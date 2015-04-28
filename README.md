@@ -1,4 +1,4 @@
-Faveo Helpdesk
+<h2>Faveo Helpdesk</h2>
 
 Faveo Open source ticketing system build on Laravel framework
 
