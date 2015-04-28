@@ -8,6 +8,14 @@ It's still in initial Phases of Development & is not production ready
 <h3>Faveo Codex</h3>
 Check out Faveo Codex <a href="http://www.demoladybird.com/kb" target="_blank">here</a>
 
+<h3>Requirements</h3>
+To run Faveo your host just needs a couple of things:
+<ul>
+<li>PHP 5.5 or greater</li>
+<li>MySQL 5.5 or greater</li>
+<li>The mod_rewrite Apache module</li>
+</ul>
+
 <h3>Credits</h3>
 <ul>
 <li>Laravel Framework</li>
