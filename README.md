@@ -16,6 +16,9 @@ To run Faveo your host just needs a couple of things:
 <li>The mod_rewrite Apache module</li>
 </ul>
 
+<h3>Faveo Web Hosting</h3>
+<a href="http://www.store.ladybirdwebhost.com" target="_blank">Ladybird Web Host</a> Offer hosting with minimum requirement to host Faveo web application. Faveo has been test on Ladybird Web Host servers & works very well in their server environment.
+
 <h3>Credits</h3>
 <ul>
 <li>Laravel Framework</li>
