@@ -1,5 +1,6 @@
 <h2>Faveo Helpdesk</h2>
 
+<h3>About Faveo</h3>
 Faveo Open source ticketing system build on Laravel framework
 
 It's still in initial Phases of Development & is not production ready
