@@ -17,7 +17,7 @@ To run Faveo your host just needs a couple of things:
 </ul>
 
 <h3>Faveo Web Hosting</h3>
-<a href="http://www.store.ladybirdwebhost.com" target="_blank">Ladybird Web Host</a> Offer hosting with minimum requirement to host Faveo web application. Faveo has been test on Ladybird Web Host servers & works very well in their server environment.
+<a href="http://www.store.ladybirdwebhost.com" target="_blank">Ladybird Web Host</a> Offer hosting with minimum requirement to host Faveo web application. Faveo has been test on Ladybird Web Host servers & works very well in their server environment. All web hosting packages offered by Ladybird Web Host come with 30 day money back gurantee.
 
 <h3>Credits</h3>
 <ul>
