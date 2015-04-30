@@ -1,4 +1,4 @@
-<h2><span style="font-family:"Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif">Faveo</span> <span style="">HELPDESK</span></h2>
+<h2><span style="font-family:"Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:700">Faveo</span> <span style=""Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:300;">HELPDESK</span></h2>
 
 <h3>About Faveo</h3>
 Faveo is Open source ticketing system build on Laravel framework.
