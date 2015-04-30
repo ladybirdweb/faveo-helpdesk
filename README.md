@@ -1,4 +1,4 @@
-<h2>Faveo Helpdesk</h2>
+<h2><span style="font-family:"Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif">Faveo</span> <span style="">HELPDESK</span></h2>
 
 <h3>About Faveo</h3>
 Faveo is Open source ticketing system build on Laravel framework.
@@ -31,5 +31,5 @@ To run Faveo your host just needs a couple of things:
 <a href="http://www.ladybirdweb.com" target="_blank">Ladybird Web Solution</a>
 
 <h3>Website</h3>
-Coming Soon <a href="http://www.faveohelpdesk.com" target="_blank">www.faveohelpdesk.com </a>
+Coming Soon... <a href="http://www.faveohelpdesk.com" target="_blank">www.faveohelpdesk.com </a>
 
