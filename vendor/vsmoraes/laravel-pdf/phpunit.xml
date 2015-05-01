@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<phpunit colors="true" bootstrap="tests/bootstrap.php">
-    <testsuites>
-        <testsuite name="DomPdf tests">
-            <directory suffix=".php">tests/</directory>
-        </testsuite>
-    </testsuites>
-</phpunit>
