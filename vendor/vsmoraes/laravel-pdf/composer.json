@@ -1,0 +1,21 @@
+{
+    "name": "vsmoraes/laravel-pdf",
+    "description": "DOMPDF module for Laravel 5",
+    "keywords": ["laravel", "dompdf", "pdf"],
+    "license": "MIT",
+    "authors": [
+        { "name": "Vinicius Moraes", "email": "vinicius@archlinux.com.br" }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "dompdf/dompdf": "0.6.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vsmoraes\\Pdf\\": "src/"
+        }
+    }
+}

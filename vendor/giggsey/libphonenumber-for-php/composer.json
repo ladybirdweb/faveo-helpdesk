@@ -1,0 +1,51 @@
+{
+    "name": "giggsey/libphonenumber-for-php",
+    "type": "library",
+    "description": "PHP Port of Google's libphonenumber",
+    "keywords": ["phonenumber", "libphonenumber", "mobile", "validation", "geocoding", "geolocation"],
+    "homepage": "https://github.com/giggsey/libphonenumber-for-php",
+    "license": "Apache-2.0",
+    "support": {
+        "irc": "irc://irc.appliedirc.com/lobby",
+        "source": "https://github.com/giggsey/libphonenumber-for-php",
+        "issues": "https://github.com/giggsey/libphonenumber-for-php/issues"
+    },
+    "authors": [
+        {
+            "name": "Joshua Gigg",
+            "email": "giggsey@gmail.com",
+            "homepage": "http://giggsey.com/"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "libphonenumber": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
+            "libphonenumber\\buildtools": "build/",
+            "libphonenumber\\Tests": "Tests/"
+        }
+    },
+    "archive": {
+        "exclude": ["Tests/", "build/", "/.travis.yml", "/build.xml", "phpunit.xml.dist", "libphonenumber-for-php.spec"]
+    },
+    "require": {
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "phing/phing": "~2.7",
+        "phpunit/phpunit": "~4.0",
+        "symfony/console": "~2.4",
+        "satooshi/php-coveralls":  "~0.6"
+    },
+    "suggest": {
+        "ext-intl": "To use the geocoder and carrier mapping"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "7.x-dev"
+        }
+    }
+}

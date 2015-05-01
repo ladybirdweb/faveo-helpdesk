@@ -1,0 +1,27 @@
+{
+    "name": "bugsnag/bugsnag",
+    "type": "library",
+    "description": "Official Bugsnag notifier for PHP applications.",
+    "keywords": ["bugsnag", "exceptions", "errors", "logging", "tracking"],
+    "homepage": "https://github.com/bugsnag/bugsnag-php",
+    "license": "MIT",
+    "authors": [{
+        "name": "James Smith",
+        "email": "notifiers@bugsnag.com",
+        "homepage": "https://bugsnag.com"
+    }],
+
+    "require": {
+        "php": ">=5.2.0"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+
+    "autoload": {
+        "psr-0" : {
+            "Bugsnag_" : "src/"
+        }
+    }
+}

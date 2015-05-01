@@ -1,0 +1,43 @@
+{
+    "file": "/Users/james/src/bugsnag/bugsnag-php/testing.php",
+    "line": 17,
+    "backtrace": [
+        {
+            "file": "/Users/james/src/bugsnag/bugsnag-php/src/Bugsnag/Error.php",
+            "line": 116,
+            "function": "generate",
+            "class": "Bugsnag_Stacktrace"
+        },
+        {
+            "file": "/Users/james/src/bugsnag/bugsnag-php/src/Bugsnag/Error.php",
+            "line": 25,
+            "function": "setPHPError",
+            "class": "Bugsnag_Error"
+        },
+        {
+            "file": "/Users/james/src/bugsnag/bugsnag-php/src/Bugsnag/Client.php",
+            "line": 346,
+            "function": "fromPHPError",
+            "class": "Bugsnag_Error"
+        },
+        {
+            "function": "errorHandler",
+            "class": "Bugsnag_Client"
+        },
+        {
+            "file": "/Users/james/src/bugsnag/bugsnag-php/testing.php",
+            "line": 17,
+            "function": "trigger_error"
+        },
+        {
+            "file": "/Users/james/src/bugsnag/bugsnag-php/testing.php",
+            "line": 13,
+            "function": "crashy_function"
+        },
+        {
+            "file": "/Users/james/src/bugsnag/bugsnag-php/testing.php",
+            "line": 20,
+            "function": "parent_of_crashy_function"
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+{
+    "backtrace": [
+        {
+            "file": "controllers/ExampleController.php",
+            "line": "12",
+            "class": "Illuminate\\Support\\Facades\\Facade",
+            "function": "__callStatic"
+        },
+        {
+            "file": "controllers/ExampleController.php",
+            "line": "12",
+            "class": "Bugsnag\\BugsnagLaravel\\BugsnagFacade",
+            "function": "notifyError"
+        },
+        {
+            "class": "ExampleController",
+            "function": "index"
+        },
+        {
+            "file": "Routing/Controller.php",
+            "line": "194",
+            "function": "call_user_func_array"
+        }
+    ]
+}
