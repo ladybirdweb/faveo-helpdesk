@@ -1,0 +1,342 @@
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class Helpdesk extends Migration {
+
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::create('agents', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('user_name')->unique();
+			$table->string('first_name');
+			$table->string('last_name');
+			$table->string('email');
+			$table->string('phone');
+			$table->string('mobile');
+			$table->string('agent_sign');
+			$table->boolean('account_type');
+			$table->boolean('account_status');
+			$table->string('assign_group');
+			$table->string('primary_dpt');
+			$table->string('agent_tzone');
+			$table->boolean('daylight_save');
+			$table->boolean('limit_access');
+			$table->boolean('directory_listing');
+			$table->boolean('vocation_mode');
+			$table->string('assign_team');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('teams', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('name');
+			$table->boolean('status');
+			$table->string('team_lead');
+			$table->boolean('assign_alert');
+			$table->string('admin_notes');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('groups', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('name');
+			$table->boolean('group_status');
+			$table->boolean('can_create_ticket');
+			$table->boolean('can_edit_ticket');
+			$table->boolean('can_post_ticket');
+			$table->boolean('can_close_ticket');
+			$table->boolean('can_assign_ticket');
+			$table->boolean('can_trasfer_ticket');
+			$table->boolean('can_delete_ticket');
+			$table->boolean('can_ban_email');
+			$table->boolean('can_manage_canned');
+			$table->boolean('can_manage_faq');
+			$table->boolean('can_view_agent_stats');
+			$table->boolean('department_access');
+			$table->string('admin_notes');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('department', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('name');
+			$table->boolean('type');
+			$table->string('sla');
+			$table->string('manager');
+			$table->boolean('ticket_assignment');
+			$table->string('outgoing_email');
+			$table->string('template_set');
+			$table->boolean('auto_ticket_response');
+			$table->boolean('auto_message_response');
+			$table->string('auto_response_email');
+			$table->string('recipient');
+			$table->boolean('group_access');
+			$table->string('department_sign');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('emails', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('email_address');
+			$table->string('email_name');
+			$table->string('department');
+			$table->string('priority');
+			$table->string('help_topic');
+			$table->string('user_name');
+			$table->string('password');
+			$table->string('fetching_host');
+			$table->string('fetching_port');
+			$table->string('mailbox_protocol');
+			$table->string('folder');
+			$table->string('sending_host');
+			$table->string('sending_port');
+			$table->boolean('internal_notes');
+			$table->boolean('auto_response');
+			$table->boolean('fetching_status');
+			$table->boolean('move_to_folder');
+			$table->boolean('delete_email');
+			$table->boolean('do_nothing');
+			$table->boolean('sending_status');
+			$table->boolean('authentication');
+			$table->boolean('header_spoofing');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('banlist', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->boolean('ban_status');
+			$table->string('email_address');
+			$table->string('internal_notes');
+			$table->rememberToken();
+			$table->timestamps();
+
+		});
+		Schema::create('template', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('name');
+			$table->boolean('status');
+			$table->string('template_set_to_clone');
+			$table->string('language');
+			$table->string('internal_note');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('help_topic', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('topic');
+			$table->string('parent_topic');
+			$table->string('custom_form');
+			$table->string('department');
+			$table->string('ticket_status');
+			$table->string('priority');
+			$table->string('sla_plan');
+			$table->string('thank_page');
+			$table->string('ticket_num_format');
+			$table->string('internal_notes');
+			$table->boolean('status');
+			$table->boolean('type');
+			$table->boolean('auto_response');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('sla_plan', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('name');
+			$table->string('grace_period');
+			$table->string('admin_note');
+			$table->boolean('status');
+			$table->boolean('transient');
+			$table->boolean('ticket_overdue');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('forms', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('title');
+			$table->string('instruction');
+			$table->string('label');
+			$table->string('type');
+			$table->string('visibility');
+			$table->string('variable');
+			$table->string('internal_notes');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('company', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('company_name');
+			$table->string('website');
+			$table->string('phone');
+			$table->string('address');
+			$table->string('landing_page');
+			$table->string('offline_page');
+			$table->string('thank_page');
+			$table->string('logo');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('system', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->boolean('status');
+			$table->string('url');
+			$table->string('name');
+			$table->string('department');
+			$table->string('page_size');
+			$table->string('log_level');
+			$table->string('purge_log');
+			$table->string('name_format');
+			$table->string('time_farmat');
+			$table->string('date_format');
+			$table->string('date_time_format');
+			$table->string('day_date_time');
+			$table->string('time_zone');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('tickets', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('num_format');
+			$table->string('num_sequence');
+			$table->string('priority');
+			$table->string('sla');
+			$table->string('help_topic');
+			$table->string('max_open_ticket');
+			$table->string('collision_avoid');
+			$table->string('captcha');
+			$table->boolean('status');
+			$table->boolean('claim_response');
+			$table->boolean('assigned_ticket');
+			$table->boolean('answered_ticket');
+			$table->boolean('agent_mask');
+			$table->boolean('html');
+			$table->boolean('client_update');
+			$table->boolean('max_file_size');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('email', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('template');
+			$table->string('sys_email');
+			$table->string('alert_email');
+			$table->string('admin_email');
+			$table->string('mta');
+			$table->boolean('email_fetching');
+			$table->boolean('strip');
+			$table->boolean('separator');
+			$table->boolean('all_emails');
+			$table->boolean('email_collaborator');
+			$table->boolean('attachment');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('access', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->string('password_expire');
+			$table->string('reg_method');
+			$table->string('user_session');
+			$table->string('agent_session');
+			$table->string('reset_ticket_expire');
+			$table->boolean('password_reset');
+			$table->boolean('bind_agent_ip');
+			$table->boolean('reg_require');
+			$table->boolean('quick_access');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('auto_response', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->boolean('new_ticket');
+			$table->boolean('agent_new_ticket');
+			$table->boolean('new_message');
+			$table->boolean('overlimit');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+		Schema::create('alert_notice', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->boolean('ticket_status');
+			$table->boolean('ticket_admin_email');
+			$table->boolean('ticket_department_manager');
+			$table->boolean('ticket_organization_accmanager');
+			$table->boolean('message_status');
+			$table->boolean('message_last_responder');
+			$table->boolean('message_assigned_agent');
+			$table->boolean('message_department_manager');
+			$table->boolean('message_organization_accmanager');
+			$table->boolean('internal_status');
+			$table->boolean('internal_last_responder');
+			$table->boolean('internal_assigned_agent');
+			$table->boolean('internal_department_manager');
+			$table->boolean('assignment_status');
+			$table->boolean('assignment_assigned_agent');
+			$table->boolean('assignment_team_leader');
+			$table->boolean('assignment_team_member');
+			$table->boolean('transfer_status');
+			$table->boolean('transfer_assigned_agent');
+			$table->boolean('transfer_department_manager');
+			$table->boolean('transfer_department_member');
+			$table->boolean('overdue_status');
+			$table->boolean('overdue_assigned_agent');
+			$table->boolean('overdue_department_manager');
+			$table->boolean('overdue_department_member');
+			$table->boolean('system_error');
+			$table->boolean('sql_error');
+			$table->boolean('excessive_failure');
+			$table->rememberToken();
+			$table->timestamps();
+		});
+
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::drop('alert_notice');
+		Schema::drop('auto_response');
+		Schema::drop('access');
+		Schema::drop('email');		
+		Schema::drop('tickets');
+		Schema::drop('system');
+		Schema::drop('company');
+		Schema::drop('forms');
+		Schema::drop('sla_plan');
+		Schema::drop('help_topic');
+		Schema::drop('template');
+		Schema::drop('banlist');
+		Schema::drop('emails');
+		Schema::drop('department');
+		Schema::drop('groups');
+		Schema::drop('teams');
+		Schema::drop('agents');
+	}
+
+}
