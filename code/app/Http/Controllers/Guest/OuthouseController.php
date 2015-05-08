@@ -1,8 +1,15 @@
-<?php namespace App\Http\Controllers\Guest;
-
+<?php
+namespace App\Http\Controllers\Guest;
 use App\Http\Controllers\Controller;
 use App\Model\Settings\System;
 
+/**
+ * OuthouseController
+ *
+ * @package     Controllers
+ * @subpackage  Controller
+ * @author      Ladybird <info@ladybirdweb.com>
+ */
 class OuthouseController extends Controller {
 
 	/**

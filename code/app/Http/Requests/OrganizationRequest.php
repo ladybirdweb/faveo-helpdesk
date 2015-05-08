@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * OrganizationRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class OrganizationRequest extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class OrganizationRequest extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,13 +24,12 @@ class OrganizationRequest extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
-			
-			'name'		=>	'required|unique:organization',
-			'website'	=>	'url',
-			'phone'		=>	'size:10'
+
+			'name' => 'required|unique:organization',
+			'website' => 'url',
+			'phone' => 'size:10',
 		];
 	}
 

@@ -1,7 +1,13 @@
-<?php namespace App\Http\Middleware;
-
+<?php
+namespace App\Http\Middleware;
 use Closure;
 
+/**
+ * CheckRoleUser
+ *
+ * @package Middleware
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class CheckRoleUser {
 
 	/**
@@ -16,7 +22,6 @@ class CheckRoleUser {
 			return $next($request);
 		}
 		return redirect('guest')->with('fails', 'You are not Autherised');
-
 	}
 
 }

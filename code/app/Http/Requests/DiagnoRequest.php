@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * DiagnoRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class DiagnoRequest extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class DiagnoRequest extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,13 +24,12 @@ class DiagnoRequest extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
-			'from'		=>		'required|email',
-			'to'		=>		'required|email',
-			'subject'	=>		'required',
-			'message'	=>		'required'
+			'from' => 'required|email',
+			'to' => 'required|email',
+			'subject' => 'required',
+			'message' => 'required',
 		];
 	}
 

@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * TicketRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class TicketRequest extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class TicketRequest extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,12 +24,11 @@ class TicketRequest extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
-			 'To'    =>   'required',  
-   'ticket_ID'     =>   'required',
-   'ReplyContent'  =>   'required'  
+			'To' => 'required',
+			'ticket_ID' => 'required',
+			'ReplyContent' => 'required',
 		];
 	}
 

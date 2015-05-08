@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * TemplateRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class TemplateRequest extends Request {
 
 	/**

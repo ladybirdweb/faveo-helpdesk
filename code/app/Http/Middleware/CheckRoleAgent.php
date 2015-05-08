@@ -1,7 +1,13 @@
-<?php namespace App\Http\Middleware;
-
+<?php
+namespace App\Http\Middleware;
 use Closure;
 
+/**
+ * CheckRoleAgent
+ *
+ * @package     default
+ * @author      Ladybird <info@ladybirdweb.com>
+ */
 class CheckRoleAgent {
 
 	/**

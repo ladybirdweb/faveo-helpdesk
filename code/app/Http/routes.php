@@ -12,7 +12,6 @@
  */
 
 //Route::get('/', 'WelcomeController@index');
-
 //Route::get('/', 'HomeController@index');
 
 Route::controllers([
@@ -59,8 +58,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 	Route::resource('sla', 'Admin\SlaController'); // in SLA Plan module, for CRUD
 
 	Route::resource('form', 'Admin\FormController'); // in Form module, for CRUD
-
-//$router->model('id','getcompany');
+	//$router->model('id','getcompany');
 
 	Route::get('getcompany', 'Admin\SettingsController@getcompany'); // direct to company setting page
 
@@ -98,7 +96,6 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
 	/*  Admin Profile Password Post */
 	Route::patch('admin-profile-password', 'Admin\ProfileController@postProfilePassword');
-
 });
 /* calling ticket.blade.php file  */
 
@@ -108,7 +105,6 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
 Route::get('time', function () {
 	return view('themes.default1.admin.tickets.timeline');
-
 });
 
 /*
@@ -135,9 +131,8 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 	/*  Profile Password Post */
 	Route::patch('agent-profile-password', 'Agent\UserController@postProfilePassword');
 
-// Route::get('/abcd', 'GuestController@getList');
-
-// Route::get('/qwer', ['as' => 'thread', 'uses' => 'GuestController@getThread']);
+	// Route::get('/abcd', 'GuestController@getList');
+	// Route::get('/qwer', ['as' => 'thread', 'uses' => 'GuestController@getThread']);
 
 	/*  Fetch Emails */
 	Route::get('/test', ['as' => 'thr', 'uses' => 'Agent\MailController@fetchdata']);
@@ -209,7 +204,6 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
 	/* To show Unassigned Tickets */
 	Route::get('unassigned', 'Agent\TicketController@unassigned');
-
 });
 
 /*
@@ -240,7 +234,6 @@ $router->get('/', 'Guest\OuthouseController@get');
 
 //testing ckeditor
 //$router->get('ck','Admin\SettingsController@getck');
-
 //===================================================================================
 
 Route::group(['middleware' => 'role.user', 'middleware' => 'auth'], function () {
@@ -252,7 +245,6 @@ Route::group(['middleware' => 'role.user', 'middleware' => 'auth'], function () 
 
 	/*  Profile Password Post */
 	Route::patch('profile-password', 'Guest\GuestController@postProfilePassword');
-
 });
 //====================================================================================
 /* Get my tickets */
@@ -260,9 +252,8 @@ $router->get('myticket', ['as' => 'ticket', 'uses' => 'Guest\GuestController@get
 
 /* Get my ticket thread */
 //$router->get('thread/{id}',['as'=>'ticket.thread','uses'=>'Guest\GuestController@getthread']);
-
 // testing
-// Route::get('testing','Agent\MailController@getdata');
+Route::get('testing', 'Agent\MailController@getdata');
 
 /* Check your Ticket */
 $router->get('checkticket', 'Guest\GuestController@getCheckTicket');

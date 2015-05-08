@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * BanRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class BanRequest extends Request {
 
 	/**

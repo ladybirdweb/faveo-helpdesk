@@ -1,92 +1,80 @@
-<?php namespace App\Http\Controllers\Admin;
-
-use App\Http\Requests\BanRequest;
+<?php
+namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
-/* include banlist Request for update function validation */
 use App\Http\Requests\BanlistRequest;
-use Illuminate\Http\Request;
-
+use App\Http\Requests\BanRequest;
 use App\Model\Email\Banlist;
-
 use App\User;
 
+/**
+ * BanlistController
+ *
+ * @package     Controllers
+ * @subpackage  Controller
+ * @author      Ladybird <info@ladybirdweb.com>
+ */
 class BanlistController extends Controller {
 
-	/*  constructor for authentication  */
-
-	public function __construct()
-	{
+	/**
+	 * Create a new controller instance.
+	 * @return type void
+	 */
+	public function __construct() {
 		$this->middleware('auth');
 		$this->middleware('roles');
 	}
 
 	/**
 	 * Display a listing of the resource.
-	 *
-	 * @return Response
+	 * @param type Banlist $ban
+	 * @return type Response
 	 */
-	public function index(Banlist $ban)
-	{
-		try
-		{
+	public function index(Banlist $ban) {
+		try {
 			$bans = $ban->get();
-			return view('themes.default1.admin.emails.banlist.index',compact('bans'));
-		}
-		catch(Exception $e)
-		{
+			return view('themes.default1.admin.emails.banlist.index', compact('bans'));
+		} catch (Exception $e) {
 			return view('404');
 		}
-
 	}
 
 	/**
 	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
+	 * @return type Response
 	 */
-	public function create()
-	{
-		try
-		{
+	public function create() {
+		try {
 			return view('themes.default1.admin.emails.banlist.create');
-		}
-		catch(Exception $e)
-		{
+		} catch (Exception $e) {
 			return view('404');
 		}
 	}
 
 	/**
 	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
+	 * @param type banlist $ban
+	 * @param type BanRequest $request
+	 * @param type User $user
+	 * @return type Response
 	 */
-	public function store(banlist $ban, BanRequest $request, User $user)
-	{
-		try
-		{
+	public function store(banlist $ban, BanRequest $request, User $user) {
+		try {
 			//adding field to user whether it is banned or not
 			$adban = $request->input('email_address');
-			$use = $user->where('email',$adban)->first();
-			 // dd($use);
-			if($use!==null)
-			{
+			$use = $user->where('email', $adban)->first();
+			// dd($use);
+			if ($use !== null) {
 				$use->ban = 1;
 				$use->save();
 				$ban->create($request->input())->save();
-				return redirect('banlist')->with('success','Email Banned sucessfully');
-			}
-			else
-			{
+				return redirect('banlist')->with('success', 'Email Banned sucessfully');
+			} else {
 				$ban->create($request->input())->save();
-				return redirect('banlist')->with('success','Email Banned sucessfully');
+				return redirect('banlist')->with('success', 'Email Banned sucessfully');
 			}
 			// $use = $user->where('email',$adban)->first();
 			// $use->ban = 1;
 			// $use->save();
-			
-			
-
 			// if($ban->create($request->input())->save()==true)
 			// {
 			// 	return redirect('banlist')->with('success','Email Banned sucessfully');
@@ -95,12 +83,9 @@ class BanlistController extends Controller {
 			// {
 			// 	return redirect('banlist')->with('fails','Email can not Ban');
 			// }
+		} catch (Exception $e) {
+			return redirect('banlist')->with('fails', 'Email can not Ban');
 		}
-		catch(Exception $e)
-		{
-			return redirect('banlist')->with('fails','Email can not Ban');
-		}
-		
 	}
 
 	/**
@@ -109,83 +94,62 @@ class BanlistController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
-	{
+	public function show($id) {
 		//
 	}
 
 	/**
 	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
+	 * @param type int $id
+	 * @param type Banlist $ban
+	 * @return type Response
 	 */
-	public function edit($id, Banlist $ban)
-	{
-		try
-		{
+	public function edit($id, Banlist $ban) {
+		try {
 			$bans = $ban->whereId($id)->first();
-			return view('themes.default1.admin.emails.banlist.edit',compact('bans'));
-		}
-		catch(Exception $e)
-		{
+			return view('themes.default1.admin.emails.banlist.edit', compact('bans'));
+		} catch (Exception $e) {
 			return view('404');
 		}
 	}
 
 	/**
 	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
+	 * @param type int $id
+	 * @param type Banlist $ban
+	 * @param type BanlistRequest $request
+	 * @return type Response
 	 */
-	public function update($id, Banlist $ban, BanlistRequest $request)
-	{
-		try
-		{
+	public function update($id, Banlist $ban, BanlistRequest $request) {
+		try {
 			$bans = $ban->whereId($id)->first();
-			if($bans->fill($request->input())->save())
-			{
-				return redirect('banlist')->with('success','Banned Email Updated sucessfully');
+			if ($bans->fill($request->input())->save()) {
+				return redirect('banlist')->with('success', 'Banned Email Updated sucessfully');
+			} else {
+				return redirect('banlist')->with('fails', 'Banned Email not Updated');
 			}
-			else
-			{
-				return redirect('banlist')->with('fails','Banned Email not Updated');
-			}
-		}
-		catch(Exception $e)
-		{
-			return redirect('banlist')->with('fails','Banned Email not Updated');
+		} catch (Exception $e) {
+			return redirect('banlist')->with('fails', 'Banned Email not Updated');
 		}
 	}
 
 	/**
 	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
+	 * @param type int $id
+	 * @param type Banlist $ban
+	 * @return type Response
 	 */
-	public function destroy($id, Banlist $ban)
-	{
-		try
-		{
+	public function destroy($id, Banlist $ban) {
+		try {
 			$bans = $ban->whereId($id)->first();
-
 			/* Success and Falure condition */
-
-			if($bans->delete()==true)
-			{
-				return redirect('banlist')->with('success','Banned Email Deleted sucessfully');
+			if ($bans->delete() == true) {
+				return redirect('banlist')->with('success', 'Banned Email Deleted sucessfully');
+			} else {
+				return redirect('banlist')->with('fails', 'Banned Email can not Delete');
 			}
-			else
-			{
-				return redirect('banlist')->with('fails','Banned Email can not Delete');
-			}
-		}
-		catch(Exception $e)
-		{
-			return redirect('banlist')->with('fails','Banned Email can not Delete');
+		} catch (Exception $e) {
+			return redirect('banlist')->with('fails', 'Banned Email can not Delete');
 		}
 	}
-
 }

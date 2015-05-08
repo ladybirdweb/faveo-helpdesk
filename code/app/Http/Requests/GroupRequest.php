@@ -1,8 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
-
+/**
+ * GroupRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class GroupRequest extends Request {
 
 	/**
@@ -10,8 +15,7 @@ class GroupRequest extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -20,10 +24,9 @@ class GroupRequest extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
-			'name' => 'required|unique:groups'
+			'name' => 'required|unique:groups',
 		];
 	}
 

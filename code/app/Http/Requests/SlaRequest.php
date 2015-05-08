@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * SlaRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class SlaRequest extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class SlaRequest extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,11 +24,10 @@ class SlaRequest extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
-			'name'	  	=> 'required|unique:sla_plan',
-			'grace_period'=> 'required'
+			'name' => 'required|unique:sla_plan',
+			'grace_period' => 'required',
 		];
 	}
 

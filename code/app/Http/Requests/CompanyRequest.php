@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * CompanyRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class CompanyRequest extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class CompanyRequest extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,13 +24,12 @@ class CompanyRequest extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
-			'company_name' 	=> 	'required',
-			'website'	   	=> 	'url',
-			'phone'			=>	'numeric',
-			'logo'			=>	'image'		
+			'company_name' => 'required',
+			'website' => 'url',
+			'phone' => 'numeric',
+			'logo' => 'image',
 		];
 	}
 

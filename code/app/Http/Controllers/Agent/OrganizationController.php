@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Agent;
+<?php
+
+namespace App\Http\Controllers\Agent;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrganizationRequest;
@@ -11,10 +13,24 @@ use App\Model\Agent_panel\Organization;
 
 /* Define OrganizationUpdate to validate the create form */
 
+/**
+ * OrganizationController
+ *
+ * @package     Controllers
+ * @subpackage  Controller
+ * @author      Ladybird <info@ladybirdweb.com>
+ */
 class OrganizationController extends Controller {
 
-	/*  Define constructor for authentication checking  */
-
+	/**
+	 * Create a new controller instance.
+	 * constructor to check
+	 * 1. authentication
+	 * 2. user roles
+	 * 3. roles must be agent
+	 *
+	 * @return void
+	 */
 	public function __construct() {
 		$this->middleware('auth');
 		$this->middleware('role.agent');
@@ -24,14 +40,13 @@ class OrganizationController extends Controller {
 	/**
 	 * Display a listing of the resource.
 	 *
-	 * @return Response
+	 * @param type Organization $org
+	 * @return type Response
 	 */
 	public function index(Organization $org) {
-		try
-		{
+		try {
 			/* get all values of table organization */
 			$orgs = $org->get();
-
 			return view('themes.default1.agent.organization.index', compact('orgs'));
 		} catch (Exception $e) {
 			return view('404');
@@ -41,11 +56,10 @@ class OrganizationController extends Controller {
 	/**
 	 * Show the form for creating a new resource.
 	 *
-	 * @return Response
+	 * @return type Response
 	 */
 	public function create() {
-		try
-		{
+		try {
 			return view('themes.default1.agent.organization.create');
 		} catch (Exception $e) {
 			return view('404');
@@ -54,12 +68,12 @@ class OrganizationController extends Controller {
 
 	/**
 	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
+	 * @param type Organization $org
+	 * @param type OrganizationRequest $request
+	 * @return type Response
 	 */
 	public function store(Organization $org, OrganizationRequest $request) {
-		try
-		{
+		try {
 			/* Insert the all input request to organization table */
 			/* Check whether function success or not */
 
@@ -79,15 +93,14 @@ class OrganizationController extends Controller {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
-	 * @return Response
+	 * @param type $id
+	 * @param type Organization $org
+	 * @return type Response
 	 */
 	public function show($id, Organization $org) {
-		try
-		{
+		try {
 			/* select the field by id  */
 			$orgs = $org->whereId($id)->first();
-
 			/* To view page */
 			return view('themes.default1.agent.organization.show', compact('orgs'));
 		} catch (Exception $e) {
@@ -98,12 +111,12 @@ class OrganizationController extends Controller {
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  int  $id
-	 * @return Response
+	 * @param type $id
+	 * @param type Organization $org
+	 * @return type Response
 	 */
 	public function edit($id, Organization $org) {
-		try
-		{
+		try {
 			/* select the field by id  */
 			$orgs = $org->whereId($id)->first();
 
@@ -117,18 +130,17 @@ class OrganizationController extends Controller {
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  int  $id
-	 * @return Response
+	 * @param type $id
+	 * @param type Organization $org
+	 * @param type OrganizationUpdate $request
+	 * @return type Response
 	 */
 	public function update($id, Organization $org, OrganizationUpdate $request) {
-		try
-		{
+		try {
 			/* select the field by id  */
 			$orgs = $org->whereId($id)->first();
-
 			/* update the organization table   */
 			/* Check whether function success or not */
-
 			if ($orgs->fill($request->input())->save() == true) {
 				/* redirect to Index page with Success Message */
 				return redirect('organizations')->with('success', 'Organization  Updated Successfully');
@@ -140,24 +152,20 @@ class OrganizationController extends Controller {
 			/* redirect to Index page with Fails Message */
 			return redirect('organizations')->with('fails', 'Organization  can not Update');
 		}
-
 	}
 
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
-	 * @return Response
+	 * @param type int $id
+	 * @return type Response
 	 */
 	public function destroy($id) {
-		try
-		{
+		try {
 			/* select the field by id  */
 			$orgs = $org->whereId($id)->first();
-
 			/* Delete the field selected from the table */
 			/* Check whether function success or not */
-
 			if ($orgs->delete() == true) {
 				/* redirect to Index page with Success Message */
 				return redirect('organizations')->with('success', 'Organization  Deleted Successfully');

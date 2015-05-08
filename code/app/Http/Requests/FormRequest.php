@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * FormRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class FormRequest extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class FormRequest extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,15 +24,13 @@ class FormRequest extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
-			
-			'title'			=>	'required',
-			'label'			=>	'required',
-			'type'			=>	'required',
-			'visibility'	=>	'required'
 
+			'title' => 'required',
+			'label' => 'required',
+			'type' => 'required',
+			'visibility' => 'required',
 		];
 	}
 

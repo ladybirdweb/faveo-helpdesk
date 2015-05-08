@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Agent;
 
 use App\Http\Controllers\Controller;
@@ -6,89 +7,92 @@ use App\Http\Requests\CreateTicketRequest;
 use App\Http\Requests\TicketRequest;
 use App\Model\Email\Banlist;
 use App\Model\Ticket\Tickets;
-// use App\Http\Requests\Ticket_EditRequest;
 use App\Model\Ticket\Ticket_Thread;
 use App\User;
 use Auth;
-use DB;
 use Hash;
 use Input;
 use Mail;
 use PDF;
 
+/**
+ * TicketController
+ *
+ * @package 	Controllers
+ * @subpackage 	Controller
+ * @author     	Ladybird <info@ladybirdweb.com>
+ */
 class TicketController extends Controller {
-	/* Define constructor for Authentication Checking */
 
+	/**
+	 * Create a new controller instance.
+	 * @return type response
+	 */
 	public function __construct() {
 		$this->middleware('auth');
 	}
 
-	//============================================
-	//  Ticket List 			      | Incomplete
-	//============================================
+	/**
+	 * Show the ticket list page
+	 * @return type response
+	 */
 	public function ticket_list() {
-		// $tickets = Tickets::all();
-		// $threads = Ticket_Thread::all();
 		return view('themes.default1.agent.ticket.ticket');
 	}
 
-	//============================================
-	//  Open Ticket List 			      | Incomplete
-	//============================================
+	/**
+	 * Show the Open ticket list page
+	 * @return type response
+	 */
 	public function open_ticket_list() {
-		// $tickets = Tickets::all();
-		// $threads = Ticket_Thread::all();
 		return view('themes.default1.agent.ticket.open');
 	}
 
-	//============================================
-	//  Open Ticket List 			      | Incomplete
-	//============================================
+	/**
+	 * Show the answered ticket list page
+	 * @return type response
+	 */
 	public function answered_ticket_list() {
-		// $tickets = Tickets::all();
-		// $threads = Ticket_Thread::all();
 		return view('themes.default1.agent.ticket.answered');
 	}
 
-	//============================================
-	//  Open Ticket List 			      | Incomplete
-	//============================================
+	/**
+	 * Show the Myticket list page
+	 * @return type response
+	 */
 	public function myticket_ticket_list() {
-		// $tickets = Tickets::all();
-		// $threads = Ticket_Thread::all();
 		return view('themes.default1.agent.ticket.myticket');
 	}
 
-	//============================================
-	//  Open Ticket List 			      | Incomplete
-	//============================================
+	/**
+	 * Show the Overdue ticket list page
+	 * @return type response
+	 */
 	public function overdue_ticket_list() {
-		// $tickets = Tickets::all();
-		// $threads = Ticket_Thread::all();
 		return view('themes.default1.agent.ticket.overdue');
 	}
 
-	//============================================
-	//  Open Ticket List 			      | Incomplete
-	//============================================
+	/**
+	 * Show the Closed ticket list page
+	 * @return type response
+	 */
 	public function closed_ticket_list() {
-		// $tickets = Tickets::all();
-		// $threads = Ticket_Thread::all();
 		return view('themes.default1.agent.ticket.closed');
 	}
 
-	//============================================
-	//  create Ticket 			      | Incomplete
-	//============================================
+	/**
+	 * Show the New ticket page
+	 * @return type response
+	 */
 	public function newticket() {
-		// $tickets = Tickets::all();
-		// $threads = Ticket_Thread::all();
 		return view('themes.default1.agent.ticket.new');
 	}
 
-	//============================================
-	//  post create ticket            | Incomplete
-	//============================================
+	/**
+	 * Save the data of new ticket and show the New ticket page with result
+	 * @param type CreateTicketRequest $request
+	 * @return type response
+	 */
 	public function post_newticket(CreateTicketRequest $request) {
 		$email = $request->input('email');
 		$fullname = $request->input('fullname');
@@ -103,26 +107,31 @@ class TicketController extends Controller {
 		$priority = $request->input('priority');
 		$phone = "";
 		$system = "";
+		//create user
 		if ($this->create_user($email, $fullname, $subject, $body, $phone, $helptopic, $sla, $priority, $system)) {
 			return Redirect('newticket')->with('success', 'success');
 		} else {
-			return Redirect('newticket')->with('success', 'success');
+			return Redirect('newticket')->with('fails', 'fails');
 		}
-		// echo $priority;
 	}
 
-	//============================================
-	//  Thread      			      | Incomplete
-	//============================================
+	/**
+	 * Shows the ticket thread details
+	 * @param type $id
+	 * @return type response
+	 */
 	public function thread($id) {
 		$tickets = Tickets::where('id', '=', $id)->first();
 		$thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
 		return view('themes.default1.agent.ticket.timeline', compact('tickets'), compact('thread'));
 	}
 
-	//============================================
-	//  Ticket reply 			      | Incomplete
-	//============================================
+	/**
+	 * Replying a ticket
+	 * @param type Ticket_Thread $thread
+	 * @param type TicketRequest $request
+	 * @return type bool
+	 */
 	public function reply(Ticket_Thread $thread, TicketRequest $request) {
 		$thread->ticket_id = $request->input('ticket_ID');
 		$thread->poster = 'support';
@@ -131,27 +140,17 @@ class TicketController extends Controller {
 		$ticket_id = $request->input('ticket_ID');
 		$tickets = Tickets::where('id', '=', $ticket_id)->first();
 		$thread = Ticket_Thread::where('ticket_id', '=', $ticket_id)->first();
-		// return 'success';
 		return 1;
 	}
 
-	// //============================================
-	// //  Ticket Edit get			      | Incomplete
-	// //============================================
-	// public function ticket_edit_get($id, Tickets $ticket , Ticket_Thread $thread)
-	// {
-	// 	$ticket_id = $ticket->where('id' , '=' , $id)->first();
-	// 	$thread_id = $thread->where('ticket_id' , '=' , $id)->first();
-	// 	$user = User::where('id' , '=' , $ticket_id->user_id)->first();
-	// 	return  view("themes.default1.agent.ticket.edit",compact('ticket_id','thread_id','user'));
-	// }
-	//============================================
-	//  Ticket Edit post 			      | Incomplete
-	//============================================
+	/**
+	 * Ticket edit and save ticket data
+	 * @param type $ticket_id
+	 * @param type Ticket_Thread $thread
+	 * @return type bool
+	 */
 	public function ticket_edit_post($ticket_id, Ticket_Thread $thread) {
-		// echo $ticket_id;
 		$threads = $thread->where('ticket_id', '=', $ticket_id)->first();
-		// // echo $threads->title;
 		if (Input::get('subject') != null && Input::get('body') != null) {
 			$threads->title = Input::get('subject');
 			$threads->body = Input::get('body');
@@ -164,9 +163,11 @@ class TicketController extends Controller {
 		return 0;
 	}
 
-	//============================================
-	//  Ticket print  			      | Incomplete
-	//============================================
+	/**
+	 * Print Ticket Details
+	 * @param type $id
+	 * @return type respponse
+	 */
 	public function ticket_print($id) {
 		$tickets = Tickets::where('id', '=', $id)->first();
 		$thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
@@ -174,9 +175,11 @@ class TicketController extends Controller {
 		return PDF::load($html)->show();
 	}
 
-	//============================================
-	//  Generate Ticket Number        | Incomplete
-	//============================================
+	/**
+	 * Generates Ticket Number
+	 * @param type $ticket_number
+	 * @return type integer
+	 */
 	public function ticket_number($ticket_number) {
 		$number = $ticket_number;
 		$number = explode('-', $number);
@@ -202,9 +205,11 @@ class TicketController extends Controller {
 		return $number;
 	}
 
-	//=============================================
-	//	Checking email availability      | Complete
-	//=============================================
+	/**
+	 * check email for dublicate entry
+	 * @param type $email
+	 * @return type bool
+	 */
 	public function check_email($email) {
 		$check = User::where('email', '=', $email)->first();
 		if ($check == true) {
@@ -214,37 +219,49 @@ class TicketController extends Controller {
 		}
 	}
 
-	//===============================================
-	//	Create User  					|  InComplete
-	//===============================================
+	/**
+	 * Create User while creating ticket
+	 * @param type $emailadd
+	 * @param type $username
+	 * @param type $subject
+	 * @param type $body
+	 * @param type $phone
+	 * @param type $helptopic
+	 * @param type $sla
+	 * @param type $priority
+	 * @param type $system
+	 * @return type bool
+	 */
 	public function create_user($emailadd, $username, $subject, $body, $phone, $helptopic, $sla, $priority, $system) {
+		// define global variables
 		$email;
 		$username;
+		// check emails
 		$checkemail = $this->check_email($emailadd);
 
 		if ($checkemail == false) {
+			// Generate password
 			$password = $this->generateRandomString();
-
+			// create user
 			$user = new User;
 			$user->user_name = $username;
 			$user->email = $emailadd;
 			$user->password = Hash::make($password);
-
+			// mail user his/her password
 			if ($user->save()) {
 				$user_id = $user->id;
 				if (Mail::send('emails.pass', ['password' => $password, 'name' => $username], function ($message) use ($emailadd, $username) {
 					$message->to($emailadd, $username)->subject('password');
 				})) {
-
+					// need to do something here....
 				}
 			}
 		} else {
 			$username = $checkemail->username;
 			$user_id = $checkemail->id;
 		}
-
 		$ticket_number = $this->check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority);
-
+		// send ticket create details to user
 		if (Mail::send('emails.Ticket_Create', ['name' => $username, 'ticket_number' => $ticket_number], function ($message) use ($emailadd, $username, $ticket_number) {
 			$message->to($emailadd, $username)->subject('[~' . $ticket_number . ']');
 		})) {
@@ -252,33 +269,43 @@ class TicketController extends Controller {
 		}
 	}
 
-	//============================================
-	//  Select Default help_topic     | Incomplete
-	//============================================
+	/**
+	 * Default helptopic
+	 * @return type string
+	 */
 	public function default_helptopic() {
-		$helptopic = "Support";
+		$helptopic = "1";
 		return $helptopic;
 	}
 
-	//============================================
-	//  Select Default sla 			  | Incomplete
-	//============================================
+	/**
+	 * Default SLA plan
+	 * @return type string
+	 */
 	public function default_sla() {
-		$sla = "12hours";
+		$sla = "1";
 		return $sla;
 	}
 
-	//============================================
-	//  Select Default priority       | Incomplete
-	//============================================
+	/**
+	 * Default Priority
+	 * @return type string
+	 */
 	public function default_priority() {
-		$priority = "important";
-		return $helptopic;
+		$priority = "1";
+		return $prioirty;
 	}
 
-	//============================================
-	//  check ticket 				  | Incomplete
-	//============================================
+	/**
+	 * Check the response of the ticket
+	 * @param type $user_id
+	 * @param type $subject
+	 * @param type $body
+	 * @param type $helptopic
+	 * @param type $sla
+	 * @param type $priority
+	 * @return type string
+	 */
 	public function check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority) {
 		$read_ticket_number = substr($subject, 0, 6);
 		if ($read_ticket_number == 'Re: [~') {
@@ -305,9 +332,16 @@ class TicketController extends Controller {
 		}
 	}
 
-	//============================================
-	//  Create Ticket 			      | Incomplete
-	//============================================
+	/**
+	 * Create Ticket
+	 * @param type $user_id
+	 * @param type $subject
+	 * @param type $body
+	 * @param type $helptopic
+	 * @param type $sla
+	 * @param type $priority
+	 * @return type string
+	 */
 	public function create_ticket($user_id, $subject, $body, $helptopic, $sla, $priority) {
 		$max_number = Tickets::whereRaw('id = (select max(`id`) from tickets)')->get();
 		foreach ($max_number as $number) {
@@ -328,9 +362,14 @@ class TicketController extends Controller {
 		}
 	}
 
-	//============================================
-	//  Create Ticket 			      | Incomplete
-	//============================================
+	/**
+	 * Generate Ticket Thread
+	 * @param type $subject
+	 * @param type $body
+	 * @param type $id
+	 * @param type $user_id
+	 * @return type
+	 */
 	public function ticket_thread($subject, $body, $id, $user_id) {
 		$thread = new Ticket_Thread;
 		$thread->user_id = $user_id;
@@ -343,9 +382,11 @@ class TicketController extends Controller {
 		}
 	}
 
-	//============================================
-	//  Generate Random password      | Incomplete
-	//============================================
+	/**
+	 * Generate a random string for password
+	 * @param type $length
+	 * @return type string
+	 */
 	public function generateRandomString($length = 10) {
 		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$charactersLength = strlen($characters);
@@ -356,9 +397,12 @@ class TicketController extends Controller {
 		return $randomString;
 	}
 
-	//============================================
-	//  Ticket Close      			  | Incomplete
-	//============================================
+	/**
+	 * function to Ticket Close
+	 * @param type $id
+	 * @param type Tickets $ticket
+	 * @return type string
+	 */
 	public function close($id, Tickets $ticket) {
 		$ticket_status = $ticket->where('id', '=', $id)->first();
 		$ticket_status->status = 3;
@@ -366,9 +410,12 @@ class TicketController extends Controller {
 		return "your ticket" . $ticket_status->ticket_number . " has been closed";
 	}
 
-	//============================================
-	//  Ticket resolve               | Incomplete
-	//============================================
+	/**
+	 * function to Ticket resolved
+	 * @param type $id
+	 * @param type Tickets $ticket
+	 * @return type string
+	 */
 	public function resolve($id, Tickets $ticket) {
 		$ticket_status = $ticket->where('id', '=', $id)->first();
 		$ticket_status->status = 2;
@@ -376,9 +423,12 @@ class TicketController extends Controller {
 		return "your ticket" . $ticket_status->ticket_number . " has been resolved";
 	}
 
-	//============================================
-	//  Ticket open     			  | Incomplete
-	//============================================
+	/**
+	 * function to Open Ticket
+	 * @param type $id
+	 * @param type Tickets $ticket
+	 * @return type
+	 */
 	public function open($id, Tickets $ticket) {
 		$ticket_status = $ticket->where('id', '=', $id)->first();
 		$ticket_status->status = 1;
@@ -386,9 +436,12 @@ class TicketController extends Controller {
 		return "your ticket" . $ticket_status->ticket_number . " has been opened";
 	}
 
-	//============================================
-	//  Ticket open     			  | Incomplete
-	//============================================
+	/**
+	 * Function to delete ticket
+	 * @param type $id
+	 * @param type Tickets $ticket
+	 * @return type string
+	 */
 	public function delete($id, Tickets $ticket) {
 		$ticket_delete = $ticket->where('id', '=', $id)->first();
 		$ticket_delete->is_deleted = 0;
@@ -397,9 +450,12 @@ class TicketController extends Controller {
 		return "your ticket" . $ticket_delete->ticket_number . " has been delete";
 	}
 
-	//============================================
-	//  ban email     			  | Incomplete
-	//============================================
+	/**
+	 * Function to ban an email
+	 * @param type $id
+	 * @param type Tickets $ticket
+	 * @return type string
+	 */
 	public function ban($id, Tickets $ticket) {
 		$ticket_ban = $ticket->where('id', '=', $id)->first();
 		$ban_email = $ticket_ban->user_id;
@@ -417,9 +473,11 @@ class TicketController extends Controller {
 		return "the user has been banned";
 	}
 
-	//============================================
-	//  Ticket Assign    		      | Incomplete
-	//============================================
+	/**
+	 * function to assign ticket
+	 * @param type $id
+	 * @return type bool
+	 */
 	public function assign($id) {
 		$UserEmail = Input::get('user');
 		// $UserEmail = 'sujitprasad12@yahoo.in';
@@ -431,12 +489,13 @@ class TicketController extends Controller {
 		return 1;
 	}
 
-	//============================================
-	//  Internal Note    		      | Incomplete
-	//============================================
+	/**
+	 * Function to post internal note
+	 * @param type $id
+	 * @return type bool
+	 */
 	public function InternalNote($id) {
 		$InternalContent = Input::get('InternalContent');
-		// $InternalContent = 'hello';
 		$thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
 		$NewThread = new Ticket_Thread;
 		$NewThread->ticket_id = $thread->ticket_id;
@@ -449,9 +508,11 @@ class TicketController extends Controller {
 		return 1;
 	}
 
-	//============================================
-	//  Surrender ticket  		      | Incomplete
-	//============================================
+	/**
+	 * Function to surrender a ticket
+	 * @param type $id
+	 * @return type bool
+	 */
 	public function surrender($id) {
 		$ticket = Tickets::where('id', '=', $id)->first();
 		$ticket->assigned_to = 0;
@@ -459,41 +520,57 @@ class TicketController extends Controller {
 		return 1;
 	}
 
-	public function search() {
-		$product = Input::get('type');
-		$word = Input::get('name_startsWith');
+	/**
+	 * function to search
+	 * @return type
+	 */
+	// public function search() {
+	// 	$product = Input::get('type');
+	// 	$word = Input::get('name_startsWith');
 
-		if ($product == 'product') {
-			$starts_with = strtoupper($word);
-			$rows = DB::table('users')->select('user_name')->where('name', 'LIKE', $starts_with . '%')->get();
-			$data = array();
-			foreach ($rows as $row) {
-				array_push($data, $row->name);
-			}
-			print_r(json_encode($data));
-		}
+	// 	if ($product == 'product') {
+	// 		$starts_with = strtoupper($word);
+	// 		$rows = DB::table('users')->select('user_name')->where('name', 'LIKE', $starts_with . '%')->get();
+	// 		$data = array();
+	// 		foreach ($rows as $row) {
+	// 			array_push($data, $row->name);
+	// 		}
+	// 		print_r(json_encode($data));
+	// 	}
 
-		if ($product == 'product_table') {
-			$row_num = Input::get('row_num');
-			$starts_with = strtoupper($word);
-			$rows = DB::table('product')->select('name', 'description', 'cost_price')->where('name', 'LIKE', $starts_with . '%')->get();
-			$data = array();
-			foreach ($rows as $row) {
-				$name = $row->name . '|' . $row->description . '|' . $row->cost_price . '|' . $row_num;
-				array_push($data, $name);
-			}
-			print_r(json_encode($data));
-		}
-	}
+	// 	if ($product == 'product_table') {
+	// 		$row_num = Input::get('row_num');
+	// 		$starts_with = strtoupper($word);
+	// 		$rows = DB::table('product')->select('name', 'description', 'cost_price')->where('name', 'LIKE', $starts_with . '%')->get();
+	// 		$data = array();
+	// 		foreach ($rows as $row) {
+	// 			$name = $row->name . '|' . $row->description . '|' . $row->cost_price . '|' . $row_num;
+	// 			array_push($data, $name);
+	// 		}
+	// 		print_r(json_encode($data));
+	// 	}
+	// }
 
+	/**
+	 * shows trashed tickets
+	 * @return type response
+	 */
 	public function trash() {
 		return view('themes.default1.agent.ticket.trash');
 	}
 
+	/**
+	 * shows unassigned tickets
+	 * @return type
+	 */
 	public function unassigned() {
 		return view('themes.default1.agent.ticket.unassigned');
 	}
 
+	/**
+	 * shows tickets assigned to Auth::user()
+	 * @return type
+	 */
 	public function myticket() {
 		return view('themes.default1.agent.ticket.myticket');
 	}

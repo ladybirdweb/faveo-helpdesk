@@ -1,7 +1,14 @@
-<?php namespace App\Http\Controllers\Error;
-
+<?php
+namespace App\Http\Controllers\Error;
 use App\Http\Controllers\Controller;
 
+/**
+ * ErrorController
+ *
+ * @package 	Controllers
+ * @subpackage 	Controller
+ * @author     	Ladybird <info@ladybirdweb.com>
+ */
 class ErrorController extends Controller {
 
 	/**
@@ -12,5 +19,4 @@ class ErrorController extends Controller {
 	public function error404() {
 		return view('404');
 	}
-
 }

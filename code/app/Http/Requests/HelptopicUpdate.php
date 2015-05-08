@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * HelptopicUpdate
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class HelptopicUpdate extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class HelptopicUpdate extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,15 +24,14 @@ class HelptopicUpdate extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
-			'parent_topic'		=>		'required',
-			'custom_form'		=>		'required',
-			'department'		=>		'required',
-			'priority'			=>		'required',
-			'sla_plan'			=>		'required',
-			'auto_assign'		=>		'required'
+			'parent_topic' => 'required',
+			'custom_form' => 'required',
+			'department' => 'required',
+			'priority' => 'required',
+			'sla_plan' => 'required',
+			'auto_assign' => 'required',
 		];
 	}
 

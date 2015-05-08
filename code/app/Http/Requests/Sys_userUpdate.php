@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * Sys_userUpdate
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class Sys_userUpdate extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class Sys_userUpdate extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,11 +24,10 @@ class Sys_userUpdate extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
-			'email' 		=> 	'required|email',
-			'phone'			=>	'size:10'
+			'email' => 'required|email',
+			'phone' => 'size:10',
 		];
 	}
 

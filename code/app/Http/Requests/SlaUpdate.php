@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * SlaUpdate
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class SlaUpdate extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class SlaUpdate extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,10 +24,9 @@ class SlaUpdate extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
-			'grace_period'=> 'required'
+			'grace_period' => 'required',
 		];
 	}
 

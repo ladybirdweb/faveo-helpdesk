@@ -1,7 +1,12 @@
 <?php namespace App\Http\Requests;
-
 use App\Http\Requests\Request;
 
+/**
+ * TemplateUdate
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class TemplateUdate extends Request {
 
 	/**

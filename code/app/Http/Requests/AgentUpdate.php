@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * AgentUpdate
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class AgentUpdate extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class AgentUpdate extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,20 +24,19 @@ class AgentUpdate extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
-		return [ 	
-			'first_name'		=> 		'required',	 
-			'last_name'			=> 		'required', 
-			'email' 			=> 		'required|email',
-			'account_type'		=> 		'required',	 
-			'role' 				=> 		'required',		
-			'assign_group'		=> 		'required',	 
-			'primary_dpt'		=> 		'required',	 
-			'agent_tzone'		=> 		'required',
-			'phone_number'		=>		'phone:IN',
-			'mobile'			=>		'phone:IN',
-			'team_id'			=>		'required'		
+	public function rules() {
+		return [
+			'first_name' => 'required',
+			'last_name' => 'required',
+			'email' => 'required|email',
+			'account_type' => 'required',
+			'role' => 'required',
+			'assign_group' => 'required',
+			'primary_dpt' => 'required',
+			'agent_tzone' => 'required',
+			'phone_number' => 'phone:IN',
+			'mobile' => 'phone:IN',
+			'team_id' => 'required',
 		];
 	}
 

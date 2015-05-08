@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * DepartmentRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class DepartmentRequest extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class DepartmentRequest extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,13 +24,12 @@ class DepartmentRequest extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
-			'name'				 	=> 'required|unique:department',
-			'outgoing_email' 		=>	'required',	
-			'auto_response_email'	=>	'required',
-			'group_id'				=>	'required'
+			'name' => 'required|unique:department',
+			'outgoing_email' => 'required',
+			'auto_response_email' => 'required',
+			'group_id' => 'required',
 		];
 	}
 

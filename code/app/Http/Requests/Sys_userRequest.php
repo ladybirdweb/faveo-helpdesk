@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * Sys_userRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class Sys_userRequest extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class Sys_userRequest extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,13 +24,12 @@ class Sys_userRequest extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
-			
-			'email' 		=> 	'required|email',
-			'full_name'		=>	'required|unique:sys_user',
-			'phone'			=>	'size:10'
+
+			'email' => 'required|email',
+			'full_name' => 'required|unique:sys_user',
+			'phone' => 'size:10',
 		];
 	}
 

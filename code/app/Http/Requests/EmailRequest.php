@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * EmailRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class EmailRequest extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class EmailRequest extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,17 +24,9 @@ class EmailRequest extends Request {
 	 *
 	 * @return array
 	 */
-
-	public function rules()
-	{
+	public function rules() {
 		return [
-			
-
-				
-
 		];
 	}
-
-
 
 }

@@ -1,7 +1,13 @@
-<?php namespace App\Http\Requests;
-
+<?php
+namespace App\Http\Requests;
 use App\Http\Requests\Request;
 
+/**
+ * CreateTicketRequest
+ *
+ * @package Request
+ * @author  Ladybird <info@ladybirdweb.com>
+ */
 class CreateTicketRequest extends Request {
 
 	/**
@@ -9,8 +15,7 @@ class CreateTicketRequest extends Request {
 	 *
 	 * @return bool
 	 */
-	public function authorize()
-	{
+	public function authorize() {
 		return true;
 	}
 
@@ -19,18 +24,17 @@ class CreateTicketRequest extends Request {
 	 *
 	 * @return array
 	 */
-	public function rules()
-	{
+	public function rules() {
 		return [
 
-			'email'			=> 		'required|email',
-			'fullname'		=> 		'required|min:3',
-			'helptopic'		=> 		'required',
-			'dept'			=> 		'required',
-			'sla'			=> 		'required',
-			'subject'		=> 		'required|min:5',
-			'body'			=> 		'required|min:20',
-			'priority'		=> 		'required'
+			'email' => 'required|email',
+			'fullname' => 'required|min:3',
+			'helptopic' => 'required',
+			'dept' => 'required',
+			'sla' => 'required',
+			'subject' => 'required|min:5',
+			'body' => 'required|min:20',
+			'priority' => 'required',
 		];
 	}
 
