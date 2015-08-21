@@ -1,0 +1,4 @@
+{!!$name!!}
+{!!$email!!}
+{!!$subject!!}
+{!!$details!!}
