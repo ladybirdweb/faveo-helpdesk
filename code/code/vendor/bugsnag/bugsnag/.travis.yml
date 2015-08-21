@@ -1,0 +1,12 @@
+language: php
+php:
+- 5.6
+- 5.5
+- 5.4
+- 5.3
+- 5.2
+- hhvm
+notifications:
+  hipchat:
+    rooms:
+      secure: CP1Pqa5TRwHtft3UQRZpnnw/mRCAVtXAn5S/Am45uk4fpGGFLf3F/mHKOgjDeALB/aVyJQvHV/Lr2KrgY7FWOjOdzXVVwLDtGoXXimvqxGEjvSFQMiJGKiwm7Thw41EqwHOZUxIKLtJBByP36bqvx4zXxUeNbCTc4T2f92eiZps=

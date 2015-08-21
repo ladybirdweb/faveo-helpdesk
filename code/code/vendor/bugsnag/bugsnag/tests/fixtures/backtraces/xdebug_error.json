@@ -1,0 +1,52 @@
+{
+    "file": "somefile.php",
+    "line": 123,
+    "backtrace": [
+        {
+            "file": "/View/Engines/PhpEngine.php",
+            "line": 39,
+            "include_filename": "storage/framework/views/9159822bf9c110749a4f033b96974fef",
+            "args": []
+        },
+        {
+            "function": "evaluatePath",
+            "type": "->",
+            "class": "Illuminate\\View\\Engines\\PhpEngine",
+            "file": "View/Engines/CompilerEngine.php",
+            "line": 57,
+            "args": []
+        },
+        {
+            "function": "get",
+            "type": "->",
+            "class": "Illuminate\\View\\Engines\\CompilerEngine",
+            "file": "View/View.php",
+            "line": 136,
+            "args": []
+        },
+        {
+            "function": "getContents",
+            "type": "->",
+            "class": "Illuminate\\View\\View",
+            "file": "View/View.php",
+            "line": 104,
+            "args": []
+        },
+        {
+            "function": "renderContents",
+            "type": "->",
+            "class": "Illuminate\\View\\View",
+            "file": "View/View.php",
+            "line": 78,
+            "args": []
+        },
+        {
+            "function": "render",
+            "type": "->",
+            "class": "Illuminate\\View\\View",
+            "file": "storage/views/f2df2d6b49591efeb36fc46e6dc25e0e",
+            "line": 5,
+            "args": []
+        }
+    ]
+}

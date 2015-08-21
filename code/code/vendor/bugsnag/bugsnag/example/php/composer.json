@@ -1,0 +1,5 @@
+{
+    "require": {
+        "bugsnag/bugsnag": "1.*"
+    }
+}
