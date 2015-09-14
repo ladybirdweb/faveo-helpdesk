@@ -7,8 +7,8 @@ It's still in initial Phases of Development & is not production ready.
 
 The Latin Word Faveo means be favorable to, aid, support, help.
 
-<h3>Faveo Codex</h3>
-Check out Faveo Codex <a href="http://www.demoladybird.com/kb" target="_blank">here</a>
+<h3>Faveo User Manual</h3>
+Check out Faveo user manual <a href="http://faveohelpdesk.com/user-manual" target="_blank">here</a>
 
 <h3>Requirements</h3>
 To run Faveo your host just needs a couple of things:
@@ -31,5 +31,5 @@ To run Faveo your host just needs a couple of things:
 <a href="http://www.ladybirdweb.com" target="_blank">Ladybird Web Solution</a>
 
 <h3>Website</h3>
-Coming Soon... <a href="http://www.faveohelpdesk.com" target="_blank">www.faveohelpdesk.com </a>
+<a href="http://www.faveohelpdesk.com" target="_blank">www.faveohelpdesk.com </a>
 
