@@ -55,7 +55,7 @@ class DashboardController extends Controller {
     public function ChartData()
     {
         $ticketlist = DB::table('tickets')
-            ->select(DB::raw('MONTHNAME(updated_at) as month'), DB::raw("(closed) as monthNum"),
+            ->select(DB::raw('MONTH(updated_at) as month'),
                 DB::raw('count(*) as tickets'))
             ->groupBy('month')
             ->orderBy('month', 'desc')

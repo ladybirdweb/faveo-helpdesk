@@ -17,7 +17,7 @@
 							<p>{!! Session::get('fails') !!}</p>
 							</div>
 						@endif
-				 	Item is covered by our standard licenses. If your end product including the item is going to be free to the end user then a Regular License is what you need. An Extended License is required if the end user must pay to use the end product.</p>
+				 	PLEASE READ THIS SOFTWARE LICENSE AGREEMENT CAREFULLY BEFORE DOWNLOADING OR USING THE SOFTWARE. BY CLICKING ON THE "ACCEPT" BUTTON, OPENING THE PACKAGE, OR DOWNLOADING THE PRODUCT, YOU ARE CONSENTING TO BE BOUND BY THIS AGREEMENT. IF YOU DO NOT AGREE TO ALL OF THE TERMS OF THIS AGREEMENT, STOP THE INSTALLATION PROCESS AND EXIT.</p>
 				<!-- form-group -->
 				<div class="form-group">
 				<label><input type="checkbox" class="flat-red" id="accept" name="accept1"/> I accept the </label><a href="#" style="color:blue;" data-toggle="modal" data-target="#Edit"> Licence Agreement</a> <br>
