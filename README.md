@@ -1,6 +1,6 @@
 <h3>About Faveo</h3>
 <p>Faveo Helpdesk is an open source ticketing system build on Laravel framework.<br />
-  It's still in initial Phases of Development &amp; is not production ready.<br />
+ We plan to come up with 1 to 2 updates every month from October 2015 onwards.<br />
   It can be integrated with email, as well as web forms.</p>
 <p>Faveo is designed for startup&rsquo;s &amp; SME&rsquo;s, keeping simplicity in mind and ease of use. </p>
 <h3>Flavors of Faveo</h3>
