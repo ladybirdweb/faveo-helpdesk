@@ -528,7 +528,7 @@ class Mailbox {
 					'/(^_)|(_$)/' => '',
 				);
 				$fileSysName = preg_replace('~[\\\\/]~', '', $mail->id . '_' . $attachmentId . '_' . preg_replace(array_keys($replace), $replace, $fileName));
-				$attachment->filePath = $this->attachmentsDir .'../../../../../public'. DIRECTORY_SEPARATOR . $fileSysName;
+				$attachment->filePath = $this->attachmentsDir .'../../../../../../public'. DIRECTORY_SEPARATOR . $fileSysName;
 				file_put_contents($attachment->filePath, $data);
 			}
 			$mail->addAttachment($attachment);

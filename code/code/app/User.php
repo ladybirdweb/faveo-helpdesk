@@ -1,6 +1,4 @@
-<?php
-
-namespace App;
+<?php namespace App;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -25,10 +23,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['user_name', 'email', 'password', 'active', 'first_name', 'last_name', 'ext', 'mobile', 'profile_pic',
+	protected $fillable = ['user_name', 'email', 'password', 'active', 'first_name', 'last_name', 'ban', 'ext', 'mobile', 'profile_pic',
 		'phone_number', 'company', 'agent_sign', 'account_type', 'account_status',
 		'assign_group', 'primary_dpt', 'agent_tzone', 'daylight_save', 'limit_access',
-		'directory_listing', 'vocation_mode', 'role'];
+		'directory_listing', 'vocation_mode', 'role', 'internal_note'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.

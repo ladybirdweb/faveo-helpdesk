@@ -2,7 +2,6 @@
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Http\Controllers\Agent\MailController;
 
 class Kernel extends ConsoleKernel {
 
@@ -25,9 +24,14 @@ class Kernel extends ConsoleKernel {
 	{
 		$schedule->command('inspire')
 				 ->hourly();
+		
+		$schedule->call(function () {
+            
+			$user = new User;
+			$user->save();
+    
+    		})->everyFiveMinutes();
 
-		$schedule->call('MailController@getdata')->everyFiveMinutes();
-	
 	}
 
 }

@@ -1,7 +1,5 @@
-<?php
-
-namespace App\Http\Controllers\Auth;
-
+<?php namespace App\Http\Controllers\Auth;
+// classes
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\PasswordBroker;
@@ -29,5 +27,6 @@ class PasswordController extends Controller {
 		$this->auth = $auth;
 		$this->passwords = $passwords;
 		$this->middleware('guest');
+		\App\Http\Controllers\Common\SettingsController::smtp();
 	}
 }

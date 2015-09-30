@@ -40,7 +40,7 @@ class PhoneNumber implements \Serializable
      */
     public function setCountryCode($value)
     {
-        $this->countryCode = $value;
+        $this->countryCode = (int) $value;
         return $this;
     }
 
@@ -91,7 +91,7 @@ class PhoneNumber implements \Serializable
      */
     public function setNationalNumber($value)
     {
-        $this->nationalNumber = $value;
+        $this->nationalNumber = (string) $value;
         return $this;
     }
 
@@ -142,7 +142,7 @@ class PhoneNumber implements \Serializable
      */
     public function setExtension($value)
     {
-        $this->extension = $value;
+        $this->extension = (string) $value;
         return $this;
     }
 
@@ -193,7 +193,7 @@ class PhoneNumber implements \Serializable
      */
     public function setItalianLeadingZero($value)
     {
-        $this->italianLeadingZero = $value;
+        $this->italianLeadingZero = (bool) $value;
         return $this;
     }
 
@@ -244,7 +244,7 @@ class PhoneNumber implements \Serializable
      */
     public function setRawInput($value)
     {
-        $this->rawInput = $value;
+        $this->rawInput = (string) $value;
         return $this;
     }
 
@@ -297,7 +297,7 @@ class PhoneNumber implements \Serializable
      */
     public function setCountryCodeSource($value)
     {
-        $this->countryCodeSource = $value;
+        $this->countryCodeSource = (int) $value;
         return $this;
     }
 
@@ -348,7 +348,7 @@ class PhoneNumber implements \Serializable
      */
     public function setPreferredDomesticCarrierCode($value)
     {
-        $this->preferredDomesticCarrierCode = $value;
+        $this->preferredDomesticCarrierCode = (string) $value;
         return $this;
     }
 
@@ -407,7 +407,7 @@ class PhoneNumber implements \Serializable
     public function setNumberOfLeadingZeros($value)
     {
         $this->hasNumberOfLeadingZeros = true;
-        $this->numberOfLeadingZeros = $value;
+        $this->numberOfLeadingZeros = (int) $value;
         return $this;
     }
 
@@ -510,14 +510,30 @@ class PhoneNumber implements \Serializable
 
     /**
      * Returns a string representation of this phone number.
-     *
-     * The number is returned as an unformatted E164 international number with leading + sign.
-     *
      * @return string
      */
     public function __toString()
     {
-        return '+' . $this->countryCode . $this->nationalNumber;
+        $outputString = '';
+
+        $outputString .= 'Country Code: ' . $this->countryCode;
+        $outputString .= ' National Number: ' . $this->nationalNumber;
+        if ($this->hasItalianLeadingZero()) {
+            $outputString .= ' Leading Zero(s): true';
+        }
+        if ($this->hasNumberOfLeadingZeros()) {
+            $outputString .= ' Number of leading zeros: ' . $this->numberOfLeadingZeros;
+        }
+        if ($this->hasExtension()) {
+            $outputString .= ' Extension: ' . $this->extension;
+        }
+        if ($this->hasCountryCode()) {
+            $outputString .= ' Country Code Source: ' . $this->countryCodeSource;
+        }
+        if ($this->hasPreferredDomesticCarrierCode()) {
+            $outputString .= ' Preferred Domestic Carrier Code: ' . $this->preferredDomesticCarrierCode;
+        }
+        return $outputString;
     }
 
     /**
@@ -534,7 +550,7 @@ class PhoneNumber implements \Serializable
                 $this->numberOfLeadingZeros,
                 $this->rawInput,
                 $this->countryCodeSource,
-                $this->preferredDomesticCarrierCode,
+                $this->preferredDomesticCarrierCode
             )
         );
     }
@@ -546,13 +562,17 @@ class PhoneNumber implements \Serializable
     {
         $data = unserialize($serialized);
 
-        $this->setCountryCode($data[0]);
-        $this->setNationalNumber($data[1]);
-        $this->setExtension($data[2]);
-        $this->setItalianLeadingZero($data[3]);
-        $this->setNumberOfLeadingZeros($data[4]);
-        $this->setRawInput($data[5]);
-        $this->setCountryCodeSource($data[6]);
-        $this->setPreferredDomesticCarrierCode($data[7]);
+        list (
+            $this->countryCode,
+            $this->nationalNumber,
+            $this->extension,
+            $this->italianLeadingZero,
+            $this->numberOfLeadingZeros,
+            $this->rawInput,
+            $this->countryCodeSource,
+            $this->preferredDomesticCarrierCode
+        ) = $data;
+
+        $this->hasNumberOfLeadingZeros = true;
     }
 }

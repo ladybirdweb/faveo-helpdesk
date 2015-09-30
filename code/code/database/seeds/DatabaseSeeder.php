@@ -1,40 +1,38 @@
 <?php
 
-use App\Model\Agent\Department;
-use App\Model\Agent\Groups;
-use App\Model\Agent\Teams;
-use App\Model\Form\Form_details;
-use App\Model\Form\Form_name;
-use App\Model\Guest\Guest_note;
-use App\Model\Manage\Help_topic;
-use App\Model\Manage\Sla_plan;
-use App\Model\Settings\Ticket;
-use App\Model\Ticket\Ticket_Priority;
-use App\Model\Ticket\Ticket_Status;
-use App\Model\Utility\Date_format;
-use App\Model\Utility\Date_time_format;
-use App\Model\Utility\Languages;
-use App\Model\Utility\Logs;
-use App\Model\Utility\MailboxProtocol;
-use App\Model\Utility\Timezones;
-use App\Model\Utility\Time_format;
-use App\Model\Utility\Priority;
+use App\Model\helpdesk\Agent\Department;
+use App\Model\helpdesk\Agent\Groups;
+use App\Model\helpdesk\Agent\Teams;
+use App\Model\helpdesk\Form\Form_details;
+use App\Model\helpdesk\Form\Form_name;
+use App\Model\helpdesk\Guest\Guest_note;
+use App\Model\helpdesk\Manage\Help_topic;
+use App\Model\helpdesk\Manage\Sla_plan;
+use App\Model\helpdesk\Settings\Ticket;
+use App\Model\helpdesk\Ticket\Ticket_Priority;
+use App\Model\helpdesk\Ticket\Ticket_Status;
+use App\Model\helpdesk\Utility\Date_format;
+use App\Model\helpdesk\Utility\Date_time_format;
+use App\Model\helpdesk\Utility\Languages;
+use App\Model\helpdesk\Utility\Logs;
+use App\Model\helpdesk\Utility\MailboxProtocol;
+use App\Model\helpdesk\Utility\Timezones;
+use App\Model\helpdesk\Utility\Time_format;
+use App\Model\helpdesk\Utility\Priority;
 use Illuminate\Database\Seeder;
-use App\Model\Settings\Access;
-use App\Model\Settings\Alert;
-use App\Model\Settings\Company;
-use App\Model\Settings\Email;
-use App\Model\Settings\Responder;
-use App\Model\Settings\System;
-use App\Model\Ticket\Ticket_source;
-use App\Model\Theme\Footer;
-use App\Model\Theme\Footer2;
-use App\Model\Theme\Footer3;
-use App\Model\Theme\Footer4;
-use App\Model\Email\Smtp;
-
-
-
+use App\Model\helpdesk\Settings\Access;
+use App\Model\helpdesk\Settings\Alert;
+use App\Model\helpdesk\Settings\Company;
+use App\Model\helpdesk\Settings\Email;
+use App\Model\helpdesk\Settings\Responder;
+use App\Model\helpdesk\Settings\System;
+use App\Model\helpdesk\Ticket\Ticket_source;
+use App\Model\helpdesk\Theme\Footer;
+use App\Model\helpdesk\Theme\Footer2;
+use App\Model\helpdesk\Theme\Footer3;
+use App\Model\helpdesk\Theme\Footer4;
+use App\Model\helpdesk\Email\Smtp;
+use App\Model\helpdesk\Utility\Version_Check;
 
 
 class DatabaseSeeder extends Seeder {
@@ -213,13 +211,7 @@ class DatabaseSeeder extends Seeder {
 
 		Guest_note::create(['heading' => 'Welcome to the Support Center', 'content' => 'Hello this is a new helpdesk support system ans it is in the development phase.']);
 
-		Form_name::create(['name' => 'form', 'status' => '1', 'no_of_fields' => '2']);
-
-		Form_details::create(['form_name_id' => '1', 'label' => 'Name', 'type' => 'text']);
-		Form_details::create(['form_name_id' => '1', 'label' => 'Phone', 'type' => 'number']);
-		Form_details::create(['form_name_id' => '1', 'label' => 'Email', 'type' => 'text']);
-		Form_details::create(['form_name_id' => '1', 'label' => 'Subject', 'type' => 'text']);
-		Form_details::create(['form_name_id' => '1', 'label' => 'Details', 'type' => 'textarea']);
+		Form_name::create(['name' => 'form', 'status' => '1', 'no_of_fields' => '5']);
 
 		$date_time_formats = [
 			'd/m/Y  H:i:s',
@@ -296,6 +288,8 @@ class DatabaseSeeder extends Seeder {
 		Ticket_source::create(array('name'=>'agent', 'value'=>'Agent Panel'));
 
 		Smtp::create(array('id' => '1'));
+
+		Version_Check::create(['id'=>'1']);
 
 	}
 }

@@ -11,12 +11,12 @@
         <!-- Ionicons -->
         <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
         <!-- fullCalendar 2.2.5-->
-        <link href="{{asset("plugins/fullcalendar/fullcalendar.min.css")}}" rel="stylesheet" type="text/css" />
-        <link href="{{asset("plugins/fullcalendar/fullcalendar.print.css")}}" rel="stylesheet" type="text/css" media='print' />
-        <link href="{{asset("plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/plugins/fullcalendar/fullcalendar.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/plugins/fullcalendar/fullcalendar.print.css")}}" rel="stylesheet" type="text/css" media='print' />
+        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
-        <link href="{{asset("dist/css/app.css")}}" rel="stylesheet" type="text/css" />
-        <link href="{{asset("plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/dist/css/app.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         {{-- // <script src="ckeditor/ckeditor.js"></script> --}}
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -30,8 +30,8 @@
                 <div class="container">
                 <div id="logo" class="site-logo text-center" style="font-size: 30px;">
                 <?php 
-                $company = App\Model\Settings\Company::where('id', '=', '1')->first();
-				$system = App\Model\Settings\System::where('id', '=', '1')->first();
+                $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
+				$system = App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
 				?>
 				@if($system->url)
 					<a href="{!! $system->url !!}" rel="home">
@@ -39,7 +39,7 @@
 					<a href="{{url('home')}}" rel="home">
 				@endif
                 @if($company->use_logo == 1)
-                	<img src="{{asset('dist')}}{{'/'}}{{$company->logo}}" alt="User Image" width="200px" height="200px"/>
+                	<img src="{{asset('lb-faveo/dist')}}{{'/'}}{{$company->logo}}" alt="User Image" width="200px" height="200px"/>
                 @else
                 	@if($system->name)
                 		{!! $system->name !!}
@@ -64,7 +64,7 @@
 									<li>
 										<div class="banner-wrapper user-menu text-center clearfix">
 											@if(Auth::user()->profile_pic)
-                                        		<img src="{{asset('dist/img')}}{{'/'}}{{Auth::user()->profile_pic}}"class="img-circle" alt="User Image" height="80" width="80"/>
+                                        		<img src="{{asset('lb-faveo/dist/img')}}{{'/'}}{{Auth::user()->profile_pic}}"class="img-circle" alt="User Image" height="80" width="80"/>
                                          	@else
 	                                            <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
                                     		@endif
@@ -162,10 +162,10 @@
 		</div>			
 <!-- /.content-wrapper -->
 <?php 
-$footer = App\Model\Theme\Footer::whereId('1')->first();                            
-$footer2 = App\Model\Theme\Footer2::whereId('1')->first();
-$footer3 = App\Model\Theme\Footer3::whereId('1')->first();
-$footer4 = App\Model\Theme\Footer4::whereId('1')->first();
+$footer = App\Model\helpdesk\Theme\Footer::whereId('1')->first();                            
+$footer2 = App\Model\helpdesk\Theme\Footer2::whereId('1')->first();
+$footer3 = App\Model\helpdesk\Theme\Footer3::whereId('1')->first();
+$footer4 = App\Model\helpdesk\Theme\Footer4::whereId('1')->first();
 ?>
         <footer id="colophon" class="site-footer" role="contentinfo">
 			<div class="container">
@@ -236,10 +236,10 @@ $footer4 = App\Model\Theme\Footer4::whereId('1')->first();
                     <!-- Bootstrap 3.3.2 JS -->
                     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
                     <!-- Slimscroll -->
-					<script src="{{asset("dist/js/superfish.js")}}" type="text/javascript"></script>
-                    <script src="{{asset("dist/js/mobilemenu.js")}}" type="text/javascript"></script>
-                    <script src="{{asset("dist/js/know.js")}}" type="text/javascript"></script>
-                    <script src="{{asset("plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
+					<script src="{{asset("lb-faveo/dist/js/superfish.js")}}" type="text/javascript"></script>
+                    <script src="{{asset("lb-faveo/dist/js/mobilemenu.js")}}" type="text/javascript"></script>
+                    <script src="{{asset("lb-faveo/dist/js/know.js")}}" type="text/javascript"></script>
+                    <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
                     <script>
                         $(function () {
                         //Add text editor

@@ -77,6 +77,7 @@ class PHPUnit_TextUI_Command
         'testdox-text='        => null,
         'test-suffix='         => null,
         'no-configuration'     => null,
+        'no-coverage'          => null,
         'no-globals-backup'    => null,
         'printer='             => null,
         'static-backup'        => null,
@@ -223,8 +224,9 @@ class PHPUnit_TextUI_Command
     protected function handleArguments(array $argv)
     {
         if (defined('__PHPUNIT_PHAR__')) {
-            $this->longOptions['selfupdate']  = null;
-            $this->longOptions['self-update'] = null;
+            $this->longOptions['check-version'] = null;
+            $this->longOptions['selfupdate']    = null;
+            $this->longOptions['self-update']   = null;
         }
 
         try {
@@ -418,6 +420,10 @@ class PHPUnit_TextUI_Command
                     $this->arguments['useDefaultConfiguration'] = false;
                     break;
 
+                case '--no-coverage':
+                    $this->arguments['noCoverage'] = true;
+                    break;
+
                 case '--no-globals-backup':
                     $this->arguments['backupGlobals'] = false;
                     break;
@@ -467,6 +473,10 @@ class PHPUnit_TextUI_Command
                     $this->arguments['enforceTimeLimit']           = true;
                     $this->arguments['disallowTodoAnnotatedTests'] = true;
                     $this->arguments['deprecatedStrictModeOption'] = true;
+                    break;
+
+                case '--check-version':
+                    $this->handleVersionCheck();
                     break;
 
                 case '--selfupdate':
@@ -580,6 +590,10 @@ class PHPUnit_TextUI_Command
              */
             if (isset($phpunit['stderr']) && ! isset($this->arguments['stderr'])) {
                 $this->arguments['stderr'] = $phpunit['stderr'];
+            }
+
+            if (isset($phpunit['columns']) && ! isset($this->arguments['columns'])) {
+                $this->arguments['columns'] = $phpunit['columns'];
             }
 
             if (isset($phpunit['printerClass'])) {
@@ -781,7 +795,7 @@ class PHPUnit_TextUI_Command
 
         // Workaround for https://bugs.php.net/bug.php?id=65538
         $caFile = dirname($tempFilename) . '/ca.pem';
-        copy(__PHPUNIT_PHAR_ROOT__ . '/ca.pem', $caFile);
+        copy(__PHPUNIT_PHAR_ROOT__ . '/phar/ca.pem', $caFile);
 
         print 'Updating the PHPUnit PHAR ... ';
 
@@ -828,6 +842,26 @@ class PHPUnit_TextUI_Command
         }
 
         print " done\n";
+        exit(PHPUnit_TextUI_TestRunner::SUCCESS_EXIT);
+    }
+
+    /**
+     * @since Method available since Release 4.8.0
+     */
+    protected function handleVersionCheck()
+    {
+        $this->printVersionString();
+
+        $latestVersion = file_get_contents('https://phar.phpunit.de/latest-version-of/phpunit');
+        $isOutdated    = version_compare($latestVersion, PHPUnit_Runner_Version::id(), '>');
+
+        if ($isOutdated) {
+            print "You are not using the latest version of PHPUnit.\n";
+            print 'Use "phpunit --self-update" to install PHPUnit ' . $latestVersion . "\n";
+        } else {
+            print "You are using the latest version of PHPUnit.\n";
+        }
+
         exit(PHPUnit_TextUI_TestRunner::SUCCESS_EXIT);
     }
 
@@ -906,6 +940,7 @@ Configuration Options:
   --bootstrap <file>        A "bootstrap" PHP file that is run before the tests.
   -c|--configuration <file> Read configuration from XML file.
   --no-configuration        Ignore default configuration file (phpunit.xml).
+  --no-coverage             Ignore code coverage configuration.
   --include-path <path(s)>  Prepend PHP's include_path with given path(s).
   -d key[=value]            Sets a php.ini value.
 
@@ -917,6 +952,7 @@ Miscellaneous Options:
 EOT;
 
         if (defined('__PHPUNIT_PHAR__')) {
+            print "\n  --check-version           Check whether PHPUnit is the latest version.";
             print "\n  --self-update             Update PHPUnit to the latest version.\n";
         }
     }

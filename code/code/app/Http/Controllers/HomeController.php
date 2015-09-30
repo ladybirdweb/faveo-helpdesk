@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers;
 
 class HomeController extends Controller {
     /*
@@ -20,7 +18,7 @@ class HomeController extends Controller {
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth');
+        // $this->middleware('auth');
     }
 
     /**
@@ -29,7 +27,14 @@ class HomeController extends Controller {
      * @return Response
      */
     public function index() {
+      ksjdckjdsnc
         return view('themes/default1/admin/dashboard');
+    }
+
+
+    public function getsmtp(){
+      $smtp = \App\Model\helpdesk\Email\Smtp::where('id','=','1')->first();
+      return $smtp->host;
     }
 
 }

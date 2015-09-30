@@ -2,17 +2,10 @@
 
 use Illuminate\Support\ServiceProvider;
 
+use App\Http\Controllers\WelcomeController;
+
 class AppServiceProvider extends ServiceProvider {
 
-	/**
-	 * Bootstrap any application services.
-	 *
-	 * @return void
-	 */
-	public function boot()
-	{
-		//
-	}
 
 	/**
 	 * Register any application services.
@@ -30,5 +23,30 @@ class AppServiceProvider extends ServiceProvider {
 			'App\Services\Registrar'
 		);
 	}
+
+
+
+	public function boot() {
+        // Please note the different namespace 
+        // and please add a \ in front of your classes in the global namespace
+        \Event::listen('cron.collectJobs', function() {
+
+            \Cron::add('example1', '* * * * *', function() {
+                $this->index();
+                return 'No';
+            });
+
+            \Cron::add('example2', '*/2 * * * *', function() {
+                // Do some crazy things successfully every two minute
+                return null;
+            });
+
+            \Cron::add('disabled job', '0 * * * *', function() {
+                // Do some crazy things successfully every hour
+            }, false);
+        });
+    }
+
+
 
 }

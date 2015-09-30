@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
-use Config;
-use DB;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -26,6 +26,11 @@ trait SearchableTrait
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSearch(Builder $q, $search, $threshold = null, $entireText = false)
+    {
+        return $this->scopeSearchRestricted($q, $search, null, $threshold, $entireText);
+    }
+
+    public function scopeSearchRestricted(Builder $q, $search, $restriction, $threshold = null, $entireText = false)
     {
         $query = clone $q;
         $query->select($this->getTable() . '.*');
@@ -60,11 +65,21 @@ trait SearchableTrait
         }
 
         $this->addSelectsToQuery($query, $selects);
-        $this->filterQueryWithRelevance($query, $selects, $threshold ?: ($relevance_count / 4));
+
+        // Default the threshold if no value was passed.
+        if (is_null($threshold)) {
+            $threshold = $relevance_count / 4;
+        }
+
+        $this->filterQueryWithRelevance($query, $selects, $threshold);
 
         $this->makeGroupBy($query);
 
         $this->addBindingsToQuery($query, $this->search_bindings);
+
+        if(is_callable($restriction)) {
+            $query = $restriction($query);
+        }
 
         $this->mergeQueries($query, $q);
 

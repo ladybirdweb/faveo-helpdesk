@@ -17,6 +17,7 @@ class CreateOrganizationTable extends Migration {
 			$table->string('phone');
 			$table->string('website');
 			$table->string('address');
+			$table->integer('head');
 			$table->string('internal_notes');
 			$table->timestamps();
 		});

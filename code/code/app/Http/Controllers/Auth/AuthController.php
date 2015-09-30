@@ -1,9 +1,12 @@
-<?php
-namespace App\Http\Controllers\Auth;
+<?php namespace App\Http\Controllers\Auth;
+// controllers
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
+use App\Http\Controllers\Common\SettingsController;
+// requests
+use App\Http\Requests\helpdesk\LoginRequest;
+use App\Http\Requests\helpdesk\RegisterRequest;
 use App\User;
+// classes
 /* include User Model */
 use Hash;
 /* Include RegisterRequest */
@@ -13,7 +16,6 @@ use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 /* Include login validator */
 use Mail;
-use App\Http\Controllers\SettingsController;
 use Auth;
 
 /**
@@ -60,17 +62,14 @@ class AuthController extends Controller {
 	 */
 	public function getRegister() {
 		if(Auth::user()) {
-			if(Auth::user()->role == "admin" || Auth::user()->role == "agent"){
+			if(Auth::user()->role == "admin" || Auth::user()->role == "agent") {
 				return \Redirect::route('dashboard');	
-			}
-			elseif(Auth::user()->role == "user"){
+			} elseif(Auth::user()->role == "user") {
 				// return view('auth.register');	
 			}
-		}
-		else{
+		} else {
 			return view('auth.register');	
 		}
-		
 	}
 
 	/**
@@ -125,12 +124,10 @@ class AuthController extends Controller {
 		if(Auth::user()) {
 			if(Auth::user()->role == "admin" || Auth::user()->role == "agent"){
 				return \Redirect::route('dashboard');	
-			}
-			elseif(Auth::user()->role == "user"){
+			} elseif(Auth::user()->role == "user") {
 				return \Redirect::route('home');		
 			}
-		}
-		else{
+		} else {
 			return view('auth.login');
 		}	
 	}
@@ -147,12 +144,9 @@ class AuthController extends Controller {
 		// dd([$email,$password,$remember]);
 		$credentials = $request->only('email', 'password');
 		if ($this->auth->attempt($credentials, $request->has('remember'))) {
-			if(Auth::user()->role == 'user')
-			{
+			if(Auth::user()->role == 'user') {
 				return \Redirect::route('home');
-			}
-			else
-			{
+			} else {
 				return redirect()->intended($this->redirectPath());
 			}
 		}

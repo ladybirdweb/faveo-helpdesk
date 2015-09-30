@@ -131,6 +131,13 @@ abstract class PHPUnit_Framework_Assert
                 $checkForNonObjectIdentity
             );
         } elseif (is_string($haystack)) {
+            if (!is_string($needle)) {
+                throw PHPUnit_Util_InvalidArgumentHelper::factory(
+                    1,
+                    'string'
+                );
+            }
+
             $constraint = new PHPUnit_Framework_Constraint_StringContains(
                 $needle,
                 $ignoreCase
@@ -193,6 +200,13 @@ abstract class PHPUnit_Framework_Assert
                 )
             );
         } elseif (is_string($haystack)) {
+            if (!is_string($needle)) {
+                throw PHPUnit_Util_InvalidArgumentHelper::factory(
+                    1,
+                    'string'
+                );
+            }
+
             $constraint = new PHPUnit_Framework_Constraint_Not(
                 new PHPUnit_Framework_Constraint_StringContains(
                     $needle,
@@ -1684,16 +1698,8 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertXmlFileEqualsXmlFile($expectedFile, $actualFile, $message = '')
     {
-        self::assertFileExists($expectedFile);
-        self::assertFileExists($actualFile);
-
-        $expected                     = new DOMDocument;
-        $expected->preserveWhiteSpace = false;
-        $expected->load($expectedFile);
-
-        $actual                     = new DOMDocument;
-        $actual->preserveWhiteSpace = false;
-        $actual->load($actualFile);
+        $expected = PHPUnit_Util_XML::loadFile($expectedFile);
+        $actual   = PHPUnit_Util_XML::loadFile($actualFile);
 
         self::assertEquals($expected, $actual, $message);
     }
@@ -1708,16 +1714,8 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertXmlFileNotEqualsXmlFile($expectedFile, $actualFile, $message = '')
     {
-        self::assertFileExists($expectedFile);
-        self::assertFileExists($actualFile);
-
-        $expected                     = new DOMDocument;
-        $expected->preserveWhiteSpace = false;
-        $expected->load($expectedFile);
-
-        $actual                     = new DOMDocument;
-        $actual->preserveWhiteSpace = false;
-        $actual->load($actualFile);
+        $expected = PHPUnit_Util_XML::loadFile($expectedFile);
+        $actual   = PHPUnit_Util_XML::loadFile($actualFile);
 
         self::assertNotEquals($expected, $actual, $message);
     }
@@ -1732,15 +1730,8 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertXmlStringEqualsXmlFile($expectedFile, $actualXml, $message = '')
     {
-        self::assertFileExists($expectedFile);
-
-        $expected                     = new DOMDocument;
-        $expected->preserveWhiteSpace = false;
-        $expected->load($expectedFile);
-
-        $actual                     = new DOMDocument;
-        $actual->preserveWhiteSpace = false;
-        $actual->loadXML($actualXml);
+        $expected = PHPUnit_Util_XML::loadFile($expectedFile);
+        $actual   = PHPUnit_Util_XML::load($actualXml);
 
         self::assertEquals($expected, $actual, $message);
     }
@@ -1755,15 +1746,8 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertXmlStringNotEqualsXmlFile($expectedFile, $actualXml, $message = '')
     {
-        self::assertFileExists($expectedFile);
-
-        $expected                     = new DOMDocument;
-        $expected->preserveWhiteSpace = false;
-        $expected->load($expectedFile);
-
-        $actual                     = new DOMDocument;
-        $actual->preserveWhiteSpace = false;
-        $actual->loadXML($actualXml);
+        $expected = PHPUnit_Util_XML::loadFile($expectedFile);
+        $actual   = PHPUnit_Util_XML::load($actualXml);
 
         self::assertNotEquals($expected, $actual, $message);
     }
@@ -1778,13 +1762,8 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertXmlStringEqualsXmlString($expectedXml, $actualXml, $message = '')
     {
-        $expected                     = new DOMDocument;
-        $expected->preserveWhiteSpace = false;
-        $expected->loadXML($expectedXml);
-
-        $actual                     = new DOMDocument;
-        $actual->preserveWhiteSpace = false;
-        $actual->loadXML($actualXml);
+        $expected = PHPUnit_Util_XML::load($expectedXml);
+        $actual   = PHPUnit_Util_XML::load($actualXml);
 
         self::assertEquals($expected, $actual, $message);
     }
@@ -1799,13 +1778,8 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertXmlStringNotEqualsXmlString($expectedXml, $actualXml, $message = '')
     {
-        $expected                     = new DOMDocument;
-        $expected->preserveWhiteSpace = false;
-        $expected->loadXML($expectedXml);
-
-        $actual                     = new DOMDocument;
-        $actual->preserveWhiteSpace = false;
-        $actual->loadXML($actualXml);
+        $expected = PHPUnit_Util_XML::load($expectedXml);
+        $actual   = PHPUnit_Util_XML::load($actualXml);
 
         self::assertNotEquals($expected, $actual, $message);
     }

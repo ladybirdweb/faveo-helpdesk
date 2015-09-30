@@ -7,20 +7,26 @@ use Symfony\Component\Filesystem\LockHandler;
 class LockHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException Symfony\Component\Filesystem\Exception\IOException
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
      * @expectedExceptionMessage Failed to create "/a/b/c/d/e": mkdir(): Permission denied.
      */
     public function testConstructWhenRepositoryDoesNotExist()
     {
+        if (!getenv('USER') || 'root' === getenv('USER')) {
+            $this->markTestSkipped('This test will fail if run under superuser');
+        }
         new LockHandler('lock', '/a/b/c/d/e');
     }
 
     /**
-     * @expectedException Symfony\Component\Filesystem\Exception\IOException
+     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
      * @expectedExceptionMessage The directory "/" is not writable.
      */
     public function testConstructWhenRepositoryIsNotWriteable()
     {
+        if (!getenv('USER') || 'root' === getenv('USER')) {
+            $this->markTestSkipped('This test will fail if run under superuser');
+        }
         new LockHandler('lock', '/');
     }
 

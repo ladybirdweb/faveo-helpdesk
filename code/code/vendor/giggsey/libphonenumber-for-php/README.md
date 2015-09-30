@@ -219,6 +219,8 @@ Ensure you have all the dev composer dependencies installed, then run
 vendor/bin/phing compile
 ```
 
+This compile process clones the [libphonenumber](https://github.com/googlei18n/libphonenumber) project at the version specified in [METADATA-VERSION.txt](METADATA-VERSION.txt).
+
 ## Integration with frameworks
 
 Other packages exist that integrate libphonenumber-for-php into frameworks.
@@ -226,4 +228,5 @@ Other packages exist that integrate libphonenumber-for-php into frameworks.
 These packages are supplied by third parties, and their quality can not be guaranteed.
 
  - Symfony: [PhoneNumberBundle](https://github.com/misd-service-development/phone-number-bundle)
+ - Laravel: [Laravel Phone](https://github.com/Propaganistas/Laravel-Phone)
 

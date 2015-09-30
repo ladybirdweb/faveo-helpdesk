@@ -17,6 +17,17 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
+	| Application Version
+	|--------------------------------------------------------------------------
+	|
+	| This tells about aplication current version.
+	|
+	 */
+
+	'version' => '0.1.1',
+
+	/*
+	|--------------------------------------------------------------------------
 	| Application URL
 	|--------------------------------------------------------------------------
 	|
@@ -202,6 +213,8 @@ return [
 		'Bugsnag' => 'Bugsnag\BugsnagLaravel\BugsnagFacade',
 		'PDF' => 'Vsmoraes\Pdf\PdfFacade',
 		'Gravatar' => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
+		'UTC' => 'App\Http\Controllers\Agent\helpdesk\TicketController',
+		'SMTPS' => 'App\Http\Controllers\HomeController',
 
 	],
 

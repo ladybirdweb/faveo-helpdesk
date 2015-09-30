@@ -5,30 +5,30 @@
         <title>Faveo | HELP DESK</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- Bootstrap 3.3.2 -->
-        <link href="{{asset("downloads/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/downloads/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Font Awesome Icons -->
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <!-- Ionicons -->
-        <link href="{{asset("downloads/ionicons.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/downloads/ionicons.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- fullCalendar 2.2.5-->
-        <link href="{{asset("plugins/fullcalendar/fullcalendar.min.css")}}" rel="stylesheet" type="text/css" />
-        <link href="{{asset("plugins/fullcalendar/fullcalendar.print.css")}}" rel="stylesheet" type="text/css" media='print' />
+        <link href="{{asset("lb-faveo/plugins/fullcalendar/fullcalendar.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/plugins/fullcalendar/fullcalendar.print.css")}}" rel="stylesheet" type="text/css" media='print' />
         <!-- Theme style -->
-        <link href="{{asset("dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- AdminLTE Skins. Choose a skin from the css/skins
              folder instead of downloading all of them to reduce the load. -->
-        <link href="{{asset("dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/dist/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- iCheck -->
-        <link href="{{asset("plugins/iCheck/flat/blue.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/plugins/iCheck/flat/blue.css")}}" rel="stylesheet" type="text/css" />
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <link rel="stylesheet" href="{{asset("dist/css/tabby.css")}}" type="text/css">
-        <link href="{{asset("downloads/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{{asset("lb-faveo/dist/css/tabby.css")}}" type="text/css">
+        <link href="{{asset("lb-faveo/downloads/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <link rel="stylesheet" href="{{asset("dist/css/editor.css")}}" type="text/css">
-        <link href="{{asset("plugins/filebrowser/plugin.js")}}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="{{asset("lb-faveo/dist/css/editor.css")}}" type="text/css">
+        <link href="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" rel="stylesheet" type="text/css" />
         {{-- jquery ui css --}}
-        <link type="text/css" href="{{asset("downloads/jquery.ui.css")}}" rel="stylesheet">
-        <link href="{{asset("plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />        
+        <link type="text/css" href="{{asset("lb-faveo/downloads/jquery.ui.css")}}" rel="stylesheet">
+        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />        
         <!-- <link type="text/css" href="http://code.jquery.com/ui/1.9.1/themes/redmond/jquery-ui.css" rel="stylesheet"> -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -44,7 +44,7 @@
                 <a href="" class="logo"><b>Faveo </b>HELPDESK</a>
 
                 <?php
-$company = App\Model\Settings\Company::where('id', '=', '1')->first();
+$company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
 if ($company != null) {
 	?><?php }
 ?>
@@ -72,7 +72,7 @@ if ($company != null) {
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
                                     @if(Auth::user()->profile_pic)
-                                        <img src="{{asset('dist/img')}}{{'/'}}{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
+                                        <img src="{{asset('lb-faveo/lb-faveo/dist/img')}}{{'/'}}{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
                                     @else
                                         <img src="{{ Gravatar::src(Auth::user()->email) }}" class="user-image" alt="User Image">
                                     @endif
@@ -83,7 +83,7 @@ if ($company != null) {
                                     <!-- User image -->
                                     <li class="user-header"  style="background-color:#343F44;">
                                         @if(Auth::user()->profile_pic)
-                                        <img src="{{asset('dist/img')}}{{'/'}}{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
+                                        <img src="{{asset('lb-faveo/dist/img')}}{{'/'}}{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
                                         @else                                      
                                             <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
                                         @endif
@@ -120,7 +120,7 @@ if ($company != null) {
 
                                         <div class="col-xs-2" style="width:50%;">
                                         @if(Auth::user() && Auth::user()->profile_pic)
-                                            <img src="{{asset('dist/img')}}{{'/'}}{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
+                                            <img src="{{asset('lb-faveo/dist/img')}}{{'/'}}{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
                                         @else
                                             <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
                                         @endif
@@ -155,12 +155,12 @@ if ($company != null) {
                                         <li class="header">TICKETS</li>
 
 <?php
- $inbox = App\Model\Ticket\Tickets::all();
+ $inbox = App\Model\helpdesk\Ticket\Tickets::all();
 
 	?>
-     <?php $myticket = App\Model\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status','1')->get();?>
-     <?php $unassigned = App\Model\Ticket\Tickets::where('assigned_to', '0')->where('status','1')->get();
-            $tickets = App\Model\Ticket\Tickets::where('status','1')->get();
+     <?php $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status','1')->get();?>
+     <?php $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '0')->where('status','1')->get();
+            $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->get();
             $i = count($tickets);
      ?>
                                         <li>
@@ -189,25 +189,25 @@ if ($company != null) {
                                         <li>
                                             <a href="{{url('trash')}}">
                                                 <i class="fa fa-trash-o"></i> <span>Trash</span>
-                                                <?php $deleted = App\Model\Ticket\Tickets::where('status', '5')->get();?>
+                                                <?php $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->get();?>
                                                 <small class="label pull-right bg-green">{{count($deleted)}}</small>
                                             </a>
                                         </li>
 <li class="header">DEPARTMENTS</li>
                                         <?php
 
-$depts = App\Model\Agent\Department::all();
+$depts = App\Model\helpdesk\Agent\Department::all();
 foreach ($depts as $dept) {
 
-$open = App\Model\Ticket\Tickets::where('status','=','1')->where('dept_id','=',$dept->id)->get();
+$open = App\Model\helpdesk\Ticket\Tickets::where('status','=','1')->where('dept_id','=',$dept->id)->get();
 $open = count($open);
 // dd($open);
 
-$closed = App\Model\Ticket\Tickets::where('status','=','2'||'3')->where('dept_id','=',$dept->id)->get();
+$closed = App\Model\helpdesk\Ticket\Tickets::where('status','=','2'||'3')->where('dept_id','=',$dept->id)->get();
 $closed = count($closed);
 // dd($closed);
 
-$underprocess = App\Model\Ticket\Tickets::where('status','=','2'||'3')->where('assigned_to','=', '0')->get();
+$underprocess = App\Model\helpdesk\Ticket\Tickets::where('status','=','2'||'3')->where('assigned_to','=', '0')->get();
 $underprocess = count($underprocess);
 // dd($underprocess);
 
@@ -256,7 +256,7 @@ $underprocess = count($underprocess);
                         </aside>
 
 <?php $agent_group = Auth::user()->assign_group;
-$group = App\Model\Agent\Groups::where('name', '=', $agent_group)->where('group_status', '=', '1')->first();
+$group = App\Model\helpdesk\Agent\Groups::where('name', '=', $agent_group)->where('group_status', '=', '1')->first();
 // dd($group);
 ?>
 
@@ -318,21 +318,21 @@ $group = App\Model\Agent\Groups::where('name', '=', $agent_group)->where('group_
 
                     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
                     <!-- Bootstrap 3.3.2 JS -->
-                    <script src="{{asset("downloads/bootstrap.min.js")}}" type="text/javascript"></script>
+                    <script src="{{asset("lb-faveo/downloads/bootstrap.min.js")}}" type="text/javascript"></script>
                     <!-- Slimscroll -->
-                    <script src="{{asset("plugins/slimScroll/jquery.slimscroll.min.js")}}" type="text/javascript"></script>
+                    <script src="{{asset("lb-faveo/plugins/slimScroll/jquery.slimscroll.min.js")}}" type="text/javascript"></script>
                     <!-- FastClick -->
-                    <script src="{{asset("plugins/fastclick/fastclick.min.js")}}"></script>
+                    <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}"></script>
                     <!-- AdminLTE App -->
-                    <script src="{{asset("dist/js/app.min.js")}}" type="text/javascript"></script>
+                    <script src="{{asset("lb-faveo/dist/js/app.min.js")}}" type="text/javascript"></script>
                     <!-- AdminLTE for demo purposes -->
                     {{-- // <script src="{{asset("dist/js/demo.js")}}" type="text/javascript"></script> --}}
                     <!-- iCheck -->
-                    <script src="{{asset("plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
+                    <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
                     {{-- maskinput --}}
                     <script src="js/jquery.maskedinput.min.js" type="text/javascript"></script>
                     {{-- jquery ui --}}
-                    <script src="{{asset("downloads/jquery.ui.js")}}" type="text/javascript"></script>
+                    <script src="{{asset("lb-faveo/downloads/jquery.ui.js")}}" type="text/javascript"></script>
                     <!-- Page Script -->
                     <script>
 $(function() {
@@ -385,13 +385,13 @@ $(function() {
                         //     });
                         // </script>
                    <!-- // <script src="../plugins/jQuery/jQuery-2.1.3.min.js"></script> -->
-                    <script src="{{asset("dist/js/tabby.js")}}"></script>
+                    <script src="{{asset("lb-faveo/dist/js/tabby.js")}}"></script>
                      <!-- // <script src="{{asset("dist/js/editor.js")}}"></script> -->
                     <!-- CK Editor -->
                     <!-- // <script src="{{asset("//cdn.ckeditor.com/4.4.3/standard/ckeditor.js")}}"></script> -->
-                    <script src="{{asset("downloads/CKEditor.js")}}"></script>
-                    <script src="{{asset("plugins/filebrowser/plugin.js")}}"></script>
-                    <script src="{{asset("plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
+                    <script src="{{asset("lb-faveo/downloads/CKEditor.js")}}"></script>
+                    <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
+                    <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
 
         
                     <script>

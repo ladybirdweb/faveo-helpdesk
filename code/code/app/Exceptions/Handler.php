@@ -2,8 +2,8 @@
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Mail;
-use App\Model\Settings;
+// use App\Http\Controllers\Common\SettingsController;
+//use App\Model\helpdesk\Email\Smtp;
 
 class Handler extends ExceptionHandler {
 
@@ -13,8 +13,16 @@ class Handler extends ExceptionHandler {
 	 * @var array
 	 */
 	protected $dontReport = [
-		'Symfony\Component\HttpKernel\Exception\HttpException',
+		'Symfony\Component\HttpKernel\Exception\HttpException'
 	];
+
+	/**
+	 * Create a new controller instance.
+	 * @return type response
+	 */
+	// public function __construct() {
+		// SettingsController::smtp();
+	// }
 
 	/**
 	 * Report or log an exception.
@@ -24,7 +32,8 @@ class Handler extends ExceptionHandler {
 	 * @param  \Exception  $e
 	 * @return void
 	 */
-	public function report(Exception $e) {
+	public function report(Exception $e)
+	{
 		return parent::report($e);
 	}
 
@@ -35,45 +44,19 @@ class Handler extends ExceptionHandler {
 	 * @param  \Exception  $e
 	 * @return \Illuminate\Http\Response
 	 */
-	public function render($request, Exception $e) {
-		// if ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
-		// 	return redirect('404');
-		// } elseif ($e instanceof \Illuminate\View\Engines\handleViewException) {
-		// 	return redirect('404');
-		// } elseif ($e instanceof \Illuminate\Database\QueryException) {
-		// 	return redirect('404');
-		// } elseif ($e) {
-		// 	return redirect('404');
-		// }
-		// return parent::render($request, $e);
-		
-		if ($this->isHttpException($e)) {
-			return $this->renderHttpException($e);
-		}
-
-		if (config('app.debug')) {
-			return $this->renderExceptionWithWhoops($e);
-		}
-
+	public function render($request, Exception $e)
+	{
+		// if ($this->isHttpException($e) && $e->getStatusCode() == 404) {
+		// 	return response()->view('errors.404', []);
+		// } else {
+		// 		\App\Http\Controllers\Common\SettingsController::smtp();
+		// 			\Mail::send('errors.report', array('e' => $e), function ($message) {
+		// 			$message->to('sujitprasad4567@gmail.com', 'Poacher Error')->subject('Error');
+		// 		});
+		// 	return response()->view('errors.503', []);
+		// }	
 		return parent::render($request, $e);
-
-	}
-
-	/**
-	 * Render an exception using Whoops.
-	 *
-	 * @param  \Exception $e
-	 * @return \Illuminate\Http\Response
-	 */
-	protected function renderExceptionWithWhoops(Exception $e) {
-		$whoops = new \Whoops\Run;
-		$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
-
-		return new \Illuminate\Http\Response(
-			$whoops->handleException($e),
-			$e->getStatusCode(),
-			$e->getHeaders()
-		);
+	
 	}
 
 }

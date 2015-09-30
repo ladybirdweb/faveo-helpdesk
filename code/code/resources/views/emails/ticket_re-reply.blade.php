@@ -1,16 +1,11 @@
----Reply above this line---<br/><br/><br/>
+---Reply above this line---<br/><br/>
 
-Hello {!! $name !!},<br/><br/>
-
-{!! $content !!}<br/><br/>
-
-Regards,<br/>
+{!! $content !!}<br/>
+<?php 
+if($Agent_Signature != null) {
+?>
 {!! $Agent_Signature !!}<br/>
-{!! $From !!}<br/>
-<br/>
+<?php  } ?>
+
 Ticket Details<br/>
 Ticket ID: {!! $ticket_number !!}<br/>
-Department: Support<br/>
-{{-- Type: Need Information<br/> --}}
-{{-- Status: Open<br/> --}}
-{{-- Priority: Normal<br/> --}}

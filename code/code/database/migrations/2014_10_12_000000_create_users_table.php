@@ -36,6 +36,7 @@ class CreateUsersTable extends Migration {
 			$table->string('vocation_mode');
 			$table->string('company');
 			$table->string('role');
+			$table->string('internal_note');
 			$table->string('profile_pic');
 			$table->rememberToken();
 			$table->timestamps();

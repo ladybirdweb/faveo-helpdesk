@@ -8,6 +8,6 @@ To view or respond to the ticket, please login {!! \URL::route('ticket2') !!} to
 
 Thank You.<br/><br/> 
 
-Kind regards,<br/><br/>
+Kind Regards,<br/><br/>
 
 {!! $from !!}

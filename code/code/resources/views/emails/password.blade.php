@@ -9,6 +9,6 @@ This will let you change your password to something new. If you didn't ask for t
 
 Thank You.<br/>
 <br/>
-Kind regards,<br/><br/>
-<?php $company =  App\Model\Settings\Company::where('id','=','1')->first(); $company = $company->company_name;  ?>
+Kind Regards,<br/><br/>
+<?php $company =  App\Model\helpdesk\Settings\Company::where('id','=','1')->first(); $company = $company->company_name;  ?>
 {!! $company !!}

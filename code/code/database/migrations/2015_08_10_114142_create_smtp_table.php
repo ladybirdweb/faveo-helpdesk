@@ -14,6 +14,7 @@ class CreateSmtpTable extends Migration {
 	{
 		Schema::create('send_mail', function (Blueprint $table) {
 			$table->increments('id');
+			$table->string('driver');
 			$table->string('host');
 			$table->string('port');
 			$table->string('encryption');

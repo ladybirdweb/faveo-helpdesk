@@ -17,7 +17,6 @@
           
           </div>
 
-
           <div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}">
             {!! Form::password('password',['placeholder'=>'Password','class' => 'form-control']) !!}
 			{!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}

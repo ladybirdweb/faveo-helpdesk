@@ -25,9 +25,9 @@ return array(
     'signmein' 				=> 'Sign me In',
     'iforgot' 				=> 'I forgot my Password',
     'email_address' 		=> 'E-Mail Address',
-    'password'				=>	'Password',
-    'woops' 				=>	'Whoops!',
-    'theirisproblem'		=> 	'There were some problems with your input.',
+    'password'				=> 'Password',
+    'woops' 				=> 'Whoops!',
+    'theirisproblem'		=>  'There were some problems with your input.',
     'login'					=>	'Login',
     /*
       |--------------------------------------
@@ -487,6 +487,7 @@ return array(
       |  SMTP Page
       |--------------------------------------
      */
+      	'driver' => 'Driver',
       	'smtp' => 'SMTP',
 		'host'=>'Host',
 		'port'=>'Port',	
@@ -511,10 +512,11 @@ return array(
       |User Page
       |------------------------------------------------
 	 */
-
+      	'ban'			=>		'Ban',
       	'user'			=>		'User',
       	'create_user'	=>		'Create User',
       	'full_name'		=>		'Full Name',
+      	'mobile'		=>		'Mobile',
 
     /*
      |------------------------------------------------
@@ -538,6 +540,8 @@ return array(
      	'role'					=>		'Role',
      	'ext'					=>		'EXT',
      	'profile_pic'			=>		'Profile Picture',
+     	'agent_sign'			=>		'Agent Signature',
+     	'inactive'				=>		'Inactive',
      	'male'					=>		'Male',
      	'female'				=>		'Female',
      	'old_password'			=>		'Old Password',
@@ -546,5 +550,7 @@ return array(
      	'gender' 				=>		'Gender',
      	'ticket_number'			=>		'Ticket Number',
      	'content'				=>		'Content',
+
+
 
     );

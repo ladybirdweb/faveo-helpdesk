@@ -538,7 +538,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
             $this->name
         );
 
-        if ($missingRequirements) {
+        if (!empty($missingRequirements)) {
             $this->markTestSkipped(implode(PHP_EOL, $missingRequirements));
         }
     }
@@ -766,9 +766,9 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
             $e = $_e;
         }
 
-        if (isset($e)) {
+        if (isset($_e)) {
             $this->status        = PHPUnit_Runner_BaseTestRunner::STATUS_ERROR;
-            $this->statusMessage = $e->getMessage();
+            $this->statusMessage = $_e->getMessage();
         }
 
         // Clean up the mock objects.
@@ -1230,7 +1230,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
         $locale   = $args[1];
 
         $categories = array(
-          LC_ALL, LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME
+            LC_ALL, LC_COLLATE, LC_CTYPE, LC_MONETARY, LC_NUMERIC, LC_TIME
         );
 
         if (defined('LC_MESSAGES')) {
