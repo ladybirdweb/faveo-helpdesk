@@ -26,7 +26,7 @@ return [
 	|
 	 */
 
-	'default' => 'mysql',
+	'default' => '%default%',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -54,10 +54,10 @@ return [
 
 		'mysql' => [
 			'driver' => 'mysql',
-			'host' => 'localhost',
-			'database' => 'envato',
-			'username' => 'root',
-			'password' => '',
+			'host' => '%host%',
+			'database' => '%database%',
+			'username' => '%username%',
+			'password' => '%password%',
 			'charset' => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix' => '',
@@ -109,7 +109,7 @@ return [
 	|
 	 */
 
-	'install' => '1',
+	'install' => '%0%',
 
 	/*
 	|--------------------------------------------------------------------------
