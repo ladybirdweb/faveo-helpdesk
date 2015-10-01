@@ -40,6 +40,8 @@
 <h3><a id="user-content-website" href="https://github.com/ladybirdweb/faveo-helpdesk#website" aria-hidden="true"></a>Website</h3>
 <p><a href="http://www.faveohelpdesk.com/" target="_blank">www.faveohelpdesk.com</a></p>
 
+<h3>Website</h3>
+<p><a href="https://www.youtube.com/channel/UC-eqh-h241b1janp6sU7Iiw" target="_blank">YouTube Channel</a></p>
 
 
 <h3>Road Map for Community Edition:</h3>
