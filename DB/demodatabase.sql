@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 01, 2015 at 04:01 PM
+-- Generation Time: Oct 23, 2015 at 01:21 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `faveohelpdesk`
+-- Database: `faveotest`
 --
 
 -- --------------------------------------------------------
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `access` (
 --
 
 INSERT INTO `access` (`id`, `password_expire`, `reg_method`, `user_session`, `agent_session`, `reset_ticket_expire`, `password_reset`, `bind_agent_ip`, `reg_require`, `quick_access`, `created_at`, `updated_at`) VALUES
-(1, '', '', '', '', '', 0, 0, 0, 0, '2015-10-01 05:00:00', '2015-10-01 05:00:00');
+(1, '', '', '', '', '', 0, 0, 0, 0, '2015-10-21 06:35:38', '2015-10-21 06:35:38');
 
 -- --------------------------------------------------------
 
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `alert_notice` (
 --
 
 INSERT INTO `alert_notice` (`id`, `ticket_status`, `ticket_admin_email`, `ticket_department_manager`, `ticket_department_member`, `ticket_organization_accmanager`, `message_status`, `message_last_responder`, `message_assigned_agent`, `message_department_manager`, `message_organization_accmanager`, `internal_status`, `internal_last_responder`, `internal_assigned_agent`, `internal_department_manager`, `assignment_status`, `assignment_assigned_agent`, `assignment_team_leader`, `assignment_team_member`, `transfer_status`, `transfer_assigned_agent`, `transfer_department_manager`, `transfer_department_member`, `overdue_status`, `overdue_assigned_agent`, `overdue_department_manager`, `overdue_department_member`, `system_error`, `sql_error`, `excessive_failure`, `created_at`, `updated_at`) VALUES
-(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2015-10-01 05:00:00', '2015-10-01 05:00:00');
+(1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2015-10-21 06:35:38', '2015-10-23 00:59:31');
 
 -- --------------------------------------------------------
 
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `auto_response` (
 --
 
 INSERT INTO `auto_response` (`id`, `new_ticket`, `agent_new_ticket`, `submitter`, `participants`, `overlimit`, `created_at`, `updated_at`) VALUES
-(1, 0, 0, 0, 0, 0, '2015-10-01 05:00:00', '2015-10-01 05:00:00');
+(1, 1, 1, 0, 0, 0, '2015-10-21 06:35:38', '2015-10-23 00:59:25');
 
 -- --------------------------------------------------------
 
@@ -138,6 +138,22 @@ CREATE TABLE IF NOT EXISTS `banlist` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `canned_response`
+--
+
+CREATE TABLE IF NOT EXISTS `canned_response` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `message` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -166,7 +182,7 @@ CREATE TABLE IF NOT EXISTS `company` (
 --
 
 INSERT INTO `company` (`id`, `company_name`, `website`, `phone`, `address`, `landing_page`, `offline_page`, `thank_page`, `logo`, `use_logo`, `created_at`, `updated_at`) VALUES
-(1, '', '', '', '', '', '', '', '', '', '2015-10-01 05:00:00', '2015-10-01 05:00:00');
+(1, '', '', '', '', '', '', '', '', '0', '2015-10-21 06:35:38', '2015-10-23 00:58:51');
 
 -- --------------------------------------------------------
 
@@ -254,9 +270,9 @@ CREATE TABLE IF NOT EXISTS `department` (
 --
 
 INSERT INTO `department` (`id`, `name`, `type`, `sla`, `manager`, `ticket_assignment`, `outgoing_email`, `template_set`, `auto_ticket_response`, `auto_message_response`, `auto_response_email`, `recipient`, `group_access`, `department_sign`, `created_at`, `updated_at`) VALUES
-(1, 'Support', '', '', '', '', '', '', '', '', '', '', '', '', '2015-10-01 04:59:59', '2015-10-01 04:59:59'),
-(2, 'Sales', '', '', '', '', '', '', '', '', '', '', '', '', '2015-10-01 04:59:59', '2015-10-01 04:59:59'),
-(3, 'Operation', '', '', '', '', '', '', '', '', '', '', '', '', '2015-10-01 04:59:59', '2015-10-01 04:59:59');
+(1, 'Support', '', '', '', '', '', '', '', '', '', '', '', '', '2015-10-21 06:35:38', '2015-10-21 06:35:38'),
+(2, 'Sales', '', '', '', '', '', '', '', '', '', '', '', '', '2015-10-21 06:35:38', '2015-10-21 06:35:38'),
+(3, 'Operation', '', '', '', '', '', '', '', '', '', '', '', '', '2015-10-21 06:35:38', '2015-10-21 06:35:38');
 
 -- --------------------------------------------------------
 
@@ -287,7 +303,7 @@ CREATE TABLE IF NOT EXISTS `email` (
 --
 
 INSERT INTO `email` (`id`, `template`, `sys_email`, `alert_email`, `admin_email`, `mta`, `email_fetching`, `strip`, `separator`, `all_emails`, `email_collaborator`, `attachment`, `created_at`, `updated_at`) VALUES
-(1, '', '', '', '', '', 0, 0, 0, 0, 0, 0, '2015-10-01 05:00:00', '2015-10-01 05:00:00');
+(1, '', '', '', '', '', 1, 0, 0, 1, 1, 1, '2015-10-21 06:35:38', '2015-10-23 00:59:14');
 
 -- --------------------------------------------------------
 
@@ -323,6 +339,25 @@ CREATE TABLE IF NOT EXISTS `emails` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `fields`
+--
+
+CREATE TABLE IF NOT EXISTS `fields` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `forms_id` int(11) NOT NULL,
+  `label` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `required` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -334,7 +369,7 @@ CREATE TABLE IF NOT EXISTS `emails` (
 CREATE TABLE IF NOT EXISTS `footer` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `footer` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `footer` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
@@ -345,7 +380,7 @@ CREATE TABLE IF NOT EXISTS `footer` (
 --
 
 INSERT INTO `footer` (`id`, `title`, `footer`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2015-10-01 05:00:00', '2015-10-01 05:00:00');
+(1, '', '', '2015-10-21 06:35:38', '2015-10-21 06:35:38');
 
 -- --------------------------------------------------------
 
@@ -356,7 +391,7 @@ INSERT INTO `footer` (`id`, `title`, `footer`, `created_at`, `updated_at`) VALUE
 CREATE TABLE IF NOT EXISTS `footer2` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `footer` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `footer` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
@@ -367,7 +402,7 @@ CREATE TABLE IF NOT EXISTS `footer2` (
 --
 
 INSERT INTO `footer2` (`id`, `title`, `footer`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2015-10-01 05:00:00', '2015-10-01 05:00:00');
+(1, '', '', '2015-10-21 06:35:38', '2015-10-21 06:35:38');
 
 -- --------------------------------------------------------
 
@@ -378,7 +413,7 @@ INSERT INTO `footer2` (`id`, `title`, `footer`, `created_at`, `updated_at`) VALU
 CREATE TABLE IF NOT EXISTS `footer3` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `footer` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `footer` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
@@ -389,7 +424,7 @@ CREATE TABLE IF NOT EXISTS `footer3` (
 --
 
 INSERT INTO `footer3` (`id`, `title`, `footer`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2015-10-01 05:00:00', '2015-10-01 05:00:00');
+(1, '', '', '2015-10-21 06:35:38', '2015-10-21 06:35:38');
 
 -- --------------------------------------------------------
 
@@ -400,7 +435,7 @@ INSERT INTO `footer3` (`id`, `title`, `footer`, `created_at`, `updated_at`) VALU
 CREATE TABLE IF NOT EXISTS `footer4` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `footer` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `footer` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
@@ -411,7 +446,21 @@ CREATE TABLE IF NOT EXISTS `footer4` (
 --
 
 INSERT INTO `footer4` (`id`, `title`, `footer`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2015-10-01 05:00:00', '2015-10-01 05:00:00');
+(1, '', '', '2015-10-21 06:35:39', '2015-10-21 06:35:39');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forms`
+--
+
+CREATE TABLE IF NOT EXISTS `forms` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `formname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -471,7 +520,9 @@ INSERT INTO `form_name` (`id`, `name`, `status`, `no_of_fields`, `created_at`, `
 
 CREATE TABLE IF NOT EXISTS `form_value` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `form_detail_id` int(11) NOT NULL,
+  `form_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `values` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -511,9 +562,9 @@ CREATE TABLE IF NOT EXISTS `groups` (
 --
 
 INSERT INTO `groups` (`id`, `name`, `group_status`, `can_create_ticket`, `can_edit_ticket`, `can_post_ticket`, `can_close_ticket`, `can_assign_ticket`, `can_trasfer_ticket`, `can_delete_ticket`, `can_ban_email`, `can_manage_canned`, `can_manage_faq`, `can_view_agent_stats`, `department_access`, `admin_notes`, `created_at`, `updated_at`) VALUES
-(1, 'Group A', 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, '', '2015-10-01 04:59:59', '2015-10-01 04:59:59'),
-(2, 'Group B', 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, '', '2015-10-01 04:59:59', '2015-10-01 04:59:59'),
-(3, 'Group C', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, '', '2015-10-01 04:59:59', '2015-10-01 04:59:59');
+(1, 'Group A', 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, '', '2015-10-21 06:35:38', '2015-10-21 06:35:38'),
+(2, 'Group B', 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, '', '2015-10-21 06:35:38', '2015-10-21 06:35:38'),
+(3, 'Group C', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, '', '2015-10-21 06:35:38', '2015-10-21 06:35:38');
 
 -- --------------------------------------------------------
 
@@ -582,9 +633,9 @@ CREATE TABLE IF NOT EXISTS `help_topic` (
 --
 
 INSERT INTO `help_topic` (`id`, `topic`, `parent_topic`, `custom_form`, `department`, `ticket_status`, `priority`, `sla_plan`, `thank_page`, `ticket_num_format`, `internal_notes`, `status`, `type`, `auto_assign`, `auto_response`, `created_at`, `updated_at`) VALUES
-(1, 'Support query', 'Support query', '1', '1', '1', '2', '1', '', '1', '', 1, 1, 0, 0, '2015-10-01 04:59:59', '2015-10-01 04:59:59'),
-(2, 'Sales query', 'Sale query', '1', '2', '1', '2', '1', '', '1', '', 1, 1, 0, 0, '2015-10-01 04:59:59', '2015-10-01 04:59:59'),
-(3, 'Operational query', 'Operational query', '1', '3', '1', '2', '1', '', '1', '', 1, 1, 0, 0, '2015-10-01 04:59:59', '2015-10-01 04:59:59');
+(1, 'Support query', 'Support query', '', '1', '1', '2', '1', '', '1', '', 1, 1, 0, 0, '2015-10-21 06:35:38', '2015-10-21 06:35:38'),
+(2, 'Sales query', 'Sale query', '', '2', '1', '2', '1', '', '1', '', 1, 1, 0, 0, '2015-10-21 06:35:38', '2015-10-21 06:35:38'),
+(3, 'Operational query', 'Operational query', '', '3', '1', '2', '1', '', '1', '', 1, 1, 0, 0, '2015-10-21 06:35:38', '2015-10-21 06:35:38');
 
 -- --------------------------------------------------------
 
@@ -673,6 +724,8 @@ CREATE TABLE IF NOT EXISTS `migrations` (
 --
 
 INSERT INTO `migrations` (`migration`, `batch`) VALUES
+('2000_08_22_110830_create_forms_table', 1),
+('2000_08_23_110830_create_fields_table', 1),
 ('2014_10_12_000000_create_users_table', 1),
 ('2014_10_12_100000_create_password_resets_table', 1),
 ('2015_05_06_073651_create_footers_table', 1),
@@ -718,7 +771,9 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES
 ('2015_07_10_061107_create_ticketsource_table', 1),
 ('2015_08_10_114142_create_smtp_table', 1),
 ('2015_09_14_101844_create_users_organization_table', 1),
-('2015_09_17_050549_create_version_check_table', 1);
+('2015_09_17_050549_create_version_check_table', 1),
+('2015_10_09_105525_create_canned_response_table', 1),
+('2015_10_20_154640_create_ticket_form_data_table', 1);
 
 -- --------------------------------------------------------
 
@@ -791,13 +846,6 @@ CREATE TABLE IF NOT EXISTS `send_mail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
---
--- Dumping data for table `send_mail`
---
-
-INSERT INTO `send_mail` (`id`, `driver`, `host`, `port`, `encryption`, `name`, `email`, `password`) VALUES
-(1, '', '', '', '', '', '', '');
-
 -- --------------------------------------------------------
 
 --
@@ -822,9 +870,9 @@ CREATE TABLE IF NOT EXISTS `sla_plan` (
 --
 
 INSERT INTO `sla_plan` (`id`, `name`, `grace_period`, `admin_note`, `status`, `transient`, `ticket_overdue`, `created_at`, `updated_at`) VALUES
-(1, 'Sla 1', '6 Hours', '', 1, 0, 0, '2015-10-01 04:59:57', '2015-10-01 04:59:57'),
-(2, 'Sla 2', '12 Hours', '', 1, 0, 0, '2015-10-01 04:59:57', '2015-10-01 04:59:57'),
-(3, 'Sla 3', '24 Hours', '', 1, 0, 0, '2015-10-01 04:59:57', '2015-10-01 04:59:57');
+(1, 'Sla 1', '6 Hours', '', 1, 0, 0, '2015-10-21 06:35:36', '2015-10-21 06:35:36'),
+(2, 'Sla 2', '12 Hours', '', 1, 0, 0, '2015-10-21 06:35:36', '2015-10-21 06:35:36'),
+(3, 'Sla 3', '24 Hours', '', 1, 0, 0, '2015-10-21 06:35:36', '2015-10-21 06:35:36');
 
 -- --------------------------------------------------------
 
@@ -858,7 +906,7 @@ CREATE TABLE IF NOT EXISTS `system` (
 --
 
 INSERT INTO `system` (`id`, `status`, `url`, `name`, `department`, `page_size`, `log_level`, `purge_log`, `name_format`, `time_farmat`, `date_format`, `date_time_format`, `day_date_time`, `time_zone`, `content`, `created_at`, `updated_at`) VALUES
-(1, 0, '', '', '', '', '', '', '', '', '', 'd/m/Y H:i', '', 'Asia/Kolkata', '', '2015-10-01 05:00:00', '2015-10-01 05:00:00');
+(1, 1, '', '', '1', '', '', '', '', '', '', 'd/m/Y  H:i:s', '', 'Europe/London', '', '2015-10-21 06:35:38', '2015-10-23 00:59:09');
 
 -- --------------------------------------------------------
 
@@ -883,9 +931,9 @@ CREATE TABLE IF NOT EXISTS `teams` (
 --
 
 INSERT INTO `teams` (`id`, `name`, `status`, `team_lead`, `assign_alert`, `admin_notes`, `created_at`, `updated_at`) VALUES
-(1, 'Level 1 Support', 0, '', 0, '', '2015-10-01 04:59:59', '2015-10-01 04:59:59'),
-(2, 'Level 2 Support', 0, '', 0, '', '2015-10-01 04:59:59', '2015-10-01 04:59:59'),
-(3, 'Developer', 0, '', 0, '', '2015-10-01 04:59:59', '2015-10-01 04:59:59');
+(1, 'Level 1 Support', 0, '', 0, '', '2015-10-21 06:35:38', '2015-10-21 06:35:38'),
+(2, 'Level 2 Support', 0, '', 0, '', '2015-10-21 06:35:38', '2015-10-21 06:35:38'),
+(3, 'Developer', 0, '', 0, '', '2015-10-21 06:35:38', '2015-10-21 06:35:38');
 
 -- --------------------------------------------------------
 
@@ -960,7 +1008,7 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -979,7 +1027,7 @@ CREATE TABLE IF NOT EXISTS `ticket_attachment` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `file` mediumblob,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -993,6 +1041,22 @@ CREATE TABLE IF NOT EXISTS `ticket_collaborator` (
   `ticket_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `role` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticket_form_data`
+--
+
+CREATE TABLE IF NOT EXISTS `ticket_form_data` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ticket_id` int(11) NOT NULL,
+  `title` text COLLATE utf8_unicode_ci NOT NULL,
+  `content` mediumtext COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
@@ -1058,7 +1122,7 @@ CREATE TABLE IF NOT EXISTS `ticket_settings` (
 --
 
 INSERT INTO `ticket_settings` (`id`, `num_format`, `num_sequence`, `priority`, `sla`, `help_topic`, `max_open_ticket`, `collision_avoid`, `captcha`, `status`, `claim_response`, `assigned_ticket`, `answered_ticket`, `agent_mask`, `html`, `client_update`, `max_file_size`, `created_at`, `updated_at`) VALUES
-(1, '#ABCD 1234 1234567', '0', 'low', '12 Hours', 'support query', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '2015-10-01 04:59:57', '2015-10-01 04:59:57');
+(1, '#ABCD 1234 1234567', '0', '1', '1', '1', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, '2015-10-21 06:35:36', '2015-10-23 00:59:21');
 
 -- --------------------------------------------------------
 
@@ -1107,11 +1171,11 @@ CREATE TABLE IF NOT EXISTS `ticket_status` (
 --
 
 INSERT INTO `ticket_status` (`id`, `name`, `state`, `mode`, `message`, `flags`, `sort`, `properties`, `created_at`, `updated_at`) VALUES
-(1, 'Open', 'open', 3, 'Ticket have been Reopened by', 0, 1, 'Open tickets.', '2015-10-01 04:59:57', '2015-10-01 04:59:57'),
-(2, 'Resolved', 'closed', 1, 'Ticket have been Resolved by', 0, 2, 'Resolved tickets.', '2015-10-01 04:59:57', '2015-10-01 04:59:57'),
-(3, 'Closed', 'closed', 3, 'Ticket have been Closed by', 0, 3, 'Closed tickets. Tickets will still be accessible on client and staff panels.', '2015-10-01 04:59:57', '2015-10-01 04:59:57'),
-(4, 'Archived', 'archived', 3, 'Ticket have been Archived by', 0, 4, 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.', '2015-10-01 04:59:57', '2015-10-01 04:59:57'),
-(5, 'Deleted', 'deleted', 3, 'Ticket have been Deleted by', 0, 5, 'Tickets queued for deletion. Not accessible on ticket queues.', '2015-10-01 04:59:57', '2015-10-01 04:59:57');
+(1, 'Open', 'open', 3, 'Ticket have been Reopened by', 0, 1, 'Open tickets.', '2015-10-21 06:35:36', '2015-10-21 06:35:36'),
+(2, 'Resolved', 'closed', 1, 'Ticket have been Resolved by', 0, 2, 'Resolved tickets.', '2015-10-21 06:35:36', '2015-10-21 06:35:36'),
+(3, 'Closed', 'closed', 3, 'Ticket have been Closed by', 0, 3, 'Closed tickets. Tickets will still be accessible on client and staff panels.', '2015-10-21 06:35:36', '2015-10-21 06:35:36'),
+(4, 'Archived', 'archived', 3, 'Ticket have been Archived by', 0, 4, 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.', '2015-10-21 06:35:36', '2015-10-21 06:35:36'),
+(5, 'Deleted', 'deleted', 3, 'Ticket have been Deleted by', 0, 5, 'Tickets queued for deletion. Not accessible on ticket queues.', '2015-10-21 06:35:36', '2015-10-21 06:35:36');
 
 -- --------------------------------------------------------
 
@@ -1135,7 +1199,7 @@ CREATE TABLE IF NOT EXISTS `ticket_thread` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
@@ -1334,7 +1398,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `user_name`, `first_name`, `last_name`, `gender`, `email`, `ban`, `password`, `active`, `ext`, `phone_number`, `mobile`, `agent_sign`, `account_type`, `account_status`, `assign_group`, `primary_dpt`, `agent_tzone`, `daylight_save`, `limit_access`, `directory_listing`, `vocation_mode`, `company`, `role`, `internal_note`, `profile_pic`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'demo@demo.com', 'demo', 'demo', 0, 'demo@demo.com', 0, '$2y$10$4L3/whr/eCph0vYtYLENRuCiIolYpxZVwNH2xTFRFIQVfEfNrzGPa', 1, '', '', '', '', '', '', 'group A', 'support', '', '', '', '', '', '', 'admin', '', '', NULL, '2015-10-01 05:00:01', '2015-10-01 05:00:01');
+(1, 'demo@demo.com', 'demo', 'demo', 0, 'demo@demo.com', 0, '$2y$10$2PP4xEbcHO3fLjOUuVvpwOXFEzPlpcIoroJ/0Kz7XqQ3wOvF/IWda', 1, '', '', '', '', '', '', 'group A', 'support', '', '', '', '', '', '', 'admin', '', '', 'Z8x1HfxP8gA69j82UZkSUTytGzfmnk1ZS5nfCYaQjVdHqftVN2RxdRYxMXVn', '2015-10-21 06:35:39', '2015-10-23 01:51:03');
 
 -- --------------------------------------------------------
 
@@ -1371,7 +1435,7 @@ CREATE TABLE IF NOT EXISTS `version_check` (
 --
 
 INSERT INTO `version_check` (`id`, `current_version`, `new_version`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2015-10-01 05:00:00', '2015-10-01 05:00:00');
+(1, '', '', '2015-10-21 06:35:39', '2015-10-21 06:35:39');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
