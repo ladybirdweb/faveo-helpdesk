@@ -32,7 +32,7 @@ class="active"
 <div class="col-md-12">
 <div class="box box-primary">
 <div class="box-header">
-	<h2 class="box-title">Departments</h2><a href="{{route('departments.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_department')}}</a></div>
+	<h2 class="box-title">{!! Lang::get('lang.departments') !!}</h2><a href="{{route('departments.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_department')}}</a></div>
 
 <div class="box-body table-responsive no-padding">
 

@@ -28,7 +28,7 @@
     <body>
 	<div id="page" class="hfeed site">
             <header id="masthead" class="site-header" role="banner">
-                <div class="container" style="margin-bottom:-25px;">
+                <div class="container" style="">
                 <div id="logo" class="site-logo text-center" style="font-size: 30px;">
                 <?php 
                 $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
@@ -37,7 +37,7 @@
 				@if($system->url)
 					<a href="{!! $system->url !!}" rel="home">
 				@else
-					<a href="{{url('home')}}" rel="home">
+					<a href="{{url('/')}}" rel="home">
 				@endif
                 @if($company->use_logo == 1)
                 	<img src="{{asset('lb-faveo/dist')}}{{'/'}}{{$company->logo}}" alt="User Image" width="200px" height="200px"/>
@@ -54,13 +54,26 @@
 				<div id="navbar" class="navbar-wrapper text-center">
 					<nav class="navbar navbar-default site-navigation" role="navigation">
 						<ul class="nav navbar-nav navbar-menu">
-							<li @yield('home')><a href="{{url('home')}}">Home</a></li>
+							<li @yield('home')><a href="{{url('home')}}">{!! Lang::get('lang.home') !!}</a></li>
 							@if($system->first()->status == 1)
-								<li @yield('submit')><a href="{{URL::route('form')}}">Submit A Ticket</a></li>
+								<li @yield('submit')><a href="{{URL::route('form')}}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
 							@endif
+							<li @yield('kb')><a href="#">{!! Lang::get('lang.knowledge_base') !!}</a>
+                                <ul class="dropdown-menu">
+                                	<li><a href="{{route('category-list')}}">{!! Lang::get('lang.categories') !!}</a></li>  
+                                    <li><a href="{{route('article-list')}}">{!! Lang::get('lang.articles') !!}</a></li>  
+                                </ul>
+                            </li>
+                            <?php $pages = App\Model\kb\Page::where('status', '1')->where('visibility', '1')->get();
+                                ?>
+                                @foreach($pages as $page)
+                                    <li><a href="{{route('pages',$page->slug)}}">{{$page->name}}</a></li>
+                                @endforeach
                         @if(Auth::user())
-							<li @yield('myticket')><a href="{{url('mytickets')}}">My Tickets</a></li>
-							<li @yield('profile')><a href="#" >My Profile</a>
+							<li @yield('myticket')><a href="{{url('mytickets')}}">{!! Lang::get('lang.my_tickets') !!}</a></li>
+							
+                            {{-- <li @yield('contact')><a href="{{route('contact')}}">Contact us</a></li> --}}
+							<li @yield('profile')><a href="#" >{!! Lang::get('lang.my_profile') !!}</a>
 								<ul class="dropdown-menu">
 									<li>
 										<div class="banner-wrapper user-menu text-center clearfix">
@@ -71,19 +84,19 @@
                                     		@endif
                                     <h3 class="banner-title text-info h4">{{Auth::user()->first_name." ".Auth::user()->last_name}}</h3>
 											<div class="banner-content">
-												{{-- <a href="{{url('kb/client-profile')}}" class="btn btn-custom btn-xs">Edit Profile</a> --}} <a href="{{url('auth/logout')}}" class="btn btn-custom btn-xs">Log out</a>
+												{{-- <a href="{{url('kb/client-profile')}}" class="btn btn-custom btn-xs">Edit Profile</a> --}} <a href="{{url('auth/logout')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.log_out') !!}</a>
 											</div>
 											@if(Auth::user())
 												@if(Auth::user()->role != 'user')
 											<div class="banner-content">
-												<a href="{{url('dashboard')}}" class="btn btn-custom btn-xs">Dashboard</a>
+												<a href="{{url('dashboard')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.dashboard') !!}</a>
 											</div>
 												@endif
 											@endif
 											@if(Auth::user())
 												@if(Auth::user()->role == 'user')
 											<div class="banner-content">
-												<a href="{{url('client-profile')}}" class="btn btn-custom btn-xs">Profile</a>
+												<a href="{{url('client-profile')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.profile') !!}</a>
 											</div>
 												@endif
 											@endif
@@ -95,39 +108,48 @@
 						</ul><!-- .navbar-user -->
                         @else
 						<ul class="nav navbar-nav navbar-login">
-							<li <?php if($errors->first('email') || $errors->first('password')){ ?> class="sfHover" <?php } else { ?> <?php  } ?> ><a href="#"  data-toggle="collapse"  <?php if($errors->first('email') || $errors->first('password')){ } else { ?> class="collapsed" <?php  } ?> data-target="#login-form">Login <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a></li>
+							<li <?php if($errors->first('email') || $errors->first('password')){ ?> class="sfHover" <?php } else { ?> <?php  } ?> ><a href="#"  data-toggle="collapse"  <?php if($errors->first('email') || $errors->first('password')){ } else { ?> class="collapsed" <?php  } ?> data-target="#login-form">{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a></li>
 						</ul><!-- .navbar-login -->
 						<div id="login-form" <?php if($errors->first('email') || $errors->first('password')){ ?> class="login-form collapse fade clearfix in" <?php } else { ?> class="login-form collapse fade clearfix" <?php  } ?> >
 					            {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}  
 
 								<div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
-									{!! Form::text('email',null,['placeholder'=>'Email','class' => 'form-control']) !!}
+									{!! Form::text('email',null,['placeholder'=>Lang::get('lang.e-mail'),'class' => 'form-control']) !!}
 									{!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
 									<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 					          	</div>
 
 								<div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}">
-						            {!! Form::password('password',['placeholder'=>'Password','class' => 'form-control']) !!}
+						            {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}
 									{!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
 						            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
 					          	</div>
 								<ul class="list-unstyled pull-left">
-									<li><a href="{{url('password/email')}}">Forgot password</a><br></li>
-									<li><a href="#">Create Account</a></li>
+									<li><a href="{{url('password/email')}}">{!! Lang::get('lang.forgot_password') !!}</a><br></li>
+									<li><a href="#">{!! Lang::get('lang.create_account') !!}</a></li>
 								</ul>
-								<button type="submit" class="btn btn-custom pull-right">Login</button>
+								<button type="submit" class="btn btn-custom pull-right">{!! Lang::get('lang.login') !!}</button>
 							{!! Form::close() !!}
 						</div><!-- #login-form -->
                         @endif
 					</nav><!-- #site-navigation -->
 				</div><!-- #navbar -->
-	<div id="header-search" class="site-search clearfix">
-    
+    					
+    					<div id="header-search" class="site-search clearfix" style="padding-bottom:5px"><!-- #header-search -->
+                            {!!Form::open(['method'=>'get','action'=>'client\kb\UserController@search','class'=>'search-form clearfix'])!!}
+                            <div class="form-border">
 
-    
+                                <div class="form-inline ">
+                                    <div class="form-group">
+                                        <input type="text" name="s" class="search-field form-control input-lg" title="Enter search term" placeholder="{!! Lang::get('lang.have_a_question?_type_your_search_term_here') !!}" />
+                                    </div>
+                                    <button type="submit" class="search-submit btn btn-custom btn-lg pull-right">{!! Lang::get('lang.search') !!}</button>
+                                </div>
                             </div>
-                </div>
-                            </header>
+                            {!! Form::close() !!}
+                        </div>	                        
+            </div>
+        </header>
                             <!-- Left side column. contains the logo and sidebar -->
                             <!-- Right side column. Contains the navbar and content of the page -->
 @yield('breadcrumb')
@@ -152,8 +174,9 @@
 					        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 					        {{Session::get('fails')}}
 					    </div>
-				    @endif		
-                                   @yield('content')
+				    @endif
+	
+                             @yield('content')
                         <div id="sidebar" class="site-sidebar col-md-3">
 							<div class="widget-area">
 							<section id="section-banner" class="section">
@@ -235,7 +258,46 @@ $footer4 = App\Model\helpdesk\Theme\Footer4::whereId('1')->first();
 					<hr/>
                     <div class="row">
 						<div class="site-info col-md-6">
-                            <p class="text-muted">Copyright &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>. All rights reserved. Powered by <a href="http://www.faveohelpdesk.com/">Faveo</a></p>
+                            <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/">Faveo</a></p>
+                        </div>
+                        <div class="site-social text-right col-md-6">
+                            <?php $social = App\Model\kb\Social::where('id', '1')->first(); ?>
+                            <ul class="list-inline hidden-print">
+                                @if($social->facebook)
+                                <li><a href="{{$social->facebook}}" class="btn btn-social btn-facebook"><i class="fa fa-facebook fa-fw"></i></a></li>
+                                @endif
+                                @if($social->twitter)
+                                <li><a href="{{$social->twitter}}" class="btn btn-social btn-twitter"><i class="fa fa-twitter fa-fw"></i></a></li>
+                                @endif
+                                @if($social->google)
+                                <li><a href="{{$social->google}}" class="btn btn-social btn-google-plus"><i class="fa fa-google-plus fa-fw"></i></a></li>
+                                @endif
+                                @if($social->linkedin)
+                                <li><a href="{{$social->linkedin}}" class="btn btn-social btn-linkedin"><i class="fa fa-linkedin fa-fw"></i></a></li>
+                                @endif
+                                @if($social->vimeo)
+                                <li><a href="{{$social->vimeo}}" class="btn btn-social btn-vimeo"><i class="fa fa-vimeo-square fa-fw"></i></a></li>
+                                @endif
+                                @if($social->youtube)
+                                <li><a href="{{$social->youtube}}" class="btn btn-social btn-youtube"><i class="fa fa-youtube-play fa-fw"></i></a></li>
+                                @endif
+                                @if($social->pinterest)
+                                <li><a href="{{$social->pinterest}}" class="btn btn-social btn-pinterest"><i class="fa fa-pinterest fa-fw"></i></a></li>
+                                @endif
+                                @if($social->dribbble)
+                                <li><a href="{{$social->dribbble}}" class="btn btn-social btn-dribbble"><i class="fa fa-dribbble fa-fw"></i></a></li>
+                                @endif
+                                @if($social->flickr)
+                                <li><a href="{{$social->flickr}}" class="btn btn-social btn-flickr"><i class="fa fa-flickr fa-fw"></i></a></li>
+                                @endif
+                                @if($social->instagram)
+                                <li><a href="{{$social->instagram}}" class="btn btn-social btn-instagram"><i class="fa fa-instagram fa-fw"></i></a></li>
+                                @endif
+                                @if($social->rss)
+                                <li><a href="{{$social->rss}}" class="btn btn-social btn-rss"><i class="fa fa-rss fa-fw"></i></a></li>
+                                @endif
+
+                            </ul>
                         </div>
 					</div>
 		</footer><!-- #colophon -->

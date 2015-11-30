@@ -84,7 +84,7 @@ class="active"
 
 		<div class="col-xs-1 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">
 
-			<label for="ext">EXT</label>	
+			<label for="ext">{!! Lang::get('lang.ext') !!}</label>	
 			{!! $errors->first('ext', '<spam class="help-block">:message</spam>') !!}			
 			{!! Form::text('ext',null,['class' => 'form-control']) !!}
 

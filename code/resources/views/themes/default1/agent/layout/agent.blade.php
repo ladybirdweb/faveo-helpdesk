@@ -31,10 +31,7 @@
         <link type="text/css" href="{{asset("lb-faveo/downloads/jquery.ui.css")}}" rel="stylesheet">
         <link type="text/css" href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />        
-
-
         <!-- <link type="text/css" href="http://code.jquery.com/ui/1.9.1/themes/redmond/jquery-ui.css" rel="stylesheet"> -->
-
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -42,13 +39,10 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         @yield('HeadInclude')
     </head>
-    <body class="skin-yellow fixed">
-
+    <body class="skin-yellow skin-green fixed">
         <div class="wrapper">
-
             <header class="main-header">
                 <a href="" class="logo"><b>Faveo </b>HELPDESK</a>
-
 <?php
 $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
 if ($company != null) {
@@ -63,18 +57,16 @@ if ($company != null) {
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
-                            <li @yield('Dashboard')><a data-target="#tabA" href="#">Dashboard</a></li>
-                            <li @yield('Users')><a data-target="#tabB" href="#">Users</a></li>
-                            <li @yield('Tickets')><a data-target="#tabC" href="#">Tickets</a></li>
-                            <li @yield('Tools')><a data-target="#tabD" href="#">Tools</a></li>
+                            <li @yield('Dashboard')><a data-target="#tabA" href="#">{!! Lang::get('lang.dashboard') !!}</a></li>
+                            <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
+                            <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
+                            <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
                         </ul>
-
                         <ul class="nav navbar-nav navbar-right">
                             @if(Auth::user()->role == 'admin')
-                                <li><a href="{{url('agents')}}">Admin Panel</a></li>
+                                <li><a href="{{url('agents')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
                             @endif
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
@@ -104,29 +96,26 @@ if ($company != null) {
                                     <!-- Menu Footer-->
                                     <li class="user-footer" style="background-color:#1a2226;">
                                         <div class="pull-left">
-                                            <a href="{{URL::route('profile')}}" class="btn btn-info btn-sm"><b>Profile</b></a>
+                                            <a href="{{URL::route('profile')}}" class="btn btn-info btn-sm"><b>{!! Lang::get('lang.profile') !!}</b></a>
                                         </div>
                                         <div class="pull-right">
-                                            <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>Sign out</b></a>
+                                            <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! Lang::get('lang.sign_out') !!}</b></a>
                                         </div>
                                     </li>
                                 </ul>
                             </li>
-
                             </nav>
                             </header>
                             <!-- Left side column. contains the logo and sidebar -->
                             <aside class="main-sidebar">
                                 <!-- sidebar: style can be found in sidebar.less -->
                                 <section class="sidebar">
-
                                     <div class="user-panel">
                                     @if (trim($__env->yieldContent('profileimg')))
                                         <h1>@yield('profileimg')</h1>
                                     @else
                                     <div class = "row">
                                         <div class="col-xs-3"></div>
-
                                         <div class="col-xs-2" style="width:50%;">
                                         <a href="{!! url('profile') !!}">
                                         @if(Auth::user() && Auth::user()->profile_pic)
@@ -162,57 +151,47 @@ if ($company != null) {
                                     <!-- sidebar menu: : style can be found in sidebar.less -->
                                     <ul class="sidebar-menu">
                                         @yield('sidebar')
-                                        <li class="header">TICKETS</li>
-
+                                        <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
 <?php
- $inbox = App\Model\helpdesk\Ticket\Tickets::all();
-
-	?>
-     <?php $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status','1')->get();?>
-     <?php $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '0')->where('status','1')->get();
-            $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->get();
-            $i = count($tickets);
-     ?>
+$inbox = App\Model\helpdesk\Ticket\Tickets::all();
+$myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status','1')->get();
+$unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '0')->where('status','1')->get();
+$tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->get();
+$i = count($tickets);
+?>
                                         <li @yield('inbox')>
                                             <a href="{{ url('/ticket/inbox') }}" id="load-inbox">
-                                                <i class="fa fa-envelope"></i> <span>Inbox</span> <small class="label pull-right bg-green"><?php echo $i;?></small>
-                                            </a>
+                                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green"><?php echo $i;?></small>                                            </a>
                                         </li>
                                         <li @yield('myticket')>
                                              <a href="{{url('ticket/myticket')}}">
-                                                <i class="fa fa-user"></i> <span>My Tickets</span>
+                                                <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!} </span>
                                                 <small class="label pull-right bg-green">{{count($myticket) }}</small>
                                             </a>
                                         </li>
                                         <li @yield('unassigned')>
                                             <a href="{{url('unassigned')}}">
-                                                <i class="fa fa-th"></i> <span>Unassigned</span>
+                                                <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
                                                 <small class="label pull-right bg-green">{{count($unassigned)}}</small>
                                             </a>
                                         </li>
                                         <li @yield('trash')>
                                             <a href="{{url('trash')}}">
-                                                <i class="fa fa-trash-o"></i> <span>Trash</span>
+                                                <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
                                                 <?php $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->get();?>
                                                 <small class="label pull-right bg-green">{{count($deleted)}}</small>
                                             </a>
                                         </li>
-<li class="header">DEPARTMENTS</li>
-
+<li class="header">{!! Lang::get('lang.Departments') !!}</li>
 <?php
 $depts = App\Model\helpdesk\Agent\Department::all();
-
 foreach ($depts as $dept) {
-
 $open = App\Model\helpdesk\Ticket\Tickets::where('status','=','1')->where('assigned_to','=', 0)->where('dept_id','=',$dept->id)->get();
 $open = count($open);
-
 $underprocess = App\Model\helpdesk\Ticket\Tickets::where('status','=','1')->where('assigned_to','>', 0)->where('dept_id','=',$dept->id)->get();
 $underprocess = count($underprocess);
-
 $closed = App\Model\helpdesk\Ticket\Tickets::where('status','=','2')->where('dept_id','=',$dept->id)->get();
 $closed = count($closed);
-
 	// $underprocess = 0;
 	// foreach ($inbox as $ticket4) {
 	// 	if ($ticket4->assigned_to == null) {
@@ -220,16 +199,15 @@ $closed = count($closed);
 	// 		$underprocess++;
 	// 	}
 	// }
-
 if (Auth::user()->role == 'admin') { ?>
                                         <li class="treeview">
                                             <a href="#">
                                                 <i class="fa fa-folder-open"></i> <span>{!! $dept->name !!}</span> <i class="fa fa-angle-left pull-right"></i>
                                             </a>
                                             <ul class="treeview-menu">
-                                                <li><a href="{!! url::route('dept.open.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>Open<small class="label pull-right bg-green">{!! $open !!}</small></a></li>
-                                                <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>Inprogress<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
-                                                <li><a href="{!! url::route('dept.closed.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>Closed<small class="label pull-right bg-green">{!! $closed !!}</small></a></li>
+                                                <li><a href="{!! url::route('dept.open.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.open') !!}<small class="label pull-right bg-green">{!! $open !!}</small></a></li>
+                                                <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.inprogress') !!}<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
+                                                <li><a href="{!! url::route('dept.closed.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.closed') !!}<small class="label pull-right bg-green">{!! $closed !!}</small></a></li>
                                             </ul>
                                         </li>
 <?php } if (Auth::user()->role == 'agent' && Auth::user()->primary_dpt == $dept->name) { ?>
@@ -238,9 +216,9 @@ if (Auth::user()->role == 'admin') { ?>
                                                 <i class="fa fa-folder-open"></i> <span>{!! $dept->name !!}</span> <i class="fa fa-angle-left pull-right"></i>
                                             </a>
                                             <ul class="treeview-menu">
-                                                <li><a href="{!! url::route('dept.open.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>Open<small class="label pull-right bg-green">{!! $open !!}</small></a></li>
-                                                <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>Inprogress<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
-                                                <li><a href="{!! url::route('dept.closed.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>Closed<small class="label pull-right bg-green">{!! $closed !!}</small></a></li>
+                                                <li><a href="{!! url::route('dept.open.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.open') !!}<small class="label pull-right bg-green">{!! $open !!}</small></a></li>
+                                                <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.inprogress') !!}<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
+                                                <li><a href="{!! url::route('dept.closed.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.closed') !!}<small class="label pull-right bg-green">{!! $closed !!}</small></a></li>
                                             </ul>
                                         </li>
 <?php } }  ?>
@@ -259,35 +237,34 @@ $group = App\Model\helpdesk\Agent\Groups::where('name', '=', $agent_group)->wher
                                     <div class="tabs-content">
                                         <div class="tabs-pane @yield('dashboard-bar')"  id="tabA">
                                             <ul class="nav navbar-nav">
-                                                <li id="bar" @yield('dashboard') ><a href="{{url('dashboard')}}">Dashboard</a></li>
-                                                <li id="bar" @yield('profile') ><a href="{{url('profile')}}">Profile</a></li>
+                                                <li id="bar" @yield('dashboard') ><a href="{{url('dashboard')}}">{!! Lang::get('lang.dashboard') !!}</a></li>
+                                                <li id="bar" @yield('profile') ><a href="{{url('profile')}}">{!! Lang::get('lang.profile') !!}</a></li>
                                             </ul>
                                         </div>
                                         <div class="tabs-pane @yield('user-bar')" id="tabB">
                                             <ul class="nav navbar-nav">
-                                                <li id="bar" @yield('user')><a href="{{ url('user') }}" >User Directory</a></li></a></li>
-                                                <li id="bar" @yield('organizations')><a href="{{ url('organizations') }}" >Organizations</a></li></a></li>
+                                                <li id="bar" @yield('user')><a href="{{ url('user') }}" >{!! Lang::get('lang.user_directory') !!}</a></li></a></li>
+                                                <li id="bar" @yield('organizations')><a href="{{ url('organizations') }}" >{!! Lang::get('lang.organizations') !!}</a></li></a></li>
                                             </ul>
                                         </div>
                                         <div class="tabs-pane @yield('ticket-bar')" id="tabC">
                                             <ul class="nav navbar-nav">
-                                                <li id="bar" @yield('open')><a href="{{ url('/ticket/open') }}" >Open</a></li>
-                                                <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered') }}" >Answered</a></li>
-                                                <li id="bar" @yield('myticket')><a href="{{ url('/ticket/myticket') }}" >My Ticket</a></li>
+                                                <li id="bar" @yield('open')><a href="{{ url('/ticket/open') }}" >{!! Lang::get('lang.open') !!}</a></li>
+                                                <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered') }}" >{!! Lang::get('lang.answered') !!}</a></li>
+                                                <li id="bar" @yield('myticket')><a href="{{ url('/ticket/myticket') }}" >{!! Lang::get('lang.my_tickets') !!}</a></li>
                                                 {{-- <li id="bar" @yield('ticket')><a href="{{ url('ticket') }}" >Ticket</a></li> --}}
                                                 {{-- <li id="bar" @yield('overdue')><a href="{{ url('/ticket/overdue') }}" >Overdue</a></li> --}}
-                                                <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned') }}" >Assigned</a></li>
-                                                <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed') }}" >Closed</a></li>
+                                                <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned') }}" >{!! Lang::get('lang.assigned') !!}</a></li>
+                                                <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed') }}" >{!! Lang::get('lang.closed') !!}</a></li>
                                                 <?php if ($group->can_create_ticket == 1) {?>
-                                                <li id="bar" @yield('newticket')><a href="{{ url('/newticket') }}" >Create Ticket
-                                                </a></li>
+                                                <li id="bar" @yield('newticket')><a href="{{ url('/newticket') }}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
                                                 <?php } ?>
                                             </ul>
                                         </div>
                                         <div class="tabs-pane @yield('tools-bar')" id="tabD">
                                             <ul class="nav navbar-nav">
-                                                <li id="bar" @yield('tools')><a href="{{ url('/canned/list') }}" >Canned</a></li>
-                                                {{-- <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered') }}" >Answered</a></li> --}}
+                                                <li id="bar" @yield('tools')><a href="{{ url('/canned/list') }}" >{!! Lang::get('lang.canned') !!}</a></li>
+                                                <li id="bar" @yield('kb')><a href="{{ url('/comment') }}" >{!! Lang::get('lang.knowledge_base') !!}</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -297,22 +274,18 @@ $group = App\Model\helpdesk\Agent\Groups::where('name', '=', $agent_group)->wher
                                 @yield('PageHeader')
                                 @yield('breadcrumbs')
                             </section>
-
                             <!-- Main content -->
                             <section class="content">
-
                                 @yield('content')
                             </section><!-- /.content -->
-                            <!-- /.content-wrapper -->
                         </div>
                         <footer class="main-footer">
                             <div class="pull-right hidden-xs">
                                 <b>Version</b> {!! Config::get('app.version') !!}
                             </div>
-            <strong>Copyright &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>.</strong> All rights reserved. Powered by <a href="http://www.faveohelpdesk.com/">Faveo</a>
+            <strong>{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>.</strong> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/">Faveo</a>
                         </footer>
                     </div><!-- ./wrapper -->
-
                     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
                     <!-- Bootstrap 3.3.2 JS -->
                     <script src="{{asset("lb-faveo/downloads/bootstrap.min.js")}}" type="text/javascript"></script>
@@ -335,14 +308,13 @@ $group = App\Model\helpdesk\Agent\Groups::where('name', '=', $agent_group)->wher
                     <!-- Page Script -->
                     <script>
 $(function() {
-    //Enable iCheck plugin for checkboxes
-    //iCheck for checkbox and radio inputs
+    // Enable iCheck plugin for checkboxes
+    // iCheck for checkbox and radio inputs
     // $('input[type="checkbox"]').iCheck({
         // checkboxClass: 'icheckbox_flat-blue',
         // radioClass: 'iradio_flat-blue'
-//     });
-
-    //Enable check and uncheck all functionality
+    // });
+    // Enable check and uncheck all functionality
     $(".checkbox-toggle").click(function() {
         var clicks = $(this).data('clicks');
         if (clicks) {
@@ -362,13 +334,11 @@ $(function() {
         var $this = $(this).find("a > i");
         var glyph = $this.hasClass("glyphicon");
         var fa = $this.hasClass("fa");
-
         //Switch states
         if (glyph) {
             $this.toggleClass("glyphicon-star");
             $this.toggleClass("glyphicon-star-empty");
         }
-
         if (fa) {
             $this.toggleClass("fa-star");
             $this.toggleClass("fa-star-o");
@@ -378,9 +348,7 @@ $(function() {
                     </script>
                     <script type="text/javascript">
                         //     $(document).ready(function() {
-
                         //         $("#content").Editor();
-
                         //     });
                         // </script>
                    <!-- // <script src="../plugins/jQuery/jQuery-2.1.3.min.js"></script> -->
@@ -391,8 +359,6 @@ $(function() {
                     <script src="{{asset("lb-faveo/downloads/CKEditor.js")}}"></script>
                     <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
                     <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
-
-        
                     <script>
                         // $(function () {
                         // //Add text editor
@@ -405,5 +371,5 @@ $(function() {
                                 });
                     </script>
                     @yield('FooterInclude')
-                    </body>
-                    </html>
+                </body>
+            </html>

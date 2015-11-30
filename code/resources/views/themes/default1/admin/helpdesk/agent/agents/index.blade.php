@@ -33,7 +33,7 @@ class="active"
 	
 <div class="box box-primary">
 <div class="box-header">
-	<h2 class="box-title">Staffs</h2><a href="{{route('agents.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_agent')}}</a></div>
+	<h2 class="box-title">{!! Lang::get('lang.staffs') !!} </h2><a href="{{route('agents.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_agent')}}</a></div>
 
 <div class="box-body table-responsive no-padding">
 <?php 
@@ -95,9 +95,9 @@ class="active"
 							{{-- <td>{{$use->Lastlogin_at}}</td> --}}
 							<td>
 							{!! Form::open(['route'=>['agents.destroy', $use->id],'method'=>'DELETE']) !!}
-							<a href="{{route('agents.edit', $use->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> Edit</a>
+							<a href="{{route('agents.edit', $use->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!} </a>
 								<!-- To pop up a confirm Message -->
-									{!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> Delete',
+									{!! Form::button(' <i class="fa fa-trash" style="color:black;"> </i> '  . Lang::get('lang.delete') ,
 					            		['type' => 'submit',
 					            		'class'=> 'btn btn-warning btn-xs btn-flat',
 					            		'onclick'=>'return confirm("Are you sure?")'])

@@ -20,7 +20,7 @@ class="active"
 
 <div class="box box-primary">
 	<div class="box-header">
-	 	<h3 class="box-title">Create </h3>
+	 	<h3 class="box-title">{!! Lang::get('lang.create') !!} </h3>
 	 	<div class="pull-right">{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}</div>
 	</div>
 

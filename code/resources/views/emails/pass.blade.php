@@ -1,10 +1,11 @@
 Hello {!! $name !!}, <br/><br/> 
 
-Your account has been created. <br/> <br/> 
+This email is confirmation that you are now registered at our helpdesk. <br/> <br/> 
 
+Registered email: support@ladybirdweb.com<br/>
 Password: {{$password}} <br/> <br/> 
 
-To view or respond to the ticket, please login {!! \URL::route('ticket2') !!} to the support ticket system <br/> <br/> 
+You can visit the helpdesk to browse articles and contact us at any time: {!! \URL::route('ticket2') !!}<br/> <br/> 
 
 Thank You.<br/><br/> 
 

@@ -42,17 +42,17 @@ class="active"
             <div class="box">
                 <div class="box-header">
                     <div class="box-title">
-                        Forms
+                        {!! Lang::get('lang.forms') !!}
                     </div>
-                    <a href="{!! url('forms/create') !!}" class="pull-right"><button class="btn btn-primary">Create Form</button></a> 
+                    <a href="{!! url('forms/create') !!}" class="pull-right"><button class="btn btn-primary">{!! Lang::get('lang.create_form') !!}</button></a> 
                 </div>
                 <div class="box-body">
 
                    <table id="example2" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Form Name</th>
-                                <th>Action</th>
+                                <th>{!! Lang::get('lang.form_name') !!}</th>
+                                <th>{!! Lang::get('lang.action') !!}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,26 +66,23 @@ class="active"
                                 <td>{!! $form->formname !!}</td>
 
                                 
-                                 <td>{!! link_to_route('forms.show','View This Form',[$form->id],['id'=>'View','class'=>'btn btn-primary btn-sm']) !!}
-                                     
-                                     
-                                    
-                                                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$form->id}}delete">Delete Form</button>
+                                 <td>{!! link_to_route('forms.show', Lang::get('lang.view_this_form') ,[$form->id],['id'=>'View','class'=>'btn btn-primary btn-sm']) !!}
+                                                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$form->id}}delete">{!! Lang::get('lang.delete_from') !!}</button>
                                                             
                                                             <div class="modal fade" id="{{$form->id}}delete">
                                                                 <div class="modal-dialog">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                 <h4 class="modal-title">Delete</h4>
+                                 <h4 class="modal-title">{!! Lang::get('lang.delete') !!}</h4>
                                       </div>
                                          <div class="modal-body">
-                                             <p>Are you sure you want to Delete ?</p>
+                                             <p>{!! Lang::get('lang.are_you_sure_you_want_to_delete') !!} ?</p>
                                                 </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                                                            {!! link_to_route('forms.delete','Delete',[$form->id],['id'=>'delete','class'=>'btn btn-danger btn-sm']) !!}
-                                                                </div>
+                                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">{!! Lang::get('lang.close') !!}</button>
+                                                                {!! link_to_route('forms.delete', Lang::get('lang.delete'),[$form->id],['id'=>'delete','class'=>'btn btn-danger btn-sm']) !!}
+                                                        </div>
                                                      </div> 
                                              </div> 
                                       </div> 

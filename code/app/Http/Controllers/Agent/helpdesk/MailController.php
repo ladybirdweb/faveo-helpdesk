@@ -69,8 +69,7 @@ class MailController extends Controller {
 			    die('Mailbox is empty');
 			}
 			// dd($mailsIds);
-			foreach($mailsIds as $mailId)
-			{
+			foreach($mailsIds as $mailId) {
 				$overview = $mailbox->get_overview($mailId);	
 				$var = $overview[0]->seen ? 'read' : 'unread';
 				if ($var == 'unread') {
@@ -82,8 +81,7 @@ class MailController extends Controller {
 					}
 					$body = $mail->textHtml;
 					// dd($mailId);
-					if($body == null)
-					{
+					if($body == null) {
 						$body = $mailbox->backup_getmail($mailId);
 						$body = str_replace('\r\n', '<br/>', $body);
 						// var_dump($body);
@@ -112,8 +110,7 @@ class MailController extends Controller {
 							$thread_id = Ticket_Thread::whereRaw('id = (select max(`id`) from ticket_thread)')->first();
 							$thread_id = $thread_id->id;
 					
-						foreach($mail->getAttachments() as $attachment)
-						{
+						foreach($mail->getAttachments() as $attachment) {
 							$support = "support";
 							// echo $_SERVER['DOCUMENT_ROOT'];
 							$dir_img_paths = __DIR__;
@@ -132,7 +129,6 @@ class MailController extends Controller {
 							$pos = strpos($body, $filepath[1]);
 
 							if($pos == false) {
-
                                 if($settings_email->first()->attachment == 1) {
 		     				        $upload = new Ticket_attachments;
                 					$upload->file = $file_data;

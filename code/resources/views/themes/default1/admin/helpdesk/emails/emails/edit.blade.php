@@ -102,7 +102,7 @@ class="active"
 
 		<div class="col-md-6 form-group">
 
-			<h4>Reuired Authentication</h4>
+			<h4>{!! Lang::get('lang.reuired_authentication') !!}</h4>
 
 		</div>
 
@@ -136,7 +136,7 @@ class="active"
 
 		<div class="col-md-6 form-group">
 
-			<h4>Fetching Email via IMAP</h4>
+			<h4>{!! Lang::get('lang.fetching_email_via_imap_or_pop') !!}</h4>
 
 		</div>
 

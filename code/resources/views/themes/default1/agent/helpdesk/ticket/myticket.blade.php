@@ -24,7 +24,7 @@ class="active"
 <!-- Main content -->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">My Ticket </h3> <small id="title_refresh">{!! $tickets->total() !!} tickets</small>
+        <h3 class="box-title">{!! Lang::get('lang.my_tickets') !!}</h3> <small id="title_refresh">{!! $tickets->total() !!} {!! Lang::get('lang.tickets') !!}</small>
     </div><!-- /.box-header -->
     @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
@@ -49,23 +49,23 @@ class="active"
             <!-- Check all button -->
             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
             <a class="btn btn-default btn-sm" id="click"><i class="fa fa-refresh"></i></a>
-            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="Delete">
-            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="Close">
+            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
+            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
             
         </div>
         <div class=" table-responsive mailbox-messages"  id="refresh">
-                <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>Loading...</b></p>
+                <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! Lang::get('lang.loading') !!}...</b></p>
         <!-- table -->
             <table class="table table-hover table-striped">
                 <thead>
                 <th></th>
-                <th>Subject</th>
-                <th>Ticket ID</th>
-                <th>Priority</th>
-                <th>From</th>
-                <th>Last Replier</th>
-                <th>Assigned To</th>
-                <th>Last Activity</th>
+                <th>{!! Lang::get('lang.subject') !!}</th>
+                <th>{!! Lang::get('lang.ticket_id') !!}</th>
+                <th>{!! Lang::get('lang.priority') !!}</th>
+                <th>{!! Lang::get('lang.from') !!}</th>
+                <th>{!! Lang::get('lang.last_replier') !!}</th>
+                <th>{!! Lang::get('lang.assigned_to') !!}</th>
+                <th>{!! Lang::get('lang.last_activity') !!}</th>
                 </thead>
                 <tbody id="hello">
                     

@@ -446,14 +446,11 @@ EOF;
         $this->parser->parse('foo: !!php/object:O:30:"Symfony\Tests\Component\Yaml\B":1:{s:1:"b";s:3:"foo";}', true, false);
     }
 
+    /**
+     * @requires extension iconv
+     */
     public function testNonUtf8Exception()
     {
-        if (!function_exists('iconv')) {
-            $this->markTestSkipped('Exceptions for non-utf8 charsets require the iconv() function.');
-
-            return;
-        }
-
         $yamls = array(
             iconv('UTF-8', 'ISO-8859-1', "foo: 'äöüß'"),
             iconv('UTF-8', 'ISO-8859-15', "euro: '€'"),
@@ -620,6 +617,32 @@ hash:
 EOF;
 
         $this->assertEquals(array('hash' => null), Yaml::parse($input));
+    }
+
+    public function testCommentAtTheRootIndent()
+    {
+        $this->assertEquals(array(
+            'services' => array(
+                'app.foo_service' => array(
+                    'class' => 'Foo',
+                ),
+                'app/bar_service' => array(
+                    'class' => 'Bar',
+                ),
+            ),
+        ), Yaml::parse(<<<EOF
+# comment 1
+services:
+# comment 2
+    # comment 3
+    app.foo_service:
+        class: Foo
+# comment 4
+    # comment 5
+    app/bar_service:
+        class: Bar
+EOF
+        ));
     }
 
     public function testStringBlockWithComments()

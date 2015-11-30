@@ -13,6 +13,7 @@ use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Model\helpdesk\Ticket\Ticket_Collaborator;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
+use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Alert;
@@ -54,6 +55,135 @@ class TicketController extends Controller {
 	 */
 	public function inbox_ticket_list() {
 		return view('themes.default1.agent.helpdesk.ticket.inbox');
+	}
+
+	public function get_inbox() {
+		return \Datatable::collection(Tickets::where('status', '=', 1)->orderBy('id', 'DESC')->get())
+			->searchColumns('subject')
+			->orderColumns('ticket_number')
+
+			->addColumn('checkbox', function ($ticket) {
+                return "<input type='checkbox' class='icheckbox_flat-blue' name='select_all' value=".$ticket->id."/>";
+			})
+
+			->addColumn('name', function ($ticket) {
+				$title = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
+                        $string = strip_tags($title->title);
+                        if($title)
+                        if($title == null){
+                        } else {
+	                        $collaborators = Ticket_Collaborator::where('ticket_id','=',$ticket->id)->get();
+	                        $collab = count($collaborators);
+	                        // check atatchments
+	                        $attachments = Ticket_attachments::where('thread_id','=',$title->id)->first();
+	                        $attach = count($attachments);
+	                        if (strlen($string) > 40) {
+	                            $stringCut = substr($string, 0, 40);
+	                            $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...'; 
+	                        }
+	                        $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
+                        	$TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
+                        	$LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first(); 
+                        	if($LastResponse->role == "user") {
+                            	$rep = "#F39C12";
+                            	$username = $LastResponse->user_name;
+                            } else { $rep = "#000"; $username = $LastResponse->first_name ." ". $LastResponse->last_name; 
+                            	if($LastResponse->first_name==null || $LastResponse->last_name==null) {
+	                                $username = $LastResponse->user_name;
+                            	}
+                            }   
+	                        $titles = Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
+	                        $count = count($titles);
+	                        foreach($titles as $title) {
+	                            $title = $title;
+	                        }  
+	                        $assigned_to = User::where('id','=',$ticket->assigned_to)->first();
+	                        if($assigned_to == null) {
+	                            $assigned = "Unassigned";
+	                        } else {
+	                            $assigned = $assigned_to->first_name ." ". $assigned_to->last_name;
+	                        }
+	                        if($collab > 0) {
+	                        	$collabs = "&nbsp;<i class='fa fa-users'></i>";
+	                        }
+	                        if($attach > 0) { 
+	                        	$attachs = "&nbsp;<i class='fa fa-paperclip'></i>";
+	                        	if($collab > 0) {
+	                        		$collabs = $collabs . $attachs;
+	                        	} else {
+	                        		$collabs = $attachs;
+	                        	}
+	                    	}
+					return "<a href=".route('ticket.thread',[$ticket->id])." title=". $title->title .">".$string."</a> (".$count.") <i class='fa fa-comment'></i>
+                        ".$collab;  
+				}
+			})
+			
+			->addColumn('Ticket ID', function ($ticket) {
+				$ticket_number = "<a href='". route('ticket.thread',[$ticket->id]) ."' title=''># ".$ticket->ticket_number."</a>";
+				return $ticket_number;
+			})
+			
+			->addColumn('Priority', function ($ticket) {
+				$priority = Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first();
+                return "<td class='mailbox-priority'><spam style='color:green;'>".$priority->priority_desc."</spam></td>";
+				// return TicketController::usertimezone($st);
+			})
+
+			->addColumn('From', function ($ticket) {
+				$from = User::where('id','=',$ticket->user_id)->first(); 
+				if($from->role == "user") {
+                return	$from->user_name;
+                } else {
+                return	$from->first_name." ".$from->last_name;
+                }
+			})
+
+			->addColumn('Last Replier', function ($ticket) {
+				 $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
+                        $TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
+                        $LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first(); 
+                        if($LastResponse->role == "user") {
+                            $rep = "#F39C12";
+                            $username = $LastResponse->user_name;
+                            } else { $rep = "#000"; $username = $LastResponse->first_name ." ". $LastResponse->last_name; 
+                            if($LastResponse->first_name==null || $LastResponse->last_name==null) {
+                                $username = $LastResponse->user_name;
+                            }}   
+                return $username;
+			})
+
+			->addColumn('Assigned To', function ($ticket) {
+				$assigned_to = 	User::where('id','=',$ticket->assigned_to)->first();
+                        if($assigned_to == null) {
+                            $assigned = "Unassigned";
+                        } else {
+                            $assigned = $assigned_to->first_name ." ". $assigned_to->last_name;
+                        }  
+                return $assigned;
+			})
+
+			->addColumn('Last Activity', function ($ticket) {
+				$assigned_to = User::where('id','=',$ticket->assigned_to)->first();
+                        if($assigned_to == null) {
+                            $assigned = "Unassigned";
+                        } else {
+                            $assigned = $assigned_to->first_name ." ". $assigned_to->last_name;
+                        }  
+                return $assigned;
+			})
+
+			->addColumn('Last Activity', function ($ticket) {
+				$titles = Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
+                        $count = count($titles);
+                        foreach($titles as $title) {
+                            $title = $title;
+                        }  
+				return TicketController::usertimezone($title->created_at);
+			})
+
+			->make();
+		
 	}
 
 	/**
@@ -429,8 +559,8 @@ class TicketController extends Controller {
 			// mail user his/her password
 			if ($user->save()) {
 				$user_id = $user->id;
-				if (Mail::send('emails.pass', ['password' => $password, 'name' => $username, 'from'=>$company], function ($message) use ($emailadd, $username) {
-					$message->to($emailadd, $username)->subject('password');
+				if (Mail::send('emails.pass', ['password' => $password, 'name' => $username, 'from'=>$company], function ($message) use ($emailadd, $username,$company) {
+					$message->to($emailadd, $username)->subject('Welcome to '.$company.' helpdesk');
 				})) {
 					// need to do something here....
 				}

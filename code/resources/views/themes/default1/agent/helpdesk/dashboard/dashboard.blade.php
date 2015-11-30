@@ -24,7 +24,7 @@ class="active"
 
           ?>
                 <div class="box-header with-border">
-                    <h3 class="box-title">Line Chart</h3>
+                    <h3 class="box-title">{!! Lang::get('lang.line_chart') !!}</h3>
                     <div class="box-tools pull-right">
                       <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                       <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -40,18 +40,18 @@ class="active"
             <hr/>
             <div class="box">
                 <div class="box-header">
-                             <h1>Statistics</h1>
+                             <h1>{!! Lang::get('lang.statistics') !!}</h1>
             
                 </div>
                 <div class="box-body">
            <table class="table table-hover" style="overflow:hidden;">
              
                     <tr>
-                <th>Department</th>
-                <th>Opened</th>
-                <th>Resolved</th>
-                <th>Closed</th>
-                <th>Deleted</th>
+                <th>{!! Lang::get('lang.department') !!}</th>
+                <th>{!! Lang::get('lang.opened') !!}</th>
+                <th>{!! Lang::get('lang.resolved') !!}</th>
+                <th>{!! Lang::get('lang.closed') !!}</th>
+                <th>{!! Lang::get('lang.deleted') !!}</th>
                 </tr>
 
 <?php $departments = App\Model\helpdesk\Agent\Department::all(); ?>

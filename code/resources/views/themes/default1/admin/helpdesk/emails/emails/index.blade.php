@@ -32,7 +32,7 @@ class="active"
 <div class="col-md-12">
 <div class="box box-primary">
 <div class="box-header">
-	<h2 class="box-title">Incoming Emails</h2><a href="{{route('emails.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_email')}}</a></div>
+	<h2 class="box-title">{!! Lang::get('lang.incoming_emails') !!}</h2><a href="{{route('emails.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_email')}}</a></div>
 
 <div class="box-body table-responsive no-padding">
 

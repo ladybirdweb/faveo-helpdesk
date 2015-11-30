@@ -31,7 +31,8 @@
         "Propaganistas\\LaravelPhone\\LaravelPhoneServiceProvider",
         "Bugsnag\\BugsnagLaravel\\BugsnagLaravelServiceProvider",
         "Vsmoraes\\Pdf\\PdfServiceProvider",
-        "Thomaswelton\\LaravelGravatar\\LaravelGravatarServiceProvider"
+        "Thomaswelton\\LaravelGravatar\\LaravelGravatarServiceProvider",
+        "Chumper\\Datatable\\DatatableServiceProvider"
     ],
     "eager": [
         "Illuminate\\Auth\\AuthServiceProvider",
@@ -53,7 +54,8 @@
         "Propaganistas\\LaravelPhone\\LaravelPhoneServiceProvider",
         "Bugsnag\\BugsnagLaravel\\BugsnagLaravelServiceProvider",
         "Vsmoraes\\Pdf\\PdfServiceProvider",
-        "Thomaswelton\\LaravelGravatar\\LaravelGravatarServiceProvider"
+        "Thomaswelton\\LaravelGravatar\\LaravelGravatarServiceProvider",
+        "Chumper\\Datatable\\DatatableServiceProvider"
     ],
     "deferred": {
         "command.app.name": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",

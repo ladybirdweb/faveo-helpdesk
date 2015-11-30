@@ -41,7 +41,7 @@ class="active"
 <div class="box">
     <div class="box-header">
    <?php $id = App\Model\helpdesk\Form\Forms::where('id',$id)->first(); ?>
-    <h3 class="box-title">Form Name : {!! $id->formname !!}</h3>
+    <h3 class="box-title">{!! Lang::get('lang.form_name') !!} : {!! $id->formname !!}</h3>
  
     </div>
         <div class="box-body">

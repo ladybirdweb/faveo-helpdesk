@@ -55,6 +55,7 @@ class PHPUnit_TextUI_TestRunner extends PHPUnit_Runner_BaseTestRunner
     /**
      * @param PHPUnit_Runner_TestSuiteLoader $loader
      * @param PHP_CodeCoverage_Filter        $filter
+     *
      * @since Method available since Release 3.4.0
      */
     public function __construct(PHPUnit_Runner_TestSuiteLoader $loader = null, PHP_CodeCoverage_Filter $filter = null)
@@ -69,9 +70,11 @@ class PHPUnit_TextUI_TestRunner extends PHPUnit_Runner_BaseTestRunner
     }
 
     /**
-     * @param  PHPUnit_Framework_Test|ReflectionClass $test
-     * @param  array                                  $arguments
+     * @param PHPUnit_Framework_Test|ReflectionClass $test
+     * @param array                                  $arguments
+     *
      * @return PHPUnit_Framework_TestResult
+     *
      * @throws PHPUnit_Framework_Exception
      */
     public static function run($test, array $arguments = array())
@@ -136,12 +139,17 @@ class PHPUnit_TextUI_TestRunner extends PHPUnit_Runner_BaseTestRunner
     }
 
     /**
-     * @param  PHPUnit_Framework_Test       $suite
-     * @param  array                        $arguments
+     * @param PHPUnit_Framework_Test $suite
+     * @param array                  $arguments
+     *
      * @return PHPUnit_Framework_TestResult
      */
     public function doRun(PHPUnit_Framework_Test $suite, array $arguments = array())
     {
+        if (isset($arguments['configuration'])) {
+            $GLOBALS['__PHPUNIT_CONFIGURATION_FILE'] = $arguments['configuration'];
+        }
+
         $this->handleConfiguration($arguments);
 
         $this->processSuiteFilters($suite, $arguments);
@@ -498,7 +506,7 @@ class PHPUnit_TextUI_TestRunner extends PHPUnit_Runner_BaseTestRunner
             if (isset($arguments['coverageText'])) {
                 if ($arguments['coverageText'] == 'php://stdout') {
                     $outputStream = $this->printer;
-                    $colors       = $arguments['colors'];
+                    $colors       = $arguments['colors'] && $arguments['colors'] != PHPUnit_TextUI_ResultPrinter::COLOR_NEVER;
                 } else {
                     $outputStream = new PHPUnit_Util_Printer($arguments['coverageText']);
                     $colors       = false;
@@ -554,6 +562,7 @@ class PHPUnit_TextUI_TestRunner extends PHPUnit_Runner_BaseTestRunner
 
     /**
      * @param string $buffer
+     *
      * @since  Method available since Release 3.1.0
      */
     protected function write($buffer)
@@ -573,6 +582,7 @@ class PHPUnit_TextUI_TestRunner extends PHPUnit_Runner_BaseTestRunner
      * Returns the loader to be used.
      *
      * @return PHPUnit_Runner_TestSuiteLoader
+     *
      * @since  Method available since Release 2.2.0
      */
     public function getLoader()
@@ -586,6 +596,7 @@ class PHPUnit_TextUI_TestRunner extends PHPUnit_Runner_BaseTestRunner
 
     /**
      * @param array $arguments
+     *
      * @since  Method available since Release 3.2.1
      */
     protected function handleConfiguration(array &$arguments)
@@ -980,6 +991,7 @@ class PHPUnit_TextUI_TestRunner extends PHPUnit_Runner_BaseTestRunner
     /**
      * @param $extension
      * @param string $message
+     *
      * @since Method available since Release 4.7.3
      */
     private function showExtensionNotLoadedWarning($extension, $message = '')

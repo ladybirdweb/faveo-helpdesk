@@ -13,7 +13,7 @@ return [
 	|
 	 */
 
-	'debug' => false,
+	'debug' => true,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -24,7 +24,7 @@ return [
 	|
 	 */
 
-	'version' => '1.0.1',
+	'version' => '1.0.2',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -159,6 +159,7 @@ return [
 		'Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider',
 		'Vsmoraes\Pdf\PdfServiceProvider',
 		'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
+		'Chumper\Datatable\DatatableServiceProvider',
 
 	],
 
@@ -215,6 +216,7 @@ return [
 		'Gravatar' => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
 		'UTC' => 'App\Http\Controllers\Agent\helpdesk\TicketController',
 		'SMTPS' => 'App\Http\Controllers\HomeController',
+		'Datatable' => 'Chumper\Datatable\Facades\DatatableFacade',
 
 	],
 

@@ -67,7 +67,7 @@ class="active"
 
 		<div class="col-xs-1 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">
 
-			<label for="ext">EXT</label>	
+			<label for="ext">{!! Lang::get('lang.ext') !!}</label>	
 			{!! $errors->first('ext', '<spam class="help-block">:message</spam>') !!}			
 			{!! Form::text('ext',null,['class' => 'form-control']) !!}
 
@@ -75,7 +75,7 @@ class="active"
 
 		<div class="col-xs-5 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
 
-			<label for="phone_number">Phone</label>
+			<label for="phone_number">{!! Lang::get('lang.phone') !!}</label>
 			{!! $errors->first('phone_number', '<spam class="help-block">:message</spam>') !!}
 			{!! Form::text('phone_number',null,['class' => 'form-control']) !!}
 

@@ -17,7 +17,7 @@ class="active"
 
 <div class="box box-primary">
     <div class="box-header">
-        <h2 class="box-title">{{Lang::get('lang.organization')}}</h2><a href="{{route('organizations.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_organisations')}}</a></div>
+        <h2 class="box-title">{{Lang::get('lang.organization')}}</h2><a href="{{route('organizations.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_organization')}}</a></div>
     <div class="box-body table-responsive no-padding">
         <!-- check whether success or not -->
         @if(Session::has('success'))
@@ -57,9 +57,9 @@ $orgs = App\Model\helpdesk\Agent_panel\Organization::orderBy('id', 'ASC')->pagin
                     {!! Form::open(['route'=>['organizations.destroy', $org->id],'method'=>'DELETE']) !!}
 
                     <div class="">
-                        <a href="{{route('organizations.edit', $org->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> Edit</a>
+                        <a href="{{route('organizations.edit', $org->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a>
                         <!-- To pop up a confirm Message -->
-                        {!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> Delete',
+                        {!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> '.Lang::get('lang.edit'),
                         ['type' => 'submit',
                         'class'=> 'btn btn-warning btn-xs btn-flat',
                         'onclick'=>'return confirm("Are you sure?")'])

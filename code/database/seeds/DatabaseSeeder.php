@@ -33,7 +33,14 @@ use App\Model\helpdesk\Theme\Footer3;
 use App\Model\helpdesk\Theme\Footer4;
 use App\Model\helpdesk\Email\Smtp;
 use App\Model\helpdesk\Utility\Version_Check;
+use App\Model\kb\Options;
 
+// Knowledge base 
+
+use App\Model\kb\Social;
+use App\Model\kb\Side1;
+use App\Model\kb\Side2;
+use App\Model\kb\Settings;
 
 class DatabaseSeeder extends Seeder {
 
@@ -290,6 +297,43 @@ class DatabaseSeeder extends Seeder {
 		Smtp::create(array('id' => '1'));
 
 		Version_Check::create(['id'=>'1']);
+
+		
+		$option = array(
+
+			'gmt_offset',
+			'date_format',
+			'time_format',
+			'date_time_format',
+			'sitename',
+			'sitedescription',
+			'admin_email',
+			'template',
+			'upload_url_path',
+			'timezone_string',
+			'siteurl',
+			'home',
+			'start_of_week',
+			'language',
+			'port',
+			'host',
+			'encryption',
+			'username',
+			'password',
+			'footer',
+			'uselogo',
+			'logo',
+
+		);
+
+		foreach ($option as $name) {
+			Options::create(array('option_name' => $name));
+		}
+
+		Social::create(['id'=>'1']);
+		Side1::create(['id'=>'1']);
+		Side2::create(['id'=>'1']);
+		Settings::create(['id'=>'id','paagination' => '10']);
 
 	}
 }

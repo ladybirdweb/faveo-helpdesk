@@ -19,7 +19,7 @@ class="active"
 {{-- <div><h1 style="margin-top:-10px;margin-bottom:-10px;">Organization Profile</h1></div>
 <a href="{{route('organizations.edit', $orgs->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> Edit</a>
  --}}
-<div class="box-header" style="margin-top:-15px;margin-bottom:-15px;"><h3 class="box-title">Organization Profile</h3><a href="{{route('organizations.edit', $orgs->id)}}" class="btn btn-info btn-sm btn-flat pull-right"><i class="fa fa-edit" style="color:black;"> </i> Edit</a></div>
+<div class="box-header" style="margin-top:-15px;margin-bottom:-15px;"><h3 class="box-title">{!! Lang::get('lang.organization_profile') !!}</h3><a href="{{route('organizations.edit', $orgs->id)}}" class="btn btn-info btn-sm btn-flat pull-right"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a></div>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -48,11 +48,17 @@ class="active"
                 </div>
                 <div class="box-footer no-padding">
                     <ul class="nav nav-stacked">
-                        @if($orgs->phone)<li><a><b>Phone</b>  <span class="pull-right"> {{$orgs->phone}}</span></a></li>@endif
-                        @if($orgs->address)<li><a><b>Address</b> <br/> <center>{!! $orgs->address !!}</center></a></li>@endif
-                        @if($orgs->internal_notes)<li><a><b>Internal Notes</b> <br/> <center>{!! $orgs->internal_notes !!}</center></a></li>@endif
+                        @if($orgs->phone)<li><a>
+                        <b>{!! Lang::get('lang.phone') !!}</b>  
+                        <span class="pull-right"> {{$orgs->phone}}</span></a></li>@endif
+                        @if($orgs->address)<li><a>
+                        <b>{!! Lang::get('lang.address') !!}</b>  
+                        <br/> <center>{!! $orgs->address !!}</center></a></li>@endif
+                        @if($orgs->internal_notes)<li><a>
+                        <b>{!! Lang::get('lang.internal_notes') !!}</b>  
+                        <br/> <center>{!! $orgs->internal_notes !!}</center></a></li>@endif
                     </ul>
-                    <button data-toggle="modal" data-target="#assign_head" id="button_select" class="btn btn-primary btn-flat btn-block">Select Department Manager</button>
+                    <button data-toggle="modal" data-target="#assign_head" id="button_select" class="btn btn-primary btn-flat btn-block">{!! Lang::get('lang.select_department_manager') !!}</button>
                 </div>
               </div>
 
@@ -66,12 +72,12 @@ class="active"
                     <img class="img-circle"  src="{{ Gravatar::src( $users->email) }}" alt="User Avatar">
                   </div><!-- /.widget-user-image -->
                   <h3 class="widget-user-username">{!! $users->user_name !!}</h3>
-                  <h5 class="widget-user-desc">Organization's head</h5>
+                  <h5 class="widget-user-desc">{!! Lang::get('lang.organization-s_head') !!}</h5>
                 </div>
                 <div class="box-footer no-padding">
                   <ul class="nav nav-stacked">
-                    <li><a href="#">E-mail <span class="pull-right">{!! $users->email !!}</span></a></li>
-                    <li><a href="#">Phone <span class="pull-right">{!! $users->phone_number !!}</span></a></li>
+                    <li><a href="#">{!! Lang::get('lang.e-mail') !!} <span class="pull-right">{!! $users->email !!}</span></a></li>
+                    <li><a href="#">{!! Lang::get('lang.phone') !!} <span class="pull-right">{!! $users->phone_number !!}</span></a></li>
                   </ul>
                 </div>
               </div>
@@ -88,7 +94,7 @@ class="active"
                 $user_orgs = App\Model\helpdesk\Agent_panel\User_org::where('org_id','=',$orgs->id)->paginate(5);
                 ?>
                 <div class="box-header">
-                    <h3 class="box-title">Users of {{$orgs->name}}</h3>
+                    <h3 class="box-title">{!! Lang::get('lang.users_of') !!} {{$orgs->name}}</h3>
                     <div class="pull-right" style="margin-top:-25px;margin-bottom:-25px;">
                         <?php echo $user_orgs->setPath('../organizations/'.$orgs->id)->render(); ?>
                     </div>
@@ -98,11 +104,11 @@ class="active"
                 <div class="box-body">
                         <table class="table table-hover table-bordered">
                             <tbody><tr>
-                              <th>Name</th>
-                              <th>Email</th>
-                              <th>Phone</th>
-                              <th>Status</th>
-                              <th>Ban</th>
+                              <th>{!! Lang::get('lang.name') !!}</th>
+                              <th>{!! Lang::get('lang.email') !!}</th>
+                              <th>{!! Lang::get('lang.phone') !!}</th>
+                              <th>{!! Lang::get('lang.status') !!}</th>
+                              <th>{!! Lang::get('lang.ban') !!}</th>
                             </tr>
 
                             @foreach($user_orgs as $user_org)
@@ -114,9 +120,9 @@ class="active"
                               <td>{!! $user_detail->email !!}</td>
                               <td>{!! $user_detail->phone_number !!}</td>
                                 @if($user_detail->active == 1)
-                                    <td><span class="label label-success">Active</span></td>
+                                    <td><span class="label label-success">{!! Lang::get('lang.active') !!}</span></td>
                                 @elseif($user_detail->active == 0)
-                                    <td><span class="label label-warning">Inactive</span></td>
+                                    <td><span class="label label-warning">{!! Lang::get('lang.inactive') !!}</span></td>
                                 @endif
                               <td>{!! $user_detail->ban !!}</td>
                             </tr>
@@ -139,7 +145,7 @@ class="active"
                 {!! Form::model($orgs->id, ['id'=>'org_head','method' => 'PATCH'] )!!}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" id="dismiss" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Assign</h4>
+                    <h4 class="modal-title">{!! Lang::get('lang.assign') !!}</h4>
                 </div>
                 <div id="assign_alert" class="alert alert-success alert-dismissable" style="display:none;">
                     <button id="assign_dismiss" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -155,7 +161,7 @@ class="active"
                         </div>
                     </div>
                     <div id="assign_body">
-                        <p>Please Select an Organization</p>
+                        <p>{!! Lang::get('lang.please_select_an_user') !!}</p>
                         <select id="user" class="form-control" name="user">
 <?php
 $org_heads = App\Model\helpdesk\Agent_panel\User_org::where('org_id','=',$orgs->id)->get();
@@ -170,8 +176,8 @@ $org_heads = App\Model\helpdesk\Agent_panel\User_org::where('org_id','=',$orgs->
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis4">Close</button>
-                    <button type="submit" class="btn btn-success pull-right" id="submt2">Assign</button>
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis4">{!! Lang::get('lang.close') !!}</button>
+                    <button type="submit" class="btn btn-success pull-right" id="submt2">{!! Lang::get('lang.assign') !!}</button>
                 </div>
                 {!! Form::close()!!}
             </div><!-- /.modal-content -->

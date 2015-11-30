@@ -18,7 +18,7 @@ class="active"
 {!! Form::open(['route'=>'post.newticket','method'=>'post']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">Create Ticket</h3>
+        <h3 class="box-title">{!! Lang::get('lang.create_ticket') !!}</h3>
         <!-- <div class="box-tools pull-right">
             <div class="has-feedback">
                 <input type="text" class="form-control input-sm" placeholder="Search Mail"/>
@@ -44,7 +44,7 @@ class="active"
             </div>
         @endif
         <div class="form-group">
-            <h4><b>User Details:<b></h4>
+            <h4><b>{!! Lang::get('lang.user_details') !!}:<b></h4>
                 {{-- <div class="row"> --}}
                     {{-- <div class="col-md-6"> --}}
                             {{-- <div class="has-feedback"> --}}
@@ -59,7 +59,7 @@ class="active"
                 <div class="col-md-4">
                 <!-- email -->
                     <div class="form-group">
-                        <label>Email:</label>
+                        <label>{!! Lang::get('lang.email') !!}:</label>
                         <input type="text" name="email" id="" class="form-control">
                         {!! $errors->first('email', '<spam class="help-block text-red">:message</spam>') !!}
                     </div>
@@ -68,7 +68,7 @@ class="active"
                 <div class="col-md-4">
                 <!-- full name -->
                     <div class="form-group">
-                        <label>Full Name:</label>
+                        <label>{!! Lang::get('lang.full_name') !!}:</label>
                         <input type="text" name="fullname" id="" class="form-control">
                         {!! $errors->first('fullname', '<spam class="help-block text-red">:message</spam>') !!}
                     </div>
@@ -76,7 +76,7 @@ class="active"
                 <div class="col-md-4">
                 <!-- phone -->
                     <div class="form-group">
-                        <label>Phone:</label>
+                        <label>{!! Lang::get('lang.phone') !!}:</label>
                         <input type="number" name="phone" id="" class="form-control">
                         {!! $errors->first('phone', '<spam class="help-block text-red">:message</spam>') !!}
                     </div>
@@ -93,11 +93,11 @@ class="active"
         </div>
             <!-- ticket options -->
             <div class="form-group">
-                <h4><b>Ticket Option<b></h4>
+                <h4><b>{!! Lang::get('lang.ticket_option') !!}<b></h4>
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Help Topic:</label>
+                            <label>{!! Lang::get('lang.help_topic') !!}:</label>
                             <!-- helptopic -->
                             <select class="form-control" name="helptopic">
                             <!-- <option>--select--</option> -->
@@ -112,7 +112,7 @@ class="active"
                                 <div class="col-md-3">
                                 <!-- sla plan -->
                                     <div class="form-group">
-                                        <label>SLA Plan:</label>
+                                        <label>{!! Lang::get('lang.sla_plan') !!}:</label>
                                         <select class="form-control" name="sla">
                                             <!-- <option>--select--</option> -->
                                             <?php $sla_plan = App\Model\helpdesk\Manage\Sla_plan::all();?>
@@ -126,14 +126,14 @@ class="active"
                                 <div class="col-md-3">
                                 <!-- due date -->
                                     <div class="form-group">
-                                        <label>Due Date:</label>
+                                        <label>{!! Lang::get('lang.due_date') !!}:</label>
                                         <input type="text" class="form-control" name="duedate" id="datemask">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                 <!-- assign to -->
                                     <div class="form-group">
-                                        <label>Assign To:</label>
+                                        <label>{!! Lang::get('lang.assign_to') !!}:</label>
                                         <select class="form-control" name="assignto">
                                             <!-- <option>--select--</option> -->
                                             <?php $agents = App\User::where('role','!=','user')->get();?>
@@ -150,12 +150,12 @@ class="active"
                             </div>
                                 <!-- ticket details -->
                                 <div class="form-group">
-                                    <h4><b>Ticket Detail<b></h4>
+                                    <h4><b>{!! Lang::get('lang.ticket_detail') !!}<b></h4>
                                         <!-- subject -->
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-md-1">
-                                                            <label>Subject:</label>
+                                                            <label>{!! Lang::get('lang.subject') !!}:</label>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <input type="text" name="subject" class="form-control">
@@ -167,7 +167,7 @@ class="active"
                                                 <!-- details -->
                                                     <div class="row">
                                                         <div class="col-md-1">
-                                                            <label>Detail:</label>
+                                                            <label>{!! Lang::get('lang.detail') !!}:</label>
                                                         </div>
                                                         <div class="col-md-9">
                                                             <textarea class="form-control" id="body" name="body" style="width:100%; height:100px;"></textarea>
@@ -179,7 +179,7 @@ class="active"
                                                 <!-- priority -->
                                                     <div class="row">
                                                         <div class="col-md-1">
-                                                            <label>Priority:</label>
+                                                            <label>{!! Lang::get('lang.priority') !!}:</label>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <select class="form-control" name="priority">
@@ -200,7 +200,7 @@ class="active"
                                                     <div class="col-md-1">
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <input type="submit" value="Create Ticket" class="btn btn-primary">
+                                                        <input type="submit" value="{!! Lang::get('lang.create_ticket') !!}" class="btn btn-primary">
                                                     </div>
                                                 </div>
                                             </div>

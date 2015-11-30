@@ -27,6 +27,7 @@
         <link rel="stylesheet" href="{{asset("lb-faveo/dist/css/editor.css")}}" type="text/css">
         <link href="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" rel="stylesheet" type="text/css" />
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">    
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -35,7 +36,6 @@
     </head>
     <body class="skin-yellow fixed">
         <div class="wrapper">
-
             <header class="main-header">
                 <a href="../../index2.html" class="logo"><b>Faveo </b>HELPDESK</a>
                 <!-- Header Navbar: style can be found in header.less -->
@@ -51,15 +51,15 @@
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         <ul class="tabs tabs-horizontal nav navbar-nav">
                             {{-- <li><a data-target="#tabA" href="#">Home</a></li> --}}
-                            <li @yield('Staffs')><a data-target="#tabB" href="#">Staffs</a></li>
-                            <li @yield('Emails')><a data-target="#tabC" href="#">Emails</a></li>
-                            <li @yield('Manage')><a data-target="#tabD" href="#">Manage</a></li>
-                            <li @yield('Settings')><a data-target="#tabE" href="#">Settings</a></li>
-                            <li @yield('Themes')><a data-target="#tabF" href="#">Themes</a></li>
+                            <li @yield('Staffs')><a data-target="#tabB" href="#">{!! Lang::get('lang.staffs') !!}</a></li>
+                            <li @yield('Emails')><a data-target="#tabC" href="#">{!! Lang::get('lang.emails') !!}</a></li>
+                            <li @yield('Manage')><a data-target="#tabD" href="#">{!! Lang::get('lang.manage') !!}</a></li>
+                            <li @yield('Settings')><a data-target="#tabE" href="#">{!! Lang::get('lang.settings') !!}</a></li>
+                            <li @yield('Themes')><a data-target="#tabF" href="#">{!! Lang::get('lang.themes') !!}</a></li>
                         </ul>
 
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a href="{{url('user')}}">Agent Panel</a></li>
+                            <li><a href="{{url('user')}}">{!! Lang::get('lang.agent_panel') !!}</a></li>
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -88,18 +88,16 @@
                                     @endif
                                     </li>
                                     <!-- Menu Footer-->
-                                    
                                     <li class="user-footer"  style="background-color:#1a2226;">
                                         <div class="pull-left">
-                                            <a href="{{url('admin-profile')}}" class="btn btn-info btn-sm"><b>Profile</b></a>
+                                            <a href="{{url('admin-profile')}}" class="btn btn-info btn-sm"><b>{!! Lang::get('lang.profile') !!}</b></a>
                                         </div>
                                         <div class="pull-right">
-                                            <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>Sign out</b></a>
+                                            <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! Lang::get('lang.sign_out') !!}</b></a>
                                         </div>
                                     </li>
                                 </ul>
                             </li>
-
                             </nav>
                             </header>
                             <!-- Left side column. contains the logo and sidebar -->
@@ -142,7 +140,7 @@
                                     <!-- /.search form -->
                                     <!-- sidebar menu: : style can be found in sidebar.less -->
                                     <ul class="sidebar-menu">
-                                                                                <li class="header">TICKETS</li>
+                                                            <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
 
 <?php
 $inbox = App\Model\helpdesk\Ticket\Tickets::get();
@@ -153,14 +151,14 @@ $i = count($tickets);
 ?>
                                         <li>
                                             <a href="{{ url('/ticket/open') }}">
-                                                <i class="fa fa-envelope"></i> <span>Inbox</span> <small class="label pull-right bg-green">
+                                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green">
                                                 {!! $i !!}</small>
                                             </a>
                                         </li>
 
                                         <li @yield('myticket')>
                                              <a href="{{url('ticket/myticket')}}">
-                                                <i class="fa fa-user"></i> <span>My Tickets</span>
+                                                <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!}</span>
                                                
                                                 <small class="label pull-right bg-green">{{count($myticket) }}</small>
                                             </a>
@@ -168,26 +166,26 @@ $i = count($tickets);
 
                                         <li>
                                             <a href="{{url('unassigned')}}">
-                                                <i class="fa fa-th"></i> <span>Unassigned</span>
+                                                <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
                                                 
                                                 <small class="label pull-right bg-green">{{count($unassigned)}}</small>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{url('trash')}}">
-                                                <i class="fa fa-trash-o"></i> <span>Trash</span>
+                                                <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
                                                 <?php $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->get();?>
                                                 <small class="label pull-right bg-green">{{count($deleted)}}</small>
                                             </a>
                                         </li>
-                                        <li class="header">UPDATES</li>
+                                        <li class="header">{!! Lang::get('lang.Updates') !!}</li>
                                         <li>
                                             <?php $update = App\Model\helpdesk\Utility\Version_Check::where('id','=',1)->first();
                                             if($update->current_version == $update->new_version){?>
                                                 <a href="{!! URL::route('checkupdate') !!}" id="checkUpdate">
-                                                    <span>No new Updates!</span><br/>
+                                                    <span>{!! Lang::get('lang.no_new_updates') !!}!</span><br/>
                                                     <br/>
-                                                    <i class="fa fa-inbox"></i> <span>Check for Updates.</span>
+                                                    <i class="fa fa-inbox"></i> <span>{!! Lang::get('lang.check_for_updates') !!}.</span>
                                                     
                                                     <img  id="gif-update" src="{{asset("lb-faveo/dist/img/gifloader.gif")}}" style="width:12%; height:12%; margin-bottom:5%;margin-left:10%;display:none">
                                                     
@@ -217,45 +215,45 @@ $i = count($tickets);
                                             </div>
                                             <div class="tabs-pane @yield('staffs-bar')" id="tabB">
                                                 <ul class="nav navbar-nav">
-                                                    <li id="bar" @yield('staffs')><a href="{{ url('agents') }}" >Staffs</a></li></a></li>
-                                                    <li id="bar" @yield('departments')><a href="{{ url('departments') }}" >Departments</a></li></a></li>
-                                                    <li id="bar" @yield('teams')><a href="{{ url('teams') }}" >Teams</a></li></a></li>
-                                                    <li id="bar" @yield('groups')><a href="{{ url('groups') }}" >Groups</a></li></a></li>
+                                                    <li id="bar" @yield('staffs')><a href="{{ url('agents') }}" >{!! Lang::get('lang.staffs') !!}</a></li></a></li>
+                                                    <li id="bar" @yield('departments')><a href="{{ url('departments') }}" >{!! Lang::get('lang.department') !!}</a></li></a></li>
+                                                    <li id="bar" @yield('teams')><a href="{{ url('teams') }}" >{!! Lang::get('lang.teams') !!}</a></li></a></li>
+                                                    <li id="bar" @yield('groups')><a href="{{ url('groups') }}" >{!! Lang::get('lang.groups') !!}</a></li></a></li>
                                                 </ul>
                                             </div>
                                             <div class="tabs-pane @yield('emails-bar')" id="tabC">
                                                 <ul class="nav navbar-nav">
-                                                    <li id="bar" @yield('emails')><a href="{{ url('emails') }}" >Incoming Emails</a></li></a></li>
-                                                    <li id="bar" @yield('smtp')><a href="{{ url('getsmtp') }}" >Outgoing Email</a></li>
-                                                    <li id="bar" @yield('ban')><a href="{{ url('banlist') }}" >Ban Lists</a></li>
+                                                    <li id="bar" @yield('emails')><a href="{{ url('emails') }}" >{!! Lang::get('lang.incoming_emails') !!}</a></li></a></li>
+                                                    <li id="bar" @yield('smtp')><a href="{{ url('getsmtp') }}" >{!! Lang::get('lang.outgoing_emails') !!}</a></li>
+                                                    <li id="bar" @yield('ban')><a href="{{ url('banlist') }}" >{!! Lang::get('lang.ban_lists') !!}</a></li>
                                                     {{-- <li id="bar" @yield('template')><a href="{{ url('template') }}" >Template</a></li> --}}
-                                                    <li id="bar" @yield('diagno')><a href="{{ url('getdiagno') }}" >Diagnostic</a></li>
+                                                    <li id="bar" @yield('diagno')><a href="{{ url('getdiagno') }}" >{!! Lang::get('lang.diagnostics') !!}</a></li>
                                                 </ul>
                                             </div>
                                             <div class="tabs-pane @yield('manage-bar')" id="tabD">
                                                 <ul class="nav navbar-nav">
-                                                    <li id="bar" @yield('help')><a href="{{url('helptopic')}}">Help Topics</a></li>
-                                                    <li id="bar" @yield('sla')><a href="{{url('sla')}}">SLA Plans</a></li>
-                                                    <li id="bar" @yield('forms')><a href="{{url('forms')}}">Forms</a></li>
+                                                    <li id="bar" @yield('help')><a href="{{url('helptopic')}}">{!! Lang::get('lang.help_topics') !!}</a></li>
+                                                    <li id="bar" @yield('sla')><a href="{{url('sla')}}">{!! Lang::get('lang.sla_plans') !!}</a></li>
+                                                    <li id="bar" @yield('forms')><a href="{{url('forms')}}">{!! Lang::get('lang.forms') !!}</a></li>
                                                 </ul>
                                             </div>
                                             <div class="tabs-pane @yield('settings-bar')" id="tabE">
                                                 <ul class="nav navbar-nav">
-                                                    <li id="bar" @yield('company')><a href="{{url('getcompany')}}">Company</a></li>
-                                                    <li id="bar" @yield('system')><a href="{{url('getsystem')}}">System</a></li>
-                                                    <li id="bar" @yield('email')><a href="{{url('getemail')}}">Email</a></li>
-                                                    <li id="bar" @yield('tickets')><a href="{{url('getticket')}}">Tickets</a></li>
+                                                    <li id="bar" @yield('company')><a href="{{url('getcompany')}}">{!! Lang::get('lang.company') !!}</a></li>
+                                                    <li id="bar" @yield('system')><a href="{{url('getsystem')}}">{!! Lang::get('lang.system') !!}</a></li>
+                                                    <li id="bar" @yield('email')><a href="{{url('getemail')}}">{!! Lang::get('lang.email') !!}</a></li>
+                                                    <li id="bar" @yield('tickets')><a href="{{url('getticket')}}">{!! Lang::get('lang.ticket') !!}</a></li>
                                                     {{-- <li id="bar" @yield('access')><a href="{{ // url('getaccess')}}">Access</a></li> --}}
-                                                    <li id="bar" @yield('auto-response')><a href="{{url('getresponder')}}">Auto-Responce</a></li>
-                                                    <li id="bar" @yield('alert')><a href="{{url('getalert')}}">Alert & Notice</a></li>
+                                                    <li id="bar" @yield('auto-response')><a href="{{url('getresponder')}}">{!! Lang::get('lang.auto_responce') !!}</a></li>
+                                                    <li id="bar" @yield('alert')><a href="{{url('getalert')}}">{!! Lang::get('lang.alert_notices') !!}</a></li>
                                                 </ul>
                                             </div>
                                             <div class="tabs-pane @yield('theme-bar')" id="tabF">
                                                 <ul class="nav navbar-nav">
-                                                    <li id="bar" @yield('footer')><a href="{{ url('create-footer') }}" >Footer</a></li></a></li>
-                                                    <li id="bar" @yield('footer2')><a href="{{ url('create-footer2') }}" >Footer2</a></li></a></li>
-                                                    <li id="bar" @yield('footer3')><a href="{{ url('create-footer3') }}" >Footer3</a></li></a></li>
-                                                    <li id="bar" @yield('footer4')><a href="{{ url('create-footer4') }}" >Footer4</a></li></a></li>
+                                                    <li id="bar" @yield('footer')><a href="{{ url('create-footer') }}" >{!! Lang::get('lang.footer1') !!}</a></li></a></li>
+                                                    <li id="bar" @yield('footer2')><a href="{{ url('create-footer2') }}" >{!! Lang::get('lang.footer2') !!}</a></li></a></li>
+                                                    <li id="bar" @yield('footer3')><a href="{{ url('create-footer3') }}" >{!! Lang::get('lang.footer3') !!}</a></li></a></li>
+                                                    <li id="bar" @yield('footer4')><a href="{{ url('create-footer4') }}" >{!! Lang::get('lang.footer4') !!}</a></li></a></li>
                                                 </ul>
                                             </div>
                                         </div>
@@ -279,7 +277,7 @@ $i = count($tickets);
                                 <?php  
                                 $company = App\Model\helpdesk\Settings\Company::where('id','=','1')->first();
                                 ?>
-                                <strong>Copyright &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>.</strong> All rights reserved. Powered by <a href="http://www.faveohelpdesk.com/" target="blank">Faveo</a>
+                                <strong>{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>.</strong> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/">Faveo</a>
                             </footer>
                     </div><!-- ./wrapper -->
 
@@ -297,6 +295,10 @@ $i = count($tickets);
                     {{-- // <script src="{{asset("dist/js/demo.js")}}" type="text/javascript"></script> --}}
                     <!-- iCheck -->
                     <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
+
+                    <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
+
+                    <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
                     <!-- Page Script -->
                     <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
                     <script>

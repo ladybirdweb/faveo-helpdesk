@@ -1,17 +1,21 @@
 @extends('themes.default1.client.layout.client')
+
+@section('submit')
+    class = "active"
+@stop
 <!-- breadcrumbs -->
 @section('breadcrumb')
     <div class="site-hero clearfix">
         <ol class="breadcrumb breadcrumb-custom">
-            <li class="text">You are here: </li>
-            <li><a href="{!! URL::route('form') !!}">Submit Ticket</a></li>
+            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
+            <li><a href="{!! URL::route('form') !!}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
         </ol>
     </div>
 @stop
 <!-- /breadcrumbs -->
 @section('check')
     <div class="banner-wrapper text-center clearfix">
-        <h3 class="banner-title text-info h4">Have a Ticket?</h3>
+        <h3 class="banner-title text-info h4">{!! Lang::get('lang.have_a_ticket') !!}?</h3>
         <div class="banner-content">
         {!! Form::open(['url' => 'checkmyticket' , 'method' => 'POST'] )!!}
     
@@ -22,7 +26,7 @@
             {!! Form::label('ticket_number',Lang::get('lang.ticket_number'),['style' => 'display: block']) !!}
             {!! $errors->first('ticket_number', '<spam class="help-block">:message</spam>') !!}
             {!! Form::text('ticket_number',null,['class' => 'form-control']) !!}
-            <br/><input type="submit" value="Check Ticket Status" class="btn btn-info">
+            <br/><input type="submit" value="{!! Lang::get('lang.check_ticket_status') !!}" class="btn btn-info">
                         
         {!! Form::close() !!}
         </div>
@@ -56,11 +60,11 @@
 {!! Form::open(['action'=>'Client\helpdesk\FormController@postedForm','method'=>'post']) !!}
 <div>
     <div class="content-header">
-        <h4>Ticket {!! Form::submit(Lang::get('lang.send'),['class'=>'form-group btn btn-info pull-right'])!!}</h4>
+        <h4>{!! Lang::get('lang.ticket') !!} {!! Form::submit(Lang::get('lang.send'),['class'=>'form-group btn btn-info pull-right'])!!}</h4>
     </div>
     <div class="row col-md-12">
         <div class="col-md-12 form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
-            {!! Form::label('help_topic', 'Choose a Help Topic') !!} 
+            {!! Form::label('help_topic', Lang::get('lang.choose_a_help_topic')) !!} 
             {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
 <?php 
 $forms = App\Model\helpdesk\Form\Forms::get(); 

@@ -36,7 +36,7 @@ class="active"
 	<div class="box box-primary">
 	<div class="box-header">
 
-	 	<h4 class="box-title">Edit</h4>	{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}
+	 	<h4 class="box-title">{!! Lang::get('lang.edit') !!}</h4>	{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}
 
 	</div>
 

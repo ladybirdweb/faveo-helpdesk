@@ -33,7 +33,7 @@ class="active"
 <div class="col-md-12">
 <div class="box box-primary">
 <div class="box-header">
-	<h2 class="box-title">Groups</h2><a href="{{route('groups.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_group')}}</a></div>
+	<h2 class="box-title">{!! Lang::get('lang.groups') !!}</h2><a href="{{route('groups.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_group')}}</a></div>
 
 <div class="box-body table-responsive no-padding">
 

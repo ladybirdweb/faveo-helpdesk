@@ -54,7 +54,7 @@ class="active"
             <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="Close">
         </div>
         <div class=" table-responsive mailbox-messages"  id="refresh">
-                <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>Loading...</b></p>
+                <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! Lang::get('lang.loading') !!}...</b></p>
         <!-- table -->
             <table class="table table-hover table-striped">
                 <thead>

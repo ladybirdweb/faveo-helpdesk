@@ -22,7 +22,7 @@ class="active"
 	<!-- <section class="content"> -->
 <div class="box box-primary">
 	<div class="box-header">
-	 <h3 class="box-title">Edit</h3>{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}
+	 <h3 class="box-title">{!! Lang::get('lang.edit') !!}</h3>{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}
 	</div>
 	<div class="box-body">
 

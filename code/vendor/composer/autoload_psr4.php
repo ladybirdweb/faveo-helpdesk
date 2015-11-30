@@ -8,6 +8,8 @@ $baseDir = dirname($vendorDir);
 return array(
     'XdgBaseDir\\' => array($vendorDir . '/dnoegel/php-xdg-base-dir/src'),
     'Vsmoraes\\Pdf\\' => array($vendorDir . '/vsmoraes/laravel-pdf/src'),
+    'Thomaswelton\\Tests\\LaravelGravatar\\' => array($vendorDir . '/thomaswelton/laravel-gravatar/tests'),
+    'Thomaswelton\\LaravelGravatar\\' => array($vendorDir . '/thomaswelton/laravel-gravatar/src'),
     'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
     'Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),
     'Symfony\\Component\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher'),

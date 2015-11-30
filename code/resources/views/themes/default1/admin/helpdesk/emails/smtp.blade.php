@@ -40,7 +40,7 @@ class="active"
 {!! Form::model($settings,['url'=>'post-smtp','method'=>'PATCH']) !!}
 <div class="box box-primary">
 	<div class="box-header">
-		<h3 class="box-title">Outgoing Email</h3>
+		<h3 class="box-title">{!! Lang::get('lang.outgoing_emails') !!}</h3>
 		<div class="pull-right">
 			{!! Form::submit(Lang::get('lang.save'),['class'=>'btn btn-primary'])!!}
 		</div>

@@ -1,4 +1,4 @@
-<html>
+lang.<html>
     <head>
         <link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
         <style>
@@ -37,11 +37,11 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title"><a>500</a>Internal server Error. Be right back.</div>
+                <div class="title"><a>500</a>{!! Lang::get('lang.internal_server_error') !!}. {!! Lang::get('lang.be_right_back') !!}.</div>
                 <div class="error-content" id="body">
-                    <h3><i class="fa fa-warning text-yellow"></i> Sorry!</h3>
+                    <h3><i class="fa fa-warning text-yellow"></i> {!! Lang::get('lang.sorry') !!}!</h3>
                     <p>
-                        We are working on it.
+                        {!! Lang::get('lang.we_are_working_on_it') !!}.
                     </p>
                 </div>
             </div>

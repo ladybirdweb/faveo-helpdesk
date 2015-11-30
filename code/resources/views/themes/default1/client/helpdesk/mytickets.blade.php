@@ -4,8 +4,8 @@
 
     <div class="site-hero clearfix">               
         <ol class="breadcrumb breadcrumb-custom">
-            <li class="text">You are here: </li>
-            <li class="active"><a href="{!! URL::route('ticket2') !!}">Mytickets</a></li>
+            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
+            <li class="active"><a href="{!! URL::route('ticket2') !!}">{!! Lang::get('lang.my_tickets') !!}</a></li>
         </ol>
     </div>
 @stop		
@@ -32,8 +32,8 @@ $close = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=' , Auth::user()-
 
 <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">Opened <small class="label bg-orange">{!! $open->total() !!}</small></a></li>
-                    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">Closed <small class="label bg-green">{!! $close->total() !!}</small></a></li>
+                    <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">{!! Lang::get('lang.opened') !!} <small class="label bg-orange">{!! $open->total() !!}</small></a></li>
+                    <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">{!! Lang::get('lang.closed') !!} <small class="label bg-green">{!! $close->total() !!}</small></a></li>
                 </ul>
             
 
@@ -44,7 +44,7 @@ $close = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=' , Auth::user()-
             <!-- Check all button -->
             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
             <a class="btn btn-default btn-sm" id="click1"><i class="fa fa-refresh"></i></a>
-            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="Close">
+            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
             <div class="pull-right" id="refresh21">
                 {!! $open->count().'-'.$open->total(); !!}
             </div>
@@ -56,22 +56,22 @@ $close = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=' , Auth::user()-
                 <thead>
                <th></th>
                 <th>
-                    Subject
+                    {!! Lang::get('lang.subject') !!}
                 </th>
                 <th>
-                    Ticket ID
+                    {!! Lang::get('lang.ticket_id') !!}
                 </th>
                 <th>
-                    Priority
+                    {!! Lang::get('lang.priority') !!}
                 </th>
                 <th>
-                    Last Replier
+                    {!! Lang::get('lang.last_replier') !!}
                 </th>
                 <th>
-                    Last Activity
+                    {!! Lang::get('lang.last_activity') !!}
                 </th>
                 <th>
-                    Status
+                    {!! Lang::get('lang.status') !!}
                 </th>
                 </thead>
                 <tbody id="hello">
@@ -129,7 +129,7 @@ $close = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=' , Auth::user()-
             <!-- Check all button -->
             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
             <a class="btn btn-default btn-sm" id="click2"><i class="fa fa-refresh"></i></a>
-            <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" value="Open">
+            <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" value="{!! Lang::get('lang.open') !!}">
             <div class="pull-right" id="refresh22">
                 {!! $close->count().'-'.$close->total(); !!}
             </div>
@@ -141,22 +141,22 @@ $close = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=' , Auth::user()-
                 <thead>
                <th></th>
                 <th>
-                    Subject
+                    {!! Lang::get('lang.subject') !!}
                 </th>
                 <th>
-                    Ticket ID
+                    {!! Lang::get('lang.ticket_id') !!}
                 </th>
                 <th>
-                    Priority
+                    {!! Lang::get('lang.priority') !!}
                 </th>
                 <th>
-                    Last Replier
+                    {!! Lang::get('lang.last_replier') !!}
                 </th>
                 <th>
-                    Last Activity
+                    {!! Lang::get('lang.last_activity') !!}
                 </th>
                 <th>
-                    Status
+                    {!! Lang::get('lang.status') !!}
                 </th>
                 </thead>
                 <tbody id="hello">

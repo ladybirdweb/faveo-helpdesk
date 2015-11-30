@@ -23,7 +23,7 @@ class="active"
 
 	<div class="content-header">
 
-	 	<h4>Profile	{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}</h4>
+	 	<h4>{!! Lang::get('lang.profile') !!}	{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}</h4>
 
 	</div>
 
@@ -152,7 +152,7 @@ class="active"
 
 	<div class="content-header">
 
-	 	<h4>Change Password	{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}</h4>
+	 	<h4>{!! Lang::get('lang.change_password') !!}	{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}</h4>
 
 	</div>
 
@@ -178,21 +178,21 @@ class="active"
 	<!-- old password -->
 	<div class="form-group has-feedback {{ $errors->has('old_password') ? 'has-error' : '' }}">
 			{!! Form::label('old_password',Lang::get('lang.old_password')) !!}
-            {!! Form::password('old_password',['placeholder'=>'Password','class' => 'form-control']) !!}
+            {!! Form::password('old_password',['placeholder'=>Lang::get('lang.old_password'),'class' => 'form-control']) !!}
 			{!! $errors->first('old_password', '<spam class="help-block">:message</spam>') !!}
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
     </div>
     <!-- new password -->
     <div class="form-group has-feedback {{ $errors->has('new_password') ? 'has-error' : '' }}">
     		{!! Form::label('new_password',Lang::get('lang.new_password')) !!}
-            {!! Form::password('new_password',['placeholder'=>'New Password','class' => 'form-control']) !!}
+            {!! Form::password('new_password',['placeholder'=>Lang::get('lang.new_password'),'class' => 'form-control']) !!}
 			{!! $errors->first('new_password', '<spam class="help-block">:message</spam>') !!}
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
     </div>
     <!-- confirm password -->
     <div class="form-group has-feedback {{ $errors->has('confirm_password') ? 'has-error' : '' }}">
     		{!! Form::label('confirm_password',Lang::get('lang.confirm_password')) !!}
-            {!! Form::password('confirm_password',['placeholder'=>'Confirm Password','class' => 'form-control']) !!}
+            {!! Form::password('confirm_password',['placeholder'=>Lang::get('lang.confirm_password'),'class' => 'form-control']) !!}
 			{!! $errors->first('confirm_password', '<spam class="help-block">:message</spam>') !!}
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
     </div>
@@ -204,11 +204,9 @@ class="active"
 
 {!! Form::close() !!}
 
-
                     <script>
                         $(function () {
                         	$("textarea").wysihtml5();
                         });
                     </script>
-
 @stop

@@ -1,6 +1,6 @@
 Hello <br/><br/>
 
-You asked to reset your Sync password. To do so, please click this link:<br/><br/>
+You asked to reset your password. To do so, please click this link:<br/><br/>
 
 	{!! url('password/reset/'.$token) !!}    <br/><br/>
 

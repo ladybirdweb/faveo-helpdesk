@@ -14,7 +14,9 @@
 		"thomaswelton/laravel-gravatar": "~1.0",
 		"php-imap/php-imap": "~2.0",
 		"neitanod/forceutf8": "dev-master",
-		"nicolaslopezj/searchable": "1.*"
+		"nicolaslopezj/searchable": "1.*",
+		"chumper/datatable": "dev-develop"
+
 
 	},
 	"require-dev": {

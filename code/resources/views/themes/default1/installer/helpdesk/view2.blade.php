@@ -5,7 +5,7 @@
 <!-- form-box -->
 <?php
 define('PROBE_VERSION', '4.2');
-define('PROBE_FOR', '<b>Faveo</b>HELPDESK 1.0.1 and Newer');
+define('PROBE_FOR', '<b>Faveo</b>HELPDESK 1.0 and Newer');
 define('STATUS_OK', 'ok');
 define('STATUS_WARNING', 'warning');
 define('STATUS_ERROR', 'error');

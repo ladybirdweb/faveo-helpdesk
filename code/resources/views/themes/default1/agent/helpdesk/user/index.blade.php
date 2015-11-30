@@ -66,7 +66,7 @@ class="active"
 		<tr>
 							<th width="100px">{{Lang::get('lang.name')}}</th>
 							<th width="100px">{{Lang::get('lang.status')}}</th>
-							<th width="100px">Last Login</th>
+							<th width="100px">{{Lang::get('lang.last_login')}}</th>
 							<th width="100px">{{Lang::get('lang.action')}}</th>
 
 						</tr>
@@ -74,14 +74,14 @@ class="active"
 						@foreach($users as $user)
 						<tr>				
 							<td><a href="{{route('user.show', $user->id)}}"> {{$user->user_name }}</a></td>
-							<td><?php if($user->active == 1) { ?> <button class="btn btn-success btn-xs">Active</button> <?php } else { ?> <button class="btn btn-danger btn-xs">Inactive</button> <?php  }  ?></td>
+							<td><?php if($user->active == 1) { ?> <button class="btn btn-success btn-xs">{!! Lang::get('lang.active') !!}</button> <?php } else { ?> <button class="btn btn-danger btn-xs">{!! Lang::get('lang.inactive') !!}</button> <?php  }  ?></td>
 							<td>{{ UTC::usertimezone($user->updated_at) }}</td>
 							<td>
 							{!! Form::open(['route'=>['user.destroy', $user->id],'method'=>'DELETE']) !!}
-								 <a href="{{route('user.edit', $user->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> Edit</a>
+								 <a href="{{route('user.edit', $user->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a>
 							 {{-- <div class="form-group"> --}}
 							<!-- To pop up a confirm Message -->
-								{!! Form::button(' <i class="fa fa-trash" style="color:black;"> </i> Delete',['type' => 'submit',
+								{!! Form::button(' <i class="fa fa-trash" style="color:black;"> </i>'.Lang::get('lang.delete') ,['type' => 'submit',
 				            		'class'=> 'btn btn-warning  btn-xs btn-flat',
 				            		'onclick'=>'return confirm("Are you sure?")'])
 				            	!!}

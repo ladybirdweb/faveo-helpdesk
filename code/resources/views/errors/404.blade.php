@@ -37,11 +37,11 @@
     <body>
         <div class="container">
             <div class="content">
-                <div class="title"><a>404</a> Not Found.</div>
+                <div class="title"><a>404</a> {!! Lang::get('lang.not_found') !!}.</div>
                 <div class="error-content" id="body">
-                    <h3><i class="fa fa-warning text-yellow"></i> Oops! Page not found.</h3>
+                    <h3><i class="fa fa-warning text-yellow"></i> {!! Lang::get('lang.oops_page_not_found') !!}.</h3>
                     <p>
-                        We could not find the page you were looking for.
+                        {!! Lang::get('lang.we_could_not_find_the_page_you_were_looking_for') !!}.
                     </p>
                 </div>
             </div>
