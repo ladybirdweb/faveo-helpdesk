@@ -39,7 +39,7 @@ $time = UTC::usertimezone($utc);
     <hr>
 
 <?php $str = $arti->description ?>
-<?php $excerpt = App\Http\Controllers\client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 300) ?>
+<?php $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 300) ?>
 
     <p>{!!$excerpt!!} <a class="readmore-link" href="{{route('show',$arti->slug)}}">{!! Lang::get('lang.read_more') !!}</a></p>
 

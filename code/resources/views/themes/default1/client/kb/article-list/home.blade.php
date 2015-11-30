@@ -65,7 +65,7 @@
                             <span class="article-meta">{{$arti->created_at}}</span>
     <?php $str = $arti->description;
     $len = strlen($str); ?>
-                            <?php $excerpt = App\Http\Controllers\client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 50); ?>
+                            <?php $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 50); ?>
                             <p >{!!$excerpt!!} <br/><a class="more-link text-center" href="{{url('show/'.$arti->slug)}}" style="color: orange">{!! Lang::get('lang.read_more') !!}</a></p>
                         </li>
                         @endforeach

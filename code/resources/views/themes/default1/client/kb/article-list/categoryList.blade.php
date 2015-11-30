@@ -53,7 +53,7 @@
                         <h4><a href="{{url('show/'.$arti->slug)}}">{{$arti->name}}</a></h4>
                         <span class="article-meta">{{$arti->created_at}}
                             <?php $str = $arti->description ?>
-                            <?php $excerpt = App\Http\Controllers\client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 55) ?>
+                            <?php $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 55) ?>
 
                             <p>{!!$excerpt!!} <a class="readmore-link" href="{{url('show/'.$arti->slug)}}">{!! Lang::get('lang.read_more') !!}</a></p>
                     </li>

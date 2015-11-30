@@ -1,4 +1,4 @@
-<?php namespace App\Http\Controllers\client\kb;
+<?php namespace App\Http\Controllers\Client\kb;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\kb\CommentRequest;

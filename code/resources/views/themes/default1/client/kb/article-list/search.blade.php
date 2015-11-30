@@ -23,7 +23,7 @@
             </div><!-- end of post meta -->
         </header>
         <?php $str = $arti->description ?>
-        <?php $excerpt = App\Http\Controllers\client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 100) ?>
+        <?php $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 100) ?>
         <p>{!!$excerpt!!} <a class="readmore-link" href="{{url('show/'.$arti->slug)}}">Read more</a></p>
         @endforeach
     </article>

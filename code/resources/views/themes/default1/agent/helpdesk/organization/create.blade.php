@@ -79,6 +79,11 @@ class="active"
     </div>
 </div>
 
+<script type="text/javascript">
+        $(function () {
+            $("textarea").wysihtml5();
+        });
+</script>
 
 @section('FooterInclude')
 

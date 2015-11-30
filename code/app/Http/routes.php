@@ -483,30 +483,30 @@ $router->get('direct', function () {
 
 // Route::get('/',['as'=>'home' , 'uses'=> 'client\kb\UserController@home'] );
 /* post the comment from show page */
-$router->post('postcomment/{slug}',['as'=>'postcomment' , 'uses'=>  'client\kb\UserController@postComment']);
+$router->post('postcomment/{slug}',['as'=>'postcomment' , 'uses'=>  'Client\kb\UserController@postComment']);
 /* get the article list */
-$router->get('article-list',['as'=>'article-list' , 'uses'=> 'client\kb\UserController@getArticle']);
+$router->get('article-list',['as'=>'article-list' , 'uses'=> 'Client\kb\UserController@getArticle']);
 // /* get search values */
-$router->get('search',['as'=>'search', 'uses'=> 'client\kb\UserController@search']);
+$router->get('search',['as'=>'search', 'uses'=> 'Client\kb\UserController@search']);
 /* get the selected article */
-$router->get('show/{slug}',['as'=>'show' , 'uses'=> 'client\kb\UserController@show']);
-$router->get('category-list', ['as'=>'category-list' , 'uses'=> 'client\kb\UserController@getCategoryList']);
+$router->get('show/{slug}',['as'=>'show' , 'uses'=> 'Client\kb\UserController@show']);
+$router->get('category-list', ['as'=>'category-list' , 'uses'=> 'Client\kb\UserController@getCategoryList']);
 /* get the categories with article */
-$router->get('category-list/{id}',['as'=>'categorylist' , 'uses'=>'client\kb\UserController@getCategory']);
+$router->get('category-list/{id}',['as'=>'categorylist' , 'uses'=>'Client\kb\UserController@getCategory']);
 /* get the home page */
-$router->get('home',['as'=>'home' , 'uses'=> 'client\kb\UserController@home']);
+$router->get('home',['as'=>'home' , 'uses'=> 'Client\kb\UserController@home']);
 /* get the faq value to user */
-$router->get('faq',['as'=>'faq' , 'uses'=>'client\kb\UserController@Faq'] );
+$router->get('faq',['as'=>'faq' , 'uses'=>'Client\kb\UserController@Faq'] );
 /* get the cantact page to user */
-$router->get('contact',['as'=>'contact' , 'uses'=> 'client\kb\UserController@contact']);
+$router->get('contact',['as'=>'contact' , 'uses'=> 'Client\kb\UserController@contact']);
 /* post the cantact page to controller */
-$router->post('post-contact',['as'=>'post-contact' , 'uses'=> 'client\kb\UserController@postContact']);
+$router->post('post-contact',['as'=>'post-contact' , 'uses'=> 'Client\kb\UserController@postContact']);
 //to get the value for page content
-$router->get('pages/{name}', ['as' => 'pages', 'uses' =>'client\kb\UserController@getPage']);
+$router->get('pages/{name}', ['as' => 'pages', 'uses' =>'Client\kb\UserController@getPage']);
 //profile
-$router->get('client-profile',['as' => 'client-profile', 'uses' => 'client\kb\UserController@clientProfile']);
-Route::patch('client-profile-edit',['as' => 'client-profile-edit', 'uses' => 'client\kb\UserController@postClientProfile']);
-Route::patch('client-profile-password/{id}',['as' => 'client-profile-password', 'uses' => 'client\kb\UserController@postClientProfilePassword']);
+$router->get('client-profile',['as' => 'client-profile', 'uses' => 'Client\kb\UserController@clientProfile']);
+Route::patch('client-profile-edit',['as' => 'client-profile-edit', 'uses' => 'Client\kb\UserController@postClientProfile']);
+Route::patch('client-profile-password/{id}',['as' => 'client-profile-password', 'uses' => 'Client\kb\UserController@postClientProfilePassword']);
 
 
 

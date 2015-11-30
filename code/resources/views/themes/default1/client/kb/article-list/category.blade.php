@@ -17,7 +17,7 @@
 <div id="content" class="site-content col-md-12">
     <header class="archive-header">
         @foreach($categorys as $category)
-        <h1 class="archive-title">{!! $category->name !!}</h1>
+        <h1 >{!! $category->name !!}</h1>
     </header><!-- .archive-header -->
     <blockquote class="archive-description" style="display: none;">
         <p>{!! $category->description !!}</p>
@@ -33,7 +33,7 @@
                     <h2 class="entry-title h4"><a href="{{url('show/'.$arti->slug)}}" onclick="toggle_visibility('foo');">{{$arti->name}}</a></h2>
                 </header><!-- .entry-header -->
                 <?php $str = $arti->description; ?>
-                <?php $excerpt = App\Http\Controllers\client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 400); ?>
+                <?php $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 400); ?>
                 <blockquote class="archive-description">
                     <p>{!!$excerpt!!}</p><br/>
                     <a class="readmore-link" href="{{url('show/'.$arti->slug)}}">{!! Lang::get('lang.read_more') !!}</a>

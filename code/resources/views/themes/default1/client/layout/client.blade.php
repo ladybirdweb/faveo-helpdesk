@@ -136,7 +136,7 @@
 				</div><!-- #navbar -->
     					
     					<div id="header-search" class="site-search clearfix" style="padding-bottom:5px"><!-- #header-search -->
-                            {!!Form::open(['method'=>'get','action'=>'client\kb\UserController@search','class'=>'search-form clearfix'])!!}
+                            {!!Form::open(['method'=>'get','action'=>'Client\kb\UserController@search','class'=>'search-form clearfix'])!!}
                             <div class="form-border">
 
                                 <div class="form-inline ">
