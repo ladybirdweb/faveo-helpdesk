@@ -535,6 +535,7 @@ class TicketController extends Controller {
 	public function create_user($emailadd, $username, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data) {
 		// define global variables
 		// dd($source);
+		// dd($emailadd);
 		$email;
 		$username;
 		// check emails
@@ -559,7 +560,7 @@ class TicketController extends Controller {
 			// mail user his/her password
 			if ($user->save()) {
 				$user_id = $user->id;
-				if (Mail::send('emails.pass', ['password' => $password, 'name' => $username, 'from'=>$company], function ($message) use ($emailadd, $username,$company) {
+				if (Mail::send('emails.pass', ['password' => $password, 'name' => $username, 'from'=>$company,'emailadd' => $emailadd], function ($message) use ($emailadd, $username,$company) {
 					$message->to($emailadd, $username)->subject('Welcome to '.$company.' helpdesk');
 				})) {
 					// need to do something here....
@@ -638,6 +639,7 @@ class TicketController extends Controller {
 			return true;
 		}
 	}
+
 
 	/**
 	 * Default helptopic
