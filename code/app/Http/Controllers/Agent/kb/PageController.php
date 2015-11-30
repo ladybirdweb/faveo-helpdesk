@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers\Agent\kb;
 
-use App\Http\Controllers\client\kb\UserController;
+use App\Http\Controllers\Client\kb\UserController;
 use App\Http\Controllers\Agent\kb\ArticleController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Agent\kb\SettingsController;
