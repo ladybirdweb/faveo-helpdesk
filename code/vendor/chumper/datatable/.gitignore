@@ -1,0 +1,6 @@
+/vendor
+composer.phar
+composer.lock
+datatable.sublime-project
+.DS_Store
+.idea
