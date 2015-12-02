@@ -39,6 +39,7 @@ return array(
     'login'					=> 'Login',
     'e-mail'				=> 'E-mail',
     'reg_new_member'        => 'Register a new membership',
+    'loading'			=>		'Loading',
  
     /*
       |--------------------------------------
