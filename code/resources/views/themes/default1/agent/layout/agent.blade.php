@@ -263,7 +263,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('name', '=', $agent_group)->wher
                                         </div>
                                         <div class="tabs-pane @yield('tools-bar')" id="tabD">
                                             <ul class="nav navbar-nav">
-                                                <li id="bar" @yield('tools')><a href="{{ url('/canned/list') }}" >{!! Lang::get('lang.canned') !!}</a></li>
+                                                <li id="bar" @yield('tools')><a href="{{ url('/canned/list') }}" >{!! Lang::get('lang.canned_response') !!}</a></li>
                                                 <li id="bar" @yield('kb')><a href="{{ url('/comment') }}" >{!! Lang::get('lang.knowledge_base') !!}</a></li>
                                             </ul>
                                         </div>

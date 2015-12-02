@@ -1,9 +1,10 @@
 <?php namespace App\Http\Controllers\Agent\kb;
-use App\Http\Controllers\Client\kb\UserController;
+use App\Http\Controllers\client\kb\UserController;
 use App\Http\Controllers\admin\kb\ArticleController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Agent\kb\SettingsController;
 use App\Http\Requests\kb\CategoryRequest;
+use App\Http\Requests\kb\CategoryUpdate;
 use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Model\kb\Category;
 use App\Model\kb\Relationship;
@@ -60,8 +61,8 @@ class CategoryController extends Controller {
 			})
 			->addColumn('Actions', function ($model) {
 				//return '<a href=category/delete/' . $model->id . ' class="btn btn-danger btn-flat">Delete</a>&nbsp;<a href=category/' . $model->id . '/edit class="btn btn-warning btn-flat">Edit</a>&nbsp;<a href=article-list class="btn btn-warning btn-flat">View</a>';
-				return '<span  data-toggle="modal" data-target="#banemail"><a href="#" ><button class="btn btn-danger btn-xs"></a>'. \Lang::get("lang.delete") .'</button></span>&nbsp;<a href=category/' . $model->slug . '/edit class="btn btn-warning btn-xs">'. \Lang::get("lang.edit") .'</a>&nbsp;<a href=article-list class="btn btn-primary btn-xs">'. \Lang::get("lang.view") .'</a>
-				<div class="modal fade" id="banemail">
+				return '<span  data-toggle="modal" data-target="#deletecategory' . $model->slug . '"><a href="#" ><button class="btn btn-danger btn-xs"></a>'. \Lang::get("lang.delete") .'</button></span>&nbsp;<a href=category/' . $model->id . '/edit class="btn btn-warning btn-xs">'. \Lang::get("lang.edit") .'</a>&nbsp;<a href=article-list class="btn btn-primary btn-xs">'. \Lang::get("lang.view") .'</a>
+				<div class="modal fade" id="deletecategory' . $model->slug . '">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -138,7 +139,7 @@ class CategoryController extends Controller {
 	 */
 	public function edit($slug, Category $category) {
 
-		$cid = $category->where('slug', $slug)->first();
+		$cid = $category->where('id', $slug)->first();
 		$id = $cid->id;
 		/* get the atributes of the category model whose id == $id */
 		$category = $category->whereId($id)->first();
@@ -153,17 +154,19 @@ class CategoryController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($slug, Category $category, CategoryRequest $request) {
+	public function update($slug, Category $category, CategoryUpdate $request) {
 		
 		/* Edit the selected category via id */
-		$category = $category->where('slug', $slug)->first();
+		$category = $category->where('id', $slug)->first();
 		$sl = $request->input('slug');
 		$slug = str_slug($sl, "-");
-
+		// dd($slug);
 		$category->slug = $slug;
 		/* update the values at the table via model according with the request */
-		if ($category->fill($request->except('slug'))->save()) //True: redirct to index page with success message
+		if ($category->fill($request->all())->save()) //True: redirct to index page with success message
 		{
+			$category->slug = $slug;
+			$category->save();
 			return redirect('category')->with('success', 'Category Updated Successfully');
 		} else //redirect to index with fails message
 		{
@@ -178,16 +181,24 @@ class CategoryController extends Controller {
 	 * @return Response
 	 */
 	public function destroy($id, Category $category, Relationship $relation) {
-		$relation = $relation->where('category_id', $id)->delete();
-		// $relation->delete();
-		/*  delete the category selected, id == $id */
-		$category = $category->whereId($id)->first();
-		if ($category->delete()) //True: redirect to index with success message
-		{
-			return Redirect::back()->with('success', 'Category Deleted Successfully');
-		} else //redirect to index page fails message
-		{
+
+		$relation = $relation->where('category_id', $id)->first();
+		// dd($relation);
+		if($relation != null){
 			return Redirect::back()->with('fails', 'Category Not Deleted');
+		}
+		else {
+
+			/*  delete the category selected, id == $id */
+			$category = $category->whereId($id)->first();
+			if ($category->delete()) //True: redirect to index with success message
+			{
+				return Redirect::back()->with('success', 'Category Deleted Successfully');
+			} else //redirect to index page fails message
+			{
+				return Redirect::back()->with('fails', 'Category Not Deleted');
+			}
+			
 		}
 	}
 

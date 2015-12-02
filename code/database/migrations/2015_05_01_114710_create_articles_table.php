@@ -15,7 +15,7 @@ class CreateArticlesTable extends Migration {
 			$table->increments('id')->unsigned();
 			$table->string('name');
 			$table->string('slug');
-			$table->text('description');
+			$table->longText('description');
 			$table->boolean('status');
 			$table->boolean('type');
 			$table->timestamps();

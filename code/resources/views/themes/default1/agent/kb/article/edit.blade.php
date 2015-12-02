@@ -7,7 +7,7 @@
     class="active"
 @stop
 @section('content')
-{!! Form::model($article,['url' => 'article/'.$article->slug , 'method' => 'PATCH'] )!!}
+{!! Form::model($article,['url' => 'article/'.$article->id , 'method' => 'PATCH'] )!!}
 <div class="row">
 		<div class="box-body" >
 		@if(Session::has('success'))
@@ -117,7 +117,7 @@
 			<div class="row">
 						<div class="form-group">
 							<div class="col-md-1">
-			<input type="checkbox" name="category_id[]" value="<?php echo $val;?>" <?php if (in_array($val, $assign)) {
+			<input type="radio" name="category_id[]" value="<?php echo $val;?>" <?php if (in_array($val, $assign)) {
 	echo ('checked');
 }
 ?> ></div>

@@ -292,7 +292,7 @@ Route::any('getdata', function() {
 
 	Route::get('/', ['as'=>'/', 'uses'=>'Client\helpdesk\WelcomepageController@index']);
 
-	Route::get('form',['as'=>'form','uses'=>'Client\helpdesk\FormController@getForm']);	//getform
+	Route::get('create-ticket',['as'=>'form','uses'=>'Client\helpdesk\FormController@getForm']);	//getform
 
 	Route::get('mytickets/{id}', ['as' => 'ticketinfo', 'uses' => 'Client\helpdesk\GuestController@singleThread']);	//detail ticket information
 
@@ -494,7 +494,7 @@ $router->get('category-list', ['as'=>'category-list' , 'uses'=> 'Client\kb\UserC
 /* get the categories with article */
 $router->get('category-list/{id}',['as'=>'categorylist' , 'uses'=>'Client\kb\UserController@getCategory']);
 /* get the home page */
-$router->get('home',['as'=>'home' , 'uses'=> 'Client\kb\UserController@home']);
+$router->get('knowledgebase',['as'=>'home' , 'uses'=> 'Client\kb\UserController@home']);
 /* get the faq value to user */
 $router->get('faq',['as'=>'faq' , 'uses'=>'Client\kb\UserController@Faq'] );
 /* get the cantact page to user */

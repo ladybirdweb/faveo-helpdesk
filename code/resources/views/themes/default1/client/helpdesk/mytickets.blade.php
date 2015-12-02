@@ -1,5 +1,9 @@
 @extends('themes.default1.client.layout.client')
 
+@section('title')
+    My Tickets -
+@stop
+
 @section('breadcrumb')
 
     <div class="site-hero clearfix">               

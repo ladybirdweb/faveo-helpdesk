@@ -28,13 +28,13 @@
                         </div>
                         <!-- password -->
                         <div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}">
-                                <input type="password" class="form-control" name="password" placeholder="Lang::get('lang.password')">
+                                <input type="password" class="form-control" name="password" placeholder="{!! Lang::get('lang.password') !!}">
                                 {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
                                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                         </div>
                         <!-- confirm password -->
                         <div class="form-group has-feedback {{ $errors->has('password_confirmation') ? 'has-error' : '' }}">
-                                <input type="password" class="form-control" name="password_confirmation" placeholder="Lang::get('lang.confirm_password')">
+                                <input type="password" class="form-control" name="password_confirmation" placeholder="{!! Lang::get('lang.confirm_password') !!}">
                                 {!! $errors->first('password_confirmation', '<spam class="help-block">:message</spam>') !!}
                                 <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
                         </div>

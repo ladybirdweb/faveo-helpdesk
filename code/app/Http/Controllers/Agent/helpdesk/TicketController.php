@@ -640,7 +640,6 @@ class TicketController extends Controller {
 		}
 	}
 
-
 	/**
 	 * Default helptopic
 	 * @return type string

@@ -11,7 +11,7 @@
 </script>
 
 @section('content')
-{!! Form::model($category,['url' => 'category/'.$category->slug , 'method' => 'PATCH'] )!!}
+{!! Form::model($category,['url' => 'category/'.$category->id , 'method' => 'PATCH'] )!!}
 
 
 <div class="box box-primary">

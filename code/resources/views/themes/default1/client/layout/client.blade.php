@@ -2,7 +2,15 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title> SUPPORT CENTER | CLIENT PANEL</title>
+        <?php  
+        $title = App\Model\helpdesk\Settings\System::where('id','=','1')->first();
+        if(isset($title->name)){
+        	$title_name = $title->name;	
+        } else {
+        	$title_name = "SUPPORT CENTER";	
+        }
+        ?>
+        <title> @yield('title') {!! $title_name !!} </title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- Bootstrap 3.3.2 -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -54,11 +62,11 @@
 				<div id="navbar" class="navbar-wrapper text-center">
 					<nav class="navbar navbar-default site-navigation" role="navigation">
 						<ul class="nav navbar-nav navbar-menu">
-							<li @yield('home')><a href="{{url('home')}}">{!! Lang::get('lang.home') !!}</a></li>
+							<li @yield('home')><a href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
 							@if($system->first()->status == 1)
 								<li @yield('submit')><a href="{{URL::route('form')}}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
 							@endif
-							<li @yield('kb')><a href="#">{!! Lang::get('lang.knowledge_base') !!}</a>
+							<li @yield('kb')><a href="{!! url('knowledgebase') !!}">{!! Lang::get('lang.knowledge_base') !!}</a>
                                 <ul class="dropdown-menu">
                                 	<li><a href="{{route('category-list')}}">{!! Lang::get('lang.categories') !!}</a></li>  
                                     <li><a href="{{route('article-list')}}">{!! Lang::get('lang.articles') !!}</a></li>  
@@ -126,7 +134,7 @@
 					          	</div>
 								<ul class="list-unstyled pull-left">
 									<li><a href="{{url('password/email')}}">{!! Lang::get('lang.forgot_password') !!}</a><br></li>
-									<li><a href="#">{!! Lang::get('lang.create_account') !!}</a></li>
+									<li><a href="{{url('auth/register')}}">{!! Lang::get('lang.create_account') !!}</a></li>
 								</ul>
 								<button type="submit" class="btn btn-custom pull-right">{!! Lang::get('lang.login') !!}</button>
 							{!! Form::close() !!}

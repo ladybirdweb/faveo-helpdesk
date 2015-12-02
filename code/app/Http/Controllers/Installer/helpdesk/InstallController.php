@@ -395,11 +395,10 @@ class InstallController extends Controller {
 				File::put($install, $datacontent);
 
 				$smtpfilepath = "\App\Http\Controllers\Common\SettingsController::smtp()";
-				$path22 = app_path('Http\routes.php');
+				$path22 = app_path('Http/routes.php');
 				$content23 = File::get($path22);
 				$content23 = str_replace('"%smtplink%"', $smtpfilepath, $content23);
 				File::put($path22, $content23);
-
 
 				try {
 					return View::make('themes/default1/installer/helpdesk/view7');

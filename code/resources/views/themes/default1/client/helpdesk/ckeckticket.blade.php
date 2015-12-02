@@ -95,21 +95,21 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                                             <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id','=',$tickets->status)->first();?>
 
                                             @if($status->id == 1)
-                                                <td title="{{$status->properties}}" style="color:orange">{{$status->state}}</td></tr>
+                                                <td title="{{$status->properties}}" style="color:orange">{{$status->name}}</td></tr>
                                             @elseif($status->id == 2)
-                                                <td title="{{$status->properties}}" style="color:green">{{$status->state}}</td></tr>
+                                                <td title="{{$status->properties}}" style="color:green">{{$status->name}}</td></tr>
                                             @elseif($status->id == 3)
-                                                <td title="{{$status->properties}}" style="color:green">{{$status->state}}</td></tr>
+                                                <td title="{{$status->properties}}" style="color:green">{{$status->name}}</td></tr>
                                             @endif
 
                                             <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id','=',$tickets->priority_id)->first();?>
 
                                             @if($priority->priority_id == 1)
-                                                <td title="{{$priority->priority_desc}}" style="color:green">{{$priority->priority}}</td>
+                                                <td title="{{$priority->priority_desc}}" style="color:green">{{$priority->priority_desc}}</td>
                                             @elseif($priority->priority_id == 2)
-                                                <td title="{{$priority->priority_desc}}" style="color:orange">{{$priority->priority}}</td>
+                                                <td title="{{$priority->priority_desc}}" style="color:orange">{{$priority->priority_desc}}</td>
                                             @elseif($priority->priority_id == 3)
-                                                <td title="{{$priority->priority_desc}}" style="color:red">{{$priority->priority}}</td>
+                                                <td title="{{$priority->priority_desc}}" style="color:red">{{$priority->priority_desc}}</td>
                                             @endif
 
                                             </tr>
@@ -127,7 +127,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                                         <table class="table table-hover">
                                             <!-- <tr><th></th><th></th></tr> -->
                                             <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id','=',$tickets->help_topic_id)->first();?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
-                                            <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{$last->poster}}</td></tr>
+                                            <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{ucwords($last->poster)}}</td></tr>
                                         </table>
                                     </div>
                                     <!-- </div> -->
@@ -219,7 +219,6 @@ $data = $ConvDate[0];
                                                         @else
                                                             <img src="{{ Gravatar::src($role->email) }}" alt="" height="50" width="50" class="avatar" <?php if($role->role == "user") { ?>style="box-shadow: 0 1px 3px #00FF26;" <?php } else { ?> style="box-shadow: 0 1px 3px #FFEC00;" <?php } ?> >
                                                         @endif
-                                                        <span class="hidden-xs">{{Auth::user()->first_name." ".Auth::user()->last_name}}</span>
                                                     @if($role->role == "user")
                                                         <b class="fn"><a href="#" rel="external" class="url">{{$role->user_name}}</a></b>
                                                     @else

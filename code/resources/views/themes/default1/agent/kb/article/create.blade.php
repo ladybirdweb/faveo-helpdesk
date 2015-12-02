@@ -135,7 +135,7 @@
 					<div class="row">
 						<div class="form-group">
 							<div class="col-md-1">
-								<input type="checkbox" name="category_id[]" value="<?php echo $val;?>">
+								<input type="radio" name="category_id[]" value="<?php echo $val;?>">
 							</div>
 							<div class="col-md-10">
 								<?php echo $key;?>

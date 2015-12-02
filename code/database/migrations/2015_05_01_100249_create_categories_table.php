@@ -15,7 +15,7 @@ class CreateCategoriesTable extends Migration {
 			$table->increments('id')->unsigned();
 			$table->string('name');
 			$table->string('slug');
-			$table->string('description');
+			$table->mediumText('description');
 			$table->boolean('status');
 			$table->integer('parent');
 			$table->timestamps();

@@ -13,6 +13,8 @@ $category_id = $all->lists('category_id');
     <ol class="breadcrumb breadcrumb-custom">
         <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
         <?php $category = App\Model\kb\Category::where('id', $category_id)->first(); ?>
+        <li><a href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
+        <li><a href="{{url('category-list')}}">{!! Lang::get('lang.allcategory') !!}</a></li>
         <li><a href="{{url('category-list/'.$category->slug)}}">{{$category->name}}</a></li>
         <li class="active">{{$arti->name}}</li>
     </ol>
@@ -20,10 +22,8 @@ $category_id = $all->lists('category_id');
 @stop		
 @section('content')
 <div id="content" class="site-content col-md-12">
-
     <!--
     <article class=" type-post format-standard hentry clearfix">
-    
                     <h1 class="post-title"><a href="#">{{$arti->name}}</a></h1>
     
                                     <div class="post-meta clearfix">
@@ -32,7 +32,6 @@ $category_id = $all->lists('category_id');
                     </div> end of post meta 
                     {!!$arti->description!!}
     </article>-->
-
     <article class="hentry">
         <header class="entry-header">
             <h1 class="entry-title">{{$arti->name}}</h1>
@@ -129,3 +128,8 @@ $category_id = $all->lists('category_id');
 
 @stop
 
+@section('title')
+    @if(isset($category->name))
+        {!! $category->name !!} -
+    @endif
+@stop

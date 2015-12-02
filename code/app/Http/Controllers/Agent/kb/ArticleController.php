@@ -5,6 +5,7 @@ use App\Http\Controllers\Agent\kb\SettingsController;
 use App\Http\Controllers\Client\kb\UserController;
 use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Requests\kb\ArticleRequest;
+use App\Http\Requests\kb\ArticleUpdate;
 use App\Model\kb\Article;
 use App\Model\kb\Category;
 use App\Model\kb\Relationship;
@@ -62,8 +63,8 @@ class ArticleController extends Controller {
 			->addColumn('Actions', function ($model) {
 				//return '<a href=article/delete/ ' . $model->id . ' class="btn btn-danger btn-flat" onclick="myFunction()">Delete</a>&nbsp;<a href=article/' . $model->id . '/edit class="btn btn-warning btn-flat">Edit</a>&nbsp;<a href=show/' . $model->id . ' class="btn btn-warning btn-flat">View</a>';
 				//return '<form action="article/delete/ ' . $model->id . '" method="post" onclick="alert()"><button type="sumbit" value="Delete"></button></form><a href=article/' . $model->id . '/edit class="btn btn-warning btn-flat">Edit</a>&nbsp;<a href=show/' . $model->id . ' class="btn btn-warning btn-flat">View</a>';
-				return '<span  data-toggle="modal" data-target="#banemail"><a href="#" ><button class="btn btn-danger btn-xs"></a> ' . \Lang::get('lang.delete') . ' </button></span>&nbsp;<a href=article/' . $model->slug . '/edit class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp;<a href=show/'.$model->slug .' class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>
-				<div class="modal fade" id="banemail">
+				return '<span  data-toggle="modal" data-target="#deletearticle'.$model->id .'"><a href="#" ><button class="btn btn-danger btn-xs"></a> ' . \Lang::get('lang.delete') . ' </button></span>&nbsp;<a href=article/' . $model->id . '/edit class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp;<a href=show/'.$model->slug .' class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>
+				<div class="modal fade" id="deletearticle'.$model->id .'">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -156,7 +157,7 @@ class ArticleController extends Controller {
 	 */
 	public function edit($slug, Article $article, Relationship $relation, Category $category) {
 
-		$aid = $article->where('slug', $slug)->first();
+		$aid = $article->where('id', $slug)->first();
 		$id = $aid->id;
 
 		/* define the selected fields */
@@ -178,13 +179,13 @@ class ArticleController extends Controller {
 	 * @param type ArticleRequest $request
 	 * @return Response
 	 */
-	public function update($slug, Article $article, Relationship $relation,
-		ArticleRequest $request) {
-		$aid = $article->where('slug', $slug)->first();
+	public function update($slug, Article $article, Relationship $relation, ArticleUpdate $request) {
+		$aid = $article->where('id', $slug)->first();
 		$id = $aid->id;
 		$sl = $request->input('slug');
-			$slug = str_slug($sl, "-");
-			$article->slug = $slug;
+		$slug = str_slug($sl, "-");
+		// dd($slug);
+		$article->slug = $slug;
 		/* get the attribute of relation table where id==$id */
 		$relation = $relation->where('article_id', $id);
 		$relation->delete();
@@ -196,8 +197,10 @@ class ArticleController extends Controller {
 			DB::insert('insert into article_relationship (category_id, article_id) values (?,?)', [$req, $id]);
 		}
 		/* update the value to the table */
-		if ($article->fill($request->except('slug'))->save()) //true: redirect to index page with success message
+		if ($article->fill($request->all())->save()) //true: redirect to index page with success message
 		{
+			$article->slug = $slug;
+			$article->save();
 			return redirect('article')->with('success', 'Article Updated Successfully');
 		} else // redirect to index page with fails message
 		{

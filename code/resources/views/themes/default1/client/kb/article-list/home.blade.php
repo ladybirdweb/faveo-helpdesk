@@ -1,5 +1,10 @@
 @extends('themes.default1.client.layout.client')
-@section('home')
+
+@section('title')
+    Knowledge Base -
+@stop
+
+@section('knowledgebase')
     class = "active"
 @stop
 @section('content')
@@ -26,7 +31,7 @@
     <div class="container">
         <ol class="breadcrumb breadcrumb-custom">
             <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-            <li class="active">{!! Lang::get('lang.home') !!}</li>
+            <li class="active">{!! Lang::get('lang.knowledge_base') !!}</li>
         </ol>
     </div>
 </div>
@@ -83,7 +88,7 @@
             <div class="banner-content">
                 <p>{!! Lang::get('lang.if_you_did_not_find_an_answer_please_raise_a_ticket_describing_the_issue') !!}.</p>
             </div>
-            <p><a href="{{url('form')}}" class="btn btn-custom">{!! Lang::get('lang.submit_a_ticket') !!}</a></p>
+            <p><a href="{!! URL::route('form') !!}" class="btn btn-custom">{!! Lang::get('lang.submit_a_ticket') !!}</a></p>
         </div>
     </section>
 </div>

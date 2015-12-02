@@ -5,7 +5,7 @@ This email is confirmation that you are now registered at our helpdesk. <br/> <b
 Registered Email: {!! $emailadd !!} <br/>
 Password: {{$password}} <br/> <br/> 
 
-You can visit the helpdesk to browse articles and contact us at any time: {!! \URL::route('ticket2') !!}<br/> <br/> 
+You can visit the helpdesk to browse articles and contact us at any time: <a href="{!! \URL::route('ticket2') !!}">{!! \URL::route('ticket2') !!}</a><br/> <br/> 
 
 Thank You.<br/><br/> 
 

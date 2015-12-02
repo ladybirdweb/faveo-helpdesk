@@ -1,11 +1,12 @@
 <?php namespace App\Http\Controllers\Agent\kb;
 
-use App\Http\Controllers\Client\kb\UserController;
+use App\Http\Controllers\client\kb\UserController;
 use App\Http\Controllers\Agent\kb\ArticleController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Agent\kb\SettingsController;
 use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Requests\kb\PageRequest;
+use App\Http\Requests\kb\PageUpdate;
 use App\Model\kb\Page;
 use Datatable;
 use Illuminate\Http\Request;
@@ -56,8 +57,8 @@ class PageController extends Controller {
 			->addColumn('Actions', function ($model) {
 
 				//return '<a href=page/delete/' . $model->id . ' class="btn btn-danger btn-flat">Delete</a>&nbsp;<a href=page/' . $model->id . '/edit class="btn btn-warning btn-flat">Edit</a>&nbsp;<a href=article-list class="btn btn-warning btn-flat">View</a>';
-				return '<span  data-toggle="modal" data-target="#banemail"><a href="#" ><button class="btn btn-danger btn-xs"></a> '. \Lang::get('lang.delete') .'</button></span>&nbsp;<a href=page/' . $model->slug . '/edit class="btn btn-warning btn-xs">'. \Lang::get('lang.edit') .'</a>&nbsp;<a href=pages/' . $model->slug . ' class="btn btn-primary btn-xs">'. \Lang::get('lang.view') .'</a>
-				<div class="modal fade" id="banemail">
+				return '<span  data-toggle="modal" data-target="#deletepage' . $model->id . '"><a href="#" ><button class="btn btn-danger btn-xs"></a> '. \Lang::get('lang.delete') .'</button></span>&nbsp;<a href=page/' . $model->slug . '/edit class="btn btn-warning btn-xs">'. \Lang::get('lang.edit') .'</a>&nbsp;<a href=pages/' . $model->slug . ' class="btn btn-primary btn-xs">'. \Lang::get('lang.view') .'</a>
+				<div class="modal fade" id="deletepage' . $model->id . '">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -129,14 +130,16 @@ class PageController extends Controller {
 	 * @param type Request $request
 	 * @return type
 	 */
-	public function update($slug, PageRequest $request) {
+	public function update($slug, PageUpdate $request) {
 		$pages = $this->page->where('slug', $slug)->first();
 		$sl = $request->input('slug');
 			$slug = str_slug($sl, "-");
 
 			$this->page->slug = $slug;
 		//$id = $page->id;
-		$pages->fill($request->except('slug'))->save();
+		$pages->fill($request->all())->save();
+		$pages->slug = $slug;
+		$pages->save();
 		return redirect('page')->with('success', 'Your Page Updated Successfully');
 	}
 

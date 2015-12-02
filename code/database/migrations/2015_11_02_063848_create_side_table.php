@@ -15,13 +15,13 @@ class CreateSideTable extends Migration {
 		Schema::create('side1', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('title');
-			$table->string('content');
+			$table->mediumText('content');
 			$table->timestamps();
 		});
 		Schema::create('side2', function (Blueprint $table) {
 			$table->increments('id');
 			$table->string('title');
-			$table->string('content');
+			$table->mediumText('content');
 			$table->timestamps();
 		});
 	}

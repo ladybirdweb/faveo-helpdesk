@@ -1,5 +1,9 @@
 @extends('themes.default1.client.layout.client')
 
+@section('title')
+    Submit A Ticket -
+@stop
+
 @section('submit')
     class = "active"
 @stop

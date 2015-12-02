@@ -5,7 +5,7 @@ if(isset($content)) {
 ?>
 
 <h4 style="background-color:#F3F3F3;padding:20px;border:1px;border-radius:7px;">{!! $content !!}<br/><br/>{!! $sign !!}</h4>
-You can check the status of or update this ticket online at: {!! \URL::route('ticket2') !!}<br/><br/>
+You can check the status of or update this ticket online at: <a href="{!! \URL::route('ticket2') !!}">{!! \URL::route('ticket2') !!}</a><br/><br/>
 
 <?php 
 } else { 
@@ -19,7 +19,7 @@ Ticket ID: <b>{!!$ticket_number!!}</b><br/>
 {{-- Status: <b>Open</b><br/> --}}
 {{-- Priority: <b>Normal</b><br/><br/> --}}
 {!! $sign !!}
-You can check the status of or update this ticket online at: {!! \URL::route('ticket2') !!}<br/><br/>
+You can check the status of or update this ticket online at: <a href="{!! \URL::route('ticket2') !!}">{!! \URL::route('ticket2') !!}</a><br/><br/>
 Thank You.<br/><br/>
 Kind Regards,<br/><br/>
 {!! $sign !!}

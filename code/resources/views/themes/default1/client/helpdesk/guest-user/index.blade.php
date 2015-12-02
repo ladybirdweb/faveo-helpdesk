@@ -1,4 +1,9 @@
 @extends('themes.default1.client.layout.client')
+
+@section('home')
+    class = "active"
+@stop
+
 @section('HeadInclude')
 <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
            <link href="{{asset("lb-faveo/dist/css/widgetbox.css")}}" rel="stylesheet" type="text/css" />
@@ -11,7 +16,7 @@
 	<div class="site-hero clearfix">
                                     <ol class="breadcrumb breadcrumb-custom">
                                             <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-                                            <li><a href="{!! URL::route('home') !!}">{!! Lang::get('lang.home') !!}</a></li>
+                                            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>
                                     </ol>
                    </div>
 @stop
@@ -29,7 +34,7 @@
         @endif
         @if(App\Model\helpdesk\Settings\System::first()->status == 1)
             <span onclick="javascript: window.location.href='https://support.ebs.in/app/index.php?/Tickets/Submit';">
-                <a href="{{url('form')}}" class="widgetrowitem defaultwidget" style="background-image: URL('https://support.ebs.in/app/__swift/themes/client/images/icon_widget_submitticket.png');">
+                <a href="{!! URL::route('form') !!}" class="widgetrowitem defaultwidget" style="background-image: URL('https://support.ebs.in/app/__swift/themes/client/images/icon_widget_submitticket.png');">
                     <span class="widgetitemtitle">{!! Lang::get('lang.submit_a_ticket') !!}</span>
                 </a>
             </span>
@@ -37,6 +42,11 @@
             <span onclick="javascript: window.location.href='https://support.ebs.in/app/index.php?/News/List';">
                 <a href="{{url('mytickets')}}" class="widgetrowitem defaultwidget" style="background-image: URL('https://support.ebs.in/app/__swift/themes/client/images/icon_widget_news.png');">
                     <span class="widgetitemtitle">{!! Lang::get('lang.my_tickets') !!}</span>
+                </a>
+            </span>
+            <span onclick="javascript: window.location.href='https://support.ebs.in/app/index.php?/News/List';">
+                <a href="{{url('/knowledgebase')}}" class="widgetrowitem defaultwidget" style="background-image: URL('https://support.ebs.in/app/__swift/themes/client/images/icon_widget_knowledgebase.png');">
+                    <span class="widgetitemtitle">{!! Lang::get('lang.knowledge_base') !!}</span>
                 </a>
             </span>
         </div>

@@ -1,5 +1,9 @@
 @extends('themes.default1.client.layout.client')
 
+@section('title')
+    All Category -
+@stop
+
 @section('kb')
     class = "active"
 @stop

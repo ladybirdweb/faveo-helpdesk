@@ -506,23 +506,23 @@ return array(
       |  Group Create Page
       |--------------------------------------
       */
-      	'create_group'			=>'Create Group',
-      	'goups'					=>'Goups',
-		'can_create_ticket'		=>'Can create ticket',	
-		'can_edit_ticket'		=>'Can edit ticket',	
-		'can_post_ticket'		=>'Can post Ticket',	
-		'can_close_ticket'		=>'Can close ticket ',	
-		'can_assign_ticket'		=>'Can assign ticket',	
-		'can_transfer_ticket'	=>'Can transfer ticket',	
-		'can_delete_ticket'		=>'Can delete ticket',	
-		'can_ban_emails'		=>'Can ban emails',	
-		'can_manage_premade'	=>'Can Manage premade',	
-		'can_manage_FAQ'		=>'Can manage FAQ',	
-		'can_view_agent_stats'	=>'Can view agent stats',	
-		'department_access'		=>'Department Access ',
-		'admin_notes'			=>'Admin Notes',
-		'group_members'			=>'Group Members',
-		'group_name'			=>'Group Name',
+      'create_group'			=>'Create Group',
+    	'goups'					=>'Goups',
+		  'can_create_ticket'		=>'Can create ticket',	
+		  'can_edit_ticket'		=>'Can edit ticket',	
+		  'can_post_ticket'		=>'Can post Ticket',	
+		  'can_close_ticket'		=>'Can close ticket ',	
+  		'can_assign_ticket'		=>'Can assign ticket',	
+		  'can_transfer_ticket'	=>'Can transfer ticket',	
+		  'can_delete_ticket'		=>'Can delete ticket',	
+		  'can_ban_emails'		=>'Can ban emails',	
+		  'can_manage_premade'	=>'Can Manage premade',	
+		  'can_manage_FAQ'		=>'Can manage FAQ',	
+		  'can_view_agent_stats'	=>'Can view agent stats',	
+		  'department_access'		=>'Department Access ',
+		  'admin_notes'			=>'Admin Notes',
+		  'group_members'			=>'Group Members',
+		  'group_name'			=>'Group Name',
 
 
      /*
@@ -686,6 +686,7 @@ return array(
        'user_details'     =>    'User Details',
        'ticket_option'    =>    'Ticket Option',
        'ticket_detail'    =>    'Ticket Detail',
+       'Assigned_To'      =>    'ASSIGNED TO',
 
 
     /*
@@ -820,7 +821,6 @@ return array(
    'check_ticket_status'  =>  'Check Ticket status',
    'choose_a_help_topic'    =>    'Choose a Help Topic',
    'ticket_status'    =>    'Ticket Status',
-   
-
+   'post_comment'   =>    'Post Comment',
 
     );
