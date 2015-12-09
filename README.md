@@ -1,8 +1,13 @@
 <h3>About Faveo</h3>
-<p>Faveo Helpdesk is an open source ticketing system build on Laravel framework.<br />
- We plan to come up with 1 to 2 updates every month from October 2015 onwards.<br />
-  It can be integrated with email, as well as web forms.</p>
-<p>Faveo is designed for startup&rsquo;s &amp; SME&rsquo;s, keeping simplicity in mind and ease of use. </p>
+<p>Headquartered in Bangalore, Faveo HELPDESK provides Businesses with an automated Helpdesk system to manage customer support. 
+<br/><br/>
+The word Faveo comes from Latin which means to be favourable. Which truly highlights vision and the scope as well as the functionality of the product that Faveo is. It is specifically designed to cater the needs of startups and SME’s empowering them with state of art, ticket based support system. In today’s competitive startup scenario customer retention is one of the major challenges. Handling client query diligently is all the difference between retaining or losing a long lasting relationship. The company is driven with passion of providing tools for managing consumer queries for strategic insights and helping companies take those decisive decisions.
+<br/><br/>
+To date, Faveo has been integrated with 6 platforms and every month there is 1 to 2 update releases with new features & platform integration.
+<br/><br/>
+Faveo can also be customised according to requirement and we do undertake such request.
+<br/><br/>
+Faveo is designed & developed by <a href="http://www.ladybirdweb.com/" target="_blank">Ladybird Web Solution Pvt Ltd</a>, and launched in October 2015.</p>
 <h3>Flavors of Faveo</h3>
 <ul>
   <li>Community Edition – Free, Open source edition</li>
@@ -10,14 +15,7 @@
   <li>Cloud Edition – Coming soon. Get started in 5 minutes. We will take care of servers, backup etc. Always stay updated with the latest updates of Faveo</li>
 </ul>
 
-<h3>Different editions of Faveo</h3>
-<ul>
-  <li>Helpdesk</li>
-  <li>Knowledgebase</li>
-  <li>Chat - Coming Soon</li>
-  <li>Helpdesk + Knowledgebase</li>
-  <li>Helpdesk + Knowledgebase + Chat - Coming Soon</li>
-</ul>
+
 <h3><a id="user-content-faveo-user-manual" href="https://github.com/ladybirdweb/faveo-helpdesk#faveo-user-manual" aria-hidden="true"></a>Faveo User Manual</h3>
 <p>Check out Faveo Knowledge Base <a href="http://www.ladybirdweb.com/support/knowledgebase" target="_blank">here</a></p>
 <h3><a id="user-content-requirements" href="https://github.com/ladybirdweb/faveo-helpdesk#requirements" aria-hidden="true"></a>Requirements</h3>
@@ -35,8 +33,7 @@
   <li>Laravel Framework</li>
   <li>Admin LTE Theme</li>
 </ul>
-<h3><a id="user-content-developed-by" href="https://github.com/ladybirdweb/faveo-helpdesk#developed-by" aria-hidden="true"></a>Developed by</h3>
-<p><a href="http://www.ladybirdweb.com/" target="_blank">Ladybird Web Solution Pvt Ltd</a></p>
+
 <h3><a id="user-content-website" href="https://github.com/ladybirdweb/faveo-helpdesk#website" aria-hidden="true"></a>Website</h3>
 <p><a href="http://www.faveohelpdesk.com/" target="_blank">www.faveohelpdesk.com</a></p>
 
