@@ -130,6 +130,9 @@ $helptopic = App\Model\helpdesk\Manage\Help_topic::get();
             {!! Form::textarea('Details',null,['class' => 'form-control']) !!}
 
         </div>
+        {{-- Event fire --}}
+        <?php Event::fire(new App\Events\ClientTicketForm()); ?>
+        
         <div class="col-md-12" id="response"> </div>
         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
     </div>

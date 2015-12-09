@@ -28,22 +28,24 @@
 @endif
 @section('breadcrumb')
 <div class="site-hero clearfix">
-    <div class="container">
+    
         <ol class="breadcrumb breadcrumb-custom">
-            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-            <li class="active">{!! Lang::get('lang.knowledge_base') !!}</li>
+
+            <li>{!! Lang::get('lang.you_are_here') !!}: </li>
+            <li>{!! Lang::get('lang.home') !!}</li>
+            <li>{!! Lang::get('lang.knowledge_base') !!}</li>
         </ol>
-    </div>
+    
 </div>
 @stop
 <div id="content" class="site-content col-md-9">
     <div class="row">
-        <?php $categories = App\Model\kb\Category::paginate('4');
+        <?php $categories = App\Model\kb\Category::all();
         ?>
         @foreach($categorys as $category)
         {{-- get the article_id where category_id == current category --}}
         <?php
-        $all = App\Model\kb\Relationship::where('category_id', '=',$category->id)->get();
+        $all = App\Model\kb\Relationship::all();
         /* from whole attribute pick the article_id */
         $page = App\Model\kb\Relationship::where('category_id', '=',$category->id)->paginate('3');
         /* from whole attribute pick the article_id */
@@ -59,19 +61,19 @@
                 </h1>
                 <ul class="fa-ul">
                     <?php foreach ($article_id as $id) {
-                        ?>
-                        <?php
+                    
                         $article = App\Model\kb\Article::where('id', '=', $id)->where('status', '=','1')->where('type', '=','1')->get();
                         ?>
                         @foreach($article as $arti)
                         <li>
                             <i class="fa-li fa fa-list-alt fa-fw text-muted"></i>
                             <h3 class="h5"><a href="#"><a href="{{url('show/'.$arti->slug)}}">{{$arti->name}}</a></h3>
-                            <span class="article-meta">{{$arti->created_at}}</span>
-    <?php $str = $arti->description;
-    $len = strlen($str); ?>
-                            <?php $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 50); ?>
-                            <p >{!!$excerpt!!} <br/><a class="more-link text-center" href="{{url('show/'.$arti->slug)}}" style="color: orange">{!! Lang::get('lang.read_more') !!}</a></p>
+                            <span class="article-meta">{{$arti->created_at->format('l, d-m-Y')}}</span>
+                    <?php $str = $arti->description;
+                        $len = strlen($str);  
+
+                        $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 50); ?>
+                            {!!$excerpt!!} <br/><a class="more-link text-center" href="{{url('show/'.$arti->slug)}}" style="color: orange">{!! Lang::get('lang.read_more') !!}</a>
                         </li>
                         @endforeach
 <?php } ?>
@@ -80,7 +82,7 @@
             </section>
         </div>
         @endforeach
-        {!!  $categories->setPath('show/'); !!}
+        
     </div>
     <section class="section">
         <div class="banner-wrapper banner-horizontal clearfix">
@@ -92,8 +94,10 @@
         </div>
     </section>
 </div>
+@stop
+
 @section('category')
-<h2 class="section-title h4 clearfix">{!! Lang::get('lang.categories') !!}</h2>
+<h2 class="section-title h4 clearfix">{!! Lang::get('lang.categories') !!}<small class="pull-right"><i class="fa fa-hdd-o fa-fw"></i></small></h2>
 <ul class="nav nav-pills nav-stacked nav-categories">
     @foreach($categorys as $category)
 <?php
@@ -104,6 +108,4 @@ $numcount = count($article_id);
     <li><a href="{{url('category-list/'.$category->slug)}}"><span class="badge pull-right">{{$numcount}}</span>{{$category->name}}</a></li>
     @endforeach
 </ul>
-@stop
-
 @stop

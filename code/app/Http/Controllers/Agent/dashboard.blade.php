@@ -15,7 +15,14 @@ class="active"
 @section('content')
   
       <div class="box box-info">
+                            
+                <?php 
+          
+          // $tickets = App\Model\Ticket\Tickets::where('created_at','>=',date('Y-m-d'))->get();
 
+          // echo count($tickets);
+
+          ?>
                 <div class="box-header with-border">
                     <h3 class="box-title">{!! Lang::get('lang.line_chart') !!}</h3>
                     <div class="box-tools pull-right">
@@ -76,19 +83,51 @@ $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id
     $(function(){
     $.getJSON("agen", function (result) {
 
-    var labels=[], open=[], closed=[], reopened=[];
-    //,data2=[],data3=[],data4=[];
+    var labels = [],data=[],data2=[],data3=[],data4=[];
     for (var i = 0; i < result.length; i++) {
 
-
-        // $var12 = result[i].day;
-
-        // labels.push($var12);
-        labels.push(result[i].date);
-        open.push(result[i].open);
-        closed.push(result[i].closed);
-        reopened.push(result[i].reopened);
-      // data4.push(result[i].open);
+$var12 = result[i].month;
+if($var12 == 1){
+   $var13 = "January";
+} 
+if($var12 == 2){
+   $var13 = "Febuary";
+} 
+if($var12 == 3){
+   $var13 = "March";
+} 
+if($var12 == 4){
+   $var13 = "April";
+} 
+if($var12 == 5){
+   $var13 = "May";
+} 
+if($var12 == 6){
+   $var13 = "June";
+} 
+if($var12 == 7){
+   $var13 = "July";
+} 
+if($var12 == 8){
+   $var13 = "August";
+} 
+if($var12 == 9){
+   $var13 = "September";
+} 
+if($var12 == 10){
+   $var13 = "October";
+} 
+if($var12 == 11){
+   $var13 = "November";
+} 
+if($var12 == 12){
+   $var13 = "December";
+}
+        labels.push($var13);
+        data.push(result[i].totaltickets);
+        data2.push(result[i].closed);
+data3.push(result[i].reopened);
+data4.push(result[i].open);
     }
 
     var buyerData = {
@@ -100,41 +139,43 @@ $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id
           strokeColor : "#f56954",
           pointColor : "#A62121",
           pointStrokeColor : "#E60073",
-          pointHighlightFill : "#FF4DC3",
-          pointHighlightStroke : "rgba(151,187,205,1)",
-          data : open      
+          data : data
+          
         }
-        ,{
+,
+{
           label : "Open Tickets" , 
           fillColor : "rgba(255, 102, 204, 0.4)",
           strokeColor : "#f56954",
           pointColor : "#FF66CC",
           pointStrokeColor : "#fff",
-          pointHighlightFill : "#FF4DC3",
-          pointHighlightStroke : "rgba(151,187,205,1)",
-          data : closed
+pointHighlightFill : "#FF4DC3",
+                pointHighlightStroke : "rgba(151,187,205,1)",
+          data : data4
           
         }
-        ,{
-          label : "Closed Tickets",
-          fillColor : "rgba(151,187,205,0.2)",
-          strokeColor : "rgba(151,187,205,1)",
-          pointColor : "rgba(151,187,205,1)",
-          pointStrokeColor : "#0000CC",
-          pointHighlightFill : "#0000E6",
-          pointHighlightStroke : "rgba(151,187,205,1)",
-          data : reopened
-        }
-        // ,{
-        //       label : "Reopened Tickets",
-        //         fillColor : "rgba(102,255,51,0.2)",
-        //       strokeColor : "rgba(151,187,205,1)",
-        //        pointColor : "rgba(46,184,0,1)",
-        //         pointStrokeColor : "#fff",
-        //         pointHighlightFill : "#fff",
-        //         pointHighlightStroke : "rgba(151,187,205,1)",
-        //        data : data3
-        //     }
+,
+              {
+              label : "Closed Tickets",
+                fillColor : "rgba(151,187,205,0.2)",
+              strokeColor : "rgba(151,187,205,1)",
+               pointColor : "rgba(151,187,205,1)",
+                pointStrokeColor : "#0000CC",
+                pointHighlightFill : "#0000E6",
+                pointHighlightStroke : "rgba(151,187,205,1)",
+               data : data2
+            }
+,
+{
+              label : "Reopened Tickets",
+                fillColor : "rgba(102,255,51,0.2)",
+              strokeColor : "rgba(151,187,205,1)",
+               pointColor : "rgba(46,184,0,1)",
+                pointStrokeColor : "#fff",
+                pointHighlightFill : "#fff",
+                pointHighlightStroke : "rgba(151,187,205,1)",
+               data : data3
+            }
       ]
     };
 

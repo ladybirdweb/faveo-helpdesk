@@ -15,7 +15,7 @@ class="active"
 @section('content')
   
       <div class="box box-info">
-
+                            
                 <div class="box-header with-border">
                     <h3 class="box-title">{!! Lang::get('lang.line_chart') !!}</h3>
                     <div class="box-tools pull-right">
@@ -31,50 +31,13 @@ class="active"
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
             <hr/>
-            <div class="box">
-                <div class="box-header">
-                             <h1>{!! Lang::get('lang.statistics') !!}</h1>
             
-                </div>
-                <div class="box-body">
-           <table class="table table-hover" style="overflow:hidden;">
-             
-                    <tr>
-                <th>{!! Lang::get('lang.department') !!}</th>
-                <th>{!! Lang::get('lang.opened') !!}</th>
-                <th>{!! Lang::get('lang.resolved') !!}</th>
-                <th>{!! Lang::get('lang.closed') !!}</th>
-                <th>{!! Lang::get('lang.deleted') !!}</th>
-                </tr>
-
-<?php $departments = App\Model\helpdesk\Agent\Department::all(); ?>
-@foreach($departments as $department)
-<?php
-$open = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id)->where('status','=',1)->count(); 
-$resolve = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id)->where('status','=',2)->count(); 
-$close = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id)->where('status','=',3)->count(); 
-$delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id)->where('status','=',5)->count(); 
-
-?>
-
-                <tr>
-                   
-                    <td>{!! $department->name !!}</td>
-                    <td>{!! $open !!}</td>
-                    <td>{!! $resolve !!}</td>
-                    <td>{!! $close !!}</td>
-                    <td>{!! $delete !!}</td>
-                   
-                </tr>
-                @endforeach 
-                </table>
-            </div>
-                </div>
    
    <script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
          <script type="text/javascript">
     $(function(){
-    $.getJSON("agen", function (result) {
+    $.getJSON("reportdata", function (result) {
+
 
     var labels=[], open=[], closed=[], reopened=[];
     //,data2=[],data3=[],data4=[];

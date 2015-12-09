@@ -16,8 +16,6 @@ class CreateTicketTable extends Migration {
 			$table->string('ticket_number');
 			$table->integer('user_id');
 			$table->integer('dept_id');
-			$table->integer('sla_id');
-			$table->integer('staff_id');
 			$table->integer('team_id');
 			$table->integer('priority_id');
 			$table->integer('sla');
@@ -30,18 +28,16 @@ class CreateTicketTable extends Migration {
 			$table->integer('lock_at');
 			$table->integer('source');
 			$table->integer('isoverdue');
-			$table->date('duedate');
 			$table->integer('reopened');
 			$table->integer('isanswered');
 			$table->integer('html');
 			$table->integer('is_deleted');
 			$table->integer('closed');
-			$table->string('last_message');
-			$table->string('last_response');
-			$table->dateTime('reopened_at');
-			$table->dateTime('closed_at');
-			$table->dateTime('last_message_at');
-			$table->dateTime('last_response_at');
+			$table->dateTime('reopened_at')->nullable();
+			$table->dateTime('duedate')->nullable();
+			$table->dateTime('closed_at')->nullable();
+			$table->dateTime('last_message_at')->nullable();
+			$table->dateTime('last_response_at')->nullable();
 			$table->timestamps();
 		});
 	}

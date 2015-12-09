@@ -39,7 +39,6 @@ return array(
     'login'					=> 'Login',
     'e-mail'				=> 'E-mail',
     'reg_new_member'        => 'Register a new membership',
-    'loading'			=>		'Loading',
  
     /*
       |--------------------------------------
@@ -566,6 +565,7 @@ return array(
       'tools'    =>  'Tools',
       'canned'   =>  'Canned',
       'knowledge_base'   =>    'Knowledge Base',
+      'loading'         =>  'Loading',
 
       /*
        |-----------------------------------------------
@@ -823,5 +823,9 @@ return array(
    'choose_a_help_topic'    =>    'Choose a Help Topic',
    'ticket_status'    =>    'Ticket Status',
    'post_comment'   =>    'Post Comment',
+
+
+
+'plugin'    =>  'Plugin',
 
     );

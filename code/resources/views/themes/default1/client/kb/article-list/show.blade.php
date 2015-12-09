@@ -14,14 +14,14 @@ $category_id = $all->lists('category_id');
         <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
         <?php $category = App\Model\kb\Category::where('id', $category_id)->first(); ?>
         <li><a href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
-        <li><a href="{{url('category-list')}}">{!! Lang::get('lang.allcategory') !!}</a></li>
+        <li><a href="{{url('category-list')}}">{!! Lang::get('lang.category') !!}</a></li>
         <li><a href="{{url('category-list/'.$category->slug)}}">{{$category->name}}</a></li>
         <li class="active">{{$arti->name}}</li>
     </ol>
 </div>
 @stop		
 @section('content')
-<div id="content" class="site-content col-md-12">
+<div id="content" class="site-content col-md-9">
     <!--
     <article class=" type-post format-standard hentry clearfix">
                     <h1 class="post-title"><a href="#">{{$arti->name}}</a></h1>
@@ -64,7 +64,7 @@ $category_id = $all->lists('category_id');
 
                         <div class="comment-metadata">
                             <small class="date text-muted">
-                                <time datetime="2013-10-23T01:50:50+00:00">{!! $comment->created_at !!}</time>
+                                <time datetime="2013-10-23T01:50:50+00:00">{!! $comment->created_at->format('l, d-m-Y') !!}</time>
                             </small>
                         </div><!-- .comment-metadata -->
                     </footer><!-- .comment-meta -->
@@ -132,4 +132,20 @@ $category_id = $all->lists('category_id');
     @if(isset($category->name))
         {!! $category->name !!} -
     @endif
+@stop
+
+@section('category')
+<h2 class="section-title h4 clearfix">{!! Lang::get('lang.categories') !!}<small class="pull-right"><i class="fa fa-hdd-o fa-fw"></i></small></h2>
+<ul class="nav nav-pills nav-stacked nav-categories">
+
+<?php $categorys = App\Model\kb\Category::all(); ?>
+    @foreach($categorys as $category)
+<?php
+$num = \App\Model\kb\Relationship::where('category_id','=', $category->id)->get();
+$article_id = $num->lists('article_id');
+$numcount = count($article_id);
+?>
+    <li><a href="{{url('category-list/'.$category->slug)}}"><span class="badge pull-right">{{$numcount}}</span>{{$category->name}}</a></li>
+    @endforeach
+</ul>
 @stop

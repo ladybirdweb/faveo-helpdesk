@@ -56,6 +56,7 @@
                             <li @yield('Manage')><a data-target="#tabD" href="#">{!! Lang::get('lang.manage') !!}</a></li>
                             <li @yield('Settings')><a data-target="#tabE" href="#">{!! Lang::get('lang.settings') !!}</a></li>
                             <li @yield('Themes')><a data-target="#tabF" href="#">{!! Lang::get('lang.themes') !!}</a></li>
+                            <li @yield('Plugin')><a data-target="#tabP" href="#">{!! Lang::get('lang.plugin') !!}</a></li>
                         </ul>
 
                         <ul class="nav navbar-nav navbar-right">
@@ -150,7 +151,7 @@ $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->get();
 $i = count($tickets);
 ?>
                                         <li>
-                                            <a href="{{ url('/ticket/open') }}">
+                                            <a href="{{ url('/ticket/inbox') }}">
                                                 <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green">
                                                 {!! $i !!}</small>
                                             </a>
@@ -255,6 +256,10 @@ $i = count($tickets);
                                                     <li id="bar" @yield('footer3')><a href="{{ url('create-footer3') }}" >{!! Lang::get('lang.footer3') !!}</a></li></a></li>
                                                     <li id="bar" @yield('footer4')><a href="{{ url('create-footer4') }}" >{!! Lang::get('lang.footer4') !!}</a></li></a></li>
                                                 </ul>
+                                            </div>
+                                            <div class="tabs-pane @yield('plugin-bar')" id="tabF">
+                                            {{-- Event fire --}}
+                                                <ul class="nav navbar-nav"><?php \Event::fire(new App\Events\TopNavEvent()); ?></ul>
                                             </div>
                                         </div>
                                     </div>

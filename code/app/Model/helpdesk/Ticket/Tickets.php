@@ -6,6 +6,6 @@ class Tickets extends Model
 {
 	protected $table = 'tickets';
 	protected $fillable = [
-							'id','ticket_number','num_sequence','user_id','priority_id','sla','help_topic_id','max_open_ticket','collision_avoid','captcha','status','lock_by','lock_at','claim_response','assigned_ticket','answered_ticket','agent_mask','html','client_update','max_file_size','remember_token','created_at','updated_at'
+							'id','ticket_number','num_sequence','user_id','priority_id','sla','help_topic_id','max_open_ticket','collision_avoid','captcha','status','lock_by','lock_at','claim_response','assigned_ticket','answered_ticket','agent_mask','html','client_update','max_file_size','remember_token','reopened_at','duedate','closed_at','last_message_at','last_response_at','created_at','updated_at'
 							];
 }

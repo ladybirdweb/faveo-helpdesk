@@ -304,6 +304,9 @@ class TicketController extends Controller {
 	public function reply(Ticket_Thread $thread, TicketRequest $request, Ticket_attachments $ta ) {
 	  	$attachments = $request->file('attachment');
 	  	$check_attachment = null;
+	  	// Event fire
+	  	$eventthread = $thread->where('ticket_id',$request->input('ticket_ID'))->first();$eventuserid = $eventthread->user_id;$emailadd = User::where('id',$eventuserid)->first()->email;$source = $eventthread->source;$form_data = $request->except('ReplyContent','ticket_ID','attachment');
+                \Event::fire(new \App\Events\ClientTicketFormPost($form_data,$emailadd,$source));
 	  	// dd($attachments);
 	  	// }
 	  	//return $attachments;
@@ -389,6 +392,10 @@ class TicketController extends Controller {
 		  	//dd($thread->id);\
 		   	// mail to main user
 		  	//$path = 'C:\wamp\tmp\php5D3A.tmp';
+
+	  		// Event
+	  		\Event::fire(new \App\Events\FaveoAfterReply($reply_content,$user->phone_number,$request,$tickets));
+	  		
 		   	Mail::send(array('html'=>'emails.ticket_re-reply'), ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name'=>$username, 'Agent_Signature' => $agentsign], function ($message) use ($email, $user_name, $ticket_number, $ticket_subject, $attachments, $check_attachment) {
     		$message->to($email, $user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');
     		// if(isset($attachments)){
@@ -558,8 +565,11 @@ class TicketController extends Controller {
 			$user->role = "user";
 			$user->active = "1";
 			// mail user his/her password
-			if ($user->save()) {
+
+				if ($user->save()) {	
 				$user_id = $user->id;
+				// Event fire 
+				\Event::fire(new \App\Events\ReadMailEvent($user_id,$password));
 				if (Mail::send('emails.pass', ['password' => $password, 'name' => $username, 'from'=>$company,'emailadd' => $emailadd], function ($message) use ($emailadd, $username,$company) {
 					$message->to($emailadd, $username)->subject('Welcome to '.$company.' helpdesk');
 				})) {

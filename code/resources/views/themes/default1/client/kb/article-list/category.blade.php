@@ -7,26 +7,28 @@
 @section('kb')
     class = "active"
 @stop
+<?php  $category = App\Model\kb\Category::where('id','=',$id)->first(); ?>
 @section('breadcrumb')
 <div class="site-hero clearfix">
 
     <ol class="breadcrumb breadcrumb-custom">
         <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
         <li>{!! Lang::get('lang.home') !!}</li>
-        <li class="active">{!! Lang::get('lang.allcategory') !!}</li>
+        <li class="active">{!! Lang::get('lang.knowledge_base') !!}</li>
+        <li class="active">{!! Lang::get('lang.category') !!}</li>
+        <li class="active">{!! $category->name !!}</li>
     </ol>
 </div>
 @stop
 @section('content')
-<div id="content" class="site-content col-md-12">
+<div id="content" class="site-content col-md-9">
     <header class="archive-header">
-        @foreach($categorys as $category)
+        
         <h1 >{!! $category->name !!}</h1>
     </header><!-- .archive-header -->
     <blockquote class="archive-description" style="display: none;">
         <p>{!! $category->description !!}</p>
     </blockquote>
-    @endforeach
     <div class="archive-list archive-article">
         <?php foreach ($article_id as $id) { ?>
             <?php $article = App\Model\kb\Article::where('id', $id)->get(); ?>
@@ -39,7 +41,8 @@
                 <?php $str = $arti->description; ?>
                 <?php $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 400); ?>
                 <blockquote class="archive-description">
-                    <p>{!!$excerpt!!}</p><br/>
+                    <?php $content = trim(preg_replace("/<img[^>]+\>/i", "", $excerpt), " \t.") ?>
+                    <p>{!! strip_tags($content) !!}</p>
                     <a class="readmore-link" href="{{url('show/'.$arti->slug)}}">{!! Lang::get('lang.read_more') !!}</a>
                 </blockquote>	
                 <footer class="entry-footer">
@@ -51,7 +54,7 @@
             @endforeach
         <?php
         }
-        echo $all->render();
+        //echo $all->render();
         ?>                      
     </div>
 </div>
@@ -70,3 +73,18 @@
 @stop
 
 
+
+
+@section('category')
+<h2 class="section-title h4 clearfix">{!! Lang::get('lang.categories') !!}<small class="pull-right"><i class="fa fa-hdd-o fa-fw"></i></small></h2>
+<ul class="nav nav-pills nav-stacked nav-categories">
+    @foreach($categorys as $category)
+<?php
+$num = \App\Model\kb\Relationship::where('category_id','=', $category->id)->get();
+$article_id = $num->lists('article_id');
+$numcount = count($article_id);
+?>
+    <li><a href="{{url('category-list/'.$category->slug)}}"><span class="badge pull-right">{{$numcount}}</span>{{$category->name}}</a></li>
+    @endforeach
+</ul>
+@stop

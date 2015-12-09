@@ -14,8 +14,8 @@
     <ol class="breadcrumb breadcrumb-custom">
         <li class="text">{!! Lang::get('lang.you_are_here')!!}: </li>
         <li>{!! Lang::get('lang.home') !!}</li>
-        <li>{!! Lang::get('lang.frequently_asked_questions') !!}</li>
-        <li class="active">{!! Lang::get('lang.allcategory') !!}</li>
+        <li>{!! Lang::get('lang.knowledge_base') !!}</li>
+        <li class="active">{!! Lang::get('lang.category') !!}</li>
     </ol>
 </div>
 @stop
@@ -41,7 +41,7 @@
         ?>
 
         <section class="articles-list">
-            <h3><a href="{{url('category-list/'.$category->slug)}}">{{$category->name}}</a> <span>({{count($all)}})</span></h3>
+            <h3><i class="fa fa-folder-open-o fa-fw text-muted"></i> <a href="{{url('category-list/'.$category->slug)}}">{{$category->name}}</a> <span>({{count($all)}})</span></h3>
             <ul class="articles">
                 <hr>
 <?php foreach ($article_id as $id) {
@@ -55,7 +55,7 @@
                     @foreach($article as $arti)
                     <li class="article-entry image" style="margin-left: 50px;">
                         <h4><a href="{{url('show/'.$arti->slug)}}">{{$arti->name}}</a></h4>
-                        <span class="article-meta">{{$arti->created_at}}
+                        <span class="article-meta">{{$arti->created_at->format('l, d-m-Y')}}
                             <?php $str = $arti->description ?>
                             <?php $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 55) ?>
 
@@ -72,10 +72,8 @@
     @endforeach
 
 </div>
-<div>
-    {!! $categorys->render() !!}
-</div>
 </div>
 <!-- end of page content -->
 
 @stop
+

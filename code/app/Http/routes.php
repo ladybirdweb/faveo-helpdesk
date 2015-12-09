@@ -368,6 +368,7 @@ Route::group(['middleware' => 'role.user', 'middleware' => 'auth'], function () 
  |
  */ 
 Route::get('readmails',['as' => 'readmails', 'uses' => 'Agent\helpdesk\MailController@readmails']);
+Route::get('notification',['as' => 'notification', 'uses' => 'Agent\helpdesk\NotificationController@send_notification']);
 
 
 /*
@@ -518,3 +519,8 @@ Route::patch('client-profile-password/{id}',['as' => 'client-profile-password', 
 
 Route::get('/inbox/data', ['as' => 'api.inbox', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);
 
+
+
+
+Route::get('/report','HomeController@getreport');
+Route::get('/reportdata','HomeController@pushdata');

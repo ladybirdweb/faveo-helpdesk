@@ -54,7 +54,7 @@ class DashboardController extends Controller {
      */
     public function ChartData()
     {
-    	    	      $date2 = strtotime(Date('Y-m-d'));
+    	      $date2 = strtotime(Date('Y-m-d'));
 	      $date3 = Date('Y-m-d');
     	  $format = 'Y-m-d';
       	$date1  = strtotime(Date($format,strtotime('-1 month'. $date3)));
@@ -76,9 +76,11 @@ class DashboardController extends Controller {
       $last = rtrim($return,',');
 
       return '['.$last.']';
-      
+
+
+
         // $ticketlist = DB::table('tickets')
-        //     ->select(DB::raw('MONTH(updated_at) as month'),DB::raw('SUM(CASE WHEN status = 3 THEN 1 ELSE 0 END) as closed'),DB::raw('SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as reopened'),DB::raw('SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as open'),DB::raw('SUM(CASE WHEN status = 5 THEN 1 ELSE 0 END) as deleted'),
+        //     ->select(DB::raw('MONTH(updated_at) as month'),DB::raw('SUM(CASE WHEN status = 3 THEN 1 ELSE 0 END) as closed'),DB::raw('SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as reopened'),DB::raw('SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as open'),
         //         DB::raw('count(*) as totaltickets'))
         //     ->groupBy('month')
         //     ->orderBy('month', 'asc')

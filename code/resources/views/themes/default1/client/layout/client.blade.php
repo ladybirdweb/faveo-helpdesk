@@ -10,7 +10,7 @@
         	$title_name = "SUPPORT CENTER";	
         }
         ?>
-        <title> @yield('title') {!! $title_name !!} </title>
+        <title> @yield('title') {!! strip_tags($title_name) !!} </title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- Bootstrap 3.3.2 -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -266,7 +266,7 @@ $footer4 = App\Model\helpdesk\Theme\Footer4::whereId('1')->first();
 					<hr/>
                     <div class="row">
 						<div class="site-info col-md-6">
-                            <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/">Faveo</a></p>
+                            <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
                         </div>
                         <div class="site-social text-right col-md-6">
                             <?php $social = App\Model\kb\Social::where('id', '1')->first(); ?>

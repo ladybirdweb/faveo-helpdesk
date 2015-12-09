@@ -101,13 +101,13 @@ class UserController extends Controller {
 		/* get the article_id where category_id == current category */
 		$catid = $category->where('slug', $slug)->first();
 		$id = $catid->id;
-		$all = $relation->where('category_id', $id)->paginate(2);
-		$all->setPath('');
+		$all = $relation->where('category_id', $id)->get();
+		// $all->setPath('');
 		/* from whole attribute pick the article_id */
 		$article_id = $all->lists('article_id');
 		$categorys = $category->get();
 		/* direct to view with $article_id */
-		return view('themes.default1.client.kb.article-list.category', compact('all', 'categorys', 'article_id'));
+		return view('themes.default1.client.kb.article-list.category', compact('all','id', 'categorys', 'article_id'));
 	}
 
 	public function home(Article $article, Category $category, Relationship $relation) {
@@ -117,8 +117,8 @@ class UserController extends Controller {
      	else
      	{
 			//$categorys = $category->get();
-			$categorys = $category->paginate(3);
-			$categorys->setPath('home');
+			$categorys = $category->get();
+			// $categorys->setPath('home');
 			/* direct to view with $article_id */
 			return view('themes.default1.client.kb.article-list.home', compact('categorys', 'article_id'));
 	 	}
@@ -223,8 +223,8 @@ class UserController extends Controller {
 
 	public function getCategoryList(Article $article, Category $category, Relationship $relation) {
 		//$categorys = $category->get();
-		$categorys = $category->paginate(3);
-		$categorys->setPath('home');
+		$categorys = $category->get();
+		// $categorys->setPath('home');
 		/* direct to view with $article_id */
 		return view('themes.default1.client.kb.article-list.categoryList', compact('categorys', 'article_id'));
 

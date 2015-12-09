@@ -50,7 +50,10 @@ active
         <h3 class="box-title" id="refresh2"><i class="fa fa-user"> </i> @if($thread->title){!! $thread->title !!} @endif</h3>
         <div class="pull-right">
             <!-- <button type="button" class="btn btn-default"><i class="fa fa-edit" style="color:green;"> </i> Edit</button> -->
-            <?php if ($group->can_edit_ticket == 1) {?>
+<?php
+            Event::fire(new \App\Events\TicketBoxHeader($user->id));
+
+             if ($group->can_edit_ticket == 1) {?>
             <button type="button" class="btn btn-default" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><i class="fa fa-edit" style="color:green;"> </i> {!! Lang::get('lang.edit') !!}</button>
             <?php } ?>
 
@@ -195,8 +198,9 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                         @if($user->mobile !=null)<tr><td><b>Phone:</b></td>          <td>{{$user->ext . $user->phone_number}}</td></tr>@endif
                         <tr><td><b>{!! Lang::get('lang.source') !!}:</b></td>         <td>{{$ticket_source}}</td></tr>
                         <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first();?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
+                        <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
                         <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{$username}}</td></tr>
-
+                        <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
                     </table>
                 </div>
                 </div>
@@ -204,6 +208,8 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
         </div>
     </div>
 </div>
+{{-- Event fire --}}
+<?php Event::fire(new App\Events\TimeLineFormEvent($TicketData)); ?>
 <div class='row'>
     <div class='col-xs-12'>
         <div class="nav-tabs-custom">
@@ -620,7 +626,11 @@ $data = $ConvDate[0];
                                                     </div>
                                         @endif
                                     @endif
+
                                     <div class="timeline-footer" style="margin-bottom:-5px">
+                                    @if(!$conversation->is_internal)
+                                    <?php Event::fire(new App\Events\Timeline($conversation,$role,$user)); ?>
+                                    @endif
                                         <?php 
                                         $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id','=',$conversation->id)->get();
                                         $i = 0;

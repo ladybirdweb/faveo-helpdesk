@@ -56,11 +56,15 @@ class AuthController extends Controller {
 		$this->middleware('guest', ['except' => 'getLogout']);
 	}
 
+
+
 	/**
 	 * Get the form for registration
 	 * @return type Response
 	 */
 	public function getRegister() {
+		// Event for login
+		\Event::fire(new \App\Events\FormRegisterEvent());
 		if(Auth::user()) {
 			if(Auth::user()->role == "admin" || Auth::user()->role == "agent") {
 				return \Redirect::route('dashboard');	
@@ -72,6 +76,7 @@ class AuthController extends Controller {
 		}
 	}
 
+
 	/**
 	 * Post registration form
 	 * @param type User $user
@@ -79,6 +84,9 @@ class AuthController extends Controller {
 	 * @return type Response
 	 */
 	public function postRegister(User $user, RegisterRequest $request) {
+		// Event for login
+		\Event::fire(new \App\Events\LoginEvent($request));
+
 		$password = Hash::make($request->input('password'));
 		$user->password = $password;
 		$name = $request->input('full_name');
