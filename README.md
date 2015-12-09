@@ -19,7 +19,7 @@
   <li>Helpdesk + Knowledgebase + Chat - Coming Soon</li>
 </ul>
 <h3><a id="user-content-faveo-user-manual" href="https://github.com/ladybirdweb/faveo-helpdesk#faveo-user-manual" aria-hidden="true"></a>Faveo User Manual</h3>
-<p>Check out Faveo Knowldgebase <a href="http://www.ladybirdweb.com/support/knowledgebase" target="_blank">here</a></p>
+<p>Check out Faveo Knowledge Base <a href="http://www.ladybirdweb.com/support/knowledgebase" target="_blank">here</a></p>
 <h3><a id="user-content-requirements" href="https://github.com/ladybirdweb/faveo-helpdesk#requirements" aria-hidden="true"></a>Requirements</h3>
 <p>To run Faveo your host just needs a couple of things:</p>
 <ul>
