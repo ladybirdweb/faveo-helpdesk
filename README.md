@@ -1,3 +1,4 @@
+
 <h3>About Faveo</h3>
 <p>Headquartered in Bangalore, Faveo HELPDESK provides Businesses with an automated Helpdesk system to manage customer support. 
 <br/><br/>
@@ -43,3 +44,6 @@ Faveo is designed & developed by <a href="http://www.ladybirdweb.com/" target="_
 
 <h3>Road Map for Community Edition:</h3>
 <p><a href="http://www.faveohelpdesk.com/faveo-helpdesk-road-map" target="_blank">Click here</a></p>
+
+<h3>Don't panic if you come across bugs</h3>
+<p>Faveo is very very new in the market, the product is fully working and is production worthy but it definitely will have some bugs like any software. We fully support Faveo whether free or pro edition, incase you come across any bugs, email us through the <a href="http://www.faveohelpdesk.com/contact-us/">contact form</a>. We want to make your experience of using Faveo as memorable as possible, so help us make Faveo a World, top class helpdesk application. Do check out our roadmap to stayed tuned with future releases </p>
