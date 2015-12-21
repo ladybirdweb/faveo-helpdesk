@@ -96,7 +96,7 @@ class AgentController extends Controller {
 				$name = $user->user_name;
 				$email = $user->email;
 				$from = $this->company();
-				Mail::send('emails.pass', ['name' => $name, 'password' => $password, 'from' => $from], function ($message) use ($email, $name) {
+				Mail::send('emails.pass', ['name' => $name, 'password' => $password, 'from' => $from, 'emailadd' => $email], function ($message) use ($email, $name) {
 					$message->to($email, $name)->subject('[password]');
 				});
 				return redirect('agents')->with('success', 'Agent Created sucessfully');
