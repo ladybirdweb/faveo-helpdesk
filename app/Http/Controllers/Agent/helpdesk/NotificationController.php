@@ -8,7 +8,7 @@ use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Utility\Log_notification;
-use App\Model\hrlpdesk\settings\Email;
+use App\Model\helpdesk\settings\Email;
 
 /**
  * UserController
