@@ -61,6 +61,13 @@ class="active"
  $users = App\User::where('role','=','user')->orderBy('id', 'ASC')->paginate(20);
 ?>
 	<table class="table table-hover" style="overflow:hidden;">
+		
+		</table>
+			<div class="pull-right">
+                <?php echo $users->setPath(url('/user'))->render();?>&nbsp;
+            </div>
+            <div class="col-xs-12">
+        <div class="row">
                 {!! Datatable::table()
                     ->addColumn(Lang::get('lang.name'),
                     			Lang::get('lang.email'),
@@ -70,7 +77,9 @@ class="active"
                                 Lang::get('lang.action'))  // these are the column headings to be shown
                     ->setUrl(route('user.list'))  // this is the route where data will be retrieved
                     ->render() !!}
-        </table>
+            
+            </div>
+        </div>
 	</div>
 </div>
 

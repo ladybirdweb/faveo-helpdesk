@@ -42,7 +42,7 @@
     <body class="skin-yellow skin-green fixed">
         <div class="wrapper">
             <header class="main-header">
-                <a href="" class="logo"><b>Faveo </b>HELPDESK</a>
+                <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/dist/img/logo.png') }}"></a>
 <?php
 $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
 if ($company != null) {

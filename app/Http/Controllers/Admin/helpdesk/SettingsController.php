@@ -248,6 +248,7 @@ class SettingsController extends Controller {
 			$emails->fill($request->except('email_fetching', 'all_emails', 'email_collaborator', 'strip', 'attachment'))->save();
 			/* insert checkboxes  to database */
 			$emails->email_fetching = $request->input('email_fetching');
+			$emails->notification_cron = $request->input('notification_cron');
 			$emails->all_emails = $request->input('all_emails');
 			$emails->email_collaborator = $request->input('email_collaborator');
 			$emails->strip = $request->input('strip');

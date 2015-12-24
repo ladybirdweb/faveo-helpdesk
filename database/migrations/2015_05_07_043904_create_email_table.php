@@ -19,6 +19,7 @@ class CreateEmailTable extends Migration {
 			$table->string('admin_email');
 			$table->string('mta');
 			$table->boolean('email_fetching');
+			$table->boolean('notification_cron');
 			$table->boolean('strip');
 			$table->boolean('separator');
 			$table->boolean('all_emails');

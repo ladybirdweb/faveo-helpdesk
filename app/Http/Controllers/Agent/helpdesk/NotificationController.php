@@ -7,6 +7,8 @@ use App\User;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Agent\Department;
+use App\Model\helpdesk\Utility\Log_notification;
+use App\Model\hrlpdesk\settings\Email;
 
 /**
  * UserController
@@ -22,12 +24,20 @@ class NotificationController extends Controller {
 	 * 	@return mail
 	 **/ 
 	public function send_notification() {
-		// $this->test();
-		$company = $this->company();
-		// $this->send_notification_to_admin($company);
-		// $this->send_notification_to_team_lead($company);
-		// $this->send_notification_to_manager($company);
-		// $this->send_notification_to_agent($company);
+		$email = Email::where('id','=','1')->first();
+		if($email->notification_cron == 1){
+			$notification = Log_notification::where('log','=','NOT-1')->orderBy('id','DESC')->first();
+			$date = explode(" " , $notification->created_at);
+			if(Date('Y-m-d') == $date[0]){
+			} else {
+				Log_notification::create(['log'=>'NOT-1']);
+				$company = $this->company();
+				$this->send_notification_to_admin($company);
+				$this->send_notification_to_team_lead($company);
+				$this->send_notification_to_manager($company);
+				$this->send_notification_to_agent($company);	
+			}
+		}
 	}
 
 	/**

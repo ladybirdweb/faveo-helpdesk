@@ -45,6 +45,29 @@ class="active"
                 {{Session::get('fails')}}
             </div>
         @endif
+        @if(Session::has('errors'))
+            <div class="alert alert-danger alert-dismissable">
+                <i class="fa fa-ban"></i>
+                <b>Alert!</b>
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <br/>
+                @if($errors->first('email'))
+                    <li class="error-message-padding">{!! $errors->first('email', ':message') !!}</li>
+                @endif
+                @if($errors->first('fullname'))
+                    <li class="error-message-padding">{!! $errors->first('fullname', ':message') !!}</li>
+                @endif
+                @if($errors->first('phone'))
+                    <li class="error-message-padding">{!! $errors->first('phone', ':message') !!}</li>
+                @endif
+                @if($errors->first('subject'))
+                    <li class="error-message-padding">{!! $errors->first('subject', ':message') !!}</li>
+                @endif
+                @if($errors->first('body'))
+                    <li class="error-message-padding">{!! $errors->first('body', ':message') !!}</li>
+                @endif
+            </div>
+        @endif
         <div class="form-group">
             <h4><b>{!! Lang::get('lang.user_details') !!}:<b></h4>
                 {{-- <div class="row"> --}}
@@ -60,26 +83,24 @@ class="active"
             <div class="row">
                 <div class="col-md-4">
                 <!-- email -->
-                    <div class="form-group">
-                        <label>{!! Lang::get('lang.email') !!}:</label>
-                        <input type="text" name="email" id="" class="form-control">
-                        {!! $errors->first('email', '<spam class="help-block text-red">:message</spam>') !!}
+                    <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+                        {!! Form::label('email',Lang::get('lang.email')) !!}
+                        {!! Form::text('email',null,['class' => 'form-control']) !!}
                     </div>
                 </div>
            
                 <div class="col-md-4">
                 <!-- full name -->
-                    <div class="form-group">
-                        <label>{!! Lang::get('lang.full_name') !!}:</label>
-                        <input type="text" name="fullname" id="" class="form-control">
-                        {!! $errors->first('fullname', '<spam class="help-block text-red">:message</spam>') !!}
+                    <div class="form-group {{ $errors->has('fullname') ? 'has-error' : '' }}">
+                        {!! Form::label('fullname',Lang::get('lang.full_name')) !!}
+                        {!! Form::text('fullname',null,['class' => 'form-control']) !!}
                     </div>
                 </div>
                 <div class="col-md-4">
                 <!-- phone -->
-                    <div class="form-group">
+                    <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
                         <label>{!! Lang::get('lang.phone') !!}:</label>
-                        <input type="number" name="phone" id="" class="form-control">
+                        {!! Form::input('number','phone',null,['class' => 'form-control']) !!}
                         {!! $errors->first('phone', '<spam class="help-block text-red">:message</spam>') !!}
                     </div>
                 </div>
@@ -101,13 +122,8 @@ class="active"
                         <div class="form-group">
                             <label>{!! Lang::get('lang.help_topic') !!}:</label>
                             <!-- helptopic -->
-                            <select class="form-control" name="helptopic">
-                            <!-- <option>--select--</option> -->
                                 <?php $helptopic = App\Model\helpdesk\Manage\Help_topic::all();?>
-                                    @foreach($helptopic as $topic)
-                                   <option value="{!! $topic->id !!}">{!! $topic->topic !!}</option>
-                                            @endforeach
-                                        </select>
+                                    {!! Form::select('helptopic', ['Helptopic'=>$helptopic->lists('topic','id')],null,['class' => 'form-control select']) !!}
                                         {!! $errors->first('helptopic', '<spam class="help-block text-red">:message</spam>') !!}
                                     </div>
                                 </div>
@@ -115,13 +131,8 @@ class="active"
                                 <!-- sla plan -->
                                     <div class="form-group">
                                         <label>{!! Lang::get('lang.sla_plan') !!}:</label>
-                                        <select class="form-control" name="sla">
-                                            <!-- <option>--select--</option> -->
-                                            <?php $sla_plan = App\Model\helpdesk\Manage\Sla_plan::all();?>
-                                            @foreach($sla_plan as $sla)
-                                            <option value="{!! $sla->id !!}">{!! $sla->grace_period !!}</option>
-                                            @endforeach
-                                        </select>
+                                        <?php $sla_plan = App\Model\helpdesk\Manage\Sla_plan::all();?>
+                                        {!! Form::select('sla', ['SLA'=>$sla_plan->lists('grace_period','id')],null,['class' => 'form-control select']) !!}
                                         {!! $errors->first('sla', '<spam class="help-block text-red">:message</spam>') !!}
                                     </div>
                                 </div>
@@ -129,23 +140,17 @@ class="active"
                                 <!-- due date -->
                                     <div class="form-group">
                                         <label>{!! Lang::get('lang.due_date') !!}:</label>
-                                        <input type="text" class="form-control" name="duedate" id="datemask">
+                                        {{-- <input type="text" class="form-control" name="duedate" id="datemask"> --}}
+                                        {!! Form::text('duedate',null,['class' => 'form-control','id'=>'datemask']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                 <!-- assign to -->
                                     <div class="form-group">
                                         <label>{!! Lang::get('lang.assign_to') !!}:</label>
-                                        <select class="form-control" name="assignto">
-                                            <!-- <option>--select--</option> -->
                                             <?php $agents = App\User::where('role','!=','user')->get();?>
-                                                <option value="">--- select ---</option>
-                                            @foreach($agents as $agent)
-                                                <option value="{!! $agent->id !!}">
-                                                    {!! $agent->first_name !!} {!! $agent->last_name !!}
-                                                </option>
-                                            @endforeach
-                                        </select>
+
+                                            {!! Form::select('assignto', ['Agents'=>$agents->lists('first_name','id')],null,['class' => 'form-control select']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -154,26 +159,26 @@ class="active"
                                 <div class="form-group">
                                     <h4><b>{!! Lang::get('lang.ticket_detail') !!}<b></h4>
                                         <!-- subject -->
-                                                <div class="form-group">
+                                                <div class="form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
                                                     <div class="row">
                                                         <div class="col-md-1">
                                                             <label>{!! Lang::get('lang.subject') !!}:</label>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <input type="text" name="subject" class="form-control">
-                                                            {!! $errors->first('subject', '<spam class="help-block text-red">:message</spam>') !!}
+                                                            {!! Form::text('subject',null,['class' => 'form-control']) !!}
+                                                         
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="form-group {{ $errors->has('body') ? 'has-error' : '' }}">
                                                 <!-- details -->
                                                     <div class="row">
                                                         <div class="col-md-1">
                                                             <label>{!! Lang::get('lang.detail') !!}:</label>
                                                         </div>
                                                         <div class="col-md-9">
-                                                            <textarea class="form-control" id="body" name="body" style="width:100%; height:100px;"></textarea>
-                                                            {!! $errors->first('body', '<spam class="help-block text-red">:message</spam>') !!}
+                                                            {!! Form::textarea('body',null,['class' => 'form-control','id' => 'body', 'style'=>"width:100%; height:150px;"]) !!}
+                                                          
                                                         </div>
                                                     </div>
                                                 </div>
@@ -184,14 +189,8 @@ class="active"
                                                             <label>{!! Lang::get('lang.priority') !!}:</label>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <select class="form-control" name="priority">
-                                                                <!-- <option>--select--</option> -->
-                                                                <?php $Priority = App\Model\helpdesk\Ticket\Ticket_Priority::all();?>
-                                                                @foreach($Priority as $priority)
-                                                                <option value="{{$priority->priority_id}}">{!! $priority->priority_desc !!}</option>
-                                                                @endforeach
-                                                            </select>
-                                                            {!! $errors->first('priority', '<spam class="help-block text-red">:message</spam>') !!}
+                                                        <?php $Priority = App\Model\helpdesk\Ticket\Ticket_Priority::all();?>
+                                                            {!! Form::select('priority', ['Priority'=>$Priority->lists('priority_desc','priority_id')],null,['class' => 'form-control select']) !!}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -211,8 +210,15 @@ class="active"
                                 {!! Form::close() !!}
 
                                 <script type="text/javascript">
+
+                                    $(function () {
+                                        $("textarea").wysihtml5();
+                                    });
+
                                     $(function() {
                                         $('#datemask').datepicker({changeMonth: true, changeYear: true}).mask('99/99/9999');
                                     });
+
                                 </script>
+
                             @stop

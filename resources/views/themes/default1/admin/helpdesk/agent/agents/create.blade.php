@@ -179,7 +179,7 @@ class="active"
 
 			{!! Form::label('primary_dpt',Lang::get('lang.primary_department')) !!}
 			{!! $errors->first('primary_dpt', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('primary_dpt', [''=>'Select a Department','Departments'=>$departments->lists('name','name')],null,['class' => 'form-control select']) !!}
+			{!! Form::select('primary_dpt', [''=>'Select a Department','Departments'=>$departments->lists('name','name')],null,['class' => 'form-control select']) !!}
 
 		</div>
 

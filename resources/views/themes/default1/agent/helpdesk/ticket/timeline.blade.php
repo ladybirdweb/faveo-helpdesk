@@ -290,7 +290,7 @@ $canneds = App\Model\helpdesk\Agent_panel\Canned::where('user_id','=',Auth::user
 ?>                                                  
                                         <option value="zzz">{!! Lang::get('lang.select_a_canned_response') !!}</option>
                                         @foreach($canneds as $canned)
-                                        <option value="{!! $canned->id !!}" >{!! $canned->title !!}</option>
+                                            <option value="{!! $canned->id !!}" >{!! $canned->title !!}</option>
                                         @endforeach
                                         {{-- <option>Last Message</option> --}}
                                     </select>

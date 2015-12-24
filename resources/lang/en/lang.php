@@ -216,6 +216,7 @@ return array(
 		'default_alert_email'				=>'Default Alert Email',
 		'attachments'							=>'Attachments',
 		'email_attahment_user'				=>'Email attachments to the user',
+    'cron_notification'     =>    'Enable Notification cron',
 
      /*
       |--------------------------------------

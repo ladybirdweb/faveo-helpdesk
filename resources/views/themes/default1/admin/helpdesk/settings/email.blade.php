@@ -108,6 +108,13 @@ class="active"
 			          </div>
 		           </div>
 		           </div>
+		           <div class="row">
+		             <div class="col-md-6">
+			       <div class="form-group">
+			           {!! Form::checkbox('notification_cron',1,true) !!}&nbsp;{{Lang::get('lang.cron_notification')}}
+			          </div>
+		           </div>
+		           </div>
 		           <!-- Accept All Emails:	CHECKBOX: Accept email from unknown Users  -->
 		            <div class="row">
 		              <div class="col-md-6">

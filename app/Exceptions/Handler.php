@@ -59,7 +59,7 @@ class Handler extends ExceptionHandler {
 		// 	}
 		// 	return response()->view('errors.500', []);
 		// }	
-		// return parent::render($request, $e);
+		return parent::render($request, $e);
 
 		if ($this->isHttpException($e))
         {

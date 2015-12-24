@@ -31,7 +31,7 @@
     </blockquote>
     <div class="archive-list archive-article">
         <?php foreach ($article_id as $id) { ?>
-            <?php $article = App\Model\kb\Article::where('id', $id)->get(); ?>
+            <?php $article = App\Model\kb\Article::where('id', $id)->orderBy('created_at', 'ASC')->get(); ?>
             @foreach($article as $arti)
             <article class="hentry">
                 <header class="entry-header">

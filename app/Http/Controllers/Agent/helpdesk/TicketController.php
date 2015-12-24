@@ -1118,7 +1118,7 @@ class TicketController extends Controller {
 					$create_user->password = Hash::make($password);
 					$create_user->save();
 					$user_id = $create_user->id;
-					Mail::send('emails.pass', ['password' => $password, 'name' => $name, 'from'=>$company], function ($message) use ($email, $name) {
+					Mail::send('emails.pass', ['password' => $password, 'name' => $name, 'from'=>$company,'emailadd' => $email], function ($message) use ($email, $name) {
 						$message->to($email, $name)->subject('password');
 					});
 				}
@@ -1308,7 +1308,7 @@ class TicketController extends Controller {
 			$user->role = 'user';
    			if ($user->save()) {
 				$user_id = $user->id;
-				Mail::send('emails.pass', ['password' => $password, 'name' => $name, 'from'=>$company], function ($message) use ($email, $name) {
+				Mail::send('emails.pass', ['password' => $password, 'name' => $name, 'from'=>$company,'emailadd'=>$email], function ($message) use ($email, $name) {
 					$message->to($email, $name)->subject('password');
 				});
 			}

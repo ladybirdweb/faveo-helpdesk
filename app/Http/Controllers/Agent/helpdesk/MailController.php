@@ -115,10 +115,9 @@ class MailController extends Controller {
 							// echo $_SERVER['DOCUMENT_ROOT'];
 							$dir_img_paths = __DIR__;
 							$dir_img_path = explode('/code', $dir_img_paths);
-							$filepath = explode('../../../../../../public/',$attachment->filePath);
-							// dd($filepath);
-                            // $path = $dir_img_path[0]."/public/".$filepath[1];
-                            $path = public_path().'/'.$filepath[1];
+							$filepath = explode('../../../../../public/',$attachment->filePath);
+							
+                            $path = $dir_img_path[0]."/code/public/".$filepath[1];
                             // dd($path);
 							$filesize = filesize($path);
 							$file_data = file_get_contents($path);

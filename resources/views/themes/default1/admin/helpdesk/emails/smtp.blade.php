@@ -37,7 +37,7 @@ class="active"
     </div>
     @endif
 
-{!! Form::model($settings,['url'=>'','method'=>'PATCH']) !!}
+{!! Form::model($settings,['url'=>'post-smtp','method'=>'PATCH']) !!}
 <div class="box box-primary">
 	<div class="box-header">
 		<h3 class="box-title">{!! Lang::get('lang.outgoing_emails') !!}</h3>
@@ -56,7 +56,6 @@ class="active"
 					<option> select </option>
 					<option <?php if($settings->driver == "smtp"){ echo "selected='selected'"; } ?>  value="smtp">smtp</option>
 					<option <?php if($settings->driver == "mail"){ echo "selected='selected'"; } ?> value="mail">mail</option>
-
 				</select>
 			</div>
 
@@ -97,11 +96,14 @@ class="active"
 			<div class="col-md-4 form-group {{ $errors->has('password') ? 'has-error' : '' }}">
 				{!! Form::label('password',Lang::get('lang.password')) !!}
 				{!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
-				<input type="password" name="" value="*********" class="form-control">
+				@if(isset($settings->password))
+					<input type="password" name="password" class="form-control" value="{!! Crypt::decrypt($settings->password) !!}">
+				@else 
+					<input type="password" name="password" class="form-control" value="">
+				@endif
 			</div>
 		</div>
 
 	</div>
 </div>
-		
 @stop

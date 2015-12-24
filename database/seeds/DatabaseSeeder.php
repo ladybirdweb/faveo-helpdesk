@@ -34,6 +34,7 @@ use App\Model\helpdesk\Theme\Footer4;
 use App\Model\helpdesk\Email\Smtp;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\kb\Options;
+use App\Model\helpdesk\Utility\Log_notification;
 
 // Knowledge base 
 
@@ -278,6 +279,8 @@ class DatabaseSeeder extends Seeder {
 		Priority::create(array('name' => 'low'));	
 		Priority::create(array('name' => 'high'));
 
+		Log_notification::create(['log'=>'NOT-1']);
+
 		Access::create(array('id' => '1'));
 		Alert::create(array('id' => '1'));
 		Company::create(array('id' => '1'));
@@ -334,6 +337,8 @@ class DatabaseSeeder extends Seeder {
 		Side1::create(['id'=>'1']);
 		Side2::create(['id'=>'1']);
 		Settings::create(['id'=>'id','paagination' => '10']);
+
+
 
 	}
 }

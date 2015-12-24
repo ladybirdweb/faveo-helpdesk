@@ -258,10 +258,11 @@ $i = count($tickets);
                                                 </ul>
                                             </div>
                                             <div class="tabs-pane @yield('plugin-bar')" id="tabP">
-
                                             {{-- Event fire --}}
                                                 <ul class="nav navbar-nav"><?php \Event::fire(new App\Events\TopNavEvent()); ?>
-                                                <li id="bar" @yield('plugin')><a href="{{ url('plugins') }}" >{!! Lang::get('lang.plugin') !!}</a></li></a></li>
+                                                    <li id="bar" @yield('plugin')>
+                                                        <a href="{{ url('plugins') }}" >{!! Lang::get('lang.plugin') !!}</a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>
