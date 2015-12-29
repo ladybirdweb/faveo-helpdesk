@@ -24,7 +24,7 @@
     <div class="row">
         <div class="col-md-6">
 
-            {!! Form::model($user,['url'=>'post-profile', 'method' => 'PATCH','files'=>true]) !!}
+            {!! Form::model($user,['url'=>'client-profile-edit', 'method' => 'PATCH','files'=>true]) !!}
 
             <div class="box box-primary">
 
@@ -145,7 +145,7 @@
         </div>
         <div class="col-md-6">
 
-            {!! Form::model($user,['url'=>'client-profile-password/'.$user->id , 'method' => 'PATCH']) !!}
+            {!! Form::model($user,['url'=>'client-profile-password' , 'method' => 'PATCH']) !!}
 
             <div class="box box-primary">
 

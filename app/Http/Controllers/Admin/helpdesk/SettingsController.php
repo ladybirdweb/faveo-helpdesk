@@ -418,6 +418,20 @@ class SettingsController extends Controller {
 			$alerts->ticket_department_manager = $request->input('ticket_department_manager');
 			$alerts->ticket_department_member = $request->input('ticket_department_member');
 			$alerts->ticket_admin_email = $request->input('ticket_admin_email');
+
+			if($request->input('system_error') == null){
+				$str = '%0%';
+				$path = app_path('../config/app.php');
+				$content = \File::get($path);
+				$content = str_replace('%1%', $str, $content);
+				\File::put($path, $content);
+			} else {
+				$str = '%1%';
+				$path = app_path('../config/app.php');
+				$content = \File::get($path);
+				$content = str_replace('%0%', $str, $content);
+				\File::put($path, $content);
+			}
 			/* fill the values to coompany table */
 			/* Check whether function success or not */
 			if ($alerts->save() == true) {

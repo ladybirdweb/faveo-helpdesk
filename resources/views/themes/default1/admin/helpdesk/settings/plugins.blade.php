@@ -1,10 +1,10 @@
 @extends('themes.default1.admin.layout.admin')
 
-@section('Plugin')
+@section('Settings')
 class="active"
 @stop
 
-@section('plugin-bar')
+@section('settings-bar')
 active
 @stop
 

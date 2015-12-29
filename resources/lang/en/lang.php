@@ -47,6 +47,11 @@ return array(
      */
     'registration' 		=> 	'Registration',
     'full_name'			=>	'Full name',
+    'firstname'     =>  'First Name',
+    'lastname'     =>  'Last Name',
+    'profilepicture'    =>  'Profile Picture',
+    'oldpassword'   =>  'Old Password',
+    'newpassword'   =>    'New Password',
     'retype_password'	=>	'Retype Password',
     'i_agree_to_the'	=>	'I agree to the',
     'terms'				=>	'terms',
@@ -298,6 +303,8 @@ return array(
 		'system_errors'						=>'System Errors',
 		'SQL_errors'						=>'SQL errors',
 		'excessive_failed_login_attempts'	=>'Excessive failed login attempts',
+    'system_error_reports'    =>    'System error Reports',
+    'Send_app_crash_reports_to_help_Ladybird_improve_Faveo'  => 'Send app crash reports to help Ladybird improve Faveo',
     
 	   /*
       |----------------------------------------------------------------------------------------

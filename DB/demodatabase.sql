@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 14, 2015 at 03:00 PM
+-- Generation Time: Dec 29, 2015 at 11:02 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `access` (
 --
 
 INSERT INTO `access` (`id`, `password_expire`, `reg_method`, `user_session`, `agent_session`, `reset_ticket_expire`, `password_reset`, `bind_agent_ip`, `reg_require`, `quick_access`, `created_at`, `updated_at`) VALUES
-(1, '', '', '', '', '', 0, 0, 0, 0, '2015-12-14 02:27:48', '2015-12-14 02:27:48');
+(1, '', '', '', '', '', 0, 0, 0, 0, '2015-12-28 22:43:03', '2015-12-28 22:43:03');
 
 -- --------------------------------------------------------
 
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `alert_notice` (
 --
 
 INSERT INTO `alert_notice` (`id`, `ticket_status`, `ticket_admin_email`, `ticket_department_manager`, `ticket_department_member`, `ticket_organization_accmanager`, `message_status`, `message_last_responder`, `message_assigned_agent`, `message_department_manager`, `message_organization_accmanager`, `internal_status`, `internal_last_responder`, `internal_assigned_agent`, `internal_department_manager`, `assignment_status`, `assignment_assigned_agent`, `assignment_team_leader`, `assignment_team_member`, `transfer_status`, `transfer_assigned_agent`, `transfer_department_manager`, `transfer_department_member`, `overdue_status`, `overdue_assigned_agent`, `overdue_department_manager`, `overdue_department_member`, `system_error`, `sql_error`, `excessive_failure`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2015-12-14 02:27:48', '2015-12-14 03:52:53');
+(1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2015-12-28 22:43:03', '2015-12-28 23:11:22');
 
 -- --------------------------------------------------------
 
@@ -129,8 +129,8 @@ CREATE TABLE IF NOT EXISTS `article_relationship` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `article_relationship_article_id_foreign` (`article_id`),
-  KEY `article_relationship_category_id_foreign` (`category_id`)
+  KEY `article_relationship_category_id_foreign` (`category_id`),
+  KEY `article_relationship_article_id_foreign` (`article_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `auto_response` (
 --
 
 INSERT INTO `auto_response` (`id`, `new_ticket`, `agent_new_ticket`, `submitter`, `participants`, `overlimit`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 0, 0, 0, '2015-12-14 02:27:48', '2015-12-14 03:52:43');
+(1, 1, 1, 0, 0, 0, '2015-12-28 22:43:03', '2015-12-28 23:11:04');
 
 -- --------------------------------------------------------
 
@@ -255,7 +255,7 @@ CREATE TABLE IF NOT EXISTS `company` (
 --
 
 INSERT INTO `company` (`id`, `company_name`, `website`, `phone`, `address`, `landing_page`, `offline_page`, `thank_page`, `logo`, `use_logo`, `created_at`, `updated_at`) VALUES
-(1, '', '', '', '', '', '', '', '', '', '2015-12-14 02:27:48', '2015-12-14 02:27:48');
+(1, 'DEMO COMPANY', 'https://www.demo.com', '', '', '', '', '', '', '0', '2015-12-28 22:43:03', '2015-12-28 23:10:04');
 
 -- --------------------------------------------------------
 
@@ -360,9 +360,9 @@ CREATE TABLE IF NOT EXISTS `department` (
 --
 
 INSERT INTO `department` (`id`, `name`, `type`, `sla`, `manager`, `ticket_assignment`, `outgoing_email`, `template_set`, `auto_ticket_response`, `auto_message_response`, `auto_response_email`, `recipient`, `group_access`, `department_sign`, `created_at`, `updated_at`) VALUES
-(1, 'Support', '', '', '', '', '', '', '', '', '', '', '', '', '2015-12-14 02:27:48', '2015-12-14 02:27:48'),
-(2, 'Sales', '', '', '', '', '', '', '', '', '', '', '', '', '2015-12-14 02:27:48', '2015-12-14 02:27:48'),
-(3, 'Operation', '', '', '', '', '', '', '', '', '', '', '', '', '2015-12-14 02:27:48', '2015-12-14 02:27:48');
+(1, 'Support', '', '', '', '', '', '', '', '', '', '', '', '', '2015-12-28 22:43:02', '2015-12-28 22:43:02'),
+(2, 'Sales', '', '', '', '', '', '', '', '', '', '', '', '', '2015-12-28 22:43:02', '2015-12-28 22:43:02'),
+(3, 'Operation', '', '', '', '', '', '', '', '', '', '', '', '', '2015-12-28 22:43:02', '2015-12-28 22:43:02');
 
 -- --------------------------------------------------------
 
@@ -378,6 +378,7 @@ CREATE TABLE IF NOT EXISTS `email` (
   `admin_email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `mta` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `email_fetching` tinyint(1) NOT NULL,
+  `notification_cron` tinyint(1) NOT NULL,
   `strip` tinyint(1) NOT NULL,
   `separator` tinyint(1) NOT NULL,
   `all_emails` tinyint(1) NOT NULL,
@@ -392,8 +393,8 @@ CREATE TABLE IF NOT EXISTS `email` (
 -- Dumping data for table `email`
 --
 
-INSERT INTO `email` (`id`, `template`, `sys_email`, `alert_email`, `admin_email`, `mta`, `email_fetching`, `strip`, `separator`, `all_emails`, `email_collaborator`, `attachment`, `created_at`, `updated_at`) VALUES
-(1, '', '', '', '', '', 1, 0, 0, 1, 1, 1, '2015-12-14 02:27:48', '2015-12-14 03:52:20');
+INSERT INTO `email` (`id`, `template`, `sys_email`, `alert_email`, `admin_email`, `mta`, `email_fetching`, `notification_cron`, `strip`, `separator`, `all_emails`, `email_collaborator`, `attachment`, `created_at`, `updated_at`) VALUES
+(1, '', '', '', '', '', 1, 1, 0, 0, 1, 1, 1, '2015-12-28 22:43:03', '2015-12-28 23:10:52');
 
 -- --------------------------------------------------------
 
@@ -429,7 +430,7 @@ CREATE TABLE IF NOT EXISTS `emails` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -483,7 +484,7 @@ CREATE TABLE IF NOT EXISTS `footer` (
 --
 
 INSERT INTO `footer` (`id`, `title`, `footer`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2015-12-14 02:27:48', '2015-12-14 02:27:48');
+(1, '', '', '2015-12-28 22:43:03', '2015-12-28 22:43:03');
 
 -- --------------------------------------------------------
 
@@ -505,7 +506,7 @@ CREATE TABLE IF NOT EXISTS `footer2` (
 --
 
 INSERT INTO `footer2` (`id`, `title`, `footer`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2015-12-14 02:27:48', '2015-12-14 02:27:48');
+(1, '', '', '2015-12-28 22:43:04', '2015-12-28 22:43:04');
 
 -- --------------------------------------------------------
 
@@ -527,7 +528,7 @@ CREATE TABLE IF NOT EXISTS `footer3` (
 --
 
 INSERT INTO `footer3` (`id`, `title`, `footer`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2015-12-14 02:27:48', '2015-12-14 02:27:48');
+(1, '', '', '2015-12-28 22:43:04', '2015-12-28 22:43:04');
 
 -- --------------------------------------------------------
 
@@ -549,7 +550,7 @@ CREATE TABLE IF NOT EXISTS `footer4` (
 --
 
 INSERT INTO `footer4` (`id`, `title`, `footer`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2015-12-14 02:27:48', '2015-12-14 02:27:48');
+(1, '', '', '2015-12-28 22:43:04', '2015-12-28 22:43:04');
 
 -- --------------------------------------------------------
 
@@ -665,9 +666,9 @@ CREATE TABLE IF NOT EXISTS `groups` (
 --
 
 INSERT INTO `groups` (`id`, `name`, `group_status`, `can_create_ticket`, `can_edit_ticket`, `can_post_ticket`, `can_close_ticket`, `can_assign_ticket`, `can_trasfer_ticket`, `can_delete_ticket`, `can_ban_email`, `can_manage_canned`, `can_manage_faq`, `can_view_agent_stats`, `department_access`, `admin_notes`, `created_at`, `updated_at`) VALUES
-(1, 'Group A', 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, '', '2015-12-14 02:27:48', '2015-12-14 02:27:48'),
-(2, 'Group B', 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, '', '2015-12-14 02:27:48', '2015-12-14 02:27:48'),
-(3, 'Group C', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, '', '2015-12-14 02:27:48', '2015-12-14 02:27:48');
+(1, 'Group A', 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, '', '2015-12-28 22:43:02', '2015-12-28 22:43:02'),
+(2, 'Group B', 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, '', '2015-12-28 22:43:02', '2015-12-28 22:43:02'),
+(3, 'Group C', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, '', '2015-12-28 22:43:02', '2015-12-28 22:43:02');
 
 -- --------------------------------------------------------
 
@@ -736,9 +737,9 @@ CREATE TABLE IF NOT EXISTS `help_topic` (
 --
 
 INSERT INTO `help_topic` (`id`, `topic`, `parent_topic`, `custom_form`, `department`, `ticket_status`, `priority`, `sla_plan`, `thank_page`, `ticket_num_format`, `internal_notes`, `status`, `type`, `auto_assign`, `auto_response`, `created_at`, `updated_at`) VALUES
-(1, 'Support query', 'Support query', '1', '1', '1', '2', '1', '', '1', '', 1, 1, 0, 0, '2015-12-14 02:27:48', '2015-12-14 02:27:48'),
-(2, 'Sales query', 'Sale query', '1', '2', '1', '2', '1', '', '1', '', 1, 1, 0, 0, '2015-12-14 02:27:48', '2015-12-14 02:27:48'),
-(3, 'Operational query', 'Operational query', '1', '3', '1', '2', '1', '', '1', '', 1, 1, 0, 0, '2015-12-14 02:27:48', '2015-12-14 02:27:48');
+(1, 'Support query', 'Support query', '1', '1', '1', '2', '1', '', '1', '', 1, 1, 0, 0, '2015-12-28 22:43:03', '2015-12-28 22:43:03'),
+(2, 'Sales query', 'Sale query', '1', '2', '1', '2', '1', '', '1', '', 1, 1, 0, 0, '2015-12-28 22:43:03', '2015-12-28 22:43:03'),
+(3, 'Operational query', 'Operational query', '1', '3', '1', '2', '1', '', '1', '', 1, 1, 0, 0, '2015-12-28 22:43:03', '2015-12-28 22:43:03');
 
 -- --------------------------------------------------------
 
@@ -788,6 +789,27 @@ INSERT INTO `logs` (`id`, `level`) VALUES
 (1, 'WARN'),
 (2, 'DEBUG'),
 (3, 'ERROR');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log_notification`
+--
+
+CREATE TABLE IF NOT EXISTS `log_notification` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `log` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `log_notification`
+--
+
+INSERT INTO `log_notification` (`id`, `log`, `created_at`, `updated_at`) VALUES
+(1, 'NOT-1', '2015-12-28 22:43:03', '2015-12-28 22:43:03');
 
 -- --------------------------------------------------------
 
@@ -887,7 +909,9 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES
 ('2015_09_17_050549_create_version_check_table', 1),
 ('2015_10_09_105525_create_canned_response_table', 1),
 ('2015_10_20_154640_create_ticket_form_data_table', 1),
-('2015_11_02_063848_create_side_table', 1);
+('2015_11_02_063848_create_side_table', 1),
+('2015_12_14_072307_create_plugins_table', 1),
+('2015_12_23_074831_create_notification_log_table', 1);
 
 -- --------------------------------------------------------
 
@@ -910,28 +934,28 @@ CREATE TABLE IF NOT EXISTS `options` (
 --
 
 INSERT INTO `options` (`id`, `option_name`, `option_value`, `autoload`, `created_at`, `updated_at`) VALUES
-(1, 'gmt_offset', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(2, 'date_format', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(3, 'time_format', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(4, 'date_time_format', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(5, 'sitename', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(6, 'sitedescription', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(7, 'admin_email', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(8, 'template', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(9, 'upload_url_path', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(10, 'timezone_string', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(11, 'siteurl', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(12, 'home', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(13, 'start_of_week', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(14, 'language', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(15, 'port', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(16, 'host', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(17, 'encryption', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(18, 'username', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(19, 'password', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(20, 'footer', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(21, 'uselogo', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49'),
-(22, 'logo', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49');
+(1, 'gmt_offset', '', '', '2015-12-28 22:43:04', '2015-12-28 22:43:04'),
+(2, 'date_format', '', '', '2015-12-28 22:43:04', '2015-12-28 22:43:04'),
+(3, 'time_format', '', '', '2015-12-28 22:43:04', '2015-12-28 22:43:04'),
+(4, 'date_time_format', '', '', '2015-12-28 22:43:04', '2015-12-28 22:43:04'),
+(5, 'sitename', '', '', '2015-12-28 22:43:04', '2015-12-28 22:43:04'),
+(6, 'sitedescription', '', '', '2015-12-28 22:43:04', '2015-12-28 22:43:04'),
+(7, 'admin_email', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(8, 'template', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(9, 'upload_url_path', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(10, 'timezone_string', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(11, 'siteurl', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(12, 'home', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(13, 'start_of_week', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(14, 'language', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(15, 'port', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(16, 'host', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(17, 'encryption', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(18, 'username', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(19, 'password', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(20, 'footer', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(21, 'uselogo', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05'),
+(22, 'logo', '', '', '2015-12-28 22:43:05', '2015-12-28 22:43:05');
 
 -- --------------------------------------------------------
 
@@ -987,6 +1011,22 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `plugins`
+--
+
+CREATE TABLE IF NOT EXISTS `plugins` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `status` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `priority`
 --
 
@@ -1022,13 +1062,6 @@ CREATE TABLE IF NOT EXISTS `send_mail` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
---
--- Dumping data for table `send_mail`
---
-
-INSERT INTO `send_mail` (`id`, `driver`, `host`, `port`, `encryption`, `name`, `email`, `password`) VALUES
-(1, '', '', '', '', '', '', '');
-
 -- --------------------------------------------------------
 
 --
@@ -1062,7 +1095,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
 --
 
 INSERT INTO `settings` (`id`, `company_name`, `phone`, `website`, `address`, `logo`, `background`, `version`, `port`, `host`, `encryption`, `email`, `password`, `pagination`, `timezone`, `dateformat`, `created_at`, `updated_at`) VALUES
-(1, '', '', '', '', '', '', '', '', '', '', '', '', 10, '', '', '2015-12-14 02:27:49', '2015-12-14 02:30:42');
+(1, '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', '2015-12-28 22:43:06', '2015-12-28 22:43:06');
 
 -- --------------------------------------------------------
 
@@ -1084,7 +1117,7 @@ CREATE TABLE IF NOT EXISTS `side1` (
 --
 
 INSERT INTO `side1` (`id`, `title`, `content`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49');
+(1, '', '', '2015-12-28 22:43:06', '2015-12-28 22:43:06');
 
 -- --------------------------------------------------------
 
@@ -1106,7 +1139,7 @@ CREATE TABLE IF NOT EXISTS `side2` (
 --
 
 INSERT INTO `side2` (`id`, `title`, `content`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49');
+(1, '', '', '2015-12-28 22:43:06', '2015-12-28 22:43:06');
 
 -- --------------------------------------------------------
 
@@ -1132,9 +1165,9 @@ CREATE TABLE IF NOT EXISTS `sla_plan` (
 --
 
 INSERT INTO `sla_plan` (`id`, `name`, `grace_period`, `admin_note`, `status`, `transient`, `ticket_overdue`, `created_at`, `updated_at`) VALUES
-(1, 'Sla 1', '6 Hours', '', 1, 0, 0, '2015-12-14 02:27:46', '2015-12-14 02:27:46'),
-(2, 'Sla 2', '12 Hours', '', 1, 0, 0, '2015-12-14 02:27:46', '2015-12-14 02:27:46'),
-(3, 'Sla 3', '24 Hours', '', 1, 0, 0, '2015-12-14 02:27:46', '2015-12-14 02:27:46');
+(1, 'Sla 1', '6 Hours', '', 1, 0, 0, '2015-12-28 22:43:00', '2015-12-28 22:43:00'),
+(2, 'Sla 2', '12 Hours', '', 1, 0, 0, '2015-12-28 22:43:00', '2015-12-28 22:43:00'),
+(3, 'Sla 3', '24 Hours', '', 1, 0, 0, '2015-12-28 22:43:00', '2015-12-28 22:43:00');
 
 -- --------------------------------------------------------
 
@@ -1168,7 +1201,7 @@ CREATE TABLE IF NOT EXISTS `social` (
 --
 
 INSERT INTO `social` (`id`, `linkedin`, `stumble`, `google`, `deviantart`, `flickr`, `skype`, `rss`, `twitter`, `facebook`, `youtube`, `vimeo`, `pinterest`, `dribbble`, `instagram`, `created_at`, `updated_at`) VALUES
-(1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49');
+(1, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2015-12-28 22:43:06', '2015-12-28 22:43:06');
 
 -- --------------------------------------------------------
 
@@ -1202,7 +1235,7 @@ CREATE TABLE IF NOT EXISTS `system` (
 --
 
 INSERT INTO `system` (`id`, `status`, `url`, `name`, `department`, `page_size`, `log_level`, `purge_log`, `name_format`, `time_farmat`, `date_format`, `date_time_format`, `day_date_time`, `time_zone`, `content`, `created_at`, `updated_at`) VALUES
-(1, 1, '', '', '1', '', '', '', '', '', '', 'd/m/Y  H:i:s', '', 'Asia/Kolkata', '', '2015-12-14 02:27:48', '2015-12-14 03:52:08');
+(1, 1, '', '<b>SUPPORT</b> CENTER', '1', '', '', '', '', '', '', 'd/m/Y  H:i:s', '', 'Asia/Kolkata', '', '2015-12-28 22:43:03', '2015-12-28 23:10:44');
 
 -- --------------------------------------------------------
 
@@ -1227,9 +1260,9 @@ CREATE TABLE IF NOT EXISTS `teams` (
 --
 
 INSERT INTO `teams` (`id`, `name`, `status`, `team_lead`, `assign_alert`, `admin_notes`, `created_at`, `updated_at`) VALUES
-(1, 'Level 1 Support', 0, '', 0, '', '2015-12-14 02:27:47', '2015-12-14 02:27:47'),
-(2, 'Level 2 Support', 0, '', 0, '', '2015-12-14 02:27:47', '2015-12-14 02:27:47'),
-(3, 'Developer', 0, '', 0, '', '2015-12-14 02:27:47', '2015-12-14 02:27:47');
+(1, 'Level 1 Support', 0, '', 0, '', '2015-12-28 22:43:02', '2015-12-28 22:43:02'),
+(2, 'Level 2 Support', 0, '', 0, '', '2015-12-28 22:43:02', '2015-12-28 22:43:02'),
+(3, 'Developer', 0, '', 0, '', '2015-12-28 22:43:02', '2015-12-28 22:43:02');
 
 -- --------------------------------------------------------
 
@@ -1300,7 +1333,7 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -1414,7 +1447,7 @@ CREATE TABLE IF NOT EXISTS `ticket_settings` (
 --
 
 INSERT INTO `ticket_settings` (`id`, `num_format`, `num_sequence`, `priority`, `sla`, `help_topic`, `max_open_ticket`, `collision_avoid`, `captcha`, `status`, `claim_response`, `assigned_ticket`, `answered_ticket`, `agent_mask`, `html`, `client_update`, `max_file_size`, `created_at`, `updated_at`) VALUES
-(1, '#ABCD 1234 1234567', '0', '1', '1', '1', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, '2015-12-14 02:27:46', '2015-12-14 03:52:35');
+(1, '#ABCD 1234 1234567', '0', '1', '1', '1', '', '', '', 1, 0, 0, 0, 0, 0, 0, 0, '2015-12-28 22:43:00', '2015-12-28 23:10:58');
 
 -- --------------------------------------------------------
 
@@ -1463,11 +1496,11 @@ CREATE TABLE IF NOT EXISTS `ticket_status` (
 --
 
 INSERT INTO `ticket_status` (`id`, `name`, `state`, `mode`, `message`, `flags`, `sort`, `properties`, `created_at`, `updated_at`) VALUES
-(1, 'Open', 'open', 3, 'Ticket have been Reopened by', 0, 1, 'Open tickets.', '2015-12-14 02:27:46', '2015-12-14 02:27:46'),
-(2, 'Resolved', 'closed', 1, 'Ticket have been Resolved by', 0, 2, 'Resolved tickets.', '2015-12-14 02:27:46', '2015-12-14 02:27:46'),
-(3, 'Closed', 'closed', 3, 'Ticket have been Closed by', 0, 3, 'Closed tickets. Tickets will still be accessible on client and staff panels.', '2015-12-14 02:27:46', '2015-12-14 02:27:46'),
-(4, 'Archived', 'archived', 3, 'Ticket have been Archived by', 0, 4, 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.', '2015-12-14 02:27:46', '2015-12-14 02:27:46'),
-(5, 'Deleted', 'deleted', 3, 'Ticket have been Deleted by', 0, 5, 'Tickets queued for deletion. Not accessible on ticket queues.', '2015-12-14 02:27:46', '2015-12-14 02:27:46');
+(1, 'Open', 'open', 3, 'Ticket have been Reopened by', 0, 1, 'Open tickets.', '2015-12-28 22:42:59', '2015-12-28 22:42:59'),
+(2, 'Resolved', 'closed', 1, 'Ticket have been Resolved by', 0, 2, 'Resolved tickets.', '2015-12-28 22:42:59', '2015-12-28 22:42:59'),
+(3, 'Closed', 'closed', 3, 'Ticket have been Closed by', 0, 3, 'Closed tickets. Tickets will still be accessible on client and staff panels.', '2015-12-28 22:42:59', '2015-12-28 22:42:59'),
+(4, 'Archived', 'archived', 3, 'Ticket have been Archived by', 0, 4, 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.', '2015-12-28 22:42:59', '2015-12-28 22:42:59'),
+(5, 'Deleted', 'deleted', 3, 'Ticket have been Deleted by', 0, 5, 'Tickets queued for deletion. Not accessible on ticket queues.', '2015-12-28 22:43:00', '2015-12-28 22:43:00');
 
 -- --------------------------------------------------------
 
@@ -1491,7 +1524,7 @@ CREATE TABLE IF NOT EXISTS `ticket_thread` (
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 -- --------------------------------------------------------
 
@@ -1683,14 +1716,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `user_name`, `first_name`, `last_name`, `gender`, `email`, `ban`, `password`, `active`, `ext`, `phone_number`, `mobile`, `agent_sign`, `account_type`, `account_status`, `assign_group`, `primary_dpt`, `agent_tzone`, `daylight_save`, `limit_access`, `directory_listing`, `vocation_mode`, `company`, `role`, `internal_note`, `profile_pic`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'demo@admin.com', 'demo', 'demo', 0, 'demo@admin.com', 0, '$2y$10$.Jmab0dl9ZNlw0gGjGgP6OxCIkcEDlBQPSHQkZquwie1GI83.5o9S', 1, '', '', '', '', '', '', 'group A', 'support', '', '', '', '', '', '', 'admin', '', '', NULL, '2015-12-14 02:27:50', '2015-12-14 02:27:50');
+(1, 'demo@demo.com', 'demo', 'demo', 0, 'demo@demo.com', 0, '$2y$10$lejFGejiVlooHhCmqIo16uB7M0bxCV07BbJN8liMe9mrbSLGc8Y7C', 1, '', '', '', '', '', '', 'group A', 'support', '', '', '', '', '', '', 'admin', '', '', NULL, '2015-12-28 22:43:07', '2015-12-28 22:43:07');
 
 -- --------------------------------------------------------
 
@@ -1727,7 +1760,7 @@ CREATE TABLE IF NOT EXISTS `version_check` (
 --
 
 INSERT INTO `version_check` (`id`, `current_version`, `new_version`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2015-12-14 02:27:49', '2015-12-14 02:27:49');
+(1, '', '', '2015-12-28 22:43:04', '2015-12-28 22:43:04');
 
 --
 -- Constraints for dumped tables

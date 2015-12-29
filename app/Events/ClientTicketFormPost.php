@@ -6,7 +6,7 @@ use Illuminate\Queue\SerializesModels;
 
 class ClientTicketFormPost extends Event {
 
-		use SerializesModels;
+        use SerializesModels;
         
         public $para1;
         public $para2;

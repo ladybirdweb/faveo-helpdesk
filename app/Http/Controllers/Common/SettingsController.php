@@ -454,13 +454,13 @@ class SettingsController extends Controller {
                 $faveoconfig = config_path() . '/plugins/' . $filename . '.php';
                 if ($faveoconfig) {
 
-                    copy($config, $faveoconfig);
+                    //copy($config, $faveoconfig);
                     /**
                      * write provider list in app.php line 128
                      */
                     $app = base_path() . '/config/app.php';
                     $str = "\n\n\t\t\t'App\\Plugins\\$filename" . "\\ServiceProvider',";
-                    $line_i_am_looking_for = 128;
+                    $line_i_am_looking_for = 144;
                     $lines = file($app, FILE_IGNORE_NEW_LINES);
                     $lines[$line_i_am_looking_for] = $str;
                     file_put_contents($app, implode("\n", $lines));
@@ -602,7 +602,7 @@ class SettingsController extends Controller {
 
             $app = base_path() . '/config/app.php';
             $str = "'App\\Plugins\\$slug" . "\\ServiceProvider',";
-            $line_i_am_looking_for = 128;
+            $line_i_am_looking_for = 144;
             $lines = file($app, FILE_IGNORE_NEW_LINES);
             $lines[$line_i_am_looking_for] = $str;
             file_put_contents($app, implode("\n", $lines));

@@ -53,9 +53,8 @@ class="active"
 				{!! Form::label('driver',Lang::get('lang.driver')) !!}
 				{!! $errors->first('driver', '<spam class="help-block">:message</spam>') !!}
 				<select name="driver" class="form-control">
-					<option> select </option>
-					<option <?php if($settings->driver == "smtp"){ echo "selected='selected'"; } ?>  value="smtp">smtp</option>
 					<option <?php if($settings->driver == "mail"){ echo "selected='selected'"; } ?> value="mail">mail</option>
+					<option <?php if($settings->driver == "smtp"){ echo "selected='selected'"; } ?>  value="smtp">smtp</option>
 				</select>
 			</div>
 
@@ -75,7 +74,6 @@ class="active"
 				{!! Form::label('encryption',Lang::get('lang.encryption')) !!}
 				{!! $errors->first('encryption', '<spam class="help-block">:message</spam>') !!}
 				<select name="encryption" class="form-control">
-					<option> select </option>
 					<option <?php if($settings->encryption == "ssl"){ echo "selected='selected'"; } ?>  value="ssl">SSL</option>
 					<option <?php if($settings->encryption == "tls"){ echo "selected='selected'"; } ?> value="tls">TLS</option>
 				</select>
@@ -96,10 +94,10 @@ class="active"
 			<div class="col-md-4 form-group {{ $errors->has('password') ? 'has-error' : '' }}">
 				{!! Form::label('password',Lang::get('lang.password')) !!}
 				{!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
-				@if(isset($settings->password))
+				@if($settings->password)
 					<input type="password" name="password" class="form-control" value="{!! Crypt::decrypt($settings->password) !!}">
-				@else 
-					<input type="password" name="password" class="form-control" value="">
+				@else
+					<input type="password" name="password" class="form-control">
 				@endif
 			</div>
 		</div>
