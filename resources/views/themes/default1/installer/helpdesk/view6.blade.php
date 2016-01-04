@@ -1,198 +1,61 @@
 @extends('themes.default1.installer.layout.installer')
 
-@section('content')
-<h1>Create Admin Account</h1>
-<div class="login-box-body" >
-<?php
-$language = Session::get('language');
-$timezone = Session::get('timezone');
-$date = Session::get('date');
-$datetime = Session::get('datetime');
-?>
-
-{!! Form::open(['url'=>route('postaccount')]) !!}
-<input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-<!-- Personal Information -->
-<h4>Personal Information</h4>
-<b>First Name</b>
-<input type="text" class="form-control" name="firstname" id="firstname">
-@if($errors->has('firstname'))
-<div class="text-red">{{$errors->first('firstname')}}</div>
-@endif
-
-<b>Last Name</b>
-<input type="text" class="form-control" name="Lastname" id="Lastname">
-@if($errors->has('Lastname'))
-<div class="text-red">{{$errors->first('Lastname')}}</div>
-@endif
-
-<b>Email</b>
-<input type="text" class="form-control" name="email" id="email">
-@if($errors->has('email'))
-<div class="text-red">{{$errors->first('email')}}</div>
-@endif
-<hr>
-<h4>Login Information</h4>
-<b>User Name</b>
-<input type="text" class="form-control" name="username" id="username">
-@if($errors->has('username'))
-<div class="text-red">{{$errors->first('username')}}</div>
-@endif
-
-<b>Password</b>
-<input type="password" class="form-control" name="password" id="password">
-@if($errors->has('password'))
-<div class="text-red">{{$errors->first('password')}}</div>
-@endif
-
-<b>Confirm Password</b>
-<input type="password" class="form-control" name="confirmpassword" id="confirmpassword">
-@if($errors->has('confirmpassword'))
-<div class="text-red">{{$errors->first('confirmpassword')}}</div>
-@endif
-<hr>
-<h4>Local Information</h4>
-<b>Language</b>
-	<select class="form-control" name="language" >
-    	<option value="English(India)">English(India)</option>
-    	<option value="English(U.k)">English(U.K)</option>
-	</select>
-
-<b>Timezone</b>
-	<select class="form-control" name="timezone" >
-        <option value="US/Samoa">US/Samoa</option>
-        <option value="US/Hawaii">US/Hawaii</option>
-        <option value="US/Alaska">US/Alaska</option>
-        <option value="US/Pacific">US/Pacific</option>
-        <option value="America/Tijuana">America/Tijuana</option>
-        <option value="US/Arizona">US/Arizona</option>
-        <option value="US/Mountain">US/Mountain</option>
-        <option value="America/Chihuahua">America/Chihuahua</option>
-        <option value="America/Mazatlan">America/Mazatlan</option>
-        <option value="America/Mexico_City">America/Mexico_City</option>
-        <option value="America/Monterrey">America/Monterrey</option>
-        <option value="Canada/Saskatchewan">Canada/Saskatchewan</option>
-        <option value="US/Central">US/Central</option>
-        <option value="US/Eastern">US/Eastern</option>
-        <option value="US/East-Indiana">US/East-Indiana</option>
-        <option value="America/Bogota">America/Bogota</option>
-        <option value="America/Lima">America/Lima</option>
-        <option value="America/Caracas">America/Caracas</option>
-        <option value="Canada/Atlantic">Canada/Atlantic</option>
-        <option value="America/La_Paz">America/La_Paz</option>
-        <option value="America/Santiago">America/Santiago</option>
-        <option value="Canada/Newfoundland">Canada/Newfoundland</option>
-        <option value="America/Buenos_Aires">America/Buenos_Aires</option>
-        <option value="Greenland">Greenland</option>
-        <option value="Atlantic/Stanley">Atlantic/Stanley</option>
-        <option value="Atlantic/Azores">Atlantic/Azores</option>
-        <option value="Atlantic/Cape_Verde">Atlantic/Cape_Verde</option>
-        <option value="Africa/Casablanca">Africa/Casablanca</option>
-        <option value="Europe/Dublin">Europe/Dublin</option>
-        <option value="Europe/Lisbon">Europe/Lisbon</option>
-        <option value="Europe/London">Europe/London</option>
-        <option value="Africa/Monrovia">Africa/Monrovia</option>
-        <option value="Europe/Amsterdam">Europe/Amsterdam</option>
-        <option value="Europe/Belgrade">Europe/Belgrade</option>
-        <option value="Europe/Berlin">Europe/Berlin</option>
-        <option value="Europe/Bratislava">Europe/Bratislava</option>
-        <option value="Europe/Brussels">Europe/Brussels</option>
-        <option value="Europe/Budapest">Europe/Budapest</option>
-        <option value="Europe/Copenhagen">Europe/Copenhagen</option>
-        <option value="Europe/Ljubljana">Europe/Ljubljana</option>
-        <option value="Europe/Madrid">Europe/Madrid</option>
-        <option value="Europe/Paris">Europe/Paris</option>
-        <option value="Europe/Prague">Europe/Prague</option>
-        <option value="Europe/Rome">Europe/Rome</option>
-        <option value="Europe/Sarajevo">Europe/Sarajevo</option>
-        <option value="Europe/Skopje">Europe/Skopje</option>
-        <option value="Europe/Stockholm">Europe/Stockholm</option>
-        <option value="Europe/Vienna">Europe/Vienna</option>
-        <option value="Europe/Warsaw">Europe/Warsaw</option>
-        <option value="Europe/Zagreb">Europe/Zagreb</option>
-        <option value="Europe/Athens">Europe/Athens</option>
-        <option value="Europe/Bucharest">Europe/Bucharest</option>
-        <option value="Africa/Cairo">Africa/Cairo</option>
-        <option value="Africa/Harare">Africa/Harare</option>
-        <option value="Europe/Helsinki">Europe/Helsinki</option>
-        <option value="Europe/Istanbul">Europe/Istanbul</option>
-        <option value="Asia/Jerusalem">Asia/Jerusalem</option>
-        <option value="Europe/Kiev">Europe/Kiev</option>
-        <option value="Europe/Minsk">Europe/Minsk</option>
-        <option value="Europe/Riga">Europe/Riga</option>
-        <option value="Europe/Sofia">Europe/Sofia</option>
-        <option value="Europe/Tallinn">Europe/Tallinn</option>
-        <option value="Europe/Vilnius">Europe/Vilnius</option>
-        <option value="Asia/Baghdad">Asia/Baghdad</option>
-        <option value="Asia/Kuwait">Asia/Kuwait</option>
-        <option value="Africa/Nairobi">Africa/Nairobi</option>
-        <option value="Asia/Riyadh">Asia/Riyadh</option>
-        <option value="Asia/Tehran">Asia/Tehran</option>
-        <option value="Europe/Moscow">Europe/Moscow</option>
-        <option value="Asia/Baku">Asia/Baku</option>
-        <option value="Europe/Volgograd">Europe/Volgograd</option>
-        <option value="Asia/Muscat">Asia/Muscat</option>
-        <option value="Asia/Tbilisi">Asia/Tbilisi</option>
-        <option value="Asia/Yerevan">Asia/Yerevan</option>
-        <option value="Asia/Kabul">Asia/Kabul</option>
-        <option value="Asia/Karachi">Asia/Karachi</option>
-        <option value="Asia/Tashkent">Asia/Tashkent</option>
-        <option value="Asia/Kolkata">Asia/Kolkata</option>
-        <option value="Asia/Kathmandu">Asia/Kathmandu</option>
-        <option value="Asia/Yekaterinburg">Asia/Yekaterinburg</option>
-        <option value="Asia/Almaty">Asia/Almaty</option>
-        <option value="Asia/Dhaka">Asia/Dhaka</option>
-        <option value="Asia/Novosibirsk">Asia/Novosibirsk</option>
-        <option value="Asia/Bangkok">Asia/Bangkok</option>
-        <option value="Asia/Ho_Chi_Minh">Asia/Ho_Chi_Minh</option>
-        <option value="Asia/Jakarta">Asia/Jakarta</option>
-        <option value="Asia/Krasnoyarsk">Asia/Krasnoyarsk</option>
-        <option value="Asia/Chongqing">Asia/Chongqing</option>
-        <option value="Asia/Hong_Kong">Asia/Hong_Kong</option>
-        <option value="Asia/Kuala_Lumpur">Asia/Kuala_Lumpur</option>
-        <option value="Australia/Perth">Australia/Perth</option>
-        <option value="Asia/Singapore">Asia/Singapore</option>
-        <option value="Asia/Taipei">Asia/Taipei</option>
-        <option value="Asia/Ulaanbaatar">Asia/Ulaanbaatar</option>
-        <option value="Asia/Urumqi">Asia/Urumqi</option>
-        <option value="Asia/Irkutsk">Asia/Irkutsk</option>
-        <option value="Asia/Seoul">Asia/Seoul</option>
-        <option value="Asia/Tokyo">Asia/Tokyo</option>
-        <option value="Australia/Adelaide">Australia/Adelaide</option>
-        <option value="Australia/Darwin">Australia/Darwin</option>
-        <option value="Asia/Yakutsk">Asia/Yakutsk</option>
-        <option value="Australia/Brisbane">Australia/Brisbane</option>
-        <option value="Australia/Canberra">Australia/Canberra</option>
-        <option value="Pacific/Guam">Pacific/Guam</option>
-        <option value="Australia/Hobart">Australia/Hobart</option>
-        <option value="Australia/Melbourne">Australia/Melbourne</option>
-        <option value="Pacific/Port_Moresby">Pacific/Port_Moresby</option>
-        <option value="Australia/Sydney">Australia/Sydney</option>
-        <option value="Asia/Vladivostok">Asia/Vladivostok</option>
-        <option value="Asia/Magadan">Asia/Magadan</option>
-        <option value="Pacific/Auckland">Pacific/Auckland</option>
-        <option value="Pacific/Fiji">Pacific/Fiji</option>
-	</select>
-
-<b>Date</b>
-    <select class="form-control" name="date" >
-    	<option value="d/m/Y">DD/MM/YYYY</option>
-    	<option value="m/d/Y">MM/DD/YYYY</option>
-    	<option value="Y/m/d">YYYY/MM/DD</option>
-	</select>
-
-<b>Date Time</b>
-    <select class="form-control" name="datetime" >
-    	<option value="d/m/Y H:i">DD/MM/YYYY H:i</option>
-    	<option value="m/d/Y H:i">MM/DD/YYYY H:i</option>
-    	<option value="Y/m/d H:i">YYYY/MM/DD H:i</option>
-	</select>
-<br/>
- {{-- <a href="{{URL::route('configuration')}}" id="access1" style="color:black">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Prev</a> --}}
-<input type="submit" value="Install" id="access">
-{!! Form::token() !!}
-{!! Form::close() !!}
-<br><p>
-</div></p>
+@section('licence')
+done
 @stop
+
+@section('environment')
+done
+@stop
+
+@section('database')
+done
+@stop
+
+@section('locale')
+done
+@stop
+
+@section('ready')
+active
+@stop
+
+@section('content')
+
+        <a class="twitter-share-button" target="_blank" href="https://twitter.com/intent/tweet?text=I just set up a new HELPDESK with @faveohelpdesk! http://www.faveohelpdesk.com #helpdesk">
+            <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ-uhinU3OzXKj9zlFO7dFxHaChqyHPcWWg5nWgMqYt6N5b3knK" style="width: 86px; float: right;">
+        </a>
+
+        <h1 style="text-align: center;">Thank you</h1>
+
+
+        <div class="wc-setup-next-steps">
+            <div class="wc-setup-next-steps-first">
+                <h2>Next Steps</h2>
+                <ul>
+                    <li class="setup-product"><a class="button button-primary button-large" href="{!! url('auth/login') !!}" style="float: none; text-align: center; font-size: 24px;    padding: 15px;     line-height: 1;">Login to Faveo</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="wc-setup-next-steps-last">
+                <h2>Learn More</h2>
+                <ul>
+                    <li class="video-walkthrough"><a target="_blank" href="https://www.youtube.com/channel/UC-eqh-h241b1janp6sU7Iiw">Video walk through</a>
+                    </li>
+                    <li class="sidekick"><a target="_blank" href="http://www.ladybirdweb.com/support/knowledgebase">Knowledge Base</a>
+                    </li>
+
+                    <li class="newsletter"><a href="mailto:support@ladybirdweb.com">Email Support</a>
+                    </li>
+                    <br>
+                    <br>
+                    <br>
+                </ul>
+            </div>
+        </div>
+
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="{{asset(" js/index.js ")}}"></script>
+  
+  @stop

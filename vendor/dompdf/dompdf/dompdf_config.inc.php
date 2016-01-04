@@ -5,7 +5,7 @@
  * @author  Benj Carson <benjcarson@digitaljunkies.ca>
  * @author  Helmut Tischer <htischer@weihenstephan.org>
  * @author  Fabien Ménager <fabien.menager@gmail.com>
- * @autho   Brian Sweeney <eclecticgeek@gmail.com>
+ * @author   Brian Sweeney <eclecticgeek@gmail.com>
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
 
@@ -246,9 +246,11 @@ def("DOMPDF_DPI", 96);
  * If this setting is set to true then DOMPDF will automatically evaluate
  * inline PHP contained within <script type="text/php"> ... </script> tags.
  *
+ * Attention!
  * Enabling this for documents you do not trust (e.g. arbitrary remote html
- * pages) is a security risk.  Set this option to false if you wish to process
- * untrusted documents.
+ * pages) is a security risk. Inline scripts are run with the same level of
+ * system access available to dompdf. Set this option to false (recommended)
+ * if you wish to process untrusted documents.
  *
  * @var bool
  */

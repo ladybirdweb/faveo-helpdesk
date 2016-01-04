@@ -3509,3 +3509,11 @@ Gradient Background colors
 }
 
 
+blockquote {
+    padding: 10px 20px;
+    margin: 0 0 20px;
+    font-size: 13px;
+    border-left: 5px solid #AFAFAF;
+    background-color:#EEEEEE;
+    border-radius:3px;
+}

@@ -14,11 +14,13 @@ class CollectionEngine extends BaseEngine {
 
     /**
      * Constant for OR queries in internal search
+     *
      * @var string
      */
     const OR_CONDITION = 'OR';
     /**
      * Constant for AND queries in internal search
+     *
      * @var string
      */
     const AND_CONDITION = 'AND';
@@ -37,9 +39,10 @@ class CollectionEngine extends BaseEngine {
      * @var array Different options
      */
     private $options = array(
-        'stripOrder'        =>  false,
-        'stripSearch'       =>  false,
-        'caseSensitive'     =>  false,
+        'sortFlags'         => SORT_NATURAL,
+        'stripOrder'        => false,
+        'stripSearch'       => false,
+        'caseSensitive'     => false,
     );
 
     /**
@@ -114,6 +117,18 @@ class CollectionEngine extends BaseEngine {
     public function setOrderStrip($callback = true)
     {
         return $this->stripOrder($callback);
+    }
+
+    /**
+     * Set the sort behaviour of the doInternalOrder() function.
+     *
+     * @param int $sort_flags For details see: http://php.net/manual/en/function.sort.php
+     * @return $this
+     */
+    public function setOrderFlags($sort_flags = SORT_NATURAL)
+    {
+        $this->options['sortFlags'] = $sort_flags;
+        return $this;
     }
 
     public function setCaseSensitive($value)
@@ -264,7 +279,7 @@ class CollectionEngine extends BaseEngine {
             {
                 return $row[$column];
             }
-        }, SORT_NATURAL);
+        }, $this->options['sortFlags']);
 
         if($this->orderDirection == BaseEngine::ORDER_DESC)
             $this->workingCollection = $this->workingCollection->reverse();

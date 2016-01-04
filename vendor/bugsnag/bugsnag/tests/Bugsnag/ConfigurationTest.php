@@ -2,6 +2,7 @@
 
 class ConfigurationTest extends PHPUnit_Framework_TestCase
 {
+    /** @var Bugsnag_Configuration */
     protected $config;
 
     protected function setUp()

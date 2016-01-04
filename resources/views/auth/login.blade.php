@@ -16,6 +16,13 @@
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         </div>
         @endif
+
+        @if(Session::has('error'))
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <li>{!! Session::get('error') !!}</li>
+        </div>
+        @endif
             <!-- form open -->
             {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}
             <!-- Email -->

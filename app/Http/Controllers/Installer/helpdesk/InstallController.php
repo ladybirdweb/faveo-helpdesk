@@ -145,7 +145,7 @@ class InstallController extends Controller {
 			}
 			if (Config::get('database.install') == '%0%') {
 				if (Session::get('step2') == 'step2') {
-					return View::make('themes/default1/installer/helpdesk/view4');
+					return View::make('themes/default1/installer/helpdesk/view3');
 				} else {
 					return Redirect::route('prerequisites');
 				}
@@ -281,7 +281,7 @@ class InstallController extends Controller {
 	public function database() {
 			if (Config::get('database.install') == '%0%') {
 				if (Session::get('step4') == 'step4') {
-					return View::make('themes/default1/installer/helpdesk/view5');
+					return View::make('themes/default1/installer/helpdesk/view4');
 				} else {
 					return Redirect::route('configuration');
 				}
@@ -302,7 +302,7 @@ class InstallController extends Controller {
 					Session::forget('step1');
 					Session::forget('step2');
 					Session::forget('step3');
-					return View::make('themes/default1/installer/helpdesk/view6');
+					return View::make('themes/default1/installer/helpdesk/view5');
 				} else {
 					return Redirect::route('configuration');
 				}
@@ -420,7 +420,7 @@ class InstallController extends Controller {
 				File::put($path22, $content23);
 
 				try {
-					return View::make('themes/default1/installer/helpdesk/view7');
+					return View::make('themes/default1/installer/helpdesk/view6');
 				} catch (Exception $e) {
 					return Redirect::route('npl');
 				}

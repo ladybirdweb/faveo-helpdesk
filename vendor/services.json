@@ -32,7 +32,8 @@
         "Bugsnag\\BugsnagLaravel\\BugsnagLaravelServiceProvider",
         "Vsmoraes\\Pdf\\PdfServiceProvider",
         "Thomaswelton\\LaravelGravatar\\LaravelGravatarServiceProvider",
-        "Chumper\\Datatable\\DatatableServiceProvider"
+        "Chumper\\Datatable\\DatatableServiceProvider",
+        "Chumper\\Zipper\\ZipperServiceProvider"
     ],
     "eager": [
         "Illuminate\\Auth\\AuthServiceProvider",
@@ -55,7 +56,8 @@
         "Bugsnag\\BugsnagLaravel\\BugsnagLaravelServiceProvider",
         "Vsmoraes\\Pdf\\PdfServiceProvider",
         "Thomaswelton\\LaravelGravatar\\LaravelGravatarServiceProvider",
-        "Chumper\\Datatable\\DatatableServiceProvider"
+        "Chumper\\Datatable\\DatatableServiceProvider",
+        "Chumper\\Zipper\\ZipperServiceProvider"
     ],
     "deferred": {
         "command.app.name": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",

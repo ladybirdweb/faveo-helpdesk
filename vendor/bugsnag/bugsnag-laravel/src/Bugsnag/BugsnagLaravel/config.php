@@ -25,7 +25,7 @@ return array(
 	| Example: array('development', 'production')
 	|
 	*/
-	'notify_release_stages' => null,
+	'notify_release_stages' => env('BUGSNAG_NOTIFY_RELEASE_STAGES', null),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -37,7 +37,7 @@ return array(
 	| this should be the URL to your Bugsnag instance.
 	|
 	*/
-	'endpoint' => null,
+	'endpoint' => env('BUGSNAG_ENDPOINT', null),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -49,7 +49,7 @@ return array(
 	| contain these strings will be filtered.
 	|
 	*/
-	'filters' => array('password'),
+	'filters' => env('BUGSNAG_FILTERS', array('password')),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -72,6 +72,6 @@ return array(
 	|     )
 	|
 	*/
-	'proxy' => null
+	'proxy' => env('BUGSNAG_PROXY', null)
 
 );

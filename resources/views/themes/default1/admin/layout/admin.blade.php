@@ -28,10 +28,13 @@
         <link href="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" rel="stylesheet" type="text/css" />
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">    
+        <script src="https://code.jquery.com/jquery-2.1.4.js" type="text/javascript"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
+
         @yield('HeadInclude')
     </head>
     <body class="skin-yellow fixed">
@@ -49,18 +52,12 @@
                     </a>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbar-collapse">
-                        <ul class="tabs tabs-horizontal nav navbar-nav">
-                            {{-- <li><a data-target="#tabA" href="#">Home</a></li> --}}
-                            <li @yield('Staffs')><a data-target="#tabB" href="#">{!! Lang::get('lang.staffs') !!}</a></li>
-                            <li @yield('Emails')><a data-target="#tabC" href="#">{!! Lang::get('lang.emails') !!}</a></li>
-                            <li @yield('Manage')><a data-target="#tabD" href="#">{!! Lang::get('lang.manage') !!}</a></li>
-                            <li @yield('Settings')><a data-target="#tabE" href="#">{!! Lang::get('lang.settings') !!}</a></li>
-                            <li @yield('Themes')><a data-target="#tabF" href="#">{!! Lang::get('lang.themes') !!}</a></li>
-                            <li @yield('Plugin')><a data-target="#tabP" href="#">{!! Lang::get('lang.plugin') !!}</a></li>
+                        <ul class="nav navbar-nav navbar-left">
+                            <li @yield('settings')><a href="{!! url('admin') !!}">{!! Lang::get('lang.home') !!}</a></li>
                         </ul>
 
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a href="{{url('user')}}">{!! Lang::get('lang.agent_panel') !!}</a></li>
+                            <li><a href="{{url('dashboard')}}">{!! Lang::get('lang.agent_panel') !!}</a></li>
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -206,68 +203,6 @@ $i = count($tickets);
                             <!-- Right side column. Contains the navbar and content of the page -->
                             <div class="content-wrapper">
                                 <!-- Content Header (Page header) -->
-                                <div class="tab-content" style="background-color: white;padding: 0 20px 0 20px">
-                                    <div class="collapse navbar-collapse" id="navbar-collapse">
-                                        <div class="tabs-content">
-                                            <div class="tabs-pane active" id="tabA">
-                                                <ul class="nav navbar-nav">
-
-                                                </ul>
-                                            </div>
-                                            <div class="tabs-pane @yield('staffs-bar')" id="tabB">
-                                                <ul class="nav navbar-nav">
-                                                    <li id="bar" @yield('staffs')><a href="{{ url('agents') }}" >{!! Lang::get('lang.staffs') !!}</a></li></a></li>
-                                                    <li id="bar" @yield('departments')><a href="{{ url('departments') }}" >{!! Lang::get('lang.department') !!}</a></li></a></li>
-                                                    <li id="bar" @yield('teams')><a href="{{ url('teams') }}" >{!! Lang::get('lang.teams') !!}</a></li></a></li>
-                                                    <li id="bar" @yield('groups')><a href="{{ url('groups') }}" >{!! Lang::get('lang.groups') !!}</a></li></a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="tabs-pane @yield('emails-bar')" id="tabC">
-                                                <ul class="nav navbar-nav">
-                                                    <li id="bar" @yield('emails')><a href="{{ url('emails') }}" >{!! Lang::get('lang.incoming_emails') !!}</a></li></a></li>
-                                                    <li id="bar" @yield('smtp')><a href="{{ url('getsmtp') }}" >{!! Lang::get('lang.outgoing_emails') !!}</a></li>
-                                                    <li id="bar" @yield('ban')><a href="{{ url('banlist') }}" >{!! Lang::get('lang.ban_lists') !!}</a></li>
-                                                    {{-- <li id="bar" @yield('template')><a href="{{ url('template') }}" >Template</a></li> --}}
-                                                    <li id="bar" @yield('diagno')><a href="{{ url('getdiagno') }}" >{!! Lang::get('lang.diagnostics') !!}</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="tabs-pane @yield('manage-bar')" id="tabD">
-                                                <ul class="nav navbar-nav">
-                                                    <li id="bar" @yield('help')><a href="{{url('helptopic')}}">{!! Lang::get('lang.help_topics') !!}</a></li>
-                                                    <li id="bar" @yield('sla')><a href="{{url('sla')}}">{!! Lang::get('lang.sla_plans') !!}</a></li>
-                                                    <li id="bar" @yield('forms')><a href="{{url('forms')}}">{!! Lang::get('lang.forms') !!}</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="tabs-pane @yield('settings-bar')" id="tabE">
-                                                <ul class="nav navbar-nav">
-                                                    <li id="bar" @yield('company')><a href="{{url('getcompany')}}">{!! Lang::get('lang.company') !!}</a></li>
-                                                    <li id="bar" @yield('system')><a href="{{url('getsystem')}}">{!! Lang::get('lang.system') !!}</a></li>
-                                                    <li id="bar" @yield('email')><a href="{{url('getemail')}}">{!! Lang::get('lang.email') !!}</a></li>
-                                                    <li id="bar" @yield('tickets')><a href="{{url('getticket')}}">{!! Lang::get('lang.ticket') !!}</a></li>
-                                                    {{-- <li id="bar" @yield('access')><a href="{{ // url('getaccess')}}">Access</a></li> --}}
-                                                    <li id="bar" @yield('auto-response')><a href="{{url('getresponder')}}">{!! Lang::get('lang.auto_responce') !!}</a></li>
-                                                    <li id="bar" @yield('alert')><a href="{{url('getalert')}}">{!! Lang::get('lang.alert_notices') !!}</a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="tabs-pane @yield('theme-bar')" id="tabF">
-                                                <ul class="nav navbar-nav">
-                                                    <li id="bar" @yield('footer')><a href="{{ url('create-footer') }}" >{!! Lang::get('lang.footer1') !!}</a></li></a></li>
-                                                    <li id="bar" @yield('footer2')><a href="{{ url('create-footer2') }}" >{!! Lang::get('lang.footer2') !!}</a></li></a></li>
-                                                    <li id="bar" @yield('footer3')><a href="{{ url('create-footer3') }}" >{!! Lang::get('lang.footer3') !!}</a></li></a></li>
-                                                    <li id="bar" @yield('footer4')><a href="{{ url('create-footer4') }}" >{!! Lang::get('lang.footer4') !!}</a></li></a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="tabs-pane @yield('plugin-bar')" id="tabP">
-                                            {{-- Event fire --}}
-                                                <ul class="nav navbar-nav"><?php \Event::fire(new App\Events\TopNavEvent()); ?>
-                                                    <li id="bar" @yield('plugin')>
-                                                        <a href="{{ url('plugins') }}" >{!! Lang::get('lang.plugin') !!}</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <section class="content-header">
                                     @yield('PageHeader')
                                     @yield('breadcrumbs')
@@ -310,6 +245,9 @@ $i = count($tickets);
                     <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
                     <!-- Page Script -->
                     <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
+                                        <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+                    <script type="text/javascript" src="{{asset('lb-faveo/plugins/datatables/dataTables.bootstrap.js')}}"></script>
+
                     <script>
                         $(function () {
                         //Add text editor

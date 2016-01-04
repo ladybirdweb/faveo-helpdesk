@@ -24,7 +24,7 @@ return [
 	| reporting about the errors we at faveo will start solving the issues already. 
 	| The errors mails will never share your files or data. it will only share 
 	| the line number and error occured.
-	| To dissable you may just change '%0%' to 0.
+	| To dissable you may just change '%1%' to 0.
 	 */
 
 	'ErrorLog'  =>  '%0%',
@@ -38,7 +38,7 @@ return [
 	|
 	 */
 
-	'version' => 'COMMUNITY 1.0.3.5',
+	'version' => 'COMMUNITY 1.0.4',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -142,7 +142,9 @@ return [
             
             
             
+//
 
+			//
 
 			//
 
@@ -202,6 +204,8 @@ return [
 		'Vsmoraes\Pdf\PdfServiceProvider',
 		'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
 		'Chumper\Datatable\DatatableServiceProvider',
+        'Chumper\Zipper\ZipperServiceProvider'
+
 	],
 
 	/*
@@ -258,6 +262,8 @@ return [
 		'UTC' => 'App\Http\Controllers\Agent\helpdesk\TicketController',
 		'SMTPS' => 'App\Http\Controllers\HomeController',
 		'Datatable' => 'Chumper\Datatable\Facades\DatatableFacade',
+        'Zipper' => 'Chumper\Zipper\Zipper',
+
 	],
 
 ];

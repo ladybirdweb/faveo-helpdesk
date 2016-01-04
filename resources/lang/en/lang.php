@@ -193,6 +193,7 @@ return array(
 		'purglog'		=>'Purge Logs',	 
 		'nameformat'	=>'Name Formatting',
 		'timeformat'	=>'Time Format',
+    'date'    =>    'Date',
 		'dateformat'	=>'Date Format',
 		'date_time'		=>'Date And Time Format',
 		'day_date_time'	=>'Day,Date And Time Format',
@@ -305,6 +306,22 @@ return array(
 		'excessive_failed_login_attempts'	=>'Excessive failed login attempts',
     'system_error_reports'    =>    'System error Reports',
     'Send_app_crash_reports_to_help_Ladybird_improve_Faveo'  => 'Send app crash reports to help Ladybird improve Faveo',
+
+     /*
+     |------------------------------------------------
+     |Language page
+     |------------------------------------------------
+     */
+     'iso-code' => 'ISO-CODE',
+     'download' => 'Downlaod',
+     'upload_file'   => 'Upload File',
+     'enter_iso-code' => "Enter ISO-CODE",
+     'eg.'            => 'Example',
+     'for'      => 'for',
+     'english'  => 'English',
+     'language-name'  => 'Language name',
+     'file'         => 'File',
+
     
 	   /*
       |----------------------------------------------------------------------------------------

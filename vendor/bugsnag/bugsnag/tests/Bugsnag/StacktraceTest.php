@@ -4,7 +4,9 @@ require_once 'Bugsnag_TestCase.php';
 
 class StacktraceTest extends Bugsnag_TestCase
 {
+    /** @var Bugsnag_Configuration */
     protected $config;
+    /** @var Bugsnag_Diagnostics */
     protected $diagnostics;
 
     protected function setUp()

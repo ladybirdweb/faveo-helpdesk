@@ -1,6 +1,6 @@
 # Laravel Phone Validator
 
-[![Build Status](https://travis-ci.org/Propaganistas/Laravel-Phone.svg)](https://travis-ci.org/Propaganistas/Laravel-Phone)
+[![Build Status](https://travis-ci.org/Propaganistas/Laravel-Phone.svg?branch=master)](https://travis-ci.org/Propaganistas/Laravel-Phone)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Propaganistas/Laravel-Phone/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Propaganistas/Laravel-Phone/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/Propaganistas/Laravel-Phone/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/Propaganistas/Laravel-Phone/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/propaganistas/laravel-phone/v/stable)](https://packagist.org/packages/propaganistas/laravel-phone)
@@ -20,7 +20,7 @@ Adds a phone validator to Laravel 4 and 5 based on the [PHP port](https://github
 2. Run the Composer update command
 
     ```bash
-    $ composer update
+    composer update
     ```
 
 3. In your app config, add the Service Provider to the end of the `$providers` array
@@ -76,13 +76,13 @@ To validate a field using the phone validator, use the `phone` keyword in your v
 Countries::getList(App::getLocale(), 'php', 'cldr'))
     ```
 
-- You instruct the validator to detect which country the number belongs to using the `AUTO` keyword:
+- You instruct the validator to detect which country the number belongs to using the `AUTO` keyword (and optionally any fallback countries):
 
     ```php
-'phonefield'  => 'phone:AUTO',
+'phonefield'  => 'phone:AUTO,US',
     ```
 
-  The validator will try to extract the country from the number itself and then check if the number is valid for that country. Note that this will only work when phone numbers are entered in *international format* (prefixed with a `+` sign, e.g. +32 ....). Leading double zeros will **NOT** be parsed correctly as this isn't an established consistency.
+  The validator will try to extract the country from the number itself and then check if the number is valid for that country. If the country could not be guessed it will be validated using the fallback countries if provided. Note that country guessing will only work when phone numbers are entered in *international format* (prefixed with a `+` sign, e.g. +32 ....). Leading double zeros will **NOT** be parsed correctly as this isn't an established consistency.
 
 To specify constraints on the number type, just append the allowed types to the end of the parameters, e.g.:
 

@@ -2,6 +2,7 @@
 
 class ClientTest extends PHPUnit_Framework_TestCase
 {
+    /** @var PHPUnit_Framework_MockObject_MockObject|Bugsnag_Client */
     protected $client;
 
     protected function setUp()
@@ -77,6 +78,6 @@ class ClientTest extends PHPUnit_Framework_TestCase
      */
     public function testSetInvalidCurlOptions()
     {
-        $return = $this->client->setCurlOptions("option");
+        $this->client->setCurlOptions("option");
     }
 }

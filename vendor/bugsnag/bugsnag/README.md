@@ -1,4 +1,4 @@
-Bugsnag Notifier for PHP
+Bugsnag Notifier for PHP <img src="https://travis-ci.org/bugsnag/bugsnag-php.svg?branch=master" alt="build status" class="build-status">
 ========================
 
 The Bugsnag Notifier for PHP gives you instant notification of errors and
@@ -161,14 +161,12 @@ you can set the `releaseStage` that is reported to Bugsnag.
 $bugsnag->setReleaseStage('development');
 ```
 
-By default this is set to be "production".
+By default this is set to "production".
 
-> Note: If you would like errors from stages other than production to be sent
-to Bugsnag, you'll also have to call `setNotifyReleaseStages`.
 
 ###setNotifyReleaseStages
 
-By default, we will notify Bugsnag of errors that happen in any
+By default, we will notify Bugsnag of errors that happen in *any*
 `releaseStage` If you would like to change which release stages notify
 Bugsnag of errors you can call `setNotifyReleaseStages`:
 

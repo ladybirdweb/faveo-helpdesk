@@ -8,23 +8,29 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '1\\d{2}',
-    'PossibleNumberPattern' => '\\d{3}',
+    'NationalNumberPattern' => '1\\d{2,5}',
+    'PossibleNumberPattern' => '\\d{3,6}',
   ),
   'fixedLine' => 
   array (
-    'NationalNumberPattern' => '1\\d{2}',
-    'PossibleNumberPattern' => '\\d{3}',
+    'NationalNumberPattern' => '1\\d{2,5}',
+    'PossibleNumberPattern' => '\\d{3,6}',
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '1\\d{2}',
-    'PossibleNumberPattern' => '\\d{3}',
+    'NationalNumberPattern' => '1\\d{2,5}',
+    'PossibleNumberPattern' => '\\d{3,6}',
   ),
   'tollFree' => 
   array (
-    'NationalNumberPattern' => 'NA',
-    'PossibleNumberPattern' => 'NA',
+    'NationalNumberPattern' => '
+          116(?:
+            00[06]|
+            111
+          )
+        ',
+    'PossibleNumberPattern' => '\\d{6}',
+    'ExampleNumber' => '116000',
   ),
   'premiumRate' => 
   array (
@@ -58,8 +64,8 @@ return array (
   ),
   'emergency' => 
   array (
-    'NationalNumberPattern' => '112',
-    'PossibleNumberPattern' => '\\d{3}',
+    'NationalNumberPattern' => '11[24]',
+    'PossibleNumberPattern' => '\\d{3,6}',
     'ExampleNumber' => '112',
   ),
   'voicemail' => 
@@ -69,8 +75,26 @@ return array (
   ),
   'shortCode' => 
   array (
-    'NationalNumberPattern' => '112',
-    'PossibleNumberPattern' => '\\d{3}',
+    'NationalNumberPattern' => '
+          1(?:
+            1(?:
+              [2-48]|
+              6(?:
+                00[06]|
+                111
+              )
+            )|
+            8(?:
+              01|
+              1[0238]|
+              28|
+              30|
+              5[13]|
+              81
+            )
+          )
+        ',
+    'PossibleNumberPattern' => '\\d{3,6}',
     'ExampleNumber' => '112',
   ),
   'standardRate' => 

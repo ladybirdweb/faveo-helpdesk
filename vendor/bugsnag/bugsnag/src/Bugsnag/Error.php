@@ -12,10 +12,12 @@ class Bugsnag_Error
     public $payloadVersion = "2";
     public $message;
     public $severity = "warning";
+    /** @var Bugsnag_Stacktrace */
     public $stacktrace;
     public $metaData = array();
     public $config;
     public $diagnostics;
+    /** @var Bugsnag_Error|null */
     public $previous;
     public $groupingHash;
 
@@ -28,10 +30,10 @@ class Bugsnag_Error
         return $error;
     }
 
-    public static function fromPHPException(Bugsnag_Configuration $config, Bugsnag_Diagnostics $diagnostics, Exception $exception)
+    public static function fromPHPThrowable(Bugsnag_Configuration $config, Bugsnag_Diagnostics $diagnostics, $throwable)
     {
         $error = new Bugsnag_Error($config, $diagnostics);
-        $error->setPHPException($exception);
+        $error->setPHPException($throwable);
 
         return $error;
     }
@@ -74,7 +76,7 @@ class Bugsnag_Error
         return $this;
     }
 
-    public function setStacktrace($stacktrace)
+    public function setStacktrace(Bugsnag_Stacktrace $stacktrace)
     {
         $this->stacktrace = $stacktrace;
 
@@ -141,7 +143,7 @@ class Bugsnag_Error
     public function setPrevious($exception)
     {
         if ($exception) {
-            $this->previous = Bugsnag_Error::fromPHPException($this->config, $this->diagnostics, $exception);
+            $this->previous = Bugsnag_Error::fromPHPThrowable($this->config, $this->diagnostics, $exception);
         }
 
         return $this;
@@ -181,13 +183,13 @@ class Bugsnag_Error
             'stacktrace' => $this->stacktrace->toArray(),
         );
 
-        return $exceptionArray;
+        return $this->cleanupObj($exceptionArray);
     }
 
     private function cleanupObj($obj)
     {
         if (is_null($obj)) {
-            return;
+            return null;
         }
 
         if (is_array($obj)) {

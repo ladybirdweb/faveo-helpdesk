@@ -36,6 +36,7 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
+        <script src="https://code.jquery.com/jquery-2.1.4.js" type="text/javascript"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         @yield('HeadInclude')
     </head>
@@ -66,7 +67,7 @@ if ($company != null) {
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
                             @if(Auth::user()->role == 'admin')
-                                <li><a href="{{url('agents')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
+                                <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
                             @endif
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
@@ -192,13 +193,13 @@ $underprocess = App\Model\helpdesk\Ticket\Tickets::where('status','=','1')->wher
 $underprocess = count($underprocess);
 $closed = App\Model\helpdesk\Ticket\Tickets::where('status','=','2')->where('dept_id','=',$dept->id)->get();
 $closed = count($closed);
-	// $underprocess = 0;
-	// foreach ($inbox as $ticket4) {
-	// 	if ($ticket4->assigned_to == null) {
-	// 	} else {
-	// 		$underprocess++;
-	// 	}
-	// }
+    // $underprocess = 0;
+    // foreach ($inbox as $ticket4) {
+    //  if ($ticket4->assigned_to == null) {
+    //  } else {
+    //      $underprocess++;
+    //  }
+    // }
 if (Auth::user()->role == 'admin') { ?>
                                         <li class="treeview">
                                             <a href="#">
@@ -306,7 +307,11 @@ $group = App\Model\helpdesk\Agent\Groups::where('name', '=', $agent_group)->wher
                     <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
                     <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
                     <!-- Page Script -->
-                    <script>
+                    
+                    <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+                    <script type="text/javascript" src="{{asset('lb-faveo/plugins/datatables/dataTables.bootstrap.js')}}"></script>
+
+<script>
 $(function() {
     // Enable iCheck plugin for checkboxes
     // iCheck for checkbox and radio inputs

@@ -3558,4 +3558,39 @@ Gradient Background colors
   filter: alpha(opacity=100);
 }
 
+blockquote{
+  padding:10px 20px;
+}
 
+.error-message-padding{
+  margin-left:20px;
+}
+
+
+        .settingdivblue:hover {
+            border: 5px double #3C8DBC;
+        }
+        .settingdivblue a:hover {
+            /*            color: #61C5FF;*/
+            /*            background-color: darkgrey;*/
+        }
+        .settingdivblue a {
+            color: #3A83AD;
+        }
+        .settingiconblue p {
+            text-align: center;
+            font-size: 17px;
+            word-wrap: break-word;
+            font-variant: small-caps;
+            font-weight: bold;
+            line-height: 30px;
+        }
+        .settingdivblue {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto;
+            text-align: center;
+            border: 5px solid #C4D8E4;
+            border-radius: 100%;
+            padding-top: 5px;
+        }

@@ -111,11 +111,12 @@ class MailController extends Controller {
 							$thread_id = $thread_id->id;
 					
 						foreach($mail->getAttachments() as $attachment) {
+							// dd($attachment);
 							$support = "support";
 							// echo $_SERVER['DOCUMENT_ROOT'];
 							$dir_img_paths = __DIR__;
 							$dir_img_path = explode('/code', $dir_img_paths);
-							$filepath = explode('../../../../../../public/',$attachment->filePath);
+							$filepath = explode('../../../../../../public',$attachment->filePath);
 							// dd($filepath);
                             // $path = $dir_img_path[0]."/public/".$filepath[1];
                             $path = public_path().'/'.$filepath[1];

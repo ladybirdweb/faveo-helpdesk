@@ -1,3 +1,5 @@
+[![Latest Stable Version](https://poser.pugx.org/dompdf/dompdf/v/stable.png)](https://packagist.org/packages/dompdf/dompdf) [![Total Downloads](https://poser.pugx.org/dompdf/dompdf/downloads.png)](https://packagist.org/packages/dompdf/dompdf) [![Latest Unstable Version](https://poser.pugx.org/dompdf/dompdf/v/unstable.png)](https://packagist.org/packages/dompdf/dompdf) [![License](https://poser.pugx.org/dompdf/dompdf/license.png)](https://packagist.org/packages/dompdf/dompdf)
+
 **dompdf is an HTML to PDF converter**.
 At its heart, dompdf is (mostly) [CSS 2.1](http://www.w3.org/TR/CSS2/) compliant
 HTML layout and rendering engine written in PHP. It is a style-driven renderer:
@@ -55,7 +57,7 @@ for more information on how to use fonts.
 
 The [DejaVu TrueType fonts](http://dejavu-fonts.org) have been pre-installed to
 give dompdf decent Unicode character coverage by default. To use the DejaVu
-fonts reference the font in your stylesheet, e.g. `body { font-family: Deja Vu
+fonts reference the font in your stylesheet, e.g. `body { font-family: DejaVu
 Sans; }` (for DejaVu Sans).
 
 Easy Installation
@@ -66,7 +68,7 @@ From the command line switch to the directory where dompdf will reside and run
 the following commands:
 
 ```sh
-git clone https://github.com/dompdf/dompdf.git
+git clone https://github.com/dompdf/dompdf.git .
 git submodule init
 git submodule update
 ```
@@ -125,7 +127,7 @@ Limitations (Known Issues)
  * large files or large tables can take a while to render
  * CSS float is not supported (but is in the works, enable it through the
    `DOMPDF_ENABLE_CSS_FLOAT` configuration constant).
- * If you find this project useful, please consider making a donation.
-
+ 
+If you find this project useful, please consider making a donation.
 (Any funds donated will be used to help further development on this project.)	
 [![Donate button](https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif)](http://goo.gl/DSvWf)

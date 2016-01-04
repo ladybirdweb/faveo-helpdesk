@@ -1,6 +1,16 @@
 Changelog
 =========
 
+1.6.2
+-----
+
+### Enhancements
+
+- Add support for configuring the notifier completely from
+[environment variables](https://github.com/bugsnag/bugsnag-laravel#environment-variables)
+  | [Andrew](https://github.com/browner12)
+  | [#71](https://github.com/bugsnag/bugsnag-laravel/pull/71)
+
 1.6.1
 -----
 -   Fix array syntax for older php

@@ -24,7 +24,6 @@ return array(
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'Prophecy\\' => array($vendorDir . '/phpspec/prophecy/src'),
     'PhpSpec' => array($vendorDir . '/phpspec/phpspec/src'),
-    'PhpImap' => array($vendorDir . '/php-imap/php-imap/src'),
     'JakubOnderka\\PhpConsoleHighlighter' => array($vendorDir . '/jakub-onderka/php-console-highlighter/src'),
     'JakubOnderka\\PhpConsoleColor' => array($vendorDir . '/jakub-onderka/php-console-color/src'),
     'ForceUTF8\\' => array($vendorDir . '/neitanod/forceutf8/src'),
@@ -32,8 +31,8 @@ return array(
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
     'Cron' => array($vendorDir . '/mtdowling/cron-expression/src'),
+    'Chumper\\Zipper' => array($vendorDir . '/chumper/zipper/src'),
     'Chumper\\Datatable' => array($vendorDir . '/chumper/datatable/src'),
-    'Carbon' => array($vendorDir . '/nesbot/carbon/src'),
     'Bugsnag_' => array($vendorDir . '/bugsnag/bugsnag/src'),
     'Bugsnag\\BugsnagLaravel\\' => array($vendorDir . '/bugsnag/bugsnag-laravel/src'),
 );

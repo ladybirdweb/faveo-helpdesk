@@ -1,118 +1,80 @@
-<html>
-<head>
-        <meta charset="UTF-8">
-        <title>Faveo HELPDESK | Insatller</title>
-        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-        <!-- bootstrap 3.0.2 -->
-        <link href="{{asset("lb-faveo/downloads/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
-        {{-- {{ HTML::style('ep-content/themes/ep-admin/default1/css/bootstrap.min.css'); }} --}}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+    <head>
+        <meta name="viewport" content="width=device-width">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Faveo HELPDESK</title>
+        <link rel="stylesheet" href="{{asset("lb-faveo/installer/css/load-styles.css")}}" type="text/css" media="all">
+        <link rel="stylesheet" href="{{asset("lb-faveo/installer/css/css.css")}}" type="text/css" media="all">
+        <link rel="stylesheet" href="{{asset("lb-faveo/installer/css/admin.css")}}" type="text/css" media="all">
+        <link rel="stylesheet" href="{{asset("lb-faveo/installer/css/wc-setup.css")}}" type="text/css" media="all">
+        <link rel="stylesheet" href="{{asset("lb-faveo/installer/css/activation.css")}}" type="text/css" media="all">
+        <link rel="stylesheet" href="{{asset("lb-faveo/installer/css/style.css")}}" type="text/css" media="all">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-        <!-- font Awesome -->
-        {{-- {{ HTML::style('ep-content/themes/ep-admin/default1/css/font-awesome.min.css'); }} --}}
+        <style type="text/css">
 
-        <!-- Ionicons -->
-        <link href="{{asset("lb-faveo/downloads/ionicons.min.css")}}" rel="stylesheet" type="text/css" />
-        {{-- {{ HTML::style('ep-content/themes/ep-admin/default1/admin/css/ionicons.min.css'); }} --}}
+            td input {
+                padding: 3px;
+                margin-left: 150px;
+                width: 280px;
+            }
 
-        <!-- Theme style -->
-        <link href="{{asset("lb-faveo/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
-        {{-- {{ HTML::style('ep-content/themes/ep-admin/default1/admin/css/AdminLTE.css'); }} --}}
+            td select {
+                width: 290px;
+                margin-left: 150px;
+                font-size: 17px;
+            }
 
-        <!-- Bootstrap time Picker -->
-        {{-- <link href="{{asset("downloads/ionicons.min.css")}}" rel="stylesheet" type="text/css" /> --}}
-        {{-- {{ HTML::style('ep-content/themes/ep-admin/default1/css/daterangepicker/daterangepicker-bs3.css'); }} --}}
+            i {
+                float: right;
+                padding-top: 7px;
+                padding-left: 5px;
+            }
 
-        <!-- daterange picker -->
-        {{-- <link href="{{asset("downloads/ionicons.min.css")}}" rel="stylesheet" type="text/css" /> --}}
-        {{-- {{ HTML::style('ep-content/themes/ep-admin/default1/css/timepicker/bootstrap-timepicker.min.css'); }} --}}
+            #sectool {
+                min-width: 200px;
+                padding: 5px;
+                line-height: 20px;
+                min-height: 18px;
+                background-color: #3AA7D9;
+                float: right;
+                border-radius: 5px;
+                box-shadow: 5px 6px #88C8E5;
+                margin-top: 30px;
+    /*            position: absolute;*/
+                top: 100px;
+            }
 
-<style type="text/css">
-a:link    {color:#000;}  /* unvisited link  */
-a:visited {color:#000;}  /* visited link    */
-a:hover   {color:#000;}  /* mouse over link */
-a:active  {color:#000;}
-
-</style>
-<style type="text/css">
-    #access2{
-        float: left;
-        /*position: fixed;*/
-        width: 100px;
-        background: #E60000;
-        font-weight: bold;
-        padding: 10px;
-        border: 0 none;
-        border-radius: 3px;
-    }
-    
-    #access1{
-        float: left;
-        /*position: fixed;*/
-        width: 100px;
-        background: #27AE60;
-        font-weight: bold;
-        padding: 10px;
-        border: 0 none;
-        border-radius: 3px;
-    }
-    
-    #access{
-        float: right;
-        /*position: fixed;*/
-        width: 100px;
-        background: #27AE60;
-        font-weight: bold;
-        padding: 10px;
-        border: 0 none;
-        border-radius: 3px;
-        color:black;
-    }
-
-    #access5{
-        float: right;
-        /*position: fixed;*/
-        width: 100px;
-        background: #27AE60;
-        font-weight: bold;
-        padding: 10px;
-        border: 0 none;
-        border-radius: 3px;
-    }
-    
-    #inputfield{
-        /*padding: 10px;*/
-        border: 0 none;
-        border-radius: 3px;
-        }
-</style>
-<style type="text/css">
-
-    .ok span, .warning span, .error span {
-            font-weight: bolder;
-        }
-
-    ok span {
-            color: green;
-        }
-
-    .warning span {
-            color: orange;
-        }
-
-    .error span {
-            color: red;
-        }
-
-</style>
-
-</head>
-<body style="background-color:#d2d6de;">
-<div class="login-box">
-    @yield('content')
-    <p id="footer">&copy;<?php echo date('Y')?>. Powered by <a href="http://www.faveohelpdesk.com">Faveo </a></p>
-</div>
-
-</body>
-
-</html>
-    
+            #sectool p{
+                 text-align: justify;
+                 text-align-last: center;
+                 font-size: 14px;
+                 color: aliceblue;
+                 width: 200px;
+                 word-wrap: break-word;
+                 font-style: italic;
+                 font-weight: 600;
+                 font-variant: normal;
+            }
+            
+        </style>
+    </head>
+    <body class="wc-setup wp-core-ui">
+        <h1 id="wc-logo"><a href="#">
+            <img src="{{asset("lb-faveo/installer/images/faveo.png")}}" alt="faveo"></a></h1>
+    <ol class="wc-setup-steps">
+        <li class="@yield('licence')">Licence Agreement</li>
+        <li class="@yield('environment')">Environment Test</li>
+        <li class="@yield('database')">Database Setup</li>
+        <li class="@yield('locale')">Locale Information</li>
+        <li class="@yield('ready')">Ready</li>
+    </ol>
+    <div class="wc-setup-content">
+        @yield('content')
+    </div>
+    <center>&copy;<?php echo date('Y')?>. Powered by <a href="http://www.faveohelpdesk.com">Faveo </a></center>
+    {{-- // <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> --}}
+    {{-- // <script src="{{asset("lb-faveo/installer/js/index.js ")}}"></script> --}}
+    </body>
+</html>    

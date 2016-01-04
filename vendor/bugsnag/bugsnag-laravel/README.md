@@ -11,11 +11,33 @@ capturing errors from your applications.
 
 Check out this excellent [Laracasts screencast](https://laracasts.com/lessons/better-error-tracking-with-bugsnag) for a quick overview of how to use Bugsnag with your Laravel apps.
 
+Contents
+--------
 
-How to Install
+- [Getting Started](#getting-started)
+  - [Installation](#installation)
+    - [Laravel 5.0+](#laravel-50)
+    - [Laravel (Older Versions)](#laravel-older-versions)
+    - [Lumen](#lumen)
+  - [Environment Variables](#environment-variables)
+- [Usage](#usage)
+  - [Catching and Reporting Exceptions](#catching-and-reporting-exceptions)
+  - [Sending Non-fatal Exceptions](#sending-non-fatal-exceptions)
+  - [Configuration Options](#configuration-options)
+    - [Error Reporting Levels](#error-reporting-levels)
+    - [Callbacks](#callbacks)
+- [Demo Applications](#demo-applications)
+- [Support](#support)
+- [Contributing](#contributing)
+- [License](#license)
+
+
+Getting Started
 ---------------
 
-### Laravel 5.0 +
+### Installation
+
+#### Laravel 5.0+
 
 1.  Install the `bugsnag/bugsnag-laravel` package
 
@@ -68,7 +90,7 @@ How to Install
 1. Create the configuration file `config/bugsnag.php`:
 
     ```shell
-    $ php artisan vendor:publish
+    $ php artisan vendor:publish --provider="Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider"
     ```
 
 1. Configure your `api_key` in your `.env` file:
@@ -87,7 +109,9 @@ How to Install
     );
     ```
 
-### Laravel < 5.0
+#### Laravel (Older Versions)
+
+For versions of Laravel before 5.0:
 
 1.  Install the `bugsnag/bugsnag-laravel` package
 
@@ -137,7 +161,7 @@ How to Install
     ```
 
 
-### Lumen
+#### Lumen
 
 1. In `bootstrap/app.php` add the line
 
@@ -170,41 +194,35 @@ How to Install
     );
     ```
 
+### Environment Variables
+
+In addition to `BUGSNAG_API_KEY`, other configuration keys can be automatically
+populated in `config.php` from your `.env` file:
+
+- `BUGSNAG_API_KEY`: Your API key. You can find your API key on your Bugsnag
+  dashboard.
+- `BUGSNAG_NOTIFY_RELEASE_STAGES`: Set which release stages should send
+  notifications to Bugsnag.
+- `BUGSNAG_ENDPOINT`: Set what server to which the Bugsnag notifier should send
+  errors. The default is https://notify.bugsnag.com, but for Bugsnag Enterprise
+  the endpoint should be the URL of your Bugsnag instance.
+- `BUGSNAG_FILTERS`: Set which keys are filtered from metadata is sent to
+  Bugsnag.
+- `BUGSNAG_PROXY`: Set the configuration options for your server if it is behind
+  a proxy server. Additional details are available in the
+  [sample configuration](src/Bugsnag/BugsnagLaravel/config.php#L56).
 
 
+Usage
+-----
 
-Sending Custom Data With Exceptions
------------------------------------
+### Catching and Reporting Exceptions
 
-It is often useful to send additional meta-data about your app, such as
-information about the currently logged in user, along with any
-error or exceptions, to help debug problems.
-
-To send custom data, you should define a *before-notify* function,
-adding an array of "tabs" of custom data to the $metaData parameter. For example:
-
-```php
-Bugsnag::setBeforeNotifyFunction("before_bugsnag_notify");
-
-function before_bugsnag_notify($error) {
-    // Do any custom error handling here
-
-    // Also add some meta data to each error
-    $error->setMetaData(array(
-        "user" => array(
-            "name" => "James",
-            "email" => "james@example.com"
-        )
-    ));
-}
-```
-
-See the [setBeforeNotifyFunction](https://bugsnag.com/docs/notifiers/php#setbeforenotifyfunction)
-documentation on the `bugsnag-php` library for more information.
+Bugsnag works "out of the box" for reporting unhandled exceptions in
+Laravel and Lumen apps.
 
 
-Sending Custom Errors or Non-Fatal Exceptions
----------------------------------------------
+### Sending Non-fatal Exceptions
 
 You can easily tell Bugsnag about non-fatal or caught exceptions by
 calling `Bugsnag::notifyException`:
@@ -231,9 +249,16 @@ $metaData =  array(
 );
 ```
 
+Additional data can be sent with exceptions as an options hash as detailed in the [Notification Options](docs/Notification Options.md) documentation, including some [options specific to non-fatal exceptions](docs/Notification Options.md#handled-notification-options).
 
-Error Reporting Levels
-----------------------
+
+### Configuration Options
+
+The [Bugsnag PHP Client](https://bugsnag.com/docs/notifiers/php)
+is available as `Bugsnag`, which allows you to set various
+configuration options. These options are listed in the [documentation for Bugsnag PHP](https://bugsnag.com/docs/notifiers/php#additional-options).
+
+#### Error Reporting Levels
 
 By default we'll use the value of `error_reporting` from your `php.ini`
 or any value you set at runtime using the `error_reporting(...)` function.
@@ -245,43 +270,67 @@ If you'd like to send different levels of errors to Bugsnag, you can call
 Bugsnag::setErrorReportingLevel(E_ALL & ~E_NOTICE);
 ```
 
+#### Callbacks
 
-Additional Configuration
-------------------------
+It is often useful to send additional meta-data about your app, such as
+information about the currently logged in user, along with any
+error or exceptions, to help debug problems.
 
-The [Bugsnag PHP Client](https://bugsnag.com/docs/notifiers/php)
-is available as `Bugsnag`, which allows you to set various
-configuration options, for example:
+To send custom data, you should define a *before-notify* function,
+adding an array of "tabs" of custom data to the $metaData parameter. For example:
 
 ```php
-Bugsnag::setReleaseStage("production");
+Bugsnag::setBeforeNotifyFunction("before_bugsnag_notify");
+
+function before_bugsnag_notify($error) {
+    // Do any custom error handling here
+
+    // Also add some meta data to each error
+    $error->setMetaData(array(
+        "user" => array(
+            "name" => "James",
+            "email" => "james@example.com"
+        )
+    ));
+}
 ```
 
-See the [Bugsnag Notifier for PHP documentation](https://bugsnag.com/docs/notifiers/php#additional-configuration)
-for full configuration details.
+This example snippet adds a "user" tab to the Bugsnag error report. See the [setBeforeNotifyFunction](https://bugsnag.com/docs/notifiers/php#setbeforenotifyfunction)
+documentation on the `bugsnag-php` library for more information.
 
 
-Reporting Bugs or Feature Requests
-----------------------------------
+Demo Applications
+-----------------
 
-Please report any bugs or feature requests on the github issues page for this
-project here:
+The [Bugsnag Laravel source repository](https://github.com/bugsnag/bugsnag-laravel) includes example applications for [Laravel 4, Laravel 5, and Lumen](https://github.com/bugsnag/bugsnag-laravel/tree/master/example).
 
-<https://github.com/bugsnag/bugsnag-laravel/issues>
+Before running one of the example applications, install the prerequisites:
+
+    brew tap josegonzalez/homebrew-php
+    brew install php56 php56-mcrypt composer
+
+Then open the example directory (such as `example/laravel-5.1`) in a terminal and start the server:
+
+	composer install
+	php56 artisan serve --port 8004
+
+
+Support
+-------
+
+* [Additional Documentation](https://github.com/bugsnag/bugsnag-laravel/tree/master/docs)
+* [Search open and closed issues](https://github.com/bugsnag/bugsnag-laravel/issues?utf8=✓&q=is%3Aissue) for similar problems
+* [Report a bug or request a feature](https://github.com/bugsnag/bugsnag-laravel/issues/new)
 
 
 Contributing
 ------------
 
--   [Fork](https://help.github.com/articles/fork-a-repo) the [notifier on github](https://github.com/bugsnag/bugsnag-laravel)
--   Commit and push until you are happy with your contribution
--   Run the tests to make sure they all pass: `composer install && ./vendor/bin/phpunit`
--   [Make a pull request](https://help.github.com/articles/using-pull-requests)
--   Thanks!
+We'd love you to file issues and send pull requests. The [contributing guidelines](https://github.com/bugsnag/bugsnag-laravel/CONTRIBUTING.md) details the process of building and testing `bugsnag-laravel`, as well as the pull request process. Feel free to comment on [existing issues](https://github.com/bugsnag/bugsnag-laravel/issues) for clarification or starting points.
 
 
 License
 -------
 
 The Bugsnag Laravel notifier is free software released under the MIT License.
-See [LICENSE.txt](https://github.com/bugsnag/bugsnag-laravel/blob/master/LICENSE.txt) for details.
+See [LICENSE.txt](LICENSE.txt) for details.

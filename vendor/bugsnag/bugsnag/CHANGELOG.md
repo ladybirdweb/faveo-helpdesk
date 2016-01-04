@@ -1,6 +1,24 @@
 Changelog
 =========
 
+2.6.0 (23 Dec 2015)
+-----
+
+### Enhancements
+
+* Add support for PHP 7's Throwable
+  | [Chris Stone](https://github.com/cmstone)
+  | [#106](https://github.com/bugsnag/bugsnag-php/pull/106)
+
+* Fix errors which arise from from error payloads not encoded using UTF-8
+  | [GaetanNaulin](https://github.com/GaetanNaulin)
+  | [#104](https://github.com/bugsnag/bugsnag-php/pull/104)
+  | [#105](https://github.com/bugsnag/bugsnag-php/pull/105)
+
+2.5.6
+-----
+-   Added a debug flag to help diagnose notification problems
+
 2.5.5
 -----
 -   Ensure no unnecessary code is executed when errors should be skipped

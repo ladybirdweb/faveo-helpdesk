@@ -11,7 +11,7 @@
     <div class="box-header">
         <h2 class="box-title">{{Lang::get('lang.articles')}}</h2>
     </div>
-    <div class="box-body table-responsive">
+    <div class="box-body">
         <!-- check whether success or not -->
         @if(Session::has('success'))
             <div class="alert alert-success alert-dismissable">
@@ -30,18 +30,12 @@
                 {{Session::get('fails')}}
             </div>
             @endif
-
-        <div class="col-xs-12">
-        <div class="row">
                 {!! Datatable::table()
                     ->addColumn(Lang::get('lang.name'),
                                 Lang::get('lang.create'),
                                 Lang::get('lang.action'))       // these are the column headings to be shown
                     ->setUrl(route('api.article'))   // this is the route where data will be retrieved
                     ->render() !!}
-            
-            </div>
-        </div>
     </div>
 </div>
 @stop

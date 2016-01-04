@@ -2,7 +2,10 @@
 
 class DiagnosticsTest extends PHPUnit_Framework_TestCase
 {
+    /** @var Bugsnag_Configuration */
     protected $config;
+    /** @var Bugsnag_Diagnostics */
+    protected $diagnostics;
 
     protected function setUp()
     {

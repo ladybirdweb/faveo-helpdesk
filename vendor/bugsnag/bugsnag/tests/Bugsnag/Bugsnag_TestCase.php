@@ -2,6 +2,11 @@
 
 abstract class Bugsnag_TestCase extends PHPUnit_Framework_TestCase
 {
+    /** @var Bugsnag_Configuration */
+    protected $config;
+    /** @var Bugsnag_Diagnostics */
+    protected $diagnostics;
+
     protected function getError($name = "Name", $message = "Message")
     {
         return Bugsnag_Error::fromNamedError($this->config, $this->diagnostics, $name, $message);

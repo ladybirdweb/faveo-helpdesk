@@ -1,5 +1,4 @@
 <?php
-
 return [
 
 	/*
@@ -67,8 +66,8 @@ return [
 
 		'pgsql' => [
 			'driver' => 'pgsql',
-			'host' => '%host1%',
-			'database' => '%database1%',
+			'host' => 'localhost',
+			'database' => 'fav',
 			'username' => '%username1%',
 			'password' => '%password1%',
 			'port'	=>	'%port1%',

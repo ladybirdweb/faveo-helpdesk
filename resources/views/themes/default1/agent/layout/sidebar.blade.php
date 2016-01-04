@@ -7,8 +7,7 @@
 @section('kb')
     class="active"
 @stop
-
-                        @section('sidebar')
+@section('sidebar')
                         <li class="header">KNOWLEDGE BASE</li>
                         <li class="treeview @yield('category')">
                             <a href="#">
@@ -30,7 +29,6 @@
                                          <li @yield('all-article')><a href="{{url('article')}}"><i class="fa fa-circle-o"></i> {{Lang::get('lang.allarticle')}}</a></li>
                                      </ul>
                         </li>
-
                         <li class="treeview @yield('pages')">
                             <a href="#">
                                 <i class="fa fa-file-text"></i> <span>{{Lang::get('lang.pages')}}</span>
@@ -59,10 +57,9 @@
                             </a>
                         </li>
                          <li @yield('settings')>
-                            <a href="{{url('settings')}}">
+                            <a href="{{url('kb/settings')}}">
                                  <i class="fa fa-wrench"></i>
                                 <span>{{Lang::get('lang.settings')}}</span>
                             </a>
                         </li>
-
                     @stop

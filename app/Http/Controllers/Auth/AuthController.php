@@ -17,6 +17,8 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 /* Include login validator */
 use Mail;
 use Auth;
+// Model
+// use App\Model\helpdesk\Utility\Limit_Login;
 
 /**
  * ---------------------------------------------------
@@ -146,14 +148,45 @@ class AuthController extends Controller {
 	 * @return type Response
 	 */
 	public function postLogin(LoginRequest $request) {
-		// $email = $request->input('email');
-		// $password = Hash::make($request->input('password'));
-		// $remember = $request->input('remember');
-		// dd([$email,$password,$remember]);
+            
+        // Set login attempts and login time
+        $loginAttempts = 1;
 		$credentials = $request->only('email', 'password');
-		if ($this->auth->attempt($credentials, $request->has('remember'))) {
+
+        $email = $request->email;
+		// $ip_address = $_SERVER['REMOTE_ADDR'];
+
+  //       $limit_login = Limit_Login::where('email' , '=' , $email)->where('ip_address', '=', $ip_address)->first();
+  //       if(isset($limit_login)) {
+        	
+  //       }
+
+
+
+        // If session has login attempts, retrieve attempts counter and attempts time
+        if (\Session::has('loginAttempts')) {
+            $loginAttempts = \Session::get('loginAttempts');
+            $loginAttemptTime = \Session::get('loginAttemptTime');
+            $credentials = $request->only('email', 'password');
+            // If attempts > 3 and time < 10 minutes
+            if ($loginAttempts > 4 && (time() - $loginAttemptTime <= 600)) {
+                return redirect()->back()->with('error', 'Maximum login attempts reached. Try again in a while');
+            }
+            // If time > 10 minutes, reset attempts counter and time in session
+            if (time() - $loginAttemptTime > 600) {
+                \Session::put('loginAttempts', 1);
+                \Session::put('loginAttemptTime', time());
+            }
+        } else // If no login attempts stored, init login attempts and time
+        {
+            \Session::put('loginAttempts', $loginAttempts);
+            \Session::put('loginAttemptTime', time());
+        }
+        // If auth ok, redirect to restricted area
+        \Session::put('loginAttempts', $loginAttempts + 1);
+        if ($this->auth->attempt($credentials, $request->has('remember'))) {
 			if(Auth::user()->role == 'user') {
-				return \Redirect::route('home');
+				return \Redirect::route('/');
 			} else {
 				return redirect()->intended($this->redirectPath());
 			}
@@ -164,6 +197,7 @@ class AuthController extends Controller {
 				'email' => $this->getFailedLoginMessage(),
 				'password' => $this->getFailedLoginMessage(),
 			]);
+        // Increment login attempts
 	}
 
 	/**
@@ -173,4 +207,101 @@ class AuthController extends Controller {
 	protected function getFailedLoginMessage() {
 		return 'This Field do not match our records.';
 	}
+
+
+	// public function postLogin(LoginRequest $request) {  
+ //                $email = $request->input('email');
+ //                $counter = 0;
+ //                $user = User::where('email','=',$email)->first();
+ //                if($user) {
+ //                    if($user->active == 1) {
+	// 	  				$credentials = $request->only('email', 'password');
+		                
+	// 	                while($counter < 10) {
+	// 	                    if($this->auth->attempt($credentials) === false) {
+	// 	                        $counter++;
+	// 	                    }
+	// 	                }
+	// 	  				if ($this->auth->attempt($credentials, $request->has('remember'))) {
+	// 	   					if(Auth::user()) {
+	// 	                        if(Auth::user()->role == 'vendor') {
+	// 	    						return \Redirect::route('vendors.index');
+	// 	   						} elseif(Auth::user()->role == 'admin') {
+	// 	                            return \Redirect::route('admin.dashboard');
+	// 	                        } elseif(Auth::user()->role == 'sadmin') {
+	// 	                            return \Redirect::route('sadmin.dashboard');
+	// 	                        } else {
+	// 	                            return redirect()->intended($this->redirectPath());
+	// 	                        }
+	// 	                    } else {
+	// 	    					return redirect()->back()->with('message','Account Inactive, Please wait for Admin to approve.');
+	// 	   					}
+	// 	                }
+	// 	            } else {
+	// 	                return redirect()->back()->with('message','Account Inactive, Please wait for Admin to approve.');
+	//         		}
+ //    			}
+ //  				return redirect($this->loginPath())
+ //  				   	->withInput($request->only('email', 'remember'))
+ //  				   	->withErrors(['email' => $this->getFailedLoginMessage(), 'password' => $this->getFailedLoginMessage(), ]);
+                
+ // 			}
+
+
+
+
+	// public function authenticate() {
+ //        // Set login attempts and login time
+ //        $loginAttempts = 1;
+ //        // If session has login attempts, retrieve attempts counter and attempts time
+ //        if (Session::has('loginAttempts')) {
+ //            $loginAttempts = Session::get('loginAttempts');
+ //            $loginAttemptTime = Session::get('loginAttemptTime');
+ //            // If attempts > 3 and time < 10 minutes
+ //            if ($loginAttempts > 3 && (time() - $loginAttemptTime <= 600)) {
+ //                return redirect()-back()->with('error', 'maximum login attempts reached. Try again in a while');
+ //            }
+ //            // If time > 10 minutes, reset attempts counter and time in session
+ //            if (time() - $loginAttemptTime > 600) {
+ //                Session::put('loginAttempts', 1);
+ //                Session::put('loginAttemptTime', time());
+ //            }
+ //        } else // If no login attempts stored, init login attempts and time
+ //        {
+ //            Session::put('loginAttempts', $loginAttempts);
+ //            Session::put('loginAttemptTime', time());
+ //        }
+ //        // If auth ok, redirect to restricted area
+ //        if (Auth::attempt(['email' => 'someone@example.com'])) {
+ //            return redirect()->intended('dashboard');
+ //        }
+ //        // Increment login attempts
+ //        Session::put('loginAttempts', $loginAttempts + 1);
+ //    }
+
+
+
+	// public function postLogin(LoginRequest $request) {
+	// 	// $email = $request->input('email');
+	// 	// $password = Hash::make($request->input('password'));
+	// 	// $remember = $request->input('remember');
+	// 	// dd([$email,$password,$remember]);
+	// 	$credentials = $request->only('email', 'password');
+	// 	if ($this->auth->attempt($credentials, $request->has('remember'))) {
+	// 		if(Auth::user()->role == 'user') {
+	// 			return \Redirect::route('home');
+	// 		} else {
+	// 			return redirect()->intended($this->redirectPath());
+	// 		}
+	// 	}
+	// 	return redirect($this->loginPath())
+	// 		->withInput($request->only('email', 'remember'))
+	// 		->withErrors([
+	// 			'email' => $this->getFailedLoginMessage(),
+	// 			'password' => $this->getFailedLoginMessage(),
+	// 		]);
+	// }
+
+
+
 }

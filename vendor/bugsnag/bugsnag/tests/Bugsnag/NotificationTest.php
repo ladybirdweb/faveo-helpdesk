@@ -4,8 +4,11 @@ require_once 'Bugsnag_TestCase.php';
 
 class NotificationTest extends Bugsnag_TestCase
 {
+    /** @var Bugsnag_Configuration */
     protected $config;
+    /** @var Bugsnag_Diagnostics */
     protected $diagnostics;
+    /** @var Bugsnag_Notification|PHPUnit_Framework_MockObject_MockObject */
     protected $notification;
 
     protected function setUp()
@@ -64,6 +67,7 @@ class NotificationTest extends Bugsnag_TestCase
                 ->method('shouldNotify')
                 ->will($this->returnValue(false));
 
+        /** @var Bugsnag_Notification $notification */
         $notification = $this->getMockBuilder('Bugsnag_Notification')
                                      ->setMethods(array("postJSON"))
                                      ->setConstructorArgs(array($config))
@@ -86,6 +90,7 @@ class NotificationTest extends Bugsnag_TestCase
                 ->method('shouldNotify')
                 ->will($this->returnValue(false));
 
+        /** @var Bugsnag_Notification|PHPUnit_Framework_MockObject_MockObject $notification */
         $notification = $this->getMockBuilder('Bugsnag_Notification')
                                      ->setMethods(array("postJSON"))
                                      ->setConstructorArgs(array($config))

@@ -37,7 +37,7 @@ class="active"
 <div class="box-header">
 	<h3 class="box-title">{{Lang::get('lang.user')}}</h3><a href="{{route('user.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_user')}}</a></div>
 
-<div class="box-body table-responsive">
+<div class="box-body">
 <!-- check whether success or not -->
 
 @if(Session::has('success'))
@@ -60,15 +60,7 @@ class="active"
 <?php 
  $users = App\User::where('role','=','user')->orderBy('id', 'ASC')->paginate(20);
 ?>
-	<table class="table table-hover" style="overflow:hidden;">
-		
-		</table>
-			<div class="pull-right">
-                <?php echo $users->setPath(url('/user'))->render();?>&nbsp;
-            </div>
-            <div class="col-xs-12">
-        <div class="row">
-                {!! Datatable::table()
+	            {!! Datatable::table()
                     ->addColumn(Lang::get('lang.name'),
                     			Lang::get('lang.email'),
                     			Lang::get('lang.phone'),
@@ -78,20 +70,8 @@ class="active"
                     ->setUrl(route('user.list'))  // this is the route where data will be retrieved
                     ->render() !!}
             
-            </div>
-        </div>
-	</div>
+    </div>
 </div>
 
-
-@section('FooterInclude')
-
 @stop
-@stop
-<!-- /content -->
-@stop
-@section('FooterInclude')
-
-@stop
-
 <!-- /content -->

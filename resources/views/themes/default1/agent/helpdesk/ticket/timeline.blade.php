@@ -209,7 +209,6 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
     </div>
 </div>
 {{-- Event fire --}}
-<?php Event::fire(new App\Events\TimeLineFormEvent($TicketData)); ?>
 <div class='row'>
     <div class='col-xs-12'>
         <div class="nav-tabs-custom">
@@ -277,6 +276,7 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                                 </div>
                             </div>
                         </div>
+                        <?php Event::fire(new App\Events\TimeLineFormEvent($TicketData)); ?>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-2">

@@ -1,6 +1,6 @@
 <?php
 
-"%smtplink%";
+\App\Http\Controllers\Common\SettingsController::smtp();
 
 /*
 |--------------------------------------------------------------------------
@@ -121,7 +121,9 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
 	Route::get('checkUpdate',['as'=>'checkupdate','uses'=>'Common\SettingsController@getupdate']);	/* get Check update */	
 
-	  Route::get('plugins',['as'=>'plugins','uses'=>'Common\SettingsController@Plugins']);
+	Route::get('admin', array('as'=>'setting', 'uses'=>'Admin\helpdesk\SettingsController@settings'));
+
+	    Route::get('plugins',['as'=>'plugins','uses'=>'Common\SettingsController@Plugins']);
         
         Route::get('getplugin', array('as'=>'get.plugin', 'uses'=>'Common\SettingsController@GetPlugin'));
         
@@ -132,6 +134,27 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
         Route::get('plugin/delete/{slug}', array('as'=>'delete.plugin', 'uses'=>'Common\SettingsController@DeletePlugin'));
         
         Route::get('plugin/status/{slug}', array('as'=>'status.plugin', 'uses'=>'Common\SettingsController@StatusPlugin'));
+
+
+
+
+	   	//Routes for showing language table and switching language
+		Route::get('languages',['as'=>'LanguageController','uses'=>'Admin\helpdesk\LanguageController@index']);
+		
+		Route::get('get-languages', array('as'=>'getAllLanguages', 'uses'=>'Admin\helpdesk\LanguageController@getLanguages'));
+		
+		Route::get('change-language/{lang}', ['as'=>'lang.switch', 'uses'=>'Admin\helpdesk\LanguageController@switchLanguage']);
+
+		//Route for download language template package
+		Route::get('/download-template', array('as' => 'download', 'uses' => 'Admin\helpdesk\LanguageController@download'));
+
+		//Routes for language file upload form-----------You may want to use csrf protection for these route--------------
+		Route::post('language/add', 'Admin\helpdesk\LanguageController@postForm');
+		Route::get('language/add',array('as'=>'add-language','uses'=>'Admin\helpdesk\LanguageController@getForm'));
+
+		//Routes for  delete language package
+ 		Route::get('delete-language/{lang}', ['as'=>'lang.delete', 'uses'=>'Admin\helpdesk\LanguageController@deleteLanguage']);
+
 });
 
 /*
@@ -447,7 +470,7 @@ $router->get('category/delete/{id}', 'Agent\kb\CategoryController@destroy');
 $router->resource('article', 'Agent\kb\ArticleController');
 $router->get('article/delete/{id}', 'Agent\kb\ArticleController@destroy');
 /* get settings */
-$router->get('settings', ['as'=>'settings' , 'uses'=> 'Agent\kb\SettingsController@settings']);
+$router->get('kb/settings', ['as'=>'settings' , 'uses'=> 'Agent\kb\SettingsController@settings']);
 /* post settings */
 $router->patch('postsettings/{id}', 'Agent\kb\SettingsController@postSettings');
 /* get the create faq page */

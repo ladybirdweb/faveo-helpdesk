@@ -48,6 +48,14 @@ class SettingsController extends Controller {
 	}
 
 	/**
+	 * Main Settings Page
+	 * @return type view
+	 */
+    public function settings() {
+		return view('themes.default1.admin.helpdesk.setting');
+	}
+
+	/**
 	 * @param int $id
 	 * @return Response
 	 * @param $compant instance of company table

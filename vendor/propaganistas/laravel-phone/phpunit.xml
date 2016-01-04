@@ -12,7 +12,7 @@
 >
     <testsuites>
         <testsuite name="Package Test Suite">
-            <directory suffix=".php">./tests/</directory>
+            <file>./tests/Laravel5.php</file>
         </testsuite>
     </testsuites>
     <filter>

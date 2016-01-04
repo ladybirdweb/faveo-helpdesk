@@ -5,6 +5,8 @@
  */
 
 return array (
-  2455 => 'Orange',
-  2456 => 'Areeba',
+  245955 => 'Orange',
+  245966 => 'Spacetel',
+  245969 => 'Spacetel',
+  245977 => 'Guinetel',
 );
