@@ -18,66 +18,6 @@ active
 
 @section('content')
 
-    <style type="text/css">
-        td input {
-            padding: 3px;
-            margin-left: 250px;
-            width: 280px;
-        }
-        td select {
-            width: 290px;
-            margin-left: 250px;
-            font-size: 17px;
-        }
-   
-        
-        #sectool {
-            min-width: 200px;
-            padding: 5px;
-            line-height: 20px;
-            min-height: 18px;
-            background-color: #3AA7D9;
-            float: right;
-            border-radius: 5px;
-            box-shadow: 5px 6px #88C8E5;
-            margin-right: -10px;
-
-      
-            z-indexndex: 666;
-        }
-        #sectool p{
-            text-align: justify;
-            text-align-last: center;
-            font-size: 14px;
-            color: aliceblue;
-            width: 200px;
-            word-wrap: break-word;
-            font-style: italic;
-            font-weight: 600;
-            font-variant: normal;
-
-        }
-
-        blockquote  {
-            padding:10px 20px;
-        }
-
-        blockquote  {
-            border:1px solid #FF3048;
-            page-break-inside:avoid;
-        }
-
-        blockquote{
-            padding:10px 20px;
-            margin:0 0 20px;
-            font-size:12.5px;
-            border-left: 5px solid #DD0019;
-            background-color: #FFE8EB;
-            border-radius: 2px;
-        }
-
-    </style>
-
         {!! Form::open(['url'=>route('postaccount')]) !!}
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         @if($errors->first('firstname')||$errors->first('Lastname')||$errors->first('email')||$errors->first('username')||$errors->first('password')||$errors->first('confirmpassword'))
@@ -106,32 +46,26 @@ active
                 <h1>Personal Information</h1>
                 <tr>
                     <td>
-                        {{-- <label for="box1">Name</label> --}}    
                         {!! Form::label('firstname',Lang::get('lang.first_name')) !!}
                     </td>
                     <td> 
-                        {{-- <input type="text" name="firstname" required> --}}
-                        {!! Form::text('firstname',null,['class' => 'form-control']) !!}
+                        {!! Form::text('firstname',null,['style' =>'margin-left:250px']) !!}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         {!! Form::label('Last Name',Lang::get('lang.last_name')) !!}
-                        {{-- <label for="box2">Last Name</label> --}}
                     </td>
                     <td>
-                        {{-- <input type="text" name="Lastname" > --}}
-                        {!! Form::text('Lastname',null,['class' => 'form-control']) !!}
+                        {!! Form::text('Lastname',null,['style' =>'margin-left:250px']) !!}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         {!! Form::label('email',Lang::get('lang.email')) !!}
-                        {{-- <label for="box3">Email</label> --}}
                     </td>
                     <td>
-                        {{-- <input type="text" name="email" > --}}
-                        {!! Form::text('email',null,['class' => 'form-control']) !!}
+                        {!! Form::text('email',null,['style' =>'margin-left:250px']) !!}
                     </td>
                 </tr>
             </table>
@@ -141,21 +75,19 @@ active
                 <tr>
                     <td>
                         {!! Form::label('user_name',Lang::get('lang.user_name')) !!}
-                        {{-- <label>User Name</label> --}}
                     </td>
                     <td>
-                        {{-- <input type="text" style="margin-left: 200px" name="email" > --}}
-                        {!! Form::text('username',null,['class' => 'form-control', 'style' => 'margin-left: 200px']) !!}
+                        {!! Form::text('username',null,['style' =>'margin-left:200px']) !!}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         {!! Form::label('Password',Lang::get('lang.password')) !!}
-                        {{-- <label>Password</label> --}}
                     </td>
                     <td>
-                        {{-- <input type="password" style="margin-left: 200px" name="username" > --}}
-                        {!! Form::text('password','ssssss',['class' => 'form-control' , 'style' => 'margin-left: 200px']) !!}
+                        <div style="margin-left:50px;">
+                            {!! Form::password('password',null,[]) !!}
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -163,7 +95,9 @@ active
                         {!! Form::label('confirmpassword',Lang::get('lang.confirm_password')) !!}
                     </td>
                     <td>
-                        {!! Form::text('confirmpassword','ssssss',['class' => 'form-control' , 'style' => 'margin-left: 200px']) !!}
+                        <div style="margin-left:50px;">
+                            {!! Form::password('confirmpassword',null,[]) !!}
+                        </div>
                     </td>
                 </tr>            
             </table>

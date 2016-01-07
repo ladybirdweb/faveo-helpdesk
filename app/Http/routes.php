@@ -1,6 +1,6 @@
 <?php
 
-\App\Http\Controllers\Common\SettingsController::smtp();
+"%smtplink%";
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +22,23 @@ $router->get('getmail/{token}', 'Auth\AuthController@getMail');
 
 /*
 |-------------------------------------------------------------------------------
-|Admin Routes
+| API Routes
+|-------------------------------------------------------------------------------
+| These routes are the API calls.
+|
+ */
+Route::group(['prefix' => 'api'], function () {
+
+	Route::get('/database-config',['as'=>'database-config','uses'=>'API\helpdesk\InstallerApiController@config_database']);
+	Route::get('/system-config',['as'=>'database-config','uses'=>'API\helpdesk\InstallerApiController@config_system']);
+	
+});
+
+
+
+/*
+|-------------------------------------------------------------------------------
+| Admin Routes
 |-------------------------------------------------------------------------------
 | Here is defining entire routes for the Admin Panel
 |
@@ -401,7 +417,7 @@ Route::group(['middleware' => 'role.user', 'middleware' => 'auth'], function () 
 	Route::post('/step6post', ['as' => 'postaccount', 'uses' => 'Installer\helpdesk\InstallController@accountcheck']);
 	Route::get('/final', ['as' => 'final','uses' => 'Installer\helpdesk\InstallController@finalize']);
 	Route::post('/finalpost', ['as' => 'postfinal','uses' => 'Installer\helpdesk\InstallController@finalcheck']);
-	Route::patch('/postconnection', ['as' => 'postconnection','uses' => 'Installer\helpdesk\InstallController@postconnection']);
+	Route::post('/postconnection', ['as' => 'postconnection','uses' => 'Installer\helpdesk\InstallController@postconnection']);
 
 /*
  |============================================================= 

@@ -33,15 +33,14 @@ use View;
  */
 class InstallController extends Controller {
 
-	    /**
-	     * Get Licence (step 1)
-	     * @return type view
-	     */
+    /**
+     * Get Licence (step 1)
+     * @return type view
+     */
 	public function licence() {
 			if (Session::get('step5') == 'step5') {
 				return Redirect::route('account');
 			}
-
 			if (Config::get('database.install') == '%0%') {
 				return view('themes/default1/installer/helpdesk/view1');
 			} else {
@@ -50,10 +49,10 @@ class InstallController extends Controller {
 			}
 	}
 
-	    /**
-	     * Post Licencecheck
-	     * @return type view
-	     */
+    /**
+     * Post Licencecheck
+     * @return type view
+     */
 	public function licencecheck() {
 		$accept = (Input::has('accept1')) ? true : false;
 		if ($accept == 'accept') {
@@ -65,13 +64,13 @@ class InstallController extends Controller {
 		// return 1;
 	}
 
-	    /**
-	     * Get prerequisites (step 2)
-	     * 
-	     * Checking the extensions enabled required for installing the faveo
-	     * without which the project cannot be executed properly
-	     * @return type view
-	     */
+    /**
+     * Get prerequisites (step 2)
+     * 
+     * Checking the extensions enabled required for installing the faveo
+     * without which the project cannot be executed properly
+     * @return type view
+     */
 	public function prerequisites() {
 			if (Session::get('step5') == 'step5') {
 				return Redirect::route('account');
@@ -87,21 +86,21 @@ class InstallController extends Controller {
 			}
 	}
 
-	    /**
-	     * Post Prerequisitescheck
-	     * checking prerequisites
-	     * @return type view
-	     */
+    /**
+     * Post Prerequisitescheck
+     * checking prerequisites
+     * @return type view
+     */
 	public function prerequisitescheck() {
 		Session::put('step2', 'step2');
 		return Redirect::route('configuration');
 	}
 
-	    /**
-	     * Get Localization (step 3)
-	     * Requesting user recomended settings for installation
-	     * @return type view
-	     */
+	/**
+	 * Get Localization (step 3)
+	 * Requesting user recomended settings for installation
+	 * @return type view
+	 */
 	public function localization() {
 			if (Session::get('step5') == 'step5') {
 				return Redirect::route('account');
@@ -117,11 +116,11 @@ class InstallController extends Controller {
 			}
 	}
 
-	    /**
-	     * Post localizationcheck
-	     * checking prerequisites
-	     * @return type view
-	     */
+	/**
+	 * Post localizationcheck
+	 * checking prerequisites
+	 * @return type view
+	 */
 	public function localizationcheck() {
 
 		Session::put('step3', 'step3');
@@ -134,11 +133,11 @@ class InstallController extends Controller {
 		return Redirect::route('configuration');
 	}
 
-	    /**
-	     * Get Configuration (step 4)
-	     * checking prerequisites
-	     * @return type view
-	     */
+    /**
+     * Get Configuration (step 4)
+     * checking prerequisites
+     * @return type view
+     */
 	public function configuration() {
 			if (Session::get('step5') == 'step5') {
 				return Redirect::route('account');
@@ -154,11 +153,11 @@ class InstallController extends Controller {
 			}
 	}
 
-	    /**
-	     * Post configurationcheck
-	     * checking prerequisites
-	     * @return type view
-	     */
+    /**
+     * Post configurationcheck
+     * checking prerequisites
+     * @return type view
+     */
 	public function configurationcheck() {
 
 		Session::put('step4', 'step4');
@@ -186,145 +185,71 @@ class InstallController extends Controller {
 		$dbpassword = Input::get('password');
 		$port = Input::get('port');
 
-		// set default value
-		$path0 = app_path('../config/database.php');
-		$content0 = File::get($path0);
-		$content0 = str_replace('%default%', $default, $content0);
-		File::put($path0, $content0);
-		// set host,databasename,username,password
-		if ($default == 'mysql') {
-			$path = app_path('../config/database.php');
-			$content = File::get($path);
-			$content = str_replace('%host%', $host, $content);
-			File::put($path, $content);
+			// Setting environment values
+ 			$_ENV['DB_TYPE'] 		= 	$default;
+        	$_ENV['DB_HOST'] 		= 	$host;
+        	$_ENV['DB_PORT'] 		= 	$port;
+        	$_ENV['DB_DATABASE'] 	= 	$database;
+        	$_ENV['DB_USERNAME'] 	= 	$dbusername;
+        	$_ENV['DB_PASSWORD'] 	= 	$dbpassword;
 
-			$path1 = app_path('../config/database.php');
-			$content1 = File::get($path1);
-			$content1 = str_replace('%database%', $database, $content1);
-			File::put($path1, $content1);
+        	$config = '';
+       		foreach ($_ENV as $key => $val) {
+          		$config .= "{$key}={$val}\n";
+        	}
+        	// Write environment file
+        	$fp = fopen(base_path()."/.env", 'w');
+        	fwrite($fp, $config);
+        	fclose($fp);
 
-			$path2 = app_path('../config/database.php');
-			$content2 = File::get($path2);
-			$content2 = str_replace('%username%', $dbusername, $content2);
-			File::put($path2, $content2);
-
-			$path3 = app_path('../config/database.php');
-			$content3 = File::get($path3);
-			$content3 = str_replace('%password%', $dbpassword, $content3);
-			File::put($path3, $content3);
-
-			$path4 = app_path('../config/database.php');
-			$content4 = File::get($path4);
-			$content4 = str_replace('%port%', $port, $content4);
-			File::put($path4, $content4);
-
-		} elseif ($default == 'pgsql') {
-			$path = app_path('../config/database.php');
-			$content = File::get($path);
-			$content = str_replace('%host1%', $host, $content);
-			File::put($path, $content);
-
-			$path1 = app_path('../config/database.php');
-			$content1 = File::get($path1);
-			$content1 = str_replace('%database1%', $database, $content1);
-			File::put($path1, $content1);
-
-			$path2 = app_path('../config/database.php');
-			$content2 = File::get($path2);
-			$content2 = str_replace('%username1%', $username, $content2);
-			File::put($path2, $content2);
-
-			$path3 = app_path('../config/database.php');
-			$content3 = File::get($path3);
-			$content3 = str_replace('%password1%', $password, $content3);
-			File::put($path3, $content3);
-
-			$path4 = app_path('../config/database.php');
-			$content4 = File::get($path4);
-			$content4 = str_replace('%port1%', $port, $content4);
-			File::put($path4, $content4);
-
-		} elseif ($default == 'sqlsrv') {
-			$path = app_path('../config/database.php');
-			$content = File::get($path);
-			$content = str_replace('%host2%', $host, $content);
-			File::put($path, $content);
-
-			$path1 = app_path('../config/database.php');
-			$content1 = File::get($path1);
-			$content1 = str_replace('%database2%', $database, $content1);
-			File::put($path1, $content1);
-
-			$path2 = app_path('../config/database.php');
-			$content2 = File::get($path2);
-			$content2 = str_replace('%username2%', $username, $content2);
-			File::put($path2, $content2);
-
-			$path3 = app_path('../config/database.php');
-			$content3 = File::get($path3);
-			$content3 = str_replace('%password2%', $password, $content3);
-			File::put($path3, $content3);
-
-			$path4 = app_path('../config/database.php');
-			$content4 = File::get($path4);
-			$content4 = str_replace('%port2%', $port, $content4);
-			File::put($path4, $content4);
-		}
 		return 1;
 	}
 
-	    /**
-	     * Get database
-	     * checking prerequisites
-	     * @return type view
-	     */
+    /**
+     * Get database
+     * checking prerequisites
+     * @return type view
+     */
 	public function database() {
-			if (Config::get('database.install') == '%0%') {
-				if (Session::get('step4') == 'step4') {
-					return View::make('themes/default1/installer/helpdesk/view4');
-				} else {
-					return Redirect::route('configuration');
-				}
+		if (Config::get('database.install') == '%0%') {
+			if (Session::get('step4') == 'step4') {
+				return View::make('themes/default1/installer/helpdesk/view4');
 			} else {
-				return redirect('/auth/login');
+				return Redirect::route('configuration');
 			}
+		} else {
+			return redirect('/auth/login');
+		}
 	}
 
-	    /**
-	     * Get account
-	     * checking prerequisites
-	     * @return type view
-	     */
+    /**
+     * Get account
+     * checking prerequisites
+     * @return type view
+     */
 	public function account() {
-			if (Config::get('database.install') == '%0%') {
-				if (Session::get('step4') == 'step4') {
-					Session::put('step5', 'step5');
-					Session::forget('step1');
-					Session::forget('step2');
-					Session::forget('step3');
-					return View::make('themes/default1/installer/helpdesk/view5');
-				} else {
-					return Redirect::route('configuration');
-				}
+		if (Config::get('database.install') == '%0%') {
+			if (Session::get('step4') == 'step4') {
+				Session::put('step5', 'step5');
+				Session::forget('step1');
+				Session::forget('step2');
+				Session::forget('step3');
+				return View::make('themes/default1/installer/helpdesk/view5');
 			} else {
-				return redirect('/auth/login');
+				return Redirect::route('configuration');
 			}
+		} else {
+			return redirect('/auth/login');
+		}
 	}
 
-	    /**
-	     * Post accountcheck
-	     * checking prerequisites
-	     * @param type InstallerRequest $request 
-	     * @return type view
-	     */
+    /**
+     * Post accountcheck
+     * checking prerequisites
+     * @param type InstallerRequest $request 
+     * @return type view
+     */
 	public function accountcheck(InstallerRequest $request) {
-		// dd($request);
-		// config/database.php management
-		$default = $request->input('default');
-		$host = $request->input('host');
-		$database = $request->input('databasename');
-		$dbusername = $request->input('dbusername');
-		$dbpassword = $request->input('dbpassword');
 
 		// migrate database
 		Artisan::call('migrate', array('--force' => true));
@@ -346,7 +271,6 @@ class InstallController extends Controller {
 		$system->time_zone = $timezone;
 		$system->date_time_format = $datetime;
 		$system->save();
-
 
 		$form1 = new Form_details;
 		$form1->label = 'Name';
@@ -396,17 +320,13 @@ class InstallController extends Controller {
 		}
 	}
 
-	    /**
-	     * Get finalize
-	     * checking prerequisites
-	     * @return type view
-	     */
+    /**
+     * Get finalize
+     * checking prerequisites
+     * @return type view
+     */
 	public function finalize() {
 			if (Session::get('step6') == 'step6') {
-				// $var = "http://" . $_SERVER['HTTP_HOST'] . "/epeper-pdf";
-				// $siteurl = Option::where('option_name', '=', 'siteurl')->first();
-				// $siteurl->option_value = $var;
-				// $siteurl->save();
 				$value = '1';
 				$install = app_path('../config/database.php');
 				$datacontent = File::get($install);
@@ -429,18 +349,16 @@ class InstallController extends Controller {
 			}
 	}
 
-	    /**
-	     * Post finalcheck
-	     * checking prerequisites
-	     * @return type view
-	     */
+	/**
+     * Post finalcheck
+     * checking prerequisites
+     * @return type view
+     */
 	public function finalcheck() {
-		try
-		{
+		try {
 			return redirect('/auth/login');
 		} catch (Exception $e) {
 			return redirect('/auth/login');
 		}
 	}
-
 }

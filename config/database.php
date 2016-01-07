@@ -25,7 +25,7 @@ return [
 	|
 	 */
 
-	'default' => '%default%',
+	'default' => env('DB_TYPE', 'mysql'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -53,36 +53,37 @@ return [
 
 		'mysql' => [
 			'driver' => 'mysql',
-			'host' => '%host%',
-			'database' => '%database%',
-			'username' => '%username%',
-			'password' => '%password%',
+			'host' => env('DB_HOST', 'localhost'),
+			'database' => env('DB_DATABASE', 'forge'),
+			'username' => env('DB_USERNAME', 'forge'),
+			'password' => env('DB_PASSWORD', ''),
 			'charset' => 'utf8',
 			'collation' => 'utf8_unicode_ci',
-			'port'	=>	'%port%',
+			'port'	=>	env('DB_PORT', ''),
 			'prefix' => '',
 			'strict' => false,
 		],
 
 		'pgsql' => [
 			'driver' => 'pgsql',
-			'host' => 'localhost',
-			'database' => 'fav',
-			'username' => '%username1%',
-			'password' => '%password1%',
-			'port'	=>	'%port1%',
+			'host' => env('DB_HOST', 'localhost'),
+			'database' => env('DB_DATABASE', 'forge'),
+			'username' => env('DB_USERNAME', 'forge'),
+			'password' => env('DB_PASSWORD', ''),
+			'port'	=>	env('DB_PORT', ''),
 			'charset' => 'utf8',
 			'prefix' => '',
 			'schema' => 'public',
 		],
 
 		'sqlsrv' => [
+
 			'driver' => 'sqlsrv',
-			'host' => '%host2%',
-			'database' => '%database2%',
-			'username' => '%username2%',
-			'password' => '%password2%',
-			'port'	=>	'%port2%',
+			'host' => env('DB_HOST', 'localhost'),
+			'database' => env('DB_DATABASE', 'forge'),
+			'username' => env('DB_USERNAME', 'forge'),
+			'password' => env('DB_PASSWORD', ''),
+			'port'	=>	env('DB_PORT', ''),
 			'prefix' => '',
 		],
 

@@ -300,7 +300,6 @@ class TicketController extends Controller {
 	 * @param type TicketRequest $request
 	 * @return type bool
 	 */
-
 	public function reply(Ticket_Thread $thread, TicketRequest $request, Ticket_attachments $ta ) {
 	  	$attachments = $request->file('attachment');
 	  	$check_attachment = null;
@@ -634,13 +633,16 @@ class TicketController extends Controller {
 			if(Alert::first()->ticket_status == 1 || Alert::first()->ticket_department_member == 1) {
 				// send email to agents
 				$agents = User::where('role','=','agent')->get();
+				// dd($agents);
 				foreach($agents as $agent)
 				{
-					if($ticketdata->dept_id == $agent->primary_dpt)
+					$department_data = Department::where('id','=',$ticketdata->dept_id)->first();
+					
+					if($department_data->name == $agent->primary_dpt)
 					{
 						$agent_email = $agent->email;
 						$agent_user = $agent->first_name;
-						Mail::send('emails.'.$mail, ['agent' => $agent_user, 'ticket_number' => $ticket_number2, 'from'=>$company, 'email' => $emailadd, 'name' => $ticket_creator, 'system' => $system], function ($message) use ($agent_email, $agent_user, $ticket_number2, $updated_subject) {
+						Mail::send('emails.'.$mail, ['agent' => $agent_user ,'content'=>$body , 'ticket_number' => $ticket_number2, 'from'=>$company, 'email' => $emailadd, 'name' => $ticket_creator, 'system' => $system], function ($message) use ($agent_email, $agent_user, $ticket_number2, $updated_subject) {
 							$message->to($agent_email, $agent_user)->subject($updated_subject);
 						});
 					}
@@ -712,12 +714,9 @@ class TicketController extends Controller {
 
 					$user_name = User::where('id','=', $user_id)->first();
 
-					if($user_name->role == 'user' )
-					{
+					if($user_name->role == 'user' ) {
 						$username = $user_name->user_name;
-					}
-					elseif($user_name->role == 'agent' or $user_name->role == 'admin')
-					{
+					} elseif($user_name->role == 'agent' or $user_name->role == 'admin') {
 						$username = $user_name->first_name . " " . $user_name->last_name;	
 					}
 
@@ -756,12 +755,9 @@ class TicketController extends Controller {
 	 */
 	public function create_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data) {
 		$max_number = Tickets::whereRaw('id = (select max(`id`) from tickets)')->first();
-			if($max_number == null)
-			{
+			if($max_number == null) {
 				$ticket_number = "AAAA-9999-9999999";		
-			}
-			else
-			{
+			} else {
 				foreach ($max_number as $number) {
 					$ticket_number = $max_number->ticket_number;
 				}
@@ -798,11 +794,9 @@ class TicketController extends Controller {
 				}
 			}
 		}
-		
-
 		// store collaborators
+		// dd($headers);
 		$this->store_collaborators($headers, $id);
-
 		if ($this->ticket_thread($subject, $body, $id, $user_id) == true) {
 			return $ticket_number;
 		}

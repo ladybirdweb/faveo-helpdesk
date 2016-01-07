@@ -128,7 +128,7 @@ if (DB_HOST && DB_USER && DB_NAME) {
 
 <span id="wait">Please wait this may take a while......</span>
 
-{!! Form::open( ['id'=>'form','method' => 'PATCH'] )!!}
+{!! Form::open( ['id'=>'form','method' => 'POST'] )!!}
 {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
     <!-- <b>default</b><br> -->
     <input type="hidden" name="default" value="{!! $default !!}"/>

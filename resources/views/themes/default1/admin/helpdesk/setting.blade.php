@@ -98,8 +98,7 @@
                                             <div class="settingiconblue">
                                                 <div class="settingdivblue">
                                                     <a href="{{ url('emails') }}"><span class="fa-stack fa-2x">
-                                                        
-                                                        <i class="fa fa-at fa-stack-1x"></i>
+                                                    <i class="fa fa-envelope-o fa-stack-1x"></i>
                                                     </span></a>
                                                 </div>
                                                 <center class="box-title" >{!! Lang::get('lang.incoming_emails') !!}</center>
@@ -111,8 +110,7 @@
                                             <div class="settingiconblue">
                                                 <div class="settingdivblue">
                                                     <a href="{{ url('getsmtp') }}"><span class="fa-stack fa-2x">
-                                                        
-                                                        <i class="fa fa-envelope-o fa-stack-1x"></i>
+                                                        <i class="fa fa-at fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
                                                 <center class="box-title" >{!! Lang::get('lang.outgoing_emails') !!}</center>

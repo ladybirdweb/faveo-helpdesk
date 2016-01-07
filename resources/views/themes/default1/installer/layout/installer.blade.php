@@ -57,6 +57,25 @@
                  font-weight: 600;
                  font-variant: normal;
             }
+
+            blockquote  {
+                padding:10px 20px;
+            }
+
+            blockquote  {
+                border:1px solid #FF3048;
+                page-break-inside:avoid;
+            }
+
+            blockquote{
+                padding:10px 20px;
+                margin:0 0 20px;
+                font-size:12.5px;
+                border-left: 5px solid #DD0019;
+                background-color: #FFE8EB;
+                border-radius: 2px;
+            }
+
             
         </style>
     </head>
