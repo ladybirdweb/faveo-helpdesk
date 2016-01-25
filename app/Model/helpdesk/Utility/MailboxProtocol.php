@@ -8,6 +8,6 @@ class MailboxProtocol extends Model {
 
 	protected $table = 'mailbox_protocol';
 
-	protected $fillable = ['id', 'name'];
+	protected $fillable = ['id', 'name', 'value'];
 
 }

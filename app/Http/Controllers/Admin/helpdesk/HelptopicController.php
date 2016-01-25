@@ -11,7 +11,11 @@ use App\Model\helpdesk\Form\Forms;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
+use App\Model\helpdesk\Settings\Ticket;
 use App\User;
+// classes
+use DB;
+use Exception;
 
 /**
  * HelptopicController
@@ -88,27 +92,13 @@ class HelptopicController extends Controller {
 	public function store(Help_topic $topic, HelptopicRequest $request) {
 		try {
 			/* Check whether function success or not */
-			if ($topic->fill($request->input())->save() == true) {
-				/* redirect to Index page with Success Message */
-				return redirect('helptopic')->with('success', 'Helptopic Created Successfully');
-			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect('helptopic')->with('fails', 'Helptopic can not Create');
-			}
+			$topic->fill($request->input())->save();
+			/* redirect to Index page with Success Message */
+			return redirect('helptopic')->with('success', 'Helptopic Created Successfully');
 		} catch (Exception $e) {
 			/* redirect to Index page with Fails Message */
-			return redirect('helptopic')->with('fails', 'Helptopic can not Create');
+			return redirect('helptopic')->with('fails', 'Helptopic can not Create'.'<li>'.$e->errorInfo[2].'</li>');
 		}
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id) {
-		//
 	}
 
 	/**
@@ -132,7 +122,7 @@ class HelptopicController extends Controller {
 			$priority = $priority->get();
 			return view('themes.default1.admin.helpdesk.manage.helptopic.edit', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas'));
 		} catch (Exception $e) {
-			return view('404');
+			return redirect('helptopic')->with('fails', '<li>'.$e->errorInfo[2].'</li>');
 		}
 	}
 
@@ -144,19 +134,29 @@ class HelptopicController extends Controller {
 	 * @return type Response
 	 */
 	public function update($id, Help_topic $topic, HelptopicUpdate $request) {
+		// dd($request);
 		try {
 			$topics = $topic->whereId($id)->first();
+			if($request->custom_form){
+				$custom_form = $request->custom_form;
+			} else {
+				$custom_form = null;
+			}
+			if($request->auto_assign){
+				$auto_assign = $request->auto_assign;
+			} else {
+				$auto_assign = null;
+			}
 			/* Check whether function success or not */
-			if ($topics->fill($request->input())->save() == true) {
+			$topics->fill($request->except('custom_form','auto_assign'))->save();
+			$topics->custom_form = $custom_form;
+			$topics->auto_assign = $auto_assign;
+			$topics->save();
 				/* redirect to Index page with Success Message */
 				return redirect('helptopic')->with('success', 'Helptopic Updated Successfully');
-			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect('helptopic')->with('fails', 'Helptopic can not Updated');
-			}
 		} catch (Exception $e) {
 			/* redirect to Index page with Fails Message */
-			return redirect('helptopic')->with('fails', 'Helptopic can not Create');
+			return redirect('helptopic')->with('fails', 'Helptopic can not Update'.'<li>'.$e->errorInfo[2].'</li>');
 		}
 	}
 
@@ -166,20 +166,50 @@ class HelptopicController extends Controller {
 	 * @param type Help_topic $topic
 	 * @return type Response
 	 */
-	public function destroy($id, Help_topic $topic) {
-		try {
-			$topics = $topic->whereId($id)->first();
-			/* Check whether function success or not */
-			if ($topics->delete() == true) {
-				/* redirect to Index page with Success Message */
-				return redirect('helptopic')->with('success', 'Helptopic Deleted Successfully');
+	public function destroy($id, Help_topic $topic, Ticket $ticket_setting) {
+			$ticket_settings = $ticket_setting->where('id','=','1')->first();
+			if($ticket_settings->help_topic == $id) {
+				return redirect('departments')->with('fails', 'You cannot delete default department');
 			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect('helptopic')->with('fails', 'Helptopic can not Delete');
+
+				$tickets = DB::table('tickets')->where('help_topic_id','=',$id)->update(['help_topic_id' => $ticket_settings->help_topic]);
+
+				if($tickets > 0){
+					if($tickets > 1){
+						$text_tickets = "Tickets";
+					} else {
+						$text_tickets = "Ticket";
+					}
+					$ticket = '<li>'.$tickets.' '.$text_tickets.' have been moved to default Help Topic</li>';
+				} else {
+					$ticket = "";
+				}
+
+				$emails = DB::table('emails')->where('help_topic','=',$id)->update(['help_topic' => $ticket_settings->help_topic]);
+
+				if($emails > 0){
+					if($emails > 1){
+						$text_emails = "Emails";
+					} else {
+						$text_emails = "Email";
+					}
+					$email = '<li>'.$emails.' System '.$text_emails.' have been moved to default Help Topic</li>';
+				} else {
+					$email = "";
+				}	
+
+				$message = $ticket.$email;
+
+				$topics = $topic->whereId($id)->first();
+				/* Check whether function success or not */
+				try{
+					$topics->delete();
+					/* redirect to Index page with Success Message */
+					return redirect('helptopic')->with('success', 'Helptopic Deleted Successfully'.$message);
+				} catch (Exception $e) {
+					/* redirect to Index page with Fails Message */
+					return redirect('helptopic')->with('fails', 'Helptopic can not Delete'.'<li>'.$e->errorInfo[2].'</li>');
+				}
 			}
-		} catch (Exception $e) {
-			/* redirect to Index page with Fails Message */
-			return redirect('helptopic')->with('fails', 'Helptopic can not Create');
-		}
 	}
 }

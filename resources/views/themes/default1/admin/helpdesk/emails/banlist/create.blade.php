@@ -62,14 +62,14 @@ class="active"
 		 <div class="box-body table-responsive"style="overflow:hidden;">
              <div class="row">
                <div class="col-md-6">
-		       <div class="form-group {{ $errors->has('ban_status') ? 'has-error' : '' }}">
-			{!! Form::label('ban_status',Lang::get('lang.ban_status')) !!}
+		       <div class="form-group {{ $errors->has('ban') ? 'has-error' : '' }}">
+			{!! Form::label('ban',Lang::get('lang.ban_status')) !!}
 			<div class="row">
 				<div class="col-xs-3">
-					{!! Form::radio('ban_status',1) !!}{{Lang::get('lang.active')}}
+					{!! Form::radio('ban',1) !!}{{Lang::get('lang.active')}}
 				</div>
 				<div class="col-xs-3">
-					{!! Form::radio('ban_status',0) !!}{{Lang::get('lang.disabled')}}
+					{!! Form::radio('ban',0) !!}{{Lang::get('lang.disabled')}}
 				</div>
 			</div>
 		</div>

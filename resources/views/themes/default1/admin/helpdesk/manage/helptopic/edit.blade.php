@@ -127,7 +127,7 @@ class="active"
 
 			{!! Form::label('auto_assign',Lang::get('lang.auto_assign')) !!}
 			{!! $errors->first('auto_assign', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('auto_assign', [''=>'Select an Agent','Agents'=>$agents->lists('user_name','user_name')],null,['class' => 'form-control']) !!}
+			{!!Form::select('auto_assign', [''=>'Select an Agent','Agents'=>$agents->lists('user_name','id')],null,['class' => 'form-control']) !!}
 			</div>
 		</div>
 		</div>

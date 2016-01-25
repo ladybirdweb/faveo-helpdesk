@@ -1,12 +1,16 @@
 <?php namespace App\Http\Controllers\Installer\helpdesk;
+
 // controllers
 use App\Http\Controllers\Controller;
+
 // requests
 use App\Http\Requests\helpdesk\InstallerRequest;
+
 // models
 use App\User;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Form\Form_details;
+
 // classes
 use App;
 use Artisan;
@@ -17,6 +21,7 @@ use Input;
 use Redirect;
 use Session;
 use View;
+use Exception;
 
 /**
  * |=======================================================================
@@ -38,9 +43,11 @@ class InstallController extends Controller {
      * @return type view
      */
 	public function licence() {
+			// checking if the installation is running for the first time or not
 			if (Session::get('step5') == 'step5') {
 				return Redirect::route('account');
 			}
+			// checking if the installation is running for the first time or not
 			if (Config::get('database.install') == '%0%') {
 				return view('themes/default1/installer/helpdesk/view1');
 			} else {
@@ -54,6 +61,7 @@ class InstallController extends Controller {
      * @return type view
      */
 	public function licencecheck() {
+		// checking if the user have accepted the licence agreement
 		$accept = (Input::has('accept1')) ? true : false;
 		if ($accept == 'accept') {
 			Session::put('step1', 'step1');
@@ -72,9 +80,11 @@ class InstallController extends Controller {
      * @return type view
      */
 	public function prerequisites() {
+			// checking if the installation is running for the first time or not
 			if (Session::get('step5') == 'step5') {
 				return Redirect::route('account');
 			}
+			// checking if the installation is running for the first time or not
 			if (Config::get('database.install') == '%0%') {
 				if (Session::get('step1') == 'step1') {
 					return View::make('themes/default1/installer/helpdesk/view2');
@@ -102,9 +112,11 @@ class InstallController extends Controller {
 	 * @return type view
 	 */
 	public function localization() {
+			// checking if the installation is running for the first time or not
 			if (Session::get('step5') == 'step5') {
 				return Redirect::route('account');
 			}
+			// checking if the installation is running for the first time or not
 			if (Config::get('database.install') == '%0%') {
 				if (Session::get('step2') == 'step2') {
 					return View::make('themes/default1/installer/helpdesk/view3');
@@ -139,9 +151,11 @@ class InstallController extends Controller {
      * @return type view
      */
 	public function configuration() {
+			// checking if the installation is running for the first time or not
 			if (Session::get('step5') == 'step5') {
 				return Redirect::route('account');
 			}
+			// checking if the installation is running for the first time or not
 			if (Config::get('database.install') == '%0%') {
 				if (Session::get('step2') == 'step2') {
 					return View::make('themes/default1/installer/helpdesk/view3');
@@ -211,6 +225,7 @@ class InstallController extends Controller {
      * @return type view
      */
 	public function database() {
+		// checking if the installation is running for the first time or not
 		if (Config::get('database.install') == '%0%') {
 			if (Session::get('step4') == 'step4') {
 				return View::make('themes/default1/installer/helpdesk/view4');
@@ -228,6 +243,7 @@ class InstallController extends Controller {
      * @return type view
      */
 	public function account() {
+		// checking if the installation is running for the first time or not
 		if (Config::get('database.install') == '%0%') {
 			if (Session::get('step4') == 'step4') {
 				Session::put('step5', 'step5');
@@ -267,53 +283,24 @@ class InstallController extends Controller {
 		$date = $request->input('date');
 		$datetime = $request->input('datetime');
 
-		$system = System::where('id','=','1')->first();
-		$system->time_zone = $timezone;
-		$system->date_time_format = $datetime;
-		$system->save();
+		// $system = System::where('id','=','1')->first();
+		// $system->time_zone = $timezone;
+		// $system->date_time_format = $datetime;
+		// $system->save();
 
-		$form1 = new Form_details;
-		$form1->label = 'Name';
-		$form1->type = 'text';
-		$form1->form_name_id = '1';
-		$form1->save();
-
-		$form2 = new Form_details;
-		$form2->label = 'Phone';
-		$form2->type = 'number';
-		$form2->form_name_id = '1';
-		$form2->save();
-		
-		$form3 = new Form_details;
-		$form3->label = 'Email';
-		$form3->type = 'text';
-		$form3->form_name_id = '1';
-		$form3->save();
-		
-		$form4 = new Form_details;
-		$form4->label = 'Subject';
-		$form4->type = 'text';
-		$form4->form_name_id = '1';
-		$form4->save();
-		
-		$form5 = new Form_details;
-		$form5->label = 'Details';
-		$form5->type = 'textarea';
-		$form5->form_name_id = '1';
-		$form5->save();
-
+		// creating an user
 		$user = User::create(array(
 			'first_name' => $firstname,
 			'last_name' => $lastname,
 			'email' => $email,
 			'user_name' => $username,
 			'password' => Hash::make($password),
+			'assign_group' => 1,
+			'primary_dpt' => 1,
 			'active' => 1,
 			'role' => 'admin',
-			'assign_group' => 'group A',
-			'primary_dpt' => 'support',
 		));
-
+		// checking if the user have been created
 		if ($user) {
 			Session::put('step6', 'step6');
 			return Redirect::route('final');
@@ -326,19 +313,19 @@ class InstallController extends Controller {
      * @return type view
      */
 	public function finalize() {
+			// checking if the installation have been completed or not
 			if (Session::get('step6') == 'step6') {
 				$value = '1';
 				$install = app_path('../config/database.php');
 				$datacontent = File::get($install);
 				$datacontent = str_replace('%0%', $value, $datacontent);
 				File::put($install, $datacontent);
-
+				// setting email settings in route
 				$smtpfilepath = "\App\Http\Controllers\Common\SettingsController::smtp()";
 				$path22 = app_path('Http/routes.php');
 				$content23 = File::get($path22);
 				$content23 = str_replace('"%smtplink%"', $smtpfilepath, $content23);
 				File::put($path22, $content23);
-
 				try {
 					return View::make('themes/default1/installer/helpdesk/view6');
 				} catch (Exception $e) {

@@ -111,22 +111,18 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
 	Route::patch('admin-profile-password', 'Admin\helpdesk\ProfileController@postProfilePassword');/*  Admin Profile Password Post */
 	
-	Route::get('create-footer', 'Common\SettingsController@CreateFooter');/* get the create footer page for admin */	
+	Route::get('widgets', 'Common\SettingsController@widgets');/* get the create footer page for admin */	
+
+	Route::get('list-widget', 'Common\SettingsController@list_widget');/* get the list widget page for admin */
+
+	Route::post('edit-widget/{id}', 'Common\SettingsController@edit_widget');/* get the create footer page for admin */
+
+	Route::get('social-buttons', 'Common\SettingsController@social_buttons');/* get the create footer page for admin */	
+
+	Route::get('list-social-buttons', 'Common\SettingsController@list_social_buttons');/* get the list widget page for admin */
+
+	Route::post('edit-widget/{id}', 'Common\SettingsController@edit_social_buttons');/* get the create footer page for admin */	
 	
-	Route::patch('post-create-footer/{id}', 'Common\SettingsController@PostFooter');/* post footer to insert to database */
-	
-	Route::get('create-footer2', 'Common\SettingsController@CreateFooter2');/* get the create footer page for admin */
-	
-	Route::patch('post-create-footer2/{id}', 'Common\SettingsController@PostFooter2');	/* post footer to insert to database */
-
-	Route::get('create-footer3', 'Common\SettingsController@CreateFooter3');	/* get the create footer page for admin */
-
-	Route::patch('post-create-footer3/{id}', 'Common\SettingsController@PostFooter3');	/* post footer to insert to database */
-
-	Route::get('create-footer4', 'Common\SettingsController@CreateFooter4');	/* get the create footer page for admin */
-
-	Route::patch('post-create-footer4/{id}', 'Common\SettingsController@PostFooter4');	/* post footer to insert to database */
-
 	Route::get('getsmtp',['as'=>'getsmtp','uses'=>'Common\SettingsController@getsmtp']);	/* get the create footer page for admin */
 	
 	Route::patch('post-smtp',['as'=>'post_smtp','uses'=>'Common\SettingsController@postsmtp']);	/* post footer to insert to database */
@@ -150,9 +146,6 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
         Route::get('plugin/delete/{slug}', array('as'=>'delete.plugin', 'uses'=>'Common\SettingsController@DeletePlugin'));
         
         Route::get('plugin/status/{slug}', array('as'=>'status.plugin', 'uses'=>'Common\SettingsController@StatusPlugin'));
-
-
-
 
 	   	//Routes for showing language table and switching language
 		Route::get('languages',['as'=>'LanguageController','uses'=>'Admin\helpdesk\LanguageController@index']);
@@ -183,11 +176,15 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
  */
 Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function () {
 
+	Route::get('agen1', 'Agent\helpdesk\DashboardController@ChartData');
+
+	Route::post('chart-range', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
+
 	Route::resource('user', 'Agent\helpdesk\UserController');	/* User router is used to control the CRUD of user */
 
 	Route::get('user-list', ['as' => 'user.list' , 'uses' => 'Agent\helpdesk\UserController@user_list']);
 
-	Route::get('user/delete/{id}', ['as' => 'user.delete' , 'uses' => 'Agent\helpdesk\UserController@destroy']);
+	// Route::get('user/delete/{id}', ['as' => 'user.delete' , 'uses' => 'Agent\helpdesk\UserController@destroy']);
 
 	Route::resource('organizations', 'Agent\helpdesk\OrganizationController');	/* organization router used to deal CRUD function of organization */
 
@@ -223,17 +220,29 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
 	Route::get('/ticket/inbox', ['as' => 'inbox.ticket', 'uses' => 'Agent\helpdesk\TicketController@inbox_ticket_list']);	/*  Get Inbox Ticket */
 
+	Route::get('/ticket/get-inbox', ['as' => 'get.inbox.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);  /* Get tickets in datatable */
+
 	Route::get('/ticket/open', ['as' => 'open.ticket', 'uses' => 'Agent\helpdesk\TicketController@open_ticket_list']);	/*  Get Open Ticket */
+
+	Route::get('/ticket/get-open', ['as' => 'get.open.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_open']);  /* Get tickets in datatable */
 
 	Route::get('/ticket/answered', ['as' => 'answered.ticket', 'uses' => 'Agent\helpdesk\TicketController@answered_ticket_list']);	/*  Get Answered Ticket */
 
+	Route::get('/ticket/get-answered', ['as' => 'get.answered.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_answered']);  /* Get tickets in datatable */
+
 	Route::get('/ticket/myticket', ['as' => 'myticket.ticket', 'uses' => 'Agent\helpdesk\TicketController@myticket_ticket_list']);	/*  Get Tickets Assigned to logged user */
+
+	Route::get('/ticket/get-myticket', ['as' => 'get.myticket.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_myticket']);  /* Get tickets in datatable */
 
 	Route::get('/ticket/overdue', ['as' => 'overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@overdue_ticket_list']);	/*  Get Overdue Ticket */
 
 	Route::get('/ticket/closed', ['as' => 'closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@closed_ticket_list']);	/*  Get Closed Ticket */
 
+	Route::get('/ticket/get-closed', ['as' => 'get.closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_closed']);  /* Get tickets in datatable */
+
 	Route::get('/ticket/assigned', ['as' => 'assigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@assigned_ticket_list']);	/*  Get Assigned Ticket */
+
+	Route::get('/ticket/get-assigned', ['as' => 'get.assigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_assigned']);  /* Get tickets in datatable */
 
 	Route::get('/newticket', ['as' => 'newticket', 'uses' => 'Agent\helpdesk\TicketController@newticket']);	/*  Get Create New Ticket */
 
@@ -267,7 +276,11 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
 	Route::get('trash', 'Agent\helpdesk\TicketController@trash');	/* To show Deleted Tickets */
 
+	Route::get('/ticket/trash', ['as' => 'get.trash.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_trash']);  /* Get tickets in datatable */
+
 	Route::get('unassigned', 'Agent\helpdesk\TicketController@unassigned');	/* To show Unassigned Tickets */
+
+	Route::get('/ticket/unassigned', ['as' => 'get.unassigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_unassigned']);  /* Get tickets in datatable */
 
 	Route::get('dashboard', 'Agent\helpdesk\DashboardController@index');	/* To show dashboard pages */
     
@@ -489,14 +502,6 @@ $router->get('article/delete/{id}', 'Agent\kb\ArticleController@destroy');
 $router->get('kb/settings', ['as'=>'settings' , 'uses'=> 'Agent\kb\SettingsController@settings']);
 /* post settings */
 $router->patch('postsettings/{id}', 'Agent\kb\SettingsController@postSettings');
-/* get the create faq page */
-$router->get('create-faq',['as'=>'create-faq' , 'uses'=> 'Agent\kb\SettingsController@Faq'] );
-/* post faq */
-$router->patch('post-create-faq/{id}', 'Agent\kb\SettingsController@postfaq');
-/* get the create page for Social- link  */
-$router->get('social',['as'=>'social' , 'uses'=>  'Agent\kb\SettingsController@CreateSocialLink']);
-/* post Social - link for insert to database */
-$router->patch('postsocial',['as'=>'post-create-social' , 'uses'=>  'Agent\kb\SettingsController@PostSocial']);
 //Route for administrater to access the comment
 $router->get('comment',['as'=>'comment' , 'uses'=> 'Agent\kb\SettingsController@comment']);
 /* Route to define the comment should Published */
@@ -522,11 +527,6 @@ $router->get('get-categorys', ['as' => 'api.category', 'uses' => 'Agent\kb\Categ
 $router->get('get-comment', ['as' => 'api.comment', 'uses' => 'Agent\kb\SettingsController@getData']);
 $router->get('test', 'ArticleController@test');
 
-$router->get('side1', 'Agent\kb\SettingsController@side1');
-$router->patch('side1/{id}', 'Agent\kb\SettingsController@postside1');
-
-$router->get('side2', 'Agent\kb\SettingsController@side2');
-$router->patch('side2/{id}', 'Agent\kb\SettingsController@postside2');
 $router->post('image', 'Agent\kb\SettingsController@image');
 
 $router->get('direct', function () {
@@ -556,7 +556,7 @@ $router->get('category-list/{id}',['as'=>'categorylist' , 'uses'=>'Client\kb\Use
 /* get the home page */
 $router->get('knowledgebase',['as'=>'home' , 'uses'=> 'Client\kb\UserController@home']);
 /* get the faq value to user */
-$router->get('faq',['as'=>'faq' , 'uses'=>'Client\kb\UserController@Faq'] );
+// $router->get('faq',['as'=>'faq' , 'uses'=>'Client\kb\UserController@Faq'] );
 /* get the cantact page to user */
 $router->get('contact',['as'=>'contact' , 'uses'=> 'Client\kb\UserController@contact']);
 /* post the cantact page to controller */

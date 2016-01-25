@@ -328,7 +328,7 @@
 
                         <div class="box">
                             <div class="box-header with-border">
-                                <h3 class="box-title">{!! Lang::get('lang.themes') !!}</h3>
+                                <h3 class="box-title">{!! Lang::get('lang.widgets') !!}</h3>
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body">
@@ -338,66 +338,36 @@
                                         <div class="col-md-2 col-sm-6">
                                             <div class="settingiconblue">
                                                 <div class="settingdivblue">
-                                                    <a href="{{ url('create-footer') }}"><span class="fa-stack fa-2x">
-                                                        
+                                                    <a href="{{ url('widgets') }}"><span class="fa-stack fa-2x">
                                                         <i class="fa fa-list-alt fa-stack-1x"></i>
                                                     </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.footer') !!}</center>
+                                                <center class="box-title" >{!! Lang::get('lang.widgets') !!}</center>
                                             </div>
                                         </div>
-                                        <!--/.col-md-2-->
+                                        <!--/.col-md-2-->                                        
 
-                                         <!--/.col-md-2-->
+
+                                        <!--/.col-md-2-->
                                         <div class="col-md-2 col-sm-6">
                                             <div class="settingiconblue">
                                                 <div class="settingdivblue">
-                                                    <a href="{{ url('create-footer2') }}"><span class="fa-stack fa-2x">
-                                                        
-                                                        <i class="fa fa-list-alt fa-stack-1x"></i>
+                                                    <a href="{{ url('social-buttons') }}"><span class="fa-stack fa-2x">
+                                                        <i class="fa fa-cubes fa-stack-1x"></i>
                                                     </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.footer2') !!}</center>
+                                                <center class="box-title" >{!! Lang::get('lang.widgets') !!}</center>
                                             </div>
                                         </div>
-                                        <!--/.col-md-2-->
+                                        <!--/.col-md-2-->                                        
 
-                                         <!--/.col-md-2-->
-                                        <div class="col-md-2 col-sm-6">
-                                            <div class="settingiconblue">
-                                                <div class="settingdivblue">
-                                                    <a href="{{ url('create-footer3') }}"><span class="fa-stack fa-2x">
-                                                        
-                                                        <i class="fa fa-list-alt fa-stack-1x"></i>
-                                                    </span></a>
-                                                </div>
-                                                <center class="box-title" >{!! Lang::get('lang.footer3') !!}</center>
-                                            </div>
-                                        </div>
-                                        <!--/.col-md-2-->
 
-                                         <!--/.col-md-2-->
-                                        <div class="col-md-2 col-sm-6">
-                                            <div class="settingiconblue">
-                                                <div class="settingdivblue">
-                                                    <a href="{{ url('create-footer4') }}"><span class="fa-stack fa-2x">
-                                                        
-                                                        <i class="fa fa-list-alt fa-stack-1x"></i>
-                                                    </span></a>
-                                                </div>
-                                                <center class="box-title" >{!! Lang::get('lang.footer4') !!}</center>
-                                            </div>
-                                        </div>
-                                        <!--/.col-md-2-->
-                                        
                                     </div>
                                 </div>
                                 <!-- /.row -->
                             </div>
                             <!-- ./box-body -->
                         </div>
-
-
                     
 
                         <div class="box">

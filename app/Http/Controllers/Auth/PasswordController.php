@@ -1,17 +1,20 @@
 <?php namespace App\Http\Controllers\Auth;
-// classes
+// controllers
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Common\SettingsController;
 
+// request
 use Illuminate\Http\Request;
+
+// model
+use App\User;
+
+// classes
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
-use App\User;
-
-use App\Http\Controllers\Common\SettingsController;
-
+use Exception;
 
 /**
  * PasswordController
@@ -44,8 +47,7 @@ class PasswordController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function getEmail()
-	{
+	public function getEmail() {
 		return view('auth.password');
 	}
 

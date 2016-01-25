@@ -1,27 +1,39 @@
 <?php namespace App\Http\Controllers\Admin\helpdesk;
 // controller
 use App\Http\Controllers\Controller;
+
 // request
 use App\Http\Requests\helpdesk\BanlistRequest;
 use App\Http\Requests\helpdesk\BanRequest;
+
 // model
 use App\User;
+use App\Model\helpdesk\Email\Banlist;
+
+//classes
+use Exception;
 
 /**
  * BanlistController
- *
+ * In this controller in the CRUD function for all the banned emails
  * @package     Controllers
  * @subpackage  Controller
  * @author      Ladybird <info@ladybirdweb.com>
  */
 class BanlistController extends Controller {
 
-	/**
+/**
 	 * Create a new controller instance.
-	 * @return type void
+	 * constructor to check
+	 * 1. authentication
+	 * 2. user roles
+	 * 3. roles must be agent
+	 * @return void
 	 */
 	public function __construct() {
+		// checking authentication
 		$this->middleware('auth');
+		// checking admin roles
 		$this->middleware('roles');
 	}
 
@@ -59,27 +71,28 @@ class BanlistController extends Controller {
 	 * @return type Response
 	 */
 	public function store(BanRequest $request, User $user) {
-		// try {
+		// dd($request);
+		try {
 			//adding field to user whether it is banned or not
 			$adban = $request->input('email');
 			$use = $user->where('email', $adban)->first();
 			if ($use != null) {
-				$use->ban = $request->input('ban_status');
+				$use->ban = $request->input('ban');
 				$use->internal_note = $request->input('internal_note');
 				$use->save();
 				// $user->create($request->input())->save();
-				return redirect()->back()->with('success', 'Email Banned sucessfully');
+				return redirect('banlist')->with('success', 'Email Banned sucessfully');
 			} else {
 				$user = new User;
 				$user->email = $adban;
-				$user->ban = $request->input('ban_status');
+				$user->ban = $request->input('ban');
 				$user->internal_note = $request->input('internal_note');
 				$user->save();
-				return redirect()->back()->with('success', 'Email Banned sucessfully');
+				return redirect('banlist')->with('success', 'Email Banned sucessfully');
 			}
-		// } catch (Exception $e) {
-			// return redirect('banlist')->with('fails', 'Email can not Ban');
-		// }
+		} catch (Exception $e) {
+			return redirect('banlist')->with('fails', 'Email can not Ban');
+		}
 	}
 
 	/**
@@ -136,17 +149,15 @@ class BanlistController extends Controller {
 	 * @param type Banlist $ban
 	 * @return type Response
 	 */
-	public function destroy($id, Banlist $ban) {
-		try {
-			$bans = $ban->whereId($id)->first();
-			/* Success and Falure condition */
-			if ($bans->delete() == true) {
-				return redirect('banlist')->with('success', 'Banned Email Deleted sucessfully');
-			} else {
-				return redirect('banlist')->with('fails', 'Banned Email can not Delete');
-			}
-		} catch (Exception $e) {
-			return redirect('banlist')->with('fails', 'Banned Email can not Delete');
-		}
-	}
+	// public function destroy($id, Banlist $ban) {
+	// 		$bans = $ban->whereId($id)->first();
+	// 		dd($bans);
+	// 		/* Success and Falure condition */
+	// 		try{
+	// 			$bans->delete();
+	// 			return redirect('banlist')->with('success', 'Banned Email Deleted sucessfully');
+	// 		} catch (Exception $e) {
+	// 			return redirect('banlist')->with('fails', 'Banned Email can not Delete'.'<li>'.$e->errorInfo[2].'</li>');
+	// 		}
+	// }
 }

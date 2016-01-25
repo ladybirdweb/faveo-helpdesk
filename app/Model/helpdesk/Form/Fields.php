@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Fields extends Model {
 
-	protected $table = 'fields';
+	protected $table = 'custom_form_fields';
 
 	/**
 	 * The attributes that are mass assignable.

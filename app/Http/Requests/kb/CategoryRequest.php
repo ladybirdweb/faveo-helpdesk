@@ -21,7 +21,7 @@ class CategoryRequest extends Request {
 	public function rules() {
 		return [
 			'name' => 'required',
-			'slug' => 'required|unique:category',
+			'slug' => 'required|unique:kb_category',
 			'description' => 'required',
 
 		];

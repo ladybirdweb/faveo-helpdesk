@@ -1,13 +1,20 @@
 <?php namespace App\Http\Controllers\Admin\helpdesk;
+
 // controllers
 use App\Http\Controllers\Controller;
+
 // requests
 use App\Http\Requests\helpdesk\TeamRequest;
 use App\Http\Requests\helpdesk\TeamUpdate;
+
 // models
 use App\Model\helpdesk\Agent\Assign_team_agent;
 use App\Model\helpdesk\Agent\Teams;
 use App\User;
+
+// classes
+use DB;
+use Exception;
 
 /**
  * TeamController
@@ -41,7 +48,7 @@ class TeamController extends Controller {
 			$assign_team_agent = $assign_team_agent->get();
 			return view('themes.default1.admin.helpdesk.agent.teams.index', compact('assign_team_agent', 'teams'));
 		} catch (Exception $e) {
-			return view('404');
+			return redirect()->back()->with('fails',$e->errorInfo[2]);
 		}
 	}
 
@@ -55,7 +62,7 @@ class TeamController extends Controller {
 			$user = $user->get();
 			return view('themes.default1.admin.helpdesk.agent.teams.create', compact('user'));
 		} catch (Exception $e) {
-			return view('404');
+			return redirect()->back()->with('fails',$e->errorInfo[2]);
 		}
 	}
 
@@ -66,29 +73,22 @@ class TeamController extends Controller {
 	 * @return type Response
 	 */
 	public function store(Teams $team, TeamRequest $request) {
+		
+			if($request->team_lead){
+				$team_lead = $request->team_lead;
+			} else {
+				$team_lead = null;
+			}
+			$team->team_lead = $team_lead;
 		try {
 			/* Check whether function success or not */
-			if ($team->fill($request->input())->save() == true) {
-				/* redirect to Index page with Success Message */
-				return redirect('teams')->with('success', 'Teams  Created Successfully');
-			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect('teams')->with('fails', 'Teams can not Create');
-			}
+			$team->fill($request->except('team_lead'))->save();
+			/* redirect to Index page with Success Message */
+			return redirect('teams')->with('success', 'Teams  Created Successfully');
 		} catch (Exception $e) {
 			/* redirect to Index page with Fails Message */
-			return redirect('teams')->with('fails', 'Teams can not Create');
+			return redirect('teams')->with('fails', 'Teams can not Create'.'<li>'.$e->errorInfo[2].'</li>');
 		}
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id) {
-		//
 	}
 
 	/**
@@ -107,7 +107,7 @@ class TeamController extends Controller {
 			$agent_id = $agent_team->lists('agent_id', 'agent_id');
 			return view('themes.default1.admin.helpdesk.agent.teams.edit', compact('agent_id', 'user', 'teams', 'allagents'));
 		} catch (Exception $e) {
-			return view('404');
+			return redirect()->back()->with('fails',$e->errorInfo[2]);
 		}
 	}
 
@@ -119,24 +119,29 @@ class TeamController extends Controller {
 	 * @return type Response
 	 */
 	public function update($id, Teams $team, TeamUpdate $request) {
-		try {
+		
 			$teams = $team->whereId($id)->first();
 			//updating check box
+			if($request->team_lead){
+				$team_lead = $request->team_lead;
+			} else {
+				$team_lead = null;
+			}
+			$teams->team_lead = $team_lead;
+			$teams->save();
+
 			$alert = $request->input('assign_alert');
 			$teams->assign_alert = $alert;
 			$teams->save(); //saving check box
 			//updating whole field
 			/* Check whether function success or not */
-			if ($teams->fill($request->input())->save() == true) {
-				/* redirect to Index page with Success Message */
-				return redirect('teams')->with('success', 'Teams  Updated Successfully');
-			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect('teams')->with('fails', 'Teams  can not Update');
-			}
+		try {				
+			$teams->fill($request->except('team_lead'))->save();
+			/* redirect to Index page with Success Message */
+			return redirect('teams')->with('success', 'Teams  Updated Successfully');
 		} catch (Exception $e) {
 			/* redirect to Index page with Fails Message */
-			return redirect('teams')->with('fails', 'Teams  can not Update');
+			return redirect('teams')->with('fails', 'Teams  can not Update'.'<li>'.$e->errorInfo[2].'</li>');
 		}
 	}
 
@@ -151,17 +156,14 @@ class TeamController extends Controller {
 		try {
 			$assign_team_agent->where('team_id', $id)->delete();
 			$teams = $team->whereId($id)->first();
+			$tickets = DB::table('tickets')->where('team_id','=',$id)->update(['team_id' => null]);
 			/* Check whether function success or not */
-			if ($teams->delete() == true) {
-				/* redirect to Index page with Success Message */
-				return redirect('teams')->with('success', 'Teams  Deleted Successfully');
-			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect('teams')->with('fails', 'Teams can not Delete');
-			}
+			$teams->delete();
+			/* redirect to Index page with Success Message */
+			return redirect('teams')->with('success', 'Teams  Deleted Successfully');
 		} catch (Exception $e) {
 			/* redirect to Index page with Fails Message */
-			return redirect('teams')->with('fails', 'Teams can not Delete');
+			return redirect('teams')->with('fails', 'Teams can not Delete'.'<li>'.$e->errorInfo[2].'</li>');
 		}
 	}
 }

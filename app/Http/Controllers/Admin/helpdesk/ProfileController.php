@@ -10,6 +10,7 @@ use App\User;
 use Auth;
 use Hash;
 use Input;
+use Exception;
 
 /**
  * ProfileController

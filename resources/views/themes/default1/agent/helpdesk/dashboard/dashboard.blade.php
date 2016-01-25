@@ -13,9 +13,10 @@ class="active"
 @stop
 
 @section('content')
-  
-      <div class="box box-info">
 
+<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
+            <div class="box box-info">
                 <div class="box-header with-border">
                     <h3 class="box-title">{!! Lang::get('lang.line_chart') !!}</h3>
                     <div class="box-tools pull-right">
@@ -24,10 +25,17 @@ class="active"
                     </div>
                 </div>
                 <div class="box-body">
-                    <div class="chart" >
-                            <div id="legendDiv"></div>
-                            <canvas class="chart-data" id="tickets-graph" width="1000" height="400"></canvas>   
+                    @if(Session::has('content'))
+                    <div class="chart">
+                        <div id="legendDiv1"></div>
+                        <canvas class="chart-data" id="tickets-graph1" width="1000" height="400"></canvas>   
                     </div>
+                    @else
+                    <div class="chart">
+                        <div id="legendDiv"></div>
+                        <canvas class="chart-data" id="tickets-graph" width="1000" height="400"></canvas>   
+                    </div>
+                    @endif
                 </div><!-- /.box-body -->
             </div><!-- /.box -->
             <hr/>
@@ -37,9 +45,9 @@ class="active"
             
                 </div>
                 <div class="box-body">
-           <table class="table table-hover" style="overflow:hidden;">
+              <table class="table table-hover" style="overflow:hidden;">
              
-                    <tr>
+                <tr>
                 <th>{!! Lang::get('lang.department') !!}</th>
                 <th>{!! Lang::get('lang.opened') !!}</th>
                 <th>{!! Lang::get('lang.resolved') !!}</th>
@@ -54,7 +62,6 @@ $open = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id)-
 $resolve = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id)->where('status','=',2)->count(); 
 $close = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id)->where('status','=',3)->count(); 
 $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id)->where('status','=',5)->count(); 
-
 ?>
 
                 <tr>
@@ -71,8 +78,8 @@ $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id
             </div>
                 </div>
    
-   <script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
-         <script type="text/javascript">
+<script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
+    <script type="text/javascript">
     $(function(){
     $.getJSON("agen", function (result) {
 
@@ -188,5 +195,27 @@ $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id
 });
 
 </script>
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        // Close a ticket
+        $('#close').on('click', function(e) {
+            $.ajax({
+                type: "GET",
+                url: "agen",
+                beforeSend: function() {
+                    
+                },
+                success: function(response) {
+                    
+                }
+            })
+            return false;
+        });
+    });
+</script>
+
+<script src="{{asset("lb-faveo/plugins/moment-develop/moment.js")}}" type="text/javascript"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
 
 @stop

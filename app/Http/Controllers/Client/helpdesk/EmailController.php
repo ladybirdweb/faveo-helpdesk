@@ -1,9 +1,13 @@
 <?php namespace App\Http\Controllers\Client\helpdesk;
+
 // controllers
 use App\Http\Controllers\Controller;
+
 // models
 use App\Model\helpdesk\Email\Emails;
 
+// classes
+use Exception;
 
 /**
  * EmailController
@@ -23,7 +27,6 @@ class OuthouseController extends Controller {
     {
         $port 	=	Emails::where('id','=','1')->first();
         $portvalue	=	$port->option_value;
-
         return $portvalue;
     }
  
@@ -36,7 +39,6 @@ class OuthouseController extends Controller {
     {
         $host=Option::where('option_name','=','host')->first();
         $hostvalue=$host->option_value;
-
         return $hostvalue;
     }
 

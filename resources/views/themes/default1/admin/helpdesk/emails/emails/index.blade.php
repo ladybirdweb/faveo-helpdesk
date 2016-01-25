@@ -34,7 +34,7 @@ class="active"
 <div class="box-header">
 	<h2 class="box-title">{!! Lang::get('lang.incoming_emails') !!}</h2><a href="{{route('emails.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_email')}}</a></div>
 
-<div class="box-body table-responsive no-padding">
+<div class="box-body table-responsive">
 
 <!-- check whether success or not -->
 
@@ -56,7 +56,7 @@ class="active"
     </div>
     @endif
     		<!-- table -->
-				<table class="table table-hover" style="overflow:hidden;">
+				<table class="table table-bordered dataTable" style="overflow:hidden;">
 	<tr>
 							<th width="100px">{{Lang::get('lang.email')}}</th>
 							<th width="100px">{{Lang::get('lang.priority')}}</th>
@@ -70,8 +70,14 @@ class="active"
 							<td><a href="{{route('emails.edit', $email->id)}}"> {{$email -> email_address }}</a></td>
 							<?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id','=',$email->priority)->first(); ?>
 							<td>{{  ucfirst($priority->priority_desc) }}</td>
-							<?php  $department = App\Model\helpdesk\Agent\Department::where('id','=',$email->department)->first();  ?>
-							<td>{{ $department->name }}</td>
+							@if($email->department !== null)
+								<?php  $department = App\Model\helpdesk\Agent\Department::where('id','=',$email->department)->first(); 
+								$dept = $department->name; ?>
+							@elseif($email->department == null)
+								<?php  $dept = "";  ?>
+							@endif
+							
+							<td>{{ $dept }}</td>
 							<td>{{ UTC::usertimezone($email->created_at) }}</td>
 							<td>{{ UTC::usertimezone($email->updated_at) }}</td>
 							<td>

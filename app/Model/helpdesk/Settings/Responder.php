@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Responder extends Model {
 
 	/* Using auto_response table  */
-	protected $table = 'auto_response';
+	protected $table = 'settings_auto_response';
 	/* Set fillable fields in table */
 	protected $fillable = [
 

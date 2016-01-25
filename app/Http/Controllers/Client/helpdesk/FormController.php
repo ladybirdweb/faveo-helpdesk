@@ -1,21 +1,18 @@
 <?php namespace App\Http\Controllers\Client\helpdesk;
+
 // controllers
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Common\SettingsController;
+
 // requests
 use Illuminate\Http\Request;
 use App\Http\Requests\helpdesk\ClientRequest;
+
 // models
-/* include help topic model */
-use App\Model\helpdesk\Form\Form_details;
-/* Include form_name model */
-use App\Model\helpdesk\Form\Form_name;
-/* include form_detals model */
-/* Include form_value model */
+use App\Model\helpdesk\Form\Forms;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Settings\Company;
-/* Validate form TicketForm using */
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Settings\System;
@@ -23,6 +20,9 @@ use App\Model\helpdesk\Settings\Ticket;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\User;
+use App\Model\helpdesk\Form\Fields;
+use App\Model\helpdesk\Form\Form_value;
+
 // classes
 use Form;
 use Input;
@@ -30,12 +30,9 @@ use Mail;
 use Hash;
 use Redirect;
 use Config;
-
 use DateTime;
 use DateTimeZone;
-use App\Model\helpdesk\Form\Fields;
-use App\Model\helpdesk\Form\Form_value;
-
+use Exception;
 
 /**
  * FormController
@@ -46,28 +43,17 @@ use App\Model\helpdesk\Form\Form_value;
  */
 class FormController extends Controller {
 
+	/**
+	 * Create a new controller instance.
+	 * Constructor to check
+	 * @return void
+	 */
 	public function __construct(TicketController $TicketController) {
+		// mail smtp settings
 		SettingsController::smtp();
+		// creating a TicketController instance
 		$this->TicketController = $TicketController;
 	}
-
-	// /**
-	//  * This Function to get the form for the ticket
-	//  * @param type Form_name $name
-	//  * @param type Form_details $details
-	//  * @param type Help_topic $topics
-	//  * @return type Response
-	//  */
-	// public function getForm() {
-	// 	if(Config::get('database.install') == '%0%') {
-	// 		return Redirect::route('license');
-	// 	}
-	// 	if(System::first()->status == 1) {
-	// 		return view('themes.default1.client.helpdesk.guest-user.form');
-	// 	} else {
-	// 		return "hello";	
-	// 	}
-	// }
 
 	/**
 	 * getform
@@ -92,7 +78,7 @@ class FormController extends Controller {
 	 * @param type Form_details $details
 	 * @return type string
 	 */
-	public function postForm($id,Form_name $name, Form_details $details, Help_topic $topic) {
+	public function postForm($id, Help_topic $topic) {
 		// dd($id);
 		if($id != 0 ){
 			$helptopic = $topic->where('id', '=', $id)->first();
@@ -163,8 +149,9 @@ class FormController extends Controller {
 		$source = $ticket_source->where('name','=','web')->first();
 
 		$collaborator = null;
+		$assignto = null;
 
-		if($this->TicketController->create_user($email, $name, $subject, $details, $phone, $helptopic, $sla, $priority, $source->id, $collaborator, $department,$assignto = "", $form_extras)) {
+		if($this->TicketController->create_user($email, $name, $subject, $details, $phone, $helptopic, $sla, $priority, $source->id, $collaborator, $department,$assignto, $form_extras)) {
 			return Redirect::route('guest.getform')->with('success','Ticket Created Successfully');	
 		}
 	}	
@@ -181,12 +168,21 @@ class FormController extends Controller {
 		if($comment != null) {
 			$tickets = Tickets::where('id','=',$id)->first();
 			$threads = new Ticket_Thread;
+			$tickets->closed_at = null;
+			$tickets->closed = 0;
+			$tickets->reopened_at = date('Y-m-d H:i:s');
+			$tickets->reopened = 1;
 			$threads->user_id = $tickets->user_id;
 			$threads->ticket_id = $tickets->id;
 			$threads->poster = "client";
 			$threads->body = $comment;
-			$threads->save();
-			return \Redirect::back()->with('success1','Successfully replied');	
+			try {
+				$threads->save();	
+				$tickets->save();
+				return \Redirect::back()->with('success1','Successfully replied');	
+			} catch(Exception $e) {
+				return \Redirect::back()->with('fails1',$e->errorInfo[2]);	
+			}
 		} else {
 			return \Redirect::back()->with('fails1','Please fill some data!');	
 		}

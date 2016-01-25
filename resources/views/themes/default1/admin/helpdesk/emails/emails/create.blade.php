@@ -84,20 +84,11 @@ class="active"
 
 			{!! Form::label('help_topic',Lang::get('lang.help_topic')) !!}
 			{!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('help_topic', [''=>'Select a Helptopic','Help Topics'=>$helps->lists('topic','topic')],null,['class' => 'form-control select']) !!}
+			{!!Form::select('help_topic', [''=>'Select a Helptopic','Help Topics'=>$helps->lists('topic','id')],null,['class' => 'form-control select']) !!}
 
 		</div>
 
 	</div>
-		<!-- Auto response -->
-		{{-- <div class="form-group"> --}}
-
-			{{-- {!! Form::label('',Lang::get('lang.auto_response')) !!} --}}
-			{{-- <div class="col-xs-1"> --}}
-				{{-- {!! Form::checkbox('auto_response',1,null,['class' => 'checkbox']) !!} --}}
-			{{-- </div> --}}
-		{{-- </div> --}}
-
 
 <hr>
 
@@ -112,14 +103,6 @@ class="active"
 	</div>
 
 	<div class="row">
-	<!-- Username -->
-		<div class="col-xs-6 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
-
-			{!! Form::label('user_name',Lang::get('lang.email_address')) !!}
-			{!! $errors->first('user_name', '<spam class="help-block">:message</spam>') !!}
-			{!! Form::text('user_name',null,['class' => 'form-control']) !!}
-
-		</div>
 		<!-- password -->
 		<div class="col-xs-6 form-group {{ $errors->has('password') ? 'has-error' : '' }}">
 
@@ -184,11 +167,7 @@ class="active"
 
 			{!! Form::label('mailbox_protocol',Lang::get('lang.mail_box_protocol')) !!}
 			{!! $errors->first('mailbox_protocol', '<spam class="help-block">:message</spam>') !!}
-			<select class="form-control" name="mailbox_protocol">
-				<option value="/imap/ssl">IMAP+SSL</option>
-				<option value="/imap/tls">IMAP+TLS</option>
-				<option value="/imap">IMAP</option>
-			</select>
+			{!!Form::select('mailbox_protocol',['Mailbox Protocols'=>$mailbox_protocols->lists('name','id')],null,['class' => 'form-control select']) !!}
 
 		</div>
 		<!-- imap config -->

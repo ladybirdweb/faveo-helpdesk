@@ -32,7 +32,7 @@ class EmailsRequest extends Request {
 			'help_topic' => 'required',
 			// 'imap_config' => 'required',
 			'password' => 'required|min:6',
-			'user_name' => 'required',
+			// 'user_name' => 'required',
 			// 'sending_host' => 'required',
 			// 'sending_port' => 'required',
 			'fetching_host' => 'required',

@@ -6,18 +6,16 @@ use Illuminate\Http\Request;
 use App\Http\Requests\helpdesk\SmtpRequest;
 use App\Http\Requests;
 // models
-use App\Model\helpdesk\Theme\Footer2;
-use App\Model\helpdesk\Theme\Footer3;
-use App\Model\helpdesk\Theme\Footer4;
-use App\Model\helpdesk\Theme\Footer;
+use App\Model\helpdesk\Theme\Widgets;
 use App\Model\helpdesk\Email\Smtp;
 use App\Model\helpdesk\Utility\Version_Check;
+use App\Model\helpdesk\Settings\Plugin;
 // classes
 use Config;
 use Input;
 use Crypt;
 use Illuminate\Support\Collection;
-use App\Model\helpdesk\Settings\Plugin;
+use Exception;
 
 /**
  * ***************************
@@ -45,13 +43,144 @@ class SettingsController extends Controller {
         SettingsController::password();
     }
 
+    
     /**
      * get the page to create the footer
      * @return response
      */
-    public function CreateFooter(Footer $footer) {
-        $footer = $footer->whereId('1')->first();
-        return view('themes.default1.admin.helpdesk.theme.footer', compact('footer'));
+    public function widgets() {
+        return view('themes.default1.admin.helpdesk.theme.widgets');
+    }
+
+    /**
+     * get the page to create the footer
+     * @return response
+     */
+    public function list_widget() {
+        return \Datatable::collection(Widgets::where('id','<','7')->get())
+            ->searchColumns('name')
+            ->orderColumns('name', 'title', 'value')
+            ->addColumn('name', function ($model) {
+                return $model->name;
+            })
+
+            ->addColumn('title', function ($model) {
+                return $model->title;
+            })
+
+            ->addColumn('body', function ($model) {
+                return $model->value;
+            })
+
+            ->addColumn('Actions', function ($model) {
+                return '<span data-toggle="modal" data-target="#edit_widget'.$model->id .'"><a class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a></span>
+                <div class="modal fade" id="edit_widget'.$model->id .'">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="'. url('edit-widget/'.$model->id) .'" method="POST">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">'.strtoupper($model->name).' </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group" style="width:100%">
+                                        <label>'.\Lang::get("lang.title").'</label><br/>
+                                        <input type="text" name="title" value="'.$model->title.'" class="form-control" style="width:100%">
+                                    </div>
+                                    <br/>
+                                    <div class="form-group" style="width:100%">
+                                        <label>'.\Lang::get("lang.content").'</label><br/>
+                                        <textarea name="content" class="form-control" style="width:100%" id="Content'.$model->id.'">'.$model->value.'</textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">'.\Lang::get('lang.close').'</button>
+                                    <input type="submit" class="btn btn-primary" value="'.\Lang::get('lang.update').'">
+                                </div>
+                                <script>
+                                    $(function () {
+                                        $("#Content'. $model->id .'").wysihtml5();
+                                    });
+                                </script>
+                            </form>
+                        </div>
+                    </div>
+                </div>';
+            })
+
+            ->make();
+    }
+
+
+    /**
+     * Post footer
+     * @param type Footer $footer
+     * @param type Request $request
+     * @return type response
+     */
+    public function edit_widget($id, Widgets $widgets, Request $request) {
+        $widget = $widgets->where('id','=',$id)->first();
+        $widget->title = $request->title;
+        $widget->value = $request->content;
+        try{
+            $widget->save();
+            return redirect()->back()->with('success', $widget->name.' Saved Successfully');    
+        } catch(Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);    
+        }
+    }
+
+    /**
+     * get the page to create the footer
+     * @return response
+     */
+    public function social_buttons() {
+        return view('themes.default1.admin.helpdesk.theme.social');
+    }
+
+    /**
+     * get the page to create the footer
+     * @return response
+     */
+    public function list_social_buttons() {
+        return \Datatable::collection(Widgets::where('id','>','6')->get())
+            ->searchColumns('name')
+            ->orderColumns('name', 'value')
+            ->addColumn('name', function ($model) {
+                return $model->name;
+            })
+
+            ->addColumn('link', function ($model) {
+                return $model->value;
+            })
+
+            ->addColumn('Actions', function ($model) {
+                return '<span data-toggle="modal" data-target="#edit_widget'.$model->id .'"><a class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a></span>
+                <div class="modal fade" id="edit_widget'.$model->id .'">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form action="'. url('edit-widget/'.$model->id) .'" method="POST">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">'.strtoupper($model->name).' </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <br/>
+                                    <div class="form-group" style="width:100%">
+                                        <label>'.\Lang::get("lang.link").'</label><br/>
+                                        <input type="url" name="content" class="form-control" style="width:100%" value="'.$model->value.'">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">'.\Lang::get('lang.close').'</button>
+                                    <input type="submit" class="btn btn-primary" value="'.\Lang::get('lang.update').'">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>';
+            })
+            ->make();
     }
 
     /**
@@ -60,84 +189,15 @@ class SettingsController extends Controller {
      * @param type Request $request
      * @return type response
      */
-    public function PostFooter(Footer $footer, Request $request) {
-        $footer = $footer->whereId('1')->first();
-        if ($footer->fill($request->input())->save()) {
-            return redirect('create-footer')->with('success', 'Footer Saved Successfully');
-        } else {
-            return redirect('create-footer')->with('fails', 'Footer was not Saved');
-        }
-    }
-
-    /**
-     * get the page to create the footer
-     * @return response
-     */
-    public function CreateFooter2(Footer2 $footer2) {
-        $footer2 = $footer2->whereId('1')->first();
-        return view('themes.default1.admin.helpdesk.theme.footer2', compact('footer2'));
-    }
-
-    /**
-     * Post footer 2
-     * @param type Footer $footer
-     * @param type Request $request
-     * @return type response
-     */
-    public function PostFooter2(Footer2 $footer2, Request $request) {
-        $footer2 = $footer2->whereId('1')->first();
-        if ($footer2->fill($request->input())->save()) {
-            return redirect('create-footer2')->with('success', 'Footer Saved Successfully');
-        } else {
-            return redirect('create-footer2')->with('fails', 'Footer was not Saved');
-        }
-    }
-
-    /**
-     * get the page to create the footer
-     * @return response
-     */
-    public function CreateFooter3(Footer3 $footer3) {
-        $footer3 = $footer3->whereId('1')->first();
-        return view('themes.default1.admin.helpdesk.theme.footer3', compact('footer3'));
-    }
-
-    /**
-     * Post footer 3
-     * @param type Footer $footer
-     * @param type Request $request
-     * @return type response
-     */
-    public function PostFooter3(Footer3 $footer3, Request $request) {
-        $footer3 = $footer3->whereId('1')->first();
-        if ($footer3->fill($request->input())->save()) {
-            return redirect('create-footer3')->with('success', 'Footer Saved Successfully');
-        } else {
-            return redirect('create-footer3')->with('fails', 'Footer was not Saved');
-        }
-    }
-
-    /**
-     * get the page to create the footer
-     * @return response
-     */
-    public function CreateFooter4(Footer4 $footer4) {
-        $footer4 = $footer4->whereId('1')->first();
-        return view('themes.default1.admin.helpdesk.theme.footer4', compact('footer4'));
-    }
-
-    /**
-     * Post footer 4
-     * @param type Footer $footer
-     * @param type Request $request
-     * @return type response
-     */
-    public function PostFooter4(Footer4 $footer4, Request $request) {
-        $footer4 = $footer4->whereId('1')->first();
-        if ($footer4->fill($request->input())->save()) {
-            return redirect('create-footer4')->with('success', 'Footer Saved Successfully');
-        } else {
-            return redirect('create-footer4')->with('fails', 'Footer was not Saved');
+    public function edit_social_buttons($id, Widgets $widgets, Request $request) {
+        $widget = $widgets->where('id','=',$id)->first();
+        $widget->title = $request->title;
+        $widget->value = $request->content;
+        try{
+            $widget->save();
+            return redirect()->back()->with('success', $widget->name.' Saved Successfully');
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails',$e->errorInfo[2]);
         }
     }
 
@@ -236,10 +296,11 @@ class SettingsController extends Controller {
         $data->name = $request->input('name');
         $data->email = $request->input('email');
         $data->password = Crypt::encrypt($request->input('password'));
-        if ($data->save()) {
+        try{
+            $data->save();
             return \Redirect::route('getsmtp')->with('success', 'success');
-        } else {
-            return \Redirect::route('getsmtp')->with('fails', 'fails');
+        } catch (Exception $e) {
+            return \Redirect::route('getsmtp')->with('fails', $e->errorInfo[2]);
         }
     }
 
@@ -282,7 +343,11 @@ class SettingsController extends Controller {
         $pass = $request->input('password');
         $password = Crypt::encrypt($pass);
         $settings->password = $password;
-        $settings->save();
+        try{
+            $settings->save();
+        } catch(Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
+        }
         if (Input::file('logo')) {
             $name = Input::file('logo')->getClientOriginalName();
             $destinationPath = 'dist/logo';
@@ -291,8 +356,12 @@ class SettingsController extends Controller {
             $settings->logo = $fileName;
             $settings->save();
         }
-        $settings->fill($request->except('logo', 'password'))->save();
-        return redirect()->back()->with('success', 'Settings updated Successfully');
+        try {
+            $settings->fill($request->except('logo', 'password'))->save();    
+            return redirect()->back()->with('success', 'Settings updated Successfully');
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
+        }
     }
 
     /**
@@ -300,9 +369,7 @@ class SettingsController extends Controller {
      * @return type
      */
     public function version_check() {
-
         $response_url = \URL::route('post-version-check');
-
         echo "<form action='http://www.faveohelpdesk.com/bill/version' method='post' name='redirect'>";
         echo "<input type='hidden' name='_token' value='csrf_token()'/>";
         echo "<input type='hidden' name='title' value='helpdeskcommunityedition'/>";
@@ -317,23 +384,20 @@ class SettingsController extends Controller {
      * @return type
      */
     public function post_version_check(Request $request) {
-
         $current_version = \Config::get('app.version');
-
         $new_version = $request->value;
-
         if ($current_version == $new_version) {
-// echo "No, new Updates";
+            // echo "No, new Updates";
             return redirect()->route('checkupdate')->with('info', ' No, new Updates');
         } elseif ($current_version < $new_version) {
             $version = Version_Check::where('id', '=', '1')->first();
             $version->current_version = $current_version;
             $version->new_version = $new_version;
             $version->save();
-// echo "Version " . $new_version . " is Available";
+            // echo "Version " . $new_version . " is Available";
             return redirect()->route('checkupdate')->with('info', ' Version ' . $new_version . ' is Available');
         } else {
-// echo "Error Checking Version";
+            // echo "Error Checking Version";
             return redirect()->route('checkupdate')->with('info', ' Error Checking Version');
         }
     }
@@ -348,8 +412,6 @@ class SettingsController extends Controller {
 
     public function GetPlugin() {
         $plugins = $this->fetchConfig();
-        //dd($plugins);
-
 
         return \Datatable::collection(new Collection($plugins))
                         ->searchColumns('name')
@@ -420,14 +482,11 @@ class SettingsController extends Controller {
      */
     public function PostPlugins(Request $request) {
         $v = $this->validate($request, ['plugin' => 'required|mimes:application/zip,zip,Zip']);
-
         $plug = new Plugin();
         $file = $request->file('plugin');
         //dd($file);
         $destination = app_path() . '/Plugins';
         $zipfile = $file->getRealPath();
-
-
         /**
          * get the file name and remove .zip
          */
@@ -498,28 +557,23 @@ class SettingsController extends Controller {
         if (!file_exists($dir)) {
             return true;
         }
-
         if (!is_dir($dir)) {
             return unlink($dir);
         }
-
         foreach (scandir($dir) as $item) {
             if ($item == '.' || $item == '..') {
                 continue;
             }
-
             if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
                 return false;
             }
         }
-
         return rmdir($dir);
     }
 
     public function ReadConfigs() {
         $dir = app_path() . '/Plugins/';
         $files = array_diff(scandir($dir), array('.', '..', 'ServiceProvider.php'));
-
         $plugins = array();
         if ($files) {
             foreach ($files as $key => $file) {
@@ -528,13 +582,10 @@ class SettingsController extends Controller {
                 $plugins[$key]['file'] = $plugin;
             }
             foreach ($plugins as $plugin) {
-
                 $dir = $plugin['file'];
                 //opendir($dir);
                 if ($dh = opendir($dir)) {
-
                     while (($file = readdir($dh)) !== false) {
-
                         if ($file == 'config.php') {
                             $config[] = $dir . '/' . $file;
                         }
@@ -542,7 +593,6 @@ class SettingsController extends Controller {
                     closedir($dh);
                 }
             }
-
             return $config;
         } else {
             return 'null';
@@ -562,9 +612,7 @@ class SettingsController extends Controller {
                     $fields[$key]['path'] = $plug[$key]['path'];
                     $fields[$key]['status'] = $plug[$key]['status'];
                 }
-                //dd($fields);
             }
-
             return $fields;
         } else {
             return array();
@@ -572,21 +620,16 @@ class SettingsController extends Controller {
     }
 
     public function DeletePlugin($slug) {
-
         $dir = app_path() . '/Plugins/' . $slug;
         $this->deleteDirectory($dir);
-
         /**
          * remove service provider from app.php
          */
         $str = "'App\\Plugins\\$slug" . "\\ServiceProvider',";
         $path_to_file = base_path() . '/config/app.php';
-
         $file_contents = file_get_contents($path_to_file);
         $file_contents = str_replace($str, "//", $file_contents);
         file_put_contents($path_to_file, $file_contents);
-
-
         $plugin = new Plugin();
         $plugin = $plugin->where('path', $slug)->first();
         $plugin->delete();

@@ -132,6 +132,21 @@ class="active"
 		</div>
 	<div class="row">
 	<div class="col-xs-6">
+	<!-- acccount type -->
+		<div class="form-group {{ $errors->has('active') ? 'has-error' : '' }}">
+
+			{!! Form::label('active',Lang::get('lang.status')) !!}
+			{!! $errors->first('active', '<spam class="help-block">:message</spam>') !!}
+			<div class="row">
+				<div class="col-xs-3">
+					{!! Form::radio('active','1',true) !!}{{Lang::get('lang.active')}}
+				</div>
+				<div class="col-xs-3">
+					{!! Form::radio('active','0',null) !!}{{Lang::get('lang.inactive')}}
+				</div>
+			</div>
+
+		</div>
 	<!-- role -->
 		<div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
 
@@ -146,21 +161,7 @@ class="active"
 				</div>
 			</div>
 		</div>
-	<!-- acccount type -->
-		<div class="form-group {{ $errors->has('account_type') ? 'has-error' : '' }}">
-
-			{!! Form::label('account_type',Lang::get('lang.account_type')) !!}
-			{!! $errors->first('account_type', '<spam class="help-block">:message</spam>') !!}
-			<div class="row">
-				<div class="col-xs-3">
-					{!! Form::radio('account_type','1',true) !!}{{Lang::get('lang.active')}}
-				</div>
-				<div class="col-xs-3">
-					{!! Form::radio('account_type','0',null) !!}{{Lang::get('lang.locked')}}
-				</div>
-			</div>
-
-		</div>
+	
 		</div>
 	<!-- day light saving -->
 		{{-- <div class="col-xs-6"> --}}
@@ -210,21 +211,21 @@ class="active"
 		<div class="col-xs-4 form-group {{ $errors->has('assign_group') ? 'has-error' : '' }}">
 			{!! Form::label('assign_group',Lang::get('lang.assigned_group')) !!}
 			{!! $errors->first('assign_group', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('assign_group', [''=>'Select a Group','Groups'=>$groups->lists('name','name')],null,['class' => 'form-control select']) !!}
+			{!!Form::select('assign_group', [''=>'Select a Group','Groups'=>$groups->lists('name','id')],null,['class' => 'form-control select']) !!}
 		</div>
 
 	<!-- primary department -->
 		<div class="col-xs-4 form-group {{ $errors->has('primary_dpt') ? 'has-error' : '' }}">
 			{!! Form::label('primary_dpt',Lang::get('lang.primary_department')) !!}
 			{!! $errors->first('primary_dpt', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('primary_dpt', $departments->lists('name','name'),null,['class' => 'form-control select']) !!}
+			{!!Form::select('primary_dpt', $departments->lists('name','id'),null,['class' => 'form-control select']) !!}
 		</div>
 
 	<!-- agent timezone -->
 		<div class="col-xs-4 form-group {{ $errors->has('agent_tzone') ? 'has-error' : '' }}">
 			{!! Form::label('agent_tzone',Lang::get('lang.agent_time_zone')) !!}
 			{!! $errors->first('agent_tzone', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('agent_tzone', $timezones->lists('name','name'),null,['class' => 'form-control select']) !!}
+			{!!Form::select('agent_tzone', $timezones->lists('name','id'),null,['class' => 'form-control select']) !!}
 		</div>
 	</div>
 

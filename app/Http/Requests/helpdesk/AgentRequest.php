@@ -29,7 +29,7 @@ class AgentRequest extends Request {
 			'first_name' => 'required',
 			'last_name' => 'required',
 			'email' => 'required',
-			'account_type' => 'required',
+			'active' => 'required',
 			// 'account_status' => 'required',
 			'assign_group' => 'required',
 			'primary_dpt' => 'required',

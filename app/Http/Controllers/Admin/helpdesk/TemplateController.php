@@ -12,6 +12,7 @@ use App\Model\helpdesk\Utility\Languages;
 // classes
 use Illuminate\Http\Request;
 use Mail;
+use Exception;
 
 /**
  * TemplateController

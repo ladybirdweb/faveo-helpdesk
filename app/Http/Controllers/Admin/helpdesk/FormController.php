@@ -1,12 +1,29 @@
 <?php namespace App\Http\Controllers\Admin\helpdesk;
 
+// Controller
+use App\Http\Controllers\Controller;
+
+// Model
 use App\Model\helpdesk\Form\Fields;
 use App\Model\helpdesk\Form\Forms;
-use Illuminate\Http\Request;
-use Input;
-use App\Http\Controllers\Controller;
-use Redirect;
+use App\Model\helpdesk\Manage\Help_topic;
 
+// Request
+use Illuminate\Http\Request;
+
+// Class
+use Input;
+use Redirect;
+use Exception;
+
+/**
+ * FormController
+ * This controller is used to CRUD Custom Forms
+ *
+ * @package     Controllers
+ * @subpackage  Controller
+ * @author      Ladybird <info@ladybirdweb.com>
+ */
 class FormController extends Controller {
     private $fields;   
     private $forms;
@@ -91,8 +108,13 @@ class FormController extends Controller {
     
 
  
-    public function delete($id,Forms $forms, Fields $field) {
+    public function delete($id,Forms $forms, Fields $field, Help_topic $help_topic) {
         $fields = $field->where('forms_id',$id)->get();
+        $help_topics = $help_topic->where('custom_form','=',$id)->get();
+        foreach($help_topics as $help_topic) {
+            $help_topic->custom_form = null;
+            $help_topic->save();
+        }
         foreach($fields as $field) {
             $field->delete();
         }

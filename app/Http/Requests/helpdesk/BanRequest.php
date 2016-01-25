@@ -25,7 +25,7 @@ class BanRequest extends Request {
 	 */
 	public function rules() {
 		return [
-			'email' => 'required|email|unique:users',
+			'email' => 'required|email',
 			'ban' => 'required',
 		];
 	}

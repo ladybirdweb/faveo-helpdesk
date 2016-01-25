@@ -62,7 +62,7 @@ class="active"
 
 			           {!! Form::label('grace_period',Lang::get('lang.grace_period')) !!}
 		               {!! $errors->first('grace_period', '<spam class="help-block">:message</spam>') !!}
-			           {!! Form::select('grace_period',['10'=>'10 Hours','15'=>'15 Hours','20'=>'20 hours','24'=>'One Day'],null,['class' => 'form-control']) !!}
+			            {!! Form::select('grace_period',['6 Hours'=>'6 Hours', '12 Hours'=>'12 Hours', '18 Hours'=>'18 Hours', '24 Hours'=>'24 Hours', '36 Hours'=>'36 Hours', '48 Hours'=>'48 Hours'],null,['class' => 'form-control']) !!}
 			          </div>
 		            </div>
 

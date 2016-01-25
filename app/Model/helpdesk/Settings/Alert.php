@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Alert extends Model {
 
 	/* Using alert_notice table  */
-	protected $table = 'alert_notice';
+	protected $table = 'settings_alert_notice';
 	/* Set fillable fields in table */
 	protected $fillable = [
 

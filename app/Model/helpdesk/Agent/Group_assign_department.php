@@ -6,6 +6,6 @@ class Group_assign_department extends Model {
 
 	protected $table = 'group_assign_department';
 
-	protected $fillable = ['group_id','id','department_id'];
+	protected $fillable = ['group_id','department_id'];
 
 }

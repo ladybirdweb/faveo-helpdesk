@@ -2,14 +2,12 @@
 @section('breadcrumb')
 
 <?php
-
 $all = App\Model\kb\Relationship::where('article_id','=', $arti->id)->get();
 /* from whole attribute pick the article_id */
 $category_id = $all->lists('category_id');
 ?>
 
 <div class="site-hero clearfix">
-
     <ol class="breadcrumb breadcrumb-custom">
         <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
         <?php $category = App\Model\kb\Category::where('id', $category_id)->first(); ?>

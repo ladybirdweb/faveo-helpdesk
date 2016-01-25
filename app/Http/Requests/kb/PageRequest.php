@@ -21,7 +21,7 @@ class PageRequest extends Request {
 	public function rules() {
 		return [
 			'name' => 'required',
-			'slug' => 'required|unique:pages',
+			'slug' => 'required|unique:kb_pages',
 			//'description' => 'required',
 
 		];

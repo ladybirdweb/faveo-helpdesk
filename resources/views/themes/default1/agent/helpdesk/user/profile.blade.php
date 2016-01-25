@@ -45,8 +45,16 @@ class="active"
 				        	@else
 				        		<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.gender') !!}:</b></h4></th><td class="col-md-6"><h4>{{ 'Female' }}</h4></td></tr>
 				        	@endif
-				        	<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.department') !!}:</b></h4></th><td class="col-md-6"><h4>{{ $user->primary_dpt }}</h4></td></tr>
-				        	<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.group') !!}:</b></h4></th><td  class="col-md-6"><h4>{{ $user->assign_group }}</h4></td></tr>
+				        	<?php
+				        	if($user->primary_dpt){
+				        		$dept = App\Model\helpdesk\Agent\Department::where('id','=',$user->primary_dpt)->first();
+				        	}
+				        	if($user->assign_group){
+				        		$grp = App\Model\helpdesk\Agent\Groups::where('id','=',$user->assign_group)->first();
+				        	}
+				        	?>
+				        	<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.department') !!}:</b></h4></th><td class="col-md-6"><h4>{{ $dept->name }}</h4></td></tr>
+				        	<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.group') !!}:</b></h4></th><td  class="col-md-6"><h4>{{ $grp->name }}</h4></td></tr>
 				        	<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.company') !!}:</b></h4></th><td  class="col-md-6"> <h4>{{ $user->company }}</h4></td></tr>
 				        	<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.time_zone') !!}:</b></h4></th><td  class="col-md-6"><h4> {{ $user->agent_tzone }}</h4></td></tr>
 				        	<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.role') !!}:</b></h4></th><td  class="col-md-6"> <h4>{{ $user->role }}</h4></td></tr>

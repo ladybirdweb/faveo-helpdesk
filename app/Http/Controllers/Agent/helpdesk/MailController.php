@@ -2,6 +2,7 @@
 // controllers
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Agent\helpdesk\TicketController;
+
 // models
 use App\User;
 use App\Model\helpdesk\Email\Emails;
@@ -9,6 +10,12 @@ use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Settings\System;
+use App\Model\helpdesk\Manage\Help_topic;
+use App\Model\helpdesk\Utility\MailboxProtocol;
+use App\Model\helpdesk\Ticket\Ticket_source;
+use App\Model\helpdesk\Ticket\Ticket_Priority;
+use App\Model\helpdesk\Ticket\Tickets;
+
 // classes
 use PhpImap\Mailbox as ImapMailbox;
 use PhpImap\IncomingMail;
@@ -20,6 +27,7 @@ use Crypt;
 use Schedule;
 use File;
 use Artisan;
+use Exception;
 
 /**
  * MailController
@@ -45,53 +53,55 @@ class MailController extends Controller {
 	 */
 	public function readmails(Emails $emails, Email $settings_email, System $system)
 	{
-		$path_url = $system->first()->url;
+		// $path_url = $system->first()->url;
 		if($settings_email->first()->email_fetching == 1)
 		{
 		if($settings_email->first()->all_emails == 1)
 		{
-		$helptopic = $this->TicketController->default_helptopic();
-		$sla = $this->TicketController->default_sla();
+		// $helptopic = $this->TicketController->default_helptopic();
+		// $sla = $this->TicketController->default_sla();
 		$email = $emails->get();
 		foreach($email as $e_mail) 
 		{
+			$helptopic = $e_mail->help_topic;
+			$get_helptopic = Help_topic::where('id', '=', $helptopic)->first();
+			$sla  = $get_helptopic->sla_plan;
 			$dept = $e_mail->department;
 			$host = $e_mail->fetching_host;
 			$port = $e_mail->fetching_port;
 			$protocol = $e_mail->mailbox_protocol;
+			$get_mailboxprotocol = MailboxProtocol::where('id','=',$protocol)->first();
+			$protocol = $get_mailboxprotocol->value;
 			$imap_config = '{'.$host.':'.$port.$protocol.'}INBOX';
-
 			$password = Crypt::decrypt($e_mail->password);
-			$mailbox = new ImapMailbox($imap_config, $e_mail->user_name, $password, __DIR__);
+			$mailbox = new ImapMailbox($imap_config, $e_mail->email_address, $password, __DIR__);
 			$mails = array();
 			$mailsIds = $mailbox->searchMailBox('SINCE '. date('d-M-Y', strtotime("-1 day")));
 			if(!$mailsIds) {
 			    die('Mailbox is empty');
 			}
-			// dd($mailsIds);
 			foreach($mailsIds as $mailId) {
 				$overview = $mailbox->get_overview($mailId);	
 				$var = $overview[0]->seen ? 'read' : 'unread';
 				if ($var == 'unread') {
 					$mail = $mailbox->getMail($mailId);
-					if($settings_email->email_collaborator == 1) {
+					if($settings_email->first()->email_collaborator == 1) {
 						$collaborator = $mail->cc;
 					} else {
 						$collaborator = null;
 					}
 					$body = $mail->textHtml;
-					// dd($mailId);
 					if($body == null) {
 						$body = $mailbox->backup_getmail($mailId);
 						$body = str_replace('\r\n', '<br/>', $body);
 						// var_dump($body);
 					}
-					// dd($body);
 					$date = $mail->date; 
 	     			$datetime = $overview[0]->date;
 					$date_time = explode(" ", $datetime);
 					$date = $date_time[1] . "-" . $date_time[2] . "-" . $date_time[3] . " " . $date_time[4];
 					$date = date('Y-m-d H:i:s', strtotime($date));
+					// dd($date);
 					
 					if(isset($mail->subject)){
 						$subject = $mail->subject;
@@ -99,27 +109,36 @@ class MailController extends Controller {
 						$subject = "No Subject";
 					}
 					
+					// dd($subject);
 					$fromname = $mail->fromName;
 					$fromaddress = $mail->fromAddress;
-					$source = "2";
+					$ticket_source = Ticket_source::where('name','=','email')->first();
+					$source = $ticket_source->id;
 					$phone = "";
-					$priority = '1';
-					$assign = "";
+					$priority = $get_helptopic->priority;
+					// Ticket_Priority::where('')
+
+					$assign = $get_helptopic->auto_assign; 
 					$form_data = null;
-					if ($this->TicketController->create_user($fromaddress, $fromname, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $form_data) == true) {
-							$thread_id = Ticket_Thread::whereRaw('id = (select max(`id`) from ticket_thread)')->first();
-							$thread_id = $thread_id->id;
+					$result = $this->TicketController->create_user($fromaddress, $fromname, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $form_data);
+					// dd($result);
+					if ($result[1] == true) {
+							$ticket_table = Tickets::where('ticket_number', '=' , $result[0])->first();
+							$thread_id = Ticket_Thread::where('ticket_id','=',$ticket_table->id)->max('id');
+							// $thread_id = Ticket_Thread::whereRaw('id = (select max(`id`) from ticket_thread)')->first();
+							$thread_id = $thread_id;
 					
 						foreach($mail->getAttachments() as $attachment) {
-							// dd($attachment);
 							$support = "support";
 							// echo $_SERVER['DOCUMENT_ROOT'];
 							$dir_img_paths = __DIR__;
 							$dir_img_path = explode('/code', $dir_img_paths);
-							$filepath = explode('../../../../../../public',$attachment->filePath);
+							// dd($attachment->filePath);
+							$filepath = explode('../../../../../public',$attachment->filePath);
+							// var_dump($attachment->filePath);
 							// dd($filepath);
-                            // $path = $dir_img_path[0]."/public/".$filepath[1];
-                            $path = public_path().'/'.$filepath[1];
+                            // $path = $dir_img_path[0]."/code/public/".$filepath[1];
+                            $path = public_path().$filepath[1];
                             // dd($path);
 							$filesize = filesize($path);
 							$file_data = file_get_contents($path);

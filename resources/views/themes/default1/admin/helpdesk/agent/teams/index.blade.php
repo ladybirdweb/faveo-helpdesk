@@ -34,7 +34,7 @@ class="active"
 <div class="box-header">
 	<h2 class="box-title">{{Lang::get('lang.teams')}}</h2><a href="{{route('teams.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_team')}}</a></div>
 
-<div class="box-body table-responsive no-padding">
+<div class="box-body table-responsive">
 
 <!-- check whether success or not -->
 
@@ -56,7 +56,7 @@ class="active"
     </div>
     @endif
 
-				<table class="table table-hover" style="overflow:hidden;">
+				<table class="table table-bordered dataTable" style="overflow:hidden;">
 	<tr>
 							<th>{{Lang::get('lang.name')}}</th>
 							<th>{{Lang::get('lang.status')}}</th>
@@ -74,9 +74,16 @@ class="active"
 								<span style="color:red">{{'Inactive'}}</span>
 								@endif
 
-
+<?php
+if($team->team_lead == 0) {
+	$team_lead = "";
+} else {
+	$users = App\User::whereId($team->team_lead)->first();
+	$team_lead = $users->first_name . " " . $users->last_name;
+}
+?>
 							<td>{{count($assign_team_agent->where('team_id',$team->id))}}</td>
-							<td>{{$team->team_lead}}</td>
+							<td>{{ $team_lead }}</td>
 							<td>
 							{!! Form::open(['route'=>['teams.destroy', $team->id],'method'=>'DELETE']) !!}
 							<!-- To pop up a confirm Message -->

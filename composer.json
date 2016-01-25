@@ -15,7 +15,8 @@
 		"php-imap/php-imap": "~2.0",
 		"neitanod/forceutf8": "dev-master",
 		"nicolaslopezj/searchable": "1.*",
-		"chumper/datatable": "dev-develop"
+		"chumper/datatable": "dev-develop",
+        "chumper/zipper": "0.6.x"
 
 
 	},

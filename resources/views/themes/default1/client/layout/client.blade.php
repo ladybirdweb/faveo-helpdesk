@@ -201,22 +201,22 @@
 		</div>			
 <!-- /.content-wrapper -->
 <?php 
-$footer = App\Model\helpdesk\Theme\Footer::whereId('1')->first();                            
-$footer2 = App\Model\helpdesk\Theme\Footer2::whereId('1')->first();
-$footer3 = App\Model\helpdesk\Theme\Footer3::whereId('1')->first();
-$footer4 = App\Model\helpdesk\Theme\Footer4::whereId('1')->first();
+$footer1 = App\Model\helpdesk\Theme\Widgets::where('name','=','footer1')->first();
+$footer2 = App\Model\helpdesk\Theme\Widgets::where('name','=','footer2')->first();
+$footer3 = App\Model\helpdesk\Theme\Widgets::where('name','=','footer3')->first();
+$footer4 = App\Model\helpdesk\Theme\Widgets::where('name','=','footer4')->first();
 ?>
         <footer id="colophon" class="site-footer" role="contentinfo">
 			<div class="container">
 				<div class="row col-md-12">
-					@if($footer->title == null)
+					@if($footer1->title == null)
 					@else
 					<div class="col-md-3">
 						<div class="widget-area">
 							<section id="section-about" class="section">
-								<h2 class="section-title h4 clearfix">{!!$footer->title!!}</h2>
+								<h2 class="section-title h4 clearfix">{!!$footer1->title!!}</h2>
 								<div class="textwidget">
-									<p>{!!$footer->footer!!}</p>
+									<p>{!!$footer1->value!!}</p>
 								</div>
 							</section><!-- #section-about -->
 						</div>
@@ -229,7 +229,7 @@ $footer4 = App\Model\helpdesk\Theme\Footer4::whereId('1')->first();
 							<section id="section-latest-news" class="section">
 								<h2 class="section-title h4 clearfix">{!!$footer2->title!!}</h2>
 								<div class="textwidget">
-									<p>{!!$footer2->footer!!}</p>	
+									<p>{!! $footer2->value !!}</p>	
 								</div>
 							</section><!-- #section-latest-news -->
 						</div>
@@ -242,7 +242,7 @@ $footer4 = App\Model\helpdesk\Theme\Footer4::whereId('1')->first();
 							<section id="section-newsletter" class="section">
 								<h2 class="section-title h4 clearfix">{!!$footer3->title!!}</h2>
 								<div class="textwidget">
-                                	<p>{!!$footer3->footer!!}</p>
+                                	<p>{!! $footer3->value !!}</p>
                                 </div>
 							</section><!-- #section-newsletter -->
 						</div>
@@ -255,7 +255,7 @@ $footer4 = App\Model\helpdesk\Theme\Footer4::whereId('1')->first();
 							<section id="section-newsletter" class="section">
                             <h2 class="section-title h4 clearfix">{{$footer4->title}}</h2>
                             <div class="textwidget">
-                                <p>{!!$footer4->footer!!}</p>
+                                <p>{!! $footer4->value !!}</p>
                    			</div>
                        		</section>
                     	</div>
@@ -269,42 +269,65 @@ $footer4 = App\Model\helpdesk\Theme\Footer4::whereId('1')->first();
                             <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
                         </div>
                         <div class="site-social text-right col-md-6">
-                            <?php $social = App\Model\kb\Social::where('id', '1')->first(); ?>
+                             <?php $socials = App\Model\helpdesk\Theme\Widgets::all(); ?>
                             <ul class="list-inline hidden-print">
-                                @if($social->facebook)
-                                <li><a href="{{$social->facebook}}" class="btn btn-social btn-facebook"><i class="fa fa-facebook fa-fw"></i></a></li>
-                                @endif
-                                @if($social->twitter)
-                                <li><a href="{{$social->twitter}}" class="btn btn-social btn-twitter"><i class="fa fa-twitter fa-fw"></i></a></li>
-                                @endif
-                                @if($social->google)
-                                <li><a href="{{$social->google}}" class="btn btn-social btn-google-plus"><i class="fa fa-google-plus fa-fw"></i></a></li>
-                                @endif
-                                @if($social->linkedin)
-                                <li><a href="{{$social->linkedin}}" class="btn btn-social btn-linkedin"><i class="fa fa-linkedin fa-fw"></i></a></li>
-                                @endif
-                                @if($social->vimeo)
-                                <li><a href="{{$social->vimeo}}" class="btn btn-social btn-vimeo"><i class="fa fa-vimeo-square fa-fw"></i></a></li>
-                                @endif
-                                @if($social->youtube)
-                                <li><a href="{{$social->youtube}}" class="btn btn-social btn-youtube"><i class="fa fa-youtube-play fa-fw"></i></a></li>
-                                @endif
-                                @if($social->pinterest)
-                                <li><a href="{{$social->pinterest}}" class="btn btn-social btn-pinterest"><i class="fa fa-pinterest fa-fw"></i></a></li>
-                                @endif
-                                @if($social->dribbble)
-                                <li><a href="{{$social->dribbble}}" class="btn btn-social btn-dribbble"><i class="fa fa-dribbble fa-fw"></i></a></li>
-                                @endif
-                                @if($social->flickr)
-                                <li><a href="{{$social->flickr}}" class="btn btn-social btn-flickr"><i class="fa fa-flickr fa-fw"></i></a></li>
-                                @endif
-                                @if($social->instagram)
-                                <li><a href="{{$social->instagram}}" class="btn btn-social btn-instagram"><i class="fa fa-instagram fa-fw"></i></a></li>
-                                @endif
-                                @if($social->rss)
-                                <li><a href="{{$social->rss}}" class="btn btn-social btn-rss"><i class="fa fa-rss fa-fw"></i></a></li>
-                                @endif
-
+                            	@foreach($socials as $social)
+	                                @if($social->name == 'facebook')
+	                                	@if($social->value)
+	                                		<li><a href="{!! $social->value !!}" class="btn btn-social btn-facebook"><i class="fa fa-facebook fa-fw"></i></a></li>
+	                                	@endif
+	                                @endif
+	                                @if($social->name == "twitter")
+	                                	@if($social->value)
+	                                		<li><a href="{{ $social->value }}" class="btn btn-social btn-twitter"><i class="fa fa-twitter fa-fw"></i></a></li>
+	                                	@endif
+	                                @endif
+	                                @if($social->name == "google")
+	                                	@if($social->value)
+	                                		<li><a href="{{$social->value}}" class="btn btn-social btn-google-plus"><i class="fa fa-google-plus fa-fw"></i></a></li>
+	                                	@endif
+	                                @endif
+	                                @if($social->name == "linkedin")
+	                                	@if($social->value)
+	                                		<li><a href="{{$social->value}}" class="btn btn-social btn-linkedin"><i class="fa fa-linkedin fa-fw"></i></a></li>
+	                                	@endif
+	                                @endif
+	                                @if($social->name == "vimeo")
+	                                	@if($social->value)
+	                                		<li><a href="{{$social->value}}" class="btn btn-social btn-vimeo"><i class="fa fa-vimeo-square fa-fw"></i></a></li>
+	                                	@endif
+	                                @endif
+	                                @if($social->name == "youtube")
+	                                	@if($social->value)
+	                                		<li><a href="{{$social->vlaue}}" class="btn btn-social btn-youtube"><i class="fa fa-youtube-play fa-fw"></i></a></li>
+	                                	@endif
+	                                @endif
+	                                @if($social->name == "pinterest")
+	                                	@if($social->value)
+	                                		<li><a href="{{$social->value}}" class="btn btn-social btn-pinterest"><i class="fa fa-pinterest fa-fw"></i></a></li>
+	                                	@endif
+	                                @endif
+	                                @if($social->name == "dribbble")
+	                                	@if($social->value)
+	                                		<li><a href="{{$social->value}}" class="btn btn-social btn-dribbble"><i class="fa fa-dribbble fa-fw"></i></a></li>
+	                                	@endif
+	                                @endif
+	                                @if($social->name == "flickr")
+	                                	@if($social->value)
+	                                		<li><a href="{{$social->value}}" class="btn btn-social btn-flickr"><i class="fa fa-flickr fa-fw"></i></a></li>
+	                                	@endif
+	                                @endif
+	                                @if($social->name == "instagram")
+	                                	@if($social->value)
+	                                		<li><a href="{{$social->value }}" class="btn btn-social btn-instagram"><i class="fa fa-instagram fa-fw"></i></a></li>
+	                                	@endif
+	                                @endif
+	                                @if($social->name == "rss")
+	                                	@if($social->value)
+	                                		<li><a href="{{$social->rss}}" class="btn btn-social btn-rss"><i class="fa fa-rss fa-fw"></i></a></li>
+	                                	@endif
+	                                @endif
+	                            @endforeach
                             </ul>
                         </div>
 					</div>

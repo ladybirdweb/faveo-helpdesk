@@ -8,9 +8,10 @@ use Illuminate\Http\Request;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Agent\Groups;
 use App\Model\helpdesk\Agent\Group_assign_department;
+use App\User;
 // classes
 use Illuminate\Support\Facades\Input;
-
+use Exception;
 /**
  * GroupController
  *
@@ -67,27 +68,12 @@ class GroupController extends Controller {
 	public function store(Groups $group, GroupRequest $request) {
 		try {
 			/* Check Whether function success or not */
-			if ($group->fill($request->input())->save() == true) {
-				/* redirect to Index page with Success Message */
-				return redirect('groups')->with('success', 'Groups Created Successfully');
-			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect('groups')->with('fails', 'Groups can not Create');
-			}
+			$group->fill($request->input())->save();
+			return redirect('groups')->with('success', 'Group Created Successfully');
 		} catch (Exception $e) {
 			/* redirect to Index page with Fails Message */
-			return redirect('groups')->with('fails', 'Groups can not Create');
+			return redirect('groups')->with('fails', 'Groups can not Create'.'<li>'.$e->errorInfo[2].'</li>');
 		}
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id, Groups $group, Request $request) {
-		//
 	}
 
 	/**
@@ -101,7 +87,7 @@ class GroupController extends Controller {
 			$groups = $group->whereId($id)->first();
 			return view('themes.default1.admin.helpdesk.agent.groups.edit', compact('groups'));
 		} catch (Exception $e) {
-			return view('404');
+			return redirect('groups')->with('fails', 'Groups can not Create'.'<li>'.$e->errorInfo[2].'</li>');
 		}
 	}
 
@@ -113,7 +99,6 @@ class GroupController extends Controller {
 	 * @return type Response
 	 */
 	public function update($id, Groups $group, Request $request) {
-		try {
 			$var = $group->whereId($id)->first();
 			//Updating Status
 			$status = $request->Input('group_status');
@@ -158,17 +143,14 @@ class GroupController extends Controller {
 			$adminNotes = $request->Input('admin_notes');
 			$var->admin_notes = $adminNotes;
 			/* Check whether function success or not */
-			if ($var->save() == true) {
+			try {
+			$var->save();
 				/* redirect to Index page with Success Message */
 				return redirect('groups')->with('success', 'Group Updated Successfully');
-			} else {
+			} catch (Exception $e) {
 				/* redirect to Index page with Fails Message */
-				return redirect('groups')->with('fails', 'Group can not Update');
+				return redirect('groups')->with('fails', 'Groups can not Create'.'<li>'.$e->errorInfo[2].'</li>');
 			}
-		} catch (Exception $e) {
-			/* redirect to Index page with Fails Message */
-			return redirect('groups')->with('fails', 'Groups can not Create');
-		}
 	}
 
 	/**
@@ -178,21 +160,22 @@ class GroupController extends Controller {
 	 * @param type Group_assign_department $group_assign_department
 	 * @return type Response
 	 */
-	public function destroy($id, Groups $group, Group_assign_department $group_assign_department) {
-		try {
+	public function destroy($id, Groups $group, Group_assign_department $group_assign_department) {		
+			$users = User::where('assign_group', '=', $id)->first();
+			if($users){
+				$user = '<li>There are agents assigned to this group. Please unassign them from this group to delete</li>';				
+				return redirect('groups')->with('fails', 'Group cannot Delete ' . $user);
+			}
 			$group_assign_department->where('group_id', $id)->delete();
 			$groups = $group->whereId($id)->first();
 			/* Check whether function success or not */
-			if ($groups->delete() == true) {
+			try {
+				$groups->delete();
 				/* redirect to Index page with Success Message */
 				return redirect('groups')->with('success', 'Group Deleted Successfully');
-			} else {
+			} catch (Exception $e) {
 				/* redirect to Index page with Fails Message */
-				return redirect('groups')->with('fails', 'Group can not Delete');
+				return redirect('groups')->with('fails', 'Groups cannot Create'.'<li>'.$e->errorInfo[2].'</li>');
 			}
-		} catch (Exception $e) {
-			/* redirect to Index page with Fails Message */
-			return redirect('groups')->with('fails', 'Groups can not Create');
-		}
 	}
 }

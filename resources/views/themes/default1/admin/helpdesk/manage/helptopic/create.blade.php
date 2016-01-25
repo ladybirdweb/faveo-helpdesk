@@ -94,7 +94,7 @@ class="active"
 
 			{!! Form::label('custom_form',Lang::get('lang.custom')) !!}
 			{!! $errors->first('custom_form', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('custom_form', [''=>'Select a Form','Custom Forms'=>$forms->lists('formname','name')],1,['class' => 'form-control']) !!}
+			{!!Form::select('custom_form', [''=>'Select a Form','Custom Forms'=>$forms->lists('formname','id')],1,['class' => 'form-control']) !!}
 			</div>
 		</div>
 
@@ -128,7 +128,7 @@ class="active"
 
 			{!! Form::label('sla_plan',Lang::get('lang.SLA_plan')) !!}
 			{!! $errors->first('sla_plan', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('sla_plan', [''=>'Select a SLA Plan','SLA Plans'=>$slas->lists('name','name')],1,['class' => 'form-control']) !!}
+			{!!Form::select('sla_plan', [''=>'Select a SLA Plan','SLA Plans'=>$slas->lists('name','id')],1,['class' => 'form-control']) !!}
 			</div>
 		</div>
 
@@ -139,7 +139,7 @@ class="active"
 
 			{!! Form::label('auto_assign',Lang::get('lang.auto_assign')) !!}
 			{!! $errors->first('auto_assign', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('auto_assign', [''=>'Select an Agent','Agents'=>$agents->lists('user_name','user_name')],null,['class' => 'form-control']) !!}
+			{!!Form::select('auto_assign', [''=>'Select an Agent','Agents'=>$agents->lists('user_name','id')],null,['class' => 'form-control']) !!}
 			</div>
 		</div>
 		</div>

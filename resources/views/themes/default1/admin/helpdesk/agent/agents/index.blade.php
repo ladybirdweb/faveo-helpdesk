@@ -35,7 +35,7 @@ class="active"
 <div class="box-header">
 	<h2 class="box-title">{!! Lang::get('lang.staffs') !!} </h2><a href="{{route('agents.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_agent')}}</a></div>
 
-<div class="box-body table-responsive no-padding">
+<div class="box-body table-responsive">
 <?php 
  $user = App\User::where('role','!=','user')->orderBy('id', 'ASC')->paginate(20);
 ?>
@@ -59,7 +59,7 @@ class="active"
     </div>
     @endif
     		<!-- Agent table -->
-				<table class="table table-hover" style="overflow:hidden;">
+				<table class="table table-bordered dataTable" style="overflow:hidden;">
 					<tr>
 							<th width="100px">{{Lang::get('lang.name')}}</th>
 							<th width="100px">{{Lang::get('lang.user_name')}}</th>
@@ -86,24 +86,26 @@ class="active"
 							}
 							?>
 							<td>
-								@if($use->account_type=='1')
+								@if($use->active=='1')
 								<span style="color:green">{{'Active'}}</span>
 								@else
 								<span style="color:red">{{'Inactive'}}</span>
 								@endif
-							<td>{{$use->assign_group }}</td>
-							<td>{{$use->primary_dpt }}</td>
+
+								<?php    
+								$group = App\Model\helpdesk\Agent\Groups::whereId($use->assign_group)->first();
+								$department = App\Model\helpdesk\Agent\Department::whereId($use->primary_dpt)->first();
+								?>
+
+							<td>{{ $group->name }}</td>
+							<td>{{ $department->name }}</td>
 							<td>{{ UTC::usertimezone($use->created_at) }}</td>
 							{{-- <td>{{$use->Lastlogin_at}}</td> --}}
 							<td>
 							{!! Form::open(['route'=>['agents.destroy', $use->id],'method'=>'DELETE']) !!}
 							<a href="{{route('agents.edit', $use->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!} </a>
 								<!-- To pop up a confirm Message -->
-									{!! Form::button(' <i class="fa fa-trash" style="color:black;"> </i> '  . Lang::get('lang.delete') ,
-					            		['type' => 'submit',
-					            		'class'=> 'btn btn-warning btn-xs btn-flat',
-					            		'onclick'=>'return confirm("Are you sure?")'])
-					            	!!}
+									{{-- {!! Form::button(' <i class="fa fa-trash" style="color:black;"> </i> '  . Lang::get('lang.delete') ,['type' => 'submit', 'class'=> 'btn btn-warning btn-xs btn-flat','onclick'=>'return confirm("Are you sure?")']) !!} --}}
 							{!! Form::close() !!}
 							</td>
 						</tr>
@@ -111,9 +113,7 @@ class="active"
 						@endforeach
 				</table>
 		</div>
-		<div class="box-footer"></div>
+		
 </div>
-@section('FooterInclude')
-@stop
 @stop
 <!-- /content --> 

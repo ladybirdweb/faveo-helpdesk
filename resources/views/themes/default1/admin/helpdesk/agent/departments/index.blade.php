@@ -34,7 +34,7 @@ class="active"
 <div class="box-header">
 	<h2 class="box-title">{!! Lang::get('lang.departments') !!}</h2><a href="{{route('departments.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_department')}}</a></div>
 
-<div class="box-body table-responsive no-padding">
+<div class="box-body table-responsive ">
 
 
 <!-- check whether success or not -->
@@ -44,7 +44,7 @@ class="active"
         <i class="fa  fa-check-circle"></i>
         <b>{!! Lang::get('lang.success') !!}</b>
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{Session::get('success')}}
+        {!! Session::get('success') !!}
     </div>
     @endif
     <!-- failure message -->
@@ -53,37 +53,78 @@ class="active"
         <i class="fa fa-ban"></i>
         <b>{!! Lang::get('lang.fails') !!}!</b>
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{Session::get('fails')}}
+        {!! Session::get('fails') !!}
     </div>
     @endif
     <!-- table -->
-				<table class="table table-hover" style="overflow:hidden;">
+				<table class="table table-bordered dataTable" style="overflow:hidden;">
 	<tr>
 						<tr>
 							<th>{{Lang::get('lang.name')}}</th>
 							<th>{{Lang::get('lang.type')}}</th>
+							<th>{{Lang::get('lang.sla_plan')}}</th>
 							<th>{{Lang::get('lang.department_manager')}}</th>
 							<th>{{Lang::get('lang.action')}}</th>
 						</tr>
+
+<?php
+$default_department = App\Model\helpdesk\Settings\System::where('id','=','1')->first();
+$default_department = $default_department->department;
+?>
+
 						@foreach($departments as $department)
 						<tr>
-							<td><a href="{{route('departments.edit', $department->id)}}"> {{$department -> name }}</a></td>
+							<td><a href="{{route('departments.edit', $department->id)}}"> {{$department -> name }}
+							@if($default_department == $department->id)
+							( Default )
+							<?php  
+							$disable = 'disabled';
+							?>
+							@else
+							<?php  
+							$disable = '';
+							?>
+							@endif
+							</a></td>
 							<td>
 								@if($department->type=='1')
 								<span style="color:green">{{'Public'}}</span>
 								@else
 								<span style="color:red">{{'Private'}}</span>
 								@endif
-							<td>{{$department->manager}}</td>
+							</td>
+								<?php 
+								if($department->manager == 0) {
+									$manager ="";
+								} else {
+									$manager = App\User::whereId($department->manager)->first();
+									$manager = $manager->user_name;
+								}	
+
+								if($department->sla == null){
+									$sla = "";
+								} else {
+									$sla = App\Model\helpdesk\Manage\sla_plan::whereId($department->sla)->first();
+									$sla = $sla->grace_period;
+								}
+								
+								?>
+
+							<td>{{ $sla }}</td>
+							<td>{{ $manager }}</td>
 							<td>
 							{!! Form::open(['route'=>['departments.destroy', $department->id],'method'=>'DELETE']) !!}
 							<a href="{{route('departments.edit', $department->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> Edit</a>
-								<!-- To pop up a confirm Message -->
+							{{-- @if($default_department == $department->id) --}}
+							{{-- @else --}}
+							<!-- To pop up a confirm Message -->
 									{!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> Delete',
 					            		['type' => 'submit',
-					            		'class'=> 'btn btn-warning btn-xs btn-flat',
+					            		'class'=> 'btn btn-warning btn-xs btn-flat '.$disable,
 					            		'onclick'=>'return confirm("Are you sure?")'])
 					            	!!}
+							{{-- @endif --}}
+								
 									{!! Form::close() !!}
 							</td>
 						</tr>

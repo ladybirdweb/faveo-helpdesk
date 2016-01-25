@@ -20,13 +20,13 @@ use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
 use App\Model\helpdesk\Utility\Date_format;
 use App\Model\helpdesk\Utility\Date_time_format;
-use App\Model\helpdesk\Utility\Logs;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Time_format;
 // classes
 use Illuminate\Http\Request;
 use Input;
+use Exception;
 
 /**
  * SettingsController
@@ -69,7 +69,7 @@ class SettingsController extends Controller {
 			/* Direct to Company Settings Page */
 			return view('themes.default1.admin.helpdesk.settings.company', compact('companys'));
 		} catch (Exception $e) {
-			return view('404');
+			return redirect()->back()->with('fails',$e->errorInfo[2]);
 		}
 	}
 
@@ -81,7 +81,7 @@ class SettingsController extends Controller {
 	 * @return Response
 	 */
 	public function postcompany($id, Company $company, CompanyRequest $request) {
-		try {
+		
 			/* fetch the values of company request  */
 			$companys = $company->whereId('1')->first();
 			if (Input::file('logo')) {
@@ -96,17 +96,14 @@ class SettingsController extends Controller {
 					$companys->use_logo = '0';
 				}
 			/* Check whether function success or not */
-			if ($companys->fill($request->except('logo'))->save() == true) {
+			try {
+				$companys->fill($request->except('logo'))->save();
 				/* redirect to Index page with Success Message */
 				return redirect('getcompany')->with('success', 'Company Updated Successfully');
-			} else {
+			} catch (Exception $e) {
 				/* redirect to Index page with Fails Message */
-				return redirect('getcompany')->with('fails', 'Company can not Updated');
+				return redirect('getcompany')->with('fails', 'Company can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
 			}
-		} catch (Exception $e) {
-			/* redirect to Index page with Fails Message */
-			return redirect('getcompany')->with('fails', 'Company can not Updated');
-		}
 	}
 
 	/**
@@ -117,10 +114,9 @@ class SettingsController extends Controller {
 	 * @param type Date_format $date
 	 * @param type Date_time_format $date_time
 	 * @param type Time_format $time
-	 * @param type Logs $log
 	 * @return type Response
 	 */
-	public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time, Logs $log) {
+	public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time) {
 		try {
 			/* fetch the values of system from system table */
 			$systems = $system->whereId('1')->first();
@@ -129,9 +125,9 @@ class SettingsController extends Controller {
 			/* Fetch the values from Timezones table */
 			$timezones = $timezone->get();
 			/* Direct to System Settings Page */
-			return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'log'));
+			return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time'));
 		} catch (Exception $e) {
-			return view('404');
+			return redirect()->back()->with('fails',$e->errorInfo[2]);
 		}
 	}
 
@@ -144,20 +140,17 @@ class SettingsController extends Controller {
 	 */
 	public function postsystem($id, System $system, SystemRequest $request) {
 		try {
+			// dd($request);
 			/* fetch the values of system request  */
 			$systems = $system->whereId('1')->first();
 			/* fill the values to coompany table */
 			/* Check whether function success or not */
-			if ($systems->fill($request->input())->save() == true) {
-				/* redirect to Index page with Success Message */
-				return redirect('getsystem')->with('success', 'System Updated Successfully');
-			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect('getsystem')->with('fails', 'System can not Updated');
-			}
+			$systems->fill($request->input())->save();
+			/* redirect to Index page with Success Message */
+			return redirect('getsystem')->with('success', 'System Updated Successfully');
 		} catch (Exception $e) {
 			/* redirect to Index page with Fails Message */
-			return redirect('getsystem')->with('fails', 'System can not Updated');
+			return redirect('getsystem')->with('fails', 'System can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
 		}
 	}
 
@@ -180,7 +173,7 @@ class SettingsController extends Controller {
 			/* Direct to Ticket Settings Page */
 			return view('themes.default1.admin.helpdesk.settings.ticket', compact('tickets', 'slas', 'topics', 'priority'));
 		} catch (Exception $e) {
-			return view('404');
+			return redirect()->back()->with('fails',$e->errorInfo[2]);
 		}
 	}
 
@@ -206,16 +199,12 @@ class SettingsController extends Controller {
 			$tickets->html = $request->input('html');
 			$tickets->client_update = $request->input('client_update');
 			/* Check whether function success or not */
-			if ($tickets->save() == true) {
-				/* redirect to Index page with Success Message */
-				return redirect('getticket')->with('success', 'Ticket Updated Successfully');
-			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect('getticket')->with('fails', 'Ticket can not Updated');
-			}
+			$tickets->save();
+			/* redirect to Index page with Success Message */
+			return redirect('getticket')->with('success', 'Ticket Updated Successfully');
 		} catch (Exception $e) {
 			/* redirect to Index page with Fails Message */
-			return redirect('getticket')->with('fails', 'Ticket can not Updated');
+			return redirect('getticket')->with('fails', 'Ticket can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
 		}
 	}
 
@@ -237,7 +226,7 @@ class SettingsController extends Controller {
 			/* Direct to Email Settings Page */
 			return view('themes.default1.admin.helpdesk.settings.email', compact('emails', 'templates', 'emails1'));
 		} catch (Exception $e) {
-			return view('404');
+			return redirect()->back()->with('fails',$e->errorInfo[2]);
 		}
 	}
 
@@ -262,16 +251,12 @@ class SettingsController extends Controller {
 			$emails->strip = $request->input('strip');
 			$emails->attachment = $request->input('attachment');
 			/* Check whether function success or not */
-			if ($emails->save() == true) {
-				/* redirect to Index page with Success Message */
-				return redirect('getemail')->with('success', 'Email Updated Successfully');
-			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect('getemail')->with('fails', 'Email can not Updated');
-			}
+			$emails->save();
+			/* redirect to Index page with Success Message */
+			return redirect('getemail')->with('success', 'Email Updated Successfully');
 		} catch (Exception $e) {
 			/* redirect to Index page with Fails Message */
-			return redirect('getemail')->with('fails', 'Email can not Updated');
+			return redirect('getemail')->with('fails', 'Email can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
 		}
 	}
 
@@ -334,7 +319,7 @@ class SettingsController extends Controller {
 			/* Direct to Responder Settings Page */
 			return view('themes.default1.admin.helpdesk.settings.responder', compact('responders'));
 		} catch (Exception $e) {
-			return view('404');
+			return redirect()->back()->with('fails',$e->errorInfo[2]);
 		}
 	}
 
@@ -356,16 +341,12 @@ class SettingsController extends Controller {
 			$responders->overlimit = $request->input('overlimit');
 			/* fill the values to coompany table */
 			/* Check whether function success or not */
-			if ($responders->save() == true) {
-				/* redirect to Index page with Success Message */
-				return redirect('getresponder')->with('success', 'Responder Updated Successfully');
-			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect('getresponder')->with('fails', 'Responder can not Updated');
-			}
+			$responders->save();
+			/* redirect to Index page with Success Message */
+			return redirect('getresponder')->with('success', 'Responder Updated Successfully');
 		} catch (Exception $e) {
 			/* redirect to Index page with Fails Message */
-			return redirect('getresponder')->with('fails', 'Responder can not Updated');
+			return redirect('getresponder')->with('fails', 'Responder can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
 		}
 	}
 
@@ -381,7 +362,7 @@ class SettingsController extends Controller {
 			/* Direct to Alert Settings Page */
 			return view('themes.default1.admin.helpdesk.settings.alert', compact('alerts'));
 		} catch (Exception $e) {
-			return view('404');
+			return redirect()->back()->with('fails',$e->errorInfo[2]);
 		}
 	}
 
@@ -442,16 +423,12 @@ class SettingsController extends Controller {
 			}
 			/* fill the values to coompany table */
 			/* Check whether function success or not */
-			if ($alerts->save() == true) {
-				/* redirect to Index page with Success Message */
-				return redirect('getalert')->with('success', 'Alert Updated Successfully');
-			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect('getalert')->with('fails', 'Alert can not Updated');
-			}
+			$alerts->save();
+			/* redirect to Index page with Success Message */
+			return redirect('getalert')->with('success', 'Alert Updated Successfully');
 		} catch (Exception $e) {
 			/* redirect to Index page with Fails Message */
-			return redirect('getalert')->with('fails', 'Alert can not Updated');
+			return redirect('getalert')->with('fails', 'Alert can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
 		}
 	}
 

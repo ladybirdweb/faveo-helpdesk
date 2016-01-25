@@ -68,14 +68,13 @@ class="active"
 
 		</div>
 	</div>
-
 		<div class="row">
 		<!-- sla -->
 			<div class="col-xs-6 form-group {{ $errors->has('sla') ? 'has-error' : '' }}">
 
 				{!! Form::label('sla',Lang::get('lang.SLA_plan')) !!}
 				{!! $errors->first('sla', '<spam class="help-block">:message</spam>') !!}
-				{!!Form::select('sla', ['SLA Plans'=>$slas->lists('grace_period','grace_period')],null,['class' => 'form-control select']) !!}
+				{!!Form::select('sla', ['SLA Plans'=>$slas->lists('grace_period','id')],null,['class' => 'form-control select']) !!}
 
 			</div>
 			<!-- manager -->
@@ -83,7 +82,7 @@ class="active"
 
 				{!! Form::label('manager',Lang::get('lang.manager')) !!}
 				{!! $errors->first('manager', '<spam class="help-block">:message</spam>') !!}
-				{!!Form::select('manager',[''=>'Select a Manager','Managers'=>$user->lists('user_name','user_name')],null,['class' => 'form-control select']) !!}
+				{!!Form::select('manager',[null=>'Select a Manager','Managers'=>$user->lists('user_name','id')],null,['class' => 'form-control select']) !!}
 
 			</div>
 

@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class System extends Model {
 
 	/* Using System Table */
-	protected $table = 'system';
+	protected $table = 'settings_system';
 	protected $fillable = [
 
 							'id','status','url','name','department','page_size','log_level','purge_log','name_format',

@@ -20,6 +20,7 @@ use Mail;
 use Auth;
 use Redirect;
 use Hash;
+use Exception;
 
 class UserController extends Controller {
 

@@ -12,7 +12,7 @@ active
     $user = App\User::where('id', '=', $tickets->user_id)->first();
     $assignedto = App\User::where('id', '=', $tickets->assigned_to)->first();
     $agent_group = Auth::user()->assign_group;
-    $group = App\Model\helpdesk\Agent\Groups::where('name', '=', $agent_group)->where('group_status', '=', '1')->first();
+    $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
 ?>
 
 @section('sidebar')
@@ -53,7 +53,7 @@ active
 <?php
             Event::fire(new \App\Events\TicketBoxHeader($user->id));
 
-             if ($group->can_edit_ticket == 1) {?>
+            if ($group->can_edit_ticket == 1) {?>
             <button type="button" class="btn btn-default" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><i class="fa fa-edit" style="color:green;"> </i> {!! Lang::get('lang.edit') !!}</button>
             <?php } ?>
 
@@ -62,7 +62,7 @@ active
             <?php } ?>
 
             @if($tickets->assigned_to == Auth::user()->id)
-            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#surrender"> <i class="fa fa-arrows-alt" style="color:red;"> </i>  {!! Lang::get('lang.surrender') !!}</button>
+            <button type="button" id="surrender_button" class="btn btn-default" data-toggle="modal" data-target="#surrender"> <i class="fa fa-arrows-alt" style="color:red;"> </i>  {!! Lang::get('lang.surrender') !!}</button>
             @endif
 
             <a href="{{url('ticket/print/'.$tickets->id)}}" target="_blank" class="btn btn-primary"><i class="fa fa-print" > </i> {!! Lang::get('lang.generate_pdf') !!}</a>
@@ -724,7 +724,7 @@ $data = $ConvDate[0];
                                 <?php $sla_plans = App\Model\helpdesk\Manage\Sla_plan::all() ?>
                                 <select class="form-control" name="sla_paln">
                                 @foreach($sla_plans as $sla_plan)
-                                    <option value="{!! $sla_plan->id !!}">{!! $sla_plan->grace_period !!}</option>
+                                    <option value="{!! $sla_plan->id !!}" <?php  if($SlaPlan->id == $sla_plan->id){ echo "selected"; } ?> >{!! $sla_plan->grace_period !!}</option>
                                 @endforeach
                                 </select>
                                 <spam id="error-sla" style="display:none" class="help-block text-red">This is a required field</spam>
@@ -735,8 +735,8 @@ $data = $ConvDate[0];
                                 <label>{!! Lang::get('lang.help_topic') !!}</label>
                                 <?php $help_topics = App\Model\helpdesk\Manage\Help_topic::all() ?>
                                 <select class="form-control" name="help_topic">
-                                @foreach($help_topics as $help_topic)
-                                    <option value="{!! $help_topic->id !!}">{!! $help_topic->topic !!}</option>
+                                @foreach($help_topics as $helptopic)
+                                    <option value="{!! $helptopic->id !!}" <?php if($help_topic->id == $helptopic->id){echo 'selected';} ?> >{!! $helptopic->topic !!}</option>
                                 @endforeach
                                 </select>
                                 <spam id="error-help" style="display:none" class="help-block text-red">This is a required field</spam>
@@ -747,20 +747,23 @@ $data = $ConvDate[0];
                                 <label>{!! Lang::get('lang.ticket_source') !!}</label>
                                 <?php $ticket_sources = App\Model\helpdesk\Ticket\Ticket_source::all() ?>
                                 <select class="form-control" name="ticket_source">
-                                @foreach($ticket_sources as $ticket_source)
-                                    <option value="{!! $ticket_source->id !!}">{!! $ticket_source->value !!}</option>
-                                @endforeach
+                                @foreach($ticket_sources as $ticketsource)
+                                    <option value="{!! $ticketsource->id !!}" <?php  if($tickets->source == $ticketsource->id){echo "selected"; } ?> >{!! $ticketsource->value !!}</option>
+                                @endforeach 
                                 </select>
                                 <spam id="error-source" style="display:none" class="help-block text-red">This is a required field</spam>
                             </div>
                         </div>
+                        <?php 
+                        
+                        ?>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{!! Lang::get('lang.priority') !!}</label>
                                 <?php $ticket_prioritys = App\Model\helpdesk\Ticket\Ticket_Priority::all() ?>
                                 <select class="form-control" name="ticket_priority">
                                 @foreach($ticket_prioritys as $ticket_priority)
-                                   <option value="{!! $ticket_priority->priority_id !!}">{!! $ticket_priority->priority_desc !!}</option>
+                                   <option value="{!! $ticket_priority->priority_id !!}" <?php if($tickets->priority_id == $ticket_priority->priority_id){echo "selected";} ?> >{!! $ticket_priority->priority_desc !!}</option>
                                 @endforeach
                                 </select>
                                 <spam id="error-priority" style="display:none" class="help-block text-red">This is a required field</spam>
@@ -858,6 +861,7 @@ $data = $ConvDate[0];
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
 <?php if ($group->can_assign_ticket == 1) {?>
     <!-- Ticket Assign Modal -->
     <div class="modal fade" id="{{$tickets->id}}assign">
@@ -884,7 +888,7 @@ $data = $ConvDate[0];
                     <div id="assign_body">
                         <p>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}?</p>
 
-                        <select id="asssign" class="form-control" name="user">
+                        <select id="asssign" class="form-control" name="assign_to">
 <?php   
 $assign = App\User::where('role', '!=', 'user')->get();
 $count_assign = count($assign);
@@ -893,12 +897,12 @@ $count_teams = count($teams);
 ?>
                             <optgroup label="Teams ( {!! $count_teams !!} )">
                                 @foreach($teams as $team)
-                                    <option  value="{{$team->id}}">{!! $team->name !!}</option>
+                                    <option  value="team_{{$team->id}}">{!! $team->name !!}</option>
                                 @endforeach
                             </optgroup>
                             <optgroup label="Agents ( {!! $count_assign !!} )">
                                 @foreach($assign as $user)
-                                    <option  value="{{$user->email}}">{{$user->first_name." ".$user->last_name}}</option>
+                                    <option  value="user_{{$user->id}}">{{$user->first_name." ".$user->last_name}}</option>
                                 @endforeach
                             </optgroup>
                         </select>
@@ -923,7 +927,7 @@ $count_teams = count($teams);
                     <h4 class="modal-title">{!! Lang::get('lang.surrender') !!}</h4>
                 </div>
                 <div class="modal-body">
-                    <p>{!! Lang::get('are_you_sure_you_want_to_surrender_this_ticket') !!}?</p>
+                    <p>{!! Lang::get('lang.are_you_sure_you_want_to_surrender_this_ticket') !!}?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis6">{!! Lang::get('lang.close') !!}</button>
@@ -1315,12 +1319,17 @@ $(document).ready(function () {
                     $("#assign_loader").show();
                 },
                 success: function(response) {
-                    if(response === 1)
+                    if(response == 1)
                     {
                         // $("#assign_body").show();
-                        var message = "Success";
-                        $('#message-success2').html(message);
-                        setInterval(function(){$("#alert21").hide(); },4000);   
+                        // var message = "Success";
+                        // $('#message-success1').html(message);
+                        // setInterval(function(){$("#alert11").hide(); },4000);   
+
+                        var message = "Success!";
+                        $("#alert11").show();
+                        $('#message-success1').html(message);
+                        setInterval(function(){$("#dismiss11").trigger("click"); },2000);   
                     }
                     $("#assign_body").show();
                     $("#assign_loader").hide();
@@ -1442,17 +1451,18 @@ $(document).ready(function () {
                     {
                         // alert('ticket has been un assigned');
                         var message = "Success! You have Unassigned your ticket";
-                        $("#alert21").show();
-                        $('#message-success2').html(message);
-                        setInterval(function(){$("#dismiss21").trigger("click"); },2000);   
+                        $("#alert11").show();
+                        $('#message-success1').html(message);
+                        setInterval(function(){$("#dismiss11").trigger("click"); },2000);   
                         // $("#refresh1").load( "http://localhost/faveo/public/thread/{{$tickets->id}}   #refresh1");
+                        $('#surrender_button').hide();
                     }
                     else
                     {
                         var message = "Fail! For some reason your request failed";
-                        $("#alert23").show();
-                        $('#message-danger2').html(message);
-                        setInterval(function(){$("#dismiss23").trigger("click"); },2000);
+                        $("#alert13").show();
+                        $('#message-danger1').html(message);
+                        setInterval(function(){$("#dismiss13").trigger("click"); },2000);
                         // alert('fail');
                         // $( "#dismis4" ).trigger( "click" );
                     }

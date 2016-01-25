@@ -39,24 +39,14 @@
                                          <li @yield('all-pages')><a href="{{url('page')}}"><i class="fa fa-circle-o"></i> {{Lang::get('lang.allpages')}}</a></li>
                                      </ul>
                         </li>
-                        <li class="treeview @yield('widget')">
-                            <a href="#">
-                                <i class="fa  fa-th"></i> <span>{{Lang::get('lang.widgets')}}</span>
-                                <i class="fa fa-angle-left pull-right"></i>
-                            </a>
-                                    <ul class="treeview-menu">
-                                        <li @yield('side1')><a href="{{url('side1')}}"><i class="fa fa-circle-o"></i> {{Lang::get('lang.sidewidget1')}}</a></li>
-                                        <li @yield('side2')><a href="{{url('side2')}}"><i class="fa fa-circle-o"></i> {{Lang::get('lang.sidewidget2')}}</a></li>
-                                        <li @yield('social')><a href="{{url('social')}}"><i class="fa fa-circle-o"></i> {!! Lang::get('lang.social') !!}</a></li>
-                                     </ul>
-                        </li>
-                         <li @yield('comment')>
+                    
+                        <li @yield('comment')>
                             <a href="{{url('comment')}}">
                                 <i class="fa fa-comments-o"></i>
                                 <span>{{Lang::get('lang.comments')}}</span>
                             </a>
                         </li>
-                         <li @yield('settings')>
+                        <li @yield('settings')>
                             <a href="{{url('kb/settings')}}">
                                  <i class="fa fa-wrench"></i>
                                 <span>{{Lang::get('lang.settings')}}</span>

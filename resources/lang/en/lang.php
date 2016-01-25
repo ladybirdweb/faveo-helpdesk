@@ -74,6 +74,7 @@ return array(
     'recover_passord' 			=> 'Recover Password',
     'send_password_reset_link' 	=> 'Send pasword Reset Link',
     'enter_email_to_reset_password' => 'Enter E-mail to reset password',
+    'link'    =>    'Link',
 
      /*
       |----------------------------------------------------------------------------------------
@@ -722,7 +723,7 @@ return array(
      */
      'canned_response'    =>    'Canned Response',
      'create_canned_response'    =>    'Create Canned Response',
-     'surrender'    =>    'surrender',
+     'surrender'    =>    'Surrender',
      'view'     =>    'View',
        
 

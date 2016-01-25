@@ -228,7 +228,7 @@ if (Auth::user()->role == 'admin') { ?>
                         <!-- /.sidebar -->
                         </aside>
 <?php $agent_group = Auth::user()->assign_group;
-$group = App\Model\helpdesk\Agent\Groups::where('name', '=', $agent_group)->where('group_status', '=', '1')->first();
+$group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
 // dd($group); ?>
                         <!-- Right side column. Contains the navbar and content of the page -->
                         <div class="content-wrapper">
@@ -288,6 +288,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('name', '=', $agent_group)->wher
                         </footer>
                     </div><!-- ./wrapper -->
                     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
                     <!-- Bootstrap 3.3.2 JS -->
                     <script src="{{asset("lb-faveo/downloads/bootstrap.min.js")}}" type="text/javascript"></script>
                     <!-- Slimscroll -->

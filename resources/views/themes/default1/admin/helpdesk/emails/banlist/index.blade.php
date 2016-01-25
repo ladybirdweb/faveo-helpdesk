@@ -34,7 +34,7 @@ class="active"
 				<div class="box-header">
 				<h2 class="box-title">{{Lang::get('lang.banlists')}}</h2><a href="{{route('banlist.create')}}" class="pull-right btn btn-primary">{{Lang::get('lang.ban_email')}}</a>
 				</div>
-				 <div class="box-body table-responsive no-padding">
+				 <div class="box-body table-responsive">
 
 
 				 <!-- check whether success or not -->
@@ -56,9 +56,7 @@ class="active"
         {{Session::get('fails')}}
     </div>
     @endif
-
-	<table class="table table-hover" style="overflow:hidden;">
-
+	<table class="table table-bordered dataTable" style="overflow:hidden;">
 	<tr>
 		<th width="100px">{{Lang::get('lang.email_address')}}</th>
 		<th width="100px">{{Lang::get('lang.last_updated')}}</th>
@@ -74,15 +72,7 @@ class="active"
 		<td> {!! UTC::usertimezone($ban->updated_at) !!} </td>
 		<!-- Deleting Fields -->
 		<td>
-			{!! Form::open(['route'=>['banlist.destroy', $ban->id],'method'=>'DELETE']) !!}
 			<a href="{{route('banlist.edit',$ban->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> Edit</a>
-				<!-- To pop up a confirm Message -->
-				{!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> Delete',
-					['type' => 'submit',
-					'class'=> 'btn btn-warning btn-xs btn-flat',
-					'onclick'=>'return confirm("Are you sure?")'])
-				!!}
-			{!! Form::close() !!}
 		</td>
 		@endforeach
 	</tr>

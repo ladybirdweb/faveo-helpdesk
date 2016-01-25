@@ -18,6 +18,7 @@ use Input;
 use Redirect;
 use Session;
 use View;
+use Exception;
 
 /**
  * |=======================================================================
@@ -40,7 +41,7 @@ class InstallerApiController extends Controller {
 	 * @return type Json
 	 */
 	public function config_database(Request $request) {
-		error_reporting(E_ALL & ~E_NOTICE);
+	error_reporting(E_ALL & ~E_NOTICE);
 
 		// Check for pre install
 		if (\Config::get('database.install') == '%0%') {
@@ -87,103 +88,90 @@ class InstallerApiController extends Controller {
 	 * @return type Json
 	 */
 	public function config_system(Request $request) {
-		error_reporting(E_ALL & ~E_NOTICE);
+		// Check for pre install
+		if (\Config::get('database.install') == '%0%') {
+			$firstname 	= 	$request->firstname;
+	   		$lastname 	= 	$request->lastname;
+	   		$email 		= 	$request->email;
+	     	$username 	= 	$request->username;
+	   		$password 	= 	$request->password;
+	   		$timezone 	= 	$request->timezone;
+	      	$datetime 	= 	$request->datetime;
 
-		try{
- 			\DB::connection()->getDatabaseName();
+			// Migrate database
+			Artisan::call('migrate', array('--force' => true));
+			Artisan::call('db:seed', array('--force' => true));
 
-			// check for database connection
-			if(\DB::connection()->getDatabaseName()) {
-			   	echo "Connected sucessfully to database ".\DB::connection()->getDatabaseName().".";
+			// Creating minum settings
+			$system = System::where('id','=','1')->first();
+			$system->time_zone = $timezone;
+			$system->date_time_format = $datetime;
+			$system->save();
+			
+			// Creating default form field
+			$form1 = new Form_details;
+			$form1->label = 'Name';
+			$form1->type = 'text';
+			$form1->form_name_id = '1';
+			$form1->save();
+
+			$form2 = new Form_details;
+			$form2->label = 'Phone';
+			$form2->type = 'number';
+			$form2->form_name_id = '1';
+			$form2->save();
+
+			$form3 = new Form_details;
+			$form3->label = 'Email';
+			$form3->type = 'text';
+			$form3->form_name_id = '1';
+			$form3->save();
+
+			$form4 = new Form_details;
+			$form4->label = 'Subject';
+			$form4->type = 'text';
+			$form4->form_name_id = '1';
+			$form4->save();
+
+			$form5 = new Form_details;
+			$form5->label = 'Details';
+			$form5->type = 'textarea';
+			$form5->form_name_id = '1';
+			$form5->save();
+
+			// Creating user
+			$user = User::create(array(
+				'first_name' 	=> 	$firstname,
+				'last_name' 	=> 	$lastname,
+				'email' 		=> 	$email,
+				'user_name' 	=> 	$username,
+				'password' 		=> 	Hash::make($password),
+				'active' 		=> 	1,
+				'role' 			=> 	'admin',
+				'assign_group' 	=> 	'group A',
+				'primary_dpt' 	=> 	'support',
+			));
+
+			// Setting database installed status
+			$value 			= 	'1';
+			$install 		= 	app_path('../config/database.php');
+			$datacontent 	= 	File::get($install);
+			$datacontent 	= 	str_replace('%0%', $value, $datacontent);
+			File::put($install, $datacontent);
+
+			// Applying email configuration on route
+			$smtpfilepath 	= 	"\App\Http\Controllers\Common\SettingsController::smtp()";
+			$path22 		= 	app_path('Http/routes.php');
+			$content23 		= 	File::get($path22);
+			$content23 		= 	str_replace('"%smtplink%"', $smtpfilepath, $content23);
+			File::put($path22, $content23);				
+
+			// If user created return success
+			if($user){
+				return ['response'=>'success','status'=>'1'];					
 			}
-
-			// Check for pre install
-			if (\Config::get('database.install') == '%0%') {
-				$firstname 	= 	$request->firstname;
-		   		$lastname 	= 	$request->lastname;
-		   		$email 		= 	$request->email;
-		     	$username 	= 	$request->username;
-		   		$password 	= 	$request->password;
-		   		$timezone 	= 	$request->timezone;
-		      	$datetime 	= 	$request->datetime;
-
-				// Migrate database
-				Artisan::call('migrate', array('--force' => true));
-				Artisan::call('db:seed', array('--force' => true));
-
-				// Creating minum settings
-				$system = System::where('id','=','1')->first();
-				$system->time_zone = $timezone;
-				$system->date_time_format = $datetime;
-				$system->save();
-				
-				// Creating default form field
-				$form1 = new Form_details;
-				$form1->label = 'Name';
-				$form1->type = 'text';
-				$form1->form_name_id = '1';
-				$form1->save();
-
-				$form2 = new Form_details;
-				$form2->label = 'Phone';
-				$form2->type = 'number';
-				$form2->form_name_id = '1';
-				$form2->save();
-
-				$form3 = new Form_details;
-				$form3->label = 'Email';
-				$form3->type = 'text';
-				$form3->form_name_id = '1';
-				$form3->save();
-
-				$form4 = new Form_details;
-				$form4->label = 'Subject';
-				$form4->type = 'text';
-				$form4->form_name_id = '1';
-				$form4->save();
-
-				$form5 = new Form_details;
-				$form5->label = 'Details';
-				$form5->type = 'textarea';
-				$form5->form_name_id = '1';
-				$form5->save();
-
-				// Creating user
-				$user = User::create(array(
-					'first_name' 	=> 	$firstname,
-					'last_name' 	=> 	$lastname,
-					'email' 		=> 	$email,
-					'user_name' 	=> 	$username,
-					'password' 		=> 	Hash::make($password),
-					'active' 		=> 	1,
-					'role' 			=> 	'admin',
-					'assign_group' 	=> 	'group A',
-					'primary_dpt' 	=> 	'support',
-				));
-
-				// Setting database installed status
-				$value 			= 	'1';
-				$install 		= 	app_path('../config/database.php');
-				$datacontent 	= 	File::get($install);
-				$datacontent 	= 	str_replace('%0%', $value, $datacontent);
-				File::put($install, $datacontent);
-
-				// Applying email configuration on route
-				$smtpfilepath 	= 	"\App\Http\Controllers\Common\SettingsController::smtp()";
-				$path22 		= 	app_path('Http/routes.php');
-				$content23 		= 	File::get($path22);
-				$content23 		= 	str_replace('"%smtplink%"', $smtpfilepath, $content23);
-				File::put($path22, $content23);				
-
-				// If user created return success
-				if($user){
-					return ['response'=>'success','status'=>'1'];					
-				}
-			} else {
-				return ['response'=>'fail','reason'=>'this system is already installed','status'=>'0'];	
-			}
-		}catch(\Exception $e){
-   			return $e->getMessage();
+		} else {
+			return ['response'=>'fail','reason'=>'this system is already installed','status'=>'0'];	
 		}
 	}
 }

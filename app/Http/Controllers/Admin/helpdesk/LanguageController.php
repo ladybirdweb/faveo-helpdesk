@@ -17,6 +17,7 @@ use App;
 use Lang;
 use Cache;
 use File;
+use Exception;
 
 /**
  * SlaController

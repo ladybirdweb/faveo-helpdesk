@@ -1,17 +1,25 @@
 <?php namespace App\Http\Controllers\Agent\helpdesk;
+
 // controllers
 use App\Http\Controllers\Controller;
+
 // requests
 use App\Http\Requests\helpdesk\CannedRequest;
 use App\Http\Requests\helpdesk\CannedUpdateRequest;
+
 // model
 use App\Model\helpdesk\Agent_panel\Canned;
 use App\User;
 
+// classes
+use Exception;
+
 /**
- * UserController
+ * CannedController
+ * 
+ * This controller is for all the functionalities of Canned response for Agents in the Agent Panel
  *
- * @package   Controllers
+ * @package   	Controllers
  * @subpackage  Controller
  * @author      Ladybird <info@ladybirdweb.com>
  */
@@ -23,108 +31,122 @@ class CannedController extends Controller {
 	 * 1. authentication
 	 * 2. user roles
 	 * 3. roles must be agent
-	 *
 	 * @return void
 	 */
 	public function __construct() {
+		// checking authentication
 		$this->middleware('auth');
+		// checking if role is agent
 		$this->middleware('role.agent');
-		// $this->middleware('roles');
 	}
 
 	/**
-	 * Display a listing of the resource.
-	 * @param type User $user
-	 * @return type Response
+	 * Display a listing of the Canned Responses.
+	 * @return type View
 	 */
 	public function index() {
 		return view('themes.default1.agent.helpdesk.canned.index');
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-	 * @return type Response
+	 * Show the form for creating a new Canned Response
+	 * @return type View
 	 */
 	public function create() {
 		return view('themes.default1.agent.helpdesk.canned.create');
 	}
 
 	/**
-	 * Store a newly created resource in storage.
-	 * @param type User $user
-	 * @param type Sys_userRequest $request
-	 * @return type Response
+	 * Store a newly created Canned Response.
+	 * @param type CannedRequest $request 
+	 * @param type Canned $canned 
+	 * @return type Redirect
 	 */
 	public function store(CannedRequest $request, Canned $canned) {
+		// fetching all the requested inputs
 		$canned->user_id = \Auth::user()->id;
 		$canned->title = $request->input('title');
 		$canned->message = $request->input('message');
-		$canned->save();
-		return redirect()->route('canned.list')->with('success','Added Successfully');
+		try {
+			// saving inputs
+			$canned->save();
+			return redirect()->route('canned.list')->with('success','Added Successfully');
+		} catch (Exception $e) {
+			return redirect()->route('canned.list')->with('fails',$e->errorInfo[2]);
+		}
 	}
 
 	/**
-	 * Show the form for editing the specified resource.
-	 * @param type int $id
-	 * @param type User $user
-	 * @return type Response
+	 * Show the form for editing the Canned Response.
+	 * @param type $id 
+	 * @param type Canned $canned 
+	 * @return type View
 	 */
 	public function edit($id, Canned $canned) {
+		// fetching requested canned response
 		$canned = $canned->where('user_id', '=', \Auth::user()->id)->where('id','=',$id)->first();
 		return view('themes.default1.agent.helpdesk.canned.edit',compact('canned'));
 	}
 
 	/**
-	 * Update the specified resource in storage.
-	 * @param type int $id
-	 * @param type User $user
-	 * @param type Sys_userUpdate $request
-	 * @return type Response
+	 * Update the Canned Response in database.
+	 * @param type $id 
+	 * @param type CannedUpdateRequest $request 
+	 * @param type Canned $canned 
+	 * @return type Redirect
 	 */
 	public function update($id, CannedUpdateRequest $request, Canned $canned) {
-
+		/* select the field where id = $id(request Id) */
 		$canned = $canned->where('id','=',$id)->where('user_id', '=', \Auth::user()->id)->first();
+		// fetching all the requested inputs
 		$canned->user_id = \Auth::user()->id;
 		$canned->title = $request->input('title');
 		$canned->message = $request->input('message');
-		$canned->save();
-
-		return redirect()->route('canned.list')->with('success','Updated Successfully');
+		try {
+			// saving inputs
+			$canned->save();
+			return redirect()->route('canned.list')->with('success','Updated Successfully');	
+		} catch (Exception $e) {
+			return redirect()->route('canned.list')->with('fails',$e->errorInfo[2]);	
+		}
 	}
 
 	/**
-	 * Remove the specified resource from storage.
-	 * @param type int $id
-	 * @param type User $user
-	 * @return type Response
+	 * Delete the Canned Response from storage.
+	 * @param type $id 
+	 * @param type Canned $canned 
+	 * @return type Redirect
 	 */
 	public function destroy($id, Canned $canned) {
 		/* select the field where id = $id(request Id) */
-			$canned = $canned->whereId($id)->first();
-			/* delete the selected field */
-			/* Check whether function success or not */
-			if ($canned->delete() == true) {
-				/* redirect to Index page with Success Message */
-				return redirect()->route('canned.list')->with('success', 'User  Deleted Successfully');
-			} else {
-				/* redirect to Index page with Fails Message */
-				return redirect()->route('canned.list')->with('fails', 'User  can not Delete');
-			}
-		return view('themes.default1.agent.helpdesk.canned.destroy');
+		$canned = $canned->whereId($id)->first();
+		/* delete the selected field */
+		/* Check whether function success or not */
+		try {
+			$canned->delete();
+			/* redirect to Index page with Success Message */
+			return redirect()->route('canned.list')->with('success', 'User  Deleted Successfully');
+		} catch (Exception $e) {
+			/* redirect to Index page with Fails Message */
+			return redirect()->route('canned.list')->with('fails', $e->errorInfo[2]);
+		}			
 	}
 
 	/**
-	 * get canned
+	 * Fetch Canned Response in the ticket detail page.
 	 * @param type $id 
 	 * @return type json
 	 */
 	public function get_canned($id) {
+		// checking for the canned response with requested value
 		if($id != "zzz") {
+			// fetching canned response
 			$canned = Canned::where('id','=',$id)->where('user_id','=',\Auth::user()->id)->first();
 			$msg = $canned->message;	
 		} else {
 			$msg = "";	
 		}
+		// returning the canned response in JSON format
 		return \Response::json($msg);
 	}
 

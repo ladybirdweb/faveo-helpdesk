@@ -28,7 +28,7 @@ class AgentUpdate extends Request {
 			'first_name' => 'required',
 			'last_name' => 'required',
 			'email' => 'required|email',
-			'account_type' => 'required',
+			'active' => 'required',
 			'role' => 'required',
 			'assign_group' => 'required',
 			'primary_dpt' => 'required',

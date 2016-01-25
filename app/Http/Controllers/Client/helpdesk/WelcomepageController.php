@@ -6,6 +6,7 @@ use App\Model\helpdesk\Settings\System;
 // classes
 use Config;
 use Redirect;
+use Exception;
 
 /**
  * OuthouseController

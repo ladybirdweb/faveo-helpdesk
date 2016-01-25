@@ -12,9 +12,13 @@ use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Email\Template;
 use App\Model\helpdesk\Manage\Sla_plan;
+use App\Model\helpdesk\Settings\System;
+use App\Model\helpdesk\Ticket\Tickets;
+use App\Model\helpdesk\Manage\Help_topic;
 use App\User;
 // classes
 use DB;
+use Exception;
 
 /**
  * DepartmentController
@@ -81,9 +85,14 @@ class DepartmentController extends Controller {
 	 */
 	public function store(Department $department, DepartmentRequest $request) {
 		try {
-			$department->fill($request->except('group_id'))->save();
+			$department->fill($request->except('group_id','manager'))->save();
 			$requests = $request->input('group_id');
 			$id = $department->id;
+			if($request->manager) {
+				$department->manager = $request->input('manager');
+			} else {
+				$department->manager = null;
+			}
 			// foreach ($requests as $req) {
 				// DB::insert('insert into group_assign_department(group_id, department_id) values (?,?)', [$req, $id]);
 			// }
@@ -97,16 +106,6 @@ class DepartmentController extends Controller {
 		} catch (Exception $e) {
 			return redirect('departments')->with('fails', 'Department can not Create');
 		}
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id) {
-		//
 	}
 
 	/**
@@ -146,6 +145,7 @@ class DepartmentController extends Controller {
 	 * @return type Response
 	 */
 	public function update($id, Group_assign_department $group_assign_department, Department $department, DepartmentUpdate $request) {
+		 // dd($id);
 		try {
 			$table = $group_assign_department->where('department_id', $id);
 			$table->delete();
@@ -154,7 +154,15 @@ class DepartmentController extends Controller {
 				// DB::insert('insert into group_assign_department (group_id, department_id) values (?,?)', [$req, $id]);
 			// }
 			$departments = $department->whereId($id)->first();
-			if ($departments->fill($request->except('group_access'))->save()) {
+
+			if($request->manager) {
+				$departments->manager = $request->input('manager');
+			} else {
+				$departments->manager = null;
+			}
+			$departments->save();
+
+			if ($departments->fill($request->except('group_access','manager'))->save()) {
 				return redirect('departments')->with('success', 'Department Updated sucessfully');
 			} else {
 				return redirect('departments')->with('fails', 'Department not Updated');
@@ -171,21 +179,64 @@ class DepartmentController extends Controller {
 	 * @param type Group_assign_department $group_assign_department
 	 * @return type Response
 	 */
-	public function destroy($id, Department $department, Group_assign_department $group_assign_department) {
-		try {
-			/* Becouse of foreign key we delete group_assign_department first */
-			$group_assign_department = $group_assign_department->where('department_id', $id);
-			$group_assign_department->delete();
-			$departments = $department->whereId($id)->first();
-			/* Check the function is Success or Fail */
-			if ($departments->delete() == true) {
-				return redirect('departments')->with('success', 'Department Deleted sucessfully');
+	public function destroy($id, Department $department, Group_assign_department $group_assign_department, System $system, Tickets $tickets) {
+		// try {
+			$system = $system->where('id','=','1')->first();
+			if($system->department == $id) {
+				return redirect('departments')->with('fails', 'You cannot delete default department');
 			} else {
-				return redirect('departments')->with('fails', 'Department can not Delete');
+				$tickets = DB::table('tickets')->where('dept_id','=',$id)->update(['dept_id' => $system->department]);
+				if($tickets > 0){
+					if($tickets > 1){
+						$text_tickets = "Tickets";
+					} else {
+						$text_tickets = "Ticket";
+					}
+					$ticket = '<li>'.$tickets.' '.$text_tickets.' have been moved to default department</li>';
+				} else {
+					$ticket = "";
+				}
+				$users = DB::table('users')->where('primary_dpt','=',$id)->update(['primary_dpt' => $system->department]);
+				if($users > 0){
+					if($users > 1){
+						$text_user = "Users";
+					} else {
+						$text_user = "User";
+					}
+					$user = '<li>'.$users.' '.$text_user.' have been moved to default department</li>';
+				} else {
+					$user = "";
+				}
+				$emails = DB::table('emails')->where('department','=',$id)->update(['department' => $system->department]);
+				if($emails > 0){
+					if($emails > 1){
+						$text_emails = "Emails";
+					} else {
+						$text_emails = "Email";
+					}
+					$email = '<li>'.$emails.' System '.$text_emails.' have been moved to default department</li>';
+				} else {
+					$email = "";
+				}				
+				$helptopic = DB::table('help_topic')->where('department','=',$id)->update(['department' => null],['status' => '1']);
+				if($helptopic > 0){
+					$helptopic = '<li>The associated helptopic has been deactivated</li>';
+				} else {
+					$helptopic = "";
+				}				
+				$message = $ticket.$user.$email.$helptopic;
+				/* Becouse of foreign key we delete group_assign_department first */
+				$group_assign_department = $group_assign_department->where('department_id', $id);
+				$group_assign_department->delete();
+				$departments = $department->whereId($id)->first();
+				/* Check the function is Success or Fail */
+				if ($departments->delete() == true) {
+					return redirect('departments')->with('success', 'Department Deleted sucessfully'.$message);
+				} else {
+					return redirect('departments')->with('fails', 'Department can not Delete');
+				}
+
 			}
-		} catch (Exception $e) {
-			return redirect('departments')->with('fails', 'Department can not Delete');
-		}
 	}
 
 }

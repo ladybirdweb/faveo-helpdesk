@@ -57,7 +57,7 @@ class="active"
                         </thead>
                         <tbody>
                             <?php
-    $forms =App\Model\helpdesk\Form\Forms::all();
+    $forms = App\Model\helpdesk\Form\Forms::all();
     ?>
                             @foreach($forms as $form)
                                

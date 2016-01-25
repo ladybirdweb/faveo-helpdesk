@@ -34,7 +34,7 @@ class="active"
 <div class="box-header">
 	<h2 class="box-title">{{Lang::get('lang.SLA_plan')}}</h2><a href="{{route('sla.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_SLA')}}</a></div>
 
-<div class="box-body table-responsive no-padding">
+<div class="box-body table-responsive">
 
 <!-- check whether success or not -->
 
@@ -43,7 +43,7 @@ class="active"
         <i class="fa  fa-check-circle"></i>
         <b>Success!</b>
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{Session::get('success')}}
+        {!! Session::get('success') !!}
     </div>
     @endif
     <!-- failure message -->
@@ -52,11 +52,11 @@ class="active"
         <i class="fa fa-ban"></i>
         <b>Fail!</b>
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{Session::get('fails')}}
+        {!! Session::get('fails') !!}
     </div>
     @endif
 
-<table class="table table-hover" style="overflow:hidden;">
+<table class="table table-bordered dataTable" style="overflow:hidden;">
 
 	<tr>
 		<th width="100px">{{Lang::get('lang.name')}}</th>
@@ -66,12 +66,28 @@ class="active"
 		<th width="100px">{{Lang::get('lang.last_updated')}}</th>
 		<th width="100px">{{Lang::get('lang.action')}}</th>
 	</tr>
+
+<?php
+$default_sla = App\Model\helpdesk\Settings\Ticket::where('id','=','1')->first();
+$default_sla = $default_sla->sla;
+?>
+
 	<!-- Foreach @var$slas as @var sla -->
 		@foreach($slas as $sla)
 	<tr>
-
 		<!-- sla Name with Link to Edit page along Id -->
-		<td><a href="{{route('sla.edit',$sla->id)}}">{!! $sla->name !!}</a></td>
+		<td><a href="{{route('sla.edit',$sla->id)}}">{!! $sla->name !!}
+		@if($sla->id == $default_sla)
+			( Default )
+		<?php  
+			$disable = 'disabled';
+		?>
+		@else
+		<?php  
+			$disable = '';
+		?>
+		@endif
+		</a> </td>
 		<!-- sla Status : if status==1 active -->
 		<td>
 			@if($sla->status=='1')
@@ -93,18 +109,14 @@ class="active"
 			<!-- To pop up a confirm Message -->
 				{!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> Delete',
             		['type' => 'submit',
-            		'class'=> 'btn btn-warning btn-xs btn-flat',
+            		'class'=> 'btn btn-warning btn-xs btn-flat '.$disable,
             		'onclick'=>'return confirm("Are you sure?")'])
             	!!}
 			{!! Form::close() !!}
 		</td>
 		@endforeach
 	</tr>
-
 	<!-- Set a link to Create Page -->
-
-
-
 
 </table>
 

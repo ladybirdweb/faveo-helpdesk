@@ -12,6 +12,7 @@ use App\Model\helpdesk\Utility\MailboxProtocol;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
 // classes
 use Crypt;
+use Exception;
 
 /**
  * EmailsController

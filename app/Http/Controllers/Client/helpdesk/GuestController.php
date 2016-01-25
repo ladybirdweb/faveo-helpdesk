@@ -1,12 +1,15 @@
 <?php namespace App\Http\Controllers\Client\helpdesk;
+
 // controllers
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Common\SettingsController;
+
 // requests
 use App\Http\Requests\helpdesk\CheckTicket;
 use App\Http\Requests\helpdesk\ProfilePassword;
 use App\Http\Requests\helpdesk\ProfileRequest;
 use App\Http\Requests\helpdesk\TicketRequest;
+
 // models
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Ticket\Tickets;
@@ -14,10 +17,12 @@ use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\System;
 use App\User;
+
 // classes
 use Auth;
 use Hash;
 use Input;
+use Exception;
 
 /**
  * GuestController
@@ -32,10 +37,11 @@ class GuestController extends Controller {
 	 * Create a new controller instance.
 	 * @return type void
 	 */
+
 	public function __construct() {
 		SettingsController::smtp();
+		// checking authentication
 		$this->middleware('auth');
-		// $this->middleware('role.user');
 	}
 
 	/**
@@ -160,8 +166,12 @@ class GuestController extends Controller {
 		//echo $user->password;
 		if (Hash::check($request->input('old_password'), $user->getAuthPassword())) {
 			$user->password = Hash::make($request->input('new_password'));
-			$user->save();
-			return redirect()->back()->with('success2', 'Password Updated sucessfully');
+			try{
+				$user->save();
+				return redirect()->back()->with('success2', 'Password Updated sucessfully');
+			} catch (Exception $e) {
+				return redirect()->back()->with('fails2', $e->errorInfo[2]);
+			}
 		} else {
 			return redirect()->back()->with('fails2', 'Password was not Updated. Incorrect old password');
 		}
