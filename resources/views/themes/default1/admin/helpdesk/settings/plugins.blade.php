@@ -109,9 +109,3 @@ class="active"
     </div>
 </div>
 @stop
-
-@section('FooterInclude')
-
-@stop
-@stop
-<!-- /content -->

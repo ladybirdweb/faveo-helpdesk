@@ -116,4 +116,3 @@ class="active"
 		
 </div>
 @stop
-<!-- /content --> 

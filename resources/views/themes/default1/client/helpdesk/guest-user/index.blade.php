@@ -6,19 +6,20 @@
 
 @section('HeadInclude')
 <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
-           <link href="{{asset("lb-faveo/dist/css/widgetbox.css")}}" rel="stylesheet" type="text/css" />
+           <link href="{{asset("lb-faveo/css/widgetbox.css")}}" rel="stylesheet" type="text/css" />
         <link href="{{asset("lb-faveo/plugins/iCheck/flat/blue.css")}}" rel="stylesheet" type="text/css" />
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+        {{-- <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css"> --}}
+        <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 @stop
 @section('breadcrumb')
 	<div class="site-hero clearfix">
-                                    <ol class="breadcrumb breadcrumb-custom">
-                                            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-                                            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>
-                                    </ol>
-                   </div>
+        <ol class="breadcrumb breadcrumb-custom">
+            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
+            <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>
+        </ol>
+    </div>
 @stop
 @section('content')
 <div id="content" class="site-content col-md-12">

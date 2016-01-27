@@ -94,9 +94,3 @@ class="active"
 
 	
 @stop
-@section('FooterInclude')
-
-@stop
-
-<!-- /content -->
-

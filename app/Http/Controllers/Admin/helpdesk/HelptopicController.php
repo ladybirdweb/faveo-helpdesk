@@ -91,8 +91,19 @@ class HelptopicController extends Controller {
 	 */
 	public function store(Help_topic $topic, HelptopicRequest $request) {
 		try {
+			if($request->custom_form){
+				$custom_form = $request->custom_form;
+			} else {
+				$custom_form = null;
+			}
+			if($request->auto_assign){
+				$auto_assign = $request->auto_assign;
+			} else {
+				$auto_assign = null;
+			}
 			/* Check whether function success or not */
-			$topic->fill($request->input())->save();
+			$topic->fill($request->except('custom_form','auto_assign'))->save();
+			// $topics->fill($request->except('custom_form','auto_assign'))->save();
 			/* redirect to Index page with Success Message */
 			return redirect('helptopic')->with('success', 'Helptopic Created Successfully');
 		} catch (Exception $e) {

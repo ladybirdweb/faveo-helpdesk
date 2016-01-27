@@ -7,7 +7,6 @@
 @section('add-category')
     class="active"
 @stop
-<script type="text/javascript" src="{{asset('lb-faveo/dist/js/nicEdit.js')}}"></script>
 
 @section('content')
 {!! Form::open(array('action' => 'Agent\kb\CategoryController@store' , 'method' => 'post') )!!}
@@ -96,8 +95,3 @@
 </script>
 
 @stop
-@section('FooterInclude')
-
-@stop
-
-<!-- /content -->

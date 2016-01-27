@@ -3,7 +3,7 @@
     <head>
         <title></title>
         <!-- <link href="{{asset("downloads/bootstrap.min.css")}}" rel="stylesheet" type="text/css" /> -->
-        <link href="{{asset("lb-faveo/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/aaaaaa/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <h2>

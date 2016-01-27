@@ -57,7 +57,7 @@ $category_id = $all->lists('category_id');
                 <article class="comment-body">
                     <footer class="comment-meta">
                         <div class="comment-author">
-                            <img src="{{asset("lb-faveo/dist/img/avatar_1.png")}}" alt="" height="50" width="50" class="avatar" />
+                            <img src="{{asset("lb-faveo/media/images/avatar_1.png")}}" alt="" height="50" width="50" class="avatar" />
                             <b class="fn"><a href="#" rel="external" class="url">{!! $comment->name !!}</a></b>
                         </div><!-- .comment-author -->
 

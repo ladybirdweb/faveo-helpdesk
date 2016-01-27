@@ -6,7 +6,7 @@ $day1  = Date($format,strtotime('-1 day'. $date));
 
 $user = App\User::where('id','=',$user_id)->first();
 
-$dept = App\Model\helpdesk\Agent\Department::where('name','=',$user->primary_dpt)->first();
+$dept = App\Model\helpdesk\Agent\Department::where('id','=',$user->primary_dpt)->first();
 
    $created  =  DB::table('tickets')->select('created_at')->where('dept_id','=',$dept->id)->where('created_at','LIKE','%'.$day1.'%')->count();
    $closed  =  DB::table('tickets')->where('dept_id','=',$dept->id)->where('closed_at','LIKE','%'.$day1.'%')->count();
@@ -125,7 +125,7 @@ $dept = App\Model\helpdesk\Agent\Department::where('name','=',$user->primary_dpt
     </td>
   </tr>
   <tr>
-      <td colspan="2"><img src="images/footer_shadow.png" width="600" height="25" /></td>
+
   </tr>
 
 </table>

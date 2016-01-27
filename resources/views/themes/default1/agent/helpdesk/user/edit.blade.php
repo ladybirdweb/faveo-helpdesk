@@ -109,41 +109,21 @@ class="active"
 					{!! Form::radio('ban','0') !!}{{Lang::get('lang.disable')}}
 				</div>
 			</div>
-
-
 		</div>
-
-
 	</div>
-
 <!-- Internal Notes : Textarea -->
-
 		<div class="form-group">
 
 			{!! Form::label('internal_note',Lang::get('lang.internal_notes')) !!}
 			{!! Form::textarea('internal_note',null,['class' => 'form-control']) !!}
 
 		</div>
-
 </div>
 </div>
-
-
                     <script>
                         $(function () {
                         	$("textarea").wysihtml5();
                         });
                     </script>
 
-
-@section('FooterInclude')
-
 @stop
-@stop
-<!-- /content -->
-@stop
-@section('FooterInclude')
-
-@stop
-
-<!-- /content -->

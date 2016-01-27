@@ -59,5 +59,3 @@
 </script>
 
 @stop
-
-<!-- /content -->

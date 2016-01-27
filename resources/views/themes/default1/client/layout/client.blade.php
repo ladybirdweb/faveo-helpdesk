@@ -13,16 +13,19 @@
         <title> @yield('title') {!! strip_tags($title_name) !!} </title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- Bootstrap 3.3.2 -->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <link href="{{asset("lb-faveo/dist/css/AdminLTEsemi.css")}}" rel="stylesheet" type="text/css" />
+        {{-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" /> --}}
+        <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/css/AdminLTEsemi.css")}}" rel="stylesheet" type="text/css" />
         <!-- Font Awesome Icons -->
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        {{-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> --}}
+        <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Ionicons -->
-        <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+        {{-- <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" /> --}}
+        <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- fullCalendar 2.2.5-->
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
-        <link href="{{asset("lb-faveo/dist/css/app.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/css/app.css")}}" rel="stylesheet" type="text/css" />
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         
         {{-- // <script src="ckeditor/ckeditor.js"></script> --}}
@@ -30,7 +33,8 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        {{-- // <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
+        <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
         @yield('HeadInclude')
     </head>
     <body>
@@ -48,7 +52,7 @@
 					<a href="{{url('/')}}" rel="home">
 				@endif
                 @if($company->use_logo == 1)
-                	<img src="{{asset('lb-faveo/dist')}}{{'/'}}{{$company->logo}}" alt="User Image" width="200px" height="200px"/>
+                	<img src="{{asset('lb-faveo/media/company')}}{{'/'}}{{$company->logo}}" alt="User Image" width="200px" height="200px"/>
                 @else
                 	@if($system->name)
                 		{!! $system->name !!}
@@ -86,7 +90,7 @@
 									<li>
 										<div class="banner-wrapper user-menu text-center clearfix">
 											@if(Auth::user()->profile_pic)
-                                        		<img src="{{asset('lb-faveo/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}"class="img-circle" alt="User Image" height="80" width="80"/>
+                                        		<img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}"class="img-circle" alt="User Image" height="80" width="80"/>
                                          	@else
 	                                            <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
                                     		@endif
@@ -333,13 +337,15 @@ $footer4 = App\Model\helpdesk\Theme\Widgets::where('name','=','footer4')->first(
 					</div>
 		</footer><!-- #colophon -->
                     <!-- jQuery 2.1.3 -->
-                    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                    {{-- // <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
+                    <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
                     <!-- Bootstrap 3.3.2 JS -->
-                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
+                    {{-- // <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script> --}}
+                    <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
                     <!-- Slimscroll -->
-					<script src="{{asset("lb-faveo/dist/js/superfish.js")}}" type="text/javascript"></script>
-                    <script src="{{asset("lb-faveo/dist/js/mobilemenu.js")}}" type="text/javascript"></script>
-                    <script src="{{asset("lb-faveo/dist/js/know.js")}}" type="text/javascript"></script>
+					<script src="{{asset("lb-faveo/js/superfish.js")}}" type="text/javascript"></script>
+                    <script src="{{asset("lb-faveo/js/mobilemenu.js")}}" type="text/javascript"></script>
+                    <script src="{{asset("lb-faveo/js/know.js")}}" type="text/javascript"></script>
                     <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
                     <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
                     <script>

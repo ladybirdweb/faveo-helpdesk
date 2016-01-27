@@ -125,9 +125,3 @@ $default_sla = $default_sla->sla;
 </div>
 </div>
 @stop
-</div><!-- /.box -->
-@section('FooterInclude')
-
-@stop
-@stop
-<!-- /content -->

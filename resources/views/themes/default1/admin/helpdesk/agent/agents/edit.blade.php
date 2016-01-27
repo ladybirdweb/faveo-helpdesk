@@ -243,6 +243,3 @@ class="active"
 			@endwhile
 </div>
 @stop
-@section('FooterInclude')
-@stop
-<!-- /content -->

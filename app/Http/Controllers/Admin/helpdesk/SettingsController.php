@@ -80,21 +80,19 @@ class SettingsController extends Controller {
 	 * @param type CompanyRequest $request 
 	 * @return Response
 	 */
-	public function postcompany($id, Company $company, CompanyRequest $request) {
-		
+	public function postcompany($id, Company $company, CompanyRequest $request) {		
 			/* fetch the values of company request  */
 			$companys = $company->whereId('1')->first();
 			if (Input::file('logo')) {
 				$name = Input::file('logo')->getClientOriginalName();
-				$destinationPath = 'lb-faveo/dist/';
+				$destinationPath = 'lb-faveo/media/company/';
 				$fileName = rand(0000, 9999) . '.' . $name;
 				Input::file('logo')->move($destinationPath, $fileName);
 				$companys->logo = $fileName;
 			}
-				if($request->input('use_logo')==null)
-				{
-					$companys->use_logo = '0';
-				}
+			if($request->input('use_logo')==null) {
+				$companys->use_logo = '0';
+			}
 			/* Check whether function success or not */
 			try {
 				$companys->fill($request->except('logo'))->save();

@@ -88,7 +88,7 @@ class LanguageController extends Controller {
      */
     public function getLanguages()
     {
-        $path = 'code/resources/lang';
+        $path = '../resources/lang';
         $values = scandir($path);  //Extracts names of directories present in lang directory
         $values = array_slice($values, 2); // skips array element $value[0] = '.' & $value[1] = '..' 
         return \Datatable::collection(new Collection($values))
@@ -150,7 +150,7 @@ class LanguageController extends Controller {
             
             
             //Checking if package already exists or not in lang folder
-            $path = 'code/resources/lang';
+            $path = '../resources/lang';
             if (in_array(Input::get('iso-code'), scandir($path))) {
                 
                 //sending back with error message
@@ -168,10 +168,9 @@ class LanguageController extends Controller {
                 
                 // checking file is valid.
                 if (Input::file('File')->isValid()) {
-                    
                     $name = Input::file('File')->getClientOriginalName(); //uploaded file's original name
-                    $destinationPath = 'code/public/uploads/'; // defining uploading path
-                    $extractpath = 'code/resources/lang/'.Input::get('iso-code');//defining extracting path
+                    $destinationPath = '../public/uploads/'; // defining uploading path
+                    $extractpath = '../resources/lang/'.Input::get('iso-code');//defining extracting path
                     mkdir($extractpath); //creating directroy for extracting uploadd file
                     //mkdir($destinationPath);
                     Input::file('File')->move($destinationPath, $name); // uploading file to given path
@@ -183,42 +182,32 @@ class LanguageController extends Controller {
                     if(!empty($directories)){ //if extract folder contains subfolder
                         $success = File::deleteDirectory($extractpath); //remove extracted folder and it's subfolder from lang
                         //$success2 = File::delete($destinationPath.'/'.$name);
-                        
                         if($success){
                             //sending back with error message
                             Session::flash('fails', 'Error in directory structure. Zip file must contain language php files only. Try Again.');
                             return Redirect::back()->withInput();   
-                        }
-                    
+                        }                    
                     } else {
-                    
                     // sending back with success message
                     Session::flash('success', "uploaded successfully.");
                     Session::flash('link',"change-language/".Input::get('iso-code'));
                     return Redirect::route('LanguageController');
-                    
                     }
-                    
                 } else {
-                    
                     // sending back with error message.
                     Session::flash('fails', 'uploaded file is not valid');
                     return Redirect::route('form');
-
                 }
-                
             }
         }
     }
-
 
     /**
      *allow user to download language template file
      *@return type
      */
-    Public function download()
-    {
-        return response()->download('code/public/downloads/en.zip');
+    Public function download() {
+        return response()->download('../public/downloads/en.zip');
     }
 
     /**
@@ -228,9 +217,9 @@ class LanguageController extends Controller {
      */
     public function deleteLanguage($lang){
         if($lang !== App::getLocale()){    
-            $deletePath = 'code/resources/lang/'.$lang;     //define file path to delete
+            $deletePath = '../resources/lang/'.$lang;     //define file path to delete
             $success = File::deleteDirectory($deletePath); //remove extracted folder and it's subfolder from lang
-            if($success){
+            if($success) {
                 //sending back with success message
                 Session::flash('success', 'Language package deleted successfully.');
                 return Redirect::back();   
@@ -245,6 +234,4 @@ class LanguageController extends Controller {
             return redirect('languages');    
         }
     }
-   
-
 }

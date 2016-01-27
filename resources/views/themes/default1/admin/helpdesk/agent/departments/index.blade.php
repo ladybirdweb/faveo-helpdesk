@@ -104,7 +104,7 @@ $default_department = $default_department->department;
 								if($department->sla == null){
 									$sla = "";
 								} else {
-									$sla = App\Model\helpdesk\Manage\sla_plan::whereId($department->sla)->first();
+									$sla = App\Model\helpdesk\Manage\Sla_plan::whereId($department->sla)->first();
 									$sla = $sla->grace_period;
 								}
 								
@@ -137,8 +137,5 @@ $default_department = $default_department->department;
 </div>
 </div>
 </div>
-@section('FooterInclude')
 
 @stop
-@stop
-<!-- /content -->

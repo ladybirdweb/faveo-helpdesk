@@ -185,8 +185,3 @@
 
 {{-- {!! Form::close() !!} --}}
 @stop
-@section('FooterInclude')
-
-@stop
-
-<!-- /content -->

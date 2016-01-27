@@ -49,7 +49,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                                             <div class="col-xs-5">
                                             </div>
                                             <div class="col-xs-1">
-                                                <img src="{{asset("lb-faveo/dist/img/gifloader.gif")}}"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                                                <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                                             </div>
                                             <div class="col-xs-6">
                                             </div>
@@ -215,7 +215,7 @@ $data = $ConvDate[0];
                                             <footer class="comment-meta"<?php if($role->role == "user") { ?> style="background-color: hsla(100, 100%, 51%, 0.15)" <?php } else { ?> style="background-color:#FFFCB3" <?php } ?>  > 
                                                 <div class="comment-author">
                                                         @if($role->profile_pic)
-                                                            <img src="{{asset('lb-faveo/profilepic')}}{{'/'}}{{$role->profile_pic}}"alt="" height="50" width="50" class="avatar" <?php if($role->role == "user") { ?>style="box-shadow: 0 1px 3px #00FF26;" <?php } else { ?> style="box-shadow: 0 1px 3px #FFEC00;" <?php } ?> >
+                                                            <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{$role->profile_pic}}"alt="" height="50" width="50" class="avatar" <?php if($role->role == "user") { ?>style="box-shadow: 0 1px 3px #00FF26;" <?php } else { ?> style="box-shadow: 0 1px 3px #FFEC00;" <?php } ?> >
                                                         @else
                                                             <img src="{{ Gravatar::src($role->email) }}" alt="" height="50" width="50" class="avatar" <?php if($role->role == "user") { ?>style="box-shadow: 0 1px 3px #00FF26;" <?php } else { ?> style="box-shadow: 0 1px 3px #FFEC00;" <?php } ?> >
                                                         @endif

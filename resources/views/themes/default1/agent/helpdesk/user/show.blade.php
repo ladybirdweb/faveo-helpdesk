@@ -559,7 +559,7 @@ $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users
 	                        <div class="col-xs-5">
 	                        </div>
 	                        <div class="col-xs-2">
-	                            <img src="{{asset("lb-faveo/dist/img/gifloader.gif")}}">
+	                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}">
 	                        </div>
 	                        <div class="col-xs-5">
 	                        </div>
@@ -638,7 +638,7 @@ $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users
                         <div class="col-md-4">
                         </div>
                         <div class="col-md-6" id="assign_loader" style="display:none;">
-                            <img src="{{asset("lb-faveo/dist/img/gifloader.gif")}}"><br/><br/><br/>
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
                         </div>
                     </div>
                     <div id="assign_body">

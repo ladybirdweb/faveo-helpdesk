@@ -1,6 +1,6 @@
 @extends('themes.default1.client.layout.client')
 @section('HeadInclude')
-        <link href="{{asset("lb-faveo/dist/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
 @stop
 <?php $user = App\User::where('id', '=', $ticket->user_id)->first();?>
 <?php $assignedto = App\User::where('id', '=', $ticket->assigned_to)->first();?>
@@ -103,7 +103,7 @@ echo UTC::usertimezone(date_format($time, 'd/m/Y H:i:s'));
                         <div class="col-md-4">
                         </div>
                         <div class="col-md-4">
-                            <img src="{{asset("lb-faveo/dist/img/gifloader.gif")}}"><br/><br/><br/>
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
                         </div>
                 </div>
                 <div id="hide2">
@@ -182,7 +182,7 @@ echo UTC::usertimezone(date_format($time, 'd/m/Y H:i:s'));
                         <div class="col-md-4">
                         </div>
                         <div class="col-md-4">
-                            <img src="{{asset("dist/img/gifloader.gif")}}"><br/><br/><br/>
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
                         </div>
                         </br>
                         </br>
@@ -586,7 +586,7 @@ $data = $ConvDate[0];
                         <div class="col-md-2">
                         </div>
                         <div class="col-md-9">
-                            <img src="{{asset("dist/img/gifloader.gif")}}"><br/><br/><br/>
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
                         </div>
                     </div>
                 </div>

@@ -7,10 +7,6 @@
 @section('side1')
     class="active"
 @stop
-<script type="text/javascript" src="{{asset('dist/js/SetnicEdit.js')}}"></script>
-<script type="text/javascript">
-    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-</script>
 
 @section('content')
 
@@ -76,5 +72,3 @@
 @section('FooterInclude')
 
 @stop
-
-<!-- /content -->

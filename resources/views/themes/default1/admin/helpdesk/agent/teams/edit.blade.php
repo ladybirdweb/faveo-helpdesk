@@ -95,8 +95,4 @@ class="active"
 {!!Form::close()!!}
 </div>
 </div>
-@section('FooterInclude')
-
 @stop
-@stop
-<!-- /content -->

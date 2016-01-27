@@ -123,7 +123,7 @@ $i = 0;
     </td>
   </tr>
   <tr>
-      <td colspan="2"><img src="images/footer_shadow.png" width="600" height="25" /></td>
+
   </tr>
 
 </table>

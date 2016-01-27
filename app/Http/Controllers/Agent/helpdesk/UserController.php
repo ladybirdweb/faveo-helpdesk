@@ -253,11 +253,11 @@ class UserController extends Controller {
 		if ($user->profile_pic == 'avatar5.png' || $user->profile_pic == 'avatar2.png') {
 			if ($request->input('gender') == 1) {
 				$name = 'avatar5.png';
-				$destinationPath = 'lb-faveo/profilepic';
+				$destinationPath = 'lb-faveo/media/profilepic';
 				$user->profile_pic = $name;
 			} elseif ($request->input('gender') == 0) {
 				$name = 'avatar2.png';
-				$destinationPath = 'lb-faveo/profilepic';
+				$destinationPath = 'lb-faveo/media/profilepic';
 				$user->profile_pic = $name;
 			}
 		}
@@ -266,7 +266,7 @@ class UserController extends Controller {
 			// fetching picture name
 			$name = Input::file('profile_pic')->getClientOriginalName();
 			// fetching upload destination path
-			$destinationPath = 'lb-faveo/profilepic';
+			$destinationPath = 'lb-faveo/media/profilepic';
 			// adding a random value to profile picture filename
 			$fileName = rand(0000, 9999) . '.' . $name;
 			// moving the picture to a destination folder

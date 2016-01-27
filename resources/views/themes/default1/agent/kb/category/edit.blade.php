@@ -5,11 +5,6 @@
     active
 @stop
 
-<script type="text/javascript" src="{{asset('dist/js/EditnicEdit.js')}}"></script>
-<script type="text/javascript">
-	bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-</script>
-
 @section('content')
 {!! Form::model($category,['url' => 'category/'.$category->id , 'method' => 'PATCH'] )!!}
 
@@ -99,8 +94,3 @@
 </script>
 
 @stop
-@section('FooterInclude')
-
-@stop
-
-<!-- /content -->

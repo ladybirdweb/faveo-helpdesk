@@ -697,27 +697,34 @@ class TicketController extends Controller {
 	 * @return type response
 	 */
 	public function post_newticket(CreateTicketRequest $request) {
-		$email = $request->input('email');
-		$fullname = $request->input('fullname');
-		$helptopic = $request->input('helptopic');
-		$sla = $request->input('sla');
-		$duedate = $request->input('duedate');
-		$assignto = $request->input('assignto');
-
-		$subject = $request->input('subject');
-		$body = $request->input('body');
-		$priority = $request->input('priority');
-		$phone = $request->input('phone');
-		$source = Ticket_source::where('name','=','email')->first();
-		$headers = null;
-		$help = Help_topic::where('id','=',$helptopic)->first();	
-		$form_data = null;
-		//create user
-		if ($this->create_user($email, $fullname, $subject, $body, $phone, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data)) {
-			return Redirect('newticket')->with('success', 'Ticket created successfully!');
-		} else {
-			return Redirect('newticket')->with('fails', 'fails');
-		}
+        try{
+    		$email = $request->input('email');
+    		$fullname = $request->input('fullname');
+    		$helptopic = $request->input('helptopic');
+    		$sla = $request->input('sla');
+    		$duedate = $request->input('duedate');
+            if($request->input('assignto')){
+                $assignto = $request->input('assignto');
+            } else {
+                $assignto = null;
+            }
+    		$subject = $request->input('subject');
+    		$body = $request->input('body');
+    		$priority = $request->input('priority');
+    		$phone = $request->input('phone');
+    		$source = Ticket_source::where('name','=','email')->first();
+    		$headers = null;
+    		$help = Help_topic::where('id','=',$helptopic)->first();	
+    		$form_data = null;
+    		//create user
+    		if ($this->create_user($email, $fullname, $subject, $body, $phone, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data)) {
+    			return Redirect('newticket')->with('success', 'Ticket created successfully!');
+    		} else {
+    			return Redirect('newticket')->with('fails', 'fails');
+    		}
+        } catch(Exception $e){
+            return Redirect()->back()->with('fails', '<li>'.$e->errorInfo[2].'</li>');
+        }
 	}
 
 	/**
@@ -1083,24 +1090,38 @@ class TicketController extends Controller {
 				}
 			}
 
-			if(Alert::first()->ticket_status == 1 || Alert::first()->ticket_department_member == 1) {
-				// send email to agents
-				$agents = User::where('role','=','agent')->get();
-				// dd($agents);
-				foreach($agents as $agent)
-				{
-					$department_data = Department::where('id','=',$ticketdata->dept_id)->first();
-					
-					if($department_data->name == $agent->primary_dpt)
-					{
-						$agent_email = $agent->email;
-						$agent_user = $agent->first_name;
-						Mail::send('emails.'.$mail, ['agent' => $agent_user ,'content'=>$body , 'ticket_number' => $ticket_number2, 'from'=>$company, 'email' => $emailadd, 'name' => $ticket_creator, 'system' => $system], function ($message) use ($agent_email, $agent_user, $ticket_number2, $updated_subject) {
-							$message->to($agent_email, $agent_user)->subject($updated_subject);
-						});
-					}
-				}
-			}
+            if($is_reply == 0) {
+    			if(Alert::first()->ticket_status == 1 || Alert::first()->ticket_department_member == 1) {
+    				// send email to agents
+    				$agents = User::where('role','=','agent')->get();
+    				// dd($agents);
+    				foreach($agents as $agent)
+    				{
+    					$department_data = Department::where('id','=',$ticketdata->dept_id)->first();
+    					
+    					if($department_data->name == $agent->primary_dpt)
+    					{
+    						$agent_email = $agent->email;
+    						$agent_user = $agent->first_name;
+    						Mail::send('emails.'.$mail, ['agent' => $agent_user ,'content'=>$body , 'ticket_number' => $ticket_number2, 'from'=>$company, 'email' => $emailadd, 'name' => $ticket_creator, 'system' => $system], function ($message) use ($agent_email, $agent_user, $ticket_number2, $updated_subject) {
+    							$message->to($agent_email, $agent_user)->subject($updated_subject);
+    						});
+    					}
+    				}
+    			}
+            }
+
+            if($ticketdata->assigned_to) {
+                $assigned_to = User::where('id','=',$ticketdata->assigned_to)->first();
+                $agent_email = $assigned_to->email;
+                $agent_user = $assigned_to->first_name;
+                Mail::send('emails.'.$mail, ['agent' => $assigned_to->user_name ,'content'=>$body , 'ticket_number' => $ticket_number2, 'from'=>$company, 'email' => $assigned_to->email, 'name' => $ticket_creator, 'system' => $system], function ($message) use ($agent_email, $agent_user, $ticket_number2, $updated_subject) {
+                    $message->to($agent_email, $agent_user)->subject($updated_subject);
+                });
+
+            }
+
+
 			return ['0'=>$ticket_number2, '1'=>true];
 		}
 	}

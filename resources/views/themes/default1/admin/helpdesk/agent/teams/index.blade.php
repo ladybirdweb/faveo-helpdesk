@@ -105,8 +105,4 @@ if($team->team_lead == 0) {
 </div>
 </div>
 
-@section('FooterInclude')
-
 @stop
-@stop
-<!-- /content -->

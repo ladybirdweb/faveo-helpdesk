@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" id="gradient">
+<html lang="en-US">
 
 <head>
     <meta name="viewport" content="width=device-width">

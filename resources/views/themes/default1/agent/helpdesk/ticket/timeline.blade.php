@@ -157,7 +157,7 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                         <div class="col-md-4">
                         </div>
                         <div class="col-md-4">
-                            <img src="{{asset("lb-faveo/dist/img/gifloader.gif")}}"><br/><br/><br/>
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
                         </div>
                 </div>
                 <div id="hide2">
@@ -240,7 +240,7 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                         <div class="col-md-4">
                         </div>
                         <div class="col-md-4">
-                            <img src="{{asset("lb-faveo/dist/img/gifloader.gif")}}"><br/><br/><br/>
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
                         </div>
                         </br>
                         </br>
@@ -336,7 +336,7 @@ $canneds = App\Model\helpdesk\Agent_panel\Canned::where('user_id','=',Auth::user
                         <div class="col-md-4">
                         </div>
                         <div class="col-md-4">
-                            <img src="{{asset("lb-faveo/dist/img/gifloader.gif")}}"><br/><br/><br/>
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
                         </div>
                         </br>
                         </br>
@@ -593,7 +593,7 @@ $data = $ConvDate[0];
                                     <div class="user-block" style="margin-bottom:-5px;margin-top:-2px;">
                                        
                                             @if($role->profile_pic != null)
-                                                <img src="{{asset('lb-faveo/profilepic')}}{{'/'}}{{$role->profile_pic}}"class="img-circle img-bordered-sm" alt="User Image"/>
+                                                <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{$role->profile_pic}}"class="img-circle img-bordered-sm" alt="User Image"/>
                                             @else
                                                 <img src="{{ Gravatar::src($role->email) }}" class="img-circle img-bordered-sm" alt="img-circle img-bordered-sm">
                                             @endif
@@ -776,7 +776,7 @@ $data = $ConvDate[0];
                         <div class="col-xs-5">
                         </div>
                         <div class="col-xs-2">
-                            <img src="{{asset("lb-faveo/dist/img/gifloader.gif")}}"><br/><br/><br/>
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
                         </div>
                         <div class="col-xs-5">
                         </div>
@@ -882,7 +882,7 @@ $data = $ConvDate[0];
                         <div class="col-md-4">
                         </div>
                         <div class="col-md-6" id="assign_loader" style="display:none;">
-                            <img src="{{asset("lb-faveo/dist/img/gifloader.gif")}}"><br/><br/><br/>
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
                         </div>
                     </div>
                     <div id="assign_body">
@@ -959,7 +959,7 @@ $count_teams = count($teams);
                                         <div class="col-xs-5">
                                         </div>
                                         <div class="col-xs-2">
-                                            <img src="{{asset("lb-faveo/dist/img/gifloader.gif")}}"> 
+                                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"> 
                                         </div>
                                         <div class="col-xs-5">
                                         </div>
@@ -985,7 +985,7 @@ $count_teams = count($teams);
                                         <div class="col-xs-5">
                                         </div>
                                         <div class="col-xs-2">
-                                            <img src="{{asset("lb-faveo/dist/img/gifloader.gif")}}"> 
+                                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"> 
                                         </div>
                                         <div class="col-xs-5">
                                         </div>
@@ -1546,167 +1546,6 @@ function remove_collaborator(id) {
 }
         
 
-// editor
-        // bkLib.onDomLoaded(function() {
-        //     nicEditors.editors.push(
-        //     new nicEditor().panelInstance(
-        //         document.getElementById('body'),
-        //         document.getElementById('body2')
-        //         )
-        //     );
-        // });
-
-
-// editor2
-        // bkLib.onDomLoaded(function() {
-        //     nicEditors.editors.push(
-            // new nicEditor().panelInstance(
-            //     document.getElementById('body2')
-            //     )
-            // );
-        //     );
-        // });
-
-
-   
-
-
-// // Change Owner
-//     jQuery(document).ready(function($) {
-//         $('#form4').on('submit', function() {
-//             $.ajax({
-//                 type: "POST",
-//                 url: "../change/owner/{{ $tickets->id }}",
-//                 dataType: "html",
-//                 data: $(this).serialize(),
-//                 success: function(response) {
-
-//                     if (response == 1)
-//                     {
-//                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
-//                     }
-//                     else
-//                     {
-//                         alert('fail');
-//                         // $( "#dismis4" ).trigger( "click" );
-//                     }
-//                 }
-//             })
-//             return false;
-//         });
-//     });
-
-
-// jQuery(document).ready(function(cash) {
-//     $('select').on('change', function (e) {
-//         $('#submt2').on('click', function (e) {
-//         var data1 = $(this).children('option:selected').data('id');
-
-//             $.ajax({
-//                 type        :   "GET",
-//                 url         :   "http://localhost/faveo/public/ticket/assign/{{$tickets->id}}",
-//                 dataType    :   'html',
-//                 data        :   ({data2:data1}) ,
-//                 success : function(response) {
-
-//                             alert(response);
-//                 }
-//             })
-//             return false;
-//         });
-//     });
-// });
-// $(document).ready(function($){
-//     $('#tags').autocomplete({
-//   source:'auto', 
-//   minLength:2
-//     });
-// });
-
-
-// $(document).ready(function() {
-//     $('#selelectall').click(function(event) { 
-//     //alert('yes');
-//      //on click 
-//         if(this.checked) { // check select status
-//             $('.checkbox1').each(function() { //loop through each checkbox
-//                 this.checked = true;  //select all checkboxes with class "checkbox1"               
-//            });
-//         }else{
-//             $('.checkbox1').each(function() { //loop through each checkbox
-//                 this.checked = false; //deselect all checkboxes with class "checkbox1"                       
-//             });         
-//         }
-//     });
-    
-// });
-
-
-
-
-    // Auto Populate Change Owner
-    $("#search").autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: 'http://localhost/faveo/public/change/owner',
-                dataType: "json",
-                data: {
-                    name_startsWith: request.term,
-                    type: 'product'
-                },
-                success: function(data) {
-                    response($.map(data, function(item) {
-                        return {
-                            label: item,
-                            value: item
-                        }
-                    }));
-                }
-            });
-        },
-        autoFocus: true,
-        minLength: 0
-    });
-    $('#item').autocomplete({
-        source: function(request, response) {
-            $.ajax({
-                url: 'http://localhost/LAKSA/public/select',
-                dataType: "json",
-                data: {
-                    name_startsWith: request.term,
-                    type: 'product_table',
-                    row_num: 1
-                },
-                success: function(data) {
-                    response($.map(data, function(item) {
-                        var code = item.split("|");
-                        return {
-                            label: code[0],
-                            value: code[0],
-                            data: item
-                        }
-                    }));
-                }
-            });
-        },
-        autoFocus: true,
-        minLength: 0,
-        select: function(event, ui) {
-            var names = ui.item.data.split("|");
-            console.log(names[0], names[1], names[2]);
-            $('#item').val(names[0]);
-            $('#desc').val(names[1]);
-            $('#box1').val(names[2]);
-        }
-    });
-    //End of Autopopulate
-
-
-</script>
-<script type="text/javascript">
-// function update(text) {
-//     document.form3.ReplyContent.value += text + '\r\n';
-// }
 </script>
 
 @stop

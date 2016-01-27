@@ -85,14 +85,4 @@ class="active"
         });
 </script>
 
-@section('FooterInclude')
-
 @stop
-@stop
-<!-- /content -->
-@stop
-@section('FooterInclude')
-
-@stop
-
-<!-- /content -->

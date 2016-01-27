@@ -150,7 +150,7 @@ class="active"
                                         <label>{!! Lang::get('lang.assign_to') !!}:</label>
                                             <?php $agents = App\User::where('role','!=','user')->get();?>
 
-                                            {!! Form::select('assignto', ['Agents'=>$agents->lists('first_name','id')],null,['class' => 'form-control select']) !!}
+                                            {!! Form::select('assignto', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')],null,['class' => 'form-control select']) !!}
                                     </div>
                                 </div>
                             </div>

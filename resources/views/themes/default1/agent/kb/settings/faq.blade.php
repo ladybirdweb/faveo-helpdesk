@@ -72,9 +72,3 @@
         });
 </script>
 @stop
-</div><!-- /.box -->
-
-@stop
-<!-- /content -->
-
-@stop

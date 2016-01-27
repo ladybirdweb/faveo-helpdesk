@@ -155,10 +155,3 @@ class="active"
 
 
 @stop
-</div><!-- /.box -->
-@section('FooterInclude')
-
-@stop
-@stop
-<!-- /content -->
-

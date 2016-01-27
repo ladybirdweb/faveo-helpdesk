@@ -100,9 +100,3 @@ class="active"
 </div>
 
 @stop
-</div><!-- /.box -->
-@section('FooterInclude')
-
-@stop
-@stop
-<!-- /content -->

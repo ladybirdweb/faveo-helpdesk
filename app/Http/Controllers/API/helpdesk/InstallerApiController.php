@@ -148,8 +148,8 @@ class InstallerApiController extends Controller {
 				'password' 		=> 	Hash::make($password),
 				'active' 		=> 	1,
 				'role' 			=> 	'admin',
-				'assign_group' 	=> 	'group A',
-				'primary_dpt' 	=> 	'support',
+				'assign_group' 	=> 	1,
+				'primary_dpt' 	=> 	1,
 			));
 
 			// Setting database installed status

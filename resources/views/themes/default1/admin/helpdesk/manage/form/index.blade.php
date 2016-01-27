@@ -97,5 +97,3 @@ class="active"
 
 
 @stop
-
-<!-- /content -->
