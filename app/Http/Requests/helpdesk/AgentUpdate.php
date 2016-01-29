@@ -33,8 +33,8 @@ class AgentUpdate extends Request {
 			'assign_group' => 'required',
 			'primary_dpt' => 'required',
 			'agent_tzone' => 'required',
-			'phone_number' => 'phone:IN',
-			'mobile' => 'phone:IN',
+			// 'phone_number' => 'phone:IN',
+			// 'mobile' => 'phone:IN',
 			'team_id' => 'required',
 		];
 	}

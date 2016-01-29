@@ -73,7 +73,7 @@ class TicketController extends Controller {
 		if(Auth::user()->role=="admin"){		
 			$tickets = Tickets::where('status','=',1)->get();;
 		} else {
-			$dept = DB::table('department')->where('name','=',Auth::user()->primary_dpt)->first();
+			$dept = DB::table('department')->where('id','=',Auth::user()->primary_dpt)->first();
 			$tickets = Tickets::where('status',1)->where('dept_id', '=', $dept->id)->get();
 		}
 		return \Datatable::collection(new Collection($tickets))   
@@ -178,7 +178,7 @@ class TicketController extends Controller {
 			// $dept = DB::table('department')->where('name','=',Auth::user()->primary_dpt)->first();
 			// $tickets = Tickets::where('status',1)->where('dept_id', '=', $dept->id)->get();
 
-	        $dept = Department::where('name','=',Auth::user()->primary_dpt)->first();
+	        $dept = Department::where('id','=',Auth::user()->primary_dpt)->first();
     	    $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('assigned_to', '=', 0)->where('dept_id','=',$dept->id)->get();
 		}
 		return \Datatable::collection(new Collection($tickets))   
@@ -286,7 +286,7 @@ class TicketController extends Controller {
 			// $dept = Department::where('name','=',Auth::user()->primary_dpt)->first();
 			// $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '=', Auth::user()->id)->get();
 
-			$dept = Department::where('name','=',Auth::user()->primary_dpt)->first();
+			$dept = Department::where('id','=',Auth::user()->primary_dpt)->first();
 	        $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 1)->where('dept_id','=',$dept->id)->get();
 
 		}
@@ -389,7 +389,7 @@ class TicketController extends Controller {
 		if(Auth::user()->role=="admin"){		
 			$tickets = Tickets::where('status', '=', 1)->where('assigned_to', '=', Auth::user()->id)->get();
 		} else {
-			$dept = Department::where('name','=',Auth::user()->primary_dpt)->first();
+			$dept = Department::where('id','=',Auth::user()->primary_dpt)->first();
 			$tickets = Tickets::where('status', '=', 1)->where('assigned_to', '=', Auth::user()->id)->get();
 		}
 		return \Datatable::collection(new Collection($tickets))   
@@ -497,7 +497,7 @@ class TicketController extends Controller {
 		if(Auth::user()->role=="admin"){		
        	    $tickets = Tickets::where('status', '>', 1)->where('status', '<', 4)->get();
 		} else {
-            $dept = Department::where('name','=',Auth::user()->primary_dpt)->first();
+            $dept = Department::where('id','=',Auth::user()->primary_dpt)->first();
         	$tickets = Tickets::where('status', '>', 1)->where('dept_id','=',$dept->id)->where('status', '<', 4)->get();
 		}
 		return \Datatable::collection(new Collection($tickets))   
@@ -595,7 +595,7 @@ class TicketController extends Controller {
 		if(Auth::user()->role=="admin"){		
         	$tickets = Tickets::where('status', '=', 1)->where('assigned_to', '>', 0)->get();
 		} else {
-	        $dept = Department::where('name','=',Auth::user()->primary_dpt)->first();
+	        $dept = Department::where('id','=',Auth::user()->primary_dpt)->first();
         	$tickets = Tickets::where('status', '=', 1)->where('assigned_to', '>', 0)->where('dept_id','=',$dept->id)->get();
 		}
 		return \Datatable::collection(new Collection($tickets))   
@@ -737,7 +737,7 @@ class TicketController extends Controller {
 		if($lock->lock_by == Auth::user()->id || $lock->lock_at < date('Y-m-d H:i:s', strtotime('-3 minutes', strtotime($lock->lock_at)))) {
 			if(Auth::user()->role == 'agent'){
 				
-				$dept = Department::where('name','=',Auth::user()->primary_dpt)->first();
+				$dept = Department::where('id','=',Auth::user()->primary_dpt)->first();
 
 				$tickets = Tickets::where('id', '=', $id)->where('dept_id','=', $dept->id)->first();
 			} else {
@@ -1736,7 +1736,7 @@ class TicketController extends Controller {
 
         	// $tickets = Tickets::where('assigned_to', '=', null)->where('status','1')->get();
 		} else {
-			$dept = Department::where('name','=',Auth::user()->primary_dpt)->first();
+			$dept = Department::where('id','=',Auth::user()->primary_dpt)->first();
 			$tickets = Tickets::where('status', '=', 5)->where('dept_id','=',$dept->id)->get();
 
 			// $dept = Department::where('name','=',Auth::user()->primary_dpt)->first();
@@ -1847,7 +1847,7 @@ class TicketController extends Controller {
         	$tickets = Tickets::where('assigned_to', '=', null)->where('status','1')->get();
 		} else {
 
-			$dept = Department::where('name','=',Auth::user()->primary_dpt)->first();
+			$dept = Department::where('id','=',Auth::user()->primary_dpt)->first();
         	$tickets = Tickets::where('assigned_to', '=', null)->where('dept_id','=',$dept->id)->get();
 
 			// $dept = Department::where('name','=',Auth::user()->primary_dpt)->first();
@@ -2139,7 +2139,7 @@ class TicketController extends Controller {
 	public function deptopen($id) {
 		$dept = Department::where('name','=',$id)->first();	
 		if(Auth::user()->role == 'agent') {	
-			if(Auth::user()->primary_dpt == $dept->name) {
+			if(Auth::user()->primary_dpt == $dept->id) {
 				return view('themes.default1.agent.helpdesk.dept-ticket.open',compact('id'));		
 			} else {
 				return redirect()->back()->with('fails','Unauthorised!');
@@ -2156,7 +2156,7 @@ class TicketController extends Controller {
 	public function deptclose($id) {
 		$dept = Department::where('name','=',$id)->first();	
 		if(Auth::user()->role == 'agent') {	
-			if(Auth::user()->primary_dpt == $dept->name) {
+			if(Auth::user()->primary_dpt == $dept->id) {
 				return view('themes.default1.agent.helpdesk.dept-ticket.closed',compact('id'));
 			} else {
 				return redirect()->back()->with('fails','Unauthorised!');
@@ -2173,7 +2173,7 @@ class TicketController extends Controller {
 	public function deptinprogress($id) {
 		$dept = Department::where('name','=',$id)->first();	
 		if(Auth::user()->role == 'agent') {	
-			if(Auth::user()->primary_dpt == $dept->name) {
+			if(Auth::user()->primary_dpt == $dept->id) {
 				return view('themes.default1.agent.helpdesk.dept-ticket.inprogress',compact('id'));
 			} else {
 				return redirect()->back()->with('fails','Unauthorised!');

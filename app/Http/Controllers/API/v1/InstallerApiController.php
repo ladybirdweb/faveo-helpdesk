@@ -1,4 +1,4 @@
-<?php namespace App\Http\Controllers\API\helpdesk;
+<?php namespace App\Http\Controllers\Api\v1;
 // controllers
 use App\Http\Controllers\Controller;
 // requests
@@ -8,6 +8,7 @@ use App\Http\Requests\helpdesk\InstallerRequest;
 use App\User;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Form\Form_details;
+use App\Model\helpdesk\Utility\Date_time_format;
 // classes
 use App;
 use Artisan;
@@ -102,42 +103,20 @@ class InstallerApiController extends Controller {
 			Artisan::call('migrate', array('--force' => true));
 			Artisan::call('db:seed', array('--force' => true));
 
+			// var_dump($datetime);
+			// $date_time_format = Date_time_format::where('format','=',$datetime)->first();
+			// // dd($date_time_format->id);
+			// if($date_time_format->id){
+				// $date_time = 1;
+			// } else {
+			// 	return 'date time format not supported';
+			// }
+
 			// Creating minum settings
 			$system = System::where('id','=','1')->first();
-			$system->time_zone = $timezone;
-			$system->date_time_format = $datetime;
+			$system->time_zone = 1;
+			$system->date_time_format = 1;
 			$system->save();
-			
-			// Creating default form field
-			$form1 = new Form_details;
-			$form1->label = 'Name';
-			$form1->type = 'text';
-			$form1->form_name_id = '1';
-			$form1->save();
-
-			$form2 = new Form_details;
-			$form2->label = 'Phone';
-			$form2->type = 'number';
-			$form2->form_name_id = '1';
-			$form2->save();
-
-			$form3 = new Form_details;
-			$form3->label = 'Email';
-			$form3->type = 'text';
-			$form3->form_name_id = '1';
-			$form3->save();
-
-			$form4 = new Form_details;
-			$form4->label = 'Subject';
-			$form4->type = 'text';
-			$form4->form_name_id = '1';
-			$form4->save();
-
-			$form5 = new Form_details;
-			$form5->label = 'Details';
-			$form5->type = 'textarea';
-			$form5->form_name_id = '1';
-			$form5->save();
 
 			// Creating user
 			$user = User::create(array(

@@ -191,7 +191,7 @@ class InstallController extends Controller {
 	 * @return type view
 	 */
 	public function postconnection() {
-		
+		error_reporting(E_ALL & ~E_NOTICE);		
 		$default = Input::get('default');
 		$host = Input::get('host');
 		$database = Input::get('databasename');

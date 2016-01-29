@@ -15,7 +15,7 @@ class="active"
 @section('content')
 <?php 
     if(Auth::user()->role == 'agent') {
-        $dept = App\Model\helpdesk\Agent\Department::where('name','=',Auth::user()->primary_dpt)->first();
+        $dept = App\Model\helpdesk\Agent\Department::where('id','=',Auth::user()->primary_dpt)->first();
         $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
     } else {
         $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->orderBy('id', 'DESC')->paginate(20);

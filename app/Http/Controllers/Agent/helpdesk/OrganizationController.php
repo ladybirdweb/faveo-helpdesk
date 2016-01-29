@@ -69,7 +69,14 @@ class OrganizationController extends Controller {
 			->orderColumns('name', 'website')
 			/* column name */
 			->addColumn('name', function ($model) {
-				return $model->name;
+				// return $model->name;
+				if(strlen($model->name) > 20) {
+                    $orgname = substr($model->name, 0, 25);
+                    $orgname = substr($orgname, 0, strrpos($orgname, ' ')).' ...'; 
+                } else {
+                	$orgname = $model->name;
+                }
+				return $orgname;
 			})
 			/* column website */
 			->addColumn('website', function ($model) {

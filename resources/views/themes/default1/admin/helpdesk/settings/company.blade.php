@@ -83,7 +83,7 @@ class="active"
 
                     {!! Form::label('website',Lang::get('lang.website')) !!}
                     {!! $errors->first('website', '<spam class="help-block">:message</spam>') !!}
-			        {!! Form::text('website',$companys->website,['class' => 'form-control']) !!}
+			        {!! Form::url('website',$companys->website,['class' => 'form-control']) !!}
 
                 </div>
                 </div>
@@ -101,11 +101,11 @@ class="active"
 
                 	<div class="col-md-12">
                     <!-- comapny address -->
-                    <div class="form-group {{ $errors->has('company_address') ? 'has-error' : '' }}">
+                    <div class="form-group {{ $errors->has('address') ? 'has-error' : '' }}">
 
                         {!! Form::label('address',Lang::get('lang.address')) !!}
-                        {!! $errors->first('company_address', '<spam class="help-block">:message</spam>') !!}
-                        {!! Form::textarea('company_address',$companys->address,['class' => 'form-control','size' => '30x5']) !!}
+                        {!! $errors->first('address', '<spam class="help-block">:message</spam>') !!}
+                        {!! Form::textarea('address',$companys->address,['class' => 'form-control','size' => '30x5']) !!}
 
                     </div>
                     </div>
@@ -152,6 +152,14 @@ class="active"
                     @if($companys->logo != null)
                         <div class="col-md-2">
                             {!! Form::checkbox('use_logo') !!} <label> Use Logo</label>
+                        </div>
+                    @endif
+
+                    <?php  $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first(); ?>
+
+                    @if($companys->logo != null)
+                        <div class="col-md-2">
+                            <img src="{{asset('lb-faveo/media/company')}}{{'/'}}{{$company->logo}}" alt="User Image" width="100px" style="border:1px solid #DCD1D1" />
                         </div>
                     @endif
 		    </div>

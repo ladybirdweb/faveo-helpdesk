@@ -211,7 +211,7 @@ if (Auth::user()->role == 'admin') { ?>
                                                 <li><a href="{!! url::route('dept.closed.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.closed') !!}<small class="label pull-right bg-green">{!! $closed !!}</small></a></li>
                                             </ul>
                                         </li>
-<?php } if (Auth::user()->role == 'agent' && Auth::user()->primary_dpt == $dept->name) { ?>
+<?php } if (Auth::user()->role == 'agent' && Auth::user()->primary_dpt == $dept->id) { ?>
                                         <li class="treeview">
                                             <a href="#">
                                                 <i class="fa fa-folder-open"></i> <span>{!! $dept->name !!}</span> <i class="fa fa-angle-left pull-right"></i>

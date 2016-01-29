@@ -68,7 +68,7 @@ class="active"
 				        	<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.department') !!}:</b></h4></th><td class="col-md-6"><h4>{{ $dept }}</h4></td></tr>
 				        	<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.group') !!}:</b></h4></th><td  class="col-md-6"><h4>{{ $grp }}</h4></td></tr>
 				        	<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.company') !!}:</b></h4></th><td  class="col-md-6"> <h4>{{ $user->company }}</h4></td></tr>
-				        	<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.time_zone') !!}:</b></h4></th><td  class="col-md-6"><h4> {{ $timezone }}</h4></td></tr>
+				        	{{-- <tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.time_zone') !!}:</b></h4></th><td  class="col-md-6"><h4> {{ $timezone }}</h4></td></tr> --}}
 				        	<tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.role') !!}:</b></h4></th><td  class="col-md-6"> <h4>{{ $user->role }}</h4></td></tr>
 			        	</table>
 			    	</div>

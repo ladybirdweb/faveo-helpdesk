@@ -46,21 +46,21 @@ class Handler extends ExceptionHandler {
 	 */
 	public function render($request, Exception $e)
 	{
-		if(config('app.debug') == false) {
-			if ($this->isHttpException($e) && $e->getStatusCode() == 404) {
-				return response()->view('errors.404', []);
-			} else {
-				if(\Config::get('database.install') == 1) {
-					// if(\Config::get('app.ErrorLog') == '%1%') {
-					// 	\App\Http\Controllers\Common\SettingsController::smtp();
-					//  		\Mail::send('errors.report', array('e' => $e), function ($message) {
-					//  		$message->to('', '')->subject('Faveo HELPDESK Pro ERROR');
-					//  	});
-					// }
-				}
-				return response()->view('errors.500', []);
-			}
-		}
+		// if(config('app.debug') == false) {
+		// 	if ($this->isHttpException($e) && $e->getStatusCode() == 404) {
+		// 		return response()->view('errors.404', []);
+		// 	} else {
+		// 		if(\Config::get('database.install') == 1) {
+		// 			// if(\Config::get('app.ErrorLog') == '%1%') {
+		// 			// 	\App\Http\Controllers\Common\SettingsController::smtp();
+		// 			//  		\Mail::send('errors.report', array('e' => $e), function ($message) {
+		// 			//  		$message->to('', '')->subject('Faveo HELPDESK Pro ERROR');
+		// 			//  	});
+		// 			// }
+		// 		}
+		// 		return response()->view('errors.500', []);
+		// 	}
+		// }
 		return parent::render($request, $e);
 
 		if ($this->isHttpException($e))

@@ -76,7 +76,13 @@ class UserController extends Controller {
 			->orderColumns('user_name', 'email')
 			/* column username */
 			->addColumn('user_name', function ($model) {
-				return $model->user_name;
+				if(strlen($model->user_name) > 20) {
+                    $username = substr($model->user_name, 0, 30);
+                    $username = substr($username, 0, strrpos($username, ' ')).' ...'; 
+                } else {
+                	$username = $model->user_name;
+                }
+				return $username;
 			})
 			/* column email */
 			->addColumn('email', function ($model) {
@@ -96,13 +102,23 @@ class UserController extends Controller {
 				$phone = $phone ."&nbsp;&nbsp;&nbsp;". $mobile;
 				return $phone;
 			})
-			/* column status */
+			/* column account status */
 			->addColumn('status', function ($model) {
 				$status = $model->active;
 				if($status == 1) {
 					$stat = '<button class="btn btn-success btn-xs">Active</button>';
 				} else {
 					$stat = '<button class="btn btn-danger btn-xs">Inactive</button>';
+				}
+				return $stat;
+			})
+			/* column ban status */
+			->addColumn('ban', function ($model) {
+				$status = $model->ban;
+				if($status == 1) {
+					$stat = '<button class="btn btn-danger btn-xs">Banned</button>';
+				} else {
+					$stat = '<button class="btn btn-success btn-xs">Active</button>';
 				}
 				return $stat;
 			})
