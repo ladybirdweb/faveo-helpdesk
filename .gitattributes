@@ -1,6 +1,3 @@
 * text=auto
-*.js linguist-vendored
 *.css linguist-vendored
 *.less linguist-vendored
-*.env linguist-vendored
-*.json linguist-vendored

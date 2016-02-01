@@ -4,13 +4,18 @@
         <meta name="viewport" content="width=device-width">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Faveo HELPDESK</title>
-        <link rel="stylesheet" href="{{asset("lb-faveo/installer/css/load-styles.css")}}" type="text/css" media="all">
-        <link rel="stylesheet" href="{{asset("lb-faveo/installer/css/css.css")}}" type="text/css" media="all">
-        <link rel="stylesheet" href="{{asset("lb-faveo/installer/css/admin.css")}}" type="text/css" media="all">
-        <link rel="stylesheet" href="{{asset("lb-faveo/installer/css/wc-setup.css")}}" type="text/css" media="all">
-        <link rel="stylesheet" href="{{asset("lb-faveo/installer/css/activation.css")}}" type="text/css" media="all">
-        <link rel="stylesheet" href="{{asset("lb-faveo/installer/css/style.css")}}" type="text/css" media="all">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{{asset("lb-faveo/css/load-styles.css")}}" type="text/css" media="all">
+        <link rel="stylesheet" href="{{asset("lb-faveo/css/css.css")}}" type="text/css" media="all">
+        <link rel="stylesheet" href="{{asset("lb-faveo/css/admin.css")}}" type="text/css" media="all">
+        <link rel="stylesheet" href="{{asset("lb-faveo/css/wc-setup.css")}}" type="text/css" media="all">
+        <link rel="stylesheet" href="{{asset("lb-faveo/css/activation.css")}}" type="text/css" media="all">
+        <link rel="stylesheet" href="{{asset("lb-faveo/css/style.css")}}" type="text/css" media="all">
+        {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> --}}
+
+        <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
+        <!-- Ionicons -->
+        {{-- <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"> --}}
+        <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet">
 
         <style type="text/css">
 
@@ -81,7 +86,8 @@
     </head>
     <body class="wc-setup wp-core-ui">
         <h1 id="wc-logo"><a href="#">
-            <img src="{{asset("lb-faveo/installer/images/faveo.png")}}" alt="faveo"></a></h1>
+            <img src="{{asset("lb-faveo/media/installer/faveo.png")}}" alt="faveo" width="
+            250px"></a></h1>
     <ol class="wc-setup-steps">
         <li class="@yield('licence')">Licence Agreement</li>
         <li class="@yield('environment')">Environment Test</li>
@@ -92,7 +98,8 @@
     <div class="wc-setup-content">
         @yield('content')
     </div>
-    <center>&copy;<?php echo date('Y')?>. Powered by <a href="http://www.faveohelpdesk.com">Faveo </a></center>
+    <br/>
+    <center>&copy;<?php echo date('Y')?>. Powered by <a target="_blank" href="http://www.faveohelpdesk.com">Faveo </a></center>
     {{-- // <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> --}}
     {{-- // <script src="{{asset("lb-faveo/installer/js/index.js ")}}"></script> --}}
     </body>

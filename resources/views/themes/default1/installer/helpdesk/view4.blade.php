@@ -157,7 +157,7 @@ if (DB_HOST && DB_USER && DB_NAME) {
         <div class="col-md-2">
         </div>
         <div class="col-md-9">
-            <img src="{{asset("lb-faveo/dist/img/gifloader.gif")}}"><br/><br/><br/>
+            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
         </div>
     </div>
 </div>

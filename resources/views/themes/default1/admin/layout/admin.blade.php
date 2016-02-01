@@ -41,7 +41,7 @@
     <body class="skin-yellow fixed">
         <div class="wrapper">
             <header class="main-header">
-                <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png') }}"></a>
+                <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png') }}" width="100px"></a>
                 <!-- Header Navbar: style can be found in header.less -->
                 <nav class="navbar navbar-static-top" role="navigation">
                     <!-- Sidebar toggle button-->
@@ -142,10 +142,17 @@
                                                             <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
 
 <?php
-$inbox = App\Model\helpdesk\Ticket\Tickets::get();
+if(Auth::user()->role == 'admin') {
+$inbox = App\Model\helpdesk\Ticket\Tickets::all();
 $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status','1')->get();
 $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '0')->where('status','1')->get();
 $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->get();
+} elseif(Auth::user()->role == 'agent') {
+$inbox = App\Model\helpdesk\Ticket\Tickets::where('dept_id','',Auth::user()->primary_dpt)->get();
+$myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status','1')->get();
+$unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '0')->where('status','1')->where('dept_id','',Auth::user()->primary_dpt)->get();
+$tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->get();
+}
 $i = count($tickets);
 ?>
                                         <li>

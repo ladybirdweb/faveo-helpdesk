@@ -56,6 +56,6 @@ active
 
 
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-    <script src="{{asset(" js/index.js ")}}"></script>
+    <script src="{{asset("lb-faveo/js/index.js")}}"></script>
   
   @stop

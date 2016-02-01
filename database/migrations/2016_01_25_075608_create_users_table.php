@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration {
 			$table->string('ext');
 			$table->string('phone_number');
 			$table->string('mobile');
-			$table->string('agent_sign');
+			$table->text('agent_sign');
 			$table->string('account_type');
 			$table->string('account_status');
 			$table->integer('assign_group')->unsigned()->nullable()->index('assign_group_3');
