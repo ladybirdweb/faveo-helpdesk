@@ -7,7 +7,7 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <!-- Theme style -->
-    <link href="{{asset("lb-faveo/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset("lb-faveo/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
     <!-- iCheck -->
     <link href="{{asset("lb-faveo/plugins/iCheck/square/blue.css")}}" rel="stylesheet" type="text/css" />
 
