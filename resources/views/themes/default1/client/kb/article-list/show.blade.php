@@ -13,7 +13,6 @@ $category_id = $all->lists('category_id');
         <?php $category = App\Model\kb\Category::where('id', $category_id)->first(); ?>
         <li><a href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
         <li><a href="{{url('/knowledgebase')}}">{!! Lang::get('lang.knowledge_base') !!}</a></li>
-        <li><a href="{{url('category-list')}}">{!! Lang::get('lang.category') !!}</a></li>
         <li><a href="{{url('category-list/'.$category->slug)}}">{{$category->name}}</a></li>
         <li class="active">{{$arti->name}}</li>
     </ol>

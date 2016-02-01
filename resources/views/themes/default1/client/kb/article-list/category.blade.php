@@ -15,7 +15,6 @@
         <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
         <li>{!! Lang::get('lang.home') !!}</li>
         <li class="active">{!! Lang::get('lang.knowledge_base') !!}</li>
-        <li class="active">{!! Lang::get('lang.category') !!}</li>
         <li class="active">{!! $category->name !!}</li>
     </ol>
 </div>
