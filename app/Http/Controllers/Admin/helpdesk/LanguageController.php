@@ -48,8 +48,8 @@ class LanguageController extends Controller {
               //  return Cache::get('language');
             //} else return 'false';
            // Cache::put('language',$)
-
-            if(array_key_exists($lang, Config::get('languages'))) {
+            $path = '../resources/lang';// Path to check available language packages 
+            if(array_key_exists($lang, Config::get('languages')) && in_array($lang, scandir($path))) {
                 // dd(array_key_exists($lang, Config::get('languages')));
                 // app()->setLocale($lang);
 
@@ -57,7 +57,7 @@ class LanguageController extends Controller {
                 // dd(Cache::get('language'));
                 // dd()
             } else {
-                return Redirect::back()->with('message', 'Language package not found in your lang directroy.');
+                return Redirect::back()->with('fails', Lang::get("lang.language-error"));
             }
             return Redirect::back();
         }
@@ -151,17 +151,17 @@ class LanguageController extends Controller {
             
             //Checking if package already exists or not in lang folder
             $path = '../resources/lang';
-            if (in_array(Input::get('iso-code'), scandir($path))) {
+            if (in_array(strtolower(Input::get('iso-code')), scandir($path))) {
                 
                 //sending back with error message
-                Session::flash('fails', "Language package already exists.");
-                Session::flash('link',"change-language/".Input::get('iso-code'));
+                Session::flash('fails', Lang::get('lang.package_exist'));
+                Session::flash('link',"change-language/".strtolower(Input::get('iso-code')));
                 return Redirect::back()->withInput();
             
-            } elseif (!array_key_exists(Input::get('iso-code'), Config::get('languages'))){//Checking Valid ISO code form Languages.php 
+            } elseif (!array_key_exists(strtolower(Input::get('iso-code')), Config::get('languages'))){//Checking Valid ISO code form Languages.php 
                 
                 //sending back with error message
-                Session::flash('fails', "Enter correct ISO-code");
+                Session::flash('fails', Lang::get('lang.iso-code-error'));
                 return Redirect::back()->withInput();
             
             } else {
@@ -170,7 +170,7 @@ class LanguageController extends Controller {
                 if (Input::file('File')->isValid()) {
                     $name = Input::file('File')->getClientOriginalName(); //uploaded file's original name
                     $destinationPath = '../public/uploads/'; // defining uploading path
-                    $extractpath = '../resources/lang/'.Input::get('iso-code');//defining extracting path
+                    $extractpath = '../resources/lang/'.strtolower(Input::get('iso-code'));//defining extracting path
                     mkdir($extractpath); //creating directroy for extracting uploadd file
                     //mkdir($destinationPath);
                     Input::file('File')->move($destinationPath, $name); // uploading file to given path
@@ -184,18 +184,19 @@ class LanguageController extends Controller {
                         //$success2 = File::delete($destinationPath.'/'.$name);
                         if($success){
                             //sending back with error message
-                            Session::flash('fails', 'Error in directory structure. Zip file must contain language php files only. Try Again.');
+                            Session::flash('fails', Lang::get('lang.zipp-error'));
+                             Session::flash('link2',"http://www.ladybirdweb.com/support/show/how-to-translate-faveo-into-multiple-languages");
                             return Redirect::back()->withInput();   
                         }                    
                     } else {
                     // sending back with success message
-                    Session::flash('success', "uploaded successfully.");
-                    Session::flash('link',"change-language/".Input::get('iso-code'));
+                    Session::flash('success', Lang::get("lang.upload-success"));
+                    Session::flash('link',"change-language/".strtolower(Input::get('iso-code')));
                     return Redirect::route('LanguageController');
                     }
                 } else {
                     // sending back with error message.
-                    Session::flash('fails', 'uploaded file is not valid');
+                    Session::flash('fails', Lang::get("lang.file-error"));
                     return Redirect::route('form');
                 }
             }
@@ -221,16 +222,16 @@ class LanguageController extends Controller {
             $success = File::deleteDirectory($deletePath); //remove extracted folder and it's subfolder from lang
             if($success) {
                 //sending back with success message
-                Session::flash('success', 'Language package deleted successfully.');
+                Session::flash('success', Lang::get('lang.delete-success'));
                 return Redirect::back();   
             } else {
                 //sending back with error message
-                Session::flash('fails', 'Language package does not exist.');
+                Session::flash('fails', Lang::get('lang.lang-doesnot-exist'));
                 return Redirect::back(); 
             }
         } else {
             //sending back with error message
-            Session::flash('fails', 'Language package can not be deleted when it is active.');
+            Session::flash('fails', Lang::get('lang.active-lang-error'));
             return redirect('languages');    
         }
     }

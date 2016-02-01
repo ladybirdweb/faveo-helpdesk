@@ -41,7 +41,7 @@ class="active"
             <div class="alert alert-success alert-dismissable">
                 <i class="fa  fa-check-circle"></i>
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {{Session::get('success')}} <a href="{{url(Session::get('link'))}}"> Enable it</a>
+                {{Session::get('success')}} @if(Session::has('link'))<a href="{{url(Session::get('link'))}}">{{Lang::get('lang.enable_lang')}}</a> @endif
             </div>
             @endif
             <!-- failure message -->

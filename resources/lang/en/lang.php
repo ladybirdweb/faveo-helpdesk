@@ -2,7 +2,7 @@
 <?php
 return array(
 
- 	/*
+  /*
       |----------------------------------------------------------------------------------------
       | Authentication Pages [English(en)]
       |----------------------------------------------------------------------------------------
@@ -28,16 +28,16 @@ return array(
       |--------------------------------------
      */
     'Login_to_start_your_session' => 'Login to start your session',
-    'login' 				=> 'Login',
-    'remember' 				=> 'Remember Me',
-    'signmein' 				=> 'Sign me In',
-    'iforgot' 				=> 'I forgot my Password',
-    'email_address' 		=> 'E-Mail Address',
-    'password'				=> 'Password',
-    'woops' 				=> 'Whoops!',
-    'theirisproblem'		=> 'There were some problems with your input.',
-    'login'					=> 'Login',
-    'e-mail'				=> 'E-mail',
+    'login'         => 'Login',
+    'remember'        => 'Remember Me',
+    'signmein'        => 'Sign me In',
+    'iforgot'         => 'I forgot my Password',
+    'email_address'     => 'E-Mail Address',
+    'password'        => 'Password',
+    'woops'         => 'Whoops!',
+    'theirisproblem'    => 'There were some problems with your input.',
+    'login'         => 'Login',
+    'e-mail'        => 'E-mail',
     'reg_new_member'        => 'Register a new membership',
  
     /*
@@ -45,34 +45,34 @@ return array(
       |   Register Page
       |--------------------------------------
      */
-    'registration' 		=> 	'Registration',
-    'full_name'			=>	'Full name',
+    'registration'    =>  'Registration',
+    'full_name'     =>  'Full name',
     'firstname'     =>  'First Name',
     'lastname'     =>  'Last Name',
     'profilepicture'    =>  'Profile Picture',
     'oldpassword'   =>  'Old Password',
     'newpassword'   =>    'New Password',
-    'retype_password'	=>	'Retype Password',
-    'i_agree_to_the'	=>	'I agree to the',
-    'terms'				=>	'terms',
-    'register'			=>	'Register',
-    'i_already_have_a_membership'	=>	'I already have a membership',
+    'retype_password' =>  'Retype Password',
+    'i_agree_to_the'  =>  'I agree to the',
+    'terms'       =>  'terms',
+    'register'      =>  'Register',
+    'i_already_have_a_membership' =>  'I already have a membership',
 
-	   /*
+     /*
       |--------------------------------------
       |   Reset Password Page
       |--------------------------------------
       */    
-	    'reset_password'	=>	'Reset Password',
-	
+      'reset_password'  =>  'Reset Password',
+  
      /*
       |--------------------------------------
       |   Forgot Password Page
       |--------------------------------------
       */
-    'i_know_my_password'		=>	'I know my password',
-    'recover_passord' 			=> 'Recover Password',
-    'send_password_reset_link' 	=> 'Send pasword Reset Link',
+    'i_know_my_password'    =>  'I know my password',
+    'recover_passord'       => 'Recover Password',
+    'send_password_reset_link'  => 'Send pasword Reset Link',
     'enter_email_to_reset_password' => 'Enter E-mail to reset password',
     'link'    =>    'Link',
 
@@ -152,7 +152,7 @@ return array(
       'message'     =>'Message',
       'send'        =>'Send',
 
-	   /*
+     /*
       |----------------------------------------------------------------------------------------
       | Settings Pages [English(en)]
       |----------------------------------------------------------------------------------------
@@ -168,61 +168,61 @@ return array(
       |   Company Settings Page
       |--------------------------------------
       */
-    	'company'		=>'Company',
-	    'website'		=>'Website', 
-  		'phone'			=>'Phone', 
-	   	'address'		=>'Address', 
-	 	  'landing'		=>'Landing Page', 
-		  'offline'		=>'Offline Page', 
-		  'thank'			=>'Thank Page', 
-		  'logo'			=>'Logo',
-		  'save'			=>'Save',
+      'company'   =>'Company',
+      'website'   =>'Website', 
+      'phone'     =>'Phone', 
+      'address'   =>'Address', 
+      'landing'   =>'Landing Page', 
+      'offline'   =>'Offline Page', 
+      'thank'     =>'Thank Page', 
+      'logo'      =>'Logo',
+      'save'      =>'Save',
 
-	   /*
+     /*
       |--------------------------------------
       |   System Settings Page
       |--------------------------------------
       */
-    'system'		=>'System',
-		'online'		=>'Online',	
-		'offline'		=>'Offline',
-		'name/title'	=>'Name/Title',
-		'pagesize'		=>'Page Size',
-		'url'			=>'URL',
-		'default_department'=>'Default Department',
-		'loglevel'		=>'Log Level',	   
-		'purglog'		=>'Purge Logs',	 
-		'nameformat'	=>'Name Formatting',
-		'timeformat'	=>'Time Format',
+    'system'    =>'System',
+    'online'    =>'Online', 
+    'offline'   =>'Offline',
+    'name/title'  =>'Name/Title',
+    'pagesize'    =>'Page Size',
+    'url'     =>'URL',
+    'default_department'=>'Default Department',
+    'loglevel'    =>'Log Level',     
+    'purglog'   =>'Purge Logs',  
+    'nameformat'  =>'Name Formatting',
+    'timeformat'  =>'Time Format',
     'date'    =>    'Date',
-		'dateformat'	=>'Date Format',
-		'date_time'		=>'Date And Time Format',
-		'day_date_time'	=>'Day,Date And Time Format',
-		'timezone'		=>'Default Time Zone',
+    'dateformat'  =>'Date Format',
+    'date_time'   =>'Date And Time Format',
+    'day_date_time' =>'Day,Date And Time Format',
+    'timezone'    =>'Default Time Zone',
 
      /*
       |--------------------------------------
       |   Email Settings Page
       |--------------------------------------
       */
-		'email'								=>'Email',
-		'default_template'					=>'Default Template Set:',
-		'default_system_email'				=>'Default System Email:',
-		'default_alert_email'				=>'Default Alert Email:',
-		'admin_email'						=>'Admins Email Address:',
-		'email_fetch'						=>'Email Fetching:',
-		'enable'							=>'Enable',
-		'default_MTA'						=>'Default MTA',
-		'fetch_auto-corn'					=>'Fetch on auto-cron',
-		'strip_quoted_reply'				=>'Strip Quoted Reply',
-		'reply_separator'					=>'Reply Separator Tag',
-		'accept_all_email'					=>'Accept All Emails',
-		'accept_email_unknown'				=>'Accept email from unknown Users',
-		'accept_email_collab'				=>'Accept Email Collaborators',
-		'automatically_and_collab_from_email'=>'Automatically add collaborators from email fields',
-		'default_alert_email'				=>'Default Alert Email',
-		'attachments'							=>'Attachments',
-		'email_attahment_user'				=>'Email attachments to the user',
+    'email'               =>'Email',
+    'default_template'          =>'Default Template Set:',
+    'default_system_email'        =>'Default System Email:',
+    'default_alert_email'       =>'Default Alert Email:',
+    'admin_email'           =>'Admins Email Address:',
+    'email_fetch'           =>'Email Fetching:',
+    'enable'              =>'Enable',
+    'default_MTA'           =>'Default MTA',
+    'fetch_auto-corn'         =>'Fetch on auto-cron',
+    'strip_quoted_reply'        =>'Strip Quoted Reply',
+    'reply_separator'         =>'Reply Separator Tag',
+    'accept_all_email'          =>'Accept All Emails',
+    'accept_email_unknown'        =>'Accept email from unknown Users',
+    'accept_email_collab'       =>'Accept Email Collaborators',
+    'automatically_and_collab_from_email'=>'Automatically add collaborators from email fields',
+    'default_alert_email'       =>'Default Alert Email',
+    'attachments'             =>'Attachments',
+    'email_attahment_user'        =>'Email attachments to the user',
     'cron_notification'     =>    'Enable Notification cron',
 
      /*
@@ -230,81 +230,81 @@ return array(
       |   Ticket Settings Page
       |--------------------------------------
       */
-      	'ticket'							=>'Ticket',
-		'default_ticket_number_format'		=>'Default Ticket Number Format',
-		'default_ticket_number_sequence'	=>'Default Ticket Number Sequence',
-		'default_status'					=>'Default Status',
-		'default_priority'					=>'Default Priority',
-		'default_sla'						=>'Default SLA',
-		'default_help_topic'				=>'Default Help Topic',
-		'maximum_open_tickets'				=>'Maximum Open Tickets',
-		'agent_collision_avoidance_duration'=>'Agent Collision Avoidance Duration',
-		'human_verification'				=>'Human Verification',
-		'claim_on_response'					=>'Claim on Response',
-		'assigned_tickets'					=>'Assigned Tickets',
-		'answered_tickets'					=>'Answered Tickets',
-		'agent_identity_masking'			=>'Agent Identity Masking',
-		'enable_HTML_ticket_thread'			=>'Enable HTML Ticket Thread',
-		'allow_client_updates'				=>'Allow Client Updates',
+        'ticket'              =>'Ticket',
+    'default_ticket_number_format'    =>'Default Ticket Number Format',
+    'default_ticket_number_sequence'  =>'Default Ticket Number Sequence',
+    'default_status'          =>'Default Status',
+    'default_priority'          =>'Default Priority',
+    'default_sla'           =>'Default SLA',
+    'default_help_topic'        =>'Default Help Topic',
+    'maximum_open_tickets'        =>'Maximum Open Tickets',
+    'agent_collision_avoidance_duration'=>'Agent Collision Avoidance Duration',
+    'human_verification'        =>'Human Verification',
+    'claim_on_response'         =>'Claim on Response',
+    'assigned_tickets'          =>'Assigned Tickets',
+    'answered_tickets'          =>'Answered Tickets',
+    'agent_identity_masking'      =>'Agent Identity Masking',
+    'enable_HTML_ticket_thread'     =>'Enable HTML Ticket Thread',
+    'allow_client_updates'        =>'Allow Client Updates',
 
      /*
       |--------------------------------------
       |   Access Settings Page
       |--------------------------------------
       */
-    'access'											=>'Access',
-    'expiration_policy'									=>'Password Expiration Policy',
-		'allow_password_resets'								=>'Allow Password Resets',  
-		'reset_token_expiration'							=>'Reset Token Expiration', 
-		'agent_session_timeout'								=>'Agent Session Timeout', 
-		'bind_agent_session_IP'								=>'Bind Agent Session to IP',  
-		'registration_required'								=>'Registration Required',   
-		'require_registration_and_login_to_create_tickets'	=>'Require registration and login to create tickets',
-		'registration_method'								=>'Registration Method', 
-		'user_session_timeout'								=>'User Session Timeout', 
-		'client_quick_access'								=>'Client Quick Access',
+    'access'                      =>'Access',
+    'expiration_policy'                 =>'Password Expiration Policy',
+    'allow_password_resets'               =>'Allow Password Resets',  
+    'reset_token_expiration'              =>'Reset Token Expiration', 
+    'agent_session_timeout'               =>'Agent Session Timeout', 
+    'bind_agent_session_IP'               =>'Bind Agent Session to IP',  
+    'registration_required'               =>'Registration Required',   
+    'require_registration_and_login_to_create_tickets'  =>'Require registration and login to create tickets',
+    'registration_method'               =>'Registration Method', 
+    'user_session_timeout'                =>'User Session Timeout', 
+    'client_quick_access'               =>'Client Quick Access',
 
      /*
       |--------------------------------------
       |   Auto-Response Settings Page
       |--------------------------------------
       */
-    'auto_responce'					=>'Auto-Responce',
-		'new_ticket'					=>'New Ticket',
-		'new_ticket_by_agent'			=>'New Ticket by Agent',
-		'new_message'					=>'New Message',
-		'submitter'						=>'Submitter : ',
-		'send_receipt_confirmation'		=>'Send Receipt Confirmation',
-		'participants'					=>'Participants : ',
-		'send_new_activity_notice'		=>'Send new activity notice',
-		'overlimit_notice'				=>'Overlimit Notice',
-		'email_attachments_to_the_user'	=>'Email attachments to the user',
+    'auto_responce'         =>'Auto-Responce',
+    'new_ticket'          =>'New Ticket',
+    'new_ticket_by_agent'     =>'New Ticket by Agent',
+    'new_message'         =>'New Message',
+    'submitter'           =>'Submitter : ',
+    'send_receipt_confirmation'   =>'Send Receipt Confirmation',
+    'participants'          =>'Participants : ',
+    'send_new_activity_notice'    =>'Send new activity notice',
+    'overlimit_notice'        =>'Overlimit Notice',
+    'email_attachments_to_the_user' =>'Email attachments to the user',
 
      /*
       |--------------------------------------
       |   Alert & Notice Settings Page
       |--------------------------------------
-	    */
-	  'disable'							=>'Disable',
-    'admin_email_2'						=>'Admin Email',
-    'alert_notices'						=>'Alert & Notices',
-    'new_ticket_alert'					=>'New Ticket Alert', 
-    'department_manager'				=>'Department Manager',
-		'department_members'				=>'Department Members',
-		'organization_account_manager'		=>'Organization Account Manager',
-		'new_message_alert'					=>'New Message Alert',
-		'last_respondent'					=>'Last Respondent',
-		'assigned_agent_team'				=>'Assigned Agent / Team',
-		'new_internal_note_alert'			=>'New Internal Note Alert',
-		'ticket_assignment_alert'			=>'Ticket Assignment Alert', 
-		'team_lead'							=>'Team Lead',
-		'team_members'						=>'Team Members',
-		'ticket_transfer_alert'				=>'Ticket Transfer Alert', 
-		'overdue_ticket_alert'				=>'Overdue Ticket Alert ',
-		'system_alerts'						=>'System Alerts', 
-		'system_errors'						=>'System Errors',
-		'SQL_errors'						=>'SQL errors',
-		'excessive_failed_login_attempts'	=>'Excessive failed login attempts',
+      */
+    'disable'             =>'Disable',
+    'admin_email_2'           =>'Admin Email',
+    'alert_notices'           =>'Alert & Notices',
+    'new_ticket_alert'          =>'New Ticket Alert', 
+    'department_manager'        =>'Department Manager',
+    'department_members'        =>'Department Members',
+    'organization_account_manager'    =>'Organization Account Manager',
+    'new_message_alert'         =>'New Message Alert',
+    'last_respondent'         =>'Last Respondent',
+    'assigned_agent_team'       =>'Assigned Agent / Team',
+    'new_internal_note_alert'     =>'New Internal Note Alert',
+    'ticket_assignment_alert'     =>'Ticket Assignment Alert', 
+    'team_lead'             =>'Team Lead',
+    'team_members'            =>'Team Members',
+    'ticket_transfer_alert'       =>'Ticket Transfer Alert', 
+    'overdue_ticket_alert'        =>'Overdue Ticket Alert ',
+    'system_alerts'           =>'System Alerts', 
+    'system_errors'           =>'System Errors',
+    'SQL_errors'            =>'SQL errors',
+    'excessive_failed_login_attempts' =>'Excessive failed login attempts',
     'system_error_reports'    =>    'System error Reports',
     'Send_app_crash_reports_to_help_Ladybird_improve_Faveo'  => 'Send app crash reports to help Ladybird improve Faveo',
 
@@ -322,9 +322,20 @@ return array(
      'english'  => 'English',
      'language-name'  => 'Language name',
      'file'         => 'File',
-
+     'read-more'  => 'Read more.',
+     'enable_lang'   => 'Enable it.',
+     'add-lang-package' => 'Add new language package',
+     'package_exist'    => "Package already exists.",
+     'iso-code-error' => "Error in iso-code. enter correct iso-code.",
+     'zipp-error'    =>  'Error in zip file. Zip must contian language php files only.',
+     'upload-success'   =>  "Uploaded successfully.",
+     "file-error"  =>  'Error in file or invalid file.',
+     'delete-success'   =>  'Language package deleted successfully.',
+     'lang-doesnot-exist'  =>  'Language package does not exist.',
+     'active-lang-error'   =>   'Language package can not be deleted when it is active.',
+     "language-error"  =>  'Language package not found in your lang directroy.',
     
-	   /*
+     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]
       |----------------------------------------------------------------------------------------
@@ -342,63 +353,63 @@ return array(
       |--------------------------------------
       */
     'help_topics'   =>  'Help Topics',
-		'topic'				=>'Topic',		
-		'type'				=>'Type',	
-		'priority'			=>'Priority',	
-		'last_updated'		=>'Last Updated',
-		'create_help_topic'	=>'Create Help topic',
-		'action'			=>'Action',
+    'topic'       =>'Topic',    
+    'type'        =>'Type', 
+    'priority'      =>'Priority', 
+    'last_updated'    =>'Last Updated',
+    'create_help_topic' =>'Create Help topic',
+    'action'      =>'Action',
 
-	   /*
+     /*
       |--------------------------------------
       |  Help Topic Create Page
       |--------------------------------------
       */
-		'active'				=>'Active',	
-		'disabled'				=>'Disabled',
-		'public'				=>'Public',
-		'private'				=>'Private',
-		'parent_topic'			=>'Parent Topic',
-		'Custom_form'			=>'Custom Form',
-		'SLA_plan'				=>'SLA Plan',
-		'auto_assign'			=>'Auto assign', 
-		'auto_respons'			=>'Auto Respons',
-		'ticket_number_format'	=>'Ticket Number Format',
-		'system_default'		=>'System Default',	
-		'custom'				=>'Custom',
-		'internal_notes'		=>'Internal Notes',
+    'active'        =>'Active', 
+    'disabled'        =>'Disabled',
+    'public'        =>'Public',
+    'private'       =>'Private',
+    'parent_topic'      =>'Parent Topic',
+    'Custom_form'     =>'Custom Form',
+    'SLA_plan'        =>'SLA Plan',
+    'auto_assign'     =>'Auto assign', 
+    'auto_respons'      =>'Auto Respons',
+    'ticket_number_format'  =>'Ticket Number Format',
+    'system_default'    =>'System Default', 
+    'custom'        =>'Custom',
+    'internal_notes'    =>'Internal Notes',
 
 
-	   /*
+     /*
       |--------------------------------------
       |  SLA plan Index Page
       |--------------------------------------
       */
     'sla_plans'     =>    'SLA Plans',
-		'create_SLA'		=>'Create a SLA',
-		'grace_period'		=>'Grace Period',	
-		'added_date'		=>'Added Date',	
+    'create_SLA'    =>'Create a SLA',
+    'grace_period'    =>'Grace Period', 
+    'added_date'    =>'Added Date', 
 
-	   /*
+     /*
       |--------------------------------------
       |  SLA plan Create Page
       |--------------------------------------
       */
-      'transient'				=>'Transient',
-		  'ticket_overdue_alert'	=>'Ticket Overdue Alerts',
+      'transient'       =>'Transient',
+      'ticket_overdue_alert'  =>'Ticket Overdue Alerts',
 
-	   /*
+     /*
       |--------------------------------------
       |  Form Create Page
       |--------------------------------------
       */
-		'title'				=>'Title',
-		'instruction'		=>'Instruction',
-		'label'				=>'Label',		
-		'visibility'		=>'Visibility',	
-		'variable'			=>'Variable',
-		'create_form'		=>'Create Form',
-		'forms'				=>'Forms',
+    'title'       =>'Title',
+    'instruction'   =>'Instruction',
+    'label'       =>'Label',    
+    'visibility'    =>'Visibility', 
+    'variable'      =>'Variable',
+    'create_form'   =>'Create Form',
+    'forms'       =>'Forms',
     'form_name'   => 'Form Name',
     'view_this_form' => 'View This Form',
     'delete_from'   =>  'Delete Form',
@@ -443,7 +454,7 @@ return array(
       'footer4'    =>    'Footer4',
 
 
-	   /*
+     /*
       |----------------------------------------------------------------------------------------
       | Staff Pages [English(en)]
       |----------------------------------------------------------------------------------------
@@ -478,77 +489,77 @@ return array(
       |  Staff Create Page
       |--------------------------------------
       */
-      	'create_agent'				=>'Create Agent',	
-		'first_name'				=>'First Name',	
-		'last_name'					=>'Last Name',		
-		'mobile_number'				=>'Mobile Number',	
-		'agent_signature'			=>'Agent Signature',
-		'account_status_setting'	=>'Account Status & Setting',
-		'account_type'				=>'Account Type',	
-		'admin'						=>'Admin',  
-		'agent'						=>'Agent',
-		'account_status'			=>'Account Status',	  
-		'locked'					=>'Locked',
-		'assigned_group'			=>'Assigned Group',	
-		'primary_department'		=>'Primary Department',	
-		'agent_time_zone'			=>'Agent Time Zone',	
-		'day_light_saving'			=>'Day Light Saving',	
-		'limit_access'				=>'Limit Access',	
-		'directory_listing'			=>'Directory Listing',	
-		'vocation_mode'				=>'Vocation Mode',	
-		'assigned_team'				=>'Assigned Team',
+        'create_agent'        =>'Create Agent', 
+    'first_name'        =>'First Name', 
+    'last_name'         =>'Last Name',    
+    'mobile_number'       =>'Mobile Number',  
+    'agent_signature'     =>'Agent Signature',
+    'account_status_setting'  =>'Account Status & Setting',
+    'account_type'        =>'Account Type', 
+    'admin'           =>'Admin',  
+    'agent'           =>'Agent',
+    'account_status'      =>'Account Status',   
+    'locked'          =>'Locked',
+    'assigned_group'      =>'Assigned Group', 
+    'primary_department'    =>'Primary Department', 
+    'agent_time_zone'     =>'Agent Time Zone',  
+    'day_light_saving'      =>'Day Light Saving', 
+    'limit_access'        =>'Limit Access', 
+    'directory_listing'     =>'Directory Listing',  
+    'vocation_mode'       =>'Vocation Mode',  
+    'assigned_team'       =>'Assigned Team',
 
      /*
       |--------------------------------------
       |  Department Create Page
       |--------------------------------------
       */
-		'create_department'									=>'Create Department',
-		'manager'											=>'Manager',	
-		'ticket_assignment'									=>'Ticket Assignment ',	 
-		'restrict_ticket_assignment_to_department_members'	=>'Restrict ticket assignment to department members',
-		'outgoing_emails'									=>'Outgoing Emails',	
-		'template_set'										=>'Template Set',	
-		'auto_responding_settings'							=>'Auto-Responding Settigs', 
-		'disable_for_this_department'						=>'Disable for this department',
-		'auto_response_email'								=>'Auto-Response Email',	
-		'recipient'											=>'Recipient',
-		'group_access'										=>'Group Access',	
-		'department_signature'								=>'Department Signature',
+    'create_department'                 =>'Create Department',
+    'manager'                     =>'Manager',  
+    'ticket_assignment'                 =>'Ticket Assignment ',  
+    'restrict_ticket_assignment_to_department_members'  =>'Restrict ticket assignment to department members',
+    'outgoing_emails'                 =>'Outgoing Emails',  
+    'template_set'                    =>'Template Set', 
+    'auto_responding_settings'              =>'Auto-Responding Settigs', 
+    'disable_for_this_department'           =>'Disable for this department',
+    'auto_response_email'               =>'Auto-Response Email',  
+    'recipient'                     =>'Recipient',
+    'group_access'                    =>'Group Access', 
+    'department_signature'                =>'Department Signature',
 
-	   /*
+     /*
       |--------------------------------------
       |  Team Create Page
       |--------------------------------------
       */
-		'create_team'=>'Create Team',
-		'team_lead'=>'Team Lead',	
-		'assignment_alert'=>'Assignment Alert',
-		'disable_for_this_team'=>'Disable for this team',
-		'teams'=>'Teams',
+    'create_team'=>'Create Team',
+    'team_lead'=>'Team Lead', 
+    'assignment_alert'=>'Assignment Alert',
+    'disable_for_this_team'=>'Disable for this team',
+    'teams'=>'Teams',
 
-	   /*
+     /*
       |--------------------------------------
       |  Group Create Page
       |--------------------------------------
       */
-      'create_group'			=>'Create Group',
-    	'goups'					=>'Goups',
-		  'can_create_ticket'		=>'Can create ticket',	
-		  'can_edit_ticket'		=>'Can edit ticket',	
-		  'can_post_ticket'		=>'Can post Ticket',	
-		  'can_close_ticket'		=>'Can close ticket ',	
-  		'can_assign_ticket'		=>'Can assign ticket',	
-		  'can_transfer_ticket'	=>'Can transfer ticket',	
-		  'can_delete_ticket'		=>'Can delete ticket',	
-		  'can_ban_emails'		=>'Can ban emails',	
-		  'can_manage_premade'	=>'Can Manage premade',	
-		  'can_manage_FAQ'		=>'Can manage FAQ',	
-		  'can_view_agent_stats'	=>'Can view agent stats',	
-		  'department_access'		=>'Department Access ',
-		  'admin_notes'			=>'Admin Notes',
-		  'group_members'			=>'Group Members',
-		  'group_name'			=>'Group Name',
+      'create_group'      =>'Create Group',
+      'goups'         =>'Goups',
+      'can_create_ticket'   =>'Can create ticket',  
+      'can_edit_ticket'   =>'Can edit ticket',  
+      'can_post_ticket'   =>'Can post Ticket',  
+      'can_close_ticket'    =>'Can close ticket ',  
+      'can_assign_ticket'   =>'Can assign ticket',  
+      'can_transfer_ticket' =>'Can transfer ticket',  
+      'can_delete_ticket'   =>'Can delete ticket',  
+      'can_ban_emails'    =>'Can ban emails', 
+      'can_manage_premade'  =>'Can Manage premade', 
+      'can_manage_FAQ'    =>'Can manage FAQ', 
+      'can_view_agent_stats'  =>'Can view agent stats', 
+      'department_access'   =>'Department Access ',
+      'admin_notes'     =>'Admin Notes',
+      'group_members'     =>'Group Members',
+      'group_name'      =>'Group Name',
 
 
      /*
@@ -556,11 +567,11 @@ return array(
       |  SMTP Page
       |--------------------------------------
       */
-    	'driver' => 'Driver',
-    	'smtp' => 'SMTP',
-   		'host'=>'Host',
-  		'port'=>'Port',	
-  		'encryption'=>'Encryption',
+      'driver' => 'Driver',
+      'smtp' => 'SMTP',
+      'host'=>'Host',
+      'port'=>'Port', 
+      'encryption'=>'Encryption',
 
      /*
       |----------------------------------------------------------------------------------------
@@ -620,14 +631,14 @@ return array(
       |------------------------------------------------
       |User Page
       |------------------------------------------------
-	    */
+      */
         'user_directory'      =>    'User Directory',
-      	'ban'			=>		'Ban',
-      	'user'			=>		'User',
+        'ban'     =>    'Ban',
+        'user'      =>    'User',
         'users'      =>    'Users',
-      	'create_user'	=>		'Create User',
-      	'full_name'		=>		'Full Name',
-      	'mobile'		=>		'Mobile',
+        'create_user' =>    'Create User',
+        'full_name'   =>    'Full Name',
+        'mobile'    =>    'Mobile',
         'last_login'    =>    'Last Login',
         'user_profile'  =>    'User Profile',
         'assign'      =>      'Assign',
@@ -639,11 +650,11 @@ return array(
      |------------------------------------------------
      |Organization Page
      |------------------------------------------------
-	   */
+     */
       'organizations'    =>     'Organizations',
-     	'organization'			=>		'Organization',
-     	'create_organization'	=>		'Create Organization',
-     	'account_manager'		=>		'Account Manager',
+      'organization'      =>    'Organization',
+      'create_organization' =>    'Create Organization',
+      'account_manager'   =>    'Account Manager',
       'update'            =>    'update',
       'please_select_an_organization'    => 'Please select an Organization',
       'please_select_an_user'    => 'Please select an user',
@@ -740,24 +751,24 @@ return array(
      |------------------------------------------------
      |Guest-User Page
      |------------------------------------------------
-	   */
-     	'issue_summary'			=>		'Issue Summary',
-     	'issue_details'			=>		'Issue Details',
-     	'contact_informations'	=>		'Contact Informations',
-     	'contact_details'		=>		'Contact Details',
-     	'role'					=>		'Role',
-     	'ext'					=>		'EXT',
-     	'profile_pic'			=>		'Profile Picture',
-     	'agent_sign'			=>		'Agent Signature',
-     	'inactive'				=>		'Inactive',
-     	'male'					=>		'Male',
-     	'female'				=>		'Female',
-     	'old_password'			=>		'Old Password',
-     	'new_password'			=>		'New Password',
-     	'confirm_password'		=>		'Confirm Password',
-     	'gender' 				=>		'Gender',
-     	'ticket_number'			=>		'Ticket Number',
-     	'content'				=>		'Content',
+     */
+      'issue_summary'     =>    'Issue Summary',
+      'issue_details'     =>    'Issue Details',
+      'contact_informations'  =>    'Contact Informations',
+      'contact_details'   =>    'Contact Details',
+      'role'          =>    'Role',
+      'ext'         =>    'EXT',
+      'profile_pic'     =>    'Profile Picture',
+      'agent_sign'      =>    'Agent Signature',
+      'inactive'        =>    'Inactive',
+      'male'          =>    'Male',
+      'female'        =>    'Female',
+      'old_password'      =>    'Old Password',
+      'new_password'      =>    'New Password',
+      'confirm_password'    =>    'Confirm Password',
+      'gender'        =>    'Gender',
+      'ticket_number'     =>    'Ticket Number',
+      'content'       =>    'Content',
 
      /*
       |------------------------------------------------
@@ -776,25 +787,25 @@ return array(
 
 
 
-	'category' => 'Category',
-	'addcategory' => 'Add Category',
-	'allcategory' => 'All Category',
-	'article' => 'Article',
+  'category' => 'Category',
+  'addcategory' => 'Add Category',
+  'allcategory' => 'All Category',
+  'article' => 'Article',
   'articles' => 'Articles',
-	'addarticle' => 'Add Article',
-	'allarticle' => 'All Article',
-	'pages' => 'Pages',
-	'addpages' => 'Add Pages',
-	'allpages' => 'All Pages',
-	'widgets' => 'Widgets',
-	'footer1' => 'Footer 1',
-	'footer2' => 'Footer 2',
-	'footer3' => 'Footer 3',
-	'footer4' => 'Footer 4',
-	'sidewidget1' => 'Side Widget 1',
-	'sidewidget2' => 'Side Widget 2',
-	'comments' => 'Comments',
-	'settings' => 'Settings',
+  'addarticle' => 'Add Article',
+  'allarticle' => 'All Article',
+  'pages' => 'Pages',
+  'addpages' => 'Add Pages',
+  'allpages' => 'All Pages',
+  'widgets' => 'Widgets',
+  'footer1' => 'Footer 1',
+  'footer2' => 'Footer 2',
+  'footer3' => 'Footer 3',
+  'footer4' => 'Footer 4',
+  'sidewidget1' => 'Side Widget 1',
+  'sidewidget2' => 'Side Widget 2',
+  'comments' => 'Comments',
+  'settings' => 'Settings',
   'parent'   => 'Parent',
   'description'   =>    'Description',
   'enter_the_description'   =>    'Enter the Description',
@@ -807,12 +818,12 @@ return array(
   'comment'   =>    'Comment',
   'not_published' =>    'Not Published',
   'numberofelementstodisplay'   =>  'Number of elements to display',
-	//======================================
-	'language' => 'Language',
-	'save' => 'Save',
-	'create' => 'Create',
-	'dateformat' => 'Date Format',
-	'slug'	=>	'Slug',
+  //======================================
+  'language' => 'Language',
+  'save' => 'Save',
+  'create' => 'Create',
+  'dateformat' => 'Date Format',
+  'slug'  =>  'Slug',
   'read_more'    =>    'Read more',
   'view_all'   =>     'View All',
   'categories'   =>    'Categories',

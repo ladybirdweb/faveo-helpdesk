@@ -38,7 +38,7 @@ class="active"
 <div class="box box-primary">
 	<div class="content-header">
 
-	 	<h4>Add language package	{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}</h4>
+	 	<h4>{{Lang::get('lang.add-lang-package')}}	{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}</h4>
 
 	</div>
 
@@ -57,7 +57,10 @@ class="active"
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{Session::get('fails')}}
                 @if(Session::has('link'))
-                	<a href="{{url(Session::get('link'))}}"> Enable it</a>
+                	<a href="{{url(Session::get('link'))}}">{{Lang::get('lang.enable_lang')}}</a>
+            	@endif
+            	@if(Session::has('link2'))
+            		<a href="{{url(Session::get('link2'))}}" target="blank">{{Lang::get('lang.read-more')}}</a>
             	@endif
             </div>
             @endif
@@ -83,7 +86,7 @@ class="active"
 	<div class="row">
         <div class="col-xs-4 form-group {{ $errors->has('File') ? 'has-error' : '' }}">
                		
-			{!! Form::label('File',Lang::get('lang.file')) !!}
+			{!! Form::label('File',Lang::get('lang.file')) !!}&nbsp
         	<div class="btn bg-olive btn-file" style="color:blue"> {!! Lang::get('lang.upload_file') !!}
 			{!! Form::file('File') !!}
         	</div>
