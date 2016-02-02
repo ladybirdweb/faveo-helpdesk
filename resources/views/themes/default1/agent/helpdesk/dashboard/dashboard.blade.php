@@ -78,6 +78,9 @@ $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id
                 </table>
             </div>
                 </div>
+                <div id="refresh"> 
+                  <script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
+                </div>
    
 <script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
     <script type="text/javascript">
@@ -194,6 +197,9 @@ $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id
     document.getElementById("legendDiv").innerHTML = myLineChart.generateLegend();
   });
 });
+
+
+
 
 </script>
 

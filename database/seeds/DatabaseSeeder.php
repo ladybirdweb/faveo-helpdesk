@@ -39,15 +39,15 @@ class DatabaseSeeder extends Seeder {
 
 		/* Date time format */
 		$date_time_formats = [
-			'd/m/Y  H:i:s',
-			'd.m.Y  H:i:s',
-			'd-m-Y  H:i:s',
-			'm/d/Y  H:i:s',
-			'm.d.Y  H:i:s',
-			'm-d-Y  H:i:s',
-			'Y/m/d  H:i:s',
-			'Y.m.d  H:i:s',
-			'Y-m-d  H:i:s'];
+			'd/m/Y H:i:s',
+			'd.m.Y H:i:s',
+			'd-m-Y H:i:s',
+			'm/d/Y H:i:s',
+			'm.d.Y H:i:s',
+			'm-d-Y H:i:s',
+			'Y/m/d H:i:s',
+			'Y.m.d H:i:s',
+			'Y-m-d H:i:s'];
 
 		foreach ($date_time_formats as $date_time_format) {
 			Date_time_format::create(['format' => $date_time_format]);
@@ -251,7 +251,7 @@ class DatabaseSeeder extends Seeder {
 		Company::create(array('id' => '1'));
 		Email::create(array('id' => '1','email_fetching'=>'1', 'notification_cron' => '1', 'all_emails' => '1', 'email_collaborator' => '1', 'attachment' => '1'));
 		Responder::create(array('id' => '1','new_ticket' => '1' , 'agent_new_ticket' => '1'));
-		System::create(array('id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32'));
+		// System::create(array('id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32'));
 		Ticket::create(array('num_format' => '#ABCD 1234 1234567', 'num_sequence' => '0', 'priority' => '1', 'sla' => '2', 'help_topic' => '1','status' => '1'));
 		/* Ticket source */
 		Ticket_source::create(array('name'=>'web', 'value'=>'Web'));
