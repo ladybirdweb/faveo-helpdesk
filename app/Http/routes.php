@@ -1,6 +1,6 @@
 <?php
 
-"%smtplink%";
+\App\Http\Controllers\Common\SettingsController::smtp();
 
 /*
 |--------------------------------------------------------------------------
@@ -178,7 +178,7 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
 	Route::get('agen1', 'Agent\helpdesk\DashboardController@ChartData');
 
-	Route::post('chart-range', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
+	Route::post('chart-range/{date1}/{date2}', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
 
 	Route::resource('user', 'Agent\helpdesk\UserController');	/* User router is used to control the CRUD of user */
 
@@ -216,7 +216,11 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
 	Route::get('/test', ['as' => 'thr', 'uses' => 'Agent\helpdesk\MailController@fetchdata']);	/*  Fetch Emails */
 
-	Route::get('/ticket', ['as' => 'ticket', 'uses' => 'Agent\helpdesk\TicketController@ticket_list']);	/*  Get Ticket */
+        Route::post('rating/{id}/{rating}', ['as' => 'ticket.rating' , 'uses' => 'Agent\helpdesk\TicketController@rating']); /* Get overall Ratings */
+        
+        Route::post('rating2/{id}/{rating}', ['as' => 'ticket.rating2' , 'uses' => 'Agent\helpdesk\TicketController@ratingReply']); /* Get reply Ratings */
+	
+        Route::get('/ticket', ['as' => 'ticket', 'uses' => 'Agent\helpdesk\TicketController@ticket_list']);	/*  Get Ticket */
 
 	Route::get('/ticket/inbox', ['as' => 'inbox.ticket', 'uses' => 'Agent\helpdesk\TicketController@inbox_ticket_list']);	/*  Get Inbox Ticket */
 
@@ -528,6 +532,12 @@ $router->get('get-comment', ['as' => 'api.comment', 'uses' => 'Agent\kb\Settings
 $router->get('test', 'ArticleController@test');
 
 $router->post('image', 'Agent\kb\SettingsController@image');
+
+Route::get('getratings', 'Admin\helpdesk\SettingsController@RatingSettings');
+Route::get('deleter/{rating}',[
+    'as'=>'ratings.delete' ,'uses'=>'Admin\helpdesk\SettingsController@RatingDelete'
+    ]);
+Route::patch('postratings/{slug}',['as'=>'settings.rating','uses'=> 'Admin\helpdesk\SettingsController@PostRatingSettings']);
 
 $router->get('direct', function () {
 	return view('direct');

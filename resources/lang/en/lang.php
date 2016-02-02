@@ -21,7 +21,9 @@ return array(
     'success' => 'Success',
     'fails' => 'Fails',
     'alert'  =>  'Alert',
-
+    'ratings' => 'Ratings',
+    'please_rate' => 'Please rate:',
+    'ticket_ratings' => 'TICKET RATING',
     /*
       |--------------------------------------
       |   Login Page

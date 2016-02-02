@@ -23,9 +23,12 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                     <!-- Main content -->
                     <div class="box box-primary">
                         <div class="box-header">
-
+<div class="row">
+    <div class="col-md-9">
                             <section class="content-header"><h3 class="box-title"><i class="fa fa-user"> </i> {{$thread->title}} </h3> ( {{$tickets->ticket_number}} )
                             </section>
+    </div> 
+                                <div class="col-md-3">
                             <div class="pull-right">
                                 <!-- <button type="button" class="btn btn-default"><i class="fa fa-edit" style="color:green;"> </i> Edit</button> -->                            
                                 {{-- <button type="button" class="btn btn-default"><i class="fa fa-print" style="color:blue;"> </i> {!! link_to_route('ticket.print','Print',[$tickets->id]) !!}</button> --}}
@@ -42,6 +45,42 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                                 </div>
                                 {!! Form::close() !!}
                             </div>
+                        </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                            <div class="ticketratings pull-right">    
+        <table><tbody>
+                <form id="foo">
+   <tr>
+        <th><div class="ticketratingtitle">Overall Satisfaction &nbsp;</div></th>&nbsp
+    <td>
+    <input type="radio" class="star" id="star5" name="rating" value="1"<?php echo ($tickets->rating=='1')?'checked':'' ?> />
+    <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating=='2')?'checked':'' ?> />
+    <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating=='3')?'checked':'' ?>/>
+    <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating=='4')?'checked':'' ?>/>
+    <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating=='5')?'checked':'' ?> />
+    </td> 
+</tr>
+                </form>
+                          <form id="foo2">
+                              
+                           
+                               <tr><th > <div class="ticketratingtitle">Reply rating &nbsp;</div></th>&nbsp
+                               <td>
+    <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($tickets->ratingreply=='1')?'checked':'' ?>  />
+    <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($tickets->ratingreply=='2')?'checked':'' ?>  />
+    <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($tickets->ratingreply=='3')?'checked':'' ?>  />
+    <input type="radio" class="star" id="star2" name="rating2" value="4"<?php echo ($tickets->ratingreply=='4')?'checked':'' ?>  />
+    <input type="radio" class="star" id="star1" name="rating2" value="5"<?php echo ($tickets->ratingreply=='5')?'checked':'' ?>  />
+
+                               </td></tr>                            
+                          
+                                </form>  </tbody> </table> 
+                        </div>
+                            </div>
+                            </div>
+                            
                         </div>
                                 <div class="box-body" style="margin-bottom:-10px">
                                     <div class="row">
@@ -340,7 +379,71 @@ $data = $ConvDate[0];
 
 
 <script type="text/javascript">
+   
+$(document).ready(function() {
+//    var Data = $('input[name="rating"]:checked').val();
+//    var Data2 = $('input[name="rating2"]:checked').val();
+//    if (Data) {
+//        $('input[name=rating]').rating('readOnly');
+//        
+//    }
+    $('input[name=rating]').change(function() { 
+$('#foo').submit();
+    });
+    $('input[name=rating2]').change(function() { 
+$('#foo2').submit();
+    });
+    // process the form
+    $('#foo').submit(function(event) {
 
+        // get the form data
+        // there are many ways to get this data using jQuery (you can use the class or id also)
+        var formData = $('input[name="rating"]:checked').val();
+        
+//$('#foo').serialize();
+        // process the form
+        $.ajax({
+            type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+            url         : '../rating/'+<?php echo $tickets->id ?>+'/'+formData, // the url where we want to POST
+            data        : formData, // our data object
+            dataType    : 'json', // what type of data do we expect back from the server
+            
+            success     : function() { 
+                 
+            }
+        });
+        
+            // using the done promise callback
+            
+        // stop the form from submitting the normal way and refreshing the page
+        event.preventDefault();
+    });
+        // process the form
+    $('#foo2').submit(function(event) {
+
+        // get the form data
+        // there are many ways to get this data using jQuery (you can use the class or id also)
+        var formData = $('input[name="rating2"]:checked').val();
+//$('#foo').serialize();
+        // process the form
+        $.ajax({
+            type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+            url         : '../rating2/'+<?php echo $tickets->id ?>+'/'+formData, // the url where we want to POST
+            data        : formData, // our data object
+            dataType    : 'json', // what type of data do we expect back from the server
+            
+            success     : function() { 
+                 
+            }
+        });
+        
+            // using the done promise callback
+            
+        // stop the form from submitting the normal way and refreshing the page
+        event.preventDefault();
+    });
+
+});
     $(function () {
         //Add text editor
         $("textarea").wysihtml5();

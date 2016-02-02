@@ -27,6 +27,7 @@ use App\Model\helpdesk\Utility\Time_format;
 use Illuminate\Http\Request;
 use Input;
 use Exception;
+use DB;
 
 /**
  * SettingsController
@@ -54,7 +55,25 @@ class SettingsController extends Controller {
     public function settings() {
 		return view('themes.default1.admin.helpdesk.setting');
 	}
-
+public function RatingSettings() {
+             $ratings = DB::table('settings_ratings')->get();
+            
+		return view('themes.default1.admin.helpdesk.settings.ratings',compact('ratings'));
+	}
+                 public function PostRatingSettings($slug) {
+                     $name = Input::get('rating_name');
+                    $publish = Input::get('publish');
+                    $modify = Input::get('modify');
+                    
+                    DB::table('settings_ratings')->whereSlug($slug)->update(array('rating_name' => $name,'publish' => $publish, 'modify' => $modify));
+           
+		return redirect()->back()->with('success', 'Successfully updated');
+	}
+        public function RatingDelete($slug) {
+             DB::table('settings_ratings')->whereSlug($slug)->delete();
+            
+		return redirect()->back()->with('success', 'Successfully Deleted');
+	}
 	/**
 	 * @param int $id
 	 * @return Response
