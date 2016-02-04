@@ -10,6 +10,8 @@ use App\Http\Requests\helpdesk\InstallerRequest;
 use App\User;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Form\Form_details;
+use App\Model\helpdesk\Utility\Date_time_format;
+use App\Model\helpdesk\Utility\Timezones;
 
 // classes
 use App;
@@ -287,6 +289,29 @@ class InstallController extends Controller {
 		// $system->time_zone = $timezone;
 		// $system->date_time_format = $datetime;
 		// $system->save();
+
+
+		// checking requested timezone for the admin and system
+		$timezones = Timezones::where('name','=',$timezone)->first();
+		if($timezones->id == null){
+			return ['response'=>'fail','reason'=>'Invalid time-zone','status'=>'0'];
+		}
+		// var_dump($datetime);
+		// checking requested date time format for the admin and system
+		$date_time_format = Date_time_format::where('format','=',$datetime)->first();
+		// dd($date_time_format);
+		if($date_time_format->id == null){
+			return ['response'=>'fail','reason'=>'invalid date-time format','status'=>'0'];
+		}
+
+		// Creating minum settings for system
+		$system = new System;
+		$system->status = 1;
+		$system->department = 1;
+		$system->date_time_format = $date_time_format->id;
+		$system->time_zone = $timezones->id;
+		$system->save();
+
 
 		// creating an user
 		$user = User::create(array(
