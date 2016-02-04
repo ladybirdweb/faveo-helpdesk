@@ -1,7 +1,8 @@
 <h3>About Faveo</h3>
+<br><img src="https://travis-ci.org/ladybirdweb/faveo-helpdesk.svg?branch=master"></br>
 <p>Headquartered in Bangalore, Faveo HELPDESK provides Businesses with an automated Helpdesk system to manage customer support. 
 <br/><br/>
-The word Faveo comes from Latin which means to be favourable. Which truly highlights vision and the scope as well as the functionality of the product that Faveo is. It is specifically designed to cater the needs of startups and SME’s empowering them with state of art, ticket based support system. In today’s competitive startup scenario customer retention is one of the major challenges. Handling client query diligently is all the difference between retaining or losing a long lasting relationship. The company is driven with passion of providing tools for managing consumer queries for strategic insights and helping companies take those decisive decisions.
+The word Faveo comes from Latin which means to be favourable. Which truly highlights vision and the scope as well as the functionality of the product that Faveo is. It is specifically designed to cater the needs of startups and SMEâ€™s empowering them with state of art, ticket based support system. In todayâ€™s competitive startup scenario customer retention is one of the major challenges. Handling client query diligently is all the difference between retaining or losing a long lasting relationship. The company is driven with passion of providing tools for managing consumer queries for strategic insights and helping companies take those decisive decisions.
 <br/><br/>
 To date, Faveo has been integrated with 6 platforms and every month there is 1 to 2 update releases with new features & platform integration.
 <br/><br/>
@@ -10,9 +11,9 @@ Faveo can also be customised according to requirement and we do undertake such r
 Faveo is designed & developed by <a href="http://www.ladybirdweb.com/" target="_blank">Ladybird Web Solution Pvt Ltd</a>, and launched in October 2015.</p>
 <h3>Flavors of Faveo</h3>
 <ul>
-  <li>Community Edition – Free, Open source edition</li>
-  <li>Pro Edition – Downloadable edition. Install it in location of our choice on premises or any hosting of your choice </li>
-  <li>Cloud Edition – Coming soon. Get started in 5 minutes. We will take care of servers, backup etc. Always stay updated with the latest updates of Faveo</li>
+  <li>Community Edition â€“ Free, Open source edition</li>
+  <li>Pro Edition â€“ Downloadable edition. Install it in location of our choice on premises or any hosting of your choice </li>
+  <li>Cloud Edition â€“ Coming soon. Get started in 5 minutes. We will take care of servers, backup etc. Always stay updated with the latest updates of Faveo</li>
 </ul>
 
 
