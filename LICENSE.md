@@ -1,4 +1,4 @@
-# Open Software License ("OSL") v. 3.0
+<h3>Open Software License ("OSL") v. 3.0</h3>
 
 This Open Software License (the "License") applies to any original work of authorship (the "Original Work") whose owner (the "Licensor") has placed the following licensing notice adjacent to the copyright notice for the Original Work:
 
