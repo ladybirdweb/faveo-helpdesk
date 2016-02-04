@@ -170,7 +170,7 @@ class Mailbox {
 	 *
 	 * @return array Mails ids
 	 */
-	public function searchMailbox($criteria = 'UNSEEN') {
+	public function searchMailbox($criteria = 'ALL') {
 		$mailsIds = imap_search($this->getImapStream(), $criteria, SE_UID, $this->serverEncoding);
 		return $mailsIds ? $mailsIds : array();
 	}
@@ -337,17 +337,6 @@ class Mailbox {
 		return imap_mailboxmsginfo($this->getImapStream());
 	}
 
-	public function get_overview($mailId) {
-		$overview = imap_fetch_overview($this->getImapStream(), $mailId, FT_UID);
-		return $overview;
-	}
-	
-	public function backup_getmail($mailId) {
-		$body = imap_body($this->getImapStream(), $mailId, 1.1);
-		return $body;
-	}
-
-
 	/**
 	 * Gets mails ids sorted by some criteria
 	 *
@@ -427,7 +416,6 @@ class Mailbox {
 
 		if(isset($head->to)) {
 			$toStrings = array();
-			// dd($mail);
 			foreach($head->to as $to) {
 				if(!empty($to->mailbox) && !empty($to->host)) {
 					$toEmail = strtolower($to->mailbox . '@' . $to->host);
@@ -449,6 +437,10 @@ class Mailbox {
 			foreach($head->reply_to as $replyTo) {
 				$mail->replyTo[strtolower($replyTo->mailbox . '@' . $replyTo->host)] = isset($replyTo->personal) ? $this->decodeMimeStr($replyTo->personal, $this->serverEncoding) : null;
 			}
+		}
+
+		if(isset($head->message_id)) {
+			$mail->messageId = $head->message_id;
 		}
 
 		$mailStructure = imap_fetchstructure($this->getImapStream(), $mailId, FT_UID);
@@ -479,6 +471,7 @@ class Mailbox {
 			$data = imap_binary($data);
 		}
 		elseif($partStructure->encoding == 3) {
+			$data = preg_replace('~[^a-zA-Z0-9+=/]+~s', '', $data); // https://github.com/barbushin/php-imap/issues/88
 			$data = imap_base64($data);
 		}
 		elseif($partStructure->encoding == 4) {
@@ -528,7 +521,7 @@ class Mailbox {
 					'/(^_)|(_$)/' => '',
 				);
 				$fileSysName = preg_replace('~[\\\\/]~', '', $mail->id . '_' . $attachmentId . '_' . preg_replace(array_keys($replace), $replace, $fileName));
-				$attachment->filePath = $this->attachmentsDir .'../../../../../../public'. DIRECTORY_SEPARATOR . $fileSysName;
+				$attachment->filePath = $this->attachmentsDir . DIRECTORY_SEPARATOR . $fileSysName;
 				file_put_contents($attachment->filePath, $data);
 			}
 			$mail->addAttachment($attachment);

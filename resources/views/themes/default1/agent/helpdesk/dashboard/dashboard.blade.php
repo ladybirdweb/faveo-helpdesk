@@ -39,8 +39,12 @@ class="active"
         </div>
         <script type="text/javascript">
             $(function () {
+                var timestring1 = "01/04/2016";
+                var timestring2 = "02/09/2016";
               $('#datepicker4').datetimepicker({
-                 format: 'DD-MM-YYYY'
+                 format: 'DD/MM/YYYY',
+                 minDate:moment(timestring1).startOf('day'),
+                 maxDate:moment(timestring2).startOf('day')
               });
 //                $('#datepicker').datepicker()
             });
@@ -55,8 +59,12 @@ class="active"
         </div>
         <script type="text/javascript">
             $(function () {
+                var timestring1 = "01/04/2016";
+                var timestring2 = "02/09/2016";
                 $('#datetimepicker3').datetimepicker({
-                    format: 'DD-MM-YYYY'
+                    format: 'DD/MM/YYYY',
+                    minDate:moment(timestring1).startOf('day'),
+                 maxDate:moment(timestring2).startOf('day')
                 });
             });
         </script>
@@ -234,11 +242,12 @@ $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id
 $('#foo').submit();
     });
     $('#foo').submit(function(event) {
-
         // get the form data
         // there are many ways to get this data using jQuery (you can use the class or id also)
-        var formData = $('#datepicker4').val();
-        var dateData = $('#datetimepicker3').val();
+        var date1 = $('#datepicker4').val();
+        var date2 = $('#datetimepicker3').val(); 
+        var formData = date1.split("/").join('-');
+        var dateData = date2.split("/").join('-');
 //$('#foo').serialize();
         // process the form
         $.ajax({

@@ -58,7 +58,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 	Route::resource('banlist', 'Admin\helpdesk\BanlistController'); // in banlist module, for CRUD
 
 	Route::resource('template', 'Admin\helpdesk\TemplateController'); // in template module, for CRUD
-
+Route::get('list-templates', 'Admin\helpdesk\TemplateController@listtemplates');
+Route::get('read-templates/{template}/{directory}',['as'=>'template.read','uses'=>'Admin\helpdesk\TemplateController@readtemplate']);
+Route::patch('write-templates/{contents}/{directory}',['as'=>'template.write','uses'=>'Admin\helpdesk\TemplateController@writetemplate']);
+Route::post('create-templates',['as'=>'template.createnew','uses'=>'Admin\helpdesk\TemplateController@createtemplate']);
 	Route::get('getdiagno', 'Admin\helpdesk\TemplateController@formDiagno'); // for getting form for diagnostic
 
 	Route::post('postdiagno', 'Admin\helpdesk\TemplateController@postDiagno'); // for getting form for diagnostic
