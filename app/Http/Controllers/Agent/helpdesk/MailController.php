@@ -20,7 +20,7 @@ use App\Model\helpdesk\Ticket\Tickets;
 use PhpImap\Mailbox as ImapMailbox;
 use PhpImap\IncomingMail;
 use PhpImap\IncomingMailAttachment;
-use \ForceUTF8\Encoding;
+use ForceUTF8\Encoding;
 use App;
 use DB;
 use Crypt;
@@ -28,8 +28,9 @@ use Schedule;
 use File;
 use Artisan;
 use Exception;
-$root = realpath($_SERVER["DOCUMENT_ROOT"]);
-include_once($root.'\vendor\phpmailer\phpmailer\PHPMailerautoload.php');
+use Phpmailer\PHPMailerautoload;
+//$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+//include_once($root.'\vendor\phpmailer\phpmailer\PHPMailerautoload.php');
 /**
  * MailController
  *
@@ -52,39 +53,8 @@ class MailController extends Controller {
 	 * Reademails
 	 * @return type
 	 */
-        public function sendmail() {
-		$mail = new \PHPMailer;
-
-//$mail->SMTPDebug = 3;                               // Enable verbose debug output
-
-$mail->isSMTP();                                      // Set mailer to use SMTP
-$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
-$mail->SMTPAuth = true;                               // Enable SMTP authentication
-$mail->Username = 'sujitprasad4567@gmail.com';                 // SMTP username
-$mail->Password = 'pankajprasad22.';                           // SMTP password
-$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-$mail->Port = 587;                                    // TCP port to connect to
-
-$mail->setFrom('sujitprasad4567@gmail.com', 'Mailer');
-$mail->addAddress('sada059@gmail.com', 'Joe User');     // Add a recipient
-              // Name is optional
-$mail->addReplyTo('sada059@gmail.com', 'Information');
-
-
-    // Optional name
-$mail->isHTML(true);                                  // Set email format to HTML
-
-$mail->Subject = 'Here is the subject';
-$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-if(!$mail->send()) {
-    echo 'Message could not be sent.';
-    echo 'Mailer Error: ' . $mail->ErrorInfo;
-} else {
-    echo 'Message has been sent';
-}
-	}
+        
+	
 	public function readmails(Emails $emails, Email $settings_email, System $system)
 	{
 		// $path_url = $system->first()->url;
