@@ -26,6 +26,8 @@ class CreateTicketsTable extends Migration {
 			$table->integer('flags');
 			$table->integer('ip_address');
 			$table->integer('assigned_to')->unsigned()->nullable()->index('assigned_to');
+                        $table->integer('rating');
+			$table->integer('ratingreply');
 			$table->integer('lock_by');
 			$table->integer('lock_at');
 			$table->integer('source')->unsigned()->nullable()->index('source');

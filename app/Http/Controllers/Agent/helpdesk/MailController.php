@@ -20,7 +20,7 @@ use App\Model\helpdesk\Ticket\Tickets;
 use PhpImap\Mailbox as ImapMailbox;
 use PhpImap\IncomingMail;
 use PhpImap\IncomingMailAttachment;
-use \ForceUTF8\Encoding;
+use ForceUTF8\Encoding;
 use App;
 use DB;
 use Crypt;
@@ -28,7 +28,9 @@ use Schedule;
 use File;
 use Artisan;
 use Exception;
-
+use Phpmailer\PHPMailerautoload;
+//$root = realpath($_SERVER["DOCUMENT_ROOT"]);
+//include_once($root.'\vendor\phpmailer\phpmailer\PHPMailerautoload.php');
 /**
  * MailController
  *
@@ -51,6 +53,8 @@ class MailController extends Controller {
 	 * Reademails
 	 * @return type
 	 */
+        
+	
 	public function readmails(Emails $emails, Email $settings_email, System $system)
 	{
 		// $path_url = $system->first()->url;

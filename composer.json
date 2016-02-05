@@ -16,7 +16,8 @@
 		"neitanod/forceutf8": "dev-master",
 		"nicolaslopezj/searchable": "1.*",
 		"chumper/datatable": "dev-develop",
-        "chumper/zipper": "0.6.x"
+        "chumper/zipper": "0.6.x",
+		"phpmailer/phpmailer": "^5.2"
 
 
 	},

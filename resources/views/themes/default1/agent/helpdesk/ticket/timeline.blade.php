@@ -16,6 +16,7 @@ active
 ?>
 
 @section('sidebar')
+
 <li class="header">{!! Lang::get('lang.Ticket_Information') !!} </li>
 <li>
     <a href="">
@@ -41,6 +42,19 @@ active
         </a>
         @endif
 </li>
+
+<li  class="header">
+    {!! Lang::get('lang.ticket_ratings') !!}
+</li><li> <a href="#">
+<input type="hidden" name="amount" value="{!! $tickets->rating !!}" />
+	<label style="color: #b8c7ce;">Overall Rating:</label>
+<h5>
+   <span class="stars">{!! $tickets->rating !!}</span></h5>
+<input type="hidden" name="amt" value="{!! $tickets->ratingreply !!}" />
+	<label style="color: #b8c7ce;">Reply Rating:</label>
+<h4>
+   <span class="stars2">{!! $tickets->ratingreply !!}</span></h4>
+    </a></li>
 @stop 
 
 @section('content')
@@ -1053,7 +1067,22 @@ $count_teams = count($teams);
 
 <!-- scripts used on page -->
 <script type="text/javascript">
-                    
+                    $(function() {    		
+			
+				$('h5').html('<span class="stars">'+parseFloat($('input[name=amount]').val())+'</span>');
+				$('span.stars').stars();
+	
+				$('h4').html('<span class="stars2">'+parseFloat($('input[name=amt]').val())+'</span>');
+				$('span.stars2').stars();
+			    		
+			
+		});
+
+		$.fn.stars = function() {
+			return $(this).each(function() {
+				$(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
+			});
+		}
                         $(function () {
                             $("#InternalContent").wysihtml5();
                         });

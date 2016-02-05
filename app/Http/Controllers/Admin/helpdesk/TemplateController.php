@@ -13,6 +13,7 @@ use App\Model\helpdesk\Utility\Languages;
 use Illuminate\Http\Request;
 use Mail;
 use Exception;
+use Input;
 
 /**
  * TemplateController
@@ -101,6 +102,65 @@ class TemplateController extends Controller {
 	 * @param type Languages $language
 	 * @return type Response
 	 */
+        public function listtemplates() {
+            $path = '../resources/views/emails/';
+            
+		$templates = scandir($path);
+                $directory = str_replace('/', '-', $path);
+                return view('themes.default1.admin.helpdesk.emails.template.listtemplates', compact('templates','directory'));
+	}
+        
+	public function readtemplate($template,$path) {
+            $directory = str_replace('-', '/', $path);
+		 $directory2 = $directory.$template;
+                        if (is_dir($directory2)) {
+                            $templates = scandir($directory2);
+                            $directory = str_replace('/', '-', $directory2.'/');
+                            return view('themes.default1.admin.helpdesk.emails.template.listtemplates', compact('templates','directory'));
+            }
+            else {
+                $handle = fopen($directory.$template, "r");
+		$contents = fread($handle, filesize($directory.$template));
+		fclose($handle);
+                }
+                return view('themes.default1.admin.helpdesk.emails.template.readtemplates', compact('contents','template','path'));
+	}
+        public function createtemplate() {
+            $directory = '../resources/views/emails/';
+            $fname = Input::get('folder_name');
+		$filename = $directory.$fname;
+                
+// images folder creation using php
+//   $mydir = dirname( __FILE__ )."/html/images";
+//   if(!is_dir($mydir)){
+//   mkdir("html/images");
+//   }
+   // Move all images files
+
+if(!file_exists($filename)) {
+mkdir($filename,0777);
+}
+$files = array_filter(scandir($directory.'default'));
+       
+   foreach($files as $file){
+       if ($file === '.' or $file === '..') continue;
+       if(!is_dir($file)) {
+    //   $file_to_go = str_replace("code/resources/views/emails/",'code/resources/views/emails/'.$fname,$file);
+    $destination = $directory.$fname.'/';
+
+    copy($directory.'default/'.$file, $destination.$file);    
+   }
+       }
+                return \Redirect::back()->with('success', 'Successfully copied');
+	}
+        public function writetemplate($template,$path) {
+              $directory = str_replace('-', '/', $path);
+		$b = Input::get('templatedata');
+                
+              file_put_contents($directory.$template, print_r($b, true));  
+                return \Redirect::back()->with('success', 'Successfully updated');
+	}
+        
 	public function edit($id, Template $template, Languages $language) {
 		try {
 			$templates = $template->whereId($id)->first();

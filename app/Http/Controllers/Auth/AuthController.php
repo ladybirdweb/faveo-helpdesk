@@ -18,6 +18,7 @@ use Mail;
 use Auth;
 use Exception;
 
+
 /**
  * ---------------------------------------------------
  * AuthController
@@ -103,7 +104,8 @@ class AuthController extends Controller {
 		});
 		return redirect('home')->with('success', 'Activate Your Account ! Click on Link that send to your mail');
 	}
-
+        
+	
 	/**
 	 * Get mail function
 	 * @param type $token

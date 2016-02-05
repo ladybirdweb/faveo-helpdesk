@@ -2182,5 +2182,15 @@ class TicketController extends Controller {
 		return view('themes.default1.agent.helpdesk.dept-ticket.inprogress',compact('id'));
 		}
 	}
+                public function rating($id,$rating) {
+            
+           Tickets::where('id', $id)->update(array('rating' => $rating));
+           return redirect()->back()->with('Success','Thank you for your rating!');
+        }
+        public function ratingReply($id,$rating) {
+           
+           Tickets::where('id', $id)->update(array('ratingreply' => $rating));
+           return redirect()->back()->with('Success','Thank you for your rating!');
+        }
 
 }

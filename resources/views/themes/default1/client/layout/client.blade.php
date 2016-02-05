@@ -25,6 +25,7 @@
         <!-- fullCalendar 2.2.5-->
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
+        <link href="{{asset("lb-faveo/dist/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
         <link href="{{asset("lb-faveo/css/app.css")}}" rel="stylesheet" type="text/css" />
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         
@@ -346,6 +347,7 @@ $footer4 = App\Model\helpdesk\Theme\Widgets::where('name','=','footer4')->first(
 					<script src="{{asset("lb-faveo/js/superfish.js")}}" type="text/javascript"></script>
                     <script src="{{asset("lb-faveo/js/mobilemenu.js")}}" type="text/javascript"></script>
                     <script src="{{asset("lb-faveo/js/know.js")}}" type="text/javascript"></script>
+                     <script src="{{asset("lb-faveo/dist/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
                     <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
                     <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
                     <script>
