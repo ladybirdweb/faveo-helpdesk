@@ -131,7 +131,7 @@
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
-                                         <div class="col-md-2 col-sm-6">
+<!--                                         <div class="col-md-2 col-sm-6">
                                             <div class="settingiconblue">
                                                 <div class="settingdivblue">
                                                     <a href="{{ url('list-templates') }}"><span class="fa-stack fa-2x">
@@ -141,7 +141,7 @@
                                                 </div>
                                                 <center class="box-title" >{!! Lang::get('lang.templates') !!}</center>
                                             </div>
-                                        </div>
+                                        </div>-->
                                         <!--/.col-md-2-->
                                         <div class="col-md-2 col-sm-6">
                                             <div class="settingiconblue">
