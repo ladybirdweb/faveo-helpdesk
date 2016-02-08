@@ -1,18 +1,14 @@
 <?php namespace App\Http\Controllers\Installer\helpdesk;
-
 // controllers
 use App\Http\Controllers\Controller;
-
 // requests
 use App\Http\Requests\helpdesk\InstallerRequest;
-
 // models
 use App\User;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Form\Form_details;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
-
 // classes
 use App;
 use Artisan;
@@ -24,7 +20,6 @@ use Redirect;
 use Session;
 use View;
 use Exception;
-
 /**
  * |=======================================================================
  * |Class: InstallController
@@ -39,7 +34,6 @@ use Exception;
  *
  */
 class InstallController extends Controller {
-
     /**
      * Get Licence (step 1)
      * @return type view
@@ -57,7 +51,6 @@ class InstallController extends Controller {
 				return redirect('/auth/login');
 			}
 	}
-
     /**
      * Post Licencecheck
      * @return type view
@@ -73,7 +66,6 @@ class InstallController extends Controller {
 		}
 		// return 1;
 	}
-
     /**
      * Get prerequisites (step 2)
      * 
@@ -97,7 +89,6 @@ class InstallController extends Controller {
 				return redirect('/auth/login');
 			}
 	}
-
     /**
      * Post Prerequisitescheck
      * checking prerequisites
@@ -107,7 +98,6 @@ class InstallController extends Controller {
 		Session::put('step2', 'step2');
 		return Redirect::route('configuration');
 	}
-
 	/**
 	 * Get Localization (step 3)
 	 * Requesting user recomended settings for installation
@@ -129,24 +119,19 @@ class InstallController extends Controller {
 				return redirect('/auth/login');
 			}
 	}
-
 	/**
 	 * Post localizationcheck
 	 * checking prerequisites
 	 * @return type view
 	 */
 	public function localizationcheck() {
-
 		Session::put('step3', 'step3');
-
 		Session::put('language', Input::get('language'));
 		Session::put('timezone', Input::get('timezone'));
 		Session::put('date', Input::get('date'));
 		Session::put('datetime', Input::get('datetime'));
-
 		return Redirect::route('configuration');
 	}
-
     /**
      * Get Configuration (step 4)
      * checking prerequisites
@@ -168,26 +153,21 @@ class InstallController extends Controller {
 				return redirect('/auth/login');
 			}
 	}
-
     /**
      * Post configurationcheck
      * checking prerequisites
      * @return type view
      */
 	public function configurationcheck() {
-
 		Session::put('step4', 'step4');
-
 		Session::put('default', Input::get('default'));
 		Session::put('host', Input::get('host'));
 		Session::put('databasename', Input::get('databasename'));
 		Session::put('username', Input::get('username'));
 		Session::put('password', Input::get('password'));
 		Session::put('port', Input::get('port'));
-
 		return Redirect::route('database');
 	}
-
 	/**
 	 * postconnection
 	 * @return type view
@@ -200,7 +180,6 @@ class InstallController extends Controller {
 		$dbusername = Input::get('username');
 		$dbpassword = Input::get('password');
 		$port = Input::get('port');
-
 			// Setting environment values
  			$_ENV['DB_TYPE'] 		= 	$default;
         	$_ENV['DB_HOST'] 		= 	$host;
@@ -208,7 +187,6 @@ class InstallController extends Controller {
         	$_ENV['DB_DATABASE'] 	= 	$database;
         	$_ENV['DB_USERNAME'] 	= 	$dbusername;
         	$_ENV['DB_PASSWORD'] 	= 	$dbpassword;
-
         	$config = '';
        		foreach ($_ENV as $key => $val) {
           		$config .= "{$key}={$val}\n";
@@ -217,10 +195,8 @@ class InstallController extends Controller {
         	$fp = fopen(base_path()."/.env", 'w');
         	fwrite($fp, $config);
         	fclose($fp);
-
 		return 1;
 	}
-
     /**
      * Get database
      * checking prerequisites
@@ -238,7 +214,6 @@ class InstallController extends Controller {
 			return redirect('/auth/login');
 		}
 	}
-
     /**
      * Get account
      * checking prerequisites
@@ -260,7 +235,6 @@ class InstallController extends Controller {
 			return redirect('/auth/login');
 		}
 	}
-
     /**
      * Post accountcheck
      * checking prerequisites
@@ -268,29 +242,23 @@ class InstallController extends Controller {
      * @return type view
      */
 	public function accountcheck(InstallerRequest $request) {
-
 		// migrate database
 		Artisan::call('migrate', array('--force' => true));
 		Artisan::call('db:seed', array('--force' => true));
-
 		// create user
 		$firstname = $request->input('firstname');
 		$lastname = $request->input('Lastname');
 		$email = $request->input('email');
 		$username = $request->input('username');
 		$password = $request->input('password');
-
 		$language = $request->input('language');
 		$timezone = $request->input('timezone');
 		$date = $request->input('date');
 		$datetime = $request->input('datetime');
-
 		// $system = System::where('id','=','1')->first();
 		// $system->time_zone = $timezone;
 		// $system->date_time_format = $datetime;
 		// $system->save();
-
-
 		// checking requested timezone for the admin and system
 		$timezones = Timezones::where('name','=',$timezone)->first();
 		if($timezones->id == null){
@@ -303,7 +271,6 @@ class InstallController extends Controller {
 		if($date_time_format->id == null){
 			return ['response'=>'fail','reason'=>'invalid date-time format','status'=>'0'];
 		}
-
 		// Creating minum settings for system
 		$system = new System;
 		$system->status = 1;
@@ -311,8 +278,6 @@ class InstallController extends Controller {
 		$system->date_time_format = $date_time_format->id;
 		$system->time_zone = $timezones->id;
 		$system->save();
-
-
 		// creating an user
 		$user = User::create(array(
 			'first_name' => $firstname,
@@ -331,7 +296,6 @@ class InstallController extends Controller {
 			return Redirect::route('final');
 		}
 	}
-
     /**
      * Get finalize
      * checking prerequisites
@@ -360,7 +324,6 @@ class InstallController extends Controller {
 				return redirect('/auth/login');
 			}
 	}
-
 	/**
      * Post finalcheck
      * checking prerequisites
