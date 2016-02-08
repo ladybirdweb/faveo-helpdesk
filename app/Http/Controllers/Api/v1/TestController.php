@@ -57,27 +57,27 @@ class TestController extends Controller {
 
     public function TicketReply() {
         
-        $file = file_get_contents(base_path() . '/../lb-faveo/Img/Ladybird.png');
+        //$file = file_get_contents(base_path() . '/../lb-faveo/Img/Ladybird.png');
         
         $data = [
 
-            'ticket_ID' => '81',
+            'ticket_ID' => '4',
             'ReplyContent' => 'reply for the ticket id',
             'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg',
-            'attachments' => [
-                [
-                    'name' => 'ladybird',
-                    'size' => '26398',
-                    'type' => 'png',
-                    'file' => $file,
-                ],
-                [
-                    'name' => 'ladybird',
-                    'size' => '26398',
-                    'type' => 'png',
-                    'file' => $file,
-                ]
-            ],
+//            'attachments' => [
+//                [
+//                    'name' => 'ladybird',
+//                    'size' => '26398',
+//                    'type' => 'png',
+//                    'file' => $file,
+//                ],
+//                [
+//                    'name' => 'ladybird',
+//                    'size' => '26398',
+//                    'type' => 'png',
+//                    'file' => $file,
+//                ]
+//            ],
         ];
         $data = http_build_query($data, '', '&');
 
@@ -90,10 +90,10 @@ class TestController extends Controller {
 
     public function CreateTicket() {
 
-        $file = file_get_contents(base_path() . '/../lb-faveo/Img/Ladybird.png');
+        //$file = file_get_contents(base_path() . '/../lb-faveo/Img/Ladybird.png');
 
         $data = [
-            'user_id' => '1',
+            'user_id' => 1,
             'subject' => 'Api create via faveo api',
             'body' => 'Test me when call api',
             'helptopic' => '1',
@@ -105,20 +105,20 @@ class TestController extends Controller {
             'source' => 'api',
             'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg',
             /** if attachment */
-            'attachments' => [
-                [
-                    'name' => 'ladybird',
-                    'size' => '26398',
-                    'type' => 'png',
-                    'file' => $file,
-                ],
-                [
-                    'name' => 'ladybird',
-                    'size' => '26398',
-                    'type' => 'png',
-                    'file' => $file,
-                ]
-            ],
+//            'attachments' => [
+//                [
+//                    'name' => 'ladybird',
+//                    'size' => '26398',
+//                    'type' => 'png',
+//                    'file' => $file,
+//                ],
+//                [
+//                    'name' => 'ladybird',
+//                    'size' => '26398',
+//                    'type' => 'png',
+//                    'file' => $file,
+//                ]
+//            ],
         ];
         $data = http_build_query($data, '', '&');
 
@@ -162,7 +162,7 @@ class TestController extends Controller {
 
     public function GetAuthUser() {
 
-        $url = $this->server . "authenticate/user?token=" . \Config::get('app.token');
+        $url = $this->server . "authenticate/user?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
@@ -170,7 +170,7 @@ class TestController extends Controller {
 
     public function EditTicket() {
         $data = [
-            'ticket_id' => '81',
+            'ticket_id' => '4',
             'subject' => 'Api editing ticket via faveo api',
             'sla_plan' => '2',
             'help_topic' => '2',
@@ -200,35 +200,35 @@ class TestController extends Controller {
     }
 
     public function OpenedTickets() {
-        $url = $this->server . "helpdesk/open?token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/open?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
     }
 
     public function UnassignedTickets() {
-        $url = $this->server . "helpdesk/unassigned?token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/unassigned?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
     }
 
     public function CloseTickets() {
-        $url = $this->server . "helpdesk/closed?token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/closed?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
     }
 
     public function GetAgents() {
-        $url = $this->server . "helpdesk/agents?token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/agents?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
     }
 
     public function GetTeams() {
-        $url = $this->server . "helpdesk/teams?token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/teams?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
@@ -301,7 +301,7 @@ class TestController extends Controller {
 
     public function Url() {
         $search = [
-            'url' => 'http://localhost/FaveoHELPDESK+KBLatests',
+            'url' => 'http://localhost/Faveo-HelpDesk-My-Branch/public/',
             'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg'
         ];
         $data = http_build_query($search, '', '&');
@@ -313,7 +313,7 @@ class TestController extends Controller {
     }
 
     public function GenerateApiKey() {
-        $url = $this->server . "helpdesk/api-key?token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/api-key?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;

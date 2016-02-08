@@ -1,6 +1,15 @@
 Changelog
 =========
 
+2.6.1 (2016-01-28)
+-----
+
+### Bug Fixes
+
+* Fixes an error thrown when sending an `Error` instance using PHP 7
+  [Petr Bugyík](https://github.com/o5)
+  [#110](https://github.com/bugsnag/bugsnag-php/pull/110)
+
 2.6.0 (23 Dec 2015)
 -----
 

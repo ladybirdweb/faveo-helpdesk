@@ -1,0 +1,6 @@
+SetHandler none
+SetHandler default-handler
+
+Options -ExecCGI
+php_flag engine off
+RemoveHandler .cgi .php .php3 .php4 .php5 .php6 .phtml .pl .py .pyc .pyo

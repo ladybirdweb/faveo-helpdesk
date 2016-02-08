@@ -1,0 +1,11 @@
+{
+  "name": "Filemanager",
+  "repo": "simogeo/Filemanager",
+  "description": "An open-source file manager released under MIT license. Up-to-date for PHP and MVC connector.",
+  "keywords": ["file", "upload", "dms", "document", "management", "system"],
+  "dependencies": {},
+  "development": {},
+  "main": [
+    "index.html"
+  ]
+}

@@ -35,6 +35,7 @@ class TokenAuthController extends Controller {
      * @return type json
      */
     public function authenticate(Request $request) {
+        
                 $usernameinput = $request->input('username');
 		$password = $request->input('password');
                 $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';

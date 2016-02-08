@@ -2,7 +2,9 @@
 @section('breadcrumb')
 
 <?php
+//dd($arti);
 $all = App\Model\kb\Relationship::where('article_id','=', $arti->id)->get();
+//dd($all);
 /* from whole attribute pick the article_id */
 $category_id = $all->lists('category_id');
 ?>

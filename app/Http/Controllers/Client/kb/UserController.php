@@ -90,12 +90,18 @@ class UserController extends Controller {
 	 */
 	public function show($slug, Article $article, Category $category) {
 		//ArticleController::timezone();
-		$arti = $article->where('slug', $slug)->where('status','1')->where('type','1')->first();
+            $tz = \App\Model\helpdesk\Settings\System::where('id','1')->first()->time_zone;
+            $tz = \App\Model\helpdesk\Utility\Timezones::where('id',$tz)->first()->name;
+                                 date_default_timezone_set($tz);
+                    $date  = \Carbon\Carbon::now()->toDateTimeString();
+		$arti = $article->where('slug', $slug)->where('status','1')->where('type','1')->where('publish_time','<',$date)->first();
+                if($arti){
+                    return view('themes.default1.client.kb.article-list.show', compact('arti'));
+                }
+		else{
+                    return redirect()->back()->with('fails','No records on publish time');
+                }
 		
-		// dd($arti);
-		//$categorys = $category->get();
-		//$avatar->get('vijaycodename47@gmail.com');
-		return view('themes.default1.client.kb.article-list.show', compact('arti'));
 	}
 
 	public function getCategory($slug, Article $article, Category $category, Relationship $relation) {

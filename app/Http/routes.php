@@ -1,6 +1,6 @@
 <?php
 
-"%smtplink%";
+\App\Http\Controllers\Common\SettingsController::smtp();
 
 /*
 |--------------------------------------------------------------------------

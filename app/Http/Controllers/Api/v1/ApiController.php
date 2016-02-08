@@ -150,6 +150,7 @@ class ApiController extends Controller {
             /**
              * return ticket details
              */
+            dd($response);
             $result = $this->thread->where('id', $response)->first();
             //$result = $this->attach($result->id,$file);
             return response()->json(compact('result'));
@@ -507,6 +508,7 @@ class ApiController extends Controller {
             $url = $this->request->input('url');
             $url = $url . "/api/v1/helpdesk/check-url?token=" . \Config::get('app.token');
             $result = $this->CallGetApi($url);
+            //dd($result);
             return response()->json(compact('result'));
         } catch (Exception $ex) {
             $error = $e->getMessage();

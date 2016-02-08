@@ -1,3 +1,14 @@
+2.4.1 / 2016/01/01
+==================
+
+* Correctly handle nested class definitions 
+* Correctly handle anonymous functions in code generation
+* Fixed rerunning on Windows platform
+* Fixed code generation on Windows platform
+* Fixed issue with fatal errors being suppressed
+* Handle underscores correctly when using PSR-4
+* Fixed HTML formatter
+
 2.4.0 / 2015/11/28
 ==================
 

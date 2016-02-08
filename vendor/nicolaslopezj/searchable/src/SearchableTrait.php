@@ -9,6 +9,10 @@ use Illuminate\Support\Str;
 /**
  * Trait SearchableTrait
  * @package Nicolaslopezj\Searchable
+ * @property array $searchable
+ * @property string $table
+ * @property string $primaryKey
+ * @method string getTable()
  */
 trait SearchableTrait
 {
@@ -202,7 +206,7 @@ trait SearchableTrait
      */
     protected function addSelectsToQuery(Builder $query, array $selects)
     {
-        $selects = new Expression('avg(' . implode(' + ', $selects) . ') as relevance');
+        $selects = new Expression('max(' . implode(' + ', $selects) . ') as relevance');
         $query->addSelect($selects);
     }
 
@@ -281,6 +285,11 @@ trait SearchableTrait
      * @return string
      */
     protected function getCaseCompare($column, $compare, $relevance) {
+        if($this->getDatabaseDriver() == 'pgsql') {
+            $field = "LOWER(" . $column . ") " . $compare . " ?";    
+            return '(case when ' . $field . ' then ' . $relevance . ' else 0 end)';
+        }
+
         $column = str_replace('.', '`.`', $column);
         $field = "LOWER(`" . $column . "`) " . $compare . " ?";
         return '(case when ' . $field . ' then ' . $relevance . ' else 0 end)';
@@ -309,7 +318,12 @@ trait SearchableTrait
      * @param \Illuminate\Database\Eloquent\Builder $original
      */
     protected function mergeQueries(Builder $clone, Builder $original) {
-        $original->from(DB::connection($this->connection)->raw("({$clone->toSql()}) as `{$this->getTable()}`"));
+        $tableName = DB::connection($this->connection)->getTablePrefix() . $this->getTable();
+		if ($this->getDatabaseDriver() == 'pgsql') {
+            $original->from(DB::connection($this->connection)->raw("({$clone->toSql()}) as {$tableName}"));
+        } else {
+            $original->from(DB::connection($this->connection)->raw("({$clone->toSql()}) as `{$tableName}`"));
+        }
         $original->mergeBindings($clone->getQuery());
     }
 }
