@@ -13,7 +13,7 @@ use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Http\Requests\helpdesk\TicketRequest;
 use App\User;
 use App\Model\helpdesk\Agent\Teams;
-use App\Model\kb\Settings;
+use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Utility\Priority;
@@ -86,7 +86,7 @@ class ApiController extends Controller {
         $team = new Teams();
         $this->team = $team;
 
-        $setting = new Settings();
+        $setting = new System();
         $this->setting = $setting;
 
         $helptopic = new Help_topic();
@@ -150,6 +150,7 @@ class ApiController extends Controller {
             /**
              * return ticket details
              */
+            //dd($response);
             $result = $this->thread->where('id', $response)->first();
             //$result = $this->attach($result->id,$file);
             return response()->json(compact('result'));
@@ -259,7 +260,7 @@ class ApiController extends Controller {
      */
     public function OpenedTickets() {
         try {
-            $result = $this->model->where('status', '=', 1)->where('isanswered', '=', 0)->where('assigned_to', '=', 0)->orderBy('id', 'DESC')->get();
+            $result = $this->model->where('status', '=', 1)->where('isanswered', '=', 0)->where('assigned_to', '=', null)->orderBy('id', 'DESC')->get();
             return response()->json(compact('result'));
         } catch (\Exception $e) {
             $error = $e->getMessage();
@@ -278,7 +279,7 @@ class ApiController extends Controller {
      */
     public function UnassignedTickets() {
         try {
-            $result = $this->model->where('assigned_to', '=', 0)->where('status', '1')->orderBy('id', 'DESC')->get();
+            $result = $this->model->where('assigned_to', '=', null)->where('status', '1')->orderBy('id', 'DESC')->get();
             return response()->json(compact('result'));
         } catch (\Exception $e) {
             $error = $e->getMessage();
@@ -316,7 +317,7 @@ class ApiController extends Controller {
      */
     public function GetAgents() {
         try {
-            $result = $this->faveoUser->where('role', 'agent')->where('active', 1)->get();
+            $result = $this->faveoUser->where('role', 'agent')->orWhere('role','admin')->where('active', 1)->get();
             return response()->json(compact('result'));
         } catch (Exception $e) {
             $error = $e->getMessage();
@@ -505,8 +506,9 @@ class ApiController extends Controller {
             }
 
             $url = $this->request->input('url');
-            $url = $url . "/api/v1/helpdesk/check-url?token=" . \Config::get('app.token');
+            $url = $url . "/api/v1/helpdesk/check-url?api-key=".$this->request->input('api-key')."&token=" . \Config::get('app.token');
             $result = $this->CallGetApi($url);
+            //dd($result);
             return response()->json(compact('result'));
         } catch (Exception $ex) {
             $error = $e->getMessage();
@@ -579,6 +581,7 @@ class ApiController extends Controller {
     public function GenerateApiKey() {
         try {
             $set = $this->setting->where('id', '1')->first();
+            //dd($set);
             if ($set->api_enable == 1) {
                 $key = str_random(32);
                 $set->api_key = $key;

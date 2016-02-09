@@ -16,7 +16,10 @@
 		"neitanod/forceutf8": "dev-master",
 		"nicolaslopezj/searchable": "1.*",
 		"chumper/datatable": "dev-develop",
-        "chumper/zipper": "0.6.x"
+        "chumper/zipper": "0.6.x",
+         "bestmomo/filemanager": "1.1.*",
+		"unisharp/laravel-filemanager": "^1.1",
+                "tymon/jwt-auth": "0.5.*"
 
 
 	},

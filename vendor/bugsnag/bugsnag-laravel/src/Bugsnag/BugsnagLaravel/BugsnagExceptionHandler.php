@@ -20,10 +20,8 @@ class BugsnagExceptionHandler extends ExceptionHandler {
             }
         }
 
-        $bugsnag = app('bugsnag');
-
-        if ($bugsnag) {
-            $bugsnag->notifyException($e, null, "error");
+        if (app()->bound('bugsnag')) {
+            app('bugsnag')->notifyException($e, null, "error");
         }
 
         return parent::report($e);

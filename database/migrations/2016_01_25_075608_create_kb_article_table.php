@@ -20,6 +20,7 @@ class CreateKbArticleTable extends Migration {
 			$table->text('description', 65535);
 			$table->boolean('status');
 			$table->boolean('type');
+                        $table->timestamp('publish_time')->nullable();
 			$table->timestamps();
 		});
 	}

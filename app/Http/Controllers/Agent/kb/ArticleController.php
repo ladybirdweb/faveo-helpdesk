@@ -140,13 +140,17 @@ class ArticleController extends Controller {
 	 */
 	public function store(Article $article, ArticleRequest $request) {
 		// requesting the values to store article data
+            $publishTime = $request->input('year') . '-' . $request->input('month') . '-' . $request->input('day') . ' ' . $request->input('hour') . ':' . $request->input('minute') . ':00';
+        
 		$sl = $request->input('slug');
 		$slug = str_slug($sl, "-");
 		$article->slug = $slug;
+                $article->publish_time = $publishTime;
 		$article->fill($request->except('created_at','slug'))->save();
 		// creating article category relationship
 		$requests = $request->input('category_id');
 		$id = $article->id;
+                
 		foreach ($requests as $req) {
 			DB::insert('insert into kb_article_relationship (category_id, article_id) values (?,?)', [$req, $id]);
 		}
@@ -198,10 +202,13 @@ class ArticleController extends Controller {
 	 */
 	public function update($slug, Article $article, Relationship $relation, ArticleUpdate $request) {
 		$aid = $article->where('id', $slug)->first();
+                $publishTime = $request->input('year') . '-' . $request->input('month') . '-' . $request->input('day') . ' ' . $request->input('hour') . ':' . $request->input('minute') . ':00';
+        
 		$id = $aid->id;
 		$sl = $request->input('slug');
 		$slug = str_slug($sl, "-");
 		// dd($slug);
+               
 		$article->slug = $slug;
 		/* get the attribute of relation table where id==$id */
 		$relation = $relation->where('article_id', $id);
@@ -211,12 +218,13 @@ class ArticleController extends Controller {
 		$requests = $request->input('category_id');
 		$id = $article->id;
 		foreach ($requests as $req) {
-			DB::insert('insert into article_relationship (category_id, article_id) values (?,?)', [$req, $id]);
+			DB::insert('insert into kb_article_relationship (category_id, article_id) values (?,?)', [$req, $id]);
 		}
 		/* update the value to the table */
 		try{
 			$article->fill($request->all())->save();	
 			$article->slug = $slug;
+                         $article->publish_time = $publishTime;
 			$article->save();
 			return redirect('article')->with('success', 'Article Updated Successfully');
 		} catch(Exception $e){

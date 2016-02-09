@@ -22,6 +22,13 @@ class PhoneValidator
     protected $autodetect = false;
 
     /**
+     * Whether to allow lenient checking of numbers (i.e. landline without area codes).
+     *
+     * @var bool
+     */
+    protected $lenient = false;
+
+    /**
      * Countries to validate against.
      *
      * @var array
@@ -62,7 +69,7 @@ class PhoneValidator
 
         // If autodetecting, let's first try without a country.
         // Otherwise use provided countries as default.
-        if ($this->autodetect) {
+        if ($this->autodetect || ($this->lenient && empty($this->countries))) {
             array_unshift($this->countries, null);
         }
 
@@ -93,6 +100,8 @@ class PhoneValidator
                 $types[] = $parameter;
             } elseif ($parameter == 'AUTO') {
                 $this->autodetect = true;
+            } elseif ($parameter == 'LENIENT') {
+                $this->lenient = true;
             } else {
                 // Force developers to write proper code.
                 throw new InvalidParameterException($parameter);
@@ -108,7 +117,7 @@ class PhoneValidator
      * When using a country field, we should validate to false if country is empty so no exception
      * will be thrown.
      *
-     * @param $attribute
+     * @param string $attribute
      * @param $validator
      * @throws \Propaganistas\LaravelPhone\Exceptions\NoValidCountryFoundException
      */
@@ -119,7 +128,7 @@ class PhoneValidator
 
         if (isset($data[$countryField])) {
             $this->countries = array($data[$countryField]);
-        } elseif (!$this->autodetect && empty($this->countries)) {
+        } elseif (!$this->autodetect && !$this->lenient && empty($this->countries)) {
             throw new NoValidCountryFoundException;
         }
     }
@@ -138,18 +147,26 @@ class PhoneValidator
             // If no country was given, tries to discover the country code from the number itself.
             $phoneNumber = $this->lib->parse($number, $country);
 
-            // For automatic detection, the number should have a country code.
             // Check if type is allowed.
-            if ($phoneNumber->hasCountryCode() && (empty($this->types) || in_array($this->lib->getNumberType($phoneNumber), $this->types))) {
+            if (empty($this->types) || in_array($this->lib->getNumberType($phoneNumber), $this->types)) {
 
-                // Automatic detection:
-                if ($this->autodetect) {
-                    // Validate if the international phone number is valid for its contained country.
-                    return $this->lib->isValidNumber($phoneNumber);
+                // Lenient validation.
+                if ($this->lenient) {
+                    return $this->lib->isPossibleNumber($phoneNumber, $country);
                 }
 
-                // Validate number against the specified country.
-                return $this->lib->isValidNumberForRegion($phoneNumber, $country);
+                // For automatic detection, the number should have a country code.
+                if ($phoneNumber->hasCountryCode()) {
+
+                    // Automatic detection:
+                    if ($this->autodetect) {
+                        // Validate if the international phone number is valid for its contained country.
+                        return $this->lib->isValidNumber($phoneNumber);
+                    }
+
+                    // Validate number against the specified country.
+                    return $this->lib->isValidNumberForRegion($phoneNumber, $country);
+                }
             }
 
         } catch (NumberParseException $e) {
@@ -168,7 +185,7 @@ class PhoneValidator
     protected function parseTypes(array $types)
     {
         // Transform types to their namespaced class constant.
-        array_walk($types, function (&$type) {
+        array_walk($types, function(&$type) {
             $type = constant('\libphonenumber\PhoneNumberType::' . $type);
         });
 

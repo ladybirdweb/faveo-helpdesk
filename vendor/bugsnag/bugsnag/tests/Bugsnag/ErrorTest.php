@@ -128,4 +128,10 @@ class ErrorTest extends Bugsnag_TestCase
         $errorArray = $this->error->toArray();
         $this->assertArrayNotHasKey('groupingHash', $errorArray);
     }
+
+    public function testSetPHPException()
+    {
+        $exception = version_compare(PHP_VERSION, '7.0.0', '>=') ? new \Error() : new Exception();
+        $this->error->setPHPException($exception);
+    }
 }

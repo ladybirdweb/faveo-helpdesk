@@ -22,6 +22,8 @@ class CreateSettingsSystemTable extends Migration {
 			$table->string('page_size');
 			$table->string('log_level');
 			$table->string('purge_log');
+                        $table->integer('api_enable');
+                        $table->string('api_key');
 			$table->string('name_format');
 			$table->integer('time_farmat')->unsigned()->nullable()->index('time_farmat');
 			$table->integer('date_format')->unsigned()->nullable()->index('date_format');

@@ -1,6 +1,15 @@
 Changelog
 =========
 
+1.6.3
+-----
+
+### Bug Fixes
+
+- Avoid initializing Bugsnag when no API key is set
+  | [Dries Vints](https://github.com/driesvints)
+  | [#72](https://github.com/bugsnag/bugsnag-laravel/pull/72)
+
 1.6.2
 -----
 

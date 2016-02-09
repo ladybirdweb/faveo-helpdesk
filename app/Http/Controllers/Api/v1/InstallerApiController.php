@@ -143,11 +143,16 @@ class InstallerApiController extends Controller {
 			File::put($install, $datacontent);
 
 			// Applying email configuration on route
-			$smtpfilepath 	= 	"\App\Http\Controllers\Common\SettingsController::smtp()";
-			$path22 		= 	app_path('Http/routes.php');
-			$content23 		= 	File::get($path22);
-			$content23 		= 	str_replace('"%smtplink%"', $smtpfilepath, $content23);
-			File::put($path22, $content23);				
+			$smtpfilepath = "\App\Http\Controllers\Common\SettingsController::smtp()";
+                                $lfmpath = "url('photos').'/'";
+				$path22 = app_path('Http/routes.php');
+                                $path23 = app_path('config/lfm.php'); 
+				$content23 = File::get($path22);
+                                $content24 = File::get($path23);
+				$content23 = str_replace('"%smtplink%"', $smtpfilepath, $content23);
+                                $content24 = str_replace("'%url%'", $lfmpath, $content24);
+				File::put($path22, $content23);
+                                File::put($path23, $content24);			
 
 			// If user created return success
 			if($user){

@@ -243,9 +243,9 @@ active
                     </td>
                     <td>
                         <select name="datetime" style="margin-left: 170px">
-                            <option value="d/m/Y H:i">DD/MM/YYYY H:i</option>
-                            <option value="m/d/Y H:i">MM/DD/YYYY H:i</option>
-                            <option value="Y/m/d H:i">YYYY/MM/DD H:i</option>
+                            <option value="d/m/Y H:i:s">DD/MM/YYYY H:i:s</option>
+                            <option value="m/d/Y H:i:s">MM/DD/YYYY H:i:s</option>
+                            <option value="Y/m/d H:i:s">YYYY/MM/DD H:i:s</option>
                         </select>
                     </td>
                 </tr>    

@@ -2,14 +2,17 @@ Bugsnag Notifier for Laravel and Lumen
 =====================================
 
 The Bugsnag Notifier for Laravel gives you instant notification of errors and
-exceptions in your Laravel PHP applications. We support Laravel 5, Laravel 4, Laravel 3, and Lumen.
+exceptions in your Laravel PHP applications. We support Laravel 5, Laravel 4,
+Laravel 3, and Lumen.
 
 [Bugsnag](https://bugsnag.com) captures errors in real-time from your web,
 mobile and desktop applications, helping you to understand and resolve them
 as fast as possible. [Create a free account](https://bugsnag.com) to start
 capturing errors from your applications.
 
-Check out this excellent [Laracasts screencast](https://laracasts.com/lessons/better-error-tracking-with-bugsnag) for a quick overview of how to use Bugsnag with your Laravel apps.
+Check out this excellent [Laracasts
+screencast](https://laracasts.com/lessons/better-error-tracking-with-bugsnag)
+for a quick overview of how to use Bugsnag with your Laravel apps.
 
 Contents
 --------
@@ -99,8 +102,9 @@ Getting Started
     BUGSNAG_API_KEY=YOUR-API-KEY-HERE
     ```
 
-1.  Optionally, you can add the `notify_release_stages` key to the `config/bugsnag.php` file
-    to define which Laravel environments will send Exceptions to Bugsnag.
+1.  Optionally, you can add the `notify_release_stages` key to the
+    `config/bugsnag.php` file to define which Laravel environments will send
+    Exceptions to Bugsnag.
 
     ```php
     return array(
@@ -175,7 +179,8 @@ For versions of Laravel before 5.0:
     require __DIR__ . '/../app/Http/routes.php';
     ```
 
-2. Change the function `report` in `app/Exceptions/Handler.php` to look like this:
+2. Change the function `report` in `app/Exceptions/Handler.php` to look like
+   this:
 
     ```php
     public function report(Exception $e) {
@@ -249,14 +254,12 @@ $metaData =  array(
 );
 ```
 
-Additional data can be sent with exceptions as an options hash as detailed in the [Notification Options](docs/Notification Options.md) documentation, including some [options specific to non-fatal exceptions](docs/Notification Options.md#handled-notification-options).
-
-
 ### Configuration Options
 
 The [Bugsnag PHP Client](https://bugsnag.com/docs/notifiers/php)
 is available as `Bugsnag`, which allows you to set various
-configuration options. These options are listed in the [documentation for Bugsnag PHP](https://bugsnag.com/docs/notifiers/php#additional-options).
+configuration options. These options are listed in the
+[documentation for Bugsnag PHP](https://bugsnag.com/docs/notifiers/php#additional-options).
 
 #### Error Reporting Levels
 
@@ -295,21 +298,26 @@ function before_bugsnag_notify($error) {
 }
 ```
 
-This example snippet adds a "user" tab to the Bugsnag error report. See the [setBeforeNotifyFunction](https://bugsnag.com/docs/notifiers/php#setbeforenotifyfunction)
+This example snippet adds a "user" tab to the Bugsnag error report. See the
+[setBeforeNotifyFunction](https://bugsnag.com/docs/notifiers/php#setbeforenotifyfunction)
 documentation on the `bugsnag-php` library for more information.
 
 
 Demo Applications
 -----------------
 
-The [Bugsnag Laravel source repository](https://github.com/bugsnag/bugsnag-laravel) includes example applications for [Laravel 4, Laravel 5, and Lumen](https://github.com/bugsnag/bugsnag-laravel/tree/master/example).
+The [Bugsnag Laravel source
+repository](https://github.com/bugsnag/bugsnag-laravel) includes example
+applications for [Laravel 4, Laravel 5, and
+Lumen](https://github.com/bugsnag/bugsnag-laravel/tree/master/example).
 
 Before running one of the example applications, install the prerequisites:
 
     brew tap josegonzalez/homebrew-php
     brew install php56 php56-mcrypt composer
 
-Then open the example directory (such as `example/laravel-5.1`) in a terminal and start the server:
+Then open the example directory (such as `example/laravel-5.1`) in a terminal
+and start the server:
 
 	composer install
 	php56 artisan serve --port 8004
@@ -326,7 +334,12 @@ Support
 Contributing
 ------------
 
-We'd love you to file issues and send pull requests. The [contributing guidelines](https://github.com/bugsnag/bugsnag-laravel/CONTRIBUTING.md) details the process of building and testing `bugsnag-laravel`, as well as the pull request process. Feel free to comment on [existing issues](https://github.com/bugsnag/bugsnag-laravel/issues) for clarification or starting points.
+We'd love you to file issues and send pull requests. The [contributing
+guidelines](https://github.com/bugsnag/bugsnag-laravel/CONTRIBUTING.md) details
+the process of building and testing `bugsnag-laravel`, as well as the pull
+request process. Feel free to comment on [existing
+issues](https://github.com/bugsnag/bugsnag-laravel/issues) for clarification or
+starting points.
 
 
 License
