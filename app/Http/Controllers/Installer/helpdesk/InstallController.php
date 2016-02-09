@@ -349,7 +349,7 @@ class InstallController extends Controller {
 				$smtpfilepath = "\App\Http\Controllers\Common\SettingsController::smtp()";
                                 $lfmpath = "url('photos').'/'";
 				$path22 = app_path('Http/routes.php');
-                                $path23 = app_path('config/lfm.php'); 
+                                $path23 = base_path('config/lfm.php'); 
 				$content23 = File::get($path22);
                                 $content24 = File::get($path23);
 				$content23 = str_replace('"%smtplink%"', $smtpfilepath, $content23);

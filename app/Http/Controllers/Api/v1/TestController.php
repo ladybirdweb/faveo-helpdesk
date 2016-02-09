@@ -61,7 +61,7 @@ class TestController extends Controller {
         
         $data = [
 
-            'ticket_ID' => '4',
+            'ticket_ID' => '13',
             'ReplyContent' => 'reply for the ticket id',
             'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg',
 //            'attachments' => [
@@ -101,8 +101,7 @@ class TestController extends Controller {
             'priority' => '1',
             'headers' => [0 => 'vijaycodename47@gmail.com'],
             'dept' => '1',
-            'assignto' => '0',
-            'source' => 'api',
+           
             'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg',
             /** if attachment */
 //            'attachments' => [
@@ -170,12 +169,12 @@ class TestController extends Controller {
 
     public function EditTicket() {
         $data = [
-            'ticket_id' => '4',
+            'ticket_id' => '13',
             'subject' => 'Api editing ticket via faveo api',
             'sla_plan' => '2',
             'help_topic' => '2',
             'ticket_source' => '2',
-            'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg',
+            'api-key' => '9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN',
             'ticket_priority' => '2',
         ];
 
@@ -188,8 +187,8 @@ class TestController extends Controller {
 
     public function DeleteTicket() {
         $data = [
-            'ticket_id' => [],
-            'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg'
+            'ticket_id' => [11],
+            'api-key' => '9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN'
         ];
 
         $data = http_build_query($data, '', '&');
@@ -200,35 +199,35 @@ class TestController extends Controller {
     }
 
     public function OpenedTickets() {
-        $url = $this->server . "helpdesk/open?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/open?api-key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
     }
 
     public function UnassignedTickets() {
-        $url = $this->server . "helpdesk/unassigned?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/unassigned?api-key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
     }
 
     public function CloseTickets() {
-        $url = $this->server . "helpdesk/closed?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/closed?api-key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
     }
 
     public function GetAgents() {
-        $url = $this->server . "helpdesk/agents?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/agents?api-key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
     }
 
     public function GetTeams() {
-        $url = $this->server . "helpdesk/teams?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/teams?api-key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
@@ -236,9 +235,9 @@ class TestController extends Controller {
 
     public function AssignTicket() {
         $data = [
-            'ticket_id' => '8',
-            'user' => 'vijay.sebastian@ladybird.com',
-            'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg'
+            'ticket_id' => 1,
+            'user' => 'vijay.sebastian@ladybirdweb.com',
+            'api-key' => '9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN'
         ];
         $data = http_build_query($data, '', '&');
         $url = $this->server . "helpdesk/assign?token=" . \Config::get('app.token');
@@ -250,7 +249,7 @@ class TestController extends Controller {
     public function GetCustomers() {
         $search = [
             'search' => 'vij',
-            'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg'
+            'api-key' => '9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN'
         ];
         $data = http_build_query($search, '', '&');
         $url = $this->server . "helpdesk/customers?token=" . \Config::get('app.token');
@@ -263,7 +262,7 @@ class TestController extends Controller {
     public function GetCustomer() {
         $search = [
             'user_id' => '1',
-            'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg'
+            'api-key' => '9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN'
         ];
         $data = http_build_query($search, '', '&');
         $url = $this->server . "helpdesk/customer?token=" . \Config::get('app.token');
@@ -276,7 +275,7 @@ class TestController extends Controller {
     public function GetSearch() {
         $search = [
             'search' => 'api',
-            'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg'
+            'api-key' => '9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN'
         ];
         $data = http_build_query($search, '', '&');
         $url = $this->server . "helpdesk/ticket-search?token=" . \Config::get('app.token');
@@ -288,8 +287,8 @@ class TestController extends Controller {
 
     public function TicketThreads() {
         $search = [
-            'id' => '8',
-            'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg'
+            'id' => '1',
+            'api-key' => '9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN'
         ];
         $data = http_build_query($search, '', '&');
         $url = $this->server . "helpdesk/ticket-thread?token=" . \Config::get('app.token');
@@ -302,7 +301,7 @@ class TestController extends Controller {
     public function Url() {
         $search = [
             'url' => 'http://localhost/Faveo-HelpDesk-My-Branch/public/',
-            'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg'
+            'api-key' => '9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN'
         ];
         $data = http_build_query($search, '', '&');
         $url = $this->server . "helpdesk/url?token=" . \Config::get('app.token');
@@ -313,21 +312,21 @@ class TestController extends Controller {
     }
 
     public function GenerateApiKey() {
-        $url = $this->server . "helpdesk/api-key?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/api-key?api-key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
     }
 
     public function GetHelpTopic() {
-        $url = $this->server . "helpdesk/help-topic?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/help-topic?api-key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
     }
 
     public function GetSlaPlan() {
-        $url = $this->server . "helpdesk/sla-plan?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/sla-plan?api-key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
@@ -341,21 +340,21 @@ class TestController extends Controller {
     }
 
     public function GetDepartment() {
-        $url = $this->server . "helpdesk/department?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/department?api-key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
     }
 
     public function GetTickets() {
-        $url = $this->server . "helpdesk/tickets?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/tickets?api-key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
     }
 
     public function Inbox() {
-        $url = $this->server . "helpdesk/inbox?api-key=clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg&token=" . \Config::get('app.token');
+        $url = $this->server . "helpdesk/inbox?api-key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token=" . \Config::get('app.token');
         $_this = new self();
         $respose = $_this->CallGetApi($url);
         return $respose;
@@ -366,7 +365,7 @@ class TestController extends Controller {
             'ticketid' => '23',
             'userid' => 1,
             'body' => 'Testing the api internal note',
-            'api-key' => 'clYbe1g7BYVEJznBdvCEBR0xDCLDqKgg'
+            'api-key' => '9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN'
         ];
         $data = http_build_query($data, '', '&');
         $url = $this->server . "helpdesk/internal-note?token=" . \Config::get('app.token');
