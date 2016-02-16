@@ -1,0 +1,22 @@
+{
+   "name":"simogeo/filemanager",
+   "description":"An open-source file manager",
+   "type":"project",
+   "keywords":[
+      "filemanager",
+      "files",
+      "images"
+   ],
+   "license": "MIT",
+   "authors":[
+      {
+         "name":"Simon Georget",
+         "email":"simon@linea21.com",
+         "homepage":"http://www.empreinte-urbaine.eu",
+         "role": "Developer"
+      }
+   ],
+   "require":{
+      "php":">= 5.2.0"
+   }
+}

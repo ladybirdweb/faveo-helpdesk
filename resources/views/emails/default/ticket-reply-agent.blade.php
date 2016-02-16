@@ -1,0 +1,1 @@
+<div>{!!$content!!}</div><div><br></div><div>{!!$agent_sign!!}</div><div><br></div><div>Ticket Details</div><div>Ticket ID: {!!$ticket_number!!}</div>
