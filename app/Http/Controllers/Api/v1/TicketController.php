@@ -10,6 +10,7 @@ use App\Model\helpdesk\Settings\Company;
 use App\User;
 use App\Model\helpdesk\Ticket\Ticket_Collaborator;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
+use App\Http\Controllers\Common\PhpMailController;
 use Auth;
 use Mail;
 use Input;
@@ -33,6 +34,14 @@ use Hash;
  * 
  */
 class TicketController extends Controller {
+
+    /**
+     * Create a new controller instance.
+     * @return type response
+     */
+    public function __construct(PhpMailController $PhpMailController) {
+        $this->PhpMailController = $PhpMailController;
+    }
 
     /**
      * Create Ticket
@@ -123,9 +132,12 @@ class TicketController extends Controller {
                         $create_user->password = Hash::make($password);
                         $create_user->save();
                         $user_id = $create_user->id;
-                        Mail::send('emails.pass', ['password' => $password, 'name' => $name, 'from' => $company, 'emailadd' => $email], function ($message) use ($email, $name) {
-                            $message->to($email, $name)->subject('password');
-                        });
+                        // Mail::send('emails.pass', ['password' => $password, 'name' => $name, 'from' => $company, 'emailadd' => $email], function ($message) use ($email, $name) {
+                        //     $message->to($email, $name)->subject('password');
+                        // });
+
+                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
+
                     } else {
                         $user = $this->check_email($email);
                         $user_id = $user->id;
@@ -288,18 +300,24 @@ class TicketController extends Controller {
             }
             \Event::fire(new \App\Events\FaveoAfterReply($reply_content, $user->phone_number, $request, $tickets));
 
-            Mail::send(array('html' => 'emails.ticket_re-reply'), ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name' => $username, 'Agent_Signature' => $agentsign], function ($message) use ($email, $user_name, $ticket_number, $ticket_subject, $check_attachment) {
-                $message->to($email, $user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');
-                // if(isset($attachments)){
-//                if ($check_attachment == 1) {
-//                    $size = count($attach);
-//                    for ($i = 0; $i < $size; $i++) {
-//                        $message->attach($attachments[$i]->getRealPath(), ['as' => $attachments[$i]->getClientOriginalName(), 'mime' => $attachments[$i]->getClientOriginalExtension()]);
-//                    }
-//                }
-            }, true);
+//             Mail::send(array('html' => 'emails.ticket_re-reply'), ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name' => $username, 'Agent_Signature' => $agentsign], function ($message) use ($email, $user_name, $ticket_number, $ticket_subject, $check_attachment) {
+//                 $message->to($email, $user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');
+//                 // if(isset($attachments)){
+// //                if ($check_attachment == 1) {
+// //                    $size = count($attach);
+// //                    for ($i = 0; $i < $size; $i++) {
+// //                        $message->attach($attachments[$i]->getRealPath(), ['as' => $attachments[$i]->getClientOriginalName(), 'mime' => $attachments[$i]->getClientOriginalExtension()]);
+// //                    }
+// //                }
+//             }, true);
 
+try {
+                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body], $template_variables = ['agent_sign' => Auth::user()->agent_sign, 'ticket_number' => $ticket_number2]);
+                    } catch (\Exception $e) {
+                        
+                    }
 
+               
             $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket_id)->get();
             foreach ($collaborators as $collaborator) {
                 //mail to collaborators
@@ -311,15 +329,23 @@ class TicketController extends Controller {
                 } else {
                     $collab_user_name = $user_id_collab->first_name . " " . $user_id_collab->last_name;
                 }
-                Mail::send('emails.ticket_re-reply', ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name' => $collab_user_name, 'Agent_Signature' => $agentsign], function ($message) use ($collab_email, $collab_user_name, $ticket_number, $ticket_subject, $check_attachment) {
-                    $message->to($collab_email, $collab_user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');
-//                    if ($check_attachment == 1) {
-//                        $size = sizeOf($attachments);
-//                        for ($i = 0; $i < $size; $i++) {
-//                            $message->attach($attachments[$i]->getRealPath(), ['as' => $attachments[$i]->getClientOriginalName(), 'mime' => $attachments[$i]->getClientOriginalExtension()]);
-//                        }
-//                    }
-                }, true);
+//                 Mail::send('emails.ticket_re-reply', ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name' => $collab_user_name, 'Agent_Signature' => $agentsign], function ($message) use ($collab_email, $collab_user_name, $ticket_number, $ticket_subject, $check_attachment) {
+//                     $message->to($collab_email, $collab_user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');
+// //                    if ($check_attachment == 1) {
+// //                        $size = sizeOf($attachments);
+// //                        for ($i = 0; $i < $size; $i++) {
+// //                            $message->attach($attachments[$i]->getRealPath(), ['as' => $attachments[$i]->getClientOriginalName(), 'mime' => $attachments[$i]->getClientOriginalExtension()]);
+// //                        }
+// //                    }
+//                 }, true);
+
+                 try {
+                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $admin_user, 'email' => $admin_email], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $admin_user, 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $admin_user, 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
+                    } catch (\Exception $e) {
+                        
+                    }
+
+
             }
             return $thread;
         } catch (\Exception $e) {
@@ -413,10 +439,19 @@ class TicketController extends Controller {
 
             $master = Auth::user()->first_name . " " . Auth::user()->last_name;
             if (Alert::first()->internal_status == 1 || Alert::first()->internal_assigned_agent == 1) {
-                // ticket assigned send mail
-                Mail::send('emails.Ticket_assign', ['agent' => $agent, 'ticket_number' => $ticket_number, 'from' => $company, 'master' => $master, 'system' => $system], function ($message) use ($agent_email, $agent, $ticket_number, $ticket_subject) {
-                    $message->to($agent_email, $agent)->subject($ticket_subject . '[#' . $ticket_number . ']');
-                });
+                // // ticket assigned send mail
+                // Mail::send('emails.Ticket_assign', ['agent' => $agent, 'ticket_number' => $ticket_number, 'from' => $company, 'master' => $master, 'system' => $system], function ($message) use ($agent_email, $agent, $ticket_number, $ticket_subject) {
+                //     $message->to($agent_email, $agent)->subject($ticket_subject . '[#' . $ticket_number . ']');
+                // });
+
+                try {
+                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket->dept_id), $to = ['name' => $agent, 'email' => $agent_email], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'assign-ticket'], $template_variables = ['ticket_agent_name' => $agent, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master]);
+                } catch (\Exception $e) {
+                    return 0;
+                }
+
+
+
             }
 
             return 1;
