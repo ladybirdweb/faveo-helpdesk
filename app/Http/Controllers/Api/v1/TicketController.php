@@ -17,6 +17,7 @@ use App\Model\helpdesk\Ticket\Ticket_Status;
 use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Alert;
+use Hash;
 
 /**
  * -----------------------------------------------------------------------------
@@ -31,7 +32,6 @@ use App\Model\helpdesk\Settings\Alert;
  * 
  * 
  */
-
 class TicketController extends Controller {
 
     /**
@@ -47,6 +47,7 @@ class TicketController extends Controller {
     public function create_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach = '') {
         try {
             $max_number = Tickets::whereRaw('id = (select max(`id`) from tickets)')->first();
+            //dd($max_number);
             if ($max_number == null) {
                 $ticket_number = "AAAA-9999-9999999";
             } else {
@@ -56,6 +57,7 @@ class TicketController extends Controller {
             }
             $ticket = new Tickets;
             $ticket->ticket_number = $this->ticket_number($ticket_number);
+            //dd($this->ticket_number($ticket_number));
             $ticket->user_id = $user_id;
             $ticket->dept_id = $dept;
             $ticket->help_topic_id = $helptopic;
@@ -65,6 +67,7 @@ class TicketController extends Controller {
             $ticket->priority_id = $priority;
             $ticket->source = $source;
             $ticket->save();
+            //dd($ticket);
             $ticket_number = $ticket->ticket_number;
             $id = $ticket->id;
             if ($form_data != null) {
@@ -93,6 +96,7 @@ class TicketController extends Controller {
             }
             return $thread;
         } catch (\Exception $e) {
+            dd($e);
             return $e->getMessage();
         }
     }
@@ -170,6 +174,7 @@ class TicketController extends Controller {
      */
     public function ticket_number($ticket_number) {
         try {
+            //dd($ticket_number);
             $number = $ticket_number;
             $number = explode('-', $number);
             $number1 = $number[0];
@@ -193,6 +198,7 @@ class TicketController extends Controller {
             $number = implode('-', $array);
             return $number;
         } catch (\Exception $e) {
+            dd($e);
             return $e->getMessage();
         }
     }
@@ -373,15 +379,24 @@ class TicketController extends Controller {
     public function assign($id) {
         try {
             $UserEmail = Input::get('user');
-            //dd($id);
+            //dd($UserEmail);
             // $UserEmail = 'sujitprasad12@yahoo.in';
             $user = User::where('email', '=', $UserEmail)->first();
+            if (!$user) {
+                return ['error' => 'No agent not found'];
+            }
             $user_id = $user->id;
             $ticket = Tickets::where('id', '=', $id)->first();
+            if (!$ticket) {
+                return ['error' => 'No ticket not found'];
+            }
             $ticket_number = $ticket->ticket_number;
             $ticket->assigned_to = $user_id;
             $ticket->save();
             $ticket_thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
+            if (!$ticket_thread) {
+                return ['error' => 'No thread not found'];
+            }
             $ticket_subject = $ticket_thread->title;
             $thread = New Ticket_Thread;
             $thread->ticket_id = $ticket->id;
@@ -497,6 +512,7 @@ class TicketController extends Controller {
             return $e->getMessage();
         }
     }
+
     /**
      * Create Attachment
      * @param type $thread

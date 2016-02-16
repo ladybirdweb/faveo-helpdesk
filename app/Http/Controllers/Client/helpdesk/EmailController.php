@@ -1,11 +1,11 @@
-<?php namespace App\Http\Controllers\Client\helpdesk;
+<?php
+
+namespace App\Http\Controllers\Client\helpdesk;
 
 // controllers
 use App\Http\Controllers\Controller;
-
 // models
 use App\Model\helpdesk\Email\Emails;
-
 // classes
 use Exception;
 
@@ -17,28 +17,26 @@ use Exception;
  * @author      Ladybird <info@ladybirdweb.com>
  */
 class OuthouseController extends Controller {
-	
-	/**
+
+    /**
      * post port
      *
      * @return string
      */
-    public static function port()  
-    {
-        $port 	=	Emails::where('id','=','1')->first();
-        $portvalue	=	$port->option_value;
+    public static function port() {
+        $port = Emails::where('id', '=', '1')->first();
+        $portvalue = $port->option_value;
         return $portvalue;
     }
- 
+
     /**
      * post host
      *
      * @return string
      */
-    public static function host()  
-    {
-        $host=Option::where('option_name','=','host')->first();
-        $hostvalue=$host->option_value;
+    public static function host() {
+        $host = Option::where('option_name', '=', 'host')->first();
+        $hostvalue = $host->option_value;
         return $hostvalue;
     }
 
@@ -47,10 +45,9 @@ class OuthouseController extends Controller {
      *
      * @return string
      */
-        public static function username()  
-    {
-        $username=Option::where('option_name','=','username')->first();
-        $uservalue=$username->option_value;
+    public static function username() {
+        $username = Option::where('option_name', '=', 'username')->first();
+        $uservalue = $username->option_value;
 
         return $uservalue;
     }
@@ -60,10 +57,9 @@ class OuthouseController extends Controller {
      *
      * @return string
      */
-        public static function password()  
-    {
-        $password=Option::where('option_name','=','password')->first();
-        $passvalue=$password->option_value;
+    public static function password() {
+        $password = Option::where('option_name', '=', 'password')->first();
+        $passvalue = $password->option_value;
 
         return $passvalue;
     }
@@ -73,10 +69,9 @@ class OuthouseController extends Controller {
      *
      * @return string
      */
-        public static function encryption()  
-    {
-        $encryption=Option::where('option_name','=','encryption')->first();
-        $encryptvalue=$encryption->option_value;
+    public static function encryption() {
+        $encryption = Option::where('option_name', '=', 'encryption')->first();
+        $encryptvalue = $encryption->option_value;
 
         return $encryptvalue;
     }

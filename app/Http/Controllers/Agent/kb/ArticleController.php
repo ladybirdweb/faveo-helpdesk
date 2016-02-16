@@ -1,22 +1,21 @@
-<?php namespace App\Http\Controllers\Agent\kb;
+<?php
+
+namespace App\Http\Controllers\Agent\kb;
 
 // Controllers
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Agent\kb\SettingsController;
 use App\Http\Controllers\Client\kb\UserController;
 use App\Http\Controllers\Agent\helpdesk\TicketController;
-
 // Requests
 use App\Http\Requests\kb\ArticleRequest;
 use App\Http\Requests\kb\ArticleUpdate;
-
 // Models
 use App\Model\kb\Article;
 use App\Model\kb\Category;
 use App\Model\kb\Relationship;
 use App\Model\kb\Settings;
 use App\Model\kb\Comment;
-
 // Classes
 use Auth;
 use Chumper\Datatable\Table;
@@ -36,52 +35,52 @@ use Exception;
  */
 class ArticleController extends Controller {
 
-	/**
-	 * Create a new controller instance.
-	 * constructor to check
-	 * 1. authentication
-	 * 2. user roles
-	 * 3. roles must be agent
-	 * @return void
-	 */
-	public function __construct() {
-		// checking authentication
-		$this->middleware('auth');
-		// checking roles
-		$this->middleware('roles');
-		SettingsController::language();
-	}
-	
-	public function test() {
-		//$table = $this->setDatatable();
-		return view('themes.default1.agent.kb.article.test');
-	}
+    /**
+     * Create a new controller instance.
+     * constructor to check
+     * 1. authentication
+     * 2. user roles
+     * 3. roles must be agent
+     * @return void
+     */
+    public function __construct() {
+        // checking authentication
+        $this->middleware('auth');
+        // checking roles
+        $this->middleware('roles');
+        SettingsController::language();
+    }
 
-	/**
-	 * Fetching all the list of articles in a chumper datatable format
-	 * @return type void
-	 */
-	public function getData() {
-		// returns chumper datatable
-		return Datatable::collection(Article::All())
-			/* searcable column name */
-			->searchColumns('name')
-			/* order column name and description */
-			->orderColumns('name', 'description')
-			/* add column name */
-			->addColumn('name', function ($model) {
-				return $model->name;
-			})
-			/* add column Created */
-			->addColumn('Created', function ($model) {
-				$t = $model->created_at;
-				return TicketController::usertimezone($t);
-			})
-			/* add column action */
-			->addColumn('Actions', function ($model) {
-				/* here are all the action buttons and modal popup to delete articles with confirmations */
-				return '<span  data-toggle="modal" data-target="#deletearticle'.$model->id .'"><a href="#" ><button class="btn btn-danger btn-xs"></a> ' . \Lang::get('lang.delete') . ' </button></span>&nbsp;<a href=article/' . $model->id . '/edit class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp;<a href=show/'.$model->slug .' class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>
-				<div class="modal fade" id="deletearticle'.$model->id .'">
+    public function test() {
+        //$table = $this->setDatatable();
+        return view('themes.default1.agent.kb.article.test');
+    }
+
+    /**
+     * Fetching all the list of articles in a chumper datatable format
+     * @return type void
+     */
+    public function getData() {
+        // returns chumper datatable
+        return Datatable::collection(Article::All())
+                        /* searcable column name */
+                        ->searchColumns('name')
+                        /* order column name and description */
+                        ->orderColumns('name', 'description')
+                        /* add column name */
+                        ->addColumn('name', function ($model) {
+                            return $model->name;
+                        })
+                        /* add column Created */
+                        ->addColumn('Created', function ($model) {
+                            $t = $model->created_at;
+                            return TicketController::usertimezone($t);
+                        })
+                        /* add column action */
+                        ->addColumn('Actions', function ($model) {
+                            /* here are all the action buttons and modal popup to delete articles with confirmations */
+                            return '<span  data-toggle="modal" data-target="#deletearticle' . $model->id . '"><a href="#" ><button class="btn btn-danger btn-xs"></a> ' . \Lang::get('lang.delete') . ' </button></span>&nbsp;<a href=article/' . $model->id . '/edit class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp;<a href=show/' . $model->slug . ' class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>
+				<div class="modal fade" id="deletearticle' . $model->id . '">
         			<div class="modal-dialog">
             			<div class="modal-content">
                 			<div class="modal-header">
@@ -89,188 +88,192 @@ class ArticleController extends Controller {
                     			<h4 class="modal-title">Are You Sure ?</h4>
                 			</div>
                 			<div class="modal-body">
-                				'.$model->name.'
+                				' . $model->name . '
                 			</div>
                 			<div class="modal-footer">
                     			<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">Close</button>
-                    			<a href="article/delete/'.$model->slug.'"><button class="btn btn-danger">delete</button></a>
+                    			<a href="article/delete/' . $model->slug . '"><button class="btn btn-danger">delete</button></a>
                 			</div>
             			</div><!-- /.modal-content -->
         			</div><!-- /.modal-dialog -->
     			</div>';
-				})
-				->make();
-	}
+                        })
+                        ->make();
+    }
 
-	/**
-	 * List of Articles
-	 * @return type view
-	 */
-	public function index() {
-		/* show article list */
-		try{
-			return view('themes.default1.agent.kb.article.index');	
-		} catch(Exception $e) {
-			return redirect()->back()->with('fails',$e->errorInfo[2]);
-		}
-	}
+    /**
+     * List of Articles
+     * @return type view
+     */
+    public function index() {
+        /* show article list */
+        try {
+            return view('themes.default1.agent.kb.article.index');
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
+        }
+    }
 
-	/**
-	 * Creating a Article
-	 * @param type Category $category
-	 * @return type view
-	 */
-	public function create(Category $category) {
-		/* get the attributes of the category */
-		$category = $category->lists('id', 'name');
-		/* get the create page  */
-		try{
-			return view('themes.default1.agent.kb.article.create', compact('category'));	
-		} catch(Exception $e) {
-			return redirect()->back()->with('fails',$e->errorInfo[2]);
-		}
-		
-	}
+    /**
+     * Creating a Article
+     * @param type Category $category
+     * @return type view
+     */
+    public function create(Category $category) {
+        /* get the attributes of the category */
+        $category = $category->lists('id', 'name');
+        /* get the create page  */
+        try {
+            return view('themes.default1.agent.kb.article.create', compact('category'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
+        }
+    }
 
-	/**
-	 * Insert the values to the article
-	 * @param type Article $article
-	 * @param type ArticleRequest $request
-	 * @return type redirect
-	 */
-	public function store(Article $article, ArticleRequest $request) {
-		// requesting the values to store article data
-		$sl = $request->input('slug');
-		$slug = str_slug($sl, "-");
-		$article->slug = $slug;
-		$article->fill($request->except('created_at','slug'))->save();
-		// creating article category relationship
-		$requests = $request->input('category_id');
-		$id = $article->id;
-		foreach ($requests as $req) {
-			DB::insert('insert into kb_article_relationship (category_id, article_id) values (?,?)', [$req, $id]);
-		}
-		/* insert the values to the article table  */
-		try{
-			$article->fill($request->except('slug'))->save();
-			return redirect('article')->with('success', 'Article Inserted Successfully');
-		} catch (Exception $e) {
-			return redirect('article')->with('fails', 'Article Not Inserted'. '<li>'.$e->errorInfo[2].'</li>');
-		}
-	}
+    /**
+     * Insert the values to the article
+     * @param type Article $article
+     * @param type ArticleRequest $request
+     * @return type redirect
+     */
+    public function store(Article $article, ArticleRequest $request) {
+        // requesting the values to store article data
+        $publishTime = $request->input('year') . '-' . $request->input('month') . '-' . $request->input('day') . ' ' . $request->input('hour') . ':' . $request->input('minute') . ':00';
 
-	/**
-	 * Edit an Article by id
-	 * @param type Integer $id
-	 * @param type Article $article
-	 * @param type Relationship $relation
-	 * @param type Category $category
-	 * @return view
-	 */
-	public function edit($slug, Article $article, Relationship $relation, Category $category) {
+        $sl = $request->input('slug');
+        $slug = str_slug($sl, "-");
+        $article->slug = $slug;
+        $article->publish_time = $publishTime;
+        $article->fill($request->except('created_at', 'slug'))->save();
+        // creating article category relationship
+        $requests = $request->input('category_id');
+        $id = $article->id;
 
-		$aid = $article->where('id', $slug)->first();
-		$id = $aid->id;
+        foreach ($requests as $req) {
+            DB::insert('insert into kb_article_relationship (category_id, article_id) values (?,?)', [$req, $id]);
+        }
+        /* insert the values to the article table  */
+        try {
+            $article->fill($request->except('slug'))->save();
+            return redirect('article')->with('success', 'Article Inserted Successfully');
+        } catch (Exception $e) {
+            return redirect('article')->with('fails', 'Article Not Inserted' . '<li>' . $e->errorInfo[2] . '</li>');
+        }
+    }
 
-		/* define the selected fields */
-		$assign = $relation->where('article_id', $id)->lists('category_id');
-		/* get the attributes of the category */
-		$category = $category->lists('id', 'name');
-		/* get the selected article and display it at edit page  */
-		/* Get the selected article with id */
-		$article = $article->whereId($id)->first();
-		/* send to the edit page */
-		try {
-			return view('themes.default1.agent.kb.article.edit', compact('assign', 'article', 'category'));	
-		} catch(Exception $e){
-			return redirect()->back()->with('fails',$e->errorInfo[2]);	
-		}
-		
-	}
+    /**
+     * Edit an Article by id
+     * @param type Integer $id
+     * @param type Article $article
+     * @param type Relationship $relation
+     * @param type Category $category
+     * @return view
+     */
+    public function edit($slug, Article $article, Relationship $relation, Category $category) {
+        $aid = $article->where('id', $slug)->first();
+        $id = $aid->id;
+        /* define the selected fields */
+        $assign = $relation->where('article_id', $id)->lists('category_id');
+        /* get the attributes of the category */
+        $category = $category->lists('id', 'name');
+        /* get the selected article and display it at edit page  */
+        /* Get the selected article with id */
+        $article = $article->whereId($id)->first();
+        /* send to the edit page */
+        try {
+            return view('themes.default1.agent.kb.article.edit', compact('assign', 'article', 'category'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
+        }
+    }
 
-	/**
-	 * Update an Artile by id
-	 * @param type Integer $id
-	 * @param type Article $article
-	 * @param type Relationship $relation
-	 * @param type ArticleRequest $request
-	 * @return Response
-	 */
-	public function update($slug, Article $article, Relationship $relation, ArticleUpdate $request) {
-		$aid = $article->where('id', $slug)->first();
-		$id = $aid->id;
-		$sl = $request->input('slug');
-		$slug = str_slug($sl, "-");
-		// dd($slug);
-		$article->slug = $slug;
-		/* get the attribute of relation table where id==$id */
-		$relation = $relation->where('article_id', $id);
-		$relation->delete();
-		/* get the request of the current articles */
-		$article = $article->whereId($id)->first();
-		$requests = $request->input('category_id');
-		$id = $article->id;
-		foreach ($requests as $req) {
-			DB::insert('insert into article_relationship (category_id, article_id) values (?,?)', [$req, $id]);
-		}
-		/* update the value to the table */
-		try{
-			$article->fill($request->all())->save();	
-			$article->slug = $slug;
-			$article->save();
-			return redirect('article')->with('success', 'Article Updated Successfully');
-		} catch(Exception $e){
-			return redirect('article')->with('fails', 'Article Not Updated'.'<li>'.$e->errorInfo[2].'</li>');
-		}
-	}
+    /**
+     * Update an Artile by id
+     * @param type Integer $id
+     * @param type Article $article
+     * @param type Relationship $relation
+     * @param type ArticleRequest $request
+     * @return Response
+     */
+    public function update($slug, Article $article, Relationship $relation, ArticleUpdate $request) {
+        $aid = $article->where('id', $slug)->first();
+        $publishTime = $request->input('year') . '-' . $request->input('month') . '-' . $request->input('day') . ' ' . $request->input('hour') . ':' . $request->input('minute') . ':00';
 
-	/**
-	 * Delete an Agent by id
-	 * @param type $id
-	 * @param type Article $article
-	 * @return Response
-	 */
-	public function destroy($slug, Article $article, Relationship $relation, Comment $comment) {
-    	/* delete the selected article from the table */
-		$article = $article->where('slug',$slug)->first(); //get the selected article via id
-		$id = $article->id;
-        $comments = $comment->where('article_id',$id)->get();
-        if($comments) {
-        	foreach($comments as $comment)
-        	$comment->delete();
+        $id = $aid->id;
+        $sl = $request->input('slug');
+        $slug = str_slug($sl, "-");
+        // dd($slug);
+
+        $article->slug = $slug;
+        /* get the attribute of relation table where id==$id */
+        $relation = $relation->where('article_id', $id);
+        $relation->delete();
+        /* get the request of the current articles */
+        $article = $article->whereId($id)->first();
+        $requests = $request->input('category_id');
+        $id = $article->id;
+        foreach ($requests as $req) {
+            DB::insert('insert into kb_article_relationship (category_id, article_id) values (?,?)', [$req, $id]);
+        }
+        /* update the value to the table */
+        try {
+            $article->fill($request->all())->save();
+            $article->slug = $slug;
+            $article->publish_time = $publishTime;
+            $article->save();
+            return redirect('article')->with('success', 'Article Updated Successfully');
+        } catch (Exception $e) {
+            return redirect('article')->with('fails', 'Article Not Updated' . '<li>' . $e->errorInfo[2] . '</li>');
+        }
+    }
+
+    /**
+     * Delete an Agent by id
+     * @param type $id
+     * @param type Article $article
+     * @return Response
+     */
+    public function destroy($slug, Article $article, Relationship $relation, Comment $comment) {
+        /* delete the selected article from the table */
+        $article = $article->where('slug', $slug)->first(); //get the selected article via id
+        $id = $article->id;
+        $comments = $comment->where('article_id', $id)->get();
+        if ($comments) {
+            foreach ($comments as $comment)
+                $comment->delete();
         }
         // deleting relationship
-		$relation = $relation->where('article_id', $id)->first();
-		if($relation) {
-			$relation->delete();
-		}
-		if($article) {
-			if ($article->delete()) {//true:redirect to index page with success message
-				return Redirect::back()->with('success', 'Article Deleted Successfully');
-			} else { //redirect to index page with fails message
-				return Redirect::back()->with('fails', 'Article Not Deleted');
-			}
-		} else { 
-			return Redirect::back()->with('fails', 'Article can Not Deleted');
-		}
-	}
+        $relation = $relation->where('article_id', $id)->first();
+        if ($relation) {
+            $relation->delete();
+        }
+        if ($article) {
+            if ($article->delete()) {//true:redirect to index page with success message
+                return Redirect::back()->with('success', 'Article Deleted Successfully');
+            } else { //redirect to index page with fails message
+                return Redirect::back()->with('fails', 'Article Not Deleted');
+            }
+        } else {
+            return Redirect::back()->with('fails', 'Article can Not Deleted');
+        }
+    }
 
-	/**
-	 * user time zone
-	 * fetching timezone
-	 * @param type $utc
-	 * @return type
-	 */
-	static function usertimezone($utc) {
-		$user = Auth::user();
-		$tz = $user->timezone;
-		$set = Settings::whereId('1')->first();
-		$format = $set->dateformat;
-		//$utc = date('M d Y h:i:s A');
-		date_default_timezone_set($tz);
-		$offset = date('Z', strtotime($utc));
-		$date = date($format, strtotime($utc) + $offset);
-		echo $date;
-	}
+    /**
+     * user time zone
+     * fetching timezone
+     * @param type $utc
+     * @return type
+     */
+    static function usertimezone($utc) {
+        $user = Auth::user();
+        $tz = $user->timezone;
+        $set = Settings::whereId('1')->first();
+        $format = $set->dateformat;
+        //$utc = date('M d Y h:i:s A');
+        date_default_timezone_set($tz);
+        $offset = date('Z', strtotime($utc));
+        $date = date($format, strtotime($utc) + $offset);
+        echo $date;
+    }
 
 }

@@ -1,5 +1,17 @@
 <?php
 
+if (!defined('PHP_VERSION_ID')) {
+    $version = explode('.', PHP_VERSION);
+
+    define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
+}
+
+if (PHP_VERSION_ID < 50207) {
+    define('PHP_MAJOR_VERSION',   $version[0]);
+    define('PHP_MINOR_VERSION',   $version[1]);
+    define('PHP_RELEASE_VERSION', $version[2]);
+}
+
 class ClientTest extends PHPUnit_Framework_TestCase
 {
     /** @var PHPUnit_Framework_MockObject_MockObject|Bugsnag_Client */
@@ -73,11 +85,13 @@ class ClientTest extends PHPUnit_Framework_TestCase
                      ->errorHandler(E_NOTICE, "Something broke", "somefile.php", 123);
     }
 
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
     public function testSetInvalidCurlOptions()
     {
+		if (PHP_MAJOR_VERSION >= 7) {
+            $this->setExpectedException('TypeError');
+        } else {
+            $this->setExpectedException('PHPUnit_Framework_Error');
+        }
         $this->client->setCurlOptions("option");
     }
 }

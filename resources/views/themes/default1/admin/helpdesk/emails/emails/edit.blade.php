@@ -68,7 +68,7 @@ class="active"
 
 			{!! Form::label('department',Lang::get('lang.department')) !!}
 			{!! $errors->first('department', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('department', [''=>'Select a Department','departments'=>$departments->lists('name','id')],null,['class' => 'form-control select']) !!}
+			{!!Form::select('department', [''=>'--System Default--','departments'=>$departments->lists('name','id')],null,['class' => 'form-control select']) !!}
 
 		</div>
 		<!-- priority -->
@@ -76,7 +76,7 @@ class="active"
 
 			{!! Form::label('priority',Lang::get('lang.priority')) !!}
 			{!! $errors->first('priority', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('priority', [''=>'Select a Priority','Priorities'=>$priority->lists('priority_desc','priority_id')],null,['class' => 'form-control select']) !!}
+			{!!Form::select('priority', [''=>'--System Default--','Priorities'=>$priority->lists('priority_desc','priority_id')],null,['class' => 'form-control select']) !!}
 
 		</div>
 		<!-- help topic -->
@@ -84,7 +84,7 @@ class="active"
 
 			{!! Form::label('help_topic',Lang::get('lang.help_topic')) !!}
 			{!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('help_topic', [''=>'Select a Helptopic','Help Topics'=>$helps->lists('topic','id')],null,['class' => 'form-control select']) !!}
+			{!!Form::select('help_topic', [''=>'--System Default--','Help Topics'=>$helps->lists('topic','id')],null,['class' => 'form-control select']) !!}
 		</div>
 
 	</div>
@@ -127,7 +127,7 @@ class="active"
 
 		<div class="col-md-6 form-group">
 
-			<h4>{!! Lang::get('lang.fetching_email_via_imap_or_pop') !!}</h4>
+			<h4>{!! Lang::get('lang.fetching_email_via_imap') !!}</h4>
 
 		</div>
 
@@ -141,10 +141,10 @@ class="active"
 			{!! Form::label('fetching_status',Lang::get('lang.status')) !!}
 			</div>
 			<div class="col-xs-2 form-group">
-			{!! Form::radio('fetching_status','1',true) !!}{{Lang::get('lang.enable')}}
+			{!! Form::radio('fetching_status','1',true) !!} {{Lang::get('lang.enable')}}
 			</div>
 			<div class="col-xs-2 form-group">
-			{!! Form::radio('fetching_status','0',null) !!}{{Lang::get('lang.disabled')}}
+			{!! Form::radio('fetching_status','0',null) !!} {{Lang::get('lang.disabled')}}
 			</div>
 
 		</div>
@@ -177,6 +177,69 @@ class="active"
 		</div>
 		<!-- imap config -->
 	</div>
+
+	<hr>
+
+		<div class="row"> 
+
+			<div class="col-md-6 form-group">
+
+				<h4>Sending Email via SMTP</h4>
+
+			</div>
+
+		</div>
+
+		<div class="row">
+	<!-- status -->
+			<div class="form-group">
+
+				<div class="col-xs-1 form-group"> 
+					{!! Form::label('sending_status',Lang::get('lang.status')) !!} 
+				</div> 
+				<div class="col-xs-2 form-group"> 
+					{!! Form::radio('sending_status','1',true) !!} {{Lang::get('lang.enable')}} 
+				</div> 
+				<div class="col-xs-2 form-group"> 
+					{!! Form::radio('sending_status','0',null) !!} {{Lang::get('lang.disabled')}} 
+				</div> 
+
+			</div>
+
+		</div>
+
+		<div class="row">
+		<!-- sending hoost -->
+			<div class="col-xs-4 form-group {{ $errors->has('sending_host') ? 'has-error' : '' }}">
+
+				{!! Form::label('sending_host',Lang::get('lang.host_name')) !!}
+				{!! $errors->first('sending_host', '<spam class="help-block">:message</spam>') !!} 
+				{!! Form::text('sending_host',null,['class' => 'form-control']) !!}
+
+			</div> 
+
+		<!-- sending port -->
+			<div class="col-xs-4 form-group {{ $errors->has('sending_port') ? 'has-error' : '' }}">
+
+				{!! Form::label('sending_port',Lang::get('lang.port_number')) !!}
+				{!! $errors->first('sending_port', '<spam class="help-block">:message</spam>') !!}
+				{!! Form::text('sending_port',null,['class' => 'form-control']) !!}
+
+			</div>
+	
+		<!-- Encryption -->
+			<div class="col-xs-4 form-group {{ $errors->has('sending_encryption') ? 'has-error' : '' }}">
+
+				{!! Form::label('sending_encryption',Lang::get('lang.encryption')) !!}
+				{!! $errors->first('sending_encryption', '<spam class="help-block">:message</spam>') !!} 
+				{!!Form::select('sending_encryption',['ssl'=>'SSL','tls'=>'TLS'],null,['class' => 'form-control select']) !!}
+
+
+			</div> 
+
+		</div>
+
+
 
 		<!-- internal notes -->
 		<div class="form-group">

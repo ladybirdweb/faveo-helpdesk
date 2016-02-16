@@ -87,10 +87,10 @@ class="active"
 			{!! $errors->first('active', '<spam class="help-block">:message</spam>') !!}
 			<div class="row">
 				<div class="col-xs-12">
-					{!! Form::radio('active','1',true) !!}{{Lang::get('lang.active')}}
+					{!! Form::radio('active','1',true) !!} {{Lang::get('lang.active')}}
 				</div>
 				<div class="col-xs-12">
-					{!! Form::radio('active','0') !!}{{Lang::get('lang.inactive')}}
+					{!! Form::radio('active','0') !!} {{Lang::get('lang.inactive')}}
 				</div>
 			</div>
 
@@ -103,10 +103,10 @@ class="active"
 
 				<div class="row">
 				<div class="col-xs-12">
-					{!! Form::radio('ban','1',true) !!}{{Lang::get('lang.enable')}}
+					{!! Form::radio('ban','1',true) !!} {{Lang::get('lang.enable')}}
 				</div>
 				<div class="col-xs-12">
-					{!! Form::radio('ban','0') !!}{{Lang::get('lang.disable')}}
+					{!! Form::radio('ban','0') !!} {{Lang::get('lang.disable')}}
 				</div>
 			</div>
 		</div>

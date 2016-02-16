@@ -61,10 +61,16 @@
                 </h1>
                 <ul class="fa-ul">
                     <?php foreach ($article_id as $id) {
-                    
-                        $article = App\Model\kb\Article::where('id', '=', $id)->where('status', '=','1')->where('type', '=','1')->get();
+                                 //$format = App\Model\helpdesk\Settings\System::where('id','1')->first()->date_time_format;
+                                 $tz = App\Model\helpdesk\Settings\System::where('id','1')->first()->time_zone;
+                                 $tz = \App\Model\helpdesk\Utility\Timezones::where('id',$tz)->first()->name;
+                                 date_default_timezone_set($tz);
+                                 $date  = \Carbon\Carbon::now()->toDateTimeString();
+                                 //dd($date);
+                                
+                        $article = App\Model\kb\Article::where('id', '=', $id)->where('status', '=','1')->where('type', '=','1')->where('publish_time','<',$date)->get();
                         ?>
-                        @foreach($article as $arti)
+                        @forelse($article as $arti)
                         <li>
                             <i class="fa-li fa fa-list-alt fa-fw text-muted"></i>
                             <h3 class="h5"><a href="#"><a href="{{url('show/'.$arti->slug)}}">{{$arti->name}}</a></h3>
@@ -75,10 +81,16 @@
                         $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 50); ?>
                             {!! $excerpt !!} <br/><a class="more-link text-center" href="{{url('show/'.$arti->slug)}}" style="color: orange">{!! Lang::get('lang.read_more') !!}</a>
                         </li>
-                        @endforeach
+                        @empty
+                        <p>No Articles</p>
+                        @endforelse
 <?php } ?>
                 </ul>
+                
+               
                 <p class="more-link text-center"><a href="{{url('category-list/'.$category->slug)}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.view_all') !!}</a></p>
+            
+                
             </section>
         </div>
         @endforeach

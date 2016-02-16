@@ -34,7 +34,7 @@
                     <br><span class="ok">ok</span> — Connected to database as root@localhost
                     <br><span class="ok">ok</span> — Database "faveo" selected
                     <br><span class="ok">ok</span> — MySQL version is 5.6.17
-                    <br><span class="ok">ok</span>, this system can run FaveoHELPDESK
+                    <br><span class="ok">ok</span>, this system can run Faveo HELPDESK
                     <h1>Database connection successfull</h1>
 
                     <br>

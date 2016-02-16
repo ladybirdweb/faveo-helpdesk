@@ -100,10 +100,10 @@ class="active"
 			{!! $errors->first('active', '<spam class="help-block">:message</spam>') !!}
 			<div class="row">
 				<div class="col-xs-12">
-					{!! Form::radio('active','1',true) !!}{{Lang::get('lang.active')}}
+					{!! Form::radio('active','1',true) !!} {{Lang::get('lang.active')}}
 				</div>
 				<div class="col-xs-12">
-					{!! Form::radio('active','0') !!}{{Lang::get('lang.inactive')}}
+					{!! Form::radio('active','0') !!} {{Lang::get('lang.inactive')}}
 				</div>
 			</div>
 

@@ -1,6 +1,6 @@
 @extends('themes.default1.installer.layout.installer')
 
-@section('licence')
+@section('license')
 done
 @stop
 
@@ -26,7 +26,11 @@ active
             <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ-uhinU3OzXKj9zlFO7dFxHaChqyHPcWWg5nWgMqYt6N5b3knK" style="width: 86px; float: right;">
         </a>
 
-        <h1 style="text-align: center;">Thank you</h1>
+        <h1 style="text-align: center;">Your Helpdesk is Ready!</h1>
+<div class="woocommerce-message woocommerce-tracker">
+                <p>All right, sparky! You’ve made it through the installation.</p>
+                
+            </div>
 
 
         <div class="wc-setup-next-steps">

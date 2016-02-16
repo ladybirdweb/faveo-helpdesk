@@ -23,31 +23,32 @@ use Illuminate\Support\Facades\Hash;
  * 
  * 
  */
-
 class TokenAuthController extends Controller {
-    
+
     public function __construct() {
         $this->middleware('api');
     }
+
     /**
      * Authenticating user with username and password and retuen token
      * @param Request $request
      * @return type json
      */
     public function authenticate(Request $request) {
-                $usernameinput = $request->input('username');
-		$password = $request->input('password');
-                $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
-                
+
+        $usernameinput = $request->input('username');
+        $password = $request->input('password');
+        $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
+
         //$credentials = $request->only('email', 'password');
 
         try {
             if (!$token = JWTAuth::attempt([$field => $usernameinput, 'password' => $password])) {
-                return response()->json(['error' => 'invalid_credentials', 'status_code'=>401]);
+                return response()->json(['error' => 'invalid_credentials', 'status_code' => 401]);
             }
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token', 500]);
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             $error = $e->getMessage();
             return response()->json(compact('error'));
         }
@@ -55,6 +56,7 @@ class TokenAuthController extends Controller {
         // if no errors are encountered we can return a JWT
         return response()->json(compact('token'));
     }
+
     /**
      * Get the user details from token
      * @return type json
@@ -75,15 +77,14 @@ class TokenAuthController extends Controller {
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
 
             return response()->json(['token_absent', $e->getStatusCode()]);
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
             $error = $e->getMessage();
             return response()->json(compact('error'));
         }
         //dd($user);
         return response()->json(compact('user'));
     }
-    
+
     /**
      * Register a user with username and password
      * @param Request $request
@@ -110,6 +111,7 @@ class TokenAuthController extends Controller {
             return response()->json(compact('error'));
         }
     }
+
     /**
      * verify the url is existing or not
      * @return type json
@@ -123,10 +125,9 @@ class TokenAuthController extends Controller {
                 $error = $v->errors();
                 return response()->json(compact('error'));
             }
-            
+
             $url = $this->request->input('url');
-            $url = $url.'/api/v1/helpdesk/check-url';
-            
+            $url = $url . '/api/v1/helpdesk/check-url';
         } catch (Exception $ex) {
             $error = $e->getMessage();
             return response()->json(compact('error'));

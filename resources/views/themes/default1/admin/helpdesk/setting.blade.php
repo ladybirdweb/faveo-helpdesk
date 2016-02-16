@@ -105,25 +105,12 @@
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
-                                        <!--/.col-md-2-->
-                                        <div class="col-md-2 col-sm-6">
-                                            <div class="settingiconblue">
-                                                <div class="settingdivblue">
-                                                    <a href="{{ url('getsmtp') }}"><span class="fa-stack fa-2x">
-                                                        <i class="fa fa-at fa-stack-1x"></i>
-                                                        </span></a>
-                                                </div>
-                                                <center class="box-title" >{!! Lang::get('lang.outgoing_emails') !!}</center>
-                                            </div>
-                                        </div>
-                                        <!--/.col-md-2-->
 
                                         <!--/.col-md-2-->
                                         <div class="col-md-2 col-sm-6">
                                             <div class="settingiconblue">
                                                 <div class="settingdivblue">
                                                     <a href="{{ url('banlist') }}"><span class="fa-stack fa-2x">
-                                                        
                                                         <i class="fa fa-ban fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
@@ -131,17 +118,21 @@
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
-<!--                                         <div class="col-md-2 col-sm-6">
+                                       
+                                        <!--/.col-md-2-->
+                                        <div class="col-md-2 col-sm-6">
                                             <div class="settingiconblue">
                                                 <div class="settingdivblue">
-                                                    <a href="{{ url('list-templates') }}"><span class="fa-stack fa-2x">
+                                                    <a href="{{ url('list-directories') }}"><span class="fa-stack fa-2x">
                                                         
                                                         <i class="fa fa-mail-forward fa-stack-1x"></i>
                                                         </span></a>
                                                 </div>
                                                 <center class="box-title" >{!! Lang::get('lang.templates') !!}</center>
                                             </div>
-                                        </div>-->
+                                        </div>
+                                        <!--/.col-md-2-->
+                                       
                                         <!--/.col-md-2-->
                                         <div class="col-md-2 col-sm-6">
                                             <div class="settingiconblue">
@@ -367,7 +358,7 @@
                                                         <i class="fa fa-cubes fa-stack-1x"></i>
                                                     </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.widgets') !!}</center>
+                                                <center class="box-title" >{!! Lang::get('lang.social') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->                                        

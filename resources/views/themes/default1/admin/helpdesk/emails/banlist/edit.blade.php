@@ -46,10 +46,10 @@ class="active"
 			{!! Form::label('ban',Lang::get('lang.ban_status')) !!}
 			<div class="row">
 				<div class="col-xs-3">
-					{!! Form::radio('ban',1) !!}{{Lang::get('lang.active')}}
+					{!! Form::radio('ban',1) !!} {{Lang::get('lang.active')}}
 				</div>
 				<div class="col-xs-3">
-					{!! Form::radio('ban',0) !!}{{Lang::get('lang.disabled')}}
+					{!! Form::radio('ban',0) !!} {{Lang::get('lang.disabled')}}
 				</div>
 			</div>
 		</div>

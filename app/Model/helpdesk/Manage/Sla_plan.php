@@ -1,11 +1,14 @@
-<?php namespace App\Model\helpdesk\Manage;
+<?php
+
+namespace App\Model\helpdesk\Manage;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Sla_plan extends Model
-{
-	protected $table = 'sla_plan';
-	protected $fillable = 	[
-								'name', 'grace_period', 'admin_note', 'status', 'transient', 'ticket_overdue'
-							];
-}							
+class Sla_plan extends Model {
+
+    protected $table = 'sla_plan';
+    protected $fillable = [
+        'name', 'grace_period', 'admin_note', 'status', 'transient', 'ticket_overdue'
+    ];
+
+}

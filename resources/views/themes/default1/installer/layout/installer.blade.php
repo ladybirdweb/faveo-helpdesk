@@ -85,11 +85,11 @@
         </style>
     </head>
     <body class="wc-setup wp-core-ui">
-        <h1 id="wc-logo"><a href="#">
+        <h1 id="wc-logo"><a href="http://www.faveohelpdesk.com">
             <img src="{{asset("lb-faveo/media/installer/faveo.png")}}" alt="faveo" width="
             250px"></a></h1>
     <ol class="wc-setup-steps">
-        <li class="@yield('licence')">Licence Agreement</li>
+        <li class="@yield('license')">License Agreement</li>
         <li class="@yield('environment')">Environment Test</li>
         <li class="@yield('database')">Database Setup</li>
         <li class="@yield('locale')">Locale Information</li>
@@ -98,8 +98,9 @@
     <div class="wc-setup-content">
         @yield('content')
     </div>
-    <br/>
-    <center>&copy;<?php echo date('Y')?>. Powered by <a target="_blank" href="http://www.faveohelpdesk.com">Faveo </a></center>
+    
+    
+    <p style="text-align: center;"> Copyright &copy; <?php echo date('Y')?> · Ladybird Web Solution Pvt Ltd. All Rights Reserved. Powered by <a target="_blank" href="http://www.faveohelpdesk.com">Faveo </a></p>
     {{-- // <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> --}}
     {{-- // <script src="{{asset("lb-faveo/installer/js/index.js ")}}"></script> --}}
     </body>

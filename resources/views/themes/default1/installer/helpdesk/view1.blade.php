@@ -1,11 +1,11 @@
 @extends('themes.default1.installer.layout.installer')
-@section('licence')
+@section('license')
 active
 @stop
 @section('content')
-        <center><h1>Licence Agreement</h1></center>
+        <center><h1>License Agreement</h1></center>
 
-        <p>PLEASE READ THIS SOFTWARE LICENSE AGREEMENT CAREFULLY BEFORE DOWNLOADING OR USING THE SOFTWARE. BY CLICKING ON THE "ACCEPT" BUTTON, OPENING THE PACKAGE, OR DOWNLOADING THE PRODUCT, YOU ARE CONSENTING TO BE BOUND BY THIS AGREEMENT. IF YOU DO NOT AGREE TO ALL OF THE TERMS OF THIS AGREEMENT, STOP THE INSTALLATION PROCESS AND EXIT.</p>
+        <p>Please read this software license agreement carefully before downloading or using the software. By clicking on the "accept" button, opening the package, or downloading the product, you are consenting to be bound by this agreement. If you do not agree to all of the terms of this agreement, stop the installation process and exit.</p>
         <form action="{{URL::route('postlicence')}}" method="post">
             <div>
                 
@@ -40,13 +40,13 @@ active
                             <br>16. Modification of This License. This License is Copyright (C) 2005 Lawrence Rosen. Permission is granted to copy, distribute, or communicate this License without modification. Nothing in this License permits You to modify this License as applied to the Original Work or to Derivative Works. However, You may modify the text of this License and copy, distribute or communicate your modified version (the "Modified License") and apply it to other original works of authorship subject to the following conditions: (i) You may not indicate in any way that your Modified License is the "Open Software License" or "OSL" and you may not use those names in the name of your Modified License; (ii) You must replace the notice specified in the first paragraph above with the notice "Licensed under " or with a notice of your own that is not confusingly similar to the notice in this License; and (iii) You may not claim that your original works are open source software unless your Modified License has been approved by Open Source Initiative (OSI) and You comply with its license review and certification process.
                             <br>
                         </div>
-                            <a style="float: right;" href="#" title="Close" class="button-primary button button-large button-next">close</a>
+                            <a style="float: right;" href="#" title="Close" class="button-primary button button-large button-next">Close</a>
                         </p>
 
                     </div>
                 </div>
                 <input id="Acceptme" class="input-checkbox" type="checkbox">
-            <label for="Acceptme">I accept the <a href="#openModal">Licence Agreement</a></label>
+            <label for="Acceptme">I accept the <a href="#openModal">License Agreement</a></label>
             </div>
             <br>
             <p class="wc-setup-actions step">

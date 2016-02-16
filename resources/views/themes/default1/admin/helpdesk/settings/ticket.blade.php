@@ -51,7 +51,7 @@ class="active"
         <i class="fa  fa-check-circle"></i>
         <b>Success!</b>
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{Session::get('success')}}
+        {!! Session::get('success') !!}
     </div>
     @endif
     <!-- failure message -->
@@ -60,7 +60,7 @@ class="active"
         <i class="fa fa-ban"></i>
         <b>Fail!</b>
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{Session::get('fails')}}
+        {!! Session::get('fails') !!}
     </div>
     @endif
 
@@ -104,7 +104,7 @@ class="active"
 		</div>
 
 	<!-- Default Priority:	Required : manual : Dropdowm  -->
-          <div class="col-md-3">
+          <div class="col-md-2">
 		<div class="form-group {{ $errors->has('priority') ? 'has-error' : '' }}">
 			{!! Form::label('priority',Lang::get('lang.default_priority')) !!}
 			{!! $errors->first('priority', '<spam class="help-block">:message</spam>') !!}
@@ -113,7 +113,7 @@ class="active"
 		</div>
 
 	<!-- Default SLA:	Required : manual : Dropdowm  -->
-       <div class="col-md-3">
+       <div class="col-md-2">
 		<div class="form-group {{ $errors->has('sla') ? 'has-error' : '' }}">
 			{!! Form::label('sla',Lang::get('lang.default_sla')) !!}
 			{!! $errors->first('sla', '<spam class="help-block">:message</spam>') !!}
@@ -122,7 +122,7 @@ class="active"
 		</div>
 
 	<!-- Default Help Topic:  Dropdowm from Help topic table	 -->
-            <div class="col-md-3">
+            <div class="col-md-2">
 		        <div class="form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
 			        {!! Form::label('help_topic',Lang::get('lang.default_help_topic')) !!}
 			        {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
@@ -140,13 +140,18 @@ class="active"
 		    {{-- </div> --}}
 
 	<!-- Agent Collision Avoidance Duration: text-number   -minutes  -->
-            {{-- <div class="col-md-6"> --}}
-		        {{-- <div class="form-group {{ $errors->has('collision_avoid') ? 'has-error' : '' }}"> --}}
-			        {{-- {!! Form::label('collision_avoid',Lang::get('lang.agent_collision_avoidance_duration')) !!} --}}
-			        {{-- {!! $errors->first('collision_avoid', '<spam class="help-block">:message</spam>') !!} --}}
-			        {{-- {!! Form::text('collision_avoid',$tickets->collision_avoid,['class' => 'form-control']) !!} --}}
-			    {{-- </div> --}}
-		    {{-- </div> --}}
+          	<div class="col-md-3">
+		        <div class="form-group {{ $errors->has('collision_avoid') ? 'has-error' : '' }}">
+			        {!! Form::label('collision_avoid',Lang::get('lang.agent_collision_avoidance_duration')) !!} 
+			       	{!! $errors->first('collision_avoid', '<spam class="help-block">:message</spam>') !!} 
+			        <div class="input-group">
+			        <input type="number" class="form-control" name="collision_avoid" min="0"  step="1" value="{{$tickets->collision_avoid}}" placeholder="in minutes">
+			    	<div class="input-group-addon">
+                          <span><i class="fa fa-clock-o"></i> {!!Lang::get('lang.in_minutes')!!}</span>
+                    </div>
+                </div>
+			    </div> 
+		    </div> 
 
 
 	<!-- Human Verification: checkbox	 Enable CAPTCHA on new web tickets.      -->

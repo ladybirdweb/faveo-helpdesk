@@ -381,12 +381,13 @@ $data = $ConvDate[0];
 <script type="text/javascript">
    
 $(document).ready(function() {
-//    var Data = $('input[name="rating"]:checked').val();
-//    var Data2 = $('input[name="rating2"]:checked').val();
-//    if (Data) {
-//        $('input[name=rating]').rating('readOnly');
-//        
-//    }
+    var Data = $('input[name="rating"]:checked').val();
+    var Data2 = $('input[name="rating2"]:checked').val();
+    if (Data) {
+        $('input[name=rating]').rating('readOnly');
+        jQuery('.star').attr('disabled', true);
+       
+    }
     $('input[name=rating]').change(function() { 
 $('#foo').submit();
     });

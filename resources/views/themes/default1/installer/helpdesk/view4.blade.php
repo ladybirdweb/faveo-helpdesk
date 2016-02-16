@@ -1,6 +1,6 @@
 @extends('themes.default1.installer.layout.installer')
 
-@section('licence')
+@section('license')
 done
 @stop
 
@@ -14,9 +14,11 @@ active
 
 @section('content')
 
+    <h1 style="text-align: center;">Database Setup</h1>
+                    Test/Probe Prerequisites required to be installed Probe<br/><br/>
 <?php
 /**
- * FaveoHELPDESK Probe
+ * Faveo HELPDESK Probe
  *
  * Copyright (c) 2014 Ladybird Web Solution.
  *
@@ -38,9 +40,9 @@ define('DB_PORT', $port); // Name of the database you are connecting to
 define('PROBE_VERSION', '4.2');
 define('PROBE_FOR', '<b>Faveo</b>HELPDESK 1.0 and Newer');
 
-define('STATUS_OK', 'ok');
-define('STATUS_WARNING', 'warning');
-define('STATUS_ERROR', 'error');
+define('STATUS_OK', 'Ok');
+define('STATUS_WARNING', 'Warning');
+define('STATUS_ERROR', 'Error');
 
 class TestResult {
 
@@ -56,7 +58,6 @@ class TestResult {
 
 if (DB_HOST && DB_USER && DB_NAME) {
     ?>
-      <ul>
 <?php
 
     $mysqli_ok = true;
@@ -66,7 +67,7 @@ if (DB_HOST && DB_USER && DB_NAME) {
 
     if($default == 'mysql') {
         if ($connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME)) {
-            $results[] = new TestResult('Connected to database as ' . DB_USER . '@' . DB_HOST, DB_PORT, STATUS_OK);
+            $results[] = new TestResult('Connected to database as ' . DB_USER . '@' . DB_HOST . DB_PORT, STATUS_OK);
             if (mysqli_select_db($connection, DB_NAME)) {
                 $results[] = new TestResult('Database "' . DB_NAME . '" selected', STATUS_OK);
                 $mysqli_version = mysqli_get_server_info($connection);
@@ -102,7 +103,7 @@ if (DB_HOST && DB_USER && DB_NAME) {
 // dd($results);
 
     foreach ($results as $result) {
-        print '<span class="' . $result->status . '">' . $result->status . '</span> &mdash; ' . $result->message . '<br/>';
+        print '<span class="' . strtolower($result->status) . '">' . $result->status . '</span> &mdash; ' . $result->message . '<br/>';
     } // foreach
     ?>
 </ul>
@@ -122,7 +123,7 @@ if (DB_HOST && DB_USER && DB_NAME) {
 <?php if ($mysqli_ok) {?>
 <p id="verdict" class="all_ok">OK, this system can run <b>Faveo</b>HELPDESK</p>
 
-<h3 id="conn">Database connection successfull</h3>
+<h2 id="conn">Database connection successful</h3>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
@@ -146,12 +147,6 @@ if (DB_HOST && DB_USER && DB_NAME) {
     <input type="submit" style="display:none;">
 
 </form>
-
-        <p class="wc-setup-actions step">
-            <a href="{{URL::route('account')}}" class="pull-right" id="next" style="text-color:black"><input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue"> </a>
-            <a href="{{URL::route('configuration')}}" class="button button-large button-next" style="float: left">Previous</a>
-        </p>
-
 <div id="show" style="display:none;">
     <div class="row">
         <div class="col-md-2">
@@ -161,6 +156,14 @@ if (DB_HOST && DB_USER && DB_NAME) {
         </div>
     </div>
 </div>
+
+    <div style="border-bottom: 1px solid #eee;">
+        <p class="wc-setup-actions step">
+            <a href="{{URL::route('account')}}" class="pull-right" id="next" style="text-color:black"><input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue"> </a>
+            <a href="{{URL::route('configuration')}}" class="button button-large button-next" style="float: left">Previous</a>
+        </p>
+    </div>
+<br/>
 
 <script type="text/javascript">
 
@@ -202,12 +205,11 @@ $(document).ready(function () {
     <p id="verdict" class="not_ok">This system does not meet <b>Faveo</b>HELPDESK system requirements</p>
             <a href="{{URL::route('configuration')}}"><button type="submit" id="submitme" class="button-danger button button-large button-next" style="background-color: #d43f3a;color:#fff;" value="Error">Back</button></a><br/><br/>
       <?php } // if ?>
-    <h2>Legend</h2>
     <div id="legend">
         {{-- <ul> --}}
-        <span class="ok">ok</span> &mdash; All OK <br/>
-        <span class="warning">warning</span> &mdash; Not a deal breaker, but it's recommended to have this installed for some features to work<br/>
-        <span class="error">error</span> &mdash; <b>Faveo</b>HELPDESK require this feature and can't work without it<br/><br/>
+        <span class="ok">Ok</span> &mdash; All OK <br/>
+        <span class="warning">Warning</span> &mdash; Not a deal breaker, but it's recommended to have this installed for some features to work<br/>
+        <span class="error">Error</span> &mdash; <b>Faveo</b>HELPDESK require this feature and can't work without it<br/><br/>
         {{-- </ul> --}}
     </div>
 <?php } // if ?>

@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Admin\helpdesk;
+<?php
+
+namespace App\Http\Controllers\Admin\helpdesk;
 
 /**
  * -----------------------------------------------
@@ -14,21 +16,21 @@
  */
 class HomeController extends Controller {
 
-	/**
-	 * Create a new controller instance.
-	 * @return void
-	 */
-	public function __construct() {
-		$this->middleware('auth');
-	}
+    /**
+     * Create a new controller instance.
+     * @return void
+     */
+    public function __construct() {
+        $this->middleware('auth');
+    }
 
-	/**
-	 * Show the application dashboard to the user.
-	 *
-	 * @return Response
-	 */
-	public function index() {
-		return view('themes/default1/admin/dashboard');
-	}
+    /**
+     * Show the application dashboard to the user.
+     *
+     * @return Response
+     */
+    public function index() {
+        return view('themes/default1/admin/dashboard');
+    }
 
 }

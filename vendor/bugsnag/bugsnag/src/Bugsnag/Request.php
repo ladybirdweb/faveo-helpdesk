@@ -59,7 +59,7 @@ class Bugsnag_Request
 
     public static function getCurrentUrl()
     {
-        $schema = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
+        $schema = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)) ? 'https://' : 'http://';
 
         return $schema.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     }

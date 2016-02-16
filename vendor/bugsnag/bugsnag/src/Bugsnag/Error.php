@@ -96,8 +96,20 @@ class Bugsnag_Error
         return $this;
     }
 
-    public function setPHPException(Exception $exception)
+    public function setPHPException($exception)
     {
+        if (version_compare(PHP_VERSION, '7.0.0', '>=')) {
+            if (!$exception instanceof \Throwable) {
+                error_log('Bugsnag Warning: Exception must implement interface \Throwable.');
+                return;
+            }
+        } else {
+            if (!$exception instanceof \Exception) {
+                error_log('Bugsnag Warning: Exception must be instance of \Exception.');
+                return;
+            }
+        }
+
         $this->setName(get_class($exception))
              ->setMessage($exception->getMessage())
              ->setStacktrace(Bugsnag_Stacktrace::fromBacktrace($this->config, $exception->getTrace(), $exception->getFile(), $exception->getLine()));

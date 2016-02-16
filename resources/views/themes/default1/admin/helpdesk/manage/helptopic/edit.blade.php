@@ -47,8 +47,8 @@ class="active"
 
 			{!! Form::label('ticket_status',Lang::get('lang.status')) !!}&nbsp;&nbsp;
 			{!! $errors->first('ticket_status', '<spam class="help-block">:message</spam>') !!}
-			{!! Form::radio('ticket_status','1',true) !!}{{Lang::get('lang.active')}}&nbsp;&nbsp;&nbsp;
-			{!! Form::radio('ticket_status','0') !!}{{Lang::get('lang.disabled')}}
+			{!! Form::radio('ticket_status','1',true) !!} {{Lang::get('lang.active')}}&nbsp;&nbsp;&nbsp;
+			{!! Form::radio('ticket_status','0') !!} {{Lang::get('lang.disabled')}}
 			</div>
 		</div>
 
@@ -58,8 +58,8 @@ class="active"
 
 			{!! Form::label('type',Lang::get('lang.type')) !!}&nbsp;&nbsp;
 			{!! $errors->first('type', '<spam class="help-block">:message</spam>') !!}
-			{!! Form::radio('type','1',true) !!}{{Lang::get('lang.public')}}&nbsp;&nbsp;&nbsp;
-			{!! Form::radio('type','0') !!}{{Lang::get('lang.private')}}
+			{!! Form::radio('type','1',true) !!} {{Lang::get('lang.public')}}&nbsp;&nbsp;&nbsp;
+			{!! Form::radio('type','0') !!} {{Lang::get('lang.private')}}
 		</div>
 		</div>
 <!-- Topic text form Required -->

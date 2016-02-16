@@ -1,4 +1,7 @@
-<?php namespace App\Http\Controllers\Error;
+<?php
+
+namespace App\Http\Controllers\Error;
+
 // controllers
 use App\Http\Controllers\Controller;
 
@@ -11,11 +14,12 @@ use App\Http\Controllers\Controller;
  */
 class ErrorController extends Controller {
 
-	/**
-	 * Display a Error Page of 404.
-	 * @return Response
-	 */
-	public function error404() {
-		return view('404');
-	}
+    /**
+     * Display a Error Page of 404.
+     * @return Response
+     */
+    public function error404() {
+        return view('404');
+    }
+
 }

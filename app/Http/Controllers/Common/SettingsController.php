@@ -1,4 +1,7 @@
-<?php namespace App\Http\Controllers\Common;
+<?php
+
+namespace App\Http\Controllers\Common;
+
 // controllers
 use App\Http\Controllers\Controller;
 // requests
@@ -43,7 +46,6 @@ class SettingsController extends Controller {
         SettingsController::password();
     }
 
-    
     /**
      * get the page to create the footer
      * @return response
@@ -57,60 +59,55 @@ class SettingsController extends Controller {
      * @return response
      */
     public function list_widget() {
-        return \Datatable::collection(Widgets::where('id','<','7')->get())
-            ->searchColumns('name')
-            ->orderColumns('name', 'title', 'value')
-            ->addColumn('name', function ($model) {
-                return $model->name;
-            })
-
-            ->addColumn('title', function ($model) {
-                return $model->title;
-            })
-
-            ->addColumn('body', function ($model) {
-                return $model->value;
-            })
-
-            ->addColumn('Actions', function ($model) {
-                return '<span data-toggle="modal" data-target="#edit_widget'.$model->id .'"><a class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a></span>
-                <div class="modal fade" id="edit_widget'.$model->id .'">
+        return \Datatable::collection(Widgets::where('id', '<', '7')->get())
+                        ->searchColumns('name')
+                        ->orderColumns('name', 'title', 'value')
+                        ->addColumn('name', function ($model) {
+                            return $model->name;
+                        })
+                        ->addColumn('title', function ($model) {
+                            return $model->title;
+                        })
+                        ->addColumn('body', function ($model) {
+                            return $model->value;
+                        })
+                        ->addColumn('Actions', function ($model) {
+                            return '<span data-toggle="modal" data-target="#edit_widget' . $model->id . '"><a class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a></span>
+                <div class="modal fade" id="edit_widget' . $model->id . '">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form action="'. url('edit-widget/'.$model->id) .'" method="POST">
+                            <form action="' . url('edit-widget/' . $model->id) . '" method="POST">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title">'.strtoupper($model->name).' </h4>
+                                    <h4 class="modal-title">' . strtoupper($model->name) . ' </h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group" style="width:100%">
-                                        <label>'.\Lang::get("lang.title").'</label><br/>
-                                        <input type="text" name="title" value="'.$model->title.'" class="form-control" style="width:100%">
+                                        <label>' . \Lang::get("lang.title") . '</label><br/>
+                                        <input type="text" name="title" value="' . $model->title . '" class="form-control" style="width:100%">
                                     </div>
                                     <br/>
                                     <div class="form-group" style="width:100%">
-                                        <label>'.\Lang::get("lang.content").'</label><br/>
-                                        <textarea name="content" class="form-control" style="width:100%" id="Content'.$model->id.'">'.$model->value.'</textarea>
+                                        <label>' . \Lang::get("lang.content") . '</label><br/>
+                                        <textarea name="content" class="form-control" style="width:100%" id="Content' . $model->id . '">' . $model->value . '</textarea>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">'.\Lang::get('lang.close').'</button>
-                                    <input type="submit" class="btn btn-primary" value="'.\Lang::get('lang.update').'">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">' . \Lang::get('lang.close') . '</button>
+                                    <input type="submit" class="btn btn-primary" value="' . \Lang::get('lang.update') . '">
                                 </div>
                                 <script>
                                     $(function () {
-                                        $("#Content'. $model->id .'").wysihtml5();
+                                        $("#Content' . $model->id . '").wysihtml5();
                                     });
                                 </script>
                             </form>
                         </div>
                     </div>
                 </div>';
-            })
-
-            ->make();
+                        })
+                        ->make();
     }
-
 
     /**
      * Post footer
@@ -119,14 +116,14 @@ class SettingsController extends Controller {
      * @return type response
      */
     public function edit_widget($id, Widgets $widgets, Request $request) {
-        $widget = $widgets->where('id','=',$id)->first();
+        $widget = $widgets->where('id', '=', $id)->first();
         $widget->title = $request->title;
         $widget->value = $request->content;
-        try{
+        try {
             $widget->save();
-            return redirect()->back()->with('success', $widget->name.' Saved Successfully');    
-        } catch(Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);    
+            return redirect()->back()->with('success', $widget->name . ' Saved Successfully');
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
     }
 
@@ -143,44 +140,42 @@ class SettingsController extends Controller {
      * @return response
      */
     public function list_social_buttons() {
-        return \Datatable::collection(Widgets::where('id','>','6')->get())
-            ->searchColumns('name')
-            ->orderColumns('name', 'value')
-            ->addColumn('name', function ($model) {
-                return $model->name;
-            })
-
-            ->addColumn('link', function ($model) {
-                return $model->value;
-            })
-
-            ->addColumn('Actions', function ($model) {
-                return '<span data-toggle="modal" data-target="#edit_widget'.$model->id .'"><a class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a></span>
-                <div class="modal fade" id="edit_widget'.$model->id .'">
+        return \Datatable::collection(Widgets::where('id', '>', '6')->get())
+                        ->searchColumns('name')
+                        ->orderColumns('name', 'value')
+                        ->addColumn('name', function ($model) {
+                            return $model->name;
+                        })
+                        ->addColumn('link', function ($model) {
+                            return $model->value;
+                        })
+                        ->addColumn('Actions', function ($model) {
+                            return '<span data-toggle="modal" data-target="#edit_widget' . $model->id . '"><a class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a></span>
+                <div class="modal fade" id="edit_widget' . $model->id . '">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <form action="'. url('edit-widget/'.$model->id) .'" method="POST">
+                            <form action="' . url('edit-widget/' . $model->id) . '" method="POST">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title">'.strtoupper($model->name).' </h4>
+                                    <h4 class="modal-title">' . strtoupper($model->name) . ' </h4>
                                 </div>
                                 <div class="modal-body">
                                     <br/>
                                     <div class="form-group" style="width:100%">
-                                        <label>'.\Lang::get("lang.link").'</label><br/>
-                                        <input type="url" name="content" class="form-control" style="width:100%" value="'.$model->value.'">
+                                        <label>' . \Lang::get("lang.link") . '</label><br/>
+                                        <input type="url" name="content" class="form-control" style="width:100%" value="' . $model->value . '">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">'.\Lang::get('lang.close').'</button>
-                                    <input type="submit" class="btn btn-primary" value="'.\Lang::get('lang.update').'">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">' . \Lang::get('lang.close') . '</button>
+                                    <input type="submit" class="btn btn-primary" value="' . \Lang::get('lang.update') . '">
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>';
-            })
-            ->make();
+                        })
+                        ->make();
     }
 
     /**
@@ -190,14 +185,14 @@ class SettingsController extends Controller {
      * @return type response
      */
     public function edit_social_buttons($id, Widgets $widgets, Request $request) {
-        $widget = $widgets->where('id','=',$id)->first();
+        $widget = $widgets->where('id', '=', $id)->first();
         $widget->title = $request->title;
         $widget->value = $request->content;
-        try{
+        try {
             $widget->save();
-            return redirect()->back()->with('success', $widget->name.' Saved Successfully');
+            return redirect()->back()->with('success', $widget->name . ' Saved Successfully');
         } catch (Exception $e) {
-            return redirect()->back()->with('fails',$e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
     }
 
@@ -296,7 +291,7 @@ class SettingsController extends Controller {
         $data->name = $request->input('name');
         $data->email = $request->input('email');
         $data->password = Crypt::encrypt($request->input('password'));
-        try{
+        try {
             $data->save();
             return \Redirect::route('getsmtp')->with('success', 'success');
         } catch (Exception $e) {
@@ -343,9 +338,9 @@ class SettingsController extends Controller {
         $pass = $request->input('password');
         $password = Crypt::encrypt($pass);
         $settings->password = $password;
-        try{
+        try {
             $settings->save();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
         if (Input::file('logo')) {
@@ -357,7 +352,7 @@ class SettingsController extends Controller {
             $settings->save();
         }
         try {
-            $settings->fill($request->except('logo', 'password'))->save();    
+            $settings->fill($request->except('logo', 'password'))->save();
             return redirect()->back()->with('success', 'Settings updated Successfully');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->errorInfo[2]);
@@ -425,8 +420,8 @@ class SettingsController extends Controller {
                                     $activate = "<a href=" . url('plugin/status/' . $model['path']) . ">Deactivate</a>";
                                 }
 
-                                $delete = "<a href=  id=delete".$model['path']." data-toggle=modal data-target=#del".$model['path']."><span style='color:red'>Delete</span></a>"
-                                        . "<div class='modal fade' id=del".$model['path'].">
+                                $delete = "<a href=  id=delete" . $model['path'] . " data-toggle=modal data-target=#del" . $model['path'] . "><span style='color:red'>Delete</span></a>"
+                                        . "<div class='modal fade' id=del" . $model['path'] . ">
                                             <div class='modal-dialog'>
                                                 <div class=modal-content>  
                                                     <div class=modal-header>
@@ -457,7 +452,7 @@ class SettingsController extends Controller {
                             return ucfirst($model['author']);
                         })
                         ->addColumn('website', function($model) {
-                            return "<a href=".$model['website']." target=_blank>".$model['website']."</a>";
+                            return "<a href=" . $model['website'] . " target=_blank>" . $model['website'] . "</a>";
                         })
                         ->addColumn('version', function($model) {
                             return $model['version'];
@@ -523,7 +518,7 @@ class SettingsController extends Controller {
                     $lines = file($app, FILE_IGNORE_NEW_LINES);
                     $lines[$line_i_am_looking_for] = $str;
                     file_put_contents($app, implode("\n", $lines));
-                    $plug->create(['name' => $filename, 'path' => $filename,'status'=>1]);
+                    $plug->create(['name' => $filename, 'path' => $filename, 'status' => 1]);
                     return redirect()->back()->with('success', 'Installed SuccessFully');
                 } else {
                     /**

@@ -1,4 +1,6 @@
-<?php namespace App\Model\kb;
+<?php
+
+namespace App\Model\kb;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -8,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Comment extends Model {
 
-	protected $table = 'kb_comment';
-	protected $fillable = ['article_id', 'name', 'email', 'website', 'comment', 'status'];
+    protected $table = 'kb_comment';
+    protected $fillable = ['article_id', 'name', 'email', 'website', 'comment', 'status'];
 
 }

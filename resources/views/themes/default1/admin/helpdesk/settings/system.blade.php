@@ -71,10 +71,10 @@ class="active"
 						{!! Form::label('status',Lang::get('lang.status')) !!}
 						<div class="row">
 							<div class="col-xs-3">
-								{!! Form::radio('status','1',true) !!}{{Lang::get('lang.online')}}
+								{!! Form::radio('status','1',true) !!} {{Lang::get('lang.online')}}
 							</div>
 							<div class="col-xs-3">
-								{!! Form::radio('status','0') !!}{{Lang::get('lang.offline')}}
+								{!! Form::radio('status','0') !!} {{Lang::get('lang.offline')}}
 							</div>
 						</div>
 					</div>

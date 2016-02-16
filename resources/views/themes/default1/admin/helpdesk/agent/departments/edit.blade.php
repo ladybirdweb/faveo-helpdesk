@@ -59,10 +59,10 @@ class="active"
 
 			<div class="row">
 				<div class="col-xs-2">
-					{!! Form::radio('type','1',true) !!}{{Lang::get('lang.public')}}
+					{!! Form::radio('type','1',true) !!} {{Lang::get('lang.public')}}
 				</div>
 				<div class="col-xs-3">
-					{!! Form::radio('type','0',null) !!}{{Lang::get('lang.private')}}
+					{!! Form::radio('type','0',null) !!} {{Lang::get('lang.private')}}
 				</div>
 			</div>
 
@@ -87,9 +87,26 @@ class="active"
 			</div>
 
 		</div>
-{!!Form::close()!!}
-</div>
-</div>
+
+<hr>
+
+<h4>Outgoing Email Settings</h4>
+<br/>
+
+		<div class="row">
+		<!-- sla -->
+			<div class="col-xs-6 form-group {{ $errors->has('outgoing_email') ? 'has-error' : '' }}">
+
+				{!! Form::label('outgoing_email',Lang::get('lang.outgoing_email')) !!}
+				{!! $errors->first('outgoing_email', '<spam class="help-block">:message</spam>') !!}
+				{!!Form::select('outgoing_email', ['' => 'System Default', 'Emails'=>$emails->lists('email_name','id')],null,['class' => 'form-control select']) !!}
+
+			</div>
+
+		</div>
+
+	{!!Form::close()!!}
+	</div>
 </div>
 
 @stop

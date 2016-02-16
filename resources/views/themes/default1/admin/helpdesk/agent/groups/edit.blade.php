@@ -60,10 +60,10 @@ class="active"
 			{!! $errors->first('group_status', '<spam class="help-block">:message</spam>') !!}
 			<div class="row">
 				<div class="col-xs-2">
-					{!! Form::radio('group_status','1',true) !!}{{Lang::get('lang.enable')}}
+					{!! Form::radio('group_status','1',true) !!} {{Lang::get('lang.enable')}}
 				</div>
 				<div class="col-xs-3">
-					{!! Form::radio('group_status','0',null) !!}{{Lang::get('lang.disabled')}}
+					{!! Form::radio('group_status','0',null) !!} {{Lang::get('lang.disabled')}}
 				</div>
 			</div>
 		</div>

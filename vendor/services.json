@@ -33,7 +33,11 @@
         "Vsmoraes\\Pdf\\PdfServiceProvider",
         "Thomaswelton\\LaravelGravatar\\LaravelGravatarServiceProvider",
         "Chumper\\Datatable\\DatatableServiceProvider",
-        "Chumper\\Zipper\\ZipperServiceProvider"
+        "Chumper\\Zipper\\ZipperServiceProvider",
+        "Bestmomo\\Filemanager\\FilemanagerServiceProvider",
+        "Unisharp\\Laravelfilemanager\\LaravelFilemanagerServiceProvider",
+        "Intervention\\Image\\ImageServiceProvider",
+        "Tymon\\JWTAuth\\Providers\\JWTAuthServiceProvider"
     ],
     "eager": [
         "Illuminate\\Auth\\AuthServiceProvider",
@@ -57,7 +61,11 @@
         "Vsmoraes\\Pdf\\PdfServiceProvider",
         "Thomaswelton\\LaravelGravatar\\LaravelGravatarServiceProvider",
         "Chumper\\Datatable\\DatatableServiceProvider",
-        "Chumper\\Zipper\\ZipperServiceProvider"
+        "Chumper\\Zipper\\ZipperServiceProvider",
+        "Bestmomo\\Filemanager\\FilemanagerServiceProvider",
+        "Unisharp\\Laravelfilemanager\\LaravelFilemanagerServiceProvider",
+        "Intervention\\Image\\ImageServiceProvider",
+        "Tymon\\JWTAuth\\Providers\\JWTAuthServiceProvider"
     ],
     "deferred": {
         "command.app.name": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",

@@ -1,6 +1,6 @@
 @extends('themes.default1.installer.layout.installer')
 
-@section('licence')
+@section('license')
 done
 @stop
 
@@ -17,7 +17,7 @@ active
 @stop
 
 @section('content')
-
+        <h1 style="text-align: center;">Locale Information</h1>
         {!! Form::open(['url'=>route('postaccount')]) !!}
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         @if($errors->first('firstname')||$errors->first('Lastname')||$errors->first('email')||$errors->first('username')||$errors->first('password')||$errors->first('confirmpassword'))
@@ -46,7 +46,8 @@ active
                 <h1>Personal Information</h1>
                 <tr>
                     <td>
-                        {!! Form::label('firstname',Lang::get('lang.first_name')) !!}
+                        <label for="box1">{!! Lang::get('lang.name') !!}<span style="color
+                                : red;font-size:12px;">*</span></label>
                     </td>
                     <td> 
                         {!! Form::text('firstname',null,['style' =>'margin-left:250px']) !!}
@@ -54,7 +55,8 @@ active
                 </tr>
                 <tr>
                     <td>
-                        {!! Form::label('Last Name',Lang::get('lang.last_name')) !!}
+                        <label for="box2">Last Name<span style="color
+                                : red;font-size:12px;">*</span></label>
                     </td>
                     <td>
                         {!! Form::text('Lastname',null,['style' =>'margin-left:250px']) !!}
@@ -62,7 +64,8 @@ active
                 </tr>
                 <tr>
                     <td>
-                        {!! Form::label('email',Lang::get('lang.email')) !!}
+                        <label for="box2">Email<span style="color
+                                : red;font-size:12px;">*</span></label>
                     </td>
                     <td>
                         {!! Form::text('email',null,['style' =>'margin-left:250px']) !!}
@@ -74,7 +77,8 @@ active
                 <h1>Login Information</h1>
                 <tr>
                     <td>
-                        {!! Form::label('user_name',Lang::get('lang.user_name')) !!}
+                        <label for="box4">User Name<span style="color
+                                : red;font-size:12px;">*</span></label>
                     </td>
                     <td>
                         {!! Form::text('username',null,['style' =>'margin-left:200px']) !!}
@@ -82,7 +86,8 @@ active
                 </tr>
                 <tr>
                     <td>
-                        {!! Form::label('Password',Lang::get('lang.password')) !!}
+                        <label for="box4">Password<span style="color
+                                : red;font-size:12px;">*</span></label>
                     </td>
                     <td>
                         <div style="margin-left:50px;">
@@ -92,7 +97,8 @@ active
                 </tr>
                 <tr>
                     <td>
-                        {!! Form::label('confirmpassword',Lang::get('lang.confirm_password')) !!}
+                        <label for="box5">Confirm Password<span style="color
+                                : red;font-size:12px;">*</span></label>
                     </td>
                     <td>
                         <div style="margin-left:50px;">
@@ -103,15 +109,21 @@ active
             </table>
 
             <table id="datepairExample">
-                <h1>Local Information</h1>
+                <h1>Locale Information</h1>
                 <tr>
                     <td>
                         {!! Form::label('language',Lang::get('lang.language')) !!}
                     </td>
                     <td>
-                        <select style="margin-left: 170px" name="language">
-                            <option value="English(India)">English(India)</option>
-                            <option value="English(U.k)">English(U.K)</option>
+                    <?php 
+                    $path = '../resources/lang'; 
+                    $values = scandir($path);
+                    $values = array_slice($values, 2);
+                    ?>  
+                        <select style="margin-left: 170px" name="language" id="selectbox1" style="margin-left: 260px">
+                            @foreach($values as $value)
+                                <option value="{!! $value !!}">{!! Config::get('languages.' . $value) !!}</option>
+                            @endforeach
                         </select>
                     </td>
                 </tr>    
@@ -120,7 +132,7 @@ active
                         {!! Form::label('time_zone',Lang::get('lang.time_zone')) !!}
                     </td>
                     <td>
-                        <select name="timezone" style="margin-left: 170px">
+                        <select name="timezone" style="margin-left: 170px" id="selectbox2" style="margin-left: 260px" required>
                             <option value="US/Samoa">US/Samoa</option>
                             <option value="US/Hawaii">US/Hawaii</option>
                             <option value="US/Alaska">US/Alaska</option>
@@ -242,10 +254,10 @@ active
                         {!! Form::label('date',Lang::get('lang.date_time')) !!}
                     </td>
                     <td>
-                        <select name="datetime" style="margin-left: 170px">
-                            <option value="d/m/Y H:i">DD/MM/YYYY H:i</option>
-                            <option value="m/d/Y H:i">MM/DD/YYYY H:i</option>
-                            <option value="Y/m/d H:i">YYYY/MM/DD H:i</option>
+                        <select name="datetime" style="margin-left: 170px" id="selectbox3" style="margin-left: 260px" required>
+                            <option value="d/m/Y H:i:s">DD/MM/YYYY H:i:s</option>
+                            <option value="m/d/Y H:i:s">MM/DD/YYYY H:i:s</option>
+                            <option value="Y/m/d H:i:s">YYYY/MM/DD H:i:s</option>
                         </select>
                     </td>
                 </tr>    
@@ -254,7 +266,7 @@ active
             <br>
             <p class="wc-setup-actions step">
                 <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Install">
-                <a href="step4.html" class="button button-large button-next"  style="float: left">Previous</a>
+                <a href="{!! route('database') !!}" class="button button-large button-next"  style="float: left">Previous</a>
             </p>
         {!! Form::token() !!}
         {!! Form::close() !!}

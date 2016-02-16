@@ -65,7 +65,7 @@ class="active"
 
 
 	        <div class="box-body table-responsive"style="overflow:hidden;">
-             <div class="row">
+            <div class="row">
              <!-- Default Template Set:	 DROPDOWN value from template table : Required   -->
                {{-- <div class="col-md-3"> --}}
                   {{-- <div class="form-group {{ $errors->has('template') ? 'has-error' : '' }}"> --}}
@@ -76,13 +76,15 @@ class="active"
 			{{-- </div> --}}
 
 		<!-- Default System Email:	DROPDOWN value from emails table : Required -->
-                 {{-- <div class="col-md-3"> --}}
-			       {{-- <div class="form-group {{ $errors->has('sys_email') ? 'has-error' : '' }}"> --}}
-                     {{-- {!! Form::label('sys_email',Lang::get('lang.default_system_email')) !!} --}}
-				      {{-- {!! $errors->first('sys_email', '<spam class="help-block">:message</spam>') !!} --}}
-				      {{-- {!!Form::select('sys_email', $emails1->lists('email_address','email_address'),null,['class'=>'form-control']) !!} --}}
-				{{-- </div> --}}
-			{{-- </div> --}}
+                <div class="col-md-12">
+	                <div class="col-md-3 no-padding">
+				       	<div class="form-group {{ $errors->has('sys_email') ? 'has-error' : '' }}">
+	                     	{!! Form::label('sys_email',Lang::get('lang.default_system_email')) !!}
+					      	{!! $errors->first('sys_email', '<spam class="help-block">:message</spam>') !!}
+					     	{!!Form::select('sys_email', $emails1->lists('email_name','id'),null,['class'=>'form-control']) !!}
+						</div>
+					</div>
+				</div>
 
 		<!-- Default Alert Email:	DROPDOWN value from emails table : Required    -->
                     {{-- <div class="col-md-3"> --}}

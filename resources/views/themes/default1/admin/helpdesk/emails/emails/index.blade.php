@@ -55,6 +55,15 @@ class="active"
         {{Session::get('fails')}}
     </div>
     @endif
+
+    <?php
+    $default_system_email = App\Model\helpdesk\Settings\Email::where('id', '=', '1')->first();
+    if($default_system_email->sys_email) {
+    	$default_email = $default_system_email->sys_email;
+    } else {
+    	$default_email = null;
+    }
+    ?>
     		<!-- table -->
 				<table class="table table-bordered dataTable" style="overflow:hidden;">
 	<tr>
@@ -67,26 +76,39 @@ class="active"
 						</tr>
 						@foreach($emails as $email)
 						<tr>
-							<td><a href="{{route('emails.edit', $email->id)}}"> {{$email -> email_address }}</a></td>
+
+							<td><a href="{{route('emails.edit', $email->id)}}"> {{$email -> email_address }}</a>
+							@if($default_email == $email->id) 
+								( Default )
+								<?php $disabled = 'disabled'; ?>
+							@else
+								<?php $disabled = ''; ?>
+							@endif
+							</td>
 							<?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id','=',$email->priority)->first(); ?>
-							<td>{{  ucfirst($priority->priority_desc) }}</td>
+							@if($email->priority == null)
+								<?php $priority = "<a href=". url('getticket') .">System Default</a>"; ?>
+							@else 
+								<?php $priority = ucfirst($priority->priority_desc); ?>
+							@endif
+							<td>{!! $priority !!}</td>
 							@if($email->department !== null)
 								<?php  $department = App\Model\helpdesk\Agent\Department::where('id','=',$email->department)->first(); 
 								$dept = $department->name; ?>
 							@elseif($email->department == null)
-								<?php  $dept = "";  ?>
+								<?php  $dept = "<a href=". url('getsystem') .">System Default</a>"; ?>
 							@endif
-							
-							<td>{{ $dept }}</td>
-							<td>{{ UTC::usertimezone($email->created_at) }}</td>
-							<td>{{ UTC::usertimezone($email->updated_at) }}</td>
+
+							<td>{!! $dept !!}</td>
+							<td>{!! UTC::usertimezone($email->created_at) !!}</td>
+							<td>{!! UTC::usertimezone($email->updated_at) !!}</td>
 							<td>
 							{!! Form::open(['route'=>['emails.destroy', $email->id],'method'=>'DELETE']) !!}
 							<a href="{{route('emails.edit', $email->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> Edit</a>
 							<!-- To pop up a confirm Message -->
 								{!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> Delete',
 				            		['type' => 'submit',
-				            		'class'=> 'btn btn-warning btn-xs btn-flat',
+				            		'class'=> 'btn btn-warning btn-xs btn-flat '. $disabled,
 				            		'onclick'=>'return confirm("Are you sure?")'])
 				            	!!}
 							{!! Form::close() !!}
@@ -98,5 +120,4 @@ class="active"
 </div>
 </div>
 </div>
-
 @stop

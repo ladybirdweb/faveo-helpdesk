@@ -45,16 +45,30 @@ active
 
 <li  class="header">
     {!! Lang::get('lang.ticket_ratings') !!}
-</li><li> <a href="#">
-<input type="hidden" name="amount" value="{!! $tickets->rating !!}" />
-	<label style="color: #b8c7ce;">Overall Rating:</label>
-<h5>
-   <span class="stars">{!! $tickets->rating !!}</span></h5>
-<input type="hidden" name="amt" value="{!! $tickets->ratingreply !!}" />
-	<label style="color: #b8c7ce;">Reply Rating:</label>
-<h4>
-   <span class="stars2">{!! $tickets->ratingreply !!}</span></h4>
-    </a></li>
+</li>
+<li> 
+    <a href="#">
+        Overall Rating:
+        <small class="pull-right">
+            <input type="radio" class="star" id="star5" name="rating" value="1"<?php echo ($tickets->rating=='1')?'checked':'' ?> />
+            <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating=='2')?'checked':'' ?> />
+            <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating=='3')?'checked':'' ?>/>
+            <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating=='4')?'checked':'' ?>/>
+            <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating=='5')?'checked':'' ?> />
+        </small>
+    </a>
+</li>
+<li>
+    <a href="">Reply Rating:
+        <small class="pull-right">
+            <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($tickets->ratingreply=='1')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($tickets->ratingreply=='2')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($tickets->ratingreply=='3')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star2" name="rating2" value="4"<?php echo ($tickets->ratingreply=='4')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star1" name="rating2" value="5"<?php echo ($tickets->ratingreply=='5')?'checked':'' ?>  />
+        </small>
+    </a>
+</li>
 @stop 
 
 @section('content')
@@ -335,7 +349,7 @@ $canneds = App\Model\helpdesk\Agent_panel\Canned::where('user_id','=',Auth::user
                                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                     <div class="col-md-2"></div>
                                     <div class="col-md-10">
-                                        <button type="submit" class="btn btn-primary"><i class="fa fa-check-square-o" style="color:white;"> </i> {!! Lang::get('lang.update') !!}</button>
+                                        <button id="replybtn" type="submit" class="btn btn-primary"><i class="fa fa-check-square-o" style="color:white;"> </i> {!! Lang::get('lang.update') !!}</button>
                                     </div>
                                 </div>
                             </div>
@@ -1063,31 +1077,16 @@ $count_teams = count($teams);
     </div>
 </div>
 
-<?php  $var=0; ?>
+<?php  $var=App\Model\helpdesk\Settings\Ticket::where('id', '=', 1)->first(); ?>
 
 <!-- scripts used on page -->
 <script type="text/javascript">
-                    $(function() {    		
-			
-				$('h5').html('<span class="stars">'+parseFloat($('input[name=amount]').val())+'</span>');
-				$('span.stars').stars();
-	
-				$('h4').html('<span class="stars2">'+parseFloat($('input[name=amt]').val())+'</span>');
-				$('span.stars2').stars();
-			    		
-			
-		});
 
-		$.fn.stars = function() {
-			return $(this).each(function() {
-				$(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
-			});
-		}
-                        $(function () {
-                            $("#InternalContent").wysihtml5();
-                        });
+        $(function () {
+            $("#InternalContent").wysihtml5();
+        });
 
-
+jQuery('.star').attr('disabled', true);
     
  $(function () {
     // $('#cand').wysihtml5();
@@ -1552,8 +1551,8 @@ $(document).ready(function () {
 
 
 
-function remove_collaborator(id) {
-    var data = id;
+    function remove_collaborator(id) {
+        var data = id;
         $.ajax({
                 headers: {
                 'X-CSRF-Token': $('meta[name="_token"]').attr('content'),
@@ -1572,8 +1571,68 @@ function remove_collaborator(id) {
                 }
             })
             return false;
+    }
+
+
+
+$(document).ready(function() {
+    
+    var locktime = '<?php echo $var->collision_avoid;?>'*60*1000;
+    lockAjaxCall(locktime);
+    setInterval(function() {// to call ajax for ticket lock repeatedly after defined lock time interval
+        lockAjaxCall(locktime);
+        return false;
+}, locktime);
+});
+//ajax call to check ticket and lock ticket
+function lockAjaxCall(locktime){
+        $.ajax({
+                type: "GET",
+                url: "../check/lock/{{$tickets->id}}",
+                dataType: "html",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if(response == 0) {
+                       
+                       var message = "{{Lang::get('lang.locked-ticket')}}";
+                        $("#alert22").show();
+                        $('#message-warning2').html(message);
+                        $('#replybtn').attr('disabled', true);
+                        //setInterval(function(){$("#alert23").hide(); },10000);
+                    } else {
+                        // alert(response);
+                        // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)
+                        // +"{{Lang::get('lang.minutes')}}";
+                        // $("#alert22").hide();
+                        // $("#alert21").show();
+                        // $('#message-success2').html(message);
+                        $('#replybtn').attr('disabled', false); 
+                        // setInterval(function(){$("#alert21").hide(); },8000);  
+                    }
+                }
+        })
 }
-        
+
+        $(function() {          
+           
+                $('h5').html('<span class="stars">'+parseFloat($('input[name=amount]').val())+'</span>');
+                $('span.stars').stars();
+
+                $('h4').html('<span class="stars2">'+parseFloat($('input[name=amt]').val())+'</span>');
+                $('span.stars2').stars();
+
+        });
+
+        $.fn.stars = function() {
+            return $(this).each(function() {
+                $(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
+            });
+        }
+
+
+
+
+
 
 </script>
 

@@ -32,8 +32,8 @@ class="active"
 @section('content')
 <div class="box box-primary">
     <div class="box-header">
-        <h2 class="box-title">{{ Lang::get('lang.language') }}</h2><a href="{{route('add-language')}}" class="btn btn-primary pull-right"><i class="fa fa-plus"></i> {{Lang::get('lang.add')}}</a>
-        <a href="{{route('download')}}" title="click here to download template file" class="btn btn-primary pull-right"><i class="fa fa-download"></i> {{Lang::get('lang.download')}}</a>
+        <h2 class="box-title">{{ Lang::get('lang.language') }}</h2><span class="pull-right"><a href="{{route('download')}}" title="click here to download template file" class="btn btn-primary"><i class="fa fa-download"></i> {{Lang::get('lang.download')}} </a> <a href="{{route('add-language')}}" class="btn btn-primary "><i class="fa fa-plus"></i> {{Lang::get('lang.add')}}</a></span>
+        
     </div>
     <div class="box-body">
         <!-- check whether success or not -->

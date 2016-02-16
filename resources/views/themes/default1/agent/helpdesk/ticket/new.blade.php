@@ -12,7 +12,6 @@ active
 class="active"
 @stop
 
-
 @section('content')
 <!-- Main content -->
 {!! Form::open(['route'=>'post.newticket','method'=>'post']) !!}
@@ -222,3 +221,7 @@ class="active"
                                 </script>
 
                             @stop
+
+                            
+                            
+                            

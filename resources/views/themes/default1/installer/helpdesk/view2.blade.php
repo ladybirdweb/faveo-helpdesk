@@ -1,6 +1,6 @@
 @extends('themes.default1.installer.layout.installer')
 
-@section('licence')
+@section('license')
 done    
 @stop
 
@@ -19,9 +19,9 @@ active
 <?php
 define('PROBE_VERSION', '4.2');
 define('PROBE_FOR', '<b>Faveo</b>HELPDESK '.Config::get('app.version').' and Newer');
-define('STATUS_OK', 'ok');
-define('STATUS_WARNING', 'warning');
-define('STATUS_ERROR', 'error');
+define('STATUS_OK', 'Ok');
+define('STATUS_WARNING', 'Warning');
+define('STATUS_ERROR', 'Error');
 class TestResult {
     var $message;
     var $status;
@@ -34,7 +34,7 @@ class TestResult {
 ?>
 
 <div id="wrapper">
-      <h1>Probe</h1>
+    <h1>Probe</h1>
 
         <b>Probe Version:</b>
         <?php echo PROBE_VERSION?>
@@ -43,9 +43,9 @@ class TestResult {
         <?php echo PROBE_FOR?>
         <br/>
         <br/>
-    <h2>1. Environment test</h2>
+    
     Test/Probe Prerequisites required to be installed Probe 
-        <ul>
+    <br/><br/>    
      <?php
 
 function validate_php(&$results) {
@@ -202,14 +202,19 @@ $php_ok = validate_php($results);
 $memory_ok = validate_memory_limit($results);
 $extensions_ok = validate_extensions($results);
 $compatibility_mode_ok = validate_zend_compatibility_mode($results);
-
+?>
+<p class="wc-setup-actions step">
+<?php 
 foreach ($results as $result) {
-    print '<span class="' . $result->status . '">' . $result->status . '</span> &mdash; ' . $result->message . '<br/>';
+    print '<span class="' . strtolower($result->status) . '">' . $result->status . '</span> &mdash; ' . $result->message . '<br/>';
 } // foreach
+?>
+</p>
+<?php
 if ($php_ok && $memory_ok && $extensions_ok && $compatibility_mode_ok) {
     ?>
 </div>  
-    <form action="{{URL::route('postprerequisites')}}" method="post">
+    <form action="{{URL::route('postprerequisites')}}" method="post"  class="border-line">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <p class="wc-setup-actions step">
             <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue">
@@ -231,9 +236,9 @@ a:active  {color:#000;}
 
 <div id="legend">
         {{-- <ul> --}}
-          <p><span class="ok">ok</span> &mdash; All OK<br/>
-          <span class="warning">warning</span> &mdash; Not a deal breaker, but it's recommended to have this installed for some features to work<br/>
-          <span class="error">error</span> &mdash; Faveo HELPDESK require this feature and can't work without it</p>
+          <p><span class="ok">Ok</span> &mdash; All OK<br/>
+          <span class="warning">Warning</span> &mdash; Not a deal breaker, but it's recommended to have this installed for some features to work<br/>
+          <span class="error">Error</span> &mdash; Faveo HELPDESK require this feature and can't work without it</p>
         {{-- </ul> --}}
       </div>
 </div>

@@ -38,7 +38,7 @@ return [
 	|
 	 */
 
-	'version' => 'COMMUNITY 1.0.5.6',
+	'version' => 'COMMUNITY 1.0.6',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -204,7 +204,11 @@ return [
 		'Vsmoraes\Pdf\PdfServiceProvider',
 		'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
 		'Chumper\Datatable\DatatableServiceProvider',
-        'Chumper\Zipper\ZipperServiceProvider'
+        'Chumper\Zipper\ZipperServiceProvider',
+        Bestmomo\Filemanager\FilemanagerServiceProvider::class,
+        Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
 
 	],
 
@@ -263,7 +267,12 @@ return [
 		'SMTPS' => 'App\Http\Controllers\HomeController',
 		'Datatable' => 'Chumper\Datatable\Facades\DatatableFacade',
         'Zipper' => 'Chumper\Zipper\Zipper',
+        'Image' => Intervention\Image\Facades\Image::class,
+        'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
+        'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory'
 
 	],
+    
+    'token'=>'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaXNzIjoiaHR0cDpcL1wvbG9jYWxob3N0XC9GYXZlby1IZWxwRGVzay1NeS1CcmFuY2hcL3B1YmxpY1wvYXBpXC92MVwvYXV0aGVudGljYXRlIiwiaWF0IjoxNDU0OTM3NTQ1LCJleHAiOjE0NTQ5NDExNDUsIm5iZiI6MTQ1NDkzNzU0NSwianRpIjoiNzE1ZGQ3N2Y2ODI3MmE5OGYxNTE0YjAxMTZmY2JiZDMifQ.25b13Yif5ZUcrqOwzSncCHAdy2TfXtR8RlcWfLvsKtw'
 
 ];

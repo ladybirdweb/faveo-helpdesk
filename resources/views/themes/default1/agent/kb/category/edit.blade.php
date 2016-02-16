@@ -68,10 +68,10 @@
 			{!! $errors->first('status', '<spam class="help-block">:message</spam>') !!}
 			<div class="row">
 				<div class="col-xs-3">
-					{!! Form::radio('status','1',true) !!}{{Lang::get('lang.active')}}
+					{!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}
 				</div>
 				<div class="col-xs-3">
-					{!! Form::radio('status','0',null) !!}{{Lang::get('lang.inactive')}}
+					{!! Form::radio('status','0',null) !!} {{Lang::get('lang.inactive')}}
 				</div>
 			</div>
 		</div>

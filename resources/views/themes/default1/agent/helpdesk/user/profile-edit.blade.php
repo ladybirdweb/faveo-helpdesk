@@ -68,10 +68,10 @@ class="active"
 			{!! Form::label('gender',Lang::get('lang.gender')) !!}
 			<div class="row">
 				<div class="col-xs-3">
-					{!! Form::radio('gender','1',true) !!}{{Lang::get('lang.male')}}
+					{!! Form::radio('gender','1',true) !!} {{Lang::get('lang.male')}}
 				</div>
 				<div class="col-xs-3">
-					{!! Form::radio('gender','0') !!}{{Lang::get('lang.female')}}
+					{!! Form::radio('gender','0') !!} {{Lang::get('lang.female')}}
 				</div>
 			</div>
 		</div>

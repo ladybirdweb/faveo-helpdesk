@@ -60,10 +60,10 @@ class="active"
 
 			<div class="row">
 				<div class="col-xs-2">
-					{!! Form::radio('type','1',true) !!}{{Lang::get('lang.public')}}
+					{!! Form::radio('type','1',true) !!} {{Lang::get('lang.public')}}
 				</div>
 				<div class="col-xs-3">
-					{!! Form::radio('type','0',null) !!}{{Lang::get('lang.private')}}
+					{!! Form::radio('type','0',null) !!} {{Lang::get('lang.private')}}
 				</div>
 			</div>
 
