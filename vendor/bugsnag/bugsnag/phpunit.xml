@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpunit
+    backupStaticAttributes="false"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    bootstrap="./src/Bugsnag/Autoload.php">
+
+    <testsuites>
+        <testsuite name="Bugsnag tests">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+
+</phpunit>

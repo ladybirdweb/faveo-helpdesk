@@ -1,0 +1,6 @@
+{
+    "file": "Bugsnag/Client.php",
+    "line": "123",
+    "class": "Bugsnag_Client",
+    "function": "example_function"
+}
