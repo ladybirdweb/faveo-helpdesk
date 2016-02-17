@@ -32,8 +32,6 @@ $router->get('getmail/{token}', 'Auth\AuthController@getMail');
 // 	Route::get('/system-config',['as'=>'database-config','uses'=>'Api\v1\InstallerApiController@config_system']);
 // });
 
-
-
 /*
   |-------------------------------------------------------------------------------
   | Admin Routes
@@ -175,6 +173,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
     //Routes for language file upload form-----------You may want to use csrf protection for these route--------------
     Route::post('language/add', 'Admin\helpdesk\LanguageController@postForm');
+
     Route::get('language/add', array('as' => 'add-language', 'uses' => 'Admin\helpdesk\LanguageController@getForm'));
 
     //Routes for  delete language package
@@ -340,9 +339,11 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
     Route::post('rating/{id}/{rating}', ['as' => 'ticket.rating', 'uses' => 'Agent\helpdesk\TicketController@rating']); /* Get overall Ratings */
 
     Route::post('rating2/{id}/{rating}', ['as' => 'ticket.rating2', 'uses' => 'Agent\helpdesk\TicketController@ratingReply']); /* Get reply Ratings */
-
     // To check and lock tickets
     Route::get('check/lock/{id}', ['as' => 'lock', 'uses' => 'Agent\helpdesk\TicketController@checkLock']);
+
+    Route::patch('/change-owner/{id}', ['as' => 'change.owner.ticket', 'uses' => 'Agent\helpdesk\TicketController@changeOwner']); /* change owner */
+
 });
 
 /*

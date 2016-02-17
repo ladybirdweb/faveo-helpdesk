@@ -12,10 +12,10 @@ done
 active
 @stop
 
-@section('content')
+@section('content') 
 
     <h1 style="text-align: center;">Database Setup</h1>
-                    Test/Probe Prerequisites required to be installed Probe<br/><br/>
+        This test will check prerequisites required to install Faveo<br/><br/>
 <?php
 /**
  * Faveo HELPDESK Probe
@@ -38,7 +38,7 @@ define('DB_NAME', $databasename); // Name of the database you are connecting to
 define('DB_PORT', $port); // Name of the database you are connecting to
 
 define('PROBE_VERSION', '4.2');
-define('PROBE_FOR', '<b>Faveo</b>HELPDESK 1.0 and Newer');
+define('PROBE_FOR', '<b>Faveo</b> HELPDESK 1.0 and Newer');
 
 define('STATUS_OK', 'Ok');
 define('STATUS_WARNING', 'Warning');
@@ -79,11 +79,11 @@ if (DB_HOST && DB_USER && DB_NAME) {
                     $mysqli_ok = false;
                 } // if
             } else {
-                $results[] = new TestResult('Failed to select database. <br> MySQL said: ' . mysqli_error(), STATUS_ERROR);
+                $results[] = new TestResult('Failed to select database. ' . mysqli_error(), STATUS_ERROR);
                 $mysqli_ok = false;
             } // if
         } else {
-            $results[] = new TestResult('Failed to connect to database. <br> MySQL said: ' . mysqli_error(), STATUS_ERROR);
+            $results[] = new TestResult('Failed to connect to database. ' . mysqli_error(), STATUS_ERROR);
             $mysqli_ok = false;
         } // if
     } 
@@ -106,7 +106,7 @@ if (DB_HOST && DB_USER && DB_NAME) {
         print '<span class="' . strtolower($result->status) . '">' . $result->status . '</span> &mdash; ' . $result->message . '<br/>';
     } // foreach
     ?>
-</ul>
+<!-- </ul> -->
 <?php } else { ?>
       <p>Database test is <strong>turned off</strong>. To turn it On, please open probe.php in your favorite text editor and set DB_XXXX connection parameters in database section at the beginning of the file:</p>
       <ul>
@@ -121,7 +121,8 @@ if (DB_HOST && DB_USER && DB_NAME) {
 
 <?php if ($mysqli_ok !== null) {?>
 <?php if ($mysqli_ok) {?>
-<p id="verdict" class="all_ok">OK, this system can run <b>Faveo</b>HELPDESK</p>
+
+<p id="verdict" class="all_ok"><span class="ok">Ok</span> &mdash; This system can run <b>Faveo</b> HELPDESK</p>
 
 <h2 id="conn">Database connection successful</h3>
 
@@ -202,14 +203,14 @@ $(document).ready(function () {
 </script>
 
 <?php } else {?>
-    <p id="verdict" class="not_ok">This system does not meet <b>Faveo</b>HELPDESK system requirements</p>
+    <p id="verdict" class="not_ok">This system does not meet <b>Faveo</b> HELPDESK system requirements</p>
             <a href="{{URL::route('configuration')}}"><button type="submit" id="submitme" class="button-danger button button-large button-next" style="background-color: #d43f3a;color:#fff;" value="Error">Back</button></a><br/><br/>
       <?php } // if ?>
     <div id="legend">
         {{-- <ul> --}}
-        <span class="ok">Ok</span> &mdash; All OK <br/>
+        <span class="ok">Ok</span> &mdash; All Ok <br/>
         <span class="warning">Warning</span> &mdash; Not a deal breaker, but it's recommended to have this installed for some features to work<br/>
-        <span class="error">Error</span> &mdash; <b>Faveo</b>HELPDESK require this feature and can't work without it<br/><br/>
+        <span class="error">Error</span> &mdash; <b>Faveo</b> HELPDESK require this feature and can't work without it<br/><br/>
         {{-- </ul> --}}
     </div>
 <?php } // if ?>

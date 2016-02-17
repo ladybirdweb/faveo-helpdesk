@@ -101,7 +101,7 @@
                                                     <i class="fa fa-envelope-o fa-stack-1x"></i>
                                                     </span></a>
                                                 </div>
-                                                <center class="box-title" >{!! Lang::get('lang.incoming_emails') !!}</center>
+                                                <center class="box-title" >{!! Lang::get('lang.emails') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->

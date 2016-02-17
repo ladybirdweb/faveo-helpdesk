@@ -42,7 +42,7 @@
     <div class="col-xs-8">
         <div class="checkbox icheck">
             <label>
-                <input type="checkbox" name="remember">{!! Lang::get("lang.remember") !!}
+                <input type="checkbox" name="remember"> {!! Lang::get("lang.remember") !!}
             </label>
         </div>
     </div><!-- /.col -->

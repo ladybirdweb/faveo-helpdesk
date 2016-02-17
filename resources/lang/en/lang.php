@@ -201,6 +201,10 @@ return array(
     'date_time' => 'Date And Time Format',
     'day_date_time' => 'Day,Date And Time Format',
     'timezone' => 'Default Time Zone',
+    'api' =>  'Api',
+    'api_key'  =>  'Api Key',
+    'api_configurations'    =>    'Api Configurations',
+    'generate_key'      =>      'Generate key',
     /*
       |--------------------------------------
       |   Email Settings Page
@@ -703,6 +707,8 @@ return array(
     'access-ticket' => 'Alert! This ticket has been locked by you for next ',
     'minutes' => ' minutes',
     'in_minutes'  =>  'In minutes',
+    'add_another_owner' =>  'Add another owner',
+    'search_user'   =>  'Search user',
     /*
       |------------------------------------------------
       |Tools Page

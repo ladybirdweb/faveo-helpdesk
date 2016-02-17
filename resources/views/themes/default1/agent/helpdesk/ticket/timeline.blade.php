@@ -842,50 +842,102 @@ $data = $ConvDate[0];
     </div><!-- /.modal -->
 <?php }
 ?>
-    <!-- change Owner Modal -->
+    <!-- Change Owner Modal -->
     <div class="modal fade" id="ChangeOwner">
         <div class="modal-dialog">
             <div class="modal-content">
-                {!! Form::model($tickets->id, ['id'=>'form4','method' => 'PATCH'] )!!}
+                {!! Form::open(['id'=>'form4','method' => 'PATCH'] )!!}
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" id="close101" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">{!! Lang::get('lang.change_owner_for_ticket') !!} <b>#{!! $tickets->ticket_number !!}</b></h4>
                 </div>
-                <div class="modal-body" >
-                    <div class="form-group has-feedback">
-                        <!-- <input type="text" class="form-control" id="search" name="search" placeholder="Search Users"\> -->
-<?php $users = App\User::where('role', '=', 'user')->get();?>
-                        
-                        {!! Lang::get('lang.add_another_owner') !!}
-                        <select name="SelectOwner" class="form-control">
-                            @foreach($users as $user)
-                            @if($user->id !== $tickets->user_id)
-                            <option value="{!! $user->user_name !!}">{!! $user->user_name !!}({!! $user->email !!})</option>
-                            @endif
-                            @endforeach
-                        </select>
-                        <!-- <spam class="glyphicon glyphicon-search form-control-feedback"></spam> -->
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2"><spam class="glyphicon glyphicon-user fa-5x"></spam></div>
-                        <div class="col-md-10">
-<?php $user = App\User::where('id', '=', $tickets->user_id)->first();?>
-
-                            <b>{!! Lang::get('lang.user_details') !!}User Details</b><br/>
-                            {!! $user->user_name !!}<br/>{!! $user->email !!}<br/>
-                            @if($user->phone != null)
-                            <b>{!! Lang::get('lang.contact_informations') !!}Contact Informations</b><br/>
-                            {!! $user->phone !!}
-                            @endif
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#ahah1" data-toggle="tab" style="color:green;" id="aa"><i class="fa fa-users"> </i> {!! Lang::get('lang.search_existing_users') !!}</a></li>
+                        <li><a href="#haha2" data-toggle="tab" style="color:orange;"><i class="fa fa-user-plus" > </i> {!! Lang::get('lang.add_new_user') !!}</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="ahah1">
+                        <div id="change_alert" class="alert alert-danger alert-dismissable" style="display:none;">
+                            <button id="change_dismiss" type="button" class="close" data-dismiss="alert"  aria-hidden="true">×</button>
+                            <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                            <div id="message-success42"></div>
                         </div>
-                    </div>
-                </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                </div>
+                                <div class="col-md-6" id="change_loader" style="display:none;">
+                                    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
+                                </div>
+                            </div>
+                            <div id="change_body">
+                                <?php $users = App\User::where('role', '=', 'user')->get();?>
+                        
+                                {!! Lang::get('lang.add_another_owner') !!}
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">{!! Lang::get('lang.close') !!}Close</button>
-                    <button id="ban" type="button" class="btn btn-warning pull-right" >{!! Lang::get('lang.submit') !!}Submit</button>
-                </div>
-                {!! Form::close() !!}
+                                <input type="text" class="form-control" id="tags2" name="email" placeholder="{!! Lang::get('lang.search_user') !!}"\>
+                                <input type="hidden" name="ticket_id" value="{!! $tickets->id !!}">
+                                <input type="hidden" name="action" value="change-owner">
+                                <div class="row">
+                                    <div class="col-md-2"><spam class="glyphicon glyphicon-user fa-5x"></spam></div>
+                                    <div class="col-md-10">
+                                    <?php $user = App\User::where('id', '=', $tickets->user_id)->first();?>
+
+                                        <!-- <b>{!! Lang::get('lang.user_details') !!}User Details</b><br/> -->
+                                        <b>Current owner</b><br/>
+                                        {!! $user->user_name !!}<br/>{!! $user->email !!}<br/>
+                                        @if($user->phone != null)
+                                            <b>{!! Lang::get('lang.contact_informations') !!}Contact Informations</b><br/>
+                                            {!! $user->phone !!}
+                                        @endif
+                                    </div>
+                                </div>
+                       
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis42">{!! Lang::get('lang.close') !!}</button>
+                            <!--<input type='checkbox' name='send-mail' class='icheckbox_flat-blue' value='".$ticket->id."'><span disabled class="btn btn-sm">Check to notify user</span></input>-->
+                            <button type="submit" class="btn btn-primary pull-right" id="submt2">{!! Lang::get('lang.update') !!}</button>
+                        </div>
+                        {!! Form::close()!!}
+                        </div><!--tab-pane active-->
+                        <div class="tab-pane" id="haha2">
+                            <div id="change_alert2" class="alert alert-danger alert-dismissable" style="display:none;">
+                                <button id="change_dismiss" type="button" class="close" data-dismiss="alert"  aria-hidden="true">×</button>
+                                <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                            <div id="message-success422"></div>
+                            </div>
+                            <div class="modal-body" id="abc">
+                            <h4 class="modal-title pull-left">{!! Lang::get('lang.add_new_user') !!}</h4>            
+                            <br/><br/>
+                            <div id="here2"></div>
+                            {!! Form::model($tickets->id, ['id'=>'change-add-owner','method' => 'PATCH'] )!!} 
+                                <div id="add-change-loader" style="display:none;">
+                                    <div class="row col-md-12">
+                                        <div class="col-xs-5">
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"> 
+                                        </div>
+                                        <div class="col-xs-5">
+                                        </div>
+                                    </div>
+                                    <br/><br/><br/><br/>
+                                </div>
+                                <div id="add-change-body">
+                                    <input type="text" name="name" class="form-control" placeholder="{!! Lang::get('lang.name') !!}" required>
+                                    <input type="email" name="email" class="form-control" placeholder="{!! Lang::get('lang.e-mail') !!}" required> 
+                                    <input type="hidden" name="ticket_id" value="{!! $tickets->id !!}">
+                                    <input type="hidden" name="action" value="change-add-owner">
+                                    <input type="submit" class="btn" value="{!! Lang::get('lang.submit') !!}">
+                                </div>
+                            {!! Form::close() !!}
+                            </div>
+                        </div>
+                    </div><!--tab-content-->    
+                </div><!--nav-tabs-custom-->
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -1123,7 +1175,7 @@ jQuery('.star').attr('disabled', true);
 
 
 $(function() {
-    $( "#tags" ).autocomplete({
+    $( "#tags, #tags2" ).autocomplete({
         source: 'auto/<?php echo $tickets->id; ?>'
     });
 });
@@ -1369,7 +1421,99 @@ $(document).ready(function () {
             return false;
         });
 
-// Internal Note
+
+    // Change owner of a ticket
+        $('#form4').on('submit', function() {
+            $.ajax({
+                type: "POST",
+                url: "../change-owner/{{ $tickets->id }}",
+                dataType: "html",
+                data: $(this).serialize(),
+                beforeSend: function() {
+                    $("#change_body").hide();
+                    $("#change_loader").show();
+                },
+                success: function(response) {
+                    if(response != 1)
+                    {
+                        // $("#assign_body").show();
+                         var message = "User not found. Try again or add a new user.";
+                        $('#change_alert').show();
+                        $('#message-success42').html(message);
+                        setInterval(function(){$("#change_alert").hide(); },5000);
+                        $("#change_body").show();
+                        $("#change_loader").hide(); 
+
+                         
+                    } else {
+                        $("#change_body").show();
+                        $("#change_loader").hide();
+                        $("#dismis42").trigger("click");
+                        // $("#RefreshAssign").load( "../thread/{{$tickets->id}} #RefreshAssign");
+                        // $("#General").load( "../thread/{{$tickets->id}} #General");
+                        $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
+                        $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
+                        $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
+                        $("#t1").load("../thread/{{$tickets->id}}  #t1");
+                        var message = "Success! owner has been changed for this ticket.";
+                        $("#alert11").show();
+                        $('#message-success1').html(message);
+                        setInterval(function(){$("#alert11").hide(); },4000); 
+
+                    }
+                }
+            })
+            return false;
+        });
+
+
+// Add and change owner of a ticket
+        $('#change-add-owner').on('submit',function(){
+            $.ajax({
+                type: "POST",
+                url: "../change-owner/{{ $tickets->id }}",//url: "../add-user",
+                dataType: "html",
+                data: $(this).serialize(),
+                beforeSend: function() {
+                    $('#add-change-loader').show();
+                    $('#add-change-body').hide();
+                },
+                success: function(response) {
+                    if(response == 1){
+                        $('#add-change-loader').hide();
+                        $('#add-change-body').show();
+                        $("#close101").trigger("click");
+                        $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
+                        $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
+                        $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
+                        $("#t1").load("../thread/{{$tickets->id}}  #t1");
+                        var message = "Success! owner has been changed for this ticket.";
+                        $("#alert11").show();
+                        $('#message-success1').html(message);
+                        setInterval(function(){$("#alert11").hide(); },4000);
+                    } else {
+                        if(response == 4){ 
+                            var message = "User already exists. Try search existing user.";
+                        } else if(response == 5){
+                            var message = "Enter a valid email address.";
+                        } else {
+                            //var message = "Can't process your request. Try after some time.";
+                        }
+                        $('#change_alert2').show();
+                        $('#message-success422').html(message);
+                        setInterval(function(){$("#change_alert2").hide(); },8000);
+                        $('#add-change-loader').hide();
+                        $('#add-change-body').show();
+
+                      
+                    }
+                }
+            })
+            return false;
+        });
+
+
+    // Internal Note
         $('#form2').on('submit', function() {
             $.ajax({
                 type: "POST",

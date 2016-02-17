@@ -2220,4 +2220,110 @@ class TicketController extends Controller {
         }
     }
 
+
+    /**
+     * function to Change owner
+     * @param type $id
+     * @return type bool
+     */
+    public function changeOwner($id) {
+        $action = Input::get('action');
+        $email = Input::get('email');   
+        $ticket_id = Input::get('ticket_id');
+        $send_mail = Input::get('send-mail');
+        
+        if($action === 'change-add-owner'){
+            $name = Input::get('name');
+            $returnValue = $this->changeOwnerAdd($email,$name,$ticket_id);
+            if($returnValue === 0) {
+                return 4;//'<div id="alert11" class="alert alert-warning alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-alert"></i>Alert!</h4><div id="message-success1">This user already Exists</div></div>';
+            } elseif ($returnValue === 2) {
+                return 5;//'<div id="alert11" class="alert alert-warning alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-alert"></i>Alert!</h4><div id="message-success1">Enter valid email address.</div></div>';
+            } else{
+                //do nothing
+            }
+        }
+        $user = User::where('email','=',$email)->first();
+        $count = count($user);
+        if($count === 1) {
+
+            $user_id = $user->id;
+            $ticket = Tickets::where('id', '=', $id)->first();
+            $ticket_number = $ticket->ticket_number;
+            $ticket->user_id = $user_id;
+            $ticket->save();
+            $ticket_thread = Ticket_Thread::where('ticket_id','=',$id)->first();
+            $ticket_subject = $ticket_thread->title;
+            $thread = New Ticket_Thread;
+            $thread->ticket_id = $ticket->id;
+            $thread->user_id = Auth::user()->id;
+            $thread->is_internal = 1;
+            $thread->body = "This ticket now belongs to " . $user->user_name;
+            $thread->save();
+
+            //mail functionality
+            $company = $this->company();
+            $system = $this->system();
+
+            $agent = $user->first_name;
+            $agent_email = $user->email;
+
+            $master = Auth::user()->first_name . " " . Auth::user()->last_name;
+            if(Alert::first()->internal_status == 1 || Alert::first()->internal_assigned_agent == 1) {
+                // ticket assigned send mail
+                Mail::send('emails.Ticket_assign', ['agent' => $agent, 'ticket_number' => $ticket_number, 'from'=>$company, 'master' => $master, 'system' => $system], function ($message) use ($agent_email, $agent, $ticket_number, $ticket_subject) {
+                        $message->to($agent_email, $agent)->subject($ticket_subject.'[#' . $ticket_number . ']');
+                    });
+            }
+
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    /** 
+     * useradd
+     * @param type Image $image 
+     * @return type json
+     */
+    public function changeOwnerAdd($email,$name,$ticket_id)
+    {
+        $name = $name;
+        $email = $email;
+        $ticket_id = $ticket_id;    
+        $validator = \Validator::make(
+            ['email' => $email,
+             'name' => $name,],
+            ['email' => 'required|email',
+            ]);
+        $user = User::where('email','=',$email)->first();
+        $count = count($user);
+        if($count === 1) {
+            return  0;//'<div id="alert11" class="alert alert-warning alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-alert"></i>Alert!</h4><div id="message-success1">This user already Exists</div></div>';
+        } elseif($validator->fails()){
+            return 2;//'<div id="alert11" class="alert alert-warning alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-alert"></i>Alert!</h4><div id="message-success1">Enter valid email address. Exists</div></div>';
+
+        } else  {
+            $company = $this->company();
+            $user = new User;
+            $user->user_name = $name;
+            $user->email = $email;
+            $password = $this->generateRandomString();
+            $user->password = \Hash::make($password);
+            $user->role = 'user';
+            if ($user->save()) {
+                $user_id = $user->id;
+                  try {
+                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'Password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
+                    } catch (\Exception $e) {
+                        dd($e);
+                    }
+            }
+            return 1;// '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-user"></i>'.$user->user_name.'</h4><div id="message-success1">'.$user->email.'</div></div>';
+        }
+        // return  '<div id="alert11" class="alert alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-user"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'</div></div>';
+    }
+
+
 }
