@@ -39,7 +39,8 @@ class TicketController extends Controller {
      * Create a new controller instance.
      * @return type response
      */
-    public function __construct(PhpMailController $PhpMailController) {
+    public function __construct() {
+        $PhpMailController  = new PhpMailController();
         $this->PhpMailController = $PhpMailController;
     }
 
@@ -53,7 +54,7 @@ class TicketController extends Controller {
      * @param type $priority
      * @return type string
      */
-    public function create_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach = '') {
+    public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach = '') {
         try {
             $max_number = Tickets::whereRaw('id = (select max(`id`) from tickets)')->first();
             //dd($max_number);
@@ -65,8 +66,8 @@ class TicketController extends Controller {
                 }
             }
             $ticket = new Tickets;
-            $ticket->ticket_number = $this->ticket_number($ticket_number);
-            //dd($this->ticket_number($ticket_number));
+            $ticket->ticket_number = $this->ticketNumber($ticket_number);
+            //dd($this->ticketNumber($ticket_number));
             $ticket->user_id = $user_id;
             $ticket->dept_id = $dept;
             $ticket->help_topic_id = $helptopic;
@@ -97,9 +98,9 @@ class TicketController extends Controller {
 
 
 
-            $this->store_collaborators($headers, $id);
+            $this->storeCollaborators($headers, $id);
 
-            $thread = $this->ticket_thread($subject, $body, $id, $user_id);
+            $thread = $this->ticketThread($subject, $body, $id, $user_id);
             if (!empty($attach)) {
                 $this->attach($thread, $attach);
             }
@@ -115,14 +116,14 @@ class TicketController extends Controller {
      * @param type $headers 
      * @return type
      */
-    public function store_collaborators($headers, $id) {
+    public function storeCollaborators($headers, $id) {
         try {
             $company = $this->company();
             if (isset($headers)) {
                 foreach ($headers as $email => $name) {
                     $name = $name;
                     $email = $email;
-                    if ($this->check_email($email) == false) {
+                    if ($this->checkEmail($email) == false) {
                         $create_user = new User;
                         $create_user->user_name = $name;
                         $create_user->email = $email;
@@ -139,7 +140,7 @@ class TicketController extends Controller {
                         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
 
                     } else {
-                        $user = $this->check_email($email);
+                        $user = $this->checkEmail($email);
                         $user_id = $user->id;
                     }
                     $collaborator_store = new Ticket_Collaborator;
@@ -164,7 +165,7 @@ class TicketController extends Controller {
      * @param type $user_id
      * @return type
      */
-    public function ticket_thread($subject, $body, $id, $user_id) {
+    public function ticketThread($subject, $body, $id, $user_id) {
         try {
             $thread = new Ticket_Thread;
             $thread->user_id = $user_id;
@@ -184,7 +185,7 @@ class TicketController extends Controller {
      * @param type $ticket_number
      * @return type integer
      */
-    public function ticket_number($ticket_number) {
+    public function ticketNumber($ticket_number) {
         try {
             //dd($ticket_number);
             $number = $ticket_number;
@@ -248,12 +249,12 @@ class TicketController extends Controller {
             $eventuserid = $eventthread->user_id;
             $emailadd = User::where('id', $eventuserid)->first()->email;
             $source = $eventthread->source;
-            $form_data = $request->except('ReplyContent', 'ticket_ID', 'attachment');
+            $form_data = $request->except('reply_content', 'ticket_ID', 'attachment');
             \Event::fire(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
-            $reply_content = $request->input('ReplyContent');
+            $reply_content = $request->input('reply_content');
             $thread->ticket_id = $request->input('ticket_ID');
             $thread->poster = 'support';
-            $thread->body = $request->input('ReplyContent');
+            $thread->body = $request->input('reply_content');
             $thread->user_id = Auth::user()->id;
             $ticket_id = $request->input('ticket_ID');
             $tickets = Tickets::where('id', '=', $ticket_id)->first();
@@ -377,7 +378,7 @@ try {
      * @param type Ticket_Thread $thread
      * @return type bool
      */
-    public function ticket_edit_post($ticket_id, $thread, $ticket) {
+    public function ticketEditPost($ticket_id, $thread, $ticket) {
         try {
 
             $ticket = $ticket->where('id', '=', $ticket_id)->first();
@@ -517,7 +518,7 @@ try {
      * @param type $email
      * @return type bool
      */
-    public function check_email($email) {
+    public function checkEmail($email) {
         try {
             $check = User::where('email', '=', $email)->first();
             if ($check == true) {

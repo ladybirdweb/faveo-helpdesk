@@ -30,7 +30,7 @@ class TicketRequest extends Request {
         return [
             // 'To' => 'required',
             'ticket_ID' => 'required',
-            'ReplyContent' => 'required',
+            'reply_content' => 'required',
         ];
     }
 

@@ -334,9 +334,9 @@ $canneds = App\Model\helpdesk\Agent_panel\Canned::where('user_id','=',Auth::user
                                     </div>
                                     <div class="col-md-10">
                                         <div id="newtextarea">
-                                            <textarea style="width:98%;height:20%;" name="ReplyContent" class="form-control" id="ReplyContent"></textarea>
+                                            <textarea style="width:98%;height:20%;" name="reply_content" class="form-control" id="reply_content"></textarea>
                                         </div>
-                                        {!! $errors->first('ReplyContent', '<spam class="help-block text-red">:message</spam>') !!}
+                                        {!! $errors->first('reply_content', '<spam class="help-block text-red">:message</spam>') !!}
                                         <br/>
                                         <div type="file" class="btn btn-default btn-file"><i class="fa fa-paperclip"> </i> {!! Lang::get('lang.attachment') !!}<input type="file" name="attachment[]" multiple/></div><br/>
                                         {!! Lang::get('lang.max') !!}. 10MB
@@ -1090,7 +1090,7 @@ jQuery('.star').attr('disabled', true);
     
  $(function () {
     // $('#cand').wysihtml5();
-    var wysihtml5Editor = $('#ReplyContent').wysihtml5().data("wysihtml5").editor;
+    var wysihtml5Editor = $('#reply_content').wysihtml5().data("wysihtml5").editor;
 
     $('#select').on('change', function (e) {
 
@@ -1394,7 +1394,7 @@ $(document).ready(function () {
                         
                          $("#newtextarea").empty();
                         var div = document.getElementById('newtextarea');
-                        div.innerHTML = div.innerHTML + '<textarea style="width:98%;height:200px;" name="ReplyContent" class="form-control" id="ReplyContent"/></textarea>';
+                        div.innerHTML = div.innerHTML + '<textarea style="width:98%;height:200px;" name="reply_content" class="form-control" id="reply_content"/></textarea>';
                         
                         $("#newtextarea1").empty();
                         var div1 = document.getElementById('newtextarea1');
@@ -1446,7 +1446,7 @@ $(document).ready(function () {
                         // var wysihtml5Editor = $('textarea').wysihtml5().data("wysihtml5").editor;
                         $("#newtextarea").empty();
                         var div = document.getElementById('newtextarea');
-                        div.innerHTML = div.innerHTML + '<textarea style="width:98%;height:200px;" name="ReplyContent" class="form-control" id="ReplyContent"/></textarea>';
+                        div.innerHTML = div.innerHTML + '<textarea style="width:98%;height:200px;" name="reply_content" class="form-control" id="reply_content"/></textarea>';
                         
                         $("#newtextarea1").empty();
                         var div1 = document.getElementById('newtextarea1');

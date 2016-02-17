@@ -116,7 +116,7 @@ class TokenAuthController extends Controller {
      * verify the url is existing or not
      * @return type json
      */
-    public function CheckUrl() {
+    public function checkUrl() {
         try {
             $v = \Validator::make($request->all(), [
                         'url' => 'required|url'

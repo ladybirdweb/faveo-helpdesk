@@ -220,11 +220,11 @@ echo UTC::usertimezone(date_format($time, 'd/m/Y H:i:s'));
                             <!-- reply content -->
                                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                     <div class="col-md-2">
-                                        {!! Form::label('Reply Content', 'ReplyContent:') !!}
+                                        {!! Form::label('Reply Content', 'reply_content:') !!}
                                     </div>
                                     <div class="col-md-10">
-                                        <textarea style="width:98%;height:200px;" name="ReplyContent" id="ReplyContent"></textarea>
-                                        {!! $errors->first('ReplyContent', '<spam class="help-block text-red">:message</spam>') !!}
+                                        <textarea style="width:98%;height:200px;" name="reply_content" id="reply_content"></textarea>
+                                        {!! $errors->first('reply_content', '<spam class="help-block text-red">:message</spam>') !!}
                                         <br/>
                                         {{-- <div type="file" class="btn btn-default btn-file"><i class="fa fa-paperclip"> </i> Attachment<input type="file" name="attachment[]" multiple/></div><br/>
                                         Max. 10MB --}}

@@ -635,62 +635,66 @@ Route::group(['prefix' => 'api/v1'], function() {
      */
     Route::group(['prefix' => 'helpdesk'], function() {
 
-        Route::post('create', 'Api\v1\ApiController@CreateTicket');
-        Route::post('reply', 'Api\v1\ApiController@TicketReply');
-        Route::post('edit', 'Api\v1\ApiController@EditTicket');
-        Route::post('delete', 'Api\v1\ApiController@DeleteTicket');
-        Route::post('assign', 'Api\v1\ApiController@AssignTicket');
+        Route::post('create', 'Api\v1\ApiController@createTicket');
+        Route::post('reply', 'Api\v1\ApiController@ticketReply');
+        Route::post('edit', 'Api\v1\ApiController@editTicket');
+        Route::post('delete', 'Api\v1\ApiController@deleteTicket');
+        Route::post('assign', 'Api\v1\ApiController@assignTicket');
 
-        Route::get('open', 'Api\v1\ApiController@OpenedTickets');
-        Route::get('unassigned', 'Api\v1\ApiController@OpenedTickets');
-        Route::get('closed', 'Api\v1\ApiController@CloseTickets');
-        Route::get('agents', 'Api\v1\ApiController@GetAgents');
-        Route::get('teams', 'Api\v1\ApiController@GetTeams');
-        Route::get('customers', 'Api\v1\ApiController@GetCustomers');
-        Route::get('customer', 'Api\v1\ApiController@GetCustomer');
-        Route::get('ticket-search', 'Api\v1\ApiController@SearchTicket');
-        Route::get('ticket-thread', 'Api\v1\ApiController@TicketThreads');
-        Route::get('url', 'Api\v1\ApiController@CheckUrl');
-        Route::get('check-url', 'Api\v1\ApiController@UrlResult');
-        Route::get('api-key', 'Api\v1\ApiController@GenerateApiKey');
-        Route::get('help-topic', 'Api\v1\ApiController@GetHelpTopic');
-        Route::get('sla-plan', 'Api\v1\ApiController@GetSlaPlan');
-        Route::get('priority', 'Api\v1\ApiController@GetPriority');
-        Route::get('department', 'Api\v1\ApiController@GetDepartment');
-        Route::get('tickets', 'Api\v1\ApiController@GetTickets');
-        Route::get('inbox', 'Api\v1\ApiController@Inbox');
-        Route::post('internal-note', 'Api\v1\ApiController@InternalNote');
+        Route::get('open', 'Api\v1\ApiController@openedTickets');
+        Route::get('unassigned', 'Api\v1\ApiController@unassignedTickets');
+        Route::get('closed', 'Api\v1\ApiController@closeTickets');
+        Route::get('agents', 'Api\v1\ApiController@getAgents');
+        Route::get('teams', 'Api\v1\ApiController@getTeams');
+        Route::get('customers', 'Api\v1\ApiController@getCustomers');
+        Route::get('customer', 'Api\v1\ApiController@getCustomer');
+        Route::get('ticket-search', 'Api\v1\ApiController@searchTicket');
+        Route::get('ticket-thread', 'Api\v1\ApiController@ticketThreads');
+        Route::get('url', 'Api\v1\ApiController@checkUrl');
+        Route::get('check-url', 'Api\v1\ApiController@urlResult');
+        Route::get('api_key', 'Api\v1\ApiController@generateApiKey');
+        Route::get('help-topic', 'Api\v1\ApiController@getHelpTopic');
+        Route::get('sla-plan', 'Api\v1\ApiController@getSlaPlan');
+        Route::get('priority', 'Api\v1\ApiController@getPriority');
+        Route::get('department', 'Api\v1\ApiController@getDepartment');
+        Route::get('tickets', 'Api\v1\ApiController@getTickets');
+        Route::get('inbox', 'Api\v1\ApiController@inbox');
+        Route::get('trash', 'Api\v1\ApiController@getTrash');
+        Route::get('my-tickets', 'Api\v1\ApiController@getMyTickets');
+        Route::post('internal-note', 'Api\v1\ApiController@internalNote');
     });
 
     /**
      * Testing Url
      */
-    Route::get('create/user', 'Api\v1\TestController@CreateUser');
-    Route::get('create/ticket', 'Api\v1\TestController@CreateTicket');
-    Route::get('ticket/reply', 'Api\v1\TestController@TicketReply');
-    Route::get('ticket/edit', 'Api\v1\TestController@EditTicket');
-    Route::get('ticket/delete', 'Api\v1\TestController@DeleteTicket');
+    Route::get('create/user', 'Api\v1\TestController@createUser');
+    Route::get('create/ticket', 'Api\v1\TestController@createTicket');
+    Route::get('ticket/reply', 'Api\v1\TestController@ticketReply');
+    Route::get('ticket/edit', 'Api\v1\TestController@editTicket');
+    Route::get('ticket/delete', 'Api\v1\TestController@deleteTicket');
 
-    Route::get('ticket/open', 'Api\v1\TestController@OpenedTickets');
-    Route::get('ticket/unassigned', 'Api\v1\TestController@UnassignedTickets');
-    Route::get('ticket/closed', 'Api\v1\TestController@CloseTickets');
-    Route::get('ticket/assign', 'Api\v1\TestController@AssignTicket');
-    Route::get('ticket/agents', 'Api\v1\TestController@GetAgents');
-    Route::get('ticket/teams', 'Api\v1\TestController@GetTeams');
-    Route::get('ticket/customers', 'Api\v1\TestController@GetCustomers');
-    Route::get('ticket/customer', 'Api\v1\TestController@GetCustomer');
-    Route::get('ticket/search', 'Api\v1\TestController@GetSearch');
-    Route::get('ticket/thread', 'Api\v1\TestController@TicketThreads');
-    Route::get('ticket/url', 'Api\v1\TestController@Url');
-    Route::get('ticket/api', 'Api\v1\TestController@GenerateApiKey');
-    Route::get('ticket/help-topic', 'Api\v1\TestController@GetHelpTopic');
-    Route::get('ticket/sla-plan', 'Api\v1\TestController@GetSlaPlan');
-    Route::get('ticket/priority', 'Api\v1\TestController@GetPriority');
-    Route::get('ticket/department', 'Api\v1\TestController@GetDepartment');
-    Route::get('ticket/tickets', 'Api\v1\TestController@GetTickets');
-    Route::get('ticket/inbox', 'Api\v1\TestController@Inbox');
-    Route::get('ticket/internal', 'Api\v1\TestController@InternalNote');
+    Route::get('ticket/open', 'Api\v1\TestController@openedTickets');
+    Route::get('ticket/unassigned', 'Api\v1\TestController@unassignedTickets');
+    Route::get('ticket/closed', 'Api\v1\TestController@closeTickets');
+    Route::get('ticket/assign', 'Api\v1\TestController@assignTicket');
+    Route::get('ticket/agents', 'Api\v1\TestController@getAgents');
+    Route::get('ticket/teams', 'Api\v1\TestController@getTeams');
+    Route::get('ticket/customers', 'Api\v1\TestController@getCustomers');
+    Route::get('ticket/customer', 'Api\v1\TestController@getCustomer');
+    Route::get('ticket/search', 'Api\v1\TestController@getSearch');
+    Route::get('ticket/thread', 'Api\v1\TestController@ticketThreads');
+    Route::get('ticket/url', 'Api\v1\TestController@url');
+    Route::get('ticket/api', 'Api\v1\TestController@generateApiKey');
+    Route::get('ticket/help-topic', 'Api\v1\TestController@getHelpTopic');
+    Route::get('ticket/sla-plan', 'Api\v1\TestController@getSlaPlan');
+    Route::get('ticket/priority', 'Api\v1\TestController@getPriority');
+    Route::get('ticket/department', 'Api\v1\TestController@getDepartment');
+    Route::get('ticket/tickets', 'Api\v1\TestController@getTickets');
+    Route::get('ticket/inbox', 'Api\v1\TestController@inbox');
+    Route::get('ticket/internal', 'Api\v1\TestController@internalNote');
+    Route::get('ticket/trash', 'Api\v1\TestController@trash');
+    Route::get('ticket/my', 'Api\v1\TestController@myTickets');
 
-    Route::get('generate/token', 'Api\v1\TestController@GenerateToken');
-    Route::get('get/user', 'Api\v1\TestController@GetAuthUser');
+    Route::get('generate/token', 'Api\v1\TestController@generateToken');
+    Route::get('get/user', 'Api\v1\TestController@getAuthUser');
 });

@@ -735,15 +735,15 @@ class TicketController extends Controller {
         $eventuserid = $eventthread->user_id;
         $emailadd = User::where('id', $eventuserid)->first()->email;
         $source = $eventthread->source;
-        $form_data = $request->except('ReplyContent', 'ticket_ID', 'attachment');
+        $form_data = $request->except('reply_content', 'ticket_ID', 'attachment');
         \Event::fire(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
         // dd($attachments);
         // }
         //return $attachments;
-        $reply_content = $request->input('ReplyContent');
+        $reply_content = $request->input('reply_content');
         $thread->ticket_id = $request->input('ticket_ID');
         $thread->poster = 'support';
-        $thread->body = $request->input('ReplyContent');
+        $thread->body = $request->input('reply_content');
         $thread->user_id = Auth::user()->id;
         $ticket_id = $request->input('ticket_ID');
         //dd($ticket_id);
@@ -828,7 +828,7 @@ class TicketController extends Controller {
 
         try {
             $this->PhpMailController->sendmail(
-                    $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'body' => $request->input('ReplyContent'), 'scenario' => 'ticket-reply-agent', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
+                    $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply-agent', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
             );
         } catch (\Exception $e) {
             return 0;
@@ -843,7 +843,7 @@ class TicketController extends Controller {
      * @param type Ticket_Thread $thread
      * @return type bool
      */
-    public function ticket_edit_post($ticket_id, Ticket_Thread $thread, Tickets $ticket) {
+    public function ticketEditPost($ticket_id, Ticket_Thread $thread, Tickets $ticket) {
 
         if (Input::get('subject') == null) {
             return 1;
@@ -887,7 +887,7 @@ class TicketController extends Controller {
      * @param type $ticket_number
      * @return type integer
      */
-    public function ticket_number($ticket_number) {
+    public function ticketNumber($ticket_number) {
         $number = $ticket_number;
         $number = explode('-', $number);
         $number1 = $number[0];
@@ -917,7 +917,7 @@ class TicketController extends Controller {
      * @param type $email
      * @return type bool
      */
-    public function check_email($email) {
+    public function checkEmail($email) {
         $check = User::where('email', '=', $email)->first();
         if ($check == true) {
             return $check;
@@ -948,7 +948,7 @@ class TicketController extends Controller {
 
         // check emails
         $ticket_creator = $username;
-        $checkemail = $this->check_email($emailadd);
+        $checkemail = $this->checkEmail($emailadd);
         $company = $this->company();
         if ($checkemail == false) {
             // Generate password
@@ -1173,16 +1173,16 @@ class TicketController extends Controller {
                     $ticket_threads->save();
                 }
                 if (isset($id)) {
-                    if ($this->ticket_thread($subject, $body, $id, $user_id)) {
+                    if ($this->ticketThread($subject, $body, $id, $user_id)) {
                         return array($ticket_number, 1);
                     }
                 }
             } else {
-                $ticket_number = $this->create_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data);
+                $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data);
                 return array($ticket_number, 0);
             }
         } else {
-            $ticket_number = $this->create_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data);
+            $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data);
             return array($ticket_number, 0);
         }
     }
@@ -1197,7 +1197,7 @@ class TicketController extends Controller {
      * @param type $priority
      * @return type string
      */
-    public function create_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data) {
+    public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data) {
         $max_number = Tickets::whereRaw('id = (select max(`id`) from tickets)')->first();
         if ($max_number == null) {
             $ticket_number = "AAAA-9999-9999999";
@@ -1209,7 +1209,7 @@ class TicketController extends Controller {
 
 
         $ticket = new Tickets;
-        $ticket->ticket_number = $this->ticket_number($ticket_number);
+        $ticket->ticket_number = $this->ticketNumber($ticket_number);
         $ticket->user_id = $user_id;
         $ticket->dept_id = $dept;
         $ticket->help_topic_id = $helptopic;
@@ -1251,8 +1251,8 @@ class TicketController extends Controller {
         }
         // store collaborators
         // dd($headers);
-        $this->store_collaborators($headers, $id);
-        if ($this->ticket_thread($subject, $body, $id, $user_id) == true) {
+        $this->storeCollaborators($headers, $id);
+        if ($this->ticketThread($subject, $body, $id, $user_id) == true) {
             return $ticket_number;
         }
     }
@@ -1265,7 +1265,7 @@ class TicketController extends Controller {
      * @param type $user_id
      * @return type
      */
-    public function ticket_thread($subject, $body, $id, $user_id) {
+    public function ticketThread($subject, $body, $id, $user_id) {
         $thread = new Ticket_Thread;
         $thread->user_id = $user_id;
         $thread->ticket_id = $id;
@@ -1601,7 +1601,7 @@ class TicketController extends Controller {
      * @param type $headers 
      * @return type
      */
-    public function store_collaborators($headers, $id) {
+    public function storeCollaborators($headers, $id) {
         $company = $this->company();
         if (isset($headers)) {
             foreach ($headers as $email => $name) {
@@ -1610,7 +1610,7 @@ class TicketController extends Controller {
                 }
                 $name = $name;
                 $email = $email;
-                if ($this->check_email($email) == false) {
+                if ($this->checkEmail($email) == false) {
                     $create_user = new User;
                     $create_user->user_name = $name;
                     $create_user->email = $email;
@@ -1636,7 +1636,7 @@ class TicketController extends Controller {
                         
                     }
                 } else {
-                    $user = $this->check_email($email);
+                    $user = $this->checkEmail($email);
                     $user_id = $user->id;
                 }
                 $collaborator_store = new Ticket_Collaborator;

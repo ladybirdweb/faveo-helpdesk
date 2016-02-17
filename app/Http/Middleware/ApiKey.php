@@ -25,7 +25,7 @@ class ApiKey {
         $set = $this->setting->where('id', '1')->first();
         if ($set->api_enable == 1) {
             $key = $set->api_key;
-            if ($key == $request->input('api-key')) {
+            if ($key == $request->input('api_key')) {
                 return $next($request);
             } else {
                 $result = 'wrong api key';

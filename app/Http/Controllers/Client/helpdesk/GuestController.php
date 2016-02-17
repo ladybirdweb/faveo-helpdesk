@@ -188,7 +188,7 @@ class GuestController extends Controller {
         $thread->ticket_id = $request->input('ticket_ID');
         $thread->title = $request->input('To');
         $thread->user_id = Auth::user()->id;
-        $thread->body = $request->input('ReplyContent');
+        $thread->body = $request->input('reply_content');
         $thread->poster = 'user';
         $thread->save();
         $ticket_id = $request->input('ticket_ID');

@@ -169,11 +169,11 @@ class="active"
                                                 <div class="row">
                                                     <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                                         <div class="col-md-2">
-                                                            {!! Form::label('Reply Content', 'ReplyContent:') !!}
+                                                            {!! Form::label('Reply Content', 'reply_content:') !!}
                                                         </div>
                                                         <div class="col-md-10">
-                                                            <textarea name="ReplyContent"></textarea> 
-                                                            {!! $errors->first('ReplyContent', '<spam class="help-block text-red">:message</spam>') !!}
+                                                            <textarea name="reply_content"></textarea> 
+                                                            {!! $errors->first('reply_content', '<spam class="help-block text-red">:message</spam>') !!}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -222,8 +222,8 @@ class="active"
                                                             <label>Message</label>
                                                         </div>
                                                         <div class="col-md-10">
-                                                            <textarea name="ReplyContent"></textarea> 
-                                                            {!! $errors->first('ReplyContent', '<spam class="help-block text-red">:message</spam>') !!}
+                                                            <textarea name="reply_content"></textarea> 
+                                                            {!! $errors->first('reply_content', '<spam class="help-block text-red">:message</spam>') !!}
                                                         </div>
                                                     </div>
                                                 </div>
