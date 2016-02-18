@@ -11,6 +11,8 @@
         }
         ?>
         <title> @yield('title') {!! strip_tags($title_name) !!} </title>
+        <!-- faveo favicon -->
+        <link rel="shortcut icon" href="{{asset("lb-faveo/media/images/favicon.ico")}}">
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- Bootstrap 3.3.2 -->
         {{-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" /> --}}

@@ -201,7 +201,6 @@ $results = array();
 $php_ok = validate_php($results);
 $memory_ok = validate_memory_limit($results);
 $extensions_ok = validate_extensions($results);
-$compatibility_mode_ok = validate_zend_compatibility_mode($results);
 ?>
 <p class="wc-setup-actions step">
 <?php 
@@ -211,9 +210,15 @@ foreach ($results as $result) {
 ?>
 </p>
 <?php
-if ($php_ok && $memory_ok && $extensions_ok && $compatibility_mode_ok) {
+if ($php_ok && $memory_ok && $extensions_ok ) {
     ?>
 </div>  
+
+            <div class="woocommerce-message woocommerce-tracker" >
+                <p id="pass">OK, this system can run Faveo</p>
+            </div>
+
+
     <form action="{{URL::route('postprerequisites')}}" method="post"  class="border-line">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <p class="wc-setup-actions step">
@@ -221,10 +226,19 @@ if ($php_ok && $memory_ok && $extensions_ok && $compatibility_mode_ok) {
             <a href="{!! route('licence') !!}" class="button button-large button-next" style="float: left">Previous</a>
         </p>
     </form>
+</br>
     <?php
 } else {
+
     ?></div><br>
-<a href="{{URL::route('licence')}}" style="text-color:black"><button value="prev" id="access1">Prev</button></a> <input type="submit" value="Next" id="access" disabled=""> <?php
+            
+            <div class="woocommerce-message woocommerce-tracker" >
+                <p id="fail">This system does not meet Faveo system requirements</p>
+            </div>
+<p class="wc-setup-actions step">
+    <a href="{{URL::route('licence')}}" style="float: left"><button value="prev" class="button-primary button button-large">Previous</button></a>
+    <button disabled="" class="button-primary button button-large button-next" style="float: right">Continue</button>
+</p> <?php
 }
 ?>
 

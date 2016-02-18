@@ -51,7 +51,7 @@ class LanguageController extends Controller {
         //  return Cache::get('language');
         //} else return 'false';
         // Cache::put('language',$)
-        $path = '../resources/lang'; // Path to check available language packages 
+        $path = base_path('resources/lang');  // Path to check available language packages 
         if (array_key_exists($lang, Config::get('languages')) && in_array($lang, scandir($path))) {
             // dd(array_key_exists($lang, Config::get('languages')));
             // app()->setLocale($lang);
@@ -86,7 +86,7 @@ class LanguageController extends Controller {
      * @return type 
      */
     public function getLanguages() {
-        $path = '../resources/lang';
+        $path = base_path('resources/lang'); 
         $values = scandir($path);  //Extracts names of directories present in lang directory
         $values = array_slice($values, 2); // skips array element $value[0] = '.' & $value[1] = '..' 
         return \Datatable::collection(new Collection($values))
@@ -143,7 +143,7 @@ class LanguageController extends Controller {
 
 
             //Checking if package already exists or not in lang folder
-            $path = '../resources/lang';
+            $path = base_path('resources/lang'); 
             if (in_array(strtolower(Input::get('iso-code')), scandir($path))) {
 
                 //sending back with error message
@@ -207,7 +207,7 @@ class LanguageController extends Controller {
      */
     public function deleteLanguage($lang) {
         if ($lang !== App::getLocale()) {
-            $deletePath = '../resources/lang/' . $lang;     //define file path to delete
+            $deletePath = base_path('resources/lang') . $lang;     //define file path to delete
             $success = File::deleteDirectory($deletePath); //remove extracted folder and it's subfolder from lang
             if ($success) {
                 //sending back with success message

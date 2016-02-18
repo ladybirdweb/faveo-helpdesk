@@ -45,10 +45,6 @@ class InstallController extends Controller {
      */
     public function licence() {
         // checking if the installation is running for the first time or not
-        // if (Session::get('step5') == 'step5') {
-            // return Redirect::route('account');
-        // }
-        // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             return view('themes/default1/installer/helpdesk/view1');
         } else {
@@ -82,10 +78,6 @@ class InstallController extends Controller {
      */
     public function prerequisites() {
         // checking if the installation is running for the first time or not
-        // if (Session::get('step5') == 'step5') {
-            // return Redirect::route('account');
-        // }
-        // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             if (Session::get('step1') == 'step1') {
                 return View::make('themes/default1/installer/helpdesk/view2');
@@ -113,10 +105,6 @@ class InstallController extends Controller {
      * @return type view
      */
     public function localization() {
-        // checking if the installation is running for the first time or not
-        // if (Session::get('step5') == 'step5') {
-            // return Redirect::route('account');
-        // }
         // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             if (Session::get('step2') == 'step2') {
@@ -153,10 +141,6 @@ class InstallController extends Controller {
      */
     public function configuration() {
         // checking if the installation is running for the first time or not
-        // if (Session::get('step5') == 'step5') {
-        //     return Redirect::route('account');
-        // }
-        // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             if (Session::get('step2') == 'step2') {
                 return View::make('themes/default1/installer/helpdesk/view3');
@@ -176,7 +160,13 @@ class InstallController extends Controller {
     public function configurationcheck() {
 
         Session::put('step4', 'step4');
-
+        // dd(Input::get('default'));
+        // dd(Input::get('host'));
+        // dd(Input::get('databasename'));
+        // dd(Input::get('username'));
+        // dd(Input::get('password'));
+        // dd(Input::get('port'));
+        
         Session::put('default', Input::get('default'));
         Session::put('host', Input::get('host'));
         Session::put('databasename', Input::get('databasename'));
