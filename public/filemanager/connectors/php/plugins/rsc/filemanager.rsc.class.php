@@ -30,7 +30,7 @@ class FilemanagerRSC extends Filemanager {
 	public function getinfo() {
 		$object = $this->get_object();
 		if (isset($object->name)) {
-			$object = $this->get_file_info(&$object);
+			$object = $this->get_file_info($object);
 			return array(
 				'Path' => $object->path,
 				'Filename' => $object->name,
