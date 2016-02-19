@@ -19,30 +19,30 @@ use App\Model\helpdesk\Agent_panel\User_org;
 use App\User;
 // classes
 use Auth;
+use Exception;
 use Hash;
 use Input;
 use Redirect;
-use Exception;
 
 /**
  * UserController
- * This controller is used to CRUD an User details, and proile management of an agent
+ * This controller is used to CRUD an User details, and proile management of an agent.
  *
- * @package   Controllers
- * @subpackage  Controller
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class UserController extends Controller {
-
+class UserController extends Controller
+{
     /**
      * Create a new controller instance.
      * constructor to check
      * 1. authentication
      * 2. user roles
-     * 3. roles must be agent
+     * 3. roles must be agent.
+     *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // checking authentication
         $this->middleware('auth');
         // checking if role is agent
@@ -51,10 +51,13 @@ class UserController extends Controller {
 
     /**
      * Display all list of the users.
+     *
      * @param type User $user
+     *
      * @return type view
      */
-    public function index() {
+    public function index()
+    {
         try {
             /* get all values in Sys_user */
             return view('themes.default1.agent.helpdesk.user.index');
@@ -64,10 +67,12 @@ class UserController extends Controller {
     }
 
     /**
-     * This function is used to display the list of users using chumper datatables
+     * This function is used to display the list of users using chumper datatables.
+     *
      * @return datatable
      */
-    public function user_list() {
+    public function user_list()
+    {
         // displaying list of users with chumper datatables
         return \Datatable::collection(User::where('role', '!=', 'admin')->where('role', '!=', 'agent')->get())
                         /* searchable column username */
@@ -78,28 +83,31 @@ class UserController extends Controller {
                         ->addColumn('user_name', function ($model) {
                             if (strlen($model->user_name) > 20) {
                                 $username = substr($model->user_name, 0, 30);
-                                $username = substr($username, 0, strrpos($username, ' ')) . ' ...';
+                                $username = substr($username, 0, strrpos($username, ' ')).' ...';
                             } else {
                                 $username = $model->user_name;
                             }
+
                             return $username;
                         })
                         /* column email */
                         ->addColumn('email', function ($model) {
                             $email = $model->email;
+
                             return $email;
                         })
                         /* column phone */
                         ->addColumn('phone', function ($model) {
-                            $phone = "";
+                            $phone = '';
                             if ($model->phone_number) {
-                                $phone = $model->ext . ' ' . $model->phone_number;
+                                $phone = $model->ext.' '.$model->phone_number;
                             }
-                            $mobile = "";
+                            $mobile = '';
                             if ($model->mobile) {
                                 $mobile = $model->mobile;
                             }
-                            $phone = $phone . "&nbsp;&nbsp;&nbsp;" . $mobile;
+                            $phone = $phone.'&nbsp;&nbsp;&nbsp;'.$mobile;
+
                             return $phone;
                         })
                         /* column account status */
@@ -110,6 +118,7 @@ class UserController extends Controller {
                             } else {
                                 $stat = '<button class="btn btn-danger btn-xs">Inactive</button>';
                             }
+
                             return $stat;
                         })
                         /* column ban status */
@@ -120,25 +129,29 @@ class UserController extends Controller {
                             } else {
                                 $stat = '<button class="btn btn-success btn-xs">Active</button>';
                             }
+
                             return $stat;
                         })
                         /* column last login date */
                         ->addColumn('lastlogin', function ($model) {
                             $t = $model->updated_at;
+
                             return TicketController::usertimezone($t);
                         })
                         /* column actions */
                         ->addColumn('Actions', function ($model) {
-                            return '<a href="' . route('user.edit', $model->id) . '" class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp; <a href="' . route('user.show', $model->id) . '" class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>';
+                            return '<a href="'.route('user.edit', $model->id).'" class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp; <a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>';
                         })
                         ->make();
     }
 
     /**
      * Show the form for creating a new users.
+     *
      * @return type view
      */
-    public function create() {
+    public function create()
+    {
         try {
             return view('themes.default1.agent.helpdesk.user.create');
         } catch (Exception $e) {
@@ -148,11 +161,14 @@ class UserController extends Controller {
 
     /**
      * Store a newly created users in storage.
-     * @param type User $user
+     *
+     * @param type User            $user
      * @param type Sys_userRequest $request
+     *
      * @return type redirect
      */
-    public function store(User $user, Sys_userRequest $request) {
+    public function store(User $user, Sys_userRequest $request)
+    {
         /* insert the input request to sys_user table */
         /* Check whether function success or not */
         $user->email = $request->input('email');
@@ -175,14 +191,18 @@ class UserController extends Controller {
 
     /**
      * Display the specified users.
+     *
      * @param type int  $id
      * @param type User $user
+     *
      * @return type view
      */
-    public function show($id, User $user) {
+    public function show($id, User $user)
+    {
         try {
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
+
             return view('themes.default1.agent.helpdesk.user.show', compact('users'));
         } catch (Exception $e) {
             return view('404');
@@ -191,14 +211,18 @@ class UserController extends Controller {
 
     /**
      * Show the form for editing the specified resource.
-     * @param type int $id
+     *
+     * @param type int  $id
      * @param type User $user
+     *
      * @return type Response
      */
-    public function edit($id, User $user) {
+    public function edit($id, User $user)
+    {
         try {
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
+
             return view('themes.default1.agent.helpdesk.user.edit', compact('users'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->errorInfo[2]);
@@ -207,12 +231,15 @@ class UserController extends Controller {
 
     /**
      * Update the specified user in storage.
-     * @param type int $id
-     * @param type User $user
+     *
+     * @param type int            $id
+     * @param type User           $user
      * @param type Sys_userUpdate $request
+     *
      * @return type Response
      */
-    public function update($id, User $user, Sys_userUpdate $request) {
+    public function update($id, User $user, Sys_userUpdate $request)
+    {
 
         /* select the field where id = $id(request Id) */
         $users = $user->whereId($id)->first();
@@ -229,10 +256,12 @@ class UserController extends Controller {
     }
 
     /**
-     * get agent profile page
+     * get agent profile page.
+     *
      * @return type view
      */
-    public function getProfile() {
+    public function getProfile()
+    {
         $user = Auth::user();
         try {
             return view('themes.default1.agent.helpdesk.user.profile', compact('user'));
@@ -242,10 +271,12 @@ class UserController extends Controller {
     }
 
     /**
-     * get profile edit page
+     * get profile edit page.
+     *
      * @return type view
      */
-    public function getProfileedit() {
+    public function getProfileedit()
+    {
         $user = Auth::user();
         try {
             return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'));
@@ -255,12 +286,15 @@ class UserController extends Controller {
     }
 
     /**
-     * post profile edit
-     * @param type int $id
+     * post profile edit.
+     *
+     * @param type int            $id
      * @param type ProfileRequest $request
+     *
      * @return type Redirect
      */
-    public function postProfileedit(ProfileRequest $request) {
+    public function postProfileedit(ProfileRequest $request)
+    {
         // geet authenticated user details
         $user = Auth::user();
         $user->gender = $request->input('gender');
@@ -284,7 +318,7 @@ class UserController extends Controller {
             // fetching upload destination path
             $destinationPath = 'lb-faveo/media/profilepic';
             // adding a random value to profile picture filename
-            $fileName = rand(0000, 9999) . '.' . $name;
+            $fileName = rand(0000, 9999).'.'.$name;
             // moving the picture to a destination folder
             Input::file('profile_pic')->move($destinationPath, $fileName);
             // saving filename to database
@@ -292,6 +326,7 @@ class UserController extends Controller {
         } else {
             try {
                 $user->fill($request->except('profile_pic', 'gender'))->save();
+
                 return Redirect::route('profile')->with('success', 'Profile Updated sucessfully');
             } catch (Exception $e) {
                 return Redirect::route('profile')->with('success', $e->errorInfo[2]);
@@ -303,19 +338,23 @@ class UserController extends Controller {
     }
 
     /**
-     * Post profile password
-     * @param type int $id
+     * Post profile password.
+     *
+     * @param type int             $id
      * @param type ProfilePassword $request
+     *
      * @return type Redirect
      */
-    public function postProfilePassword($id, ProfilePassword $request) {
-        // get authenticated user 
+    public function postProfilePassword($id, ProfilePassword $request)
+    {
+        // get authenticated user
         $user = Auth::user();
         // checking if the old password matches the new password
         if (Hash::check($request->input('old_password'), $user->getAuthPassword())) {
             $user->password = Hash::make($request->input('new_password'));
             try {
                 $user->save();
+
                 return redirect('profile-edit')->with('success1', 'Password Updated sucessfully');
             } catch (Exception $e) {
                 return redirect('profile-edit')->with('fails', $e->errorInfo[2]);
@@ -326,25 +365,32 @@ class UserController extends Controller {
     }
 
     /**
-     * Assigning an user to an organization
-     * @param type $id 
+     * Assigning an user to an organization.
+     *
+     * @param type $id
+     *
      * @return type boolean
      */
-    public function UserAssignOrg($id) {
+    public function UserAssignOrg($id)
+    {
         $org = Input::get('org');
-        $user_org = new User_org;
+        $user_org = new User_org();
         $user_org->org_id = $org;
         $user_org->user_id = $id;
         $user_org->save();
+
         return 1;
     }
 
     /**
-     * creating an organization in user profile page via modal popup
-     * @param type $id 
+     * creating an organization in user profile page via modal popup.
+     *
+     * @param type $id
+     *
      * @return type
      */
-    public function User_Create_Org($id) {
+    public function User_Create_Org($id)
+    {
         // checking if the entered value for website is available in database
         if (Input::get('website') != null) {
             // checking website
@@ -356,14 +402,14 @@ class UserController extends Controller {
         $check2 = Organization::where('name', '=', Input::get('name'))->first();
         // if any of the fields is not available then return false
         if (\Input::get('name') == null) {
-            return "Name is required";
+            return 'Name is required';
         } elseif ($check2 != null) {
-            return "Name should be Unique";
+            return 'Name should be Unique';
         } elseif ($check != null) {
-            return "Website should be Unique";
+            return 'Website should be Unique';
         } else {
             // storing organization details and assigning the current user to that organization
-            $org = new Organization;
+            $org = new Organization();
             $org->name = Input::get('name');
             $org->phone = Input::get('phone');
             $org->website = Input::get('website');
@@ -371,7 +417,7 @@ class UserController extends Controller {
             $org->internal_notes = Input::get('internal');
             $org->save();
 
-            $user_org = new User_org;
+            $user_org = new User_org();
             $user_org->org_id = $org->id;
             $user_org->user_id = $id;
             $user_org->save();
@@ -379,5 +425,4 @@ class UserController extends Controller {
             return 0;
         }
     }
-
 }

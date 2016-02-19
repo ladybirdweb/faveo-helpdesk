@@ -2,7 +2,7 @@
 /**
  *  Filemanager PHP connector
  *  This file should at least declare auth() function 
- *  and instantiate the Filemanager as '$fm'
+ *  and instantiate the Filemanager as '$fm'.
  *  
  *  IMPORTANT : by default Read and Write access is granted to everyone
  *  Copy/paste this file to 'user.config.php' file to implement your own auth() function
@@ -17,8 +17,8 @@
  */
 
 // Laravel init
-require getcwd() . '/../../../../bootstrap/autoload.php';
-$app = require_once getcwd() . '/../../../../bootstrap/app.php';
+require getcwd().'/../../../../bootstrap/autoload.php';
+$app = require_once getcwd().'/../../../../bootstrap/app.php';
 
 $kernel = $app->make('Illuminate\Contracts\Http\Kernel');
 
@@ -31,58 +31,44 @@ $app['session']->driver()->setId($id);
 $app['session']->driver()->start();
 
 // Folder path
-$folderPath = $app->basePath() . '/public/'.config('filemanager.folder_path');     
+$folderPath = $app->basePath().'/public/'.config('filemanager.folder_path');
 
 // Check if user in authentified
-if(!$app['auth']->check()) 
-{
-  $laravelAuth = false;
-} 
-else 
-{
-  // Check if user has all access
-  if($app['auth']->user()->accessMediasAll())
-  {
-    $laravelAuth = true; 
-  } 
-  elseif(method_exists($app['auth']->user(), 'accessMediasFolder'))
-  {
-    // Check if user has access to one folder
-    if($app['auth']->user()->accessMediasFolder())
-    {
-      // Folder name with user id
-      $folderPath .= 'user' . $app['auth']->id();
-      // Create folder if doesn't exist
-      if (!is_dir($folderPath))
-      {
-        mkdir($folderPath); 
-      }  
-      $laravelAuth = true;  
-    } 
-    else
-    {
-      $laravelAuth = false;
-    }    
-  }
-  else
-  {
+if (!$app['auth']->check()) {
     $laravelAuth = false;
-  } 
+} else {
+    // Check if user has all access
+  if ($app['auth']->user()->accessMediasAll()) {
+      $laravelAuth = true;
+  } elseif (method_exists($app['auth']->user(), 'accessMediasFolder')) {
+      // Check if user has access to one folder
+    if ($app['auth']->user()->accessMediasFolder()) {
+        // Folder name with user id
+      $folderPath .= 'user'.$app['auth']->id();
+      // Create folder if doesn't exist
+      if (!is_dir($folderPath)) {
+          mkdir($folderPath);
+      }
+        $laravelAuth = true;
+    } else {
+        $laravelAuth = false;
+    }
+  } else {
+      $laravelAuth = false;
+  }
 }
 
 /**
- *  Check if user is authorized
+ *  Check if user is authorized.
  *  
  *
- *  @return boolean true if access granted, false if no access
+ *  @return bool true if access granted, false if no access
  */
-function auth() 
+function auth()
 {
-  return $GLOBALS['laravelAuth'];
+    return $GLOBALS['laravelAuth'];
 }
 
 $fm = new Filemanager();
 
 $fm->setFileRoot($folderPath);
-
-?>

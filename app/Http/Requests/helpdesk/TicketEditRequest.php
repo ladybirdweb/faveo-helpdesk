@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * AgentRequest
+ * AgentRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class TicketEditRequest extends Request {
-
+class TicketEditRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,7 +26,8 @@ class TicketEditRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
                 // 'subject' => 'required',
                 // 'sla_paln' => 'required',
@@ -35,5 +36,4 @@ class TicketEditRequest extends Request {
                 // 'ticket_priority' => 'required',
         ];
     }
-
 }

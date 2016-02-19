@@ -8,29 +8,30 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\helpdesk\BanlistRequest;
 use App\Http\Requests\helpdesk\BanRequest;
 // model
-use App\User;
 use App\Model\helpdesk\Email\Banlist;
+use App\User;
 //classes
 use Exception;
 
 /**
  * BanlistController
- * In this controller in the CRUD function for all the banned emails
- * @package     Controllers
- * @subpackage  Controller
+ * In this controller in the CRUD function for all the banned emails.
+ *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class BanlistController extends Controller {
-
+class BanlistController extends Controller
+{
     /**
      * Create a new controller instance.
      * constructor to check
      * 1. authentication
      * 2. user roles
-     * 3. roles must be agent
+     * 3. roles must be agent.
+     *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // checking authentication
         $this->middleware('auth');
         // checking admin roles
@@ -39,12 +40,16 @@ class BanlistController extends Controller {
 
     /**
      * Display a listing of the resource.
+     *
      * @param type Banlist $ban
+     *
      * @return type Response
      */
-    public function index() {
+    public function index()
+    {
         try {
             $bans = User::where('ban', '=', 1)->get();
+
             return view('themes.default1.admin.helpdesk.emails.banlist.index', compact('bans'));
         } catch (Exception $e) {
             return view('404');
@@ -53,9 +58,11 @@ class BanlistController extends Controller {
 
     /**
      * Show the form for creating a new resource.
+     *
      * @return type Response
      */
-    public function create() {
+    public function create()
+    {
         try {
             return view('themes.default1.admin.helpdesk.emails.banlist.create');
         } catch (Exception $e) {
@@ -65,12 +72,15 @@ class BanlistController extends Controller {
 
     /**
      * Store a newly created resource in storage.
-     * @param type banlist $ban
+     *
+     * @param type banlist    $ban
      * @param type BanRequest $request
-     * @param type User $user
+     * @param type User       $user
+     *
      * @return type Response
      */
-    public function store(BanRequest $request, User $user) {
+    public function store(BanRequest $request, User $user)
+    {
         // dd($request);
         try {
             //adding field to user whether it is banned or not
@@ -83,11 +93,12 @@ class BanlistController extends Controller {
                 // $user->create($request->input())->save();
                 return redirect('banlist')->with('success', 'Email Banned sucessfully');
             } else {
-                $user = new User;
+                $user = new User();
                 $user->email = $adban;
                 $user->ban = $request->input('ban');
                 $user->internal_note = $request->input('internal_note');
                 $user->save();
+
                 return redirect('banlist')->with('success', 'Email Banned sucessfully');
             }
         } catch (Exception $e) {
@@ -98,22 +109,28 @@ class BanlistController extends Controller {
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
-    public function show($id) {
+    public function show($id)
+    {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
-     * @param type int $id
+     *
+     * @param type int     $id
      * @param type Banlist $ban
+     *
      * @return type Response
      */
-    public function edit($id, User $ban) {
+    public function edit($id, User $ban)
+    {
         try {
             $bans = $ban->whereId($id)->first();
+
             return view('themes.default1.admin.helpdesk.emails.banlist.edit', compact('bans'));
         } catch (Exception $e) {
             return view('404');
@@ -122,12 +139,15 @@ class BanlistController extends Controller {
 
     /**
      * Update the specified resource in storage.
-     * @param type int $id
-     * @param type Banlist $ban
+     *
+     * @param type int            $id
+     * @param type Banlist        $ban
      * @param type BanlistRequest $request
+     *
      * @return type Response
      */
-    public function update($id, User $ban, BanlistRequest $request) {
+    public function update($id, User $ban, BanlistRequest $request)
+    {
         try {
             $bans = $ban->whereId($id)->first();
             $bans->internal_note = $request->input('internal_note');
@@ -143,7 +163,7 @@ class BanlistController extends Controller {
         }
     }
 
-    /**
+    /*
      * Remove the specified resource from storage.
      * @param type int $id
      * @param type Banlist $ban

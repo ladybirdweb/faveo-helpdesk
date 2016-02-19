@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * ProfileRequest
+ * ProfileRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class ProfileRequest extends Request {
-
+class ProfileRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,11 +26,11 @@ class ProfileRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            'first_name' => 'required',
+            'first_name'  => 'required',
             'profile_pic' => 'mimes:png,jpeg',
         ];
     }
-
 }

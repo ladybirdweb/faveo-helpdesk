@@ -6,45 +6,49 @@ namespace App\Http\Controllers\Admin\helpdesk;
 use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\GroupRequest;
-use Illuminate\Http\Request;
-// models
 use App\Model\helpdesk\Agent\Department;
-use App\Model\helpdesk\Agent\Groups;
+// models
 use App\Model\helpdesk\Agent\Group_assign_department;
+use App\Model\helpdesk\Agent\Groups;
 use App\User;
-// classes
-use Illuminate\Support\Facades\Input;
 use Exception;
+// classes
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 /**
- * GroupController
+ * GroupController.
  *
- * @package     Controllers
- * @subpackage  Controller
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class GroupController extends Controller {
-
+class GroupController extends Controller
+{
     /**
      * Create a new controller instance.
+     *
      * @return type void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
         $this->middleware('roles');
     }
 
     /**
      * Display a listing of the resource.
-     * @param type Groups $group
-     * @param type Department $department
+     *
+     * @param type Groups                  $group
+     * @param type Department              $department
      * @param type Group_assign_department $group_assign_department
+     *
      * @return type Response
      */
-    public function index(Groups $group, Department $department, Group_assign_department $group_assign_department) {
+    public function index(Groups $group, Department $department, Group_assign_department $group_assign_department)
+    {
         try {
             $groups = $group->get();
             $departments = $department->lists('id');
+
             return view('themes.default1.admin.helpdesk.agent.groups.index', compact('departments', 'group_assign_department', 'groups'));
         } catch (Exception $e) {
             return view('404');
@@ -53,9 +57,11 @@ class GroupController extends Controller {
 
     /**
      * Show the form for creating a new resource.
+     *
      * @return type Response
      */
-    public function create() {
+    public function create()
+    {
         try {
             return view('themes.default1.admin.helpdesk.agent.groups.create');
         } catch (Exception $e) {
@@ -65,44 +71,55 @@ class GroupController extends Controller {
 
     /**
      * Store a newly created resource in storage.
-     * @param type Groups $group
+     *
+     * @param type Groups       $group
      * @param type GroupRequest $request
+     *
      * @return type Response
      */
-    public function store(Groups $group, GroupRequest $request) {
+    public function store(Groups $group, GroupRequest $request)
+    {
         try {
             /* Check Whether function success or not */
             $group->fill($request->input())->save();
+
             return redirect('groups')->with('success', 'Group Created Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('groups')->with('fails', 'Groups can not Create' . '<li>' . $e->errorInfo[2] . '</li>');
+            return redirect('groups')->with('fails', 'Groups can not Create'.'<li>'.$e->errorInfo[2].'</li>');
         }
     }
 
     /**
      * Show the form for editing the specified resource.
-     * @param type int $id
+     *
+     * @param type int    $id
      * @param type Groups $group
+     *
      * @return type Response
      */
-    public function edit($id, Groups $group) {
+    public function edit($id, Groups $group)
+    {
         try {
             $groups = $group->whereId($id)->first();
+
             return view('themes.default1.admin.helpdesk.agent.groups.edit', compact('groups'));
         } catch (Exception $e) {
-            return redirect('groups')->with('fails', 'Groups can not Create' . '<li>' . $e->errorInfo[2] . '</li>');
+            return redirect('groups')->with('fails', 'Groups can not Create'.'<li>'.$e->errorInfo[2].'</li>');
         }
     }
 
     /**
      * Update the specified resource in storage.
-     * @param type int $id
-     * @param type Groups $group
+     *
+     * @param type int     $id
+     * @param type Groups  $group
      * @param type Request $request
+     *
      * @return type Response
      */
-    public function update($id, Groups $group, Request $request) {
+    public function update($id, Groups $group, Request $request)
+    {
         $var = $group->whereId($id)->first();
         //Updating Status
         $status = $request->Input('group_status');
@@ -153,22 +170,26 @@ class GroupController extends Controller {
             return redirect('groups')->with('success', 'Group Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('groups')->with('fails', 'Groups can not Create' . '<li>' . $e->errorInfo[2] . '</li>');
+            return redirect('groups')->with('fails', 'Groups can not Create'.'<li>'.$e->errorInfo[2].'</li>');
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     * @param type int $id
-     * @param type Groups $group
+     *
+     * @param type int                     $id
+     * @param type Groups                  $group
      * @param type Group_assign_department $group_assign_department
+     *
      * @return type Response
      */
-    public function destroy($id, Groups $group, Group_assign_department $group_assign_department) {
+    public function destroy($id, Groups $group, Group_assign_department $group_assign_department)
+    {
         $users = User::where('assign_group', '=', $id)->first();
         if ($users) {
             $user = '<li>There are agents assigned to this group. Please unassign them from this group to delete</li>';
-            return redirect('groups')->with('fails', 'Group cannot Delete ' . $user);
+
+            return redirect('groups')->with('fails', 'Group cannot Delete '.$user);
         }
         $group_assign_department->where('group_id', $id)->delete();
         $groups = $group->whereId($id)->first();
@@ -179,8 +200,7 @@ class GroupController extends Controller {
             return redirect('groups')->with('success', 'Group Deleted Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('groups')->with('fails', 'Groups cannot Create' . '<li>' . $e->errorInfo[2] . '</li>');
+            return redirect('groups')->with('fails', 'Groups cannot Create'.'<li>'.$e->errorInfo[2].'</li>');
         }
     }
-
 }

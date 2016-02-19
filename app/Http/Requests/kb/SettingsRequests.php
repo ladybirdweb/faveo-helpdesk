@@ -4,14 +4,15 @@ namespace App\Http\Requests\kb;
 
 use App\Http\Requests\Request;
 
-class SettingsRequests extends Request {
-
+class SettingsRequests extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -20,11 +21,11 @@ class SettingsRequests extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
                 // 'company_name' => 'required',
                 // 'website' => 'required|url',
         ];
     }
-
 }

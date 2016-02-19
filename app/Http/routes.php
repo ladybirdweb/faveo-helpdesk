@@ -1,6 +1,6 @@
 <?php
 
-"%smtplink%";
+'%smtplink%';
 
 /*
   |--------------------------------------------------------------------------
@@ -14,7 +14,7 @@
  */
 
 Route::controllers([
-    'auth' => 'Auth\AuthController',
+    'auth'     => 'Auth\AuthController',
     'password' => 'Auth\PasswordController',
 ]);
 
@@ -147,34 +147,34 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
     Route::get('checkUpdate', ['as' => 'checkupdate', 'uses' => 'Common\SettingsController@getupdate']); /* get Check update */
 
-    Route::get('admin', array('as' => 'setting', 'uses' => 'Admin\helpdesk\SettingsController@settings'));
+    Route::get('admin', ['as' => 'setting', 'uses' => 'Admin\helpdesk\SettingsController@settings']);
 
     Route::get('plugins', ['as' => 'plugins', 'uses' => 'Common\SettingsController@Plugins']);
 
-    Route::get('getplugin', array('as' => 'get.plugin', 'uses' => 'Common\SettingsController@GetPlugin'));
+    Route::get('getplugin', ['as' => 'get.plugin', 'uses' => 'Common\SettingsController@GetPlugin']);
 
     Route::post('post-plugin', ['as' => 'post.plugin', 'uses' => 'Common\SettingsController@PostPlugins']);
 
-    Route::get('getconfig', array('as' => 'get.config', 'uses' => 'Common\SettingsController@fetchConfig'));
+    Route::get('getconfig', ['as' => 'get.config', 'uses' => 'Common\SettingsController@fetchConfig']);
 
-    Route::get('plugin/delete/{slug}', array('as' => 'delete.plugin', 'uses' => 'Common\SettingsController@DeletePlugin'));
+    Route::get('plugin/delete/{slug}', ['as' => 'delete.plugin', 'uses' => 'Common\SettingsController@DeletePlugin']);
 
-    Route::get('plugin/status/{slug}', array('as' => 'status.plugin', 'uses' => 'Common\SettingsController@StatusPlugin'));
+    Route::get('plugin/status/{slug}', ['as' => 'status.plugin', 'uses' => 'Common\SettingsController@StatusPlugin']);
 
     //Routes for showing language table and switching language
     Route::get('languages', ['as' => 'LanguageController', 'uses' => 'Admin\helpdesk\LanguageController@index']);
 
-    Route::get('get-languages', array('as' => 'getAllLanguages', 'uses' => 'Admin\helpdesk\LanguageController@getLanguages'));
+    Route::get('get-languages', ['as' => 'getAllLanguages', 'uses' => 'Admin\helpdesk\LanguageController@getLanguages']);
 
     Route::get('change-language/{lang}', ['as' => 'lang.switch', 'uses' => 'Admin\helpdesk\LanguageController@switchLanguage']);
 
     //Route for download language template package
-    Route::get('/download-template', array('as' => 'download', 'uses' => 'Admin\helpdesk\LanguageController@download'));
+    Route::get('/download-template', ['as' => 'download', 'uses' => 'Admin\helpdesk\LanguageController@download']);
 
     //Routes for language file upload form-----------You may want to use csrf protection for these route--------------
     Route::post('language/add', 'Admin\helpdesk\LanguageController@postForm');
 
-    Route::get('language/add', array('as' => 'add-language', 'uses' => 'Admin\helpdesk\LanguageController@getForm'));
+    Route::get('language/add', ['as' => 'add-language', 'uses' => 'Admin\helpdesk\LanguageController@getForm']);
 
     //Routes for  delete language package
     Route::get('delete-language/{lang}', ['as' => 'lang.delete', 'uses' => 'Admin\helpdesk\LanguageController@deleteLanguage']);
@@ -355,23 +355,23 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
   |
  */
 // seasrch
-Route::POST('tickets/search/', function() {
+Route::POST('tickets/search/', function () {
     $keyword = Illuminate\Support\Str::lower(Input::get('auto'));
     $models = App\Model\Ticket\Tickets::where('ticket_number', '=', $keyword)->orderby('ticket_number')->take(10)->skip(0)->get();
     $count = count($models);
-    return Illuminate\Support\Facades\Redirect::back()->with("contents", $models)->with("counts", $count);
+
+    return Illuminate\Support\Facades\Redirect::back()->with('contents', $models)->with('counts', $count);
 });
-Route::any('getdata', function() {
+Route::any('getdata', function () {
 
     $term = Illuminate\Support\Str::lower(Input::get('term'));
-    $data = Illuminate\Support\Facades\DB::table("tickets")->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term . '%')->groupBy('ticket_number')->take(10)->get();
+    $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
     foreach ($data as $v) {
         return [
-            'value' => $v->ticket_number
+            'value' => $v->ticket_number,
         ];
     }
 });
-
 
 Route::get('getform', ['as' => 'guest.getform', 'uses' => 'Client\helpdesk\FormController@getForm']); /* get the form for create a ticket by guest user */
 
@@ -425,7 +425,6 @@ Route::get('postcheck', 'Client\helpdesk\GuestController@PostCheckTicket');
 
 Route::post('post-ticket-reply/{id}', 'Client\helpdesk\FormController@post_ticket_reply');
 
-
 /* 404 page */
 // Route::get('404', 'error\ErrorController@error404');
 
@@ -463,30 +462,29 @@ Route::post('/postconnection', ['as' => 'postconnection', 'uses' => 'Installer\h
 Route::get('readmails', ['as' => 'readmails', 'uses' => 'Agent\helpdesk\MailController@readmails']);
 Route::get('notification', ['as' => 'notification', 'uses' => 'Agent\helpdesk\NotificationController@send_notification']);
 
-
 /*
   |=============================================================
   |  View all the Routes
   |=============================================================
  */
-Route::get('/aaa', function() {
+Route::get('/aaa', function () {
     $routeCollection = Route::getRoutes();
     echo "<table style='width:100%'>";
-    echo "<tr>";
+    echo '<tr>';
     echo "<td width='10%'><h4>HTTP Method</h4></td>";
     echo "<td width='10%'><h4>Route</h4></td>";
     echo "<td width='10%'><h4>Url</h4></td>";
     echo "<td width='80%'><h4>Corresponding Action</h4></td>";
-    echo "</tr>";
+    echo '</tr>';
     foreach ($routeCollection as $value) {
-        echo "<tr>";
-        echo "<td>" . $value->getMethods()[0] . "</td>";
-        echo "<td>" . $value->getName() . "</td>";
-        echo "<td>" . $value->getPath() . "</td>";
-        echo "<td>" . $value->getActionName() . "</td>";
-        echo "</tr>";
+        echo '<tr>';
+        echo '<td>'.$value->getMethods()[0].'</td>';
+        echo '<td>'.$value->getName().'</td>';
+        echo '<td>'.$value->getPath().'</td>';
+        echo '<td>'.$value->getActionName().'</td>';
+        echo '</tr>';
     }
-    echo "</table>";
+    echo '</table>';
 });
 
 /*
@@ -494,10 +492,10 @@ Route::get('/aaa', function() {
   |  Error Routes
   |=============================================================
  */
-Route::get('503', function() {
+Route::get('503', function () {
     return view('errors.503');
 });
-Route::get('404', function() {
+Route::get('404', function () {
     return view('errors.404');
 });
 
@@ -506,16 +504,13 @@ Route::get('404', function() {
   |  Test mail Routes
   |=============================================================
  */
-Route::get('testmail', function() {
-    $e = "hello";
+Route::get('testmail', function () {
+    $e = 'hello';
     Config::set('mail.host', 'smtp.gmail.com');
-    \Mail::send('errors.report', array('e' => $e), function ($message) {
+    \Mail::send('errors.report', ['e' => $e], function ($message) {
         $message->to('sujitprasad4567@gmail.com', 'sujit prasad')->subject('Error');
     });
 });
-
-
-
 
 /*  For the crud of catogory  */
 $router->resource('category', 'Agent\kb\CategoryController');
@@ -558,14 +553,6 @@ $router->get('direct', function () {
     return view('direct');
 });
 
-
-
-
-
-
-
-
-
 // Route::get('/',['as'=>'home' , 'uses'=> 'client\kb\UserController@home'] );
 /* post the comment from show page */
 $router->post('postcomment/{slug}', ['as' => 'postcomment', 'uses' => 'Client\kb\UserController@postComment']);
@@ -593,29 +580,12 @@ $router->get('pages/{name}', ['as' => 'pages', 'uses' => 'Client\kb\UserControll
 // Route::patch('client-profile-edit',['as' => 'client-profile-edit', 'uses' => 'Client\kb\UserController@postClientProfile']);
 // Route::patch('client-profile-password/{id}',['as' => 'client-profile-password', 'uses' => 'Client\kb\UserController@postClientProfilePassword']);
 
-
-
-
-
-
-
-
-
 Route::get('/inbox/data', ['as' => 'api.inbox', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);
-
-
-
 
 Route::get('/report', 'HomeController@getreport');
 Route::get('/reportdata', 'HomeController@pushdata');
 
-
-
-
-
-
-
-/**
+/*
  * ================================================================================================
  * @version v1
  * @access public
@@ -623,7 +593,7 @@ Route::get('/reportdata', 'HomeController@pushdata');
  * @author Vijay Sebastian<vijay.sebastian@ladybirdweb.com>
  * @name Faveo
  */
-Route::group(['prefix' => 'api/v1'], function() {
+Route::group(['prefix' => 'api/v1'], function () {
     Route::post('register', 'Api\v1\TokenAuthController@register');
     Route::post('authenticate', 'Api\v1\TokenAuthController@authenticate');
     Route::get('authenticate/user', 'Api\v1\TokenAuthController@getAuthenticatedUser');
@@ -631,10 +601,10 @@ Route::group(['prefix' => 'api/v1'], function() {
     Route::get('/database-config', ['as' => 'database-config', 'uses' => 'Api\v1\InstallerApiController@config_database']);
     Route::get('/system-config', ['as' => 'database-config', 'uses' => 'Api\v1\InstallerApiController@config_system']);
 
-    /**
+    /*
      * Helpdesk
      */
-    Route::group(['prefix' => 'helpdesk'], function() {
+    Route::group(['prefix' => 'helpdesk'], function () {
 
         Route::post('create', 'Api\v1\ApiController@createTicket');
         Route::post('reply', 'Api\v1\ApiController@ticketReply');
@@ -665,7 +635,7 @@ Route::group(['prefix' => 'api/v1'], function() {
         Route::post('internal-note', 'Api\v1\ApiController@internalNote');
     });
 
-    /**
+    /*
      * Testing Url
      */
     Route::get('create/user', 'Api\v1\TestController@createUser');
