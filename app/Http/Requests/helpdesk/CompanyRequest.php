@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * CompanyRequest
+ * CompanyRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class CompanyRequest extends Request {
-
+class CompanyRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,13 +26,13 @@ class CompanyRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             'company_name' => 'required',
-            'website' => 'url',
-            'phone' => 'numeric',
-            'logo' => 'image',
+            'website'      => 'url',
+            'phone'        => 'numeric',
+            'logo'         => 'image',
         ];
     }
-
 }

@@ -5,26 +5,26 @@ namespace App\Http\Middleware;
 use Closure;
 
 /**
- * CheckRole
+ * CheckRole.
  *
- * @package  Middleware
  * @author   Ladybird <info@ladybirdweb.com>
  */
-class CheckRole {
-
+class CheckRole
+{
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
-    public function handle($request, Closure $next) {
-
+    public function handle($request, Closure $next)
+    {
         if ($request->user()->role == 'admin') {
             return $next($request);
         }
+
         return redirect('guest')->with('fails', 'You are not Autherised');
     }
-
 }

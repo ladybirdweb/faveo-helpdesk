@@ -10,17 +10,17 @@ namespace App\Http\Controllers\Admin\helpdesk;
  * are authenticated. Of course, you are free to change or remove the
  * controller as you wish. It is just here to get your app started!
  *
- * @package     Controllers
- * @subpackage  Controller
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class HomeController extends Controller {
-
+class HomeController extends Controller
+{
     /**
      * Create a new controller instance.
+     *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
@@ -29,8 +29,8 @@ class HomeController extends Controller {
      *
      * @return Response
      */
-    public function index() {
+    public function index()
+    {
         return view('themes/default1/admin/dashboard');
     }
-
 }

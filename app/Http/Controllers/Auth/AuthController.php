@@ -3,21 +3,20 @@
 namespace App\Http\Controllers\Auth;
 
 // controllers
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Common\PhpMailController;
+use App\Http\Controllers\Common\SettingsController;
+use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\LoginRequest;
 use App\Http\Requests\helpdesk\RegisterRequest;
 use App\User;
 // classes
+use Auth;
 use Hash;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Mail;
-use Auth;
-use Exception;
 
 /**
  * ---------------------------------------------------
@@ -27,12 +26,10 @@ use Exception;
  * authentication of existing users. By default, this controller uses
  * a simple trait to add these behaviors. Why don't you explore it?
  *
- * @package Controllers
- * @subpackage Controller
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class AuthController extends Controller {
-
+class AuthController extends Controller
+{
     use AuthenticatesAndRegistersUsers;
     /* to redirect after login */
 
@@ -47,11 +44,13 @@ class AuthController extends Controller {
     /**
      * Create a new authentication controller instance.
      *
-     * @param  \Illuminate\Contracts\Auth\Guard  $auth
-     * @param  \Illuminate\Contracts\Auth\Registrar  $registrar
+     * @param \Illuminate\Contracts\Auth\Guard     $auth
+     * @param \Illuminate\Contracts\Auth\Registrar $registrar
+     *
      * @return void
      */
-    public function __construct(Guard $auth, Registrar $registrar, PhpMailController $PhpMailController) {
+    public function __construct(Guard $auth, Registrar $registrar, PhpMailController $PhpMailController)
+    {
         $this->PhpMailController = $PhpMailController;
         SettingsController::smtp();
         $this->auth = $auth;
@@ -60,17 +59,19 @@ class AuthController extends Controller {
     }
 
     /**
-     * Get the form for registration
+     * Get the form for registration.
+     *
      * @return type Response
      */
-    public function getRegister() {
+    public function getRegister()
+    {
         // Event for login
         \Event::fire(new \App\Events\FormRegisterEvent());
         if (Auth::user()) {
-            if (Auth::user()->role == "admin" || Auth::user()->role == "agent") {
+            if (Auth::user()->role == 'admin' || Auth::user()->role == 'agent') {
                 return \Redirect::route('dashboard');
-            } elseif (Auth::user()->role == "user") {
-                // return view('auth.register');	
+            } elseif (Auth::user()->role == 'user') {
+                // return view('auth.register');
             }
         } else {
             return view('auth.register');
@@ -78,12 +79,15 @@ class AuthController extends Controller {
     }
 
     /**
-     * Post registration form
-     * @param type User $user
+     * Post registration form.
+     *
+     * @param type User            $user
      * @param type RegisterRequest $request
+     *
      * @return type Response
      */
-    public function postRegister(User $user, RegisterRequest $request) {
+    public function postRegister(User $user, RegisterRequest $request)
+    {
         // Event for login
         \Event::fire(new \App\Events\LoginEvent($request));
 
@@ -105,24 +109,26 @@ class AuthController extends Controller {
         // 	$message->to($user->email, $user->full_name)->subject('active your account');
         // });
 
-        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => 'password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('password/reset/' . $code)]);
-
-
+        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => 'password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('password/reset/'.$code)]);
 
         return redirect('home')->with('success', 'Activate Your Account ! Click on Link that send to your mail');
     }
 
     /**
-     * Get mail function
-     * @param type $token
+     * Get mail function.
+     *
+     * @param type      $token
      * @param type User $user
+     *
      * @return type Response
      */
-    public function getMail($token, User $user) {
+    public function getMail($token, User $user)
+    {
         $user = $user->where('remember_token', $token)->where('active', 0)->first();
         if ($user) {
             $user->active = 1;
             $user->save();
+
             return redirect('auth/login');
         } else {
             return redirect('auth/login');
@@ -130,14 +136,16 @@ class AuthController extends Controller {
     }
 
     /**
-     * Get login page
+     * Get login page.
+     *
      * @return type Response
      */
-    public function getLogin() {
+    public function getLogin()
+    {
         if (Auth::user()) {
-            if (Auth::user()->role == "admin" || Auth::user()->role == "agent") {
+            if (Auth::user()->role == 'admin' || Auth::user()->role == 'agent') {
                 return \Redirect::route('dashboard');
-            } elseif (Auth::user()->role == "user") {
+            } elseif (Auth::user()->role == 'user') {
                 return \Redirect::route('home');
             }
         } else {
@@ -146,11 +154,14 @@ class AuthController extends Controller {
     }
 
     /**
-     * Post of login page
+     * Post of login page.
+     *
      * @param type LoginRequest $request
+     *
      * @return type Response
      */
-    public function postLogin(LoginRequest $request) {
+    public function postLogin(LoginRequest $request)
+    {
         // Set login attempts and login time
         $loginAttempts = 1;
         $usernameinput = $request->input('email');
@@ -186,21 +197,23 @@ class AuthController extends Controller {
                 return redirect()->intended($this->redirectPath());
             }
         }
+
         return redirect($this->loginPath())
                         ->withInput($request->only('email', 'remember'))
                         ->withErrors([
-                            'email' => $this->getFailedLoginMessage(),
+                            'email'    => $this->getFailedLoginMessage(),
                             'password' => $this->getFailedLoginMessage(),
         ]);
         // Increment login attempts
     }
 
     /**
-     * Get Failed login message
+     * Get Failed login message.
+     *
      * @return type string
      */
-    protected function getFailedLoginMessage() {
+    protected function getFailedLoginMessage()
+    {
         return 'This Field do not match our records.';
     }
-
 }

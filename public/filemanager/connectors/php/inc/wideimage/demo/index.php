@@ -1,63 +1,53 @@
 <?php
-	/**
-    This file is part of WideImage.
-		
-    WideImage is free software; you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation; either version 2.1 of the License, or
-    (at your option) any later version.
-		
-    WideImage is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
-		
-    You should have received a copy of the GNU Lesser General Public License
-    along with WideImage; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-    
-	* @package Demos
-  **/
-	
-	include 'helpers/common.php';
-	require_once '../lib/WideImage.php';
-	
-	$demos = array();
-	$di = new DirectoryIterator(dirname(__FILE__) . '/demos/');
-	foreach ($di as $file)
-		if (substr($file->getFilename(), -4) == '.php')
-			$demos[] = Demo::create(substr($file->getFilename(), 0, -4));
-	
-	usort($demos, 'cmp_demos');
-	
-	function cmp_demos($d1, $d2)
-	{
-		if ($d1->order === $d2->order)
-			return 0;
-		
-		return ($d1->order < $d2->order ? -1 : 1);
-	}
-	
-	if (isset($_GET['demo']))
-		$activeDemoName = $_GET['demo'];
-	else
-		$activeDemoName = null;
-	
-	$activeDemo = null;
-	foreach ($demos as $demo)
-		if ($demo->name == $activeDemoName)
-		{
-			$activeDemo = $demo;
-			break;
-		}
-	
-	if (!$activeDemo)
-		$activeDemoName = null;
-	
+    /**
+     
+     **/
+    include 'helpers/common.php';
+    require_once '../lib/WideImage.php';
+
+    $demos = [];
+    $di = new DirectoryIterator(dirname(__FILE__).'/demos/');
+    foreach ($di as $file) {
+        if (substr($file->getFilename(), -4) == '.php') {
+            $demos[] = Demo::create(substr($file->getFilename(), 0, -4));
+        }
+    }
+
+    usort($demos, 'cmp_demos');
+
+    function cmp_demos($d1, $d2)
+    {
+        if ($d1->order === $d2->order) {
+            return 0;
+        }
+
+        return $d1->order < $d2->order ? -1 : 1;
+    }
+
+    if (isset($_GET['demo'])) {
+        $activeDemoName = $_GET['demo'];
+    } else {
+        $activeDemoName = null;
+    }
+
+    $activeDemo = null;
+    foreach ($demos as $demo) {
+        if ($demo->name == $activeDemoName) {
+            $activeDemo = $demo;
+            break;
+        }
+    }
+
+    if (!$activeDemo) {
+        $activeDemoName = null;
+    }
+
 ?>
 <html>
 	<head>
-			<title>WideImage -<?php if ($activeDemo) echo " " . $activeDemo->name; ?> demo</title>
+			<title>WideImage -<?php if ($activeDemo) {
+    echo ' '.$activeDemo->name;
+} ?> demo</title>
 
 <style>
 	body
@@ -119,28 +109,28 @@
 			
 			<ul>
 <?php
-	$top_form = array();
-	
-	$top_form['output'] = new FormatSelectField('output');
-	$top_form['output']->init(Request::getInstance());
-	
-	$top_form['ncolors'] = new IntField('colors', 255);
-	$top_form['ncolors']->init(Request::getInstance());
-	
-	$top_form['dither'] = new CheckboxField('dither', true);
-	$top_form['dither']->init(Request::getInstance());
-	$top_form['match_palette'] = new CheckboxField('match_palette', true);
-	$top_form['match_palette']->init(Request::getInstance());
-	
-	foreach ($demos as $demo)
-	{
-		if ($activeDemo !== null && $demo->name == $activeDemo->name)
-			$css = 'active_demo';
-		else
-			$css = '';
-		
-		echo "<li><a class=\"$css\" href=\"?demo={$demo->name}&output={$top_form['output']->value}&colors={$top_form['ncolors']->value}&dither={$top_form['dither']->value}&match_palette={$top_form['match_palette']->value}\">{$demo->name}</a></li>\n";
-	}
+    $top_form = [];
+
+    $top_form['output'] = new FormatSelectField('output');
+    $top_form['output']->init(Request::getInstance());
+
+    $top_form['ncolors'] = new IntField('colors', 255);
+    $top_form['ncolors']->init(Request::getInstance());
+
+    $top_form['dither'] = new CheckboxField('dither', true);
+    $top_form['dither']->init(Request::getInstance());
+    $top_form['match_palette'] = new CheckboxField('match_palette', true);
+    $top_form['match_palette']->init(Request::getInstance());
+
+    foreach ($demos as $demo) {
+        if ($activeDemo !== null && $demo->name == $activeDemo->name) {
+            $css = 'active_demo';
+        } else {
+            $css = '';
+        }
+
+        echo "<li><a class=\"$css\" href=\"?demo={$demo->name}&output={$top_form['output']->value}&colors={$top_form['ncolors']->value}&dither={$top_form['dither']->value}&match_palette={$top_form['match_palette']->value}\">{$demo->name}</a></li>\n";
+    }
 ?>
 			</ul>
 			
@@ -164,10 +154,9 @@
 		</div>
 		<div style="margin-left: 200px">
 <?php
-	if ($activeDemo)
-	{
-		include 'demo_screen.php';
-	}
+    if ($activeDemo) {
+        include 'demo_screen.php';
+    }
 ?>
 		</div>
 	</body>
