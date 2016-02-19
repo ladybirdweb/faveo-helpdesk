@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * DepartmentUpdate
+ * DepartmentUpdate.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class DepartmentUpdate extends Request {
-
+class DepartmentUpdate extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,7 +26,8 @@ class DepartmentUpdate extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
 
                 // 'outgoing_email' => 'required',
@@ -34,5 +35,4 @@ class DepartmentUpdate extends Request {
                 // 'group_id' => 'required',
         ];
     }
-
 }

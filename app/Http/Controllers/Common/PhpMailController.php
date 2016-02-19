@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers\Common;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Phpmailer\PHPMailerautoload;
-use Illuminate\Http\Request;
-use Auth;
+use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
+use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
 use App\User;
-use App\Model\helpdesk\Settings\Company;
-use App\Model\helpdesk\Agent\Department;
+use Auth;
 
-class PhpMailController extends Controller {
-
-    public function fetch_smtp_details($id) {
+class PhpMailController extends Controller
+{
+    public function fetch_smtp_details($id)
+    {
         $emails = Emails::where('id', '=', $id)->first();
+
         return $emails;
     }
 
@@ -25,7 +24,8 @@ class PhpMailController extends Controller {
      *
      * @return Mail
      */
-    public function sendmail($from, $to, $message, $template_variables) {
+    public function sendmail($from, $to, $message, $template_variables)
+    {
         // dd($from);
         $from_address = $this->fetch_smtp_details($from);
 
@@ -169,21 +169,21 @@ class PhpMailController extends Controller {
 
         $system_from = $this->company();
 
-        $mail = new \PHPMailer;
+        $mail = new \PHPMailer();
 
         $status = \DB::table('settings_email')->first();
 
         $path2 = \Config::get('view.paths');
 
-        $directory = $path2[0] . '\emails' . DIRECTORY_SEPARATOR . $status->template . DIRECTORY_SEPARATOR;
+        $directory = $path2[0].'\emails'.DIRECTORY_SEPARATOR.$status->template.DIRECTORY_SEPARATOR;
 
-        $handle = fopen($directory . $template . '.blade.php', "r");
-        $contents = fread($handle, filesize($directory . $template . '.blade.php'));
+        $handle = fopen($directory.$template.'.blade.php', 'r');
+        $contents = fread($handle, filesize($directory.$template.'.blade.php'));
         fclose($handle);
 
-        $variables = array('{!!$user!!}', '{!!$agent!!}', '{!!$ticket_number!!}', '{!!$content!!}', '{!!$from!!}', '{!!$ticket_agent_name!!}', '{!!$ticket_client_name!!}', '{!!$ticket_client_email!!}', '{!!$ticket_body!!}', '{!!$ticket_assigner!!}', '{!!$ticket_link_with_number!!}', '{!!$system_error!!}', '{!!$agent_sign!!}', '{!!$department_sign!!}', '{!!$password_reset_link!!}', '{!!$email_address!!}', '{!!$user_password!!}', '{!!$system_from!!}', '{!!$system_link!!}');
+        $variables = ['{!!$user!!}', '{!!$agent!!}', '{!!$ticket_number!!}', '{!!$content!!}', '{!!$from!!}', '{!!$ticket_agent_name!!}', '{!!$ticket_client_name!!}', '{!!$ticket_client_email!!}', '{!!$ticket_body!!}', '{!!$ticket_assigner!!}', '{!!$ticket_link_with_number!!}', '{!!$system_error!!}', '{!!$agent_sign!!}', '{!!$department_sign!!}', '{!!$password_reset_link!!}', '{!!$email_address!!}', '{!!$user_password!!}', '{!!$system_from!!}', '{!!$system_link!!}'];
 
-        $data = array($user, $agent, $ticket_number, $content, $from, $ticket_agent_name, $ticket_client_name, $ticket_client_email, $ticket_body, $ticket_assigner, $ticket_link_with_number, $system_error, $agent_sign, $department_sign, $password_reset_link, $email_address, $user_password, $system_from, $system_link);
+        $data = [$user, $agent, $ticket_number, $content, $from, $ticket_agent_name, $ticket_client_name, $ticket_client_email, $ticket_body, $ticket_assigner, $ticket_link_with_number, $system_error, $agent_sign, $department_sign, $password_reset_link, $email_address, $user_password, $system_from, $system_link];
 
         // dd($variables,$data,$contents);
         // $messagebody = str_replace($variables, $data, $contents);
@@ -194,7 +194,6 @@ class PhpMailController extends Controller {
 
             $contents = $messagebody;
         }
-
 
         // dd($messagebody);
         //$mail->SMTPDebug = 3;                               // Enable verbose debug output
@@ -226,7 +225,7 @@ class PhpMailController extends Controller {
         $mail->addBCC($bc);
 
         if ($attachment != null) {
-            $size = sizeOf($message['attachments']);
+            $size = count($message['attachments']);
             $attach = $message['attachments'];
             for ($i = 0; $i < $size; $i++) {
                 $file_path = $attach[$i]->getRealPath();
@@ -237,8 +236,8 @@ class PhpMailController extends Controller {
 
         $mail->Subject = $subject;
         if ($template == 'ticket-reply-agent') {
-            $line = "---Reply above this line--- <br/><br/>";
-            $mail->Body = $line . $messagebody;
+            $line = '---Reply above this line--- <br/><br/>';
+            $mail->Body = $line.$messagebody;
         } else {
             $mail->Body = $messagebody;
         }
@@ -247,23 +246,26 @@ class PhpMailController extends Controller {
 
         if (!$mail->send()) {
             echo 'Message could not be sent.';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
+            echo 'Mailer Error: '.$mail->ErrorInfo;
         } else {
             echo 'Message has been sent';
         }
     }
 
     /**
-     * Fetching comapny name to send mail
+     * Fetching comapny name to send mail.
+     *
      * @return type
      */
-    public function company() {
+    public function company()
+    {
         $company = Company::Where('id', '=', '1')->first();
         if ($company->company_name == null) {
-            $company = "Support Center";
+            $company = 'Support Center';
         } else {
             $company = $company->company_name;
         }
+
         return $company;
     }
 
@@ -311,12 +313,15 @@ class PhpMailController extends Controller {
     // }
 
     /**
-     * Function to choose from address
-     * @param type Reg $reg
+     * Function to choose from address.
+     *
+     * @param type Reg        $reg
      * @param type Department $dept_id
+     *
      * @return type integer
      */
-    public function mailfrom($reg, $dept_id) {
+    public function mailfrom($reg, $dept_id)
+    {
         $email = Email::where('id', '=', '1')->first();
         if ($reg == 1) {
             return $email->sys_email;
@@ -329,5 +334,4 @@ class PhpMailController extends Controller {
             }
         }
     }
-
 }

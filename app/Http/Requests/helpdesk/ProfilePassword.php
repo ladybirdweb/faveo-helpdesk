@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * ProfilePassword
+ * ProfilePassword.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class ProfilePassword extends Request {
-
+class ProfilePassword extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,12 +26,12 @@ class ProfilePassword extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            'old_password' => 'required',
-            'new_password' => 'required|min:6',
+            'old_password'     => 'required',
+            'new_password'     => 'required|min:6',
             'confirm_password' => 'required|same:new_password',
         ];
     }
-
 }

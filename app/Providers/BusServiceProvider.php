@@ -5,16 +5,18 @@ namespace App\Providers;
 use Illuminate\Bus\Dispatcher;
 use Illuminate\Support\ServiceProvider;
 
-class BusServiceProvider extends ServiceProvider {
-
+class BusServiceProvider extends ServiceProvider
+{
     /**
      * Bootstrap any application services.
      *
-     * @param  \Illuminate\Bus\Dispatcher  $dispatcher
+     * @param \Illuminate\Bus\Dispatcher $dispatcher
+     *
      * @return void
      */
-    public function boot(Dispatcher $dispatcher) {
-        $dispatcher->mapUsing(function($command) {
+    public function boot(Dispatcher $dispatcher)
+    {
+        $dispatcher->mapUsing(function ($command) {
             return Dispatcher::simpleMapping(
                             $command, 'App\Commands', 'App\Handlers\Commands'
             );
@@ -26,8 +28,8 @@ class BusServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function register() {
+    public function register()
+    {
         //
     }
-
 }

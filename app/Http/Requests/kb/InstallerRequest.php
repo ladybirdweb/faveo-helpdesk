@@ -5,19 +5,19 @@ namespace App\Http\Requests\kb;
 use App\Http\Requests\Request;
 
 /**
- * InstallerRequest
+ * InstallerRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class InstallerRequest extends Request {
-
+class InstallerRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,15 +26,15 @@ class InstallerRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            'firstname' => 'required|max:20',
-            'Lastname' => 'required|max:20',
-            'email' => 'required|max:50|email',
-            'username' => 'required|max:50|min:3',
-            'password' => 'required|min:6',
+            'firstname'       => 'required|max:20',
+            'Lastname'        => 'required|max:20',
+            'email'           => 'required|max:50|email',
+            'username'        => 'required|max:50|min:3',
+            'password'        => 'required|min:6',
             'confirmpassword' => 'required|same:password',
         ];
     }
-
 }

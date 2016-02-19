@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     /*
       |--------------------------------------------------------------------------
       | Table specific configuration options.
@@ -8,7 +8,7 @@ return array(
       |
      */
 
-    'table' => array(
+    'table' => [
         /*
           |--------------------------------------------------------------------------
           | Table class
@@ -42,10 +42,10 @@ return array(
           | Supported: array
           |
          */
-        'options' => array(
-            "sPaginationType" => "full_numbers",
-            "bProcessing" => false
-        ),
+        'options' => [
+            'sPaginationType' => 'full_numbers',
+            'bProcessing'     => false,
+        ],
         /*
           |--------------------------------------------------------------------------
           | DataTable callbacks
@@ -57,7 +57,7 @@ return array(
           | Supported: array
           |
          */
-        'callbacks' => array(),
+        'callbacks' => [],
         /*
           |--------------------------------------------------------------------------
           | Skip javascript in table template
@@ -88,14 +88,14 @@ return array(
           |
          */
         'script_view' => 'chumper.datatable::javascript',
-    ),
+    ],
     /*
       |--------------------------------------------------------------------------
       | Engine specific configuration options.
       |--------------------------------------------------------------------------
       |
      */
-    'engine' => array(
+    'engine' => [
         /*
           |--------------------------------------------------------------------------
           | Search for exact words
@@ -107,16 +107,16 @@ return array(
          */
 
         'exactWordSearch' => false,
-    ),
+    ],
     /*
       |--------------------------------------------------------------------------
       | Allow overrides Datatable core classes
       |--------------------------------------------------------------------------
       |
      */
-    'classmap' => array(
+    'classmap' => [
         'CollectionEngine' => 'Chumper\Datatable\Engines\CollectionEngine',
-        'QueryEngine' => 'Chumper\Datatable\Engines\QueryEngine',
-        'Table' => 'Chumper\Datatable\Table',
-    )
-);
+        'QueryEngine'      => 'Chumper\Datatable\Engines\QueryEngine',
+        'Table'            => 'Chumper\Datatable\Table',
+    ],
+];

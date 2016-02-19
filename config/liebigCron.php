@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     // Interval defines the time in minutes between two run method calls - in other words, the time between the Cron route or command will be called
     'runInterval' => 1,
     // Should the Laravel integrated logger handle the logging
@@ -15,6 +15,6 @@ return array(
     'preventOverlapping' => true,
     // Enable or disable the check if the current Cron run is in time
     'inTimeCheck' => true,
-    // Cron application key for securing the integrated Cron run route - if the value is empty, the route is disabled 
-    'cronKey' => 'Sv9zmTTmLVODDEkI1NrRnAbfBJIPH2nf'
-);
+    // Cron application key for securing the integrated Cron run route - if the value is empty, the route is disabled
+    'cronKey' => 'Sv9zmTTmLVODDEkI1NrRnAbfBJIPH2nf',
+];

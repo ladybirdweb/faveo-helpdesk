@@ -4,7 +4,8 @@ namespace App\Model\helpdesk\Settings;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Alert extends Model {
+class Alert extends Model
+{
     /* Using alert_notice table  */
 
     protected $table = 'settings_alert_notice';
@@ -17,7 +18,6 @@ class Alert extends Model {
         'internal_assigned_agent', 'internal_department_manager', 'assignment_status', 'assignment_assigned_agent',
         'assignment_team_leader', 'assignment_team_member', 'transfer_status', 'transfer_assigned_agent', 'transfer_department_manager',
         'transfer_department_member', 'overdue_status', 'overdue_assigned_agent', 'overdue_department_manager',
-        'overdue_department_member', 'system_error', 'sql_error', 'excessive_failure'
+        'overdue_department_member', 'system_error', 'sql_error', 'excessive_failure',
     ];
-
 }

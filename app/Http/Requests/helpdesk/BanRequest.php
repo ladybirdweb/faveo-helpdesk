@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * BanRequest
+ * BanRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class BanRequest extends Request {
-
+class BanRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,11 +26,11 @@ class BanRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             'email' => 'required|email',
-            'ban' => 'required',
+            'ban'   => 'required',
         ];
     }
-
 }

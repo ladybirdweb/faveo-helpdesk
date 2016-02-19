@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * AgentRequest
+ * AgentRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class CannedRequest extends Request {
-
+class CannedRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,11 +26,11 @@ class CannedRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            'title' => 'required',
+            'title'   => 'required',
             'message' => 'required',
         ];
     }
-
 }
