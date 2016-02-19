@@ -3,34 +3,31 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreatePluginsTable extends Migration {
+class CreatePluginsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('plugins', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('path');
+            $table->integer('status');
+            $table->timestamps();
+        });
+    }
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::create('plugins', function(Blueprint $table)
-		{
-			$table->increments('id');
-			$table->string('name');
-			$table->string('path');
-			$table->integer('status');
-			$table->timestamps();
-		});
-	}
-
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::drop('plugins');
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('plugins');
+    }
 }

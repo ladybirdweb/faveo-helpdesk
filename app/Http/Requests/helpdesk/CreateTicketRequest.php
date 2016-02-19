@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * CreateTicketRequest
+ * CreateTicketRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class CreateTicketRequest extends Request {
-
+class CreateTicketRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,18 +26,18 @@ class CreateTicketRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
 
-            'email' => 'required|email',
-            'fullname' => 'required|min:3',
+            'email'     => 'required|email',
+            'fullname'  => 'required|min:3',
             'helptopic' => 'required',
             // 'dept' => 'required',
-            'sla' => 'required',
-            'subject' => 'required|min:5',
-            'body' => 'required|min:20',
+            'sla'      => 'required',
+            'subject'  => 'required|min:5',
+            'body'     => 'required|min:20',
             'priority' => 'required',
         ];
     }
-
 }

@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * Sys_userUpdate
+ * Sys_userUpdate.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class Sys_userUpdate extends Request {
-
+class Sys_userUpdate extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,12 +26,12 @@ class Sys_userUpdate extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             'user_name' => 'required',
                 // 'email' => 'required|email',
                 // 'phone' => 'size:10',
         ];
     }
-
 }

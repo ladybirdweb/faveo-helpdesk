@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * EmailsEditRequest
+ * EmailsEditRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class EmailsEditRequest extends Request {
-
+class EmailsEditRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,10 +26,11 @@ class EmailsEditRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             'email_address' => 'email',
-            'email_name' => 'required',
+            'email_name'    => 'required',
             // 'department' => 'required',
             // 'priority' => 'required',
             // 'help_topic' => 'required',
@@ -39,10 +40,9 @@ class EmailsEditRequest extends Request {
             // 'sending_host' => 'required',
             // 'sending_port' => 'required',
             //'mailbox_protocol'	=>		'required'
-            'fetching_host' => 'required',
-            'fetching_port' => 'required',
+            'fetching_host'    => 'required',
+            'fetching_port'    => 'required',
             'mailbox_protocol' => 'required',
         ];
     }
-
 }

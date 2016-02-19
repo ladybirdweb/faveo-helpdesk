@@ -4,14 +4,15 @@ namespace App\Http\Requests\helpdesk;
 
 use App\Http\Requests\Request;
 
-class MessageRequest extends Request {
-
+class MessageRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -20,13 +21,12 @@ class MessageRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
 
-
             'message_title' => 'required',
-            'message' => 'required'
+            'message'       => 'required',
         ];
     }
-
 }

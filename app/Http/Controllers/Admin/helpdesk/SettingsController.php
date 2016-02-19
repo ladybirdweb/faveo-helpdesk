@@ -21,51 +21,55 @@ use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Settings\Responder;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
+use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Utility\Date_format;
 use App\Model\helpdesk\Utility\Date_time_format;
-use App\Model\helpdesk\Ticket\Ticket_Priority;
-use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Time_format;
+use App\Model\helpdesk\Utility\Timezones;
 // classes
+use Exception;
 use Illuminate\Http\Request;
 use Input;
-use Exception;
 
 /**
- * SettingsController
+ * SettingsController.
  *
- * @package     Controllers
- * @subpackage  Controller
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class SettingsController extends Controller {
-
+class SettingsController extends Controller
+{
     /**
      * Create a new controller instance.
+     *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // $this->smtp();
         $this->middleware('auth');
         $this->middleware('roles');
     }
 
     /**
-     * Main Settings Page
+     * Main Settings Page.
+     *
      * @return type view
      */
-    public function settings() {
+    public function settings()
+    {
         return view('themes.default1.admin.helpdesk.setting');
     }
 
     /**
      * @param int $id
-     * @return Response
      * @param $compant instance of company table
      *
      * get the form for company setting page
+     *
+     * @return Response
      */
-    public function getcompany(Company $company) {
+    public function getcompany(Company $company)
+    {
         try {
             /* fetch the values of company from company table */
             $companys = $company->whereId('1')->first();
@@ -78,18 +82,21 @@ class SettingsController extends Controller {
 
     /**
      * Update the specified resource in storage.
-     * @param type int $id
-     * @param type Company $company
-     * @param type CompanyRequest $request 
+     *
+     * @param type int            $id
+     * @param type Company        $company
+     * @param type CompanyRequest $request
+     *
      * @return Response
      */
-    public function postcompany($id, Company $company, CompanyRequest $request) {
+    public function postcompany($id, Company $company, CompanyRequest $request)
+    {
         /* fetch the values of company request  */
         $companys = $company->whereId('1')->first();
         if (Input::file('logo')) {
             $name = Input::file('logo')->getClientOriginalName();
             $destinationPath = 'lb-faveo/media/company/';
-            $fileName = rand(0000, 9999) . '.' . $name;
+            $fileName = rand(0000, 9999).'.'.$name;
             Input::file('logo')->move($destinationPath, $fileName);
             $companys->logo = $fileName;
         }
@@ -103,21 +110,24 @@ class SettingsController extends Controller {
             return redirect('getcompany')->with('success', 'Company Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getcompany')->with('fails', 'Company can not Updated' . '<li>' . $e->errorInfo[2] . '</li>');
+            return redirect('getcompany')->with('fails', 'Company can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
         }
     }
 
     /**
-     * get the form for System setting page
-     * @param type System $system
-     * @param type Department $department
-     * @param type Timezones $timezone
-     * @param type Date_format $date
+     * get the form for System setting page.
+     *
+     * @param type System           $system
+     * @param type Department       $department
+     * @param type Timezones        $timezone
+     * @param type Date_format      $date
      * @param type Date_time_format $date_time
-     * @param type Time_format $time
+     * @param type Time_format      $time
+     *
      * @return type Response
      */
-    public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time) {
+    public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time)
+    {
         try {
             /* fetch the values of system from system table */
             $systems = $system->whereId('1')->first();
@@ -134,12 +144,15 @@ class SettingsController extends Controller {
 
     /**
      * Update the specified resource in storage.
-     * @param type int  $id
-     * @param type System $system
+     *
+     * @param type int           $id
+     * @param type System        $system
      * @param type SystemRequest $request
+     *
      * @return type Response
      */
-    public function postsystem($id, System $system, SystemRequest $request) {
+    public function postsystem($id, System $system, SystemRequest $request)
+    {
         try {
             // dd($request);
             /* fetch the values of system request  */
@@ -151,19 +164,22 @@ class SettingsController extends Controller {
             return redirect('getsystem')->with('success', 'System Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getsystem')->with('fails', 'System can not Updated' . '<li>' . $e->errorInfo[2] . '</li>');
+            return redirect('getsystem')->with('fails', 'System can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
         }
     }
 
     /**
-     * get the form for Ticket setting page
-     * @param type Ticket $ticket
-     * @param type Sla_plan $sla
+     * get the form for Ticket setting page.
+     *
+     * @param type Ticket     $ticket
+     * @param type Sla_plan   $sla
      * @param type Help_topic $topic
-     * @param type Priority $priority
+     * @param type Priority   $priority
+     *
      * @return type Response
      */
-    public function getticket(Ticket $ticket, Sla_plan $sla, Help_topic $topic, Ticket_Priority $priority) {
+    public function getticket(Ticket $ticket, Sla_plan $sla, Help_topic $topic, Ticket_Priority $priority)
+    {
         try {
             /* fetch the values of ticket from ticket table */
             $tickets = $ticket->whereId('1')->first();
@@ -180,12 +196,15 @@ class SettingsController extends Controller {
 
     /**
      * Update the specified resource in storage.
-     * @param type int  $id
-     * @param type Ticket $ticket
+     *
+     * @param type int     $id
+     * @param type Ticket  $ticket
      * @param type Request $request
+     *
      * @return type Response
      */
-    public function postticket($id, Ticket $ticket, Request $request) {
+    public function postticket($id, Ticket $ticket, Request $request)
+    {
         try {
             /* fetch the values of ticket request  */
             $tickets = $ticket->whereId('1')->first();
@@ -206,18 +225,21 @@ class SettingsController extends Controller {
             return redirect('getticket')->with('success', 'Ticket Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getticket')->with('fails', 'Ticket can not Updated' . '<li>' . $e->errorInfo[2] . '</li>');
+            return redirect('getticket')->with('fails', 'Ticket can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
         }
     }
 
     /**
-     * get the form for Email setting page
-     * @param type Email $email
+     * get the form for Email setting page.
+     *
+     * @param type Email    $email
      * @param type Template $template
-     * @param type Emails $email1
+     * @param type Emails   $email1
+     *
      * @return type Response
      */
-    public function getemail(Email $email, Template $template, Emails $email1) {
+    public function getemail(Email $email, Template $template, Emails $email1)
+    {
         try {
             /* fetch the values of email from Email table */
             $emails = $email->whereId('1')->first();
@@ -234,12 +256,15 @@ class SettingsController extends Controller {
 
     /**
      * Update the specified resource in storage.
-     * @param type int $id
-     * @param type Email $email
+     *
+     * @param type int          $id
+     * @param type Email        $email
      * @param type EmailRequest $request
+     *
      * @return type Response
      */
-    public function postemail($id, Email $email, EmailRequest $request) {
+    public function postemail($id, Email $email, EmailRequest $request)
+    {
         try {
             /* fetch the values of email request  */
             $emails = $email->whereId('1')->first();
@@ -258,20 +283,22 @@ class SettingsController extends Controller {
             return redirect('getemail')->with('success', 'Email Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getemail')->with('fails', 'Email can not Updated' . '<li>' . $e->errorInfo[2] . '</li>');
+            return redirect('getemail')->with('fails', 'Email can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
         }
     }
 
     /**
-     * get the form for Access setting page
+     * get the form for Access setting page.
+     *
      * @param type Access $access
+     *
      * @return type Response
      */
     // public function getaccess(Access $access) {
     // 	try {
     // 		/* fetch the values of access from access table */
     // 		$accesses = $access->whereId('1')->first();
-//	// 		 Direct to Access Settings Page 
+//	// 		 Direct to Access Settings Page
     // 		return view('themes.default1.admin.helpdesk.settings.access', compact('accesses'));
     // 	} catch (Exception $e) {
     // 		return view('404');
@@ -280,8 +307,10 @@ class SettingsController extends Controller {
 
     /**
      * Update the specified resource in storage.
-     * @param type Access $access
+     *
+     * @param type Access  $access
      * @param type Request $request
+     *
      * @return type Response
      */
     // public function postaccess(Access $access, Request $request) {
@@ -310,11 +339,14 @@ class SettingsController extends Controller {
     // }
 
     /**
-     * get the form for Responder setting page
+     * get the form for Responder setting page.
+     *
      * @param type Responder $responder
+     *
      * @return type Response
      */
-    public function getresponder(Responder $responder) {
+    public function getresponder(Responder $responder)
+    {
         try {
             /* fetch the values of responder from responder table */
             $responders = $responder->whereId('1')->first();
@@ -327,11 +359,14 @@ class SettingsController extends Controller {
 
     /**
      * Update the specified resource in storage.
+     *
      * @param type Responder $responder
-     * @param type Request $request
+     * @param type Request   $request
+     *
      * @return type
      */
-    public function postresponder(Responder $responder, Request $request) {
+    public function postresponder(Responder $responder, Request $request)
+    {
         try {
             /* fetch the values of responder request  */
             $responders = $responder->whereId('1')->first();
@@ -348,16 +383,19 @@ class SettingsController extends Controller {
             return redirect('getresponder')->with('success', 'Responder Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getresponder')->with('fails', 'Responder can not Updated' . '<li>' . $e->errorInfo[2] . '</li>');
+            return redirect('getresponder')->with('fails', 'Responder can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
         }
     }
 
     /**
-     * get the form for Alert setting page
+     * get the form for Alert setting page.
+     *
      * @param type Alert $alert
+     *
      * @return type Response
      */
-    public function getalert(Alert $alert) {
+    public function getalert(Alert $alert)
+    {
         try {
             /* fetch the values of alert from alert table */
             $alerts = $alert->whereId('1')->first();
@@ -370,12 +408,15 @@ class SettingsController extends Controller {
 
     /**
      * Update the specified resource in storage.
-     * @param type $id
-     * @param type Alert $alert
+     *
+     * @param type         $id
+     * @param type Alert   $alert
      * @param type Request $request
+     *
      * @return type Response
      */
-    public function postalert($id, Alert $alert, Request $request) {
+    public function postalert($id, Alert $alert, Request $request)
+    {
         try {
             /* fetch the values of alert request  */
             $alerts = $alert->whereId('1')->first();
@@ -430,38 +471,46 @@ class SettingsController extends Controller {
             return redirect('getalert')->with('success', 'Alert Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getalert')->with('fails', 'Alert can not Updated' . '<li>' . $e->errorInfo[2] . '</li>');
+            return redirect('getalert')->with('fails', 'Alert can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
         }
     }
 
     /**
-     * 	To display the list of ratings in the system
+     * 	To display the list of ratings in the system.
+     *
      *  @return type View
      */
-    public function RatingSettings() {
+    public function RatingSettings()
+    {
         $ratings = DB::table('settings_ratings')->get();
+
         return view('themes.default1.admin.helpdesk.settings.ratings', compact('ratings'));
     }
 
     /**
-     * 	To store rating data
+     * 	To store rating data.
+     *
      *  @return type Redirect
      */
-    public function PostRatingSettings($slug) {
+    public function PostRatingSettings($slug)
+    {
         $name = Input::get('rating_name');
         $publish = Input::get('publish');
         $modify = Input::get('modify');
-        DB::table('settings_ratings')->whereSlug($slug)->update(array('rating_name' => $name, 'publish' => $publish, 'modify' => $modify));
+        DB::table('settings_ratings')->whereSlug($slug)->update(['rating_name' => $name, 'publish' => $publish, 'modify' => $modify]);
+
         return redirect()->back()->with('success', 'Successfully updated');
     }
 
     /**
-     *  To delete a type of rating
+     *  To delete a type of rating.
+     *
      * 	@return type Redirect
      */
-    public function RatingDelete($slug) {
+    public function RatingDelete($slug)
+    {
         DB::table('settings_ratings')->whereSlug($slug)->delete();
+
         return redirect()->back()->with('success', 'Successfully Deleted');
     }
-
 }

@@ -6,13 +6,12 @@ use Closure;
 use Illuminate\Contracts\Auth\Guard;
 
 /**
- * Authenticate
+ * Authenticate.
  *
- * @package   Middleware
  * @author    Ladybird <info@ladybirdweb.com>
  */
-class Authenticate {
-
+class Authenticate
+{
     /**
      * The Guard implementation.
      *
@@ -23,21 +22,25 @@ class Authenticate {
     /**
      * Create a new filter instance.
      *
-     * @param  Guard  $auth
+     * @param Guard $auth
+     *
      * @return void
      */
-    public function __construct(Guard $auth) {
+    public function __construct(Guard $auth)
+    {
         $this->auth = $auth;
     }
 
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
-    public function handle($request, Closure $next) {
+    public function handle($request, Closure $next)
+    {
         if ($this->auth->guest()) {
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
@@ -48,5 +51,4 @@ class Authenticate {
 
         return $next($request);
     }
-
 }
