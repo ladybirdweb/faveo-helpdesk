@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * SystemRequest
+ * SystemRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class SystemRequest extends Request {
-
+class SystemRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,12 +26,12 @@ class SystemRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
 
             'name' => '',
-            'url' => 'url',
+            'url'  => 'url',
         ];
     }
-
 }

@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * HelptopicRequest
+ * HelptopicRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class HelptopicRequest extends Request {
-
+class HelptopicRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,16 +26,16 @@ class HelptopicRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             'topic' => 'required|unique:help_topic',
             // 'parent_topic' => 'required',
             // 'custom_form' => 'required',
             'department' => 'required',
-            'priority' => 'required',
-            'sla_plan' => 'required',
+            'priority'   => 'required',
+            'sla_plan'   => 'required',
                 // 'auto_assign' => 'required',
         ];
     }
-
 }

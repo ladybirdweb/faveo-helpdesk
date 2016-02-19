@@ -11,21 +11,22 @@ use App\Model\helpdesk\Ticket_thread;
 use Exception;
 
 /**
- * ThreadController
+ * ThreadController.
  *
- * @package     Controllers
- * @subpackage  Controller
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class ThreadController extends Controller {
-
+class ThreadController extends Controller
+{
     /**
-     * get the values from ticket_thread Table and direct to view page
+     * get the values from ticket_thread Table and direct to view page.
+     *
      * @param type Ticket_thread $thread
-     * @param type Priority $priority
-     * @return type  Response
+     * @param type Priority      $priority
+     *
+     * @return type Response
      */
-    public function getTickets(Ticket_thread $thread, Priority $priority) {
+    public function getTickets(Ticket_thread $thread, Priority $priority)
+    {
         try {
             /* get the values of Ticket_thread from Ticket_thread Table  */
             $threads = $thread->get();
@@ -37,5 +38,4 @@ class ThreadController extends Controller {
             return view('404');
         }
     }
-
 }

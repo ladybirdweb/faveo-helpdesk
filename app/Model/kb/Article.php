@@ -5,8 +5,8 @@ namespace App\Model\kb;
 use Illuminate\Database\Eloquent\Model;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
-class Article extends Model {
-
+class Article extends Model
+{
     use SearchableTrait;
 
     /**
@@ -16,8 +16,8 @@ class Article extends Model {
      */
     protected $searchable = [
         'columns' => [
-            'name' => 10,
-            'slug' => 10,
+            'name'        => 10,
+            'slug'        => 10,
             'description' => 10,
         ],
     ];
@@ -26,5 +26,4 @@ class Article extends Model {
     protected $table = 'kb_article';
     /* define the fillable field in the table */
     protected $fillable = ['name', 'slug', 'description', 'type', 'status', 'publish_time'];
-
 }

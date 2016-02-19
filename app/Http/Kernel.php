@@ -5,12 +5,10 @@ namespace App\Http;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 /**
- * Kernel
- *
- * @package HttpKernel
+ * Kernel.
  */
-class Kernel extends HttpKernel {
-
+class Kernel extends HttpKernel
+{
     /**
      * The application's global HTTP middleware stack.
      *
@@ -32,15 +30,14 @@ class Kernel extends HttpKernel {
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => 'App\Http\Middleware\Authenticate',
-        'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
-        'guest' => 'App\Http\Middleware\RedirectIfAuthenticated',
-        'roles' => 'App\Http\Middleware\CheckRole',
-        'role.agent' => 'App\Http\Middleware\CheckRoleAgent',
-        'role.user' => 'App\Http\Middleware\CheckRoleUser',
-        'api' => 'App\Http\Middleware\ApiKey',
-        'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
-        'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class
+        'auth'        => 'App\Http\Middleware\Authenticate',
+        'auth.basic'  => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
+        'guest'       => 'App\Http\Middleware\RedirectIfAuthenticated',
+        'roles'       => 'App\Http\Middleware\CheckRole',
+        'role.agent'  => 'App\Http\Middleware\CheckRoleAgent',
+        'role.user'   => 'App\Http\Middleware\CheckRoleUser',
+        'api'         => 'App\Http\Middleware\ApiKey',
+        'jwt.auth'    => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
+        'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
     ];
-
 }

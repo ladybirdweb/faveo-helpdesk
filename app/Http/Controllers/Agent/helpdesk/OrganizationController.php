@@ -6,13 +6,11 @@ namespace App\Http\Controllers\Agent\helpdesk;
 use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\OrganizationRequest;
-
 /* include organization model */
 use App\Http\Requests\helpdesk\OrganizationUpdate;
 // models
 /* Define OrganizationRequest to validate the create form */
 use App\Model\helpdesk\Agent_panel\Organization;
-
 /* Define OrganizationUpdate to validate the create form */
 use App\Model\helpdesk\Agent_panel\User_org;
 // classes
@@ -22,21 +20,21 @@ use Exception;
  * OrganizationController
  * This controller is used to CRUD organization detail.
  *
- * @package     Controllers
- * @subpackage  Controller
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class OrganizationController extends Controller {
-
+class OrganizationController extends Controller
+{
     /**
      * Create a new controller instance.
      * constructor to check
      * 1. authentication
      * 2. user roles
-     * 3. roles must be agent
+     * 3. roles must be agent.
+     *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // checking for authentication
         $this->middleware('auth');
         // checking if the role is agent
@@ -45,10 +43,13 @@ class OrganizationController extends Controller {
 
     /**
      * Display a listing of the resource.
+     *
      * @param type Organization $org
+     *
      * @return type Response
      */
-    public function index() {
+    public function index()
+    {
         try {
             /* get all values of table organization */
             return view('themes.default1.agent.helpdesk.organization.index');
@@ -58,10 +59,12 @@ class OrganizationController extends Controller {
     }
 
     /**
-     * This function is used to display the list of Organizations
+     * This function is used to display the list of Organizations.
+     *
      * @return datatable
      */
-    public function org_list() {
+    public function org_list()
+    {
         // chumper datable package call to display Advance datatable
         return \Datatable::collection(Organization::all())
                         /* searchable name */
@@ -73,28 +76,31 @@ class OrganizationController extends Controller {
                             // return $model->name;
                             if (strlen($model->name) > 20) {
                                 $orgname = substr($model->name, 0, 25);
-                                $orgname = substr($orgname, 0, strrpos($orgname, ' ')) . ' ...';
+                                $orgname = substr($orgname, 0, strrpos($orgname, ' ')).' ...';
                             } else {
                                 $orgname = $model->name;
                             }
+
                             return $orgname;
                         })
                         /* column website */
                         ->addColumn('website', function ($model) {
                             $website = $model->website;
+
                             return $website;
                         })
                         /* column phone number */
                         ->addColumn('phone', function ($model) {
                             $phone = $model->phone;
+
                             return $phone;
                         })
                         /* column action buttons */
                         ->addColumn('Actions', function ($model) {
-                            // displaying action buttons 
+                            // displaying action buttons
                             // modal popup to delete data
-                            return '<span  data-toggle="modal" data-target="#deletearticle' . $model->id . '"><a href="#" ><button class="btn btn-danger btn-xs"></a> ' . \Lang::get('lang.delete') . ' </button></span>&nbsp;<a href="' . route('organizations.edit', $model->id) . '" class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp;<a href="' . route('organizations.show', $model->id) . '" class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>
-				<div class="modal fade" id="deletearticle' . $model->id . '">
+                            return '<span  data-toggle="modal" data-target="#deletearticle'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.\Lang::get('lang.delete').' </button></span>&nbsp;<a href="'.route('organizations.edit', $model->id).'" class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href="'.route('organizations.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
+				<div class="modal fade" id="deletearticle'.$model->id.'">
 			        <div class="modal-dialog">
 			            <div class="modal-content">
                 			<div class="modal-header">
@@ -102,11 +108,11 @@ class OrganizationController extends Controller {
                     			<h4 class="modal-title">Are You Sure ?</h4>
                 			</div>
                 			<div class="modal-body">
-                				' . $model->user_name . '
+                				'.$model->user_name.'
                 			</div>
                 			<div class="modal-footer">
                     			<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">Close</button>
-                    			<a href="' . route('org.delete', $model->id) . '"><button class="btn btn-danger">delete</button></a>
+                    			<a href="'.route('org.delete', $model->id).'"><button class="btn btn-danger">delete</button></a>
                 			</div>
             			</div><!-- /.modal-content -->
         			</div><!-- /.modal-dialog -->
@@ -117,9 +123,11 @@ class OrganizationController extends Controller {
 
     /**
      * Show the form for creating a new organization.
+     *
      * @return type Response
      */
-    public function create() {
+    public function create()
+    {
         try {
             return view('themes.default1.agent.helpdesk.organization.create');
         } catch (Exception $e) {
@@ -129,11 +137,14 @@ class OrganizationController extends Controller {
 
     /**
      * Store a newly created organization in storage.
-     * @param type Organization $org
+     *
+     * @param type Organization        $org
      * @param type OrganizationRequest $request
+     *
      * @return type Redirect
      */
-    public function store(Organization $org, OrganizationRequest $request) {
+    public function store(Organization $org, OrganizationRequest $request)
+    {
         try {
             /* Insert the all input request to organization table */
             /* Check whether function success or not */
@@ -152,11 +163,14 @@ class OrganizationController extends Controller {
 
     /**
      * Display the specified organization.
-     * @param type $id
+     *
+     * @param type              $id
      * @param type Organization $org
+     *
      * @return type view
      */
-    public function show($id, Organization $org) {
+    public function show($id, Organization $org)
+    {
         try {
             /* select the field by id  */
             $orgs = $org->whereId($id)->first();
@@ -169,11 +183,14 @@ class OrganizationController extends Controller {
 
     /**
      * Show the form for editing the specified organization.
-     * @param type $id
+     *
+     * @param type              $id
      * @param type Organization $org
+     *
      * @return type view
      */
-    public function edit($id, Organization $org) {
+    public function edit($id, Organization $org)
+    {
         try {
             /* select the field by id  */
             $orgs = $org->whereId($id)->first();
@@ -186,12 +203,15 @@ class OrganizationController extends Controller {
 
     /**
      * Update the specified organization in storage.
-     * @param type $id
-     * @param type Organization $org
+     *
+     * @param type                    $id
+     * @param type Organization       $org
      * @param type OrganizationUpdate $request
+     *
      * @return type Redirect
      */
-    public function update($id, Organization $org, OrganizationUpdate $request) {
+    public function update($id, Organization $org, OrganizationUpdate $request)
+    {
 
         /* select the field by id  */
         $orgs = $org->whereId($id)->first();
@@ -213,10 +233,13 @@ class OrganizationController extends Controller {
 
     /**
      * Delete a specified organization from storage.
+     *
      * @param type int $id
+     *
      * @return type Redirect
      */
-    public function destroy($id, Organization $org, User_org $user_org) {
+    public function destroy($id, Organization $org, User_org $user_org)
+    {
 
         /* select the field by id  */
         $orgs = $org->whereId($id)->first();
@@ -237,11 +260,14 @@ class OrganizationController extends Controller {
     }
 
     /**
-     * Soring an organization head
-     * @param type $id 
+     * Soring an organization head.
+     *
+     * @param type $id
+     *
      * @return type boolean
      */
-    public function Head_Org($id) {
+    public function Head_Org($id)
+    {
         // get the user to make organization head
         $head_user = \Input::get('user');
         // get an instance of the selected organization
@@ -249,7 +275,7 @@ class OrganizationController extends Controller {
         $org_head->head = $head_user;
         // save the user to organization head
         $org_head->save();
+
         return 1;
     }
-
 }

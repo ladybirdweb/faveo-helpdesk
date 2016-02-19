@@ -4,14 +4,15 @@ namespace App\Http\Requests\kb;
 
 use App\Http\Requests\Request;
 
-class ProfileRequest extends Request {
-
+class ProfileRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -20,12 +21,12 @@ class ProfileRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            'firstname' => 'required',
-            'lastname' => 'required',
+            'firstname'   => 'required',
+            'lastname'    => 'required',
             'profile_pic' => 'mimes:png,jpeg',
         ];
     }
-
 }

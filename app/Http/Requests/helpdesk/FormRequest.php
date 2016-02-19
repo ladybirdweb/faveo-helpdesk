@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * FormRequest
+ * FormRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class FormRequest extends Request {
-
+class FormRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,14 +26,14 @@ class FormRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
 
-            'title' => 'required',
-            'label' => 'required',
-            'type' => 'required',
+            'title'      => 'required',
+            'label'      => 'required',
+            'type'       => 'required',
             'visibility' => 'required',
         ];
     }
-
 }
