@@ -1054,7 +1054,6 @@ class TicketController extends Controller
                 // 	$message->to($emailadd, $username)->subject('Welcome to '.$company.' helpdesk');
                 // })) {
                 try {
-
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => 'Welcome to '.$company.' helpdesk', 'scenario' => 'registration-notification'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'user_password' => $password]);
                 } catch (\Exception $e) {
                     // return 0;
