@@ -103,7 +103,7 @@ class EmailsController extends Controller {
                 $email->password = $encrypted;
                 $email->save();
 
-                $email_settings = Email::where('id',1'=', '1')->first();
+                $email_settings = Email::where('id', '=', '1')->first();
                 $email_settings->sys_email = $email->id;
                 $email_settings->save();
                 return redirect('emails')->with('success', 'Email Created sucessfully');
