@@ -1,4 +1,4 @@
-s<?php
+<?php
 
 namespace App\Model\kb;
 
