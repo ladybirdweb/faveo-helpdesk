@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * TicketForm
+ * TicketForm.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class SmtpRequest extends Request {
-
+class SmtpRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,15 +26,15 @@ class SmtpRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            'host' => 'required',
-            'port' => 'required',
+            'host'       => 'required',
+            'port'       => 'required',
             'encryption' => 'required',
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
+            'name'       => 'required',
+            'email'      => 'required',
+            'password'   => 'required',
         ];
     }
-
 }

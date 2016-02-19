@@ -5,52 +5,42 @@ namespace App\Http\Controllers\Api\v1;
 // controllers
 use App\Http\Controllers\Controller;
 // requests
-use Illuminate\Http\Request;
-use App\Http\Requests\helpdesk\InstallerRequest;
-// models
-use App\User;
 use App\Model\helpdesk\Settings\System;
-use App\Model\helpdesk\Form\Form_details;
+// models
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
-// classes
-use App;
+use App\User;
 use Artisan;
+// classes
 use Config;
 use File;
 use Hash;
-use Input;
-use Redirect;
-use Session;
-use View;
-use Exception;
+use Illuminate\Http\Request;
 
 /**
  * |=======================================================================
  * |Class: InstallController
- * |=======================================================================
+ * |=======================================================================.
  *
  *  Class to perform the first install operation without this the database
  *  settings could not be started
  *
- *  @package    Faveo HELPDESK
- *  @subpackage Controller
  *  @author     Ladybird <info@ladybirdweb.com>
- *
  */
-class InstallerApiController extends Controller {
-
+class InstallerApiController extends Controller
+{
     /**
      * config_database
      * This function is to configure the database and install the application via API call.
+     *
      * @return type Json
      */
-    public function config_database(Request $request) {
+    public function config_database(Request $request)
+    {
         error_reporting(E_ALL & ~E_NOTICE);
 
         // Check for pre install
         if (\Config::get('database.install') == '%0%') {
-
             $default = $request->database;
             $host = $request->host;
             $database = $request->databasename;
@@ -74,7 +64,7 @@ class InstallerApiController extends Controller {
                 }
 
                 // Write environment file
-                $fp = fopen(base_path() . "/.env", 'w');
+                $fp = fopen(base_path().'/.env', 'w');
                 fwrite($fp, $config);
                 fclose($fp);
 
@@ -90,9 +80,11 @@ class InstallerApiController extends Controller {
     /**
      * config_database
      * This function is to configure the database and install the application via API call.
+     *
      * @return type Json
      */
-    public function config_system(Request $request) {
+    public function config_system(Request $request)
+    {
         // Check for pre install
         if (\Config::get('database.install') == '%0%') {
             $firstname = $request->firstname;
@@ -104,8 +96,8 @@ class InstallerApiController extends Controller {
             $datetime = $request->datetime;
 
             // Migrate database
-            Artisan::call('migrate', array('--force' => true));
-            Artisan::call('db:seed', array('--force' => true));
+            Artisan::call('migrate', ['--force' => true]);
+            Artisan::call('db:seed', ['--force' => true]);
 
             // checking requested timezone for the admin and system
             $timezones = Timezones::where('name', '=', $timezone)->first();
@@ -118,7 +110,7 @@ class InstallerApiController extends Controller {
                 return ['response' => 'fail', 'reason' => 'invalid date-time format', 'status' => '0'];
             }
             // Creating minum settings for system
-            $system = new System;
+            $system = new System();
             $system->status = 1;
             $system->department = 1;
             $system->date_time_format = $date_time_format->id;
@@ -126,17 +118,17 @@ class InstallerApiController extends Controller {
             $system->save();
 
             // Creating user
-            $user = User::create(array(
-                        'first_name' => $firstname,
-                        'last_name' => $lastname,
-                        'email' => $email,
-                        'user_name' => $username,
-                        'password' => Hash::make($password),
-                        'active' => 1,
-                        'role' => 'admin',
+            $user = User::create([
+                        'first_name'   => $firstname,
+                        'last_name'    => $lastname,
+                        'email'        => $email,
+                        'user_name'    => $username,
+                        'password'     => Hash::make($password),
+                        'active'       => 1,
+                        'role'         => 'admin',
                         'assign_group' => 1,
-                        'primary_dpt' => 1,
-            ));
+                        'primary_dpt'  => 1,
+            ]);
 
             // Setting database installed status
             $value = '1';
@@ -165,5 +157,4 @@ class InstallerApiController extends Controller {
             return ['response' => 'fail', 'reason' => 'this system is already installed', 'status' => '0'];
         }
     }
-
 }

@@ -7,45 +7,47 @@ use App\Http\Controllers\Controller;
 // models
 use App\Model\helpdesk\Email\Emails;
 // classes
-use Exception;
 
 /**
- * EmailController
+ * EmailController.
  *
- * @package     Controllers
- * @subpackage  Controller
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class OuthouseController extends Controller {
-
+class EmailController extends Controller
+{
     /**
-     * post port
+     * post port.
      *
      * @return string
      */
-    public static function port() {
+    public static function port()
+    {
         $port = Emails::where('id', '=', '1')->first();
         $portvalue = $port->option_value;
+
         return $portvalue;
     }
 
     /**
-     * post host
+     * post host.
      *
      * @return string
      */
-    public static function host() {
+    public static function host()
+    {
         $host = Option::where('option_name', '=', 'host')->first();
         $hostvalue = $host->option_value;
+
         return $hostvalue;
     }
 
     /**
-     * post username
+     * post username.
      *
      * @return string
      */
-    public static function username() {
+    public static function username()
+    {
         $username = Option::where('option_name', '=', 'username')->first();
         $uservalue = $username->option_value;
 
@@ -53,11 +55,12 @@ class OuthouseController extends Controller {
     }
 
     /**
-     * post passowrd
+     * post passowrd.
      *
      * @return string
      */
-    public static function password() {
+    public static function password()
+    {
         $password = Option::where('option_name', '=', 'password')->first();
         $passvalue = $password->option_value;
 
@@ -65,15 +68,15 @@ class OuthouseController extends Controller {
     }
 
     /**
-     * post encryption
+     * post encryption.
      *
      * @return string
      */
-    public static function encryption() {
+    public static function encryption()
+    {
         $encryption = Option::where('option_name', '=', 'encryption')->first();
         $encryptvalue = $encryption->option_value;
 
         return $encryptvalue;
     }
-
 }
