@@ -1747,7 +1747,7 @@ function lockAjaxCall(locktime){
                         // alert(response);
                         // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)
                         // +"{{Lang::get('lang.minutes')}}";
-                        // $("#alert22").hide();
+                        $("#alert22").hide();
                         // $("#alert21").show();
                         // $('#message-success2').html(message);
                         $('#replybtn').attr('disabled', false); 
