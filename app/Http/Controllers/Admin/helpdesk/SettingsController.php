@@ -515,12 +515,14 @@ class SettingsController extends Controller
     }
 
     /**
-     *  Generate Api key
+     *  Generate Api key.
+     *
      *  @return type json
      */
-    public function generateApiKey() {
+    public function generateApiKey()
+    {
         $key = str_random(32);
+
         return $key;
     }
-
 }
