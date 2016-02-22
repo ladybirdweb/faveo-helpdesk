@@ -453,19 +453,20 @@ class TestController extends Controller
         }
     }
 
-     public function getTicketById(){
-        try{
-            $url = $this->server . "helpdesk/my-tickets?id=1&api_key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token=" . \Config::get('app.token');
+    public function getTicketById()
+    {
+        try {
+            $url = $this->server.'helpdesk/my-tickets?id=1&api_key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token='.\Config::get('app.token');
             $_this = new self();
             $respose = $_this->callGetApi($url);
+
             return $respose;
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
             $file = $e->getFile();
+
             return response()->json(compact('error', 'file', 'line'));
         }
     }
-
-
 }
