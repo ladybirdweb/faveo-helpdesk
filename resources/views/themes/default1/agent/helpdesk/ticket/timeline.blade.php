@@ -220,7 +220,7 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                         else
                             $ticket_source = $tickets->source;
 ?>
-                    <table class="table table-hover">
+                    <table class="table table-hover" id="refresh3">
 
                         @if($user->phone_number !=null)<tr><td><b>Phone:</b></td>          <td>{{$user->phone_number}}</td></tr>@endif
                         @if($user->mobile !=null)<tr><td><b>Phone:</b></td>          <td>{{$user->ext . $user->phone_number}}</td></tr>@endif
@@ -1748,6 +1748,10 @@ function lockAjaxCall(locktime){
                         // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)
                         // +"{{Lang::get('lang.minutes')}}";
                         $("#alert22").hide();
+                        $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
+                        $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
+                        $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
+                        $("#t1").load("../thread/{{$tickets->id}}  #t1");
                         // $("#alert21").show();
                         // $('#message-success2').html(message);
                         $('#replybtn').attr('disabled', false); 
