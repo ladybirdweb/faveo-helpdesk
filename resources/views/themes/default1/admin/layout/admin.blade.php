@@ -4,6 +4,8 @@
         <meta charset="UTF-8">
         <title>Faveo | HELP DESK</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        <!-- faveo favicon -->
+        <link rel="shortcut icon" href="{{asset("lb-faveo/media/images/favicon.ico")}}">
         <!-- Bootstrap 3.3.2 -->
         <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Font Awesome Icons -->

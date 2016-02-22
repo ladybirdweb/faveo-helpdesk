@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * TemplateUdate
+ * TemplateUdate.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class TemplateUdate extends Request {
-
+class TemplateUdate extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,13 +26,13 @@ class TemplateUdate extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
 
-            'ban_status' => 'required',
+            'ban_status'            => 'required',
             'template_set_to_clone' => 'required',
-            'language' => 'required',
+            'language'              => 'required',
         ];
     }
-
 }

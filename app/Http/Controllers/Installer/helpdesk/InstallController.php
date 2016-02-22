@@ -7,47 +7,40 @@ use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\InstallerRequest;
 // models
-use App\User;
 use App\Model\helpdesk\Settings\System;
-use App\Model\helpdesk\Form\Form_details;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
+use App\User;
 // classes
-use App;
 use Artisan;
 use Config;
+use Exception;
 use File;
 use Hash;
 use Input;
 use Redirect;
 use Session;
 use View;
-use Exception;
 
 /**
  * |=======================================================================
  * |Class: InstallController
- * |=======================================================================
+ * |=======================================================================.
  *
  *  Class to perform the first install operation without this the database
  *  settings could not be started
  *
- *  @package    Faveo HELPDESK
- *  @subpackage Controller
  *  @author     Ladybird <info@ladybirdweb.com>
- *
  */
-class InstallController extends Controller {
-
+class InstallController extends Controller
+{
     /**
-     * Get Licence (step 1)
+     * Get Licence (step 1).
+     *
      * @return type view
      */
-    public function licence() {
-        // checking if the installation is running for the first time or not
-        // if (Session::get('step5') == 'step5') {
-            // return Redirect::route('account');
-        // }
+    public function licence()
+    {
         // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             return view('themes/default1/installer/helpdesk/view1');
@@ -58,14 +51,17 @@ class InstallController extends Controller {
     }
 
     /**
-     * Post Licencecheck
+     * Post Licencecheck.
+     *
      * @return type view
      */
-    public function licencecheck() {
+    public function licencecheck()
+    {
         // checking if the user have accepted the licence agreement
         $accept = (Input::has('accept1')) ? true : false;
         if ($accept == 'accept') {
             Session::put('step1', 'step1');
+
             return Redirect::route('prerequisites');
         } else {
             return Redirect::route('licence')->with('fails', 'Failed! first accept the licence agreeement');
@@ -74,17 +70,15 @@ class InstallController extends Controller {
     }
 
     /**
-     * Get prerequisites (step 2)
+     * Get prerequisites (step 2).
      * 
      * Checking the extensions enabled required for installing the faveo
      * without which the project cannot be executed properly
+     *
      * @return type view
      */
-    public function prerequisites() {
-        // checking if the installation is running for the first time or not
-        // if (Session::get('step5') == 'step5') {
-            // return Redirect::route('account');
-        // }
+    public function prerequisites()
+    {
         // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             if (Session::get('step1') == 'step1') {
@@ -99,24 +93,25 @@ class InstallController extends Controller {
 
     /**
      * Post Prerequisitescheck
-     * checking prerequisites
+     * checking prerequisites.
+     *
      * @return type view
      */
-    public function prerequisitescheck() {
+    public function prerequisitescheck()
+    {
         Session::put('step2', 'step2');
+
         return Redirect::route('configuration');
     }
 
     /**
      * Get Localization (step 3)
-     * Requesting user recomended settings for installation
+     * Requesting user recomended settings for installation.
+     *
      * @return type view
      */
-    public function localization() {
-        // checking if the installation is running for the first time or not
-        // if (Session::get('step5') == 'step5') {
-            // return Redirect::route('account');
-        // }
+    public function localization()
+    {
         // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             if (Session::get('step2') == 'step2') {
@@ -131,11 +126,12 @@ class InstallController extends Controller {
 
     /**
      * Post localizationcheck
-     * checking prerequisites
+     * checking prerequisites.
+     *
      * @return type view
      */
-    public function localizationcheck() {
-
+    public function localizationcheck()
+    {
         Session::put('step3', 'step3');
 
         Session::put('language', Input::get('language'));
@@ -148,14 +144,12 @@ class InstallController extends Controller {
 
     /**
      * Get Configuration (step 4)
-     * checking prerequisites
+     * checking prerequisites.
+     *
      * @return type view
      */
-    public function configuration() {
-        // checking if the installation is running for the first time or not
-        // if (Session::get('step5') == 'step5') {
-        //     return Redirect::route('account');
-        // }
+    public function configuration()
+    {
         // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             if (Session::get('step2') == 'step2') {
@@ -170,12 +164,19 @@ class InstallController extends Controller {
 
     /**
      * Post configurationcheck
-     * checking prerequisites
+     * checking prerequisites.
+     *
      * @return type view
      */
-    public function configurationcheck() {
-
+    public function configurationcheck()
+    {
         Session::put('step4', 'step4');
+        // dd(Input::get('default'));
+        // dd(Input::get('host'));
+        // dd(Input::get('databasename'));
+        // dd(Input::get('username'));
+        // dd(Input::get('password'));
+        // dd(Input::get('port'));
 
         Session::put('default', Input::get('default'));
         Session::put('host', Input::get('host'));
@@ -188,10 +189,12 @@ class InstallController extends Controller {
     }
 
     /**
-     * postconnection
+     * postconnection.
+     *
      * @return type view
      */
-    public function postconnection() {
+    public function postconnection()
+    {
         error_reporting(E_ALL & ~E_NOTICE);
         $default = Input::get('default');
         $host = Input::get('host');
@@ -213,7 +216,7 @@ class InstallController extends Controller {
             $config .= "{$key}={$val}\n";
         }
         // Write environment file
-        $fp = fopen(base_path() . "/.env", 'w');
+        $fp = fopen(base_path().'/.env', 'w');
         fwrite($fp, $config);
         fclose($fp);
 
@@ -222,10 +225,12 @@ class InstallController extends Controller {
 
     /**
      * Get database
-     * checking prerequisites
+     * checking prerequisites.
+     *
      * @return type view
      */
-    public function database() {
+    public function database()
+    {
         // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             if (Session::get('step4') == 'step4') {
@@ -240,10 +245,12 @@ class InstallController extends Controller {
 
     /**
      * Get account
-     * checking prerequisites
+     * checking prerequisites.
+     *
      * @return type view
      */
-    public function account() {
+    public function account()
+    {
         // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             if (Session::get('step4') == 'step4') {
@@ -251,6 +258,7 @@ class InstallController extends Controller {
                 Session::forget('step1');
                 Session::forget('step2');
                 Session::forget('step3');
+
                 return View::make('themes/default1/installer/helpdesk/view5');
             } else {
                 return Redirect::route('configuration');
@@ -262,15 +270,18 @@ class InstallController extends Controller {
 
     /**
      * Post accountcheck
-     * checking prerequisites
-     * @param type InstallerRequest $request 
+     * checking prerequisites.
+     *
+     * @param type InstallerRequest $request
+     *
      * @return type view
      */
-    public function accountcheck(InstallerRequest $request) {
+    public function accountcheck(InstallerRequest $request)
+    {
 
         // migrate database
-        Artisan::call('migrate', array('--force' => true));
-        Artisan::call('db:seed', array('--force' => true));
+        Artisan::call('migrate', ['--force' => true]);
+        Artisan::call('db:seed', ['--force' => true]);
 
         // create user
         $firstname = $request->input('firstname');
@@ -284,9 +295,8 @@ class InstallController extends Controller {
         $date = $request->input('date');
         $datetime = $request->input('datetime');
 
-        
         //\Cache::forever('language', $language);
-        
+
         //\App::setLocale($language);
         // $system = System::where('id','=','1')->first();
         // $system->time_zone = $timezone;
@@ -306,39 +316,41 @@ class InstallController extends Controller {
         }
 
         // Creating minum settings for system
-        $system = new System;
+        $system = new System();
         $system->status = 1;
         $system->department = 1;
         $system->date_time_format = $date_time_format->id;
         $system->time_zone = $timezones->id;
         $system->save();
 
-
         // creating an user
-        $user = User::create(array(
-                    'first_name' => $firstname,
-                    'last_name' => $lastname,
-                    'email' => $email,
-                    'user_name' => $username,
-                    'password' => Hash::make($password),
+        $user = User::create([
+                    'first_name'   => $firstname,
+                    'last_name'    => $lastname,
+                    'email'        => $email,
+                    'user_name'    => $username,
+                    'password'     => Hash::make($password),
                     'assign_group' => 1,
-                    'primary_dpt' => 1,
-                    'active' => 1,
-                    'role' => 'admin',
-        ));
+                    'primary_dpt'  => 1,
+                    'active'       => 1,
+                    'role'         => 'admin',
+        ]);
         // checking if the user have been created
         if ($user) {
             Session::put('step6', 'step6');
+
             return Redirect::route('final');
         }
     }
 
     /**
      * Get finalize
-     * checking prerequisites
+     * checking prerequisites.
+     *
      * @return type view
      */
-    public function finalize() {
+    public function finalize()
+    {
         // checking if the installation have been completed or not
         if (Session::get('step6') == 'step6') {
             $value = '1';
@@ -364,6 +376,7 @@ class InstallController extends Controller {
                 Session::forget('step4');
                 Session::forget('step5');
                 Session::forget('step6');
+
                 return View::make('themes/default1/installer/helpdesk/view6');
             } catch (Exception $e) {
                 return Redirect::route('npl');
@@ -375,15 +388,16 @@ class InstallController extends Controller {
 
     /**
      * Post finalcheck
-     * checking prerequisites
+     * checking prerequisites.
+     *
      * @return type view
      */
-    public function finalcheck() {
+    public function finalcheck()
+    {
         try {
             return redirect('/auth/login');
         } catch (Exception $e) {
             return redirect('/auth/login');
         }
     }
-
 }

@@ -3,10 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Http\Controllers\WelcomeController;
 
-class AppServiceProvider extends ServiceProvider {
-
+class AppServiceProvider extends ServiceProvider
+{
     /**
      * Register any application services.
      *
@@ -16,31 +15,33 @@ class AppServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function register() {
+    public function register()
+    {
         $this->app->bind(
                 'Illuminate\Contracts\Auth\Registrar', 'App\Services\Registrar'
         );
     }
 
-    public function boot() {
-        // Please note the different namespace 
+    public function boot()
+    {
+        // Please note the different namespace
         // and please add a \ in front of your classes in the global namespace
-        \Event::listen('cron.collectJobs', function() {
+        \Event::listen('cron.collectJobs', function () {
 
-            \Cron::add('example1', '* * * * *', function() {
+            \Cron::add('example1', '* * * * *', function () {
                 $this->index();
+
                 return 'No';
             });
 
-            \Cron::add('example2', '*/2 * * * *', function() {
+            \Cron::add('example2', '*/2 * * * *', function () {
                 // Do some crazy things successfully every two minute
-                return null;
+                return;
             });
 
-            \Cron::add('disabled job', '0 * * * *', function() {
+            \Cron::add('disabled job', '0 * * * *', function () {
                 // Do some crazy things successfully every hour
             }, false);
         });
     }
-
 }

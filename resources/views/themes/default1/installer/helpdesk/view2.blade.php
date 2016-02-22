@@ -17,8 +17,8 @@ active
 
 
 <?php
-define('PROBE_VERSION', '4.2');
-define('PROBE_FOR', '<b>Faveo</b>HELPDESK '.Config::get('app.version').' and Newer');
+define('PROBE_VERSION', '1.0');
+define('PROBE_FOR', 'Faveo HELPDESK '. Config::get('app.version').' and Newer');
 define('STATUS_OK', 'Ok');
 define('STATUS_WARNING', 'Warning');
 define('STATUS_ERROR', 'Error');
@@ -43,8 +43,8 @@ class TestResult {
         <?php echo PROBE_FOR?>
         <br/>
         <br/>
+    This test will check prerequisites required to install Faveo
     
-    Test/Probe Prerequisites required to be installed Probe 
     <br/><br/>    
      <?php
 
@@ -201,7 +201,6 @@ $results = array();
 $php_ok = validate_php($results);
 $memory_ok = validate_memory_limit($results);
 $extensions_ok = validate_extensions($results);
-$compatibility_mode_ok = validate_zend_compatibility_mode($results);
 ?>
 <p class="wc-setup-actions step">
 <?php 
@@ -211,9 +210,15 @@ foreach ($results as $result) {
 ?>
 </p>
 <?php
-if ($php_ok && $memory_ok && $extensions_ok && $compatibility_mode_ok) {
+if ($php_ok && $memory_ok && $extensions_ok ) {
     ?>
 </div>  
+
+            <div class="woocommerce-message woocommerce-tracker" >
+                <p id="pass">OK, this system can run Faveo</p>
+            </div>
+
+
     <form action="{{URL::route('postprerequisites')}}" method="post"  class="border-line">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <p class="wc-setup-actions step">
@@ -221,22 +226,25 @@ if ($php_ok && $memory_ok && $extensions_ok && $compatibility_mode_ok) {
             <a href="{!! route('licence') !!}" class="button button-large button-next" style="float: left">Previous</a>
         </p>
     </form>
+</br>
     <?php
 } else {
+
     ?></div><br>
-<a href="{{URL::route('licence')}}" style="text-color:black"><button value="prev" id="access1">Prev</button></a> <input type="submit" value="Next" id="access" disabled=""> <?php
+            
+            <div class="woocommerce-message woocommerce-tracker" >
+                <p id="fail">This system does not meet Faveo system requirements</p>
+            </div>
+<p class="wc-setup-actions step">
+    <a href="{{URL::route('licence')}}" style="float: left"><button value="prev" class="button-primary button button-large">Previous</button></a>
+    <button disabled="" class="button-primary button button-large button-next" style="float: right">Continue</button>
+</p> <?php
 }
 ?>
-<style type="text/css">
-a:link    {color:#000;}  /* unvisited link  */
-a:visited {color:#000;}  /* visited link    */
-a:hover   {color:#000;}  /* mouse over link */
-a:active  {color:#000;}
-</style>
 
 <div id="legend">
         {{-- <ul> --}}
-          <p><span class="ok">Ok</span> &mdash; All OK<br/>
+          <p><span class="ok">Ok</span> &mdash; All Ok<br/>
           <span class="warning">Warning</span> &mdash; Not a deal breaker, but it's recommended to have this installed for some features to work<br/>
           <span class="error">Error</span> &mdash; Faveo HELPDESK require this feature and can't work without it</p>
         {{-- </ul> --}}

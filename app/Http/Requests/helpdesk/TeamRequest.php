@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * TeamRequest
+ * TeamRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class TeamRequest extends Request {
-
+class TeamRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,11 +26,11 @@ class TeamRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            'name' => 'required|unique:teams',
+            'name'   => 'required|unique:teams',
             'status' => 'required',
         ];
     }
-
 }

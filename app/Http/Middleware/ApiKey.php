@@ -2,14 +2,15 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use App\Model\helpdesk\Settings\System;
+use Closure;
 
-class ApiKey {
-
+class ApiKey
+{
     public $setting;
 
-    public function __construct() {
+    public function __construct()
+    {
         $setting = new System();
         $this->setting = $setting;
     }
@@ -17,11 +18,13 @@ class ApiKey {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
-    public function handle($request, Closure $next) {
+    public function handle($request, Closure $next)
+    {
         $set = $this->setting->where('id', '1')->first();
         if ($set->api_enable == 1) {
             $key = $set->api_key;
@@ -29,12 +32,13 @@ class ApiKey {
                 return $next($request);
             } else {
                 $result = 'wrong api key';
+
                 return response()->json(compact('result'));
             }
         } else {
             $result = 'please enable api';
+
             return response()->json(compact('result'));
         }
     }
-
 }

@@ -5,19 +5,19 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * GroupRequest
+ * GroupRequest.
  *
- * @package Request
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class GroupRequest extends Request {
-
+class GroupRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -26,10 +26,10 @@ class GroupRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             'name' => 'required|unique:groups',
         ];
     }
-
 }

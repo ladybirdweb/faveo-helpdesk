@@ -12,10 +12,10 @@ done
 active
 @stop
 
-@section('content')
+@section('content') 
 
     <h1 style="text-align: center;">Database Setup</h1>
-                    Test/Probe Prerequisites required to be installed Probe<br/><br/>
+        This test will check prerequisites required to install Faveo<br/>
 <?php
 /**
  * Faveo HELPDESK Probe
@@ -30,41 +30,31 @@ $username = Session::get('username');
 $password = Session::get('password');
 $databasename = Session::get('databasename');
 $port = Session::get('port');
-
 define('DB_HOST', $host); // Address of your MySQL server (usually localhost)
 define('DB_USER', $username); // Username that is used to connect to the server
 define('DB_PASS', $password); // User's password
 define('DB_NAME', $databasename); // Name of the database you are connecting to
 define('DB_PORT', $port); // Name of the database you are connecting to
-
 define('PROBE_VERSION', '4.2');
-define('PROBE_FOR', '<b>Faveo</b>HELPDESK 1.0 and Newer');
-
+define('PROBE_FOR', '<b>Faveo</b> HELPDESK 1.0 and Newer');
 define('STATUS_OK', 'Ok');
 define('STATUS_WARNING', 'Warning');
 define('STATUS_ERROR', 'Error');
-
 class TestResult {
-
     var $message;
     var $status;
-
     function TestResult($message, $status = STATUS_OK) {
         $this->message = $message;
         $this->status = $status;
     }
-
 } // TestResult
-
 if (DB_HOST && DB_USER && DB_NAME) {
     ?>
 <?php
-
     $mysqli_ok = true;
     $results = array();
     // error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
     error_reporting(0);
-
     if($default == 'mysql') {
         if ($connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME)) {
             $results[] = new TestResult('Connected to database as ' . DB_USER . '@' . DB_HOST . DB_PORT, STATUS_OK);
@@ -79,11 +69,11 @@ if (DB_HOST && DB_USER && DB_NAME) {
                     $mysqli_ok = false;
                 } // if
             } else {
-                $results[] = new TestResult('Failed to select database. <br> MySQL said: ' . mysqli_error(), STATUS_ERROR);
+                $results[] = new TestResult('Failed to select database. ' . mysqli_error(), STATUS_ERROR);
                 $mysqli_ok = false;
             } // if
         } else {
-            $results[] = new TestResult('Failed to connect to database. <br> MySQL said: ' . mysqli_error(), STATUS_ERROR);
+            $results[] = new TestResult('Failed to connect to database. ' . mysqli_error(), STATUS_ERROR);
             $mysqli_ok = false;
         } // if
     } 
@@ -101,12 +91,12 @@ if (DB_HOST && DB_USER && DB_NAME) {
     //  Validators
     // ---------------------------------------------------
 // dd($results);
-
+    ?><p class="wc-setup-actions step"><?php
     foreach ($results as $result) {
-        print '<span class="' . strtolower($result->status) . '">' . $result->status . '</span> &mdash; ' . $result->message . '<br/>';
+        print '<br><span class="' . strtolower($result->status) . '">' . $result->status . '</span> &mdash; ' . $result->message . '';
     } // foreach
-    ?>
-</ul>
+    ?> </p>
+<!-- </ul> -->
 <?php } else { ?>
       <p>Database test is <strong>turned off</strong>. To turn it On, please open probe.php in your favorite text editor and set DB_XXXX connection parameters in database section at the beginning of the file:</p>
       <ul>
@@ -121,9 +111,10 @@ if (DB_HOST && DB_USER && DB_NAME) {
 
 <?php if ($mysqli_ok !== null) {?>
 <?php if ($mysqli_ok) {?>
-<p id="verdict" class="all_ok">OK, this system can run <b>Faveo</b>HELPDESK</p>
 
-<h2 id="conn">Database connection successful</h3>
+<div class="woocommerce-message woocommerce-tracker" >
+    <p id="pass">Database connection successful. This system can run Faveo</p>
+</div>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
@@ -147,31 +138,31 @@ if (DB_HOST && DB_USER && DB_NAME) {
     <input type="submit" style="display:none;">
 
 </form>
-<div id="show" style="display:none;">
-    <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-9">
-            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
+
+    <div id="show" style="display:none;">
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-9">
+                <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
+            </div>
         </div>
     </div>
-</div>
 
     <div style="border-bottom: 1px solid #eee;">
         <p class="wc-setup-actions step">
-            <a href="{{URL::route('account')}}" class="pull-right" id="next" style="text-color:black"><input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue"> </a>
-            <a href="{{URL::route('configuration')}}" class="button button-large button-next" style="float: left">Previous</a>
+            <a href="{{ URL::route('account') }}" class="pull-right" id="next" style="text-color:black"><input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue"> </a>
+            <a href="{{ URL::route('configuration') }}" class="button button-large button-next" style="float: left">Previous</a>
         </p>
     </div>
+
 <br/>
 
 <script type="text/javascript">
-
 // submit a ticket
 $(document).ready(function () {
     $("#form").submit();
 });
-
     // Edit a ticket
         $('#form').on('submit', function() {
             $.ajax({
@@ -198,18 +189,27 @@ $(document).ready(function () {
             })
             return false;
         });
-
 </script>
 
 <?php } else {?>
-    <p id="verdict" class="not_ok">This system does not meet <b>Faveo</b>HELPDESK system requirements</p>
-            <a href="{{URL::route('configuration')}}"><button type="submit" id="submitme" class="button-danger button button-large button-next" style="background-color: #d43f3a;color:#fff;" value="Error">Back</button></a><br/><br/>
+    <div class="woocommerce-message woocommerce-tracker" >
+            <p id="fail">Database connection unsuccessful. This system does not meet Faveo system requirements</p>
+            </div>
+            <div  style="border-bottom: 1px solid #eee;">
+                <p class="wc-setup-actions step">
+                    <input type="submit" id="submitme" class="button-danger button button-large button-next" style="background-color: #d43f3a;color:#fff;" value="continue" disabled>
+                    <a href="{{URL::route('configuration')}}" class="button button-large button-next" style="float: left;">Previous</a>
+                </p>
+            </div>
+            <br/><br/>
       <?php } // if ?>
     <div id="legend">
         {{-- <ul> --}}
-        <span class="ok">Ok</span> &mdash; All OK <br/>
-        <span class="warning">Warning</span> &mdash; Not a deal breaker, but it's recommended to have this installed for some features to work<br/>
-        <span class="error">Error</span> &mdash; <b>Faveo</b>HELPDESK require this feature and can't work without it<br/><br/>
+        <p class="wc-setup-actions step">
+            <span class="ok">Ok</span> &mdash; All Ok <br/>
+            <span class="warning">Warning</span> &mdash; Not a deal breaker, but it's recommended to have this installed for some features to work<br/>
+            <span class="error">Error</span> &mdash; Faveo HELPDESK require this feature and can't work without it<br/>
+        </p>
         {{-- </ul> --}}
     </div>
 <?php } // if ?>

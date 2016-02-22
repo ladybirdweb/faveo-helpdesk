@@ -60,8 +60,6 @@
 
 /*UI Developer- Karthik Sengottaian*/
 
-
-
 #gradient {
     width: 100%;
     height: 100%;
@@ -70,175 +68,232 @@
 }
 .ok {
     color: #4cae4c;
-   
     text-align: center;
 }
 .error {
     color: #d43f3a;
-   
     text-align: center;
 }
 .warning {
     color: #eea236;
-   
     text-align: center;
 }
-a{
+a {
     text-decoration: none;
 }
 /*For gradient background */
 
-
 /*--Tool Tip-- */
 
-a.tooltip {outline:none; }
-a.tooltip strong {line-height:30px;}
-a.tooltip:hover {text-decoration:none;} 
-a.tooltip span {
-    z-index:10;display:none; padding:14px 20px;
-    margin-top:-30px; margin-left:28px;
-    width:300px; line-height:16px;
+a.tooltip {
+    outline: none;
 }
-a.tooltip:hover span{
-    display:inline; position:absolute; color:#111;
-    border:1px solid #DCA; background:#fffAF0;}
-.callout {z-index:20;position:absolute;top:30px;border:0;left:-12px;}
-
+a.tooltip strong {
+    line-height: 30px;
+}
+a.tooltip:hover {
+    text-decoration: none;
+}
+a.tooltip span {
+    z-index: 10;
+    display: none;
+    padding: 14px 20px;
+    margin-top: -30px;
+    margin-left: 28px;
+    width: 300px;
+    line-height: 16px;
+}
+a.tooltip:hover span {
+    display: inline;
+    position: absolute;
+    color: #111;
+    border: 1px solid #DCA;
+    background: #fffAF0;
+}
+.callout {
+    z-index: 20;
+    position: absolute;
+    top: 30px;
+    border: 0;
+    left: -12px;
+}
 /*CSS3 extras*/
-a.tooltip span
-{
-    border-radius:4px;
+
+a.tooltip span {
+    border-radius: 4px;
     box-shadow: 5px 5px 8px #CCC;
 }
-
-.border-line{
-	border-bottom: 1px solid #eee;
+.border-line {
+    border-bottom: 1px solid #eee;
 }
-
-
 td input {
-	padding: 3px;
-	margin-left: 150px;
-	width: 280px;
+    padding: 3px;
+    margin-left: 150px;
+    width: 280px;
 }
 td select {
-	width: 290px;
-	margin-left: 150px;
-	font-size: 17px;
+    width: 290px;
+    margin-left: 150px;
+    font-size: 17px;
 }
 i {
-	float: right;
-	padding-top: 7px;
-	padding-left: 5px;
+    float: right;
+    padding-top: 7px;
+    padding-left: 5px;
 }
+#selectbox1,
+#selectbox2,
+#selectbox3 {
+    display: block;
+    width: 75%%;
+    height: 30px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    border-radius: 0;
+    box-shadow: none;
+    border-color: #d2d6de;
+}
+td input {
+    padding: 3px;
+    margin-left: 250px;
+    width: 280px;
+}
+td select {
+    width: 290px;
+    margin-left: 250px;
+    font-size: 17px;
+}
+i {
+    float: right;
+    padding-top: 7px;
+    padding-left: 5px;
+}
+
+
 #sectool {
 	display: none;
-	max-width: 150px;
-	background-color: #3AA7D9;
-	border-radius: 5px;
-	box-shadow: 5px 6px #88C8E5;
-	z-index: 666;
-	text-align: center;
 }
+
+/*
 #sectool p {
-	line-height: 16px;
-	font-size: 14px;
+	line-height: 1px;
+	font-size: 12px;
 	color: aliceblue;
-	width: 140px;
+	width: 90px;
 	padding: 0px 0px 0px 0px;
 	word-wrap: break-word;
 	font-style: italic;
 	font-weight: 600;
 	font-variant: normal;
-	margin-top: 10px;
+	margin-top: 20px;
 }
-#selectbox1,
-#selectbox2,
-#selectbox3 {
-	display: block;
-	width: 75%%;
-	height: 30px;
-	padding: 6px 12px;
-	font-size: 14px;
-	line-height: 1.42857143;
-	color: #555;
-	background-color: #fff;
-	background-image: none;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-	border-radius: 0;
-	box-shadow: none;
-	border-color: #d2d6de;
-}
-
-
-
-
-td input {
-	padding: 3px;
-	margin-left: 250px;
-	width: 280px;
-}
-td select {
-	width: 290px;
-	margin-left: 250px;
-	font-size: 17px;
-}
-i {
-	float: right;
-	padding-top: 7px;
-	padding-left: 5px;
-}
-#sectool {
-	display: none;
-	max-width: 150px;
-	background-color: #3AA7D9;
-	border-radius: 5px;
-	box-shadow: 5px 6px #88C8E5;
-	z-index: 666;
-	text-align: center;
-}
-#sectool p {
-	line-height: 16px;
-	font-size: 14px;
-	color: aliceblue;
-	width: 140px;
-	padding: 0px 0px 0px 0px;
-	word-wrap: break-word;
-	font-style: italic;
-	font-weight: 600;
-	font-variant: normal;
-	margin-top: 10px;
-}
+*/
 
 #selectbox1,
 #selectbox2,
 #selectbox3 {
-	display: block;
-	width: 75%%;
-	height: 30px;
-	padding: 6px 12px;
-	font-size: 14px;
-	line-height: 1.42857143;
-	color: #555;
-	background-color: #fff;
-	background-image: none;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-	border-radius: 0;
-	box-shadow: none;
-	border-color: #d2d6de;
+    display: block;
+    width: 75%%;
+    height: 30px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    border-radius: 0;
+    box-shadow: none;
+    border-color: #d2d6de;
 }
-
-
+.column-right.chat {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    margin-right: 50px;
+}
+.arrow-globe {
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    margin-top: 20px;
+    margin-left: -12px;
+    border-right: 12px solid #3AA7D9;
+    border-bottom: 7px solid transparent;
+	border-top: 7px solid transparent;
+}
+.chat-text {
+    font-style: italic;
+    font-weight: 600;
+    font-variant: normal;
+    max-width: 150px;
+    display: inline-block;
+    margin-top: 7px;
+    padding: 12px 15px;
+    float: left;
+    border-radius: 5px;
+    background-color: #3AA7D9;
+    color: #fff;
+    font-size: 12px;
+    line-height: 17px;
+}
 /*--Tool Tip-- */
+.ui-selectmenu-button span.ui-selectmenu-text{
+	padding: 2px 0px 2px 6px;
+}
+.demo{
+	margin-left: 260px;
+}
+.ui-widget{
+	font-size: 15px;
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
+	background: none;
+}
+
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br{
+	border-radius: 0px;
+}
+.ui-state-hover .ui-icon,
+.ui-state-focus .ui-icon {
+	background-image: none;
+}
+
+.ui-icon,
+.ui-widget-content .ui-icon {
+	background-image: none;
+}
+
+.ui-menu-icons .ui-menu-item{
+	padding-left: 6px;
+}
+#pass{
+    color: #008000;
+}
+#fail{
+    color: #BC0000;
+}
+
+.moveleft{
+	margin-left: 170px;
+}
+
+.moveleftthre{
+	margin-left: 250px;
+}

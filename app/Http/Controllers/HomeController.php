@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Ticket\Tickets;
 
-class HomeController extends Controller {
+class HomeController extends Controller
+{
     /*
       |--------------------------------------------------------------------------
       | Home Controller
@@ -22,7 +22,8 @@ class HomeController extends Controller {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // $this->middleware('auth');
     }
 
@@ -31,48 +32,52 @@ class HomeController extends Controller {
      *
      * @return Response
      */
-    public function index() {
+    public function index()
+    {
         // ksjdckjdsnc
         return view('themes/default1/admin/dashboard');
     }
 
-    public function getsmtp() {
+    public function getsmtp()
+    {
         $smtp = \App\Model\helpdesk\Email\Smtp::where('id', '=', '1')->first();
+
         return $smtp->host;
     }
 
-    Public function getdata() {
+    public function getdata()
+    {
         return \View::make('emails/notifications/agent');
     }
 
-    public function getreport() {
+    public function getreport()
+    {
         return \View::make('test');
     }
 
-    public function pushdata() {
-
-        $date2 = strtotime(Date('Y-m-d'));
-        $date3 = Date('Y-m-d');
+    public function pushdata()
+    {
+        $date2 = strtotime(date('Y-m-d'));
+        $date3 = date('Y-m-d');
         $format = 'Y-m-d';
-        $date1 = strtotime(Date($format, strtotime('-1 month' . $date3)));
+        $date1 = strtotime(date($format, strtotime('-1 month'.$date3)));
 
-        $return = "";
-        $last = "";
+        $return = '';
+        $last = '';
         for ($i = $date1; $i <= $date2; $i = $i + 86400) {
             $thisDate = date('Y-m-d', $i);
 
-            $created = \DB::table('tickets')->select('created_at')->where('created_at', 'LIKE', '%' . $thisDate . '%')->count();
-            $closed = \DB::table('tickets')->select('closed_at')->where('closed_at', 'LIKE', '%' . $thisDate . '%')->count();
-            $reopened = \DB::table('tickets')->select('reopened_at')->where('reopened_at', 'LIKE', '%' . $thisDate . '%')->count();
+            $created = \DB::table('tickets')->select('created_at')->where('created_at', 'LIKE', '%'.$thisDate.'%')->count();
+            $closed = \DB::table('tickets')->select('closed_at')->where('closed_at', 'LIKE', '%'.$thisDate.'%')->count();
+            $reopened = \DB::table('tickets')->select('reopened_at')->where('reopened_at', 'LIKE', '%'.$thisDate.'%')->count();
 
             $value = ['date' => $thisDate, 'open' => $created, 'closed' => $closed, 'reopened' => $reopened];
             $array = array_map('htmlentities', $value);
             $json = html_entity_decode(json_encode($array));
-            $return .= $json . ',';
+            $return .= $json.',';
         }
         $last = rtrim($return, ',');
 
-        return '[' . $last . ']';
+        return '['.$last.']';
     }
-
 }

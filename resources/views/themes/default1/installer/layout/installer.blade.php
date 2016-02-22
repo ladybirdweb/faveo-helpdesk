@@ -4,85 +4,18 @@
         <meta name="viewport" content="width=device-width">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Faveo HELPDESK</title>
+        <link rel="shortcut icon" href="{{asset("lb-faveo/media/images/favicon.ico")}}">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/load-styles.css")}}" type="text/css" media="all">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/css.css")}}" type="text/css" media="all">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/admin.css")}}" type="text/css" media="all">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/wc-setup.css")}}" type="text/css" media="all">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/activation.css")}}" type="text/css" media="all">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/style.css")}}" type="text/css" media="all">
-        {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> --}}
-
-        <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
-        <!-- Ionicons -->
-        {{-- <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"> --}}
-        <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet">
-
-        <style type="text/css">
-
-            td input {
-                padding: 3px;
-                margin-left: 150px;
-                width: 280px;
-            }
-
-            td select {
-                width: 290px;
-                margin-left: 150px;
-                font-size: 17px;
-            }
-
-            i {
-                float: right;
-                padding-top: 7px;
-                padding-left: 5px;
-            }
-
-            #sectool {
-                min-width: 200px;
-                padding: 5px;
-                line-height: 20px;
-                min-height: 18px;
-                background-color: #3AA7D9;
-                float: right;
-                border-radius: 5px;
-                box-shadow: 5px 6px #88C8E5;
-                margin-top: 30px;
-    /*            position: absolute;*/
-                top: 100px;
-            }
-
-            #sectool p{
-                 text-align: justify;
-                 text-align-last: center;
-                 font-size: 14px;
-                 color: aliceblue;
-                 width: 200px;
-                 word-wrap: break-word;
-                 font-style: italic;
-                 font-weight: 600;
-                 font-variant: normal;
-            }
-
-            blockquote  {
-                padding:10px 20px;
-            }
-
-            blockquote  {
-                border:1px solid #FF3048;
-                page-break-inside:avoid;
-            }
-
-            blockquote{
-                padding:10px 20px;
-                margin:0 0 20px;
-                font-size:12.5px;
-                border-left: 5px solid #DD0019;
-                background-color: #FFE8EB;
-                border-radius: 2px;
-            }
-
-            
-        </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link href="{{asset("lb-faveo/css/ggpopover.css")}}" rel="stylesheet"/>
+        <link rel="stylesheet" href="{{asset("lb-faveo/css/prism.css")}}">
+        <link rel="stylesheet" href="{{asset("lb-faveo/css/chosen.css")}}">
     </head>
     <body class="wc-setup wp-core-ui">
         <h1 id="wc-logo"><a href="http://www.faveohelpdesk.com">
@@ -100,8 +33,37 @@
     </div>
     
     
-    <p style="text-align: center;"> Copyright &copy; <?php echo date('Y')?> · Ladybird Web Solution Pvt Ltd. All Rights Reserved. Powered by <a target="_blank" href="http://www.faveohelpdesk.com">Faveo </a></p>
-    {{-- // <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> --}}
-    {{-- // <script src="{{asset("lb-faveo/installer/js/index.js ")}}"></script> --}}
+    <p style="text-align: center;"> Copyright &copy; 2015 - <?php echo date('Y')?> · Ladybird Web Solution Pvt Ltd. All Rights Reserved. Powered by <a target="_blank" href="http://www.faveohelpdesk.com">Faveo </a></p>
+    
+
+
+    
+    <script src="{{asset("lb-faveo/js/ggpopover.js")}}"></script>
+    <script type="text/javascript">
+        $('[data-toggle="popover"]').ggpopover();
+    </script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script> -->
+    <script src="{{asset("lb-faveo/js/chosen.jquery.js")}}" type="text/javascript"></script>
+    <script src="{{asset("lb-faveo/js/prism.js")}}" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var config = {
+            '.chosen-select': {},
+            '.chosen-select-deselect': {
+                allow_single_deselect: true
+            },
+            '.chosen-select-no-single': {
+                disable_search_threshold: 10
+            },
+            '.chosen-select-no-results': {
+                no_results_text: 'Oops, nothing found!'
+            },
+            '.chosen-select-width': {
+                width: "95%"
+            }
+        }
+        for (var selector in config) {
+            $(selector).chosen(config[selector]);
+        }
+    </script>
     </body>
-</html>    
+</html>

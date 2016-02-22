@@ -23,12 +23,17 @@ active
                         <label for="selectbox1">Database <span style="color
                                 : red;font-size:12px;">*</span></label>
                     </td>
-                    <td class="select2-container wc-enhanced-select enhanced">
-                        <select name="default" id="selectbox1">
-                            <option value="mysql">MySQL</option>
-                            <option value="pgsql">PgSQL</option>
-                            <option value="sqlsrv">SQLSRV</option>
-                        </select>
+                   <td>
+                        <div class="side-by-side clearfix moveleftthre">
+                            <div>
+                                <select name="default" data-placeholder="Choose a SQL format..." class="chosen-select" style="width:290px;" tabindex="2">
+                                    <option value=""></option>
+                                    <option value="mysql">MySQL</option>
+                                    <option value="pgsql">PgSQL</option>
+                                    <option value="sqlsrv">SQLSRV</option>
+                                </select>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr>
@@ -38,7 +43,6 @@ active
                     </td>
                     <td>
                         <input type="text" name="host" required>
-                        </a>
                     </td>
                 </tr>
                 <tr>
@@ -47,7 +51,6 @@ active
                     </td>
                     <td>
                         <input type="text" name="port"> 
-                        </a>
                     </td>
                 </tr>
                 <tr>
@@ -57,7 +60,6 @@ active
                     </td>
                     <td>
                         <input type="text" name="databasename" required> 
-                        </a>
                     </td>
                 </tr>
                 <tr>
@@ -67,7 +69,6 @@ active
                     </td>
                     <td>
                         <input type="text" name="username" required> 
-                        </a>
                     </td>
                 </tr>
                 <tr>
@@ -76,8 +77,6 @@ active
                     </td>
                     <td>
                         <input type="text" name="password"> 
-                       
-                        </a>
                     </td>
                 </tr>
             </table>
@@ -88,4 +87,5 @@ active
             </p>
         </form>
     </div>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 @stop
