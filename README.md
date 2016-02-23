@@ -48,5 +48,9 @@ Faveo is designed & developed by <a href="http://www.ladybirdweb.com/" target="_
 <p>Helps verify whether your server can run Faveo or not. 
 <a href="https://github.com/ladybirdweb/faveo-probe" target="_blank">Download here</a></p>
 
+<h3>Faveo Community:</h3>
+<p>Join Faveo discussion group and stay tuned to latest updates. 
+<a href="https://www.linkedin.com/groups/8429668" target="_blank">Join here</a></p>
+
 <h3>Don't panic if you come across bugs</h3>
 <p>Faveo is very very new in the market, the product is fully working and is production worthy but it definitely will have some bugs like any software. We fully support Faveo whether free or pro edition, incase you come across any bugs, email us through the <a href="http://www.faveohelpdesk.com/contact-us/">contact form</a>. We want to make your experience of using Faveo as memorable as possible, so help us make Faveo a World, top class helpdesk application. Do check out our roadmap to stayed tuned with future releases </p>
