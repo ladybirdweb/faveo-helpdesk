@@ -348,7 +348,7 @@ $canneds = App\Model\helpdesk\Agent_panel\Canned::where('user_id','=',Auth::user
                             <div class="row">
                                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                     <div class="col-md-2"></div>
-                                    <div class="col-md-10">
+                                    <div class="col-md-10" id="t5">
                                         <button id="replybtn" type="submit" class="btn btn-primary"><i class="fa fa-check-square-o" style="color:white;"> </i> {!! Lang::get('lang.update') !!}</button>
                                     </div>
                                 </div>
@@ -1751,7 +1751,7 @@ function lockAjaxCall(locktime){
                         $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                         $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
-                        $("#t1").load("../thread/{{$tickets->id}}  #t1");
+                        $("#t5").load("../thread/{{$tickets->id}}  #t5");
                         // $("#alert21").show();
                         // $('#message-success2').html(message);
                         $('#replybtn').attr('disabled', false); 
