@@ -281,13 +281,11 @@ class InstallController extends Controller
         // checking is the installation was done previously
         try {
             $check_for_pre_installation = System::all();
-            if($check_for_pre_installation) {
+            if ($check_for_pre_installation) {
                 return redirect()->back()->with('fails', 'The data in database already exist. Please provide fresh database');
-            }    
+            }
         } catch (Exception $e) {
-            
         }
-        
 
         // migrate database
         Artisan::call('migrate', ['--force' => true]);
