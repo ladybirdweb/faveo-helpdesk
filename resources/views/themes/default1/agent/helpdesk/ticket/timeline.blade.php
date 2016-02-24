@@ -190,13 +190,15 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                 </div>
                 <div id="hide2">
                 <div class="col-md-6">
-                    <table class="table table-hover"id="refresh">
-                        <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $tickets->status)->first();?><td title="{{$status->properties}}">{{$status->name}}</td></tr>
-                        <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first();?><td title="{{$priority->priority_desc}}">{{$priority->priority_desc}}</td></tr>
-                        <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first();?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
-                        <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        <td>{{$user->email}}</td></tr>
-                        @if($user->ban > 0)  <tr><td style="color:orange;"><i class="fa fa-warning"></i><b>
-                        {!!  Lang::get('lang.this_ticket_is_under_banned_user')!!}</td><td></td></tr>@endif
+                    <table class="table table-hover">
+                        <div id="refresh">
+                            <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $tickets->status)->first();?><td title="{{$status->properties}}">{{$status->name}}</td></tr>
+                            <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first();?><td title="{{$priority->priority_desc}}">{{$priority->priority_desc}}</td></tr>
+                            <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first();?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
+                            <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        <td>{{$user->email}}</td></tr>
+                            @if($user->ban > 0)  <tr><td style="color:orange;"><i class="fa fa-warning"></i><b>
+                            {!!  Lang::get('lang.this_ticket_is_under_banned_user')!!}</td><td></td></tr>@endif
+                        </div>
                     </table>
                 </div>
                 <div class="col-md-6">
@@ -221,14 +223,16 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                             $ticket_source = $tickets->source;
 ?>
                     <table class="table table-hover">
+                        <div id="refresh3">
 
-                        @if($user->phone_number !=null)<tr><td><b>Phone:</b></td>          <td>{{$user->phone_number}}</td></tr>@endif
-                        @if($user->mobile !=null)<tr><td><b>Phone:</b></td>          <td>{{$user->ext . $user->phone_number}}</td></tr>@endif
-                        <tr><td><b>{!! Lang::get('lang.source') !!}:</b></td>         <td>{{$ticket_source}}</td></tr>
-                        <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first();?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
-                        <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
-                        <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{$username}}</td></tr>
-                        <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
+                            @if($user->phone_number !=null)<tr><td><b>Phone:</b></td>          <td>{{$user->phone_number}}</td></tr>@endif
+                            @if($user->mobile !=null)<tr><td><b>Phone:</b></td>          <td>{{$user->ext . $user->phone_number}}</td></tr>@endif
+                            <tr><td><b>{!! Lang::get('lang.source') !!}:</b></td>         <td>{{$ticket_source}}</td></tr>
+                            <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first();?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
+                            <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
+                            <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{$username}}</td></tr>
+                            <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
+                        </div>
                     </table>
                 </div>
                 </div>
@@ -237,6 +241,9 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
     </div>
 </div>
 {{-- Event fire --}}
+<div id="resultdiv">
+</div>
+
 <div class='row'>
     <div class='col-xs-12'>
         <div class="nav-tabs-custom">
@@ -290,15 +297,17 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                                         {!! Form::label('To', Lang::get('lang.to').':') !!}
                                     </div>
                                     <div class="col-md-10">
-                                        {!! Form::text('To',$user->email,['disabled'=>'disabled','id'=>'email','class'=>'form-control','style'=>'width:55%'])!!}
-                                        {!! $errors->first('To', '<spam class="help-block text-red">:message</spam>') !!}
-                                        <a href="#" data-toggle="modal" data-target="#addccc"> {!! Lang::get('lang.add_cc') !!} </a>
-                                        <div id="recepients">
-                                        <?php $Collaborator =  App\Model\helpdesk\Ticket\Ticket_Collaborator::where('ticket_id', '=', $tickets->id)->get(); 
-                                        $count_collaborator = count($Collaborator);?>
-                                        @if($count_collaborator > 0)
-                                            <a href="#" data-toggle="modal" data-target="#surrender2">({!! $count_collaborator !!}) {!! Lang::get('lang.recepients') !!} </a>
-                                        @endif
+                                        <div id="refreshTo">
+                                            {!! Form::text('To',$user->email,['disabled'=>'disabled','id'=>'email','class'=>'form-control','style'=>'width:55%'])!!}
+                                            {!! $errors->first('To', '<spam class="help-block text-red">:message</spam>') !!}
+                                            <a href="#" data-toggle="modal" data-target="#addccc"> {!! Lang::get('lang.add_cc') !!} </a>
+                                            <div id="recepients">
+                                            <?php $Collaborator =  App\Model\helpdesk\Ticket\Ticket_Collaborator::where('ticket_id', '=', $tickets->id)->get(); 
+                                            $count_collaborator = count($Collaborator);?>
+                                            @if($count_collaborator > 0)
+                                                <a href="#" data-toggle="modal" data-target="#surrender2">({!! $count_collaborator !!}) {!! Lang::get('lang.recepients') !!} </a>
+                                            @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -349,7 +358,9 @@ $canneds = App\Model\helpdesk\Agent_panel\Canned::where('user_id','=',Auth::user
                                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                     <div class="col-md-2"></div>
                                     <div class="col-md-10">
-                                        <button id="replybtn" type="submit" class="btn btn-primary"><i class="fa fa-check-square-o" style="color:white;"> </i> {!! Lang::get('lang.update') !!}</button>
+                                        <div id="t5">
+                                            <button id="replybtn" type="submit" class="btn btn-primary"><i class="fa fa-check-square-o" style="color:white;"> </i> {!! Lang::get('lang.update') !!}</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1454,7 +1465,7 @@ $(document).ready(function () {
                         $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                         $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
-                        $("#t1").load("../thread/{{$tickets->id}}  #t1");
+                        $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
                         var message = "Success! owner has been changed for this ticket.";
                         $("#alert11").show();
                         $('#message-success1').html(message);
@@ -1486,7 +1497,7 @@ $(document).ready(function () {
                         $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                         $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
-                        $("#t1").load("../thread/{{$tickets->id}}  #t1");
+                        $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
                         var message = "Success! owner has been changed for this ticket.";
                         $("#alert11").show();
                         $('#message-success1').html(message);
@@ -1717,10 +1728,7 @@ $(document).ready(function () {
             return false;
     }
 
-
-
 $(document).ready(function() {
-    
     var locktime = '<?php echo $var->collision_avoid;?>'*60*1000;
     lockAjaxCall(locktime);
     setInterval(function() {// to call ajax for ticket lock repeatedly after defined lock time interval
@@ -1737,7 +1745,6 @@ function lockAjaxCall(locktime){
                 data: $(this).serialize(),
                 success: function(response) {
                     if(response == 0) {
-                       
                        var message = "{{Lang::get('lang.locked-ticket')}}";
                         $("#alert22").show();
                         $('#message-warning2').html(message);
@@ -1747,7 +1754,11 @@ function lockAjaxCall(locktime){
                         // alert(response);
                         // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)
                         // +"{{Lang::get('lang.minutes')}}";
-                        // $("#alert22").hide();
+                        $("#alert22").hide();
+                        $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
+                        $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
+                        $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
+                        $("#t5").load("../thread/{{$tickets->id}}  #t5");
                         // $("#alert21").show();
                         // $('#message-success2').html(message);
                         $('#replybtn').attr('disabled', false); 
@@ -1772,12 +1783,6 @@ function lockAjaxCall(locktime){
                 $(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
             });
         }
-
-
-
-
-
-
 </script>
 
 @stop

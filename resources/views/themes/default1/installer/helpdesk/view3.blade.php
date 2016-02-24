@@ -13,11 +13,23 @@ active
 @stop
 
 @section('content')
-  
+<div ng-app="myApp">
+                    @if(Session::has('fails'))
+                        <div class="wc-setup-content">
+                            <div class="woocommerce-message woocommerce-tracker">
+                                <div class="fail">
+                                    <span id="fail">{!! Lang::get('lang.fails') !!}! {{Session::get('fails')}}</span><br/><br/>
+                                </div>
+                            </div>        
+                        </div>  
+                    @endif
+            
         <h1 style="text-align: center;">Database Setup</h1>
 
+        <p class="wc-setup-content">Below you should enter your database connection details. If you’re not sure about these, contact your host.</p>
+
         {!! Form::open(['url'=> '/step4post']) !!}
-            <table>
+            <table ng-controller="MainController">
                 <tr>
                     <td>
                         <label for="selectbox1">Database <span style="color
@@ -27,13 +39,16 @@ active
                         <div class="side-by-side clearfix moveleftthre">
                             <div>
                                 <select name="default" data-placeholder="Choose a SQL format..." class="chosen-select" style="width:290px;" tabindex="2">
-                                    <option value=""></option>
                                     <option value="mysql">MySQL</option>
                                     <option value="pgsql">PgSQL</option>
                                     <option value="sqlsrv">SQLSRV</option>
                                 </select>
                             </div>
                         </div>
+                    </td>
+                    <td>
+                        <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Databasetitle}}" data-content="@{{Databasecontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                        </button>
                     </td>
                 </tr>
                 <tr>
@@ -44,6 +59,10 @@ active
                     <td>
                         <input type="text" name="host" required>
                     </td>
+                    <td>
+                        <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Hosttitle}}" data-content="@{{Hostcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                        </button>
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -51,6 +70,10 @@ active
                     </td>
                     <td>
                         <input type="text" name="port"> 
+                    </td>
+                    <td>
+                        <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Porttitle}}" data-content="@{{Portcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                        </button>
                     </td>
                 </tr>
                 <tr>
@@ -61,6 +84,10 @@ active
                     <td>
                         <input type="text" name="databasename" required> 
                     </td>
+                    <td>
+                        <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Databasenametitle}}" data-content="@{{Databasenamecontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                        </button>
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -70,6 +97,10 @@ active
                     <td>
                         <input type="text" name="username" required> 
                     </td>
+                    <td>
+                        <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Usertitle}}" data-content="@{{Usercontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                        </button>
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -77,6 +108,10 @@ active
                     </td>
                     <td>
                         <input type="text" name="password"> 
+                    </td>
+                    <td>
+                        <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Passwordtitle}}" data-content="@{{Passwordcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                        </button>
                     </td>
                 </tr>
             </table>
@@ -88,4 +123,7 @@ active
         </form>
     </div>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
+    <script src="{{asset("lb-faveo/js/angular2.js")}}" type="text/javascript"></script>
+</div>
 @stop

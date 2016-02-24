@@ -513,4 +513,16 @@ class SettingsController extends Controller
 
         return redirect()->back()->with('success', 'Successfully Deleted');
     }
+
+    /**
+     *  Generate Api key.
+     *
+     *  @return type json
+     */
+    public function generateApiKey()
+    {
+        $key = str_random(32);
+
+        return $key;
+    }
 }

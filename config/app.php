@@ -38,7 +38,7 @@ return [
     |
      */
 
-    'version' => 'Community 1.0.6.2',
+    'version' => 'Community 1.0.6.4',
 
     /*
     |--------------------------------------------------------------------------
@@ -143,6 +143,52 @@ return [
 
             //
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /*
          * Laravel Framework Service Providers...
          */
@@ -245,7 +291,7 @@ return [
         'SMTPS'      => 'App\Http\Controllers\HomeController',
         'Datatable'  => 'Chumper\Datatable\Facades\DatatableFacade',
         'Zipper'     => 'Chumper\Zipper\Zipper',
-        'Image'      => Intervention\Image\Facades\Image::class,
+        'Image'      =>  Intervention\Image\Facades\Image::class,
         'JWTAuth'    => 'Tymon\JWTAuth\Facades\JWTAuth',
         'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory',
 

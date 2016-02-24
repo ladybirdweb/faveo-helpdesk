@@ -17,11 +17,12 @@ active
 @stop
 
 @section('content')
-
-    <div class="wc-setup-content">
+<div ng-app="myApp">
         <h1 style="text-align: center;">Locale Information</h1>
         {!! Form::open(['url'=>route('postaccount')]) !!}
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+        <!-- checking if the form submit fails -->
         @if($errors->first('firstname')||$errors->first('Lastname')||$errors->first('email')||$errors->first('username')||$errors->first('password')||$errors->first('confirmpassword'))
             <div class="woocommerce-message woocommerce-tracker">
                 <div class="fail">
@@ -46,10 +47,24 @@ active
                 </div>
             </div>        
         @endif
-    </div>
-    <div class="wc-setup-content">
+
+        <!-- checking if the system fails -->
+        @if(Session::has('fails'))
+            <div class="woocommerce-message woocommerce-tracker">
+                <div class="fail">
+                    <span id="fail">{{Session::get('fails')}} </span><br/><br/>
+                </div>
+            </div>
+        @endif
+
+    <div ng-controller="MainController">
             <table>
-                <h1>Personal Information</h1>
+                
+                <p>Welcome to the five-minute Faveo installation process! Just fill in the information below.</p>
+            
+                <h1 style="border-top:1px solid #dedede; border-bottom:1px solid #dedede; padding: 10px 0px 10px 0px;">Personal Information</h1>
+                <p>Please provide the following information. Don’t worry, you can always change these settings later.</p>
+
                 <div>
                     <tr>
                         <td>
@@ -58,6 +73,10 @@ active
                         </td>
                         <td>
                             {!! Form::text('firstname',null,['style' =>'margin-left:250px']) !!}
+                        </td>
+                        <td>
+                            <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Nametitle}}" data-content="@{{Namecontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                            </button>
                         </td>
                     </tr>
                     <tr>
@@ -68,6 +87,10 @@ active
                         <td>
                             {!! Form::text('Lastname',null,['style' =>'margin-left:250px']) !!}
                         </td>
+                        <td>
+                            <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Lasttitle}}" data-content="@{{Lastcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                            </button>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -76,6 +99,10 @@ active
                         </td>
                         <td>
                             {!! Form::text('email',null,['style' =>'margin-left:250px']) !!}
+                        </td>
+                        <td>
+                            <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Emailtitle}}" data-content="@{{Emailcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                            </button>
                         </td>
                     </tr>
 
@@ -96,6 +123,10 @@ active
                         <td>
                             {!! Form::text('username',null,['style' =>'margin-left:195px']) !!}
                         </td>
+                        <td>
+                            <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{UserNametitle}}" data-content="@{{UserNamecontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                            </button>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -106,6 +137,10 @@ active
                         <td>
                             <input type="password" name="password" style="margin-left: 195px" >
                         </td>
+                        <td>
+                            <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Passtitle}}" data-content="@{{Passcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                            </button>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -115,6 +150,10 @@ active
                         </td>
                         <td>
                             <input type="password" name="confirmpassword" style="margin-left: 195px" >
+                        </td>
+                        <td>
+                            <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Confirmtitle}}" data-content="@{{Confirmcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                            </button>
                         </td>
                     </tr>
                 </div>
@@ -130,13 +169,16 @@ active
                             <div class="side-by-side clearfix moveleft">
                                 <div>
                                     <select name="datetime" data-placeholder="Choose a date format..." class="chosen-select" style="width:295px;" tabindex="2">
-                                        <option value=""></option>
                                         <option value="d/m/Y H:i:s">DD/MM/YYYY H:i:s</option>
                                         <option value="m/d/Y H:i:s">MM/DD/YYYY H:i:s</option>
                                         <option value="Y/m/d H:i:s">YYYY/MM/DD H:i:s</option>
                                     </select>
                                 </div>
                             </div>
+                        </td>
+                        <td>
+                            <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Datetimetitle}}" data-content="@{{Datetimecontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                            </button>
                         </td>
                     </tr>
                     <tr>
@@ -147,7 +189,6 @@ active
                             <div class="side-by-side clearfix moveleft">
                                 <div>
                                     <select name="timezone" data-placeholder="Choose a timezone..." class="chosen-select" style="width:295px;" tabindex="2">
-                                        <option value=""></option>
                                         <option value="US/Samoa">US/Samoa</option>
                                         <option value="US/Hawaii">US/Hawaii</option>
                                         <option value="US/Alaska">US/Alaska</option>
@@ -264,6 +305,10 @@ active
                                 </div>
                             </div>                
                         </td>
+                        <td>
+                            <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Timezonetitle}}" data-content="@{{Timezonecontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                            </button>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -278,11 +323,14 @@ active
                             ?>  
                                 <select name="language" data-placeholder="Choose a timezone..." class="chosen-select" style="width:295px;" tabindex="2">
                                     @foreach($values as $value)
-                                        <option value=""></option>
                                         <option value="{!! $value !!}">{!! Config::get('languages.' . $value) !!}</option>
                                     @endforeach
                                 </select>
                            </div>
+                        </td>
+                        <td>
+                            <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Languagetitle}}" data-content="@{{Languagecontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                            </button>
                         </td>
                     </tr>
                 </div>
@@ -296,4 +344,7 @@ active
     </div>
     </p>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
+    <script src="{{asset("lb-faveo/js/angular2.js")}}" type="text/javascript"></script>
+    </div>
 @stop

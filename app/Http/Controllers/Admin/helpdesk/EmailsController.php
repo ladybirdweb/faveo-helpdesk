@@ -114,6 +114,10 @@ class EmailsController extends Controller
                 $email->password = $encrypted;
                 $email->save();
 
+                $email_settings = Email::where('id', '=', '1')->first();
+                $email_settings->sys_email = $email->id;
+                $email_settings->save();
+
                 return redirect('emails')->with('success', 'Email Created sucessfully');
             } else {
                 return redirect('emails')->with('fails', 'Email can not Create');
@@ -217,8 +221,8 @@ class EmailsController extends Controller
     public function destroy($id, Emails $email)
     {
         $default_system_email = Email::where('id', '=', '1')->first();
-        if ($default_system_email->id) {
-            if ($id == $default_system_email->id) {
+        if ($default_system_email->sys_email) {
+            if ($id == $default_system_email->sys_email) {
                 return redirect('emails')->with('fails', 'You cannot delete system default Email');
             }
         }

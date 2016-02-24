@@ -58,7 +58,7 @@
     <div class="col-xs-8">
         <div class="checkbox icheck">
             <label>
-                <input type="checkbox">{!! Lang::get('lang.i_agree_to_the') !!}  <a href="#">{!! Lang::get('lang.terms') !!}</a>
+                <a href="{{url('auth/login')}}" class="text-center">{!! Lang::get('lang.login') !!}</a>                
             </label>
         </div>
     </div><!-- /.col -->
@@ -67,7 +67,7 @@
     </div><!-- /.col -->
 </div>
 
-<a href="{{url('auth/login')}}" class="text-center">{!! Lang::get('lang.i_already_have_a_membership') !!}</a>
+
 {!! Form::close()!!}
 
 @stop
