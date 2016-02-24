@@ -5,9 +5,6 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
-// use App\Http\Controllers\Common\SettingsController;
-//use App\Model\helpdesk\Email\Smtp;
-
 class Handler extends ExceptionHandler
 {
     /**
@@ -18,15 +15,6 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
         'Symfony\Component\HttpKernel\Exception\HttpException',
     ];
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return type response
-     */
-    // public function __construct() {
-    // SettingsController::smtp();
-    // }
 
     /**
      * Report or log an exception.
@@ -46,7 +34,7 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Exception               $e
+     * @param \Exception $e
      *
      * @return \Illuminate\Http\Response
      */
@@ -54,39 +42,50 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
             return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
-            //dd($e);
+
         } elseif ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
             return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
         }
-
-        // if (config('app.debug') == false) {
-        //     if ($this->isHttpException($e) && $e->getStatusCode() == 404) {
-        //         return response()->view('errors.404', []);
-        //     } else {
-        //         if (\Config::get('database.install') == 1) {
-        //             // if(\Config::get('app.ErrorLog') == '%1%') {
-        //             // 	\App\Http\Controllers\Common\SettingsController::smtp();
-        //             //    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => '', 'email' => ''], $message = ['subject' => '', 'scenario'=>'error-report'], $template_variables = ['e' =>$e ]);
-        //             // }
-        //         }
-        //         return response()->view('errors.500', []);
-        //     }
-        // }
-        // return parent::render($request, $e);
-
+        // This is to check if the debug is true or false
+        if (config('app.debug') == false) {
+            // checking if the error is actually an error page or if its an system error page
+            if ($this->isHttpException($e) && $e->getStatusCode() == 404) {
+                return response()->view('errors.404', []);
+            } else {
+                // checking if the application is installed
+                if (\Config::get('database.install') == 1) {
+                    // checking if the error log send to Ladybirdweb is enabled or not
+                    if(\Config::get('app.ErrorLog') == '%1%') {
+                       $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => '', 'email' => ''], $message = ['subject' => '', 'scenario'=>'error-report'], $template_variables = ['e' =>$e ]);
+                    }
+                }
+                return response()->view('errors.500', []);
+            }
+        }
+        // returns non oops error message
+        return parent::render($request, $e);
+        // checking if the error is related to http error i.e. page not found
         if ($this->isHttpException($e)) {
+            // returns error for page not found
             return $this->renderHttpException($e);
         }
-
+        // checking if the config app sebug is enabled or not
         if (config('app.debug')) {
+            // returns oops error page i.e. colour full error page
             return $this->renderExceptionWithWhoops($e);
         }
 
         return parent::render($request, $e);
     }
 
+    /**
+     * function to generate oops error page
+     * @param \Exception $e
+     * @return \Illuminate\Http\Response
+     */
     protected function renderExceptionWithWhoops(Exception $e)
     {
+        // new instance of whoops class to display customized error page
         $whoops = new \Whoops\Run();
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
 

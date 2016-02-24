@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
 use App\Http\Controllers\Common\PhpMailController;
-use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\CreateTicketRequest;
@@ -15,7 +14,7 @@ use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Form\Fields;
 use App\Model\helpdesk\Manage\Help_topic;
-use App\Model\Helpdesk\Manage\Sla_plan;
+use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Settings\Alert;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
@@ -44,7 +43,7 @@ use PDF;
 /**
  * TicketController.
  *
- * @author     	Ladybird <info@ladybirdweb.com>
+ * @author      Ladybird <info@ladybirdweb.com>
  */
 class TicketController extends Controller
 {
@@ -56,7 +55,6 @@ class TicketController extends Controller
     public function __construct(PhpMailController $PhpMailController)
     {
         $this->PhpMailController = $PhpMailController;
-        SettingsController::smtp();
         $this->middleware('auth');
     }
 
@@ -85,10 +83,14 @@ class TicketController extends Controller
                         })
                         ->addColumn('subject', function ($ticket) {
                             $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            $string = $subject->title;
-                            if (strlen($string) > 20) {
-                                $stringCut = substr($string, 0, 30);
-                                $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                            if (isset($subject->title)) {
+                                $string = $subject->title;
+                                if (strlen($string) > 20) {
+                                    $stringCut = substr($string, 0, 30);
+                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                                }
+                            } else {
+                                $string = "..";
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -1009,7 +1011,8 @@ class TicketController extends Controller
      * @param type $emailadd
      * @param type $username
      * @param type $subject
-     * @param type $body
+     * 
+     @param type $body
      * @param type $phone
      * @param type $helptopic
      * @param type $sla
@@ -1051,7 +1054,7 @@ class TicketController extends Controller
                 // Event fire
                 \Event::fire(new \App\Events\ReadMailEvent($user_id, $password));
                 // if (Mail::send('emails.pass', ['password' => $password, 'name' => $username, 'from'=>$company,'emailadd' => $emailadd], function ($message) use ($emailadd, $username,$company) {
-                // 	$message->to($emailadd, $username)->subject('Welcome to '.$company.' helpdesk');
+                //  $message->to($emailadd, $username)->subject('Welcome to '.$company.' helpdesk');
                 // })) {
                 try {
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => 'Welcome to '.$company.' helpdesk', 'scenario' => 'registration-notification'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'user_password' => $password]);
@@ -1093,7 +1096,7 @@ class TicketController extends Controller
 
                 if ($source == 3) {
                     // Mail::send('emails.Ticket_Create', ['sign'=>$sign, 'content' => $body, 'name' => $username, 'ticket_number' => $ticket_number2, 'system' => $system], function ($message) use ($emailadd, $username, $ticket_number2, $updated_subject) {
-                    // 	$message->to($emailadd, $username)->subject($updated_subject);
+                    //  $message->to($emailadd, $username)->subject($updated_subject);
                     // });
                     // dd($body);
                     try {
@@ -1103,7 +1106,7 @@ class TicketController extends Controller
                 } else {
                     $body2 = null;
                     // Mail::send('emails.Ticket_Create', ['sign'=>$sign, 'content' => $body2, 'name' => $username, 'ticket_number' => $ticket_number2, 'system' => $system], function ($message) use ($emailadd, $username, $ticket_number2, $updated_subject) {
-                    // 	$message->to($emailadd, $username)->subject($updated_subject);
+                    //  $message->to($emailadd, $username)->subject($updated_subject);
                     // });
                     try {
                         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'], $template_variables = ['user' => $username, 'ticket_number' => $ticket_number2, 'department_sign' => '']);
@@ -1121,7 +1124,7 @@ class TicketController extends Controller
                     $admin_email = $admin->email;
                     $admin_user = $admin->first_name;
                     // Mail::send('emails.'.$mail, ['agent' => $admin_user,'content'=>$body, 'ticket_number' => $ticket_number2, 'from'=>$company, 'email' => $emailadd, 'name' => $ticket_creator, 'system' => $system], function ($message) use ($admin_email, $admin_user, $ticket_number2, $updated_subject) {
-                    // 	$message->to($admin_email, $admin_user)->subject($updated_subject);
+                    //  $message->to($admin_email, $admin_user)->subject($updated_subject);
                     // });
                     try {
                         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $admin_user, 'email' => $admin_email], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $admin_user, 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $admin_user, 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
@@ -1142,7 +1145,7 @@ class TicketController extends Controller
                             $agent_email = $agent->email;
                             $agent_user = $agent->first_name;
                             // Mail::send('emails.'.$mail, ['agent' => $agent_user ,'content'=>$body , 'ticket_number' => $ticket_number2, 'from'=>$company, 'email' => $emailadd, 'name' => $ticket_creator, 'system' => $system], function ($message) use ($agent_email, $agent_user, $ticket_number2, $updated_subject) {
-                            // 	$message->to($agent_email, $agent_user)->subject($updated_subject);
+                            //  $message->to($agent_email, $agent_user)->subject($updated_subject);
                             // });
                             try {
                                 $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $agent_user, 'email' => $agent_email], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $admin_user, 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $agent_user, 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
@@ -1424,7 +1427,7 @@ class TicketController extends Controller
         $system_from = $this->company();
 
         // Mail::send('emails.close_ticket', ['ticket_number' => $ticket_number, 'from'=>$company], function ($message) use ($email, $user_name, $ticket_number, $ticket_subject) {
-        // 	$message->to($email, $user_name)->subject($ticket_subject.'[#' . $ticket_number . ']');
+        //  $message->to($email, $user_name)->subject($ticket_subject.'[#' . $ticket_number . ']');
         // });
 
         $sending_emails = Emails::where('department', '=', $ticket_status->dept_id)->first();
@@ -1585,10 +1588,10 @@ class TicketController extends Controller
 
             // $master = Auth::user()->first_name . " " . Auth::user()->last_name;
             // if(Alert::first()->internal_status == 1 || Alert::first()->internal_assigned_agent == 1) {
-            // 	// ticket assigned send mail
-            // 	Mail::send('emails.Ticket_assign', ['agent' => $agent, 'ticket_number' => $ticket_number, 'from'=>$company, 'master' => $master, 'system' => $system], function ($message) use ($agent_email, $agent, $ticket_number, $ticket_subject) {
-            // 			$message->to($agent_email, $agent)->subject($ticket_subject.'[#' . $ticket_number . ']');
-            // 		});
+            //  // ticket assigned send mail
+            //  Mail::send('emails.Ticket_assign', ['agent' => $agent, 'ticket_number' => $ticket_number, 'from'=>$company, 'master' => $master, 'system' => $system], function ($message) use ($agent_email, $agent, $ticket_number, $ticket_subject) {
+            //          $message->to($agent_email, $agent)->subject($ticket_subject.'[#' . $ticket_number . ']');
+            //      });
             // }
         } elseif ($assign_to[0] == 'user') {
             $ticket->assigned_to = $assign_to[1];
@@ -1618,8 +1621,8 @@ class TicketController extends Controller
             // if(Alert::first()->internal_status == 1 || Alert::first()->internal_assigned_agent == 1) {
             // ticket assigned send mail
             // Mail::send('emails.Ticket_assign', ['agent' => $agent, 'ticket_number' => $ticket_number, 'from'=>$company, 'master' => $master, 'system' => $system], function ($message) use ($agent_email, $agent, $ticket_number, $ticket_subject) {
-            // 		$message->to($agent_email, $agent)->subject($ticket_subject.'[#' . $ticket_number . ']');
-            // 	});
+            //      $message->to($agent_email, $agent)->subject($ticket_subject.'[#' . $ticket_number . ']');
+            //  });
             // $sending_emails = Emails::where('department', '=', $ticket->dept_id)->first();
             // if($sending_emails == null) {
             //     $from_email = $this->system_mail();
@@ -1760,7 +1763,7 @@ class TicketController extends Controller
                     $user_id = $create_user->id;
 
                     // Mail::send('emails.pass', ['password' => $password, 'name' => $name, 'from'=>$company,'emailadd' => $email], function ($message) use ($email, $name) {
-                    // 	$message->to($email, $name)->subject('password');
+                    //  $message->to($email, $name)->subject('password');
                     // });
                     // $sending_emails = Emails::where('department', '=', $ticket_status->dept_id)->first();
                     // if($sending_emails == null) {
@@ -1828,28 +1831,28 @@ class TicketController extends Controller
      * @return type
      */
     // public function search() {
-    // 	$product = Input::get('type');
-    // 	$word = Input::get('name_startsWith');
-    // 	if ($product == 'product') {
-    // 		$starts_with = strtoupper($word);
-    // 		$rows = DB::table('users')->select('user_name')->where('name', 'LIKE', $starts_with . '%')->get();
-    // 		$data = array();
-    // 		foreach ($rows as $row) {
-    // 			array_push($data, $row->name);
-    // 		}
-    // 		print_r(json_encode($data));
-    // 	}
-    // 	if ($product == 'product_table') {
-    // 		$row_num = Input::get('row_num');
-    // 		$starts_with = strtoupper($word);
-    // 		$rows = DB::table('product')->select('name', 'description', 'cost_price')->where('name', 'LIKE', $starts_with . '%')->get();
-    // 		$data = array();
-    // 		foreach ($rows as $row) {
-    // 			$name = $row->name . '|' . $row->description . '|' . $row->cost_price . '|' . $row_num;
-    // 			array_push($data, $name);
-    // 		}
-    // 		print_r(json_encode($data));
-    // 	}
+    //  $product = Input::get('type');
+    //  $word = Input::get('name_startsWith');
+    //  if ($product == 'product') {
+    //      $starts_with = strtoupper($word);
+    //      $rows = DB::table('users')->select('user_name')->where('name', 'LIKE', $starts_with . '%')->get();
+    //      $data = array();
+    //      foreach ($rows as $row) {
+    //          array_push($data, $row->name);
+    //      }
+    //      print_r(json_encode($data));
+    //  }
+    //  if ($product == 'product_table') {
+    //      $row_num = Input::get('row_num');
+    //      $starts_with = strtoupper($word);
+    //      $rows = DB::table('product')->select('name', 'description', 'cost_price')->where('name', 'LIKE', $starts_with . '%')->get();
+    //      $data = array();
+    //      foreach ($rows as $row) {
+    //          $name = $row->name . '|' . $row->description . '|' . $row->cost_price . '|' . $row_num;
+    //          array_push($data, $name);
+    //      }
+    //      print_r(json_encode($data));
+    //  }
     // }
 
     /**
@@ -2180,7 +2183,7 @@ class TicketController extends Controller
                 $user_id = $user->id;
 
                 // Mail::send('emails.pass', ['password' => $password, 'name' => $name, 'from'=>$company,'emailadd'=>$email], function ($message) use ($email, $name) {
-                // 	$message->to($email, $name)->subject('password');
+                //  $message->to($email, $name)->subject('password');
                 // });
                 // $sending_emails = Emails::where('department', '=', $ticket_status->dept_id)->first();
                 // if($sending_emails == null) {

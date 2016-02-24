@@ -86,7 +86,6 @@ $helptopic = App\Model\helpdesk\Manage\Help_topic::get();
             }
 
              ?>  
-                <option value="{!! $default_helptopic !!}">Default</option>
                 @foreach($helptopic as $topic)
                     <option value="{!! $topic->id !!}">{!! $topic->topic !!}</option>
                 @endforeach

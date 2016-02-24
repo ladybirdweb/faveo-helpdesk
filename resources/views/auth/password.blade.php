@@ -22,12 +22,26 @@
     <!-- Email -->
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <!-- Email -->
-    <div class="input-group margin">
+    <!-- <div class="input-group margin"> -->
+    <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
         <input type="email" class="form-control" name="email" placeholder="{!! Lang::get('lang.email') !!}" value="{{ old('email') }}">
-        <span class="input-group-btn"><button type="submit" class="btn btn-primary btn-block btn-flat">{!! Lang::get('lang.send') !!}</button></span>
+         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
     </div>
+    
+
+    <div class="row">
+    <div class="col-xs-8">
+
+    <a href="{{url('auth/login')}}" class="text-center">{!! Lang::get('lang.i_know_my_password') !!}</a>    
+    </div>
+    <div class="col-xs-4">
+        <span class="input-group-btn"><button type="submit" class="btn btn-primary btn-block btn-flat">{!! Lang::get('lang.send') !!}</button></span>
+        <br/>
+    </div>
+    </div>        
+    <!-- </div> -->
 </form>
 
-<a href="{{url('auth/login')}}" class="text-center">{!! Lang::get('lang.i_know_my_password') !!}</a>
+
 <!-- /.login-page -->
 @stop
