@@ -2,6 +2,9 @@
 
 namespace App\Exceptions;
 
+// controller
+use App\Http\Controllers\Common\PhpMailController;
+
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -15,6 +18,19 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
         'Symfony\Component\HttpKernel\Exception\HttpException',
     ];
+
+
+    /**
+     * Create a new controller instance.
+     * constructor to check
+     * 1. php mailer
+     * @return void
+     */
+    public function __construct(PhpMailController $PhpMailController)
+    {
+        $this->PhpMailController = $PhpMailController;
+    }
+
 
     /**
      * Report or log an exception.
@@ -56,7 +72,7 @@ class Handler extends ExceptionHandler
                 if (\Config::get('database.install') == 1) {
                     // checking if the error log send to Ladybirdweb is enabled or not
                     if(\Config::get('app.ErrorLog') == '%1%') {
-                       $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => '', 'email' => ''], $message = ['subject' => '', 'scenario'=>'error-report'], $template_variables = ['e' =>$e ]);
+                       $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario'=>'error-report'], $template_variables = ['e' => $e]);
                     }
                 }
                 return response()->view('errors.500', []);
