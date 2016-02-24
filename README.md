@@ -22,9 +22,11 @@ Faveo is designed & developed by <a href="http://www.ladybirdweb.com/" target="_
 <h3><a id="user-content-requirements" href="https://github.com/ladybirdweb/faveo-helpdesk#requirements" aria-hidden="true"></a>Requirements</h3>
 <p>To run Faveo your host just needs a couple of things:</p>
 <ul>
-  <li>PHP 5.5 or greater</li>
-  <li>MySQL 5.5 or greater</li>
-  <li>The mod_rewrite Apache module</li>
+<li> Web Server: Apache or IIS or Nginx</li>
+<li> PHP Version: 5.5+</li>
+<li> PHP Extensions: Mcrypt, OpenSSL, Mbstring, Tokenizer PHP Extension</li>
+<li> Database: MySQL(5.0+) or Postgres or SQLite or SQL Server</li>
+<li> Web Server Extension: Pretty URLs or Search Engine Friendly URL's have to be enabled in your web server configuration</li>
 </ul>
 
 <h3>Faveo Web Hosting</h3>
