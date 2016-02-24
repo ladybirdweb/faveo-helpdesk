@@ -195,6 +195,15 @@ $(document).ready(function () {
     <div class="woocommerce-message woocommerce-tracker" >
             <p id="fail">Database connection unsuccessful. This system does not meet Faveo system requirements</p>
             </div>
+        <p>This either means that the username and password information is incorrect or we can&rsquo;t contact the database server. This could mean your host&rsquo;s database server is down.</p>
+        <ul>
+            <li>Are you sure you have the correct username and password?</li>
+            <li>Are you sure that you have typed the correct hostname?</li>
+            <li>Are you sure that the database server is running?</li>
+        </ul>
+        <p>If you&rsquo;re unsure what these terms mean you should probably contact your host. If you still need help you can always visit the <a href="http://www.ladybirdweb.com/support">Faveo Support </a>.</p>
+
+
             <div  style="border-bottom: 1px solid #eee;">
                 <p class="wc-setup-actions step">
                     <input type="submit" id="submitme" class="button-danger button button-large button-next" style="background-color: #d43f3a;color:#fff;" value="continue" disabled>

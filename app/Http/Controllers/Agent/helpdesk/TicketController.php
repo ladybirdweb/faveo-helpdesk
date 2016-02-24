@@ -32,6 +32,7 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Auth;
 use DB;
+use UTC;
 // classes
 use Exception;
 use Hash;
@@ -90,7 +91,7 @@ class TicketController extends Controller
                                     $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
                                 }
                             } else {
-                                $string = "..";
+                                $string = "(no subject)";
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -160,7 +161,7 @@ class TicketController extends Controller
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
 
-                            return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
                         ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
@@ -190,17 +191,20 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('assigned_to', '=', 0)->where('dept_id', '=', $dept->id)->get();
         }
-
         return \Datatable::collection(new Collection($tickets))
                         ->addColumn('id', function ($ticket) {
                             return "<input type='checkbox' name='select_all[]' class='icheckbox_flat-blue' value='".$ticket->id."'></input>";
                         })
                         ->addColumn('subject', function ($ticket) {
                             $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            $string = $subject->title;
-                            if (strlen($string) > 20) {
-                                $stringCut = substr($string, 0, 30);
-                                $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                            if (isset($subject->title)) {
+                                $string = $subject->title;
+                                if (strlen($string) > 20) {
+                                    $stringCut = substr($string, 0, 30);
+                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                                }
+                            } else {
+                                $string = "(no subject)";
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -267,7 +271,8 @@ class TicketController extends Controller
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
 
-                            return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            // return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
                         ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
@@ -304,10 +309,14 @@ class TicketController extends Controller
                         })
                         ->addColumn('subject', function ($ticket) {
                             $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            $string = $subject->title;
-                            if (strlen($string) > 20) {
-                                $stringCut = substr($string, 0, 30);
-                                $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                            if (isset($subject->title)) {
+                                $string = $subject->title;
+                                if (strlen($string) > 20) {
+                                    $stringCut = substr($string, 0, 30);
+                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                                }
+                            } else {
+                                $string = "(no subject)";
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -374,7 +383,8 @@ class TicketController extends Controller
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
 
-                            return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            // return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
                         ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
@@ -406,10 +416,14 @@ class TicketController extends Controller
                         })
                         ->addColumn('subject', function ($ticket) {
                             $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            $string = $subject->title;
-                            if (strlen($string) > 20) {
-                                $stringCut = substr($string, 0, 30);
-                                $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                            if (isset($subject->title)) {
+                                $string = $subject->title;
+                                if (strlen($string) > 20) {
+                                    $stringCut = substr($string, 0, 30);
+                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                                }
+                            } else {
+                                $string = "(no subject)";
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -476,7 +490,8 @@ class TicketController extends Controller
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
 
-                            return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            // return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
                         ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
@@ -518,10 +533,14 @@ class TicketController extends Controller
                         })
                         ->addColumn('subject', function ($ticket) {
                             $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            $string = $subject->title;
-                            if (strlen($string) > 20) {
-                                $stringCut = substr($string, 0, 30);
-                                $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                            if (isset($subject->title)) {
+                                $string = $subject->title;
+                                if (strlen($string) > 20) {
+                                    $stringCut = substr($string, 0, 30);
+                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                                }
+                            } else {
+                                $string = "(no subject)";
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -587,7 +606,8 @@ class TicketController extends Controller
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
 
-                            return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            // return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
                         ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
@@ -619,10 +639,14 @@ class TicketController extends Controller
                         })
                         ->addColumn('subject', function ($ticket) {
                             $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            $string = $subject->title;
-                            if (strlen($string) > 20) {
-                                $stringCut = substr($string, 0, 30);
-                                $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                            if (isset($subject->title)) {
+                                $string = $subject->title;
+                                if (strlen($string) > 20) {
+                                    $stringCut = substr($string, 0, 30);
+                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                                }
+                            } else {
+                                $string = "(no subject)";
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -689,7 +713,8 @@ class TicketController extends Controller
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
 
-                            return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            // return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
                         ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
@@ -1889,10 +1914,14 @@ class TicketController extends Controller
                         })
                         ->addColumn('subject', function ($ticket) {
                             $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            $string = $subject->title;
-                            if (strlen($string) > 20) {
-                                $stringCut = substr($string, 0, 30);
-                                $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                            if (isset($subject->title)) {
+                                $string = $subject->title;
+                                if (strlen($string) > 20) {
+                                    $stringCut = substr($string, 0, 30);
+                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                                }
+                            } else {
+                                $string = "(no subject)";
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -1959,7 +1988,8 @@ class TicketController extends Controller
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
 
-                            return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            // return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
                         ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
@@ -1996,10 +2026,14 @@ class TicketController extends Controller
                         })
                         ->addColumn('subject', function ($ticket) {
                             $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            $string = $subject->title;
-                            if (strlen($string) > 20) {
-                                $stringCut = substr($string, 0, 30);
-                                $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                            if (isset($subject->title)) {
+                                $string = $subject->title;
+                                if (strlen($string) > 20) {
+                                    $stringCut = substr($string, 0, 30);
+                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                                }
+                            } else {
+                                $string = "(no subject)";
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -2066,7 +2100,8 @@ class TicketController extends Controller
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
 
-                            return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            // return date('d F Y, H:i:s', strtotime($TicketDatarow->updated_at));
+                            return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
                         ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')

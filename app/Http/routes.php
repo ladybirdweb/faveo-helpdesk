@@ -631,6 +631,7 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::get('priority', 'Api\v1\ApiController@getPriority');
         Route::get('department', 'Api\v1\ApiController@getDepartment');
         Route::get('tickets', 'Api\v1\ApiController@getTickets');
+        Route::get('ticket', 'Api\v1\ApiController@getTicketById');
         Route::get('inbox', 'Api\v1\ApiController@inbox');
         Route::get('trash', 'Api\v1\ApiController@getTrash');
         Route::get('my-tickets', 'Api\v1\ApiController@getMyTickets');
@@ -667,6 +668,7 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::get('ticket/internal', 'Api\v1\TestController@internalNote');
     Route::get('ticket/trash', 'Api\v1\TestController@trash');
     Route::get('ticket/my', 'Api\v1\TestController@myTickets');
+     Route::get('ticket', 'Api\v1\TestController@getTicketById');
 
     Route::get('generate/token', 'Api\v1\TestController@generateToken');
     Route::get('get/user', 'Api\v1\TestController@getAuthUser');

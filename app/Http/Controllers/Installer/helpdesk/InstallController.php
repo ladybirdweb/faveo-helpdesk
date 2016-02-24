@@ -278,11 +278,20 @@ class InstallController extends Controller
      */
     public function accountcheck(InstallerRequest $request)
     {
+        // checking is the installation was done previously
+        try {
+            $check_for_pre_installation = System::all();
+            if($check_for_pre_installation) {
+                return redirect()->back()->with('fails', 'The data in database already exist. Please provide fresh database');
+            }    
+        } catch (Exception $e) {
+            
+        }
+        
 
         // migrate database
         Artisan::call('migrate', ['--force' => true]);
         Artisan::call('db:seed', ['--force' => true]);
-
         // create user
         $firstname = $request->input('firstname');
         $lastname = $request->input('Lastname');

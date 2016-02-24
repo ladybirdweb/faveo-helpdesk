@@ -1038,4 +1038,37 @@ class ApiController extends Controller
             return response()->json(compact('error'));
         }
     }
+
+    public function getTicketById()
+    {
+        try {
+            $v = \Validator::make($this->request->all(), [
+                        'id' => 'required|exists:tickets,id',
+            ]);
+            if ($v->fails()) {
+                $error = $v->errors();
+
+                return response()->json(compact('error'));
+            }
+            $id = $this->request->input('id');
+            if (!$this->model->where('id', $id)->first()) {
+                $error = 'There is no Ticket as ticket id: '.$id;
+
+                return response()->json(compact('error'));
+            }
+            $result = $this->model->where('id', $id)->first();
+
+            return response()->json(compact('result'));
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            $line = $e->getLine();
+            $file = $e->getFile();
+
+            return response()->json(compact('error', 'file', 'line'));
+        } catch (\TokenExpiredException $e) {
+            $error = $e->getMessage();
+
+            return response()->json(compact('error'));
+        }
+    }
 }
