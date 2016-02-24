@@ -32,14 +32,14 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Auth;
 use DB;
-use UTC;
-// classes
 use Exception;
+// classes
 use Hash;
 use Illuminate\support\Collection;
 use Input;
 use Mail;
 use PDF;
+use UTC;
 
 /**
  * TicketController.
@@ -91,7 +91,7 @@ class TicketController extends Controller
                                     $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
                                 }
                             } else {
-                                $string = "(no subject)";
+                                $string = '(no subject)';
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -191,6 +191,7 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('assigned_to', '=', 0)->where('dept_id', '=', $dept->id)->get();
         }
+
         return \Datatable::collection(new Collection($tickets))
                         ->addColumn('id', function ($ticket) {
                             return "<input type='checkbox' name='select_all[]' class='icheckbox_flat-blue' value='".$ticket->id."'></input>";
@@ -204,7 +205,7 @@ class TicketController extends Controller
                                     $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
                                 }
                             } else {
-                                $string = "(no subject)";
+                                $string = '(no subject)';
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -316,7 +317,7 @@ class TicketController extends Controller
                                     $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
                                 }
                             } else {
-                                $string = "(no subject)";
+                                $string = '(no subject)';
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -423,7 +424,7 @@ class TicketController extends Controller
                                     $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
                                 }
                             } else {
-                                $string = "(no subject)";
+                                $string = '(no subject)';
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -540,7 +541,7 @@ class TicketController extends Controller
                                     $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
                                 }
                             } else {
-                                $string = "(no subject)";
+                                $string = '(no subject)';
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -646,7 +647,7 @@ class TicketController extends Controller
                                     $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
                                 }
                             } else {
-                                $string = "(no subject)";
+                                $string = '(no subject)';
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -1036,8 +1037,6 @@ class TicketController extends Controller
      * @param type $emailadd
      * @param type $username
      * @param type $subject
-     * 
-     @param type $body
      * @param type $phone
      * @param type $helptopic
      * @param type $sla
@@ -1921,7 +1920,7 @@ class TicketController extends Controller
                                     $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
                                 }
                             } else {
-                                $string = "(no subject)";
+                                $string = '(no subject)';
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
@@ -2033,7 +2032,7 @@ class TicketController extends Controller
                                     $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
                                 }
                             } else {
-                                $string = "(no subject)";
+                                $string = '(no subject)';
                             }
                             //collabrations
                             $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
