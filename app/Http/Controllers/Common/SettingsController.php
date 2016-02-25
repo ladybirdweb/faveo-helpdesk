@@ -573,8 +573,8 @@ class SettingsController extends Controller
                      * write provider list in app.php line 128
                      */
                     $app = base_path().'/config/app.php';
-                    $str = "\n\n\t\t\t'App\\Plugins\\$filename"."\\ServiceProvider',";
-                    $line_i_am_looking_for = 144;
+                    $str = "\n\t\t'App\\Plugins\\$filename"."\\ServiceProvider',";
+                    $line_i_am_looking_for = 140;
                     $lines = file($app, FILE_IGNORE_NEW_LINES);
                     $lines[$line_i_am_looking_for] = $str;
                     file_put_contents($app, implode("\n", $lines));
@@ -696,7 +696,7 @@ class SettingsController extends Controller
         $str = "'App\\Plugins\\$slug"."\\ServiceProvider',";
         $path_to_file = base_path().'/config/app.php';
         $file_contents = file_get_contents($path_to_file);
-        $file_contents = str_replace($str, '//', $file_contents);
+        $file_contents = str_replace($str, '', $file_contents);
         file_put_contents($path_to_file, $file_contents);
         $plugin = new Plugin();
         $plugin = $plugin->where('path', $slug)->first();
@@ -714,8 +714,8 @@ class SettingsController extends Controller
             $plug->status = 1;
 
             $app = base_path().'/config/app.php';
-            $str = "'App\\Plugins\\$slug"."\\ServiceProvider',";
-            $line_i_am_looking_for = 144;
+            $str = "\n\t\t'App\\Plugins\\$slug"."\\ServiceProvider',";
+            $line_i_am_looking_for = 140;
             $lines = file($app, FILE_IGNORE_NEW_LINES);
             $lines[$line_i_am_looking_for] = $str;
             file_put_contents($app, implode("\n", $lines));
@@ -729,7 +729,7 @@ class SettingsController extends Controller
             $path_to_file = base_path().'/config/app.php';
 
             $file_contents = file_get_contents($path_to_file);
-            $file_contents = str_replace($str, '//', $file_contents);
+            $file_contents = str_replace($str, '', $file_contents);
             file_put_contents($path_to_file, $file_contents);
         }
         $plug->save();
