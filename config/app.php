@@ -135,10 +135,10 @@ return [
 
     'providers' => [
 
-    	/**
+        /*
     	* Faveo Plugins
     	*/
-	
+
         /*
          * Laravel Framework Service Providers...
          */
@@ -183,8 +183,8 @@ return [
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
-		
-	],
+
+    ],
 
     /*
     |--------------------------------------------------------------------------
