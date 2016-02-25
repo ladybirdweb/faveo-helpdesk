@@ -214,7 +214,7 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
     Route::get('profile-edit', ['as' => 'agent-profile-edit', 'uses' => 'Agent\helpdesk\UserController@getProfileedit']); /*  User profile edit get  */
 
-    Route::patch('agent-profile', ['as' => 'agent-profile', 'uses' => 'Agent\helpdesk\UserController@postProfilEedit']); /* User Profile Post */
+    Route::patch('agent-profile', ['as' => 'agent-profile', 'uses' => 'Agent\helpdesk\UserController@postProfileedit']); /* User Profile Post */
 
     Route::patch('agent-profile-password/{id}', 'Agent\helpdesk\UserController@postProfilePassword'); /*  Profile Password Post */
 
