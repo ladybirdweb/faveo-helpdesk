@@ -40,6 +40,7 @@ use Input;
 use Mail;
 use PDF;
 use UTC;
+use Lang;
 
 /**
  * TicketController.
@@ -2576,5 +2577,111 @@ class TicketController extends Controller
             return 1; // '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-user"></i>'.$user->user_name.'</h4><div id="message-success1">'.$user->email.'</div></div>';
         }
         // return  '<div id="alert11" class="alert alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-user"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'</div></div>';
+    }
+    public function getMergeTickets($id)
+    {
+        $ticket = Tickets::select('user_id')->where('id', '=', $id)->first();
+        $ticket_data = Tickets::select('ticket_number', 'id')
+        ->where('user_id', '=', $ticket->user_id)->where('id', '!=', $id)->where('status', '=', 1)->get();
+        foreach ($ticket_data as $value) {
+            $title = Ticket_Thread::select('title')->where('ticket_id', '=', $value->id)->first();
+            echo "<option value='$value->id'>".$title->title.'</option>';
+        }
+    }
+
+    public function checkMergeTickets($id)
+    {
+        $ticket = Tickets::select('user_id')->where('id', '=', $id)->first();
+        $ticket_data = Tickets::select('ticket_number', 'id')
+                                ->where('user_id', '=', $ticket->user_id)
+                                ->where('id', '!=', $id)
+                                ->where('status', '=', 1)->get();
+        if (isset($ticket_data) && count($ticket_data) >= 1) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function mergeTickets($id)
+    {
+        $t_id = Input::get('t_id');//getting array of tickets to merge
+        $temp_id = Input::get('p_id');//getting parent ticket
+        if ($id == $temp_id) {
+            $p_id = $id;
+        } else {
+            $p_id = $temp_id;
+            array_push($t_id, $id);
+            $t_id = array_diff($t_id, array($temp_id));
+        }
+        $parent_ticket = Tickets::select('ticket_number')->where('id', '=', $p_id)->first();
+        $parent_thread = Ticket_thread::where('ticket_id', '=', $p_id)->first();
+        foreach ($t_id as $value) {//to create new thread of the tickets to be merged with parent
+            $thread = Ticket_thread::where('ticket_id', '=', $value)->first();
+            $ticket = Tickets::select('ticket_number')->where('id', '=', $value)->first();
+            Ticket_thread::where('ticket_id', '=', $value)
+                            ->update(['ticket_id' => $p_id]);
+            Ticket_Form_Data::where('ticket_id', '=', $value)
+                            ->update(['ticket_id' => $p_id]);
+            Ticket_Collaborator::where('ticket_id', '=', $value)
+                            ->update(['ticket_id' => $p_id]);
+            Tickets::where('id', '=', $value)
+                            ->update(['status' => 3]);
+            if (!empty(Input::get('reason'))) {
+                $reason = Input::get('reason');
+            } else {
+                $reason = "";
+            }
+            if (!empty(Input::get('title'))) {
+                Ticket_thread::where('ticket_id', '=', $p_id)->first()
+                            ->update(['title' => Input::get('title')]);
+            }
+
+            $new_thread = new Ticket_thread;
+            $new_thread->ticket_id   = $thread->ticket_id;
+            $new_thread->user_id     = Auth::user()->id;
+            $new_thread->poster      = $thread->poster;
+            $new_thread->source      = $thread->source;
+            $new_thread->is_internal = 1;
+            $new_thread->title       = $thread->title;
+            $new_thread->body        = Lang::get('lang.get_merge_message').
+            "&nbsp;&nbsp;<a href='".route('ticket.thread', [$p_id]).
+            "'>#".$parent_ticket->ticket_number."</a><br>".$reason;
+            $new_thread->format      = $thread->format;
+            $new_thread->ip_address  = $thread->ip_address;
+            //$new_thread->save();
+            
+            $new_parent_thread = new Ticket_thread;
+            $new_parent_thread->ticket_id   = $p_id;
+            $new_parent_thread->user_id     = Auth::user()->id;
+            $new_parent_thread->poster      = $parent_thread->poster;
+            $new_parent_thread->source      = $parent_thread->source;
+            $new_parent_thread->is_internal = 1;
+            $new_parent_thread->title       = $thread->title;
+            $new_parent_thread->body        = Lang::get('lang.ticket')."&nbsp;<a href='".route('ticket.thread', [$value])."'>#".$ticket->ticket_number."</a>&nbsp".Lang::get('lang.ticket_merged');
+            $new_parent_thread->format      = $parent_thread->format;
+            $new_parent_thread->ip_address  = $parent_thread->ip_address;
+            //$new_parent_thread->save();
+            if ($new_thread->save() && $new_parent_thread->save()) {
+                $success = 1;
+            } else {
+                $success = 0;
+            }
+
+        }
+        return $success;
+
+    }
+
+    public function getParentTickets($id)
+    {
+        $title = Ticket_Thread::select('title')->where('ticket_id', '=', $id)->first();
+        echo "<option value='$id'>".$title->title.'</option>';
+        $tickets = Input::get('data1');
+        foreach ($tickets as $value) {
+            $title = Ticket_Thread::select('title')->where('ticket_id', '=', $value)->first();
+            echo "<option value='$value'>".$title->title.'</option>';
+        }
+
     }
 }

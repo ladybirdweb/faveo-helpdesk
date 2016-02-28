@@ -33,6 +33,9 @@
         <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/faveo-css.css")}}">
 
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
+
+         <!-- Select2 -->
+        <link rel="stylesheet" href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}">
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -328,6 +331,8 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                     
                     <script type="text/javascript" src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"></script>
                     <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
+
+                     <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" ></script>
 
 <script>
 $(function() {

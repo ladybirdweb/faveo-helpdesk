@@ -113,7 +113,7 @@ active
                 </button>
                 <ul class="dropdown-menu pull-right">
                     <li data-toggle="modal" data-target="#ChangeOwner"><a href="#"><i class="fa fa-users" style="color:green;"> </i>Change Owner</a></li>
-                    <!-- <li><a href="#"><i class="fa fa-edit" style="color:blue;"> </i>Manage Forms</a></li> -->
+                     <li data-toggle="modal" data-target="#MergeTickets"><a href="#"><i class="fa fa-chain" style="color:teal;"> </i>{!! Lang::get('lang.merge-ticket') !!}</a></li>
                     <?php if ($group->can_delete_ticket == 1) {?>
                     <li id="delete"><a href="#"><i class="fa fa-trash-o" style="color:red;"> </i>{!! Lang::get('lang.delete_ticket') !!}</a></li>
                     <?php }
@@ -1140,6 +1140,89 @@ $count_teams = count($teams);
     </div>
 </div>
 
+
+
+<!-- merge tickets modal -->
+    <div class="modal fade" id="MergeTickets">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="merge-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{!! Lang::get('lang.merge-ticket') !!} </h4>&nbsp;<b>#{!! $tickets->ticket_number !!}</b>
+                </div><!-- /.modal-header-->
+                <div class ="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-6" id="merge_loader"  style="display:none;">
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
+                        </div><!-- /.merge-loader -->
+                    </div>
+                    <div id="merge_body">
+                        <div id="merge-body-alert">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="merge-succ-alert" class="alert alert-success alert-dismissable" style="display:none;" >
+                                        <button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                                        <div id="message-merge-succ"></div>
+                                    </div>
+                                    <div id="merge-err-alert" class="alert alert-danger alert-dismissable" style="display:none;">
+                                        <button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <h4><i class="icon fa fa-ban"></i>Alert!</h4>
+                                        <div id="message-merge-err"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.merge-alert -->
+                        <div id="merge-body-form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {!! Form::open(['id'=>'merge-form','method' => 'PATCH'] )!!}
+                                    <label>{!! Lang::get('lang.title') !!}</label>
+                                    <input type="text" name='title' class="form-control" value="<?php $ticket_data = App\Model\helpdesk\Ticket\Ticket_Thread::select('title')->where('ticket_id', "=", $tickets->id)->first();    echo $ticket_data->title;?>"/>
+                                </div>
+                                <div class="col-md-6">
+                                <label>{!! Lang::get('lang.select-pparent-ticket') !!}</label>
+                                    <div id="parent-loader" style="display:none;">
+                                        <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" height="30px" width="30px">
+                                    </div>
+                                    <div id="parent-body" >
+                                        
+                                        <select class="form-control" id="select-merge-parent"  name='p_id' data-placeholder="{!! Lang::get('lang.select_tickets') !!}" style="width: 100%;"><option value="{{$tickets->id}}"><?php $ticket_data = App\Model\helpdesk\Ticket\Ticket_Thread::select('title')->where('ticket_id', "=", $tickets->id)->first();    echo $ticket_data->title;?></option></select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-8">
+                            
+                                    <label>{!! Lang::get('lang.select_tickets') !!}</label>
+                                    <select class="form-control select2" id="select-merge-tickts" name="t_id[]" multiple="multiple" data-placeholder="{!! Lang::get('lang.select_tickets') !!}" style="width: 100%;">
+                                
+                                    </select>
+                           
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label>{!! Lang::get('lang.merge-reason') !!}</label>
+                                    <textarea  name="reason" class="form-control"></textarea>
+                                </div>
+                          
+                            </div>
+                        </div><!-- mereg-body-form -->
+                    </div><!-- merge-body -->
+                </div><!-- /.modal-body -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">{!! Lang::get('lang.close') !!}</button>
+                    <input  type="submit" id="merge-btn" class="btn btn-primary pull-right" value="{!! Lang::get('lang.merge') !!}"></input>
+                    {!! Form::close() !!}
+                </div><!-- /.modal-footer -->
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 <?php  $var=App\Model\helpdesk\Settings\Ticket::where('id', '=', 1)->first(); ?>
 
 <!-- scripts used on page -->
@@ -1151,7 +1234,7 @@ $count_teams = count($teams);
 
 jQuery('.star').attr('disabled', true);
     
- $(function () {
+$(function () {
     // $('#cand').wysihtml5();
     var wysihtml5Editor = $('#reply_content').wysihtml5().data("wysihtml5").editor;
 
@@ -1181,7 +1264,7 @@ jQuery('.star').attr('disabled', true);
        
         return false;
         });
-    });
+});
 
 
 
@@ -1192,6 +1275,10 @@ $(function() {
 });
 
 $(document).ready(function () {
+    
+    //Initialize Select2 Elements
+    $(".select2").select2();
+    
     setInterval(function(){
         $("#auto-submit").submit(function(){
             $.ajax({
@@ -1205,7 +1292,7 @@ $(document).ready(function () {
 
 
 
-    jQuery(document).ready(function() {
+jQuery(document).ready(function() {
         // Close a ticket
         $('#close').on('click', function(e) {
             $.ajax({
@@ -1702,7 +1789,92 @@ $(document).ready(function () {
             return false;
         });
 
-    });
+        // checking merge
+        $('#MergeTickets').on('show.bs.modal', function (id) {
+            $.ajax({
+                type: "GET",
+                url: "../check-merge-ticket/{{ $tickets->id }}",
+                dataType: "html",
+                data:$(this).serialize(),
+                beforeSend: function() {
+                    $("#merge_body").hide();
+                    $("#merge_loader").show();
+                },
+                success: function(response) {
+                    if(response == 0) {
+                        $("#merge_body").show();
+                        $("#merge-body-alert").show();
+                        $("#merge-body-form").hide();
+                        $("#merge_loader").hide();
+                        $("#merge-btn").attr('disabled', true);
+                       var message = "No more tickets found by this user.";
+                        $("#merge-err-alert").show();
+                        $('#message-merge-err').html(message);  
+
+                    } else {
+                        $("#merge_body").show();
+                        $("#merge-body-alert").hide();
+                        $("#merge-body-form").show();
+                        $("#merge_loader").hide();
+                        $("#merge-btn").attr('disabled', false);
+                        $("#merge_loader").hide();
+                        $.ajax({
+                            url: "../get-merge-tickets/{{ $tickets->id}}",
+                            type: 'GET',
+                            data: $(this).serialize(),
+                            success: function(data) {
+            
+                                $('#select-merge-tickts').html(data);
+                            }
+                            // return false;
+                        });
+                    }
+                }
+            });
+        });
+
+    //submit merging form
+        $('#merge-form').on('submit', function(){
+            $.ajax({
+                    type: "POST",
+                    url: "../merge-tickets/{{ $tickets->id }}",
+                    dataType: "html",
+                    data: $(this).serialize(),
+                    beforeSend: function() {
+                        $("#merge_body").hide();
+                        $("#merge_loader").show();
+                   
+                    },
+                    success: function(response) {
+                        if(response == 0) {
+                            $("#merge_body").show();
+                            $("#merge-body-alert").show();
+                            $("#merge-body-form").hide();
+                            $("#merge_loader").hide();
+                            $("#merge-btn").attr('disabled', true);
+                           var message = "Could not process your request try after some time.";
+                            $("#merge-err-alert").show();
+                            $('#message-merge-err').html(message);  
+                    
+                        } else {
+                            $("#merge_body").show();
+                            $("#merge-body-alert").show();
+                            $("#merge-body-form").hide();
+                            $("#merge_loader").hide();
+                            $("#merge-btn").attr('disabled', true);
+                           var message = "Tickets has been merged successfully.";
+                            $("#merge-succ-alert").show();
+                            $('#message-merge-succ').html(message);  
+
+                        }
+                  
+                    }
+                })
+                return false;
+
+        });
+
+});
 
 
 
@@ -1729,6 +1901,34 @@ $(document).ready(function () {
     }
 
 $(document).ready(function() {
+
+    $('#select-merge-parent').on("focus", function(){
+       // alert();
+        var arr = $("#select-merge-tickts").val();
+        if(arr == null) {
+            document.getElementById("select-merge-parent").innerHTML = "<option value='{{$tickets->id}}'><?php $ticket_data = App\Model\helpdesk\Ticket\Ticket_Thread::select('title')->where('ticket_id', "=", $tickets->id)->first();    echo $ticket_data->title;?></option>"
+        } else {
+            $.ajax({
+                type: "GET",
+                url: "../get-parent-tickets/{{ $tickets->id }}",
+                dataType: "html",
+                data:{data1:arr},
+                beforeSend: function() {
+                   // $("#parent-loader").show();
+                   // $("#parent-body").hide();
+                },
+                success: function(data) {
+                    // $("#parent-loader").hide();
+                    // $("#parent-body").show();
+                    // $("#select-merge-parent").focus();
+                    $('#select-merge-parent').html(data);
+                    $( this ).off( event );
+                }
+            });
+        }
+        
+    });
+
     var locktime = '<?php echo $var->collision_avoid;?>'*60*1000;
     lockAjaxCall(locktime);
     setInterval(function() {// to call ajax for ticket lock repeatedly after defined lock time interval

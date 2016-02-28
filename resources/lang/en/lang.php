@@ -709,6 +709,14 @@ return [
     'in_minutes'                                     => 'In minutes',
     'add_another_owner'                              => 'Add another owner',
     'search_user'                                    => 'Search user',
+     'merge-ticket'                                   => 'Merge ticket',
+    'title'                                          => 'Title',
+    'merge'                                          => 'Merge',
+    'select_tickets'                                 => 'Select tickets to merge',
+    'select-pparent-ticket'                          => 'Select parent ticket',
+    'merge-reason'                                   => 'Reason for merging',
+    'get_merge_message'                              => 'This ticket has been merged with ticket',
+    'ticket_merged'                                  => ' has been merged with this ticket.',
     /*
       |------------------------------------------------
       |Tools Page
