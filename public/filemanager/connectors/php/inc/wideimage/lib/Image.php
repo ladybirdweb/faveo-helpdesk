@@ -62,7 +62,7 @@
 
         /**
          * Cleanup.
-         * 
+         *
          * Destroys the handle via WideImage_Image::destroy() when called by the GC.
          */
         public function __destruct()
@@ -72,7 +72,7 @@
 
         /**
          * This method destroy the image handle, and releases the image resource.
-         * 
+         *
          * After this is called, the object doesn't hold a valid image any more.
          * No operation should be called after that.
          */
@@ -87,7 +87,7 @@
 
         /**
          * Returns the GD image resource.
-         * 
+         *
          * @return resource GD image resource
          */
         public function getHandle()
@@ -113,29 +113,29 @@
 
         /**
          * Saves an image to a file.
-         * 
+         *
          * The file type is recognized from the $uri. If you save to a GIF8, truecolor images
          * are automatically converted to palette.
-         * 
-         * This method supports additional parameters: quality (for jpeg images) and 
+         *
+         * This method supports additional parameters: quality (for jpeg images) and
          * compression quality and filters (for png images). See http://www.php.net/imagejpeg and
          * http://www.php.net/imagepng for details.
-         * 
+         *
          * Examples:
          * <code>
          * // save to a GIF
          * $image->saveToFile('image.gif');
-         * 
+         *
          * // save to a PNG with compression=7 and no filters
          * $image->saveToFile('image.png', 7, PNG_NO_FILTER);
-         * 
+         *
          * // save to a JPEG with quality=80
          * $image->saveToFile('image.jpg', 80);
-         * 
+         *
          * // save to a JPEG with default quality=100
          * $image->saveToFile('image.jpg');
          * </code>
-         * 
+         *
          * @param string $uri File location
          */
         public function saveToFile($uri)
@@ -151,9 +151,9 @@
 
         /**
          * Returns binary string with image data in format specified by $format.
-         * 
+         *
          * Additional parameters may be passed to the function. See WideImage_Image::saveToFile() for more details.
-         * 
+         *
          * @param string $format The format of the image
          *
          * @return string The binary image data in specified format
@@ -176,7 +176,7 @@
 
         /**
          * Output a header to browser.
-         * 
+         *
          * @param $name Name of the header
          * @param $data Data
          */
@@ -187,15 +187,15 @@
 
         /**
          * Outputs the image to browser.
-         * 
+         *
          * Sets headers Content-length and Content-type, and echoes the image in the specified format.
-         * All other headers (such as Content-disposition) must be added manually. 
-         * 
+         * All other headers (such as Content-disposition) must be added manually.
+         *
          * Example:
          * <code>
          * WideImage::load('image1.png')->resize(100, 100)->output('gif');
          * </code>
-         * 
+         *
          * @param string $format Image format
          */
         public function output($format)
@@ -226,7 +226,7 @@
 
         /**
          * Allocate a color by RGB values.
-         * 
+         *
          * @param mixed $R Red-component value or an RGB array (with red, green, blue keys)
          * @param int   $G If $R is int, this is the green component
          * @param int   $B If $R is int, this is the blue component
@@ -260,7 +260,7 @@
 
         /**
          * Sets the current transparent color index. Only makes sense for palette images (8-bit).
-         * 
+         *
          * @param int $color Transparent color index
          */
         public function setTransparentColor($color)
@@ -270,7 +270,7 @@
 
         /**
          * Returns a RGB array of the transparent color or null if none.
-         * 
+         *
          * @return mixed Transparent color RGBA array
          */
         public function getTransparentColorRGB()
@@ -287,11 +287,11 @@
 
         /**
          * Returns a RGBA array for pixel at $x, $y.
-         * 
+         *
          * @param int $x
          * @param int $y
          *
-         * @return array RGB array 
+         * @return array RGB array
          */
         public function getRGBAt($x, $y)
         {
@@ -300,7 +300,7 @@
 
         /**
          * Writes a pixel at the designated coordinates.
-         * 
+         *
          * Takes an associative array of colours and uses getExactColor() to
          * retrieve the exact index color to write to the image with.
          *
@@ -315,7 +315,7 @@
 
         /**
          * Returns a color's RGB.
-         * 
+         *
          * @param int $colorIndex Color index
          *
          * @return mixed RGBA array for a color with index $colorIndex
@@ -327,7 +327,7 @@
 
         /**
          * Returns an index of the color at $x, $y.
-         * 
+         *
          * @param int $x
          * @param int $y
          *
@@ -340,7 +340,7 @@
 
         /**
          * Set the color index $color to a pixel at $x, $y.
-         * 
+         *
          * @param int $x
          * @param int $y
          * @param int $color Color index
@@ -353,7 +353,7 @@
         /**
          * Returns closest color index that matches the given RGB value. Uses
          * PHP's imagecolorclosest().
-         * 
+         *
          * @param mixed $R Red or RGBA array
          * @param int   $G Green component (or null if $R is an RGB array)
          * @param int   $B Blue component (or null if $R is an RGB array)
@@ -372,7 +372,7 @@
         /**
          * Returns the color index that exactly matches the given RGB value. Uses
          * PHP's imagecolorexact().
-         * 
+         *
          * @param mixed $R Red or RGBA array
          * @param int   $G Green component (or null if $R is an RGB array)
          * @param int   $B Blue component (or null if $R is an RGB array)
@@ -391,7 +391,7 @@
         /**
          * Copies transparency information from $sourceImage. Optionally fills
          * the image with the transparent color at (0, 0).
-         * 
+         *
          * @param object $sourceImage
          * @param bool   $fill        True if you want to fill the image with transparent color
          */
@@ -419,7 +419,7 @@
 
         /**
          * Fill the image at ($x, $y) with color index $color.
-         * 
+         *
          * @param int $x
          * @param int $y
          * @param int $color
@@ -443,13 +443,13 @@
 
         /**
          * Returns the image's mask.
-         * 
+         *
          * Mask is a greyscale image where the shade defines the alpha channel (black = transparent, white = opaque).
-         * 
-         * For opaque images (JPEG), the result will be white. For images with single-color transparency (GIF, 8-bit PNG), 
-         * the areas with the transparent color will be black. For images with alpha channel transparenct, 
+         *
+         * For opaque images (JPEG), the result will be white. For images with single-color transparency (GIF, 8-bit PNG),
+         * the areas with the transparent color will be black. For images with alpha channel transparenct,
          * the result will be alpha channel.
-         * 
+         *
          * @return WideImage_Image An image mask
          **/
         public function getMask()
@@ -459,23 +459,23 @@
 
         /**
          * Resize the image to given dimensions.
-         * 
+         *
          * $width and $height are both smart coordinates. This means that you can pass any of these values in:
          *   - positive or negative integer (100, -20, ...)
          *   - positive or negative percent string (30%, -15%, ...)
          *   - complex coordinate (50% - 20, 15 + 30%, ...)
-         * 
+         *
          * If $width is null, it's calculated proportionally from $height, and vice versa.
-         * 
+         *
          * Example (resize to half-size):
          * <code>
          * $smaller = $image->resize('50%');
-         * 
+         *
          * $smaller = $image->resize('100', '100', 'inside', 'down');
          * is the same as
          * $smaller = $image->resizeDown(100, 100, 'inside');
          * </code>
-         * 
+         *
          * @param mixed  $width  The new width (smart coordinate), or null.
          * @param mixed  $height The new height (smart coordinate), or null.
          * @param string $fit    'inside', 'outside', 'fill'
@@ -491,7 +491,7 @@
         /**
          * Same as WideImage_Image::resize(), but the image is only applied if it is larger then the given dimensions.
          * Otherwise, the resulting image retains the source's dimensions.
-         * 
+         *
          * @param int    $width  New width, smart coordinate
          * @param int    $height New height, smart coordinate
          * @param string $fit    'inside', 'outside', 'fill'
@@ -506,7 +506,7 @@
         /**
          * Same as WideImage_Image::resize(), but the image is only applied if it is smaller then the given dimensions.
          * Otherwise, the resulting image retains the source's dimensions.
-         * 
+         *
          * @param int    $width  New width, smart coordinate
          * @param int    $height New height, smart coordinate
          * @param string $fit    'inside', 'outside', 'fill'
@@ -520,9 +520,9 @@
 
         /**
          * Rotate the image for angle $angle clockwise.
-         * 
+         *
          * Preserves transparency. Has issues when saving to a BMP.
-         * 
+         *
          * @param int  $angle             Angle in degrees, clock-wise
          * @param int  $bgColor           color of the new background
          * @param bool $ignoreTransparent
@@ -536,9 +536,9 @@
 
         /**
          * This method lays the overlay (watermark) on the image.
-         * 
+         *
          * Hint: if the overlay is a truecolor image with alpha channel, you should leave $pct at 100.
-         * 
+         *
          * This operation supports alignment notation in coordinates:
          * <code>
          * $watermark = WideImage::load('logo.gif');
@@ -546,7 +546,7 @@
          * $result = $base->merge($watermark, "right - 10", "bottom - 10", 50);
          * // applies a logo aligned to bottom-right corner with a 10 pixel margin
          * </code>
-         * 
+         *
          * @param WideImage_Image $overlay The overlay image
          * @param mixed           $left    Left position of the overlay, smart coordinate
          * @param mixed           $top     Top position of the overlay, smart coordinate
@@ -561,31 +561,31 @@
 
         /**
          * Resizes the canvas of the image, but doesn't scale the content of the image.
-         * 
-         * This operation creates an empty canvas with dimensions $width x $height, filled with 
+         *
+         * This operation creates an empty canvas with dimensions $width x $height, filled with
          * background color $bg_color and draws the original image onto it at position [$pos_x, $pos_y].
-         * 
-         * Arguments $width, $height, $pos_x and $pos_y are all smart coordinates. $width and $height are 
+         *
+         * Arguments $width, $height, $pos_x and $pos_y are all smart coordinates. $width and $height are
          * relative to the current image size, $pos_x and $pos_y are relative to the newly calculated
          * canvas size. This can be confusing, but it makes sense. See the example below.
-         * 
-         * The example below loads a 100x150 image and then resizes its canvas to 200% x 100%+20 
+         *
+         * The example below loads a 100x150 image and then resizes its canvas to 200% x 100%+20
          * (which evaluates to 200x170). The image is placed at position [10, center+20], which evaluates to [10, 30].
          * <code>
          * $image = WideImage::load('someimage.jpg'); // 100x150
          * $white = $image->allocateColor(255, 255, 255);
          * $image->resizeCanvas('200%', '100% + 20', 10, 'center+20', $white);
          * </code>
-         * 
+         *
          * The parameter $merge defines whether the original image should be merged onto the new canvas.
          * This means it blends transparent color and alpha colors into the background color. If set to false,
          * the original image is just copied over, preserving the transparency/alpha information.
-         * 
-         * You can set the $scale parameter to limit when to resize the canvas. For example, if you want 
-         * to resize the canvas only if the image is smaller than the new size, but leave the image intact 
-         * if it's larger, set it to 'up'. Likewise, if you want to shrink the canvas, but don't want to 
-         * change images that are already smaller, set it to 'down'. 
-         * 
+         *
+         * You can set the $scale parameter to limit when to resize the canvas. For example, if you want
+         * to resize the canvas only if the image is smaller than the new size, but leave the image intact
+         * if it's larger, set it to 'up'. Likewise, if you want to shrink the canvas, but don't want to
+         * change images that are already smaller, set it to 'down'.
+         *
          * @param mixed  $width    Width of the new canvas (smart coordinate, relative to current image width)
          * @param mixed  $height   Height of the new canvas (smart coordinate, relative to current image height)
          * @param mixed  $pos_x    x-position of the image (smart coordinate, relative to the new width)
@@ -603,31 +603,31 @@
 
         /**
          * Returns an image with round corners.
-         * 
+         *
          * You can either set the corners' color or set them transparent.
-         * 
+         *
          * Note on $smoothness: 1 means jagged edges, 2 is much better, more than 4 doesn't noticeably improve the quality.
          * Rendering becomes increasingly slower if you increase smoothness.
-         * 
+         *
          * Example:
          * <code>
          * $nice = $ugly->roundCorners(20, $ugly->allocateColor(255, 0, 0), 2);
          * </code>
-         * 
+         *
          * Use $corners parameter to specify which corners to draw rounded. Possible values are
          * WideImage::SIDE_TOP_LEFT, WideImage::SIDE_TOP,
          * WideImage::SIDE_TOP_RIGHT, WideImage::SIDE_RIGHT,
-         * WideImage::SIDE_BOTTOM_RIGHT, WideImage::SIDE_BOTTOM, 
+         * WideImage::SIDE_BOTTOM_RIGHT, WideImage::SIDE_BOTTOM,
          * WideImage::SIDE_BOTTOM_LEFT, WideImage::SIDE_LEFT, and WideImage::SIDE_ALL.
          * You can specify any combination of corners with a + operation, see example below.
-         * 
+         *
          * Example:
          * <code>
          * $white = $image->allocateColor(255, 255, 255);
          * $diagonal_corners = $image->roundCorners(15, $white, 2, WideImage::SIDE_TOP_LEFT + WideImage::SIDE_BOTTOM_RIGHT);
          * $right_corners = $image->roundCorners(15, $white, 2, WideImage::SIDE_RIGHT);
          * </code>
-         * 
+         *
          * @param int $radius     Radius of the corners
          * @param int $color      The color of corners. If null, corners are rendered transparent (slower than using a solid color).
          * @param int $smoothness Specify the level of smoothness. Suggested values from 1 to 4.
@@ -642,10 +642,10 @@
 
         /**
          * Returns an image with applied mask.
-         * 
+         *
          * A mask is a grayscale image, where the shade determines the alpha channel. Black is fully transparent
          * and white is fully opaque.
-         * 
+         *
          * @param WideImage_Image $mask The mask image, greyscale
          * @param mixed           $left Left coordinate, smart coordinate
          * @param mixed           $top  Top coordinate, smart coordinate
@@ -689,23 +689,23 @@
 
         /**
          * Returns a cropped rectangular portion of the image.
-         * 
+         *
          * If the rectangle specifies area that is out of bounds, it's limited to the current image bounds.
-         * 
+         *
          * Examples:
          * <code>
          * $cropped = $img->crop(10, 10, 150, 200); // crops a 150x200 rect at (10, 10)
          * $cropped = $img->crop(-100, -50, 100, 50); // crops a 100x50 rect at the right-bottom of the image
          * $cropped = $img->crop('25%', '25%', '50%', '50%'); // crops a 50%x50% rect from the center of the image
          * </code>
-         * 
+         *
          * This operation supports alignment notation in left/top coordinates.
          * Example:
          * <code>
          * $cropped = $img->crop("right", "bottom", 100, 200); // crops a 100x200 rect from right bottom
          * $cropped = $img->crop("center", "middle", 50, 30); // crops a 50x30 from the center of the image
          * </code>
-         * 
+         *
          * @param mixed $left   Left-coordinate of the crop rect, smart coordinate
          * @param mixed $top    Top-coordinate of the crop rect, smart coordinate
          * @param mixed $width  Width of the crop rect, smart coordinate
@@ -721,13 +721,13 @@
         /**
          * Performs an auto-crop on the image.
          *
-         * The image is auto-cropped from each of four sides. All sides are 
-         * scanned for pixels that differ from $base_color for more than 
-         * $rgb_threshold in absolute RGB difference. If more than $pixel_cutoff 
+         * The image is auto-cropped from each of four sides. All sides are
+         * scanned for pixels that differ from $base_color for more than
+         * $rgb_threshold in absolute RGB difference. If more than $pixel_cutoff
          * differentiating pixels are found, that line is considered to be the crop line for the side.
-         * If the line isn't different enough, the algorithm procedes to the next line 
+         * If the line isn't different enough, the algorithm procedes to the next line
          * towards the other edge of the image.
-         * 
+         *
          * When the crop rectangle is found, it's enlarged by the $margin value on each of the four sides.
          *
          * @param int $margin        Margin for the crop rectangle, can be negative.
@@ -758,7 +758,7 @@
 
         /**
          * Returns a grayscale copy of the image.
-         * 
+         *
          * @return WideImage_Image grayscale copy
          **/
         public function asGrayscale()
@@ -768,7 +768,7 @@
 
         /**
          * Returns a mirrored copy of the image.
-         * 
+         *
          * @return WideImage_Image Mirrored copy
          **/
         public function mirror()
@@ -778,7 +778,7 @@
 
         /**
          * Applies the unsharp filter.
-         * 
+         *
          * @param float $amount
          * @param float $radius
          * @param float $threshold
@@ -792,7 +792,7 @@
 
         /**
          * Returns a flipped (mirrored over horizontal line) copy of the image.
-         * 
+         *
          * @return WideImage_Image Flipped copy
          **/
         public function flip()
@@ -802,7 +802,7 @@
 
         /**
          * Corrects gamma on the image.
-         * 
+         *
          * @param float $inputGamma
          * @param float $outputGamma
          *
@@ -815,9 +815,9 @@
 
         /**
          * Adds noise to the image.
-         * 
+         *
          * @author Tomasz Kapusta
-         * 
+         *
          * @param int    $amount Number of noise pixels to add
          * @param string $type   Type of noise 'salt&pepper', 'color' or 'mono'
          *
@@ -860,7 +860,7 @@
 
         /**
          * Returns a copy of the image object.
-         * 
+         *
          * @return WideImage_Image The copy
          **/
         public function copy()
@@ -874,7 +874,7 @@
 
         /**
          * Copies this image onto another image.
-         * 
+         *
          * @param WideImage_Image $dest
          * @param int             $left
          * @param int             $top
@@ -888,21 +888,21 @@
 
         /**
          * Returns the canvas object.
-         * 
+         *
          * The Canvas object can be used to draw text and shapes on the image
-         * 
+         *
          * Examples:
          * <code>
          * $img = WideImage::load('pic.jpg);
          * $canvas = $img->getCanvas();
          * $canvas->useFont('arial.ttf', 15, $img->allocateColor(200, 220, 255));
          * $canvas->writeText(10, 50, "Hello world!");
-         * 
+         *
          * $canvas->filledRectangle(10, 10, 80, 40, $img->allocateColor(255, 127, 255));
          * $canvas->line(60, 80, 30, 100, $img->allocateColor(255, 0, 0));
          * $img->saveToFile('new.png');
          * </code>
-         * 
+         *
          * @return WideImage_Canvas The Canvas object
          **/
         public function getCanvas()
@@ -916,14 +916,14 @@
 
         /**
          * Returns true if the image is true-color, false otherwise.
-         * 
+         *
          * @return bool
          **/
         abstract public function isTrueColor();
 
         /**
          * Returns a true-color copy of the image.
-         * 
+         *
          * @return WideImage_TrueColorImage
          **/
         abstract public function asTrueColor();
@@ -933,7 +933,7 @@
          *
          * @param int  $nColors      Number of colors in the resulting image, more than 0, less or equal to 255
          * @param bool $dither       Use dithering or not
-         * @param bool $matchPalette Set to true to use imagecolormatch() to match the resulting palette more closely to the original image 
+         * @param bool $matchPalette Set to true to use imagecolormatch() to match the resulting palette more closely to the original image
          *
          * @return WideImage_Image
          **/
@@ -941,28 +941,28 @@
 
         /**
          * Retrieve an image with selected channels.
-         * 
+         *
          * Examples:
          * <code>
          * $channels = $img->getChannels('red', 'blue');
          * $channels = $img->getChannels('alpha', 'green');
          * $channels = $img->getChannels(array('green', 'blue'));
          * </code>
-         * 
+         *
          * @return WideImage_Image
          **/
         abstract public function getChannels();
 
         /**
          * Returns an image without an alpha channel.
-         * 
+         *
          * @return WideImage_Image
          **/
         abstract public function copyNoAlpha();
 
         /**
          * Returns an array of serializable protected variables. Called automatically upon serialize().
-         * 
+         *
          * @return array
          */
         public function __sleep()

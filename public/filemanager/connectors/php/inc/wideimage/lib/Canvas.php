@@ -3,27 +3,18 @@
      * @author Gasper Kozak
      * @copyright 2007-2011
      **/
-
-    /**
-     */
     class WideImage_NoFontException extends WideImage_Exception
     {
     }
 
-    /**
-     */
     class WideImage_InvalidFontFileException extends WideImage_Exception
     {
     }
 
-    /**
-     */
     class WideImage_InvalidCanvasMethodException extends WideImage_Exception
     {
     }
 
-    /**
-     */
     class WideImage_Canvas
     {
         protected $handle = 0;
@@ -44,7 +35,7 @@
         }
 
         /**
-         * Sets the active font. Can be an instance of 
+         * Sets the active font. Can be an instance of
          * WideImage_Font_TTF, WideImage_Font_PS, or WideImage_Font_GDF.
          *
          *
@@ -59,12 +50,12 @@
 
         /**
          * Creates and sets the current font.
-         * 
+         *
          * The supported font types are: TTF/OTF, PS, and GDF.
          * Font type is detected from the extension. If the $file parameter doesn't have an extension, TTF font is presumed.
-         * 
+         *
          * Note: not all parameters are supported by all fonts.
-         * 
+         *
          * @param string $file    Font file name (string)
          * @param int    $size    Font size (supported for TTF/OTF and PS fonts, ignored for GDF)
          * @param int    $color   Text color
@@ -98,11 +89,11 @@
 
         /**
          * Write text on the image at specified position.
-         * 
+         *
          * You must set a font with a call to WideImage_Canvas::setFont() prior to writing text to the image.
-         * 
+         *
          * Smart coordinates are supported for $x and $y arguments, but currently only for TTF/OTF fonts.
-         * 
+         *
          * Example:
          * <code>
          * $img = WideImage::load('pic.jpg');
@@ -110,7 +101,7 @@
          * $canvas->useFont('Verdana.ttf', 16, $img->allocateColor(255, 0, 0));
          * $canvas->writeText('right', 'bottom', 'www.website.com');
          * </code>
-         * 
+         *
          * @param int    $x     Left
          * @param int    $y     Top
          * @param string $text  Text to write
@@ -133,9 +124,9 @@
 
         /**
          * A magic method that allows you to call any PHP function that starts with "image".
-         * 
+         *
          * This is a shortcut to call custom functions on the image handle.
-         * 
+         *
          * Example:
          * <code>
          * $img = WideImage::load('pic.jpg');

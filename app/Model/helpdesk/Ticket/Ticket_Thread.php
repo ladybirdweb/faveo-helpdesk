@@ -3,6 +3,7 @@
 namespace App\Model\helpdesk\Ticket;
 
 use Illuminate\Database\Eloquent\Model;
+
 class Ticket_Thread extends Model
 {
     protected $table = 'ticket_thread';

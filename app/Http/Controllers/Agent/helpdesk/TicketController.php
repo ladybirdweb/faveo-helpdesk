@@ -37,10 +37,10 @@ use Exception;
 use Hash;
 use Illuminate\support\Collection;
 use Input;
+use Lang;
 use Mail;
 use PDF;
 use UTC;
-use Lang;
 
 /**
  * TicketController.
@@ -2534,7 +2534,7 @@ class TicketController extends Controller
         }
     }
 
-    /** 
+    /**
      * useradd.
      *
      * @param type Image $image
@@ -2578,6 +2578,7 @@ class TicketController extends Controller
         }
         // return  '<div id="alert11" class="alert alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-user"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'</div></div>';
     }
+
     public function getMergeTickets($id)
     {
         $ticket = Tickets::select('user_id')->where('id', '=', $id)->first();
@@ -2605,14 +2606,14 @@ class TicketController extends Controller
 
     public function mergeTickets($id)
     {
-        $t_id = Input::get('t_id');//getting array of tickets to merge
-        $temp_id = Input::get('p_id');//getting parent ticket
+        $t_id = Input::get('t_id'); //getting array of tickets to merge
+        $temp_id = Input::get('p_id'); //getting parent ticket
         if ($id == $temp_id) {
             $p_id = $id;
         } else {
             $p_id = $temp_id;
             array_push($t_id, $id);
-            $t_id = array_diff($t_id, array($temp_id));
+            $t_id = array_diff($t_id, [$temp_id]);
         }
         $parent_ticket = Tickets::select('ticket_number')->where('id', '=', $p_id)->first();
         $parent_thread = Ticket_thread::where('ticket_id', '=', $p_id)->first();
@@ -2630,47 +2631,46 @@ class TicketController extends Controller
             if (!empty(Input::get('reason'))) {
                 $reason = Input::get('reason');
             } else {
-                $reason = "";
+                $reason = '';
             }
             if (!empty(Input::get('title'))) {
                 Ticket_thread::where('ticket_id', '=', $p_id)->first()
                             ->update(['title' => Input::get('title')]);
             }
 
-            $new_thread = new Ticket_thread;
-            $new_thread->ticket_id   = $thread->ticket_id;
-            $new_thread->user_id     = Auth::user()->id;
-            $new_thread->poster      = $thread->poster;
-            $new_thread->source      = $thread->source;
+            $new_thread = new Ticket_thread();
+            $new_thread->ticket_id = $thread->ticket_id;
+            $new_thread->user_id = Auth::user()->id;
+            $new_thread->poster = $thread->poster;
+            $new_thread->source = $thread->source;
             $new_thread->is_internal = 1;
-            $new_thread->title       = $thread->title;
-            $new_thread->body        = Lang::get('lang.get_merge_message').
+            $new_thread->title = $thread->title;
+            $new_thread->body = Lang::get('lang.get_merge_message').
             "&nbsp;&nbsp;<a href='".route('ticket.thread', [$p_id]).
-            "'>#".$parent_ticket->ticket_number."</a><br>".$reason;
-            $new_thread->format      = $thread->format;
-            $new_thread->ip_address  = $thread->ip_address;
+            "'>#".$parent_ticket->ticket_number.'</a><br>'.$reason;
+            $new_thread->format = $thread->format;
+            $new_thread->ip_address = $thread->ip_address;
             //$new_thread->save();
-            
-            $new_parent_thread = new Ticket_thread;
-            $new_parent_thread->ticket_id   = $p_id;
-            $new_parent_thread->user_id     = Auth::user()->id;
-            $new_parent_thread->poster      = $parent_thread->poster;
-            $new_parent_thread->source      = $parent_thread->source;
+
+            $new_parent_thread = new Ticket_thread();
+            $new_parent_thread->ticket_id = $p_id;
+            $new_parent_thread->user_id = Auth::user()->id;
+            $new_parent_thread->poster = $parent_thread->poster;
+            $new_parent_thread->source = $parent_thread->source;
             $new_parent_thread->is_internal = 1;
-            $new_parent_thread->title       = $thread->title;
-            $new_parent_thread->body        = Lang::get('lang.ticket')."&nbsp;<a href='".route('ticket.thread', [$value])."'>#".$ticket->ticket_number."</a>&nbsp".Lang::get('lang.ticket_merged');
-            $new_parent_thread->format      = $parent_thread->format;
-            $new_parent_thread->ip_address  = $parent_thread->ip_address;
+            $new_parent_thread->title = $thread->title;
+            $new_parent_thread->body = Lang::get('lang.ticket')."&nbsp;<a href='".route('ticket.thread', [$value])."'>#".$ticket->ticket_number.'</a>&nbsp'.Lang::get('lang.ticket_merged');
+            $new_parent_thread->format = $parent_thread->format;
+            $new_parent_thread->ip_address = $parent_thread->ip_address;
             //$new_parent_thread->save();
             if ($new_thread->save() && $new_parent_thread->save()) {
                 $success = 1;
             } else {
                 $success = 0;
             }
-
         }
-        return $success;
 
+        return $success;
     }
 
     public function getParentTickets($id)
@@ -2682,6 +2682,5 @@ class TicketController extends Controller
             $title = Ticket_Thread::select('title')->where('ticket_id', '=', $value)->first();
             echo "<option value='$value'>".$title->title.'</option>';
         }
-
     }
 }

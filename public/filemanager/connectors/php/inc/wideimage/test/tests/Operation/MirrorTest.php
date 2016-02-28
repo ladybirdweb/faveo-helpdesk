@@ -1,10 +1,6 @@
 <?php
-    /**
-     
-     **/
 
-    /**
-     */
+
     class WideImage_Operation_Mirror_Test extends WideImage_TestCase
     {
         public function testMirror()

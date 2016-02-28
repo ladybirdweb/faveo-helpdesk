@@ -1,10 +1,6 @@
 <?php
-    /**
-     
-     **/
 
-    /**
-     */
+
     class WideImage_Operation_GetChannels_Test extends WideImage_TestCase
     {
         public function testCopyChannel8bit()
@@ -73,7 +69,7 @@
             $this->assertRGBEqual($copy->getRGBAt(85, 85), 0, 255, 0);
             $this->assertRGBEqual($copy->getRGBAt(15, 85), 0, 255, 0);
             $this->assertRGBEqual($copy->getRGBAt(50, 50), 0, 127, 0);
-            
+
             $copy = $img->copyChannels('blue');
             $this->assertFalse($img->getHandle() === $copy->getHandle());
             $this->assertTrue($copy instanceof WideImage_TrueColorImage);
@@ -84,7 +80,7 @@
             $this->assertRGBEqual($copy->getRGBAt(85, 85), 0, 0, 0);
             $this->assertRGBEqual($copy->getRGBAt(15, 85), 0, 0, 0);
             $this->assertRGBEqual($copy->getRGBAt(50, 50), 0, 0, 127);
-            
+
             $img = WideImage::load(IMG_PATH . '100x100-blue-alpha.png');
             $copy = $img->copyChannels('alpha');
             $this->assertRGBNear($copy->getRGBAt(25, 25), 0, 0, 0, 0.25 * 127);

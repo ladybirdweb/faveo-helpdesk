@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_resize extends Demo
     {
         public $order = 900;

@@ -1,9 +1,9 @@
 <?php
 /**
  *  Filemanager PHP connector
- *  This file should at least declare auth() function 
+ *  This file should at least declare auth() function
  *  and instantiate the Filemanager as '$fm'.
- *  
+ *
  *  IMPORTANT : by default Read and Write access is granted to everyone
  *  Copy/paste this file to 'user.config.php' file to implement your own auth() function
  *  to grant access to wanted users only
@@ -60,7 +60,7 @@ if (!$app['auth']->check()) {
 
 /**
  *  Check if user is authorized.
- *  
+ *
  *
  *  @return bool true if access granted, false if no access
  */

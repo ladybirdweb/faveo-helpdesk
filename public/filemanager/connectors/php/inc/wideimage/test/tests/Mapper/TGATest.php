@@ -1,7 +1,5 @@
 <?php
-    /**
-     
-     **/
+
     include WideImage::path().'Mapper/TGA.php';
 
     /**

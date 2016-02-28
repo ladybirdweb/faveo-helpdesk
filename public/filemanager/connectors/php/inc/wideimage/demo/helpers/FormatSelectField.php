@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class FormatSelectField extends SelectField
     {
         public function __construct($name)

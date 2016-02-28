@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_crop extends Demo
     {
         public $order = 1000;

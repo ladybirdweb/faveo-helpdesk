@@ -1,10 +1,6 @@
 <?php
-    /**
-     
-     **/
 
-    /**
-     */
+
     class FlipTest extends WideImage_TestCase
     {
         public function testFlip()

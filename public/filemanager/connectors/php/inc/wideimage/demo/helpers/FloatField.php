@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class FloatField extends Field
     {
         public function __construct($name, $default, $hint = 'Float')

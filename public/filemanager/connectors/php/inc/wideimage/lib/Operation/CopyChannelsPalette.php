@@ -6,7 +6,7 @@
 
     /**
      * CopyChannelsPalette operation class.
-     * 
+     *
      * This operation is intended to be used on palette images
      */
     class WideImage_Operation_CopyChannelsPalette

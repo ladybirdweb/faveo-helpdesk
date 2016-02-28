@@ -18,20 +18,14 @@
     require_once WideImage::path().'Font/GDF.php';
     require_once WideImage::path().'Font/PS.php';
 
-    /**
-     */
     class WideImage_InvalidImageHandleException extends WideImage_Exception
     {
     }
 
-    /**
-     */
     class WideImage_InvalidImageSourceException extends WideImage_Exception
     {
     }
 
-    /**
-     */
     class WideImage_GDFunctionResultException extends WideImage_Exception
     {
     }
@@ -92,12 +86,12 @@
 
         /**
          * Registers a custom mapper for image loading and saving.
-         * 
+         *
          * Example:
          * <code>
          * 	WideImage::registerCustomMapper('WideImage_Mapper_TGA', 'image/tga', 'tga');
          * </code>
-         * 
+         *
          * @param string $mapper_class_name
          * @param string $mime_type
          * @param string $extension
@@ -109,18 +103,18 @@
 
         /**
          * Loads an image from a file, URL, HTML input file field, binary string, or a valid image handle.
-         * The image format is auto-detected. 
-         * 
+         * The image format is auto-detected.
+         *
          * Currently supported formats: PNG, GIF, JPG, BMP, TGA, GD, GD2.
-         * 
+         *
          * This function analyzes the input and decides whether to use WideImage::loadFromHandle(),
          * WideImage::loadFromFile(), WideImage::loadFromUpload() or WideImage::loadFromString(),
          * all of which you can also call directly to spare WideImage some guessing.
-         * 
-         * Arrays are supported for upload fields; it returns an array of loaded images. 
-         * To load only a single image from an array field, use WideImage::loadFromUpload('img', $i), 
+         *
+         * Arrays are supported for upload fields; it returns an array of loaded images.
+         * To load only a single image from an array field, use WideImage::loadFromUpload('img', $i),
          * where $i is the index of the image you want to load.
-         * 
+         *
          * <code>
          * $img = WideImage::load('http://url/image.png'); // image URL
          * $img = WideImage::load('/path/to/image.png'); // local file path
@@ -128,7 +122,7 @@
          * $img = WideImage::load(imagecreatetruecolor(10, 10)); // a GD resource
          * $img = WideImage::load($image_data); // binary string containing image data
          * </code>
-         * 
+         *
          * @param mixed $source File name, url, HTML file input field name, binary string, or a GD image resource
          *
          * @return WideImage_Image WideImage_PaletteImage or WideImage_TrueColorImage instance
@@ -175,7 +169,7 @@
 
         /**
          * Create and load an image from a file or URL. The image format is auto-detected.
-         * 
+         *
          * @param string $uri File or url
          *
          * @return WideImage_Image WideImage_PaletteImage or WideImage_TrueColorImage instance
@@ -217,7 +211,7 @@
 
         /**
          * Create and load an image from a string. Format is auto-detected.
-         * 
+         *
          * @param string $string Binary data, i.e. from BLOB field in the database
          *
          * @return WideImage_Image WideImage_PaletteImage or WideImage_TrueColorImage instance
@@ -249,19 +243,19 @@
 
         /**
          * Create and load an image from an image handle.
-         * 
-         * <b>Note:</b> the resulting image object takes ownership of the passed 
-         * handle. When the newly-created image object is destroyed, the handle is 
-         * destroyed too, so it's not a valid image handle anymore. In order to 
-         * preserve the handle for use after object destruction, you have to call 
+         *
+         * <b>Note:</b> the resulting image object takes ownership of the passed
+         * handle. When the newly-created image object is destroyed, the handle is
+         * destroyed too, so it's not a valid image handle anymore. In order to
+         * preserve the handle for use after object destruction, you have to call
          * WideImage_Image::releaseHandle() on the created image instance prior to its
          * destruction.
-         * 
+         *
          * <code>
          * $handle = imagecreatefrompng('file.png');
          * $image = WideImage::loadFromHandle($handle);
          * </code>
-         * 
+         *
          * @param resource $handle A valid GD image resource
          *
          * @return WideImage_Image WideImage_PaletteImage or WideImage_TrueColorImage instance
@@ -281,11 +275,11 @@
 
         /**
          * This method loads a file from the $_FILES array. The image format is auto-detected.
-         * 
+         *
          * You only have to pass the field name as the parameter. For array fields, this function will
          * return an array of image objects, unless you specify the $index parameter, which will
          * load the desired image.
-         * 
+         *
          * @param $field_name Name of the key in $_FILES array
          * @param int $index The index of the file to load (if the input field is an array)
          *
@@ -321,7 +315,7 @@
 
         /**
          * Factory method for creating a palette image.
-         * 
+         *
          * @param int $width
          * @param int $height
          *
@@ -334,7 +328,7 @@
 
         /**
          * Factory method for creating a true-color image.
-         * 
+         *
          * @param int $width
          * @param int $height
          *
@@ -347,7 +341,7 @@
 
         /**
          * Check whether the given handle is a valid GD resource.
-         * 
+         *
          * @param mixed $handle The variable to check
          *
          * @return bool
@@ -359,7 +353,7 @@
 
         /**
          * Throws exception if the handle isn't a valid GD resource.
-         * 
+         *
          * @param mixed $handle The variable to check
          */
         public static function assertValidImageHandle($handle)

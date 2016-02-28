@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_asGrayscale extends Demo
     {
         public $order = 300;

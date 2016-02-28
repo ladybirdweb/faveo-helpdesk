@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_getChannels extends Demo
     {
         public $order = 500;
