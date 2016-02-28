@@ -74,7 +74,7 @@
 
         /**
          * Allocates a color and returns its index.
-         * 
+         *
          * This method accepts either each component as an integer value,
          * or an associative array that holds the color's components in keys
          * 'red', 'green', 'blue', 'alpha'.

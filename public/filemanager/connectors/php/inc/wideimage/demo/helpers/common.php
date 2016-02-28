@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     define('DEMO_PATH', realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'..').DIRECTORY_SEPARATOR);
 
     error_reporting(E_ALL | E_STRICT);

@@ -15,7 +15,7 @@ use View;
 /**
  * DashboardController
  * This controlleris used to fetch dashboard in the agent panel.
- * 
+ *
  * @author      Ladybird <info@ladybirdweb.com>
  */
 class DashboardController extends Controller

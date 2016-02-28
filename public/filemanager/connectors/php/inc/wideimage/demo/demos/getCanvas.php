@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_getCanvas extends Demo
     {
         public $order = 1300;

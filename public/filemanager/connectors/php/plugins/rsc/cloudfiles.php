@@ -67,9 +67,6 @@
  * @author Eric "EJ" Johnson <ej@racklabs.com>
  * @copyright Copyright (c) 2008, Rackspace US, Inc.
  */
-
-/**
- */
 require_once 'cloudfiles_exceptions.php';
 require 'cloudfiles_http.php';
 define('DEFAULT_CF_API_VERSION', 1);
@@ -232,14 +229,14 @@ class CF_Authentication
      * #Pass Cached URL's and Token as Args
      * $auth->load_cached_credentials("auth_token", "storage_url", "cdn_management_url");
      * </code>
-     * 
+     *
      * @param string $auth_token  A Cloud Files Auth Token (Required)
      * @param string $storage_url The Cloud Files Storage URL (Required)
      * @param string $cdnm_url    CDN Management URL (Required)
      *
      * @throws SyntaxException If any of the Required Arguments are missing
      *
-     * @return bool <kbd>True</kbd> if successful 
+     * @return bool <kbd>True</kbd> if successful
      */
     public function load_cached_credentials($auth_token, $storage_url, $cdnm_url)
     {
@@ -267,7 +264,7 @@ class CF_Authentication
      * $auth->authenticate();
      * $array = $auth->export_credentials();
      * </code>
-     * 
+     *
      * @return array of url's and an auth token.
      */
     public function export_credentials()
@@ -408,9 +405,9 @@ class CF_Connection
      *
      * Example:
      * <code>
-     *  
+     *
      * $conn->close();
-     * 
+     *
      * </code>
      *
      * Will close all current cUrl active connections.
@@ -1103,7 +1100,7 @@ class CF_Container
      * $container->purge_from_cdn("user@domain.com");
      * # or
      * $container->purge_from_cdn();
-     * # or 
+     * # or
      * $container->purge_from_cdn("user1@domain.com,user2@domain.com");.
      *
      * @returns boolean True if successful
@@ -1220,7 +1217,7 @@ class CF_Container
      * uploaded to a ".CDN_ACCESS_LOGS" container in the form of
      * "container_name.YYYYMMDDHH-XXXX.gz". Requires CDN be enabled on
      * the account.
-     * 
+     *
      * Example:
      * <code>
      * # ... authentication code excluded (see previous examples) ...
@@ -1419,7 +1416,7 @@ class CF_Container
      * # Grab subsets of all storage objects
      * #
      * $first_ten = $images->list_objects(10);
-     * 
+     *
      * # Note the use of the previous result's last object name being
      * # used as the 'marker' parameter to fetch the next 10 objects
      * #
@@ -1664,7 +1661,7 @@ class CF_Container
  * Object operations.
  *
  * An Object is analogous to a file on a conventional filesystem. You can
- * read data from, or write data to your Objects. You can also associate 
+ * read data from, or write data to your Objects. You can also associate
  * arbitrary metadata with them.
  */
 class CF_Object
@@ -1739,7 +1736,7 @@ class CF_Object
      *
      * if fileinfo is not available it will try to use the internal
      * mime_content_type function.
-     * 
+     *
      * @param string $handle name of file or buffer to guess the type from
      *
      * @throws BadContentTypeException
@@ -1819,8 +1816,6 @@ class CF_Object
         if ($this->container->cdn_enabled) {
             return $this->container->cdn_uri.'/'.$this->name;
         }
-
-        return;
     }
 
     /**
@@ -2189,7 +2184,7 @@ class CF_Object
      * $obj->purge_from_cdn("user@domain.com");
      * # or
      * $obj->purge_from_cdn();
-     * # or 
+     * # or
      * $obj->purge_from_cdn("user1@domain.com,user2@domain.com");.
      *
      * @returns boolean True if successful

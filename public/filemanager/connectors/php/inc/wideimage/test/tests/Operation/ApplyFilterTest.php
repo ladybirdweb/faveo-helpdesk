@@ -1,7 +1,5 @@
 <?php
-    /**
-     
-     **/
+
 
     /**
      * @group operation

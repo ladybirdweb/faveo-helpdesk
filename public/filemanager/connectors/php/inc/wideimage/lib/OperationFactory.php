@@ -3,9 +3,6 @@
      * @author Gasper Kozak
      * @copyright 2007-2011
      **/
-
-    /**
-     */
     class WideImage_UnknownImageOperationException extends WideImage_Exception
     {
     }

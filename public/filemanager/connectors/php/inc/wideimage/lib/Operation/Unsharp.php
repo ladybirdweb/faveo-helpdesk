@@ -6,7 +6,7 @@
 
     /**
      * Unsharp filter.
-     * 
+     *
      * This filter was taken from http://vikjavev.no/computing/ump.php,
      * the original author Torstein Hønsi. Adapted to fit better within
      * the Wideimage package.

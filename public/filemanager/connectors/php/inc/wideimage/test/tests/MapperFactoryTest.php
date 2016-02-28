@@ -1,10 +1,6 @@
 <?php
-    /**
-     
-     **/
 
-    /**
-     */
+
     class WideImage_MapperFactory_Test extends WideImage_TestCase
     {
         public function testMapperPNGByURI()

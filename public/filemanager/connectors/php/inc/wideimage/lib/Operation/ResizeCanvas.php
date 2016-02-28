@@ -11,7 +11,7 @@
     {
         /**
          * Returns an image with a resized canvas.
-         * 
+         *
          * The image is filled with $color. Use $scale to determine, when to resize.
          *
          * @param WideImage_Image  $img

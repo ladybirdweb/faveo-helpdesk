@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class SelectField extends Field
     {
         public $options;

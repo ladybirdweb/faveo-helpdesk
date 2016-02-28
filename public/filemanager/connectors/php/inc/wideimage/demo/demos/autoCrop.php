@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_autoCrop extends Demo
     {
         public $order = 1050;

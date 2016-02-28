@@ -1,10 +1,6 @@
 <?php
-    /**
-     
-     **/
 
-    /**
-     */
+
     class WideImage_Mapper_FOO
     {
         public static $calls = [];
@@ -71,8 +67,6 @@
         }
     }
 
-    /**
-     */
     class WideImage_Test extends WideImage_TestCase
     {
         protected $_FILES;

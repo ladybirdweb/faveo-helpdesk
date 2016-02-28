@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_applyConvolution extends Demo
     {
         public $order = 2025;

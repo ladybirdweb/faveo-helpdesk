@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class CheckboxSetField extends Field
     {
         public $options;

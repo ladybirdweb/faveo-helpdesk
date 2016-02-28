@@ -1,11 +1,7 @@
 <?php
-    /**
-     
-     **/
+
     include WideImage::path().'Mapper/GD2.php';
 
-    /**
-     */
     class WideImage_Mapper_GD2_Test extends WideImage_TestCase
     {
         protected $mapper;

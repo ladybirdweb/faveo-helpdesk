@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
-use App\Http\Controllers\Common\SettingsController;use App\Http\Controllers\Controller;
+use App\Http\Controllers\Common\SettingsController;
+use App\Http\Controllers\Controller;
 // requests
 // models
 use App\Model\helpdesk\Agent\Department;

@@ -23,8 +23,8 @@ use Illuminate\Http\Request;
  * -----------------------------------------------------------------------------
  * Api Controller
  * -----------------------------------------------------------------------------.
- * 
- * 
+ *
+ *
  * @author Vijay Sebastian <vijay.sebastian@ladybirdweb.com>
  * @copyright (c) 2016, Ladybird Web Solution
  * @name Faveo HELPDESK
@@ -723,7 +723,7 @@ class ApiController extends Controller
 
     /**
      * To generate api string.
-     * 
+     *
      * @return type | json
      */
     public function generateApiKey()

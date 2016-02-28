@@ -1,10 +1,6 @@
 <?php
-    /**
-     
-     **/
 
-    /**
-     */
+
     class WideImage_Operation_Crop_Test extends WideImage_TestCase
     {
         public function testCropTransparentGif()

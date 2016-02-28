@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
 
             \Cron::add('example2', '*/2 * * * *', function () {
                 // Do some crazy things successfully every two minute
-                return;
+
             });
 
             \Cron::add('disabled job', '0 * * * *', function () {

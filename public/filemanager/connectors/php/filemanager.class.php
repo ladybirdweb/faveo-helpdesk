@@ -1213,8 +1213,6 @@ private function is_valid_path($path)
         if ($deleteRootToo) {
             @rmdir($dir);
         }
-
-        return;
     }
 
 /**

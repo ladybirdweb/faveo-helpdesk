@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class CheckboxField extends Field
     {
         public function init($request)
