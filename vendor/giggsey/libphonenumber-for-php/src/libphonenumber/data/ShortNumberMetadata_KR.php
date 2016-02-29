@@ -27,11 +27,10 @@ return array (
           1(?:
             1[78]|
             28|
-            330|
             82
           )
         ',
-    'PossibleNumberPattern' => '\\d{3,4}',
+    'PossibleNumberPattern' => '\\d{3}',
     'ExampleNumber' => '118',
   ),
   'premiumRate' => 
@@ -84,10 +83,7 @@ return array (
            2[01389]|
            3(?:
              2|
-             3[039]|
-             45|
-             66|
-             88|
+             39|
              9[18]
            )|
            82

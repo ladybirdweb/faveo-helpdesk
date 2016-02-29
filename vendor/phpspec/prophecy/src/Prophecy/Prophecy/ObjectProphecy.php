@@ -260,8 +260,6 @@ class ObjectProphecy implements ProphecyInterface
      * Tries to get property value from double.
      *
      * @param string $name
-     *
-     * @return mixed
      */
     public function __get($name)
     {
@@ -272,7 +270,7 @@ class ObjectProphecy implements ProphecyInterface
      * Tries to set property value to double.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param string $value
      */
     public function __set($name, $value)
     {

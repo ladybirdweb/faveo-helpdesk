@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of jwt-auth.
- *
- * (c) Sean Tymon <tymon148@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Tymon\JWTAuth;
 
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -33,12 +24,12 @@ class JWTManager
     protected $payloadFactory;
 
     /**
-     * @var bool
+     * @var boolean
      */
     protected $blacklistEnabled = true;
 
     /**
-     * @var bool
+     * @var boolean
      */
     protected $refreshFlow = false;
 
@@ -55,7 +46,7 @@ class JWTManager
     }
 
     /**
-     * Encode a Payload and return the Token.
+     * Encode a Payload and return the Token
      *
      * @param  \Tymon\JWTAuth\Payload  $payload
      * @return \Tymon\JWTAuth\Token
@@ -68,7 +59,7 @@ class JWTManager
     }
 
     /**
-     * Decode a Token and return the Payload.
+     * Decode a Token and return the Payload
      *
      * @param  \Tymon\JWTAuth\Token $token
      * @return Payload
@@ -88,7 +79,7 @@ class JWTManager
     }
 
     /**
-     * Refresh a Token and return a new Token.
+     * Refresh a Token and return a new Token
      *
      * @param  \Tymon\JWTAuth\Token  $token
      * @return \Tymon\JWTAuth\Token
@@ -106,16 +97,16 @@ class JWTManager
         return $this->encode(
             $this->payloadFactory->make([
                 'sub' => $payload['sub'],
-                'iat' => $payload['iat'],
+                'iat' => $payload['iat']
             ])
         );
     }
 
     /**
-     * Invalidate a Token by adding it to the blacklist.
+     * Invalidate a Token by adding it to the blacklist
      *
      * @param  Token  $token
-     * @return bool
+     * @return boolean
      */
     public function invalidate(Token $token)
     {
@@ -127,7 +118,7 @@ class JWTManager
     }
 
     /**
-     * Get the PayloadFactory instance.
+     * Get the PayloadFactory instance
      *
      * @return \Tymon\JWTAuth\PayloadFactory
      */
@@ -137,7 +128,7 @@ class JWTManager
     }
 
     /**
-     * Get the JWTProvider instance.
+     * Get the JWTProvider instance
      *
      * @return \Tymon\JWTAuth\Providers\JWT\JWTInterface
      */
@@ -147,7 +138,7 @@ class JWTManager
     }
 
     /**
-     * Get the Blacklist instance.
+     * Get the Blacklist instance
      *
      * @return \Tymon\JWTAuth\Blacklist
      */
@@ -157,7 +148,7 @@ class JWTManager
     }
 
     /**
-     * Set whether the blacklist is enabled.
+     * Set whether the blacklist is enabled
      *
      * @param bool  $enabled
      */
@@ -169,9 +160,9 @@ class JWTManager
     }
 
     /**
-     * Set the refresh flow.
+     * Set the refresh flow
      *
-     * @param bool $refreshFlow
+     * @param boolean $refreshFlow
      * @return $this
      */
     public function setRefreshFlow($refreshFlow = true)

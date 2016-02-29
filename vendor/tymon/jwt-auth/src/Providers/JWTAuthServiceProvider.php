@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of jwt-auth.
- *
- * (c) Sean Tymon <tymon148@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Tymon\JWTAuth\Providers;
 
 use Tymon\JWTAuth\JWTAuth;
@@ -35,7 +26,7 @@ class JWTAuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/config.php' => config_path('jwt.php'),
+            __DIR__.'/../config/config.php' => config_path('jwt.php')
         ], 'config');
 
         $this->bootBindings();
@@ -44,7 +35,7 @@ class JWTAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bind some Interfaces and implementations.
+     * Bind some Interfaces and implementations
      */
     protected function bootBindings()
     {
@@ -111,11 +102,11 @@ class JWTAuthServiceProvider extends ServiceProvider
         $this->registerPayloadFactory();
         $this->registerJWTCommand();
 
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'jwt');
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'jwt');
     }
 
     /**
-     * Register the bindings for the User provider.
+     * Register the bindings for the User provider
      */
     protected function registerUserProvider()
     {
@@ -125,7 +116,7 @@ class JWTAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the bindings for the JSON Web Token provider.
+     * Register the bindings for the JSON Web Token provider
      */
     protected function registerJWTProvider()
     {
@@ -140,7 +131,7 @@ class JWTAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the bindings for the Auth provider.
+     * Register the bindings for the Auth provider
      */
     protected function registerAuthProvider()
     {
@@ -150,7 +141,7 @@ class JWTAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the bindings for the Storage provider.
+     * Register the bindings for the Storage provider
      */
     protected function registerStorageProvider()
     {
@@ -160,7 +151,7 @@ class JWTAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the bindings for the Payload Factory.
+     * Register the bindings for the Payload Factory
      */
     protected function registerClaimFactory()
     {
@@ -170,7 +161,7 @@ class JWTAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the bindings for the JWT Manager.
+     * Register the bindings for the JWT Manager
      */
     protected function registerJWTManager()
     {
@@ -187,7 +178,7 @@ class JWTAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the bindings for the main JWTAuth class.
+     * Register the bindings for the main JWTAuth class
      */
     protected function registerJWTAuth()
     {
@@ -205,19 +196,17 @@ class JWTAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the bindings for the main JWTAuth class.
+     * Register the bindings for the main JWTAuth class
      */
     protected function registerJWTBlacklist()
     {
         $this->app['tymon.jwt.blacklist'] = $this->app->share(function ($app) {
-            $instance = new Blacklist($app['tymon.jwt.provider.storage']);
-
-            return $instance->setRefreshTTL($this->config('refresh_ttl'));
+            return new Blacklist($app['tymon.jwt.provider.storage']);
         });
     }
 
     /**
-     * Register the bindings for the payload validator.
+     * Register the bindings for the payload validator
      */
     protected function registerPayloadValidator()
     {
@@ -227,7 +216,7 @@ class JWTAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the bindings for the Payload Factory.
+     * Register the bindings for the Payload Factory
      */
     protected function registerPayloadFactory()
     {
@@ -239,7 +228,7 @@ class JWTAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the Artisan command.
+     * Register the Artisan command
      */
     protected function registerJWTCommand()
     {
@@ -249,7 +238,7 @@ class JWTAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Helper to get the config values.
+     * Helper to get the config values
      *
      * @param  string $key
      * @return string
@@ -260,7 +249,7 @@ class JWTAuthServiceProvider extends ServiceProvider
     }
 
     /**
-     * Get an instantiable configuration instance. Pinched from dingo/api :).
+     * Get an instantiable configuration instance. Pinched from dingo/api :)
      *
      * @param  mixed  $instance
      * @return object

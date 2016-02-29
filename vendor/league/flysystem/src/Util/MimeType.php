@@ -22,7 +22,10 @@ class MimeType
             return;
         }
 
-        return (new Finfo(FILEINFO_MIME_TYPE))->buffer($content) ?: null;
+        $finfo = new Finfo(FILEINFO_MIME_TYPE);
+        $mimeType = $finfo->buffer($content);
+
+        return $mimeType ?: null;
     }
 
     /**
@@ -121,7 +124,6 @@ class MimeType
             'bmp'   => 'image/bmp',
             'tiff'  => 'image/tiff',
             'tif'   => 'image/tiff',
-            'svg'   => 'image/svg+xml',
             'css'   => 'text/css',
             'html'  => 'text/html',
             'htm'   => 'text/html',

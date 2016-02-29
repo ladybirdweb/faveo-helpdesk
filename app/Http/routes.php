@@ -178,8 +178,6 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
     //Routes for  delete language package
     Route::get('delete-language/{lang}', ['as' => 'lang.delete', 'uses' => 'Admin\helpdesk\LanguageController@deleteLanguage']);
-
-    Route::get('generate-api-key', 'Admin\helpdesk\SettingsController@GenerateApiKey'); // route to generate api key
 });
 
 /*
@@ -586,7 +584,6 @@ Route::get('/inbox/data', ['as' => 'api.inbox', 'uses' => 'Agent\helpdesk\Ticket
 
 Route::get('/report', 'HomeController@getreport');
 Route::get('/reportdata', 'HomeController@pushdata');
-
 
 /*
  * ================================================================================================

@@ -1,16 +1,8 @@
 <?php
 
-/*
- * This file is part of jwt-auth.
- *
- * (c) Sean Tymon <tymon148@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Tymon\JWTAuth\Test;
 
+use Mockery;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tymon\JWTAuth\Commands\JWTGenerateCommand;
 use Illuminate\Foundation\Application;
@@ -37,7 +29,7 @@ class JWTGenerateCommandTest extends \PHPUnit_Framework_TestCase
         // $this->runCommand($this->command);
     }
 
-    protected function runCommand($command, $input = [])
+    protected function runCommand($command, $input = array())
     {
         return $command->run(new ArrayInput($input), new NullOutput);
     }

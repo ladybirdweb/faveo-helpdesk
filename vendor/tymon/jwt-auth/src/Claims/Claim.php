@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of jwt-auth.
- *
- * (c) Sean Tymon <tymon148@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Tymon\JWTAuth\Claims;
 
 use Tymon\JWTAuth\Exceptions\InvalidClaimException;
@@ -16,14 +7,14 @@ use Tymon\JWTAuth\Exceptions\InvalidClaimException;
 abstract class Claim implements ClaimInterface
 {
     /**
-     * The claim name.
+     * The claim name
      *
      * @var string
      */
     protected $name;
 
     /**
-     * The claim value.
+     * The claim value
      *
      * @var mixed
      */
@@ -38,7 +29,7 @@ abstract class Claim implements ClaimInterface
     }
 
     /**
-     * Set the claim value, and call a validate method if available.
+     * Set the claim value, and call a validate method if available
      *
      * @param $value
      * @throws \Tymon\JWTAuth\Exceptions\InvalidClaimException
@@ -47,7 +38,7 @@ abstract class Claim implements ClaimInterface
     public function setValue($value)
     {
         if (! $this->validate($value)) {
-            throw new InvalidClaimException('Invalid value provided for claim "'.$this->getName().'": '.$value);
+            throw new InvalidClaimException('Invalid value provided for claim "' . $this->getName() . '": ' . $value);
         }
 
         $this->value = $value;
@@ -56,7 +47,7 @@ abstract class Claim implements ClaimInterface
     }
 
     /**
-     * Get the claim value.
+     * Get the claim value
      *
      * @return mixed
      */
@@ -66,7 +57,7 @@ abstract class Claim implements ClaimInterface
     }
 
     /**
-     * Set the claim name.
+     * Set the claim name
      *
      * @param string $name
      * @return $this
@@ -79,7 +70,7 @@ abstract class Claim implements ClaimInterface
     }
 
     /**
-     * Get the claim name.
+     * Get the claim name
      *
      * @return string
      */
@@ -89,10 +80,10 @@ abstract class Claim implements ClaimInterface
     }
 
     /**
-     * Validate the Claim value.
+     * Validate the Claim value
      *
      * @param  $value
-     * @return bool
+     * @return boolean
      */
     protected function validate($value)
     {
@@ -100,7 +91,7 @@ abstract class Claim implements ClaimInterface
     }
 
     /**
-     * Build a key value array comprising of the claim name and value.
+     * Build a key value array comprising of the claim name and value
      *
      * @return array
      */
@@ -110,7 +101,7 @@ abstract class Claim implements ClaimInterface
     }
 
     /**
-     * Get the claim as a string.
+     * Get the claim as a string
      *
      * @return string
      */
