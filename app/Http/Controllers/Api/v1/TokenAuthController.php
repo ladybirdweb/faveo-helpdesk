@@ -13,8 +13,8 @@ use Tymon\JWTAuth\Exceptions\JWTException;
  * -----------------------------------------------------------------------------
  * Token authenticate Controller
  * -----------------------------------------------------------------------------.
- *
- *
+ * 
+ * 
  * @author Vijay Sebastian <vijay.sebastian@ladybirdweb.com>
  * @copyright (c) 2016, Ladybird Web Solution
  * @name Faveo HELPDESK
@@ -54,9 +54,11 @@ class TokenAuthController extends Controller
 
             return response()->json(compact('error'));
         }
-
+        
+        $user_id = \Auth::user()->id;
         // if no errors are encountered we can return a JWT
-        return response()->json(compact('token'));
+        return response()->json(compact('token','user_id'));
+        
     }
 
     /**

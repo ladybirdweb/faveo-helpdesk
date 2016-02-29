@@ -178,8 +178,6 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
     //Routes for  delete language package
     Route::get('delete-language/{lang}', ['as' => 'lang.delete', 'uses' => 'Admin\helpdesk\LanguageController@deleteLanguage']);
-
-    Route::get('generate-api-key', 'Admin\helpdesk\SettingsController@GenerateApiKey'); // route to generate api key
 });
 
 /*
@@ -345,15 +343,6 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
     Route::get('check/lock/{id}', ['as' => 'lock', 'uses' => 'Agent\helpdesk\TicketController@checkLock']);
 
     Route::patch('/change-owner/{id}', ['as' => 'change.owner.ticket', 'uses' => 'Agent\helpdesk\TicketController@changeOwner']); /* change owner */
-
-    //To check and merge tickets for the same owner
-    Route::get('/get-merge-tickets/{id}', ['as' => 'get.merge.tickets', 'uses' => 'Agent\helpdesk\TicketController@getMergeTickets']);
-
-    Route::get('/check-merge-ticket/{id}', ['as' => 'check.merge.tickets', 'uses' => 'Agent\helpdesk\TicketController@checkMergeTickets']);
-
-    Route::get('/get-parent-tickets/{id}', ['as' => 'get.parent.ticket', 'uses' => 'Agent\helpdesk\TicketController@getParentTickets']);
-
-    Route::patch('/merge-tickets/{id}', 'Agent\helpdesk\TicketController@mergeTickets');
 
 });
 
@@ -645,6 +634,11 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::get('trash', 'Api\v1\ApiController@getTrash');
         Route::get('my-tickets', 'Api\v1\ApiController@getMyTickets');
         Route::post('internal-note', 'Api\v1\ApiController@internalNote');
+        /**
+         * Newly added
+         */
+        
+        Route::get('customers-custom','Api\v1\ApiController@internalNote');
     });
 
     /*
