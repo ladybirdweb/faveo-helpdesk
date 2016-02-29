@@ -15,7 +15,7 @@ use Exception;
 
 /**
  * CannedController.
- * 
+ *
  * This controller is for all the functionalities of Canned response for Agents in the Agent Panel
  *
  * @author      Ladybird <info@ladybirdweb.com>

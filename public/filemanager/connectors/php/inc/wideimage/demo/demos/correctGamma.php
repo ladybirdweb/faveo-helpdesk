@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_correctGamma extends Demo
     {
         public $order = 2050;

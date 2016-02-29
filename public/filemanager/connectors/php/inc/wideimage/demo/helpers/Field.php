@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Field
     {
         public $name;

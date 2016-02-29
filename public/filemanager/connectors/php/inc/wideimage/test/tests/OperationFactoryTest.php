@@ -1,16 +1,10 @@
 <?php
-    /**
-     
-     **/
 
-    /**
-     */
+
     class WideImage_Operation_MyOperation
     {
     }
 
-    /**
-     */
     class WideImage_OperationFactory_Test extends WideImage_TestCase
     {
         public function testFactoryReturnsCached()

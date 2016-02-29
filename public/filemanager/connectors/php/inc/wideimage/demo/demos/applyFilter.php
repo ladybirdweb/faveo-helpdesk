@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_applyFilter extends Demo
     {
         public $order = 2000;

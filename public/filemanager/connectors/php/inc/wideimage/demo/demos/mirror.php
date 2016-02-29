@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_mirror extends Demo
     {
         public $order = 1150;

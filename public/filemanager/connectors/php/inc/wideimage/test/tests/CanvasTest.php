@@ -1,10 +1,6 @@
 <?php
-    /**
-     
-     **/
 
-    /**
-     */
+
     class WideImage_Canvas_Test extends WideImage_TestCase
     {
         public function testCreate()

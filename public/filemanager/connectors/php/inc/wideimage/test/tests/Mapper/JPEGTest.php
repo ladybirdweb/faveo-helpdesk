@@ -1,11 +1,7 @@
 <?php
-    /**
-     
-     **/
+
     include WideImage::path().'Mapper/JPEG.php';
 
-    /**
-     */
     class WideImage_Mapper_JPEG_Test extends WideImage_TestCase
     {
         protected $mapper;

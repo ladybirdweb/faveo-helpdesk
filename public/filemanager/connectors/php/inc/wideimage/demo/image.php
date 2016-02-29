@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     require_once dirname(__FILE__).'/helpers/common.php';
     require_once dirname(__FILE__).'/../lib/WideImage.php';
 

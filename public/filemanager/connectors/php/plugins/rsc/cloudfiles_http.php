@@ -23,9 +23,6 @@
  * @author Eric "EJ" Johnson <ej@racklabs.com>
  * @copyright Copyright (c) 2008, Rackspace US, Inc.
  */
-
-/**
- */
 require_once 'cloudfiles_exceptions.php';
 
 define('PHP_CF_VERSION', '1.7.7');
@@ -172,8 +169,6 @@ class CF_Http
             throw new IOException('Could not use CA bundle: '
                 .$this->cabundle_path);
         }
-
-        return;
     }
 
     // Uses separate cURL connection to authenticate
@@ -1320,8 +1315,6 @@ class CF_Http
             curl_setopt($ch, CURLOPT_NOBODY, 1);
         }
         $this->connections[$conn_type] = $ch;
-
-        return;
     }
 
     private function _reset_callback_vars()

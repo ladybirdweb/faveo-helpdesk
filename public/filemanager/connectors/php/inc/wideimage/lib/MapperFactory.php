@@ -29,7 +29,7 @@
 
         /**
          * Returns a mapper, based on the $uri and $format.
-         * 
+         *
          * @param string $uri    File URI
          * @param string $format File format (extension or mime-type) or null
          *

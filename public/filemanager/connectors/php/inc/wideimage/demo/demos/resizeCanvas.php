@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_resizeCanvas extends Demo
     {
         public $order = 910;

@@ -1,6 +1,5 @@
 <?php
-/**
- */
+
 ?>
 <form style="font-family: Verdana, Tahoma; font-size: 11px">
 	<input type="hidden" name="demo" value="<?php echo $activeDemo->name; ?>" />

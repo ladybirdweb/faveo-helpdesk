@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_applyMask extends Demo
     {
         public $order = 600;

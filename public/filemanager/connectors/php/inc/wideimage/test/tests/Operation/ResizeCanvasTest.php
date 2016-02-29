@@ -1,11 +1,7 @@
 <?php
-    /**
-     
-     **/
+
     WideImage_OperationFactory::get('ResizeCanvas');
 
-    /**
-     */
     class WideImage_Operation_ResizeCanvas_Test extends WideImage_TestCase
     {
         public function testResizeCanvasUp()

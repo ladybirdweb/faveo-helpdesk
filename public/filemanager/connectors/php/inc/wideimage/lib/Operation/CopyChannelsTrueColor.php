@@ -6,14 +6,14 @@
 
     /**
      * CopyChannelsTrueColor operation class.
-     * 
+     *
      * Used to perform CopyChannels operation on truecolor images
      */
     class WideImage_Operation_CopyChannelsTrueColor
     {
         /**
          * Returns an image with only specified channels copied.
-         * 
+         *
          * @param WideImage_Image $img
          * @param array           $channels
          *

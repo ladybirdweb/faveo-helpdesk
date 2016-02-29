@@ -1,7 +1,5 @@
 <?php
-    /**
-     
-     **/
+
     WideImage_OperationFactory::get('Resize');
 
     class WideImage_Operation_Resize_Testable extends WideImage_Operation_Resize
@@ -12,8 +10,6 @@
         }
     }
 
-    /**
-     */
     class WideImage_Operation_Resize_Test extends WideImage_TestCase
     {
         public function testProxyMethod()

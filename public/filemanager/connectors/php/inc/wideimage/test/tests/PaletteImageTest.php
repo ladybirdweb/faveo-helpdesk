@@ -1,10 +1,6 @@
 <?php
-    /**
-     
-     **/
 
-    /**
-     */
+
     class WideImage_PaletteImage_Test extends WideImage_TestCase
     {
         public function testCreate()
