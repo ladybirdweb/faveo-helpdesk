@@ -1,10 +1,18 @@
 <?php
 
+/*
+ * This file is part of jwt-auth.
+ *
+ * (c) Sean Tymon <tymon148@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tymon\JWTAuth\Test\Providers\JWT;
 
-use Tymon\JWTAuth\Providers\JWT\FirebaseAdapter;
+use Carbon\Carbon;
 use Tymon\JWTAuth\Payload;
-use Tymon\JWTAuth\PayloadFactory;
 use Mockery;
 use Tymon\JWTAuth\Claims\Issuer;
 use Tymon\JWTAuth\Claims\IssuedAt;
@@ -13,19 +21,20 @@ use Tymon\JWTAuth\Claims\NotBefore;
 use Tymon\JWTAuth\Claims\Audience;
 use Tymon\JWTAuth\Claims\Subject;
 use Tymon\JWTAuth\Claims\JwtId;
-use Tymon\JWTAuth\Claims\Custom;
 
 class PayloadTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        Carbon::setTestNow(Carbon::createFromTimeStampUTC(123));
+
         $claims = [
             new Subject(1),
             new Issuer('http://example.com'),
-            new Expiration(time() + 3600),
-            new NotBefore(time()),
-            new IssuedAt(time()),
-            new JwtId('foo')
+            new Expiration(123 + 3600),
+            new NotBefore(123),
+            new IssuedAt(123),
+            new JwtId('foo'),
         ];
 
         $this->validator = Mockery::mock('Tymon\JWTAuth\Validators\PayloadValidator');

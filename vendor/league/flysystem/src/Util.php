@@ -31,11 +31,7 @@ class Util
      */
     public static function normalizeDirname($dirname)
     {
-        if ($dirname === '.') {
-            return '';
-        }
-
-        return $dirname;
+        return $dirname === '.' ? '' : $dirname;
     }
 
     /**
@@ -159,7 +155,7 @@ class Util
     {
         $mimeType = MimeType::detectByContent($content);
 
-        if (empty($mimeType) || in_array($mimeType, ['text/plain', 'application/x-empty'])) {
+        if (empty($mimeType) || in_array($mimeType, ['application/x-empty', 'text/plain', 'text/x-asm'])) {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
 
             if ($extension) {

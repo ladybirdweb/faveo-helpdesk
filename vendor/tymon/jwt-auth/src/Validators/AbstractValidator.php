@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of jwt-auth.
+ *
+ * (c) Sean Tymon <tymon148@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tymon\JWTAuth\Validators;
 
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -12,7 +21,7 @@ abstract class AbstractValidator implements ValidatorInterface
     protected $refreshFlow = false;
 
     /**
-     * Helper function to return a boolean
+     * Helper function to return a boolean.
      *
      * @param  array  $value
      * @return bool
@@ -29,7 +38,7 @@ abstract class AbstractValidator implements ValidatorInterface
     }
 
     /**
-     * Set the refresh flow flag
+     * Set the refresh flow flag.
      *
      * @param  bool  $refreshFlow
      * @return $this

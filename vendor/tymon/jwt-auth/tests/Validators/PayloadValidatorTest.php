@@ -1,14 +1,24 @@
 <?php
 
+/*
+ * This file is part of jwt-auth.
+ *
+ * (c) Sean Tymon <tymon148@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tymon\JWTAuth\Test;
 
-use Mockery;
+use Carbon\Carbon;
 use Tymon\JWTAuth\Validators\PayloadValidator;
 
 class PayloadValidatorTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
+        Carbon::setTestNow(Carbon::createFromTimeStampUTC(123));
         $this->validator = new PayloadValidator();
     }
 
@@ -17,11 +27,11 @@ class PayloadValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $payload = [
             'iss' => 'http://example.com',
-            'iat' => time(),
-            'nbf' => time(),
-            'exp' => time() + 3600,
+            'iat' => 100,
+            'nbf' => 100,
+            'exp' => 100 + 3600,
             'sub' => 1,
-            'jti' => 'foo'
+            'jti' => 'foo',
         ];
 
         $this->assertTrue($this->validator->isValid($payload));
@@ -34,11 +44,11 @@ class PayloadValidatorTest extends \PHPUnit_Framework_TestCase
 
         $payload = [
             'iss' => 'http://example.com',
-            'iat' => time() - 3660,
-            'nbf' => time() - 3660,
-            'exp' => time() - 1440,
+            'iat' => 20,
+            'nbf' => 20,
+            'exp' => 120,
             'sub' => 1,
-            'jti' => 'foo'
+            'jti' => 'foo',
         ];
 
         $this->validator->check($payload);
@@ -51,11 +61,11 @@ class PayloadValidatorTest extends \PHPUnit_Framework_TestCase
 
         $payload = [
             'iss' => 'http://example.com',
-            'iat' => time() - 3660,
-            'nbf' => time() + 3660,
-            'exp' => time() + 1440,
+            'iat' => 100,
+            'nbf' => 150,
+            'exp' => 150 + 3600,
             'sub' => 1,
-            'jti' => 'foo'
+            'jti' => 'foo',
         ];
 
         $this->validator->check($payload);
@@ -68,11 +78,11 @@ class PayloadValidatorTest extends \PHPUnit_Framework_TestCase
 
         $payload = [
             'iss' => 'http://example.com',
-            'iat' => time() + 3660,
-            'nbf' => time() - 3660,
-            'exp' => time() + 1440,
+            'iat' => 150,
+            'nbf' => 100,
+            'exp' => 150 + 3600,
             'sub' => 1,
-            'jti' => 'foo'
+            'jti' => 'foo',
         ];
 
         $this->validator->check($payload);
@@ -85,7 +95,7 @@ class PayloadValidatorTest extends \PHPUnit_Framework_TestCase
 
         $payload = [
             'iss' => 'http://example.com',
-            'sub' => 1
+            'sub' => 1,
         ];
 
         $this->validator->check($payload);
@@ -98,10 +108,10 @@ class PayloadValidatorTest extends \PHPUnit_Framework_TestCase
 
         $payload = [
             'iss' => 'http://example.com',
-            'iat' => time() - 3660,
+            'iat' => 100,
             'exp' => 'foo',
             'sub' => 1,
-            'jti' => 'foo'
+            'jti' => 'foo',
         ];
 
         $this->validator->check($payload);
