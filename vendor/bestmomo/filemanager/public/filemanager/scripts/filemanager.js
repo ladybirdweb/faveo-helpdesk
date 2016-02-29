@@ -158,14 +158,15 @@ $.prompt.setDefaults({
 // Forces columns to fill the layout vertically.
 // Called on initial page load and on resize.
 var setDimensions = function(){
-	var bheight = 53;
-	
+	var bheight = 53,
+		$uploader = $('#uploader');
+
 	if($.urlParam('CKEditorCleanUpFuncNum')) bheight +=60;
 
-	var newH = $(window).height() - $('#uploader').height() - bheight;	
+	var newH = $(window).height() - $uploader.height() - $uploader.offset().top - bheight;
 	$('#splitter, #filetree, #fileinfo, .vsplitbar').height(newH);
 	var newW = $('#splitter').width() - $('div.vsplitbar').width() - $('#filetree').width();
-    $('#fileinfo').width(newW);
+	$('#fileinfo').width(newW);
 };
 
 // Display Min Path
@@ -730,7 +731,7 @@ var renameItem = function(data) {
 			}
 
 			var oldPath = data['Path'];	
-			var connectString = fileConnector + '?mode=rename&old=' + data['Path'] + '&new=' + givenName + '&config=' + userconfig;
+			var connectString = fileConnector + '?mode=rename&old=' + encodeURIComponent(data['Path']) + '&new=' + encodeURIComponent(givenName) + '&config=' + userconfig;
 		
 			$.ajax({
 				type: 'GET',
@@ -1221,7 +1222,7 @@ function getContextMenuOptions(elem) {
 // Binds contextual menus to items in list and grid views.
 var setMenus = function(action, path) {
 	var d = new Date(); // to prevent IE cache issues
-	$.getJSON(fileConnector + '?mode=getinfo&path=' + path + '&config=' + userconfig + '&time=' + d.getMilliseconds(), function(data){
+	$.getJSON(fileConnector + '?mode=getinfo&path=' + encodeURIComponent(path) + '&config=' + userconfig + '&time=' + d.getMilliseconds(), function(data){
 		if($('#fileinfo').data('view') == 'grid'){
 			var item = $('#fileinfo').find('img[data-path="' + data['Path'] + '"]').parent();
 		} else {

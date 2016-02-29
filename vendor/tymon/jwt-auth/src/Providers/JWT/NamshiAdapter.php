@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of jwt-auth.
+ *
+ * (c) Sean Tymon <tymon148@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tymon\JWTAuth\Providers\JWT;
 
 use Exception;
@@ -27,7 +36,7 @@ class NamshiAdapter extends JWTProvider implements JWTInterface
     }
 
     /**
-     * Create a JSON Web Token
+     * Create a JSON Web Token.
      *
      * @return string
      * @throws \Tymon\JWTAuth\Exceptions\JWTException
@@ -39,12 +48,12 @@ class NamshiAdapter extends JWTProvider implements JWTInterface
 
             return $this->jws->getTokenString();
         } catch (Exception $e) {
-            throw new JWTException('Could not create token: ' . $e->getMessage());
+            throw new JWTException('Could not create token: '.$e->getMessage());
         }
     }
 
     /**
-     * Decode a JSON Web Token
+     * Decode a JSON Web Token.
      *
      * @param  string  $token
      * @return array
@@ -55,7 +64,7 @@ class NamshiAdapter extends JWTProvider implements JWTInterface
         try {
             $jws = JWS::load($token);
         } catch (Exception $e) {
-            throw new TokenInvalidException('Could not decode token: ' . $e->getMessage());
+            throw new TokenInvalidException('Could not decode token: '.$e->getMessage());
         }
 
         if (! $jws->verify($this->secret, $this->algo)) {

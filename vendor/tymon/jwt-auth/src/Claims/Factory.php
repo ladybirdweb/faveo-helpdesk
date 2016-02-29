@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of jwt-auth.
+ *
+ * (c) Sean Tymon <tymon148@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tymon\JWTAuth\Claims;
 
 class Factory
@@ -14,11 +23,11 @@ class Factory
         'iss' => 'Tymon\JWTAuth\Claims\Issuer',
         'jti' => 'Tymon\JWTAuth\Claims\JwtId',
         'nbf' => 'Tymon\JWTAuth\Claims\NotBefore',
-        'sub' => 'Tymon\JWTAuth\Claims\Subject'
+        'sub' => 'Tymon\JWTAuth\Claims\Subject',
     ];
 
     /**
-     * Get the instance of the claim when passing the name and value
+     * Get the instance of the claim when passing the name and value.
      *
      * @param  string  $name
      * @param  mixed   $value
@@ -34,10 +43,10 @@ class Factory
     }
 
     /**
-     * Check whether the claim exists
+     * Check whether the claim exists.
      *
      * @param  string  $name
-     * @return boolean
+     * @return bool
      */
     public function has($name)
     {

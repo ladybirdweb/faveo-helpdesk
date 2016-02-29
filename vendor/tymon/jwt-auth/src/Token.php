@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of jwt-auth.
+ *
+ * (c) Sean Tymon <tymon148@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tymon\JWTAuth;
 
 use Tymon\JWTAuth\Validators\TokenValidator;
@@ -12,7 +21,7 @@ class Token
     private $value;
 
     /**
-     * Create a new JSON Web Token
+     * Create a new JSON Web Token.
      *
      * @param string  $value
      */
@@ -24,7 +33,7 @@ class Token
     }
 
     /**
-     * Get the token
+     * Get the token.
      *
      * @return string
      */
@@ -34,7 +43,7 @@ class Token
     }
 
     /**
-     * Get the token when casting to string
+     * Get the token when casting to string.
      *
      * @return string
      */

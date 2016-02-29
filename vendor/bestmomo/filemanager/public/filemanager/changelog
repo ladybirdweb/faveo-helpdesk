@@ -1,3 +1,11 @@
+From version 2.3.0 to 2.4.0
+---------------------------
+- handle better language ISO 4 Letters | #428
+- encode path on requests | #429
+- catalan translation updated | #440
+- security fix : Path Traversal Vulnerability | #453
+
+
 From version 2.2.0 to 2.3.0
 ---------------------------
 - PDF viewer added | #377 & #319

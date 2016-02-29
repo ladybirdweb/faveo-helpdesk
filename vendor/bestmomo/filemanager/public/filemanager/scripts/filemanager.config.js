@@ -19,7 +19,7 @@
         "dateFormat": "d M Y H:i",
         "serverRoot": false,
         "fileRoot": "/",
-        "baseUrl": "/filemanager/",
+        "baseUrl": "/",
         "logger": false,
         "capabilities": ["select", "download", "rename", "delete", "replace"],
         "plugins": []

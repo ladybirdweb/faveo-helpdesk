@@ -1,9 +1,17 @@
 <?php
 
+/*
+ * This file is part of jwt-auth.
+ *
+ * (c) Sean Tymon <tymon148@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tymon\JWTAuth\Providers\Storage;
 
 use Illuminate\Cache\CacheManager;
-use Tymon\JWTAuth\Providers\Storage\StorageInterface;
 
 class IlluminateCacheAdapter implements StorageInterface
 {
@@ -26,7 +34,7 @@ class IlluminateCacheAdapter implements StorageInterface
     }
 
     /**
-     * Add a new item into storage
+     * Add a new item into storage.
      *
      * @param  string  $key
      * @param  mixed  $value
@@ -39,7 +47,7 @@ class IlluminateCacheAdapter implements StorageInterface
     }
 
     /**
-     * Check whether a key exists in storage
+     * Check whether a key exists in storage.
      *
      * @param  string  $key
      * @return bool
@@ -50,7 +58,7 @@ class IlluminateCacheAdapter implements StorageInterface
     }
 
     /**
-     * Remove an item from storage
+     * Remove an item from storage.
      *
      * @param  string  $key
      * @return bool
@@ -61,7 +69,7 @@ class IlluminateCacheAdapter implements StorageInterface
     }
 
     /**
-     * Remove all items associated with the tag
+     * Remove all items associated with the tag.
      *
      * @return void
      */
@@ -71,7 +79,7 @@ class IlluminateCacheAdapter implements StorageInterface
     }
 
     /**
-     * Return the cache instance with tags attached
+     * Return the cache instance with tags attached.
      *
      * @return \Illuminate\Cache\CacheManager
      */
