@@ -637,11 +637,13 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::get('trash', 'Api\v1\ApiController@getTrash');
         Route::get('my-tickets', 'Api\v1\ApiController@getMyTickets');
         Route::post('internal-note', 'Api\v1\ApiController@internalNote');
+        
+        
         /**
          * Newly added
          */
         
-        Route::get('customers-custom','Api\v1\ApiController@internalNote');
+        Route::get('customers-custom','Api\v1\ApiController@getCustomersWith');
     });
 
     /*
@@ -674,7 +676,11 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::get('ticket/internal', 'Api\v1\TestController@internalNote');
     Route::get('ticket/trash', 'Api\v1\TestController@trash');
     Route::get('ticket/my', 'Api\v1\TestController@myTickets');
-     Route::get('ticket', 'Api\v1\TestController@getTicketById');
+    Route::get('ticket', 'Api\v1\TestController@getTicketById');
+    /**
+    * Newly added
+    */
+    Route::get('customers-custom','Api\v1\TestController@getCustomersWith');
 
     Route::get('generate/token', 'Api\v1\TestController@generateToken');
     Route::get('get/user', 'Api\v1\TestController@getAuthUser');
