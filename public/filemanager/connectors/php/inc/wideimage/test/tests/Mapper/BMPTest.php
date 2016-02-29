@@ -1,11 +1,7 @@
 <?php
-    /**
-     
-     **/
+
     include WideImage::path().'Mapper/BMP.php';
 
-    /**
-     */
     class WideImage_Mapper_BMP_Test extends WideImage_TestCase
     {
         /**

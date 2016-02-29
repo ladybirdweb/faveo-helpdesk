@@ -3,9 +3,6 @@
      * @author Gasper Kozak
      * @copyright 2007-2011
      **/
-
-    /**
-     */
     class WideImage_PaletteImage extends WideImage_Image
     {
         /**
@@ -52,7 +49,7 @@
 
         /**
          * Returns a copy of the image.
-         * 
+         *
          * @param $trueColor True if the new image should be truecolor
          *
          * @return WideImage_Image

@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_asNegative extends Demo
     {
         public $order = 300;

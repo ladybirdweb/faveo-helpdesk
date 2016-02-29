@@ -71,7 +71,7 @@ class InstallController extends Controller
 
     /**
      * Get prerequisites (step 2).
-     * 
+     *
      * Checking the extensions enabled required for installing the faveo
      * without which the project cannot be executed properly
      *

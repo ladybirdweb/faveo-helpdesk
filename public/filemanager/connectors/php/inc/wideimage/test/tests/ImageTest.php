@@ -1,10 +1,6 @@
 <?php
-    /**
-     
-     **/
 
-    /**
-     */
+
     class WideImage_Operation_CustomOp
     {
         public static $args = null;
@@ -17,8 +13,6 @@
         }
     }
 
-    /**
-     */
     class ImageForOutput extends WideImage_TrueColorImage
     {
         public $headers = [];
@@ -29,8 +23,6 @@
         }
     }
 
-    /**
-     */
     class TestableImage extends WideImage_TrueColorImage
     {
         public $headers = [];
@@ -45,8 +37,6 @@
         }
     }
 
-    /**
-     */
     class WideImage_Image_Test extends WideImage_TestCase
     {
         public function testFactories()

@@ -3,9 +3,6 @@
      * @author Gasper Kozak
      * @copyright 2007-2011
      **/
-
-    /**
-     */
     class WideImage_InvalidCoordinateException extends WideImage_Exception
     {
     }
@@ -20,7 +17,7 @@
 
         /**
          * Parses a numeric or string representation of a corrdinate into a structure.
-         * 
+         *
          * @param string $coord Smart coordinate
          *
          * @return array Parsed smart coordinate
@@ -71,7 +68,7 @@
 
         /**
          * Evaluates the $coord relatively to $dim.
-         * 
+         *
          * @param string $coord   A numeric value or percent string
          * @param int    $dim     Dimension
          * @param int    $sec_dim Secondary dimension (for align)
@@ -130,7 +127,7 @@
 
         /**
          * Calculates and fixes a smart coordinate into a numeric value.
-         * 
+         *
          * @param mixed $value   Smart coordinate, relative to $dim
          * @param int   $dim     Coordinate to which $value is relative
          * @param int   $sec_dim Secondary dimension (for align)

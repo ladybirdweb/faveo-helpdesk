@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_roundCorners extends Demo
     {
         public $order = 1075;

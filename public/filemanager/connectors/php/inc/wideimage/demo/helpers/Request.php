@@ -2,9 +2,6 @@
     /**
      Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
      **/
-
-    /**
-     */
     class Request
     {
         protected $vars = [];
@@ -33,7 +30,7 @@
             {
                 if (strlen($keyval) == 0)
                     continue;
-                
+
                 if (strpos($keyval, '=') === false)
                 {
                     $key = $keyval;

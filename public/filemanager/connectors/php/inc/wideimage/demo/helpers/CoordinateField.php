@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class CoordinateField extends Field
     {
         public function __construct($name, $default, $hint = 'Smart coordinate')

@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_addNoise extends Demo
     {
         public $order = 9350;

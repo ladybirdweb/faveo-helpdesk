@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_merge extends Demo
     {
         public $order = 800;

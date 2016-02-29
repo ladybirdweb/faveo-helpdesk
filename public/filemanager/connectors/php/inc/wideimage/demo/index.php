@@ -1,7 +1,5 @@
 <?php
-    /**
-     
-     **/
+
     include 'helpers/common.php';
     require_once '../lib/WideImage.php';
 

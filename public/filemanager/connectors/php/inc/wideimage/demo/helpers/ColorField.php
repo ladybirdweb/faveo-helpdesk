@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class ColorField extends Field
     {
         public function __construct($name, $default, $hint = 'RRGGBB hex, leave blank for transparent background')

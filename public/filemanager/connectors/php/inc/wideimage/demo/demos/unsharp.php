@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_unsharp extends Demo
     {
         public $order = 1350;

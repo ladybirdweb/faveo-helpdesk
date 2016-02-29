@@ -2,9 +2,6 @@
     /**
      Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
      **/
-
-    /**
-     */
     class WideImage_Coordinate_Test extends WideImage_TestCase
     {
         public function testEvaluate()

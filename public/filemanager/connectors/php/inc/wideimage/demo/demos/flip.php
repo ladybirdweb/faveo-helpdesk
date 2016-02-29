@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_flip extends Demo
     {
         public $order = 1200;

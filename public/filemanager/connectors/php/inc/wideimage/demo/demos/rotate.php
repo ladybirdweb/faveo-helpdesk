@@ -1,6 +1,5 @@
 <?php
-    /**
-     */
+
     class Demo_rotate extends Demo
     {
         public $order = 1100;

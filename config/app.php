@@ -20,9 +20,9 @@ return [
     | Error Log
     |--------------------------------------------------------------------------
     |
-    | This error log will send email to faveo about the errors. So that before 
-    | reporting about the errors we at faveo will start solving the issues already. 
-    | The errors mails will never share your files or data. it will only share 
+    | This error log will send email to faveo about the errors. So that before
+    | reporting about the errors we at faveo will start solving the issues already.
+    | The errors mails will never share your files or data. it will only share
     | the line number and error occured.
     | To dissable you may just change '%1%' to 0.
      */

@@ -2533,7 +2533,7 @@ class TicketController extends Controller
         }
     }
 
-    /** 
+    /**
      * useradd.
      *
      * @param type Image $image
