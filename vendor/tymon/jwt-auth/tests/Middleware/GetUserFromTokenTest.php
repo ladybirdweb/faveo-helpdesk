@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of jwt-auth.
- *
- * (c) Sean Tymon <tymon148@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Tymon\JWTAuth\Test;
 
 use Mockery;
@@ -20,11 +11,11 @@ class GetUserFromTokenTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->events = Mockery::mock('Illuminate\Contracts\Events\Dispatcher');
+        $this->events = Mockery::mock('Illuminate\Events\Dispatcher');
         $this->auth = Mockery::mock('Tymon\JWTAuth\JWTAuth');
 
         $this->request = Mockery::mock('Illuminate\Http\Request');
-        $this->response = Mockery::mock('Illuminate\Contracts\Routing\ResponseFactory');
+        $this->response = Mockery::mock('Illuminate\Routing\ResponseFactory');
 
         $this->middleware = new GetUserFromToken($this->response, $this->events, $this->auth);
 

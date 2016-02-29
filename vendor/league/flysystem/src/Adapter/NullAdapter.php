@@ -29,7 +29,7 @@ class NullAdapter extends AbstractAdapter
     public function write($path, $contents, Config $config)
     {
         $type = 'file';
-        $result = compact('contents', 'type', 'path');
+        $result = compact('contents', 'type', 'size', 'path');
 
         if ($visibility = $config->get('visibility')) {
             $result['visibility'] = $visibility;

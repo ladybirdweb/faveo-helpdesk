@@ -31,8 +31,7 @@ $app['session']->driver()->setId($id);
 $app['session']->driver()->start();
 
 // Folder path
-$folderPath = $app->publicPath() . '/'. config('filemanager.folder_path');   
-$folderPath = str_replace('\\', '/', $folderPath); 
+$folderPath = $app->basePath() . '/public/'.config('filemanager.folder_path');     
 
 // Check if user in authentified
 if(!$app['auth']->check()) 

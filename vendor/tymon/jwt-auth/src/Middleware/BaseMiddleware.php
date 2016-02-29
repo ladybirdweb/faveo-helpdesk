@@ -1,29 +1,20 @@
 <?php
 
-/*
- * This file is part of jwt-auth.
- *
- * (c) Sean Tymon <tymon148@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace Tymon\JWTAuth\Middleware;
 
 use Tymon\JWTAuth\JWTAuth;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Routing\ResponseFactory;
 
 abstract class BaseMiddleware
 {
     /**
-     * @var \Illuminate\Contracts\Routing\ResponseFactory
+     * @var \Illuminate\Routing\ResponseFactory
      */
     protected $response;
 
     /**
-     * @var \Illuminate\Contracts\Events\Dispatcher
+     * @var \Illuminate\Events\Dispatcher
      */
     protected $events;
 
@@ -33,10 +24,10 @@ abstract class BaseMiddleware
     protected $auth;
 
     /**
-     * Create a new BaseMiddleware instance.
+     * Create a new BaseMiddleware instance
      *
-     * @param \Illuminate\Contracts\Routing\ResponseFactory  $response
-     * @param \Illuminate\Contracts\Events\Dispatcher  $events
+     * @param \Illuminate\Routing\ResponseFactory  $response
+     * @param \Illuminate\Events\Dispatcher  $events
      * @param \Tymon\JWTAuth\JWTAuth  $auth
      */
     public function __construct(ResponseFactory $response, Dispatcher $events, JWTAuth $auth)
@@ -47,11 +38,11 @@ abstract class BaseMiddleware
     }
 
     /**
-     * Fire event and return the response.
+     * Fire event and return the response
      *
      * @param  string   $event
      * @param  string   $error
-     * @param  int  $status
+     * @param  integer  $status
      * @param  array    $payload
      * @return mixed
      */

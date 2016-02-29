@@ -37,10 +37,10 @@ class ReturnArgumentPromise implements PromiseInterface
     public function __construct($index = 0)
     {
         if (!is_int($index) || $index < 0) {
-            throw new InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(
                 'Zero-based index expected as argument to ReturnArgumentPromise, but got %s.',
                 $index
-            ));
+            );
         }
         $this->index = $index;
     }

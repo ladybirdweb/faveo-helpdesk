@@ -46,38 +46,10 @@ class Console
      */
     public function getNumberOfColumns()
     {
+        // Windows terminals have a fixed size of 80
+        // but one column is used for the cursor.
         if (DIRECTORY_SEPARATOR == '\\') {
-            $columns = 80;
-
-            if (preg_match('/^(\d+)x\d+ \(\d+x(\d+)\)$/', trim(getenv('ANSICON')), $matches)) {
-                $columns = $matches[1];
-            } elseif (function_exists('proc_open')) {
-                $process = proc_open(
-                    'mode CON',
-                    array(
-                        1 => array('pipe', 'w'),
-                        2 => array('pipe', 'w')
-                    ),
-                    $pipes,
-                    null,
-                    null,
-                    array('suppress_errors' => true)
-                );
-
-                if (is_resource($process)) {
-                    $info = stream_get_contents($pipes[1]);
-
-                    fclose($pipes[1]);
-                    fclose($pipes[2]);
-                    proc_close($process);
-
-                    if (preg_match('/--------+\r?\n.+?(\d+)\r?\n.+?(\d+)\r?\n/', $info, $matches)) {
-                        $columns = $matches[2];
-                    }
-                }
-            }
-
-            return $columns - 1;
+            return 79;
         }
 
         if (!$this->isInteractive(self::STDIN)) {
@@ -85,15 +57,11 @@ class Console
         }
 
         if (preg_match('#\d+ (\d+)#', shell_exec('stty size'), $match) === 1) {
-            if ((int) $match[1] > 0) {
-                return (int) $match[1];
-            }
+            return (int) $match[1];
         }
 
         if (preg_match('#columns = (\d+);#', shell_exec('stty'), $match) === 1) {
-            if ((int) $match[1] > 0) {
-                return (int) $match[1];
-            }
+            return (int) $match[1];
         }
 
         return 80;

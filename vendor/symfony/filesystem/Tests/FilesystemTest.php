@@ -358,28 +358,6 @@ class FilesystemTest extends FilesystemTestCase
         $this->assertTrue($this->filesystem->exists($basePath.'folder'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Filesystem\Exception\IOException
-     */
-    public function testFilesExistsFails()
-    {
-        if ('\\' !== DIRECTORY_SEPARATOR) {
-            $this->markTestSkipped('Test covers edge case on Windows only.');
-        }
-
-        $basePath = $this->workspace.'\\directory\\';
-
-        $oldPath = getcwd();
-        mkdir($basePath);
-        chdir($basePath);
-        $file = str_repeat('T', 259 - strlen($basePath));
-        $path = $basePath.$file;
-        exec('TYPE NUL >>'.$file); // equivalent of touch, we can not use the php touch() here because it suffers from the same limitation
-        self::$longPathNamesWindows[] = $path; // save this so we can clean up later
-        chdir($oldPath);
-        $this->filesystem->exists($path);
-    }
-
     public function testFilesExistsTraversableObjectOfFilesAndDirectories()
     {
         $basePath = $this->workspace.DIRECTORY_SEPARATOR;
@@ -915,7 +893,7 @@ class FilesystemTest extends FilesystemTestCase
 
     public function testMirrorCopiesLinkedDirectoryContents()
     {
-        $this->markAsSkippedIfSymlinkIsMissing(true);
+        $this->markAsSkippedIfSymlinkIsMissing();
 
         $sourcePath = $this->workspace.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR;
 
@@ -935,7 +913,7 @@ class FilesystemTest extends FilesystemTestCase
 
     public function testMirrorCopiesRelativeLinkedContents()
     {
-        $this->markAsSkippedIfSymlinkIsMissing(true);
+        $this->markAsSkippedIfSymlinkIsMissing();
 
         $sourcePath = $this->workspace.DIRECTORY_SEPARATOR.'source'.DIRECTORY_SEPARATOR;
         $oldPath = getcwd();
@@ -1027,6 +1005,7 @@ class FilesystemTest extends FilesystemTestCase
 
         // The compress.zlib:// stream does not support mode x: creates the file, errors "failed to open stream: operation failed" and returns false
         $this->filesystem->tempnam($dirname, 'bar');
+
     }
 
     public function testTempnamWithPHPTempSchemeFails()
@@ -1172,8 +1151,8 @@ class FilesystemTest extends FilesystemTestCase
     {
         $this->markAsSkippedIfChmodIsMissing();
 
-        $sourceFilePath = $this->workspace . DIRECTORY_SEPARATOR . 'copy_source_file';
-        $targetFilePath = $this->workspace . DIRECTORY_SEPARATOR . 'copy_target_file';
+        $sourceFilePath = $this->workspace.DIRECTORY_SEPARATOR.'copy_source_file';
+        $targetFilePath = $this->workspace.DIRECTORY_SEPARATOR.'copy_target_file';
 
         file_put_contents($sourceFilePath, 'SOURCE FILE');
         chmod($sourceFilePath, 0745);

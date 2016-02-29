@@ -165,12 +165,11 @@ Error Handling
 --------------
 Every response should include two keys specific to error handling: Error, and Code. If an error occurs in your script, you may populate these keys with whatever values you feel are most appropriate. If there is no error, Error should remain empty or null, and Code should be empty, null, or zero (0). Do not use zero for any actual errors. The following example would be an appropriate response if the connector uses an external file for configuration (recommended), but that file cannot be found:
 
-```json
-{
-  "Error": "Configuration file missing.",
-  "Code":  -1
-}
-```
+	{
+		"Error": "Configuration file missing.",
+		"Code":  -1
+	}
+
 
 Methods
 -------
@@ -186,25 +185,23 @@ Example Request:
 
 Example Response:
 
-```json
-{
-  "Path": "/UserFiles/Image/logo.png",
-  "Filename": "logo.png",
-  "File Type": "png",
-  "Preview": "/UserFiles/Image/logo.png",
-  "Protected": 0,
-  "Properties": {
-    "Date Created": null,
-    "Date Modified": "02/09/2007 14:01:06",
-    "filemtime": 1360237058,
-    "Height": 14,
-    "Width": 14,
-    "Size": 384
-  },
-  "Error": "",
-  "Code": 0
-}
-```
+	{
+		"Path": "/UserFiles/Image/logo.png",
+		"Filename": "logo.png",
+		"File Type": "png",
+		"Preview": "/UserFiles/Image/logo.png",
+		"Protected": 0,
+		"Properties": {
+			"Date Created": null, 
+			"Date Modified": "02/09/2007 14:01:06",
+			"filemtime": 1360237058,
+			"Height": 14,
+			"Width": 14,
+			"Size": 384 
+		},
+		"Error": "",
+		"Code": 0
+	}
 
 The keys are as follows:
 
@@ -248,59 +245,57 @@ Example Request:
 
 Example Response:
 
-```json
-{
-  "/UserFiles/Image/logo.png": {
-    "Path": "/UserFiles/Image/logo.png",
-    "Filename": "logo.png",
-    "File Type": "png",
-    "Preview": "/UserFiles/Image/logo.png",
-    "Protected": 0,
-    "Properties": {
-      "Date Created": null,
-      "Date Modified": "02/09/2007 14:01:06",
-      "filemtime": 1360237058,
-      "Height": 14,
-      "Width": 14,
-      "Size": 384
-    },
-    "Error": "",
-    "Code": 0
-  },
-  "/UserFiles/Image/icon.png": {
-    "Path": "/UserFiles/Image/icon.png",
-    "Filename": "icon.png",
-    "File Type": "png",
-    "Preview": "/UserFiles/Image/icon.png",
-    "Properties": {
-      "Date Created": null,
-      "Date Modified": "02/09/2007 14:01:06",
-      "filemtime": 1360237058,
-      "Height": 14,
-      "Width": 14,
-      "Size": 384
-    },
-    "Error": "",
-    "Code": 0
-  },
-  "/UserFiles/folder/":{
-    "Path":"/UserFiles/folder/",
-    "Filename":"folder",
-    "File Type":"dir",
-    "Preview":"images\/fileicons\/_Open.png",
-    "Properties": {
-      "Date Created":null,
-      "Date Modified": "02/09/2007 14:01:06",
-      "filemtime": 1360237058,
-      "Height":null,
-      "Width":null,
-      "Size":null
-    },
-    "Error":"",
-    "Code":0
-  }
-}
-```
+	{
+		"/UserFiles/Image/logo.png": {
+			"Path": "/UserFiles/Image/logo.png",
+			"Filename": "logo.png",
+			"File Type": "png",
+			"Preview": "/UserFiles/Image/logo.png",
+			"Protected": 0,
+			"Properties": {
+				"Date Created": null, 
+				"Date Modified": "02/09/2007 14:01:06",
+				"filemtime": 1360237058,
+				"Height": 14,
+				"Width": 14,
+				"Size": 384 
+			},
+			"Error": "",
+			"Code": 0	
+		},
+		"/UserFiles/Image/icon.png": {
+			"Path": "/UserFiles/Image/icon.png",
+			"Filename": "icon.png",
+			"File Type": "png",
+			"Preview": "/UserFiles/Image/icon.png",
+			"Properties": {
+				"Date Created": null, 
+				"Date Modified": "02/09/2007 14:01:06",
+				"filemtime": 1360237058,
+				"Height": 14,
+				"Width": 14,
+				"Size": 384 
+			},
+			"Error": "",
+			"Code": 0	
+		},
+		"/UserFiles/folder/":{
+			"Path":"/UserFiles/folder/",
+			"Filename":"folder",
+			"File Type":"dir",
+			"Preview":"images\/fileicons\/_Open.png",
+			"Properties": {
+				"Date Created":null,
+				"Date Modified": "02/09/2007 14:01:06",
+				"filemtime": 1360237058,
+				"Height":null,
+				"Width":null,
+				"Size":null
+			},
+			"Error":"",
+			"Code":0
+		}		
+	}
 
 Each key in the array is the path to an individual item, and the value is the file object for that item.
 
@@ -315,16 +310,14 @@ Example Request:
 
 Example Response:
 
-```json
-{
-  "Error": "No error",
-  "Code": 0,
-  "Old Path": "/a_folder_renamed/thisisareallylongincrediblylongfilenamefortesting.txt",
-  "Old Name": "thisisareallylongincrediblylongfilenamefortesting.txt",
-  "New Path": "/a_folder_renamed/a_renamed_file",
-  "New Name": "a_renamed_file"
-}
-```
+    {
+        "Error": "No error",
+        "Code": 0,
+        "Old Path": "/a_folder_renamed/thisisareallylongincrediblylongfilenamefortesting.txt",
+        "Old Name": "thisisareallylongincrediblylongfilenamefortesting.txt",
+        "New Path": "/a_folder_renamed/a_renamed_file",
+        "New Name": "a_renamed_file"
+    }
 
 move
 ------
@@ -336,16 +329,14 @@ Example Request: Move file
 
 Example Response:
 
-```json
-{
-  "Error": "No error",
-  "Code": 0,
-  "Old Path": "/uploads/images/original/Image/",
-  "Old Name": "logo.png",
-  "New Path": "/uploads/images/moved/",
-  "New Name": "logo.png"
-}
-```
+    {
+        "Error": "No error",
+        "Code": 0,
+        "Old Path": "/uploads/images/original/Image/",
+        "Old Name": "logo.png",
+        "New Path": "/uploads/images/moved/",
+        "New Name": "logo.png"
+    }
 
 Example Request: Move directory to not existing directory (will be created)
 	
@@ -353,16 +344,15 @@ Example Request: Move directory to not existing directory (will be created)
 
 Example Response:
 
-```json
-{
-  "Error": "No error",
-  "Code": 0,
-  "Old Path": "/uploads/images/original/",
-  "Old Name": "Image",
-  "New Path": "/uploads/new_dir/",
-  "New Name": "Image"
-}
-```
+    {
+        "Error": "No error",
+        "Code": 0,
+        "Old Path": "/uploads/images/original/",
+        "Old Name": "Image",
+        "New Path": "/uploads/new_dir/",
+        "New Name": "Image"
+    }
+
 
 
 
@@ -376,43 +366,38 @@ Example Request:
 
 Example Response:
 
-```json
-{
-  "Error": "No error",
-  "Code": 0,
-  "Path": "/UserFiles/Image/logo.png"
-}
-```
+    {
+        "Error": "No error",
+        "Code": 0,
+        "Path": "/UserFiles/Image/logo.png"
+    }
+
 
 add
 ---
-The `add` method adds the uploaded file to the specified path. Unlike the other methods, this method must return its JSON response wrapped in an HTML `<textarea>`, so the MIME type of the response is text/html instead of text/plain. The upload form in the File Manager passes the current path as a POST param along with the uploaded file. The response includes the path as well as the name used to store the file. The uploaded file's name should be safe to use as a path component in a URL, so URL-encoded at a minimum.
+The `add` method adds the uploaded file to the specified path. Unlike the other methods, this method must return its JSON response wrapped in an HTML <textarea>, so the MIME type of the response is text/html instead of text/plain. The upload form in the File Manager passes the current path as a POST param along with the uploaded file. The response includes the path as well as the name used to store the file. The uploaded file's name should be safe to use as a path component in a URL, so URL-encoded at a minimum.
 
 Example Response:
 
-```json
-{
-  "Path": "/UserFiles/Image/",
-  "Name": "new_logo.png",
-  "Error": "No error",
-  "Code": 0
-}
-```
+    {
+        "Path": "/UserFiles/Image/",
+        "Name": "new_logo.png",
+        "Error": "No error",
+        "Code": 0
+    }
 
 replace
 ---
-The `replace` method allow the user to replace a specific file whatever the new filename - at least, the new file should have the same extension the original has. The old file is automatically overwritten. Unlike the other methods, this method must return its JSON response wrapped in an HTML `<textarea>`, so the MIME type of the response is text/html instead of text/plain. The *dynamic* upload form in the File Manager passes the current file path as a POST param along with the uploaded file. The response includes the path as well as the name used to store the file.
+The `replace` method allow the user to replace a specific file whatever the new filename - at least, the new file should have the same extension the original has. The old file is automatically overwritten. Unlike the other methods, this method must return its JSON response wrapped in an HTML <textarea>, so the MIME type of the response is text/html instead of text/plain. The *dynamic* upload form in the File Manager passes the current file path as a POST param along with the uploaded file. The response includes the path as well as the name used to store the file.
 
 Example Response:
 
-```json
-{
-  "Path": "/UserFiles/Image/",
-  "Name": "new_logo.png",
-  "Error": "No error",
-  "Code": 0
-}
-```
+    {
+        "Path": "/UserFiles/Image/",
+        "Name": "new_logo.png",
+        "Error": "No error",
+        "Code": 0
+    }
 
 editfile
 --------
@@ -421,31 +406,27 @@ The `editfile` method returns the content of a given file (passed as parameter).
 Example request:
 
 	[path to connector]?mode=editfile&path=/UserFiles/MyFolder/myfile.txt
-
+	
 Example Response:
 
-```json
-{
-  "Error": "No error",
-  "Code": 0,
-  "Path": "/UserFiles/MyFolder/myfile.txt",
-  "Content": "Content":"Lorem ipsum dolor sit amet, consectetur adipiscing elit.\r\n\Phasellus eu erat lorem.\r\n\r\n\Bye!"
-}
-```
+    {
+        "Error": "No error",
+        "Code": 0,
+        "Path": "/UserFiles/MyFolder/myfile.txt",
+        "Content": "Content":"Lorem ipsum dolor sit amet, consectetur adipiscing elit.\r\n\Phasellus eu erat lorem.\r\n\r\n\Bye!"
+    }
 
 savefile
 --------
 The `save` method will overwrite the content of the current file. The edit form in the File Manager passes the mode (as `savefile`), path of the current file and the content as POST parameters.
-
+	
 Example Response:
 
-```json
-{
-  "Error": "No error",
-  "Code": 0,
-  "Path": "/UserFiles/MyFolder/myfile.txt"
-}
-```
+    {
+        "Error": "No error",
+        "Code": 0,
+        "Path": "/UserFiles/MyFolder/myfile.txt"
+    }
 
 preview
 --------
@@ -463,17 +444,15 @@ The `addfolder` method creates a new directory on the server within the given pa
 Example Request:
 
 	[path to connector]?mode=addfolder&path=/UserFiles/&name=new%20logo.png
-
+	
 Example Response:
 
-```json
-{
-  "Parent": "/UserFiles/",
-  "Name": "new_logo.png",
-  "Error": "No error",
-  "Code": 0
-}
-```
+    {
+        "Parent": "/UserFiles/",
+        "Name": "new_logo.png",
+        "Error": "No error",
+        "Code": 0
+    }
 
 
 download
