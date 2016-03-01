@@ -81,7 +81,7 @@ class TicketController extends Controller
 
         return \Datatable::collection(new Collection($tickets))
                         ->addColumn('id', function ($ticket) {
-                            return "<input type='checkbox' name='select_all[]' class='icheckbox_flat-blue' value='".$ticket->id."'></input>";
+                           return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
                         })
                         ->addColumn('subject', function ($ticket) {
                             $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();

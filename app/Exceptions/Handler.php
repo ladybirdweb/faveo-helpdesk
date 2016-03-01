@@ -25,10 +25,10 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function __construct(PhpMailController $PhpMailController)
-    {
-        $this->PhpMailController = $PhpMailController;
-    }
+    // public function __construct(PhpMailController $PhpMailController)
+    // {
+    //     $this->PhpMailController = $PhpMailController;
+    // }
 
     /**
      * Report or log an exception.
