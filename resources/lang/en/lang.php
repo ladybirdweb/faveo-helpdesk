@@ -708,6 +708,10 @@ return [
     'minutes'                                         => ' minutes',
     'in_minutes'                                      => 'In minutes',
     'add_another_owner'                               => 'Add another owner',
+    'user-not-found'                                  => 'User not found. Try again or add a new user.',
+    'change-success'                                  => 'Success! owner has been changed for this ticket.',
+    'user-exists'                                     => 'User already exists. Try search existing user.',
+    'valid-email'                                     => 'Enter a valid email address.',
     'search_user'                                     => 'Search user',
      'merge-ticket'                                   => 'Merge ticket',
     'title'                                           => 'Title',
@@ -717,6 +721,13 @@ return [
     'merge-reason'                                    => 'Reason for merging',
     'get_merge_message'                               => 'This ticket has been merged with ticket',
     'ticket_merged'                                   => ' has been merged with this ticket.',
+    'no-tickets-to-merge'                             => 'There are no more tickets by the owner of this ticket.',
+    'merge-error'                                     => 'Could not process your request try after some time.',
+    'merge-success'                                   => 'Tickets has been merged successfully.',
+    'merge-error2'                                    => 'Please select ticket to merge.',
+    'select-tickets-to merge'                         => "select two or more tickets to merge.",
+    'different-users'                                 => 'Ticktes from different users',
+
     /*
       |------------------------------------------------
       |Tools Page
