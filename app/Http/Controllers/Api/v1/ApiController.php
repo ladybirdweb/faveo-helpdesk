@@ -538,7 +538,7 @@ class ApiController extends Controller
     public function getCustomersWith()
     {
         try {
-            $users = $this->faveoUser->select('id', 'user_name', 'first_name', 'last_name', 'email', 'phone_number', 'profile_pic')->where('role', 'client')->get();
+            $users = $this->faveoUser->select('id', 'user_name', 'first_name', 'last_name', 'email', 'phone_number', 'profile_pic')->where('role', 'user')->get();
             $result = [];
             foreach ($users as $key => $user) {
                 $result[$key]['id'] = $user->id;
@@ -587,7 +587,7 @@ class ApiController extends Controller
                 return response()->json(compact('error'));
             }
             $id = $this->request->input('user_id');
-            $result = $this->faveoUser->where('id', $id)->first();
+            $result = $this->faveoUser->where('id', $id)->where('role','user')->first();
 
             return response()->json(compact('result'));
         } catch (Exception $e) {
