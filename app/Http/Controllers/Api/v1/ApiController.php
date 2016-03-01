@@ -587,7 +587,7 @@ class ApiController extends Controller
                 return response()->json(compact('error'));
             }
             $id = $this->request->input('user_id');
-            $result = $this->faveoUser->where('id', $id)->where('role','user')->first();
+            $result = $this->faveoUser->where('id', $id)->where('role', 'user')->first();
 
             return response()->json(compact('result'));
         } catch (Exception $e) {
@@ -1114,10 +1114,8 @@ class ApiController extends Controller
         }
     }
 
-
     public function createPagination($array, $perPage)
     {
-
         try {
             //Get current page form url e.g. &page=6
             $currentPage = LengthAwarePaginator::resolveCurrentPage();

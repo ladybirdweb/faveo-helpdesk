@@ -725,7 +725,7 @@ return [
     'merge-error'                                     => 'Could not process your request try after some time.',
     'merge-success'                                   => 'Tickets has been merged successfully.',
     'merge-error2'                                    => 'Please select ticket to merge.',
-    'select-tickets-to merge'                         => "select two or more tickets to merge.",
+    'select-tickets-to merge'                         => 'select two or more tickets to merge.',
     'different-users'                                 => 'Ticktes from different users',
 
     /*
