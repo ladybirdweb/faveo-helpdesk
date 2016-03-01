@@ -1535,7 +1535,7 @@ jQuery(document).ready(function() {
                     if(response != 1)
                     {
                         // $("#assign_body").show();
-                         var message = "{{Lang::get('lang.user-not-')}}";
+                         var message = "{{Lang::get('lang.user-not-found')}}";
                         $('#change_alert').show();
                         $('#message-success42').html(message);
                         setInterval(function(){$("#change_alert").hide(); },5000);

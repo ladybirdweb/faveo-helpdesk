@@ -781,6 +781,7 @@ class TicketController extends Controller
      *
      * @return type response
      */
+   
     public function thread($id)
     {
         /* $lock = Tickets::where('id','=',$id)->first();
@@ -802,8 +803,13 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
 
             $tickets = Tickets::where('id', '=', $id)->where('dept_id', '=', $dept->id)->first();
-        } else {
+        } elseif (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('id', '=', $id)->first();
+        } elseif (Auth::user()->role == 'user') {
+            $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
+            $ticket_id = \Crypt::encrypt($id);
+            // dd($ticket_id);
+            return redirect()->route('check_ticket', compact('ticket_id'));
         }
         $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
         //$tickets = Tickets::where('id', '=', $id)->first();
@@ -2685,7 +2691,7 @@ class TicketController extends Controller
             $new_thread->user_id = Auth::user()->id;
             $new_thread->poster = $thread->poster;
             $new_thread->source = $thread->source;
-            $new_thread->is_internal = 1;
+            $new_thread->is_internal = 0;
             $new_thread->title = $thread->title;
             $new_thread->body = Lang::get('lang.get_merge_message').
             "&nbsp;&nbsp;<a href='".route('ticket.thread', [$p_id]).
