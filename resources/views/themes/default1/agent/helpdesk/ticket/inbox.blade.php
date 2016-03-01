@@ -270,7 +270,7 @@ class="active"
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
                         $("#merge-btn").attr('disabled', true);
-                       var message = "{{Lang::get('lang.merge-error2')}}";
+                       var message = "{{Lang::get('lang.merge-success')}}";
                         $("#merge-succ-alert").show();
                         $('#message-merge-succ').html(message);  
                         setInterval(function(){

@@ -1553,7 +1553,7 @@ jQuery(document).ready(function() {
                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                         $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
                         $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
-                        var message = "{{Lang::get('change-success')}}";
+                        var message = "{{Lang::get('lang.change-success')}}";
                         $("#alert11").show();
                         $('#message-success1').html(message);
                         setInterval(function(){$("#alert11").hide(); },4000); 
@@ -1585,7 +1585,7 @@ jQuery(document).ready(function() {
                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                         $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
                         $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
-                        var message = "{{Lang::get('change-success')}}";
+                        var message = "{{Lang::get('lang.change-success')}}";
                         $("#alert11").show();
                         $('#message-success1').html(message);
                         setInterval(function(){$("#alert11").hide(); },4000);
