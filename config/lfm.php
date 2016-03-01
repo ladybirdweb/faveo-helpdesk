@@ -9,7 +9,7 @@ return [
     'shared_folder_name' => 'shares',
     'thumb_folder_name'  => 'thumbs',
     'images_dir'         => 'public/photos/',
-    'images_url'         => '%url%',//url('photos').'/',
+    'images_url'         => '%url%', //url('photos').'/',
     'files_dir'          => 'public/files/',
     'files_url'          => '/files/',
     'file_type_array'    => [
