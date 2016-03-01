@@ -781,7 +781,6 @@ class TicketController extends Controller
      *
      * @return type response
      */
-   
     public function thread($id)
     {
         /* $lock = Tickets::where('id','=',$id)->first();
