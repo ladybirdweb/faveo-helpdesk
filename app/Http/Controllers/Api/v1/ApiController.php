@@ -527,7 +527,7 @@ class ApiController extends Controller {
         try {
 
 
-            $users = $this->faveoUser->select('id', 'user_name', 'first_name', 'last_name', 'email', 'phone_number', 'profile_pic')->where('role','client')->get();
+            $users = $this->faveoUser->select('id', 'user_name', 'first_name', 'last_name', 'email', 'phone_number', 'profile_pic')->where('role', 'client')->get();
             $result = [];
             foreach ($users as $key => $user) {
                 $result[$key]['id'] = $user->id;
@@ -1080,7 +1080,7 @@ class ApiController extends Controller {
         }
     }
 
-    public function createPagination($array,$perPage) {
+    public function createPagination($array, $perPage) {
         try {
             //Get current page form url e.g. &page=6
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
@@ -1093,7 +1093,7 @@ class ApiController extends Controller {
 
             //Create our paginator and pass it to the view
             $paginatedResults = new LengthAwarePaginator($currentPageSearchResults, count($collection), $perPage);
-            
+
             return $paginatedResults;
         } catch (\Exception $e) {
             $error = $e->getMessage();
