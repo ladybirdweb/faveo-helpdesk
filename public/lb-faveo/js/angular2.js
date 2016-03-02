@@ -8,7 +8,7 @@ myApp.controller('MainController', ['$http', '$scope',
 
         //titile and content for page 3
         $scope.Databasetitle = 'Database Type';
-        $scope.Databasecontent = 'Faveo supports 3 databases, choose anyone which your server supports';
+        $scope.Databasecontent = 'Choose the type of your database';
 
         $scope.Hosttitle = 'Database Host';
         $scope.Hostcontent = 'You should be able to get this info from your web host, if localhost doesn’t work';

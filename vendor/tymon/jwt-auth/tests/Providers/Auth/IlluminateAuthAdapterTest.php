@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of jwt-auth.
+ *
+ * (c) Sean Tymon <tymon148@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tymon\JWTAuth\Test\Providers\Auth;
 
 use Mockery;
@@ -35,8 +44,16 @@ class IlluminateAuthAdapterTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_should_return_false_if_user_is_not_found()
     {
-        $this->authManager->shouldReceive('onceUsingId')->once()->with(123)->andThrow(new \Exception);
+        $this->authManager->shouldReceive('onceUsingId')->once()->with(123)->andReturn(false);
         $this->assertFalse($this->auth->byId(123));
+    }
+
+    /** @test */
+    public function it_should_bubble_exceptions_from_auth()
+    {
+        $this->authManager->shouldReceive('onceUsingId')->once()->with(123)->andThrow(new \Exception('Some auth failure'));
+        $this->setExpectedException('Exception', 'Some auth failure');
+        $this->auth->byId(123);
     }
 
     /** @test */

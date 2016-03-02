@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of jwt-auth.
+ *
+ * (c) Sean Tymon <tymon148@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tymon\JWTAuth;
 
 use Illuminate\Http\Request;
@@ -140,7 +149,7 @@ class JWTAuth
      *
      * @param mixed $token
      *
-     * @return boolean
+     * @return bool
      */
     public function invalidate($token = false)
     {
@@ -152,7 +161,7 @@ class JWTAuth
     /**
      * Get the token.
      *
-     * @return boolean|string
+     * @return bool|string
      */
     public function getToken()
     {

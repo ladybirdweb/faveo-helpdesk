@@ -55,8 +55,9 @@ class TokenAuthController extends Controller
             return response()->json(compact('error'));
         }
 
+        $user_id = \Auth::user()->id;
         // if no errors are encountered we can return a JWT
-        return response()->json(compact('token'));
+        return response()->json(compact('token', 'user_id'));
     }
 
     /**

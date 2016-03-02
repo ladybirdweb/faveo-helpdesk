@@ -1,17 +1,26 @@
 <?php
 
+/*
+ * This file is part of jwt-auth.
+ *
+ * (c) Sean Tymon <tymon148@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tymon\JWTAuth\Exceptions;
 
 class JWTException extends \Exception
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $statusCode = 500;
 
     /**
      * @param string  $message
-     * @param integer $statusCode
+     * @param int $statusCode
      */
     public function __construct($message = 'An error occurred', $statusCode = null)
     {
@@ -23,7 +32,7 @@ class JWTException extends \Exception
     }
 
     /**
-     * @param integer $statusCode
+     * @param int $statusCode
      */
     public function setStatusCode($statusCode)
     {
@@ -31,7 +40,7 @@ class JWTException extends \Exception
     }
 
     /**
-     * @return integer the status code
+     * @return int the status code
      */
     public function getStatusCode()
     {

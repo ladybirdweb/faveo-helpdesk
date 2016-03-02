@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of jwt-auth.
+ *
+ * (c) Sean Tymon <tymon148@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Tymon\JWTAuth\Test\Providers\JWT;
 
 use Mockery;
@@ -10,10 +19,8 @@ use Tymon\JWTAuth\Claims\Issuer;
 use Tymon\JWTAuth\Claims\IssuedAt;
 use Tymon\JWTAuth\Claims\Expiration;
 use Tymon\JWTAuth\Claims\NotBefore;
-use Tymon\JWTAuth\Claims\Audience;
 use Tymon\JWTAuth\Claims\Subject;
 use Tymon\JWTAuth\Claims\JwtId;
-use Tymon\JWTAuth\Claims\Custom;
 
 class JWTManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +49,7 @@ class JWTManagerTest extends \PHPUnit_Framework_TestCase
             new Expiration(123 + 3600),
             new NotBefore(123),
             new IssuedAt(123),
-            new JwtId('foo')
+            new JwtId('foo'),
         ];
         $payload = new Payload($claims, $this->validator);
 
@@ -62,7 +69,7 @@ class JWTManagerTest extends \PHPUnit_Framework_TestCase
             new Expiration(123 + 3600),
             new NotBefore(123),
             new IssuedAt(123),
-            new JwtId('foo')
+            new JwtId('foo'),
         ];
         $payload = new Payload($claims, $this->validator);
         $token = new Token('foo.bar.baz');
@@ -87,7 +94,7 @@ class JWTManagerTest extends \PHPUnit_Framework_TestCase
             new Expiration(123 + 3600),
             new NotBefore(123),
             new IssuedAt(123),
-            new JwtId('foo')
+            new JwtId('foo'),
         ];
         $payload = new Payload($claims, $this->validator);
         $token = new Token('foo.bar.baz');
@@ -96,7 +103,7 @@ class JWTManagerTest extends \PHPUnit_Framework_TestCase
         $this->factory->shouldReceive('setRefreshFlow->make')->with($payload->toArray())->andReturn($payload);
         $this->blacklist->shouldReceive('has')->with($payload)->andReturn(true);
 
-        $payload = $this->manager->decode($token);
+        $this->manager->decode($token);
     }
 
     /** @test */
@@ -108,7 +115,7 @@ class JWTManagerTest extends \PHPUnit_Framework_TestCase
             new Expiration(123 - 3600),
             new NotBefore(123),
             new IssuedAt(123),
-            new JwtId('foo')
+            new JwtId('foo'),
         ];
         $payload = new Payload($claims, $this->validator, true);
         $token = new Token('foo.bar.baz');
@@ -137,7 +144,7 @@ class JWTManagerTest extends \PHPUnit_Framework_TestCase
             new Expiration(123 + 3600),
             new NotBefore(123),
             new IssuedAt(123),
-            new JwtId('foo')
+            new JwtId('foo'),
         ];
         $payload = new Payload($claims, $this->validator);
         $token = new Token('foo.bar.baz');

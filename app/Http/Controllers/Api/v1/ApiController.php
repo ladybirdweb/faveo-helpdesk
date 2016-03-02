@@ -18,6 +18,8 @@ use App\Model\helpdesk\Utility\Priority;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 /**
  * -----------------------------------------------------------------------------
@@ -529,6 +531,46 @@ class ApiController extends Controller
     }
 
     /**
+     * Get all customers having client_id, client_picture, client_name, client_email, client_phone.
+     *
+     * @return json
+     */
+    public function getCustomersWith()
+    {
+        try {
+            $users = $this->faveoUser->select('id', 'user_name', 'first_name', 'last_name', 'email', 'phone_number', 'profile_pic')->where('role', 'user')->get();
+            $result = [];
+            foreach ($users as $key => $user) {
+                $result[$key]['id'] = $user->id;
+                $result[$key]['user_name'] = $user->user_name;
+                $result[$key]['first_name'] = $user->first_name;
+                $result[$key]['last_name'] = $user->last_name;
+                $result[$key]['email'] = $user->email;
+                $result[$key]['phone_number'] = $user->phone_number;
+                if ($user->profile_pic) {
+                    $path = 'lb-faveo/media/profilepic/'.$user->profile_pic;
+                } else {
+                    $path = \Gravatar::src($user->email);
+                }
+                $result[$key]['picture'] = $path;
+            }
+            $result = $this->createPagination($result, 10);
+            //$result->toJson();
+            return $result->toJson();
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+            $line = $e->getLine();
+            $file = $e->getFile();
+
+            return response()->json(compact('error', 'file', 'line'));
+        } catch (\TokenExpiredException $e) {
+            $error = $e->getMessage();
+
+            return response()->json(compact('error'));
+        }
+    }
+
+    /**
      * Get a customer by id.
      *
      * @return json
@@ -545,7 +587,7 @@ class ApiController extends Controller
                 return response()->json(compact('error'));
             }
             $id = $this->request->input('user_id');
-            $result = $this->faveoUser->where('id', $id)->first();
+            $result = $this->faveoUser->where('id', $id)->where('role', 'user')->first();
 
             return response()->json(compact('result'));
         } catch (Exception $e) {
@@ -1059,6 +1101,35 @@ class ApiController extends Controller
             $result = $this->model->where('id', $id)->first();
 
             return response()->json(compact('result'));
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            $line = $e->getLine();
+            $file = $e->getFile();
+
+            return response()->json(compact('error', 'file', 'line'));
+        } catch (\TokenExpiredException $e) {
+            $error = $e->getMessage();
+
+            return response()->json(compact('error'));
+        }
+    }
+
+    public function createPagination($array, $perPage)
+    {
+        try {
+            //Get current page form url e.g. &page=6
+            $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+            //Create a new Laravel collection from the array data
+            $collection = new Collection($array);
+
+            //Slice the collection to get the items to display in current page
+            $currentPageSearchResults = $collection->slice($currentPage * $perPage, $perPage)->all();
+
+            //Create our paginator and pass it to the view
+            $paginatedResults = new LengthAwarePaginator($currentPageSearchResults, count($collection), $perPage);
+
+            return $paginatedResults;
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();

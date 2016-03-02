@@ -1,7 +1,9 @@
 @extends('themes.default1.installer.layout.installer')
+
 @section('serial')
 active
 @stop
+
 @section('content')
     <div class="wc-setup-content" ng-app="myApp">
         <h1 style="text-align: center;">Faveo HELPDESK Serial Key</h1>
@@ -42,7 +44,7 @@ active
                     </td>
                     <td style="">
                         {!! $errors->first('order_no', '<spam class="help-block">:message</spam>') !!}
-                        <input type="text" name="order_no" style="margin-left:180px;width:274px;" value="010451236">
+                        <input type="text" name="order_no" style="margin-left:180px;width:274px;" value="">
                         <br/><br/>
                     </td>
                 </tr>

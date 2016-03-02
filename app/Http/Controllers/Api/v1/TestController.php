@@ -469,4 +469,16 @@ class TestController extends Controller
             return response()->json(compact('error', 'file', 'line'));
         }
     }
+
+    public function getCustomersWith()
+    {
+        try {
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            $line = $e->getLine();
+            $file = $e->getFile();
+
+            return response()->json(compact('error', 'file', 'line'));
+        }
+    }
 }

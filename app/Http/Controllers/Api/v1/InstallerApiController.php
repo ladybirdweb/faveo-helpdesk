@@ -37,8 +37,34 @@ class InstallerApiController extends Controller
      */
     public function config_database(Request $request)
     {
-        error_reporting(E_ALL & ~E_NOTICE);
+        $validator = \Validator::make(
+            [
+                'database'     => $request->database,
+                'host'         => $request->host,
+                'databasename' => $request->databasename,
+                'dbusername'   => $request->dbusername,
+                'port'         => $request->port,
+            ],
+            [
+                'database'     => 'required|min:1',
+                'host'         => 'required',
+                'databasename' => 'required|min:1',
+                'dbusername'   => 'required|min:1',
+                'port'         => 'integer|min:0',
+            ]
+        );
+        if ($validator->fails()) {
+            $jsons = $validator->messages();
+            $val = '';
+            foreach ($jsons->all() as $key => $value) {
+                $val .= $value;
+            }
+            $return_data = rtrim(str_replace('.', ',', $val), ',');
 
+            return ['response' => 'fail', 'reason' => $return_data, 'status' => '0'];
+        }
+        // dd($validator->messages());
+        // error_reporting(E_ALL & ~E_NOTICE);
         // Check for pre install
         if (\Config::get('database.install') == '%0%') {
             $default = $request->database;
@@ -47,9 +73,7 @@ class InstallerApiController extends Controller
             $dbusername = $request->dbusername;
             $dbpassword = $request->dbpassword;
             $port = $request->port;
-
             if (isset($default) && isset($host) && isset($database) && isset($dbusername)) {
-
                 // Setting environment values
                 $_ENV['DB_TYPE'] = $default;
                 $_ENV['DB_HOST'] = $host;
@@ -57,12 +81,10 @@ class InstallerApiController extends Controller
                 $_ENV['DB_DATABASE'] = $database;
                 $_ENV['DB_USERNAME'] = $dbusername;
                 $_ENV['DB_PASSWORD'] = $dbpassword;
-
                 $config = '';
                 foreach ($_ENV as $key => $val) {
                     $config .= "{$key}={$val}\n";
                 }
-
                 // Write environment file
                 $fp = fopen(base_path().'/.env', 'w');
                 fwrite($fp, $config);
@@ -85,6 +107,36 @@ class InstallerApiController extends Controller
      */
     public function config_system(Request $request)
     {
+        $validator = \Validator::make(
+            [
+                'firstname' => $request->firstname,
+                'lastname'  => $request->lastname,
+                'email'     => $request->email,
+                'username'  => $request->username,
+                'password'  => $request->password,
+                'timezone'  => $request->timezone,
+                'datetime'  => $request->datetime,
+            ],
+            [
+                'firstname' => 'required|alpha|min:1',
+                'lastname'  => 'required|alpha|min:1',
+                'email'     => 'required|email|min:1',
+                'username'  => 'required|min:4',
+                'password'  => 'required|min:6',
+                'timezone'  => 'required|min:1',
+                'datetime'  => 'required|min:1',
+            ]
+        );
+        if ($validator->fails()) {
+            $jsons = $validator->messages();
+            $val = '';
+            foreach ($jsons->all() as $key => $value) {
+                $val .= $value;
+            }
+            $return_data = rtrim(str_replace('.', ',', $val), ',');
+
+            return ['response' => 'fail', 'reason' => $return_data, 'status' => '0'];
+        }
         // Check for pre install
         if (\Config::get('database.install') == '%0%') {
             $firstname = $request->firstname;
@@ -101,12 +153,16 @@ class InstallerApiController extends Controller
 
             // checking requested timezone for the admin and system
             $timezones = Timezones::where('name', '=', $timezone)->first();
-            if ($timezones->id == null) {
+            if ($timezones == null) {
+                Artisan::call('migrate:reset', ['--force' => true]);
+
                 return ['response' => 'fail', 'reason' => 'Invalid time-zone', 'status' => '0'];
             }
             // checking requested date time format for the admin and system
             $date_time_format = Date_time_format::where('format', '=', $datetime)->first();
-            if ($date_time_format->id == null) {
+            if ($date_time_format == null) {
+                Artisan::call('migrate:reset', ['--force' => true]);
+
                 return ['response' => 'fail', 'reason' => 'invalid date-time format', 'status' => '0'];
             }
             // Creating minum settings for system
