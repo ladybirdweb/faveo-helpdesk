@@ -58,13 +58,10 @@ active
         @endif
 
     <div ng-controller="MainController">
-            <table>
-                
+            <table>                
                 <p>Welcome to the five-minute Faveo installation process! Just fill in the information below.</p>
-            
                 <h1 style="border-top:1px solid #dedede; border-bottom:1px solid #dedede; padding: 10px 0px 10px 0px;">Personal Information</h1>
                 <p>Please provide the following information. Don’t worry, you can always change these settings later.</p>
-
                 <div>
                     <tr>
                         <td>
@@ -107,9 +104,7 @@ active
                     </tr>
 
                 </div>
-
             </table>
-
             <table>
                 <h1>Login Information</h1>
                 <div>
@@ -338,7 +333,7 @@ active
             <br>
             <p class="wc-setup-actions step">
                 <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Install">
-                <a href="step4.html" class="button button-large button-next" style="float: left">Previous</a>
+                <a href="{{url('step4')}}" class="button button-large button-next" style="float: left">Previous</a>
             </p>
         </form>
     </div>

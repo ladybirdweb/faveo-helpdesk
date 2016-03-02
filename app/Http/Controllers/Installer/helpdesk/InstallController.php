@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Installer\helpdesk;
 use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\InstallerRequest;
+use App\Http\Requests\helpdesk\DatabaseRequest;
 // models
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Utility\Date_time_format;
@@ -61,7 +62,6 @@ class InstallController extends Controller
         $accept = (Input::has('accept1')) ? true : false;
         if ($accept == 'accept') {
             Session::put('step1', 'step1');
-
             return Redirect::route('prerequisites');
         } else {
             return Redirect::route('licence')->with('fails', 'Failed! first accept the licence agreeement');
@@ -71,7 +71,7 @@ class InstallController extends Controller
 
     /**
      * Get prerequisites (step 2).
-     *
+     * 
      * Checking the extensions enabled required for installing the faveo
      * without which the project cannot be executed properly
      *
@@ -100,7 +100,6 @@ class InstallController extends Controller
     public function prerequisitescheck()
     {
         Session::put('step2', 'step2');
-
         return Redirect::route('configuration');
     }
 
@@ -133,12 +132,10 @@ class InstallController extends Controller
     public function localizationcheck()
     {
         Session::put('step3', 'step3');
-
         Session::put('language', Input::get('language'));
         Session::put('timezone', Input::get('timezone'));
         Session::put('date', Input::get('date'));
         Session::put('datetime', Input::get('datetime'));
-
         return Redirect::route('configuration');
     }
 
@@ -168,23 +165,21 @@ class InstallController extends Controller
      *
      * @return type view
      */
-    public function configurationcheck()
+    public function configurationcheck(DatabaseRequest $request)
     {
         Session::put('step4', 'step4');
-        // dd(Input::get('default'));
-        // dd(Input::get('host'));
-        // dd(Input::get('databasename'));
-        // dd(Input::get('username'));
-        // dd(Input::get('password'));
-        // dd(Input::get('port'));
-
-        Session::put('default', Input::get('default'));
-        Session::put('host', Input::get('host'));
-        Session::put('databasename', Input::get('databasename'));
-        Session::put('username', Input::get('username'));
-        Session::put('password', Input::get('password'));
-        Session::put('port', Input::get('port'));
-
+        // dd($request->input('default'));
+        // dd($request->input('host'));
+        // dd($request->input('databasename'));
+        // dd($request->input('username'));
+        // dd($request->input('password'));
+        // dd($request->input('port'));
+        Session::put('default', $request->input('default'));
+        Session::put('host', $request->input('host'));
+        Session::put('databasename', $request->input('databasename'));
+        Session::put('username', $request->input('username'));
+        Session::put('password', $request->input('password'));
+        Session::put('port', $request->input('port'));
         return Redirect::route('database');
     }
 
@@ -311,15 +306,15 @@ class InstallController extends Controller
         // $system->save();
         // checking requested timezone for the admin and system
         $timezones = Timezones::where('name', '=', $timezone)->first();
-        if ($timezones->id == null) {
-            return ['response' => 'fail', 'reason' => 'Invalid time-zone', 'status' => '0'];
+        if ($timezones == null) {
+            return redirect()->back()->with('fails','Invalid time-zone');
+            // return ['response' => 'fail', 'reason' => 'Invalid time-zone', 'status' => '0'];
         }
-        // var_dump($datetime);
         // checking requested date time format for the admin and system
         $date_time_format = Date_time_format::where('format', '=', $datetime)->first();
-        // dd($date_time_format);
-        if ($date_time_format->id == null) {
-            return ['response' => 'fail', 'reason' => 'invalid date-time format', 'status' => '0'];
+        if ($date_time_format == null) {
+            return redirect()->back()->with('fails','invalid date-time format');
+            // return ['response' => 'fail', 'reason' => 'invalid date-time format', 'status' => '0'];
         }
 
         // Creating minum settings for system

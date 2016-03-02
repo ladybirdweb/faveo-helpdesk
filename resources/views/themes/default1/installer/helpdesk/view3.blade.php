@@ -14,7 +14,10 @@ active
 
 @section('content')
 <div ng-app="myApp">
-                    @if(Session::has('fails'))
+        <h1 style="text-align: center;">Database Setup</h1>
+        <p class="wc-setup-content">Below you should enter your database connection details. If you’re not sure about these, contact your host.</p>
+
+                            @if(Session::has('fails'))
                         <div class="wc-setup-content">
                             <div class="woocommerce-message woocommerce-tracker">
                                 <div class="fail">
@@ -23,10 +26,23 @@ active
                             </div>        
                         </div>  
                     @endif
-            
-        <h1 style="text-align: center;">Database Setup</h1>
 
-        <p class="wc-setup-content">Below you should enter your database connection details. If you’re not sure about these, contact your host.</p>
+                    @if($errors->has('default') || $errors->has('host') || $errors->has('port') || $errors->has('databasename') || $errors->has('username') || $errors->has('password'))
+                        <div class="wc-setup-content">
+                            <div class="woocommerce-message woocommerce-tracker">
+                                <div class="fail">
+                                    {!! $errors->first('default', '<spam id="fail">:message</spam><br/>') !!}
+                                    {!! $errors->first('host', '<spam id="fail">:message</spam><br/>') !!}
+                                    {!! $errors->first('port', '<spam id="fail">:message</spam><br/>') !!}
+                                    {!! $errors->first('databasename', '<spam id="fail">:message</spam><br/>') !!}
+                                    {!! $errors->first('username', '<spam id="fail">:message</spam><br/>') !!}
+                                    {!! $errors->first('password', '<spam id="fail">:message</spam><br/>') !!}
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
 
         {!! Form::open(['url'=> '/step4post']) !!}
             <table ng-controller="MainController">
@@ -40,8 +56,6 @@ active
                             <div>
                                 <select name="default" data-placeholder="Choose a SQL format..." class="chosen-select" style="width:290px;" tabindex="2">
                                     <option value="mysql">MySQL</option>
-                                    <option value="pgsql">PgSQL</option>
-                                    <option value="sqlsrv">SQLSRV</option>
                                 </select>
                             </div>
                         </div>
@@ -57,7 +71,7 @@ active
                             : red;font-size:12px;">*</span></label>
                     </td>
                     <td>
-                        <input type="text" name="host" required>
+                        <input type="text" name="host">
                     </td>
                     <td>
                         <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Hosttitle}}" data-content="@{{Hostcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -69,7 +83,7 @@ active
                         <label for="box2">Port</label>
                     </td>
                     <td>
-                        <input type="text" name="port"> 
+                        <input type="number" name="port"> 
                     </td>
                     <td>
                         <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Porttitle}}" data-content="@{{Portcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -82,7 +96,7 @@ active
                             : red;font-size:12px;">*</span></label>
                     </td>
                     <td>
-                        <input type="text" name="databasename" required> 
+                        <input type="text" name="databasename"> 
                     </td>
                     <td>
                         <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Databasenametitle}}" data-content="@{{Databasenamecontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -95,7 +109,7 @@ active
                             : red; font-size: 12px;">*</span></label>
                     </td>
                     <td>
-                        <input type="text" name="username" required> 
+                        <input type="text" name="username"> 
                     </td>
                     <td>
                         <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Usertitle}}" data-content="@{{Usercontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
