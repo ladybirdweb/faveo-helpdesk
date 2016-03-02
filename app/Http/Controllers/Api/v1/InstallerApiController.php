@@ -6,8 +6,6 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 // requests
 use App\Model\helpdesk\Settings\System;
-use App\Http\Requests\helpdesk\DatabaseRequest;
-use App\Http\Requests\helpdesk\InstallerRequest;
 // models
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
@@ -41,29 +39,28 @@ class InstallerApiController extends Controller
     {
         $validator = \Validator::make(
             [
-                'database' => $request->database,
-                'host'  => $request->host,
+                'database'     => $request->database,
+                'host'         => $request->host,
                 'databasename' => $request->databasename,
-                'dbusername' => $request->dbusername,
-                'port' => $request->port,
+                'dbusername'   => $request->dbusername,
+                'port'         => $request->port,
             ],
             [
-                'database' => 'required|min:1',
-                'host'  => 'required',
+                'database'     => 'required|min:1',
+                'host'         => 'required',
                 'databasename' => 'required|min:1',
-                'dbusername' => 'required|min:1',
-                'port' => 'integer|min:0',
+                'dbusername'   => 'required|min:1',
+                'port'         => 'integer|min:0',
             ]
         );
-        if ($validator->fails()) 
-        {
+        if ($validator->fails()) {
             $jsons = $validator->messages();
-            $val ="";
-            foreach($jsons->all() as $key => $value)
-            {
+            $val = '';
+            foreach ($jsons->all() as $key => $value) {
                 $val .= $value;
             }
-            $return_data = rtrim(str_replace(".", ",", $val), ",");
+            $return_data = rtrim(str_replace('.', ',', $val), ',');
+
             return ['response' => 'fail', 'reason' => $return_data, 'status' => '0'];
         }
         // dd($validator->messages());
@@ -104,6 +101,7 @@ class InstallerApiController extends Controller
                 $fp = fopen(base_path().'/.env', 'w');
                 fwrite($fp, $config);
                 fclose($fp);
+
                 return ['response' => 'success', 'status' => '1'];
             } else {
                 return ['response' => 'fail', 'reason' => 'insufficient parameters', 'status' => '0'];
@@ -125,31 +123,30 @@ class InstallerApiController extends Controller
             [
                 'firstname' => $request->firstname,
                 'lastname'  => $request->lastname,
-                'email' => $request->email,
-                'username' => $request->username,
-                'password' => $request->password,
-                'timezone' => $request->timezone,
-                'datetime' => $request->datetime,
+                'email'     => $request->email,
+                'username'  => $request->username,
+                'password'  => $request->password,
+                'timezone'  => $request->timezone,
+                'datetime'  => $request->datetime,
             ],
             [
                 'firstname' => 'required|alpha|min:1',
                 'lastname'  => 'required|alpha|min:1',
-                'email' => 'required|email|min:1',
-                'username' => 'required|min:4',
-                'password' => 'required|min:6',
-                'timezone' => 'required|min:1',
-                'datetime' => 'required|min:1',
+                'email'     => 'required|email|min:1',
+                'username'  => 'required|min:4',
+                'password'  => 'required|min:6',
+                'timezone'  => 'required|min:1',
+                'datetime'  => 'required|min:1',
             ]
         );
-        if ($validator->fails()) 
-        {
+        if ($validator->fails()) {
             $jsons = $validator->messages();
-            $val ="";
-            foreach($jsons->all() as $key => $value)
-            {
+            $val = '';
+            foreach ($jsons->all() as $key => $value) {
                 $val .= $value;
             }
-            $return_data = rtrim(str_replace(".", ",", $val), ",");
+            $return_data = rtrim(str_replace('.', ',', $val), ',');
+
             return ['response' => 'fail', 'reason' => $return_data, 'status' => '0'];
         }
         // Check for pre install
@@ -170,12 +167,14 @@ class InstallerApiController extends Controller
             $timezones = Timezones::where('name', '=', $timezone)->first();
             if ($timezones == null) {
                 Artisan::call('migrate:reset', ['--force' => true]);
+
                 return ['response' => 'fail', 'reason' => 'Invalid time-zone', 'status' => '0'];
             }
             // checking requested date time format for the admin and system
             $date_time_format = Date_time_format::where('format', '=', $datetime)->first();
             if ($date_time_format == null) {
                 Artisan::call('migrate:reset', ['--force' => true]);
+
                 return ['response' => 'fail', 'reason' => 'invalid date-time format', 'status' => '0'];
             }
             // Creating minum settings for system
