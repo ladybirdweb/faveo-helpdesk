@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Installer\helpdesk;
 // controllers
 use App\Http\Controllers\Controller;
 // requests
-use App\Http\Requests\helpdesk\InstallerRequest;
 use App\Http\Requests\helpdesk\DatabaseRequest;
+use App\Http\Requests\helpdesk\InstallerRequest;
 // models
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Utility\Date_time_format;
@@ -62,6 +62,7 @@ class InstallController extends Controller
         $accept = (Input::has('accept1')) ? true : false;
         if ($accept == 'accept') {
             Session::put('step1', 'step1');
+
             return Redirect::route('prerequisites');
         } else {
             return Redirect::route('licence')->with('fails', 'Failed! first accept the licence agreeement');
@@ -71,7 +72,7 @@ class InstallController extends Controller
 
     /**
      * Get prerequisites (step 2).
-     * 
+     *
      * Checking the extensions enabled required for installing the faveo
      * without which the project cannot be executed properly
      *
@@ -100,6 +101,7 @@ class InstallController extends Controller
     public function prerequisitescheck()
     {
         Session::put('step2', 'step2');
+
         return Redirect::route('configuration');
     }
 
@@ -136,6 +138,7 @@ class InstallController extends Controller
         Session::put('timezone', Input::get('timezone'));
         Session::put('date', Input::get('date'));
         Session::put('datetime', Input::get('datetime'));
+
         return Redirect::route('configuration');
     }
 
@@ -180,6 +183,7 @@ class InstallController extends Controller
         Session::put('username', $request->input('username'));
         Session::put('password', $request->input('password'));
         Session::put('port', $request->input('port'));
+
         return Redirect::route('database');
     }
 
@@ -307,13 +311,13 @@ class InstallController extends Controller
         // checking requested timezone for the admin and system
         $timezones = Timezones::where('name', '=', $timezone)->first();
         if ($timezones == null) {
-            return redirect()->back()->with('fails','Invalid time-zone');
+            return redirect()->back()->with('fails', 'Invalid time-zone');
             // return ['response' => 'fail', 'reason' => 'Invalid time-zone', 'status' => '0'];
         }
         // checking requested date time format for the admin and system
         $date_time_format = Date_time_format::where('format', '=', $datetime)->first();
         if ($date_time_format == null) {
-            return redirect()->back()->with('fails','invalid date-time format');
+            return redirect()->back()->with('fails', 'invalid date-time format');
             // return ['response' => 'fail', 'reason' => 'invalid date-time format', 'status' => '0'];
         }
 
