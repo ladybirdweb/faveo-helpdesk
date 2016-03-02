@@ -200,6 +200,7 @@ class="active"
                 success: function(response) {
                      if(response == 0) {
                         $("#merge_body").show();
+                        $("#merge-succ-alert").hide();
                         $("#merge-body-alert").show();
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
@@ -209,7 +210,8 @@ class="active"
                         $('#message-merge-err').html(message);  
 
                     }  else if(response == 2) {
-                         $("#merge_body").show();
+                        $("#merge_body").show();
+                        $("#merge-succ-alert").hide();
                         $("#merge-body-alert").show();
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
@@ -256,6 +258,7 @@ class="active"
                 success: function(response) {
                     if(response == 0) {
                         $("#merge_body").show();
+                        $("#merge-succ-alert").hide();
                         $("#merge-body-alert").show();
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
@@ -266,6 +269,7 @@ class="active"
                     
                     } else {
                         $("#merge_body").show();
+                        $("#merge-err-alert").hide();
                         $("#merge-body-alert").show();
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();

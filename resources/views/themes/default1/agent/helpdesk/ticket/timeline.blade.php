@@ -1803,6 +1803,7 @@ jQuery(document).ready(function() {
                 success: function(response) {
                     if(response == 0) {
                         $("#merge_body").show();
+                        $("#merge-succ-alert").hide();
                         $("#merge-body-alert").show();
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
@@ -1848,6 +1849,7 @@ jQuery(document).ready(function() {
                     success: function(response) {
                         if(response == 0) {
                             $("#merge_body").show();
+                            $("#merge-succ-alert").hide();
                             $("#merge-body-alert").show();
                             $("#merge-body-form").hide();
                             $("#merge_loader").hide();
@@ -1858,6 +1860,7 @@ jQuery(document).ready(function() {
                     
                         } else if(response == 2) {
                             $("#merge_body").show();
+                            $("#merge-succ-alert").hide();
                             $("#merge-body-alert").show();
                             $("#merge-body-form").hide();
                             $("#merge_loader").hide();
@@ -1868,6 +1871,7 @@ jQuery(document).ready(function() {
 
                         } else {
                             $("#merge_body").show();
+                            $("#merge-err-alert").hide();
                             $("#merge-body-alert").show();
                             $("#merge-body-form").hide();
                             $("#merge_loader").hide();
