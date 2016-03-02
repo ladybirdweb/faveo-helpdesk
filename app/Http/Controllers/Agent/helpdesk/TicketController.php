@@ -2268,11 +2268,8 @@ class TicketController extends Controller
     {
         if (Input::has('select_all')) {
             $selectall = Input::get('select_all');
-            // dd($selectall);
             $value = Input::get('submit');
-            // dd($value);
             foreach ($selectall as $delete) {
-                var_dump($delete);
                 $ticket = Tickets::whereId($delete)->first();
                 if ($value == 'Delete') {
                     $ticket->status = 5;
@@ -2288,7 +2285,6 @@ class TicketController extends Controller
                     $ticket->reopened_at = date('Y-m-d H:i:s');
                     $ticket->closed = 0;
                     $ticket->closed_at = null;
-
                     $ticket->save();
                 }
             }
@@ -2575,7 +2571,7 @@ class TicketController extends Controller
                 try {
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'Password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
                 } catch (\Exception $e) {
-                    dd($e);
+                    // dd($e);
                 }
             }
 
