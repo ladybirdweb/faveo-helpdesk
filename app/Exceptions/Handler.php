@@ -69,7 +69,7 @@ class Handler extends ExceptionHandler
                 if (\Config::get('database.install') == 1) {
                     // checking if the error log send to Ladybirdweb is enabled or not
                     if (\Config::get('app.ErrorLog') == '%1%') {
-                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['e' => $e]);
+                        //$this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['e' => $e]);
                     }
                 }
 
