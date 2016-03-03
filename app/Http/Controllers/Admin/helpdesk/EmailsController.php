@@ -22,28 +22,35 @@ use Exception;
  * ======================================
  * EmailsController.
  * ======================================
- * This Controller is used to define below mentioned set of functions applied to the Emails in the system
+ * This Controller is used to define below mentioned set of functions applied to the Emails in the system.
+ *
  * @author Ladybird <info@ladybirdweb.com>
  */
-class EmailsController extends Controller {
-
+class EmailsController extends Controller
+{
     /**
-     * Defining constructor variables
+     * Defining constructor variables.
+     *
      * @return type
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
         $this->middleware('roles');
     }
 
     /**
-     * Display a listing of the Emails
+     * Display a listing of the Emails.
+     *
      * @param type Emails $emails
+     *
      * @return type view
      */
-    public function index(Emails $emails) {
+    public function index(Emails $emails)
+    {
         try {
             $emails = $emails->get();
+
             return view('themes.default1.admin.helpdesk.emails.emails.index', compact('emails'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -52,13 +59,16 @@ class EmailsController extends Controller {
 
     /**
      * Show the form for creating a new resource.
+     *
      * @param type Department      $department
      * @param type Help_topic      $help
      * @param type Priority        $priority
      * @param type MailboxProtocol $mailbox_protocol
+     *
      * @return type Response
      */
-    public function create(Department $department, Help_topic $help, Ticket_Priority $priority, MailboxProtocol $mailbox_protocol) {
+    public function create(Department $department, Help_topic $help, Ticket_Priority $priority, MailboxProtocol $mailbox_protocol)
+    {
         try {
             $departments = $department->get();
             $helps = $help->get();
@@ -73,11 +83,14 @@ class EmailsController extends Controller {
 
     /**
      * Store a newly created resource in storage.
+     *
      * @param type Emails        $email
      * @param type EmailsRequest $request
+     *
      * @return type Response
      */
-    public function store(Emails $email, EmailsRequest $request) {
+    public function store(Emails $email, EmailsRequest $request)
+    {
         try {
             $password = $request->input('password');
             $encrypted = Crypt::encrypt($password);
@@ -119,21 +132,25 @@ class EmailsController extends Controller {
 
     /**
      * Show the form for editing the specified resource.
+     *
      * @param type int             $id
      * @param type Department      $department
      * @param type Help_topic      $help
      * @param type Emails          $email
      * @param type Priority        $priority
      * @param type MailboxProtocol $mailbox_protocol
+     *
      * @return type Response
      */
-    public function edit($id, Department $department, Help_topic $help, Emails $email, Ticket_Priority $priority, MailboxProtocol $mailbox_protocol) {
+    public function edit($id, Department $department, Help_topic $help, Emails $email, Ticket_Priority $priority, MailboxProtocol $mailbox_protocol)
+    {
         try {
             $emails = $email->whereId($id)->first();
             $departments = $department->get();
             $helps = $help->get();
             $priority = $priority->get();
             $mailbox_protocols = $mailbox_protocol->get();
+
             return view('themes.default1.admin.helpdesk.emails.emails.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails'));
         } catch (Exception $e) {
             return view('404');
@@ -142,12 +159,15 @@ class EmailsController extends Controller {
 
     /**
      * Update the specified resource in storage.
+     *
      * @param type                   $id
      * @param type Emails            $email
      * @param type EmailsEditRequest $request
+     *
      * @return type Response
      */
-    public function update($id, Emails $email, EmailsEditRequest $request) {
+    public function update($id, Emails $email, EmailsEditRequest $request)
+    {
         $password = $request->input('password');
         $encrypted = Crypt::encrypt($password);
         try {
@@ -170,6 +190,7 @@ class EmailsController extends Controller {
             }
             $emails->password = $encrypted;
             $emails->save();
+
             return redirect('emails')->with('success', 'Email Updated sucessfully');
         } catch (Exception $e) {
             return redirect('emails')->with('fails', 'Email not updated');
@@ -178,11 +199,14 @@ class EmailsController extends Controller {
 
     /**
      * Remove the specified resource from storage.
+     *
      * @param type int    $id
      * @param type Emails $email
+     *
      * @return type Response
      */
-    public function destroy($id, Emails $email) {
+    public function destroy($id, Emails $email)
+    {
         $default_system_email = Email::where('id', '=', '1')->first();
         if ($default_system_email->sys_email) {
             if ($id == $default_system_email->sys_email) {
@@ -200,5 +224,4 @@ class EmailsController extends Controller {
             return redirect('emails')->with('fails', 'Email can not  Delete ');
         }
     }
-
 }

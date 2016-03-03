@@ -102,10 +102,10 @@ class TicketController extends Controller
                             } else {
                                 $collabString = null;
                             }
-                            
+
                             $threads = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first(); //
                             $count = Ticket_Thread::where('ticket_id', '=', $ticket->id)->count(); //Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
-                            
+
                             $attachment = Ticket_attachments::where('thread_id', '=', $threads->id)->get();
                             $attachCount = count($attachment);
                             if ($attachCount > 0) {
@@ -113,6 +113,7 @@ class TicketController extends Controller
                             } else {
                                 $attachString = '';
                             }
+
                             return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
                         })
                         ->addColumn('ticket_number', function ($ticket) {
@@ -216,6 +217,7 @@ class TicketController extends Controller
                             } else {
                                 $attachString = '';
                             }
+
                             return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
                         })
                         ->addColumn('ticket_number', function ($ticket) {
@@ -260,6 +262,7 @@ class TicketController extends Controller
                         ->addColumn('Last', function ($ticket) {
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
+
                             return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
@@ -318,6 +321,7 @@ class TicketController extends Controller
                             } else {
                                 $attachString = '';
                             }
+
                             return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
                         })
                         ->addColumn('ticket_number', function ($ticket) {
@@ -421,6 +425,7 @@ class TicketController extends Controller
                             } else {
                                 $attachString = '';
                             }
+
                             return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
                         })
                         ->addColumn('ticket_number', function ($ticket) {
@@ -465,6 +470,7 @@ class TicketController extends Controller
                         ->addColumn('Last', function ($ticket) {
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
+
                             return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
@@ -533,6 +539,7 @@ class TicketController extends Controller
                             } else {
                                 $attachString = '';
                             }
+
                             return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
                         })
                         ->addColumn('ticket_number', function ($ticket) {
@@ -577,6 +584,7 @@ class TicketController extends Controller
                         ->addColumn('Last', function ($ticket) {
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
+
                             return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
@@ -680,6 +688,7 @@ class TicketController extends Controller
                         ->addColumn('Last', function ($ticket) {
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
+
                             return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
@@ -754,9 +763,11 @@ class TicketController extends Controller
         } elseif (Auth::user()->role == 'user') {
             $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
             $ticket_id = \Crypt::encrypt($id);
+
             return redirect()->route('check_ticket', compact('ticket_id'));
         }
         $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
+
         return view('themes.default1.agent.helpdesk.ticket.timeline', compact('tickets'), compact('thread'));
     }
 
@@ -780,13 +791,13 @@ class TicketController extends Controller
         $form_data = $request->except('reply_content', 'ticket_ID', 'attachment');
         \Event::fire(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
         $reply_content = $request->input('reply_content');
- 
+
         $thread->ticket_id = $request->input('ticket_ID');
         $thread->poster = 'support';
         $thread->body = $request->input('reply_content');
         $thread->user_id = Auth::user()->id;
         $ticket_id = $request->input('ticket_ID');
- 
+
         $tickets = Tickets::where('id', '=', $ticket_id)->first();
         $tickets->isanswered = '1';
         $tickets->save();
@@ -873,7 +884,7 @@ class TicketController extends Controller
     /**
      * Ticket edit and save ticket data.
      *
-     * @param type $ticket_id
+     * @param type               $ticket_id
      * @param type Ticket_Thread $thread
      *
      * @return type bool
@@ -1367,7 +1378,7 @@ class TicketController extends Controller
     /**
      * function to Ticket resolved.
      *
-     * @param type $id
+     * @param type         $id
      * @param type Tickets $ticket
      *
      * @return type string
@@ -1418,7 +1429,7 @@ class TicketController extends Controller
     /**
      * Function to delete ticket.
      *
-     * @param type $id
+     * @param type         $id
      * @param type Tickets $ticket
      *
      * @return type string
@@ -1504,7 +1515,6 @@ class TicketController extends Controller
             $thread->is_internal = 1;
             $thread->body = 'This Ticket has been assigned to '.$assignee;
             $thread->save();
-
         } elseif ($assign_to[0] == 'user') {
             $ticket->assigned_to = $assign_to[1];
             $user_detail = User::where('id', '=', $assign_to[1])->first();
@@ -1726,7 +1736,6 @@ class TicketController extends Controller
         } else {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 5)->where('dept_id', '=', $dept->id)->get();
-
         }
 
         return \Datatable::collection(new Collection($tickets))
@@ -1806,6 +1815,7 @@ class TicketController extends Controller
                         ->addColumn('Last', function ($ticket) {
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
+
                             return UTC::usertimezone($TicketDatarow->updated_at);
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
@@ -2284,7 +2294,7 @@ class TicketController extends Controller
             $name = Input::get('name');
             $returnValue = $this->changeOwnerAdd($email, $name, $ticket_id);
             if ($returnValue === 0) {
-                return 4; 
+                return 4;
             } elseif ($returnValue === 2) {
                 return 5;
             } else {
@@ -2349,9 +2359,9 @@ class TicketController extends Controller
         $user = User::where('email', '=', $email)->first();
         $count = count($user);
         if ($count === 1) {
-            return  0; 
+            return  0;
         } elseif ($validator->fails()) {
-            return 2; 
+            return 2;
         } else {
             $company = $this->company();
             $user = new User();
@@ -2367,6 +2377,7 @@ class TicketController extends Controller
                 } catch (\Exception $e) {
                 }
             }
+
             return 1;
         }
     }
