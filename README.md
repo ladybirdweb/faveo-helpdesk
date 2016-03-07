@@ -4,7 +4,7 @@
 <br/><br/>
 The word Faveo comes from Latin which means to be favourable. Which truly highlights vision and the scope as well as the functionality of the product that Faveo is. It is specifically designed to cater the needs of startups and SME’s empowering them with state of art, ticket based support system. In today’s competitive startup scenario customer retention is one of the major challenges. Handling client query diligently is all the difference between retaining or losing a long lasting relationship. The company is driven with passion of providing tools for managing consumer queries for strategic insights and helping companies take those decisive decisions.
 <br/><br/>
-To date, Faveo has been integrated with 6 platforms and every month there is 1 to 2 update releases with new features & platform integration.
+To date, Faveo has been integrated with 3 platforms and every month there is 1 to 2 update releases with new features & platform integration.
 <br/><br/>
 Faveo can also be customised according to requirement and we do undertake such request.
 <br/><br/>
