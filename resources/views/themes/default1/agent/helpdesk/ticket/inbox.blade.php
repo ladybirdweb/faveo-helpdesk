@@ -176,7 +176,7 @@ class="active"
                 //Check all checkboxes
                 $("input[type='checkbox']", ".mailbox-messages").iCheck("check");
                 // alert('Hallo');
-                t_id = null;
+                t_id = [];
             }
             $(this).data("clicks", !clicks);
 
