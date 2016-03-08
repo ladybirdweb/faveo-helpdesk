@@ -1163,12 +1163,12 @@ $count_teams = count($teams);
                             <div class="row">
                                 <div class="col-md-12">
                                     <div id="merge-succ-alert" class="alert alert-success alert-dismissable" style="display:none;" >
-                                        <button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <!-- <button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
                                         <h4><i class="icon fa fa-check"></i>Alert!</h4>
                                         <div id="message-merge-succ"></div>
                                     </div>
                                     <div id="merge-err-alert" class="alert alert-danger alert-dismissable" style="display:none;">
-                                        <button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <!-- <button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
                                         <h4><i class="icon fa fa-ban"></i>Alert!</h4>
                                         <div id="message-merge-err"></div>
                                     </div>

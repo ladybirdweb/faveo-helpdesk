@@ -95,12 +95,12 @@ class="active"
                             <div class="row">
                                 <div class="col-md-12">
                                     <div id="merge-succ-alert" class="alert alert-success alert-dismissable" style="display:none;" >
-                                        <button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <!--<button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
                                         <h4><i class="icon fa fa-check"></i>Alert!</h4>
                                         <div id="message-merge-succ"></div>
                                     </div>
                                     <div id="merge-err-alert" class="alert alert-danger alert-dismissable" style="display:none;">
-                                        <button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <!--<button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
                                         <h4><i class="icon fa fa-ban"></i>Alert!</h4>
                                         <div id="message-merge-err"></div>
                                     </div>
@@ -142,20 +142,20 @@ class="active"
 
 <script>
     var t_id =[];
-      $(function () {
+    $(function () {
         //Enable check and uncheck all functionality
         $(".checkbox-toggle").click(function () {
-          var clicks = $(this).data('clicks');
-          if (clicks) {
+            var clicks = $(this).data('clicks');
+            if (clicks) {
             //Uncheck all checkboxes
-            $(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
-            $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
-          } else {
-            //Check all checkboxes
-            $(".mailbox-messages input[type='checkbox']").iCheck("check");
-            $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
-          }          
-          $(this).data("clicks", !clicks);
+                $(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
+                $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+            } else {
+                //Check all checkboxes
+                $(".mailbox-messages input[type='checkbox']").iCheck("check");
+                $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+            }          
+            $(this).data("clicks", !clicks);
         });
       });
 
@@ -167,13 +167,24 @@ class="active"
             if (clicks) {
                 //Uncheck all checkboxes
                 $("input[type='checkbox']", ".mailbox-messages").iCheck("uncheck");
+                // alert($("input[type='checkbox']").val());
+                t_id = $('.selectval').map(function() {
+                    return $(this).val();
+                }).get();
+                // alert(checkboxValues);
             } else {
                 //Check all checkboxes
                 $("input[type='checkbox']", ".mailbox-messages").iCheck("check");
+                // alert('Hallo');
+                t_id = null;
             }
             $(this).data("clicks", !clicks);
+
         });
+
+
     });
+
 
     $(document).ready(function() { /// Wait till page is loaded
         $('#click').click(function() {
@@ -184,7 +195,10 @@ class="active"
         });
 
         $(".select2").select2();
-//checking merging tickets
+
+
+
+        //checking merging tickets
         $('#MergeTickets').on('show.bs.modal', function () {
             
             // alert("hi");
@@ -243,9 +257,9 @@ class="active"
             });
         });
 
-            //submit merging form
-    $('#merge-form').on('submit', function(){
-        $.ajax({
+        //submit merging form
+        $('#merge-form').on('submit', function(){
+            $.ajax({
                 type: "POST",
                 url: "../merge-tickets/"+t_id,
                 dataType: "json",
@@ -293,12 +307,7 @@ class="active"
             })
             return false;
 
-    });
-
-
-
-
-    
+        });
     });
 
 
