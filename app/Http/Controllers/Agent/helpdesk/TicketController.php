@@ -179,10 +179,10 @@ class TicketController extends Controller
     public function get_open()
     {
         if (Auth::user()->role == 'admin') {
-            $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('assigned_to', '=', 0)->get();
+            $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->get();
         } else {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
-            $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('assigned_to', '=', 0)->where('dept_id', '=', $dept->id)->get();
+            $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->get();
         }
 
         return \Datatable::collection(new Collection($tickets))
@@ -234,7 +234,7 @@ class TicketController extends Controller
                             return "<span style='color:#508983'>".$from->user_name.'</span>';
                         })
                         ->addColumn('Last Replier', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
+                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '=', 0)->max('id');
                             $TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
                             $LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first();
                             if ($LastResponse->role == 'user') {
