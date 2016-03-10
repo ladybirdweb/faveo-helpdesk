@@ -19,19 +19,17 @@ use Exception;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class BanlistController extends Controller
-{
+class BanlistController extends Controller {
+
     /**
      * Create a new controller instance.
      * constructor to check
      * 1. authentication
      * 2. user roles
      * 3. roles must be agent.
-     *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         // checking authentication
         $this->middleware('auth');
         // checking admin roles
@@ -39,17 +37,12 @@ class BanlistController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @param type Banlist $ban
-     *
-     * @return type Response
+     * Display a listing of all the banned users
+     * @return type
      */
-    public function index()
-    {
+    public function index() {
         try {
             $bans = User::where('ban', '=', 1)->get();
-
             return view('themes.default1.admin.helpdesk.emails.banlist.index', compact('bans'));
         } catch (Exception $e) {
             return view('404');
@@ -57,12 +50,10 @@ class BanlistController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
+     * Show the form for creating a banned user
      * @return type Response
      */
-    public function create()
-    {
+    public function create() {
         try {
             return view('themes.default1.admin.helpdesk.emails.banlist.create');
         } catch (Exception $e) {
@@ -71,16 +62,12 @@ class BanlistController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param type banlist    $ban
-     * @param type BanRequest $request
-     * @param type User       $user
-     *
+     * Store a new banned user credentials
+     * @param BanRequest $request
+     * @param User $user
      * @return type Response
      */
-    public function store(BanRequest $request, User $user)
-    {
+    public function store(BanRequest $request, User $user) {
         // dd($request);
         try {
             //adding field to user whether it is banned or not
@@ -107,30 +94,14 @@ class BanlistController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param type int     $id
-     * @param type Banlist $ban
-     *
+     * Editing the details of the banned users
+     * @param type $id
+     * @param User $ban
      * @return type Response
      */
-    public function edit($id, User $ban)
-    {
+    public function edit($id, User $ban) {
         try {
             $bans = $ban->whereId($id)->first();
-
             return view('themes.default1.admin.helpdesk.emails.banlist.edit', compact('bans'));
         } catch (Exception $e) {
             return view('404');
@@ -138,21 +109,17 @@ class BanlistController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param type int            $id
-     * @param type Banlist        $ban
-     * @param type BanlistRequest $request
-     *
+     * Update the banned users
+     * @param type $id
+     * @param User $ban
+     * @param BanlistRequest $request
      * @return type Response
      */
-    public function update($id, User $ban, BanlistRequest $request)
-    {
+    public function update($id, User $ban, BanlistRequest $request) {
         try {
             $bans = $ban->whereId($id)->first();
             $bans->internal_note = $request->input('internal_note');
             $bans->ban = $request->input('ban');
-            // dd($request->input('ban'));
             if ($bans->save()) {
                 return redirect('banlist')->with('success', 'Banned Email Updated sucessfully');
             } else {
@@ -163,21 +130,4 @@ class BanlistController extends Controller
         }
     }
 
-    /*
-     * Remove the specified resource from storage.
-     * @param type int $id
-     * @param type Banlist $ban
-     * @return type Response
-     */
-    // public function destroy($id, Banlist $ban) {
-    // 		$bans = $ban->whereId($id)->first();
-    // 		dd($bans);
-    // 		/* Success and Falure condition */
-    // 		try{
-    // 			$bans->delete();
-    // 			return redirect('banlist')->with('success', 'Banned Email Deleted sucessfully');
-    // 		} catch (Exception $e) {
-    // 			return redirect('banlist')->with('fails', 'Banned Email can not Delete'.'<li>'.$e->errorInfo[2].'</li>');
-    // 		}
-    // }
 }
