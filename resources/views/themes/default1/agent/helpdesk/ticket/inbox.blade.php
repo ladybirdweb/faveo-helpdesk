@@ -49,7 +49,7 @@ class="active"
             {{-- <a class="btn btn-default btn-sm" id="click"><i class="fa fa-refresh"></i></a> --}}
             <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
             <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
-            <button type="button" class="btn btn-sm btn-default text-yellow" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-chain"> </i> {!! Lang::get('lang.merge') !!}</button>
+            <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
            
         </div>
         <div class="mailbox-messages" id="refresh">
@@ -204,7 +204,7 @@ class="active"
             // alert("hi");
             $.ajax({
                 type: "GET",
-                url: "../check-merge-ticket/"+0,
+                url: "{{route('check.merge.tickets',0)}}",
                 dataType: "html",
                 data:{data1: t_id},
                 beforeSend: function() {
@@ -242,7 +242,7 @@ class="active"
                         $("#merge-btn").attr('disabled', false);
                         $("#merge_loader").hide();
                         $.ajax({
-                            url: "../get-merge-tickets/"+0,
+                            url: "{{ route('get.merge.tickets',0) }}",
                             dataType: "html",
                             data:{data1: t_id},
                             success: function(data) {
@@ -261,7 +261,7 @@ class="active"
         $('#merge-form').on('submit', function(){
             $.ajax({
                 type: "POST",
-                url: "../merge-tickets/"+t_id,
+                url: "{!! url('merge-tickets/') !!}/"+t_id,
                 dataType: "json",
                 data: $(this).serialize(),
                 beforeSend: function() {
