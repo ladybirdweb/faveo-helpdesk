@@ -105,6 +105,16 @@ return [
     'header_spoofing'         => 'Header Spoofing',
     'allow_for_this_email'    => 'Allow For This Email',
     'imap_config'             => 'IMAP Configuration',
+    'email_information_and_settings' => 'Email Information and Settings',
+    'incoming_email_information'    =>  'Incoming Email Information',
+    'outgoing_email_information'    =>  'Outgoing Email Information',
+    'new_ticket_settings'       =>      'New Ticket Settings',
+    'protocol'      =>  'Protocol',
+    'fetching_protocol' =>  'Fetching Protocol',
+    'transfer_protocol' =>  'Transfer Protocol',
+    'from_name' =>  'From Name',
+    'add_an_email'  =>  'Add an Email',
+    'edit_an_email'     =>  'Edit an Email',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
