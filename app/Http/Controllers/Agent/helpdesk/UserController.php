@@ -75,8 +75,8 @@ class UserController extends Controller
     {
         // displaying list of users with chumper datatables
         return \Datatable::collection(User::where('role', '!=', 'admin')->where('role', '!=', 'agent')->get())
-                        /* searchable column username */
-                        ->searchColumns('user_name')
+                        /* searchable column username and email*/
+                        ->searchColumns('user_name', 'email')
                         /* order column username and email */
                         ->orderColumns('user_name', 'email')
                         /* column username */

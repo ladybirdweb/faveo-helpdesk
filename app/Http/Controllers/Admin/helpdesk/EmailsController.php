@@ -19,14 +19,17 @@ use Crypt;
 use Exception;
 
 /**
+ * ======================================
  * EmailsController.
+ * ======================================
+ * This Controller is used to define below mentioned set of functions applied to the Emails in the system.
  *
- * @author      Ladybird <info@ladybirdweb.com>
+ * @author Ladybird <info@ladybirdweb.com>
  */
 class EmailsController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Defining constructor variables.
      *
      * @return type
      */
@@ -37,11 +40,11 @@ class EmailsController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the Emails.
      *
      * @param type Emails $emails
      *
-     * @return type Response
+     * @return type view
      */
     public function index(Emails $emails)
     {
@@ -50,7 +53,7 @@ class EmailsController extends Controller
 
             return view('themes.default1.admin.helpdesk.emails.emails.index', compact('emails'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -128,18 +131,6 @@ class EmailsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param type int             $id
@@ -179,12 +170,8 @@ class EmailsController extends Controller
     {
         $password = $request->input('password');
         $encrypted = Crypt::encrypt($password);
-        //echo $encrypted;
-        //$value = Crypt::decrypt($encrypted);
-        //echo $value;
         try {
             $emails = $email->whereId($id)->first();
-            // $emails->password = $encrypted;
             $emails->fill($request->except('password', 'department', 'priority', 'help_topic'))->save();
             if ($request->input('department')) {
                 $emails->department = $request->input('department');

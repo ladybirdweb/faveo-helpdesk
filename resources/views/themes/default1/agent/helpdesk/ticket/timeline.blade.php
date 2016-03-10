@@ -1163,12 +1163,12 @@ $count_teams = count($teams);
                             <div class="row">
                                 <div class="col-md-12">
                                     <div id="merge-succ-alert" class="alert alert-success alert-dismissable" style="display:none;" >
-                                        <button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <!-- <button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
                                         <h4><i class="icon fa fa-check"></i>Alert!</h4>
                                         <div id="message-merge-succ"></div>
                                     </div>
                                     <div id="merge-err-alert" class="alert alert-danger alert-dismissable" style="display:none;">
-                                        <button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <!-- <button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
                                         <h4><i class="icon fa fa-ban"></i>Alert!</h4>
                                         <div id="message-merge-err"></div>
                                     </div>
@@ -1535,7 +1535,7 @@ jQuery(document).ready(function() {
                     if(response != 1)
                     {
                         // $("#assign_body").show();
-                         var message = "User not found. Try again or add a new user.";
+                         var message = "{{Lang::get('lang.user-not-found')}}";
                         $('#change_alert').show();
                         $('#message-success42').html(message);
                         setInterval(function(){$("#change_alert").hide(); },5000);
@@ -1553,7 +1553,7 @@ jQuery(document).ready(function() {
                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                         $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
                         $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
-                        var message = "Success! owner has been changed for this ticket.";
+                        var message = "{{Lang::get('lang.change-success')}}";
                         $("#alert11").show();
                         $('#message-success1').html(message);
                         setInterval(function(){$("#alert11").hide(); },4000); 
@@ -1585,15 +1585,15 @@ jQuery(document).ready(function() {
                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                         $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
                         $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
-                        var message = "Success! owner has been changed for this ticket.";
+                        var message = "{{Lang::get('lang.change-success')}}";
                         $("#alert11").show();
                         $('#message-success1').html(message);
                         setInterval(function(){$("#alert11").hide(); },4000);
                     } else {
                         if(response == 4){ 
-                            var message = "User already exists. Try search existing user.";
+                            var message = "{{Lang::get('lang.user-exists')}}";
                         } else if(response == 5){
-                            var message = "Enter a valid email address.";
+                            var message = "{{Lang::get('lang.valid-email')}}";
                         } else {
                             //var message = "Can't process your request. Try after some time.";
                         }
@@ -1803,11 +1803,12 @@ jQuery(document).ready(function() {
                 success: function(response) {
                     if(response == 0) {
                         $("#merge_body").show();
+                        $("#merge-succ-alert").hide();
                         $("#merge-body-alert").show();
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
                         $("#merge-btn").attr('disabled', true);
-                       var message = "No more tickets found by this user.";
+                       var message = "{{Lang::get('lang.no-tickets-to-merge')}}";
                         $("#merge-err-alert").show();
                         $('#message-merge-err').html(message);  
 
@@ -1848,21 +1849,38 @@ jQuery(document).ready(function() {
                     success: function(response) {
                         if(response == 0) {
                             $("#merge_body").show();
+                            $("#merge-succ-alert").hide();
                             $("#merge-body-alert").show();
                             $("#merge-body-form").hide();
                             $("#merge_loader").hide();
                             $("#merge-btn").attr('disabled', true);
-                           var message = "Could not process your request try after some time.";
+                           var message = "{{Lang::get('lang.merge-error')}}";
                             $("#merge-err-alert").show();
                             $('#message-merge-err').html(message);  
                     
-                        } else {
+                        } else if(response == 2) {
                             $("#merge_body").show();
+                            $("#merge-succ-alert").hide();
                             $("#merge-body-alert").show();
                             $("#merge-body-form").hide();
                             $("#merge_loader").hide();
                             $("#merge-btn").attr('disabled', true);
-                           var message = "Tickets has been merged successfully.";
+                            var message = "{{Lang::get('lang.merge-error2')}}";
+                            $("#merge-err-alert").show();
+                            $('#message-merge-err').html(message);
+
+                        } else {
+                            $("#merge_body").show();
+                            $("#merge-err-alert").hide();
+                            $("#merge-body-alert").show();
+                            $("#merge-body-form").hide();
+                            $("#merge_loader").hide();
+                            $("#merge-btn").attr('disabled', true);
+                            $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
+                            $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
+                            $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
+                            $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
+                            var message = "{{Lang::get('lang.merge-success')}}";
                             $("#merge-succ-alert").show();
                             $('#message-merge-succ').html(message);  
 
@@ -1902,7 +1920,15 @@ jQuery(document).ready(function() {
 
 $(document).ready(function() {
 
-    $('#select-merge-parent').on("focus", function(){
+    var Vardata="";
+    var count = 0;
+    $(".select2").on('select2:select', function(){
+        parentAjaxCall();
+    });
+    $(".select2").on('select2:unselect', function(){
+        parentAjaxCall();
+    });
+    function parentAjaxCall(){
        // alert();
         var arr = $("#select-merge-tickts").val();
         if(arr == null) {
@@ -1914,20 +1940,20 @@ $(document).ready(function() {
                 dataType: "html",
                 data:{data1:arr},
                 beforeSend: function() {
-                   // $("#parent-loader").show();
-                   // $("#parent-body").hide();
+                   $("#parent-loader").show();
+                   $("#parent-body").hide();
                 },
                 success: function(data) {
-                    // $("#parent-loader").hide();
-                    // $("#parent-body").show();
+                    $("#parent-loader").hide();
+                    $("#parent-body").show();
                     // $("#select-merge-parent").focus();
                     $('#select-merge-parent').html(data);
-                    $( this ).off( event );
+                    // $( this ).off( event );
                 }
             });
         }
         
-    });
+    }
 
     var locktime = '<?php echo $var->collision_avoid;?>'*60*1000;
     lockAjaxCall(locktime);
