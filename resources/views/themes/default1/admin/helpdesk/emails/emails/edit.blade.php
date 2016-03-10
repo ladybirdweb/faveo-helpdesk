@@ -197,7 +197,7 @@ class="active"
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::button('<i id="spin" class="fa fa-spinner" style="display:none;"></i> <b>' . Lang::get("lang.Update").'</b>' ,['class'=>'btn btn-primary', 'type' => 'submit'])!!}
+        {!! Form::button('<i id="spin" class="fa fa-spinner" style="display:none;"></i> <b>' . Lang::get("lang.update").'</b>' ,['class'=>'btn btn-primary', 'type' => 'submit'])!!}
 
     </div>
 </div>

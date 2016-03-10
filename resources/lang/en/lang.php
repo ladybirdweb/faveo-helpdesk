@@ -213,6 +213,7 @@ return [
     'timezone'              => 'Default Time Zone',
     'api'                   => 'Api',
     'api_key'               => 'Api Key',
+    'api_key_mandatory'     => 'Api key mandatory',
     'api_configurations'    => 'Api Configurations',
     'generate_key'          => 'Generate key',
     /*
