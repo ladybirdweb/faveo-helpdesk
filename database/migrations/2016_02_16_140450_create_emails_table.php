@@ -22,9 +22,9 @@ class CreateEmailsTable extends Migration
             $table->string('user_name');
             $table->string('password');
             $table->string('fetching_host');
-            $table->string('fetching_port');    
-            $table->string('fetching_protocol');    
-            $table->string('fetching_encryption');    
+            $table->string('fetching_port');
+            $table->string('fetching_protocol');
+            $table->string('fetching_encryption');
             $table->string('mailbox_protocol');
             $table->string('imap_config');
             $table->string('folder');

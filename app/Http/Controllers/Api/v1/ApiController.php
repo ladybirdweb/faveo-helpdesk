@@ -537,7 +537,6 @@ class ApiController extends Controller
      */
     public function getCustomersWith()
     {
-       
         try {
             $users = $this->faveoUser->select('id', 'user_name', 'first_name', 'last_name', 'email', 'phone_number', 'profile_pic')->where('role', 'user')->get();
             $result = [];
