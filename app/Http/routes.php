@@ -621,8 +621,8 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::get('customer', 'Api\v1\ApiController@getCustomer');
         Route::get('ticket-search', 'Api\v1\ApiController@searchTicket');
         Route::get('ticket-thread', 'Api\v1\ApiController@ticketThreads');
-        Route::get('url', 'Api\v1\ApiController@checkUrl');
-        Route::get('check-url', 'Api\v1\ApiController@urlResult');
+        Route::get('url', 'Api\v1\ApiExceptAuthController@checkUrl');
+        Route::get('check-url', 'Api\v1\ApiExceptAuthController@urlResult');
         Route::get('api_key', 'Api\v1\ApiController@generateApiKey');
         Route::get('help-topic', 'Api\v1\ApiController@getHelpTopic');
         Route::get('sla-plan', 'Api\v1\ApiController@getSlaPlan');
@@ -676,7 +676,7 @@ Route::group(['prefix' => 'api/v1'], function () {
     /*
     * Newly added
     */
-    Route::get('customers-custom', 'Api\v1\TestController@getCustomersWith');
+    Route::get('ticket/customers-custom', 'Api\v1\TestController@getCustomersWith');
 
     Route::get('generate/token', 'Api\v1\TestController@generateToken');
     Route::get('get/user', 'Api\v1\TestController@getAuthUser');

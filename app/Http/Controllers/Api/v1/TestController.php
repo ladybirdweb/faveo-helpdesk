@@ -473,6 +473,13 @@ class TestController extends Controller
     public function getCustomersWith()
     {
         try {
+            //dd($this->server);
+            $url = $this->server.'helpdesk/customers-custom?api_key=9p41T2XFZ34YRZJUNQAdmM7iV0Rr1CjN&token='.\Config::get('app.token');
+            $_this = new self();
+            $respose = $_this->callGetApi($url);
+            dd($respose);
+
+            return $respose;
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
