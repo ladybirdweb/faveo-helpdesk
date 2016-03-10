@@ -13,6 +13,7 @@ class ApiExceptAuthController extends Controller {
 
     public function __construct(Request $request) {
         $this->request = $request;
+        $this->middleware('api');
     }
 
     /**
@@ -35,7 +36,7 @@ class ApiExceptAuthController extends Controller {
             $url = $this->request->input('url');
             $url = $url . '/api/v1/helpdesk/check-url';
             $result = $this->CallGetApi($url);
-            //dd($result);
+//            dd($result);
             return response()->json(compact('result'));
         } catch (\Exception $ex) {
             $error = $ex->getMessage();
