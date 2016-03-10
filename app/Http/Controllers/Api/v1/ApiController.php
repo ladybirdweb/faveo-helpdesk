@@ -537,6 +537,7 @@ class ApiController extends Controller
      */
     public function getCustomersWith()
     {
+       
         try {
             $users = $this->faveoUser->select('id', 'user_name', 'first_name', 'last_name', 'email', 'phone_number', 'profile_pic')->where('role', 'user')->get();
             $result = [];
@@ -555,9 +556,10 @@ class ApiController extends Controller
                 $result[$key]['picture'] = $path;
             }
             $result = $this->createPagination($result, 10);
+            //dd($result);
             //$result->toJson();
             return $result->toJson();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
             $file = $e->getFile();
