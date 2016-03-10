@@ -4,8 +4,8 @@ namespace App\Model\helpdesk\Email;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Emails extends Model {
-
+class Emails extends Model
+{
     protected $table = 'emails';
     protected $fillable = [
         'email_address', 'email_name', 'department', 'priority', 'help_topic',
@@ -14,5 +14,4 @@ class Emails extends Model {
         'fetching_status', 'move_to_folder', 'delete_email', 'do_nothing',
         'sending_status', 'authentication', 'header_spoofing', 'imap_config',
     ];
-
 }

@@ -23,19 +23,22 @@ use Hash;
 /**
  * AgentController
  * This controller is used to CRUD Agents.
+ *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class AgentController extends Controller {
-
+class AgentController extends Controller
+{
     /**
      * Create a new controller instance.
      * constructor to check
      * 1. authentication
      * 2. user roles
      * 3. roles must be agent.
+     *
      * @return void
      */
-    public function __construct(PhpMailController $PhpMailController) {
+    public function __construct(PhpMailController $PhpMailController)
+    {
         // creating an instance for the PhpmailController
         $this->PhpMailController = $PhpMailController;
         // checking authentication
@@ -46,9 +49,11 @@ class AgentController extends Controller {
 
     /**
      * Get all agent list page.
+     *
      * @return type view
      */
-    public function index() {
+    public function index()
+    {
         try {
             return view('themes.default1.admin.helpdesk.agent.agents.index');
         } catch (Exception $e) {
@@ -58,14 +63,17 @@ class AgentController extends Controller {
 
     /**
      * creating a new agent.
+     *
      * @param Assign_team_agent $team_assign_agent
-     * @param Timezones $timezone
-     * @param Groups $group
-     * @param Department $department
-     * @param Teams $team_all
+     * @param Timezones         $timezone
+     * @param Groups            $group
+     * @param Department        $department
+     * @param Teams             $team_all
+     *
      * @return type view
      */
-    public function create(Timezones $timezone, Groups $group, Department $department, Teams $team_all) {
+    public function create(Timezones $timezone, Groups $group, Department $department, Teams $team_all)
+    {
         try {
             // gte all the teams
             $team = $team_all->get();
@@ -87,12 +95,15 @@ class AgentController extends Controller {
 
     /**
      * store a new agent.
-     * @param User $user
-     * @param AgentRequest $request
+     *
+     * @param User              $user
+     * @param AgentRequest      $request
      * @param Assign_team_agent $team_assign_agent
+     *
      * @return type Response
      */
-    public function store(User $user, AgentRequest $request) {
+    public function store(User $user, AgentRequest $request)
+    {
         // fixing the user role to agent
         $user->fill($request->input())->save();
         // generate password and has immediately to store
@@ -139,7 +150,8 @@ class AgentController extends Controller {
      *
      * @return type Response
      */
-    public function edit($id, User $user, Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team) {
+    public function edit($id, User $user, Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team)
+    {
         try {
             $user = $user->whereId($id)->first();
             $team = $team->get();
@@ -167,7 +179,8 @@ class AgentController extends Controller {
      *
      * @return type Response
      */
-    public function update($id, User $user, AgentUpdate $request, Assign_team_agent $team_assign_agent) {
+    public function update($id, User $user, AgentUpdate $request, Assign_team_agent $team_assign_agent)
+    {
 
         // storing all the details
         $user = $user->whereId($id)->first();
@@ -189,19 +202,23 @@ class AgentController extends Controller {
 
             return redirect('agents')->with('success', 'Agent Updated sucessfully');
         } catch (Exception $e) {
-            return redirect('agents')->with('fails', 'Agent did not update' . '<li>' . $e->errorInfo[2] . '</li>');
+            return redirect('agents')->with('fails', 'Agent did not update'.'<li>'.$e->errorInfo[2].'</li>');
         }
     }
 
     /**
      * Remove the specified agent from storage.
-     * @param type $id
-     * @param User $user
+     *
+     * @param type              $id
+     * @param User              $user
      * @param Assign_team_agent $team_assign_agent
-     * @return type Response
+     *
      * @throws Exception
+     *
+     * @return type Response
      */
-    public function destroy($id, User $user, Assign_team_agent $team_assign_agent) {
+    public function destroy($id, User $user, Assign_team_agent $team_assign_agent)
+    {
         /* Becouse of foreign key we delete team_assign_agent first */
         error_reporting(E_ALL & ~E_NOTICE);
         $team_assign_agent = $team_assign_agent->where('agent_id', $id);
@@ -212,6 +229,7 @@ class AgentController extends Controller {
             $user->id;
             $user->delete();
             throw new \Exception($error);
+
             return redirect('agents')->with('success', 'Agent Deleted sucessfully');
         } catch (\Exception $e) {
             return redirect('agents')->with('fails', $error);
@@ -220,10 +238,13 @@ class AgentController extends Controller {
 
     /**
      * Generate a random string for password.
+     *
      * @param type $length
+     *
      * @return string
      */
-    public function generateRandomString($length = 10) {
+    public function generateRandomString($length = 10)
+    {
         // list of supported characters
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         // character length checked
@@ -237,5 +258,4 @@ class AgentController extends Controller {
         // return random string
         return $randomString;
     }
-
 }

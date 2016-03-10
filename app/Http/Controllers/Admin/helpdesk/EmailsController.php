@@ -7,17 +7,17 @@ use App\Http\Controllers\Controller;
 // request
 use App\Http\Requests\helpdesk\EmailsEditRequest;
 use App\Http\Requests\helpdesk\EmailsRequest;
-use Illuminate\Http\Request;
-// model
 use App\Model\helpdesk\Agent\Department;
+// model
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Utility\MailboxProtocol;
-// classes
 use Crypt;
+// classes
 use Exception;
+use Illuminate\Http\Request;
 
 //use PhpImap\Mailbox as ImapMailbox;
 
@@ -25,29 +25,36 @@ use Exception;
  * ======================================
  * EmailsController.
  * ======================================
- * This Controller is used to define below mentioned set of functions applied to the Emails in the system
+ * This Controller is used to define below mentioned set of functions applied to the Emails in the system.
+ *
  * @author Ladybird <info@ladybirdweb.com>
  */
-class EmailsController extends Controller {
-
+class EmailsController extends Controller
+{
     /**
-     * Defining constructor variables
+     * Defining constructor variables.
+     *
      * @return type
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
         $this->middleware('roles');
     }
 
     /**
-     * Display a listing of the Emails
+     * Display a listing of the Emails.
+     *
      * @param type Emails $emails
+     *
      * @return type view
      */
-    public function index(Emails $email) {
+    public function index(Emails $email)
+    {
         try {
             // fetch all the emails from emails table
             $emails = $email->get();
+
             return view('themes.default1.admin.helpdesk.emails.emails.index', compact('emails'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -56,13 +63,16 @@ class EmailsController extends Controller {
 
     /**
      * Show the form for creating a new resource.
+     *
      * @param type Department      $department
      * @param type Help_topic      $help
      * @param type Priority        $priority
      * @param type MailboxProtocol $mailbox_protocol
+     *
      * @return type Response
      */
-    public function create(Department $department, Help_topic $help, Ticket_Priority $ticket_priority, MailboxProtocol $mailbox_protocol) {
+    public function create(Department $department, Help_topic $help, Ticket_Priority $ticket_priority, MailboxProtocol $mailbox_protocol)
+    {
         try {
             // fetch all the departments from the department table
             $departments = $department->get();
@@ -81,20 +91,23 @@ class EmailsController extends Controller {
     }
 
     /**
-     * Check for email input validation
+     * Check for email input validation.
+     *
      * @param EmailsRequest $request
+     *
      * @return int
      */
-    public function validatingEmailSettings(Request $request) {
+    public function validatingEmailSettings(Request $request)
+    {
         $validator = \Validator::make(
                         [
                     'email_address' => $request->email_address,
-                    'email_name' => $request->email_name,
-                    'password' => $request->password,
+                    'email_name'    => $request->email_name,
+                    'password'      => $request->password,
                         ], [
                     'email_address' => 'required|email|unique:emails',
-                    'email_name' => 'required',
-                    'password' => 'required',
+                    'email_name'    => 'required',
+                    'password'      => 'required',
                         ]
         );
         if ($validator->fails()) {
@@ -104,22 +117,23 @@ class EmailsController extends Controller {
                 $val .= $value;
             }
             $return_data = rtrim(str_replace('.', ',', $val), ',');
+
             return $return_data;
         }
-        if ($request->fetching_status == "on") {
+        if ($request->fetching_status == 'on') {
             $imap_check = $this->getImapStream($request);
             if ($imap_check == 0) {
-                return "Incoming email connection failed";
+                return 'Incoming email connection failed';
             }
             $need_to_check_imap = 1;
         } else {
             $imap_check = 0;
             $need_to_check_imap = 0;
         }
-        if ($request->sending_status == "on") {
+        if ($request->sending_status == 'on') {
             $smtp_check = $this->getSmtp($request);
             if ($smtp_check == 0) {
-                return "Outgoing email connection failed";
+                return 'Outgoing email connection failed';
             }
             $need_to_check_smtp = 1;
         } else {
@@ -148,28 +162,32 @@ class EmailsController extends Controller {
                 $return = 1;
             }
         }
+
         return $return;
     }
 
     /**
      * Store a newly created resource in storage.
+     *
      * @param type Emails        $email
      * @param type EmailsRequest $request
+     *
      * @return type Redirect
      */
-    public function store($request) {
-//        dd($request);
-        $email = new Emails;
+    public function store($request)
+    {
+        //        dd($request);
+        $email = new Emails();
         try {
-//            getConnection($request->input('email_name'), $request->input('email_address'), $request->input('email_address'))
+            //            getConnection($request->input('email_name'), $request->input('email_address'), $request->input('email_address'))
             // saving all the fields to the database
             if ($email->fill($request->except('password', 'department', 'priority', 'help_topic', 'fetching_status', 'sending_status'))->save() == true) {
-                if ($request->fetching_status == "on") {
+                if ($request->fetching_status == 'on') {
                     $email->fetching_status = 1;
                 } else {
                     $email->fetching_status = 0;
                 }
-                if ($request->sending_status == "on") {
+                if ($request->sending_status == 'on') {
                     $email->sending_status = 1;
                 } else {
                     $email->sending_status = 0;
@@ -192,7 +210,7 @@ class EmailsController extends Controller {
                 return 1;
             } else {
                 // returns fail message for unsuccessful save execution
-//                return redirect('emails')->with('fails', 'Email can not Create'); 
+//                return redirect('emails')->with('fails', 'Email can not Create');
                 return 0;
             }
         } catch (Exception $e) {
@@ -204,21 +222,24 @@ class EmailsController extends Controller {
 
     /**
      * Show the form for editing the specified resource.
+     *
      * @param type int             $id
      * @param type Department      $department
      * @param type Help_topic      $help
      * @param type Emails          $email
      * @param type Priority        $priority
      * @param type MailboxProtocol $mailbox_protocol
+     *
      * @return type Response
      */
-    public function edit($id, Department $department, Help_topic $help, Emails $email, Ticket_Priority $ticket_priority, MailboxProtocol $mailbox_protocol) {
+    public function edit($id, Department $department, Help_topic $help, Emails $email, Ticket_Priority $ticket_priority, MailboxProtocol $mailbox_protocol)
+    {
         try {
             // fetch the selected emails
             $emails = $email->whereId($id)->first();
             // get all the departments
             $departments = $department->get();
-            // get all the helptopic 
+            // get all the helptopic
             $helps = $help->get();
             // get all the priority
             $priority = $ticket_priority->get();
@@ -233,20 +254,23 @@ class EmailsController extends Controller {
     }
 
     /**
-     * Check for email input validation
+     * Check for email input validation.
+     *
      * @param EmailsRequest $request
+     *
      * @return int
      */
-    public function validatingEmailSettingsUpdate($id, Request $request) {
+    public function validatingEmailSettingsUpdate($id, Request $request)
+    {
         $validator = \Validator::make(
                         [
                     'email_address' => $request->email_address,
-                    'email_name' => $request->email_name,
-                    'password' => $request->password,
+                    'email_name'    => $request->email_name,
+                    'password'      => $request->password,
                         ], [
                     'email_address' => 'email',
-                    'email_name' => 'required',
-                    'password' => 'required',
+                    'email_name'    => 'required',
+                    'password'      => 'required',
                         ]
         );
         if ($validator->fails()) {
@@ -256,23 +280,24 @@ class EmailsController extends Controller {
                 $val .= $value;
             }
             $return_data = rtrim(str_replace('.', ',', $val), ',');
+
             return $return_data;
         }
 //        return $request;
-        if ($request->fetching_status == "on") {
+        if ($request->fetching_status == 'on') {
             $imap_check = $this->getImapStream($request);
             if ($imap_check == 0) {
-                return "Incoming email connection failed";
+                return 'Incoming email connection failed';
             }
             $need_to_check_imap = 1;
         } else {
             $imap_check = 0;
             $need_to_check_imap = 0;
         }
-        if ($request->sending_status == "on") {
+        if ($request->sending_status == 'on') {
             $smtp_check = $this->getSmtp($request);
             if ($smtp_check == 0) {
-                return "Outgoing email connection failed";
+                return 'Outgoing email connection failed';
             }
             $need_to_check_smtp = 1;
         } else {
@@ -301,28 +326,32 @@ class EmailsController extends Controller {
                 $return = 1;
             }
         }
+
         return $return;
     }
 
     /**
      * Update the specified resource in storage.
+     *
      * @param type                   $id
      * @param type Emails            $email
      * @param type EmailsEditRequest $request
+     *
      * @return type Response
      */
-    public function update($id, $request) {
+    public function update($id, $request)
+    {
         try {
             // fetch the selected emails
             $emails = Emails::whereId($id)->first();
             // insert all the requested parameters with except
             $emails->fill($request->except('password', 'department', 'priority', 'help_topic', 'fetching_status', 'sending_status'))->save();
-            if ($request->fetching_status == "on") {
+            if ($request->fetching_status == 'on') {
                 $emails->fetching_status = 1;
             } else {
                 $emails->fetching_status = 0;
             }
-            if ($request->sending_status == "on") {
+            if ($request->sending_status == 'on') {
                 $emails->sending_status = 1;
             } else {
                 $emails->sending_status = 0;
@@ -342,16 +371,20 @@ class EmailsController extends Controller {
             // returns if try fails
             $return = $e->getMessage();
         }
+
         return $return;
     }
 
     /**
      * Remove the specified resource from storage.
+     *
      * @param type int    $id
      * @param type Emails $email
+     *
      * @return type Redirect
      */
-    public function destroy($id, Emails $email) {
+    public function destroy($id, Emails $email)
+    {
         // fetching the details on the basis of the $id passed to the function
         $default_system_email = Email::where('id', '=', '1')->first();
         if ($default_system_email->sys_email) {
@@ -376,24 +409,27 @@ class EmailsController extends Controller {
     }
 
     /**
-     * Create imap connection
+     * Create imap connection.
+     *
      * @param type $request
+     *
      * @return type int
      */
-    public function getImapStream($request) {
+    public function getImapStream($request)
+    {
         $fetching_status = $request->input('fetching_status');
         $username = $request->input('email_address');
         $password = $request->input('password');
         $protocol_id = $request->input('mailbox_protocol');
-        $fetching_protocol = "/" . $request->input('fetching_protocol');
-        $fetching_encryption = "/" . $request->input('fetching_encryption');
+        $fetching_protocol = '/'.$request->input('fetching_protocol');
+        $fetching_encryption = '/'.$request->input('fetching_encryption');
         if ($fetching_encryption == 'none') {
             $fetching_encryption = 'novalidate-cert';
         }
-        $mailbox_protocol = $fetching_protocol . $fetching_encryption;
+        $mailbox_protocol = $fetching_protocol.$fetching_encryption;
         $host = $request->input('fetching_host');
         $port = $request->input('fetching_port');
-        $mailbox = '{' . $host . ':' . $port . $mailbox_protocol . '}INBOX';
+        $mailbox = '{'.$host.':'.$port.$mailbox_protocol.'}INBOX';
         try {
             $imap_stream = imap_open($mailbox, $username, $password);
         } catch (\Exception $ex) {
@@ -405,30 +441,38 @@ class EmailsController extends Controller {
         } else {
             $return = 0;
         }
+
         return $return;
     }
 
     /**
-     * Check connection
+     * Check connection.
+     *
      * @param type $imap_stream
+     *
      * @return type int
      */
-    public function checkImapStream($imap_stream) {
+    public function checkImapStream($imap_stream)
+    {
         $check_imap_stream = imap_check($imap_stream);
         if ($check_imap_stream) {
             $imap_stream = 1;
         } else {
             $imap_stream = 0;
         }
+
         return $imap_stream;
     }
 
     /**
-     * Get smtp connection
+     * Get smtp connection.
+     *
      * @param type $request
+     *
      * @return int
      */
-    public function getSmtp($request) {
+    public function getSmtp($request)
+    {
         $sending_status = $request->input('sending_status');
         $mail = new \PHPMailer();
         $mail->isSMTP();
@@ -444,49 +488,61 @@ class EmailsController extends Controller {
         } else {
             $return = 0;
         }
+
         return $return;
     }
 
     /**
-     * Checking if department value is null
+     * Checking if department value is null.
+     *
      * @param type $dept
+     *
      * @return type string or null
      */
-    public function departmentValue($dept) {
+    public function departmentValue($dept)
+    {
         if ($dept) {
             $email_department = $dept;
         } else {
             $email_department = null;
         }
+
         return $email_department;
     }
 
     /**
-     * Checking if priority value is null
+     * Checking if priority value is null.
+     *
      * @param type $priority
+     *
      * @return type string or null
      */
-    public function priorityValue($priority) {
+    public function priorityValue($priority)
+    {
         if ($priority) {
             $email_priority = $priority;
         } else {
             $email_priority = null;
         }
+
         return $email_priority;
     }
 
     /**
-     * Checking if helptopic value is null
+     * Checking if helptopic value is null.
+     *
      * @param type $help_topic
+     *
      * @return type string or null
      */
-    public function helpTopicValue($help_topic) {
+    public function helpTopicValue($help_topic)
+    {
         if ($help_topic) {
             $email_help_topic = $help_topic;
         } else {
             $email_help_topic = null;
         }
+
         return $email_help_topic;
     }
-
 }
