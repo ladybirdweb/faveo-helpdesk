@@ -240,7 +240,7 @@ class="active"
                 $('.yes').html("{{Lang::get('lang.ok')}}");
                 $('#myModalLabel').html("{{Lang::get('lang.alert')}}");
             } else {
-                $('.yes').html("yes");
+                $('.yes').html("Yes");
             }
             $('#custom-alert-body').html(msg);
             $("#myModal").css("display", "block");
