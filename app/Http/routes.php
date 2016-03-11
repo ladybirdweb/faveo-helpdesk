@@ -180,6 +180,9 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
     Route::get('delete-language/{lang}', ['as' => 'lang.delete', 'uses' => 'Admin\helpdesk\LanguageController@deleteLanguage']);
 
     Route::get('generate-api-key', 'Admin\helpdesk\SettingsController@GenerateApiKey'); // route to generate api key
+
+    Route::post('validating-email-settings', ['as' => 'validating.email.settings', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettings']); // route to check email input validation
+    Route::post('validating-email-settings-on-update/{id}', ['as' => 'validating.email.settings.update', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettingsUpdate']); // route to check email input validation
 });
 
 /*
@@ -354,7 +357,7 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
     Route::get('/get-parent-tickets/{id}', ['as' => 'get.parent.ticket', 'uses' => 'Agent\helpdesk\TicketController@getParentTickets']);
 
-    Route::patch('/merge-tickets/{id}', 'Agent\helpdesk\TicketController@mergeTickets');
+    Route::patch('/merge-tickets/{id}', ['as' => 'merge.tickets', 'uses' => 'Agent\helpdesk\TicketController@mergeTickets']);
 
 });
 
@@ -633,8 +636,8 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::get('customer', 'Api\v1\ApiController@getCustomer');
         Route::get('ticket-search', 'Api\v1\ApiController@searchTicket');
         Route::get('ticket-thread', 'Api\v1\ApiController@ticketThreads');
-        Route::get('url', 'Api\v1\ApiController@checkUrl');
-        Route::get('check-url', 'Api\v1\ApiController@urlResult');
+        Route::get('url', 'Api\v1\ApiExceptAuthController@checkUrl');
+        Route::get('check-url', 'Api\v1\ApiExceptAuthController@urlResult');
         Route::get('api_key', 'Api\v1\ApiController@generateApiKey');
         Route::get('help-topic', 'Api\v1\ApiController@getHelpTopic');
         Route::get('sla-plan', 'Api\v1\ApiController@getSlaPlan');
@@ -688,7 +691,7 @@ Route::group(['prefix' => 'api/v1'], function () {
     /*
     * Newly added
     */
-    Route::get('customers-custom', 'Api\v1\TestController@getCustomersWith');
+    Route::get('ticket/customers-custom', 'Api\v1\TestController@getCustomersWith');
 
     Route::get('generate/token', 'Api\v1\TestController@generateToken');
     Route::get('get/user', 'Api\v1\TestController@getAuthUser');

@@ -64,6 +64,7 @@ class ClientTicketController extends Controller
             $tickets->closed = 0;
             $tickets->reopened_at = date('Y-m-d H:i:s');
             $tickets->reopened = 1;
+            $tickets->isanswered = 0;
             $threads = new Ticket_Thread();
             $threads->user_id = Auth::user()->id;
             $threads->ticket_id = $tickets->id;

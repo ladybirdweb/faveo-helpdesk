@@ -113,7 +113,7 @@ active
                 </button>
                 <ul class="dropdown-menu pull-right">
                     <li data-toggle="modal" data-target="#ChangeOwner"><a href="#"><i class="fa fa-users" style="color:green;"> </i>Change Owner</a></li>
-                     <li data-toggle="modal" data-target="#MergeTickets"><a href="#"><i class="fa fa-chain" style="color:teal;"> </i>{!! Lang::get('lang.merge-ticket') !!}</a></li>
+                     <li data-toggle="modal" data-target="#MergeTickets"><a href="#"><i class="fa fa-code-fork" style="color:teal;"> </i>{!! Lang::get('lang.merge-ticket') !!}</a></li>
                     <?php if ($group->can_delete_ticket == 1) {?>
                     <li id="delete"><a href="#"><i class="fa fa-trash-o" style="color:red;"> </i>{!! Lang::get('lang.delete_ticket') !!}</a></li>
                     <?php }
@@ -1163,12 +1163,12 @@ $count_teams = count($teams);
                             <div class="row">
                                 <div class="col-md-12">
                                     <div id="merge-succ-alert" class="alert alert-success alert-dismissable" style="display:none;" >
-                                        <button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <!-- <button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
                                         <h4><i class="icon fa fa-check"></i>Alert!</h4>
                                         <div id="message-merge-succ"></div>
                                     </div>
                                     <div id="merge-err-alert" class="alert alert-danger alert-dismissable" style="display:none;">
-                                        <button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <!-- <button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> -->
                                         <h4><i class="icon fa fa-ban"></i>Alert!</h4>
                                         <div id="message-merge-err"></div>
                                     </div>
@@ -1803,6 +1803,7 @@ jQuery(document).ready(function() {
                 success: function(response) {
                     if(response == 0) {
                         $("#merge_body").show();
+                        $("#merge-succ-alert").hide();
                         $("#merge-body-alert").show();
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
@@ -1848,6 +1849,7 @@ jQuery(document).ready(function() {
                     success: function(response) {
                         if(response == 0) {
                             $("#merge_body").show();
+                            $("#merge-succ-alert").hide();
                             $("#merge-body-alert").show();
                             $("#merge-body-form").hide();
                             $("#merge_loader").hide();
@@ -1858,6 +1860,7 @@ jQuery(document).ready(function() {
                     
                         } else if(response == 2) {
                             $("#merge_body").show();
+                            $("#merge-succ-alert").hide();
                             $("#merge-body-alert").show();
                             $("#merge-body-form").hide();
                             $("#merge_loader").hide();
@@ -1868,6 +1871,7 @@ jQuery(document).ready(function() {
 
                         } else {
                             $("#merge_body").show();
+                            $("#merge-err-alert").hide();
                             $("#merge-body-alert").show();
                             $("#merge-body-form").hide();
                             $("#merge_loader").hide();

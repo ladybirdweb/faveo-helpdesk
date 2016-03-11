@@ -203,23 +203,30 @@ class InstallController extends Controller
         $port = Input::get('port');
 
         // Setting environment values
-        $ENV['APP_ENV'] = 'local';
-        $ENV['APP_DEBUG'] = 'false';
-        $ENV['APP_KEY'] = 'SomeRandomString';
-        $ENV['DB_TYPE'] = $default;
-        $ENV['DB_HOST'] = $host;
-        $ENV['DB_PORT'] = $port;
-        $ENV['DB_DATABASE'] = $database;
-        $ENV['DB_USERNAME'] = $dbusername;
-        $ENV['DB_PASSWORD'] = $dbpassword;
-        $ENV['MAIL_DRIVER'] = 'smtp';
-        $ENV['MAIL_HOST'] = 'mailtrap.io';
-        $ENV['MAIL_PORT'] = '2525';
-        $ENV['MAIL_USERNAME'] = 'null';
-        $ENV['MAIL_PASSWORD'] = 'null';
-        $ENV['CACHE_DRIVER'] = 'file';
-        $ENV['SESSION_DRIVER'] = 'file';
-        $ENV['QUEUE_DRIVER'] = 'sync';
+        // $_ENV['DB_TYPE'] = $default;
+        // $_ENV['DB_HOST'] = $host;
+        // $_ENV['DB_PORT'] = $port;
+        // $_ENV['DB_DATABASE'] = $database;
+        // $_ENV['DB_USERNAME'] = $dbusername;
+        // $_ENV['DB_PASSWORD'] = $dbpassword;
+
+                $ENV['APP_ENV'] = 'local';
+                $ENV['APP_DEBUG'] = 'false';
+                $ENV['APP_KEY'] = 'SomeRandomString';
+                $ENV['DB_TYPE'] = $default;
+                $ENV['DB_HOST'] = $host;
+                $ENV['DB_PORT'] = $port;
+                $ENV['DB_DATABASE'] = $database;
+                $ENV['DB_USERNAME'] = $dbusername;
+                $ENV['DB_PASSWORD'] = $dbpassword;
+                $ENV['MAIL_DRIVER'] = 'smtp';
+                $ENV['MAIL_HOST'] = 'mailtrap.io';
+                $ENV['MAIL_PORT'] = '2525';
+                $ENV['MAIL_USERNAME'] = 'null';
+                $ENV['MAIL_PASSWORD'] = 'null';
+                $ENV['CACHE_DRIVER'] = 'file';
+                $ENV['SESSION_DRIVER'] = 'file';
+                $ENV['QUEUE_DRIVER'] = 'sync';
 
         $config = '';
         foreach ($ENV as $key => $val) {

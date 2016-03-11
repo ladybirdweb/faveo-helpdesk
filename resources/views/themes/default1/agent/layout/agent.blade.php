@@ -34,7 +34,7 @@
 
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
-         <!-- Select2 -->
+        <!-- Select2 -->
         <link rel="stylesheet" href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}">
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -177,13 +177,13 @@ $i = count($tickets);
                                                 <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green"><?php echo $i;?></small>                                            </a>
                                         </li>
                                         <li @yield('myticket')>
-                                             <a href="{{url('ticket/myticket')}}">
+                                             <a href="{{url('ticket/myticket')}}" id="load-myticket">
                                                 <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!} </span>
                                                 <small class="label pull-right bg-green">{{count($myticket) }}</small>
                                             </a>
                                         </li>
                                         <li @yield('unassigned')>
-                                            <a href="{{url('unassigned')}}">
+                                            <a href="{{url('unassigned')}}" id="load-unassigned">
                                                 <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
                                                 <small class="label pull-right bg-green">{{count($unassigned)}}</small>
                                             </a>
@@ -262,12 +262,12 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                                         </div>
                                         <div class="tabs-pane @yield('ticket-bar')" id="tabC">
                                             <ul class="nav navbar-nav">
-                                                <li id="bar" @yield('open')><a href="{{ url('/ticket/open') }}" >{!! Lang::get('lang.open') !!}</a></li>
-                                                <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered') }}" >{!! Lang::get('lang.answered') !!}</a></li>
+                                                <li id="bar" @yield('open')><a href="{{ url('/ticket/open') }}" id="load-open">{!! Lang::get('lang.open') !!}</a></li>
+                                                <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered') }}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
                                                 <li id="bar" @yield('myticket')><a href="{{ url('/ticket/myticket') }}" >{!! Lang::get('lang.my_tickets') !!}</a></li>
                                                 {{-- <li id="bar" @yield('ticket')><a href="{{ url('ticket') }}" >Ticket</a></li> --}}
                                                 {{-- <li id="bar" @yield('overdue')><a href="{{ url('/ticket/overdue') }}" >Overdue</a></li> --}}
-                                                <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned') }}" >{!! Lang::get('lang.assigned') !!}</a></li>
+                                                <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned') }}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
                                                 <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed') }}" >{!! Lang::get('lang.closed') !!}</a></li>
                                                 <?php if ($group->can_create_ticket == 1) {?>
                                                 <li id="bar" @yield('newticket')><a href="{{ url('/newticket') }}" >{!! Lang::get('lang.create_ticket') !!}</a></li>

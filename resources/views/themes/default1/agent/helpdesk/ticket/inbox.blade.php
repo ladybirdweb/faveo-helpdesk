@@ -42,14 +42,14 @@ class="active"
         </div>
         @endif
     <div class="box-body ">
-    {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
+    {!! Form::open(['id'=>'modalpopup', 'route'=>'select_all','method'=>'post']) !!}
         <div class="mailbox-controls">
             <!-- Check all button -->
             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
             {{-- <a class="btn btn-default btn-sm" id="click"><i class="fa fa-refresh"></i></a> --}}
-            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
-            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
-            <button type="button" class="btn btn-sm btn-default text-yellow" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-chain"> </i> {!! Lang::get('lang.merge') !!}</button>
+            <input type="submit" class="submit btn btn-default text-orange btn-sm" id="delete" name="submit" value="{!! Lang::get('lang.delete') !!}">
+            <input type="submit" class="submit btn btn-default text-yellow btn-sm" id="close" name="submit" value="{!! Lang::get('lang.close') !!}">
+            <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
            
         </div>
         <div class="mailbox-messages" id="refresh">
@@ -95,12 +95,12 @@ class="active"
                             <div class="row">
                                 <div class="col-md-12">
                                     <div id="merge-succ-alert" class="alert alert-success alert-dismissable" style="display:none;" >
-                                        <button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <!--<button id="dismiss-merge" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
                                         <h4><i class="icon fa fa-check"></i>Alert!</h4>
                                         <div id="message-merge-succ"></div>
                                     </div>
                                     <div id="merge-err-alert" class="alert alert-danger alert-dismissable" style="display:none;">
-                                        <button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <!--<button id="dismiss-merge2" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>-->
                                         <h4><i class="icon fa fa-ban"></i>Alert!</h4>
                                         <div id="message-merge-err"></div>
                                     </div>
@@ -139,23 +139,45 @@ class="active"
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+   <!-- Modal -->   
+                <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none; padding-right: 15px;background-color: rgba(0, 0, 0, 0.7);">
+                    <div class="modal-dialog" role="document">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    <h4 class="modal-title" id="myModalLabel"></h4>
+                                </div>
+                                <div class="modal-body" id="custom-alert-body" >
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary pull-left yes" data-dismiss="modal">{{Lang::get('lang.ok')}}</button>
+                                    <button type="button" class="btn btn-default no">{{Lang::get('lang.cancel')}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
 <script>
     var t_id =[];
-      $(function () {
+    var option = null;
+    $(function () {
         //Enable check and uncheck all functionality
         $(".checkbox-toggle").click(function () {
-          var clicks = $(this).data('clicks');
-          if (clicks) {
+            var clicks = $(this).data('clicks');
+            if (clicks) {
             //Uncheck all checkboxes
-            $(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
-            $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
-          } else {
-            //Check all checkboxes
-            $(".mailbox-messages input[type='checkbox']").iCheck("check");
-            $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
-          }          
-          $(this).data("clicks", !clicks);
+                $(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
+                $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
+            } else {
+                //Check all checkboxes
+                $(".mailbox-messages input[type='checkbox']").iCheck("check");
+                $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
+            }          
+            $(this).data("clicks", !clicks);
         });
       });
 
@@ -167,13 +189,24 @@ class="active"
             if (clicks) {
                 //Uncheck all checkboxes
                 $("input[type='checkbox']", ".mailbox-messages").iCheck("uncheck");
+                // alert($("input[type='checkbox']").val());
+                t_id = $('.selectval').map(function() {
+                    return $(this).val();
+                }).get();
+                // alert(checkboxValues);
             } else {
                 //Check all checkboxes
                 $("input[type='checkbox']", ".mailbox-messages").iCheck("check");
+                // alert('Hallo');
+                t_id = [];
             }
             $(this).data("clicks", !clicks);
+
         });
+
+
     });
+
 
     $(document).ready(function() { /// Wait till page is loaded
         $('#click').click(function() {
@@ -184,13 +217,77 @@ class="active"
         });
 
         $(".select2").select2();
-//checking merging tickets
+
+        $('#delete').on('click', function(){
+            option = 0;
+            $('#myModalLabel').html("{{Lang::get('lang.delete-tickets')}}");
+        });
+
+        $('#close').on('click', function(){
+            option = 1;
+            $('#myModalLabel').html("{{Lang::get('lang.close-tickets')}}");
+        });
+
+         $("#modalpopup").on('submit', function(e){
+            e.preventDefault();
+            var msg ="{{Lang::get('lang.confirm')}}";
+            var values = getValues();
+            if(values == ""){
+                msg = "{{Lang::get('lang.select-ticket')}}";
+                $('.yes').html("{{Lang::get('lang.ok')}}");
+                $('#myModalLabel').html("{{Lang::get('lang.alert')}}");
+            } else {
+                $('.yes').html("Yes");
+            }
+            $('#custom-alert-body').html(msg);
+            $("#myModal").css("display", "block");
+        });
+        
+        $(".closemodal, .no").click(function(){
+
+            $("#myModal").css("display", "none");
+
+        });
+        
+        $(".closemodal, .no").click(function(){
+
+            $("#myModal").css("display", "none");
+
+        });
+
+        $('.yes').click(function(){
+            var values = getValues();
+            if(values == ""){
+                $("#myModal").css("display", "none");
+            } else {
+                $("#myModal").css("display", "none");
+                $("#modalpopup").unbind('submit');
+                if (option == 0) {
+                    //alert('delete');
+                    $('#delete').click();
+                } else {
+                    //alert('close');
+                    $('#close').click();
+                }
+            }
+        });
+
+        function getValues(){
+            var values = $('.selectval:checked').map(function() {
+                    return $(this).val();
+                }).get();
+            return values;
+        }
+
+
+
+        //checking merging tickets
         $('#MergeTickets').on('show.bs.modal', function () {
             
             // alert("hi");
             $.ajax({
                 type: "GET",
-                url: "../check-merge-ticket/"+0,
+                url: "{{route('check.merge.tickets',0)}}",
                 dataType: "html",
                 data:{data1: t_id},
                 beforeSend: function() {
@@ -200,6 +297,7 @@ class="active"
                 success: function(response) {
                      if(response == 0) {
                         $("#merge_body").show();
+                        $("#merge-succ-alert").hide();
                         $("#merge-body-alert").show();
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
@@ -209,7 +307,8 @@ class="active"
                         $('#message-merge-err').html(message);  
 
                     }  else if(response == 2) {
-                         $("#merge_body").show();
+                        $("#merge_body").show();
+                        $("#merge-succ-alert").hide();
                         $("#merge-body-alert").show();
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
@@ -226,7 +325,7 @@ class="active"
                         $("#merge-btn").attr('disabled', false);
                         $("#merge_loader").hide();
                         $.ajax({
-                            url: "../get-merge-tickets/"+0,
+                            url: "{{ route('get.merge.tickets',0) }}",
                             dataType: "html",
                             data:{data1: t_id},
                             success: function(data) {
@@ -241,11 +340,11 @@ class="active"
             });
         });
 
-            //submit merging form
-    $('#merge-form').on('submit', function(){
-        $.ajax({
+        //submit merging form
+        $('#merge-form').on('submit', function(){
+            $.ajax({
                 type: "POST",
-                url: "../merge-tickets/"+t_id,
+                url: "{!! url('merge-tickets/') !!}/"+t_id,
                 dataType: "json",
                 data: $(this).serialize(),
                 beforeSend: function() {
@@ -256,6 +355,7 @@ class="active"
                 success: function(response) {
                     if(response == 0) {
                         $("#merge_body").show();
+                        $("#merge-succ-alert").hide();
                         $("#merge-body-alert").show();
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
@@ -266,6 +366,7 @@ class="active"
                     
                     } else {
                         $("#merge_body").show();
+                        $("#merge-err-alert").hide();
                         $("#merge-body-alert").show();
                         $("#merge-body-form").hide();
                         $("#merge_loader").hide();
@@ -289,12 +390,7 @@ class="active"
             })
             return false;
 
-    });
-
-
-
-
-    
+        });
     });
 
 

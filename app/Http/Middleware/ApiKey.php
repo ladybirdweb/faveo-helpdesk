@@ -26,19 +26,34 @@ class ApiKey
     public function handle($request, Closure $next)
     {
         $set = $this->setting->where('id', '1')->first();
-        if ($set->api_enable == 1) {
-            $key = $set->api_key;
-            if ($key == $request->input('api_key')) {
-                return $next($request);
+        if ($set->api_key_mandatory == 1) {
+            if ($set->api_enable == 1) {
+                $key = $set->api_key;
+                $check = $this->test($key, $request->input('api_key'));
+                if ($check == '1') {
+                    return $next($request);
+                }
+                if ($check == '0') {
+                    $result = 'wrong api key';
+
+                    return response()->json(compact('result'));
+                }
             } else {
-                $result = 'wrong api key';
+                $result = 'please enable api';
 
                 return response()->json(compact('result'));
             }
         } else {
-            $result = 'please enable api';
+            return $next($request);
+        }
+    }
 
-            return response()->json(compact('result'));
+    public function test($v1, $v2)
+    {
+        if ($v1 == $v2) {
+            return '1';
+        } else {
+            return '0';
         }
     }
 }
