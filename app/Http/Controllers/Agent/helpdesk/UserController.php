@@ -38,6 +38,7 @@ class UserController extends Controller
      * 1. authentication
      * 2. user roles
      * 3. roles must be agent.
+     *
      * @return void
      */
     public function __construct()
@@ -50,7 +51,9 @@ class UserController extends Controller
 
     /**
      * Display all list of the users.
+     *
      * @param type User $user
+     *
      * @return type view
      */
     public function index()
@@ -65,6 +68,7 @@ class UserController extends Controller
 
     /**
      * This function is used to display the list of users using chumper datatables.
+     *
      * @return datatable
      */
     public function user_list()
@@ -81,14 +85,14 @@ class UserController extends Controller
                                 $username = substr($model->user_name, 0, 30);
                                 $username = substr($username, 0, strrpos($username, ' ')).' ...';
                             } else {
-                                $username = "<a href='".route('user.edit', $model->id)."'>".$model->user_name."</a>";
+                                $username = "<a href='".route('user.edit', $model->id)."'>".$model->user_name.'</a>';
                             }
 
                             return $username;
                         })
                         /* column email */
                         ->addColumn('email', function ($model) {
-                            $email = "<a href='".route('user.edit', $model->id)."'>".$model->email."</a>";
+                            $email = "<a href='".route('user.edit', $model->id)."'>".$model->email.'</a>';
 
                             return $email;
                         })
@@ -143,6 +147,7 @@ class UserController extends Controller
 
     /**
      * Show the form for creating a new users.
+     *
      * @return type view
      */
     public function create()
@@ -156,8 +161,10 @@ class UserController extends Controller
 
     /**
      * Store a newly created users in storage.
+     *
      * @param type User            $user
      * @param type Sys_userRequest $request
+     *
      * @return type redirect
      */
     public function store(User $user, Sys_userRequest $request)
@@ -184,8 +191,10 @@ class UserController extends Controller
 
     /**
      * Display the specified users.
+     *
      * @param type int  $id
      * @param type User $user
+     *
      * @return type view
      */
     public function show($id, User $user)
@@ -202,8 +211,10 @@ class UserController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     *
      * @param type int  $id
      * @param type User $user
+     *
      * @return type Response
      */
     public function edit($id, User $user)
@@ -220,9 +231,11 @@ class UserController extends Controller
 
     /**
      * Update the specified user in storage.
+     *
      * @param type int            $id
      * @param type User           $user
      * @param type Sys_userUpdate $request
+     *
      * @return type Response
      */
     public function update($id, User $user, Sys_userUpdate $request)
@@ -243,6 +256,7 @@ class UserController extends Controller
 
     /**
      * get agent profile page.
+     *
      * @return type view
      */
     public function getProfile()
@@ -257,6 +271,7 @@ class UserController extends Controller
 
     /**
      * get profile edit page.
+     *
      * @return type view
      */
     public function getProfileedit()
@@ -271,8 +286,10 @@ class UserController extends Controller
 
     /**
      * post profile edit.
+     *
      * @param type int            $id
      * @param type ProfileRequest $request
+     *
      * @return type Redirect
      */
     public function postProfileedit(ProfileRequest $request)
@@ -321,8 +338,10 @@ class UserController extends Controller
 
     /**
      * Post profile password.
+     *
      * @param type int             $id
      * @param type ProfilePassword $request
+     *
      * @return type Redirect
      */
     public function postProfilePassword($id, ProfilePassword $request)
@@ -334,6 +353,7 @@ class UserController extends Controller
             $user->password = Hash::make($request->input('new_password'));
             try {
                 $user->save();
+
                 return redirect('profile-edit')->with('success1', 'Password Updated sucessfully');
             } catch (Exception $e) {
                 return redirect('profile-edit')->with('fails', $e->errorInfo[2]);
@@ -345,7 +365,9 @@ class UserController extends Controller
 
     /**
      * Assigning an user to an organization.
+     *
      * @param type $id
+     *
      * @return type boolean
      */
     public function UserAssignOrg($id)
@@ -355,12 +377,15 @@ class UserController extends Controller
         $user_org->org_id = $org;
         $user_org->user_id = $id;
         $user_org->save();
+
         return 1;
     }
 
     /**
      * creating an organization in user profile page via modal popup.
+     *
      * @param type $id
+     *
      * @return type
      */
     public function User_Create_Org($id)
