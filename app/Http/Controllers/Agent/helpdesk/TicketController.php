@@ -768,7 +768,7 @@ class TicketController extends Controller
                 return Redirect('newticket')->with('fails', 'fails');
             }
         } catch (Exception $e) {
-            dd($e);
+            // dd($e);
 
             return Redirect()->back()->with('fails', '<li>'.$e->errorInfo.'</li>');
         }
