@@ -47,13 +47,13 @@ class="active"
         @endif
     <div class="box-body">
         
-    {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
+    {!! Form::open(['id'=>'modalpopup', 'route'=>'select_all','method'=>'post']) !!}
 
         <div class="mailbox-controls">
             <!-- Check all button -->
             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
-            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
+            <input type="submit" class="submit btn btn-default text-orange btn-sm" id="delete" name="submit" value="{!! Lang::get('lang.delete') !!}">
+            <input type="submit" class="submit btn btn-default text-yellow btn-sm" id="close" name="submit" value="{!! Lang::get('lang.close') !!}">
             <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
         </div>
         <div class="mailbox-messages"  id="refresh">
@@ -145,8 +145,31 @@ class="active"
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+<!-- Modal -->   
+                <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none; padding-right: 15px;background-color: rgba(0, 0, 0, 0.7);">
+                    <div class="modal-dialog" role="document">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    <h4 class="modal-title" id="myModalLabel"></h4>
+                                </div>
+                                <div class="modal-body" id="custom-alert-body" >
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary pull-left yes" data-dismiss="modal">{{Lang::get('lang.ok')}}</button>
+                                    <button type="button" class="btn btn-default no">{{Lang::get('lang.cancel')}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
 <script>
     var t_id =[];
+    var option = null;
     $(function () {
         //Enable check and uncheck all functionality
         $(".checkbox-toggle").click(function () {
@@ -201,7 +224,60 @@ class="active"
 
         $(".select2").select2();
 
+        $('#delete').on('click', function(){
+            option = 0;
+            $('#myModalLabel').html("{{Lang::get('lang.delete-tickets')}}");
+        });
 
+        $('#close').on('click', function(){
+            option = 1;
+            $('#myModalLabel').html("{{Lang::get('lang.close-tickets')}}");
+        });
+
+         $("#modalpopup").on('submit', function(e){
+            e.preventDefault();
+            var msg ="{{Lang::get('lang.confirm')}}";
+            var values = getValues();
+            if(values == ""){
+                msg = "{{Lang::get('lang.select-ticket')}}";
+                $('.yes').html("{{Lang::get('lang.ok')}}");
+                $('#myModalLabel').html("{{Lang::get('lang.alert')}}");
+            } else {
+                $('.yes').html("yes");
+            }
+            $('#custom-alert-body').html(msg);
+            $("#myModal").css("display", "block");
+        });
+        
+        $(".closemodal, .no").click(function(){
+
+            $("#myModal").css("display", "none");
+
+        });
+
+        $('.yes').click(function(){
+            var values = getValues();
+            if(values == ""){
+                $("#myModal").css("display", "none");
+            } else {
+                $("#myModal").css("display", "none");
+                $("#modalpopup").unbind('submit');
+                if (option == 0) {
+                    //alert('delete');
+                    $('#delete').click();
+                } else {
+                    //alert('close');
+                    $('#close').click();
+                }
+            }
+        });
+
+        function getValues(){
+            var values = $('.selectval:checked').map(function() {
+                    return $(this).val();
+                }).get();
+            return values;
+        }
 
         //checking merging tickets
         $('#MergeTickets').on('show.bs.modal', function () {
