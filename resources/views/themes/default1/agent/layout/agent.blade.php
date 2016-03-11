@@ -34,7 +34,7 @@
 
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
-         <!-- Select2 -->
+        <!-- Select2 -->
         <link rel="stylesheet" href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}">
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>

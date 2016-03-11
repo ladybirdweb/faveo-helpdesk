@@ -27,8 +27,6 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-
-
 <!-- open a form -->
 <form id="form">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
