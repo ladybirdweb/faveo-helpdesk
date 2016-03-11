@@ -113,7 +113,7 @@ active
                 </button>
                 <ul class="dropdown-menu pull-right">
                     <li data-toggle="modal" data-target="#ChangeOwner"><a href="#"><i class="fa fa-users" style="color:green;"> </i>Change Owner</a></li>
-                     <li data-toggle="modal" data-target="#MergeTickets"><a href="#"><i class="fa fa-chain" style="color:teal;"> </i>{!! Lang::get('lang.merge-ticket') !!}</a></li>
+                     <li data-toggle="modal" data-target="#MergeTickets"><a href="#"><i class="fa fa-code-fork" style="color:teal;"> </i>{!! Lang::get('lang.merge-ticket') !!}</a></li>
                     <?php if ($group->can_delete_ticket == 1) {?>
                     <li id="delete"><a href="#"><i class="fa fa-trash-o" style="color:red;"> </i>{!! Lang::get('lang.delete_ticket') !!}</a></li>
                     <?php }

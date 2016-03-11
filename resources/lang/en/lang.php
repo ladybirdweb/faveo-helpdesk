@@ -454,6 +454,19 @@ return [
     'footer2' => 'Footer2',
     'footer3' => 'Footer3',
     'footer4' => 'Footer4',
+     /*
+      |--------------------------------------
+      |  Custom alert box
+      |--------------------------------------
+     */
+    'ok'                     => 'Ok',
+    'cancel'                 => 'Cancel',
+    'select-ticket'          => 'Please select tickets.',
+    'confirm'                => 'Are you sure?',
+    'delete-tickets'         => 'Delete Tickets',
+    'close-tickets'          => 'Close Tickets',
+    'open-tickets'           => 'Open Tickets',
+
     /*
       |----------------------------------------------------------------------------------------
       | Staff Pages [English(en)]
