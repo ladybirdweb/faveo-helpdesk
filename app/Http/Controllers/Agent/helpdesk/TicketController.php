@@ -2355,7 +2355,8 @@ class TicketController extends Controller
             ['email' => $email,
              'name'  => $name, ],
             ['email' => 'required|email',
-            ]);
+            ]
+        );
         $user = User::where('email', '=', $email)->first();
         $count = count($user);
         if ($count === 1) {

@@ -8,7 +8,7 @@ class="active"
 active
 @stop
 
-<?php 
+<?php
     $user = App\User::where('id', '=', $tickets->user_id)->first();
     $assignedto = App\User::where('id', '=', $tickets->assigned_to)->first();
     $agent_group = Auth::user()->assign_group;
@@ -259,7 +259,6 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                     <div id="message-success2"></div>
                 </div>
                 <div id="alert22" class="alert alert-warning alert-dismissable" style="display:none;">
-                    <button id="dismiss22" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                     <h4><i class="icon fa fa-warning"></i>Alert!</h4>
                     <div id="message-warning2"></div>
                 </div>
@@ -1549,6 +1548,7 @@ jQuery(document).ready(function() {
                         $("#dismis42").trigger("click");
                         // $("#RefreshAssign").load( "../thread/{{$tickets->id}} #RefreshAssign");
                         // $("#General").load( "../thread/{{$tickets->id}} #General");
+                        $("#hide2").load("../thread/{{$tickets->id}}  #hide2");
                         $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                         $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
@@ -1581,6 +1581,7 @@ jQuery(document).ready(function() {
                         $('#add-change-loader').hide();
                         $('#add-change-body').show();
                         $("#close101").trigger("click");
+                        $("#hide2").load("../thread/{{$tickets->id}}  #hide2");
                         $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                         $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
@@ -1876,6 +1877,7 @@ jQuery(document).ready(function() {
                             $("#merge-body-form").hide();
                             $("#merge_loader").hide();
                             $("#merge-btn").attr('disabled', true);
+                            $("#hide2").load("../thread/{{$tickets->id}}  #hide2");
                             $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
                             $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                             $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
@@ -1976,11 +1978,12 @@ function lockAjaxCall(locktime){
                         $('#message-warning2').html(message);
                         $('#replybtn').attr('disabled', true);
                         //setInterval(function(){$("#alert23").hide(); },10000);
-                    } else {
+                    } else if(response == 2) {
                         // alert(response);
                         // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)
                         // +"{{Lang::get('lang.minutes')}}";
                         $("#alert22").hide();
+                        $("#hide2").load("../thread/{{$tickets->id}}  #hide2");
                         $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                         $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
@@ -1989,6 +1992,19 @@ function lockAjaxCall(locktime){
                         // $('#message-success2').html(message);
                         $('#replybtn').attr('disabled', false); 
                         // setInterval(function(){$("#alert21").hide(); },8000);  
+                    } else {
+                        // alert(response);
+                        // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)
+                        // +"{{Lang::get('lang.minutes')}}";
+                        $("#alert22").hide();
+                        $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
+                       // $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
+                        $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
+                        $("#t5").load("../thread/{{$tickets->id}}  #t5");
+                        // $("#alert21").show();
+                        // $('#message-success2').html(message);
+                        $('#replybtn').attr('disabled', false); 
+                        // setInterval(function(){$("#alert21").hide(); },8000); 
                     }
                 }
         })
