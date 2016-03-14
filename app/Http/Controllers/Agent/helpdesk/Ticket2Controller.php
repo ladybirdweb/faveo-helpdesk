@@ -8,36 +8,17 @@ use App\Http\Controllers\Controller;
 // requests
 // models
 use App\Model\helpdesk\Agent\Department;
-use App\Model\helpdesk\Agent\Teams;
-use App\Model\helpdesk\Email\Emails;
-use App\Model\helpdesk\Form\Fields;
-use App\Model\helpdesk\Manage\Help_topic;
-use App\Model\helpdesk\Manage\Sla_plan;
-use App\Model\helpdesk\Settings\Alert;
-use App\Model\helpdesk\Settings\Company;
-use App\Model\helpdesk\Settings\Email;
-use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Model\helpdesk\Ticket\Ticket_Collaborator;
-use App\Model\helpdesk\Ticket\Ticket_Form_Data;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
-use App\Model\helpdesk\Ticket\Ticket_source;
-use App\Model\helpdesk\Ticket\Ticket_Status;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
-use App\Model\helpdesk\Utility\Date_time_format;
-use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Auth;
 use DB;
-use Exception;
 // classes
-use Hash;
 use Illuminate\support\Collection;
 use Input;
-use Lang;
-use Mail;
-use PDF;
 use UTC;
 
 /**
@@ -283,6 +264,7 @@ class Ticket2Controller extends Controller
                         ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
                         ->make();
     }
+
     /**
      * Show the Inbox ticket list page.
      *
@@ -303,19 +285,18 @@ class Ticket2Controller extends Controller
     }
 
     /**
-     *Show the list of In process tickets
+     *Show the list of In process tickets.
+     *
      *@param $id int
      */
-    public function getInProcessTickets($id) 
+    public function getInProcessTickets($id)
     {
-        $dept = Department::where('name','=',$id)->first();
-        if(Auth::user()->role == 'agent') {
-        
-            $tickets = Tickets::where('status','=','1')->where('assigned_to','>', 0)->where('dept_id','=', $id)->get();
+        $dept = Department::where('name', '=', $id)->first();
+        if (Auth::user()->role == 'agent') {
+            $tickets = Tickets::where('status', '=', '1')->where('assigned_to', '>', 0)->where('dept_id', '=', $id)->get();
         } else {
-            $tickets = Tickets::where('status','=','1')->where('assigned_to','>', 0)->where('dept_id','=', $id)->get();
+            $tickets = Tickets::where('status', '=', '1')->where('assigned_to', '>', 0)->where('dept_id', '=', $id)->get();
         }
-
 
         return \Datatable::collection(new Collection($tickets))
                         ->addColumn('id', function ($ticket) {
@@ -400,6 +381,5 @@ class Ticket2Controller extends Controller
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
                         ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
                         ->make();
-
     }
 }
