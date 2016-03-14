@@ -54,7 +54,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-//        $phpmail = new PhpMailController;
+        //        $phpmail = new PhpMailController;
 //        if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
 //            return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
 //        } elseif ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
