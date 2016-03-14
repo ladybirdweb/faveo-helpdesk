@@ -907,6 +907,8 @@ class TicketController extends Controller
             $ticket->help_topic_id = Input::get('help_topic');
             $ticket->source = Input::get('ticket_source');
             $ticket->priority_id = Input::get('ticket_priority');
+            $dept   = Help_topic::select('department')->where('id', '=', $ticket->help_topic_id)->first();
+            $ticket->dept_id = $dept->department;
             $ticket->save();
 
             $threads = $thread->where('ticket_id', '=', $ticket_id)->first();

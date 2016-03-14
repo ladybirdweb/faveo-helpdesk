@@ -155,14 +155,14 @@ if ($company != null) {
                                     {{-- </form> --}}
                                     <!-- /.search form -->
                                     <!-- sidebar menu: : style can be found in sidebar.less -->
-                                    <ul class="sidebar-menu">
+                                    <ul id="side-bar" class="sidebar-menu">
                                         @yield('sidebar')
                                         <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
 <?php
 if(Auth::user()->role == 'admin') {
 $inbox = App\Model\helpdesk\Ticket\Tickets::all();
 $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status','1')->get();
-$unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '0')->where('status','1')->get();
+$unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', null)->where('status','1')->get();
 $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->get();
 } elseif(Auth::user()->role == 'agent') {
 $inbox = App\Model\helpdesk\Ticket\Tickets::where('dept_id','',Auth::user()->primary_dpt)->get();
@@ -199,7 +199,7 @@ $i = count($tickets);
 <?php
 $depts = App\Model\helpdesk\Agent\Department::all();
 foreach ($depts as $dept) {
-$open = App\Model\helpdesk\Ticket\Tickets::where('status','=','1')->where('assigned_to','=', 0)->where('dept_id','=',$dept->id)->get();
+$open = App\Model\helpdesk\Ticket\Tickets::where('status','=','1')->where('isanswered', '=', 0)->where('dept_id','=',$dept->id)->get();
 $open = count($open);
 $underprocess = App\Model\helpdesk\Ticket\Tickets::where('status','=','1')->where('assigned_to','>', 0)->where('dept_id','=',$dept->id)->get();
 $underprocess = count($underprocess);
