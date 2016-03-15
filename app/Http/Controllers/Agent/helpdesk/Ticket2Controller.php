@@ -177,7 +177,7 @@ class Ticket2Controller extends Controller
             $tickets = Tickets::where('status', '=', '2')->where('dept_id', '=', $id)->get();
         } else {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
-            $tickets = Tickets::where('status', '=', '2')->where('dept_id', '=', $id)->get();
+            $tickets = Tickets::where('status', '=', '2')->where('dept_id', '=', $dept->id)->get();
         }
 
         return \Datatable::collection(new Collection($tickets))
@@ -291,11 +291,11 @@ class Ticket2Controller extends Controller
      */
     public function getInProcessTickets($id)
     {
-        $dept = Department::where('name', '=', $id)->first();
-        if (Auth::user()->role == 'agent') {
+        if (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('status', '=', '1')->where('assigned_to', '>', 0)->where('dept_id', '=', $id)->get();
         } else {
-            $tickets = Tickets::where('status', '=', '1')->where('assigned_to', '>', 0)->where('dept_id', '=', $id)->get();
+            $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
+            $tickets = Tickets::where('status', '=', '1')->where('assigned_to', '>', 0)->where('dept_id', '=', $dept->id)->get();
         }
 
         return \Datatable::collection(new Collection($tickets))
