@@ -18,10 +18,9 @@ return [
       |   Error
       |--------------------------------------
      */
-    'success'           => 'Success',
-    'fails'             => 'Fails',
-    'alert'             => 'Alert',
-    'invalid-action'    => 'invalid Action',
+    'success' => 'Success',
+    'fails'   => 'Fails',
+    'alert'   => 'Alert',
     /*
       |--------------------------------------
       |   Login Page

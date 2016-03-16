@@ -758,9 +758,6 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
 
             $tickets = Tickets::where('id', '=', $id)->where('dept_id', '=', $dept->id)->first();
-            if ($tickets == null) {
-                return redirect()->back()->with('fails', Lang::get('lang.invalid-action'));
-            }
         } elseif (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('id', '=', $id)->first();
         } elseif (Auth::user()->role == 'user') {
@@ -1844,7 +1841,7 @@ class TicketController extends Controller
             $tickets = Tickets::where('assigned_to', '=', null)->where('status', '1')->get();
         } else {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
-            $tickets = Tickets::where('assigned_to', '=', null)->where('status', '1')->where('dept_id', '=', $dept->id)->get();
+            $tickets = Tickets::where('assigned_to', '=', null)->where('dept_id', '=', $dept->id)->get();
         }
 
         return \Datatable::collection(new Collection($tickets))
