@@ -1,3 +1,8 @@
+var scripts = document.getElementsByTagName("script"),
+file_path = scripts[scripts.length-1].src;
+var pos = file_path.search("plugins");
+var path = file_path.substring(0,pos);
+   //var i = file_path.indexOf("plugins");
 $.fn.dataTable.ext.errMode = 'throw';
 /* Set the defaults for DataTables initialisation */
 $.extend( true, $.fn.dataTable.defaults, {
@@ -7,7 +12,8 @@ $.extend( true, $.fn.dataTable.defaults, {
 		"<'row'<'col-xs-6'i><'col-xs-6'p>>",
 	"oLanguage": {
 		"sLengthMenu": "_MENU_ Records per page",
-		"sSearch"    : "Search: "
+		"sSearch"    : "Search: ",
+		"sProcessing": "<img id='blur-bg' height='80px' width='80px' style='top:50%;left:50%;' src='"+path+"/media/images/gifloader3.gif'>"
 	}
 } );
 
