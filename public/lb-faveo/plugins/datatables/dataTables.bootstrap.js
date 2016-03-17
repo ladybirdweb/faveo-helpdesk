@@ -13,11 +13,19 @@ $.extend( true, $.fn.dataTable.defaults, {
 	"oLanguage": {
 		"sLengthMenu": "_MENU_ Records per page",
 		"sSearch"    : "Search: ",
-		"sProcessing": "<img id='blur-bg' height='80px' width='80px' style='top:50%;left:50%;' src='"+path+"/media/images/gifloader3.gif'>"
-	}
+		"sProcessing": '<img id="blur-bg" class="backgroundfadein" style="top:40%;left:50%; width: 50px; height:50 px; display: block; position: fixed;" src="'+path+'/media/images/gifloader3.gif">'
+	},
+	"fnDrawCallback": function( oSettings ) {
+		$(".box-body").css({"opacity": "1"});
+		$('#blur-bg').css({"opacity": "1", "z-index": "99999"});
+		},
+	 "fnPreDrawCallback": function(oSettings, json) {
+	 	$(".box-body").css({"opacity":"0.4"});
+         }
 } );
 
 
+  
 /* Default class modification */
 $.extend( $.fn.dataTableExt.oStdClasses, {
 	"sWrapper": "dataTables_wrapper form-inline",

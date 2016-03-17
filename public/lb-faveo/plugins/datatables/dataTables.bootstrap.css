@@ -228,15 +228,20 @@ div.dataTables_wrapper div.dataTables_processing{
 	text-align:center;
 	padding:1em 0; 
 	z-index: 9999; 
-	background-color: rgba(0, 0, 0, 0.8)
 }
 
-
+.backgroundfadein{
+	body{
+		opacity: 0.1;
+	}
+}
     
 
 
        /* .first 
         {
+}
+}
   	z-index: 2;
     color: #fff;
     cursor: default;
