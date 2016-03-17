@@ -1316,10 +1316,11 @@ jQuery(document).ready(function() {
                     setInterval(function(){
                         $("#alert11").hide();
                         setTimeout(function() {
-                            var link = document.querySelector('#load-inbox');
-                            if(link) {
-                                link.click();
-                            }
+                            // var link = document.querySelector('#load-inbox');
+                            // if(link) {
+                            //     link.click();
+                            // }
+                            history.go(-1);
                         }, 500);
                     },2000);   
                 }
@@ -1346,10 +1347,11 @@ jQuery(document).ready(function() {
                     $('#message-success1').html(message);
                     setInterval(function(){$("#alert11").hide();
                         setTimeout(function() {
-                            var link = document.querySelector('#load-inbox');
-                            if(link) {
-                                link.click();
-                            }
+                            // var link = document.querySelector('#load-inbox');
+                            // if(link) {
+                            //     link.click();
+                            // }
+                            history.go(-1);
                         }, 500);
                     },2000);   
                 }
@@ -1400,10 +1402,11 @@ jQuery(document).ready(function() {
                     $('#message-success1').html(message);
                     setInterval(function(){$("#alert11").hide(); 
                         setTimeout(function() {
-                            var link = document.querySelector('#load-inbox');
-                            if(link) {
-                                link.click();
-                            }
+                            // var link = document.querySelector('#load-inbox');
+                            // if(link) {
+                            //     link.click();
+                            // }
+                            history.go(-1);
                         }, 500);
                     },2000);   
                 }
