@@ -122,6 +122,7 @@
 							</li>
 						</ul><!-- .navbar-user -->
                         @else
+                        </ul>
 						<ul class="nav navbar-nav navbar-login">
 							<li <?php if($errors->first('email') || $errors->first('password')){ ?> class="sfHover" <?php } else { ?> <?php  } ?> ><a href="#"  data-toggle="collapse"  <?php if($errors->first('email') || $errors->first('password')){ } else { ?> class="collapsed" <?php  } ?> data-target="#login-form">{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a></li>
 						</ul><!-- .navbar-login -->
