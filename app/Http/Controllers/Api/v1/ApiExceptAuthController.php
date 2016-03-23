@@ -13,7 +13,7 @@ class ApiExceptAuthController extends Controller {
 
     public function __construct(Request $request) {
         $this->request = $request;
-        $this->middleware('api');
+        //$this->middleware('api');
     }
 
     /**
