@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin\helpdesk;
 
 // controller
 use App\Http\Controllers\Common\PhpMailController;
-use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Controller;
 // request
 use App\Http\Requests\helpdesk\AgentRequest;
@@ -14,20 +13,16 @@ use App\Model\helpdesk\Agent\Assign_team_agent;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Agent\Groups;
 use App\Model\helpdesk\Agent\Teams;
-use App\Model\helpdesk\Email\Emails;
-use App\Model\helpdesk\Settings\Company;
-use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 // classes
 use DB;
 use Exception;
 use Hash;
-use Mail;
 
 /**
  * AgentController
- * This controller is used to CRUD category.
+ * This controller is used to CRUD Agents.
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
@@ -44,8 +39,8 @@ class AgentController extends Controller
      */
     public function __construct(PhpMailController $PhpMailController)
     {
+        // creating an instance for the PhpmailController
         $this->PhpMailController = $PhpMailController;
-        SettingsController::smtp();
         // checking authentication
         $this->middleware('auth');
         // checking admin roles
@@ -55,84 +50,89 @@ class AgentController extends Controller
     /**
      * Get all agent list page.
      *
-     * @param type User $user
-     *
-     * @return type Response
+     * @return type view
      */
     public function index()
     {
         try {
             return view('themes.default1.admin.helpdesk.agent.agents.index');
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
     /**
      * creating a new agent.
      *
-     * @param type Assign_team_agent $team_assign_agent
-     * @param type Timezones         $timezone
-     * @param type Groups            $group
-     * @param type Department        $department
-     * @param type Teams             $team
+     * @param Assign_team_agent $team_assign_agent
+     * @param Timezones         $timezone
+     * @param Groups            $group
+     * @param Department        $department
+     * @param Teams             $team_all
      *
      * @return type view
      */
-    public function create(Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team)
+    public function create(Timezones $timezone, Groups $group, Department $department, Teams $team_all)
     {
         try {
-            $team = $team->get();
+            // gte all the teams
+            $team = $team_all->get();
+            // get all the timezones
             $timezones = $timezone->get();
+            // get all the groups
             $groups = $group->get();
+            // get all department
             $departments = $department->get();
+            // list all the teams in a single variable
             $teams = $team->lists('id', 'name');
-
+            // returns to the page with all the variables and their datas
             return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            // returns if try fails with exception meaagse
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
     /**
      * store a new agent.
      *
-     * @param type User              $user
-     * @param type AgentRequest      $request
-     * @param type Assign_team_agent $team_assign_agent
+     * @param User              $user
+     * @param AgentRequest      $request
+     * @param Assign_team_agent $team_assign_agent
      *
      * @return type Response
      */
-    public function store(User $user, AgentRequest $request, Assign_team_agent $team_assign_agent)
+    public function store(User $user, AgentRequest $request)
     {
-
-        // dd($this->system_mail());
-
-        /* Insert to user table */
-        $user->role = 'agent';
+        // fixing the user role to agent
         $user->fill($request->input())->save();
-        $password = $this->generateRandomString();
-        $user->password = Hash::make($password);
+        // generate password and has immediately to store
+        $user->password = Hash::make($this->generateRandomString());
+        // fetching all the team details checked for this user
         $requests = $request->input('team_id');
+        // get user id of the inserted user detail
         $id = $user->id;
         // insert team
         foreach ($requests as $req) {
-            // DB::insert('insert into team_assign_agent (team_id, agent_id) values (?,?)', [$req, $id]);
+            // insert all the selected team id to the team and agent relationship table
+            DB::insert('insert into team_assign_agent (team_id, agent_id) values (?,?)', [$req, $id]);
         }
-        /* Succes And Failure condition */
+        // save user credentails
         if ($user->save() == true) {
+            // fetch user credentails to send mail
             $name = $user->user_name;
             $email = $user->email;
-            $system_from = $this->company();
             try {
                 // send mail on registration
                 $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'Password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
             } catch (Exception $e) {
+                // returns if try fails
                 return redirect('agents')->with('fails', 'Some error occured while sending mail to the agent. Please check email settings and try again');
             }
-
+            // returns for the success case
             return redirect('agents')->with('success', 'Agent Created sucessfully');
         } else {
+            // returns if fails
             return redirect('agents')->with('fails', 'Agent can not Create');
         }
     }
@@ -209,9 +209,11 @@ class AgentController extends Controller
     /**
      * Remove the specified agent from storage.
      *
-     * @param type int               $id
-     * @param type User              $user
-     * @param type Assign_team_agent $team_assign_agent
+     * @param type              $id
+     * @param User              $user
+     * @param Assign_team_agent $team_assign_agent
+     *
+     * @throws Exception
      *
      * @return type Response
      */
@@ -230,8 +232,6 @@ class AgentController extends Controller
 
             return redirect('agents')->with('success', 'Agent Deleted sucessfully');
         } catch (\Exception $e) {
-            dd($e->errorInfo);
-
             return redirect('agents')->with('fails', $error);
         }
     }
@@ -241,47 +241,21 @@ class AgentController extends Controller
      *
      * @param type $length
      *
-     * @return type string
+     * @return string
      */
     public function generateRandomString($length = 10)
     {
+        // list of supported characters
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        // character length checked
         $charactersLength = strlen($characters);
+        // creating an empty variable for random string
         $randomString = '';
+        // fetching random string
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
-
+        // return random string
         return $randomString;
     }
-
-    /**
-     * Fetching comapny name to send mail.
-     *
-     * @return type
-     */
-    public function company()
-    {
-        $company = Company::Where('id', '=', '1')->first();
-        if ($company->company_name == null) {
-            $company = 'Support Center';
-        } else {
-            $company = $company->company_name;
-        }
-
-        return $company;
-    }
-
-    /*
-     * System default email
-     */
-    //  public function system_mail() {
-    //  	$emails = Emails::all();
-    //  	$count_emails = $emails->count();
-    //  	if($count_emails > 1) {
-    // dd($emails);
-    //  	}
-    //      $email = Email::where('id', '=', '1')->first();
-    //      return $email->sys_email;
-    //  }
 }

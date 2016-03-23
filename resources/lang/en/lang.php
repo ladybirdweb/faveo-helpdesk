@@ -87,24 +87,34 @@ return [
       |  Emails Create Page
       |--------------------------------------
      */
-    'emails'                  => 'Emails',
-    'incoming_emails'         => 'Incoming Emails',
-    'reuired_authentication'  => 'Reuired Authentication',
-    'fetching_email_via_imap' => 'Fetching Email via IMAP',
-    'create_email'            => 'Create Email',
-    'email_address'           => 'Email Address',
-    'email_name'              => 'Email Name',
-    'help_topic'              => 'Help Topic',
-    'auto_response'           => 'Auto Response',
-    'host_name'               => 'Host Name',
-    'port_number'             => 'Port Number',
-    'mail_box_protocol'       => 'Mail Box Protocol',
-    'authentication_required' => 'Authentication Required',
-    'yes'                     => 'Yes',
-    'no'                      => 'No',
-    'header_spoofing'         => 'Header Spoofing',
-    'allow_for_this_email'    => 'Allow For This Email',
-    'imap_config'             => 'IMAP Configuration',
+    'emails'                         => 'Emails',
+    'incoming_emails'                => 'Incoming Emails',
+    'reuired_authentication'         => 'Reuired Authentication',
+    'fetching_email_via_imap'        => 'Fetching Email via IMAP',
+    'create_email'                   => 'Create Email',
+    'email_address'                  => 'Email Address',
+    'email_name'                     => 'Email Name',
+    'help_topic'                     => 'Help Topic',
+    'auto_response'                  => 'Auto Response',
+    'host_name'                      => 'Host Name',
+    'port_number'                    => 'Port Number',
+    'mail_box_protocol'              => 'Mail Box Protocol',
+    'authentication_required'        => 'Authentication Required',
+    'yes'                            => 'Yes',
+    'no'                             => 'No',
+    'header_spoofing'                => 'Header Spoofing',
+    'allow_for_this_email'           => 'Allow For This Email',
+    'imap_config'                    => 'IMAP Configuration',
+    'email_information_and_settings' => 'Email Information and Settings',
+    'incoming_email_information'     => 'Incoming Email Information',
+    'outgoing_email_information'     => 'Outgoing Email Information',
+    'new_ticket_settings'            => 'New Ticket Settings',
+    'protocol'                       => 'Protocol',
+    'fetching_protocol'              => 'Fetching Protocol',
+    'transfer_protocol'              => 'Transfer Protocol',
+    'from_name'                      => 'From Name',
+    'add_an_email'                   => 'Add an Email',
+    'edit_an_email'                  => 'Edit an Email',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
@@ -203,6 +213,7 @@ return [
     'timezone'              => 'Default Time Zone',
     'api'                   => 'Api',
     'api_key'               => 'Api Key',
+    'api_key_mandatory'     => 'Api key mandatory',
     'api_configurations'    => 'Api Configurations',
     'generate_key'          => 'Generate key',
     /*
@@ -443,6 +454,19 @@ return [
     'footer2' => 'Footer2',
     'footer3' => 'Footer3',
     'footer4' => 'Footer4',
+     /*
+      |--------------------------------------
+      |  Custom alert box
+      |--------------------------------------
+     */
+    'ok'                     => 'Ok',
+    'cancel'                 => 'Cancel',
+    'select-ticket'          => 'Please select tickets.',
+    'confirm'                => 'Are you sure?',
+    'delete-tickets'         => 'Delete Tickets',
+    'close-tickets'          => 'Close Tickets',
+    'open-tickets'           => 'Open Tickets',
+
     /*
       |----------------------------------------------------------------------------------------
       | Staff Pages [English(en)]

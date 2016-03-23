@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Api\v1\ApiController;
 
-class ApiExceptAuthController extends Controller {
-
+class ApiExceptAuthController extends Controller
+{
     public $api_controller;
 
-    public function __construct(Request $request) {
+    public function __construct(Request $request)
+    {
         $this->request = $request;
         //$this->middleware('api');
     }
@@ -21,7 +20,8 @@ class ApiExceptAuthController extends Controller {
      *
      * @return json
      */
-    public function checkUrl() {
+    public function checkUrl()
+    {
         //dd($this->request);
         try {
             $v = \Validator::make($this->request->all(), [
@@ -34,7 +34,7 @@ class ApiExceptAuthController extends Controller {
             }
 
             $url = $this->request->input('url');
-            $url = $url . '/api/v1/helpdesk/check-url';
+            $url = $url.'/api/v1/helpdesk/check-url';
             $result = $this->CallGetApi($url);
 //            dd($result);
             return response()->json(compact('result'));
@@ -43,7 +43,6 @@ class ApiExceptAuthController extends Controller {
 
             return $error;
         } catch (\Symfony\Component\HttpKernel\Exception\HttpException $ex) {
-
             return ['status' => 'fails', 'code' => $ex->getStatusCode()];
         }
     }
@@ -53,9 +52,11 @@ class ApiExceptAuthController extends Controller {
      *
      * @return string
      */
-    public function urlResult() {
+    public function urlResult()
+    {
         try {
             $result = ['status' => 'success'];
+
             return $result;
         } catch (\Symfony\Component\HttpKernel\Exception\HttpException $ex) {
             return ['status' => 'fails', 'code' => $ex->getStatusCode()];
@@ -69,7 +70,8 @@ class ApiExceptAuthController extends Controller {
      *
      * @return type int|string|json
      */
-    public function callGetApi($url) {
+    public function callGetApi($url)
+    {
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -80,6 +82,7 @@ class ApiExceptAuthController extends Controller {
         if (curl_errno($curl)) {
             //echo 'error:' . curl_error($curl);
         }
+
         return $response;
         curl_close($curl);
     }
@@ -92,7 +95,8 @@ class ApiExceptAuthController extends Controller {
      *
      * @return type int|string|json
      */
-    public function callPostApi($url, $data) {
+    public function callPostApi($url, $data)
+    {
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -102,11 +106,10 @@ class ApiExceptAuthController extends Controller {
         $response = curl_exec($curl);
 
         if (curl_errno($curl)) {
-            echo 'error:' . curl_error($curl);
+            echo 'error:'.curl_error($curl);
         }
 
         return $response;
         curl_close($curl);
     }
-
 }

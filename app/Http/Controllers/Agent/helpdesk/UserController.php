@@ -76,7 +76,7 @@ class UserController extends Controller
         // displaying list of users with chumper datatables
         return \Datatable::collection(User::where('role', '!=', 'admin')->where('role', '!=', 'agent')->get())
                         /* searchable column username and email*/
-                        ->searchColumns('user_name', 'email')
+                        ->searchColumns('user_name', 'email', 'phone')
                         /* order column username and email */
                         ->orderColumns('user_name', 'email')
                         /* column username */
@@ -85,14 +85,14 @@ class UserController extends Controller
                                 $username = substr($model->user_name, 0, 30);
                                 $username = substr($username, 0, strrpos($username, ' ')).' ...';
                             } else {
-                                $username = $model->user_name;
+                                $username = "<a href='".route('user.edit', $model->id)."'>".$model->user_name.'</a>';
                             }
 
                             return $username;
                         })
                         /* column email */
                         ->addColumn('email', function ($model) {
-                            $email = $model->email;
+                            $email = "<a href='".route('user.edit', $model->id)."'>".$model->email.'</a>';
 
                             return $email;
                         })
@@ -240,7 +240,6 @@ class UserController extends Controller
      */
     public function update($id, User $user, Sys_userUpdate $request)
     {
-
         /* select the field where id = $id(request Id) */
         $users = $user->whereId($id)->first();
         /* Update the value by selected field  */

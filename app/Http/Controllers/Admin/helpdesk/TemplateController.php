@@ -324,8 +324,12 @@ class TemplateController extends Controller
             return redirect('getdiagno')->with('fails', 'Please provide E-mail address !');
         }
         // sending mail via php mailer
-        $mail = $this->PhpMailController->sendmail($from = 1, $to = ['email' => $email], $message = ['subject' => 'Checking the connection', 'scenario' => 'error-report', 'content' => 'Email Received Successfully'], $template_variables = ['system_error' => 'hello']);
+        $mail = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['email' => $email], $message = ['subject' => 'Checking the connection', 'scenario' => 'error-report', 'content' => 'Email Received Successfully'], $template_variables = ['system_error' => 'hello']);
 
-        return redirect('getdiagno')->with('success', 'Please check your mail. An E-mail has been sent to your E-mail address');
+        if ($mail == null) {
+            return redirect('getdiagno')->with('fails', 'Please check your E-mail settings. Unable to send mails');
+        } else {
+            return redirect('getdiagno')->with('success', 'Please check your mail. An E-mail has been sent to your E-mail address');
+        }
     }
 }

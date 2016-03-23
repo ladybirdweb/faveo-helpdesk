@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<div class="box-header" style="margin-top:-15px;margin-bottom:-15px;"><h3 class="box-title">{!! Lang::get('lang.user_profile') !!}</h3><a href="{{route('user.edit', $users->id)}}" class="btn btn-info btn-sm btn-flat pull-right"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a></div>
+<h1>{!! Lang::get('lang.user_profile') !!} <a href="{{route('user.edit', $users->id)}}" class="btn btn-info btn-sm btn-flat pull-right"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a></h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -26,7 +26,6 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-{{-- style="display:none" --}}
 <!-- success message -->
 	<div id="alert-success" class="alert alert-success alert-dismissable" style="display:none;">
 		<i class="fa  fa-check-circle"> </i> <b> Success <span id="get-success"></span></b>
@@ -165,7 +164,6 @@ $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users
 						                <th>{!! Lang::get('lang.subject') !!}</th>
 						                <th>{!! Lang::get('lang.ticket_id') !!}</th>
 						                <th>{!! Lang::get('lang.priority') !!}</th>
-						                <th>{!! Lang::get('lang.from') !!}</th>
 						                <th>{!! Lang::get('lang.last_replier') !!}</th>
 						                <th>{!! Lang::get('lang.assigned_to') !!}</th>
 						                <th>{!! Lang::get('lang.last_activity') !!}</th>
@@ -220,11 +218,6 @@ $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users
 						                        <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first();?>
 						                        <td class="mailbox-priority"><spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam></td>
 						                        <?php $from = App\User::where('id','=',$ticket->user_id)->first();   ?> 
-						                        @if($from->role == "user")
-						                <td class="mailbox-from" >{!! $from->user_name !!}</td>        
-						                        @else
-						                <td class="mailbox-from" >{!! $from->first_name." ".$from->last_name !!}</td>        
-						                        @endif
 						                <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
 						                <td>{!! $assigned !!}</td>
 						                <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
@@ -288,7 +281,6 @@ $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users
 						                <th>{!! Lang::get('lang.subject') !!}</th>
 						                <th>{!! Lang::get('lang.ticket_id') !!}</th>
 						                <th>{!! Lang::get('lang.priority') !!}</th>
-						                <th>{!! Lang::get('lang.from') !!}</th>
 						                <th>{!! Lang::get('lang.last_replier') !!}</th>
 						                <th>{!! Lang::get('lang.assigned_to') !!}</th>
 						                <th>{!! Lang::get('lang.last_activity') !!}</th>
@@ -342,11 +334,6 @@ $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users
 						                        <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first();?>
 						                        <td class="mailbox-priority"><spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam></td>
 						                        <?php $from = App\User::where('id','=',$ticket->user_id)->first();   ?> 
-						                        @if($from->role == "user")
-						                <td class="mailbox-from" >{!! $from->user_name !!}</td>        
-						                        @else
-						                <td class="mailbox-from" >{!! $from->first_name." ".$from->last_name !!}</td>        
-						                        @endif
 						                <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
 						                <td>{!! $assigned !!}</td>
 						                <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
@@ -413,7 +400,6 @@ $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users
 						              	<th>{!! Lang::get('lang.subject') !!}</th>
 						                <th>{!! Lang::get('lang.ticket_id') !!}</th>
 						                <th>{!! Lang::get('lang.priority') !!}</th>
-						                <th>{!! Lang::get('lang.from') !!}</th>
 						                <th>{!! Lang::get('lang.last_replier') !!}</th>
 						                <th>{!! Lang::get('lang.assigned_to') !!}</th>
 						                <th>{!! Lang::get('lang.last_activity') !!}</th>
@@ -472,11 +458,6 @@ $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users
 						                        <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first();?>
 						                        <td class="mailbox-priority"><spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam></td>
 						                        <?php $from = App\User::where('id','=',$ticket->user_id)->first();   ?> 
-						                        @if($from->role == "user")
-						                <td class="mailbox-from" >{!! $from->user_name !!}</td>        
-						                        @else
-						                <td class="mailbox-from" >{!! $from->first_name." ".$from->last_name !!}</td>        
-						                        @endif
 						                <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
 						                <td>{!! $assigned !!}</td>
 						                <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
@@ -750,6 +731,10 @@ $orgs = App\Model\helpdesk\Agent_panel\Organization::all();
 
 
 </script>
-
+<script>
+    $(function () {
+        $("textarea").wysihtml5();
+    });
+</script>
 @stop
 <!-- /content -->

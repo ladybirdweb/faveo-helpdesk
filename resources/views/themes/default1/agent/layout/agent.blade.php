@@ -34,7 +34,7 @@
 
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
-         <!-- Select2 -->
+        <!-- Select2 -->
         <link rel="stylesheet" href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}">
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -155,14 +155,14 @@ if ($company != null) {
                                     {{-- </form> --}}
                                     <!-- /.search form -->
                                     <!-- sidebar menu: : style can be found in sidebar.less -->
-                                    <ul class="sidebar-menu">
+                                    <ul id="side-bar" class="sidebar-menu">
                                         @yield('sidebar')
                                         <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
 <?php
 if(Auth::user()->role == 'admin') {
 $inbox = App\Model\helpdesk\Ticket\Tickets::all();
 $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status','1')->get();
-$unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '0')->where('status','1')->get();
+$unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', null)->where('status','1')->get();
 $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->get();
 } elseif(Auth::user()->role == 'agent') {
 $inbox = App\Model\helpdesk\Ticket\Tickets::where('dept_id','',Auth::user()->primary_dpt)->get();
@@ -177,13 +177,13 @@ $i = count($tickets);
                                                 <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green"><?php echo $i;?></small>                                            </a>
                                         </li>
                                         <li @yield('myticket')>
-                                             <a href="{{url('ticket/myticket')}}">
+                                             <a href="{{url('ticket/myticket')}}" id="load-myticket">
                                                 <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!} </span>
                                                 <small class="label pull-right bg-green">{{count($myticket) }}</small>
                                             </a>
                                         </li>
                                         <li @yield('unassigned')>
-                                            <a href="{{url('unassigned')}}">
+                                            <a href="{{url('unassigned')}}" id="load-unassigned">
                                                 <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
                                                 <small class="label pull-right bg-green">{{count($unassigned)}}</small>
                                             </a>
@@ -199,7 +199,7 @@ $i = count($tickets);
 <?php
 $depts = App\Model\helpdesk\Agent\Department::all();
 foreach ($depts as $dept) {
-$open = App\Model\helpdesk\Ticket\Tickets::where('status','=','1')->where('assigned_to','=', 0)->where('dept_id','=',$dept->id)->get();
+$open = App\Model\helpdesk\Ticket\Tickets::where('status','=','1')->where('isanswered', '=', 0)->where('dept_id','=',$dept->id)->get();
 $open = count($open);
 $underprocess = App\Model\helpdesk\Ticket\Tickets::where('status','=','1')->where('assigned_to','>', 0)->where('dept_id','=',$dept->id)->get();
 $underprocess = count($underprocess);
@@ -262,12 +262,12 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                                         </div>
                                         <div class="tabs-pane @yield('ticket-bar')" id="tabC">
                                             <ul class="nav navbar-nav">
-                                                <li id="bar" @yield('open')><a href="{{ url('/ticket/open') }}" >{!! Lang::get('lang.open') !!}</a></li>
-                                                <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered') }}" >{!! Lang::get('lang.answered') !!}</a></li>
+                                                <li id="bar" @yield('open')><a href="{{ url('/ticket/open') }}" id="load-open">{!! Lang::get('lang.open') !!}</a></li>
+                                                <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered') }}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
                                                 <li id="bar" @yield('myticket')><a href="{{ url('/ticket/myticket') }}" >{!! Lang::get('lang.my_tickets') !!}</a></li>
                                                 {{-- <li id="bar" @yield('ticket')><a href="{{ url('ticket') }}" >Ticket</a></li> --}}
                                                 {{-- <li id="bar" @yield('overdue')><a href="{{ url('/ticket/overdue') }}" >Overdue</a></li> --}}
-                                                <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned') }}" >{!! Lang::get('lang.assigned') !!}</a></li>
+                                                <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned') }}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
                                                 <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed') }}" >{!! Lang::get('lang.closed') !!}</a></li>
                                                 <?php if ($group->can_create_ticket == 1) {?>
                                                 <li id="bar" @yield('newticket')><a href="{{ url('/newticket') }}" >{!! Lang::get('lang.create_ticket') !!}</a></li>

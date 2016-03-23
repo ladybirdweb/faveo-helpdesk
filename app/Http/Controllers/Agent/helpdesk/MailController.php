@@ -51,137 +51,142 @@ class MailController extends Controller
         if ($settings_email->first()->email_fetching == 1) {
             if ($settings_email->first()->all_emails == 1) {
                 // $helptopic = $this->TicketController->default_helptopic();
-                // $sla = $this->TicketController->default_sla();
+// $sla = $this->TicketController->default_sla();
                 $email = $emails->get();
                 foreach ($email as $e_mail) {
-                    $priority = $e_mail->priority;
-                    $dept = $e_mail->department;
-                    $helptopic = $e_mail->help_topic;
-
-                    if ($priority == null) {
-                        $priority = $ticket->first()->priority;
-                    }
-
-                    if ($dept == null) {
-                        $dept = $system->first()->department;
-                    }
-
-                    if ($helptopic == null) {
-                        $helptopic = $ticket->first()->help_topic;
-                    }
-                    // dd($dept);
-
-                    $get_helptopic = Help_topic::where('id', '=', $helptopic)->first();
-                    $sla = $get_helptopic->sla_plan;
-                    // $dept = $e_mail->department;
-                    $host = $e_mail->fetching_host;
-                    $port = $e_mail->fetching_port;
-                    $protocol = $e_mail->mailbox_protocol;
-                    $get_mailboxprotocol = MailboxProtocol::where('id', '=', $protocol)->first();
-                    $protocol = $get_mailboxprotocol->value;
-                    $imap_config = '{'.$host.':'.$port.$protocol.'}INBOX';
-                    $password = Crypt::decrypt($e_mail->password);
-                    $mailbox = new ImapMailbox($imap_config, $e_mail->email_address, $password, __DIR__);
-                    $mails = [];
-                    $mailsIds = $mailbox->searchMailBox('SINCE '.date('d-M-Y', strtotime('-1 day')));
-                    if (!$mailsIds) {
-                        die('Mailbox is empty');
-                    }
-                    foreach ($mailsIds as $mailId) {
-                        $overview = $mailbox->get_overview($mailId);
-                        $var = $overview[0]->seen ? 'read' : 'unread';
-                        if ($var == 'unread') {
-                            $mail = $mailbox->getMail($mailId);
-                            if ($settings_email->first()->email_collaborator == 1) {
-                                $collaborator = $mail->cc;
+                    if ($e_mail->fetching_status == 1) {
+                        $priority = $e_mail->priority;
+                        $dept = $e_mail->department;
+                        $helptopic = $e_mail->help_topic;
+                        if ($priority == null) {
+                            $priority = $ticket->first()->priority;
+                        }
+                        if ($dept == null) {
+                            $dept = $system->first()->department;
+                        }
+                        if ($helptopic == null) {
+                            $helptopic = $ticket->first()->help_topic;
+                        }
+                        $get_helptopic = Help_topic::where('id', '=', $helptopic)->first();
+                        $sla = $get_helptopic->sla_plan;
+                        $host = $e_mail->fetching_host;
+                        $port = $e_mail->fetching_port;
+                        if ($e_mail->mailbox_protocol) {
+                            $protocol_value = $e_mail->mailbox_protocol;
+                            $get_mailboxprotocol = MailboxProtocol::where('id', '=', $protocol_value)->first();
+                            $protocol = $get_mailboxprotocol->value;
+                        } else {
+                            if ($e_mail->fetching_protocol) {
+                                $fetching_protocol = '/'.$e_mail->fetching_protocol;
                             } else {
-                                $collaborator = null;
+                                $fetching_protocol = '';
                             }
-                            $body = $mail->textHtml;
-                            if ($body == null) {
-                                $body = $mailbox->backup_getmail($mailId);
-                                $body = str_replace('\r\n', '<br/>', $body);
-                                // var_dump($body);
-                            }
-                            $date = $mail->date;
-                            $datetime = $overview[0]->date;
-                            $date_time = explode(' ', $datetime);
-                            $date = $date_time[1].'-'.$date_time[2].'-'.$date_time[3].' '.$date_time[4];
-                            $date = date('Y-m-d H:i:s', strtotime($date));
-                            // dd($date);
-
-                            if (isset($mail->subject)) {
-                                $subject = $mail->subject;
+                            if ($e_mail->fetching_encryption) {
+                                $fetching_encryption = '/'.$e_mail->fetching_encryption;
                             } else {
-                                $subject = 'No Subject';
+                                $fetching_encryption = '';
                             }
+                            $protocol = $fetching_protocol.$fetching_encryption;
+                        }
+                        $imap_config = '{'.$host.':'.$port.$protocol.'}INBOX';
+                        $password = Crypt::decrypt($e_mail->password);
+                        $mailbox = new ImapMailbox($imap_config, $e_mail->email_address, $password, __DIR__);
+                        $mails = [];
+                        $mailsIds = $mailbox->searchMailBox('SINCE '.date('d-M-Y', strtotime('-1 day')));
+                        if (!$mailsIds) {
+                            die('Mailbox is empty');
+                        }
+                        foreach ($mailsIds as $mailId) {
+                            $overview = $mailbox->get_overview($mailId);
+                            $var = $overview[0]->seen ? 'read' : 'unread';
+                            if ($var == 'unread') {
+                                $mail = $mailbox->getMail($mailId);
+                                if ($settings_email->first()->email_collaborator == 1) {
+                                    $collaborator = $mail->cc;
+                                } else {
+                                    $collaborator = null;
+                                }
+                                $body = $mail->textHtml;
+                                if ($body == null) {
+                                    $body = $mailbox->backup_getmail($mailId);
+                                    $body = str_replace('\r\n', '<br/>', $body);
+                                }
+                                $date = $mail->date;
+                                $datetime = $overview[0]->date;
+                                $date_time = explode(' ', $datetime);
+                                $date = $date_time[1].'-'.$date_time[2].'-'.$date_time[3].' '.$date_time[4];
+                                $date = date('Y-m-d H:i:s', strtotime($date));
+                                if (isset($mail->subject)) {
+                                    $subject = $mail->subject;
+                                } else {
+                                    $subject = 'No Subject';
+                                }
+                                $fromname = $mail->fromName;
+                                $fromaddress = $mail->fromAddress;
+                                $ticket_source = Ticket_source::where('name', '=', 'email')->first();
+                                $source = $ticket_source->id;
+                                $phone = '';
 
-                            // dd($subject);
-                            $fromname = $mail->fromName;
-                            $fromaddress = $mail->fromAddress;
-                            $ticket_source = Ticket_source::where('name', '=', 'email')->first();
-                            $source = $ticket_source->id;
-                            $phone = '';
+                                $assign = $get_helptopic->auto_assign;
+                                $form_data = null;
+                                $result = $this->TicketController->create_user($fromaddress, $fromname, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $form_data);
+// dd($result);
+                                if ($result[1] == true) {
+                                    $ticket_table = Tickets::where('ticket_number', '=', $result[0])->first();
+                                    $thread_id = Ticket_Thread::where('ticket_id', '=', $ticket_table->id)->max('id');
+// $thread_id = Ticket_Thread::whereRaw('id = (select max(`id`) from ticket_thread)')->first();
+                                    $thread_id = $thread_id;
 
-                            $assign = $get_helptopic->auto_assign;
-                            $form_data = null;
-                            $result = $this->TicketController->create_user($fromaddress, $fromname, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $form_data);
-                            // dd($result);
-                            if ($result[1] == true) {
-                                $ticket_table = Tickets::where('ticket_number', '=', $result[0])->first();
-                                $thread_id = Ticket_Thread::where('ticket_id', '=', $ticket_table->id)->max('id');
-                                // $thread_id = Ticket_Thread::whereRaw('id = (select max(`id`) from ticket_thread)')->first();
-                                $thread_id = $thread_id;
+                                    foreach ($mail->getAttachments() as $attachment) {
+                                        $support = 'support';
+// echo $_SERVER['DOCUMENT_ROOT'];
+                                        $dir_img_paths = __DIR__;
+                                        $dir_img_path = explode('/code', $dir_img_paths);
+// dd($attachment->filePath);
+                                        $filepath = explode('../../../../../public', $attachment->filePath);
+// var_dump($attachment->filePath);
+// dd($filepath);
+// $path = $dir_img_path[0]."/code/public/".$filepath[1];
+                                        $path = public_path().$filepath[1];
+// dd($path);
+                                        $filesize = filesize($path);
+                                        $file_data = file_get_contents($path);
+                                        $ext = pathinfo($attachment->filePath, PATHINFO_EXTENSION);
+                                        $imageid = $attachment->id;
+                                        $string = str_replace('-', '', $attachment->name);
+                                        $filename = explode('src', $attachment->filePath);
+                                        $filename = str_replace('\\', '', $filename);
+                                        $body = str_replace('cid:'.$imageid, $filepath[1], $body);
+                                        $pos = strpos($body, $filepath[1]);
 
-                                foreach ($mail->getAttachments() as $attachment) {
-                                    $support = 'support';
-                                    // echo $_SERVER['DOCUMENT_ROOT'];
-                                    $dir_img_paths = __DIR__;
-                                    $dir_img_path = explode('/code', $dir_img_paths);
-                                    // dd($attachment->filePath);
-                                    $filepath = explode('../../../../../public', $attachment->filePath);
-                                    // var_dump($attachment->filePath);
-                                    // dd($filepath);
-                                    // $path = $dir_img_path[0]."/code/public/".$filepath[1];
-                                    $path = public_path().$filepath[1];
-                                    // dd($path);
-                                    $filesize = filesize($path);
-                                    $file_data = file_get_contents($path);
-                                    $ext = pathinfo($attachment->filePath, PATHINFO_EXTENSION);
-                                    $imageid = $attachment->id;
-                                    $string = str_replace('-', '', $attachment->name);
-                                    $filename = explode('src', $attachment->filePath);
-                                    $filename = str_replace('\\', '', $filename);
-                                    $body = str_replace('cid:'.$imageid, $filepath[1], $body);
-                                    $pos = strpos($body, $filepath[1]);
-
-                                    if ($pos == false) {
-                                        if ($settings_email->first()->attachment == 1) {
+                                        if ($pos == false) {
+                                            if ($settings_email->first()->attachment == 1) {
+                                                $upload = new Ticket_attachments();
+                                                $upload->file = $file_data;
+                                                $upload->thread_id = $thread_id;
+                                                $upload->name = $filepath[1];
+                                                $upload->type = $ext;
+                                                $upload->size = $filesize;
+                                                $upload->poster = 'ATTACHMENT';
+                                                $upload->save();
+                                            }
+                                        } else {
                                             $upload = new Ticket_attachments();
                                             $upload->file = $file_data;
                                             $upload->thread_id = $thread_id;
                                             $upload->name = $filepath[1];
                                             $upload->type = $ext;
                                             $upload->size = $filesize;
-                                            $upload->poster = 'ATTACHMENT';
+                                            $upload->poster = 'INLINE';
                                             $upload->save();
                                         }
-                                    } else {
-                                        $upload = new Ticket_attachments();
-                                        $upload->file = $file_data;
-                                        $upload->thread_id = $thread_id;
-                                        $upload->name = $filepath[1];
-                                        $upload->type = $ext;
-                                        $upload->size = $filesize;
-                                        $upload->poster = 'INLINE';
-                                        $upload->save();
+                                        unlink($path);
                                     }
-                                    unlink($path);
+                                    $body = Encoding::fixUTF8($body);
+                                    $thread = Ticket_Thread::where('id', '=', $thread_id)->first();
+                                    $thread->body = $this->separate_reply($body);
+                                    $thread->save();
                                 }
-                                $body = Encoding::fixUTF8($body);
-                                $thread = Ticket_Thread::where('id', '=', $thread_id)->first();
-                                $thread->body = $this->separate_reply($body);
-                                $thread->save();
                             }
                         }
                     }

@@ -76,7 +76,7 @@ class="active"
                     {!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}
                 </div>
                 <div class="col-xs-2">
-                    {!! Form::radio('status','0',null) !!} {{Lang::get('lang.disabled')}}
+                    {!! Form::radio('status','0',null) !!} {{Lang::get('lang.inactive')}}
                 </div>
             </div>
 

@@ -39,11 +39,9 @@ class BanlistController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of all the banned users.
      *
-     * @param type Banlist $ban
-     *
-     * @return type Response
+     * @return type
      */
     public function index()
     {
@@ -57,7 +55,7 @@ class BanlistController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a banned user.
      *
      * @return type Response
      */
@@ -71,11 +69,10 @@ class BanlistController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a new banned user credentials.
      *
-     * @param type banlist    $ban
-     * @param type BanRequest $request
-     * @param type User       $user
+     * @param BanRequest $request
+     * @param User       $user
      *
      * @return type Response
      */
@@ -107,22 +104,10 @@ class BanlistController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Editing the details of the banned users.
      *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param type int     $id
-     * @param type Banlist $ban
+     * @param type $id
+     * @param User $ban
      *
      * @return type Response
      */
@@ -138,11 +123,11 @@ class BanlistController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the banned users.
      *
-     * @param type int            $id
-     * @param type Banlist        $ban
-     * @param type BanlistRequest $request
+     * @param type           $id
+     * @param User           $ban
+     * @param BanlistRequest $request
      *
      * @return type Response
      */
@@ -152,7 +137,6 @@ class BanlistController extends Controller
             $bans = $ban->whereId($id)->first();
             $bans->internal_note = $request->input('internal_note');
             $bans->ban = $request->input('ban');
-            // dd($request->input('ban'));
             if ($bans->save()) {
                 return redirect('banlist')->with('success', 'Banned Email Updated sucessfully');
             } else {
@@ -162,22 +146,4 @@ class BanlistController extends Controller
             return redirect('banlist')->with('fails', 'Banned Email not Updated');
         }
     }
-
-    /*
-     * Remove the specified resource from storage.
-     * @param type int $id
-     * @param type Banlist $ban
-     * @return type Response
-     */
-    // public function destroy($id, Banlist $ban) {
-    // 		$bans = $ban->whereId($id)->first();
-    // 		dd($bans);
-    // 		/* Success and Falure condition */
-    // 		try{
-    // 			$bans->delete();
-    // 			return redirect('banlist')->with('success', 'Banned Email Deleted sucessfully');
-    // 		} catch (Exception $e) {
-    // 			return redirect('banlist')->with('fails', 'Banned Email can not Delete'.'<li>'.$e->errorInfo[2].'</li>');
-    // 		}
-    // }
 }

@@ -180,6 +180,9 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
     Route::get('delete-language/{lang}', ['as' => 'lang.delete', 'uses' => 'Admin\helpdesk\LanguageController@deleteLanguage']);
 
     Route::get('generate-api-key', 'Admin\helpdesk\SettingsController@GenerateApiKey'); // route to generate api key
+
+    Route::post('validating-email-settings', ['as' => 'validating.email.settings', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettings']); // route to check email input validation
+    Route::post('validating-email-settings-on-update/{id}', ['as' => 'validating.email.settings.update', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettingsUpdate']); // route to check email input validation
 });
 
 /*
@@ -354,8 +357,17 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
     Route::get('/get-parent-tickets/{id}', ['as' => 'get.parent.ticket', 'uses' => 'Agent\helpdesk\TicketController@getParentTickets']);
 
-    Route::patch('/merge-tickets/{id}', 'Agent\helpdesk\TicketController@mergeTickets');
+    Route::patch('/merge-tickets/{id}', ['as' => 'merge.tickets', 'uses' => 'Agent\helpdesk\TicketController@mergeTickets']);
 
+    //To get department tickets data
+    //open tickets of department
+    Route::get('/get-open-tickets/{id}', ['as' => 'get.dept.open', 'uses' => 'Agent\helpdesk\Ticket2Controller@getOpenTickets']);
+
+    //close tickets of deartment
+    Route::get('/get-closed-tickets/{id}', ['as' => 'get.dept.close', 'uses' => 'Agent\helpdesk\Ticket2Controller@getCloseTickets']);
+
+    //in progress ticket of department
+    Route::get('/get-under-process-tickets/{id}', ['as' => 'get.dept.inprocess', 'uses' => 'Agent\helpdesk\Ticket2Controller@getInProcessTickets']);
 });
 
 /*
@@ -652,6 +664,7 @@ Route::group(['prefix' => 'api/v1'], function () {
          */
 
         Route::get('customers-custom', 'Api\v1\ApiController@getCustomersWith');
+        Route::get('collaborator/search', 'Api\v1\ApiController@collaboratorSearch');
     });
 
     /*

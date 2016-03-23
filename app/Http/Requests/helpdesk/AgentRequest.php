@@ -32,7 +32,7 @@ class AgentRequest extends Request
             'user_name'  => 'required|unique:users',
             'first_name' => 'required',
             'last_name'  => 'required',
-            'email'      => 'required',
+            'email'      => 'required|unique:users',
             'active'     => 'required',
             // 'account_status' => 'required',
             'assign_group' => 'required',

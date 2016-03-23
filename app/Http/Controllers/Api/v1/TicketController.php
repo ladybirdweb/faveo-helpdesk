@@ -601,4 +601,60 @@ try {
             return $e->getMessage();
         }
     }
+    
+    /**
+     * autosearch.
+     *
+     * @return type json
+     */
+    public function autosearch()
+    {
+        $term = \Input::get('term');
+        $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->lists('email');
+        return $user;
+    }
+    
+    /**
+     * useradd.
+     *
+     * @param type Image $image
+     *
+     * @return type json
+     */
+    public function useradd()
+    {
+        $name = Input::get('name');
+        $email = Input::get('email');
+        $ticket_id = Input::get('ticket_id');
+        $user_search = User::where('email', '=', $email)->first();
+        if (isset($user_serach)) {
+            $result = "user already exist";
+            return $result;
+        } else {
+            $company = $this->company();
+            $user = new User();
+            $user->user_name = $name;
+            $user->email = $email;
+            $password = $this->generateRandomString();
+            $user->password = \Hash::make($password);
+            $user->role = 'user';
+            $user->active = 1;
+            if ($user->save()) {
+                $user_id = $user->id;
+                $php_mailer = new PhpMailController();
+                $php_mailer->sendmail($from = $php_mailer->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'Password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
+            }
+            $ticket_collaborator = new Ticket_Collaborator();
+            $ticket_collaborator->isactive = 1;
+            $ticket_collaborator->ticket_id = $ticket_id;
+            $ticket_collaborator->user_id = $user->id;
+            $ticket_collaborator->role = 'ccc';
+            $ticket_collaborator->save();
+            
+            $result = [$user->user_name=>$user->email];
+            return $result;
+           
+        }
+    }
+
 }
