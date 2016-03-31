@@ -151,7 +151,7 @@ class FormController extends Controller
 
         $collaborator = null;
         $assignto = null;
-        $auto_response = 02;
+        $auto_response = 0;
         if ($this->TicketController->create_user($email, $name, $subject, $details, $phone, $helptopic, $sla, $priority, $source->id, $collaborator, $department, $assignto, $form_extras, $auto_response)) {
             return Redirect::route('guest.getform')->with('success', 'Ticket Created Successfully');
         }
