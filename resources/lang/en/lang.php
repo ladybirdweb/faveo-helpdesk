@@ -18,9 +18,11 @@ return [
       |   Error
       |--------------------------------------
      */
-    'success' => 'Success',
-    'fails'   => 'Fails',
-    'alert'   => 'Alert',
+    'success'        => 'Success',
+    'fails'          => 'Fails',
+    'alert'          => 'Alert',
+    'required-error' => 'Please fill all required feilds',
+    'invalid'        => 'Incorrect User id or password',
     /*
       |--------------------------------------
       |   Login Page
