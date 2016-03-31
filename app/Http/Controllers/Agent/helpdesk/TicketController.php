@@ -1091,10 +1091,6 @@ class TicketController extends Controller
                     $to_user = $admin->first_name;
                     $to_user_name = $admin->first_name . " " . $admin->last_name;
                     $set_mails[] = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
-                    // try {
-                    //     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $admin_user, 'email' => $admin_email], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $admin_user, 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $admin_user, 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
-                    // } catch (\Exception $e) {
-                    // }
                 }
                 
             }
@@ -1111,10 +1107,6 @@ class TicketController extends Controller
                             $to_user = $agent->first_name;
                             $to_user_name = $agent->first_name. " " . $agent->last_name;
                             $set_mails[] = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
-                            // try {
-                            //     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $agent_user, 'email' => $agent_email], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $admin_user, 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $agent_user, 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
-                            // } catch (\Exception $e) {
-                            // }
                         }
                     }
                 }
@@ -1126,16 +1118,10 @@ class TicketController extends Controller
                 $to_user = $assigned_to->first_name;
                 $to_user_name = $assigned_to->first_name . " " . $assigned_to->last_name;
                 $set_mails[] = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
-                // try {
-                //     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $agent_user, 'email' => $agent_email], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $admin_user, 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $assigned_to->user_name, 'ticket_number' => $ticket_number2, 'email_address' => $assigned_to->email, 'name' => $ticket_creator]);
-                // } catch (\Exception $e) {
-                // }
             }
             $emails_to_be_sent = array_unique($set_mails, SORT_REGULAR);
             foreach ($emails_to_be_sent as $email_data) {
-                if($auto_response == 0) {
-                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $email_data['to_user'], 'email' => $email_data['to_email'] ], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $email_data['to_user_name'], 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $email_data['to_user_name'], 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
-                }
+                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $email_data['to_user'], 'email' => $email_data['to_email'] ], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $email_data['to_user_name'], 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $email_data['to_user_name'], 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
             }
             return ['0' => $ticket_number2, '1' => true];
         }
