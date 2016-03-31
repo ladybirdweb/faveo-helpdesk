@@ -11,7 +11,7 @@
             <i class="fa  fa-info-circle"></i>
             <b>Info!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('info')}}
+            {!!Session::get('info')!!}
         </div>
         @endif
 	<div class="box-body">

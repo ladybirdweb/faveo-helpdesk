@@ -182,7 +182,7 @@ class PhpMailController extends Controller
 
             $path2 = \Config::get('view.paths');
 
-            $directory = $path2[0].'\emails'.DIRECTORY_SEPARATOR.$status->template.DIRECTORY_SEPARATOR;
+            $directory = $path2[0].DIRECTORY_SEPARATOR.'emails'.DIRECTORY_SEPARATOR.$status->template.DIRECTORY_SEPARATOR;
 
             $handle = fopen($directory.$template.'.blade.php', 'r');
             $contents = fread($handle, filesize($directory.$template.'.blade.php'));
