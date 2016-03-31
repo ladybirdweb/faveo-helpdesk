@@ -55,6 +55,7 @@ class MailController extends Controller
                 $email = $emails->get();
                 foreach ($email as $e_mail) {
                     if ($e_mail->fetching_status == 1) {
+                        $auto_response = $e_mail->auto_response;
                         $priority = $e_mail->priority;
                         $dept = $e_mail->department;
                         $helptopic = $e_mail->help_topic;
@@ -129,7 +130,7 @@ class MailController extends Controller
 
                                 $assign = $get_helptopic->auto_assign;
                                 $form_data = null;
-                                $result = $this->TicketController->create_user($fromaddress, $fromname, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $form_data);
+                                $result = $this->TicketController->create_user($fromaddress, $fromname, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $form_data, $auto_response);
 // dd($result);
                                 if ($result[1] == true) {
                                     $ticket_table = Tickets::where('ticket_number', '=', $result[0])->first();
