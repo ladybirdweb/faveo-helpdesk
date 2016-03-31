@@ -262,11 +262,13 @@ class PhpMailController extends Controller
         }
     }
 
-/**
+    /**
      * Sending emails from the system.
+     *
      * @return MailNotification
      */
-    public function sendEmail($from, $to, $message) {
+    public function sendEmail($from, $to, $message)
+    {
         // dd($from);
         $from_address = $this->fetch_smtp_details($from);
 
@@ -325,15 +327,14 @@ class PhpMailController extends Controller
         } else {
             $agent = null;
         }
-        
+
         $system_link = url('/');
 
         $system_from = $this->company();
 
-        $mail = new \PHPMailer;
+        $mail = new \PHPMailer();
 
         $status = \DB::table('settings_email')->first();
-
 
         // dd($messagebody);
         //$mail->SMTPDebug = 3;                               // Enable verbose debug output
@@ -365,7 +366,7 @@ class PhpMailController extends Controller
         $mail->addBCC($bc);
 
         if ($attachment != null) {
-            $size = sizeOf($message['attachments']);
+            $size = count($message['attachments']);
             $attach = $message['attachments'];
             for ($i = 0; $i < $size; $i++) {
                 $file_path = $attach[$i]->getRealPath();
@@ -376,19 +377,18 @@ class PhpMailController extends Controller
 
         $mail->Subject = $subject;
 
-            $mail->Body = $content;
-        
+        $mail->Body = $content;
 
         // $mail->AltBody = $altbody;
 
         if (!$mail->send()) {
-//            echo 'Message could not be sent.';
+            //            echo 'Message could not be sent.';
 //            echo 'Mailer Error: ' . $mail->ErrorInfo;
         } else {
-//            echo 'Message has been sent';
+            //            echo 'Message has been sent';
         }
     }
-    
+
     /**
      * Fetching comapny name to send mail.
      *

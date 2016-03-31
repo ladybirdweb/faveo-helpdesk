@@ -16,8 +16,8 @@ use Hash;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-use Mail;
 use Lang;
+use Mail;
 
 /**
  * ---------------------------------------------------
@@ -178,7 +178,7 @@ class AuthController extends Controller
             $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
             // If attempts > 3 and time < 10 minutes
             if ($loginAttempts > 4 && (time() - $loginAttemptTime <= 600)) {
-                return redirect()->back()->withErrors('email','incorrect email')->with('error', 'Maximum login attempts reached. Try again in a while');
+                return redirect()->back()->withErrors('email', 'incorrect email')->with('error', 'Maximum login attempts reached. Try again in a while');
             }
             // If time > 10 minutes, reset attempts counter and time in session
             if (time() - $loginAttemptTime > 600) {
@@ -204,7 +204,7 @@ class AuthController extends Controller
                         ->withErrors([
                             'email'    => $this->getFailedLoginMessage(),
                             'password' => $this->getFailedLoginMessage(),
-        ])              ->with('error',Lang::get('lang.invalid'));
+        ])->with('error', Lang::get('lang.invalid'));
         // Increment login attempts
     }
 

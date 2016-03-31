@@ -825,8 +825,8 @@ class TicketController extends Controller
             $tickets->save();
         }
         $thread->save();
-        
-        if($attachments != null) {        
+
+        if ($attachments != null) {
             foreach ($attachments as $attachment) {
                 if ($attachment != null) {
                     $name = $attachment->getClientOriginalName();
@@ -1034,8 +1034,8 @@ class TicketController extends Controller
                 // Event fire
                 \Event::fire(new \App\Events\ReadMailEvent($user_id, $password));
                 try {
-                    if($auto_response == 0) {
-                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => 'Welcome to '.$company.' helpdesk', 'scenario' => 'registration-notification'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'user_password' => $password]);
+                    if ($auto_response == 0) {
+                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => 'Welcome to '.$company.' helpdesk', 'scenario' => 'registration-notification'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'user_password' => $password]);
                     }
                 } catch (\Exception $e) {
                 }
@@ -1064,7 +1064,7 @@ class TicketController extends Controller
 
                 if ($source == 3) {
                     try {
-                        if($auto_response == 0) {
+                        if ($auto_response == 0) {
                             $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body], $template_variables = ['agent_sign' => Auth::user()->agent_sign, 'ticket_number' => $ticket_number2]);
                         }
                     } catch (\Exception $e) {
@@ -1072,7 +1072,7 @@ class TicketController extends Controller
                 } else {
                     $body2 = null;
                     try {
-                        if($auto_response == 0) {
+                        if ($auto_response == 0) {
                             $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'], $template_variables = ['user' => $username, 'ticket_number' => $ticket_number2, 'department_sign' => '']);
                         }
                     } catch (\Exception $e) {
@@ -1085,14 +1085,13 @@ class TicketController extends Controller
             if (Alert::first()->ticket_status == 1 || Alert::first()->ticket_admin_email == 1) {
                 // send email to admin
                 $admins = User::where('role', '=', 'admin')->get();
-                $set_mails = "";
+                $set_mails = '';
                 foreach ($admins as $admin) {
                     $to_email = $admin->email;
                     $to_user = $admin->first_name;
-                    $to_user_name = $admin->first_name . " " . $admin->last_name;
+                    $to_user_name = $admin->first_name.' '.$admin->last_name;
                     $set_mails[] = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
                 }
-                
             }
 
             if ($is_reply == 0) {
@@ -1105,7 +1104,7 @@ class TicketController extends Controller
                         if ($department_data->name == $agent->primary_dpt) {
                             $to_email = $agent->email;
                             $to_user = $agent->first_name;
-                            $to_user_name = $agent->first_name. " " . $agent->last_name;
+                            $to_user_name = $agent->first_name.' '.$agent->last_name;
                             $set_mails[] = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
                         }
                     }
@@ -1116,13 +1115,14 @@ class TicketController extends Controller
                 $assigned_to = User::where('id', '=', $ticketdata->assigned_to)->first();
                 $to_email = $assigned_to->email;
                 $to_user = $assigned_to->first_name;
-                $to_user_name = $assigned_to->first_name . " " . $assigned_to->last_name;
+                $to_user_name = $assigned_to->first_name.' '.$assigned_to->last_name;
                 $set_mails[] = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
             }
             $emails_to_be_sent = array_unique($set_mails, SORT_REGULAR);
             foreach ($emails_to_be_sent as $email_data) {
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $email_data['to_user'], 'email' => $email_data['to_email'] ], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $email_data['to_user_name'], 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $email_data['to_user_name'], 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
+                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $email_data['to_user'], 'email' => $email_data['to_email']], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $email_data['to_user_name'], 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $email_data['to_user_name'], 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
             }
+
             return ['0' => $ticket_number2, '1' => true];
         }
     }
