@@ -44,7 +44,7 @@ return [
          */
         'options' => [
             'sPaginationType' => 'full_numbers',
-            'bProcessing'     => false,
+            'bProcessing'     => true,
         ],
         /*
           |--------------------------------------------------------------------------
