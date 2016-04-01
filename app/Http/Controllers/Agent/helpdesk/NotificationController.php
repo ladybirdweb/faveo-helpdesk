@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Settings\Company;
-use App\Model\helpdesk\settings\Email;
+use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Utility\Log_notification;
 use App\User;
 use View;
@@ -154,7 +154,7 @@ class NotificationController extends Controller
             // Send notification details to all the agents
             $email = $user->email;
             $user_name = $user->first_name.' '.$user->last_name;
-            $view = View::make('emails.notifications.agent', ['company' => $company, 'name' => $user_name]);
+            $view = View::make('emails.notifications.agent', ['company' => $company, 'name' => $user_name, 'user_id' => $user->id]);
             $contents = $view->render();
             $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Dily Report', 'scenario' => null, 'body' => $contents]);
 
