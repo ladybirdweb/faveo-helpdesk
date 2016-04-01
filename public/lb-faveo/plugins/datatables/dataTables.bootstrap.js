@@ -1,3 +1,8 @@
+var scripts = document.getElementsByTagName("script"),
+file_path = scripts[scripts.length-1].src;
+var pos = file_path.search("plugins");
+var path = file_path.substring(0,pos);
+   //var i = file_path.indexOf("plugins");
 $.fn.dataTable.ext.errMode = 'throw';
 /* Set the defaults for DataTables initialisation */
 $.extend( true, $.fn.dataTable.defaults, {
@@ -7,11 +12,20 @@ $.extend( true, $.fn.dataTable.defaults, {
 		"<'row'<'col-xs-6'i><'col-xs-6'p>>",
 	"oLanguage": {
 		"sLengthMenu": "_MENU_ Records per page",
-		"sSearch"    : "Search: "
-	}
+		"sSearch"    : "Search: ",
+		"sProcessing": '<img id="blur-bg" class="backgroundfadein" style="top:40%;left:50%; width: 50px; height:50 px; display: block; position: fixed;" src="'+path+'/media/images/gifloader3.gif">'
+	},
+	"fnDrawCallback": function( oSettings ) {
+		$(".box-body").css({"opacity": "1"});
+		$('#blur-bg').css({"opacity": "1", "z-index": "99999"});
+		},
+	 "fnPreDrawCallback": function(oSettings, json) {
+	 	$(".box-body").css({"opacity":"0.4"});
+         }
 } );
 
 
+  
 /* Default class modification */
 $.extend( $.fn.dataTableExt.oStdClasses, {
 	"sWrapper": "dataTables_wrapper form-inline",

@@ -220,14 +220,28 @@ div.DTFC_RightFootWrapper table,
 div.DTFC_LeftFootWrapper table {
     border-top: none;
 }
+div.dataTables_wrapper div.dataTables_processing{
+	position:absolute;top:50%;
+	left:15%;width:90%; 
+	margin-left:-100px;
+	margin-top:-26px;
+	text-align:center;
+	padding:1em 0; 
+	z-index: 9999; 
+}
 
-
-
+.backgroundfadein{
+	body{
+		opacity: 0.1;
+	}
+}
     
 
 
        /* .first 
         {
+}
+}
   	z-index: 2;
     color: #fff;
     cursor: default;
