@@ -92,7 +92,7 @@ class="active"
            <div class="col-md-6">
 		<div class="form-group {{ $errors->has('custom_form') ? 'has-error' : '' }}">
 
-			{!! Form::label('custom_form',Lang::get('lang.custom')) !!}
+			{!! Form::label('custom_form',Lang::get('lang.Custom_form')) !!}
 			{!! $errors->first('custom_form', '<spam class="help-block">:message</spam>') !!}
 			{!!Form::select('custom_form', [''=>'Select a Form','Custom Forms'=>$forms->lists('formname','id')],1,['class' => 'form-control']) !!}
 			</div>
