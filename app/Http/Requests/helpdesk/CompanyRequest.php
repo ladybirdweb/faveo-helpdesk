@@ -30,7 +30,7 @@ class CompanyRequest extends Request
     {
         return [
             'company_name' => 'required',
-            'website'      => 'url',
+            'website'      => 'active_url',
             'phone'        => 'numeric',
             'logo'         => 'image',
         ];

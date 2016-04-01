@@ -54,7 +54,7 @@ class="active"
 			{!! Form::label('ticket_status',Lang::get('lang.status')) !!}&nbsp;&nbsp;
 			{!! $errors->first('ticket_status', '<spam class="help-block">:message</spam>') !!}
 			{!! Form::radio('ticket_status','1',true) !!} {{Lang::get('lang.active')}}&nbsp;&nbsp;&nbsp;
-			{!! Form::radio('ticket_status','0') !!} {{Lang::get('lang.disabled')}}
+			{!! Form::radio('ticket_status','0') !!} {{Lang::get('lang.inactive')}}
 			</div>
 		</div>
 
@@ -139,7 +139,7 @@ class="active"
 
 			{!! Form::label('auto_assign',Lang::get('lang.auto_assign')) !!}
 			{!! $errors->first('auto_assign', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('auto_assign', [''=>'Select an Agent','Agents'=>$agents->lists('user_name','id')],null,['class' => 'form-control']) !!}
+			{!!Form::select('auto_assign', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')],null,['class' => 'form-control']) !!}
 			</div>
 		</div>
 		</div>
