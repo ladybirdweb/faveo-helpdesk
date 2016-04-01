@@ -147,7 +147,7 @@ class NotificationController extends Controller
             $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
         }
     }
- 
+
     /**
      * Fetching company name.
      *
@@ -166,6 +166,4 @@ class NotificationController extends Controller
 
         return $company;
     }
-
-
 }
