@@ -1,5 +1,5 @@
 @extends('themes.default1.admin.layout.admin')
-
+ <link href="{{asset("lb-faveo/css/faveo-css.css")}}" rel="stylesheet" type="text/css" />
 @section('Settings')
 class="active"
 @stop
@@ -149,6 +149,7 @@ class="active"
                         </div>
 				
 					</div>
+                    <div id="logo-display" style="display: block;">
                     @if($companys->logo != null)
                         <div class="col-md-2">
                             {!! Form::checkbox('use_logo') !!} <label> Use Logo</label>
@@ -158,12 +159,65 @@ class="active"
                     <?php  $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first(); ?>
 
                     @if($companys->logo != null)
-                        <div class="col-md-2">
-                            <img src="{{asset('lb-faveo/media/company')}}{{'/'}}{{$company->logo}}" alt="User Image" width="100px" style="border:1px solid #DCD1D1" />
+                            <img src="{{asset('lb-faveo/media/company')}}{{'/'}}{{$company->logo}}" alt="User Image" id="company-logo" width="100px" style="border:1px solid #DCD1D1" />
                         </div>
                     @endif
+                    </div>
 		    </div>
         </div>
     </div>
+    <!-- Modal -->   
+                <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none; padding-right: 15px;background-color: rgba(0, 0, 0, 0.7);">
+                    <div class="modal-dialog" role="document">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    <h4 class="modal-title" id="myModalLabel"></h4>
+                                </div>
+                                <div class="modal-body" id="custom-alert-body" >
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary pull-left yes" data-dismiss="modal"></button>
+                                    <button type="button" class="btn btn-default no"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $( ".image" ).on( "click", function() {
+                $("#myModal").css("display","block");
+                $("#myModalLabel").html("{!! Lang::get('lang.delete-logo') !!}");
+                $(".yes").html("{!! Lang::get('lang.yes') !!}");
+                $(".no").html("{{Lang::get('lang.cancel')}}");
+                $("#custom-alert-body").html("{{Lang::get('lang.confirm')}}");
+            });
+            $('.no,.closemodal').on("click", function(){
+                $("#myModal").css("display","none");
+            });
+            $('.yes').on('click',function(){
+                var src = $('#company-logo').attr('src').split('/');
+                var file = src[src.length - 1];
 
+                var path = "lb-faveo/media/company/"+file;
+                // alert(path); 
+                $.ajax({
+                    type: "GET",
+                    url: "{{route('delete.logo')}}",
+                    dataType: "html",
+                    data:{data1:path},
+                    success: function(data) {
+                        if(data == "true") {
+                            $("#myModal").css("display","none");
+                            $("#logo-display").css("display","none");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 @stop

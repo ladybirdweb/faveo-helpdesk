@@ -184,15 +184,17 @@ return [
       |   Company Settings Page
       |--------------------------------------
      */
-    'company' => 'Company',
-    'website' => 'Website',
-    'phone'   => 'Phone',
-    'address' => 'Address',
-    'landing' => 'Landing Page',
-    'offline' => 'Offline Page',
-    'thank'   => 'Thank Page',
-    'logo'    => 'Logo',
-    'save'    => 'Save',
+    'company'      => 'Company',
+    'website'      => 'Website',
+    'phone'        => 'Phone',
+    'address'      => 'Address',
+    'landing'      => 'Landing Page',
+    'offline'      => 'Offline Page',
+    'thank'        => 'Thank Page',
+    'logo'         => 'Logo',
+    'save'         => 'Save',
+    'delete-logo'  => 'Delete logo',
+    'click-delete' => 'Click here to delete',
     /*
       |--------------------------------------
       |   System Settings Page
@@ -734,6 +736,7 @@ return [
     'access-ticket'                                   => 'Alert! This ticket has been locked by you for next ',
     'minutes'                                         => ' minutes',
     'in_minutes'                                      => 'In minutes',
+    'change_owner_for_ticket'                         => 'Change owner for ticket',
     'add_another_owner'                               => 'Add another owner',
     'user-not-found'                                  => 'User not found. Try again or add a new user.',
     'change-success'                                  => 'Success! owner has been changed for this ticket.',

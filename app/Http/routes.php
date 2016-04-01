@@ -89,6 +89,8 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
     Route::patch('postcompany/{id}', 'Admin\helpdesk\SettingsController@postcompany'); // Updating the Company table with requests
 
+    Route::get('delete-logo', ['as' => 'delete.logo', 'uses' => 'Admin\helpdesk\SettingsController@deleteLogo']); // deleting a logo
+
     Route::get('getsystem', 'Admin\helpdesk\SettingsController@getsystem'); // direct to system setting page
 
     Route::patch('postsystem/{id}', 'Admin\helpdesk\SettingsController@postsystem'); // Updating the System table with requests

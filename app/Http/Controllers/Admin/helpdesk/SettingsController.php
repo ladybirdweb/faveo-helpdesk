@@ -30,6 +30,7 @@ use App\Model\helpdesk\Utility\Timezones;
 use Exception;
 use Illuminate\Http\Request;
 use Input;
+use DB;
 
 /**
  * SettingsController.
@@ -112,6 +113,27 @@ class SettingsController extends Controller
             /* redirect to Index page with Fails Message */
             return redirect('getcompany')->with('fails', 'Company can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
         }
+    }
+
+        /**
+     * function to delete system logo
+     *
+     *
+     */
+    public function deleteLogo()
+    {
+        $path = $_GET['data1'];
+        // $companys = $company->whereId('1')->first();
+        if(!unlink($path)){
+            return "false";
+        } else {
+            $companys = Company::where('id', '=',1)->first();
+            $companys->logo = null;
+            $companys->use_logo = '0';
+            $companys->save();
+            return "true";
+        }
+        // return $res;
     }
 
     /**
@@ -525,4 +547,5 @@ class SettingsController extends Controller
 
         return $key;
     }
+
 }

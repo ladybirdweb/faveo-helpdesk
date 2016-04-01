@@ -31,7 +31,7 @@
           <a href="{{url('/')}}" rel="home">
         @endif
                 @if($company->use_logo == 1)
-                  <img src="{{asset('lb-faveo/media/company')}}{{'/'}}{{$company->logo}}" alt="User Image" width="150px" height="150px"/>
+                  <img src="{{asset('lb-faveo/media/company')}}{{'/'}}{{$company->logo}}" alt="User Image" width="200px" />
                 @else
                   @if($system->name)
                     {!! $system->name !!}
