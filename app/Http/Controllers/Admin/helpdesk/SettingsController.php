@@ -27,10 +27,10 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 // classes
+use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Input;
-use DB;
 
 /**
  * SettingsController.
@@ -116,21 +116,22 @@ class SettingsController extends Controller
     }
 
     /**
-     * function to delete system logo
-     *  @return type string
+     * function to delete system logo.
      *
+     *  @return type string
      */
     public function deleteLogo()
     {
         $path = $_GET['data1']; //get file path of logo image
-        if(!unlink($path)){
-            return "false";
+        if (!unlink($path)) {
+            return 'false';
         } else {
-            $companys = Company::where('id', '=',1)->first();
+            $companys = Company::where('id', '=', 1)->first();
             $companys->logo = null;
             $companys->use_logo = '0';
             $companys->save();
-            return "true";
+
+            return 'true';
         }
         // return $res;
     }
@@ -546,5 +547,4 @@ class SettingsController extends Controller
 
         return $key;
     }
-
 }
