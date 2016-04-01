@@ -16,9 +16,9 @@ class="active"
 <?php 
     if(Auth::user()->role == 'agent') {
         $dept = App\Model\helpdesk\Agent\Department::where('id','=',Auth::user()->primary_dpt)->first();
-        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('assigned_to', '=', 0)->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
+        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
     } else {
-        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('assigned_to', '=', 0)->orderBy('id', 'DESC')->paginate(20);
+        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->paginate(20);
     } 
 ?>
 <!-- Main content -->

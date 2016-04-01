@@ -47,7 +47,7 @@ class="active"
             <i class="fa  fa-check-circle"></i>
             <b>Success!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('success')}}
+            {!!Session::get('success')!!}
         </div>
     @endif
     <!-- failure message -->
@@ -56,7 +56,7 @@ class="active"
             <i class="fa fa-ban"></i>
             <b>Fail!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('fails')}}
+            {!!Session::get('fails')!!}
         </div>
     @endif
 

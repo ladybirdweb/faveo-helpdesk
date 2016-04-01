@@ -122,21 +122,32 @@
 							</li>
 						</ul><!-- .navbar-user -->
                         @else
+                        </ul>
 						<ul class="nav navbar-nav navbar-login">
 							<li <?php if($errors->first('email') || $errors->first('password')){ ?> class="sfHover" <?php } else { ?> <?php  } ?> ><a href="#"  data-toggle="collapse"  <?php if($errors->first('email') || $errors->first('password')){ } else { ?> class="collapsed" <?php  } ?> data-target="#login-form">{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a></li>
 						</ul><!-- .navbar-login -->
 						<div id="login-form" <?php if($errors->first('email') || $errors->first('password')){ ?> class="login-form collapse fade clearfix in" <?php } else { ?> class="login-form collapse fade clearfix" <?php  } ?> >
 					            {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}  
-
+					            @if(Session::has('errors'))
+									<div class="alert alert-danger alert-dismissable">
+   										<!-- <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b> -->
+   										<!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> -->
+   										@if(Session::has('error'))
+   											{!! Session::get('error') !!}
+   										@else
+   											{!! Lang::get('lang.required-error') !!}
+   										@endif
+									</div>
+								@endif
 								<div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
 									{!! Form::text('email',null,['placeholder'=>Lang::get('lang.e-mail'),'class' => 'form-control']) !!}
-									{!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
+									<!-- {!! $errors->first('email', '<spam class="help-block">:message</spam>') !!} -->
 									<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 					          	</div>
 
 								<div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}">
 						            {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}
-									{!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
+									<!-- {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!} -->
 						            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
 					          	</div>
 								<ul class="list-unstyled pull-left">
