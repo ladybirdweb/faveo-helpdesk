@@ -213,8 +213,11 @@ class="active"
                     data:{data1:path},
                     success: function(data) {
                         if(data == "true") {
-                            $("#myModal").css("display","none");
+                            var msg = "Logo deleted succesfully."
                             $("#logo-display").css("display","none");
+                            $("#myModal").css("display","none");
+                        } else {
+                            $("#myModal").css("display","none");
                         }
                     }
                 });

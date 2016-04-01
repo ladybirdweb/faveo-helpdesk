@@ -115,15 +115,14 @@ class SettingsController extends Controller
         }
     }
 
-        /**
+    /**
      * function to delete system logo
-     *
+     *  @return type string
      *
      */
     public function deleteLogo()
     {
-        $path = $_GET['data1'];
-        // $companys = $company->whereId('1')->first();
+        $path = $_GET['data1']; //get file path of logo image
         if(!unlink($path)){
             return "false";
         } else {
