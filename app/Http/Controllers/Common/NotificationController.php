@@ -34,7 +34,7 @@ class NotificationController extends Controller {
     public function create($model_id, $userid_created, $type_id, $forwhome = []) {
        try{
         if (empty($forwhome)) {
-            $forwhome = $this->user->where('role', '!=', 'client')->get()->toArray();
+            $forwhome = $this->user->where('role', '!=', 'user')->get()->toArray();
         }
         //dd($forwhome);
         //system notification

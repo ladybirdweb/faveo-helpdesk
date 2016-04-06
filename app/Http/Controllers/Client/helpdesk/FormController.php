@@ -153,7 +153,8 @@ class FormController extends Controller
         
         $collaborator = null;
         $assignto = null;
-        $result = $this->TicketController->create_user($email, $name, $subject, $details, $phone, $helptopic, $sla, $priority, $source->id, $collaborator, $department, $assignto, $form_extras);
+        $auto_response = 0;
+        $result = $this->TicketController->create_user($email, $name, $subject, $details, $phone, $helptopic, $sla, $priority, $source->id, $collaborator, $department, $assignto, $form_extras,$auto_response);
         if ($result[1] == 1) {
             $ticketId = Tickets::where('ticket_number','=', $result[0])->first();
             $thread = Ticket_Thread::where('ticket_id','=',$ticketId->id)->first();

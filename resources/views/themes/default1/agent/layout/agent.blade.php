@@ -90,13 +90,13 @@ if ($company != null) {
                                             @foreach($notifications as $notification)
                                             @if($notification->type == 'registration')
                                             <li>
-                                                <a href="{!! route('user.show', $notification->notification_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
+                                                <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
                                                     <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
                                                 </a>
                                             </li>
                                             @else
                                             <li>
-                                                <a href="{!! route('ticket.thread', $notification->notification_id) !!}" id='{{ $notification->notification_id }}' class='noti_User'>
+                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id }}' class='noti_User'>
                                                     <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
                                                 </a>
                                             </li>
@@ -323,7 +323,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                                     <div class="col-md-6">
                                         <h3>  @yield('PageHeader')</h3>
                                     </div>
-                    <div class="col-md-6 pull-right">
+                    <div class="pull-right">
                                 
                                 @include('breadcrumbs')
                     </div>

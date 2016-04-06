@@ -257,7 +257,7 @@ $i = count($tickets);
                                     <div class="col-md-6">
                                         <h3>  @yield('PageHeader')</h3>
                                     </div>
-                    <div class="col-md-6 pull-right">
+                    <div class="pull-right">
                                 
                                 @include('breadcrumbs')
                     </div>
