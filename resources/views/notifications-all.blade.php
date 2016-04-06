@@ -27,7 +27,7 @@ input[type="checkbox"]:not(old) + label {
     font-size: 14px;
 }
 input[type="checkbox"]:not(old) + label span {
-    background: rgba(0, 0, 0, 0) url("media/images/check_radio_sheet.png") no-repeat scroll left top;
+    background: rgba(0, 0, 0, 0) url("lb-faveo/media/images/check_radio_sheet.png") no-repeat scroll left top;
     cursor: pointer;
     display: inline-block;
     height: 19px;
@@ -37,7 +37,7 @@ input[type="checkbox"]:not(old) + label span {
     width: 19px;
 }
 input[type="checkbox"]:checked + label span {
-    background: rgba(0, 0, 0, 0) url("media/images/check_radio_sheet.png") no-repeat scroll -19px top;
+    background: rgba(0, 0, 0, 0) url("lb-faveo/media/images/check_radio_sheet.png") no-repeat scroll -19px top;
 }
 </style>
 @stop
