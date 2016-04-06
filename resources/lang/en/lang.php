@@ -18,9 +18,11 @@ return [
       |   Error
       |--------------------------------------
      */
-    'success' => 'Success',
-    'fails'   => 'Fails',
-    'alert'   => 'Alert',
+    'success'        => 'Success',
+    'fails'          => 'Fails',
+    'alert'          => 'Alert',
+    'required-error' => 'Please fill all required feilds',
+    'invalid'        => 'Incorrect User id or password',
     /*
       |--------------------------------------
       |   Login Page
@@ -115,6 +117,7 @@ return [
     'from_name'                      => 'From Name',
     'add_an_email'                   => 'Add an Email',
     'edit_an_email'                  => 'Edit an Email',
+    'disable_for_this_email_address' => 'Disable for this Email address',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
@@ -181,15 +184,17 @@ return [
       |   Company Settings Page
       |--------------------------------------
      */
-    'company' => 'Company',
-    'website' => 'Website',
-    'phone'   => 'Phone',
-    'address' => 'Address',
-    'landing' => 'Landing Page',
-    'offline' => 'Offline Page',
-    'thank'   => 'Thank Page',
-    'logo'    => 'Logo',
-    'save'    => 'Save',
+    'company'      => 'Company',
+    'website'      => 'Website',
+    'phone'        => 'Phone',
+    'address'      => 'Address',
+    'landing'      => 'Landing Page',
+    'offline'      => 'Offline Page',
+    'thank'        => 'Thank Page',
+    'logo'         => 'Logo',
+    'save'         => 'Save',
+    'delete-logo'  => 'Delete logo',
+    'click-delete' => 'Click here to delete',
     /*
       |--------------------------------------
       |   System Settings Page
@@ -731,6 +736,7 @@ return [
     'access-ticket'                                   => 'Alert! This ticket has been locked by you for next ',
     'minutes'                                         => ' minutes',
     'in_minutes'                                      => 'In minutes',
+    'change_owner_for_ticket'                         => 'Change owner for ticket',
     'add_another_owner'                               => 'Add another owner',
     'user-not-found'                                  => 'User not found. Try again or add a new user.',
     'change-success'                                  => 'Success! owner has been changed for this ticket.',

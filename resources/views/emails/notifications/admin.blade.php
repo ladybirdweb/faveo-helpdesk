@@ -52,7 +52,7 @@ foreach ($depts as $dept) {
             <strong> Daily Report</strong>
         </p>
         <p style="padding: 0px 30px 20px 50px; margin: 0; font-size: 12px; color: #333; font-weight: normal; font-family: Arial, Helvetica, sans-serif; line-height: 22px;">
-            <strong>Hi {!! $name !!},</strong> <br> Below mentioned are your daily report for your {!! $company !!}.
+            <strong>Hi {!! $name !!},</strong> <br> Below mentioned is daily report for {!! $company !!}.
         </p>
     <!-- End Main Text (introduction) -->
     </td>
@@ -129,9 +129,7 @@ foreach ($depts as $dept) {
         <tr>
             <td style="padding: " colspan="2" bgcolor="#FFFFFF">
                 <p style="padding: 0px 30px 20px 50px; margin: 0; font-size: 11px; color: #333; font-weight: normal; font-family: Arial, Helvetica, sans-serif; line-height: 22px;">
-                    We should all work hard to guarantee that all tickets are being addressed in a timely manner. 
-
-                </p>
+                    We should all work hard to guarantee that all tickets are being addressed in a timely manner.</p>
                 
                 <p style="padding: 15px 30px 20px 50px; margin: 0; font-size: 16px; color: #333; font-weight: bold; font-family: Arial, Helvetica, sans-serif; text-align: left;">
                     Thank You,<br/> Kind Regards,<br/>{!! $company !!}
@@ -139,7 +137,7 @@ foreach ($depts as $dept) {
                 
                 <!-- Main Text -->
                 <p style="padding: 0px 30px 20px 50px; margin: 0; font-size: 16px; color: #333; font-weight: normal; font-family: Arial, Helvetica, sans-serif; line-height: 22px; text-align: center; color: #3AB4FF;">
-                    <strong>     Powered by Faveo</strong>
+                    <strong>Powered by <a href="http://www.faveohelpdesk.com" target="_blank">Faveo</a></strong>
                 </p>
              
             </td>

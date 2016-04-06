@@ -98,6 +98,16 @@ class="active"
                 {!!Form::select('help_topic', [''=>'--System Default--','Help Topics'=>$helps->lists('topic','id')],null,['class' => 'form-control select']) !!}
             </div>
 
+            <!-- status -->
+            <div class="col-xs-2 form-group">
+                {!! Form::label('auto_response', Lang::get('lang.auto_response')) !!}
+            </div>
+            <div class="col-xs-3 form-group">
+                <input type="checkbox" name="auto_response" id="auto_response" <?php if ($emails->auto_response == 1) {
+    echo "checked='checked'";
+} ?>> {!!Lang::get('lang.disable_for_this_email_address')!!}
+            </div>
+
         </div>
     </div>
     <div class="box-header with-border">

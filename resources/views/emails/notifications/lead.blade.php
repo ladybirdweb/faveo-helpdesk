@@ -193,7 +193,7 @@ foreach ($depts as $dept) {
                                                                   </tr>
                                                                   <tr>
                                                                      <td style="font-family: Helvetica, arial, sans-serif; font-size: 14px; line-height:24px; color: #666666;" st-conteent="2colcontent1">
-                                                                        Below mentioned are your daily reportfor your {!! $company !!}.
+                                                                        Below mentioned is daily report for {!! $company !!}.
                                                                      </td>
                                                                   </tr>
                                                                </tbody>
@@ -562,9 +562,7 @@ foreach ($depts as $dept) {
         <tr>
             <td style="padding: " colspan="2" bgcolor="#FFFFFF">
                 <p style="padding: 0px 30px 20px 50px; margin: 0; font-size: 11px; color: #333; font-weight: normal; font-family: Arial, Helvetica, sans-serif; line-height: 22px;">
-                    We should all work hard to guarantee that all tickets are being addressed in a timely manner. 
-
-                </p>
+                    We should all work hard to guarantee that all tickets are being addressed in a timely manner.</p>
                 
                 <p style="padding: 15px 30px 20px 50px; margin: 0; font-size: 16px; color: #333; font-weight: bold; font-family: Arial, Helvetica, sans-serif; text-align: left;">
                     Thank You,<br/> Kind Regards,<br/>{!! $company !!}
@@ -572,7 +570,7 @@ foreach ($depts as $dept) {
                 
                 <!-- Main Text -->
                 <p style="padding: 0px 30px 20px 50px; margin: 0; font-size: 16px; color: #333; font-weight: normal; font-family: Arial, Helvetica, sans-serif; line-height: 22px; text-align: center; color: #3AB4FF;">
-                    <strong>     Powered by Faveo</strong>
+                    <strong>Powered by <a href="http://www.faveohelpdesk.com" target="_blank">Faveo</a></strong>
                 </p>
              
             </td>

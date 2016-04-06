@@ -1,0 +1,2671 @@
+activeCollab 3.3.0 [2013/03/26]
+================================================================================
+
+First beta release. Major new features:
+
+    1. Auto-upgrade
+    2. Numerious invoicing improvements
+    3. Projects on a timeline
+    4. Workload report
+    5. Improved main menu and navigation
+    6. Invite People dialog
+    7. Disk Utility
+
+activeCollab 3.2.12 [2013/03/18]
+================================================================================
+
+Enhancements:
+
+    1. More prominent warning that SVN communication via command line is
+       deprecated and will be removed in activeCollab 4
+    2. Simplified source settings dialogs
+    3. Installation and upgrade scripts can detect Suhosin patch and extension
+    4. Improved signature and quote cleaning when importing email
+    5. Links added to visual editor can be forced to open in new browser window
+    6. Added warning to New Incoming Mailbox for that clarifies what might
+       happen if users use personal addresses with activeCollab's incoming mail
+       feature
+
+Bug Fixes:
+
+    1. Fixed assignment filter print when filter is showing tracked time data
+    2. Fixed issue when users and companies that already had an account but were
+       deleted, are imported from vCard
+    3. Fixed issue where incoming mail would crash when invalid language
+       instance was provided
+    4. Fixed activeCollab 2.3 project upgrade. Paused and canceled projects are
+       properly labeled now
+    5. Page tabs at client invoicing section are properly localised now
+    6. Mobile view of task page now shows related tasks
+    7. Fixed issue that stopped users from loading more than 100 repositories in
+       Administration > Source Settings section
+    8. System no longer allows users to send a quote to owner company
+    9. Fixed issue when quote issued to owner company could not be deleted
+   10. Fixed issue where some items could be duplicated in Outline view
+   11. Fixed multi-byte issue when timeline background images are generated
+   12. Improved the way system handles BCC-ed incoming mail
+   13. "Set new password" button text can now be localised
+   14. IAssigneesImplementation::getAllAssigneeIds() method now works properly
+   15. Installer no longer uses persistent MySQL connections
+   16. Fixed error where textarea was not displayed in some cases to users who
+       turned off visual editor
+   17. Increased font size of group headers in printed reports
+   18. boolval() function is defined if not present (PHP 5.5 introduces this
+       function while older versions of PHP don't have it)
+   19. Fixed issue where private comment content could be lost upon recurring
+       profile update
+   20. Fixed invoice PDF problem when project name had & in its name
+   21. Invoice notes are listed alphabetically in WebKit powered browsers
+
+activeCollab 3.2.11 [2013/02/25]
+================================================================================
+
+Enhancements:
+
+    1. Compatibility update - this release can load upgrade information from
+       versions of activeCollab that use PHAR packages
+
+Bug Fixes:
+
+    1. Fixed compiled routes and templates routine
+
+activeCollab 3.2.10 [2013/02/21]
+================================================================================
+
+Enhancements:
+
+    1. Added option to select multiple time records and expenses and mass-change
+       their billable status
+    2. Added quick view for completed objects displayed in Day Overview
+       home-screen widget
+    3. Link to Item can be limited to search only in current project
+    4. Added progress field to project's and milestone's detailed API response
+       that shows percent done, total number of tasks and number of open tasks
+    5. Improved /info/roles API response
+
+Bug Fixes:
+
+    1. Fixed crash when incoming mail filter is being deleted in a new tab
+    2. Fixed the way email notification are displayed on iPad
+    3. Multiple localisation tweaks and fixes
+    4. Fixed a bug where incoming mail could import an empty body when message
+       charset was not specified
+    5. Fixed width of message field in Maintenance Mode dialog
+    6. When project is created from a template, custom template settings are
+       applied to the new project as well
+    7. Module icons are shown for disabled modules as well
+    8. Fixed issue when one or more items gets added to objects list to
+       previously not visible group, and the group remained collapsed instead of
+       appearing expanded
+    9. Fixed URL for attachments that are displayed at public pages
+   10. Fixed issue with left list padding in content block
+   11. Different number style for different levels of ordered lists
+   12. Home screen will skip widgets and tabs that are not available if parent
+       module gets disabled
+   13. Generic "This page is not available on mobile device" page is displayed
+       when visitor tries to open a page that does not have a mobile version
+   14. Fixed issue with public tasks form on mobile devices
+   15. Code that checks whether InnoDB support is available has been improved
+       (MySQL 5.6 compatibility tweak)
+   16. When deleting quotes, automatically reset based on values for projects
+   17. Made sure that long project names do not break Related Tasks dialog
+   18. When task is copied, its most recent estimate is copied as well (this
+       functionality is used when projects are created from templates, too)
+   19. Module clean-up on uninstallation improvements
+   20. Fixed SVN over HTTPS error
+   21. Projects are properly sorted in Add to Projects dialog
+   22. Fixed issue when subtasks did not get rescheduled when their parent does
+       not have a due date set
+   23. Fixed crash that could happen when user was removed from a project
+   24. When time is tracked from a timesheet page, system uses proper default
+       visibility status (configured globally or per project)
+   25. Long object type in recent activities widget no longer wraps
+   26. Fixed project listing in mobile interface (it used to list only active
+       projects)
+   27. SVN properly works when repository is actually a subfolder, nor root
+       folder of the repository
+   28. Fixed milestone progress calculation for situations when big milestone
+       is close to completion, but not completed yet
+   29. Fixed quick view navigation error
+   30. Improved email cleaner for messages received from GMail
+   31. Fixed a small vCard import error
+   32. When temporal attachments are removed, object contexts are properly
+       cleaned up
+
+activeCollab 3.2.9 [2013/01/30]
+================================================================================
+
+Enhancements:
+
+    1. HTML root element uses language code based on user's language
+    2. Link in email notifications for downloading PDF version of a quote
+       doesn't require login
+    3. Improved performance of People page for users who have a lot of accounts
+       defined in their system
+    4. When milestone is moved from one project to another, system will also
+       move archived tasks, discussions and files that belong to that milestone
+    5. Email notifications for tasks now show task's due date (if set)
+    6. Big email replies are imported as attachments
+    7. Improved instructions for Scheduled Tasks setup on Windows
+
+Bug Fixes:
+
+    1. When user is removed from a project (or replaced), reminders that belong
+       to that user are cleaned up as well
+    2. Fixed multiple translation issues
+    3. Fixed styling on project budget page
+    4. Outline properly displays task category when Edit form is opened
+    5. Fixed issue that caused double activity log entries when file was
+       uploaded via API
+    6. Fixed issue with commit path in Source module
+    7. Fixed creation date display for recurring profiles
+    8. Fixed issue with Recent Activities page in mobile interface
+    9. Removed navigation block and Complete option from trashed objects in
+       mobile interface
+   10. Fixed a minor problem with invoice issuing form
+   11. Fixed issue with project template not being imported after a project
+       based on quote or project request is created
+   12. Fixed issue where Notify People box in forms in Documents section also
+       listed archived users
+   13. Fixed error during project creating step when quote items had to be
+       converted into project milestones
+   14. Fixed minor issue with discussion details loading
+   15. Fixed crash report when tracking report was executed, but there was no
+       tasks module installed
+   16. Improved email notifications so they display properly in vast majority of
+       email clients
+   17. Fixed time zone issue in Day Overview widget
+
+activeCollab 3.2.8 [2013/01/10]
+================================================================================
+
+Enhancements:
+
+    1. If user is visiting activeCollab with unsupported version of Internet
+       Explorer, or IE running in Compatibility mode, they will be warned
+    2. Force HTML powered file uploads in Internet Explorer
+    3. Project name added to project request notifications
+
+Bug Fixes:
+
+    1. Properly handle Esc when closing dialogs
+    2. Fixed permissions issue when subtasks assignees could not complete
+       subtasks unless they were assigned to the parent task
+    3. Fixed Internet Explorer issue where you had to click twice to open a
+       project tab
+    4. Fixed links in notifications sent to users that don't have an account in
+       the system
+    5. Fixed issue where Outline would stop working if Tracking module was
+       missing
+    6. Covered one more SVN error condition
+    7. Fixed issue where users were not redirected to new project after they
+       moved a project object
+    8. Fixed invoice logo URL issue when system is using clean URL-s
+    9. Fixed issue that forced default project visibility on new objects
+
+activeCollab 3.2.7 [2012/12/26]
+================================================================================
+
+Enhancements:
+
+    1. Tweaked subject of reassignment email notification
+    2. Payment notifications are configurable now. On top of notifying all
+       financial managers, you can select to notify just specific manager or
+       turn off this notification
+    3. Turn on or off email notification that are sent to clients when invoice
+       is fully paid
+    4. Turn on or off email notification that are sent to clients when invoice
+       is canceled
+    5. Added API commands for listing recent activities. This option is
+       available globally, per project and per user
+    6. Information about task creation can be posted via API call
+    7. Quick View added to Day Overview widget
+    8. Quotes that are Sent, Won or Lost can be deleted
+
+Bug Fixes:
+
+    1. Remove Manage Project People link that was displayed to client company
+       managers (even though the could not use the tool)
+    2. Fixed "Minuts" option in Who is Online home screen widget
+    3. Various Internet Explorer fixes
+
+activeCollab 3.2.6 [2012/12/14]
+================================================================================
+
+Enhancements:
+
+    1. Added branching support to Source module
+
+Bug Fixes:
+
+    1. Fixed disk space calculation on 32-bit version of PHP
+    2. Fixed start date display in recurring profiles
+    3. Tweaked file, bookmark and YouTube video shared pages in mobile interface
+    4. If project request text is not provided, request text box is not
+       displayed in mobile interface
+
+activeCollab 3.2.5 [2012/12/13]
+================================================================================
+
+Enhancements:
+
+    1. Separated modules that ship with activeCollab and custom modules on
+       Administration > Modules page
+    2. Added option to disable all custom modules with a single click
+
+Bug Fixes:
+
+    1. Hiding project budget in Small Biz (does not have budgeting features)
+    2. When object is created via API, use default project visibility instead of
+       private visibility
+    3. Fixed issue when project is created from template and there was a source
+       repository associated with template project
+    4. Trashed and deleted milestones are no longer displayed on calendars
+    5. Quote details page can be viewed using mobile device
+    6. Fixed issue where documents module would print full documents list
+       instead of a single document
+    7. Fixed problem where edit project form would not load custom field values
+    8. Fixed public page link issue on quite details page
+    9. Fixed user display issue in source module (printed HTML instead of links)
+   10. Fixed minor filtering issue in Invoices section
+   11. Fixed check that determine whether image can be previewed or not (some
+       images were missed by existing method)
+   12. Fixed bug when attachments could not be attached to comments using the
+       main interface
+   13. Fixed issue when Microsoft Excel treated assignment filter export as
+       symbolic links because they started with ID string
+   14. Fixed problem where project did not pick up custom field values when it
+       was created
+   15. Fixed error when invoice due date settings (configured in Administration 
+       panel) were always forced
+   16. Fixed potential crash in tracking reports where conditions are so strict
+       that there is no project that meets them
+   17. Improved email details dialog layout in Admin > Email section
+
+activeCollab 3.2.4 [2012/11/26]
+================================================================================
+
+Bug Fixes:
+
+    1. Fixed code snippets error
+    2. Shared notebooks can be accessed via mobile device
+    3. Added icon for PPTX documents
+    4. Fixed issue when expense category was not properly saved when tracking
+       report was saved
+    5. Fixed issue where Tasks module could not be installed unless it is
+       installed during system installation or upgrade
+
+activeCollab 3.2.3 [2012/11/20]
+================================================================================
+
+Bug Fixes:
+
+    1. Fixed issue with upgrade script
+    2. Fixed numerous PHP notices (due to static calls to methods that are not
+       declared as static in generated model classes)
+    3. Fixed issue with thumbnail and CAPTCHA generation
+    4. Improved text cleanup on email import
+
+activeCollab 3.2.2 [2012/11/16]
+================================================================================
+
+Enhancements:
+
+    1. Assignment filters now also take into account task's position when they
+       are displaying data (works when tasks are not or grouped, or when they
+       are grouped by due date)
+    2. Improved contrast of drag handle icon and changed cursor to move when
+       hovering over drag handle on Incoming Mail Filters page
+    3. Added mobile views for public pages of objects that are shared
+
+Bug Fixes:
+
+    1. Fixed issue with upgrade script and default tax rate
+
+activeCollab 3.2.1 [2012/11/14]
+================================================================================
+
+Enhancements:
+
+    1. Tweaked wording for creation entries in activity logs
+    2. Browse archive link instead of a button in sections where there are
+       archives (projects, tasks etc)
+    3. Easily unsubscribe from future notifications about particular object
+       directly from within email notification that user received
+    4. Added option to configure default tax rate
+    5. System will warn users if they try to navigate away from the page where
+       they have inserted a comment, but haven't submitted it
+    6. Added keyboard shortcuts to Quick Jump and Quick Add tools (Ctrl+Shift+J
+       for Quick Jump and Ctrl+Shift+Q for Quick Add)
+    7. Quick Jump and Quick Add can be navigated with keyboard
+    8. Time & Expenses Report: Added billable filter that returns billable,
+       pending payment and paid records
+    9. Archive related tasks are displayed as well, not just active ones
+   10. Project requests are displayed as tab on client company page
+
+Bug Fixes:
+
+    1. Fixed issue where creation of category from select box would break
+       categories that were already in the select box
+    2. Fixed issue where permanently deleted global documents were still visible
+       in recent activities
+    3. Clean up routing cache when module is uninstalled, to cover cases where
+       module was overriding routes used by activeCollab
+    4. Fixed Quick Add Project button
+    5. Date picker on New Time Record form for task now uses date in user's
+       time zone, instead of GMT date
+    6. Fixed issue where system allowed Add People form to be submitted even
+       when there is no users selected
+    7. Fixed issue where brief project info could not be loaded if project was
+       created based on a quote or project request
+    8. Notify users list in Global Document section checks for access
+       permissions when listing users
+    9. Add Client to People option removed form public quote page
+   10. System properly updates file list on milestone page when multiple files
+       are uploaded
+   11. Fixed issue when installed activeCollab version was ahead of latest
+       stable version (like beta releases)
+
+activeCollab 3.2.0 [2012/11/06]
+================================================================================
+
+First activeCollab 3.2 beta build. Major new features and improvements:
+
+    1. Quick View enables easy preview and management of application objects
+    2. Quick View for Attachments
+    3. Related Tasks provides quick and easy way to connect related tasks
+    4. Custom Fields for Tasks and Projects
+    5. HTML5 based upload (instead of Flash powered implementation)
+
+activeCollab 3.1.18 [2012/11/02]
+================================================================================
+
+Enhancements:
+
+    1. After successful password reset, user is automatically logged in and
+       taken to the home screen
+    2. System generates longer, more secure random passwords (20 letters, mixed
+       letter case, including numbers and symbols included)
+    3. On successful login automatically rehash password using PBKDF2 if we have
+       SHA1 hashed value in the database
+    4. New User form tweaked to look like other forms in the system and better
+       explain behaviour of options that are turned off by default
+
+Bug Fixes:
+
+    1. When user tries to create a new mailbox with reserved email address,
+       Email Reply to Comment tool will report a proper message
+    2. Fixed issue where anonymous users would receive notifications about
+       comments that they post
+    3. Fixed reset password issue in IE8 and IE9
+    4. Fixed issue where system would ignore users' time zone when sending
+       scheduled reminders
+    5. Mobile Interface: Fixed issue where post comment form was visible even
+       when comments were locked
+    6. Mobile Interface: fixed notebooks page on milestone level
+    7. Mobile Interface: fixed files page on milestone level
+    8. Fixed issue with latest version number checking
+    9. Upgrade Script: fixed issue where text_document_versions and
+       file_versions tables were created even when files module was not
+       installed
+   10. Fixed issue with estimates report (it used to query permanently deleted
+       and trashed time records)
+   11. Fixed issue where project progress was displayed even to people who don't
+       have access to tasks and to do lists on the project
+
+activeCollab 3.1.17 [2012/08/26]
+================================================================================
+
+Enhancements:
+
+    1. System uses PBKDF2 to hash passwords instead of SHA1
+    2. Notification sent to new assignee includes full tasks/milestone
+       description and attachments
+    3. Added option to reorder milestones that start on the same date
+    4. Improved quote and signature stripping for replies sent using Windows
+       Live Mail and iPad Mail
+    5. Control Tower now shows if there's a new version of activeCollab
+       available for download
+    6. Links in imported email messages are automatically made clickable
+    7. Different icons for different log types in email log
+    8. Assignment filter are aware of subtask due dates when they are grouping
+       data by due date
+    9. Assignment filter will automatically set additional fields when user
+       decides to include time data
+   10. When draft invoice has number set, system will treat it as pro-forma
+       invoice + option to specify how pro-forma invoices are called
+   11. Added tile icons used by Windows 8
+   12. Added /info/job-types API command
+
+Bug Fixes:
+
+    1. /info properly returns read only flag
+    2. Use "Sale" instead of "Authorisation" when processing card with PayPal
+    3. Fixed bug where Insert Link tool in visual editor would strip white space
+       around selected text
+    4. Fixed issue where activeCollab would ignore recipients's language
+       settings and sent email notifications in default language
+    5. Fixed copy phrase problem for long phrases in translation tool
+    6. Fixed collision between "Reopen on New Comments" option and completion of
+       parent objects using a comment form
+    7. Fixed long body line display issue in IE9
+    8. Fixed issue when Insert Image tool would always add image at the
+       beginning of text block in IE9
+    9. License and new version check properly checks for branding removal
+   10. Job types API response includes is_default flag
+   11. Fixed GIT update silent failing when URL path is changed
+   12. Fixed big logo issue in invoice PDF
+   13. Fixed GIT update issue when GIT repository is empty
+
+activeCollab 3.1.16 [2012/08/17]
+================================================================================
+
+Enhancements:
+
+    1. Improved and documented API commands and responses
+    2. When translating long phrases, system offers text area instead of single
+       line text input
+    3. Added priority and label to non-completed objects in Day Overview
+    4. Incoming mailbox auto-disable feature is now configurable
+    5. Added option not to print footer in invoice and quote PDF-s
+
+Bug Fixes:
+
+    1. Fixed issue where archived projects would not display any data on
+       Time & Expenses page
+    2. Colors for YouTube Videos and Bookmarks in Recent Activities
+    3. Fixed display of client address in quote PDF
+    4. Fixed date display on Milestones printout
+    5. Fixed showing raw HTML in quote's description when it is created from a
+       project request
+    6. Fixed aggregate tasks report crash on long milestone names
+    7. Improved height and width calculation when company logo is being added to
+       invoice PDF-s
+    8. Fixed outline issue when milestone, task or subtask had " in the name
+    9. Fixed conflicts count label
+   10. Fixed Load More link issue in advanced search
+   11. HTML::toPlainText() no longer prepends each paragraph with a tab (\t)
+   12. Anonymous subscribers' permissions are not evaluated any more upon
+       copying or moving an object to another project
+   13. Log Time and Log Expense dialogs are aware of user's time zone when
+       pre-selecting date
+   14. Fixed bug that sometimes appeared upon populating client data when a
+       quote is created from a project request
+   15. Fixed issue with checking public quote's status
+   16. Moving an object now moves anonymous subscriptions as well
+   17. Fixed issue with printing in Internet Explorer
+   18. Fixed issue when GIT repositories are checked via scheduled tasks
+
+activeCollab 3.1.15 [2012/08/11]
+================================================================================
+
+Enhancements:
+
+    1. Added option to resend sent and won quotes
+    2. Added project archive on company and user profile pages
+
+Bug Fixes:
+
+    1. Fixed CSS error that could result in some stylesheets not being applied
+    2. Fixed error when default hourly rate for a job type was updated
+
+activeCollab 3.1.14 [2012/08/09]
+================================================================================
+
+Enhancements:
+
+    1. Control Tower helps administrators spot problems early on
+    2. Email notifications when milestones, tasks and subtasks are reassigned
+    3. Source module will recognise .info, .install and .module files as text
+       files (based on Drupal naming convention)
+    4. Existing language can be updated with translation file
+    5. Images will open inline in a new browser tab or window, instead of always
+       being downloaded to disk
+    6. Project overview printout improved
+    7. Project specific task ID is now in a separate column in CSV export
+    8. Assignment filters can load estimated and tracked time
+    9. Added option to turn off result number limit when time & expenses log is
+       requested via API
+   10. Estimated vs Tracked time report added
+   11. Day Overview now displays object priority
+   12. Less CSS and JavaScript files (less files to upload means faster upgrade)
+
+Bug Fixes:
+
+    1. License key is sent to JavaScript only in administration section
+    2. Logs are not kept when system is in production mode
+    3. Fixed counting unread messages in IMAP/POP3 mailbox
+    4. Favourites listing will not show permanently deleted items
+    5. Fixed problem that prevented custom date option for Issue Invoice dialog
+    6. Fixed a bug where text documents, files, you tube vides and bookmarks
+       could not be copied to another project
+    7. Fixed issue with incorrectly displayed user in Day Overview widget
+    8. Fixed issue with incorrect sum of total time logged by selected user in
+       Day Overview widget
+    9. Fixed bug when number of users on a project was not displayed correctly
+       at 'project brief' page
+   10. NaN.NaN in tracked time and expenses widgets fixed
+   11. Fixed issue with being able to archive your own company, or a company
+       where the last administrator is in
+   12. Fixed bug when filenames in Files module have been appended with counters
+       even if the old files were permanently deleted
+
+activeCollab 3.1.13 [2012/09/26]
+================================================================================
+
+Enhancements:
+
+    1. Task time and expenses widget now shows task estimate as well
+    2. Reply to Comment checklist makes configuration and troubleshooting of
+       that feature much easier
+    3. Default due date can be pre-configured on recurring profile level
+    4. Default billable flag value can be set globally and per project
+    5. Improved select project permissions widget
+    6. Simplified and improved Add People dialog
+    7. Users can be replaced with a user that's already on a project
+    8. Current day is highlighted on project timeline
+    9. Notifications for incoming mail conflicts have beed added
+   10. Better options for removing incoming mail conflicts
+   11. Project exporter now also exports text documents, bookmarks and YouTube
+       videos from project's Files section
+   12. System will not allow for milestone to start on a day off or weekend
+   13. Versions of text documents can be compered now
+   14. Text document can be revered to one of the older versions
+   15. Simplified project listings in company and user pages
+   16. Sending an email notification to client is now optional if project
+       request is created from Projects > Project Requests section
+   17. Upon creating a new project request, user that is selected to be in
+       charge for that request is automatically subscribed to it
+   18. Links in subtasks are automatically made clickable
+   19. TCPDF now supports characters from Chinese, Japanese etc languages
+   20. Included link to user assignments project page when user is replacing
+       someone on a project
+   21. Reminders widget added to the default set of widgets that are created
+       when activeCollab is installed
+   22. Information on whether recipient is responsible or assigned is included
+       in task and milestone notifications
+
+Bug Fixes:
+
+    1. Fixed bug where public submit form offered only projects that
+       administrator is directly involved with, instead of listing all available
+       projects
+    2. My Discussions widget looks through all projects for administrators and
+       project managers, instead of including only projects that they are
+       directly involved with
+    3. Fixed NaN total in time reports
+    4. Fixed double HTML cleaning in status messages
+    5. Fixed issue when Resend Invoice would say that email was sent even in
+       situations where there was no email notification
+    6. Fixed a problem that could stop new objects from being saved when
+       Documents, Source or Tracking modules were uninstalled
+    7. Fixed issue where project threw and error when tasks are being exported
+       and tracking module was not installed
+    8. Fixed some SVN over executable bugs on Windows
+    9. Long quote name is broken into multiple lines of text
+   10. Get visible user ID-s and get visible company ID-s checks included
+       permanently deleted projects by mistake
+   11. Fixed issue where source repositories could not be deleted from
+       Administration panel
+   12. Formatting in public task forms is preserved
+   13. When user is removed as responsible party from an assignment, all other
+       assignees are dropped and unsubscribed as well
+   14. Fixed issue with object context rebuild for project objects
+   15. Fixed issue when deleted time records and expenses were included in a new
+       invoice when invoice is based on a milestone
+   16. Fixed bug when client for the quote created within activeCollab was not
+       subscribed automatically
+   17. Project name is included as prefix of subject line for discussion related
+       notifications
+   18. Line item quantity in recurring profiles does not need to be a whole
+       number any longer
+   19. Milestone information is now hidden at view/add/edit pages when
+       Milestones tab is not used within a project
+   20. Fixed issue when late and/or due milestones were visible at project's
+       index page without checking for appropriate permissions
+   21. Removed /e modifier and made activeCollab works well when Suhohsin is
+       configured to disable eval in preg_match
+   22. Extra radio button in Make a Payment dialog removed
+   23. Fixed issue with "Reply Above This Line" stripping when reply was sent
+       from Yahoo! Mail
+   24. Fixed "Reply Above This Line" stripping when that phrase is translated
+       and notification is not in English
+   25. Fixed search result listing problem
+   26. Fixed initial group checkbox values in select assignees helper
+   27. Fixed bug in wrong pre-selected user at the 'edit quote' form
+   28. Moving an object from one project to another now checks for
+       assignee/subscriber's permissions
+
+activeCollab 3.1.12 [2012/09/06]
+================================================================================
+
+Enhancements:
+
+    1. activeCollab can check for new version
+    2. System can list both open and completed projects, as well as open or
+       completed only
+    3. "Add as Comment" resolution option for incoming mail conflicts added
+    4. Improved transliteration support
+    5. Group by file name in Documents and Files sections are smarter when
+       working with non-latin names
+    6. Project exporter now exports files
+    7. Added note to a freshly submitted project request to let user know they
+       can bookmark the public page
+    8. Added from/to labels to milestone filters
+    9. Added company note field, with an appropriate permission in system role
+   10. Invoices can be issued with due upon receipt, NET 10, NET 15, NET 30 and
+       NET 60 due date options
+   11. Discussions are visually marked as read as soon as they are loaded
+   12. Tasks use global {TASK/ID} identifier in email notifications
+   13. Modules have default uninstall message, which includes the name of the
+       module
+   14. Confirmations for uninstalling a module are using module's defined
+       message (or falling back to default if it's not defined)
+   15. System shows "Loading" bar instead of black screen while loading backend
+       scripts and stylesheets
+   16. "Help us Improve activeCollab" is configurable (Admin > General Settings)
+
+Bug Fixes:
+
+    1. Fixed php config to int conversion function
+    2. Fixed template so proper person is listed as version author in New
+       Notebook Page Version email notification
+    3. Fixed missing $context in 'forgot_password' email notification
+    4. Fixed sorting in jump to tool, object lists and assignment filters
+    5. Fixed issue with month not being displayed correctly in date range picker
+    6. Financial managers see "Go to Invoice" instead of "Pay Online Now" link
+       in email notifications for issued invoices
+    7. Fixed issues with week boundaries calculation in assignment and tracking
+       reports
+    8. Exporter module will not try to create /work/export folder if that folder
+       already exists
+    9. Fixed project assets URL (uses slug instead of project ID)
+   10. Fixed issue with Files project tab initialisation
+   11. Fixed saving 'based on' information for projects created from requests or
+       quotes
+   12. New invoice created from a quote which has a project, now pre-selects
+       that project
+   13. Setting system default options for invoice that's based on a report or a
+       quote
+   14. Fixed invoice comment height so it does not overlap company info block
+   15. Schedule task update checks if the connection to repository is valid
+   16. Don't show Next Trigger On for archived recurring profiles
+   17. Private invoice comment is saved when invoice is created from a tracking
+       report
+   18. Upgrade script moves uncategorized pages to "Uncategorized Pages"
+       notebook instead of skipping them
+   19. Delegated tasks widget now properly shows tasks delegated by selected
+       user
+   20. Removed "not assigned tasks" options from Delegated tasks widget
+       (unassigned tasks aren't delegated - filter result is always empty)
+   21. Fixed cleaning up HTML in text documents that caused all line breaks to
+       be lost after editing
+   22. Fixed code styles in pages exported with Project Exporter tool
+   23. Fixed issue when reassigning a task via comment to 'nobody'
+   24. Fix for redirect loop in some environments which report working on port
+       80 while they actually work at 443 ($_SERVER['HTTP_X_REAL_PORT'])
+   25. Fix for frequently task being crashed when log about incoming mail has
+       invalid "from" email
+   26. Reminders are cleared when parent object is deleted
+   27. Fixed default billable status filter in time and expense widgets
+   28. "Notify sender about task being created" option is forced for CC-ed
+       recipients as well
+
+activeCollab 3.1.11 [2012/08/21]
+================================================================================
+
+Enhancements:
+
+    1. Added "To Email" criterion to incoming mail filters
+    2. Added support to login to the application using a third-party login form
+    3. System will send messages that are set to be sent instantly but something
+       went wrong and they were not sent
+    4. Logo URL in email notifications now includes timestamp to avoid caching
+       problems with some email clients
+    5. Improved the way quotes handle existing and non-existing clients
+    6. Project exports are grouped per project in /work/export folder
+    7. Documents can be printed (in Documents section)
+    8. Added .htaccess to /git and /hg folders with "Deny for all"
+    9. Added repository type icons
+   10. Completed tasks at project time log are now crossed-over
+   11. Added user, day and billable status filters to time and expense widgets
+   12. Added support to mark saved assignment filters as private (can be used
+       only by users who created them)
+   13. Added option to unsubscribe unregistered users when sharing is turned off
+       for particular object
+   14. Archived objects are now included into project's progress
+   15. Budget report on project level now shows hourly rate, as well as number
+       of billable hours
+   16. Owner company is listed above other companies in Add People dialog
+   17. activeCollab now checks memory limit on installation
+   18. Reminder comment is now listed in "Manage Reminders" dialog
+
+Bug Fixes:
+
+    1. Fixed bug when clearing the entire cache
+    2. Fixed bug which prevented custom frontend layout to be used
+    3. Fixed issue with assignment labels cache
+    4. Changed getenv($env) to $_SERVER[$env] (getenv does not work in some IIS
+       servers)
+    5. Fixed problem where mail log info was escaped twice
+    6. Fixed application URL in email notifications
+    7. Fixed issue in upgrade script's JS which was incorrectly guessing the URL
+       and failing to execute upgrade steps on rare occasions
+    8. Fixed incorrect casting of 'no' value in yes_no_default helper
+    9. Fixed a bug that could prevent the system from uploading an attachment
+   10. Fixed a problem where status updates are cloned when one of the buttons
+       are clicked
+   11. Visual editor macros fixed to work in Google Chrome
+   12. Fixed mass mailer message template
+   13. Logout simply shows login form if user is already logged out (from a
+       different window or by session expiry)
+   14. Case insensitive checks if user is already subscribed (by email)
+   15. Category is no longer a dead link in email notifications
+   16. Images in description fields are properly resized to fit max email
+       notification width
+   17. Code snippets in email notifications are properly formatted
+   18. Some elements that could not be translated in 3.1.10 are covered now
+   19. Checking for active session, reset password and forgot password actions
+       are now checking for user's status
+   20. Quoting strings during CSV export now properly takes care about custom
+       CSV field separator
+   21. Added styling for date range picker
+   22. Fixed showing error dump instead of error message upon validation failure
+       at 'add user' dialog
+   23. Project name is updated at project tabs without need for refreshing the
+       page
+   24. New task is loaded after a task is copied to another project
+   25. When task is rescheduled, subtasks are properly rescheduled as well
+   26. Expense records are properly marked as paid, when invoice is paid
+   27. When notebook is copied, system also copies archived notebook pages
+   28. Invoice due on update is properly saved and displayed
+   29. Fixed bug in quotes with setting recipient for quote edit
+   30. Fixed incorrect linking to permanently deleted users/companies in Quotes
+       & Project requests
+   31. Fixed an issue when source repository is deleted from admin page
+   32. Fixed returning permanently deleted company by default, in case that
+       company is being looked up by name
+   33. Fixed issues in Documents module for users that have permission to manage
+       documents
+   34. Fixed potential issue with viewing Document objects by users who don't
+       have proper permissions
+   35. Milestone is properly updated when object is moved from selected
+       milestone to a different milestone
+   36. Project exporter will not create dead links on milestone details page
+       for objects that are not being exported
+   37. Fixed error that caused Project Exporter to skip time and expense records
+       from export
+   38. Fixed issue that stopped "users map" from opening to non-admin users
+   39. Reloading job types after default one is changed so permissions of the
+       existing ones get properly updated
+   40. Fixed issue with caching user's display name in project people list
+   41. Fixed issue with loading permanently deleted company
+   42. Fixed fatal error at public object's page when submitting a comment which
+       has validation errors
+   43. Fixed error when trying to release time & expenses from an invoice when
+       its status is issued or paid
+   44. Fixed access permission checks for Reports section
+   45. Mitigated potential performance issue when copying many objects or
+       creating projects from a template
+   46. Assignment filter's results exported to CSV now show labels properly
+   47. Error message for min. password length now makes more sense
+   48. Fixed a bug when the interface was not refreshing after uploading new
+       file version
+   49. To Do lists now support subscribers
+   50. Fixed notifications for assignees and subscribers of subtasks added to
+       tasks
+   51. Notifications for subtask assignee in To Do list now work
+   52. Fixed inconsistency at discussions add/edit form (one/two sidebars view)
+   53. If user does not have permissions to track time, they will not be able to
+       set or update task estimate
+   54. Fixed vCard import crash ($str needs to be scalar value)
+   55. Due to various Opera bugs, version of page optimise for print opens a new
+       window instead of being printed in the background
+   56. Upgrade script properly handles uncategorized pages
+   57. Added server-side check for deleting the last home screen tab
+   58. Fixed bug with upgrade script reporting too low memory limit in case that
+       it's set to -1 (unlimited)
+   59. Fixed condition that finds recurring profiles that should be sent today
+
+activeCollab 3.1.10 [2012/07/12]
+================================================================================
+
+Enhancements:
+
+    1. Added ability to specify how invoices are called (so you can easily cover
+       situations where your country requires that invoices are displayed as
+       "Tax Invoice" for example)
+    2. Files tab added to milestone details page
+    3. Added options to sum time records and expenses when invoice is created
+       based on a result of a tracking report
+
+Bug Fixes:
+
+    1. Better clean up of home screen widgets and tabs on module uninstallation
+    2. Sample Theme is automatically uninstalled by the upgrade script
+    3. Fixed API error when file has versions
+    4. Invoice related email notifications show note, not comment
+    5. Task assignee is subscribed and notified
+    6. Fixed issue with assignment filters and filtering by selected milestone
+       and / or category
+    7. Milestone is preserved when project is created from a template
+    8. Subtasks are properly rescheduled when milestone is rescheduled
+    9. Fixed problem where New Subtask notification displayed person that
+       created parent task or to do list as subtask author
+   10. Internet Explorer 8 slow script error covered
+   11. Trash popup properly updates when one of the notebook pages that has
+       sub-pages is restored
+   12. Interface does not break if user tries to log in after log out without
+       refreshing the page
+   13. Fixed an error that shifted milestones one day back on timeline tab and
+       milestone details page
+   14. Sample theme is automatically removed by the upgrade script
+   15. User is redirected to Repositories page when source repository is removed
+       from a project
+   16. Estimate can be updated in project outline
+   17. Failed to load class 'EstimateInspectorProperty' error fixed on task
+       print page
+
+activeCollab 3.1.9 [2012/07/09]
+================================================================================
+
+Enhancements:
+
+    1. Email notifications: simplified templates
+    2. Email notifications: improved readability on small screens
+    3. Forms now wait for attachments to upload
+    4. One click change label for subtasks
+    5. Labels are displayed in object list for projects and tasks
+    6. If object is private, little icon is displayed in the object list
+    7. Comments widget now displays comment number
+    8. System no longer sends four notifications when invoice is marked as paid
+       (it sends two now: one to payee, and one to financial managers)
+    9. Added dd/mm/yy and dd/mm/yyyy date formats
+   10. From, To, and Created on cells in e-mail log will no longer break into
+       more lines
+   11. Inline images now support links
+   12. Minor tweaks with sharing and non-registered users
+   13. Tasks show task ID in title
+   14. Page title is now in "Page Title - Site Name" format
+   15. Design of redesigned reminder tightened up
+   16. Project name included in comment, subtask and reminder notifications
+   17. System will notify administrators when mailbox is auto-disabled
+   18. activeCollab loads 30 instead of 50 recent activity entries
+   19. Financial manager see all people (but can't manage their accounts)
+   20. It's clear that project is archived when viewing Project at a Glance page
+   21. Mobile Interface: Show only active tasks on My Assignments page
+   22. Added Files tab to project milestone page
+   23. Show/hide Add User button when company is trashed
+   24. Parent information included in printed detailed tracking report
+   25. Improved grouping of summarised tracking reports
+   26. Tasks displayed at home screen widgets grouped by completion or creation
+       date are now sorted from newest to oldest date, respectively
+   27. Saving client from quote will now update all existing quotes with same
+       (non-existing) client
+   28. PDF that's attached to invoice related notifications always uses
+       "invoice.pdf" filename
+   29. Duplicate quote
+
+Bug Fixes:
+
+    1. Email notifications: fixed escaped characters in email subjects
+    2. Trash is properly update when last object in a group is removed
+    3. Chrome specific: fixed issue were Jump To and Quick Add would not open
+       after Status Updates has been opened
+    4. Fixed issue that occurred when Notebook is being moved to trash
+    5. Updated CURL command to include -L switch (follow redirections)
+    6. Updated checking isSubscribed method in case that subscriber is anonymous
+       user
+    7. Fixed issue upon using select_assignees helper to manage subscriptions as
+       well (not all subscribers were properly pre-selected during Edit action)
+    8. Assignee set via comment now gets subscribed to object as well
+    9. Fixed deleted label appearing within the system after it's been deleted
+       (caching issue)
+   10. Notification context code is included in the subject ONLY if context
+       object is commendable (user and invoices are not)
+   11. Internal: MySQL connection throws an exception on invalid escape value
+   12. Fixed bug on "Nudge" page in mobile interface
+   13. Fix for incoming mail when filename of body part is forwarded as a
+       disposition parameter, and not as inline parameter
+   14. Fixed issue where label name could break in two lines
+   15. Fixed URL validator (it marked URL as invalid in case when they have &
+       character)
+   16. Email subject is no longer HTML escaped
+   17. Internal: Email validator now uses PHP's filter extension
+   18. Internal: Shut-up for get_magic_quotes_gpc() (to remove deprecated
+       warnings from error logs)
+   19. Internal: Ability to specify attachment's name has been added to
+       application mailer
+   21. If "Notify sender" is not checked, don't notify sender
+   22. Fixed wrong info for object author, creation date and completed status
+       upon copying the object to another project
+   23. Fixed "forbidden" error for project manager / admin while trying to
+       subscribe to objects in projects that they aren't members of
+   24. Fixed potential problem with day off update
+   25. Fixed copy feature for archived objects
+   26. Trashed objects now cannot be copied/moved
+   27. Copying an object now removes relation to milestone
+   28. Fixed issue that disabled Safe feature for tracking reports
+   29. To do list category is properly updated when To Do list is edited
+   30. Fixed error when non-submitted Project::add() API request ended up
+       loading template (instead of serving Bad Request error)
+   31. Improved vCard importer and fixed some import related bugs
+   32. Internet Explorer compatibility fixes
+   33. Skip trying to subscribe public task creator if the same user is set to
+       be automatically subscribed in public task's settings
+   34. Fixed links to different invoicing sections depending on user's company
+       (owner or not)
+   35. Fixed issues where last payment was not marking Invoice as paid
+   36. Better propagation of state changes when project is archived or trashed
+       (and restored from archive or trash)
+   37. Upgrade script fixes issues with empty object texts
+   38. Fixed visual bug after editing a quote (client-side fail)
+   39. File is properly loaded when users visits it from email notification, but
+       needs to authenticate first
+   40. Fixed bug when project manager or admin had to be added to projects in
+       order to see other user's tasks via home screen widgets
+   41. Fixed bug when tasks grouped by completion date were showing only open
+       tasks
+   42. Fixed inability to choose default language in user's profile after some
+       other language has been set as default
+   43. Fixed saving theme config option for user (disabled until new support for
+       themes is introduced)
+   44. Fixed issue where calendar duplicated events in last couple of days of
+       previous month, and appropriate days of current month
+   45. Fixed validation issue during creation of a new quote
+   46. Fixed issue that resulted in "Failed to Load" error when user tried to
+       open Recent Activities tab on user's profile
+   47. Prevent user from submitting form for adding user to projects if there
+       are no more projects that user can be added to
+   48. Fixed data integrity issue that could result in project object being
+       imported from multiple project instead of just from the template
+   49. When user is replaced, assignments are properly moved to the new user
+   50. Fixed issue where users who are automatically added to new projects all
+       start with no permissions
+   51. Fixed "Send Welcome Message" dialog style
+   52. Fixed "Notify Users About this Change" feature when user is being
+       replaced on a project
+   53. In recurring profiles, company managers from owner company are excluded
+       from notifications if they don't have financial management permissions
+   54. RSS feed is no longer empty
+   55. Cache is cleared when project tabs are re-arranged on Administration >
+       Project Settings page
+
+activeCollab 3.1.8 [2012/06/18]
+================================================================================
+
+Enhancements:
+
+    1. History API patch is applied only to Internet Explorer
+    2. Assignment delegation settings are available on project level
+    3. More informative user login error messages
+    4. Maintenance module re-introduced
+    5. Invoice counter can have fixed string length (prefixed with zeros)
+    6. Module management actions now refresh the entire page
+    7. Default button color changed to green
+    8. Improved design of flyout dialogs
+
+Bug Fixes:
+
+    1. Slow script bug fix for browsers that implement History API natively
+    2. Fixed issue where Save As and Delete options for filters were displayed
+       even to users who can't use these actions
+    3. Compiled templates are cleared when module is installed or uninstalled.
+       They are also cleared after each upgrade
+    4. Fixed error when user tries to save a new notebook page version
+
+activeCollab 3.1.7 [2012/06/16]
+================================================================================
+
+Enhancements:
+
+    1. Force check that notifications are sent only to active users
+
+Bug Fixes:
+
+    1. When invoice notification is sent to a client, PDF version of the invoice
+       is included as an attachment
+    2. Fixed Day Overview widget issue that resulted with query error
+    3. Improved handling of notebook pages when notebooks and pages are moved to
+       trash and restored from trash
+
+activeCollab 3.1.6 [2012/06/15]
+================================================================================
+
+Enhancements:
+
+    1. New client side events: content_loaded and single_content_loaded
+    2. Incoming mail will notify administrators if it fails to check mailbox
+       because of a validation error
+    3. Client see person who issued an invoice, not a person who created it
+    4. Activity logs are much faster now, and consume less resources
+    5. Browser history manipulation improved on the AJAX load for the Projects
+       index page
+    6. Day off name no longer needs to be unique
+    7. Added archive for documents
+    8. Invoice form: Add From Template option will overwrite default invoice item
+       if it is empty
+    9. Quick search now can search for documents as well
+   10. SVN can trust server certificate (added --trust-server-certificate to svn
+       executable call)
+   11. My Discussions widget optionally displays discussions from completed
+       projects (off by default)
+   12. Tracking reports display parent info for time records and expenses that
+       are tracked for a task
+   13. Estimates use hour notation
+   14. Defined default home screen for people managers (same as for project
+       managers for now)
+   15. Quotes: saving client now optionally sends a welcome e-mail
+
+
+Bug Fixes:
+
+    1. Rebuild localisation bug fixed
+    2. Collectors show file path only when app is in debug or development mode
+    3. Permanently deleted objects can't be accessed
+    4. App.isValidEmail() is no longer case sensitive
+    5. Situation when server_name is not properly set will no longer break the
+       system
+    6. Break lines are no longer cleaned from paragraphs by HTML sanitizer
+    7. activeCollab will obey Return-Path and Auto-Submitted email headers
+    8. If someone adds an address of defined incoming mailbox to CC, that
+       address will not be automatically subscribed
+    9. Quick search is more reliable
+   10. Fixed message analyzer in source module
+   11. Source module search index related bug has been covered
+   12. Fixed repository upgrade issue
+   13. Trashed users are not displayed on project people pages
+   14. Show only visible repository project objects in source admin section
+   15. Project progress refreshes when we change objects milestone or when we
+       move it to the trash
+   16. Fixed print in invoices section that clients use
+   17. Quick search: fixed bug where quick search would return objects that are
+       already deleted
+   18. Quick search: fixed bug where users can't be found after their accounts
+       have been update
+   19. Advanced search: fixed bug where advanced search would return objects
+       that are already deleted
+   20. Tracking reports will display records for all selected users, not just
+       for the first one
+   21. Trashed projects are no longer listed in tracking reports
+   22. Upload files from shared task pages works now
+   23. Error that happens when reminder is dismissed has been covered
+   24. Fixed an error that happens when milestone is restored from trash
+   25. Subtasks are properly showing in Day Overview widget
+   26. Issue that caused recent activities blocks to be empty for clients has
+       been covered
+   27. Delegated Tasks widget now properly displayed Delegation Settings on edit
+   28. Add and edit company dialogs have the same width
+   29. Fixed calculation issue that could leave an invoice open even after last
+       payment has been made
+   30. Covered a rare issue that caused some of the objects not to be copied
+       from a template to the new project
+
+
+activeCollab 3.1.5 [2012/06/08]
+================================================================================
+
+Enhancements:
+
+    1. My discussions widget now displays only active, non-archived projects.
+       Completed, non-archived projects can be optionally included
+    2. File preview is download link for images and types that don't have inline
+       preview option
+    3. FORCE_ROOT_URL is On by default
+    4. Record parent displayed in Time & Expenses log
+    5. Added option to Project Settings that lets administrator configure
+       whether clients can delegate tasks to all project members or just to
+       members of their own company that are on a project
+    6. Completed objects are crossed over on project assignments page and in
+       assignment filter results
+    7. After creating a new project from quote, user is redirected to that
+       project
+    8. Outline: Faux milestone in outline view is now called 'Unclassified
+       Tasks and Todo Lists' not 'Unknown Milestone'
+    9. Outline: New milestones are added before faux one, but after all existing
+   10. Max upload size displayed in New File Version form
+   11. Upgrade from 2.x should drop records from subscriptions that refer to
+       non-existing entries in users table
+   12. System automatically scrolls down to the bottom of invoice items list
+       when there are many items in the list
+
+Bug Fixes:
+
+    1. Fixed missing method error when public task form is updated
+    2. More complete localisation dictionary
+    3. JavaScript error on assignments filter page in IE8 has been covered
+    4. Attachments are listed for notebook pages in mobile interface
+    5. Covered issue with home screen and non-ASCII characters in widget titles
+    6. Fixed issue where deleted financial managers kept receiving email
+       notifications even after they were deleted
+    7. Email address can be re-used after original account is deleted
+    8. Company name can be re-used after original company is deleted
+    9. Billable status is properly displayed when time & expenses report is
+       printed (used to show all records as Non Billable)
+   10. Object that don't implement IState could display deleted comments
+   11. Project managers can assign tasks to all project members, not just to
+       members of their own company
+   12. Source code properly displays file content
+   13. Added attachments to notebook pages in mobile interface
+   14. Fixed WebKit specific issue with Day Overview widget and user names that
+       contain non-ASCII characters
+   15. Related time and expenses are dropped when item is removed from an
+       invoice via Edit Invoice form
+   16. Fixed getting visible company ID-s
+   17. activeCollab will check if email address is reserved by incoming mail
+       when new user is being created
+   18. Improved Google Calendar compatibility
+   19. Project Exporter stability is improved
+   20. Completed milestones that have no open tasks are displayed as 100% done
+   21. List of to do lists is properly updated when new to do list is created
+   22. Max length of file in Documents section increased to 150 characters
+   23. Exceptions in incoming mail will not choke frequently task, but log the
+       error and allow for task to be completed
+   24. vCard importer is no longer case sensitive when it imports companies
+   25. Notebook pages list is refreshed when pages are reordered
+   26. Patched FileVersion class so it uses IRoutingContext
+   27. IDownloadImplemention will not fail with a fatal error if parent object
+       does not implement IRoutingContext
+   28. Fixed potential fatal error in incoming mail class
+
+activeCollab 3.1.4 [2012/06/03]
+================================================================================
+
+Enhancements:
+
+    1. FORCE_ROOT_URL introduced (experimental)
+    2. Improved the way incoming mail picks up message parts
+    3. Added download button to shared files page
+    4. Plain Text used by default in code snippet tool
+    5. When categories in projects are deleted, objects that belong to that
+       category are now unlinked, not deleted
+    6. Added Nudge and Reminder options to To Do Lists
+    7. Move to Notebook has current notebook pre-selected
+    8. activeCollab opens non-persistent MySQL connections by default
+
+Bug Fixes:
+
+    1. file_is_writable() is aware whether file exists or not
+    2. Smarty reconfigured to be in auto-clean mode
+    3. Fixed issue with invoice creation after upgrade from activeCollab 2.3.x
+    4. Code snippets now properly display type icons
+    5. Corrected date in comments on shared pages
+    6. Fixed issue with Add to Projects tool
+    7. System displays Recent Activities to user who is viewing his own profile
+       or to a project manager on user's profile page
+    8. Fixed spelling error in recurring profiles
+    9. Fixed invoice edit/add issue in case there is no defined Tax rates
+   10. Archived and trashed users can't log in any more
+   11. Members can track time and expenses on task level
+   12. Calendar properly displays user assignments
+   13. Corrected links for upgrading license in admin section
+   14. Fixed issue with select company picker in quotes for users who are not
+       financial managers
+   15. Save client visibility in quotes for users who are not people managers
+   16. Select company picker takes care of companies that are visible to user
+   17. SQL error triggered by Tasks model has been covered
+   18. Due date was off by one day in some situations in subtasks section
+   19. Dependency on Horde_String removed
+   20. Link popup properly picks up selection when it has brackets
+   21. Fixed download for PHP setups that automatically use GZIPed buffer
+   22. Improved the way "Minor Revision" picker looks like in mobile interface
+   23. Password reset fixed in mobile interface
+   24. Corrected URL for PayPal Express production mode
+   25. Custom payment fix for 1000 amounts
+   26. Email address can contain capitalised letters
+   27. Numerous tweaks to HTML sanitizer
+   28. Corrected invoice creation when there are no tax rates defined
+   29. Fixed Internet Explorer 8 bug on Roles & Permissions page
+   30. Long project names go over icons on project overview page
+   31. Notebooks page in Mobile Interface has been patched
+   32. Enhanced basic file uploads to work properly in Chrome
+   33. Active projects can be trashed
+   34. Quotes are properly sent now
+   35. Documents preserves file name when file is downloaded
+   36. Fixed breaking home screen when user in day overview widget has
+       apostrophe or double quotes in name
+   37. Fixed showing client company managers to people who are not allowed to
+       see those users
+   38. Fixed routing error display in production mode
+
+activeCollab 3.1.3 [2012/05/26]
+================================================================================
+
+Bug Fixes:
+
+    1. Fixed upgrade issue that affects activeCollab 3.1.1 users
+    2. Fixed allow_payments field type in invoices table
+
+activeCollab 3.1.2 [2012/05/25]
+================================================================================
+
+Bug Fixes:
+
+    1. Fixed an error in daily task caused by mailing log clean-up
+    2. float_to_time() fix for integer input values
+    3. Fixed PayPal Express payment for client company managers
+    4. "Notebook" prefix removed from notebook titles
+    5. Removed option to create new objects from archived milestones
+    6. Fixed situations when invoices were not always connected with projects
+       that they are based on
+    7. Fixed invoice draft deletion issue
+    8. Built-in (en_UTF-8) is not editable via administration
+    9. Fixed permanent project deletion
+   10. Fixed issue with new file version upload
+   11. Day and month names can be translated now
+   12. Fixed issue when milestone could not be created if tracking module was
+       not installed
+   13. Less agressive HTML cleaner
+   14. Fixed problems where in some cases project slugs ended up with non-ASCII
+       characters
+   15. Fixed error on Quotes page
+   16. Issue with upgrade script 17 covered (it used to end the upgrade)
+   17. Fixed issue with can_use_api permission upgrade
+
+Enhancements:
+
+    1. activeCollab forces IE to run in standard mode
+    2. People on Project People page sorted by their name
+    3. Link To does not replace selected text with target name
+    4. Label added to project's details page
+
+activeCollab 3.1.1 [2012/05/21]
+================================================================================
+
+Bug Fixes:
+
+    1. Option to create new tasks, discussions etc removed from details page of
+       archived milestones
+    2. Fixed issue with subscribe / unsubscribe options on archived objects
+    3. "$invoker not defined" JavaScript error fixed
+    4. Scroll bar for invoices that have more than 7 items
+    5. Fixed task counter and progress calculator for milestones
+    6. Fixed issue with project icon change
+    7. Fixed to do list filtering
+    8. Notebook page preview fixed
+    9. Option name for Pin option in Global Documents section
+   10. HTML cleaner improved
+   11. Installer and upgrade script now check whether config/version.php is
+       writable
+   12. Subscription tweak for objects created with an email
+   13. Admin Tools are displayed to administrators even when system is not in
+       development mode
+   14. Completed On filter issue fixed in assignments filter
+
+Enhancements:
+
+   1. Fixed title for login page
+   2. Client details added to Project at a Glance page
+   3. Download option highlighted for Global Documents
+   4. Completed items are crossed over in calendar view
+   5. Various sharing improvements
+   6. New icon for Rebuild Indexes administration tool
+
+
+activeCollab 3.1.0 [2012/05/18]
+================================================================================
+
+Final stable activeCollab 3 release. Major new features and improvements:
+
+    * All new interface brings faster navigation, less clutter and powerful
+      tools (navigate without refresh, object lists, great visual editor etc)
+    * activeCollab looks and works great on modern phones
+    * Outline and timeline view make project management much easier
+    * Tickets are renamed to tasks, checklists to to do lists and tasks to
+      subtasks
+    * Pages module renamed to Notebooks and significantly improved
+    * Configurable home screens with support for extension via modules
+    * Workweek and holiday configuration with smart assignment rescheduling
+    * Invoicing module now features invoice designer, quotes and payments
+    * Time tracking module has been extended with estimates and expense tracking
+    * Specify job type when tracking time. Each job type has its own hourly rate
+    * Set project budgets and see how project resources are spent, in real time
+    * Labels for projects and tasks enable easier status tracking and sorting
+    * Email integration offers email queue, email log and all new templates
+    * Incoming mail now supports definition of message filters
+    * Mail cleaner will remove quotes and signatures from replies
+    * Share project data with people who don't have an account in the system
+    * Powerful assignment filters and tracking reports
+    * GIT and Mercurial support added on top of SVN support to Source module
+
+... and much more. There's not a single section in activeCollab that haven't
+been improved with this release, at least a bit!
+
+Enjoy!
+activeCollab Team
+
+activeCollab 2.3.10 [2012/05/10]
+================================================================================
+
+Security:
+
+    1. Fixed SQL injection issue in project object class
+    2. Fixed XSS issues with select users and select projects widgets
+    3. Upgrade script steps can't be triggered without logging in as
+       administrator
+
+    Thanks to http://www.stratsec.net/ for the report.
+
+Bug Fixes:
+
+    1. Project filter and group options could not be applied both at the same
+       time
+    2. In project exporter corrected ticket ID numbers, links to tasks, added
+       time records from tasks to tickets and checklists
+    3. Fixed missing project grouping options for some users having admin role
+
+Enhancements:
+
+   1. Backup restore instructions switched from a PHP file with a comment to a
+      text file
+   2. Updated the list of file types whose source can be displayed
+
+activeCollab 2.3.9 [2012/03/21]
+================================================================================
+
+Security:
+
+    1. Fixed XSS problem with theme names (high)
+    2. Added CSRF vulnerability check for editing password and company/role (medium)
+    3. Secure flag is set to On for cookies when activeCollab uses HTTPS (medium)
+    4. Login form does not re-print user password after failed authentication (medium)
+
+    Thanks to Nokia and Nixu.com for the reports
+
+Enhancements:
+
+    1. Options menu can be toggled on click (was toggled on hover only)
+
+Bug Fixes:
+
+    1. Quick-fix for issue in TinyMCE when using backspace/delete in first item in an list
+
+activeCollab 2.3.8 [2012/02/09]
+================================================================================
+
+Licensing:
+
+    1. License agreement updated: http://www.activecollab.com/docs/manuals/licensing/license-agreement
+
+Enhancements:
+
+    1. Shipping latest stable TinyMCE release (v3.4.8), which now enables rich-
+       text editor to devices using iOS5
+    2. PHP 5.4 compatibility
+
+Bug Fixes:
+
+    1. Fixed problem with BenchmarkTimer class in CronController when system is
+       not in DEBUG mode
+    2. Company invoices are listed on pages
+    3. Only administrators can change role of another administrator
+    4. Fixed error reports by Backup module
+    5. Fixed issue with rich-text editor when activeCollab is used via mobile
+       interface
+    6. Upgrade script does not enforce persistent connection
+    7. Fixed JS "return false;" issue with IE 7 & 8
+    8. Output redirection bug fixed in Source admin section
+    9. Missing 3rd parameter in Category::canAdd
+   10. Fixed setting a project as favorite using drag & drop
+
+activeCollab 3.0.0 [2011/12/29]
+================================================================================
+
+First public activeCollab 3 beta release
+
+activeCollab 2.3.7 [2011/11/30]
+================================================================================
+
+Enhancements:
+
+    1. Users from archived companies are now excluded from the dialog for
+       adding users to a project	
+
+Bug Fixes:
+
+    1. Escaped repository password
+    2. Nested lists in visual editor are properly saved
+    3. jQuery UI upgrade and IE drag and drop compatibility
+    4. Fixed deleting project's icon
+    5. Fixed few issues with print preview 
+    6. Fixed default date and time format issue for Windows
+    7. If there is only one admin role, it's system or admin access cannot be
+       turned off
+    8. Fixed the bug in the assignment filters, when pointing "completed on"
+       to a specific date and setting status "both active and open" actually
+       showed completed objects only
+
+activeCollab 2.3.6 [2011/11/01]
+================================================================================
+
+Enhancements:
+	
+    1. Improved thumb.php
+    2. People with manage permissions in specific section (discussions, files, 
+       pages, tickets) can also manage categories in that section
+    3. Removed extra database lock while emptying the trash
+    4. If there are too many trashed objects, they will be deleted in chunks
+       (not all at once)
+    5. Status updates now can be deleted
+    6. Basecamp data importer included in Corporate and Small Biz builds
+
+Bug Fixes:
+
+    1. Fixed subscriptions page problem when project is empty
+    2. Fixed permission checking for tasks assigned to a user who can't edit 
+       parent ticket, checklist or a page
+    3. Fixed favicon URL for login screen, as well as error page
+    4. Fixed issue when assignments filter was including comments in the results 
+       in some cases
+    5. Fixed issue when trash was reporting to be empty and it wasn't
+    6. Fixed bug where admins and project managers were being able to perform
+       search only across projects that they were added to
+    7. Fixed PHP compatibility message for Incoming Mail and Importer modules
+    8. Master categories at Admin page are now sorted in the same way as
+       they are sorted within projects
+
+activeCollab 2.3.5 [2011/09/16]
+================================================================================
+
+Bug Fixes:
+
+    1. Fixed PHP4 compatibility error in Subscriptions class
+    2. Fixed Google Chrome issue with print preview stylesheets
+
+activeCollab 2.3.4 [2011/08/12]
+================================================================================
+
+Enhancements:
+
+    1. Favicon updated
+    2. Directories having invalid name are excluded from modules list
+    3. Objects can also be completed by using "completes" keyword in commit 
+       messages
+    4. Text excerpt adds white-space between paragraphs instead of "glueing" 
+       them together
+    5. Email notifications about new comments now include links attachments 
+       (if any), and don't include parent object information block any more
+    6. Admins and project managers can see all projects at projects list while 
+       adding/editing an invoice
+    7. Invoice number generator counters can now be manually set in admin panel
+    8. Added character counter for status update message and blocking input when 
+       the limit exceeded
+    9. Ticket IDs are preserved upon creating a project from a template
+   10. Tickets and tasks now use VEVENT instead of VTODO when exported in ICS 
+       file type
+   11. Improved recognition of Droid and Palm devices
+   12. Improved Assignments by adding more options to filters
+   13. Added "Reset password" to mobile interface
+   14. Comments are now displayed as newest first; comment form moved above the 
+       comments
+   15. Added more recent activities on Dashboard and Project Overview
+   16. Added "Subscriptions" link to user options and "My Subscriptions" to 
+       project overview for easy subscription management
+   17. Edit option for comments is locked one hour after the comment is posted
+   18. No more "free for taking" tasks
+
+
+Bug Fixes:
+
+    1. Fixed bug when eval() function throws an error while exporting projects
+    2. Fixed bug with invoices where there was typo in one of the parameters in 
+       Invoices class (condition instead of conditions)
+    3. Fixed deadlock MySql issue - try 3 times before throwing an error
+    4. Fixed warning message at parsing commit messages
+    5. Fixed regex which was failing to validate URLs containing query string 
+       (e.g. custom logout URL)
+    6. Fixed editing "Issued on" value for invoices
+    7. Fixed downloading files issue - ob_end_clean()
+    8. Fixed subscribing project leader to tickets added via Quick Add
+    9. Fixed pagination at company invoices page
+   10. Checking for more error strings in Svn response
+   11. Fixed selecting target project at resolving mail conflict
+   12. Fixed viewing objects moved to other project via objects' old links.
+   13. Fixed disappearing of assignment filters added to the group named "Other"
+   14. Fixed setting wrong user and time for previous page version
+   15. Fixed SVN issue when, on some systems, SVN repository always returns one 
+       log even if there are no new ones
+   16. Fixed calculating first day of the week that wasn't working as expected 
+       in some cases
+   17. Fixed error at mailbox add/edit page when neither Tickets nor Discussions
+       module are installed
+   18. Fixed issue at checklists page when no tasks could be added
+   19. Fixed displaying company users via API
+   20. Some phrases were not available in the translation tool
+   21. Fixed double status message posting
+   22. Fixed default "Late" assignment filter showing completed objects
+   23. Fixed issue when tasks rescheduled by a milestone were diplaying old due 
+       dates
+   24. Fixed issue when user with ability to manage an object couldn't manage 
+       its subtasks
+   25. Administrators and project managers can see all projects via mobile 
+       interface now (before only projects assigned to)
+   26. Fixed displaying 'Object' instead of selected date and date range in some 
+       environments at assignment filter's details block
+   27. Fixed showing all assignments instead of none, when selected company has 
+       no users or no visible users
+   28. Fixed print preview failing to load stylesheets in Safari 5.1
+   29. Fixed fatal error in setups using persistent connections but not having 
+       them enabled on system level
+   
+
+
+activeCollab 2.3.3 [2011/05/16]
+================================================================================
+
+Bug Fixes:
+
+    1. Fixed logo uploading in Company identity section of activeCollab
+       administration
+    2. Email notifications when adding Documents
+    3. Time reports now displays time records for anonymous users
+    4. Fixed Go button on arhived ticket page
+    5. Fixed problem with Page Version delete permissions
+    6. Fixed importing language from xml issues when there's a translation for
+       one module only / translation for module has a single translation entry
+    7. Fixed filemtime() PHP warnings when logo and avatar URL-s are returned
+    8. Fixed PHP warning in ProjectPeopleController class
+    9. Fixed bug with invoice unit price value while another language is chosen
+       where point (.) was interpreted as comma (,) thus preventing company
+       address to be rendered correctly
+   10. Fixed bug for showing compare differences between revisions
+   11. Fixed bug for time entries of deleted users when using project exporter
+   12. Fixed bug to use "Use error output redirection" in Source Settings by 
+       default
+   13. Improved Internet Explorer 9 compatibility
+
+activeCollab 2.3.2 [2010/07/16]
+================================================================================
+
+Enhancements:
+
+    1. Only administrator can change password of another administrator
+    2. TinyMCE upgraded
+
+Bug Fixes:
+
+    1. Fixed Source module bug (browse repository link error)
+    2. Fixed Source module bug (update repository JS problem in IE)
+    3. Change commits visibility on repository visibility changes 
+    4. Fixed MIME type issue with documents and attachments
+    5. Ticket priority is properly set when ticket is created by incoming mail
+    6. Fixed fatal error on status page when there are no status messages in the 
+       database
+    7. Fixed issue with task complete / reopen action in mobile interface
+    8. Attachments can be deleted only by people who can edit parent object
+    9. Only people who can see an object can subsctibe to it
+   10. Fixed long URL problem with projects select widget when there's a lot of 
+       projects to be excluded
+   11. Fixed problem when system failed to connect time records with invoices 
+       based on time reports
+   12. Fixed problem with Styles menu in visual editor
+
+activeCollab 2.3.1 [2010/06/18]
+================================================================================
+
+Enhancements:
+
+    1. Added information on when the reminder was sent
+    2. Added list of available modules to the welcome message
+    3. Welcome message on the Dashboard is displayed only to Administrators
+    4. Replies have been added to status module
+    5. Copying/moving milestones to another project now allows copying/moving
+       all related objects (tickets, checklists, files, discussions)
+    6. STDERR to STDOUT redirection (2>&1) in Source module's SVN commands is 
+       now optional
+    7. Added config option for limiting number of subscribers that are printed 
+       on each page that lists them
+    8. Source module can be accessed trough mobile interface
+    9. Added message when a user who does not participate in any active projects
+       tries to download the .ics file
+	 10. Added --trust-server-cert option to Source module
+	 11. Added support for custom number of decimal spaces used in invoices, use
+	     INVOICE_PRECISION in config.php to determine how many decimal spaces you
+	     need. Maximum number of decimals supported by system is 3
+	 12. Tax rate now can have 3 decimals
+	 13. Users on project's People tab are ordered by name
+	 14. Copy / Move to Projects lists all available projects to project managers 
+	     and administrators
+	 15. System sets Return-Path for outgoing messages
+	 16. Better canUnsubscribe() permission check for project objects
+	 17. Administrators, project managers and people managers can add people from 
+	     any company to projects
+	 18. Status updates module now supports replies to individual messages
+	 19. User has an option to avoid sending notification to company specified on 
+	     an invoice when adding last invoice payment
+	 20. Now the following fileds can be set through the API for project objects: 
+	     created_on, created_by_id, created_by_name, created_by_email
+
+Bug Fixes:
+
+    1. Source module is translatable
+    2. Fixed problem with formatting of time data
+    3. Fixed "With Selected ..." button style
+    4. Improved edit time record form
+    5. Fixed problem with pagination not remembering selected category in
+       Documents module
+    6. Fixed problem with relation between milestones and checklists being lost 
+       when project is created from a template
+    7. Fixed bug with callback functions of modal dialogs
+    8. Fixed issue with converting uppercase hyperlinks
+    9. Fixed incorrect date for "last comment on" for discussions copied from
+       other projects
+   10. Fixed bug that was crashing invoicing module when there is invoice which
+       is issued to the company which is deleted
+   11. Fixed bug with invoicing module in which two or more invoices can share
+       same timerecords attached to them. From now on, when you assign
+       timerecord to one invoice, it can't be assigned to invoices created
+       afterwards
+   12. Fixed diff/compare/history issue that affected some files in Source 
+       module
+   13. Fixed bug with number rounding in invoicing module
+   14. Fixed bug with corrupted archives while using project exporter on some
+       installations
+   15. Fixes for uploaded files permission and for cache file permission. File
+       permission can be overridden now with simple config option
+   16. Fixed incorrect hidden input value when editing documents
+   17. Fixed problem with long MIME type strings
+   18. Warsaw moved into a correct time zone
+   19. Fixed issue when long user agent string could cause query error when 
+       MySQL is in strict SQL mode
+   20. Improved PHP 5.3 compatibility
+   21. All projects are listed in projects archive to administrators and project 
+       managers when viewed by client
+   22. Fixed missing argument warning in on_project_overview_sidebars handler
+   23. Correct page version author is displayed on Pages tab
+   24. Mobile interface now displays login error messages
+   25. Fixed bug, when visitor receives 'Page not found' error when visiting 
+       assignments page after deleting default assignments filter
+   26. Fixed issue with logo resizing in invoicing administration
+   27. Single quote (') is now allowed in email addresses
+   28. Fixed issues with tr_TR locale
+   29. Fixed issue with visual editor when caret gets moved to the beginning of 
+       the editor after pasting text
+   30. Removed completed objects from the project calendar iCal feed
+   31. Visual editor disabled for mobile browsers (most of them do not support
+       content editable, or iframe design mode)
+   32. Company name is 'cached' in invoice in case that company gets deleted
+   33. Fixed issue where on some activeCollab setups if you try to download
+       PDF version of invoice, you receive fatal error message.
+   34. Pinned projects list only projects that user is member of
+   35. System does not allow last system administrator to change his system role 
+       to a role which does not have administrator permissions
+   36. Fixed issue with archive and RSS icons in status updates dialog
+   37. Listing files in /work folder with browser is now disabled
+   38. Installer sets COOKIE_DOMAIN to empty value in case of localhost
+   39. Fixed problem when "Upload Now" on Files tab could not be translated
+   40. Added stripos() for PHP4 compatibility
+   
+Security:
+
+    1. Fixed potential XSS problem in SVN commit messages
+    2. Fixed module, action and controller variable validation 
+       (problem reported by Jose Carlos de Arriba)
+
+API Changes:
+
+    1. Status messages now return the URL of the user's avatar
+    2. Added 'system_edition' field to /info command
+    3. Added /projects/:project_id/files/categories call
+    4. Added /projects/:project_id/discussions/categories call
+    5. Added /projects/:project_id/tickets/categories call
+    6. Added /projects/:project_id/pages/categories call
+    7. Category filtering for tickets, pages, discussions and files
+
+activeCollab 2.3 [2009/10/09]
+================================================================================
+
+Enhancements:
+
+    1. Better option names on export project page
+    2. Email address that is already in use by an user account can't be used for 
+       incoming mailbox
+    3. Clicking user's name in the list of commits in the Source module leads to 
+       the list of commits made by that user
+    4. Manage invoices permission management added to Invoice module page
+       
+Bug Fixes:
+
+    1. Fixed problem when thumbnails are not loaded when warnings are on in 
+       PHP 5.3.0
+    2. Stripped style comment from text when text is pasted from Microsoft Office
+       application (Word, Outlook etc)
+    3. Time reports do not ignore time from deleted users any more
+    4. Link to user profile from Source module now follows the way all other
+       URLs are formed
+    5. Fixed issues when project icons, client logos and user avatars smaller 
+       than 40x40px ended up with black background when resized
+    6. Fixed issue with mobile interface on pages with categories and project
+       groups on setups with PATH_INFO_THROUGH_QUERY_STRING turned on
+    7. Fixed print preview crashes in Internet Explorer
+    8. admin_access and project_management permissions now override 
+       can_see_private_objects permission
+    9. New Company option removed from client picker on New Invoice form
+   10. Fixed problem with number formatting
+   11. Fixed bug when milestones got wrong dates on exported project
+
+activeCollab 2.2.2 beta [2009/09/29]
+================================================================================
+
+Enhancements:
+
+    1. Source module has the ability to set custom 'config-dir' for Subversion
+
+Bug Fixes:
+
+    1. Fixed PHP4 compatibility problem in PdfSettingsAdminController class
+    2. Fixed 'duplicate entry for key...' in Source module
+    3. Fixed bug on page with invoices listing where instead total price with
+       tax, price without tax is shown
+    4. Fixed number rounding issue on 'Add Payment' page of Invoicing module
+    5. Issued invoice now can be edited
+    6. When creating invoice based on ticket and project time report, project
+       field on invoice form is preselected
+   
+activeCollab 2.1.4 [2009/09/28]
+================================================================================
+
+Enhancements:
+
+    1. When an assignment is re-assigned, new assignees are automatically 
+       subscribed to it
+    2. All project template categories are copied to a new project
+    3. Milestone information is included in email notifications
+    4. DST setting now supports "-- System Default --" value on user profiles
+    5. Emails sent from people who don't have access to certain incoming 
+       mailbox, now can be manually imported while preserving original author
+    6. PCRE (Perl-Compatible Regular Expressions) is required extension
+    7. Added GMT -4:30 time zone
+    8. XML extension has been added to optional, but recommended extensions list
+    9. System will not throw a warning if PHP works in safe mode when it tries 
+       to set default timezone to GMT
+   10. Added option to filter archived projects by status
+   11. When email is imported it updates last activity time in profile of the 
+       user who created it
+   12. Fixed PHP5.3.0 preg_quote() compatibility issue
+
+Bug Fixes:
+
+    1. Section labels used in select project permissions block now can be 
+       translated
+    2. Fixed problem where Quick Add time record form could not processed time 
+       in 3:30 format
+    3. Fixed problem where related tasks were not properly rescheduled when 
+       parent milestone was rescheduled
+    4. HTML entities are not double escaped in ticket titles
+    5. Fixed issue with image visibility in Documents for non-admin users
+    6. Fixed bug in mobile interface when using pagination on some installations
+    7. Android based mobile devices now use interface made for iPhone devices
+    8. System "system_access" permission can't be removed any more from the last 
+       admin role
+    9. Title of dialog window for changing avatars/logos/icons is now using 
+       distinct text, instead of "Change icon" for all three of them
+   10. After switching the language in user settings, confirmation message is
+       no longer displayed in previous language
+   11. Fixed localization issue with New Task activity log entries
+   12. Fixed problem with Unicode tags
+   13. Download file links force download
+   14. User can set due on date when creating ticket via quick add dialog
+   15. Fixed who can see private document message
+       
+
+activeCollab 2.2.1 beta [2009/07/20]
+================================================================================
+
+Enhancements:
+
+    1. Added default logo for PDF invoices generated by invoicing module
+    2. Improved the way activeCollab works with user sessions
+    3. Cookie domain is configurable (if needed)
+    
+Bug Fixes:
+
+    1. Fixed broken 'New Invoice Form' in IE6 and IE7
+    2. Tax Rate names in invoicing are not unique anymore
+    3. Invoice can be issued only to company managers
+    4. Predefined item template is not truncated anymore
+    5. Source module notification e-mails include commit details (if there are 
+       10 or less commits in an update)
+    6. Fixed bug in Source module when trying to view objects that were removed
+       from a repository
+    7. Repositories from non-active projects are excluded from updating
+    8. Fixed switching revisions in Source module
+    9. "SVN executable not found" replaced with message that is being returned
+       from svn/command line
+   10. Fixed PHP5.3.0 preg_quote() compatibility issue
+    
+activeCollab 2.1.3 [2009/07/16]
+================================================================================
+
+Enhancements:
+
+    1. Added auto-reconnect for situations when MySQL closes connection in the 
+       middle of the request
+    2. Added new config options for better controlling the way mailing is 
+       working (native mailer and marking messages as bulk options)
+    3. System permission 'manage_trash' has been added
+    4. Administrators and project managers see all objects that are in the Trash
+    5. GZIP compression for assets (js, css and print collector files) can be 
+       turned off by setting COMPRESS_ASSET_REQUESTS option to false in 
+       config.php file
+    6. {title} accepts language parameters just like {lang} does
+
+Bug Fixes:
+
+    1. Fixed fread() problem in collector files
+    2. HTML Purifier now uses /cache folder to cache definitions
+    3. Styles in visual editor are translatable
+    4. Time records API returns same records as web interface
+    5. Fixed notice in DashboardController
+    6. Many localization fixes and tweaks (thanks to Frederik Sauer)
+    7. Welcome message after user login is now in user's language
+    8. Fixed problem when, in some rare cases, task parent form was loaded when 
+       tasks was created with AJAX request
+    9. Aligment of 'Complete ticket with this comment' checkbox fixed
+   10. Empty Return-Path turned off by default
+   11. Uppercase letters can be used in email addresses
+   12. Fixed infinite visual editor explanding in Google Chrome
+   13. Fixed issue where on some installations, incoming mail was treating first
+       empty line in the imported email, as beginning of hidden email history
+    
+API Changes:
+
+    1. Comments now return list of files attached to them
+    2. Fixed problem with Pages category not listing pages in API response
+
+activeCollab 2.2 beta [2009/06/25]
+================================================================================
+
+Enhancements:
+
+    1. Introducing Invoicing module in Corporate version (beta!)
+    2. Introducing Source module in Corporate version (beta!)
+
+Bug Fixes:
+
+    1. Fixed fread() problem in collector files
+    2. HTML Purifier now uses /cache folder to cache definitions
+    3. Styles in visual editor are translatable
+    4. Time records API returns same records as web interface
+    5. Fixed issue with visual editor auto-expaner in Google Chrome
+
+activeCollab 2.1.2 [2009/06/13]
+================================================================================
+
+Enhancements:
+
+    1. Archive link in Projects is now aware of selected client and group
+    2. HTML Purifier upgraded to version 2.1.5 (last PHP4 compatible version)
+    3. Only people with manage permissions in Time section will see mass edit 
+       checkboxes and controls
+    4. Scheduled Tasks page now includes instructions for executing scheduled 
+       tasks using PHP command line interface
+    5. Billable status is automatically set to Yes in quick add dialog
+    6. Added links to upgrades in Administration > System Information block
+    7. People now see companies that are set as clients for a project even when 
+       members of that company are not involved in a project
+    8. Task notifications include link to parent object (ticket, checklist etc)
+    9. Status module page with easy to access permissions added
+
+Bug Fixes:
+
+    1. Fixed buggy quick add dialog behavior
+    2. Language importer is now more careful when importing languages from
+       broken xml
+    3. Backup module on some installations was sorting previous backups by
+       their modification time instead of creation time
+    4. Long links in Page diffs could make the diff block too wide and break the 
+       layout in Safari
+    5. Fixed issue with date filter for assignment filters
+    6. Fixed project icon caching issue when project client is changed
+    7. Fixed problem where projects with owner company set as a client are not 
+       considered internal
+    8. Fixed project exporter chrashing on some servers with PHP installed as 
+       ISAPI on IIS
+    9. Fixed time record creation / upgrade problem on some installations
+   10. The last administrator in the system cannot disable "admin_access" 
+       permission for his role
+   11. Add links on milestone details page are aware of permissions now
+   12. Fixed project exporter issue where attachments to pages and discussions
+       were not exported
+   13. Fixed time reports that in some cases did not properly calcualte total 
+       time if there was 1000 or more hours logged
+   14. Email address validation now supports something+something@something.com 
+       addresses
+   15. Fixed iCalendar feed generation on PHP 5.0.x versions
+   16. When user tries to delete a document from Documents section he will be 
+       asked to confirm the action
+   17. Bugfix for Safari 4 which was causing textarea to be stretched vertically 
+       on page scroll
+   18. Fixed automatic URL conversion bug that was introduced in v2.1.1
+   19. Object can't be restored if its parent is still in Trash
+   20. Fixed issue with client tabs when projects are grouped by client
+   21. Upgrade script did not properly update parent type for some attachments
+   22. Fixed issue with deleting company logos, project icons, and user avatars
+       in dedicated pages
+   23. Fixed problem with mass edit of time records in IE8
+   24. Fixed layout issues with popup dialogs in IE6
+
+activeCollab 2.1.1 [2009/05/19]
+================================================================================
+
+Enhancements:
+
+    1. Increased number of comments per page to 25
+   
+Security:
+
+    1. Fixed XSS problem when error dump is displayed
+    2. Fixed possible path exposure in error dumps
+
+Bug Fixes:
+
+    1. Object types in quick add module now are properly translated
+    2. Fixed scrolling in quick add popup
+    3. Covered some phrases that were not available for translation
+    4. Added option in incoming mailbox add/editing form, to accept emails from
+       registered activeCollab users which are not added to project specified
+       in that incoming mailbox
+    5. Fixed issue with restoring backups, when some users were having "Access
+       Forbidden" issues
+    6. Fixed project description bug in mobile interface
+    7. Fixed issues with incoming mail MIME encoding problem
+    8. Fixed issue with quick add dialog, when it breaks apart when there is
+       more than ~10 projects
+    9. Title of new company dialog was not properly named
+   10. Fixed link auto discovery when link is at the beginning of the sentence
+   11. Status updates in RSS now have valid permalinks
+   12. Fixed ordering of backups in administration
+   13. Incoming Mail is configured not to accept auto-responder emails
+   14. Task priority is visible now
+   15. Fixed password issue when new user is created with API command
+   16. Fixed error display when DEBUG level is not set for development
+   17. Fixed pre_var_dump function to properly clean variable dumps
+   18. Fixed All Attachments permissions problem
+   
+activeCollab 1.1.6 [2009/05/19]
+================================================================================
+
+Enhancements:
+
+   1. RSS feeds validate
+   2. When clicking on New Ticket button while in ticket category, that category 
+      will be preselected in Category drop-down on New Ticket form.
+   3. Added description below project template picker which explains who will 
+      be automatically added to the new project. When project is created from a 
+      template, users will be imported from a template. If no template is 
+      selected, users will be added based on auto-assignment settings.
+   4. Anyone assignment filter returns task by ignoring assignment data. Now it 
+      really returns tasks assigned to anyone.
+   5. Not assigned assignment filter return tasks that do not have people 
+      assigned to them.
+   6. Status filter lets you define if you wish to have all, only active or only 
+      completed tasks listed.
+   7. Next page link at the bottom of Assignments page added.
+   
+Security:
+
+    1. Fixed XSS problem when error dump is displayed.
+    2. Fixed possible path exposure in error dumps.
+
+Bug Fixes:
+
+   1. Fixed pubdate bug in RSS generation. This cause problems with some RSS 
+      readers because correct name of element is pubDate.
+   2. Fixed problem with calendar popup in date picker being cut off in some 
+      cases on 1024x768 resolutions or smaller.
+   3. Fixed Internet Explorer print style switcher issue which caused problems 
+      when print stylesheet was loaded for the second time.
+   4. Removed Image Browser tab in Insert image tool. This feature was never 
+      implemented and the tab caused a lot of confusion.
+   5. Fixed error when edit time record form was submitted with validation error.
+   6. Fixed bug with avatar / logo / project icon upload on some systems which 
+      return false when we use is_file() for uploaded files.
+   7. Fixed problem with Select Users dialog when there was a lot of users on 
+      Internet Explorer 6.
+
+API Changes:
+
+   1. Fixed issue where discussion request did not return discussion comments.
+
+activeCollab 2.1 [2009/04/29]
+================================================================================
+
+Final stable activeCollab 2 release. Major new features and improvements:
+
+New Module - Incoming mail
+
+   1. activeCollab can check and import email. New messages are imported as 
+      tickets or discussions, while replies to notifications are posted as 
+      comments. Email attachments are imported as well
+   2. Define any number of POP3 / IMAP servers to receive emails
+   3. Detailed activity log to spot and resolve errors and conflicts
+
+New Module - Documents
+
+   1. Global documents section is perfect for common company documents, 
+      operation manuals etc
+   2. Post text or upload files
+   3. Just like tickets, discussions or files, documents can be marked as 
+      private and visible just to a specific group of people, while invisible to 
+      other users
+
+Pages Module Overhaul
+
+   1. Page categories for better organization
+   2. Compare version tool outlines changes between two versions of the page
+   3. Easy reordering and regrouping of pages
+   4. Page can be reverted to any version at any time
+   5. Pages tab shows recently updated documents grouped by date when last 
+      change was made
+
+Improved tasks and checklists
+
+   1. Drag and Drop reordering for tasks in checklists, pages and tickets
+   2. Drag and Drop reordering of checklists
+   3. Checklist page lists all checklists and their tasks. No need to go to 
+      checklist details page to manage tasks
+   4. Improved task creation workflow
+
+Improved Dashboard and Project Overview
+
+   1. New and improved activity log
+   2. List of active projects shows all of your active projects
+   3. Block that shows who was active in the last 15 minutes
+   4. Project Overview now shows people involved with that project
+
+Improved people section
+
+   1. Friendlier interface makes navigation and management of people much easier
+   2. User can be added to multiple project at once
+   3. Improved New User form. By default it asks only for data it requires, but 
+      you can execute advanced actions if needed
+   4. Welcome messages can be sent to users at any time
+   5. Client companies you no longer work with can be archived. Members of 
+      client companies are no aware that their company is archive even if they 
+      visit the system
+
+Other system improvements
+
+   1. Subscribing and notifying people is more obvious because picker is listed 
+      right on the form instead in the popup
+   2. Notifications sent by the system are more readable and contain more 
+      information
+   3. Easier management of categories, project groups and document groups
+   4. Easier subscription management
+   5. New version and better integration of visual editor. Images can be 
+      uploaded directly from the editor
+   6. Easier change of avatars, logos and project icons
+   7. Test connection tool for mailing settings for easier troubleshooting
+   8. Better module installation process
+   9. Maintenance mode
+  10. Easier translation management with XML import and export of language files
+  11. Default assignment filter can be specified both globally and per user
+
+and many, many more changes.
+
+activeCollab 2.0 [2009/02/06]
+================================================================================
+
+First activeCollab 2 beta release (for complete feature set, check 2.1 release)
+
+activeCollab 1.1.5 [2008/12/01]
+================================================================================
+
+Enhancements:
+
+   1. People can be moved from one company to another.
+   2. Added confirmation dialog when permanently removing objects from trash.
+   3. Max upload size is displayed on upload files form.
+   4. Time reports can be created from Reports section inside of projects.
+   5. People manager cannot promote person into administrator. Only 
+      administrators can do that.
+   6. User's role cannot be changed if he or she is the last administrator in 
+      the system.
+   7. Added visibility indicator to Pages module.
+   8. When JavaScript is disabled, system will display error message alerting 
+      the user about it. This warning can be turned off by setting 
+      WARN_WHEN_JAVASCRIPT_IS_DISABLED to false in config/config.php.
+   9. Added a page that provides instructions how to enable JavaScript in 
+      Microsoft Internet Explorer, Mozilla Firefox and Apple Safari.
+  10. iCalendar feed added on user Schedule pages. Only project managers can use 
+      these feeds.
+  11. Pending Payment status added to Time Records. There is no interface for 
+      this status, but it can be used by modules which control time record 
+      status (Invoicing tools for example).
+
+Bug Fixes:
+
+   1. Fixed the issue where Select Users popup is not working on New / Edit 
+      Assignment Filter and New / Edit Time Filter forms.
+   2. Fixed the issue where successive milestones are extracted based on updated 
+      due date instead of original value.
+   3. Long file names are trimmed to 40 characters on Files tab. Extremely long 
+      file names could break interface previously.
+   4. Fixed problem where Project Starts On is sometimes off by one day due to 
+      time-zone miscalculation.
+   5. If a user assignees only himself to an object, project leader now will 
+      also be subscribed to that object, automatically.
+   6. Milestone moved to another project was preserving the relations to its 
+      child objects in the project that it has been moved from.
+   7. No error/success messages were displayed after turning the cache off.
+   8. If a user had only last name entered in his profile, his e-mail address 
+      was used in assignees block.
+   9. Links were not automatically converted to be clickable in ticket body, 
+      milestone description and project overview.
+  10. Fixed 'Can't copy image to work path' error upon pressing Submit with no 
+      file selected at edit project icon, edit avatar and edit company logo 
+      pages.
+  11. Fixed problem where objects couldn't be associated with milestones in 
+      activeCollab setups with large amount of data.
+  12. Corrected the problem with displaying "unknown project" in ticket history 
+      after moving a ticket to another project.
+  13. Fixed bug where, in some cases, ago modifier returned Yesterday for 
+      actions that happened the day before Yesterday..
+  14. Date selected by default in time popup now properly calculates user's 
+      time-zone.
+
+API Changes:
+
+   1. In time management calls, billable_status was added. is_billable and 
+      is_billed are left for compatibility reasons, but are consireder 
+      deprecated.
+
+
+activeCollab 1.1.4 [2008/10/06]
+================================================================================
+
+Enhancements:
+
+   1. Object can be copied in parent project.
+   2. Ticket time shows total time logged for ticket and all of its tasks.
+   3. Improved time popup.
+   4. Notify Assignees checkbox removed. Assignees will always be notified.
+   5. Person creating a ticket, milestone, tasks, file, discussion or page will 
+      be automatically subscribed to it.
+   6. Project section included when visiting comment, tasks, attachment and 
+      subscription pages.
+   7. When tasks / ticket / milestone is re-assigned, notification is send to 
+      all old and new assignees except the person who did the update even if 
+      that person is one of the assignees.
+   8. When user posts a comment he or she is automatically subscribed to object 
+      that was commented.
+   9. Project leader is automatically subscribed to tickets created with Public 
+      Submit module.
+  10. In New Task form priority and due date fields are hidden by default.
+  11. User's project role is displayed on People project tab.
+  12. If there are no assignees / subscribers selected when object is created, 
+      project leader will be automatically subscribed and notified.
+  13. Scheduled tasks administration page shows time when was the last time 
+      scheduled tasks were executed (if ever).
+  14. Comments on tickets, discussions, pages and files can be locked.
+  15. Discussions can be pinned to the top of discussions list.
+  16. Added support for servers that do not properly handle path info (some 
+      versions of IIS for example).
+  17. Improved underlying Status module code.
+  18. System and license information displayed on administration start page.
+  19. Upload files form now returns more descriptive error messages.
+  20. Project Exporter uses built in notifications instead of custom div-s.
+  21. Daily, hourly and frequently tasks executed through command line do not 
+      display output unless there are errors to be displayed.
+
+Bug fixes:
+
+   1. Security fix! Instructions for restoring backup are stored in PHP file 
+      instead of plain text file.
+   2. When object is copied in another project milestone ID is reseted if no 
+      milestone map is present.
+   3. When ticket is copied it will use next available ticket ID in destination 
+      project instead of keeping ID from original project.
+   4. Duplicate subscriptions bug resulted by incomplete cleanup routine fixed.
+   5. Fixed subscription caching issues when subscribe_users() method is called.
+   6. Fixed problem with HTTP status code not being properly passed when error 
+      page is displayed.
+   7. Module info loading bug fixed.
+   8. Master Categories will not let you define category names shorter than 3 
+      letters.
+   9. Fixed problem where duplicate notifications are sent to users when 
+      reminder was sent to people involved in a discussion.
+  10. Fixed caching issue when module is uninstalled.
+  11. Project Exporter exports completed milestones.
+  12. Fixed issue where links to modules that user selected not to export are 
+      still present in navigation.
+
+API improvements:
+
+   1. /roles/system - List all system roles (permissions included). If user is 
+      not system administrator or people manager only default role ID is 
+      returned!
+   2. /roles/project - List all project roles (permissions included). No 
+      permission checking is done.
+   3. /role/:role_id - Show details of any role. No permission checking is done.
+   4. Implemented support for work with project groups through API.
+   5. New user fields: is_administrator, is_project_manager and 
+      is_people_manager.
+   6. Project people request (/projects/:project_id/people) returns more 
+      information including users role and permissions for every project user.
+   7. /projects/:project_id request now includes logged_user_permissions field 
+      with role of currently logged user and his or hers permissions on a 
+      selected project (similar to project people permission information).
+   8. Assignee information is included in Ticket, Task and Milestone details.
+   9. API for Status message - /status for listing and /status/add for 
+      submitting messages. 
+  10. avatar_url property added for User details request.
+  11. logo_url property added for Company details request.
+  12. icon_url property added for Project details request.
+  13. Permissions array added to every project object details response with 
+      following permission values: can_edit, can_delete, can_change_visibility, 
+      can_movecan_copy and can_change_complete_status.
+
+
+activeCollab 1.1.3 [2008/08/12]
+================================================================================
+
+Enhancements:
+
+   1. Objects can be moved / copied only by administrators, project managers and 
+      project leaders.
+   2. Next page link on Projects, People, Files, Tickets, Discussions, Time, 
+      Dashboard and Status archive pages.
+   3. Improved notification message for private objects.
+   4. If attachment is private it is indicated with red dot on Files tab (as for 
+      Files).
+   5. Calendar subscription link added to Project Calendar page.
+   6. File description included in list of files on Files tab.
+   7. Mass change ticket visibility added to tickets page.
+   8. Links are recognized in text and automatically made clickable in comments.
+   9. When time record is submitted through Quick add dialog Project and Is 
+      billable values are preserved.
+  10. Caching for project icon URL-s.
+  11. System notifies user if he is viewing trashed object.
+  12. Prettier notifications for private and trashed objects.
+  13. HTMLPurifier can be turned off by adding define('PURIFY_HTML', false); to 
+      config/config.php file.
+  14. On New User form Password field is automatically focused when user selects 
+      to specify password.
+
+Bug fixes:
+
+   1. Last file revision is not required to be instance of User class in order 
+      to be returned. It can also be an AnonymousUser.
+   2. First field on reset password form is password field instead of text 
+      field.
+   3. Completed, canceled or paused projects that project manager or 
+      administrator is not directly involved with are now visible in project 
+      archives.
+   4. Fixed problem where milestone start and due dates can be one day of in 
+      some cases.
+   5. Fixed problem with users last activity time logging and display.
+   6. Helper that shows which action was done by whom now uses a timezone 
+      settings of logged in user to display proper time.
+   7. Due helper ignores timezone settings when displaying due date tooltip 
+      (correct behavior).
+   8. JavaScript confirm dialog for Remove User option on role details page.
+   9. Is billable is set to Yes by default in Quick Add dialog.
+  10. Fixed problem with tickets archive no remembering selected category for 
+      pagination.
+  11. Fixed bug where pagination does not remember parent object when listing 
+      time records attached to task or a ticket.
+  12. One day shift for milestones fixed. Calendar applications do not include 
+      DTEND day so it needs to be set to the day after due date.
+  13. Fixed problem where not billable records are not counted correctly in time 
+      reports.
+  14. Parent page select box does not list page that is being updated and its 
+      sub-pages.
+  15. Fixed problem where attachments always inherit author from parent object 
+      instead of using logged user.
+  16. Fixed problem where not all assignees are properly moved into a project 
+      created from template.
+  17. Fixed broken image link to logo in error layout and on login / forgot 
+      password pages in mobile interface.
+  18. Fix for project icon not being displayed in Jump to Project dialog if it 
+      was inherited from client.
+
+AP I improvements:
+
+   1. Added read_only flag to /info. Value of this flag will be 0 if API 
+      supports both read and write requests and 1 if it supports only read 
+      requests.
+
+
+activeCollab 1.1.2 [2008/06/07]
+================================================================================
+
+Enhancements:
+
+   1. Removed Date time format field from profile. Instead of being a separate 
+      configuration option it is now made out of date and time options
+   2. Text input is automatically focused when status update dialog is displayed
+   3. People who do not have can_see_private_objects permissions but can create 
+      projects now do not have ability to select default visibility (Private 
+      value will be set automatically)
+   4. Object visibility indicator for tickets, discussions and checklists with 
+      popup that explains who can see private objects
+   5. Session ID is not force refreshed on every request
+   6. Checkbox icons next to tasks user cannot complete are not clickable any 
+      more
+   7. If user does not have permissions to create tasks under a specific object 
+      (ticket, page, checklist) New Task link is not displayed in Tasks section 
+      header
+   8. When breaking recent activities per day system now checks users timezone 
+      instead of just using GMT value
+   9. Ago helper now displays number of hours instead of Few hours ago
+  10. Better localization coverage
+  11. Backup module enhancements. It does not require specific MySQL 
+      configuration any more but uses PHP to generate / restore SQL files
+  12. Site logo and favicon graphics are now in septate folder so cannot 
+      override them by accident when updating content of /assets folder
+
+Bug fixes:
+
+   1. Fixed problem with filtering time reports for a specific day
+   2. Fixed some RSS / iCal feed links that were broken
+   3. Fixed :project problem in select visibility control
+   4. Script will die when CSV export is served
+   5. Checklist tasks are available on assignments page
+   6. Only people who can edit specific tickets can attach tasks to them
+   7. Only people from a specific project can be reminded using Send Reminder 
+      tool
+   8. Fixed CSS/JS caching issues with Safari.
+   9. Fixed upload issue for Windows host where slashes from uploaded file path 
+      were stripped out
+  10. Today / Late counter fixed
+  11. Administrators, project managers and project leaders have edit / delete 
+      object permissions no matter what.
+  12. Fixed issue when time record is shown in project history even though user 
+      does not have permissions to access time (access permission is by mistake 
+      inherited from parent object)
+  13. Fixed date format issues on Windows servers
+  14. New discussion form does not lose message field when title is too short 
+      and needs to be revised
+  15. Fixed problem where attachment cannot be delete even though user has 
+      permissions to edit parent object
+  16. Fixed problem with first screen that needs point you to the installer, but 
+      fails to do that on Windows
+  17. Permissions cache is cleaned when role is updated or deleted
+  18. Assignments cache is completely cleared when assignments of any particular 
+      object are changed.
+
+API improvements:
+
+   1. Added logged user URL in /info call so you can see who the logged person 
+      is for API key you are using
+   2. Added type to all project objects in the system. This is especially 
+      important when you list objects of mixed type
+   3. Added /project/#project_id/user-tasks call that lists all tasks currently 
+      logged user can work on in a particular project
+
+activeCollab 1.1.1 [2008/05/29]
+================================================================================
+
+Enhancements:
+
+   1. Projects are ordered by name in Quick add dialog
+   2. More company fields included in API result for company request
+   3. System will not allow you to submit an empty status message
+   4. More descriptive select_visibility helper
+   5. Turn on / off thumbnail creation for images (on by default)
+   6. Limit max image size when thumbnail is created (default is 500kb)
+
+Bug fixes:
+
+   1. API is working properly with .htaccess hack for clean URL-s
+   2. Send Reminders properly filters out people
+   3. Dictionary does not exist error when create a new translation file has 
+      been fixed
+   4. Starred items from Trash are not counted on Dashboard
+   5. Fixed problem with read / unread discussions
+   6. When module is removed all reminders for old objects are also removed
+   7. Time filtering by date range fixed
+   8. Problem with Project Exporter module and open_basedir restriction has been 
+      fixed
+   9. Problem with filtering billable, but not billed hours fixed
+  10. When project is created from template number of open / completed tasks and 
+      project progress are refreshed
+  11. Fixed problem when time record is added from time page for a particular 
+      object
+  12. HTTP errors for status update count asynchronous request fixed
+  13. Fixed problem when user did not receive email notification in prefered 
+      language
+  14. Problem with members not being able to see their assignments fixed
+
+
+activeCollab 1.1 [2008/05/19]
+================================================================================
+
+New modules:
+
+   1. Mobile access - Interface created just for mobile devices. iPhone support 
+      included - you can finally touch activeCollab!
+   2. Backup - automatically back up your database and files.
+   3. Project Exporter - Export project data in series of static, HTML files 
+      that does not require activeCollab to be displayed. Burn it on a CD, 
+      upload to your website or send it to your clients.
+   4. Public Submit - Let people submit tickets without logging into 
+      activeCollab. CAPTCHA protection included.
+   5. Status - Simple, Twitter like notifications system built right into 
+      activeCollab.
+
+Time tracking improvements:
+
+   1. Reusable reports that work both globally and on project level. Reports can 
+      list all time records or calculate how much time every user reported.
+   2. Ability to mark billable time record as billed and filter it out in 
+      reports.
+   3. Time tracking for subtasks.
+   4. New time widget makes it super easy to track time.
+
+Improved assignments page:
+
+   1. Powerful assignments filter that let you select not just your tasks but 
+      tasks assigned to any company or group of people.
+   2. RSS for any assignment filter.
+   3. Ability to mark filter as private so only you can use it.
+   4. Ability to mark task as completed directly on assignment page.
+   5. Ability to subscribe to every task and receive email notification on 
+      status change directly on assignments page.
+   6. Track time for every ticket or subtask directly on assignments page.
+   
+Calendar improvements:
+
+   1. Tickets and tasks are listed in calendar.
+   2. Tasks, tickets and milestones can be marked as completed directly on 
+      calendar page.
+   3. Improved performance of calendar pages.
+
+Improved search:
+
+   1. Search for users.
+   2. Search for project or inside of projects.
+   3. Quick search dialog is really handy. It will show top 5 results directly 
+      in the quick search dialog and give you link if you need more.
+
+Localization support:
+
+   1. Translate the interface in as many languages you want.
+   2. Per user language settings.
+   3. Email translates also support translations and are aware of user language 
+      preferences. Every user will be notified in their preferred language.
+   4. Per user date and time formatting settings.
+   5. Administration tools for language management and translation.
+
+New permissions and roles:
+
+   1. Every user can have a system role now, not just members of owner company.
+   2. Project roles are reusable sets of project permissions. Users can have 
+      different roles in different projects.
+   3. Per module access permissions.
+   4. New system permissions - can add project, can see private objects and more
+
+File module improvements:
+
+   1. Attachments are listed in files listing.
+   2. Thumbnails are created for images.
+   3. Tool that lets you upload multiple files at once has been added.
+   4. Improved workflow.
+   
+API improvements:
+
+   1. Write support for API is added.
+   2. API methods are documented.
+   3. Configuration option that controls whether API is enabled or disabled. 
+      This configuration option also lets you set up API to work in read only or 
+      in read / write mode.
+
+Reminders:
+
+   1. Send reminders regarding a ticket, discussion or file to assignees, 
+      subscribers, specific person or people who commented on it.
+   2. Reminders include email notification and entry in �Things that require 
+      your attention� block that is shown on dashboard.
+   3. Read more about reminders in Developer Blog...
+
+Other changes:
+
+   1. Any project can be used as a template for new project.
+   2. Auto-assignments system has been redone.
+   3. Modules that are not required for system to work properly can be 
+      uninstalled.
+   4. Checklists module is not installed in Corporate version by default. You 
+      can install it if you really need it.
+   5. User password are not readable in database any more.
+   6. System that detemines witch objects are new since your last visit is more
+      reliable now.
+   7. When list of assignees is changed everyone is notified about the changes 
+      (old and new assignees with complete list of changes).
+   8. Links for creating new objects on milestone details page.
+   9. Users last visit time is displayed on profile page.
+   10. A simple tool for managing file, discussion and ticket categories that 
+       are created when new project is created.
+       
+Plus many, many more bug fixes and improvements!
+
+activeCollab 1.0.6 [2008/02/19]
+================================================================================
+
+Enhancements: 
+
+   1.  Improved role creation process
+
+Bug fixes:
+
+   1. Fixed project group duplication on projects page when logged in user is a 
+      member of client company
+   2. Fixed build script bug that resulted in empty names for initial set of 
+      roles
+
+activeCollab 1.0.5 [2008/01/31]
+================================================================================
+
+  1. Problem with redirection on the project people page when there are no users 
+     assigned to a project
+  2. Files are sorted so the latest ones are on top
+  3. Support for passing path_info through query string (for compatibility with 
+     hosts such as Dreamhost)
+  4. Assignments page is now displayed properly even when there are no projects 
+     in the database
+  5. When ticket is moved, the system will make sure to assign it an ID which is 
+     not used in destination folder
+  6. When ticket is moved, associated time records are also moved
+  7. On the Projects page, only project groups where user has projects are 
+     available
+  8. Problem with email encoding
+  9. Line breaks are preserved in discussion related email notifications
+
+activeCollab 1.0.4 [2007/10/30]
+================================================================================
+
+Features and Improvements:
+
+   1. Milestones start and end date can be the same day
+   2. Members of client companies can track time (if they have proper 
+      permissions)
+   3. Added relation between files and milestones
+   4. Added Manage Attachments button to comment options group (right to authors
+      name)
+   5. Added Manage / Add links to Attachment and Subscription headers on object 
+      details page
+   6. Improved usability of comment options
+   7. Added attachment field to New Discussion form
+   8. activeCollab will keep connection alive by refreshing user session every 5 
+      minutes for as long as any activeCollab page is open
+   9. When theme is updated in Administration it will be updated for all the 
+      users
+  10. When extracting task name system will use first 15 words instead of 5
+  11. Debug backtrace is saved only for fatal errors - saves some time on PHP4
+  12. Removed timezone information from date pickers
+
+Bug fixes:
+
+   1. Fixed issue where email notifications get cut off when containing 
+      multibyte characters on some systems
+   2. Fixed pagination on project page when browsing projects by company or by 
+      group
+   3. Proper project leader is selected on edit project page
+   4. Fixes JavaScript and CSS issue for servers with zlib.output_compression 
+      set to On
+   5. Comments, Attachments and Tasks will properly inherit parents visibility
+   6. Fixed issue with due display and calculation
+   7. Fixed problem with HTML entities being escaped two times in the activity 
+      logs
+   8. Fixed problem when user cannot be subscribed to the object if he or she 
+      was already a subscriber
+   9. File backend cache uses PHP files instead of plain text files
+  10. .htaccess that restricts direct access to files in /cache, /import, /logs, 
+      /thumbnails and /upload folders added
+  11. Multibyte operations are forcing UTF-8 encoding
+  12. White is used instead of black when resizing images with transparent areas
+  13. Fixed select_user helper so it does not break the script when data is out 
+      of sync in database
+  14. Pagination helper will render first page even when there are no items to 
+      show (information that there are no items is displayed in that case)
+  15. JavaScript error when selecting user or assignee fixed
+  16. Better data cleanup on project deletion
+
+activeCollab 1.0.3 [2007/10/17]
+================================================================================
+
+Bug fixes:
+
+   1. Fixed the problem with time tracking module being too restrictive about 
+      who can and who can't add time records 
+
+activeCollab 1.0.2 [2007/10/16]
+================================================================================
+
+Features and Improvements: 
+
+   1. Improved compatibility with Safari 2
+   2. Improved search results page
+   3. Trash added to the Main Menu
+   4. When project is created, user is redirected to Add People page 
+      automatically
+   5. Tasks without due date are not listed on Assignments page when ordered by 
+      due date
+   6. At Assignments page, due date is displayed next to the task creator
+   7. When assignments are ordered by creation time, new column with creation 
+      time is displayed
+
+Bug fixes:
+
+   1. Fixed problem with query string generation on PHP5 versions lower than 
+      PHP 5.1.2
+   2. Fixed syntax error in HTML Purifier when trying to use DOMLex on latest 
+      PHP 4 version, even though it is supported only in PHP5
+   3. Fixed Not Found issue with servers that do not provide good PATH_INFO 
+      value
+   4. Administrators and Project Managers can see all of the projects in P
+      rojects section
+   5. No permission to remove / update user permissions on some systems
+   6. No permission to remove / delete category
+   7. Calendar displaying all tasks / tickets to the people not assigned to any 
+      projects
+   8. Add Timerecord permission enforced
+   9. Files do not get attached to objects in PHP4
+  10. Mass mailer not sending emails
+  11. JavaScript initialization after AJAX request on Trash / Starred page
+
+activeCollab 1.0 [2007/10/05]
+================================================================================
+
+Initial release

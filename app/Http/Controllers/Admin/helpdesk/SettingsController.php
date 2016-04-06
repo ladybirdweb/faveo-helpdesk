@@ -27,6 +27,7 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 // classes
+use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Input;
@@ -112,6 +113,27 @@ class SettingsController extends Controller
             /* redirect to Index page with Fails Message */
             return redirect('getcompany')->with('fails', 'Company can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
         }
+    }
+
+    /**
+     * function to delete system logo.
+     *
+     *  @return type string
+     */
+    public function deleteLogo()
+    {
+        $path = $_GET['data1']; //get file path of logo image
+        if (!unlink($path)) {
+            return 'false';
+        } else {
+            $companys = Company::where('id', '=', 1)->first();
+            $companys->logo = null;
+            $companys->use_logo = '0';
+            $companys->save();
+
+            return 'true';
+        }
+        // return $res;
     }
 
     /**

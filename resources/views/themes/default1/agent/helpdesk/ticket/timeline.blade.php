@@ -107,13 +107,15 @@ active
                 </ul>
             </div>
             <?php if ($group->can_delete_ticket == 1 || $group->can_ban_email == 1) {?>
-            <div class="btn-group">
+            <div id="more-option" class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="d2"><i class="fa fa-cogs" style="color:teal;"> </i>
                     {!! Lang::get('lang.more') !!} <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu pull-right">
+                <ul  class="dropdown-menu pull-right">
                     <li data-toggle="modal" data-target="#ChangeOwner"><a href="#"><i class="fa fa-users" style="color:green;"> </i>Change Owner</a></li>
+                    @if($tickets->status != 3 && $tickets->status != 2)
                      <li data-toggle="modal" data-target="#MergeTickets"><a href="#"><i class="fa fa-code-fork" style="color:teal;"> </i>{!! Lang::get('lang.merge-ticket') !!}</a></li>
+                     @endif
                     <?php if ($group->can_delete_ticket == 1) {?>
                     <li id="delete"><a href="#"><i class="fa fa-trash-o" style="color:red;"> </i>{!! Lang::get('lang.delete_ticket') !!}</a></li>
                     <?php }
@@ -891,7 +893,7 @@ $data = $ConvDate[0];
                                 <input type="hidden" name="action" value="change-owner">
                                 <div class="row">
                                     <div class="col-md-2"><spam class="glyphicon glyphicon-user fa-5x"></spam></div>
-                                    <div class="col-md-10">
+                                    <div id="change-refresh" class="col-md-10">
                                     <?php $user = App\User::where('id', '=', $tickets->user_id)->first();?>
 
                                         <!-- <b>{!! Lang::get('lang.user_details') !!}User Details</b><br/> -->
@@ -1556,6 +1558,7 @@ jQuery(document).ready(function() {
                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                         $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
                         $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
+                        $("#change-refresh").load("../thread/{{$tickets->id}}  #change-refresh");
                         var message = "{{Lang::get('lang.change-success')}}";
                         $("#alert11").show();
                         $('#message-success1').html(message);
@@ -1885,6 +1888,7 @@ jQuery(document).ready(function() {
                             $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                             $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
                             $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
+                            $("#more-option").load("../thread/{{$tickets->id}}  #more-option");
                             var message = "{{Lang::get('lang.merge-success')}}";
                             $("#merge-succ-alert").show();
                             $('#message-merge-succ').html(message);  

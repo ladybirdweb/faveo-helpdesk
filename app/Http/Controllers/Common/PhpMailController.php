@@ -182,7 +182,7 @@ class PhpMailController extends Controller
 
             $path2 = \Config::get('view.paths');
 
-            $directory = $path2[0].'\emails'.DIRECTORY_SEPARATOR.$status->template.DIRECTORY_SEPARATOR;
+            $directory = $path2[0].DIRECTORY_SEPARATOR.'emails'.DIRECTORY_SEPARATOR.$status->template.DIRECTORY_SEPARATOR;
 
             $handle = fopen($directory.$template.'.blade.php', 'r');
             $contents = fread($handle, filesize($directory.$template.'.blade.php'));
@@ -389,6 +389,133 @@ class PhpMailController extends Controller
 //            echo 'Message has been sent';
         }
     }
+    /**
+     * Sending emails from the system.
+     *
+     * @return MailNotification
+     */
+    public function sendEmail($from, $to, $message)
+    {
+        // dd($from);
+        $from_address = $this->fetch_smtp_details($from);
+
+        // dd($from_address);
+        $username = $from_address->email_address;
+        $fromname = $from_address->email_name;
+        $password = \Crypt::decrypt($from_address->password);
+        $smtpsecure = $from_address->sending_encryption;
+        $host = $from_address->sending_host;
+        $port = $from_address->sending_port;
+
+        if (isset($to['email'])) {
+            $recipants = $to['email'];
+        } else {
+            $recipants = null;
+        }
+        if (isset($to['name'])) {
+            $recipantname = $to['name'];
+        } else {
+            $recipantname = null;
+        }
+        if (isset($to['cc'])) {
+            $cc = $to['cc'];
+        } else {
+            $cc = null;
+        }
+        if (isset($to['bc'])) {
+            $bc = $to['bc'];
+        } else {
+            $bc = null;
+        }
+        if (isset($message['subject'])) {
+            $subject = $message['subject'];
+        } else {
+            $subject = null;
+        }
+        if (isset($message['body'])) {
+            $content = $message['body'];
+        } else {
+            $content = null;
+        }
+        if (isset($message['scenario'])) {
+            $template = $message['scenario'];
+        } else {
+            $template = null;
+        }
+        if (isset($message['attachments'])) {
+            $attachment = $message['attachments'];
+        } else {
+            $attachment = null;
+        }
+
+        // template variables
+        if (Auth::user()) {
+            $agent = Auth::user()->user_name;
+        } else {
+            $agent = null;
+        }
+
+        $system_link = url('/');
+
+        $system_from = $this->company();
+
+        $mail = new \PHPMailer();
+
+        $status = \DB::table('settings_email')->first();
+
+        // dd($messagebody);
+        //$mail->SMTPDebug = 3;                               // Enable verbose debug output
+
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = $host;  // Specify main and backup SMTP servers
+        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+        $mail->Username = $username;                 // SMTP username
+        $mail->Password = $password;                           // SMTP password
+        $mail->SMTPSecure = $smtpsecure;                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = $port;                                    // TCP port to connect to
+
+        $mail->setFrom($username, $fromname);
+        $mail->addAddress($recipants);     // Add a recipient
+        // Name is optional
+        // $mail->addReplyTo('sada059@gmail.com', 'Information');
+        // Optional name
+        $mail->isHTML(true);                                  // Set email format to HTML
+        if ($cc != null) {
+            foreach ($cc as $collaborator) {
+                //mail to collaborators
+                $collab_user_id = $collaborator->user_id;
+                $user_id_collab = User::where('id', '=', $collab_user_id)->first();
+                $collab_email = $user_id_collab->email;
+                $mail->addCC($collab_email);
+            }
+        }
+
+        $mail->addBCC($bc);
+
+        if ($attachment != null) {
+            $size = count($message['attachments']);
+            $attach = $message['attachments'];
+            for ($i = 0; $i < $size; $i++) {
+                $file_path = $attach[$i]->getRealPath();
+                $file_name = $attach[$i]->getClientOriginalName();
+                $mail->addAttachment($file_path, $file_name);
+            }
+        }
+
+        $mail->Subject = $subject;
+
+        $mail->Body = $content;
+
+        // $mail->AltBody = $altbody;
+
+        if (!$mail->send()) {
+            //            echo 'Message could not be sent.';
+//            echo 'Mailer Error: ' . $mail->ErrorInfo;
+        } else {
+            //            echo 'Message has been sent';
+        }
+    }
+
     /**
      * Fetching comapny name to send mail.
      *
