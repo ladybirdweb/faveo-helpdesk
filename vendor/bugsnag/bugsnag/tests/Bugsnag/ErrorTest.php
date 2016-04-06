@@ -44,6 +44,16 @@ class ErrorTest extends Bugsnag_TestCase
         $this->assertEquals($errorArray['metaData']['Testing']['password'], '[FILTERED]');
     }
 
+    public function testExceptionsNotFiltered()
+    {
+        $this->config->filters = array('code');
+        $this->error->setPHPError(E_NOTICE, "Broken", "file", 123);
+
+        $errorArray = $this->error->toArray();
+        // 'Code' should not be filtered so should remain still be an array
+        $this->assertInternalType('array', $errorArray['exceptions'][0]['stacktrace'][0]['code']);
+    }
+
     public function testNoticeName()
     {
         $this->error->setPHPError(E_NOTICE, "Broken", "file", 123);

@@ -61,11 +61,11 @@ active
 <li>
     <a href="">Reply Rating:
         <small class="pull-right">
-            <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($tickets->ratingreply=='1')?'checked':'' ?>  />
-            <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($tickets->ratingreply=='2')?'checked':'' ?>  />
-            <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($tickets->ratingreply=='3')?'checked':'' ?>  />
-            <input type="radio" class="star" id="star2" name="rating2" value="4"<?php echo ($tickets->ratingreply=='4')?'checked':'' ?>  />
-            <input type="radio" class="star" id="star1" name="rating2" value="5"<?php echo ($tickets->ratingreply=='5')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($avg_rating=='1')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($avg_rating=='2')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($avg_rating=='3')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star2" name="rating2" value="4"<?php echo ($avg_rating=='4')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star1" name="rating2" value="5"<?php echo ($avg_rating=='5')?'checked':'' ?>  />
         </small>
     </a>
 </li>

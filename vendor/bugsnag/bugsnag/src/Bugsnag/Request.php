@@ -11,6 +11,8 @@ class Bugsnag_Request
     {
         $requestData = array();
 
+        $methodsWithPayload = array('PUT');
+
         // Request Tab
         $requestData['request'] = array();
         $requestData['request']['url'] = self::getCurrentUrl();
@@ -21,8 +23,21 @@ class Bugsnag_Request
         if (!empty($_POST)) {
             $requestData['request']['params'] = $_POST;
         } else {
+
             if (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') === 0) {
                 $requestData['request']['params'] = json_decode(file_get_contents('php://input'));
+            }
+
+            if (isset($_SERVER['REQUEST_METHOD']) && in_array(strtoupper($_SERVER['REQUEST_METHOD']), $methodsWithPayload)) {
+                parse_str(file_get_contents('php://input'),$params);
+                if(isset($requestData['request']['params']))
+                {
+                    $requestData['request']['params'] = array_merge($requestData['request']['params'],$params);
+                }
+                else
+                {
+                    $requestData['request']['params'] = $params;
+                }
             }
         }
 

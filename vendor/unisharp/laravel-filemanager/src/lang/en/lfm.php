@@ -1,11 +1,12 @@
 <?php
 
 return [
+    'nav-back'          => 'Back',
+    'nav-new'           => 'New Folder',
     'nav-upload'        => 'Upload',
     'nav-thumbnails'    => 'Thumbnails',
     'nav-list'          => 'List',
 
-    'menu-new'          => 'New Folder',
     'menu-rename'       => 'Rename',
     'menu-delete'       => 'Delete',
     'menu-view'         => 'View',
@@ -39,10 +40,13 @@ return [
     'error-delete'      => 'You cannot delete this folder because it is not empty!',
     'error-folder-name' => 'Folder name cannot be empty!',
     'error-folder-exist'=> 'A folder with this name already exists!',
+    'error-mime'        => 'Unexpected MimeType: ',
+    'error-instance'    => 'The uploaded file should be an instance of UploadedFile',
+    'error-invalid'     => 'Invalid upload request',
 
     'btn-upload'        => 'Upload File',
-    'btn-close'         => 'Close',
     'btn-uploading'     => 'Uploading...',
+    'btn-close'         => 'Close',
     'btn-crop'          => 'Crop',
     'btn-cancel'        => 'Cancel',
     'btn-resize'        => 'Resize',
@@ -56,5 +60,4 @@ return [
     'resize-new-width'  => 'Width:',
 
     'locale-bootbox'    => 'en',
-
 ];

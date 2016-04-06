@@ -171,17 +171,13 @@ class Bugsnag_Notification
             error_log('Bugsnag Warning: Can\'t use proxy settings unless cURL is installed');
         }
 
-        // Warn about lack of timeout support if we are using fopen()
-        if ($this->config->timeout != Bugsnag_Configuration::$DEFAULT_TIMEOUT) {
-            error_log('Bugsnag Warning: Can\'t change timeout settings unless cURL is installed');
-        }
-
         // Create the request context
         $context = stream_context_create(array(
             'http' => array(
                 'method' => 'POST',
                 'header' => Bugsnag_Notification::$CONTENT_TYPE_HEADER.'\r\n',
                 'content' => $body,
+                'timeout' => $this->config->timeout
             ),
             'ssl' => array(
                 'verify_peer' => false,

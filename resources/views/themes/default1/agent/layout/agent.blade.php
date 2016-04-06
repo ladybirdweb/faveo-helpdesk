@@ -31,7 +31,7 @@
         <link type="text/css" href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />        
         <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/faveo-css.css")}}">
-
+        <link href="{{asset('css/notification-style.css')}}" rel="stylesheet" type="text/css">
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
         <!-- Select2 -->
@@ -63,6 +63,8 @@ if ($company != null) {
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
+                    <?php $notifications = App\Http\Controllers\Common\NotificationController::getNotifications();
+                    ?>
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
                             <li @yield('Dashboard')><a data-target="#tabA" href="#">{!! Lang::get('lang.dashboard') !!}</a></li>
@@ -75,6 +77,39 @@ if ($company != null) {
                                 <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
                             @endif
                             <!-- User Account: style can be found in dropdown.less -->
+                            <li class="dropdown notifications-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
+                                    <i class="fa fa-bell-o"></i>
+                                    <span class="label label-warning" id="count"><?php echo count($notifications); ?></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="header">You have <?php echo count($notifications); ?> notifications</li>
+                                    <li>
+
+                                        <ul class="menu">
+                                            @foreach($notifications as $notification)
+                                            @if($notification->type == 'registration')
+                                            <li>
+                                                <a href="{!! route('user.show', $notification->notification_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
+                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
+                                                </a>
+                                            </li>
+                                            @else
+                                            <li>
+                                                <a href="{!! route('ticket.thread', $notification->notification_id) !!}" id='{{ $notification->notification_id }}' class='noti_User'>
+                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
+                                                </a>
+                                            </li>
+                                            @endif
+                                            @endforeach
+
+                                        </ul>
+                                    </li>
+                                    <li class="footer"><a href="{{ url('notifications-list') }}">View all</a>
+                                    </li>
+                               
+                                </ul>
+                            </li>
                             <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
@@ -265,8 +300,8 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                                                 <li id="bar" @yield('open')><a href="{{ url('/ticket/open') }}" id="load-open">{!! Lang::get('lang.open') !!}</a></li>
                                                 <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered') }}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
                                                 <li id="bar" @yield('myticket')><a href="{{ url('/ticket/myticket') }}" >{!! Lang::get('lang.my_tickets') !!}</a></li>
-                                                {{-- <li id="bar" @yield('ticket')><a href="{{ url('ticket') }}" >Ticket</a></li> --}}
-                                                {{-- <li id="bar" @yield('overdue')><a href="{{ url('/ticket/overdue') }}" >Overdue</a></li> --}}
+                                                <!--<li id="bar" @yield('ticket')><a href="{{ url('ticket') }}" >Ticket</a></li>-->
+                                                <li id="bar" @yield('overdue')><a href="{{ url('/ticket/overdue') }}" >Overdue</a></li>
                                                 <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned') }}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
                                                 <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed') }}" >{!! Lang::get('lang.closed') !!}</a></li>
                                                 <?php if ($group->can_create_ticket == 1) {?>
@@ -284,8 +319,15 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                                 </div>
                             </div>
                             <section class="content-header">
-                                @yield('PageHeader')
-                                @yield('breadcrumbs')
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h3>  @yield('PageHeader')</h3>
+                                    </div>
+                    <div class="col-md-6 pull-right">
+                                
+                                @include('breadcrumbs')
+                    </div>
+                                </div>
                             </section>
                             <!-- Main content -->
                             <section class="content">
@@ -333,6 +375,34 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                     <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
                      <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" ></script>
+                     <script>
+                function myFunction() {
+
+                    document.getElementById("count").innerHTML = "0";
+
+                }
+        </script>
+        <script>
+                $(document).ready(function () {
+                    
+                    $('.noti_User').click(function () {
+                        var id = this.id;
+                    var dataString = 'id=' + id;
+                        $.ajax
+                                ({
+                                    type: "POST",
+                                    url: "{{url('mark-read')}}" + "/" + id,
+                                    data: dataString,
+                                    cache: false,
+                                    success: function (html)
+                                    {
+//$(".city").html(html);
+                                    }
+                                });
+                    });
+
+                });
+        </script>
 
 <script>
 $(function() {
