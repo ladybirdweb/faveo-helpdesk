@@ -107,8 +107,15 @@
                             <div class="content-wrapper">
                                 
                                 <section class="content-header">
-                                    @yield('PageHeader')
-                                    @yield('breadcrumbs')
+                                     <div class="row">
+                                    <div class="col-md-6">
+                                        <h3>  @yield('PageHeader')</h3>
+                                    </div>
+                    <div class="col-md-6 pull-right">
+                                
+                                @include('breadcrumbs')
+                    </div>
+                                </div>
                                 </section>
 
                                 <!-- Main content -->

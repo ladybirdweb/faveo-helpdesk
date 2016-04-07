@@ -13,18 +13,10 @@ class="active"
 @stop
 
 @section('content')
-<?php
-    if(Auth::user()->role == 'agent') {
-        $dept = App\Model\helpdesk\Agent\Department::where('id','=',Auth::user()->primary_dpt)->first();
-        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
-    } else {
-        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->orderBy('id', 'DESC')->paginate(20);
-    }
-?>
 <!-- Main content -->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">Overdue </h3> <small>{!! $tickets->total() !!} tickets</small>
+        <h3 class="box-title">Overdue </h3> 
     </div><!-- /.box-header -->
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
@@ -44,110 +36,33 @@ class="active"
         </div>
         @endif
     <div class="box-body no-padding ">
-        
+       
     {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
 
         <div class="mailbox-controls">
-        <h3 class="pull-right" style="margin-top:0;margin-bottom:0;"> {!! $tickets->count().'-'.$tickets->total(); !!}</h3>
+        <h3 class="pull-right" style="margin-top:0;margin-bottom:0;"> </h3>
             <!-- Check all button -->
             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
             <a class="btn btn-default btn-sm" id="click"><i class="fa fa-refresh"></i></a>
             <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="Delete">
             <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="Close">
         </div>
-        <div class=" table-responsive mailbox-messages"  id="refresh">
-                <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! Lang::get('lang.loading') !!}...</b></p>
+<div class="mailbox-messages" id="refresh">
+        <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! Lang::get('lang.loading') !!}...</b></p>
         <!-- table -->
-            <table class="table table-hover table-striped">
-                <thead>
-                <th></th>
-                <th>Subject</th>
-                <th>Ticket ID</th>
-                <th>Priority</th>
-                <th>From</th>
-                <th>Last Replier</th>
-                <th>Assigned To</th>
-                <th>Last Activity</th>
-                </thead>
-                <tbody id="hello">
-                    
-                    @foreach ($tickets  as $ticket )
-                    <tr <?php if ($ticket->seen_by == null) {?> style="color:green;" <?php }
+            {!! Datatable::table()
+        ->addColumn(
+                    "",
+                    Lang::get('lang.subject'),
+                    Lang::get('lang.ticket_id'),
+                    Lang::get('lang.from'),
+                    Lang::get('lang.last_replier'),
+                    Lang::get('lang.assigned_to'),
+                    Lang::get('lang.last_activity'))
+        ->setUrl(route('get.overdue.ticket')) 
+        ->setClass('table table-hover table-bordered table-striped')       
+        ->render();!!}
 
-
-                    $sla = $ticket->sla;
-                    $SlaPlan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $sla)->first();
-
-                    $time = $ticket->created_at;
-                    $time = date_create($time);
-                    date_add($time, date_interval_create_from_date_string($SlaPlan->grace_period));
-                    echo date_format($time, 'd/m/Y H:i:s');
-
-?> >
-                        <td><input type="checkbox" class="icheckbox_flat-blue" name="select_all[]" value="{{$ticket->id}}"/></td>
-                        <?php 
-                        //  collaborators
-                        $collaborators = App\Model\helpdesk\Ticket\Ticket_Collaborator::where('ticket_id','=',$ticket->id)->get();
-                        $collab = count($collaborators);
-                        //  title
-                        $title = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
-                        $string = strip_tags($title->title);
-                        // check atatchments
-                        $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id','=',$title->id)->first();
-                        $attach = count($attachments);
-
-                        if (strlen($string) > 40) {
-                            $stringCut = substr($string, 0, 40);
-                            $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...'; 
-                        }
-                        $TicketData = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                        $TicketDatarow = App\Model\helpdesk\Ticket\Ticket_Thread::where('id', '=', $TicketData)->first();
-                        $LastResponse = App\User::where('id', '=', $TicketDatarow->user_id)->first(); 
-                        if($LastResponse->role == "user") {
-                            $rep = "#F39C12";
-                            $username = $LastResponse->user_name;
-                            } else { $rep = "#000"; $username = $LastResponse->first_name ." ". $LastResponse->last_name; 
-                            if($LastResponse->first_name==null || $LastResponse->last_name==null) {
-                                $username = $LastResponse->user_name;
-                            }}   
-                        $titles = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
-                        $count = count($titles);
-                        foreach($titles as $title)
-                        {
-                            $title = $title;
-                        }   
-                        $assigned_to = App\User::where('id','=',$ticket->assigned_to)->first();
-                        if($assigned_to == null)
-                        {
-                            $assigned = "Unassigned";
-                        }
-                        else
-                        {
-                            $assigned = $assigned_to->first_name ." ". $assigned_to->last_name;
-                        }
-                        ?>
-                        <td class="mailbox-name"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">{{$string}}   </a> ({!! $count!!}) <i class="fa fa-comment"></i>
-                        @if($collab > 0)&nbsp;<i class="fa fa-users"></i>@endif 
-                        @if($attach > 0)&nbsp;<i class="fa fa-paperclip"></i>@endif</td>
-                        <td class="mailbox-Id"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">#{!! $ticket->ticket_number !!}</a></td>
-                        <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first();?>
-                        <td class="mailbox-priority"><spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority_desc}}</spam></td>
-                        <?php $from = App\User::where('id','=',$ticket->user_id)->first();   ?> 
-                        @if($from->role == "user")
-                <td class="mailbox-from" >{!! $from->user_name !!}</td>        
-                        @else
-                <td class="mailbox-from" >{!! $from->first_name." ".$from->last_name !!}</td>        
-                        @endif
-                <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
-                <td>{!! $assigned !!}</td>
-                <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
-                </tr>
-                @endforeach
-                </tbody>
-            </table><!-- /.table -->
-            <div class="pull-right">
-                <?php echo $tickets->setPath(url('/ticket/overdue'))->render();?>&nbsp;
-            </div>
         </div><!-- /.mail-box-messages -->
         {!! Form::close() !!}
     </div><!-- /.box-body -->

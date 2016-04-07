@@ -2317,4 +2317,4 @@ class CF_Object
  * c-basic-offset: 4
  * c-hanging-comment-ender-p: nil
  * End:
- */;
+ */

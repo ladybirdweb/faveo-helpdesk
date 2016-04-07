@@ -181,7 +181,7 @@ class EmailsController extends Controller
         try {
             //            getConnection($request->input('email_name'), $request->input('email_address'), $request->input('email_address'))
             // saving all the fields to the database
-            if ($email->fill($request->except('password', 'department', 'priority', 'help_topic', 'fetching_status', 'sending_status'))->save() == true) {
+            if ($email->fill($request->except('password', 'department', 'priority', 'help_topic', 'fetching_status', 'sending_status', 'auto_response'))->save() == true) {
                 if ($request->fetching_status == 'on') {
                     $email->fetching_status = 1;
                 } else {
@@ -191,6 +191,11 @@ class EmailsController extends Controller
                     $email->sending_status = 1;
                 } else {
                     $email->sending_status = 0;
+                }
+                if ($request->auto_response == 'on') {
+                    $email->auto_response = 1;
+                } else {
+                    $email->auto_response = 0;
                 }
                 // fetching department value
                 $email->department = $this->departmentValue($request->input('department'));
@@ -355,6 +360,11 @@ class EmailsController extends Controller
                 $emails->sending_status = 1;
             } else {
                 $emails->sending_status = 0;
+            }
+            if ($request->auto_response == 'on') {
+                $emails->auto_response = 1;
+            } else {
+                $emails->auto_response = 0;
             }
             // fetching department value
             $emails->department = $this->departmentValue($request->input('department'));

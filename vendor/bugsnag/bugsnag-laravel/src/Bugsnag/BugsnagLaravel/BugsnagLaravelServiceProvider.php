@@ -41,7 +41,7 @@ class BugsnagLaravelServiceProvider extends ServiceProvider
         } else {
           $this->publishes(array(
               __DIR__.'/config.php' => config_path('bugsnag.php'),
-          ));
+          ), 'config');
         }
     }
 
@@ -66,7 +66,7 @@ class BugsnagLaravelServiceProvider extends ServiceProvider
             $client->setReleaseStage($app->environment());
             $client->setNotifier(array(
                 'name'    => 'Bugsnag Laravel',
-                'version' => '1.6.3',
+                'version' => '1.6.4',
                 'url'     => 'https://github.com/bugsnag/bugsnag-laravel'
             ));
 

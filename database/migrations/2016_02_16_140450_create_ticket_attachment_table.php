@@ -20,8 +20,9 @@ class CreateTicketAttachmentTable extends Migration
             $table->string('type');
             $table->string('poster');
             $table->timestamps();
-            $table->binary('file', 65535)->nullable();
         });
+
+        \DB::statement('ALTER TABLE `ticket_attachment` ADD `file` MEDIUMBLOB');
     }
 
     /**

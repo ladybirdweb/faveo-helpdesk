@@ -67,6 +67,7 @@ class="active"
 
                                 
                                  <td>{!! link_to_route('forms.show', Lang::get('lang.view_this_form') ,[$form->id],['id'=>'View','class'=>'btn btn-primary btn-sm']) !!}
+                                     <!--{!! link_to_route('forms.edit', Lang::get('lang.edit_this_form') ,[$form->id],['id'=>'View','class'=>'btn btn-info btn-sm']) !!}-->
                                                             <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$form->id}}delete">{!! Lang::get('lang.delete_from') !!}</button>
                                                             
                                                             <div class="modal fade" id="{{$form->id}}delete">

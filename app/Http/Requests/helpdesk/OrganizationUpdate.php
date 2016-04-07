@@ -30,7 +30,7 @@ class OrganizationUpdate extends Request
     {
         return [
 
-            'website' => 'url',
+            'website' => 'active_url',
                 // 'phone' => 'size:10',
         ];
     }

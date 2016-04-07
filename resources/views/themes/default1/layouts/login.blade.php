@@ -21,14 +21,32 @@
   <body class="login-page">
     <div class="login-box">
       <div class="login-logo">
-        <b>SUPPORT</b> CENTER
+        <?php 
+                $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
+        $system = App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
+        ?>
+        @if($system->url)
+          <a href="{!! $system->url !!}" rel="home">
+        @else
+          <a href="{{url('/')}}" rel="home">
+        @endif
+                @if($company->use_logo == 1)
+                  <img src="{{asset('lb-faveo/media/company')}}{{'/'}}{{$company->logo}}" alt="User Image" width="200px" />
+                @else
+                  @if($system->name)
+                    {!! $system->name !!}
+                  @else
+                    <b>SUPPORT</b> CENTER
+                  @endif
+                @endif
+                </a>
       </div><!-- /.login-logo -->
         <div class="login-box-body">
        @yield('body')
     </div><!-- /.login-box -->
     <div class="login-box-msg">
     </br>
-       Powered by <a href="http://www.faveohelpdesk.com/">FAVEO</a>
+      <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
     </div>
     </div>
 

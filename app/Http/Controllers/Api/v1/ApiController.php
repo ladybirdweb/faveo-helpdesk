@@ -1148,5 +1148,26 @@ class ApiController extends Controller {
             return response()->json(compact('error', 'file', 'line'));
         }
     }
+    
+    public function deleteCollaborator() {
+        try {
+            $v = $this->validate($this->request, [
+                'id' => 'required'
+                    ]
+            );
+            if($v->fails()){
+               $result = $validator->messages(); 
+               return response()->json(compact('result'));
+            }
+            $collaborator = $this->ticket->userremove();
+            return response()->json(compact('collaborator'));
+        } catch (\Exception $ex) {
+            $error = $e->getMessage();
+            $line = $e->getLine();
+            $file = $e->getFile();
+
+            return response()->json(compact('error', 'file', 'line'));
+        }
+    }
 
 }

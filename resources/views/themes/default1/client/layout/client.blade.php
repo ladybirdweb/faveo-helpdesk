@@ -128,16 +128,26 @@
 						</ul><!-- .navbar-login -->
 						<div id="login-form" <?php if($errors->first('email') || $errors->first('password')){ ?> class="login-form collapse fade clearfix in" <?php } else { ?> class="login-form collapse fade clearfix" <?php  } ?> >
 					            {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}  
-
+					            @if(Session::has('errors'))
+									<div class="alert alert-danger alert-dismissable">
+   										<!-- <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b> -->
+   										<!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> -->
+   										@if(Session::has('error'))
+   											{!! Session::get('error') !!}
+   										@else
+   											{!! Lang::get('lang.required-error') !!}
+   										@endif
+									</div>
+								@endif
 								<div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
 									{!! Form::text('email',null,['placeholder'=>Lang::get('lang.e-mail'),'class' => 'form-control']) !!}
-									{!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
+									<!-- {!! $errors->first('email', '<spam class="help-block">:message</spam>') !!} -->
 									<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 					          	</div>
 
 								<div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}">
 						            {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}
-									{!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
+									<!-- {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!} -->
 						            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
 					          	</div>
 								<ul class="list-unstyled pull-left">
@@ -168,7 +178,9 @@
         </header>
                             <!-- Left side column. contains the logo and sidebar -->
                             <!-- Right side column. Contains the navbar and content of the page -->
-@yield('breadcrumb')
+                            <div class="site-hero clearfix">
+@include('breadcrumbs')
+                            </div>
         <!-- Main content -->
         <div id="main" class="site-main clearfix">
 			<div class="container">

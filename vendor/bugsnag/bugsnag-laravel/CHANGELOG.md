@@ -1,6 +1,14 @@
 Changelog
 =========
 
+## 1.6.4 (9 Mar 2016)
+
+### Bug Fixes
+
+* Add missing 'config' tag in service provider
+  [Dan Smith](https://github.com/DanSmith83)
+  [#73](https://github.com/bugsnag/bugsnag-laravel/pull/73)
+
 1.6.3
 -----
 

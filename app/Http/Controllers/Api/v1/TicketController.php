@@ -656,5 +656,16 @@ try {
            
         }
     }
+    /**
+     * user remove.
+     *
+     * @return type
+     */
+    public function userremove()
+    {
+        $id = Input::get('id');
+        $ticket_collaborator = Ticket_Collaborator::where('id', '=', $id)->delete();
+        return "deleted successfully";
+    }
 
 }
