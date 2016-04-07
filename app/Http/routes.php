@@ -47,7 +47,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
     Route::get('notifications-list', ['as' => 'notification.list', 'uses' => 'Common\NotificationController@show']);
 
     Route::post('notification-delete/{id}', ['as' => 'notification.delete', 'uses' => 'Common\NotificationController@delete']);
-    
+
         // resource is a function to process create,edit,read and delete
     Route::resource('groups', 'Admin\helpdesk\GroupController'); // for group module, for CRUD
 

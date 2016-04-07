@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Config file for mjanssen\BreadcrumbsBundle
+ * Config file for mjanssen\BreadcrumbsBundle.
  */
 
 return [
@@ -55,10 +55,10 @@ return [
      *
      * The value will be shown as first breadcrumb.
      */
-    'automaticFirstCrumb' => array(
+    'automaticFirstCrumb' => [
         'enabled' => true,
-        'value' => 'Home'
-    ),
+        'value'   => 'Home',
+    ],
 
     /*
      * @string
@@ -81,7 +81,7 @@ return [
      * Put values that should be ignored in this array. Could come in handy for automatic generation while using
      * languages. (example.com/en/some-slug) where you want the languages to be filtered out of the breadcrumbs.
      */
-    'except' => array(
-        
-    ),
+    'except' => [
+
+    ],
 ];
