@@ -46,14 +46,15 @@ class AppServiceProvider extends ServiceProvider
             }, false);
         });
     }
-    
-    public function composer() {
-        \View::composer('breadcrumbs', function() {
+
+    public function composer()
+    {
+        \View::composer('breadcrumbs', function () {
 
             $data = [
-                'global_breadcrumbs' => Breadcrumbs::automatic()
+                'global_breadcrumbs' => Breadcrumbs::automatic(),
             ];
-            
+
             view()->share($data);
         });
     }

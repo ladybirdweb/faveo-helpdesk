@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class NotificationType extends Model
 {
-     protected $table = 'notification_types';
-	protected $fillable = 	[
-								
-            'message', 'type','icon_class'
-							];
+    protected $table = 'notification_types';
+    protected $fillable = [
+
+            'message', 'type', 'icon_class',
+                            ];
 }

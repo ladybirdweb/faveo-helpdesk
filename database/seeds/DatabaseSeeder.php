@@ -6,6 +6,7 @@ use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Email\Smtp;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
+use App\Model\helpdesk\Notification\NotificationType;
 use App\Model\helpdesk\Settings\Alert;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
@@ -13,7 +14,6 @@ use App\Model\helpdesk\Settings\Responder;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
 use App\Model\helpdesk\Theme\Widgets;
-use App\Model\helpdesk\Notification\NotificationType;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Status;
@@ -286,8 +286,8 @@ class DatabaseSeeder extends Seeder
         Widgets::create(['id' => '20', 'name' => 'instagram']);
         /* Knowledge base setting */
         Settings::create(['id' => 'id', 'pagination' => '10']);
-        NotificationType::create(['id' => '1', 'message' => 'A new user is registered.','type' => 'registration','icon_class' => 'fa fa-user']);
-        NotificationType::create(['id' => '2', 'message' => 'You have new reply on this ticket.','type' => 'reply','icon_class' => 'fa fa-envelope']);
-        NotificationType::create(['id' => '3', 'message' => 'A new ticket has created.','type' => 'new_ticket','icon_class' => 'fa fa-envelope']);
+        NotificationType::create(['id' => '1', 'message' => 'A new user is registered.', 'type' => 'registration', 'icon_class' => 'fa fa-user']);
+        NotificationType::create(['id' => '2', 'message' => 'You have new reply on this ticket.', 'type' => 'reply', 'icon_class' => 'fa fa-envelope']);
+        NotificationType::create(['id' => '3', 'message' => 'A new ticket has created.', 'type' => 'new_ticket', 'icon_class' => 'fa fa-envelope']);
     }
 }
