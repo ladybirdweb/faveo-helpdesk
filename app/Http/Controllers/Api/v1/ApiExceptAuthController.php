@@ -34,7 +34,12 @@ class ApiExceptAuthController extends Controller
             }
 
             $url = $this->request->input('url');
-            $url = $url.'/api/v1/helpdesk/check-url';
+            if(!str_is('*/', $url)){
+                $url = str_finish($url, '/');
+            }
+            
+            $url = $url.'api/v1/helpdesk/check-url';
+            //return $url;
             $result = $this->CallGetApi($url);
 //            dd($result);
             return response()->json(compact('result'));

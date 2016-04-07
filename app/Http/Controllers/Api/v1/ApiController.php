@@ -59,9 +59,12 @@ class ApiController extends Controller {
 
         $this->middleware('jwt.auth');
         $this->middleware('api', ['except' => 'GenerateApiKey']);
-
-        $user = \JWTAuth::parseToken()->authenticate();
-        $this->user = $user;
+        try {
+            $user = \JWTAuth::parseToken()->authenticate();
+            $this->user = $user;
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+           
+        }
 
         $ticket = new TicketController();
         $this->ticket = $ticket;
@@ -297,6 +300,7 @@ class ApiController extends Controller {
                         ->whereNotNull('title');
                     })
                     ->select('first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+                    ->orderBy('ticket_thread.updated_at','desc')
                     ->groupby('tickets.id')
                     ->distinct()
                     ->paginate(10)
@@ -340,6 +344,7 @@ class ApiController extends Controller {
                         ->whereNotNull('title');
                     })
                     ->select('first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+                    ->orderBy('ticket_thread.updated_at','desc')
                     ->groupby('tickets.id')
                     ->distinct()
                     ->paginate(10)
@@ -383,6 +388,7 @@ class ApiController extends Controller {
                         ->whereNotNull('title');
                     })
                     ->select('first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+                    ->orderBy('ticket_thread.updated_at','desc')
                     ->groupby('tickets.id')
                     ->distinct()
                     ->paginate(10)
@@ -672,6 +678,10 @@ class ApiController extends Controller {
             }
 
             $url = $this->request->input('url');
+            if(!str_is('*/', $url)){
+                $url = str_finish($url, '/');
+            }
+            
             $url = $url . '/api/v1/helpdesk/check-url?api_key=' . $this->request->input('api_key') . '&token=' . \Config::get('app.token');
             $result = $this->CallGetApi($url);
             //dd($result);
@@ -877,7 +887,7 @@ class ApiController extends Controller {
      */
     public function getTickets() {
         try {
-            $tickets = $this->model->paginate(10);
+            $tickets = $this->model->orderBy('created_at','desc')->paginate(10);
             $tickets->toJson();
 
             return $tickets;
@@ -912,6 +922,7 @@ class ApiController extends Controller {
                         ->whereNotNull('title');
                     })
                     ->select('first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+                    ->orderBy('ticket_thread.updated_at','desc')
                     ->groupby('tickets.id')
                     ->distinct()
                     ->paginate(10)
@@ -984,6 +995,7 @@ class ApiController extends Controller {
                         ->whereNotNull('title');
                     })
                     ->select('first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+                    ->orderBy('ticket_thread.updated_at','desc')
                     ->groupby('tickets.id')
                     ->distinct()
                     ->paginate(10)
@@ -1033,6 +1045,7 @@ class ApiController extends Controller {
                         ->whereNotNull('title');
                     })
                     ->select('first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+                     ->orderBy('ticket_thread.updated_at','desc')
                     ->groupby('tickets.id')
                     ->distinct()
                     ->paginate(10)
@@ -1113,11 +1126,26 @@ class ApiController extends Controller {
     }
 
     public function collaboratorSearch() {
+        $this->validate($this->request, ['term' => 'required']);
         try {
-            $this->validate($this->request, ['term' => 'required']);
-            $collaborator = $this->ticket->autosearch();
-            return response()->json(compact('collaborator'));
-        } catch (\Exception $ex) {
+
+            $emails = $this->ticket->autosearch();
+            //return $emails;
+            $user = new User();
+            if (count($emails) > 0) {
+                foreach ($emails as $key => $email) {
+
+                    $user_model = $user->where('email', $email)->first();
+                    //return $user_model;
+                    $users[$key]['name'] = $user_model->first_name . ' ' . $user_model->last_name;
+                    $users[$key]['email'] = $email;
+                    $users[$key]['avatar'] = $this->avatarUrl($email);
+                }
+            }
+            //return $users;
+
+            return response()->json(compact('users'));
+        } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
             $file = $e->getFile();
@@ -1126,21 +1154,42 @@ class ApiController extends Controller {
         }
     }
 
-    public function addCollaborator() {
+    public function avatarUrl($email) {
         try {
-            $v = $this->validate($this->request, [
-                'name' => 'required',
-                'email'=>'required',
-                'ticket_id'=>'required'
+            $user = new User();
+            $user = $user->where('email', $email)->first();
+            if ($user->profile_pic) {
+                $url = url('lb-faveo/media/profilepic/' . $user->profile_pic);
+            } else {
+                $url = \Gravatar::src($email);
+            }
+            return $url;
+        } catch (\Exception $ex) {
+            //return $ex->getMessage();
+            throw new \Exception($ex->getMessage());
+        }
+    }
+
+    public function addCollaboratorForTicket() {
+        try {
+            $v = \Validator::make(\Input::get(), [
+                'email' => 'required|email|unique:users',
+                'ticket_id' => 'required'
                     ]
             );
-            if($v->fails()){
-               $result = $validator->messages(); 
-               return response()->json(compact('result'));
+            if ($v->fails()) {
+                $error = $v->messages();
+                return response()->json(compact('error'));
             }
             $collaborator = $this->ticket->useradd();
             return response()->json(compact('collaborator'));
-        } catch (\Exception $ex) {
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            $line = $e->getLine();
+            $file = $e->getFile();
+
+            return response()->json(compact('error', 'file', 'line'));
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $ex) {
             $error = $e->getMessage();
             $line = $e->getLine();
             $file = $e->getFile();
@@ -1148,16 +1197,43 @@ class ApiController extends Controller {
             return response()->json(compact('error', 'file', 'line'));
         }
     }
-    
-    public function deleteCollaborator() {
+     public function getCollaboratorForTicket() {
         try {
-            $v = $this->validate($this->request, [
-                'id' => 'required'
+            $v = \Validator::make(\Input::get(), [
+                'ticket_id' => 'required'
                     ]
             );
-            if($v->fails()){
-               $result = $validator->messages(); 
-               return response()->json(compact('result'));
+            if ($v->fails()) {
+                $error = $v->messages();
+                return response()->json(compact('error'));
+            }
+            $collaborator = $this->ticket->getCollaboratorForTicket();
+            return response()->json(compact('collaborator'));
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            $line = $e->getLine();
+            $file = $e->getFile();
+
+            return response()->json(compact('error', 'file', 'line'));
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $ex) {
+            $error = $e->getMessage();
+            $line = $e->getLine();
+            $file = $e->getFile();
+
+            return response()->json(compact('error', 'file', 'line'));
+        }
+    }
+
+    public function deleteCollaborator() {
+        try {
+            $v = \Validator::make(\Input::get(), [
+                'ticketid' => 'required',
+                'email'=>'required'
+                    ]
+            );
+            if ($v->fails()) {
+                $result = $v->messages();
+                return response()->json(compact('result'));
             }
             $collaborator = $this->ticket->userremove();
             return response()->json(compact('collaborator'));

@@ -677,6 +677,9 @@ Route::group(['prefix' => 'api/v1'], function () {
 
         Route::get('customers-custom', 'Api\v1\ApiController@getCustomersWith');
         Route::get('collaborator/search', 'Api\v1\ApiController@collaboratorSearch');
+        Route::post('collaborator/create', 'Api\v1\ApiController@addCollaboratorForTicket');
+        Route::post('collaborator/remove', 'Api\v1\ApiController@deleteCollaborator');
+        Route::post('collaborator/get-ticket', 'Api\v1\ApiController@getCollaboratorForTicket');
     });
 
     /*
