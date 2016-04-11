@@ -761,7 +761,7 @@ return [
     'see-profile2'                                    => 's profile',
     'overdue'                                         => 'Overdue',
     'user-unassigned'                                 => 'User unassigned',
-    'reason'                                          => 'Reason for merging: ',    
+    'reason'                                          => 'Reason for merging: ',
 
     /*
       |------------------------------------------------

@@ -8,18 +8,10 @@ use App\Http\Controllers\Controller;
 // requests
 // models
 use App\Model\helpdesk\Agent\Department;
-use App\Model\helpdesk\Ticket\Ticket_attachments;
-use App\Model\helpdesk\Ticket\Ticket_Collaborator;
-use App\Model\helpdesk\Ticket\Ticket_Priority;
-use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\User;
 use Auth;
-use DB;
 // classes
-use Illuminate\support\Collection;
-use Input;
-use UTC;
 use Tickable;
 
 /**

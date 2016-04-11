@@ -80,8 +80,8 @@ class TicketController extends Controller
             $dept = DB::table('department')->where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', 1)->where('dept_id', '=', $dept->id)->get();
         }
+
         return $this->makeTable($tickets);
-        
     }
 
     /**
@@ -102,8 +102,8 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->get();
         }
+
         return $this->makeTable($tickets);
-        
     }
 
     /**
@@ -146,8 +146,8 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '=', Auth::user()->id)->get();
         }
+
         return $this->makeTable($tickets);
-        
     }
 
     /**
@@ -191,7 +191,6 @@ class TicketController extends Controller
         }
 
         return $this->makeTable($tickets);
-        
     }
 
     /**
@@ -212,8 +211,8 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '>', 1)->where('dept_id', '=', $dept->id)->where('status', '<', 4)->get();
         }
+
         return $this->makeTable($tickets);
-        
     }
 
     /**
@@ -235,7 +234,7 @@ class TicketController extends Controller
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '>', 0)->where('dept_id', '=', $dept->id)->get();
         }
 
-        return $this->makeTable($tickets); 
+        return $this->makeTable($tickets);
     }
 
     /**
@@ -1317,8 +1316,8 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('assigned_to', '=', null)->where('dept_id', '=', $dept->id)->get();
         }
+
         return $this->makeTable($tickets);
-        
     }
 
     /**
@@ -1930,8 +1929,10 @@ $thread->reply_rating = $rating;
     }
 
     /**
-     * function to make/render datatable
+     * function to make/render datatable.
+     *
      * @param array/object $tickets
+     *
      * @return array(table data)
      */
     public static function makeTable($tickets)
