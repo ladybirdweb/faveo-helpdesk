@@ -70,12 +70,33 @@ class="active"
                     Lang::get('lang.ticket_id'),
                     Lang::get('lang.priority'),
                     Lang::get('lang.from'),
-                    Lang::get('lang.last_replier'),
                     Lang::get('lang.assigned_to'),
                     Lang::get('lang.last_activity'))
         ->setUrl(route('get.answered.ticket')) 
-        ->setOrder(array(7=>'desc'))  
-        ->setClass('table table-hover table-bordered table-striped')       
+        ->setOrder(array(6=>'desc'))  
+        ->setClass('table table-hover table-bordered table-striped')
+        ->setCallbacks("fnRowCallback",'function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+            var str = aData[0];
+            if(1==1){
+                if(str.search("#000") == -1) {
+                    $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border":"none"});
+                    $("td", nRow).mouseenter(function(){
+                        $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border":"none"});
+                    });
+                    $("td", nRow).mouseleave(function(){
+                        $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border":"none"});
+                    });
+                } else {
+                    $("td", nRow).css({"background-color":"white", "border":"none"});
+                    $("td", nRow).mouseenter(function(){
+                        $("td", nRow).css({"background-color":"#DEDFE0", "border":"none"});
+                    });
+                    $("td", nRow).mouseleave(function(){
+                        $("td", nRow).css({"background-color":"white", "border":"none"});
+                    });   
+                }
+            }
+        }')   
         ->render();!!}
 
         </div><!-- /.mail-box-messages -->
