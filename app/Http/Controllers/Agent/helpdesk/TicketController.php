@@ -952,7 +952,11 @@ class TicketController extends Controller
         $thread->ticket_id = $ticket_status->id;
         $thread->user_id = Auth::user()->id;
         $thread->is_internal = 1;
-        $thread->body = $ticket_status_message->message.' '.Auth::user()->first_name.' '.Auth::user()->last_name;
+        if (Auth::user()->first_name != null) {
+            $thread->body = $ticket_status_message->message.' '.Auth::user()->first_name.' '.Auth::user()->last_name;
+        } else {
+             $thread->body = $ticket_status_message->message.' '.Auth::user()->user_name;
+        }
         $thread->save();
 
         return 'your ticket'.$ticket_status->ticket_number.' has been resolved';
