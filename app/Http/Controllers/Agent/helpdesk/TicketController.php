@@ -1519,6 +1519,32 @@ class TicketController extends Controller
     }
 
     /**
+     *adding offset to updated_at time
+     *
+     *@return date
+     */
+    public static function timeOffset($utc)
+    {
+        $set = System::whereId('1')->first();
+        $timezone = Timezones::whereId($set->time_zone)->first();
+        $tz = $timezone->name;
+        date_default_timezone_set($tz);
+        $offset = date('Z', strtotime($utc));
+        return $offset;
+    }
+    
+    /**
+     * to get user date time format
+     *
+     *@return string 
+     */
+    public static function getDateTimeFormat()
+    {
+        $set = System::select('date_time_format')->whereId('1')->first();
+        return $set->date_time_format;
+    }
+
+    /**
      * lock.
      *
      * @param type $id
@@ -2011,8 +2037,9 @@ $thread->reply_rating = $rating;
                         ->addColumn('Last', function ($ticket) {
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
                             $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
-
-                            return UTC::usertimezone($TicketDatarow->updated_at);
+                            $date = strtotime($TicketDatarow->updated_at)+UTC::timeOffset($TicketDatarow->updated_at);
+                            // return date('Y-m-d H:i:s', strtotime($TicketDatarow->updated_at) + UTC::timeOffset($TicketDatarow->updated_at));
+                            return date('Y-m-d H:i:s', strtotime($TicketDatarow->updated_at)+UTC::timeOffset($TicketDatarow->updated_at));
                         })
                         ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
                         ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')

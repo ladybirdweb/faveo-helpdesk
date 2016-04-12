@@ -375,6 +375,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                     <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
                      <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" ></script>
+                      <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" ></script>
                      <script>
                 function myFunction() {
 
