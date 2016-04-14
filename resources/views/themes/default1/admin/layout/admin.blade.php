@@ -330,7 +330,10 @@ $i = count($tickets);
                 });
         </script>
                     <script>
-                        
+                       $(function () {
+    //Add text editor
+    $("textarea").wysihtml5();
+}); 
 // $(function(){
 //     $("#checkUpdate").on('click',function(){        
 //             $.ajax({
