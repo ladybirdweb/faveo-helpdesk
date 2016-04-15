@@ -92,9 +92,11 @@
 								<ul class="dropdown-menu">
 									<li>
 										<div class="banner-wrapper user-menu text-center clearfix">
-								
-                                        		<img src="{{Auth::user()->profile_pic}}"class="img-circle" alt="User Image" height="80" width="80"/>
-                                         	
+											@if(Auth::user()->profile_pic)
+                                        		<img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}"class="img-circle" alt="User Image" height="80" width="80"/>
+                                         	@else
+	                                            <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
+                                    		@endif
                                     <h3 class="banner-title text-info h4">{{Auth::user()->first_name." ".Auth::user()->last_name}}</h3>
 											<div class="banner-content">
 												{{-- <a href="{{url('kb/client-profile')}}" class="btn btn-custom btn-xs">Edit Profile</a> --}} <a href="{{url('auth/logout')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.log_out') !!}</a>

@@ -184,15 +184,17 @@ return [
       |   Company Settings Page
       |--------------------------------------
      */
-    'company' => 'Company',
-    'website' => 'Website',
-    'phone'   => 'Phone',
-    'address' => 'Address',
-    'landing' => 'Landing Page',
-    'offline' => 'Offline Page',
-    'thank'   => 'Thank Page',
-    'logo'    => 'Logo',
-    'save'    => 'Save',
+    'company'      => 'Company',
+    'website'      => 'Website',
+    'phone'        => 'Phone',
+    'address'      => 'Address',
+    'landing'      => 'Landing Page',
+    'offline'      => 'Offline Page',
+    'thank'        => 'Thank Page',
+    'logo'         => 'Logo',
+    'save'         => 'Save',
+    'delete-logo'  => 'Delete logo',
+    'click-delete' => 'Click here to delete',
     /*
       |--------------------------------------
       |   System Settings Page
@@ -405,28 +407,6 @@ return [
      */
     'transient'            => 'Transient',
     'ticket_overdue_alert' => 'Ticket Overdue Alerts',
-
-    /*
-      |--------------------------------------
-      |  Work Flow
-      |--------------------------------------
-     */
-    'workflow'            => 'Workflow',
-    'ticket_workflow'            => 'Ticket Workflow',
-    'create_workflow'   =>  'Create Workflow',
-    'edit_workflow'   =>  'Edit Workflow',
-    'updated'             => 'Updated',
-    'target'              => 'Target',
-    'target_channel'      => 'Target Channel',
-    'exceution_order'   =>  'Exceution Order',
-    'target_channel'    =>  'Target Channel',
-    'workflow_rules'    =>  'Workflow Rules',
-    'workflow_action'   =>  'Workflow Action',
-    'rules'               => 'Rules',
-    'order'               => 'Order',
-    'condition'         =>  'Condition',
-    'statement'         =>  'Statement',
-
     /*
       |--------------------------------------
       |  Form Create Page
@@ -756,6 +736,7 @@ return [
     'access-ticket'                                   => 'Alert! This ticket has been locked by you for next ',
     'minutes'                                         => ' minutes',
     'in_minutes'                                      => 'In minutes',
+    'change_owner_for_ticket'                         => 'Change owner for ticket',
     'add_another_owner'                               => 'Add another owner',
     'user-not-found'                                  => 'User not found. Try again or add a new user.',
     'change-success'                                  => 'Success! owner has been changed for this ticket.',

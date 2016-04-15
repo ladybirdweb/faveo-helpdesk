@@ -116,7 +116,7 @@ if (DB_HOST && DB_USER && DB_NAME) {
     <p id="pass">Database connection successful. This system can run Faveo</p>
 </div>
 
-<script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 <span id="wait">Please wait this may take a while......</span>
 

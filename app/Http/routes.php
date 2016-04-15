@@ -185,15 +185,6 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
     Route::post('validating-email-settings', ['as' => 'validating.email.settings', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettings']); // route to check email input validation
     Route::post('validating-email-settings-on-update/{id}', ['as' => 'validating.email.settings.update', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettingsUpdate']); // route to check email input validation
-    
-    Route::get('workflow', ['as' => 'workflow' , 'uses' => 'Admin\helpdesk\WorkflowController@index']);
-    Route::get('workflow-list', ['as' => 'workflow.list' , 'uses' => 'Admin\helpdesk\WorkflowController@workFlowList']);
-    Route::get('workflow/create', ['as' => 'workflow.create' , 'uses' => 'Admin\helpdesk\WorkflowController@create']);
-    Route::post('workflow/store', ['as' => 'workflow.store' , 'uses' => 'Admin\helpdesk\WorkflowController@store']);
-    Route::get('workflow/edit/{id}', ['as' => 'workflow.edit' , 'uses' => 'Admin\helpdesk\WorkflowController@edit']);
-    Route::post('workflow/update/{id}', ['as' => 'workflow.update' , 'uses' => 'Admin\helpdesk\WorkflowController@update']);
-    Route::get('workflow/action-rule/{id}', ['as' => 'workflow.dept' , 'uses' => 'Admin\helpdesk\WorkflowController@selectAction']);
-    Route::get('workflow/delete/{id}', ['as' => 'workflow.delete' , 'uses' => 'Admin\helpdesk\WorkflowController@destroy']);
 });
 
 /*

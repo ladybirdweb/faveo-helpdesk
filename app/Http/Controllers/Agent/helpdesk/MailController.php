@@ -35,9 +35,9 @@ class MailController extends Controller
      *
      * @param type TicketController $TicketController
      */
-    public function __construct(TicketWorkflowController $TicketWorkflowController)
+    public function __construct(TicketController $TicketController)
     {
-        $this->TicketWorkflowController = $TicketWorkflowController;
+        $this->TicketController = $TicketController;
     }
 
     /**
@@ -76,9 +76,6 @@ class MailController extends Controller
                             $protocol_value = $e_mail->mailbox_protocol;
                             $get_mailboxprotocol = MailboxProtocol::where('id', '=', $protocol_value)->first();
                             $protocol = $get_mailboxprotocol->value;
-                        } elseif($e_mail->fetching_encryption == '/none') {
-                            $fetching_encryption2 = '/novalidate-cert';
-                            $protocol = $fetching_encryption2;
                         } else {
                             if ($e_mail->fetching_protocol) {
                                 $fetching_protocol = '/'.$e_mail->fetching_protocol;
@@ -86,7 +83,7 @@ class MailController extends Controller
                                 $fetching_protocol = '';
                             }
                             if ($e_mail->fetching_encryption) {
-                                $fetching_encryption = $e_mail->fetching_encryption;
+                                $fetching_encryption = '/'.$e_mail->fetching_encryption;
                             } else {
                                 $fetching_encryption = '';
                             }
@@ -133,9 +130,7 @@ class MailController extends Controller
 
                                 $assign = $get_helptopic->auto_assign;
                                 $form_data = null;
-                                $team_assign = null;
-                                $ticket_status = null;
-                                $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
+                                $result = $this->TicketController->create_user($fromaddress, $fromname, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $form_data, $auto_response);
 // dd($result);
                                 if ($result[1] == true) {
                                     $ticket_table = Tickets::where('ticket_number', '=', $result[0])->first();
