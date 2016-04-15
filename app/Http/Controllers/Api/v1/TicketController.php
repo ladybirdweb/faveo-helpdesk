@@ -331,10 +331,10 @@ class TicketController extends Controller
 // //                }
 //             }, true);
 
-try {
-    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body], $template_variables = ['agent_sign' => Auth::user()->agent_sign, 'ticket_number' => $ticket_number2]);
-} catch (\Exception $e) {
-}
+            try {
+                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body], $template_variables = ['agent_sign' => Auth::user()->agent_sign, 'ticket_number' => $ticket_number2]);
+            } catch (\Exception $e) {
+            }
 
             $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket_id)->get();
             foreach ($collaborators as $collaborator) {
@@ -357,10 +357,10 @@ try {
 // //                    }
 //                 }, true);
 
-                 try {
-                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $admin_user, 'email' => $admin_email], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $admin_user, 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $admin_user, 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
-                 } catch (\Exception $e) {
-                 }
+                try {
+                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $admin_user, 'email' => $admin_email], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $admin_user, 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $admin_user, 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
+                } catch (\Exception $e) {
+                }
             }
 
             return $thread;
@@ -599,6 +599,125 @@ try {
             return 1;
         } catch (\Exception $e) {
             return $e->getMessage();
+        }
+    }
+
+    /**
+     * autosearch.
+     *
+     * @return type json
+     */
+    public function autosearch()
+    {
+        $term = \Input::get('term');
+        $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->orWhere('first_name', 'LIKE', '%'.$term.'%')->orWhere('last_name', 'LIKE', '%'.$term.'%')->orWhere('user_name', 'LIKE', '%'.$term.'%')->lists('email');
+
+        return $user;
+    }
+
+    /**
+     * useradd.
+     *
+     * @param type Image $image
+     *
+     * @return type json
+     */
+    public function useradd()
+    {
+        $email = Input::get('email');
+        $ticket_id = Input::get('ticket_id');
+        $company = $this->company();
+        $user = new User();
+        $user->user_name = $email;
+        $user->email = $email;
+        $password = $this->generateRandomString();
+        $user->password = \Hash::make($password);
+        $user->role = 'user';
+        $user->active = 1;
+        if ($user->save()) {
+            $user_id = $user->id;
+            $php_mailer = new PhpMailController();
+            $php_mailer->sendmail($from = $php_mailer->mailfrom('1', '0'), $to = ['name' => $email, 'email' => $email], $message = ['subject' => 'Password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $email, 'email_address' => $email, 'user_password' => $password]);
+        }
+        $ticket_collaborator = new Ticket_Collaborator();
+        $ticket_collaborator->isactive = 1;
+        $ticket_collaborator->ticket_id = $ticket_id;
+        $ticket_collaborator->user_id = $user->id;
+        $ticket_collaborator->role = 'ccc';
+        $ticket_collaborator->save();
+
+        $result = [$user->user_name => $user->email];
+
+        return $result;
+    }
+
+    /**
+     * user remove.
+     *
+     * @return type
+     */
+    public function userremove()
+    {
+        $email = Input::get('email');
+        $ticketid = Input::get('ticketid');
+        $user = new User();
+        $user = $user->where('email', $email)->first();
+        $ticket_collaborator = Ticket_Collaborator::where('ticket_id', '=', $ticketid)
+                ->where('user_id', $user->id)
+                ->first();
+        if ($ticket_collaborator) {
+            $ticket_collaborator->delete();
+
+            return 'deleted successfully';
+        } else {
+            return 'not found';
+        }
+    }
+
+    public function getCollaboratorForTicket()
+    {
+        try {
+            $ticketid = Input::get('ticket_id');
+
+            $ticket_collaborator = \DB::table('users')
+                    ->join('ticket_collaborator', function ($join) use ($ticketid) {
+                        $join->on('users.id', '=', 'ticket_collaborator.user_id')
+                        ->where('ticket_collaborator.ticket_id', '=', $ticketid);
+                    })
+                    ->select('users.email', 'users.user_name')
+                    ->get();
+            if (count($ticket_collaborator) > 0) {
+                foreach ($ticket_collaborator as $key => $collaborator) {
+                    $collab[$key]['email'] = $collaborator->email;
+                    $collab[$key]['user_name'] = $collaborator->user_name;
+                    $collab[$key]['avatar'] = $this->avatarUrl($collaborator->email);
+                }
+            } else {
+                $collab = $ticket_collaborator;
+            }
+
+            return $collab;
+        } catch (\Exception $ex) {
+            return $ex->getMessage();
+            throw new \Exception('get collaborator for ticket fails');
+        }
+    }
+
+    public function avatarUrl($email)
+    {
+        try {
+            $user = new User();
+            $user = $user->where('email', $email)->first();
+            if ($user->profile_pic) {
+                $url = url('lb-faveo/media/profilepic/'.$user->profile_pic);
+            } else {
+                $url = \Gravatar::src($email);
+            }
+
+            return $url;
+        } catch (\Exception $ex) {
+            //return $ex->getMessage();
+            throw new \Exception($ex->getMessage());
         }
     }
 }

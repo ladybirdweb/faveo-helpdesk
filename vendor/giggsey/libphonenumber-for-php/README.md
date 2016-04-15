@@ -14,9 +14,9 @@ A PHP library for parsing, formatting, storing and validating international phon
 * `isNumberMatch` - gets a confidence level on whether two numbers could be the same.
 * `getExampleNumber`/`getExampleNumberByType` - provides valid example numbers for all countries/regions, with the option of specifying which type of example phone number is needed.
 * `isValidNumber` - full validation of a phone number for a region using length and prefix information.
-* PhoneNumberOfflineGeocoder - provides geographical information related to a phone number.
-* PhoneNumberToTimeZonesMapper - provides timezone information related to a phone number.
-* PhoneNumberToCarrierMapper - provides carrier information related to a phone number.
+* `PhoneNumberOfflineGeocoder` - provides geographical information related to a phone number.
+* `PhoneNumberToTimeZonesMapper` - provides timezone information related to a phone number.
+* `PhoneNumberToCarrierMapper` - provides carrier information related to a phone number.
 
 ## Installation
 
@@ -225,5 +225,7 @@ Other packages exist that integrate libphonenumber-for-php into frameworks.
 
  - Symfony: [PhoneNumberBundle](https://github.com/misd-service-development/phone-number-bundle)
  - Laravel: [Laravel Phone](https://github.com/Propaganistas/Laravel-Phone)
+ - Yii2: [PhoneInput](https://github.com/Borales/yii2-phone-input)
+ - Kohana: [PhoneNumber](https://github.com/softmediadev/kohana-phonenumber)
 
 These packages are supplied by third parties, and their quality can not be guaranteed.

@@ -14,6 +14,7 @@ use App\Model\helpdesk\Form\Fields;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
+use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
@@ -129,7 +130,7 @@ class FormController extends Controller
      * @param type Request $request
      * @param type User    $user
      */
-    public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source)
+    public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta)
     {
         $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token');
 
@@ -148,12 +149,29 @@ class FormController extends Controller
         $sla = $ticket_settings->first()->sla;
         $priority = $ticket_settings->first()->priority;
         $source = $ticket_source->where('name', '=', 'web')->first();
+        $attachments = $request->file('attachment');
 
         $collaborator = null;
         $assignto = null;
         $auto_response = 0;
-        if ($this->TicketController->create_user($email, $name, $subject, $details, $phone, $helptopic, $sla, $priority, $source->id, $collaborator, $department, $assignto, $form_extras, $auto_response)) {
-            return Redirect::route('guest.getform')->with('success', 'Ticket Created Successfully');
+        $result = $this->TicketController->create_user($email, $name, $subject, $details, $phone, $helptopic, $sla, $priority, $source->id, $collaborator, $department, $assignto, $form_extras, $auto_response);
+        if ($result[1] == 1) {
+            $ticketId = Tickets::where('ticket_number', '=', $result[0])->first();
+            $thread = Ticket_Thread::where('ticket_id', '=', $ticketId->id)->first();
+            if ($attachments != null) {
+                foreach ($attachments as $attachment) {
+                    if ($attachment != null) {
+                        $name = $attachment->getClientOriginalName();
+                        $type = $attachment->getClientOriginalExtension();
+                        $size = $attachment->getSize();
+                        $data = file_get_contents($attachment->getRealPath());
+                        $attachPath = $attachment->getRealPath();
+                        $ta->create(['thread_id' => $thread->id, 'name' => $name, 'size' => $size, 'type' => $type, 'file' => $data, 'poster' => 'ATTACHMENT']);
+                    }
+                }
+            }
+
+            return Redirect::route('guest.getform')->with('success', 'Ticket has been created successfully, your ticket number is <b>'.$result[0].'</b> Please save this for future reference.');
         }
     }
 

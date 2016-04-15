@@ -40,7 +40,15 @@ $router->get('getmail/{token}', 'Auth\AuthController@getMail');
   |
  */
 Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
-    // resource is a function to process create,edit,read and delete
+
+        //Notification marking
+    Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
+
+    Route::get('notifications-list', ['as' => 'notification.list', 'uses' => 'Common\NotificationController@show']);
+
+    Route::post('notification-delete/{id}', ['as' => 'notification.delete', 'uses' => 'Common\NotificationController@delete']);
+
+        // resource is a function to process create,edit,read and delete
     Route::resource('groups', 'Admin\helpdesk\GroupController'); // for group module, for CRUD
 
     Route::resource('departments', 'Admin\helpdesk\DepartmentController'); // for departments module, for CRUD
@@ -258,6 +266,8 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
     Route::get('/ticket/get-myticket', ['as' => 'get.myticket.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_myticket']);  /* Get tickets in datatable */
 
     Route::get('/ticket/overdue', ['as' => 'overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@overdue_ticket_list']); /*  Get Overdue Ticket */
+
+    Route::get('/ticket/get-overdue', ['as' => 'get.overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@getOverdueTickets']); /*  Get Overdue Ticket */
 
     Route::get('/ticket/closed', ['as' => 'closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@closed_ticket_list']); /*  Get Closed Ticket */
 
@@ -666,6 +676,10 @@ Route::group(['prefix' => 'api/v1'], function () {
          */
 
         Route::get('customers-custom', 'Api\v1\ApiController@getCustomersWith');
+        Route::get('collaborator/search', 'Api\v1\ApiController@collaboratorSearch');
+        Route::post('collaborator/create', 'Api\v1\ApiController@addCollaboratorForTicket');
+        Route::post('collaborator/remove', 'Api\v1\ApiController@deleteCollaborator');
+        Route::post('collaborator/get-ticket', 'Api\v1\ApiController@getCollaboratorForTicket');
     });
 
     /*

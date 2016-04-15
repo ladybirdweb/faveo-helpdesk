@@ -1,0 +1,13 @@
+{
+    "name": "mjanssen/laravel-5-breadcrumbs",
+    "description": "A simple and powerfull way to create breadcrumbs in Laravel 5+",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marnix Janssen",
+            "email": "dev.marnix@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

@@ -24,6 +24,7 @@
         <link href="{{asset("lb-faveo/plugins/iCheck/flat/blue.css")}}" rel="stylesheet" type="text/css" />
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <link href="{{asset("lb-faveo/css/tabby.css")}}" type="text/css" rel="stylesheet">
+        <link href="{{asset('css/notification-style.css')}}" rel="stylesheet" type="text/css">
         <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <link  href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css">
@@ -53,15 +54,53 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
+                    <?php $notifications = App\Http\Controllers\Common\NotificationController::getNotifications();
+                    ?>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         <ul class="nav navbar-nav navbar-left">
                             <li @yield('settings')><a href="{!! url('admin') !!}">{!! Lang::get('lang.home') !!}</a></li>
+                            
+                                </ul>
+                           
                         </ul>
 
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="{{url('dashboard')}}">{!! Lang::get('lang.agent_panel') !!}</a></li>
                             <!-- User Account: style can be found in dropdown.less -->
+                            <li class="dropdown notifications-menu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
+                                    <i class="fa fa-bell-o"></i>
+                                    <span class="label label-warning" id="count"><?php echo count($notifications); ?></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="header">You have <?php echo count($notifications); ?> notifications</li>
+                                    <li>
+
+                                        <ul class="menu">
+                                            @foreach($notifications as $notification)
+                                            @if($notification->type == 'registration')
+                                            <li>
+                                                <a href="{!! route('user.show', $notification->notification_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
+                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
+                                                </a>
+                                            </li>
+                                            @else
+                                            <li>
+                                                <a href="{!! route('ticket.thread', $notification->notification_id) !!}" id='{{ $notification->notification_id }}' class='noti_User'>
+                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
+                                                </a>
+                                            </li>
+                                            @endif
+                                            @endforeach
+
+                                        </ul>
+                                    </li>
+                                    <li class="footer"><a href="{{ url('notifications-list') }}">View all</a>
+                                    </li>
+                               
+                                </ul>
+                            </li>
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
@@ -214,8 +253,15 @@ $i = count($tickets);
                             <div class="content-wrapper">
                                 <!-- Content Header (Page header) -->
                                 <section class="content-header">
-                                    @yield('PageHeader')
-                                    @yield('breadcrumbs')
+                                    <div class="row">
+                                    <div class="col-md-6">
+                                        <h3>  @yield('PageHeader')</h3>
+                                    </div>
+                    <div class="pull-right">
+                                
+                                @include('breadcrumbs')
+                    </div>
+                                </div>
                                 </section>
 
                                 <!-- Main content -->
@@ -256,10 +302,38 @@ $i = count($tickets);
                     <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}"  type="text/javascript"></script>
                     <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
                     <script>
-                        $(function () {
-                        //Add text editor
-                        $("textarea").wysihtml5();
-                        });
+                function myFunction() {
+
+                    document.getElementById("count").innerHTML = "0";
+
+                }
+        </script>
+        <script>
+                $(document).ready(function () {
+                    
+                    $('.noti_User').click(function () {
+                        var id = this.id;
+                    var dataString = 'id=' + id;
+                        $.ajax
+                                ({
+                                    type: "POST",
+                                    url: "{{url('mark-read')}}" + "/" + id,
+                                    data: dataString,
+                                    cache: false,
+                                    success: function (html)
+                                    {
+//$(".city").html(html);
+                                    }
+                                });
+                    });
+
+                });
+        </script>
+                    <script>
+                       $(function () {
+    //Add text editor
+    $("textarea").wysihtml5();
+}); 
 // $(function(){
 //     $("#checkUpdate").on('click',function(){        
 //             $.ajax({

@@ -757,6 +757,11 @@ return [
     'merge-error2'                                    => 'Please select ticket to merge.',
     'select-tickets-to merge'                         => 'select two or more tickets to merge.',
     'different-users'                                 => 'Ticktes from different users',
+    'see-profile1'                                    => 'Click here to see ',
+    'see-profile2'                                    => 's profile',
+    'overdue'                                         => 'Overdue',
+    'user-unassigned'                                 => 'User unassigned',
+    'reason'                                          => 'Reason for merging: ',
 
     /*
       |------------------------------------------------

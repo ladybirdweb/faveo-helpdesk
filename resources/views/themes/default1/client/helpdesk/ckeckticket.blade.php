@@ -63,20 +63,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
     </td> 
 </tr>
                 </form>
-                          <form id="foo2">
-                              
-                           
-                               <tr><th > <div class="ticketratingtitle">Reply rating &nbsp;</div></th>&nbsp
-                               <td>
-    <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($tickets->ratingreply=='1')?'checked':'' ?>  />
-    <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($tickets->ratingreply=='2')?'checked':'' ?>  />
-    <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($tickets->ratingreply=='3')?'checked':'' ?>  />
-    <input type="radio" class="star" id="star2" name="rating2" value="4"<?php echo ($tickets->ratingreply=='4')?'checked':'' ?>  />
-    <input type="radio" class="star" id="star1" name="rating2" value="5"<?php echo ($tickets->ratingreply=='5')?'checked':'' ?>  />
-
-                               </td></tr>                            
-                          
-                                </form>  </tbody> </table> 
+ </tbody> </table> 
                         </div>
                             </div>
                             </div>
@@ -262,6 +249,18 @@ $data = $ConvDate[0];
                                                         <b class="fn"><a href="#" rel="external" class="url">{{$role->user_name}}</a></b>
                                                     @else
                                                         <b class="fn"><a href="#" rel="external" class="url">{{$role->first_name." ".$role->last_name}}</a></b>
+                                                 <div class="ticketratings pull-right">   <table><tbody>
+                <form id="foo2">
+   <tr>
+       <th>     <div class="ticketratingtitle">Reply rating &nbsp;</div></th>&nbsp
+                <td>            
+    <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($conversation->reply_rating=='1')?'checked':'' ?>  />
+    <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($conversation->reply_rating=='2')?'checked':'' ?>  />
+    <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($conversation->reply_rating=='3')?'checked':'' ?>  />
+    <input type="radio" class="star" id="star2" name="rating2" value="4"<?php echo ($conversation->reply_rating=='4')?'checked':'' ?>  />
+    <input type="radio" class="star" id="star1" name="rating2" value="5"<?php echo ($conversation->reply_rating=='5')?'checked':'' ?>  />
+                </td></tr></form></tbody></table></div>
+                             
                                                     @endif
                                                 </div><!-- .comment-author -->
                                                 <div class="comment-metadata">
@@ -429,7 +428,7 @@ $('#foo2').submit();
         // process the form
         $.ajax({
             type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-            url         : '../rating2/'+<?php echo $tickets->id ?>+'/'+formData, // the url where we want to POST
+            url         : '../rating2/'+<?php echo $thread->id ?>+'/'+formData, // the url where we want to POST
             data        : formData, // our data object
             dataType    : 'json', // what type of data do we expect back from the server
             

@@ -238,6 +238,7 @@ return [
         'PDF'        => 'Vsmoraes\Pdf\PdfFacade',
         'Gravatar'   => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
         'UTC'        => 'App\Http\Controllers\Agent\helpdesk\TicketController',
+        'Tickable'   => 'App\Http\Controllers\Agent\helpdesk\TicketController',
         'SMTPS'      => 'App\Http\Controllers\HomeController',
         'Datatable'  => 'Chumper\Datatable\Facades\DatatableFacade',
         'Zipper'     => 'Chumper\Zipper\Zipper',

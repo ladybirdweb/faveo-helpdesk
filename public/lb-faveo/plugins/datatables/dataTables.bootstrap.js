@@ -21,7 +21,7 @@ $.extend( true, $.fn.dataTable.defaults, {
 		},
 	 "fnPreDrawCallback": function(oSettings, json) {
 	 	$(".box-body").css({"opacity":"0.4"});
-         }
+        }
 } );
 
 
