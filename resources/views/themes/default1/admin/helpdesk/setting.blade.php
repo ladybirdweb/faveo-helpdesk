@@ -12,7 +12,7 @@
 </ol>
 @stop
 <!-- /breadcrumbs -->
-<!-- content -->
+<!-- content --> 
 @section('content')
                         <div class="box">
                             <div class="box-header with-border">
@@ -199,6 +199,20 @@
                                                         </span></a>
                                                 </div>
                                                 <center class="box-title" >{!! Lang::get('lang.forms') !!}</center>
+                                            </div>
+                                        </div>
+                                        <!--/.col-md-2-->
+
+                                        <!--/.col-md-2-->
+                                        <div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{url('workflow')}}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa fa-sitemap fa-stack-1x"></i>
+                                                        </span></a>
+                                                </div>
+                                                <center class="box-title" >{!! Lang::get('lang.workflow') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->

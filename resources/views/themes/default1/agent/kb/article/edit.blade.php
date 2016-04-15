@@ -117,7 +117,7 @@ CKEDITOR.replace('editor', {
                         <?php
                         //dd($article);
                         $format = App\Model\helpdesk\Settings\System::where('id', '1')->first()->date_time_format;
-                            $format = \App\Model\helpdesk\Utility\Time_format::where('id',$format)->first()->format;
+                            $format = \App\Model\helpdesk\Utility\Date_time_format::where('id',$format)->first()->format;
                             $tz = App\Model\helpdesk\Settings\System::where('id', '1')->first()->time_zone;
                             $tz = App\Model\helpdesk\Utility\Timezones::where('id',$tz)->first()->name;
                             date_default_timezone_set($tz);

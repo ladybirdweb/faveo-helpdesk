@@ -54,7 +54,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        //        $phpmail = new PhpMailController;
+//        $phpmail = new PhpMailController;
 //        if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
 //            return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
 //        } elseif ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
@@ -70,15 +70,15 @@ class Handler extends ExceptionHandler
 //                if (\Config::get('database.install') == 1) {
 //                    // checking if the error log send to Ladybirdweb is enabled or not
 //                    if (\Config::get('app.ErrorLog') == '1') {
-//                        $this->phpmail->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['e' => $e]);
+////                        $this->phpmail->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['e' => $e]);
 //                    }
 //                }
 //
 //                return response()->view('errors.500', []);
 //            }
 //        }
-//       //  returns non oops error message
-        return parent::render($request, $e);
+//        //  returns non oops error message
+//        return parent::render($request, $e);
         // checking if the error is related to http error i.e. page not found
         if ($this->isHttpException($e)) {
             // returns error for page not found

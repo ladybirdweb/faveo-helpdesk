@@ -78,22 +78,18 @@ if ($company != null) {
                             <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
-                                    @if(Auth::user()->profile_pic)
-                                        <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
-                                    @else
-                                        <img src="{{ Gravatar::src(Auth::user()->email) }}" class="user-image" alt="User Image">
-                                    @endif
+                                    
+                                        <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
+                                    
                                     <span class="hidden-xs">{{Auth::user()->first_name." ".Auth::user()->last_name}}</span>
                                 @endif          
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header"  style="background-color:#343F44;">
-                                        @if(Auth::user()->profile_pic)
-                                        <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                        @else                                      
-                                            <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
-                                        @endif
+                                       
+                                        <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
+                                       
                                         <p>
                                             {{Auth::user()->first_name." ".Auth::user()->last_name}} - {{Auth::user()->role}}
                                             <small></small>
@@ -124,11 +120,9 @@ if ($company != null) {
                                         <div class="col-xs-3"></div>
                                         <div class="col-xs-2" style="width:50%;">
                                         <a href="{!! url('profile') !!}">
-                                        @if(Auth::user() && Auth::user()->profile_pic)
-                                            <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                        @else
-                                            <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
-                                        @endif
+                                      
+                                            <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
+                                      
                                         </a>
                                         </div>
                                     </div>
@@ -301,7 +295,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                     </div><!-- ./wrapper -->
                     {{-- // <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
 
-                     <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}"></script>
+                    <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}"></script>
                     
                     {{-- // <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script> --}}
 
@@ -333,6 +327,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                     <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
                      <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" ></script>
+                      <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" ></script>
 
 <script>
 $(function() {

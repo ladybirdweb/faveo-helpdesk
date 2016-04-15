@@ -117,25 +117,30 @@ class="active"
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-3 form-group {!! $errors->has('fetching_protocol') ? 'has-error' : ''!!}" id="fetching_protocol_error">
+                <div class="col-xs-2 form-group {!! $errors->has('fetching_protocol') ? 'has-error' : ''!!}" id="fetching_protocol_error">
                     {!! Form::label('fetching_protocol',Lang::get('lang.fetching_protocol')) !!}
                     {!! $errors->first('fetching_protocol', '<spam class="help-block">:message</spam>') !!}
                     {!!Form::select('fetching_protocol',['imap' => 'IMAP'],null,['class' => 'form-control select', 'id' => 'fetching_protocol']) !!}
                 </div>
-                <div class="col-xs-3 form-group  {!! $errors->has('fetching_host') ? 'has-error' : ''!!}" id="fetching_host_error">
+                <div class="col-xs-2 form-group  {!! $errors->has('fetching_host') ? 'has-error' : ''!!}" id="fetching_host_error">
                     {!! Form::label('fetching_host',Lang::get('lang.host_name')) !!}
                     {!! $errors->first('fetching_host', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::text('fetching_host',null,['class' => 'form-control', 'id' => 'fetching_host']) !!}
                 </div>
-                <div class="col-xs-3 form-group {!! $errors->has('fetching_port') ? 'has-error' : ''!!}" id="fetching_port_error">
+                <div class="col-xs-2 form-group {!! $errors->has('fetching_port') ? 'has-error' : ''!!}" id="fetching_port_error">
                     {!! Form::label('fetching_port',Lang::get('lang.port_number')) !!}
                     {!! $errors->first('fetching_port', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::text('fetching_port',null,['class' => 'form-control', 'id' => 'fetching_port']) !!}
                 </div>
-                <div class="col-xs-3 form-group {!! $errors->has('fetching_encryption') ? 'has-error' : ''!!}" id="fetching_encryption_error">
+                <div class="col-xs-2 form-group {!! $errors->has('fetching_encryption') ? 'has-error' : ''!!}" id="fetching_encryption_error">
                     {!! Form::label('fetching_encryption',Lang::get('lang.encryption')) !!}
                     {!! $errors->first('fetching_encryption', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('fetching_encryption',['none' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS', 'ssl/novalidate-cert' => 'SSL (Accept all certificates)', 'tls/novalidate-cert' => 'TLS (Accept all certificates)'],null,['class' => 'form-control select', 'id' => 'fetching_encryption']) !!}
+                    {!!Form::select('fetching_encryption',['none' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS'],null,['class' => 'form-control select', 'id' => 'fetching_encryption']) !!}
+                </div>
+                <div class="col-xs-4 form-group">
+                    <div class="callout callout-default" style="font-style: oblique; margin-top: -47px; margin-bottom: -30px; margin-left: -12px; margin-right: -6px;">If this checkbox is not checked SSL certificates will not be validated</div>
+                    <br/><br/>
+                    <input type="checkbox" name="validate" id="validate">&nbsp; Validate certificates from TLS/SSL server
                 </div>
             </div>
         </div>
@@ -240,7 +245,7 @@ class="active"
         var sending_host = document.getElementById('sending_host').value;
         var sending_port = document.getElementById('sending_port').value;
         var sending_encryption = document.getElementById('sending_encryption').value;
-
+        var validate = $('input#validate[type="checkbox"]:checked', this).val();
 
         var filter_number = /^([0-9])/;
         var error_list = [];

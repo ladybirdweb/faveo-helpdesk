@@ -65,11 +65,9 @@
                             <li class="dropdown user user-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
-                                    @if(Auth::user()->profile_pic)
-                                        <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
-                                    @else
-                                        <img src="{{ Gravatar::src(Auth::user()->email) }}" class="user-image" alt="User Image">
-                                    @endif
+                                    
+                                        <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
+                                    
                                     <span class="hidden-xs">{!! Auth::user()->first_name." ".Auth::user()->last_name !!}</span>
                                 @endif          
                                 </a>
@@ -77,11 +75,9 @@
                                     <!-- User image -->
                                     <li class="user-header" style="background-color:#343F44;">
                                     @if(Auth::user())
-                                        @if(Auth::user()->profile_pic)
-                                            <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                        @else
-                                            <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
-                                        @endif
+              
+                                            <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
+              
                                         <p>
                                             {!! Auth::user()->first_name !!}{!! " ". Auth::user()->last_name !!} - {{Auth::user()->role}}
                                             <small></small>
@@ -110,11 +106,9 @@
                                         <div class="col-xs-3"></div>
                                         <div class="col-xs-2" style="width:50%;">
                                         <a href="{!! url('profile') !!}">
-                                        @if(Auth::user() && Auth::user()->profile_pic)
-                                            <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                        @else
-                                            <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
-                                        @endif
+                                        
+                                            <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
+                                        
                                         </a>
                                         </div>
                                     </div>

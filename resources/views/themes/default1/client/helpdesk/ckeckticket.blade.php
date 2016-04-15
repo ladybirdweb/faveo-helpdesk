@@ -199,20 +199,19 @@ $data = $ConvDate[0];
         $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id','=',$conversation->id)->orderBy('id', 'DESC')->get();
                     foreach($attachments as $attachment)
                     {
-                        if($attachment->type == 'pdf')
-                        {
-                        }elseif($attachment->type == 'docx')
-                        {
-                        }
-                        else
+                        // $i++;
+                        if($attachment->type == 'jpg'|| $attachment->type == 'png')
                         {
                         $image = @imagecreatefromstring($attachment->file); 
                         ob_start();
                         imagejpeg($image, null, 80);
                         $data = ob_get_contents();
                         ob_end_clean();
-                        $var  =  '<img src="data:image/jpg;base64,' .  base64_encode($data)  . '" />';
-                        $body = str_replace($attachment->name, "data:image/jpg;base64," .  base64_encode($data), $body);
+                        $var  =  '<img style="max-width:200px;max-height:200px;" src="data:image/'.$attachment->type.';base64,' .  base64_encode($data)  . '" />';
+                        // echo $var;
+                        // echo $attachment->name;
+                        // $body = explode($attachment->name, $body);
+                        $body = str_replace($attachment->name, "data:image/".$attachment->type.";base64," .  base64_encode($data), $body);
 
                             $string = $body;                        
                             $start = "<head>";
@@ -229,7 +228,8 @@ $data = $ConvDate[0];
                             $body2 = $parsed;
                             $body = str_replace($body2 ," " ,$body);
                             }
-                        }
+                        } else{}
+
                     }
     }
                             $string = $body;                        
@@ -291,7 +291,7 @@ $data = $ConvDate[0];
                                         <?php
                                         foreach($attachments as $attachment)
                                         {
-
+  
     $size = $attachment->size;
     $units = array( 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
     $power = $size > 0 ? floor(log($size, 1024)) : 0;

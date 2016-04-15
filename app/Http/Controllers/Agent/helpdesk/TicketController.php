@@ -857,10 +857,8 @@ class TicketController extends Controller
         } else {
             $agentsign = null;
         }
-
         // Event
         \Event::fire(new \App\Events\FaveoAfterReply($reply_content, $user->phone_number, $request, $tickets));
-
         // sending attachments via php mail function
         $message = '';
         if ($check_attachment == 1) {
@@ -868,11 +866,8 @@ class TicketController extends Controller
         } else {
             $attachment_files = null;
         }
-
         $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket_id)->get();
-
         $emails = Emails::where('department', '=', $tickets->dept_id)->first();
-
         try {
             $this->PhpMailController->sendmail(
                     $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
@@ -1669,7 +1664,7 @@ class TicketController extends Controller
                 $email = $email;
                 if ($this->checkEmail($email) == false) {
                     $create_user = new User();
-                    $create_user->user_name = $name;
+                    $create_user->first_name = $name;
                     $create_user->email = $email;
                     $create_user->active = 1;
                     $create_user->role = 'user';

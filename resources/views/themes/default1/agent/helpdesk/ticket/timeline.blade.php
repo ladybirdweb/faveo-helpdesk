@@ -720,7 +720,8 @@ $data = $ConvDate[0];
                                 </div>
                             </li>
                             <?php $lastid = $conversation->id?>
-<?php }}
+<?php }
+}
 ?>
                         <li>
                             <i class="fa fa-clock-o bg-gray"></i>

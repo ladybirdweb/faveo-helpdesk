@@ -497,9 +497,12 @@ $data = $ConvDate[0];
                                           {!! $body !!}
 
                                     </div>
-                                    <div class="timeline-footer" >
+                                    <div class="timeline-footer" style="margin-bottom:-5px">
+                                    @if(!$conversation->is_internal)
+                                    <?php Event::fire(new App\Events\Timeline($conversation,$role,$user)); ?>
+                                    @endif
                                         <?php 
-                                        $attachments = App\Model\Ticket\Ticket_attachments::where('thread_id','=',$conversation->id)->get();
+                                        $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id','=',$conversation->id)->get();
                                         $i = 0;
                                         foreach($attachments as $attachment) {
                                         if($attachment->poster == 'ATTACHMENT') {
@@ -508,29 +511,38 @@ $data = $ConvDate[0];
                                         }
                                         if($i>0)
                                         {
-                                        echo "<hr style='height:1px;color:#2D3244;background-color:#2D3244;''><h4 class='box-title'><b>".$i." </b> Attachments</h4>";
+                                        echo "<hr style='border-top: 1px dotted #FFFFFF;margin-top:0px;margin-bottom:0px;background-color:#8B8C90;'><h4 class='box-title'><b>".$i." </b> Attachments</h4>";
                                         }
                                         ?>
                                         <ul class='mailbox-attachments clearfix'>
                                         <?php
                                         foreach($attachments as $attachment)
                                         {
+
+    $size = $attachment->size;
+    $units = array( 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+    $power = $size > 0 ? floor(log($size, 1024)) : 0;
+    $value = number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
+
+                                            
                                             if($attachment->poster == 'ATTACHMENT')
                                             {
                                                 if($attachment->type == 'jpg'||$attachment->type == 'JPG'||$attachment->type == 'jpeg'||$attachment->type == 'JPEG'||$attachment->type == 'png'||$attachment->type == 'PNG'||$attachment->type == 'gif'||$attachment->type == 'GIF')
                                                 {
-                                                $image = imagecreatefromstring($attachment->file); 
+                                                $image = @imagecreatefromstring($attachment->file); 
                                                 ob_start();
                                                 imagejpeg($image, null, 80);
                                                 $data = ob_get_contents();
                                                 ob_end_clean();
-                                                $var = '<a href="'.URL::route('image', array('image_id' => $attachment->id)).'" target="_blank"><img src="data:image/jpg;base64,' . base64_encode($data)  . '"/></a>';
-                                                echo '<li><span class="mailbox-attachment-icon has-img">'.$var.'</span></li>';
+                                                $var = '<a href="'.URL::route('image', array('image_id' => $attachment->id)).'" target="_blank"><img style="max-width:200px;height:133px;" src="data:image/jpg;base64,' . base64_encode($data)  . '"/></a>';
+
+
+                                                echo '<li style="background-color:#f4f4f4;"><span class="mailbox-attachment-icon has-img">'.$var.'</span><div class="mailbox-attachment-info"><b style="word-wrap: break-word;">'.$attachment->name.'</b><br/><p>'.$value.'</p></div></li>';
                                                 }
                                                 else
                                                 {
-                                                $var = '<a href="'.URL::route('image', array('image_id' => $attachment->id)).'" target="_blank">'.$attachment->name.'</a>';
-                                                echo '<li>'.$var.'</li>';   
+                                                $var = '<a style="max-width:200px;height:133px;color:#666;" href="'.URL::route('image', array('image_id' => $attachment->id)).'" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff;">'.strtoupper($attachment->type).'</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">'.$attachment->name.'</b><br/><p>'.$value.'</p></span></div></a>';
+                                                echo '<li style="background-color:#f4f4f4;">'.$var.'</li>';   
                                                 }                                            
                                             }
                                         }
