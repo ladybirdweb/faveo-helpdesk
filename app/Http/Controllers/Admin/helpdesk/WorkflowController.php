@@ -3,37 +3,36 @@
 namespace App\Http\Controllers\Admin\helpdesk;
 
 // controller
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\Agent\helpdesk\TicketController;
+use App\Http\Controllers\Controller;
 // request
-use Illuminate\Http\Request;
 use App\Http\Requests\helpdesk\WorkflowCreateRequest;
 use App\Http\Requests\helpdesk\WorkflowUpdateRequest;
-// model
-use App\User;
-use App\Model\helpdesk\Workflow\WorkflowName;
-use App\Model\helpdesk\Workflow\WorkflowAction;
-use App\Model\helpdesk\Workflow\WorkflowRules;
-use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Agent\Department;
-use App\Model\helpdesk\Ticket\Ticket_Priority;
-use App\Model\helpdesk\Manage\Sla_plan;
+// model
 use App\Model\helpdesk\Agent\Teams;
+use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Manage\Help_topic;
+use App\Model\helpdesk\Manage\Sla_plan;
+use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Ticket\Ticket_Status;
+use App\Model\helpdesk\Workflow\WorkflowAction;
+use App\Model\helpdesk\Workflow\WorkflowName;
+use App\Model\helpdesk\Workflow\WorkflowRules;
+use App\User;
+use Datatable;
 //classes
 use Exception;
-use Chumper\Datatable\Table;
-use Datatable;
+use Illuminate\Http\Request;
 
 /**
  * WorkflowController
- * In this controller in the CRUD function for all the workflow applied in faveo
+ * In this controller in the CRUD function for all the workflow applied in faveo.
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class WorkflowController extends Controller {
-
+class WorkflowController extends Controller
+{
     /**
      * Create a new controller instance.
      * constructor to check
@@ -43,7 +42,8 @@ class WorkflowController extends Controller {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // checking authentication
         $this->middleware('auth');
         // checking admin roles
@@ -51,10 +51,12 @@ class WorkflowController extends Controller {
     }
 
     /**
-     * Display a listing of all the workflow
+     * Display a listing of all the workflow.
+     *
      * @return type
      */
-    public function index() {
+    public function index()
+    {
         try {
             return view('themes.default1.admin.helpdesk.manage.workflow.index');
         } catch (Exception $e) {
@@ -63,10 +65,12 @@ class WorkflowController extends Controller {
     }
 
     /**
-     * List of all the workflow in the system
+     * List of all the workflow in the system.
+     *
      * @return type
      */
-    public function workFlowList() {
+    public function workFlowList()
+    {
         // returns chumper datatable
         return Datatable::collection(WorkflowName::All())
                         /* searcable column name */
@@ -92,6 +96,7 @@ class WorkflowController extends Controller {
                         /* add column rules */
                         ->addColumn('rules', function ($model) {
                             $rules = WorkflowRules::where('workflow_id', '=', $model->id)->count();
+
                             return $rules;
                         })
                         /* add column target */
@@ -124,27 +129,29 @@ class WorkflowController extends Controller {
                         })
                         /* add column action */
                         ->addColumn('Actions', function ($model) {
-                            $confirmation = "Are you sure?";
-                            return "<a class='btn btn-info btn-xs btn-flat' href='" . route('workflow.edit', $model->id) . "'><i class='fa fa-edit text-black'></i> Edit</a>  <a class='btn btn-danger btn-xs btn-flat' href='" . route('workflow.delete', $model->id) . "'><i class='fa fa-trash text-black'></i> Delete</a>";
+                            $confirmation = 'Are you sure?';
+
+                            return "<a class='btn btn-info btn-xs btn-flat' href='".route('workflow.edit', $model->id)."'><i class='fa fa-edit text-black'></i> Edit</a>  <a class='btn btn-danger btn-xs btn-flat' href='".route('workflow.delete', $model->id)."'><i class='fa fa-trash text-black'></i> Delete</a>";
                         })
                         ->make();
     }
 
     /**
-     * Show the form for creating a new workflow
+     * Show the form for creating a new workflow.
+     *
      * @return type Response
      */
-    public function create(Emails $emails) {
-//        dd($emails);
-        foreach ($emails->lists('email_address' , 'id') as $key => $email) {
-            
+    public function create(Emails $emails)
+    {
+        //        dd($emails);
+        foreach ($emails->lists('email_address', 'id') as $key => $email) {
             $email_data["E-$key"] = $email;
         }
 //        dd($email_data);
 //        dd($emails->lists('email_address' , 'id'));
         $emails = $email_data;
         try {
-//            $emails = $emails->get();
+            //            $emails = $emails->get();
             return view('themes.default1.admin.helpdesk.manage.workflow.create', compact('emails'));
         } catch (Exception $e) {
             return view('404');
@@ -152,15 +159,18 @@ class WorkflowController extends Controller {
     }
 
     /**
-     * Store a new workflow in to the system
+     * Store a new workflow in to the system.
+     *
      * @param \App\Http\Requests\helpdesk\WorkflowCreateRequest $request
+     *
      * @return type view
      */
-    public function store(WorkflowCreateRequest $request) {
+    public function store(WorkflowCreateRequest $request)
+    {
         //dd($request);
         try {
             // store a new workflow credentials in to the system
-            $workflow_name = new WorkflowName;
+            $workflow_name = new WorkflowName();
             $workflow_name->name = $request->name;
             $workflow_name->status = $request->status;
             $workflow_name->order = $request->execution_order;
@@ -172,7 +182,7 @@ class WorkflowController extends Controller {
             $actions = $request->action;
             // store workflow rules into the system
             foreach ($rules as $rule) {
-                $workflow_rule = new WorkflowRules;
+                $workflow_rule = new WorkflowRules();
                 $workflow_rule->workflow_id = $workflow_name->id;
                 $workflow_rule->matching_scenario = $rule['a'];
                 $workflow_rule->matching_relation = $rule['b'];
@@ -181,12 +191,13 @@ class WorkflowController extends Controller {
             }
             // store a new workflow action into the system
             foreach ($actions as $action) {
-                $workflow_action = new WorkflowAction;
+                $workflow_action = new WorkflowAction();
                 $workflow_action->workflow_id = $workflow_name->id;
                 $workflow_action->condition = $action['a'];
                 $workflow_action->action = $action['b'];
                 $workflow_action->save();
             }
+
             return redirect('workflow')->with('success', 'Workflow Created Successfully');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -195,16 +206,20 @@ class WorkflowController extends Controller {
 
     /**
      * Editing the details of the banned users.
+     *
      * @param type $id
      * @param User $ban
+     *
      * @return type Response
      */
-    public function edit($id, WorkflowName $work_flow_name, Emails $emails, WorkflowRules $workflow_rule, WorkflowAction $workflow_action) {
+    public function edit($id, WorkflowName $work_flow_name, Emails $emails, WorkflowRules $workflow_rule, WorkflowAction $workflow_action)
+    {
         try {
             $emails = $emails->get();
             $workflow = $work_flow_name->whereId($id)->first();
             $workflow_rules = $workflow_rule->whereWorkflow_id($id)->get();
             $workflow_actions = $workflow_action->whereWorkflow_id($id)->get();
+
             return view('themes.default1.admin.helpdesk.manage.workflow.edit', compact('id', 'workflow', 'emails', 'workflow_rules', 'workflow_actions'));
         } catch (Exception $e) {
             return view('404');
@@ -212,12 +227,15 @@ class WorkflowController extends Controller {
     }
 
     /**
-     * Update ticket workflow
-     * @param type $id
+     * Update ticket workflow.
+     *
+     * @param type                                              $id
      * @param \App\Http\Requests\helpdesk\WorkflowUpdateRequest $request
+     *
      * @return type view
      */
-    public function update($id, WorkflowUpdateRequest $request) {
+    public function update($id, WorkflowUpdateRequest $request)
+    {
         try {
             // store a new workflow credentials in to the system
             $workflow_name = WorkflowName::whereId($id)->first();
@@ -235,7 +253,7 @@ class WorkflowController extends Controller {
             WorkflowRules::where('workflow_id', '=', $id)->delete();
             // update workflow rules into the system
             foreach ($rules as $rule) {
-                $workflow_rule = new WorkflowRules;
+                $workflow_rule = new WorkflowRules();
                 $workflow_rule->workflow_id = $workflow_name->id;
                 $workflow_rule->matching_scenario = $rule['a'];
                 $workflow_rule->matching_relation = $rule['b'];
@@ -244,12 +262,13 @@ class WorkflowController extends Controller {
             }
             // update workflow action into the system
             foreach ($actions as $action) {
-                $workflow_action = new WorkflowAction;
+                $workflow_action = new WorkflowAction();
                 $workflow_action->workflow_id = $workflow_name->id;
                 $workflow_action->condition = $action['a'];
                 $workflow_action->action = $action['b'];
                 $workflow_action->save();
             }
+
             return redirect('workflow')->with('success', 'Workflow Updated Successfully');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -257,15 +276,18 @@ class WorkflowController extends Controller {
     }
 
     /**
-     * function to delete workflow
+     * function to delete workflow.
+     *
      * @param type $id
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         try {
             // remove all the contents of workflow
             $workflow_action = WorkflowAction::where('workflow_id', '=', $id)->delete();
             $workflow_rules = WorkflowRules::where('workflow_id', '=', $id)->delete();
             $workflow = WorkflowName::whereId($id)->delete();
+
             return redirect('workflow')->with('success', 'Workflow Deleted Successfully');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -273,12 +295,15 @@ class WorkflowController extends Controller {
     }
 
     /**
-     * function to select action
-     * @param type $id
+     * function to select action.
+     *
+     * @param type                     $id
      * @param \Illuminate\Http\Request $request
+     *
      * @return type void
      */
-    public function selectAction($id, Request $request) {
+    public function selectAction($id, Request $request)
+    {
         if ($request->option == 'reject') {
             return $this->rejectTicket($id);
         } elseif ($request->option == 'department') {
@@ -299,110 +324,133 @@ class WorkflowController extends Controller {
     }
 
     /**
-     * function to reject ticket
+     * function to reject ticket.
+     *
      * @return string
      */
-    public function rejectTicket($id) {
-        $var = '<input type="hidden" name="action[' . $id . '][b]" class="form-control" value="reject"><span text-red>Reject</span> ';
+    public function rejectTicket($id)
+    {
+        $var = '<input type="hidden" name="action['.$id.'][b]" class="form-control" value="reject"><span text-red>Reject</span> ';
+
         return $var;
     }
 
     /**
-     * function to return deprtment select option
+     * function to return deprtment select option.
+     *
      * @return type string
      */
-    public function department($id) {
+    public function department($id)
+    {
         $departments = Department::all();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($departments as $department) {
-            $var .= "<option value='" . $department->id . "'>" . $department->name . "</option>";
+            $var .= "<option value='".$department->id."'>".$department->name.'</option>';
         }
-        $var .= "</select>";
+        $var .= '</select>';
+
         return $var;
     }
 
     /**
-     * function to return the priority select option
+     * function to return the priority select option.
+     *
      * @return type string
      */
-    public function priority($id) {
+    public function priority($id)
+    {
         $priorities = Ticket_Priority::all();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($priorities as $priority) {
-            $var .= "<option value='" . $priority->priority_id . "'>" . $priority->priority_desc . "</option>";
+            $var .= "<option value='".$priority->priority_id."'>".$priority->priority_desc.'</option>';
         }
-        $var .= "</select>";
+        $var .= '</select>';
+
         return $var;
     }
 
     /**
-     * function to return the slaplan select option
+     * function to return the slaplan select option.
+     *
      * @return type string
      */
-    public function slaPlan($id) {
+    public function slaPlan($id)
+    {
         $sla_plans = Sla_plan::where('status', '=', 1)->get();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($sla_plans as $sla_plan) {
-            $var .= "<option value='" . $sla_plan->id . "'>" . $sla_plan->grace_period . "</option>";
+            $var .= "<option value='".$sla_plan->id."'>".$sla_plan->grace_period.'</option>';
         }
-        $var .= "</select>";
+        $var .= '</select>';
+
         return $var;
     }
 
     /**
-     * function to get system team select option 
+     * function to get system team select option.
+     *
      * @return type string
      */
-    public function assignTeam($id) {
+    public function assignTeam($id)
+    {
         $teams = Teams::where('status', '=', 1)->get();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($teams as $team) {
-            $var .= "<option value='" . $team->id . "'>" . $team->name . "</option>";
+            $var .= "<option value='".$team->id."'>".$team->name.'</option>';
         }
-        $var .= "</select>";
+        $var .= '</select>';
+
         return $var;
     }
 
     /**
-     * function to get system agents select option
+     * function to get system agents select option.
+     *
      * @return type string
      */
-    public function assignAgent($id) {
+    public function assignAgent($id)
+    {
         $users = User::where('role', '!=', 'user')->where('active', '=', 1)->get();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($users as $user) {
-            $var .= "<option value='" . $user->id . "'>" . $user->first_name . " " . $user->last_name . "</option>";
+            $var .= "<option value='".$user->id."'>".$user->first_name.' '.$user->last_name.'</option>';
         }
-        $var .= "</select>";
+        $var .= '</select>';
+
         return $var;
     }
 
     /**
-     * function to get the helptopic select option
+     * function to get the helptopic select option.
+     *
      * @return type string
      */
-    public function helptopic($id) {
+    public function helptopic($id)
+    {
         $help_topics = Help_topic::where('status', '=', 1)->get();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($help_topics as $help_topic) {
-            $var .= "<option value='" . $help_topic->id . "'>" . $help_topic->topic . "</option>";
+            $var .= "<option value='".$help_topic->id."'>".$help_topic->topic.'</option>';
         }
-        $var .= "</select>";
+        $var .= '</select>';
+
         return $var;
     }
 
     /**
-     * function to get the select option to choose the ticket status
+     * function to get the select option to choose the ticket status.
+     *
      * @return type string
      */
-    public function ticketStatus($id) {
+    public function ticketStatus($id)
+    {
         $ticket_status = Ticket_Status::all();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($ticket_status as $status) {
-            $var .= "<option value='" . $status->id . "'>" . $status->name . "</option>";
+            $var .= "<option value='".$status->id."'>".$status->name.'</option>';
         }
-        $var .= "</select>";
+        $var .= '</select>';
+
         return $var;
     }
-
 }

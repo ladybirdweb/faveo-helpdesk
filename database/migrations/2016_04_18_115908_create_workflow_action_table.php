@@ -1,17 +1,17 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class CreateWorkflowActionTable extends Migration {
-
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
+class CreateWorkflowActionTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
         Schema::create('workflow_action', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('workflow_id')->unsigned();
@@ -19,10 +19,10 @@ class CreateWorkflowActionTable extends Migration {
             $table->string('action');
             $table->timestamps();
             });
-            Schema::table('workflow_action', function (Blueprint $table) {
+        Schema::table('workflow_action', function (Blueprint $table) {
                 $table->foreign('workflow_id', 'workflow_action_1')->references('id')->on('workflow_name')->onUpdate('NO ACTION')->onDelete('RESTRICT');
             });
-        }
+    }
 
         /**
          * Reverse the migrations.

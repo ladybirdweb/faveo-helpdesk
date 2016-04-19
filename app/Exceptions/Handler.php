@@ -7,8 +7,8 @@ use App\Http\Controllers\Common\PhpMailController;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
-class Handler extends ExceptionHandler {
-    
+class Handler extends ExceptionHandler
+{
     public $phpmailer;
 
     /**
@@ -29,7 +29,8 @@ class Handler extends ExceptionHandler {
      *
      * @return void
      */
-    public function report(Exception $e) {
+    public function report(Exception $e)
+    {
         return parent::report($e);
     }
 
@@ -41,7 +42,8 @@ class Handler extends ExceptionHandler {
      *
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e) {
+    public function render($request, Exception $e)
+    {
         //dd($e);
         $phpmail = new PhpMailController();
         $this->PhpMailController = $phpmail;
@@ -61,7 +63,7 @@ class Handler extends ExceptionHandler {
                     // checking if the error log send to Ladybirdweb is enabled or not
                     if (\Config::get('app.ErrorLog') == '1') {
                         try {
-                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['system_error' => "<pre style='background-color: #FFC7C7;/* border-color: red; */border: 1px solid red;border-radius: 3px;'> <b>Message:</b>" . $e->getMessage() . "<br/> <b>Code:</b>" . $e->getCode() . "<br/> <b>File:</b>" . $e->getFile() . "<br/> <b>Line:</b>" . $e->getLine() ."</pre>"]);
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['system_error' => "<pre style='background-color: #FFC7C7;/* border-color: red; */border: 1px solid red;border-radius: 3px;'> <b>Message:</b>".$e->getMessage().'<br/> <b>Code:</b>'.$e->getCode().'<br/> <b>File:</b>'.$e->getFile().'<br/> <b>Line:</b>'.$e->getLine().'</pre>']);
                         } catch (Exception $exx) {
                         }
                     }
@@ -81,6 +83,7 @@ class Handler extends ExceptionHandler {
             // returns oops error page i.e. colour full error page
             return $this->renderExceptionWithWhoops($e);
         }
+
         return parent::render($request, $e);
     }
 
@@ -91,7 +94,8 @@ class Handler extends ExceptionHandler {
      *
      * @return \Illuminate\Http\Response
      */
-    protected function renderExceptionWithWhoops(Exception $e) {
+    protected function renderExceptionWithWhoops(Exception $e)
+    {
         // new instance of whoops class to display customized error page
         $whoops = new \Whoops\Run();
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
@@ -100,5 +104,4 @@ class Handler extends ExceptionHandler {
                 $whoops->handleException($e), $e->getStatusCode(), $e->getHeaders()
         );
     }
-
 }
