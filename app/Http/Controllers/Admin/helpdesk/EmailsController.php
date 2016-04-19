@@ -52,6 +52,7 @@ class EmailsController extends Controller
         try {
             // fetch all the emails from emails table
             $emails = $email->get();
+
             return view('themes.default1.admin.helpdesk.emails.emails.index', compact('emails'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -117,7 +118,7 @@ class EmailsController extends Controller
 
             return $return_data;
         }
-        if($request->validate == 'on') {
+        if ($request->validate == 'on') {
             $validate = '/validate-cert';
         } else {
             $validate = '/novalidate-cert';
@@ -296,7 +297,7 @@ class EmailsController extends Controller
             return $return_data;
         }
 //        return $request;
-        if($request->validate == 'on') {
+        if ($request->validate == 'on') {
             $validate = '/validate-cert';
         } else {
             $validate = '/novalidate-cert';
@@ -343,6 +344,7 @@ class EmailsController extends Controller
                 $return = 1;
             }
         }
+
         return $return;
     }
 
@@ -392,6 +394,7 @@ class EmailsController extends Controller
             // returns if try fails
             $return = $e->getMessage();
         }
+
         return $return;
     }
 
@@ -456,7 +459,7 @@ class EmailsController extends Controller
             $mailbox = '{'.$host.':'.$port.$mailbox_protocol.$validate.'}INBOX';
             $mailbox_protocol = $fetching_encryption.$validate;
         }
-        
+
         try {
             $imap_stream = imap_open($mailbox, $username, $password);
         } catch (\Exception $ex) {

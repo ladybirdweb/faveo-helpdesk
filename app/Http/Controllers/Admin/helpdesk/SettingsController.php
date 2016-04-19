@@ -310,7 +310,7 @@ class SettingsController extends Controller
         }
     }
 
-     /**
+    /**
      * get the form for cron job setting page.
      *
      * @param type Email    $email
@@ -328,12 +328,14 @@ class SettingsController extends Controller
             $templates = $template->get();
             /* Fetch the values from Emails table */
             $emails1 = $email1->get();
-            return view('themes.default1.admin.helpdesk.settings.crone',compact('emails', 'templates', 'emails1'));
+
+        return view('themes.default1.admin.helpdesk.settings.crone', compact('emails', 'templates', 'emails1'));
         // } catch {
 
         // }
     }
-     /**
+
+    /**
      * Update the specified resource in storage for cron job.
      *
      * @param type Email        $email
@@ -347,15 +349,15 @@ class SettingsController extends Controller
         try {
             /* fetch the values of email request  */
             $emails = $email->whereId('1')->first();
-            if($request->email_fetching) {
-                $emails->email_fetching = $request->email_fetching;    
+            if ($request->email_fetching) {
+                $emails->email_fetching = $request->email_fetching;
             } else {
                 $emails->email_fetching = 0;
             }
-            if($request->notification_cron) {
+            if ($request->notification_cron) {
                 $emails->notification_cron = $request->notification_cron;
             } else {
-                $emails->notification_cron = 0;   
+                $emails->notification_cron = 0;
             }
             $emails->save();
             /* redirect to Index page with Success Message */
@@ -365,6 +367,7 @@ class SettingsController extends Controller
             return redirect('job-scheduler')->with('fails', Lang::get('lang.job-scheduler-error').'<li>'.$e->getMessage().'</li>');
         }
     }
+
     /**
      * get the form for Access setting page.
      *

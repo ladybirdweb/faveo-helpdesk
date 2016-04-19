@@ -76,7 +76,7 @@ class MailController extends Controller
                             $protocol_value = $e_mail->mailbox_protocol;
                             $get_mailboxprotocol = MailboxProtocol::where('id', '=', $protocol_value)->first();
                             $protocol = $get_mailboxprotocol->value;
-                        } elseif($e_mail->fetching_encryption == '/none') {
+                        } elseif ($e_mail->fetching_encryption == '/none') {
                             $fetching_encryption2 = '/novalidate-cert';
                             $protocol = $fetching_encryption2;
                         } else {

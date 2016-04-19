@@ -184,15 +184,15 @@ return [
       |   Company Settings Page
       |--------------------------------------
      */
-    'company' => 'Company',
-    'website' => 'Website',
-    'phone'   => 'Phone',
-    'address' => 'Address',
-    'landing' => 'Landing Page',
-    'offline' => 'Offline Page',
-    'thank'   => 'Thank Page',
-    'logo'    => 'Logo',
-    'save'    => 'Save',
+    'company'      => 'Company',
+    'website'      => 'Website',
+    'phone'        => 'Phone',
+    'address'      => 'Address',
+    'landing'      => 'Landing Page',
+    'offline'      => 'Offline Page',
+    'thank'        => 'Thank Page',
+    'logo'         => 'Logo',
+    'save'         => 'Save',
     'delete-logo'  => 'Delete logo',
     'click-delete' => 'Click here to delete',
     /*
@@ -426,21 +426,21 @@ return [
       |  Work Flow
       |--------------------------------------
      */
-    'workflow'            => 'Workflow',
+    'workflow'                   => 'Workflow',
     'ticket_workflow'            => 'Ticket Workflow',
-    'create_workflow'   =>  'Create Workflow',
-    'edit_workflow'   =>  'Edit Workflow',
-    'updated'             => 'Updated',
-    'target'              => 'Target',
-    'target_channel'      => 'Target Channel',
-    'exceution_order'   =>  'Exceution Order',
-    'target_channel'    =>  'Target Channel',
-    'workflow_rules'    =>  'Workflow Rules',
-    'workflow_action'   =>  'Workflow Action',
-    'rules'               => 'Rules',
-    'order'               => 'Order',
-    'condition'         =>  'Condition',
-    'statement'         =>  'Statement',
+    'create_workflow'            => 'Create Workflow',
+    'edit_workflow'              => 'Edit Workflow',
+    'updated'                    => 'Updated',
+    'target'                     => 'Target',
+    'target_channel'             => 'Target Channel',
+    'exceution_order'            => 'Exceution Order',
+    'target_channel'             => 'Target Channel',
+    'workflow_rules'             => 'Workflow Rules',
+    'workflow_action'            => 'Workflow Action',
+    'rules'                      => 'Rules',
+    'order'                      => 'Order',
+    'condition'                  => 'Condition',
+    'statement'                  => 'Statement',
 
     /*
       |--------------------------------------
@@ -795,7 +795,7 @@ return [
     'hard-delete-success-message'                     => 'Tickets have been deleted permanently.',
     'overdue'                                         => 'Overdue',
     'change_owner_for_ticket'                         => 'Change Owner for Ticket',
-    
+
     /*
       |------------------------------------------------
       |Tools Page

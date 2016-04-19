@@ -90,10 +90,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
     Route::get('delete-forms/{id}', ['as' => 'forms.delete', 'uses' => 'Admin\helpdesk\FormController@delete']);
 
     //$router->model('id','getcompany');
-    
-    Route::get('job-scheduler',['as' => 'get.job.scheder', 'uses' => 'Admin\helpdesk\SettingsController@getSchedular']);//to get ob scheduler form page
 
-    Route::patch('post-scheduler', ['as' => 'post.job.scheduler', 'uses' => 'Admin\helpdesk\SettingsController@postSchedular']);//to update job scheduler
+    Route::get('job-scheduler', ['as' => 'get.job.scheder', 'uses' => 'Admin\helpdesk\SettingsController@getSchedular']); //to get ob scheduler form page
+
+    Route::patch('post-scheduler', ['as' => 'post.job.scheduler', 'uses' => 'Admin\helpdesk\SettingsController@postSchedular']); //to update job scheduler
 
     Route::get('agent-profile-page/{id}', ['as' => 'agent.profile.page', 'uses' => 'Admin\helpdesk\AgentController@agent_profile']);
 
@@ -197,15 +197,15 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
     Route::post('validating-email-settings', ['as' => 'validating.email.settings', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettings']); // route to check email input validation
     Route::post('validating-email-settings-on-update/{id}', ['as' => 'validating.email.settings.update', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettingsUpdate']); // route to check email input validation
-    
-    Route::get('workflow', ['as' => 'workflow' , 'uses' => 'Admin\helpdesk\WorkflowController@index']);
-    Route::get('workflow-list', ['as' => 'workflow.list' , 'uses' => 'Admin\helpdesk\WorkflowController@workFlowList']);
-    Route::get('workflow/create', ['as' => 'workflow.create' , 'uses' => 'Admin\helpdesk\WorkflowController@create']);
-    Route::post('workflow/store', ['as' => 'workflow.store' , 'uses' => 'Admin\helpdesk\WorkflowController@store']);
-    Route::get('workflow/edit/{id}', ['as' => 'workflow.edit' , 'uses' => 'Admin\helpdesk\WorkflowController@edit']);
-    Route::post('workflow/update/{id}', ['as' => 'workflow.update' , 'uses' => 'Admin\helpdesk\WorkflowController@update']);
-    Route::get('workflow/action-rule/{id}', ['as' => 'workflow.dept' , 'uses' => 'Admin\helpdesk\WorkflowController@selectAction']);
-    Route::get('workflow/delete/{id}', ['as' => 'workflow.delete' , 'uses' => 'Admin\helpdesk\WorkflowController@destroy']);
+
+    Route::get('workflow', ['as' => 'workflow', 'uses' => 'Admin\helpdesk\WorkflowController@index']);
+    Route::get('workflow-list', ['as' => 'workflow.list', 'uses' => 'Admin\helpdesk\WorkflowController@workFlowList']);
+    Route::get('workflow/create', ['as' => 'workflow.create', 'uses' => 'Admin\helpdesk\WorkflowController@create']);
+    Route::post('workflow/store', ['as' => 'workflow.store', 'uses' => 'Admin\helpdesk\WorkflowController@store']);
+    Route::get('workflow/edit/{id}', ['as' => 'workflow.edit', 'uses' => 'Admin\helpdesk\WorkflowController@edit']);
+    Route::post('workflow/update/{id}', ['as' => 'workflow.update', 'uses' => 'Admin\helpdesk\WorkflowController@update']);
+    Route::get('workflow/action-rule/{id}', ['as' => 'workflow.dept', 'uses' => 'Admin\helpdesk\WorkflowController@selectAction']);
+    Route::get('workflow/delete/{id}', ['as' => 'workflow.delete', 'uses' => 'Admin\helpdesk\WorkflowController@destroy']);
 });
 
 /*
@@ -280,8 +280,8 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
     Route::get('/ticket/overdue', ['as' => 'overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@overdue_ticket_list']); /*  Get Overdue Ticket */
 
-    Route::get('/ticket/get-overdue',['as' => 'get.overdue.ticket',
-                                      'uses' => 'Agent\helpdesk\TicketController@getOverdueTickets']);
+    Route::get('/ticket/get-overdue', ['as'  => 'get.overdue.ticket',
+                                      'uses' => 'Agent\helpdesk\TicketController@getOverdueTickets', ]);
 
     Route::get('/ticket/closed', ['as' => 'closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@closed_ticket_list']); /*  Get Closed Ticket */
 

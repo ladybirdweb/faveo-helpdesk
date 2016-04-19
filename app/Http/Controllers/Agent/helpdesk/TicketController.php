@@ -80,8 +80,8 @@ class TicketController extends Controller
             $dept = DB::table('department')->where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', 1)->where('dept_id', '=', $dept->id)->get();
         }
+
         return $this->getTable($tickets);
-        
     }
 
     /**
@@ -102,8 +102,8 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->get();
         }
+
         return $this->getTable($tickets);
-        
     }
 
     /**
@@ -124,8 +124,8 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 1)->where('dept_id', '=', $dept->id)->get();
         }
+
         return $this->getTable($tickets);
-        
     }
 
     /**
@@ -146,8 +146,8 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '=', Auth::user()->id)->get();
         }
+
         return $this->getTable($tickets);
-        
     }
 
     /**
@@ -189,8 +189,8 @@ class TicketController extends Controller
                 $tickets = null;
             }
         }
-        return $this->getTable($tickets);
 
+        return $this->getTable($tickets);
     }
 
     /**
@@ -211,8 +211,8 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '>', 1)->where('dept_id', '=', $dept->id)->where('status', '<', 4)->get();
         }
+
         return $this->getTable($tickets);
-        
     }
 
     /**
@@ -233,8 +233,8 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '>', 0)->where('dept_id', '=', $dept->id)->get();
         }
+
         return $this->getTable($tickets);
-        
     }
 
     /**
@@ -768,7 +768,7 @@ class TicketController extends Controller
                 return [$ticket_number, 0];
             }
         } else {
-            $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data ,$status);
+            $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status);
 
             return [$ticket_number, 0];
         }
@@ -804,15 +804,14 @@ class TicketController extends Controller
         $ticket->help_topic_id = $helptopic;
         $ticket->sla = $sla;
         $ticket->assigned_to = $assignto;
-        
+
         $ticket->priority_id = $priority;
         $ticket->source = $source;
-        if($status == null)
-        {
+        if ($status == null) {
             $ticket->status = 1;
         } else {
             $ticket->status = $status;
-        }   
+        }
         $ticket->save();
 
         $sla_plan = Sla_plan::where('id', '=', $sla)->first();
@@ -961,7 +960,7 @@ class TicketController extends Controller
         if (Auth::user()->first_name != null) {
             $thread->body = $ticket_status_message->message.' '.Auth::user()->first_name.' '.Auth::user()->last_name;
         } else {
-             $thread->body = $ticket_status_message->message.' '.Auth::user()->user_name;
+            $thread->body = $ticket_status_message->message.' '.Auth::user()->user_name;
         }
         $thread->save();
 
@@ -1304,8 +1303,8 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 5)->where('dept_id', '=', $dept->id)->get();
         }
+
         return $this->getTable($tickets);
-        
     }
 
     /**
@@ -1326,8 +1325,8 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('assigned_to', '=', null)->where('dept_id', '=', $dept->id)->get();
         }
+
         return $this->getTable($tickets);
-       
     }
 
     /**
@@ -1464,9 +1463,10 @@ class TicketController extends Controller
 
         return 1;
     }
-    
+
     /**
      * select_all.
+     *
      * @return type
      */
     public function select_all()
@@ -1491,14 +1491,14 @@ class TicketController extends Controller
                     $ticket->closed = 0;
                     $ticket->closed_at = null;
                     $ticket->save();
-                } elseif ($value == "Clean up") {
+                } elseif ($value == 'Clean up') {
                     $thread = Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
                     foreach ($thread as $th_id) {
                         // echo $th_id->id." ";
                         $attachment = Ticket_attachments::where('thread_id', '=', $th_id->id)->get();
                         if (count($attachment)) {
                             foreach ($attachment as $a_id) {
-                                echo $a_id->id." ";
+                                echo $a_id->id.' ';
                                 $attachment = Ticket_attachments::find($a_id->id);
                                 $attachment->delete();
                             }
@@ -1530,6 +1530,7 @@ class TicketController extends Controller
                 return redirect()->back()->with('success', Lang::get('lang.hard-delete-success-message'));
             }
         }
+
         return redirect()->back()->with('fails', 'None Selected!');
     }
 
@@ -1581,6 +1582,7 @@ class TicketController extends Controller
 
         return $set->date_time_format;
     }
+
     /**
      * lock.
      *
