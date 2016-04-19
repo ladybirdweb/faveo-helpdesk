@@ -2,7 +2,7 @@
 
 
 @section('Emails')
-class="active"
+active
 @stop
 
 @section('emails-bar')
@@ -69,7 +69,7 @@ class="active"
 					{!! Form::radio('ban',1) !!} {{Lang::get('lang.active')}}
 				</div>
 				<div class="col-xs-3">
-					{!! Form::radio('ban',0) !!} {{Lang::get('lang.disabled')}}
+					{!! Form::radio('ban',0) !!} {{Lang::get('lang.inactive')}}
 				</div>
 			</div>
 		</div>

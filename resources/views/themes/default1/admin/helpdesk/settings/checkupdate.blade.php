@@ -1,5 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
-
+@section('update')
+class="active"
+@stop
 @section('content')
 
 <div class="box box-primary">

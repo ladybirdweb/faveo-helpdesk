@@ -202,6 +202,19 @@
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
+                                        <!--/.col-md-2-->
+                                        <div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{url('workflow')}}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa fa-sitemap fa-stack-1x"></i>
+                                                        </span></a>
+                                                </div>
+                                                <center class="box-title" >{!! Lang::get('lang.workflow') !!}</center>
+                                            </div>
+                                        </div>
+                                        <!--/.col-md-2-->
                                         
                                     </div>
                                 </div>
@@ -311,6 +324,18 @@
                                                         </span></a>
                                                 </div>
                                                 <center class="box-title">{!! Lang::get('lang.language') !!}</center>
+                                            </div>
+                                        </div>
+                                        <!--/.col-md-2-->
+                                        <div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{url('job-scheduler')}}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa  fa-hourglass-o fa-stack-1x"></i>
+                                                        </span></a>
+                                                </div>
+                                                <center class="box-title" >{!! Lang::get('lang.cron') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->

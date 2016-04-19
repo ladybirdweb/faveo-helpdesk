@@ -196,10 +196,10 @@ class DatabaseSeeder extends Seeder
         Ticket_status::create(['name' => 'Archived', 'state' => 'archived', 'mode' => '3', 'message' => 'Ticket have been Archived by', 'flags' => '0', 'sort' => '4', 'properties' => 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.']);
         Ticket_status::create(['name' => 'Deleted', 'state' => 'deleted', 'mode' => '3', 'message' => 'Ticket have been Deleted by', 'flags' => '0', 'sort' => '5', 'properties' => 'Tickets queued for deletion. Not accessible on ticket queues.']);
         /* Ticket priority */
-        Ticket_priority::create(['priority' => 'low', 'priority_desc' => 'Low', 'priority_color' => 'info', 'priority_urgency' => '4', 'ispublic' => '1']);
-        Ticket_priority::create(['priority' => 'normal', 'priority_desc' => 'Normal', 'priority_color' => 'info', 'priority_urgency' => '3', 'ispublic' => '1']);
-        Ticket_priority::create(['priority' => 'high', 'priority_desc' => 'High', 'priority_color' => 'warning', 'priority_urgency' => '2', 'ispublic' => '1']);
-        Ticket_priority::create(['priority' => 'emergency', 'priority_desc' => 'Emergency', 'priority_color' => 'danger', 'priority_urgency' => '1', 'ispublic' => '1']);
+        Ticket_priority::create(['priority' => 'Low', 'priority_desc' => 'Low', 'priority_color' => 'info', 'priority_urgency' => '4', 'ispublic' => '1']);
+        Ticket_priority::create(['priority' => 'Normal', 'priority_desc' => 'Normal', 'priority_color' => 'info', 'priority_urgency' => '3', 'ispublic' => '1']);
+        Ticket_priority::create(['priority' => 'High', 'priority_desc' => 'High', 'priority_color' => 'warning', 'priority_urgency' => '2', 'ispublic' => '1']);
+        Ticket_priority::create(['priority' => 'Emergency', 'priority_desc' => 'Emergency', 'priority_color' => 'danger', 'priority_urgency' => '1', 'ispublic' => '1']);
         /* SLA Plans */
         Sla_plan::create(['name' => 'Sla 1', 'grace_period' => '6 Hours', 'status' => '1']);
         Sla_plan::create(['name' => 'Sla 2', 'grace_period' => '12 Hours', 'status' => '1']);

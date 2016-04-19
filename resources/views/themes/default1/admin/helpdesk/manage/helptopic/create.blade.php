@@ -1,7 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Manage')
-class="active"
+active
 @stop
 
 @section('manage-bar')
@@ -52,9 +52,9 @@ class="active"
 		<div class="form-group {{ $errors->has('ticket_status') ? 'has-error' : '' }}">
 
 			{!! Form::label('ticket_status',Lang::get('lang.status')) !!}&nbsp;&nbsp;
-			{!! $errors->first('ticket_status', '<spam class="help-block">:message</spam>') !!}
-			{!! Form::radio('ticket_status','1',true) !!} {{Lang::get('lang.active')}}&nbsp;&nbsp;&nbsp;
-			{!! Form::radio('ticket_status','0') !!} {{Lang::get('lang.disabled')}}
+			{!! $errors->first('status', '<spam class="help-block">:message</spam>') !!}
+			{!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}&nbsp;&nbsp;&nbsp;
+			{!! Form::radio('status','0') !!} {{Lang::get('lang.inactive')}}
 			</div>
 		</div>
 
@@ -92,7 +92,7 @@ class="active"
            <div class="col-md-6">
 		<div class="form-group {{ $errors->has('custom_form') ? 'has-error' : '' }}">
 
-			{!! Form::label('custom_form',Lang::get('lang.custom')) !!}
+			{!! Form::label('custom_form',Lang::get('lang.Custom_form')) !!}
 			{!! $errors->first('custom_form', '<spam class="help-block">:message</spam>') !!}
 			{!!Form::select('custom_form', [''=>'Select a Form','Custom Forms'=>$forms->lists('formname','id')],1,['class' => 'form-control']) !!}
 			</div>
@@ -139,7 +139,7 @@ class="active"
 
 			{!! Form::label('auto_assign',Lang::get('lang.auto_assign')) !!}
 			{!! $errors->first('auto_assign', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('auto_assign', [''=>'Select an Agent','Agents'=>$agents->lists('user_name','id')],null,['class' => 'form-control']) !!}
+			{!!Form::select('auto_assign', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')],null,['class' => 'form-control']) !!}
 			</div>
 		</div>
 		</div>

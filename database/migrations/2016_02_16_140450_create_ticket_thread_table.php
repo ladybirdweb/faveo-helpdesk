@@ -18,6 +18,8 @@ class CreateTicketThreadTable extends Migration
             $table->integer('user_id')->unsigned()->nullable()->index('user_id');
             $table->string('poster');
             $table->integer('source')->unsigned()->nullable()->index('source');
+            $table->integer('reply_rating');
+            $table->integer('rating_count');
             $table->boolean('is_internal');
             $table->string('title');
             $table->text('body', 65535);

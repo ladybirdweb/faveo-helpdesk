@@ -414,7 +414,7 @@ class SettingsController extends Controller
     public function version_check()
     {
         $response_url = \URL::route('post-version-check');
-        echo "<form action='http://www.faveohelpdesk.com/bill/version' method='post' name='redirect'>";
+        echo "<form action='http://www.faveohelpdesk.com/billing/version' method='post' name='redirect'>";
         echo "<input type='hidden' name='_token' value='csrf_token()'/>";
         echo "<input type='hidden' name='title' value='helpdeskcommunityedition'/>";
         echo "<input type='hidden' name='id' value='19'/>";

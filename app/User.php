@@ -36,4 +36,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    public function getProfilePicAttribute($value)
+    {
+        if (!$value) {
+            return \Gravatar::src($this->attributes['email']);
+        } else {
+            return asset('lb-faveo/media/profilepic/'.$value);
+        }
+    }
 }

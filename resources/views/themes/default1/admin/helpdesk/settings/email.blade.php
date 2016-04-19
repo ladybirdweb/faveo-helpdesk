@@ -1,7 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Settings')
-class="active"
+active
 @stop
 
 @section('settings-bar')
@@ -68,20 +68,9 @@ class="active"
                             </div>
                         </div>
                     </div>
-                    <!-- Email Fetching: CHECKBOX  : Enable ,Fetch on auto-cron   -->
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            {!! Form::label('email_fetching',Lang::get('lang.email_fetch')) !!}<br>
-                            {!! Form::checkbox('email_fetching',1,true) !!}&nbsp;{{Lang::get('lang.fetch_auto-corn')}}
-                        </div>
-                    </div>
+                   
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            {!! Form::checkbox('notification_cron',1,true) !!}&nbsp;{{Lang::get('lang.cron_notification')}}
-                        </div>
-                    </div>
                 </div>
                 <!-- Accept All Emails:	CHECKBOX: Accept email from unknown Users  -->
                 <div class="row">

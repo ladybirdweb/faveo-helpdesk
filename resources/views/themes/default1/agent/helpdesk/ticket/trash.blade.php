@@ -13,7 +13,8 @@ class="active"
 @stop
 
 @section('content')
-<?php 
+<?php
+    $date_time_format = UTC::getDateTimeFormat();
     if(Auth::user()->role == 'agent') {
         $dept = App\Model\helpdesk\Agent\Department::where('id','=',Auth::user()->primary_dpt)->first();
         $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 5)->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
@@ -51,6 +52,7 @@ class="active"
             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
             <input type="submit" class="btn btn-default text-blue btn-sm" id="delete"  name="submit" value="{!! Lang::get('lang.open') !!}">
             <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="close" value="{!! Lang::get('lang.close') !!}">
+            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="hard-delete" value="{{Lang::get('lang.clean-up')}}" title="{{Lang::get('lang.trash-delete-title-msg')}}">
             
         </div>
         <div class="mailbox-messages"  id="refresh">
@@ -64,12 +66,62 @@ class="active"
                     Lang::get('lang.ticket_id'),
                     Lang::get('lang.priority'),
                     Lang::get('lang.from'),
-                    Lang::get('lang.last_replier'),
                     Lang::get('lang.assigned_to'),
                     Lang::get('lang.last_activity'))
-        ->setUrl(route('get.trash.ticket')) 
-        ->setOrder(array(7=>'desc'))  
-        ->setClass('table table-hover table-bordered table-striped')       
+        ->setUrl(route('get.trash.ticket'))
+        ->setOptions('aoColumnDefs',array(
+        array(
+            'render' => "function ( data, type, row ) {
+                    var t = row[6].split(/[- :,/ :,. /]/);
+                    var d = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+                    <!--  -->
+                    var dtf= '$date_time_format';
+                    if(dtf==1) {
+                        dtf = 'D/MMM/YYYY hh:mm:ss A';
+                    } else if(dtf==2) {
+                        dtf = 'D MMM, YYYY hh:mm:ss A';
+                    } else if(dtf==3) {
+                        dtf = 'D-MMM-YYYY hh:mm:ss A';
+                    } else if(dtf==4) {
+                        dtf = 'MMM/D/YYYY hh:mm:ss A';
+                    } else if(dtf==5) {
+                        dtf = 'MMM D, YYYY hh:mm:ss A';
+                    } else if(dtf==6) {
+                        dtf = 'MMM-D-YYYY hh:mm:ss A';
+                    } else if(dtf==7) {
+                        dtf = 'YYYY/MMM/D hh:mm:ss A';
+                    } else if(dtf==8) {
+                        dtf = 'YYYY, MMM D hh:mm:ss A';
+                    } else if(dtf==9) {
+                        dtf = 'YYYY-MMM-D hh:mm:ss A';
+                    }
+                    return  moment(d).format(dtf);
+                    <!-- //return d; -->
+                }", 
+            'aTargets' => array(6))
+        ))
+        ->setOrder(array(6=>'desc'))  
+        ->setClass('table table-hover table-bordered table-striped')
+        ->setCallbacks("fnRowCallback",'function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+            var str = aData[3];
+            if(str.search("#000") == -1) {
+                $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #F3F3F3"});
+                $("td", nRow).mouseenter(function(){
+                    $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border":"none"});
+                });
+                $("td", nRow).mouseleave(function(){
+                    $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd","border-right":"solid 0.5px #F3F3F3"});
+                });
+            } else {
+                $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
+                $("td", nRow).mouseenter(function(){
+                    $("td", nRow).css({"background-color":"#DEDFE0", "border":"none"});
+                });
+                $("td", nRow).mouseleave(function(){
+                    $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
+                });   
+            }
+        }')                 
         ->render();!!}
 
         </div><!-- /.mail-box-messages -->
@@ -83,7 +135,7 @@ class="active"
                         <div class="col-md-8">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Ã—</span></button>
+                                    <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                                     <h4 class="modal-title" id="myModalLabel"></h4>
                                 </div>
                                 <div class="modal-body" id="custom-alert-body" >
@@ -150,6 +202,11 @@ class="active"
             $('#myModalLabel').html("{{Lang::get('lang.close-tickets')}}");
         });
 
+        $('#hard-delete').on('click', function(){
+            option = 2;
+            $('#myModalLabel').html("{{Lang::get('lang.trash-delete-ticket')}}");
+        });
+
          $("#modalpopup").on('submit', function(e){
             e.preventDefault();
             var msg ="{{Lang::get('lang.confirm')}}";
@@ -180,9 +237,11 @@ class="active"
                 if (option == 0) {
                     //alert('delete');
                     $('#delete').click();
-                } else {
+                } else if(option ==1) {
                     //alert('close');
                     $('#close').click();
+                } else {
+                    $('#hard-delete').click();
                 }
             }
         });

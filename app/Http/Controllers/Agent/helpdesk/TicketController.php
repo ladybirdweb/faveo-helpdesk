@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
+use App\Http\Controllers\Common\NotificationController;
 use App\Http\Controllers\Common\PhpMailController;
 use App\Http\Controllers\Controller;
 // requests
@@ -54,9 +55,10 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function __construct(PhpMailController $PhpMailController)
+    public function __construct(PhpMailController $PhpMailController, NotificationController $NotificationController)
     {
         $this->PhpMailController = $PhpMailController;
+        $this->NotificationController = $NotificationController;
         $this->middleware('auth');
     }
 
@@ -79,91 +81,7 @@ class TicketController extends Controller
             $tickets = Tickets::where('status', 1)->where('dept_id', '=', $dept->id)->get();
         }
 
-        return \Datatable::collection(new Collection($tickets))
-                        ->addColumn('id', function ($ticket) {
-                              return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
-                        })
-                        ->addColumn('subject', function ($ticket) {
-                            $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            if (isset($subject->title)) {
-                                $string = $subject->title;
-                                if (strlen($string) > 20) {
-                                    $stringCut = substr($string, 0, 30);
-                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
-                                }
-                            } else {
-                                $string = '(no subject)';
-                            }
-                            //collabrations
-                            $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
-                            $collab = count($collaborators);
-                            if ($collab > 0) {
-                                $collabString = '&nbsp;<i class="fa fa-users"></i>';
-                            } else {
-                                $collabString = null;
-                            }
-
-                            $threads = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first(); //
-                            $count = Ticket_Thread::where('ticket_id', '=', $ticket->id)->count(); //Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
-
-                            $attachment = Ticket_attachments::where('thread_id', '=', $threads->id)->get();
-                            $attachCount = count($attachment);
-                            if ($attachCount > 0) {
-                                $attachString = '&nbsp;<i class="fa fa-paperclip"></i>';
-                            } else {
-                                $attachString = '';
-                            }
-
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
-                        })
-                        ->addColumn('ticket_number', function ($ticket) {
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$ticket->ticket_number."'>#".$ticket->ticket_number.'</a>';
-                        })
-                        ->addColumn('priority', function ($ticket) {
-                            $priority = DB::table('ticket_priority')->select('priority_desc', 'priority_color')->where('priority_id', '=', $ticket->priority_id)->first();
-
-                            return '<span class="btn btn-'.$priority->priority_color.' btn-xs">'.$priority->priority_desc.'</span>';
-                        })
-                        ->addColumn('from', function ($ticket) {
-                            $from = DB::table('users')->select('user_name')->where('id', '=', $ticket->user_id)->first();
-
-                            return "<span style='color:#508983'>".$from->user_name.'</span>';
-                        })
-                        ->addColumn('Last Replier', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                            $TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
-                            $LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first();
-                            if ($LastResponse->role == 'user') {
-                                $rep = '#F39C12';
-                                $username = $LastResponse->user_name;
-                            } else {
-                                $rep = '#000';
-                                $username = $LastResponse->first_name.' '.$LastResponse->last_name;
-                                if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
-                                    $username = $LastResponse->user_name;
-                                }
-                            }
-
-                            return "<span style='color:".$rep."'>".$username.'</span>';
-                        })
-                        ->addColumn('assigned_to', function ($ticket) {
-                            if ($ticket->assigned_to == null) {
-                                return "<span style='color:red'>Unassigned</span>";
-                            } else {
-                                $assign = DB::table('users')->where('id', '=', $ticket->assigned_to)->first();
-
-                                return "<span style='color:green'>".$assign->first_name.' '.$assign->last_name.'</span>';
-                            }
-                        })
-                        ->addColumn('Last', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                            $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
-
-                            return UTC::usertimezone($TicketDatarow->updated_at);
-                        })
-                        ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
-                        ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
-                        ->make();
+        return $this->getTable($tickets);
     }
 
     /**
@@ -185,89 +103,7 @@ class TicketController extends Controller
             $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->get();
         }
 
-        return \Datatable::collection(new Collection($tickets))
-                        ->addColumn('id', function ($ticket) {
-                             return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
-                        })
-                        ->addColumn('subject', function ($ticket) {
-                            $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            if (isset($subject->title)) {
-                                $string = $subject->title;
-                                if (strlen($string) > 20) {
-                                    $stringCut = substr($string, 0, 30);
-                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
-                                }
-                            } else {
-                                $string = '(no subject)';
-                            }
-                            //collabrations
-                            $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
-                            $collab = count($collaborators);
-                            if ($collab > 0) {
-                                $collabString = '&nbsp;<i class="fa fa-users"></i>';
-                            } else {
-                                $collabString = null;
-                            }
-                            $threads = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first(); //
-                            $count = Ticket_Thread::where('ticket_id', '=', $ticket->id)->count(); //
-                            $attachment = Ticket_attachments::where('thread_id', '=', $threads->id)->get();
-                            $attachCount = count($attachment);
-                            if ($attachCount > 0) {
-                                $attachString = '&nbsp;<i class="fa fa-paperclip"></i>';
-                            } else {
-                                $attachString = '';
-                            }
-
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
-                        })
-                        ->addColumn('ticket_number', function ($ticket) {
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$ticket->ticket_number."'>#".$ticket->ticket_number.'</a>';
-                        })
-                        ->addColumn('priority', function ($ticket) {
-                            $priority = DB::table('ticket_priority')->select('priority_desc', 'priority_color')->where('priority_id', '=', $ticket->priority_id)->first();
-
-                            return '<span class="btn btn-'.$priority->priority_color.' btn-xs">'.$priority->priority_desc.'</span>';
-                        })
-                        ->addColumn('from', function ($ticket) {
-                            $from = DB::table('users')->select('user_name')->where('id', '=', $ticket->user_id)->first();
-
-                            return "<span style='color:#508983'>".$from->user_name.'</span>';
-                        })
-                        ->addColumn('Last Replier', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '=', 0)->max('id');
-                            $TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
-                            $LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first();
-                            if ($LastResponse->role == 'user') {
-                                $rep = '#F39C12';
-                                $username = $LastResponse->user_name;
-                            } else {
-                                $rep = '#000';
-                                $username = $LastResponse->first_name.' '.$LastResponse->last_name;
-                                if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
-                                    $username = $LastResponse->user_name;
-                                }
-                            }
-
-                            return "<span style='color:".$rep."'>".$username.'</span>';
-                        })
-                        ->addColumn('assigned_to', function ($ticket) {
-                            if ($ticket->assigned_to == null) {
-                                return "<span style='color:red'>Unassigned</span>";
-                            } else {
-                                $assign = DB::table('users')->where('id', '=', $ticket->assigned_to)->first();
-
-                                return "<span style='color:green'>".$assign->first_name.' '.$assign->last_name.'</span>';
-                            }
-                        })
-                        ->addColumn('Last', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                            $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
-
-                            return UTC::usertimezone($TicketDatarow->updated_at);
-                        })
-                        ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
-                        ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
-                        ->make();
+        return $this->getTable($tickets);
     }
 
     /**
@@ -289,89 +125,7 @@ class TicketController extends Controller
             $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 1)->where('dept_id', '=', $dept->id)->get();
         }
 
-        return \Datatable::collection(new Collection($tickets))
-                        ->addColumn('id', function ($ticket) {
-                             return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
-                        })
-                        ->addColumn('subject', function ($ticket) {
-                            $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            if (isset($subject->title)) {
-                                $string = $subject->title;
-                                if (strlen($string) > 20) {
-                                    $stringCut = substr($string, 0, 30);
-                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
-                                }
-                            } else {
-                                $string = '(no subject)';
-                            }
-                            //collabrations
-                            $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
-                            $collab = count($collaborators);
-                            if ($collab > 0) {
-                                $collabString = '&nbsp;<i class="fa fa-users"></i>';
-                            } else {
-                                $collabString = null;
-                            }
-                            $threads = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
-                            $count = Ticket_Thread::where('ticket_id', '=', $ticket->id)->count();
-                            $attachment = Ticket_attachments::where('thread_id', '=', $threads->id)->get();
-                            $attachCount = count($attachment);
-                            if ($attachCount > 0) {
-                                $attachString = '&nbsp;<i class="fa fa-paperclip"></i>';
-                            } else {
-                                $attachString = '';
-                            }
-
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
-                        })
-                        ->addColumn('ticket_number', function ($ticket) {
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$ticket->ticket_number."'>#".$ticket->ticket_number.'</a>';
-                        })
-                        ->addColumn('priority', function ($ticket) {
-                            $priority = DB::table('ticket_priority')->select('priority_desc', 'priority_color')->where('priority_id', '=', $ticket->priority_id)->first();
-
-                            return '<span class="btn btn-'.$priority->priority_color.' btn-xs">'.$priority->priority_desc.'</span>';
-                        })
-                        ->addColumn('from', function ($ticket) {
-                            $from = DB::table('users')->select('user_name')->where('id', '=', $ticket->user_id)->first();
-
-                            return "<span style='color:#508983'>".$from->user_name.'</span>';
-                        })
-                        ->addColumn('Last Replier', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '!=', 1)->max('id');
-                            $TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
-                            $LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first();
-                            if ($LastResponse->role == 'user') {
-                                $rep = '#F39C12';
-                                $username = $LastResponse->user_name;
-                            } else {
-                                $rep = '#000';
-                                $username = $LastResponse->first_name.' '.$LastResponse->last_name;
-                                if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
-                                    $username = $LastResponse->user_name;
-                                }
-                            }
-
-                            return "<span style='color:".$rep."'>".$username.'</span>';
-                        })
-                        ->addColumn('assigned_to', function ($ticket) {
-                            if ($ticket->assigned_to == null) {
-                                return "<span style='color:red'>Usernassigned</span>";
-                            } else {
-                                $assign = DB::table('users')->where('id', '=', $ticket->assigned_to)->first();
-
-                                return "<span style='color:green'>".$assign->first_name.' '.$assign->last_name.'</span>';
-                            }
-                        })
-                        ->addColumn('Last', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                            $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
-
-                            return UTC::usertimezone($TicketDatarow->updated_at);
-                        })
-                        ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
-                        ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
-                        ->make();
+        return $this->getTable($tickets);
     }
 
     /**
@@ -393,89 +147,7 @@ class TicketController extends Controller
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '=', Auth::user()->id)->get();
         }
 
-        return \Datatable::collection(new Collection($tickets))
-                        ->addColumn('id', function ($ticket) {
-                              return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
-                        })
-                        ->addColumn('subject', function ($ticket) {
-                            $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            if (isset($subject->title)) {
-                                $string = $subject->title;
-                                if (strlen($string) > 20) {
-                                    $stringCut = substr($string, 0, 30);
-                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
-                                }
-                            } else {
-                                $string = '(no subject)';
-                            }
-                            //collabrations
-                            $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
-                            $collab = count($collaborators);
-                            if ($collab > 0) {
-                                $collabString = '&nbsp;<i class="fa fa-users"></i>';
-                            } else {
-                                $collabString = null;
-                            }
-                            $threads = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
-                            $count = Ticket_Thread::where('ticket_id', '=', $ticket->id)->count();
-                            $attachment = Ticket_attachments::where('thread_id', '=', $threads->id)->get();
-                            $attachCount = count($attachment);
-                            if ($attachCount > 0) {
-                                $attachString = '&nbsp;<i class="fa fa-paperclip"></i>';
-                            } else {
-                                $attachString = '';
-                            }
-
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
-                        })
-                        ->addColumn('ticket_number', function ($ticket) {
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$ticket->ticket_number."'>#".$ticket->ticket_number.'</a>';
-                        })
-                        ->addColumn('priority', function ($ticket) {
-                            $priority = DB::table('ticket_priority')->select('priority_desc', 'priority_color')->where('priority_id', '=', $ticket->priority_id)->first();
-
-                            return '<span class="btn btn-'.$priority->priority_color.' btn-xs">'.$priority->priority_desc.'</span>';
-                        })
-                        ->addColumn('from', function ($ticket) {
-                            $from = DB::table('users')->select('user_name')->where('id', '=', $ticket->user_id)->first();
-
-                            return "<span style='color:#508983'>".$from->user_name.'</span>';
-                        })
-                        ->addColumn('Last Replier', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '!=', 1)->max('id');
-                            $TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
-                            $LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first();
-                            if ($LastResponse->role == 'user') {
-                                $rep = '#F39C12';
-                                $username = $LastResponse->user_name;
-                            } else {
-                                $rep = '#000';
-                                $username = $LastResponse->first_name.' '.$LastResponse->last_name;
-                                if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
-                                    $username = $LastResponse->user_name;
-                                }
-                            }
-
-                            return "<span style='color:".$rep."'>".$username.'</span>';
-                        })
-                        ->addColumn('assigned_to', function ($ticket) {
-                            if ($ticket->assigned_to == null) {
-                                return "<span style='color:red'>Usernassigned</span>";
-                            } else {
-                                $assign = DB::table('users')->where('id', '=', $ticket->assigned_to)->first();
-
-                                return "<span style='color:green'>".$assign->first_name.' '.$assign->last_name.'</span>';
-                            }
-                        })
-                        ->addColumn('Last', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                            $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
-
-                            return UTC::usertimezone($TicketDatarow->updated_at);
-                        })
-                        ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
-                        ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
-                        ->make();
+        return $this->getTable($tickets);
     }
 
     /**
@@ -486,6 +158,39 @@ class TicketController extends Controller
     public function overdue_ticket_list()
     {
         return view('themes.default1.agent.helpdesk.ticket.overdue');
+    }
+
+    public function getOverdueTickets()
+    {
+        if (Auth::user()->role == 'agent') {
+            $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
+            $overdues = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->get();
+        } else {
+            $overdues = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
+        }
+        if (count($overdues) == 0) {
+            $tickets = null;
+        } else {
+            $i = 0;
+            foreach ($overdues as $overdue) {
+                $sla_plan = Sla_plan::where('id', '=', $overdue->sla)->first();
+
+                $ovadate = $overdue->created_at;
+                $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)).'<br/><br/>';
+                if (date('Y-m-d H:i:s') > $new_date) {
+                    $i++;
+                    $value[] = $overdue;
+                }
+            }
+            // dd(count($value));
+            if ($i > 0) {
+                $tickets = new collection($value);
+            } else {
+                $tickets = null;
+            }
+        }
+
+        return $this->getTable($tickets);
     }
 
     /**
@@ -507,89 +212,7 @@ class TicketController extends Controller
             $tickets = Tickets::where('status', '>', 1)->where('dept_id', '=', $dept->id)->where('status', '<', 4)->get();
         }
 
-        return \Datatable::collection(new Collection($tickets))
-                        ->addColumn('id', function ($ticket) {
-                             return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
-                        })
-                        ->addColumn('subject', function ($ticket) {
-                            $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            if (isset($subject->title)) {
-                                $string = $subject->title;
-                                if (strlen($string) > 20) {
-                                    $stringCut = substr($string, 0, 30);
-                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
-                                }
-                            } else {
-                                $string = '(no subject)';
-                            }
-                            //collabrations
-                            $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
-                            $collab = count($collaborators);
-                            if ($collab > 0) {
-                                $collabString = '&nbsp;<i class="fa fa-users"></i>';
-                            } else {
-                                $collabString = null;
-                            }
-                            $threads = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
-                            $count = Ticket_Thread::where('ticket_id', '=', $ticket->id)->count();
-                            $attachment = Ticket_attachments::where('thread_id', '=', $threads->id)->get();
-                            $attachCount = count($attachment);
-                            if ($attachCount > 0) {
-                                $attachString = '&nbsp;<i class="fa fa-paperclip"></i>';
-                            } else {
-                                $attachString = '';
-                            }
-
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
-                        })
-                        ->addColumn('ticket_number', function ($ticket) {
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$ticket->ticket_number."'>#".$ticket->ticket_number.'</a>';
-                        })
-                        ->addColumn('priority', function ($ticket) {
-                            $priority = DB::table('ticket_priority')->select('priority_desc', 'priority_color')->where('priority_id', '=', $ticket->priority_id)->first();
-
-                            return '<span class="btn btn-'.$priority->priority_color.' btn-xs">'.$priority->priority_desc.'</span>';
-                        })
-                        ->addColumn('from', function ($ticket) {
-                            $from = DB::table('users')->select('user_name')->where('id', '=', $ticket->user_id)->first();
-
-                            return "<span style='color:#508983'>".$from->user_name.'</span>';
-                        })
-                        ->addColumn('Last Replier', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '!=', 1)->max('id');
-                            $TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
-                            $LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first();
-                            if ($LastResponse->role == 'user') {
-                                $rep = '#F39C12';
-                                $username = $LastResponse->user_name;
-                            } else {
-                                $rep = '#000';
-                                $username = $LastResponse->first_name.' '.$LastResponse->last_name;
-                                if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
-                                    $username = $LastResponse->user_name;
-                                }
-                            }
-
-                            return "<span style='color:".$rep."'>".$username.'</span>';
-                        })
-                        ->addColumn('assigned_to', function ($ticket) {
-                            if ($ticket->assigned_to == null) {
-                                return "<span style='color:red'>Usernassigned</span>";
-                            } else {
-                                $assign = DB::table('users')->where('id', '=', $ticket->assigned_to)->first();
-
-                                return "<span style='color:green'>".$assign->first_name.' '.$assign->last_name.'</span>';
-                            }
-                        })
-                        ->addColumn('Last', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                            $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
-
-                            return UTC::usertimezone($TicketDatarow->updated_at);
-                        })
-                        ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
-                        ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
-                        ->make();
+        return $this->getTable($tickets);
     }
 
     /**
@@ -611,89 +234,7 @@ class TicketController extends Controller
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '>', 0)->where('dept_id', '=', $dept->id)->get();
         }
 
-        return \Datatable::collection(new Collection($tickets))
-                        ->addColumn('id', function ($ticket) {
-                              return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
-                        })
-                        ->addColumn('subject', function ($ticket) {
-                            $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            if (isset($subject->title)) {
-                                $string = $subject->title;
-                                if (strlen($string) > 20) {
-                                    $stringCut = substr($string, 0, 30);
-                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
-                                }
-                            } else {
-                                $string = '(no subject)';
-                            }
-                            //collabrations
-                            $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
-                            $collab = count($collaborators);
-                            if ($collab > 0) {
-                                $collabString = '&nbsp;<i class="fa fa-users"></i>';
-                            } else {
-                                $collabString = null;
-                            }
-                            $threads = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
-                            $count = Ticket_Thread::where('ticket_id', '=', $ticket->id)->count();
-                            $attachment = Ticket_attachments::where('thread_id', '=', $threads->id)->get();
-                            $attachCount = count($attachment);
-                            if ($attachCount > 0) {
-                                $attachString = '&nbsp;<i class="fa fa-paperclip"></i>';
-                            } else {
-                                $attachString = '';
-                            }
-
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
-                        })
-                        ->addColumn('ticket_number', function ($ticket) {
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$ticket->ticket_number."'>#".$ticket->ticket_number.'</a>';
-                        })
-                        ->addColumn('priority', function ($ticket) {
-                            $priority = DB::table('ticket_priority')->select('priority_desc', 'priority_color')->where('priority_id', '=', $ticket->priority_id)->first();
-
-                            return '<span class="btn btn-'.$priority->priority_color.' btn-xs">'.$priority->priority_desc.'</span>';
-                        })
-                        ->addColumn('from', function ($ticket) {
-                            $from = DB::table('users')->select('user_name')->where('id', '=', $ticket->user_id)->first();
-
-                            return "<span style='color:#508983'>".$from->user_name.'</span>';
-                        })
-                        ->addColumn('Last Replier', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '!=', 1)->max('id');
-                            $TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
-                            $LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first();
-                            if ($LastResponse->role == 'user') {
-                                $rep = '#F39C12';
-                                $username = $LastResponse->user_name;
-                            } else {
-                                $rep = '#000';
-                                $username = $LastResponse->first_name.' '.$LastResponse->last_name;
-                                if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
-                                    $username = $LastResponse->user_name;
-                                }
-                            }
-
-                            return "<span style='color:".$rep."'>".$username.'</span>';
-                        })
-                        ->addColumn('assigned_to', function ($ticket) {
-                            if ($ticket->assigned_to == null) {
-                                return "<span style='color:red'>Usernassigned</span>";
-                            } else {
-                                $assign = DB::table('users')->where('id', '=', $ticket->assigned_to)->first();
-
-                                return "<span style='color:green'>".$assign->first_name.' '.$assign->last_name.'</span>';
-                            }
-                        })
-                        ->addColumn('Last', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                            $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
-
-                            return UTC::usertimezone($TicketDatarow->updated_at);
-                        })
-                        ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
-                        ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
-                        ->make();
+        return $this->getTable($tickets);
     }
 
     /**
@@ -767,9 +308,12 @@ class TicketController extends Controller
 
             return redirect()->route('check_ticket', compact('ticket_id'));
         }
+        $avg = DB::table('ticket_thread')->where('ticket_id', '=', $id)->where('reply_rating', '!=', 0)->avg('reply_rating');
+        $avg_rate = explode('.', $avg);
+        $avg_rating = $avg_rate[0];
         $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
 
-        return view('themes.default1.agent.helpdesk.ticket.timeline', compact('tickets'), compact('thread'));
+        return view('themes.default1.agent.helpdesk.ticket.timeline', compact('tickets'), compact('thread', 'avg_rating'));
     }
 
     /**
@@ -874,6 +418,7 @@ class TicketController extends Controller
         $emails = Emails::where('department', '=', $tickets->dept_id)->first();
 
         try {
+            $this->NotificationController->create($ticket_id, Auth::user()->id, '2');
             $this->PhpMailController->sendmail(
                     $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
             );
@@ -1003,7 +548,7 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function create_user($emailadd, $username, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $auto_response)
+    public function create_user($emailadd, $username, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $auto_response, $status)
     {
         // define global variables
         $email;
@@ -1044,7 +589,7 @@ class TicketController extends Controller
             $username = $checkemail->user_name;
             $user_id = $checkemail->id;
         }
-        $ticket_number = $this->check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data);
+        $ticket_number = $this->check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $status);
         $ticket_number2 = $ticket_number[0];
         $ticketdata = Tickets::where('ticket_number', '=', $ticket_number2)->first();
         $threaddata = Ticket_Thread::where('ticket_id', '=', $ticketdata->id)->first();
@@ -1175,7 +720,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data)
+    public function check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status)
     {
         $read_ticket_number = explode('[#', $subject);
         if (isset($read_ticket_number[1])) {
@@ -1218,12 +763,12 @@ class TicketController extends Controller
                     }
                 }
             } else {
-                $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data);
+                $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status);
 
                 return [$ticket_number, 0];
             }
         } else {
-            $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data);
+            $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status);
 
             return [$ticket_number, 0];
         }
@@ -1241,7 +786,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data)
+    public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status)
     {
         $max_number = Tickets::whereRaw('id = (select max(`id`) from tickets)')->first();
         if ($max_number == null) {
@@ -1259,9 +804,14 @@ class TicketController extends Controller
         $ticket->help_topic_id = $helptopic;
         $ticket->sla = $sla;
         $ticket->assigned_to = $assignto;
-        $ticket->status = '1';
+
         $ticket->priority_id = $priority;
         $ticket->source = $source;
+        if ($status == null) {
+            $ticket->status = 1;
+        } else {
+            $ticket->status = $status;
+        }
         $ticket->save();
 
         $sla_plan = Sla_plan::where('id', '=', $sla)->first();
@@ -1272,7 +822,7 @@ class TicketController extends Controller
 
         $ticket_number = $ticket->ticket_number;
         $id = $ticket->id;
-
+        $this->NotificationController->create($id, $user_id, '3');
         // store Form Data
         // Form Data comes from raising a ticket from client panel
         if ($form_data != null) {
@@ -1407,7 +957,11 @@ class TicketController extends Controller
         $thread->ticket_id = $ticket_status->id;
         $thread->user_id = Auth::user()->id;
         $thread->is_internal = 1;
-        $thread->body = $ticket_status_message->message.' '.Auth::user()->first_name.' '.Auth::user()->last_name;
+        if (Auth::user()->first_name != null) {
+            $thread->body = $ticket_status_message->message.' '.Auth::user()->first_name.' '.Auth::user()->last_name;
+        } else {
+            $thread->body = $ticket_status_message->message.' '.Auth::user()->user_name;
+        }
         $thread->save();
 
         return 'your ticket'.$ticket_status->ticket_number.' has been resolved';
@@ -1750,89 +1304,7 @@ class TicketController extends Controller
             $tickets = Tickets::where('status', '=', 5)->where('dept_id', '=', $dept->id)->get();
         }
 
-        return \Datatable::collection(new Collection($tickets))
-                        ->addColumn('id', function ($ticket) {
-                              return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
-                        })
-                        ->addColumn('subject', function ($ticket) {
-                            $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            if (isset($subject->title)) {
-                                $string = $subject->title;
-                                if (strlen($string) > 20) {
-                                    $stringCut = substr($string, 0, 30);
-                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
-                                }
-                            } else {
-                                $string = '(no subject)';
-                            }
-                            //collabrations
-                            $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
-                            $collab = count($collaborators);
-                            if ($collab > 0) {
-                                $collabString = '&nbsp;<i class="fa fa-users"></i>';
-                            } else {
-                                $collabString = null;
-                            }
-                            $threads = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
-                            $count = Ticket_Thread::where('ticket_id', '=', $ticket->id)->count();
-                            $attachment = Ticket_attachments::where('thread_id', '=', $threads->id)->get();
-                            $attachCount = count($attachment);
-                            if ($attachCount > 0) {
-                                $attachString = '&nbsp;<i class="fa fa-paperclip"></i>';
-                            } else {
-                                $attachString = '';
-                            }
-
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
-                        })
-                        ->addColumn('ticket_number', function ($ticket) {
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$ticket->ticket_number."'>#".$ticket->ticket_number.'</a>';
-                        })
-                        ->addColumn('priority', function ($ticket) {
-                            $priority = DB::table('ticket_priority')->select('priority_desc', 'priority_color')->where('priority_id', '=', $ticket->priority_id)->first();
-
-                            return '<span class="btn btn-'.$priority->priority_color.' btn-xs">'.$priority->priority_desc.'</span>';
-                        })
-                        ->addColumn('from', function ($ticket) {
-                            $from = DB::table('users')->select('user_name')->where('id', '=', $ticket->user_id)->first();
-
-                            return "<span style='color:#508983'>".$from->user_name.'</span>';
-                        })
-                        ->addColumn('Last Replier', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '!=', 1)->max('id');
-                            $TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
-                            $LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first();
-                            if ($LastResponse->role == 'user') {
-                                $rep = '#F39C12';
-                                $username = $LastResponse->user_name;
-                            } else {
-                                $rep = '#000';
-                                $username = $LastResponse->first_name.' '.$LastResponse->last_name;
-                                if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
-                                    $username = $LastResponse->user_name;
-                                }
-                            }
-
-                            return "<span style='color:".$rep."'>".$username.'</span>';
-                        })
-                        ->addColumn('assigned_to', function ($ticket) {
-                            if ($ticket->assigned_to == null) {
-                                return "<span style='color:red'>Unassigned</span>";
-                            } else {
-                                $assign = DB::table('users')->where('id', '=', $ticket->assigned_to)->first();
-
-                                return "<span style='color:green'>".$assign->first_name.' '.$assign->last_name.'</span>';
-                            }
-                        })
-                        ->addColumn('Last', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                            $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
-
-                            return UTC::usertimezone($TicketDatarow->updated_at);
-                        })
-                        ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
-                        ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
-                        ->make();
+        return $this->getTable($tickets);
     }
 
     /**
@@ -1854,89 +1326,7 @@ class TicketController extends Controller
             $tickets = Tickets::where('assigned_to', '=', null)->where('dept_id', '=', $dept->id)->get();
         }
 
-        return \Datatable::collection(new Collection($tickets))
-                        ->addColumn('id', function ($ticket) {
-                           return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
-                        })
-                        ->addColumn('subject', function ($ticket) {
-                            $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
-                            if (isset($subject->title)) {
-                                $string = $subject->title;
-                                if (strlen($string) > 20) {
-                                    $stringCut = substr($string, 0, 30);
-                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
-                                }
-                            } else {
-                                $string = '(no subject)';
-                            }
-                            //collabrations
-                            $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
-                            $collab = count($collaborators);
-                            if ($collab > 0) {
-                                $collabString = '&nbsp;<i class="fa fa-users"></i>';
-                            } else {
-                                $collabString = null;
-                            }
-                            $threads = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
-                            $count = Ticket_Thread::where('ticket_id', '=', $ticket->id)->count();
-                            $attachment = Ticket_attachments::where('thread_id', '=', $threads->id)->get();
-                            $attachCount = count($attachment);
-                            if ($attachCount > 0) {
-                                $attachString = '&nbsp;<i class="fa fa-paperclip"></i>';
-                            } else {
-                                $attachString = '';
-                            }
-
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".$string."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
-                        })
-                        ->addColumn('ticket_number', function ($ticket) {
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$ticket->ticket_number."'>#".$ticket->ticket_number.'</a>';
-                        })
-                        ->addColumn('priority', function ($ticket) {
-                            $priority = DB::table('ticket_priority')->select('priority_desc', 'priority_color')->where('priority_id', '=', $ticket->priority_id)->first();
-
-                            return '<span class="btn btn-'.$priority->priority_color.' btn-xs">'.$priority->priority_desc.'</span>';
-                        })
-                        ->addColumn('from', function ($ticket) {
-                            $from = DB::table('users')->select('user_name')->where('id', '=', $ticket->user_id)->first();
-
-                            return "<span style='color:#508983'>".$from->user_name.'</span>';
-                        })
-                        ->addColumn('Last Replier', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '!=', 1)->max('id');
-                            $TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
-                            $LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first();
-                            if ($LastResponse->role == 'user') {
-                                $rep = '#F39C12';
-                                $username = $LastResponse->user_name;
-                            } else {
-                                $rep = '#000';
-                                $username = $LastResponse->first_name.' '.$LastResponse->last_name;
-                                if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
-                                    $username = $LastResponse->user_name;
-                                }
-                            }
-
-                            return "<span style='color:".$rep."'>".$username.'</span>';
-                        })
-                        ->addColumn('assigned_to', function ($ticket) {
-                            if ($ticket->assigned_to == null) {
-                                return "<span style='color:red'>Unassigned</span>";
-                            } else {
-                                $assign = DB::table('users')->where('id', '=', $ticket->assigned_to)->first();
-
-                                return "<span style='color:green'>".$assign->first_name.' '.$assign->last_name.'</span>';
-                            }
-                        })
-                        ->addColumn('Last', function ($ticket) {
-                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                            $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
-
-                            return UTC::usertimezone($TicketDatarow->updated_at);
-                        })
-                        ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
-                        ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
-                        ->make();
+        return $this->getTable($tickets);
     }
 
     /**
@@ -2015,9 +1405,9 @@ class TicketController extends Controller
             $ticket_collaborator->role = 'ccc';
             $ticket_collaborator->save();
 
-            return '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-check"></i>Success!</h4><h4><i class="icon fa fa-user"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'</div></div>';
+            return '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">Ã—</button><h4><i class="icon fa fa-check"></i>Success!</h4><h4><i class="icon fa fa-user"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'</div></div>';
         } else {
-            return '<div id="alert11" class="alert alert-warning alert-dismissable"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-warning"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'<br/>This user already Collaborated</div></div>';
+            return '<div id="alert11" class="alert alert-warning alert-dismissable"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">Ã—</button><h4><i class="icon fa fa-warning"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'<br/>This user already Collaborated</div></div>';
         }
     }
 
@@ -2035,7 +1425,7 @@ class TicketController extends Controller
         $ticket_id = Input::get('ticket_id');
         $user_search = User::where('email', '=', $email)->first();
         if (isset($user_serach)) {
-            return '<div id="alert11" class="alert alert-warning alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-alert"></i>Alert!</h4><div id="message-success1">This user already Exists</div></div>';
+            return '<div id="alert11" class="alert alert-warning alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">Ã—</button><h4><i class="icon fa fa-alert"></i>Alert!</h4><div id="message-success1">This user already Exists</div></div>';
         } else {
             $company = $this->company();
             $user = new User();
@@ -2057,7 +1447,7 @@ class TicketController extends Controller
             $ticket_collaborator->role = 'ccc';
             $ticket_collaborator->save();
 
-            return '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-user"></i>'.$user->user_name.'</h4><div id="message-success1">'.$user->email.'</div></div>';
+            return '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">Ã—</button><h4><i class="icon fa fa-user"></i>'.$user->user_name.'</h4><div id="message-success1">'.$user->email.'</div></div>';
         }
     }
 
@@ -2100,8 +1490,34 @@ class TicketController extends Controller
                     $ticket->reopened_at = date('Y-m-d H:i:s');
                     $ticket->closed = 0;
                     $ticket->closed_at = null;
-
                     $ticket->save();
+                } elseif ($value == 'Clean up') {
+                    $thread = Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
+                    foreach ($thread as $th_id) {
+                        // echo $th_id->id." ";
+                        $attachment = Ticket_attachments::where('thread_id', '=', $th_id->id)->get();
+                        if (count($attachment)) {
+                            foreach ($attachment as $a_id) {
+                                echo $a_id->id.' ';
+                                $attachment = Ticket_attachments::find($a_id->id);
+                                $attachment->delete();
+                            }
+                            // echo "<br>";
+                        }
+                        $thread = Ticket_Thread::find($th_id->id);
+//                        dd($thread);
+                        $thread->delete();
+                    }
+                    $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket->id)->get();
+                    if (count($collaborators)) {
+                        foreach ($collaborators as $collab_id) {
+                            echo $collab_id->id;
+                            $collab = Ticket_Collaborator::find($collab_id->id);
+                            $collab->delete();
+                        }
+                    }
+                    $tickets = Tickets::find($ticket->id);
+                    $tickets->delete();
                 }
             }
             if ($value == 'Delete') {
@@ -2110,6 +1526,8 @@ class TicketController extends Controller
                 return redirect()->back()->with('success', 'Tickets has been Closed');
             } elseif ($value == 'Open') {
                 return redirect()->back()->with('success', 'Ticket has been Opened');
+            } else {
+                return redirect()->back()->with('success', Lang::get('lang.hard-delete-success-message'));
             }
         }
 
@@ -2135,6 +1553,34 @@ class TicketController extends Controller
         $date = date($format, strtotime($utc) + $offset);
 
         return $date;
+    }
+
+    /**
+     *adding offset to updated_at time.
+     *
+     *@return date
+     */
+    public static function timeOffset($utc)
+    {
+        $set = System::whereId('1')->first();
+        $timezone = Timezones::whereId($set->time_zone)->first();
+        $tz = $timezone->name;
+        date_default_timezone_set($tz);
+        $offset = date('Z', strtotime($utc));
+
+        return $offset;
+    }
+
+    /**
+     * to get user date time format.
+     *
+     *@return string
+     */
+    public static function getDateTimeFormat()
+    {
+        $set = System::select('date_time_format')->whereId('1')->first();
+
+        return $set->date_time_format;
     }
 
     /**
@@ -2228,8 +1674,15 @@ class TicketController extends Controller
      */
     public function ratingReply($id, $rating)
     {
-        Tickets::where('id', $id)->update(['ratingreply' => $rating]);
-
+        $thread = Ticket_Thread::whereId($id)->first();
+//        $last_average = $thread->reply_rating;
+//$total_numbers = $thread->rating_count;
+//$new_number = $rating;
+//$new_average = (($last_average * $total_numbers) + $new_number) / ($total_numbers + 1);
+//$thread->rating_count += 1;
+$thread->reply_rating = $rating;
+        $thread->save();
+//        $thread->set('rating_count', 'rating_count+1', FALSE)->update(['ratingreply' => $new_average]);
         return redirect()->back()->with('Success', 'Thank you for your rating!');
     }
 
@@ -2489,7 +1942,7 @@ class TicketController extends Controller
             if (!empty(Input::get('reason'))) {
                 $reason = Input::get('reason');
             } else {
-                $reason = '';
+                $reason = Lang::get('lang.no-reason');
             }
             if (!empty(Input::get('title'))) {
                 Ticket_thread::where('ticket_id', '=', $p_id)->first()
@@ -2505,7 +1958,7 @@ class TicketController extends Controller
             $new_thread->title = $thread->title;
             $new_thread->body = Lang::get('lang.get_merge_message').
             "&nbsp;&nbsp;<a href='".route('ticket.thread', [$p_id]).
-            "'>#".$parent_ticket->ticket_number.'</a><br>'.$reason;
+            "'>#".$parent_ticket->ticket_number.'</a><br><br><b>'.Lang::get('lang.merge-reason').'</b>'.$reason;
             $new_thread->format = $thread->format;
             $new_thread->ip_address = $thread->ip_address;
 
@@ -2516,7 +1969,7 @@ class TicketController extends Controller
             $new_parent_thread->source = $parent_thread->source;
             $new_parent_thread->is_internal = 1;
             $new_parent_thread->title = $thread->title;
-            $new_parent_thread->body = Lang::get('lang.ticket')."&nbsp;<a href='".route('ticket.thread', [$value])."'>#".$ticket->ticket_number.'</a>&nbsp'.Lang::get('lang.ticket_merged').'<br>'.$reason;
+            $new_parent_thread->body = Lang::get('lang.ticket')."&nbsp;<a href='".route('ticket.thread', [$value])."'>#".$ticket->ticket_number.'</a>&nbsp'.Lang::get('lang.ticket_merged').'<br><br><b>'.Lang::get('lang.merge-reason').'</b>'.$reason;
             $new_parent_thread->format = $parent_thread->format;
             $new_parent_thread->ip_address = $parent_thread->ip_address;
             if ($new_thread->save() && $new_parent_thread->save()) {
@@ -2538,5 +1991,112 @@ class TicketController extends Controller
             $title = Ticket_Thread::select('title')->where('ticket_id', '=', $value)->first();
             echo "<option value='$value'>".$title->title.'</option>';
         }
+    }
+
+    /*
+     *chumper's function to return data to chumper datatable.
+     *@param Array-object $tickets
+     *
+     *@return Array-object
+     */
+    public static function getTable($tickets)
+    {
+        return \Datatable::collection(new Collection($tickets))
+                        ->addColumn('id', function ($ticket) {
+                             return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
+                        })
+                        ->addColumn('subject', function ($ticket) {
+                            $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
+                            if (isset($subject->title)) {
+                                $string = $subject->title;
+                                if (strlen($string) > 20) {
+                                    $stringCut = substr($string, 0, 30);
+                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                                }
+                            } else {
+                                $string = '(no subject)';
+                            }
+                            //collabrations
+                            $collaborators = DB::table('ticket_collaborator')->where('ticket_id', '=', $ticket->id)->get();
+                            $collab = count($collaborators);
+                            if ($collab > 0) {
+                                $collabString = '&nbsp;<i class="fa fa-users"></i>';
+                            } else {
+                                $collabString = null;
+                            }
+                            $threads = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first(); //
+                            $count = Ticket_Thread::where('ticket_id', '=', $ticket->id)->count(); //
+                            $attachment = Ticket_attachments::where('thread_id', '=', $threads->id)->get();
+                            $attachCount = count($attachment);
+                            if ($attachCount > 0) {
+                                $attachString = '&nbsp;<i class="fa fa-paperclip"></i>';
+                            } else {
+                                $attachString = '';
+                            }
+
+                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".ucfirst($string)."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
+                        })
+                        ->addColumn('ticket_number', function ($ticket) {
+                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$ticket->ticket_number."'>#".$ticket->ticket_number.'</a>';
+                        })
+                        ->addColumn('priority', function ($ticket) {
+                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '=', 0)->max('id');
+                            $TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
+                            $LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first();
+                            if ($LastResponse->role == 'user') {
+                                $rep = '#F39C12';
+                                $username = $LastResponse->user_name;
+                            } else {
+                                $rep = '#000';
+                                $username = $LastResponse->first_name.' '.$LastResponse->last_name;
+                                if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
+                                    $username = $LastResponse->user_name;
+                                }
+                            }
+                            $priority = DB::table('ticket_priority')->select('priority_desc', 'priority_color')->where('priority_id', '=', $ticket->priority_id)->first();
+
+                            return '<span class="btn btn-'.$priority->priority_color.' btn-xs '.$rep.'">'.ucfirst($priority->priority_desc).'</span>';
+                        })
+                        ->addColumn('from', function ($ticket) {
+                            $from = DB::table('users')->select('user_name')->where('id', '=', $ticket->user_id)->first();
+
+                            return "<a href='../user/".$ticket->user_id."' title='".Lang::get('lang.see-profile1').' '.ucfirst($from->user_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".ucfirst($from->user_name).'</span></a>';
+                        })
+                        // ->addColumn('Last Replier', function ($ticket) {
+                        //     $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '=', 0)->max('id');
+                        //     $TicketDatarow = Ticket_Thread::where('id', '=', $TicketData)->first();
+                        //     $LastResponse = User::where('id', '=', $TicketDatarow->user_id)->first();
+                        //     if ($LastResponse->role == 'user') {
+                        //         $rep = '#F39C12';
+                        //         $username = $LastResponse->user_name;
+                        //     } else {
+                        //         $rep = '#000';
+                        //         $username = $LastResponse->first_name.' '.$LastResponse->last_name;
+                        //         if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
+                        //             $username = $LastResponse->user_name;
+                        //         }
+                        //     }
+
+                        //     return "<a href='' title=''><span style='color:".$rep."'>".ucfirst($username).'</span></a>';
+                        // })
+                        ->addColumn('assigned_to', function ($ticket) {
+                            if ($ticket->assigned_to == null) {
+                                return "<span style='color:red'>Unassigned</span>";
+                            } else {
+                                $assign = DB::table('users')->where('id', '=', $ticket->assigned_to)->first();
+
+                                return "<a href='../user/".$ticket->assigned_to."' title='".Lang::get('lang.see-profile1').' '.ucfirst($assign->first_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:green'>".ucfirst($assign->first_name).' '.ucfirst($assign->last_name).'</span></a>';
+                            }
+                        })
+                        ->addColumn('Last', function ($ticket) {
+                            $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
+                            $TicketDatarow = Ticket_Thread::select('updated_at')->where('id', '=', $TicketData)->first();
+
+                            // return UTC::usertimezone($TicketDatarow->updated_at);
+                            return date('Y-m-d H:i:s', strtotime($TicketDatarow->updated_at) + UTC::timeOffset($TicketDatarow->updated_at));
+                        })
+                        ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
+                        ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
+                        ->make();
     }
 }

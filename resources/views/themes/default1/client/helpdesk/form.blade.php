@@ -44,7 +44,7 @@
         <i class="fa  fa-check-circle"></i>
         <b>Success!</b>
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{Session::get('message')}}
+        {!! Session::get('message') !!}
     </div>
     @endif
     
@@ -62,7 +62,7 @@
         $encrypted_token = $encrypter->encrypt(csrf_token());
  ?>
 <input id="token" type="hidden" value="{{$encrypted_token}}">
-{!! Form::open(['action'=>'Client\helpdesk\FormController@postedForm','method'=>'post']) !!}
+{!! Form::open(['action'=>'Client\helpdesk\FormController@postedForm','method'=>'post', 'enctype'=>'multipart/form-data']) !!}
 <div>
     <div class="content-header">
         <h4>{!! Lang::get('lang.ticket') !!} {!! Form::submit(Lang::get('lang.send'),['class'=>'form-group btn btn-info pull-right'])!!}</h4>
@@ -129,6 +129,11 @@ $helptopic = App\Model\helpdesk\Manage\Help_topic::get();
             {!! $errors->first('Details', '<spam class="help-block">:message</spam>') !!}
             {!! Form::textarea('Details',null,['class' => 'form-control']) !!}
 
+        </div>
+        <div class="col-md-12 form-group">
+
+        <div class="btn btn-default btn-file"><i class="fa fa-paperclip"> </i> {!! Lang::get('lang.attachment') !!}<input type="file" name="attachment[]" multiple/></div><br/>
+                                        {!! Lang::get('lang.max') !!}. 10MB
         </div>
         {{-- Event fire --}}
         <?php Event::fire(new App\Events\ClientTicketForm()); ?>
