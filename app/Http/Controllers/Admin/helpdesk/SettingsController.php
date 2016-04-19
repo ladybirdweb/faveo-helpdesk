@@ -31,6 +31,7 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Input;
+use Lang;
 
 /**
  * SettingsController.
@@ -77,7 +78,7 @@ class SettingsController extends Controller
             /* Direct to Company Settings Page */
             return view('themes.default1.admin.helpdesk.settings.company', compact('companys'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -111,7 +112,7 @@ class SettingsController extends Controller
             return redirect('getcompany')->with('success', 'Company Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getcompany')->with('fails', 'Company can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('getcompany')->with('fails', 'Company can not Updated'.'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -160,7 +161,7 @@ class SettingsController extends Controller
             /* Direct to System Settings Page */
             return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -186,7 +187,7 @@ class SettingsController extends Controller
             return redirect('getsystem')->with('success', 'System Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getsystem')->with('fails', 'System can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('getsystem')->with('fails', 'System can not Updated'.'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -212,7 +213,7 @@ class SettingsController extends Controller
             /* Direct to Ticket Settings Page */
             return view('themes.default1.admin.helpdesk.settings.ticket', compact('tickets', 'slas', 'topics', 'priority'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -247,7 +248,7 @@ class SettingsController extends Controller
             return redirect('getticket')->with('success', 'Ticket Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getticket')->with('fails', 'Ticket can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('getticket')->with('fails', 'Ticket can not Updated'.'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -272,7 +273,7 @@ class SettingsController extends Controller
             /* Direct to Email Settings Page */
             return view('themes.default1.admin.helpdesk.settings.email', compact('emails', 'templates', 'emails1'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -293,8 +294,8 @@ class SettingsController extends Controller
             /* fill the values to email table */
             $emails->fill($request->except('email_fetching', 'all_emails', 'email_collaborator', 'strip', 'attachment'))->save();
             /* insert checkboxes  to database */
-            $emails->email_fetching = $request->input('email_fetching');
-            $emails->notification_cron = $request->input('notification_cron');
+            // $emails->email_fetching = $request->input('email_fetching');
+            // $emails->notification_cron = $request->input('notification_cron');
             $emails->all_emails = $request->input('all_emails');
             $emails->email_collaborator = $request->input('email_collaborator');
             $emails->strip = $request->input('strip');
@@ -305,10 +306,65 @@ class SettingsController extends Controller
             return redirect('getemail')->with('success', 'Email Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getemail')->with('fails', 'Email can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('getemail')->with('fails', 'Email can not Updated'.'<li>'.$e->getMessage().'</li>');
         }
     }
 
+     /**
+     * get the form for cron job setting page.
+     *
+     * @param type Email    $email
+     * @param type Template $template
+     * @param type Emails   $email1
+     *
+     * @return type Response
+     */
+    public function getSchedular(Email $email, Template $template, Emails $email1)
+    {
+        // try {
+             /* fetch the values of email from Email table */
+            $emails = $email->whereId('1')->first();
+            /* Fetch the values from Template table */
+            $templates = $template->get();
+            /* Fetch the values from Emails table */
+            $emails1 = $email1->get();
+            return view('themes.default1.admin.helpdesk.settings.crone',compact('emails', 'templates', 'emails1'));
+        // } catch {
+
+        // }
+    }
+     /**
+     * Update the specified resource in storage for cron job.
+     *
+     * @param type Email        $email
+     * @param type EmailRequest $request
+     *
+     * @return type Response
+     */
+    public function postSchedular(Email $email, Template $template, Emails $email1, Request $request)
+    {
+        // dd($request);
+        try {
+            /* fetch the values of email request  */
+            $emails = $email->whereId('1')->first();
+            if($request->email_fetching) {
+                $emails->email_fetching = $request->email_fetching;    
+            } else {
+                $emails->email_fetching = 0;
+            }
+            if($request->notification_cron) {
+                $emails->notification_cron = $request->notification_cron;
+            } else {
+                $emails->notification_cron = 0;   
+            }
+            $emails->save();
+            /* redirect to Index page with Success Message */
+            return redirect('job-scheduler')->with('success', Lang::get('lang.job-scheduler-success'));
+        } catch (Exception $e) {
+            /* redirect to Index page with Fails Message */
+            return redirect('job-scheduler')->with('fails', Lang::get('lang.job-scheduler-error').'<li>'.$e->getMessage().'</li>');
+        }
+    }
     /**
      * get the form for Access setting page.
      *
@@ -375,7 +431,7 @@ class SettingsController extends Controller
             /* Direct to Responder Settings Page */
             return view('themes.default1.admin.helpdesk.settings.responder', compact('responders'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -405,7 +461,7 @@ class SettingsController extends Controller
             return redirect('getresponder')->with('success', 'Responder Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getresponder')->with('fails', 'Responder can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('getresponder')->with('fails', 'Responder can not Updated'.'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -424,7 +480,7 @@ class SettingsController extends Controller
             /* Direct to Alert Settings Page */
             return view('themes.default1.admin.helpdesk.settings.alert', compact('alerts'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -493,7 +549,7 @@ class SettingsController extends Controller
             return redirect('getalert')->with('success', 'Alert Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getalert')->with('fails', 'Alert can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('getalert')->with('fails', 'Alert can not Updated'.'<li>'.$e->getMessage().'</li>');
         }
     }
 

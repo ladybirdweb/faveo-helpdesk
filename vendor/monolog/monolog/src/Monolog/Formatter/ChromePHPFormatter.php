@@ -41,9 +41,10 @@ class ChromePHPFormatter implements FormatterInterface
     {
         // Retrieve the line and file if set and remove them from the formatted extra
         $backtrace = 'unknown';
-        if (isset($record['extra']['file'], $record['extra']['line'])) {
+        if (isset($record['extra']['file']) && isset($record['extra']['line'])) {
             $backtrace = $record['extra']['file'].' : '.$record['extra']['line'];
-            unset($record['extra']['file'], $record['extra']['line']);
+            unset($record['extra']['file']);
+            unset($record['extra']['line']);
         }
 
         $message = array('message' => $record['message']);

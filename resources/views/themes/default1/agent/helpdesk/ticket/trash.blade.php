@@ -13,8 +13,8 @@ class="active"
 @stop
 
 @section('content')
-<?php 
-$date_time_format = UTC::getDateTimeFormat();
+<?php
+    $date_time_format = UTC::getDateTimeFormat();
     if(Auth::user()->role == 'agent') {
         $dept = App\Model\helpdesk\Agent\Department::where('id','=',Auth::user()->primary_dpt)->first();
         $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 5)->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
@@ -52,6 +52,7 @@ $date_time_format = UTC::getDateTimeFormat();
             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
             <input type="submit" class="btn btn-default text-blue btn-sm" id="delete"  name="submit" value="{!! Lang::get('lang.open') !!}">
             <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="close" value="{!! Lang::get('lang.close') !!}">
+            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="hard-delete" value="{{Lang::get('lang.clean-up')}}" title="{{Lang::get('lang.trash-delete-title-msg')}}">
             
         </div>
         <div class="mailbox-messages"  id="refresh">
@@ -98,32 +99,30 @@ $date_time_format = UTC::getDateTimeFormat();
                     <!-- //return d; -->
                 }", 
             'aTargets' => array(6))
-        )) 
+        ))
         ->setOrder(array(6=>'desc'))  
         ->setClass('table table-hover table-bordered table-striped')
         ->setCallbacks("fnRowCallback",'function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-            var str = aData[0];
-            if(1==1){
-                if(str.search("#000") == -1) {
-                    $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border":"none"});
-                    $("td", nRow).mouseenter(function(){
-                        $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border":"none"});
-                    });
-                    $("td", nRow).mouseleave(function(){
-                        $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border":"none"});
-                    });
-                } else {
-                    $("td", nRow).css({"background-color":"white", "border":"none"});
-                    $("td", nRow).mouseenter(function(){
-                        $("td", nRow).css({"background-color":"#DEDFE0", "border":"none"});
-                    });
-                    $("td", nRow).mouseleave(function(){
-                        $("td", nRow).css({"background-color":"white", "border":"none"});
-                    });   
-                }
+            var str = aData[3];
+            if(str.search("#000") == -1) {
+                $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #F3F3F3"});
+                $("td", nRow).mouseenter(function(){
+                    $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border":"none"});
+                });
+                $("td", nRow).mouseleave(function(){
+                    $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd","border-right":"solid 0.5px #F3F3F3"});
+                });
+            } else {
+                $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
+                $("td", nRow).mouseenter(function(){
+                    $("td", nRow).css({"background-color":"#DEDFE0", "border":"none"});
+                });
+                $("td", nRow).mouseleave(function(){
+                    $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
+                });   
             }
-        }')
-        ->render(); !!}
+        }')                 
+        ->render();!!}
 
         </div><!-- /.mail-box-messages -->
         {!! Form::close() !!}
@@ -136,7 +135,7 @@ $date_time_format = UTC::getDateTimeFormat();
                         <div class="col-md-8">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">Ã—</span></button>
+                                    <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                                     <h4 class="modal-title" id="myModalLabel"></h4>
                                 </div>
                                 <div class="modal-body" id="custom-alert-body" >
@@ -203,6 +202,11 @@ $date_time_format = UTC::getDateTimeFormat();
             $('#myModalLabel').html("{{Lang::get('lang.close-tickets')}}");
         });
 
+        $('#hard-delete').on('click', function(){
+            option = 2;
+            $('#myModalLabel').html("{{Lang::get('lang.trash-delete-ticket')}}");
+        });
+
          $("#modalpopup").on('submit', function(e){
             e.preventDefault();
             var msg ="{{Lang::get('lang.confirm')}}";
@@ -233,9 +237,11 @@ $date_time_format = UTC::getDateTimeFormat();
                 if (option == 0) {
                     //alert('delete');
                     $('#delete').click();
-                } else {
+                } else if(option ==1) {
                     //alert('close');
                     $('#close').click();
+                } else {
+                    $('#hard-delete').click();
                 }
             }
         });

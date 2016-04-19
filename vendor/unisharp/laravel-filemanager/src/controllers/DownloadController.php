@@ -1,9 +1,10 @@
 <?php namespace Unisharp\Laravelfilemanager\controllers;
 
-use Unisharp\Laravelfilemanager\controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 
 /**
  * Class DownloadController
@@ -18,7 +19,7 @@ class DownloadController extends LfmController {
      */
     public function getDownload()
     {
-        return Response::download(parent::getPath('directory') . Input::get('file'));
+        return Response::download(parent::getPath() . Input::get('file'));
     }
 
 }

@@ -41,14 +41,14 @@ $router->get('getmail/{token}', 'Auth\AuthController@getMail');
  */
 Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
-        //Notification marking
+    //Notification marking
     Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
 
     Route::get('notifications-list', ['as' => 'notification.list', 'uses' => 'Common\NotificationController@show']);
 
     Route::post('notification-delete/{id}', ['as' => 'notification.delete', 'uses' => 'Common\NotificationController@delete']);
 
-        // resource is a function to process create,edit,read and delete
+    // resource is a function to process create,edit,read and delete
     Route::resource('groups', 'Admin\helpdesk\GroupController'); // for group module, for CRUD
 
     Route::resource('departments', 'Admin\helpdesk\DepartmentController'); // for departments module, for CRUD
@@ -90,6 +90,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
     Route::get('delete-forms/{id}', ['as' => 'forms.delete', 'uses' => 'Admin\helpdesk\FormController@delete']);
 
     //$router->model('id','getcompany');
+    
+    Route::get('job-scheduler',['as' => 'get.job.scheder', 'uses' => 'Admin\helpdesk\SettingsController@getSchedular']);//to get ob scheduler form page
+
+    Route::patch('post-scheduler', ['as' => 'post.job.scheduler', 'uses' => 'Admin\helpdesk\SettingsController@postSchedular']);//to update job scheduler
 
     Route::get('agent-profile-page/{id}', ['as' => 'agent.profile.page', 'uses' => 'Admin\helpdesk\AgentController@agent_profile']);
 
@@ -193,6 +197,15 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
     Route::post('validating-email-settings', ['as' => 'validating.email.settings', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettings']); // route to check email input validation
     Route::post('validating-email-settings-on-update/{id}', ['as' => 'validating.email.settings.update', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettingsUpdate']); // route to check email input validation
+    
+    Route::get('workflow', ['as' => 'workflow' , 'uses' => 'Admin\helpdesk\WorkflowController@index']);
+    Route::get('workflow-list', ['as' => 'workflow.list' , 'uses' => 'Admin\helpdesk\WorkflowController@workFlowList']);
+    Route::get('workflow/create', ['as' => 'workflow.create' , 'uses' => 'Admin\helpdesk\WorkflowController@create']);
+    Route::post('workflow/store', ['as' => 'workflow.store' , 'uses' => 'Admin\helpdesk\WorkflowController@store']);
+    Route::get('workflow/edit/{id}', ['as' => 'workflow.edit' , 'uses' => 'Admin\helpdesk\WorkflowController@edit']);
+    Route::post('workflow/update/{id}', ['as' => 'workflow.update' , 'uses' => 'Admin\helpdesk\WorkflowController@update']);
+    Route::get('workflow/action-rule/{id}', ['as' => 'workflow.dept' , 'uses' => 'Admin\helpdesk\WorkflowController@selectAction']);
+    Route::get('workflow/delete/{id}', ['as' => 'workflow.delete' , 'uses' => 'Admin\helpdesk\WorkflowController@destroy']);
 });
 
 /*
@@ -267,7 +280,8 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
     Route::get('/ticket/overdue', ['as' => 'overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@overdue_ticket_list']); /*  Get Overdue Ticket */
 
-    Route::get('/ticket/get-overdue', ['as' => 'get.overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@getOverdueTickets']); /*  Get Overdue Ticket */
+    Route::get('/ticket/get-overdue',['as' => 'get.overdue.ticket',
+                                      'uses' => 'Agent\helpdesk\TicketController@getOverdueTickets']);
 
     Route::get('/ticket/closed', ['as' => 'closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@closed_ticket_list']); /*  Get Closed Ticket */
 
@@ -632,6 +646,7 @@ Route::get('/reportdata', 'HomeController@pushdata');
 Route::group(['prefix' => 'api/v1'], function () {
     Route::post('register', 'Api\v1\TokenAuthController@register');
     Route::post('authenticate', 'Api\v1\TokenAuthController@authenticate');
+    Route::post('forgot', 'Api\v1\TokenAuthController@forgotPassword');
     Route::get('authenticate/user', 'Api\v1\TokenAuthController@getAuthenticatedUser');
 
     Route::get('/database-config', ['as' => 'database-config', 'uses' => 'Api\v1\InstallerApiController@config_database']);
@@ -668,7 +683,7 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::get('ticket', 'Api\v1\ApiController@getTicketById');
         Route::get('inbox', 'Api\v1\ApiController@inbox');
         Route::get('trash', 'Api\v1\ApiController@getTrash');
-        Route::get('my-tickets', 'Api\v1\ApiController@getMyTickets');
+        Route::get('my-tickets-agent', 'Api\v1\ApiController@getMyTicketsAgent');
         Route::post('internal-note', 'Api\v1\ApiController@internalNote');
 
         /*
@@ -680,6 +695,8 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::post('collaborator/create', 'Api\v1\ApiController@addCollaboratorForTicket');
         Route::post('collaborator/remove', 'Api\v1\ApiController@deleteCollaborator');
         Route::post('collaborator/get-ticket', 'Api\v1\ApiController@getCollaboratorForTicket');
+        Route::get('my-tickets-user', 'Api\v1\ApiController@getMyTicketsUser');
+        Route::get('dependency', 'Api\v1\ApiController@dependency');
     });
 
     /*

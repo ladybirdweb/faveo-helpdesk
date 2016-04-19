@@ -139,9 +139,6 @@ class GroupController extends Controller
         //Updating can_assign_ticket field
         $assignTicket = $request->Input('can_assign_ticket');
         $var->can_assign_ticket = $assignTicket;
-        //Updating can_trasfer_ticket field
-        $trasferTicket = $request->Input('can_trasfer_ticket');
-        $var->can_trasfer_ticket = $trasferTicket;
         //Updating can_delete_ticket field
         $deleteTicket = $request->Input('can_delete_ticket');
         $var->can_delete_ticket = $deleteTicket;

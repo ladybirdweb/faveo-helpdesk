@@ -40,8 +40,8 @@ class IsolatedProcessContext implements Context, SnippetAcceptingContext
         $command = sprintf('%s %s', $this->buildPhpSpecCmd(), 'run');
         $env = array(
             'SHELL_INTERACTIVE' => true,
-            'HOME' => getenv('HOME'),
-            'PATH' => getenv('PATH'),
+            'HOME' => $_SERVER['HOME'],
+            'PATH' => $_SERVER['PATH']
         );
 
         $this->process = $process = new Process($command);
@@ -56,13 +56,7 @@ class IsolatedProcessContext implements Context, SnippetAcceptingContext
      */
     protected function buildPhpSpecCmd()
     {
-        $isWindows = DIRECTORY_SEPARATOR === '\\';
-        $cmd = escapeshellcmd('' . __DIR__ . '/../../bin/phpspec');
-        if ($isWindows) {
-            $cmd = 'php ' . $cmd;
-        }
-
-        return $cmd;
+        return escapeshellcmd(__DIR__ . '/../../bin/phpspec');
     }
 
     /**

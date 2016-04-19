@@ -1,14 +1,14 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Staffs')
-class="active"
+active
 @stop
 
 @section('staffs-bar')
 active
 @stop
 
-@section('staffs')
+@section('agents')
 class="active"
 @stop
 

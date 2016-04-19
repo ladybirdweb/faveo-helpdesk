@@ -14,18 +14,40 @@ class="active"
 
 @section('content')
 <?php
-$date_time_format = UTC::getDateTimeFormat();
+    $date_time_format = UTC::getDateTimeFormat();
 if (Auth::user()->role == 'agent') {
-    $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
-    $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->paginate(20);
-} else {
-    $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->orderBy('id', 'DESC')->paginate(20);
-}
+            $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
+            $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->get();
+        } else {
+            $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
+        }
+$i = count($overdues);
+if ($i == 0) {
+            $overdue_ticket = 0;
+        } else {
+            $j = 0;
+            foreach ($overdues as $overdue) {
+                $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $overdue->sla)->first();
+
+                $ovadate = $overdue->created_at;
+                $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)).'<br/><br/>';
+                if (date('Y-m-d H:i:s') > $new_date) {
+                    $j++;
+                    //$value[] = $overdue;
+                }
+            }
+            // dd(count($value));
+            if ($j > 0) {
+                $overdue_ticket = $j;
+            } else {
+                $overdue_ticket = 0;
+            }
+        }
 ?>
 <!-- Main content -->
 <div class="box box-primary">
      <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.inbox') !!} </h3> <small id="title_refresh">{!! $tickets->total() !!} {!! Lang::get('lang.tickets') !!}</small>
+        <h3 class="box-title">{!! Lang::get('lang.overdue') !!} </h3> <small id="title_refresh">{!! $overdue_ticket !!} {!! Lang::get('lang.tickets') !!}</small>
     </div><!-- /.box-header -->
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
@@ -65,7 +87,7 @@ if (Auth::user()->role == 'agent') {
                     Lang::get('lang.assigned_to'),
                     Lang::get('lang.last_activity'))
         ->setUrl(route('get.overdue.ticket'))
-        ->setOptions('aoColumnDefs',array(
+         ->setOptions('aoColumnDefs',array(
         array(
             'render' => "function ( data, type, row ) {
                     var t = row[6].split(/[- :,/ :,. /]/);
@@ -95,31 +117,29 @@ if (Auth::user()->role == 'agent') {
                     <!-- //return d; -->
                 }", 
             'aTargets' => array(6))
-        ))   
+        ))
         ->setOrder(array(6=>'desc'))  
-        ->setClass('table table-hover table-bordered ')   
+        ->setClass('table table-hover table-bordered table-striped')
         ->setCallbacks("fnRowCallback",'function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-            var str = aData[0];
-            if(1==1){
-                if(str.search("#000") == -1) {
-                    $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border":"none"});
-                    $("td", nRow).mouseenter(function(){
-                        $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border":"none"});
-                    });
-                    $("td", nRow).mouseleave(function(){
-                        $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"700", "border":"none"});
-                    });
-                } else {
-                    $("td", nRow).css({"background-color":"white", "border":"none"});
-                    $("td", nRow).mouseenter(function(){
-                        $("td", nRow).css({"background-color":"#DEDFE0", "border":"none"});
-                    });
-                    $("td", nRow).mouseleave(function(){
-                        $("td", nRow).css({"background-color":"white", "border":"none"});
-                    });   
-                }
+            var str = aData[3];
+            if(str.search("#000") == -1) {
+                $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #F3F3F3"});
+                $("td", nRow).mouseenter(function(){
+                    $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border":"none"});
+                });
+                $("td", nRow).mouseleave(function(){
+                    $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd","border-right":"solid 0.5px #F3F3F3"});
+                });
+            } else {
+                $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
+                $("td", nRow).mouseenter(function(){
+                    $("td", nRow).css({"background-color":"#DEDFE0", "border":"none"});
+                });
+                $("td", nRow).mouseleave(function(){
+                    $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
+                });   
             }
-    }')    
+        }')               
         ->render();!!}
         <!-- /.datatable -->
         </div><!-- /.mail-box-messages -->

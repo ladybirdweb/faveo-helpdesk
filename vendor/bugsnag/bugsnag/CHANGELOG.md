@@ -1,24 +1,6 @@
 Changelog
 =========
 
-## 2.7.0 (2016-03-09)
-
-### Enhancements
-
-* Support `timeout` settings outside of cURL
-  [Ivan Shalganov](https://github.com/bzick)
-  [#111](https://github.com/bugsnag/bugsnag-php/pull/111)
-
-* Support PUT request payloads
-  [forgadenny](https://github.com/forgandenny)
-  [#83](https://github.com/bugsnag/bugsnag-php/pull/83)
-
-### Bug Fixes
-
-* Remove exception code filtering
-  [Duncan Hewett](https://github.com/duncanhewett)
-  [#113](https://github.com/bugsnag/bugsnag-php/pull/113)
-
 2.6.1 (2016-01-28)
 -----
 
@@ -28,23 +10,19 @@ Changelog
   [Petr Bugyík](https://github.com/o5)
   [#110](https://github.com/bugsnag/bugsnag-php/pull/110)
 
-* Fix error which occurs when `$_SERVER['SERVER_PORT']` is unset
-  [Michael Curry](https://github.com/michaelcurry)
-  [#109](https://github.com/bugsnag/bugsnag-php/pull/109)
-
-2.6.0 (2015-12-23)
+2.6.0 (23 Dec 2015)
 -----
 
 ### Enhancements
 
 * Add support for PHP 7's Throwable
-  [Chris Stone](https://github.com/cmstone)
-  [#106](https://github.com/bugsnag/bugsnag-php/pull/106)
+  | [Chris Stone](https://github.com/cmstone)
+  | [#106](https://github.com/bugsnag/bugsnag-php/pull/106)
 
 * Fix errors which arise from from error payloads not encoded using UTF-8
-  [GaetanNaulin](https://github.com/GaetanNaulin)
-  [#104](https://github.com/bugsnag/bugsnag-php/pull/104)
-  [#105](https://github.com/bugsnag/bugsnag-php/pull/105)
+  | [GaetanNaulin](https://github.com/GaetanNaulin)
+  | [#104](https://github.com/bugsnag/bugsnag-php/pull/104)
+  | [#105](https://github.com/bugsnag/bugsnag-php/pull/105)
 
 2.5.6
 -----

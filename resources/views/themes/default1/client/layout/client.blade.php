@@ -92,11 +92,9 @@
 								<ul class="dropdown-menu">
 									<li>
 										<div class="banner-wrapper user-menu text-center clearfix">
-											@if(Auth::user()->profile_pic)
-                                        		<img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}"class="img-circle" alt="User Image" height="80" width="80"/>
-                                         	@else
-	                                            <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
-                                    		@endif
+								
+                                        		<img src="{{Auth::user()->profile_pic}}"class="img-circle" alt="User Image" height="80" width="80"/>
+                                         	
                                     <h3 class="banner-title text-info h4">{{Auth::user()->first_name." ".Auth::user()->last_name}}</h3>
 											<div class="banner-content">
 												{{-- <a href="{{url('kb/client-profile')}}" class="btn btn-custom btn-xs">Edit Profile</a> --}} <a href="{{url('auth/logout')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.log_out') !!}</a>
@@ -178,9 +176,7 @@
         </header>
                             <!-- Left side column. contains the logo and sidebar -->
                             <!-- Right side column. Contains the navbar and content of the page -->
-                            <div class="site-hero clearfix">
-@include('breadcrumbs')
-                            </div>
+@yield('breadcrumb')
         <!-- Main content -->
         <div id="main" class="site-main clearfix">
 			<div class="container">

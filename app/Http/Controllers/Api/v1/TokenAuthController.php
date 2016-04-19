@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Http\Controllers\Common\PhpMailController;
 
 /**
  * -----------------------------------------------------------------------------
@@ -21,11 +22,15 @@ use Tymon\JWTAuth\Exceptions\JWTException;
  *
  * @version v1
  */
-class TokenAuthController extends Controller
-{
-    public function __construct()
-    {
+class TokenAuthController extends Controller {
+    
+    public $PhpMailController;
+
+    public function __construct() {
         $this->middleware('api');
+        
+        $PhpMailController = new PhpMailController();
+        $this->PhpMailController = $PhpMailController;
     }
 
     /**
@@ -35,13 +40,12 @@ class TokenAuthController extends Controller
      *
      * @return type json
      */
-    public function authenticate(Request $request)
-    {
+    public function authenticate(Request $request) {
         $usernameinput = $request->input('username');
         $password = $request->input('password');
         $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
 
-        //$credentials = $request->only('email', 'password');
+//$credentials = $request->only('email', 'password');
 
         try {
             if (!$token = JWTAuth::attempt([$field => $usernameinput, 'password' => $password])) {
@@ -56,7 +60,7 @@ class TokenAuthController extends Controller
         }
 
         $user_id = \Auth::user()->id;
-        // if no errors are encountered we can return a JWT
+// if no errors are encountered we can return a JWT
         return response()->json(compact('token', 'user_id'));
     }
 
@@ -65,9 +69,8 @@ class TokenAuthController extends Controller
      *
      * @return type json
      */
-    public function getAuthenticatedUser()
-    {
-        //dd(JWTAuth::parseToken()->authenticate());
+    public function getAuthenticatedUser() {
+//dd(JWTAuth::parseToken()->authenticate());
         try {
             if (!$user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json(['user_not_found', 404]);
@@ -83,7 +86,7 @@ class TokenAuthController extends Controller
 
             return response()->json(compact('error'));
         }
-        //dd($user);
+//dd($user);
         return response()->json(compact('user'));
     }
 
@@ -94,11 +97,10 @@ class TokenAuthController extends Controller
      *
      * @return type json
      */
-    public function register(Request $request)
-    {
+    public function register(Request $request) {
         try {
             $v = \Validator::make($request->all(), [
-                        'email'    => 'required|email|unique:users',
+                        'email' => 'required|email|unique:users',
                         'password' => 'required',
             ]);
             if ($v->fails()) {
@@ -124,8 +126,7 @@ class TokenAuthController extends Controller
      *
      * @return type json
      */
-    public function checkUrl()
-    {
+    public function checkUrl(Request $request) {
         try {
             $v = \Validator::make($request->all(), [
                         'url' => 'required|url',
@@ -137,11 +138,50 @@ class TokenAuthController extends Controller
             }
 
             $url = $this->request->input('url');
-            $url = $url.'/api/v1/helpdesk/check-url';
+            $url = $url . '/api/v1/helpdesk/check-url';
         } catch (Exception $ex) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
         }
     }
+
+    public function forgotPassword(Request $request) {
+
+        try {
+            $v = \Validator::make($request->all(), [
+                        'email' => 'required|email|exists:users,email',
+            ]);
+            if ($v->fails()) {
+                $error = $v->errors();
+
+                return response()->json(compact('error'));
+            }
+
+            $date = date('Y-m-d H:i:s');
+            $user = User::where('email', '=', $request->only('email'))->first();
+            if (isset($user)) {
+                $user1 = $user->email;
+                //gen new code and pass
+                $code = str_random(60);
+                $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->first();
+                if (isset($password_reset_table)) {
+                    $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->update(['token' => $code, 'created_at' => $date]);
+                // $password_reset_table->token = $code;
+                // $password_reset_table->update(['token' => $code]);
+                } else {
+                    $create_password_reset = \DB::table('password_resets')->insert(['email' => $user->email, 'token' => $code, 'created_at' => $date]);
+                }
+                
+                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user->user_name, 'email' => $user->email], $message = ['subject' => 'Your Password Reset Link', 'scenario' => 'reset-password'], $template_variables = ['user' => $user->user_name, 'email_address' => $user->email, 'password_reset_link' => url('password/reset/' . $code)]);
+                $result = "We have e-mailed your password reset link!";
+                return response()->json(compact('result'));
+            }
+        } catch (Exception $ex) {
+            $error = $e->getMessage();
+
+            return response()->json(compact('error'));
+        }
+    }
+
 }

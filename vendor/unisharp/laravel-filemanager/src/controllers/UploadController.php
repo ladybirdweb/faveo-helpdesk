@@ -1,22 +1,19 @@
 <?php namespace Unisharp\Laravelfilemanager\controllers;
 
-use Unisharp\Laravelfilemanager\controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Lang;
 use Intervention\Image\Facades\Image;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class UploadController
  * @package Unisharp\Laravelfilemanager\controllers
  */
 class UploadController extends LfmController {
-
-    private $default_file_types = ['application/pdf'];
-    private $default_image_types = ['image/jpeg', 'image/png', 'image/gif'];
 
     /**
      * Upload an image/file and (for images) create thumbnail
@@ -26,20 +23,15 @@ class UploadController extends LfmController {
      */
     public function upload()
     {
-        try {
-            $res = $this->uploadValidator();
-            if (true !== $res) {
-                return Lang::get('laravel-filemanager::lfm.error-invalid');
-            }
-        } catch (\Exception $e) {
-            return $e->getMessage();
+        if (!Input::hasFile('upload')) {
+            return Lang::get('laravel-filemanager::lfm.error-file-empty');
         }
 
         $file = Input::file('upload');
 
         $new_filename = $this->getNewName($file);
 
-        $dest_path = parent::getPath('directory');
+        $dest_path = parent::getPath();
 
         if (File::exists($dest_path . $new_filename)) {
             return Lang::get('laravel-filemanager::lfm.error-file-exist');
@@ -47,7 +39,7 @@ class UploadController extends LfmController {
 
         $file->move($dest_path, $new_filename);
 
-        if ('Images' === $this->file_type) {
+        if (Session::get('lfm_type') == 'Images') {
             $this->makeThumb($dest_path, $new_filename);
         }
 
@@ -59,56 +51,13 @@ class UploadController extends LfmController {
         return 'OK';
     }
 
-    private function uploadValidator()
-    {
-        // when uploading a file with the POST named "upload"
-
-        $expected_file_type = $this->file_type;
-        $is_valid = false;
-
-        $file = Input::file('upload');
-        if (empty($file)) {
-            throw new \Exception(Lang::get('laravel-filemanager::lfm.error-file-empty'));
-        }
-        if (!$file instanceof UploadedFile) {
-            throw new \Exception(Lang::get('laravel-filemanager::lfm.error-instance'));
-        }
-
-        $mimetype = $file->getMimeType();
-
-        if ($expected_file_type === 'Files') {
-            $config_name = 'lfm.valid_file_mimetypes';
-            $valid_mimetypes = Config::get($config_name, $this->default_file_types);
-        } else {
-            $config_name = 'lfm.valid_image_mimetypes';
-            $valid_mimetypes = Config::get($config_name, $this->default_image_types);
-        }
-
-        if (!is_array($valid_mimetypes)) {
-            throw new \Exception('Config : ' . $config_name . ' is not set correctly');
-        }
-
-        if (in_array($mimetype, $valid_mimetypes)) {
-            $is_valid = true;
-        }
-
-        if (false === $is_valid) {
-            throw new \Exception(Lang::get('laravel-filemanager::lfm.error-mime') . $mimetype);
-        }
-        return $is_valid;
-    }
-
     private function getNewName($file)
     {
         $new_filename = $file->getClientOriginalName();
 
         if (Config::get('lfm.rename_file') === true) {
-            $new_filename = uniqid();
-        } elseif (Config::get('lfm.alphanumeric_filename') === true) {
-            $new_filename = preg_replace('/[^A-Za-z0-9\-\']/', '_', $file->getClientOriginalName());
+            $new_filename = uniqid() . '.' . $file->getClientOriginalExtension();
         }
-
-        $new_filename = $new_filename . '.' . $file->getClientOriginalExtension();
 
         return $new_filename;
     }

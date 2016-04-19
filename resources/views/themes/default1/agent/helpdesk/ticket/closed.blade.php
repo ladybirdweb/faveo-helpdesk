@@ -14,7 +14,7 @@ class="active"
 
 @section('content')
 <?php
-$date_time_format = UTC::getDateTimeFormat();
+    $date_time_format = UTC::getDateTimeFormat();
     if(Auth::user()->role == 'agent') {
         $dept = App\Model\helpdesk\Agent\Department::where('id','=',Auth::user()->primary_dpt)->first();
         $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '>', 1)->where('dept_id','=',$dept->id)->where('status', '<', 4)->orderBy('id', 'DESC')->paginate(20);
@@ -96,32 +96,31 @@ $date_time_format = UTC::getDateTimeFormat();
                     <!-- //return d; -->
                 }", 
             'aTargets' => array(6))
-        ))  
+        ))
                 ->setOrder(array(6=>'desc'))  
-        ->setClass('table table-hover table-bordered table-striped')
-        ->setCallbacks("fnRowCallback",'function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-            var str = aData[0];
-            if(1==1){
-                if(str.search("#000") == -1) {
-                    $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border":"none"});
-                    $("td", nRow).mouseenter(function(){
-                        $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border":"none"});
-                    });
-                    $("td", nRow).mouseleave(function(){
-                        $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border":"none"});
-                    });
-                } else {
-                    $("td", nRow).css({"background-color":"white", "border":"none"});
-                    $("td", nRow).mouseenter(function(){
-                        $("td", nRow).css({"background-color":"#DEDFE0", "border":"none"});
-                    });
-                    $("td", nRow).mouseleave(function(){
-                        $("td", nRow).css({"background-color":"white", "border":"none"});
-                    });   
-                }
+                ->setClass('table table-hover table-bordered table-striped')
+                ->setCallbacks("fnRowCallback",'function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+            var str = aData[3];
+            if(str.search("#000") == -1) {
+                $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #F3F3F3"});
+                $("td", nRow).mouseenter(function(){
+                    $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border":"none"});
+                });
+                $("td", nRow).mouseleave(function(){
+                    $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd","border-right":"solid 0.5px #F3F3F3"});
+                });
+            } else {
+                $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
+                $("td", nRow).mouseenter(function(){
+                    $("td", nRow).css({"background-color":"#DEDFE0", "border":"none"});
+                });
+                $("td", nRow).mouseleave(function(){
+                    $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
+                });   
             }
-        }')
-        ->render(); !!}
+        }')       
+                ->render();!!}
+
         </div><!-- /.mail-box-messages -->
         {!! Form::close() !!}
     </div><!-- /.box-body -->

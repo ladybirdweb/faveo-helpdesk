@@ -8,11 +8,19 @@ use App\Http\Controllers\Controller;
 // requests
 // models
 use App\Model\helpdesk\Agent\Department;
+use App\Model\helpdesk\Ticket\Ticket_attachments;
+use App\Model\helpdesk\Ticket\Ticket_Collaborator;
+use App\Model\helpdesk\Ticket\Ticket_Priority;
+use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\User;
 use Auth;
+use DB;
 // classes
-use Tickable;
+use Illuminate\support\Collection;
+use Input;
+use UTC;
+use Ttable;
 
 /**
  * TicketController2.
@@ -59,8 +67,8 @@ class Ticket2Controller extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->get();
         }
-
-        return Tickable::makeTable($tickets);
+        return Ttable::getTable($tickets);
+        
     }
 
     /**
@@ -90,8 +98,8 @@ class Ticket2Controller extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', '2')->where('dept_id', '=', $dept->id)->get();
         }
-
-        return Tickable::makeTable($tickets);
+        return Ttable::getTable($tickets);
+        
     }
 
     /**
@@ -126,7 +134,7 @@ class Ticket2Controller extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', '1')->where('assigned_to', '>', 0)->where('dept_id', '=', $dept->id)->get();
         }
-
-        return Tickable::makeTable($tickets);
+        return Ttable::getTable($tickets);
+        
     }
 }

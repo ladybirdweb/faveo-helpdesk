@@ -189,9 +189,6 @@ $logger->pushHandler($firephp);
 $securityLogger = new Logger('security');
 $securityLogger->pushHandler($stream);
 $securityLogger->pushHandler($firephp);
-
-// Or clone the first one to only change the channel
-$securityLogger = $logger->withName('security');
 ```
 
 ## Customizing the log format

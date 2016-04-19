@@ -61,6 +61,7 @@ active
 <li>
     <a href="">Reply Rating:
         <small class="pull-right">
+            
             <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($avg_rating=='1')?'checked':'' ?>  />
             <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($avg_rating=='2')?'checked':'' ?>  />
             <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($avg_rating=='3')?'checked':'' ?>  />
@@ -196,7 +197,7 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                         <div id="refresh">
                             <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $tickets->status)->first();?><td title="{{$status->properties}}">{{$status->name}}</td></tr>
                             <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first();?><td title="{{$priority->priority_desc}}">{{$priority->priority_desc}}</td></tr>
-                            <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first();?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
+                            <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   <?php $dept123 = App\Model\helpdesk\Agent\Department::where('id', '=', $tickets->dept_id)->first();?><td title="{{$dept123->name}}">{{$dept123->name}}</td></tr>
                             <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        <td>{{$user->email}}</td></tr>
                             @if($user->ban > 0)  <tr><td style="color:orange;"><i class="fa fa-warning"></i><b>
                             {!!  Lang::get('lang.this_ticket_is_under_banned_user')!!}</td><td></td></tr>@endif
@@ -633,7 +634,7 @@ $data = $ConvDate[0];
                                     <div class="user-block" style="margin-bottom:-5px;margin-top:-2px;">
                                        
                                             @if($role->profile_pic != null)
-                                                <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{$role->profile_pic}}"class="img-circle img-bordered-sm" alt="User Image"/>
+                                                <img src="{{$role->profile_pic}}"class="img-circle img-bordered-sm" alt="User Image"/>
                                             @else
                                                 <img src="{{ Gravatar::src($role->email) }}" class="img-circle img-bordered-sm" alt="img-circle img-bordered-sm">
                                             @endif

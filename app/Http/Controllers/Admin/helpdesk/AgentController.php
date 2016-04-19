@@ -107,7 +107,8 @@ class AgentController extends Controller
         // fixing the user role to agent
         $user->fill($request->input())->save();
         // generate password and has immediately to store
-        $user->password = Hash::make($this->generateRandomString());
+        $password = $this->generateRandomString();
+        $user->password = Hash::make($password);
         // fetching all the team details checked for this user
         $requests = $request->input('team_id');
         // get user id of the inserted user detail
@@ -127,7 +128,7 @@ class AgentController extends Controller
                 $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'Password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
             } catch (Exception $e) {
                 // returns if try fails
-                return redirect('agents')->with('fails', 'Some error occured while sending mail to the agent. Please check email settings and try again');
+                return redirect('agents')->with('fails', 'Some error occurred while sending mail to the agent. Please check email settings and try again');
             }
             // returns for the success case
             return redirect('agents')->with('success', 'Agent Created sucessfully');

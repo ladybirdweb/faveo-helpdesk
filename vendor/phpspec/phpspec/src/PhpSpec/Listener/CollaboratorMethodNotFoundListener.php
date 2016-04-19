@@ -19,8 +19,6 @@ use PhpSpec\Event\ExampleEvent;
 use PhpSpec\Event\SuiteEvent;
 use PhpSpec\Exception\Locator\ResourceCreationException;
 use PhpSpec\Locator\ResourceManagerInterface;
-use PhpSpec\Util\NameCheckerInterface;
-use PhpSpec\Util\ReservedWordsMethodNameChecker;
 use Prophecy\Argument\ArgumentsWildcard;
 use Prophecy\Exception\Doubler\MethodNotFoundException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -50,31 +48,15 @@ class CollaboratorMethodNotFoundListener implements EventSubscriberInterface
     private $generator;
 
     /**
-     * @var NameCheckerInterface
-     */
-    private $nameChecker;
-
-    /**
-     * @var array
-     */
-    private $wrongMethodNames = array();
-
-    /**
      * @param IO $io
      * @param ResourceManagerInterface $resources
      * @param GeneratorManager $generator
-     * @param NameCheckerInterface $nameChecker
      */
-    public function __construct(
-        IO $io,
-        ResourceManagerInterface $resources,
-        GeneratorManager $generator,
-        NameCheckerInterface $nameChecker = null
-    ) {
+    public function __construct(IO $io, ResourceManagerInterface $resources, GeneratorManager $generator)
+    {
         $this->io = $io;
         $this->resources = $resources;
         $this->generator = $generator;
-        $this->nameChecker = $nameChecker ?: new ReservedWordsMethodNameChecker();
     }
 
     /**
@@ -105,9 +87,7 @@ class CollaboratorMethodNotFoundListener implements EventSubscriberInterface
             $this->interfaces[$interface] = array();
         }
 
-        $methodName = $exception->getMethodName();
-        $this->interfaces[$interface][$methodName] = $exception->getArguments();
-        $this->checkIfMethodNameAllowed($methodName);
+        $this->interfaces[$interface][$exception->getMethodName()] = $exception->getArguments();
     }
 
     /**
@@ -139,6 +119,7 @@ class CollaboratorMethodNotFoundListener implements EventSubscriberInterface
     public function afterSuite(SuiteEvent $event)
     {
         foreach ($this->interfaces as $interface => $methods) {
+
             try {
                 $resource = $this->resources->createResource($interface);
             } catch (ResourceCreationException $e) {
@@ -146,10 +127,6 @@ class CollaboratorMethodNotFoundListener implements EventSubscriberInterface
             }
 
             foreach ($methods as $method => $arguments) {
-                if (in_array($method, $this->wrongMethodNames)) {
-                    continue;
-                }
-
                 if ($this->io->askConfirmation(sprintf(self::PROMPT, $interface, $method))) {
                     $this->generator->generate(
                         $resource,
@@ -162,11 +139,6 @@ class CollaboratorMethodNotFoundListener implements EventSubscriberInterface
                     $event->markAsWorthRerunning();
                 }
             }
-        }
-
-        if ($this->wrongMethodNames) {
-            $this->writeErrorMessage();
-            $event->markAsNotWorthRerunning();
         }
     }
 
@@ -193,21 +165,6 @@ class CollaboratorMethodNotFoundListener implements EventSubscriberInterface
             && ($exception = $event->getException())
             && $exception instanceof MethodNotFoundException) {
             return $exception;
-        }
-    }
-
-    private function checkIfMethodNameAllowed($methodName)
-    {
-        if (!$this->nameChecker->isNameValid($methodName)) {
-            $this->wrongMethodNames[] = $methodName;
-        }
-    }
-
-    private function writeErrorMessage()
-    {
-        foreach ($this->wrongMethodNames as $methodName) {
-            $message = sprintf("I cannot generate the method '%s' for you because it is a reserved keyword", $methodName);
-            $this->io->writeBrokenCodeBlock($message, 2);
         }
     }
 }

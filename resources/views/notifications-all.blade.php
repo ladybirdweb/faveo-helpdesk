@@ -128,8 +128,8 @@ class="active"
                                         <input type="checkbox" value="" name="cc" class="noti_User clickfun" id="{{$notification -> notification_id}}">
                                         <label for='cl'  data-toggle="tooltip"  data-placement="top" title="Mark Read"><span></span>
                                         <!-- todo text -->
-                                        <h6 class="textcontent marginzero"><a href="{!! route('user.show', $notification->notification_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>{!! $notification->message !!}</a></h6>
-                                        <small class="label label-danger"><i class="fa fa-clock-o"></i> {{ $notification -> created_at }}</small></label> <!-- Emphasis label -->
+                                        <h6 class="textcontent marginzero"><a href="{!! route('user.show', $notification->notification_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>{!! $notification->message !!}</a><small class="label label-danger"><i class="fa fa-clock-o"></i> {{ $notification -> created_at }}</small></h6>
+                                        </label> <!-- Emphasis label -->
                                         
                                         <!-- General tools such as edit or delete-->
                                         <div class="tools">
@@ -142,8 +142,8 @@ class="active"
                                      
                                         <input type="checkbox" value="" name="cc"  data-toggle="tooltip"  data-placement="top" title="Mark Read" class="noti_User clickfun" id="{{$notification -> notification_id}}">
                                         <label for='cl'><span></span>
-                                        <h6 class="textcontent marginzero"><a href="{!! route('ticket.thread', $notification->notification_id) !!}" id='{{ $notification->notification_id }}' class='noti_User'>{!! $notification->message !!}</a></h6>
-                                        <small class="label label-info"><i class="fa fa-clock-o"></i> {{ $notification -> created_at }}</small>
+                                        <h6 class="textcontent marginzero"><a href="{!! route('ticket.thread', $notification->notification_id) !!}" id='{{ $notification->notification_id }}' class='noti_User'>{!! $notification->message !!}</a><small class="label label-info"><i class="fa fa-clock-o"></i> {{ $notification -> created_at }}</small></h6>
+                                        
                                         </label><div class="tools">
                                             <a href="{!! route('ticket.thread', $notification->notification_id) !!}" id='{{ $notification->notification_id }}'  data-toggle="tooltip"  data-placement="top" title="View" class='noti_User'><i class="fa fa-eye"></i></a>
                                               <a href="#" id='{{ $notification->notification_id }}' data-toggle="tooltip"  data-placement="top" title="Delete" class='notification-delete clickfun'><i class="fa fa-trash-o"></i></a>
@@ -155,8 +155,8 @@ class="active"
                                      @else
                                     <li>
                                       
-                                        <h6 class="textcontent marginzero">No Notifications Available!</h6>
-                                        <small class="label label-warning" ><i class="fa fa-bell-slash-o"></i></small>
+                                        <h6 class="textcontent marginzero">No Notifications Available!<small class="label label-warning" ><i class="fa fa-bell-slash-o"></i></small></h6>
+                                        
                                         
                                     </li>
                                     @endif

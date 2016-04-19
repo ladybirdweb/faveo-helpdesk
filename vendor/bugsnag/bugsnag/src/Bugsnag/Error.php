@@ -171,7 +171,7 @@ class Bugsnag_Error
             'payloadVersion' => $this->payloadVersion,
             'severity' => $this->severity,
             'exceptions' => $this->exceptionArray(),
-            'metaData' => $this->cleanupObj($this->metaData, true),
+            'metaData' => $this->cleanupObj($this->metaData),
         );
 
         if (isset($this->groupingHash)) {
@@ -195,10 +195,10 @@ class Bugsnag_Error
             'stacktrace' => $this->stacktrace->toArray(),
         );
 
-        return $this->cleanupObj($exceptionArray, false);
+        return $this->cleanupObj($exceptionArray);
     }
 
-    private function cleanupObj($obj, $isMetaData)
+    private function cleanupObj($obj)
     {
         if (is_null($obj)) {
             return null;
@@ -207,23 +207,23 @@ class Bugsnag_Error
         if (is_array($obj)) {
             $cleanArray = array();
             foreach ($obj as $key => $value) {
-                // Check if this key should be filtered
-                $shouldFilter = false;
-
-                // Apply filters to metadata if required
-                if ($isMetaData && is_array($this->config->filters)) {
+                // Apply filters if required
+                if (is_array($this->config->filters)) {
+                    // Check if this key should be filtered
+                    $shouldFilter = false;
                     foreach ($this->config->filters as $filter) {
                         if (strpos($key, $filter) !== false) {
                             $shouldFilter = true;
                             break;
                         }
                     }
-                }
-                // Apply filter
-                if ($shouldFilter) {
-                    $cleanArray[$key] = '[FILTERED]';
-                } else {
-                    $cleanArray[$key] = $this->cleanupObj($value, $isMetaData);
+
+                    // Apply filters
+                    if ($shouldFilter) {
+                        $cleanArray[$key] = '[FILTERED]';
+                    } else {
+                        $cleanArray[$key] = $this->cleanupObj($value);
+                    }
                 }
             }
 
@@ -237,7 +237,7 @@ class Bugsnag_Error
             }
         } elseif (is_object($obj)) {
             // json_encode -> json_decode trick turns an object into an array
-            return $this->cleanupObj(json_decode(json_encode($obj), true), $isMetaData);
+            return $this->cleanupObj(json_decode(json_encode($obj), true));
         } else {
             return $obj;
         }

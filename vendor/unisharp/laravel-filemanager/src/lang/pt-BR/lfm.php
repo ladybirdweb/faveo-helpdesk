@@ -1,12 +1,11 @@
 <?php
 
 return [
-    'nav-back'          => 'Back',
-    'nav-new'           => 'Nova Pasta',
     'nav-upload'        => 'Enviar',
     'nav-thumbnails'    => 'Miniatura',
     'nav-list'          => 'Lista',
 
+    'menu-new'          => 'Nova Pasta',
     'menu-rename'       => 'Renomear',
     'menu-delete'       => 'Deletar',
     'menu-view'         => 'Ver',
@@ -40,13 +39,10 @@ return [
     'error-delete'      => 'Você não pode deletar esta pasta, pois ela não está vazia!',
     'error-folder-name' => 'Nome da pasta não pode ser vazio!',
     'error-folder-exist'=> 'Uma pasta com este nome já existe!',
-    'error-mime'        => 'Unexpected MimeType: ',
-    'error-instance'    => 'The uploaded file should be an instance of UploadedFile',
-    'error-invalid'     => 'Invalid upload request',
 
     'btn-upload'        => 'Enviar Arquivo',
-    'btn-uploading'     => 'Enviando...',
     'btn-close'         => 'Fechar',
+    'btn-uploading'     => 'Enviando...',
     'btn-crop'          => 'Cortar',
     'btn-cancel'        => 'Cancelar',
     'btn-resize'        => 'Redimensionar',

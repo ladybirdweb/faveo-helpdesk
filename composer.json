@@ -20,9 +20,7 @@
         "phpmailer/phpmailer": "^5.2",
   		"bestmomo/filemanager": "1.1.*",
 		"unisharp/laravel-filemanager": "^1.1",
-        "tymon/jwt-auth": "0.5.*",
-	        "mjanssen/laravel-5-breadcrumbs": "dev-master",
-	"stichoza/google-translate-php": "~3.0.1"
+        "tymon/jwt-auth": "0.5.*"
 
 	},
 	"require-dev": {
@@ -34,8 +32,7 @@
 			"database"
 		],
 		"psr-4": {
-			"App\\": "app/",
-			"mjanssen\\BreadcrumbsBundle\\": "vendor/mjanssen/laravel-5-breadcrumbs/src"
+			"App\\": "app/"
 		}
 	},
 	"autoload-dev": {

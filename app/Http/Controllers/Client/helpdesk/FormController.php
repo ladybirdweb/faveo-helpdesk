@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Client\helpdesk;
 
 // controllers
-use App\Http\Controllers\Agent\helpdesk\TicketController;
+use App\Http\Controllers\Agent\helpdesk\TicketWorkflowController;
 use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Controller;
 // requests
@@ -40,12 +40,12 @@ class FormController extends Controller
      *
      * @return void
      */
-    public function __construct(TicketController $TicketController)
+    public function __construct(TicketWorkflowController $TicketWorkflowController)
     {
         // mail smtp settings
-        SettingsController::smtp();
+//        SettingsController::smtp();
         // creating a TicketController instance
-        $this->TicketController = $TicketController;
+        $this->TicketWorkflowController = $TicketWorkflowController;
     }
 
     /**
@@ -148,13 +148,16 @@ class FormController extends Controller
         $helptopic = $ticket_settings->first()->help_topic;
         $sla = $ticket_settings->first()->sla;
         $priority = $ticket_settings->first()->priority;
-        $source = $ticket_source->where('name', '=', 'web')->first();
+        $source = $ticket_source->where('name', '=', 'web')->first()->id;
         $attachments = $request->file('attachment');
 
         $collaborator = null;
         $assignto = null;
         $auto_response = 0;
-        $result = $this->TicketController->create_user($email, $name, $subject, $details, $phone, $helptopic, $sla, $priority, $source->id, $collaborator, $department, $assignto, $form_extras, $auto_response);
+        $team_assign = null;
+
+        $result = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response);
+
         if ($result[1] == 1) {
             $ticketId = Tickets::where('ticket_number', '=', $result[0])->first();
             $thread = Ticket_Thread::where('ticket_id', '=', $ticketId->id)->first();

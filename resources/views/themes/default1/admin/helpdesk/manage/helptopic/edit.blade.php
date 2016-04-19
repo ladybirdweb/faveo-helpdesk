@@ -1,7 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Manage')
-class="active"
+active
 @stop
 
 @section('manage-bar')
@@ -46,9 +46,9 @@ class="active"
 		<div class="form-group {{ $errors->has('ticket_status') ? 'has-error' : '' }}">
 
 			{!! Form::label('ticket_status',Lang::get('lang.status')) !!}&nbsp;&nbsp;
-			{!! $errors->first('ticket_status', '<spam class="help-block">:message</spam>') !!}
-			{!! Form::radio('ticket_status','1',true) !!} {{Lang::get('lang.active')}}&nbsp;&nbsp;&nbsp;
-			{!! Form::radio('ticket_status','0') !!} {{Lang::get('lang.inactive')}}
+			{!! $errors->first('status', '<spam class="help-block">:message</spam>') !!}
+			{!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}&nbsp;&nbsp;&nbsp;
+			{!! Form::radio('status','0') !!} {{Lang::get('lang.inactive')}}
 			</div>
 		</div>
 

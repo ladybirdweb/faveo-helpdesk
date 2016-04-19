@@ -1,7 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Manage')
-class="active"
+active
 @stop
 
 @section('manage-bar')
@@ -13,7 +13,6 @@ class="active"
 @stop
 
 @section('HeadInclude')
-
 @stop
 <!-- header -->
 @section('PageHeader')
@@ -29,81 +28,79 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-     <div class="box">
-       {!! Form::model($forms,['url' => 'forms/'.$forms->id,'method' => 'PATCH']) !!}
+<!-- open a form -->
+{!! Form::model($forms,['url' => 'form/'.$forms->id,'method' => 'PATCH']) !!}
 
-    <div class="form-group">
-                <div class="box-header">
-                    <h3 class="box-title">{!! Lang::get('lang.adding_fields') !!}</h3>
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="box box-primary">
+               <div class="box-body">
+                  <div class="box-header">
+                   <h2 class="box-title"style="margin-left:-10px">{{Lang::get('lang.create')}}</h2>{!! Form::submit(Lang::get('lang.save'),['class'=>'pull-right btn btn-primary'])!!}</div>
+		<!-- title: text -->
+		 <div class="box-body table-responsive no-padding"style="overflow:hidden">
+		 <div class="row">
+		 <div class="col-md-6">
+		<div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
+			{!! Form::label('title',Lang::get('lang.title')) !!}
+			{!! $errors->first('title', '<spam class="help-block">:message</spam>') !!}
+			{!! Form::text('title',null,['class' => 'form-control']) !!}
+			</div>
+		</div>
+		<!-- declare table head Label -->
+		 <div class="col-md-6">
+		<div class="form-group {{ $errors->has('label') ? 'has-error' : '' }}">
+		{!! Form::label('label',Lang::get('lang.label')) !!}
+		{!! $errors->first('label', '<spam class="help-block">:message</spam>') !!}
+		{!! Form::text('label',null,['class' => 'form-control']) !!}
+        </div>
+        </div>
+        <!-- declare table head type -->
+                  <div class="col-md-4">
+		           <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
+		           {!! Form::label('type',Lang::get('lang.type')) !!}
+		           {!! $errors->first('type', '<spam class="help-block">:message</spam>') !!}
+                   {!!Form::select('type', [''=>'Select a Type','types'=>$type->lists('type','id')] ,null,['class' => 'form-control'] ) !!}
                 </div>
-                        <div class="callout callout-default col-md-4"> {!! Lang::get('lang.click_add_fields_button_to_add_fields') !!} </div>
-                        <div class="col-md-4"> 
-                            <button type="button" class="btn btn-primary addField" value="Show Div" onclick="showDiv()" ><i class="fa fa-plus"></i>&nbsp; {!! Lang::get('lang.add_fields') !!}</button>
-                        </div>
-    <div class="row">
-     
-        
-    
-    </div>
-    
-    <hr>
-    <div class="box-body" id="welcomeDiv" >
-       <table id="example2" class="table table-bordered table-striped">
-                        <thead>
-                        <th>{!! Lang::get('lang.label') !!} </th>
-                        <th>{!! Lang::get('lang.name') !!} </th>
-                        <th>{!! Lang::get('lang.type') !!} </th>
-                        <th>{!! Lang::get('lang.values(selected_fields)') !!} </th>
-                        <th>{!! Lang::get('lang.required') !!} </th>
-                        <th>{!! Lang::get('lang.Action') !!} </th>
-                        </thead>
-                        <tbody class="inputField" id="inputField">
-                        <p></p>
-                            <tr></tr>  
-                        </tbody>
-       </table>
-       
-    </div>  
-    <div class="box-footer">
-        <input type="submit" class="btn btn-primary" value="{!! Lang::get('lang.save_form') !!}">
-    </div>
-    </div>
-     </div>
-<!--<script>
-var string = '<h1>Paste your html sada</h1>';
-var text = "";
-var i;
-var j=2;
-for (i = 0; i < j; i++) {
-    text += string ;
-}
-document.getElementById("sada").innerHTML = text;
-</script>-->
-<script>
-    
-    function showDiv() {
-   document.getElementById('welcomeDiv').style.display = "block";
-}
+                </div>
+                <!-- declare table head Vissibility -->
+                <div class="col-md-4">
+		           <div class="form-group {{ $errors->has('visibility') ? 'has-error' : '' }}">
+		           {!! Form::label('visibility',Lang::get('lang.visibility')) !!}
+		           {!! $errors->first('visibility', '<spam class="help-block">:message</spam>') !!}
+		           {!!Form::select('visibility', [''=>'Select a Visibility','visibilities' =>$visibility->lists('visibility','id')],null,['class' => 'form-control'] ) !!}
+		         </div>
+		         </div>
+		         <!-- declare table head variable -->
+		          <div class="col-md-4">
+		           <div class="form-group">
+		           {!! Form::label('variable',Lang::get('lang.variable')) !!}
+		           {!! Form::text('variable',null,['class' => 'form-control']) !!}
+		           </div>
+		           </div>
+		<!-- instruction: textarea -->
+		<div class="col-md-6">
+		<div class="form-group">
+			{!! Form::label('instruction',Lang::get('lang.instruction')) !!}
+			{!! Form::textarea('instruction',null,['class' => 'form-control','size' => '10x5']) !!}
+		</div>
+		</div>
 
-$(document).ready(function() {
-    var max_fields      = 10;
-    var wrapper         = $(".inputField"); 
-    var add_button      = $(".addField"); 
-    
-   var j=5; 
-    
-     
-        for (x = 1; x < j; x++) {
-           
-            $(wrapper).append('<tr><td><input type="text" name="label[]"></td><td><input type="text" name="name[]"></td><td><select name="type[]"><option>text</option><option>email</option><option>password</option><option>textarea</option><option>select</option><option>radio</option><option>checkbox</option><option>submit</option></select></td><td><textarea name="value[]"></textarea></td><td>{!! Lang::get("lang.yes") !!}&nbsp;&nbsp;<input type=radio name="required['+x+'][]" value=1 checked>&nbsp;&nbsp;{!! Lang::get("lang.no") !!}&nbsp;&nbsp;<input type=radio name="required['+x+'][]" value=0></td><td><button type="button" class="remove_field btn btn-danger"><i class="fa fa-trash-o"></i>&nbsp {!! Lang::get("lang.remove") !!}</button></td></tr>'); 
-        }
-  
-    
-    $(wrapper).on("click",".remove_field", function(e)
- {
-        e.preventDefault(); $(this).closest('tr').remove(); x--;
-    });
-});
-</script>
+	<!-- /table -->
+
+	<!-- txt area -->
+	<div class="col-md-6">
+	<div class="form-group">
+		{!! Form::label('internal_notes',Lang::get('lang.internal_notes')) !!}
+		{!! Form::textarea('internal_notes',null,['class' => 'form-control','size' => '10x5']) !!}
+	</div>
+	</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 
 @stop

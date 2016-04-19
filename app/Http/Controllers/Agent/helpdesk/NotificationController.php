@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Agent\helpdesk;
 
-// 	controllers
+//  controllers
 use App\Http\Controllers\Common\PhpMailController;
-//	Model
+//  Model
 use App\Http\Controllers\Controller;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Settings\Company;
-use App\Model\helpdesk\settings\Email;
+use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Utility\Log_notification;
 use App\User;
 use View;
@@ -30,7 +30,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * 	This function is for sending daily report/notification about the system.
+     *  This function is for sending daily report/notification about the system.
      * */
     public function send_notification()
     {
@@ -59,11 +59,11 @@ class NotificationController extends Controller
     }
 
     /**
-     * 	Admin Notification/Report.
+     *  Admin Notification/Report.
      *
-     * 	@param company
+     *  @param company
      *
-     * 	@return mail
+     *  @return mail
      * */
     public function send_notification_to_admin($company)
     {
@@ -75,7 +75,7 @@ class NotificationController extends Controller
             $user_name = $user->first_name.' '.$user->last_name;
             $view = View::make('emails.notifications.admin', ['company' => $company, 'name' => $user_name]);
             $contents = $view->render();
-            $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Dily Report', 'scenario' => null, 'body' => $contents]);
+            $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
 
 //            \Mail::send('emails.notifications.admin', ['company' => $company, 'name' => $user_name], function ($message) use ($email, $user_name, $company) {
 //                $message->to($email, $user_name)->subject($company.' Daily Report ');
@@ -84,9 +84,9 @@ class NotificationController extends Controller
     }
 
     /**
-     * 	Department Manager Notification/Report.
+     *  Department Manager Notification/Report.
      *
-     * 	@return mail
+     *  @return mail
      * */
     public function send_notification_to_manager($company)
     {
@@ -102,7 +102,7 @@ class NotificationController extends Controller
                     $user_name = $user->first_name.' '.$user->last_name;
                     $view = View::make('emails.notifications.manager', ['company' => $company, 'name' => $user_name]);
                     $contents = $view->render();
-                    $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Dily Report', 'scenario' => null, 'body' => $contents]);
+                    $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
 
 //                    \Mail::send('emails.notifications.manager', ['company' => $company, 'name' => $user_name, 'dept_id' => $dept->id, 'dept_name' => $dept->name], function ($message) use ($email, $user_name, $company, $dept_name) {
 //                        $message->to($email, $user_name)->subject($company.' Daily Report for department manager of '.$dept_name.' department.');
@@ -115,7 +115,7 @@ class NotificationController extends Controller
     /**
      *  Team Lead Notification/Report.
      *
-     * 	@return mail
+     *  @return mail
      * */
     public function send_notification_to_team_lead($company)
     {
@@ -131,7 +131,7 @@ class NotificationController extends Controller
                     $user_name = $user->first_name.' '.$user->last_name;
                     $view = View::make('emails.notifications.lead', ['company' => $company, 'name' => $user_name]);
                     $contents = $view->render();
-                    $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Dily Report', 'scenario' => null, 'body' => $contents]);
+                    $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
 
 //                    \Mail::send('emails.notifications.lead', ['company' => $company, 'name' => $user_name, 'team_id' => $team->id], function ($message) use ($email, $user_name, $company, $team_name) {
 //                        $message->to($email, $user_name)->subject($company.' Daily Report for Team Lead of team '.$team_name);
@@ -142,9 +142,9 @@ class NotificationController extends Controller
     }
 
     /**
-     * 	Agent Notification/Report.
+     *  Agent Notification/Report.
      *
-     * 	@return mail
+     *  @return mail
      * */
     public function send_notification_to_agent($company)
     {
@@ -154,9 +154,9 @@ class NotificationController extends Controller
             // Send notification details to all the agents
             $email = $user->email;
             $user_name = $user->first_name.' '.$user->last_name;
-            $view = View::make('emails.notifications.agent', ['company' => $company, 'name' => $user_name]);
+            $view = View::make('emails.notifications.agent', ['company' => $company, 'name' => $user_name, 'user_id' => $user->id]);
             $contents = $view->render();
-            $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Dily Report', 'scenario' => null, 'body' => $contents]);
+            $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
 
 //            \Mail::send('emails.notifications.agent', ['company' => $company, 'name' => $user_name, 'user_id' => 1], function ($message) use ($email, $user_name, $company) {
 //                $message->to($email, $user_name)->subject($company.' Daily Report for Agents');
@@ -185,10 +185,10 @@ class NotificationController extends Controller
 
     // // testing
     // public function test(){
-    // 	$email = "sujit.prasad@ladybirdweb.com";
-    // 	$user_name = "sujit prasad";
-    // 	\Mail::send('emails.notifications.test', ['user_id' => 1], function ($message) use($email, $user_name) {
-    //     	$message->to($email, $user_name)->subject('testing reporting');
-    // 	});
+    //  $email = "sujit.prasad@ladybirdweb.com";
+    //  $user_name = "sujit prasad";
+    //  \Mail::send('emails.notifications.test', ['user_id' => 1], function ($message) use($email, $user_name) {
+    //      $message->to($email, $user_name)->subject('testing reporting');
+    //  });
     // }
 }

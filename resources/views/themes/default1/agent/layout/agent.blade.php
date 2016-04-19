@@ -26,12 +26,11 @@
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <link rel="stylesheet" href="{{asset("lb-faveo/css/editor.css")}}" type="text/css">
         <link href="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" rel="stylesheet" type="text/css" />
-        {{-- jquery ui css --}}
         <link type="text/css" href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet">
         <link type="text/css" href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />        
         <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/faveo-css.css")}}">
-        <link href="{{asset('css/notification-style.css')}}" rel="stylesheet" type="text/css">
+
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
         <!-- Select2 -->
@@ -80,23 +79,23 @@ if ($company != null) {
                             <li class="dropdown notifications-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
                                     <i class="fa fa-bell-o"></i>
-                                    <span class="label label-warning" id="count"><?php echo count($notifications); ?></span>
+                                    <span class="label label-warning" id="count">{!! count($notifications) !!}</span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="header">You have <?php echo count($notifications); ?> notifications</li>
+                                    <li class="header">You have {!! count($notifications) !!} notifications</li>
                                     <li>
 
                                         <ul class="menu">
                                             @foreach($notifications as $notification)
                                             @if($notification->type == 'registration')
                                             <li>
-                                                <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
+                                                <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
                                                     <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
                                                 </a>
                                             </li>
                                             @else
                                             <li>
-                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id }}' class='noti_User'>
+                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
                                                     <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
                                                 </a>
                                             </li>
@@ -105,30 +104,27 @@ if ($company != null) {
 
                                         </ul>
                                     </li>
-                                    <li class="footer"><a href="{{ url('notifications-list') }}">View all</a>
+                                    <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
                                     </li>
-                               
+
                                 </ul>
                             </li>
+                            <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
-                                    @if(Auth::user()->profile_pic)
-                                        <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
-                                    @else
-                                        <img src="{{ Gravatar::src(Auth::user()->email) }}" class="user-image" alt="User Image">
-                                    @endif
+                                    
+                                        <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
+                                    
                                     <span class="hidden-xs">{{Auth::user()->first_name." ".Auth::user()->last_name}}</span>
                                 @endif          
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header"  style="background-color:#343F44;">
-                                        @if(Auth::user()->profile_pic)
-                                        <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                        @else                                      
-                                            <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
-                                        @endif
+                                        
+                                        <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
+                                        
                                         <p>
                                             {{Auth::user()->first_name." ".Auth::user()->last_name}} - {{Auth::user()->role}}
                                             <small></small>
@@ -145,6 +141,9 @@ if ($company != null) {
                                     </li>
                                 </ul>
                             </li>
+                        </ul>
+                    </div>
+
                             </nav>
                             </header>
                             <!-- Left side column. contains the logo and sidebar -->
@@ -159,11 +158,9 @@ if ($company != null) {
                                         <div class="col-xs-3"></div>
                                         <div class="col-xs-2" style="width:50%;">
                                         <a href="{!! url('profile') !!}">
-                                        @if(Auth::user() && Auth::user()->profile_pic)
-                                            <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                        @else
-                                            <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
-                                        @endif
+                                        
+                                                <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
+                                        
                                         </a>
                                         </div>
                                     </div>
@@ -195,21 +192,50 @@ if ($company != null) {
                                         <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
 <?php
 if(Auth::user()->role == 'admin') {
-$inbox = App\Model\helpdesk\Ticket\Tickets::all();
+//$inbox = App\Model\helpdesk\Ticket\Tickets::all();
 $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status','1')->get();
-$unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', null)->where('status','1')->get();
+$unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=',null)->where('status', '=', '1')->get();
 $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->get();
+$deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->get();
 } elseif(Auth::user()->role == 'agent') {
-$inbox = App\Model\helpdesk\Ticket\Tickets::where('dept_id','',Auth::user()->primary_dpt)->get();
+//$inbox = App\Model\helpdesk\Ticket\Tickets::where('dept_id','',Auth::user()->primary_dpt)->get();
 $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status','1')->get();
-$unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '0')->where('status','1')->where('dept_id','',Auth::user()->primary_dpt)->get();
-$tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->get();
+$unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=',null)->where('status', '=', '1')->where('dept_id','=',Auth::user()->primary_dpt)->get();
+$tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->where('dept_id','=',Auth::user()->primary_dpt)->get();
+$deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id','=',Auth::user())->get();
 }
-$i = count($tickets);
+if (Auth::user()->role == 'agent') {
+            $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
+            $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->get();
+        } else {
+            $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
+        }
+$i = count($overdues);
+if ($i == 0) {
+            $overdue_ticket = 0;
+        } else {
+            $j = 0;
+            foreach ($overdues as $overdue) {
+                $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $overdue->sla)->first();
+
+                $ovadate = $overdue->created_at;
+                $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)).'<br/><br/>';
+                if (date('Y-m-d H:i:s') > $new_date) {
+                    $j++;
+                    //$value[] = $overdue;
+                }
+            }
+            // dd(count($value));
+            if ($j > 0) {
+                $overdue_ticket = $j;
+            } else {
+                $overdue_ticket = 0;
+            }
+        }
 ?>
                                         <li @yield('inbox')>
                                             <a href="{{ url('/ticket/inbox') }}" id="load-inbox">
-                                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green"><?php echo $i;?></small>                                            </a>
+                                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green"><?php echo count($tickets); ?></small>                                            </a>
                                         </li>
                                         <li @yield('myticket')>
                                              <a href="{{url('ticket/myticket')}}" id="load-myticket">
@@ -223,10 +249,15 @@ $i = count($tickets);
                                                 <small class="label pull-right bg-green">{{count($unassigned)}}</small>
                                             </a>
                                         </li>
+                                        <li @yield('overdue')>
+                                            <a href="{{url('ticket/overdue')}}" id="load-unassigned">
+                                                <i class="fa fa-calendar-times-o"></i> <span>{!! Lang::get('lang.overdue') !!}</span>
+                                                <small class="label pull-right bg-green">{{$overdue_ticket}}</small>
+                                            </a>
+                                        </li>
                                         <li @yield('trash')>
                                             <a href="{{url('trash')}}">
                                                 <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
-                                                <?php $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->get();?>
                                                 <small class="label pull-right bg-green">{{count($deleted)}}</small>
                                             </a>
                                         </li>
@@ -300,8 +331,8 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                                                 <li id="bar" @yield('open')><a href="{{ url('/ticket/open') }}" id="load-open">{!! Lang::get('lang.open') !!}</a></li>
                                                 <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered') }}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
                                                 <li id="bar" @yield('myticket')><a href="{{ url('/ticket/myticket') }}" >{!! Lang::get('lang.my_tickets') !!}</a></li>
-                                                <!--<li id="bar" @yield('ticket')><a href="{{ url('ticket') }}" >Ticket</a></li>-->
-                                                <li id="bar" @yield('overdue')><a href="{{ url('/ticket/overdue') }}" >Overdue</a></li>
+                                                {{-- <li id="bar" @yield('ticket')><a href="{{ url('ticket') }}" >Ticket</a></li> --}}
+                                                {{-- <li id="bar" @yield('overdue')><a href="{{ url('/ticket/overdue') }}" >Overdue</a></li> --}}
                                                 <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned') }}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
                                                 <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed') }}" >{!! Lang::get('lang.closed') !!}</a></li>
                                                 <?php if ($group->can_create_ticket == 1) {?>
@@ -319,15 +350,8 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                                 </div>
                             </div>
                             <section class="content-header">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h3>  @yield('PageHeader')</h3>
-                                    </div>
-                    <div class="pull-right">
-                                
-                                @include('breadcrumbs')
-                    </div>
-                                </div>
+                                @yield('PageHeader')
+                                @yield('breadcrumbs')
                             </section>
                             <!-- Main content -->
                             <section class="content">
@@ -376,34 +400,6 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
 
                      <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" ></script>
                       <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" ></script>
-                     <script>
-                function myFunction() {
-
-                    document.getElementById("count").innerHTML = "0";
-
-                }
-        </script>
-        <script>
-                $(document).ready(function () {
-                    
-                    $('.noti_User').click(function () {
-                        var id = this.id;
-                    var dataString = 'id=' + id;
-                        $.ajax
-                                ({
-                                    type: "POST",
-                                    url: "{{url('mark-read')}}" + "/" + id,
-                                    data: dataString,
-                                    cache: false,
-                                    success: function (html)
-                                    {
-//$(".city").html(html);
-                                    }
-                                });
-                    });
-
-                });
-        </script>
 
 <script>
 $(function() {

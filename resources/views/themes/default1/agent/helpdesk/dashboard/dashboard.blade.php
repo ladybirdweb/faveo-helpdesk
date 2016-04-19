@@ -7,9 +7,7 @@ class="active"
 @section('dashboard-bar')
 active
 @stop
-@section('PageHeader')
-Dashboard
-@stop
+
 @section('dashboard')
 class="active"
 @stop

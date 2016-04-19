@@ -23,9 +23,7 @@ class Decoder extends \Intervention\Image\AbstractDecoder
 
         } catch (\ImagickException $e) {
             throw new \Intervention\Image\Exception\NotReadableException(
-                "Unable to read image from path ({$path}).",
-                0,
-                $e
+                "Unable to read image from path ({$path})."
             );
         }
 
@@ -83,9 +81,7 @@ class Decoder extends \Intervention\Image\AbstractDecoder
 
         } catch (\ImagickException $e) {
             throw new \Intervention\Image\Exception\NotReadableException(
-                "Unable to read image from binary data.",
-                0,
-                $e
+                "Unable to read image from binary data."
             );
         }
 

@@ -174,15 +174,8 @@ if ($company != null) {
                         <div class="content-wrapper">
                             <!-- Content Header (Page header) -->
                             <section class="content-header">
-                               <div class="row">
-                                    <div class="col-md-6">
-                                        <h3>  @yield('PageHeader')</h3>
-                                    </div>
-                    <div class="col-md-6 pull-right">
-                                
-                                @include('breadcrumbs')
-                    </div>
-                                </div>
+                                @yield('PageHeader')
+                                @yield('breadcrumbs')
                             </section>
                             <!-- Main content -->
                             <section class="content">

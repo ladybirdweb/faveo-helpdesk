@@ -13,7 +13,7 @@ class="active"
 @stop
 
 @section('content')
-<?php
+<?php 
 $date_time_format = UTC::getDateTimeFormat();
 $dept = App\Model\helpdesk\Agent\Department::where('name','=',$id)->first();
     if(Auth::user()->role == 'agent') {
@@ -57,8 +57,8 @@ $dept = App\Model\helpdesk\Agent\Department::where('name','=',$id)->first();
             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
             <input type="submit" class="submit btn btn-default text-orange btn-sm" id="delete" name="submit" value="{!! Lang::get('lang.delete') !!}">
             <input type="submit" class="submit btn btn-default text-blue btn-sm" id="close" name="submit" value="{!! Lang::get('lang.open') !!}">
-            <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
-        </div>
+            <!-- <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
+ -->        </div>
         <div class="mailbox-messages" id="refresh">
         <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! Lang::get('lang.loading') !!}...</b></p>
         <!-- table -->
@@ -102,32 +102,30 @@ $dept = App\Model\helpdesk\Agent\Department::where('name','=',$id)->first();
                     <!-- //return d; -->
                 }", 
             'aTargets' => array(6))
-        )) 
+        ))
                 ->setOrder(array(6=>'desc'))  
-        ->setClass('table table-hover table-bordered ')   
-        ->setCallbacks("fnRowCallback",'function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-            var str = aData[0];
-            if(1==1){
-                if(str.search("#000") == -1) {
-                    $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border":"none"});
-                    $("td", nRow).mouseenter(function(){
-                        $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border":"none"});
-                    });
-                    $("td", nRow).mouseleave(function(){
-                        $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border":"none"});
-                    });
-                } else {
-                    $("td", nRow).css({"background-color":"white", "border":"none"});
-                    $("td", nRow).mouseenter(function(){
-                        $("td", nRow).css({"background-color":"#DEDFE0", "border":"none"});
-                    });
-                    $("td", nRow).mouseleave(function(){
-                        $("td", nRow).css({"background-color":"white", "border":"none"});
-                    });   
-                }
+                ->setClass('table table-hover table-bordered table-striped')
+                ->setCallbacks("fnRowCallback",'function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+            var str = aData[3];
+            if(str.search("#000") == -1) {
+                $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #F3F3F3"});
+                $("td", nRow).mouseenter(function(){
+                    $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border":"none"});
+                });
+                $("td", nRow).mouseleave(function(){
+                    $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd","border-right":"solid 0.5px #F3F3F3"});
+                });
+            } else {
+                $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
+                $("td", nRow).mouseenter(function(){
+                    $("td", nRow).css({"background-color":"#DEDFE0", "border":"none"});
+                });
+                $("td", nRow).mouseleave(function(){
+                    $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
+                });   
             }
-        }')    
-        ->render();!!}
+        }')                 
+                ->render();!!}
 
         </div><!-- /.mail-box-messages -->
         {!! Form::close() !!}

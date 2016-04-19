@@ -1004,7 +1004,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
         if ($this->prophet !== null) {
             try {
                 $this->prophet->checkPredictions();
-            } catch (Throwable $e) {
+            } catch (Throwable $t) {
                 /* Intentionally left empty */
             } catch (Exception $e) {
                 /* Intentionally left empty */

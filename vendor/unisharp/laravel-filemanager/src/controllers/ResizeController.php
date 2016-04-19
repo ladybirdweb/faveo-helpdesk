@@ -1,6 +1,6 @@
 <?php namespace Unisharp\Laravelfilemanager\controllers;
 
-use Unisharp\Laravelfilemanager\controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\View;
@@ -22,7 +22,7 @@ class ResizeController extends LfmController {
         $ratio = 1.0;
         $image = Input::get('img');
 
-        $path_to_image   = parent::getPath('directory') . $image;
+        $path_to_image   = parent::getPath() . $image;
         $original_width  = Image::make($path_to_image)->width();
         $original_height = Image::make($path_to_image)->height();
 
@@ -46,7 +46,7 @@ class ResizeController extends LfmController {
         }
 
         return View::make('laravel-filemanager::resize')
-            ->with('img', parent::getUrl('directory') . $image)
+            ->with('img', parent::getUrl() . $image)
             ->with('height', number_format($height, 0))
             ->with('width', $width)
             ->with('original_height', $original_height)

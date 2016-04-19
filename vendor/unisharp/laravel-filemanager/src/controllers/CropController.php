@@ -1,6 +1,6 @@
 <?php namespace Unisharp\Laravelfilemanager\controllers;
 
-use Unisharp\Laravelfilemanager\controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\View;
@@ -20,7 +20,7 @@ class CropController extends LfmController {
     public function getCrop()
     {
         $working_dir = Input::get('working_dir');
-        $img = parent::getUrl('directory') . Input::get('img');
+        $img = parent::getUrl() . Input::get('img');
 
         return View::make('laravel-filemanager::crop')
             ->with(compact('working_dir', 'img'));
@@ -46,7 +46,7 @@ class CropController extends LfmController {
         // make new thumbnail
         $thumb_img = Image::make(public_path() . $image);
         $thumb_img->fit(200, 200)
-            ->save(parent::getPath('thumb') . parent::getFileName($image)['short']);
+            ->save(parent::getPath('thumb') . parent::getFileName($image));
     }
 
 }

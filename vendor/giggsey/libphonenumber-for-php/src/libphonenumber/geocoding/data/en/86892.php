@@ -5,5 +5,5 @@
  */
 
 return array (
-  86892 => 'Rikaze/Zhongba, Tibet',
+  86892 => 'Rikaze, Tibet',
 );

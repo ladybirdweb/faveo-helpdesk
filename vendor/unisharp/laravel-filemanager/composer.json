@@ -9,8 +9,7 @@
     "tinymce",
     "upload",
     "file",
-    "manager",
-    "image"
+    "manager"
   ],
   "authors": [
     {
@@ -26,10 +25,6 @@
     "php": ">=5.5.0",
     "illuminate/support": ">=4.2.0",
     "intervention/image": "2.*"
-  },
-  "suggest": {
-    "ext-gd": "to use GD library based image processing.",
-    "ext-imagick": "to use Imagick based image processing."
   },
   "autoload": {
     "psr-4": {

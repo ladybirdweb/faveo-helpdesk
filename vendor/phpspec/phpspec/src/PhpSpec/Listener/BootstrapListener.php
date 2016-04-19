@@ -19,7 +19,7 @@ class BootstrapListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array('beforeSuite' => array('beforeSuite', 1100));
+        return array('beforeSuite' => 'beforeSuite');
     }
 
     public function beforeSuite()

@@ -108,10 +108,7 @@ class ApplicationContext implements Context, MatchersProviderInterface
 
         $this->addOptionToArguments($option, $arguments);
 
-        $this->lastExitCode = $this->tester->run($arguments, array(
-            'interactive' => (bool)$interactive,
-            'decorated' => false,
-        ));
+        $this->lastExitCode = $this->tester->run($arguments, array('interactive' => (bool)$interactive));
     }
 
     /**

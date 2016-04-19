@@ -198,7 +198,7 @@ final class ClassFileAnalyser
         for ($i = $index, $max = count($tokens); $i < $max; $i++) {
             $token = $tokens[$i];
 
-            if ('{' === $token || $this->isSpecialBraceToken($token)) {
+            if ('{' === $token) {
                 $braceCount++;
                 continue;
             }
@@ -210,15 +210,6 @@ final class ClassFileAnalyser
                 }
             }
         }
-    }
-
-    private function isSpecialBraceToken($token)
-    {
-        if (!is_array($token)) {
-            return false;
-        }
-
-        return $token[1] === "{";
     }
 
     /**

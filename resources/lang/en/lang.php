@@ -184,15 +184,15 @@ return [
       |   Company Settings Page
       |--------------------------------------
      */
-    'company'      => 'Company',
-    'website'      => 'Website',
-    'phone'        => 'Phone',
-    'address'      => 'Address',
-    'landing'      => 'Landing Page',
-    'offline'      => 'Offline Page',
-    'thank'        => 'Thank Page',
-    'logo'         => 'Logo',
-    'save'         => 'Save',
+    'company' => 'Company',
+    'website' => 'Website',
+    'phone'   => 'Phone',
+    'address' => 'Address',
+    'landing' => 'Landing Page',
+    'offline' => 'Offline Page',
+    'thank'   => 'Thank Page',
+    'logo'    => 'Logo',
+    'save'    => 'Save',
     'delete-logo'  => 'Delete logo',
     'click-delete' => 'Click here to delete',
     /*
@@ -245,6 +245,15 @@ return [
     'attachments'                         => 'Attachments',
     'email_attahment_user'                => 'Email attachments to the user',
     'cron_notification'                   => 'Enable Notification cron',
+    'cron'                                => 'Job Scheduler',
+    'crone-url-message'                   => "These are Faveo's Job Scheduler(cron job) url for your system.",
+    'clipboard-copy-message'              => 'Copied to clipboard.',
+    'click'                               => 'Click here',
+    'check-cron-set'                      => 'to check how to set cron jobs on your server.',
+    'notification-email'                  => 'Email notifications',
+    'click-url-copy'                      => 'Click here to copy URL',
+    'job-scheduler-error'                 => 'Job scheduler can not be updated.',
+    'job-scheduler-success'               => 'Job scheduler updated successfully.',
     /*
       |--------------------------------------
       |   Ticket Settings Page
@@ -282,6 +291,10 @@ return [
     'registration_method'                              => 'Registration Method',
     'user_session_timeout'                             => 'User Session Timeout',
     'client_quick_access'                              => 'Client Quick Access',
+    'cron'                                             => 'Cron',
+    'system-settings'                                  => 'System Settings',
+    'settings-2'                                       => 'Settings',
+
     /*
       |--------------------------------------
       |   Auto-Response Settings Page
@@ -407,6 +420,28 @@ return [
      */
     'transient'            => 'Transient',
     'ticket_overdue_alert' => 'Ticket Overdue Alerts',
+
+    /*
+      |--------------------------------------
+      |  Work Flow
+      |--------------------------------------
+     */
+    'workflow'            => 'Workflow',
+    'ticket_workflow'            => 'Ticket Workflow',
+    'create_workflow'   =>  'Create Workflow',
+    'edit_workflow'   =>  'Edit Workflow',
+    'updated'             => 'Updated',
+    'target'              => 'Target',
+    'target_channel'      => 'Target Channel',
+    'exceution_order'   =>  'Exceution Order',
+    'target_channel'    =>  'Target Channel',
+    'workflow_rules'    =>  'Workflow Rules',
+    'workflow_action'   =>  'Workflow Action',
+    'rules'               => 'Rules',
+    'order'               => 'Order',
+    'condition'         =>  'Condition',
+    'statement'         =>  'Statement',
+
     /*
       |--------------------------------------
       |  Form Create Page
@@ -736,7 +771,6 @@ return [
     'access-ticket'                                   => 'Alert! This ticket has been locked by you for next ',
     'minutes'                                         => ' minutes',
     'in_minutes'                                      => 'In minutes',
-    'change_owner_for_ticket'                         => 'Change owner for ticket',
     'add_another_owner'                               => 'Add another owner',
     'user-not-found'                                  => 'User not found. Try again or add a new user.',
     'change-success'                                  => 'Success! owner has been changed for this ticket.',
@@ -757,12 +791,11 @@ return [
     'merge-error2'                                    => 'Please select ticket to merge.',
     'select-tickets-to merge'                         => 'select two or more tickets to merge.',
     'different-users'                                 => 'Ticktes from different users',
-    'see-profile1'                                    => 'Click here to see ',
-    'see-profile2'                                    => 's profile',
+    'clean-up'                                        => 'Clean up',
+    'hard-delete-success-message'                     => 'Tickets have been deleted permanently.',
     'overdue'                                         => 'Overdue',
-    'user-unassigned'                                 => 'User unassigned',
-    'reason'                                          => 'Reason for merging: ',
-
+    'change_owner_for_ticket'                         => 'Change Owner for Ticket',
+    
     /*
       |------------------------------------------------
       |Tools Page

@@ -22,7 +22,7 @@ class LogglyFormatter extends JsonFormatter
      * Overrides the default batch mode to new lines for compatibility with the
      * Loggly bulk API.
      *
-     * @param int $batchMode
+     * @param integer $batchMode
      */
     public function __construct($batchMode = self::BATCH_MODE_NEWLINES, $appendNewline = false)
     {

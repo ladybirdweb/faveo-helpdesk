@@ -32,7 +32,6 @@ use ArrayAccess;
  * @method void beConstructedThrough($factoryMethod, array $constructorArguments = array())
  * @method void beAnInstanceOf($class)
  * @method void shouldHaveType($type)
- * @method void shouldImplement($interface)
  * @method Subject\Expectation\DuringCall shouldThrow($exception = null)
  */
 class ObjectBehavior implements
