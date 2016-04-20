@@ -1,0 +1,51 @@
+|=======================================================
+| v1.0.7
+|=======================================================
+
+Enhancements
+
+    Ticket Workflow
+    Ticket Overdue Listing
+    In App Notification
+    Cron job separate settings
+    Select all to delete permanently from trash
+    Added Read Unread features in ticket listing pages
+    User linking to where ever usernames are displayed
+    Attachment upload-able while creating ticket from client panel
+    Enhanced email check while setting emails
+    Ticket rating enhanced
+
+Bug Fixed
+
+    Date sorting issue fixed
+    Department folder issue fixed
+    Group update issue fixed
+    Templates issue fixed
+    Email checking issue fixed
+    Ticket rating issue fixed
+    
+    |------------------------------------------
+    |Updating from 1.0.6.10 to 1.0.7
+    |------------------------------------------
+    
+    To upgrade read instructions here http://ladybirdweb.com/support/show/v107
+    
+|======================================================
+| v1.0.6.10
+|======================================================
+
+Bug Fixed
+
+    Redirection issue fixed from ticket details page
+    Login dropdown box responsitivity issue fixed
+    Mailing issue for ticket reply and new ticket creation fixed
+    Email template issue fixed for replying tickets and auto response for ticket creation
+    Settings pages error display issue fixed for html type errors
+    Daily notification issue fixed for the new mail system integrated for faveo
+    Issue fixed for large size attachments
+
+Enhancements
+
+    Added loader image in datatable processing
+    Added readme.txt which will provide install instruction
+    Updated auth validation message and showing custom logo in auth/login page
