@@ -205,7 +205,7 @@ $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->where('dept_i
 $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id','=',Auth::user())->get();
 }
 if (Auth::user()->role == 'agent') {
-            $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
+            $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->get();
         } else {
             $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
