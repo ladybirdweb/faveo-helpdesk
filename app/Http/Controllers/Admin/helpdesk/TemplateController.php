@@ -125,7 +125,7 @@ class TemplateController extends Controller
      */
     public function listdirectories()
     {
-        $path = '../resources/views/emails/';
+        $path = \Config::get('view.paths')[0].'/emails/';
         $directories = scandir($path);
         $directory = str_replace('/', '-', $path);
 
