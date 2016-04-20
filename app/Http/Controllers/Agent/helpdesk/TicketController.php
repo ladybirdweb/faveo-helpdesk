@@ -276,8 +276,9 @@ class TicketController extends Controller
             $help = Help_topic::where('id', '=', $helptopic)->first();
             $form_data = null;
             $auto_response = 0;
+            $status = 1;
             //create user
-            if ($this->create_user($email, $fullname, $subject, $body, $phone, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response)) {
+            if ($this->create_user($email, $fullname, $subject, $body, $phone, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response, $status)) {
                 return Redirect('newticket')->with('success', 'Ticket created successfully!');
             } else {
                 return Redirect('newticket')->with('fails', 'fails');
