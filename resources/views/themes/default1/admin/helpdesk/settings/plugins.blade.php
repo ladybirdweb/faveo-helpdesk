@@ -1,7 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
 
-@section('Settings')
-class="active"
+@section('Plugins')
+active
 @stop
 
 @section('settings-bar')

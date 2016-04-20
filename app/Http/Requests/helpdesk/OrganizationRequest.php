@@ -31,7 +31,7 @@ class OrganizationRequest extends Request
         return [
 
             'name'    => 'required|unique:organization',
-            'website' => 'url',
+            'website' => 'active_url',
                 // 'phone' => 'size:10',
         ];
     }

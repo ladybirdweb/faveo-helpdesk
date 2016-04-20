@@ -13,7 +13,7 @@ return [
     |
      */
 
-    'debug' => true,
+    'debug' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ return [
     |
      */
 
-    'version' => 'Community 1.0.6.10',
+    'version' => 'Community 1.0.7',
 
     /*
     |--------------------------------------------------------------------------
@@ -238,6 +238,7 @@ return [
         'PDF'        => 'Vsmoraes\Pdf\PdfFacade',
         'Gravatar'   => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
         'UTC'        => 'App\Http\Controllers\Agent\helpdesk\TicketController',
+        'Ttable'     => 'App\Http\Controllers\Agent\helpdesk\TicketController', //to use getTable function.
         'SMTPS'      => 'App\Http\Controllers\HomeController',
         'Datatable'  => 'Chumper\Datatable\Facades\DatatableFacade',
         'Zipper'     => 'Chumper\Zipper\Zipper',

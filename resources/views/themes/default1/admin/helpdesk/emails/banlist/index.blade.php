@@ -1,7 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Emails')
-class="active"
+active
 @stop
 
 @section('emails-bar')

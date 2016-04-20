@@ -61,11 +61,12 @@ active
 <li>
     <a href="">Reply Rating:
         <small class="pull-right">
-            <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($tickets->ratingreply=='1')?'checked':'' ?>  />
-            <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($tickets->ratingreply=='2')?'checked':'' ?>  />
-            <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($tickets->ratingreply=='3')?'checked':'' ?>  />
-            <input type="radio" class="star" id="star2" name="rating2" value="4"<?php echo ($tickets->ratingreply=='4')?'checked':'' ?>  />
-            <input type="radio" class="star" id="star1" name="rating2" value="5"<?php echo ($tickets->ratingreply=='5')?'checked':'' ?>  />
+            
+            <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($avg_rating=='1')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($avg_rating=='2')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($avg_rating=='3')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star2" name="rating2" value="4"<?php echo ($avg_rating=='4')?'checked':'' ?>  />
+            <input type="radio" class="star" id="star1" name="rating2" value="5"<?php echo ($avg_rating=='5')?'checked':'' ?>  />
         </small>
     </a>
 </li>
@@ -107,13 +108,15 @@ active
                 </ul>
             </div>
             <?php if ($group->can_delete_ticket == 1 || $group->can_ban_email == 1) {?>
-            <div class="btn-group">
+            <div id="more-option" class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="d2"><i class="fa fa-cogs" style="color:teal;"> </i>
                     {!! Lang::get('lang.more') !!} <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu pull-right">
+                <ul  class="dropdown-menu pull-right">
                     <li data-toggle="modal" data-target="#ChangeOwner"><a href="#"><i class="fa fa-users" style="color:green;"> </i>Change Owner</a></li>
+                    @if($tickets->status != 3 && $tickets->status != 2)
                      <li data-toggle="modal" data-target="#MergeTickets"><a href="#"><i class="fa fa-code-fork" style="color:teal;"> </i>{!! Lang::get('lang.merge-ticket') !!}</a></li>
+                     @endif
                     <?php if ($group->can_delete_ticket == 1) {?>
                     <li id="delete"><a href="#"><i class="fa fa-trash-o" style="color:red;"> </i>{!! Lang::get('lang.delete_ticket') !!}</a></li>
                     <?php }
@@ -194,7 +197,7 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                         <div id="refresh">
                             <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $tickets->status)->first();?><td title="{{$status->properties}}">{{$status->name}}</td></tr>
                             <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first();?><td title="{{$priority->priority_desc}}">{{$priority->priority_desc}}</td></tr>
-                            <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first();?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
+                            <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   <?php $dept123 = App\Model\helpdesk\Agent\Department::where('id', '=', $tickets->dept_id)->first();?><td title="{{$dept123->name}}">{{$dept123->name}}</td></tr>
                             <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        <td>{{$user->email}}</td></tr>
                             @if($user->ban > 0)  <tr><td style="color:orange;"><i class="fa fa-warning"></i><b>
                             {!!  Lang::get('lang.this_ticket_is_under_banned_user')!!}</td><td></td></tr>@endif
@@ -631,7 +634,7 @@ $data = $ConvDate[0];
                                     <div class="user-block" style="margin-bottom:-5px;margin-top:-2px;">
                                        
                                             @if($role->profile_pic != null)
-                                                <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{$role->profile_pic}}"class="img-circle img-bordered-sm" alt="User Image"/>
+                                                <img src="{{$role->profile_pic}}"class="img-circle img-bordered-sm" alt="User Image"/>
                                             @else
                                                 <img src="{{ Gravatar::src($role->email) }}" class="img-circle img-bordered-sm" alt="img-circle img-bordered-sm">
                                             @endif
@@ -891,7 +894,7 @@ $data = $ConvDate[0];
                                 <input type="hidden" name="action" value="change-owner">
                                 <div class="row">
                                     <div class="col-md-2"><spam class="glyphicon glyphicon-user fa-5x"></spam></div>
-                                    <div class="col-md-10">
+                                    <div id="change-refresh" class="col-md-10">
                                     <?php $user = App\User::where('id', '=', $tickets->user_id)->first();?>
 
                                         <!-- <b>{!! Lang::get('lang.user_details') !!}User Details</b><br/> -->
@@ -1556,6 +1559,7 @@ jQuery(document).ready(function() {
                         $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                         $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
                         $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
+                        $("#change-refresh").load("../thread/{{$tickets->id}}  #change-refresh");
                         var message = "{{Lang::get('lang.change-success')}}";
                         $("#alert11").show();
                         $('#message-success1').html(message);
@@ -1885,6 +1889,7 @@ jQuery(document).ready(function() {
                             $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                             $("#refresh3").load("../thread/{{$tickets->id}}  #refresh3");
                             $("#refreshTo").load("../thread/{{$tickets->id}}  #refreshTo");
+                            $("#more-option").load("../thread/{{$tickets->id}}  #more-option");
                             var message = "{{Lang::get('lang.merge-success')}}";
                             $("#merge-succ-alert").show();
                             $('#message-merge-succ').html(message);  

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 18, 2016 at 08:11 PM
+-- Generation Time: Apr 20, 2016 at 06:48 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -173,9 +173,9 @@ CREATE TABLE IF NOT EXISTS `department` (
 --
 
 INSERT INTO `department` (`id`, `name`, `type`, `sla`, `manager`, `ticket_assignment`, `outgoing_email`, `template_set`, `auto_ticket_response`, `auto_message_response`, `auto_response_email`, `recipient`, `group_access`, `department_sign`, `created_at`, `updated_at`) VALUES
-(1, 'Support', '', 1, NULL, '', '', '', '', '', '', '', '', '', '2016-02-18 08:41:11', '2016-02-18 08:41:11'),
-(2, 'Sales', '', 1, NULL, '', '', '', '', '', '', '', '', '', '2016-02-18 08:41:11', '2016-02-18 08:41:11'),
-(3, 'Operation', '', 1, NULL, '', '', '', '', '', '', '', '', '', '2016-02-18 08:41:11', '2016-02-18 08:41:11');
+(1, 'Support', '', 1, NULL, '', '', '', '', '', '', '', '', '', '2016-04-19 22:39:55', '2016-04-19 22:39:55'),
+(2, 'Sales', '', 1, NULL, '', '', '', '', '', '', '', '', '', '2016-04-19 22:39:55', '2016-04-19 22:39:55'),
+(3, 'Operation', '', 1, NULL, '', '', '', '', '', '', '', '', '', '2016-04-19 22:39:55', '2016-04-19 22:39:55');
 
 -- --------------------------------------------------------
 
@@ -194,11 +194,14 @@ CREATE TABLE IF NOT EXISTS `emails` (
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `fetching_host` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `fetching_port` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `fetching_protocol` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `fetching_encryption` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `mailbox_protocol` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `imap_config` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `folder` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `sending_host` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `sending_port` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `sending_protocol` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `sending_encryption` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `internal_notes` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `auto_response` tinyint(1) NOT NULL,
@@ -216,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `emails` (
   KEY `department_2` (`department`,`priority`,`help_topic`),
   KEY `priority` (`priority`),
   KEY `help_topic` (`help_topic`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -251,9 +254,9 @@ CREATE TABLE IF NOT EXISTS `groups` (
 --
 
 INSERT INTO `groups` (`id`, `name`, `group_status`, `can_create_ticket`, `can_edit_ticket`, `can_post_ticket`, `can_close_ticket`, `can_assign_ticket`, `can_transfer_ticket`, `can_delete_ticket`, `can_ban_email`, `can_manage_canned`, `can_manage_faq`, `can_view_agent_stats`, `department_access`, `admin_notes`, `created_at`, `updated_at`) VALUES
-(1, 'Group A', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, '', '2016-02-18 08:41:11', '2016-02-18 08:41:11'),
-(2, 'Group B', 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, '', '2016-02-18 08:41:11', '2016-02-18 08:41:11'),
-(3, 'Group C', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, '', '2016-02-18 08:41:11', '2016-02-18 08:41:11');
+(1, 'Group A', 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, '', '2016-04-19 22:39:54', '2016-04-19 22:39:54'),
+(2, 'Group B', 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, '', '2016-04-19 22:39:54', '2016-04-19 22:39:54'),
+(3, 'Group C', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, '', '2016-04-19 22:39:55', '2016-04-19 22:39:55');
 
 -- --------------------------------------------------------
 
@@ -310,9 +313,9 @@ CREATE TABLE IF NOT EXISTS `help_topic` (
 --
 
 INSERT INTO `help_topic` (`id`, `topic`, `parent_topic`, `custom_form`, `department`, `ticket_status`, `priority`, `sla_plan`, `thank_page`, `ticket_num_format`, `internal_notes`, `status`, `type`, `auto_assign`, `auto_response`, `created_at`, `updated_at`) VALUES
-(1, 'Support query', '', NULL, 1, 1, 2, 1, '', '1', '', 1, 1, NULL, 0, '2016-02-18 08:41:11', '2016-02-18 08:41:11'),
-(2, 'Sales query', '', NULL, 2, 1, 2, 1, '', '1', '', 0, 1, NULL, 0, '2016-02-18 08:41:11', '2016-02-18 08:41:11'),
-(3, 'Operational query', '', NULL, 3, 1, 2, 1, '', '1', '', 0, 1, NULL, 0, '2016-02-18 08:41:11', '2016-02-18 08:41:11');
+(1, 'Support query', '', NULL, 1, 1, 2, 1, '', '1', '', 1, 1, NULL, 0, '2016-04-19 22:39:55', '2016-04-19 22:39:55'),
+(2, 'Sales query', '', NULL, 2, 1, 2, 1, '', '1', '', 0, 1, NULL, 0, '2016-04-19 22:39:55', '2016-04-19 22:39:55'),
+(3, 'Operational query', '', NULL, 3, 1, 2, 1, '', '1', '', 0, 1, NULL, 0, '2016-04-19 22:39:55', '2016-04-19 22:39:55');
 
 -- --------------------------------------------------------
 
@@ -425,7 +428,7 @@ CREATE TABLE IF NOT EXISTS `kb_settings` (
 --
 
 INSERT INTO `kb_settings` (`id`, `pagination`, `created_at`, `updated_at`) VALUES
-(1, 10, '2016-02-18 08:41:12', '2016-02-18 08:41:12');
+(1, 10, '2016-04-19 22:39:56', '2016-04-19 22:39:56');
 
 -- --------------------------------------------------------
 
@@ -474,7 +477,7 @@ CREATE TABLE IF NOT EXISTS `log_notification` (
 --
 
 INSERT INTO `log_notification` (`id`, `log`, `created_at`, `updated_at`) VALUES
-(1, 'NOT-1', '2016-02-18 08:41:11', '2016-02-18 08:41:11');
+(1, 'NOT-1', '2016-04-19 22:39:55', '2016-04-19 22:39:55');
 
 -- --------------------------------------------------------
 
@@ -581,7 +584,45 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES
 ('2016_02_16_140454_add_foreign_keys_to_ticket_thread_table', 1),
 ('2016_02_16_140454_add_foreign_keys_to_tickets_table', 1),
 ('2016_02_16_140454_add_foreign_keys_to_user_assign_organization_table', 1),
-('2016_02_16_140454_add_foreign_keys_to_users_table', 1);
+('2016_02_16_140454_add_foreign_keys_to_users_table', 1),
+('2016_03_31_061239_create_notifications_table', 1),
+('2016_03_31_061534_create_notification_types_table', 1),
+('2016_03_31_061740_create_user_notification_table', 1),
+('2016_04_18_115852_create_workflow_name_table', 1),
+('2016_04_18_115900_create_workflow_rule_table', 1),
+('2016_04_18_115908_create_workflow_action_table', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `model_id` int(11) NOT NULL,
+  `userid_created` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notification_types`
+--
+
+CREATE TABLE IF NOT EXISTS `notification_types` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `message` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `icon_class` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -705,7 +746,7 @@ CREATE TABLE IF NOT EXISTS `settings_alert_notice` (
 --
 
 INSERT INTO `settings_alert_notice` (`id`, `ticket_status`, `ticket_admin_email`, `ticket_department_manager`, `ticket_department_member`, `ticket_organization_accmanager`, `message_status`, `message_last_responder`, `message_assigned_agent`, `message_department_manager`, `message_organization_accmanager`, `internal_status`, `internal_last_responder`, `internal_assigned_agent`, `internal_department_manager`, `assignment_status`, `assignment_assigned_agent`, `assignment_team_leader`, `assignment_team_member`, `transfer_status`, `transfer_assigned_agent`, `transfer_department_manager`, `transfer_department_member`, `overdue_status`, `overdue_assigned_agent`, `overdue_department_manager`, `overdue_department_member`, `system_error`, `sql_error`, `excessive_failure`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2016-02-18 08:41:11', '2016-02-18 08:41:11');
+(1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2016-04-19 22:39:55', '2016-04-19 22:39:55');
 
 -- --------------------------------------------------------
 
@@ -730,7 +771,7 @@ CREATE TABLE IF NOT EXISTS `settings_auto_response` (
 --
 
 INSERT INTO `settings_auto_response` (`id`, `new_ticket`, `agent_new_ticket`, `submitter`, `participants`, `overlimit`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 0, 0, 0, '2016-02-18 08:41:11', '2016-02-18 08:41:11');
+(1, 1, 1, 0, 0, 0, '2016-04-19 22:39:55', '2016-04-19 22:39:55');
 
 -- --------------------------------------------------------
 
@@ -759,7 +800,7 @@ CREATE TABLE IF NOT EXISTS `settings_company` (
 --
 
 INSERT INTO `settings_company` (`id`, `company_name`, `website`, `phone`, `address`, `landing_page`, `offline_page`, `thank_page`, `logo`, `use_logo`, `created_at`, `updated_at`) VALUES
-(1, '', '', '', '', '', '', '', '', '', '2016-02-18 08:41:11', '2016-02-18 08:41:11');
+(1, '', '', '', '', '', '', '', '', '', '2016-04-19 22:39:55', '2016-04-19 22:39:55');
 
 -- --------------------------------------------------------
 
@@ -791,7 +832,7 @@ CREATE TABLE IF NOT EXISTS `settings_email` (
 --
 
 INSERT INTO `settings_email` (`id`, `template`, `sys_email`, `alert_email`, `admin_email`, `mta`, `email_fetching`, `notification_cron`, `strip`, `separator`, `all_emails`, `email_collaborator`, `attachment`, `created_at`, `updated_at`) VALUES
-(1, 'default', NULL, '', '', '', 1, 0, 0, 0, 1, 1, 1, '2016-02-18 08:41:11', '2016-02-18 08:47:51');
+(1, 'default', NULL, '', '', '', 1, 0, 0, 0, 1, 1, 1, '2016-04-19 22:39:55', '2016-04-19 22:39:55');
 
 -- --------------------------------------------------------
 
@@ -827,6 +868,7 @@ CREATE TABLE IF NOT EXISTS `settings_system` (
   `log_level` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `purge_log` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `api_enable` int(11) NOT NULL,
+  `api_key_mandatory` int(11) NOT NULL,
   `api_key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `name_format` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `time_farmat` int(10) unsigned DEFAULT NULL,
@@ -848,8 +890,8 @@ CREATE TABLE IF NOT EXISTS `settings_system` (
 -- Dumping data for table `settings_system`
 --
 
-INSERT INTO `settings_system` (`id`, `status`, `url`, `name`, `department`, `page_size`, `log_level`, `purge_log`, `api_enable`, `api_key`, `name_format`, `time_farmat`, `date_format`, `date_time_format`, `day_date_time`, `time_zone`, `content`, `created_at`, `updated_at`) VALUES
-(1, 1, '', '', '1', '', '', '', 0, '', '', NULL, NULL, 1, '', 79, '', '2016-02-18 08:41:12', '2016-02-18 08:41:12');
+INSERT INTO `settings_system` (`id`, `status`, `url`, `name`, `department`, `page_size`, `log_level`, `purge_log`, `api_enable`, `api_key_mandatory`, `api_key`, `name_format`, `time_farmat`, `date_format`, `date_time_format`, `day_date_time`, `time_zone`, `content`, `created_at`, `updated_at`) VALUES
+(1, 1, '', '', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 79, '', '2016-04-19 22:39:56', '2016-04-19 22:39:56');
 
 -- --------------------------------------------------------
 
@@ -885,7 +927,7 @@ CREATE TABLE IF NOT EXISTS `settings_ticket` (
 --
 
 INSERT INTO `settings_ticket` (`id`, `num_format`, `num_sequence`, `priority`, `sla`, `help_topic`, `max_open_ticket`, `collision_avoid`, `captcha`, `status`, `claim_response`, `assigned_ticket`, `answered_ticket`, `agent_mask`, `html`, `client_update`, `max_file_size`, `created_at`, `updated_at`) VALUES
-(1, '#ABCD 1234 1234567', '0', '1', '2', '1', '', '2', '', 1, 0, 0, 0, 0, 0, 0, 0, '2016-02-18 08:41:11', '2016-02-18 08:41:11');
+(1, '#ABCD 1234 1234567', '0', '1', '2', '1', '', '2', '', 1, 0, 0, 0, 0, 0, 0, 0, '2016-04-19 22:39:55', '2016-04-19 22:39:55');
 
 -- --------------------------------------------------------
 
@@ -911,9 +953,9 @@ CREATE TABLE IF NOT EXISTS `sla_plan` (
 --
 
 INSERT INTO `sla_plan` (`id`, `name`, `grace_period`, `admin_note`, `status`, `transient`, `ticket_overdue`, `created_at`, `updated_at`) VALUES
-(1, 'Sla 1', '6 Hours', '', 1, 0, 0, '2016-02-18 08:41:10', '2016-02-18 08:41:10'),
-(2, 'Sla 2', '12 Hours', '', 1, 0, 0, '2016-02-18 08:41:10', '2016-02-18 08:41:10'),
-(3, 'Sla 3', '24 Hours', '', 1, 0, 0, '2016-02-18 08:41:10', '2016-02-18 08:41:10');
+(1, 'Sla 1', '6 Hours', '', 1, 0, 0, '2016-04-19 22:39:54', '2016-04-19 22:39:54'),
+(2, 'Sla 2', '12 Hours', '', 1, 0, 0, '2016-04-19 22:39:54', '2016-04-19 22:39:54'),
+(3, 'Sla 3', '24 Hours', '', 1, 0, 0, '2016-04-19 22:39:54', '2016-04-19 22:39:54');
 
 -- --------------------------------------------------------
 
@@ -939,9 +981,9 @@ CREATE TABLE IF NOT EXISTS `teams` (
 --
 
 INSERT INTO `teams` (`id`, `name`, `status`, `team_lead`, `assign_alert`, `admin_notes`, `created_at`, `updated_at`) VALUES
-(1, 'Level 1 Support', 1, NULL, 0, '', '2016-02-18 08:41:10', '2016-02-18 08:41:10'),
-(2, 'Level 2 Support', 0, NULL, 0, '', '2016-02-18 08:41:10', '2016-02-18 08:41:10'),
-(3, 'Developer', 0, NULL, 0, '', '2016-02-18 08:41:10', '2016-02-18 08:41:10');
+(1, 'Level 1 Support', 1, NULL, 0, '', '2016-04-19 22:39:54', '2016-04-19 22:39:54'),
+(2, 'Level 2 Support', 0, NULL, 0, '', '2016-04-19 22:39:54', '2016-04-19 22:39:54'),
+(3, 'Developer', 0, NULL, 0, '', '2016-04-19 22:39:54', '2016-04-19 22:39:54');
 
 -- --------------------------------------------------------
 
@@ -1027,7 +1069,7 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   KEY `status` (`status`),
   KEY `assigned_to` (`assigned_to`),
   KEY `source` (`source`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1044,10 +1086,10 @@ CREATE TABLE IF NOT EXISTS `ticket_attachment` (
   `poster` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `file` blob,
+  `file` mediumblob,
   PRIMARY KEY (`id`),
   KEY `thread_id` (`thread_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1106,10 +1148,10 @@ CREATE TABLE IF NOT EXISTS `ticket_priority` (
 --
 
 INSERT INTO `ticket_priority` (`priority_id`, `priority`, `priority_desc`, `priority_color`, `priority_urgency`, `ispublic`) VALUES
-(1, 'low', 'Low', 'info', 4, 1),
-(2, 'normal', 'Normal', 'info', 3, 1),
-(3, 'high', 'High', 'warning', 2, 1),
-(4, 'emergency', 'Emergency', 'danger', 1, 1);
+(1, 'Low', 'Low', 'info', 4, 1),
+(2, 'Normal', 'Normal', 'info', 3, 1),
+(3, 'High', 'High', 'warning', 2, 1),
+(4, 'Emergency', 'Emergency', 'danger', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1158,11 +1200,11 @@ CREATE TABLE IF NOT EXISTS `ticket_status` (
 --
 
 INSERT INTO `ticket_status` (`id`, `name`, `state`, `mode`, `message`, `flags`, `sort`, `properties`, `created_at`, `updated_at`) VALUES
-(1, 'Open', 'open', 3, 'Ticket have been Reopened by', 0, 1, 'Open tickets.', '2016-02-18 08:41:09', '2016-02-18 08:41:09'),
-(2, 'Resolved', 'closed', 1, 'Ticket have been Resolved by', 0, 2, 'Resolved tickets.', '2016-02-18 08:41:09', '2016-02-18 08:41:09'),
-(3, 'Closed', 'closed', 3, 'Ticket have been Closed by', 0, 3, 'Closed tickets. Tickets will still be accessible on client and staff panels.', '2016-02-18 08:41:09', '2016-02-18 08:41:09'),
-(4, 'Archived', 'archived', 3, 'Ticket have been Archived by', 0, 4, 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.', '2016-02-18 08:41:09', '2016-02-18 08:41:09'),
-(5, 'Deleted', 'deleted', 3, 'Ticket have been Deleted by', 0, 5, 'Tickets queued for deletion. Not accessible on ticket queues.', '2016-02-18 08:41:09', '2016-02-18 08:41:09');
+(1, 'Open', 'open', 3, 'Ticket have been Reopened by', 0, 1, 'Open tickets.', '2016-04-19 22:39:53', '2016-04-19 22:39:53'),
+(2, 'Resolved', 'closed', 1, 'Ticket have been Resolved by', 0, 2, 'Resolved tickets.', '2016-04-19 22:39:53', '2016-04-19 22:39:53'),
+(3, 'Closed', 'closed', 3, 'Ticket have been Closed by', 0, 3, 'Closed tickets. Tickets will still be accessible on client and staff panels.', '2016-04-19 22:39:53', '2016-04-19 22:39:53'),
+(4, 'Archived', 'archived', 3, 'Ticket have been Archived by', 0, 4, 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.', '2016-04-19 22:39:53', '2016-04-19 22:39:53'),
+(5, 'Deleted', 'deleted', 3, 'Ticket have been Deleted by', 0, 5, 'Tickets queued for deletion. Not accessible on ticket queues.', '2016-04-19 22:39:53', '2016-04-19 22:39:53');
 
 -- --------------------------------------------------------
 
@@ -1176,6 +1218,8 @@ CREATE TABLE IF NOT EXISTS `ticket_thread` (
   `user_id` int(10) unsigned DEFAULT NULL,
   `poster` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `source` int(10) unsigned DEFAULT NULL,
+  `reply_rating` int(11) NOT NULL,
+  `rating_count` int(11) NOT NULL,
   `is_internal` tinyint(1) NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `body` text COLLATE utf8_unicode_ci NOT NULL,
@@ -1187,7 +1231,7 @@ CREATE TABLE IF NOT EXISTS `ticket_thread` (
   KEY `ticket_id_2` (`ticket_id`),
   KEY `user_id` (`user_id`),
   KEY `source` (`source`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1381,14 +1425,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `users_email_unique` (`email`),
   KEY `assign_group_3` (`assign_group`),
   KEY `primary_dpt_2` (`primary_dpt`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `user_name`, `first_name`, `last_name`, `gender`, `email`, `ban`, `password`, `active`, `ext`, `phone_number`, `mobile`, `agent_sign`, `account_type`, `account_status`, `assign_group`, `primary_dpt`, `agent_tzone`, `daylight_save`, `limit_access`, `directory_listing`, `vacation_mode`, `company`, `role`, `internal_note`, `profile_pic`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'demo.admin', 'demo', 'admin', 0, 'demo@admin.com', 0, '$2y$10$whmtHDap2LVeCcMy4gjYk.nOWKx45M7loy8TsVjWozLLfQbDRswUe', 1, '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'admin', '', '', 'mzJmeXU43vOHGxFvFcnwQTAKa3HEqOjUu7quW9hPxR211S3uAJDZCGJ5PXXj', '2016-02-18 08:41:12', '2016-02-18 08:55:17');
+(1, 'demo@admin.com', 'admin', 'demo', 0, 'demo@admin.com', 0, '$2y$10$r1QfG5KRpX8h0nyf96xCTOCAYvKFYu4HQbZwQM5w000VX/Klyqiri', 1, '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'admin', '', '', NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56');
 
 -- --------------------------------------------------------
 
@@ -1405,6 +1449,22 @@ CREATE TABLE IF NOT EXISTS `user_assign_organization` (
   PRIMARY KEY (`id`),
   KEY `org_id` (`org_id`),
   KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_notification`
+--
+
+CREATE TABLE IF NOT EXISTS `user_notification` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `notification_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `is_read` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -1427,7 +1487,7 @@ CREATE TABLE IF NOT EXISTS `version_check` (
 --
 
 INSERT INTO `version_check` (`id`, `current_version`, `new_version`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2016-02-18 08:41:11', '2016-02-18 08:41:11');
+(1, '', '', '2016-04-19 22:39:55', '2016-04-19 22:39:55');
 
 -- --------------------------------------------------------
 
@@ -1450,26 +1510,80 @@ CREATE TABLE IF NOT EXISTS `widgets` (
 --
 
 INSERT INTO `widgets` (`id`, `name`, `title`, `value`, `created_at`, `updated_at`) VALUES
-(1, 'footer1', NULL, NULL, '2016-02-18 08:41:11', '2016-02-18 08:41:11'),
-(2, 'footer2', NULL, NULL, '2016-02-18 08:41:11', '2016-02-18 08:41:11'),
-(3, 'footer3', NULL, NULL, '2016-02-18 08:41:11', '2016-02-18 08:41:11'),
-(4, 'footer4', NULL, NULL, '2016-02-18 08:41:11', '2016-02-18 08:41:11'),
-(5, 'side1', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(6, 'side2', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(7, 'linkedin', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(8, 'stumble', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(9, 'google', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(10, 'deviantart', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(11, 'flickr', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(12, 'skype', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(13, 'rss', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(14, 'twitter', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(15, 'facebook', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(16, 'youtube', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(17, 'vimeo', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(18, 'pinterest', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(19, 'dribbble', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12'),
-(20, 'instagram', NULL, NULL, '2016-02-18 08:41:12', '2016-02-18 08:41:12');
+(1, 'footer1', NULL, NULL, '2016-04-19 22:39:55', '2016-04-19 22:39:55'),
+(2, 'footer2', NULL, NULL, '2016-04-19 22:39:55', '2016-04-19 22:39:55'),
+(3, 'footer3', NULL, NULL, '2016-04-19 22:39:55', '2016-04-19 22:39:55'),
+(4, 'footer4', NULL, NULL, '2016-04-19 22:39:55', '2016-04-19 22:39:55'),
+(5, 'side1', NULL, NULL, '2016-04-19 22:39:55', '2016-04-19 22:39:55'),
+(6, 'side2', NULL, NULL, '2016-04-19 22:39:55', '2016-04-19 22:39:55'),
+(7, 'linkedin', NULL, NULL, '2016-04-19 22:39:55', '2016-04-19 22:39:55'),
+(8, 'stumble', NULL, NULL, '2016-04-19 22:39:55', '2016-04-19 22:39:55'),
+(9, 'google', NULL, NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56'),
+(10, 'deviantart', NULL, NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56'),
+(11, 'flickr', NULL, NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56'),
+(12, 'skype', NULL, NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56'),
+(13, 'rss', NULL, NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56'),
+(14, 'twitter', NULL, NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56'),
+(15, 'facebook', NULL, NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56'),
+(16, 'youtube', NULL, NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56'),
+(17, 'vimeo', NULL, NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56'),
+(18, 'pinterest', NULL, NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56'),
+(19, 'dribbble', NULL, NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56'),
+(20, 'instagram', NULL, NULL, '2016-04-19 22:39:56', '2016-04-19 22:39:56');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workflow_action`
+--
+
+CREATE TABLE IF NOT EXISTS `workflow_action` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `workflow_id` int(10) unsigned NOT NULL,
+  `condition` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `action` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `workflow_action_1` (`workflow_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workflow_name`
+--
+
+CREATE TABLE IF NOT EXISTS `workflow_name` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `status` int(11) NOT NULL,
+  `order` int(11) NOT NULL,
+  `target` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `internal_note` text COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workflow_rules`
+--
+
+CREATE TABLE IF NOT EXISTS `workflow_rules` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `workflow_id` int(10) unsigned NOT NULL,
+  `matching_criteria` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `matching_scenario` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `matching_relation` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `matching_value` text COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `workflow_rules_1` (`workflow_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 --
 -- Constraints for dumped tables
@@ -1609,6 +1723,18 @@ ALTER TABLE `users`
 ALTER TABLE `user_assign_organization`
   ADD CONSTRAINT `user_assign_organization_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `user_assign_organization_ibfk_1` FOREIGN KEY (`org_id`) REFERENCES `organization` (`id`) ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `workflow_action`
+--
+ALTER TABLE `workflow_action`
+  ADD CONSTRAINT `workflow_action_1` FOREIGN KEY (`workflow_id`) REFERENCES `workflow_name` (`id`) ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `workflow_rules`
+--
+ALTER TABLE `workflow_rules`
+  ADD CONSTRAINT `workflow_rules_1` FOREIGN KEY (`workflow_id`) REFERENCES `workflow_name` (`id`) ON UPDATE NO ACTION;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
