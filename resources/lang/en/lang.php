@@ -57,6 +57,8 @@ return [
     'terms'                       => 'terms',
     'register'                    => 'Register',
     'i_already_have_a_membership' => 'I already have a membership',
+    'see-profile1'                => 'Click here to see ',
+    'see-profile2'                => 's profile',
     /*
       |--------------------------------------
       |   Reset Password Page
