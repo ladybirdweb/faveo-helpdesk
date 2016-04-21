@@ -13,7 +13,7 @@ return [
     |
      */
 
-    'debug' => false,
+    'debug' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -142,7 +142,9 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
-        'Illuminate\Foundation\Providers\ArtisanServiceProvider',
+//
+
+			//
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
         'Illuminate\Cache\CacheServiceProvider',
