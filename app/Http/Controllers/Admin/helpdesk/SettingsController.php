@@ -13,6 +13,8 @@ use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Email\Template;
 use App\Model\helpdesk\Manage\Help_topic;
+use App\Model\helpdesk\Notification\UserNotification;
+use DateTime;
 use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Settings\Access;
 use App\Model\helpdesk\Settings\Alert;
@@ -61,7 +63,35 @@ class SettingsController extends Controller
     {
         return view('themes.default1.admin.helpdesk.setting');
     }
-
+        public function notificationSettings()
+    {
+        return view('themes.default1.admin.helpdesk.settings.notification');
+    }
+public function deleteReadNoti()
+    {
+        $markasread = UserNotification::where('is_read', '=', 1)->get();
+        foreach ($markasread as $mark) {
+            
+            $mark->delete();
+            \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
+        }
+        return redirect()->back()->with('success','You have deleted all the read notifications');
+    }
+    
+    public function deleteNotificationLog()
+    {
+        $days = Input::get('no_of_days');
+        $date = new DateTime;
+$date->modify($days.' day');
+$formatted_date = $date->format('Y-m-d H:i:s');
+       $markasread = DB::table('user_notification')->where('created_at','<=',$formatted_date)->get();
+foreach ($markasread as $mark) {
+            
+            $mark->delete();
+            \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
+        }
+        return redirect()->back()->with('success','You have deleted all the notification records since '.$days.' days.');
+    }
      /**
      * @param int $id
      * @return Response

@@ -362,6 +362,17 @@
                                                 <p class="box-title" >Statuses</p>
                                             </div>
                                         </div>
+                                         <div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{url('settings-notification')}}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa fa-file-text fa-bell-o"></i>
+                                                        </span></a>
+                                                </div>
+                                                <p class="box-title" >Notification Settings</p>
+                                            </div>
+                                        </div>
                                          
                                     </div>
                                 </div>

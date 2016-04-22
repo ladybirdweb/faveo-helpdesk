@@ -25,6 +25,7 @@ use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\kb\Settings;
+use App\Model\helpdesk\Notification\NotificationType;
 // Knowledge base
 use Illuminate\Database\Seeder;
 
@@ -53,6 +54,10 @@ class DatabaseSeeder extends Seeder
         foreach ($date_time_formats as $date_time_format) {
             Date_time_format::create(['format' => $date_time_format]);
         }
+        NotificationType::create(['id' => '1','message' => 'A new user is registered','type' => 'registration','icon_class' => 'fa fa-user' ]);
+        NotificationType::create(['id' => '2','message' => 'You have a new reply on this ticket','type' => 'reply','icon_class' => 'fa fa-envelope' ]);
+        NotificationType::create(['id' => '3','message' => 'A new ticket has been created','type' => 'new_ticket','icon_class' => 'fa fa-envelope' ]);
+
         /* Date format */
         $date_formats = [
             'dd/mm/yyyy',
