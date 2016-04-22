@@ -66,8 +66,8 @@
                         </div>
                     </div>
 
-                    <div class="form-group {{ $errors->has('backlist_offender') ? 'has-error' : '' }}">
-                        <!-- gender -->
+<!--                    <div class="form-group {{ $errors->has('backlist_offender') ? 'has-error' : '' }}">
+                         gender 
                         <div class="row">
 
                             <div class="col-md-3">
@@ -84,7 +84,7 @@
                             </div>
                         </div>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="form-group {{ $errors->has('lockout_period') ? 'has-error' : '' }}"> 
                         <div class="row">
 
@@ -98,7 +98,7 @@
                         </div>
                     </div>
                     </div>
-                    <div class="form-group {{ $errors->has('days_to_keep_logs') ? 'has-error' : '' }}">
+<!--                    <div class="form-group {{ $errors->has('days_to_keep_logs') ? 'has-error' : '' }}">
                         <div class="row">
 
                             <div class="col-md-3"><label for="title">No of days to keep logs:</label></div>
@@ -108,7 +108,7 @@
                             <span>{!! Form::text('days_to_keep_logs',null,['class'=>'form-control'])!!} Days</span>
                         </div>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="form-group">
                         
                         <button type="submit" class="btn btn-success">Save</button>

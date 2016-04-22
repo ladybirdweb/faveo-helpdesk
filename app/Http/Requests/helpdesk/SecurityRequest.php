@@ -30,11 +30,8 @@ class SecurityRequest extends Request
     {
         return [
             'lockout_message'  => 'required',
-            'backlist_offender' => 'required',
             'backlist_threshold'  => 'required|numeric',
-            'lockout_period'      => 'required|numeric',
-            'days_to_keep_logs'     => 'required|numeric',
-            
+            'lockout_period'      => 'required|numeric',      
         ];
     }
 }

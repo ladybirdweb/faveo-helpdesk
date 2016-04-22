@@ -166,22 +166,23 @@ class AuthController extends Controller
     public function postLogin(LoginRequest $request)
     {
         // Set login attempts and login time
-        $loginAttempts = 1;
+
         $value = $_SERVER['REMOTE_ADDR'];
-        $result = $this->confirmIPAddress($value);
+        $usernameinput = $request->input('email');
+        $password = $request->input('password');
+        $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
+        $result = $this->confirmIPAddress($value,$usernameinput);
          // If attempts > 3 and time < 30 minutes
         $security = Security::whereId('1')->first();
         if($result == 1){
          return redirect()->back()->withErrors('email', 'Incorrect details')->with('error', $security->lockout_message);
       } 
-        $usernameinput = $request->input('email');
-        $password = $request->input('password');
-        $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
+        $loginAttempts = 1;
         // If session has login attempts, retrieve attempts counter and attempts time
         if (\Session::has('loginAttempts')) {
             $loginAttempts = \Session::get('loginAttempts');
             $loginAttemptTime = \Session::get('loginAttemptTime');
-            $this->addLoginAttempt($value);
+            $this->addLoginAttempt($value,$usernameinput);
             // $credentials = $request->only('email', 'password');
             $usernameinput = $request->input('email');
             $password = $request->input('password');
@@ -199,7 +200,7 @@ class AuthController extends Controller
         } else { // If no login attempts stored, init login attempts and time
             \Session::put('loginAttempts', $loginAttempts);
             \Session::put('loginAttemptTime', time());
-            $this->clearLoginAttempts($value);
+            $this->clearLoginAttempts($value,$usernameinput);
         }
         // If auth ok, redirect to restricted area
         \Session::put('loginAttempts', $loginAttempts + 1);
@@ -226,7 +227,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function addLoginAttempt($value) {
+    public function addLoginAttempt($value,$field) {
 	  $result = DB::table('login_attempts')->where('IP','=',$value)->first();
 	  $data = $result;
 	          $security = Security::whereId('1')->first();
@@ -235,14 +236,14 @@ class AuthController extends Controller
       {
         $attempts = $data->Attempts+1;
         if($attempts==$apt) {
-		 $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts.", LastLogin=NOW() WHERE IP = '$value'");
+		 $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts.", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
 		}
         else {
-		 $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value'");
+		 $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
 		}
        }
       else {
-	   $result = DB::select("INSERT INTO login_attempts (Attempts,IP,LastLogin) values (1, '$value', NOW())");
+	   $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
 	  }
     }
      /**
@@ -252,8 +253,8 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-     public function clearLoginAttempts($value) {
-         $data =  DB::table('login_attempts')->where('IP','=',$value)->update(['attempts' => '0']);
+     public function clearLoginAttempts($value,$field) {
+         $data =  DB::table('login_attempts')->where('IP','=',$value)->orWhere('User','=',$field)->update(['attempts' => '0']);
 	return $data;
    }
    
@@ -264,13 +265,13 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-   public function confirmIPAddress($value) {
+   public function confirmIPAddress($value,$field) {
          $security = Security::whereId('1')->first();
        $time = $security->lockout_period;
        $max_attempts = $security->backlist_threshold;
        $table = 'login_attempts';
      $result = DB::select("SELECT Attempts, (CASE when LastLogin is not NULL and DATE_ADD(LastLogin, INTERVAL ".$time." MINUTE)>NOW() then 1 else 0 end) as Denied ".
-   " FROM ".$table." WHERE IP = '$value'");
+   " FROM ".$table." WHERE IP = '$value' OR User = '$field'");
   
  $data = $result;
    //Verify that at least one login attempt is in database
@@ -285,7 +286,7 @@ class AuthController extends Controller
       }
      else
      {
-        $this->clearLoginAttempts($value);
+        $this->clearLoginAttempts($value,$field);
         return 0;
      }
    }
