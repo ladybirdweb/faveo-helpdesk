@@ -144,7 +144,7 @@ return [
          */
 //
 
-			//
+            //
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
         'Illuminate\Cache\CacheServiceProvider',
