@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Agent\kb;
 
-// controllersuse App\Http\Controllers\Agent\helpdesk\TicketController;
+use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 // request
 use App\Http\Requests\kb\PageRequest;
