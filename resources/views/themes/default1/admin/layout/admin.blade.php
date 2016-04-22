@@ -223,6 +223,8 @@
                 <li @yield('alert')><a href="{{url('getalert')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.alert_notices') !!}</a></li>
                 <li @yield('languages')><a href="{{url('languages')}}"><i class="fa fa-language"></i>{!! Lang::get('lang.language') !!}</a></li>
                 <li @yield('cron')><a href="{{url('job-scheduler')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.cron') !!}</a></li>
+                <li @yield('cron')><a href="{{url('setting-status')}}"><i class="fa fa-stack-overflow"></i>{!! Lang::get('lang.manage_status') !!}</a></li>
+                <li @yield('cron')><a href="{{url('security')}}"><i class="fa fa-lock"></i>{!! Lang::get('lang.security') !!}</a></li>
             </ul>
         </li>
         <li class="treeview @yield('Themes')">

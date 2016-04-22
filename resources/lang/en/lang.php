@@ -29,6 +29,7 @@ return [
       |--------------------------------------
      */
     'security' => 'Security',
+    'manage_status'=> 'Manage Status',
     'Login_to_start_your_session' => 'Login to start your session',
     'login'                       => 'Login',
     'remember'                    => 'Remember Me',

@@ -351,6 +351,18 @@
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
+                                        <div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{url('setting-status')}}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa fa-file-text fa-stack-1x"></i>
+                                                        </span></a>
+                                                </div>
+                                                <p class="box-title" >Statuses</p>
+                                            </div>
+                                        </div>
+                                         
                                     </div>
                                 </div>
                                 <!-- /.row -->
