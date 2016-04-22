@@ -61,7 +61,51 @@ class TicketController extends Controller
         $this->NotificationController = $NotificationController;
         $this->middleware('auth');
     }
+    public function updateStatuses($id,$state, Tickets $ticket) {
+        if($state == 'open') {
+        $ticket_status = $ticket->where('id', '=', $id)->first();
+        $ticket_status->status = 1;
+        $ticket_status->reopened_at = date('Y-m-d H:i:s');
+        $ticket_status->save();
+        $ticket_status_message = Ticket_Status::where('id', '=', $ticket_status->status)->first();
+        $thread = New Ticket_Thread;
+        $thread->ticket_id = $ticket_status->id;
+        $thread->user_id = Auth::user()->id;
+        $thread->is_internal = 1;
+        $thread->body = $ticket_status_message->message . " " . Auth::user()->full_name;
+        $thread->save();
+        return "your ticket" . $ticket_status->ticket_number . " has been opened";
+        }
+        else {
+            $ticket_status = $ticket->where('id', '=', $id)->first();
+        $ticket_status->status = 3;
+        $ticket_status->closed = 1;
+        $ticket_status->closed_at = date('Y-m-d H:i:s');
+        $ticket_status->save();
+        $ticket_thread = Ticket_Thread::where('ticket_id', '=', $ticket_status->id)->first();
+        $ticket_subject = $ticket_thread->title;
+        $ticket_status_message = Ticket_Status::where('id', '=', $ticket_status->status)->first();
+        $thread = New Ticket_Thread;
+        $thread->ticket_id = $ticket_status->id;
+        $thread->user_id = Auth::user()->id;
+        $thread->is_internal = 1;
+        $thread->body = $ticket_status_message->message . " " . Auth::user()->full_name;
+        $thread->save();
 
+        $user_id = $ticket_status->user_id;
+        $user = User::where('id', '=', $user_id)->first();
+        $email = $user->email;
+        $user_name = $user->user_name;
+        $ticket_number = $ticket_status->ticket_number;
+        try {
+            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket_status->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
+        } catch (\Exception $e) {
+            return 0;
+        }
+
+        return "your ticket" . $ticket_status->ticket_number . " has been closed";
+        }
+    }
     /**
      * Show the Inbox ticket list page.
      *

@@ -13,6 +13,8 @@ use App\User;
 // classes
 use Auth;
 use Hash;
+use DB;
+use App\Model\helpdesk\Settings\Security;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
@@ -165,6 +167,13 @@ class AuthController extends Controller
     {
         // Set login attempts and login time
         $loginAttempts = 1;
+        $value = $_SERVER['REMOTE_ADDR'];
+        $result = $this->confirmIPAddress($value);
+         // If attempts > 3 and time < 30 minutes
+        $security = Security::whereId('1')->first();
+        if($result == 1){
+         return redirect()->back()->withErrors('email', 'Incorrect details')->with('error', $security->lockout_message);
+      } 
         $usernameinput = $request->input('email');
         $password = $request->input('password');
         $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
@@ -172,13 +181,15 @@ class AuthController extends Controller
         if (\Session::has('loginAttempts')) {
             $loginAttempts = \Session::get('loginAttempts');
             $loginAttemptTime = \Session::get('loginAttemptTime');
+            $this->addLoginAttempt($value);
             // $credentials = $request->only('email', 'password');
             $usernameinput = $request->input('email');
             $password = $request->input('password');
             $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
             // If attempts > 3 and time < 10 minutes
-            if ($loginAttempts > 4 && (time() - $loginAttemptTime <= 600)) {
-                return redirect()->back()->withErrors('email', 'incorrect email')->with('error', 'Maximum login attempts reached. Try again in a while');
+            if ($loginAttempts > 3 && (time() - $loginAttemptTime <= 600)) {
+                
+                return redirect()->back()->withErrors('email', 'incorrect email')->with('error', $security->lockout_message);
             }
             // If time > 10 minutes, reset attempts counter and time in session
             if (time() - $loginAttemptTime > 600) {
@@ -188,6 +199,7 @@ class AuthController extends Controller
         } else { // If no login attempts stored, init login attempts and time
             \Session::put('loginAttempts', $loginAttempts);
             \Session::put('loginAttemptTime', time());
+            $this->clearLoginAttempts($value);
         }
         // If auth ok, redirect to restricted area
         \Session::put('loginAttempts', $loginAttempts + 1);
@@ -207,7 +219,78 @@ class AuthController extends Controller
         ])->with('error', Lang::get('lang.invalid'));
         // Increment login attempts
     }
-
+ /**
+     * Add login attempt.
+     *
+     * @param type IPaddress $value
+     *
+     * @return type Response
+     */
+    public function addLoginAttempt($value) {
+	  $result = DB::table('login_attempts')->where('IP','=',$value)->first();
+	  $data = $result;
+	          $security = Security::whereId('1')->first();
+                  $apt = $security->backlist_threshold;
+	  if($data)
+      {
+        $attempts = $data->Attempts+1;
+        if($attempts==$apt) {
+		 $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts.", LastLogin=NOW() WHERE IP = '$value'");
+		}
+        else {
+		 $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value'");
+		}
+       }
+      else {
+	   $result = DB::select("INSERT INTO login_attempts (Attempts,IP,LastLogin) values (1, '$value', NOW())");
+	  }
+    }
+     /**
+     * Clear login attempt.
+     *
+     * @param type IPaddress $value
+     *
+     * @return type Response
+     */
+     public function clearLoginAttempts($value) {
+         $data =  DB::table('login_attempts')->where('IP','=',$value)->update(['attempts' => '0']);
+	return $data;
+   }
+   
+    /**
+     * Confiem IP.
+     *
+     * @param type IPaddress $value
+     *
+     * @return type Response
+     */
+   public function confirmIPAddress($value) {
+         $security = Security::whereId('1')->first();
+       $time = $security->lockout_period;
+       $max_attempts = $security->backlist_threshold;
+       $table = 'login_attempts';
+     $result = DB::select("SELECT Attempts, (CASE when LastLogin is not NULL and DATE_ADD(LastLogin, INTERVAL ".$time." MINUTE)>NOW() then 1 else 0 end) as Denied ".
+   " FROM ".$table." WHERE IP = '$value'");
+  
+ $data = $result;
+   //Verify that at least one login attempt is in database
+   if (!$data) {
+     return 0;
+   } 
+   if ($data[0]->Attempts >= $max_attempts)
+   {
+      if($data[0]->Denied == 1)
+      {
+         return 1;
+      }
+     else
+     {
+        $this->clearLoginAttempts($value);
+        return 0;
+     }
+   }
+   return 0;  
+  }
     /**
      * Get Failed login message.
      *

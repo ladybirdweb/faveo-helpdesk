@@ -339,7 +339,18 @@
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
-
+<div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{url('security')}}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa  fa-lock fa-stack-1x"></i>
+                                                        </span></a>
+                                                </div>
+                                                <center class="box-title" >{!! Lang::get('lang.security') !!}</center>
+                                            </div>
+                                        </div>
+                                        <!--/.col-md-2-->
                                     </div>
                                 </div>
                                 <!-- /.row -->

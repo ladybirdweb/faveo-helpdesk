@@ -62,6 +62,74 @@ class SettingsController extends Controller
         return view('themes.default1.admin.helpdesk.setting');
     }
 
+     /**
+     * @param int $id
+     * @return Response
+     * @param $compant instance of company table
+     *
+     * get the form for company setting page
+     */
+    public function getStatuses() {
+        try {
+            /* fetch the values of company from company table */
+            $statuss = \DB::table('ticket_status')->get();
+            /* Direct to Company Settings Page */
+            return view('themes.default1.admin.helpdesk.settings.status', compact('statuss'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
+        }
+    }
+    
+        /**
+     * @param int $id
+     * @return Response
+     * @param $compant instance of company table
+     *
+     * get the form for company setting page
+     */
+    public function editStatuses($id) {
+        try {
+            /* fetch the values of company from company table */
+            $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->first();
+            $statuss->name = Input::get('name');
+            $statuss->state = Input::get('state');
+            $statuss->email_user = Input::get('email_user');
+            $statuss->sort = Input::get('sort');
+            $statuss->save();
+            /* Direct to Company Settings Page */
+            return redirect()->back()->with('success','Status has been updated!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
+        }
+    }
+    
+    public function createStatuses() {
+//        try {
+            /* fetch the values of company from company table */
+            $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::create(['name' => Input::get('name'),'state' => Input::get('state'),'sort' => Input::get('sort'),'email_user' => Input::get('email_user')]);
+            /* Direct to Company Settings Page */
+            return redirect()->back()->with('success','Status has been created!');
+//        } catch (Exception $ex) {
+//            return redirect()->back()->with('fails', $ex->errorInfo[2]);
+//        }
+    }
+    
+    public function deleteStatuses($id) {
+        try {
+            if($id > 5) {
+            /* fetch the values of company from company table */
+             \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->delete();
+            /* Direct to Company Settings Page */
+            return redirect()->back()->with('success','Status has been deleted');
+            }
+            else {
+                return redirect()->back()->with('failed','You cannot delete this status');
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
+        }
+    }
+    
     /**
      * @param int $id
      * @param $compant instance of company table

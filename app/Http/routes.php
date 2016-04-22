@@ -125,6 +125,18 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
     Route::patch('postalert/{id}', 'Admin\helpdesk\SettingsController@postalert'); // Updating the Alert table with requests
 
+    Route::resource('security', 'Admin\helpdesk\SecurityController'); // direct to security setting page
+      Route::patch('security/{id}', ['as' => 'securitys.update', 'uses' => 'Admin\helpdesk\SecurityController@update']); // direct to security setting page  
+    Route::get('setting-status', 'Admin\helpdesk\SettingsController@getStatuses'); // direct to status setting page
+
+    Route::patch('status-update/{id}', ['as' => 'statuss.update', 'uses' => 'Admin\helpdesk\SettingsController@editStatuses']);
+    
+    Route::post('status-create', ['as' => 'statuss.create', 'uses' => 'Admin\helpdesk\SettingsController@createStatuses']);
+    
+    Route::get('status-delete/{id}', ['as' => 'statuss.delete', 'uses' => 'Admin\helpdesk\SettingsController@deleteStatuses']);
+
+    Route::get('ticket/status/{id}/{state}', ['as' => 'statuss.state', 'uses' => 'Agent\helpdesk\TicketController@updateStatuses']);
+    
     Route::get('getratings', 'Admin\helpdesk\SettingsController@RatingSettings');
 
     Route::get('deleter/{rating}', ['as' => 'ratings.delete', 'uses' => 'Admin\helpdesk\SettingsController@RatingDelete']);
