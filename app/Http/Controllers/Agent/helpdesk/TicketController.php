@@ -671,6 +671,7 @@ class TicketController extends Controller
                 } catch (\Exception $e) {
                 }
             }
+
             return ['0' => $ticket_number2, '1' => true];
         }
     }
