@@ -68,28 +68,33 @@
                                     <i class="fa fa-bell-o"></i>
                                     <span class="label label-warning" id="count"><?php echo count($notifications); ?></span>
                                 </a>
-                                <ul class="dropdown-menu">
-                                    <li class="header">You have <?php echo count($notifications); ?> notifications</li>
+                                 <ul class="dropdown-menu" style="width: -moz-max-content">
+                                    <li class="header">You have {!! count($notifications) !!} notifications</li>
                                     <li>
+
                                         <ul class="menu">
                                             @foreach($notifications as $notification)
+                                                     <?php $user = App\User::whereId($notification->user_id)->first(); ?>
                                             @if($notification->type == 'registration')
-                                            <li>
-                                                <a href="{!! route('user.show', $notification->notification_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
-                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
-                                                </a>
+                                            <li><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:10%;height: 10%" alt="User Image" />
+                                                <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
+                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!} with id "{!!$notification -> model_id!!}"
+                                                </a></span>
                                             </li>
                                             @else
-                                            <li>
-                                                <a href="{!! route('ticket.thread', $notification->notification_id) !!}" id='{{ $notification->notification_id }}' class='noti_User'>
-                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
-                                                </a>
+                                            <li><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:10%;height: 10%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
+                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!} with id "{!!$notification -> model_id!!}"
+                                                </a></span>
                                             </li>
                                             @endif
                                             @endforeach
+
                                         </ul>
                                     </li>
-                                    <li class="footer"><a href="{{ url('notifications-list') }}">View all</a></li>
+                                    <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
+                                    </li>
+
                                 </ul>
                             </li>
                             <li class="dropdown user user-menu">

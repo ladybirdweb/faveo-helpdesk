@@ -44,6 +44,8 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
     //Notification marking
     Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
 
+    Route::post('mark-all-read/{id}', 'Common\NotificationController@markAllRead');
+        
     Route::get('notifications-list', ['as' => 'notification.list', 'uses' => 'Common\NotificationController@show']);
 
     Route::post('notification-delete/{id}', ['as' => 'notification.delete', 'uses' => 'Common\NotificationController@delete']);

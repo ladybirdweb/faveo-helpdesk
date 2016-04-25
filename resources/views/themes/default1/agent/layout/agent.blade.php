@@ -77,34 +77,45 @@ if ($company != null) {
                                 <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
                             @endif
                             <!-- User Account: style can be found in dropdown.less -->
-                            <li class="dropdown notifications-menu">
+                            <li class="dropdown notifications-menu" id="myDropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
                                     <i class="fa fa-bell-o"></i>
                                     <span class="label label-warning" id="count">{!! count($notifications) !!}</span>
                                 </a>
-                                <ul class="dropdown-menu">
-                                    <li class="header">You have {!! count($notifications) !!} notifications</li>
-                                    <li>
-
+                                <ul class="dropdown-menu" style="width: -moz-max-content">
+                                         
+                                    <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
+        <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4><i class="icon fa fa-check"></i>Alert!</h4>
+        <div id="message-success1"></div>
+    </div>
+                                   
+                                    <li id="refreshNote">
+ <li class="header">You have {!! count($notifications) !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
+                                    
                                         <ul class="menu">
                                             @foreach($notifications as $notification)
+                                                     <?php $user = App\User::whereId($notification->user_id)->first(); ?>
                                             @if($notification->type == 'registration')
-                                            <li>
+                                            <li style="list-style: none;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:10%;height: 10%" alt="User Image" />
                                                 <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
-                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
-                                                </a>
+                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!} with id "{!!$notification -> model_id!!}"
+                                                </a></span>
                                             </li>
                                             @else
-                                            <li>
+                                            <li style="list-style: none;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:10%;height: 10%" alt="User Image" />
                                                 <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
-                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
-                                                </a>
+                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!} with id "{!!$notification -> model_id!!}"
+                                                </a></span>
                                             </li>
                                             @endif
                                             @endforeach
 
                                         </ul>
                                     </li>
+                                    <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
+                                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;" id="notification-loader">
+                                            </div><div class="col-md-5"></div></li>
                                     <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
                                     </li>
 
@@ -426,8 +437,34 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                                     }
                                 });
                     });
+                     });
+                    $('#read-all').click(function () {
+                        
+var id2 = <?php echo \Auth::user()->id ?>;
+                    var dataString = 'id=' + id2;
+                        $.ajax
+                                ({
+                                    type: "POST",
+                                    url: "{{url('mark-all-read')}}" + "/" + id2,
+                                    data: dataString,
+                                    cache: false,
+                                    beforeSend: function () {
+                                        $('#myDropdown').on('hide.bs.dropdown', function () {
+    return false;
+});
 
-                });
+$("#refreshNote").hide();
+                    $("#notification-loader").show();
+                },
+                success: function (response) {
+                     $("#refreshNote").load("<?php echo $_SERVER['REQUEST_URI']; ?>  #refreshNote");
+                    $("#notification-loader").hide();
+                    $('#myDropdown').removeClass('open');
+              
+            }
+                                });
+                                    });
+               
         </script>
 <script>
 $(function() {

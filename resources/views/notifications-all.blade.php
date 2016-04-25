@@ -112,6 +112,7 @@ class="active"
                             <div class="box-body">
                                 <ul class="todo-list">
                                     @if(count($notifications))
+                           
                                     @foreach($notifications as $notification)
                                     <?php $user = App\User::whereId($notification->user_id)->first(); ?>
                                     @if($notification->type == 'registration')
@@ -122,7 +123,7 @@ class="active"
                                         <input type="checkbox" value="" name="cc" class="noti_User clickfun" id="{{$notification -> notification_id}}">
                                         <label for='cl'  data-toggle="tooltip"  data-placement="top" title="Mark Read"><span></span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:10%;height: 10%" alt="User Image" />
                                             <!-- todo text -->
-                                            <h6 class="textcontent marginzero"><a href="{!! route('user.show', $notification->notification_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>{!! $notification->message !!} with id {!!$notification -> model_id!!}</a></h6>
+                                            <h6 class="textcontent marginzero"><a href="{!! route('user.show', $notification->notification_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>{!! $notification->message !!} with id "{!!$notification -> model_id!!}"</a></h6>
                                             <small class="label label-danger"><i class="fa fa-clock-o"></i> {{ $notification -> created_at }}</small></label> <!-- Emphasis label -->
 
                                         <!-- General tools such as edit or delete-->
@@ -154,7 +155,7 @@ class="active"
 
                                     </li>
                                     @endif
-
+{!! $notifications->render() !!}
                                 </ul>
                             </div>
 
