@@ -380,6 +380,26 @@ class UserController extends Controller
 
         return 1;
     }
+    
+        public function orgAssignUser($id)
+    {
+        $org = Input::get('org');
+        $user_org = new User_org();
+        $user_org->org_id = $id;
+        $user_org->user_id = $org;
+        $user_org->save();
+
+        return 1;
+    }
+    
+    public function removeUserOrg($id)
+    {
+        
+        $user_org = User_org::where('org_id','=',$id)->first();
+        $user_org->delete();
+        
+        return redirect()->back()->with('success', 'The user has been removed from this organization');
+    }
 
     /**
      * creating an organization in user profile page via modal popup.

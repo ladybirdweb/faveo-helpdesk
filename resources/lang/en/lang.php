@@ -29,6 +29,8 @@ return [
       |--------------------------------------
      */
     'template-types' => 'Template Types',
+    'modify' => 'Modify',
+    'rating_name' => 'Rating Name',
     'add_user_to_this_organization' => 'Add User to this Organization',
     'Tickets_of' => 'Tickets Of',
     'security' => 'Security',

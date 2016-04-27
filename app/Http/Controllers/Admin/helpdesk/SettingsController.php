@@ -681,6 +681,16 @@ foreach ($markasread as $mark) {
         return redirect()->back()->with('success', 'Successfully updated');
     }
 
+    public function createRating()
+    {
+        $name = Input::get('rating_name');
+        $publish = Input::get('publish');
+        $modify = Input::get('modify');
+        DB::table('settings_ratings')->insert(['rating_name' => $name, 'publish' => $publish, 'modify' => $modify]);
+
+        return redirect()->back()->with('success', 'Successfully created this rating');
+    }
+
     /**
      *  To delete a type of rating.
      *

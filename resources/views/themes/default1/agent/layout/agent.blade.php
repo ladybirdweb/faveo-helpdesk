@@ -97,15 +97,16 @@ if ($company != null) {
                                             @foreach($notifications as $notification)
                                                      <?php $user = App\User::whereId($notification->user_id)->first(); ?>
                                             @if($notification->type == 'registration')
-                                            <li style="list-style: none;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:10%;height: 10%" alt="User Image" />
+                                            <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
                                                 <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
-                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!} with id "{!!$notification -> model_id!!}"
+                                                    {!! $notification->message !!}
                                                 </a></span>
                                             </li>
                                             @else
-                                            <li style="list-style: none;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:10%;height: 10%" alt="User Image" />
+                                            <?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification -> model_id)->first(); ?>
+                                            <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
                                                 <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
-                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!} with id "{!!$notification -> model_id!!}"
+                                                   {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
                                                 </a></span>
                                             </li>
                                             @endif

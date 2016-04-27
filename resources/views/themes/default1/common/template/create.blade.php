@@ -3,7 +3,7 @@
 <div class="box box-primary">
 
     <div class="content-header">
-        {!! Form::open(['url'=>'templates','method'=>'post']) !!}
+        {!! Form::open(['route'=>'templates.store','method'=>'post']) !!}
         <h4>{{Lang::get('lang.templates')}}	{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}</h4>
 
     </div>
@@ -62,10 +62,10 @@
 
                 </div>
                 <div class="row">
-                    <div class="col-md-12 form-group {{ $errors->has('url') ? 'has-error' : '' }}">
+                    <div class="col-md-12 form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
          
-                        {!! Form::label('url',Lang::get('lang.subject')) !!}
-                        {!! Form::text('url',null,['class' => 'form-control']) !!}
+                        {!! Form::label('subject',Lang::get('lang.subject')) !!}
+                        {!! Form::text('subject',null,['class' => 'form-control']) !!}
 
                     </div>
                 </div>
@@ -91,8 +91,8 @@
 });
 </script>
                         
-                        {!! Form::label('data',Lang::get('lang.content'),['class'=>'required']) !!}
-                        {!! Form::textarea('data',null,['class'=>'form-control','id'=>'textarea']) !!}
+                        {!! Form::label('message',Lang::get('lang.content'),['class'=>'required']) !!}
+                        {!! Form::textarea('message',null,['class'=>'form-control','id'=>'textarea']) !!}
                        
                     </div>
 

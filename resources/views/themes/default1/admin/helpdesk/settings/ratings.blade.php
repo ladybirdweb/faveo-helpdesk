@@ -30,6 +30,74 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">Current Ratings</h3>
                      <div class="box-tools pull-right">
+                                              <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-toggle="modal" data-target="#create" title="Create"><i class="fa fa-plus-circle fa-2x"></i></button>
+                 <div class="modal fade" id="create">
+                                       <div class="modal-dialog">
+                                          <div class="modal-content">
+                                  {!! Form::open(['route'=>'rating.create']) !!}
+                    <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Create</h4>
+        </div>
+                     <div class="modal-body">
+                         <h3 id="conn" style="display:none;">Successfully Saved</h3>
+                                              <div id="show" style="display:none;">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-9">
+            <img src="{{asset("dist/img/loading.gif")}}">
+        </div>
+    </div>
+</div>
+                              <div class="form-group {{ $errors->has('rating_name') ? 'has-error' : '' }}">
+        <div class="row">
+                 
+              <div class="col-md-6">
+                    <label for="title">Name:</label><br>
+{!! Form::text('rating_name',null,['class'=>'form-control'])!!}
+              </div>
+            
+        </div></div>
+         <div class="form-group {{ $errors->has('publish') ? 'has-error' : '' }}">
+		<!-- gender -->
+			{!! Form::label('gender','Would you like to publish this rating?') !!}
+                        <blockquote>If you choose Yes then the rating will be publish in client and agent panel.</blockquote>
+			<div class="row">
+				<div class="col-xs-3">
+					{!! Form::radio('publish','1') !!} {{Lang::get('lang.yes')}}
+				</div>
+				<div class="col-xs-3">
+					{!! Form::radio('publish','0') !!} {{Lang::get('lang.no')}}
+				</div>
+			</div>
+		</div>
+                           <div class="form-group {{ $errors->has('modify') ? 'has-error' : '' }}">
+		<!-- Email user -->
+						
+{!! Form::label('modify','Allow user to change the rating?') !!}
+                        <blockquote>If you choose 'YES' user can modify the rating.</blockquote>
+			<div class="row">
+				<div class="col-xs-3">
+					{!! Form::radio('modify','1') !!} {{Lang::get('lang.yes')}}
+				</div>
+				<div class="col-xs-3">
+					{!! Form::radio('modify','0') !!} {{Lang::get('lang.no')}}
+				</div>
+		</div>        
+                     </div>
+                         </div>
+                                                                        <div class="modal-footer">
+                                                                            <div class="form-group">
+                                                                                {!! Form::submit('Create Rating',['class'=>'btn btn-primary'])!!}
+                                                                            
+                                                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                                                        </div></div>
+                                                                        {!! Form::close() !!}
+                                                                    </div> 
+                                                                </div>
+                                                            </div>
                 <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
                 <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
               </div>
@@ -52,7 +120,7 @@
                                 <td>{!! $rating->id !!}</td>
                                 <td>{!! $rating->rating_name !!}</td>
                                 
-                                 <td>{!! link_to_route('ratings.show','View Details',[$rating->slug],['id'=>'View','class'=>'btn btn-primary btn-sm']) !!}
+                                 <td>
                                      
                                    <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#{{$rating->id}}">Edit Details</button> 
                                    
@@ -61,7 +129,7 @@
                                           <div class="modal-content">
                                              
                                              
-                                  {!! Form::model($rating,['route'=>['ratings.update', $rating->id],'method'=>'PATCH','files' => true]) !!} 
+                                  {!! Form::model($rating,['route'=>['settings.rating', $rating->id],'method'=>'PATCH','files' => true]) !!} 
                                   {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
                     <div class="modal-header">
                        
@@ -79,8 +147,38 @@
         </div>
     </div>
 </div>
-                              @include('themes.default1.ratings.form')
+                         <div class="row">
+                              <div class="col-md-6 form-group {{ $errors->has('rating_name') ? 'has-error' : '' }}">
+                {!! Form::label('rating_name',Lang::get('lang.rating_name')) !!}
+                {!! Form::text('rating_name',null,['class' => 'form-control']) !!}
+            </div>
                                      </div>
+                                              <div class=" form-group {{ $errors->has('publish') ? 'has-error' : '' }}">
+                {!! Form::label('publish',Lang::get('lang.publish')) !!}
+                   <blockquote>If you choose Yes then the rating will be publish in client and agent panel.</blockquote>
+                <div class="row">
+                    <div class="col-xs-12">
+                        {!! Form::radio('publish','1',true) !!} {{Lang::get('lang.yes')}}
+                    </div>
+                    <div class="col-xs-12">
+                        {!! Form::radio('publish','0') !!} {{Lang::get('lang.no')}}
+                    </div>
+                </div>
+            </div>
+                                              <div class="form-group {{ $errors->has('modify') ? 'has-error' : '' }}">
+                {!! Form::label('modify',Lang::get('lang.modify')) !!}
+                          <blockquote>If you choose 'YES' user can modify the rating.</blockquote>
+                <div class="row">
+                    <div class="col-xs-12">
+                        {!! Form::radio('modify','1',true) !!} {{Lang::get('lang.yes')}}
+                    </div>
+                    <div class="col-xs-12">
+                        {!! Form::radio('modify','0') !!} {{Lang::get('lang.no')}}
+                    </div>
+                </div>
+            </div>
+                    </div>
+                                          
                                                                         <div class="modal-footer">
                                                                             <div class="form-group">
                                                                                 {!! Form::submit('Update Details',['class'=>'btn btn-primary'])!!}

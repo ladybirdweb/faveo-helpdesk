@@ -19,7 +19,52 @@ class="active"
 {{-- <div><h1 style="margin-top:-10px;margin-bottom:-10px;">Organization Profile</h1></div>
 <a href="{{route('organizations.edit', $orgs->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> Edit</a>
  --}}
-<div class="box-header" style="margin-top:-15px;margin-bottom:-15px;"><h3 class="box-title">{!! Lang::get('lang.organization_profile') !!}</h3><a href="" class="btn btn-info btn-sm btn-flat pull-right"><i class="fa fa-user-plus" style="color:black;"> </i> {!! Lang::get('lang.add_user_to_this_organization') !!}</a></div>
+<div class="box-header" style="margin-top:-15px;margin-bottom:-15px;"><h3 class="box-title">{!! Lang::get('lang.organization_profile') !!}</h3><a href="#"  data-toggle="modal" data-target="#assign" class="btn btn-info btn-sm btn-flat pull-right"><i class="fa fa-user-plus" style="color:black;"> </i> {!! Lang::get('lang.add_user_to_this_organization') !!}</a></div>
+<!-- Organisation Assign Modal -->
+    <div class="modal fade" id="assign">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {!! Form::model($orgs->id, ['id'=>'user_assign','method' => 'PATCH'] )!!}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="dismiss" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{!! Lang::get('lang.assign') !!}</h4>
+                </div>
+                <div id="assign_alert" class="alert alert-success alert-dismissable" style="display:none;">
+                    <button id="assign_dismiss" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                    <div id="message-success1"></div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-6" id="assign_loader" style="display:none;">
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
+                        </div>
+                    </div>
+                    <div id="assign_body">
+                        <p>{!! Lang::get('lang.please_select_an_user') !!}</p>
+                        <select id="org" class="form-control" name="org">
+<?php
+$users = App\User::all();
+?>
+                            <optgroup label="Select Users">
+                                @foreach($users as $user)
+                                    <option  value="{{$user->id}}">{!! $user->user_name !!}</option>
+                                @endforeach
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis4">{!! Lang::get('lang.close') !!}</button>
+                    <button type="submit" class="btn btn-success pull-right" id="submt2">{!! Lang::get('lang.assign') !!}</button>
+                </div>
+                {!! Form::close()!!}
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -249,14 +294,14 @@ $countdeleted = count($deletes); ?>
 						                        <td ><input type="checkbox" class="icheckbox_flat-blue" name="select_all[]" value="{{$open->id}}"/></td>
 						                        <?php 
 						                        //  collaborators
-						                        $collaborators = App\Model\Ticket\Ticket_Collaborator::where('ticket_id','=',$open->id)->get();
+						                        $collaborators = App\Model\helpdesk\Ticket\Ticket_Collaborator::where('ticket_id','=',$open->id)->get();
 						                        $collab = count($collaborators);
 						                        //  title
-						                        $title = App\Model\Ticket\Ticket_Thread::where('ticket_id', '=', $open->id)->first();
+						                        $title = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $open->id)->first();
                                                            
 						                        $string = strip_tags($title->title);
 						                        // check atatchments
-						                        $attachments = App\Model\Ticket\Ticket_attachments::where('thread_id','=',$open->id)->first();
+						                        $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id','=',$open->id)->first();
 						                        $attach = count($attachments);
 
 						                        if (strlen($string) > 40) {
@@ -675,7 +720,41 @@ $org_heads = App\Model\helpdesk\Agent_panel\User_org::where('org_id','=',$orgs->
     });
 
 </script>
+<script type="text/javascript">
+// Assign a ticket
+    jQuery(document).ready(function($) {
+// create org
+        $('#user_assign').on('submit', function() {
+            $.ajax({
+                type: "POST",
+                url: "../org-assign-user/{{$orgs->id}}",
+                dataType: "html",
+                data: $(this).serialize(),
+                beforeSend: function() {
+                    $("#hide").hide();
+                    $("#show2").show();
+                },
+                success: function(response) {
+                    $("#show2").hide();
+                    $("#hide").show();
+                    
+                    if (response == 1) {
+                        message = "Organization added successfully."
+                        $("#dismiss").trigger("click");
+                        $("#refresh-org").load("../organizations/{{ $orgs->id }}  #refresh-org");
+                
+                        // $("#show").show();
+                        $("#alert-success").show();
+                        $('#get-success').html(message);
+                        setInterval(function(){$("#alert-success").hide(); },4000);   
+                    }
+                }
+            })
+            return false;
+        });
+    });
 
+</script>
 @stop
 
 <!-- /content -->

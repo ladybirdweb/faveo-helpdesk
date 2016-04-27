@@ -155,8 +155,12 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
     Route::get('deleter/{rating}', ['as' => 'ratings.delete', 'uses' => 'Admin\helpdesk\SettingsController@RatingDelete']);
 
+        Route::post('create-ratings', ['as' => 'rating.create', 'uses' => 'Admin\helpdesk\SettingsController@createRating']);
+        
     Route::patch('postratings/{slug}', ['as' => 'settings.rating', 'uses' => 'Admin\helpdesk\SettingsController@PostRatingSettings']);
-
+    
+        Route::get('remove-user-org/{id}', ['as' => 'removeuser.org', 'uses' => 'Agent\helpdesk\UserController@removeUserOrg']);
+        
     Route::get('admin-profile', 'Admin\helpdesk\ProfileController@getProfile'); /*  User profile edit get  */
 
     Route::get('admin-profile-edit', 'Admin\helpdesk\ProfileController@getProfileedit'); /*  Admin profile get  */
@@ -250,7 +254,7 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
     Route::post('chart-range', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
     
-    Route::post('user-chart-range/{date1}/{date2}', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
+    Route::post('user-chart-range/{id}/{date1}/{date2}', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
 
     Route::get('user-agen/{id}', 'Agent\helpdesk\DashboardController@userChartData');
         
@@ -388,7 +392,7 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
     Route::post('lock', ['as' => 'lock', 'uses' => 'Agent\helpdesk\TicketController@lock']);
 
     Route::patch('user-org-assign/{id}', ['as' => 'user.assign.org', 'uses' => 'Agent\helpdesk\UserController@UserAssignOrg']);
-
+    Route::patch('org-assign-user/{id}', ['as' => 'org.assign.user', 'uses' => 'Agent\helpdesk\UserController@orgAssignUser']);
     Route::patch('/user-org/{id}', 'Agent\helpdesk\UserController@User_Create_Org');
 
     Route::patch('/head-org/{id}', 'Agent\helpdesk\OrganizationController@Head_Org');

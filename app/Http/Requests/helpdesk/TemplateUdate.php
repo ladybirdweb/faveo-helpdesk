@@ -30,9 +30,9 @@ class TemplateUdate extends Request
     {
         return [
             'name'                  => 'required',
-            'url'            => 'required',
+            'subject'            => 'required',
             'type' => 'required',
-            'data'              => 'required',
+            'message'              => 'required',
         ];
     }
 }

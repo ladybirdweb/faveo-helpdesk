@@ -69,7 +69,27 @@ class="active"
 		<?php 	$org_id = $user_org->org_id;
 				$organization = App\Model\helpdesk\Agent_panel\Organization::where('id','=',$org_id)->first(); ?>
 						<b>{!! Lang::get('lang.organization') !!}</b>
-							<a href="{!! URL::route('organizations.show',$organization->id) !!}" class="pull-right">{!! $organization->name !!}</a>
+                                                <a class="pull-right" href="#" data-toggle="modal" data-target="#{{$org_id}}delete">Remove</a> 
+                                                            
+							<a href="{!! URL::route('organizations.show',$organization->id) !!}" class="pull-right">{!! $organization->name !!}&nbsp;/&nbsp;</a>
+                                                                                                                    
+                                                            <div class="modal fade" id="{{$org_id}}delete">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                 <h4 class="modal-title">Remove user from Organization</h4>
+                                      </div>
+                                         <div class="modal-body">
+                                             <p>Are you sure you want to Remove ?</p>
+                                                </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                                                                            {!! link_to_route('removeuser.org','Remove User',[$org_id],['id'=>'delete','class'=>'btn btn-danger btn-sm']) !!}
+                                                                        </div>
+                                                                    </div> 
+                                                                </div>
+                                                            </div> 
 						@endif
 					
 					</div>
@@ -955,7 +975,7 @@ $('#foo').submit();
         // process the form
         $.ajax({
             type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-            url         : 'user-chart-range/'+dateData+'/'+formData, // the url where we want to POST
+            url         : '../user-chart-range/<?php echo $users->id; ?>/'+dateData+'/'+formData, // the url where we want to POST
             data        : formData, // our data object
             dataType    : 'json', // what type of data do we expect back from the server
             
