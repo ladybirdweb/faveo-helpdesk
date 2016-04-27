@@ -14,7 +14,7 @@
  */
 
 Route::controllers([
-    'auth'     => 'Auth\AuthController',
+    'auth' => 'Auth\AuthController',
     'password' => 'Auth\PasswordController',
 ]);
 
@@ -45,7 +45,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
     Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
 
     Route::post('mark-all-read/{id}', 'Common\NotificationController@markAllRead');
-        
+
     Route::get('notifications-list', ['as' => 'notification.list', 'uses' => 'Common\NotificationController@show']);
 
     Route::post('notification-delete/{id}', ['as' => 'notification.delete', 'uses' => 'Common\NotificationController@delete']);
@@ -66,7 +66,16 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
 
     Route::resource('banlist', 'Admin\helpdesk\BanlistController'); // in banlist module, for CRUD
 
-    Route::resource('template', 'Admin\helpdesk\TemplateController'); // in template module, for CRUD
+    /*
+     * Templates
+     */
+
+    Route::resource('templates', 'Common\TemplateController');
+    Route::get('get-templates', 'Common\TemplateController@GetTemplates');
+    Route::get('templates-delete', 'Common\TemplateController@destroy');
+    Route::get('testmail/{id}', 'Common\TemplateController@mailtest');
+
+//    Route::resource('template', 'Admin\helpdesk\TemplateController'); // in template module, for CRUD
 
     Route::get('list-directories', 'Admin\helpdesk\TemplateController@listdirectories');
 
@@ -131,17 +140,17 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
     Route::patch('postalert/{id}', 'Admin\helpdesk\SettingsController@postalert'); // Updating the Alert table with requests
 
     Route::resource('security', 'Admin\helpdesk\SecurityController'); // direct to security setting page
-      Route::patch('security/{id}', ['as' => 'securitys.update', 'uses' => 'Admin\helpdesk\SecurityController@update']); // direct to security setting page  
+    Route::patch('security/{id}', ['as' => 'securitys.update', 'uses' => 'Admin\helpdesk\SecurityController@update']); // direct to security setting page  
     Route::get('setting-status', 'Admin\helpdesk\SettingsController@getStatuses'); // direct to status setting page
 
     Route::patch('status-update/{id}', ['as' => 'statuss.update', 'uses' => 'Admin\helpdesk\SettingsController@editStatuses']);
-    
+
     Route::post('status-create', ['as' => 'statuss.create', 'uses' => 'Admin\helpdesk\SettingsController@createStatuses']);
-    
+
     Route::get('status-delete/{id}', ['as' => 'statuss.delete', 'uses' => 'Admin\helpdesk\SettingsController@deleteStatuses']);
 
     Route::get('ticket/status/{id}/{state}', ['as' => 'statuss.state', 'uses' => 'Agent\helpdesk\TicketController@updateStatuses']);
-    
+
     Route::get('getratings', 'Admin\helpdesk\SettingsController@RatingSettings');
 
     Route::get('deleter/{rating}', ['as' => 'ratings.delete', 'uses' => 'Admin\helpdesk\SettingsController@RatingDelete']);
@@ -240,6 +249,14 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
     Route::get('agen1', 'Agent\helpdesk\DashboardController@ChartData');
 
     Route::post('chart-range', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
+    
+    Route::post('user-chart-range/{date1}/{date2}', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
+
+    Route::get('user-agen/{id}', 'Agent\helpdesk\DashboardController@userChartData');
+        
+    Route::get('user-agen1', 'Agent\helpdesk\DashboardController@userChartData');
+
+    Route::post('user-chart-range', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
 
     Route::resource('user', 'Agent\helpdesk\UserController'); /* User router is used to control the CRUD of user */
 
@@ -297,8 +314,8 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
     Route::get('/ticket/overdue', ['as' => 'overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@overdue_ticket_list']); /*  Get Overdue Ticket */
 
-    Route::get('/ticket/get-overdue', ['as'  => 'get.overdue.ticket',
-                                      'uses' => 'Agent\helpdesk\TicketController@getOverdueTickets', ]);
+    Route::get('/ticket/get-overdue', ['as' => 'get.overdue.ticket',
+        'uses' => 'Agent\helpdesk\TicketController@getOverdueTickets',]);
 
     Route::get('/ticket/closed', ['as' => 'closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@closed_ticket_list']); /*  Get Closed Ticket */
 
@@ -432,7 +449,7 @@ Route::POST('tickets/search/', function () {
 Route::any('getdata', function () {
 
     $term = Illuminate\Support\Str::lower(Input::get('term'));
-    $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
+    $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term . '%')->groupBy('ticket_number')->take(10)->get();
     foreach ($data as $v) {
         return [
             'value' => $v->ticket_number,
@@ -545,10 +562,10 @@ Route::get('/aaa', function () {
     echo '</tr>';
     foreach ($routeCollection as $value) {
         echo '<tr>';
-        echo '<td>'.$value->getMethods()[0].'</td>';
-        echo '<td>'.$value->getName().'</td>';
-        echo '<td>'.$value->getPath().'</td>';
-        echo '<td>'.$value->getActionName().'</td>';
+        echo '<td>' . $value->getMethods()[0] . '</td>';
+        echo '<td>' . $value->getName() . '</td>';
+        echo '<td>' . $value->getPath() . '</td>';
+        echo '<td>' . $value->getActionName() . '</td>';
         echo '</tr>';
     }
     echo '</table>';
@@ -748,8 +765,8 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::get('ticket/my', 'Api\v1\TestController@myTickets');
     Route::get('ticket', 'Api\v1\TestController@getTicketById');
     /*
-    * Newly added
-    */
+     * Newly added
+     */
     Route::get('ticket/customers-custom', 'Api\v1\TestController@getCustomersWith');
 
     Route::get('generate/token', 'Api\v1\TestController@generateToken');

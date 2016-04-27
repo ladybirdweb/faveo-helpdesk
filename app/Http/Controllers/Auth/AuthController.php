@@ -188,12 +188,12 @@ class AuthController extends Controller
             $password = $request->input('password');
             $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
             // If attempts > 3 and time < 10 minutes
-            if ($loginAttempts > 3 && (time() - $loginAttemptTime <= 600)) {
+            if ($loginAttempts > $security->backlist_threshold && (time() - $loginAttemptTime <= ($security->lockout_period * 60))) {
                 
                 return redirect()->back()->withErrors('email', 'incorrect email')->with('error', $security->lockout_message);
             }
             // If time > 10 minutes, reset attempts counter and time in session
-            if (time() - $loginAttemptTime > 600) {
+            if (time() - $loginAttemptTime > ($security->lockout_period * 60)) {
                 \Session::put('loginAttempts', 1);
                 \Session::put('loginAttemptTime', time());
             }

@@ -85,14 +85,14 @@ class UserController extends Controller
                                 $username = substr($model->user_name, 0, 30);
                                 $username = substr($username, 0, strrpos($username, ' ')).' ...';
                             } else {
-                                $username = "<a href='".route('user.edit', $model->id)."'>".$model->user_name.'</a>';
+                                $username = "<a href='".route('user.show', $model->id)."'>".$model->user_name.'</a>';
                             }
 
                             return $username;
                         })
                         /* column email */
                         ->addColumn('email', function ($model) {
-                            $email = "<a href='".route('user.edit', $model->id)."'>".$model->email.'</a>';
+                            $email = "<a href='".route('user.show', $model->id)."'>".$model->email.'</a>';
 
                             return $email;
                         })

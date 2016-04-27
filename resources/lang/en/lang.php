@@ -28,6 +28,9 @@ return [
       |   Login Page
       |--------------------------------------
      */
+    'template-types' => 'Template Types',
+    'add_user_to_this_organization' => 'Add User to this Organization',
+    'Tickets_of' => 'Tickets Of',
     'security' => 'Security',
     'manage_status'=> 'Manage Status',
     'Login_to_start_your_session' => 'Login to start your session',

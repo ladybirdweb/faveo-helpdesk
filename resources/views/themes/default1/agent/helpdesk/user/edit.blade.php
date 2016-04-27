@@ -28,7 +28,72 @@ class="active"
         <h3 class="box-title">
             User Credentials
         </h3>
+        <a class="pull-right" href="{{route('user.show', $users->id)}}">
+					View profile
+				</a>
+        <?php
+						$user_org = App\Model\helpdesk\Agent_panel\User_org::where('user_id','=', $users->id)->first();
+					?>
+						@if($user_org == null)
+						<b>{!! Lang::get('lang.organization') !!}</b>
+
+							<a href="" class="pull-right"  data-toggle="modal" data-target="#assign"><i class="fa fa-hand-o-right" style="color:orange;"> </i> {!! Lang::get('lang.assign') !!} </a>
+							<a href="" data-toggle="modal" data-target="#create_org" class="pull-right"> {{Lang::get('lang.create')}} <b style="color:#000"> / </b>&nbsp; </a>
+						@else
+		<?php 	$org_id = $user_org->org_id;
+				$organization = App\Model\helpdesk\Agent_panel\Organization::where('id','=',$org_id)->first(); ?>
+                                                <div class="pull-right">
+                                                    <span><b>{!! Lang::get('lang.organization') !!}</b>
+                                                        <a href="{!! URL::route('organizations.show',$organization->id) !!}" >{!! $organization->name !!}</a></span>&nbsp;&nbsp;
+&nbsp;
+						@endif
+					
     </div>
+    <!-- Organisation Assign Modal -->
+    <div class="modal fade" id="assign">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {!! Form::model($users->id, ['id'=>'org_assign','method' => 'PATCH'] )!!}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="dismiss" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{!! Lang::get('lang.assign') !!}</h4>
+                </div>
+                <div id="assign_alert" class="alert alert-success alert-dismissable" style="display:none;">
+                    <button id="assign_dismiss" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                    <div id="message-success1"></div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-6" id="assign_loader" style="display:none;">
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
+                        </div>
+                    </div>
+                    <div id="assign_body">
+                        <p>{!! Lang::get('lang.please_select_an_organization') !!}</p>
+                        <select id="org" class="form-control" name="org">
+<?php
+$orgs = App\Model\helpdesk\Agent_panel\Organization::all();
+?>
+                            <optgroup label="Select Organizations">
+                                @foreach($orgs as $org)
+                                    <option  value="{{$org->id}}">{!! $org->name !!}</option>
+                                @endforeach
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis4">{!! Lang::get('lang.close') !!}</button>
+                    <button type="submit" class="btn btn-success pull-right" id="submt2">{!! Lang::get('lang.assign') !!}</button>
+                </div>
+                {!! Form::close()!!}
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <div class="box-body">
         @if(Session::has('errors'))
         <div class="alert alert-danger alert-dismissable">

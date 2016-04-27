@@ -56,10 +56,10 @@
                         <div class="row">
 
                             <div class="col-md-3">
-                                <label for="title">Backlist Threshold:</label>
+                                <label for="title">Max Login Attempts Per Host/User:</label>
                             </div>
                             <div class="col-md-9">
-<blockquote><em>The no of lockouts per IP before the host is banned permanently from the site.</em></blockquote>
+<blockquote><em>The number of login attempts a user has before their host/user or computer is locked out of the system. Set to 0 to record bad login attempts without locking out the host/user..</em></blockquote>
                       {!! $errors->first('backlist_threshold', '<spam class="help-block">:message</spam>') !!}
 <span>{!! Form::text('backlist_threshold',null,['class'=>'form-control'])!!} Lockouts</span>
                             </div>     
