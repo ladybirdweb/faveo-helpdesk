@@ -102,7 +102,9 @@ class Handler extends ExceptionHandler
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
 
         return new \Illuminate\Http\Response(
-                $whoops->handleException($e), $e->getStatusCode(), $e->getHeaders()
+            $whoops->handleException($e),
+            $e->getStatusCode(),
+            $e->getHeaders()
         );
     }
 }

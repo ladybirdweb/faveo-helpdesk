@@ -98,11 +98,12 @@ class EmailsController extends Controller
     public function validatingEmailSettings(Request $request)
     {
         $validator = \Validator::make(
-                        [
+            [
                     'email_address' => $request->email_address,
                     'email_name'    => $request->email_name,
                     'password'      => $request->password,
-                        ], [
+                        ],
+            [
                     'email_address' => 'required|email|unique:emails',
                     'email_name'    => 'required',
                     'password'      => 'required',
@@ -276,11 +277,12 @@ class EmailsController extends Controller
     public function validatingEmailSettingsUpdate($id, Request $request)
     {
         $validator = \Validator::make(
-                        [
+            [
                     'email_address' => $request->email_address,
                     'email_name'    => $request->email_name,
                     'password'      => $request->password,
-                        ], [
+                        ],
+            [
                     'email_address' => 'email',
                     'email_name'    => 'required',
                     'password'      => 'required',

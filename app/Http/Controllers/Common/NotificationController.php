@@ -41,7 +41,7 @@ class NotificationController extends Controller
             }
         //dd($forwhome);
         //system notification
-        $notification = new Notification();
+            $notification = new Notification();
             $UN = new UserNotification();
 
             $notify = $notification->create(['model_id' => $model_id, 'userid_created' => $userid_created, 'type_id' => $type_id]);

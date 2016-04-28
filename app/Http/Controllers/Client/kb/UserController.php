@@ -184,7 +184,7 @@ class UserController extends Controller
         //echo $contact->email;
         $mail = Mail::send('themes.default1.client.kb.article-list.contact-details', ['name' => $name, 'email' => $email, 'subject' => $subject, 'details' => $details], function ($message) use ($contact) {
                     $message->to($contact->email, $contact->name)->subject('Contact');
-                });
+        });
         if ($mail) {
             return redirect('contact')->with('success', 'Your details send to System');
         } else {

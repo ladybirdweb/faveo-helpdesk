@@ -304,7 +304,7 @@ class ApiController extends Controller
             $result = $this->user->join('tickets', function ($join) {
                         $join->on('users.id', '=', 'tickets.user_id')
                         ->where('isanswered', '=', 0)->where('status', '=', 1)->whereNull('assigned_to');
-                    })
+            })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
@@ -349,7 +349,7 @@ class ApiController extends Controller
             $unassigned = $this->user->join('tickets', function ($join) {
                         $join->on('users.id', '=', 'tickets.user_id')
                         ->whereNull('assigned_to')->where('status', '=', 1);
-                    })
+            })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
@@ -394,7 +394,7 @@ class ApiController extends Controller
             $result = $this->user->join('tickets', function ($join) {
                         $join->on('users.id', '=', 'tickets.user_id')
                         ->where('isanswered', '=', 0)->where('status', '>', 1)->where('status', '<', 4);
-                    })
+            })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
@@ -1021,7 +1021,7 @@ class ApiController extends Controller
             $trash = $this->user->join('tickets', function ($join) {
                         $join->on('users.id', '=', 'tickets.user_id')
                         ->where('status', '=', 5);
-                    })
+            })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
@@ -1072,7 +1072,7 @@ class ApiController extends Controller
             $result = $this->user->join('tickets', function ($join) use ($id) {
                         $join->on('users.id', '=', 'tickets.assigned_to')
                         ->where('user_id', '=', $id);
-                    })
+            })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
@@ -1123,7 +1123,7 @@ class ApiController extends Controller
             $result = $this->user->join('tickets', function ($join) use ($id) {
                         $join->on('users.id', '=', 'tickets.user_id')
                         ->where('user_id', '=', $id);
-                    })
+            })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
@@ -1269,8 +1269,7 @@ class ApiController extends Controller
             $v = \Validator::make(\Input::get(), [
                         'email'     => 'required|email|unique:users',
                         'ticket_id' => 'required',
-                            ]
-            );
+                            ]);
             if ($v->fails()) {
                 $error = $v->messages();
 
@@ -1299,8 +1298,7 @@ class ApiController extends Controller
         try {
             $v = \Validator::make(\Input::get(), [
                         'ticket_id' => 'required',
-                            ]
-            );
+                            ]);
             if ($v->fails()) {
                 $error = $v->messages();
 
@@ -1330,8 +1328,7 @@ class ApiController extends Controller
             $v = \Validator::make(\Input::get(), [
                         'ticketid' => 'required',
                         'email'    => 'required',
-                            ]
-            );
+                            ]);
             if ($v->fails()) {
                 $result = $v->messages();
 

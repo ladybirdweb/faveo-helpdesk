@@ -557,7 +557,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * 	To display the list of ratings in the system.
+     *  To display the list of ratings in the system.
      *
      *  @return type View
      */
@@ -569,7 +569,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * 	To store rating data.
+     *  To store rating data.
      *
      *  @return type Redirect
      */
@@ -586,7 +586,7 @@ class SettingsController extends Controller
     /**
      *  To delete a type of rating.
      *
-     * 	@return type Redirect
+     *  @return type Redirect
      */
     public function RatingDelete($slug)
     {

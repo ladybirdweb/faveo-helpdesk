@@ -204,7 +204,7 @@ class AuthController extends Controller
                         ->withErrors([
                             'email'    => $this->getFailedLoginMessage(),
                             'password' => $this->getFailedLoginMessage(),
-        ])->with('error', Lang::get('lang.invalid'));
+                        ])->with('error', Lang::get('lang.invalid'));
         // Increment login attempts
     }
 

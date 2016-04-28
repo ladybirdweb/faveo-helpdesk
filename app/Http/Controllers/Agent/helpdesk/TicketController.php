@@ -421,7 +421,10 @@ class TicketController extends Controller
         try {
             $this->NotificationController->create($ticket_id, Auth::user()->id, '2');
             $this->PhpMailController->sendmail(
-                    $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
+                $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id),
+                $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators],
+                $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files],
+                $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
             );
         } catch (\Exception $e) {
             return 0;
@@ -1683,7 +1686,7 @@ class TicketController extends Controller
 //$new_number = $rating;
 //$new_average = (($last_average * $total_numbers) + $new_number) / ($total_numbers + 1);
 //$thread->rating_count += 1;
-$thread->reply_rating = $rating;
+        $thread->reply_rating = $rating;
         $thread->save();
 //        $thread->set('rating_count', 'rating_count+1', FALSE)->update(['ratingreply' => $new_average]);
         return redirect()->back()->with('Success', 'Thank you for your rating!');
@@ -1798,7 +1801,7 @@ $thread->reply_rating = $rating;
                 // ticket assigned send mail
                 Mail::send('emails.Ticket_assign', ['agent' => $agent, 'ticket_number' => $ticket_number, 'from' => $company, 'master' => $master, 'system' => $system], function ($message) use ($agent_email, $agent, $ticket_number, $ticket_subject) {
                         $message->to($agent_email, $agent)->subject($ticket_subject.'[#'.$ticket_number.']');
-                    });
+                });
             }
 
             return 1;
