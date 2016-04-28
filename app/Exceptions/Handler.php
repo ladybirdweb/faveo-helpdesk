@@ -6,6 +6,8 @@ namespace App\Exceptions;
 use App\Http\Controllers\Common\PhpMailController;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -17,6 +19,8 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
+        AuthorizationException::class,
+        ValidationException::class,
         'Symfony\Component\HttpKernel\Exception\HttpException',
     ];
 
