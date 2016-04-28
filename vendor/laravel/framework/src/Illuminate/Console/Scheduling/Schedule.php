@@ -1,76 +1,109 @@
-<?php namespace Illuminate\Console\Scheduling;
+<?php
 
+namespace Illuminate\Console\Scheduling;
+
+use Symfony\Component\Process\ProcessUtils;
 use Illuminate\Contracts\Foundation\Application;
+use Symfony\Component\Process\PhpExecutableFinder;
 
-class Schedule {
+class Schedule
+{
+    /**
+     * All of the events on the schedule.
+     *
+     * @var array
+     */
+    protected $events = [];
 
-	/**
-	 * All of the events on the schedule.
-	 *
-	 * @var array
-	 */
-	protected $events = [];
+    /**
+     * Add a new callback event to the schedule.
+     *
+     * @param  string  $callback
+     * @param  array   $parameters
+     * @return \Illuminate\Console\Scheduling\Event
+     */
+    public function call($callback, array $parameters = [])
+    {
+        $this->events[] = $event = new CallbackEvent($callback, $parameters);
 
-	/**
-	 * Add a new callback event to the schedule.
-	 *
-	 * @param  string  $callback
-	 * @param  array   $parameters
-	 * @return \Illuminate\Console\Scheduling\Event
-	 */
-	public function call($callback, array $parameters = array())
-	{
-		$this->events[] = $event = new CallbackEvent($callback, $parameters);
+        return $event;
+    }
 
-		return $event;
-	}
+    /**
+     * Add a new Artisan command event to the schedule.
+     *
+     * @param  string  $command
+     * @param  array  $parameters
+     * @return \Illuminate\Console\Scheduling\Event
+     */
+    public function command($command, array $parameters = [])
+    {
+        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
 
-	/**
-	 * Add a new Artisan command event to the schedule.
-	 *
-	 * @param  string  $command
-	 * @return \Illuminate\Console\Scheduling\Event
-	 */
-	public function command($command)
-	{
-		return $this->exec(PHP_BINARY.' artisan '.$command);
-	}
+        if (defined('HHVM_VERSION')) {
+            $binary .= ' --php';
+        }
 
-	/**
-	 * Add a new command event to the schedule.
-	 *
-	 * @param  string  $command
-	 * @return \Illuminate\Console\Scheduling\Event
-	 */
-	public function exec($command)
-	{
-		$this->events[] = $event = new Event($command);
+        if (defined('ARTISAN_BINARY')) {
+            $artisan = ProcessUtils::escapeArgument(ARTISAN_BINARY);
+        } else {
+            $artisan = 'artisan';
+        }
 
-		return $event;
-	}
+        return $this->exec("{$binary} {$artisan} {$command}", $parameters);
+    }
 
-	/**
-	 * Get all of the events on the schedule.
-	 *
-	 * @return array
-	 */
-	public function events()
-	{
-		return $this->events;
-	}
+    /**
+     * Add a new command event to the schedule.
+     *
+     * @param  string  $command
+     * @param  array  $parameters
+     * @return \Illuminate\Console\Scheduling\Event
+     */
+    public function exec($command, array $parameters = [])
+    {
+        if (count($parameters)) {
+            $command .= ' '.$this->compileParameters($parameters);
+        }
 
-	/**
-	 * Get all of the events on the schedule that are due.
-	 *
-	 * @param  \Illuminate\Contracts\Foundation\Application  $app
-	 * @return array
-	 */
-	public function dueEvents(Application $app)
-	{
-		return array_filter($this->events, function($event) use ($app)
-		{
-			return $event->isDue($app);
-		});
-	}
+        $this->events[] = $event = new Event($command);
 
+        return $event;
+    }
+
+    /**
+     * Compile parameters for a command.
+     *
+     * @param  array  $parameters
+     * @return string
+     */
+    protected function compileParameters(array $parameters)
+    {
+        return collect($parameters)->map(function ($value, $key) {
+            return is_numeric($key) ? $value : $key.'='.(is_numeric($value) ? $value : ProcessUtils::escapeArgument($value));
+        })->implode(' ');
+    }
+
+    /**
+     * Get all of the events on the schedule.
+     *
+     * @return array
+     */
+    public function events()
+    {
+        return $this->events;
+    }
+
+    /**
+     * Get all of the events on the schedule that are due.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @return array
+     */
+    public function dueEvents(Application $app)
+    {
+        return array_filter($this->events, function ($event) use ($app) {
+            return $event->isDue($app);
+        });
+    }
 }

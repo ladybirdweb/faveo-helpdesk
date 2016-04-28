@@ -76,6 +76,25 @@ namespace Bar {
     BAR\FOO;
     BAZ\FOO;
 }
+namespace Baz {
+    use A\T\{B\C, D\E};
+    use function X\T\{b\c, d\e};
+    use const Y\T\{B\C, D\E};
+    use Z\T\{G, function f, const K};
+
+    new C;
+    new E;
+    new C\D;
+    new E\F;
+    new G;
+
+    c();
+    e();
+    f();
+    C;
+    E;
+    K;
+}
 EOC;
         $expectedCode = <<<'EOC'
 namespace Foo {
@@ -127,9 +146,26 @@ namespace Bar {
     \foo\FOO;
     \Bar\BAZ\FOO;
 }
+namespace Baz {
+    use A\T\{B\C, D\E};
+    use function X\T\{b\c, d\e};
+    use const Y\T\{B\C, D\E};
+    use Z\T\{G, function f, const K};
+    new \A\T\B\C();
+    new \A\T\D\E();
+    new \A\T\B\C\D();
+    new \A\T\D\E\F();
+    new \Z\T\G();
+    \X\T\b\c();
+    \X\T\d\e();
+    \Z\T\f();
+    \Y\T\B\C;
+    \Y\T\D\E;
+    \Z\T\K;
+}
 EOC;
 
-        $parser        = new PhpParser\Parser(new PhpParser\Lexer\Emulative);
+        $parser        = new PhpParser\Parser\Php7(new PhpParser\Lexer\Emulative);
         $prettyPrinter = new PhpParser\PrettyPrinter\Standard;
         $traverser     = new PhpParser\NodeTraverser;
         $traverser->addVisitor(new NameResolver);
@@ -219,7 +255,7 @@ try {
 }
 EOC;
 
-        $parser        = new PhpParser\Parser(new PhpParser\Lexer\Emulative);
+        $parser        = new PhpParser\Parser\Php7(new PhpParser\Lexer\Emulative);
         $prettyPrinter = new PhpParser\PrettyPrinter\Standard;
         $traverser     = new PhpParser\NodeTraverser;
         $traverser->addVisitor(new NameResolver);
@@ -242,53 +278,36 @@ EOC;
         $this->assertEquals($stmts, $traverser->traverse($stmts));
     }
 
-    protected function createNamespacedAndNonNamespaced(array $stmts) {
-        return array(
-            new Stmt\Namespace_(new Name('NS'), $stmts),
-            new Stmt\Namespace_(null,                          $stmts),
-        );
-    }
-
     public function testAddNamespacedName() {
-        $stmts = $this->createNamespacedAndNonNamespaced(array(
+        $nsStmts = array(
             new Stmt\Class_('A'),
             new Stmt\Interface_('B'),
             new Stmt\Function_('C'),
             new Stmt\Const_(array(
-                new Node\Const_('D', new Node\Scalar\String_('E'))
+                new Node\Const_('D', new Node\Scalar\LNumber(42))
             )),
+            new Stmt\Trait_('E'),
             new Expr\New_(new Stmt\Class_(null)),
-        ));
+        );
 
         $traverser = new PhpParser\NodeTraverser;
         $traverser->addVisitor(new NameResolver);
 
-        $stmts = $traverser->traverse($stmts);
-
+        $stmts = $traverser->traverse([new Stmt\Namespace_(new Name('NS'), $nsStmts)]);
         $this->assertSame('NS\\A', (string) $stmts[0]->stmts[0]->namespacedName);
         $this->assertSame('NS\\B', (string) $stmts[0]->stmts[1]->namespacedName);
         $this->assertSame('NS\\C', (string) $stmts[0]->stmts[2]->namespacedName);
         $this->assertSame('NS\\D', (string) $stmts[0]->stmts[3]->consts[0]->namespacedName);
-        $this->assertObjectNotHasAttribute('namespacedName', $stmts[0]->stmts[4]->class);
-        $this->assertSame('A',     (string) $stmts[1]->stmts[0]->namespacedName);
-        $this->assertSame('B',     (string) $stmts[1]->stmts[1]->namespacedName);
-        $this->assertSame('C',     (string) $stmts[1]->stmts[2]->namespacedName);
-        $this->assertSame('D',     (string) $stmts[1]->stmts[3]->consts[0]->namespacedName);
-        $this->assertObjectNotHasAttribute('namespacedName', $stmts[1]->stmts[4]->class);
-    }
+        $this->assertSame('NS\\E', (string) $stmts[0]->stmts[4]->namespacedName);
+        $this->assertObjectNotHasAttribute('namespacedName', $stmts[0]->stmts[5]->class);
 
-    public function testAddTraitNamespacedName() {
-        $stmts = $this->createNamespacedAndNonNamespaced(array(
-            new Stmt\Trait_('A')
-        ));
-
-        $traverser = new PhpParser\NodeTraverser;
-        $traverser->addVisitor(new NameResolver);
-
-        $stmts = $traverser->traverse($stmts);
-
-        $this->assertSame('NS\\A', (string) $stmts[0]->stmts[0]->namespacedName);
-        $this->assertSame('A',     (string) $stmts[1]->stmts[0]->namespacedName);
+        $stmts = $traverser->traverse([new Stmt\Namespace_(null, $nsStmts)]);
+        $this->assertSame('A',     (string) $stmts[0]->stmts[0]->namespacedName);
+        $this->assertSame('B',     (string) $stmts[0]->stmts[1]->namespacedName);
+        $this->assertSame('C',     (string) $stmts[0]->stmts[2]->namespacedName);
+        $this->assertSame('D',     (string) $stmts[0]->stmts[3]->consts[0]->namespacedName);
+        $this->assertSame('E',     (string) $stmts[0]->stmts[4]->namespacedName);
+        $this->assertObjectNotHasAttribute('namespacedName', $stmts[0]->stmts[5]->class);
     }
 
     /**
@@ -306,22 +325,22 @@ EOC;
         return array(
             array(
                 new Stmt\Use_(array(
-                    new Stmt\UseUse(new Name('A\B'), 'B', array('startLine' => 1)),
-                    new Stmt\UseUse(new Name('C\D'), 'B', array('startLine' => 2)),
+                    new Stmt\UseUse(new Name('A\B'), 'B', 0, array('startLine' => 1)),
+                    new Stmt\UseUse(new Name('C\D'), 'B', 0, array('startLine' => 2)),
                 ), Stmt\Use_::TYPE_NORMAL),
                 'Cannot use C\D as B because the name is already in use on line 2'
             ),
             array(
                 new Stmt\Use_(array(
-                    new Stmt\UseUse(new Name('a\b'), 'b', array('startLine' => 1)),
-                    new Stmt\UseUse(new Name('c\d'), 'B', array('startLine' => 2)),
+                    new Stmt\UseUse(new Name('a\b'), 'b', 0, array('startLine' => 1)),
+                    new Stmt\UseUse(new Name('c\d'), 'B', 0, array('startLine' => 2)),
                 ), Stmt\Use_::TYPE_FUNCTION),
                 'Cannot use function c\d as B because the name is already in use on line 2'
             ),
             array(
                 new Stmt\Use_(array(
-                    new Stmt\UseUse(new Name('A\B'), 'B', array('startLine' => 1)),
-                    new Stmt\UseUse(new Name('C\D'), 'B', array('startLine' => 2)),
+                    new Stmt\UseUse(new Name('A\B'), 'B', 0, array('startLine' => 1)),
+                    new Stmt\UseUse(new Name('C\D'), 'B', 0, array('startLine' => 2)),
                 ), Stmt\Use_::TYPE_CONSTANT),
                 'Cannot use const C\D as B because the name is already in use on line 2'
             ),
@@ -353,7 +372,7 @@ use Bar\Baz;
 $test = new baz();
 EOC;
 
-        $parser = new PhpParser\Parser(new PhpParser\Lexer\Emulative);
+        $parser = new PhpParser\Parser\Php7(new PhpParser\Lexer\Emulative);
         $stmts = $parser->parse($source);
 
         $traverser = new PhpParser\NodeTraverser;
@@ -381,7 +400,7 @@ class Bar
 }
 EOC;
 
-        $parser = new PhpParser\Parser(new PhpParser\Lexer\Emulative);
+        $parser = new PhpParser\Parser\Php7(new PhpParser\Lexer\Emulative);
         $stmts = $parser->parse($source);
 
         $traverser = new PhpParser\NodeTraverser;

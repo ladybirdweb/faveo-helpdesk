@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -33,7 +33,7 @@ class ExitCommand extends Command
             ->setDefinition(array())
             ->setDescription('End the current session and return to caller.')
             ->setHelp(
-                <<<HELP
+                <<<'HELP'
 End the current session and return to caller.
 
 e.g.

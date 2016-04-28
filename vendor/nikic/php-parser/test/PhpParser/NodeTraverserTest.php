@@ -185,19 +185,34 @@ class NodeTraverserTest extends \PHPUnit_Framework_TestCase
         $this->assertAttributeSame($postExpected, 'visitors', $traverser, 'The appropriate visitors are not present after removal');
     }
 
-    public function testCloneNodesByDefault() {
+    public function testCloneNodes() {
         $stmts = array(new Node\Stmt\Echo_(array(new String_('Foo'), new String_('Bar'))));
 
-        $traverser = new NodeTraverser;
+        $traverser = new NodeTraverser(true);
 
         $this->assertNotSame($stmts, $traverser->traverse($stmts));
     }
 
-    public function testCloneNodesDisabled() {
+    public function testNoCloneNodesByDefault() {
         $stmts = array(new Node\Stmt\Echo_(array(new String_('Foo'), new String_('Bar'))));
 
-        $traverser = new NodeTraverser(false);
+        $traverser = new NodeTraverser;
 
         $this->assertSame($stmts, $traverser->traverse($stmts));
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage leaveNode() may only return an array if the parent structure is an array
+     */
+    public function testReplaceByArrayOnlyAllowedIfParentIsArray() {
+        $stmts = array(new Node\Expr\UnaryMinus(new Node\Scalar\LNumber(42)));
+
+        $visitor = $this->getMock('PhpParser\NodeVisitor');
+        $visitor->method('leaveNode')->willReturn(array(new Node\Scalar\DNumber(42.0)));
+
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor($visitor);
+        $traverser->traverse($stmts);
     }
 }

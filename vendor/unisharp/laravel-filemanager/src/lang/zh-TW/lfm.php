@@ -1,11 +1,12 @@
 <?php
 
 return [
+    'nav-back'          => '回上一頁',
+    'nav-new'           => '新增資料夾',
     'nav-upload'        => '上傳檔案',
     'nav-thumbnails'    => '縮圖顯示',
     'nav-list'          => '列表顯示',
 
-    'menu-new'          => '新增資料夾',
     'menu-rename'       => '重新命名',
     'menu-delete'       => '刪除',
     'menu-view'         => '預覽',
@@ -39,10 +40,13 @@ return [
     'error-delete'      => '資料夾未清空，無法刪除！',
     'error-folder-name' => '請輸入資料夾名稱！',
     'error-folder-exist'=> '相同名稱的資料夾已存在！',
+    'error-mime'        => 'Mime 格式錯誤 : ',
+    'error-instance'    => '上傳檔案的 instance 應為 UploadedFile',
+    'error-invalid'     => '驗證失敗，上傳未成功',
 
     'btn-upload'        => '上傳',
-    'btn-close'         => '關閉',
     'btn-uploading'     => '上傳中...',
+    'btn-close'         => '關閉',
     'btn-crop'          => '裁剪',
     'btn-cancel'        => '取消',
     'btn-resize'        => '縮放',
@@ -56,5 +60,4 @@ return [
     'resize-new-width'  => '目前寬度:',
 
     'locale-bootbox'    => 'zh_TW',
-
 ];

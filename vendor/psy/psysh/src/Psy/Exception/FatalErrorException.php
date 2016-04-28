@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -28,7 +28,7 @@ class FatalErrorException extends \ErrorException implements Exception
      * @param int        $lineno   (default: null)
      * @param \Exception $previous (default: null)
      */
-    public function __construct($message = "", $code = 0, $severity = 9000, $filename = null, $lineno = null, $previous = null)
+    public function __construct($message = '', $code = 0, $severity = 9000, $filename = null, $lineno = null, $previous = null)
     {
         $this->rawMessage = $message;
         $message = sprintf('PHP Fatal error:  %s in %s on line %d', $message, $filename ?: "eval()'d code", $lineno);

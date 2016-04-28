@@ -241,9 +241,7 @@ $bugsnag->setEndpoint("http://bugsnag.internal.example.com");
 
 ###setTimeout
 
-> Note: Timeout configuration is only possible if the PHP cURL extension is installed.
-
-Define a custom timeout, in seconds, for cURL connection when notifying bugsnag.com.
+Define a custom timeout in seconds for the connection when notifying bugsnag.com.
 
 ```php
 $bugsnag->setTimeout(2);

@@ -167,7 +167,13 @@ For versions of Laravel before 5.0:
 
 #### Lumen
 
-1. In `bootstrap/app.php` add the line
+1.  Install the `bugsnag/bugsnag-laravel` package
+
+    ```shell
+    $ composer require bugsnag/bugsnag-laravel:1.*
+    ```
+
+2. In `bootstrap/app.php` add the line
 
     ```php
     $app->register('Bugsnag\BugsnagLaravel\BugsnagLumenServiceProvider');
@@ -179,7 +185,7 @@ For versions of Laravel before 5.0:
     require __DIR__ . '/../app/Http/routes.php';
     ```
 
-2. Change the function `report` in `app/Exceptions/Handler.php` to look like
+3. Change the function `report` in `app/Exceptions/Handler.php` to look like
    this:
 
     ```php
@@ -189,7 +195,7 @@ For versions of Laravel before 5.0:
     }
     ```
 
-3. Create a file `config/bugsnag.php` that contains your API key
+4. Create a file `config/bugsnag.php` that contains your API key
 
     ```php
     <?php # config/bugsnag.php
@@ -326,7 +332,6 @@ and start the server:
 Support
 -------
 
-* [Additional Documentation](https://github.com/bugsnag/bugsnag-laravel/tree/master/docs)
 * [Search open and closed issues](https://github.com/bugsnag/bugsnag-laravel/issues?utf8=✓&q=is%3Aissue) for similar problems
 * [Report a bug or request a feature](https://github.com/bugsnag/bugsnag-laravel/issues/new)
 

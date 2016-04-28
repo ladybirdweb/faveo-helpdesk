@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\LoginRequest;
 use App\Http\Requests\helpdesk\RegisterRequest;
-use App\User;
+
 // classes
 use Auth;
 use Hash;

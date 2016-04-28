@@ -2,6 +2,14 @@
 
 All notable changes of the PHPUnit 4.8 release series are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [4.8.24] - 2016-03-14
+
+### Fixed
+
+* Fixed [#1959](https://github.com/sebastianbergmann/phpunit/issues/1959): Prophecy errors are not handled correctly
+* Fixed [#2039](https://github.com/sebastianbergmann/phpunit/issues/2039): TestDox does not handle snake_case test methods properly
+* Fixed [#2109](https://github.com/sebastianbergmann/phpunit/issues/2109): Process isolation leaks global variable
+
 ## [4.8.23] - 2016-02-11
 
 ### Fixed
@@ -169,6 +177,7 @@ New PHAR release due to updated dependencies
 * Made the argument check of `assertContains()` and `assertNotContains()` more strict to prevent undefined behavior such as [#1808](https://github.com/sebastianbergmann/phpunit/issues/1808)
 * Changed the name of the default group from `__nogroup__` to `default`
 
+[4.8.24]: https://github.com/sebastianbergmann/phpunit/compare/4.8.23...4.8.24
 [4.8.23]: https://github.com/sebastianbergmann/phpunit/compare/4.8.22...4.8.23
 [4.8.22]: https://github.com/sebastianbergmann/phpunit/compare/4.8.21...4.8.22
 [4.8.21]: https://github.com/sebastianbergmann/phpunit/compare/4.8.20...4.8.21
