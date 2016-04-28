@@ -13,8 +13,9 @@ use App\User;
 // classes
 use Auth;
 use Hash;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\Registrar;
+use App\User;
+use Validator;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Lang;
 use Mail;
@@ -31,7 +32,7 @@ use Mail;
  */
 class AuthController extends Controller
 {
-    use AuthenticatesAndRegistersUsers;
+    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
     /* to redirect after login */
 
     // if auth is agent
@@ -45,17 +46,13 @@ class AuthController extends Controller
     /**
      * Create a new authentication controller instance.
      *
-     * @param \Illuminate\Contracts\Auth\Guard     $auth
-     * @param \Illuminate\Contracts\Auth\Registrar $registrar
      *
      * @return void
      */
-    public function __construct(Guard $auth, Registrar $registrar, PhpMailController $PhpMailController)
+    public function __construct(PhpMailController $PhpMailController)
     {
         $this->PhpMailController = $PhpMailController;
         SettingsController::smtp();
-        $this->auth = $auth;
-        $this->registrar = $registrar;
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
@@ -216,5 +213,36 @@ class AuthController extends Controller
     protected function getFailedLoginMessage()
     {
         return 'This Field do not match our records.';
+    }
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param array $data
+     *
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+                    'name'     => 'required|max:255',
+                    'email'    => 'required|email|max:255|unique:users',
+                    'password' => 'required|confirmed|min:6',
+        ]);
+    }
+
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param array $data
+     *
+     * @return User
+     */
+    protected function create(array $data)
+    {
+        return User::create([
+                    'name'     => $data['name'],
+                    'email'    => $data['email'],
+                    'password' => bcrypt($data['password']),
+        ]);
     }
 }
