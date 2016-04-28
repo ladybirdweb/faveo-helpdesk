@@ -135,6 +135,7 @@ return [
 
     'providers' => [
 
+        Illuminate\Broadcasting\BroadcastServiceProvider::class,
         /*
     	* Faveo Plugins
     	*/
