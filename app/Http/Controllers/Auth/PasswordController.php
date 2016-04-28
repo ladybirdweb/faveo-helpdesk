@@ -9,9 +9,7 @@ use App\Http\Controllers\Controller;
 // request
 use App\User;
 // model
-use Illuminate\Contracts\Auth\Guard;
 // classes
-use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 
@@ -27,16 +25,12 @@ class PasswordController extends Controller
     /**
      * Create a new password controller instance.
      *
-     * @param \Illuminate\Contracts\Auth\Guard          $auth
-     * @param \Illuminate\Contracts\Auth\PasswordBroker $passwords
      *
      * @return void
      */
-    public function __construct(Guard $auth, PasswordBroker $passwords, PhpMailController $PhpMailController)
+    public function __construct(PhpMailController $PhpMailController)
     {
         $this->PhpMailController = $PhpMailController;
-        $this->auth = $auth;
-        $this->passwords = $passwords;
         $this->middleware('guest');
         SettingsController::smtp();
     }
