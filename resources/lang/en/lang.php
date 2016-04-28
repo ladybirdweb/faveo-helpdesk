@@ -21,7 +21,7 @@ return [
     'success'        => 'Success',
     'fails'          => 'Fails',
     'alert'          => 'Alert',
-    'required-error' => 'Please fill all required feilds',
+    'required-error' => 'Please fill all required fields',
     'invalid'        => 'Incorrect User id or password',
     /*
       |--------------------------------------
@@ -57,6 +57,8 @@ return [
     'terms'                       => 'terms',
     'register'                    => 'Register',
     'i_already_have_a_membership' => 'I already have a membership',
+    'see-profile1'                => 'Click here to see ',
+    'see-profile2'                => 's profile',
     /*
       |--------------------------------------
       |   Reset Password Page
@@ -91,7 +93,7 @@ return [
      */
     'emails'                         => 'Emails',
     'incoming_emails'                => 'Incoming Emails',
-    'reuired_authentication'         => 'Reuired Authentication',
+    'reuired_authentication'         => 'Required Authentication',
     'fetching_email_via_imap'        => 'Fetching Email via IMAP',
     'create_email'                   => 'Create Email',
     'email_address'                  => 'Email Address',
@@ -343,7 +345,7 @@ return [
       |------------------------------------------------
      */
     'iso-code'           => 'ISO-CODE',
-    'download'           => 'Downlaod',
+    'download'           => 'Download',
     'upload_file'        => 'Upload File',
     'enter_iso-code'     => 'Enter ISO-CODE',
     'eg.'                => 'Example',
@@ -399,7 +401,7 @@ return [
     'Custom_form'          => 'Custom Form',
     'SLA_plan'             => 'SLA Plan',
     'auto_assign'          => 'Auto assign',
-    'auto_respons'         => 'Auto Respons',
+    'auto_respons'         => 'Auto Response',
     'ticket_number_format' => 'Ticket Number Format',
     'system_default'       => 'System Default',
     'custom'               => 'Custom',
@@ -569,7 +571,7 @@ return [
     'outgoing_emails'                                  => 'Outgoing Emails',
     'outgoing_email'                                   => 'Outgoing Email',
     'template_set'                                     => 'Template Set',
-    'auto_responding_settings'                         => 'Auto-Responding Settigs',
+    'auto_responding_settings'                         => 'Auto-Responding Settings',
     'disable_for_this_department'                      => 'Disable for this department',
     'auto_response_email'                              => 'Auto-Response Email',
     'recipient'                                        => 'Recipient',
@@ -811,7 +813,7 @@ return [
       |-----------------------------------------------
      */
     'copyright'           => 'Copyright',
-    'all_rights_reserved' => 'All right Reserved',
+    'all_rights_reserved' => 'All rights Reserved',
     'powered_by'          => 'Powered by',
     /*
       |------------------------------------------------

@@ -276,8 +276,9 @@ class TicketController extends Controller
             $help = Help_topic::where('id', '=', $helptopic)->first();
             $form_data = null;
             $auto_response = 0;
+            $status = 1;
             //create user
-            if ($this->create_user($email, $fullname, $subject, $body, $phone, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response)) {
+            if ($this->create_user($email, $fullname, $subject, $body, $phone, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response, $status)) {
                 return Redirect('newticket')->with('success', 'Ticket created successfully!');
             } else {
                 return Redirect('newticket')->with('fails', 'fails');
@@ -665,9 +666,11 @@ class TicketController extends Controller
             }
             $emails_to_be_sent = array_unique($set_mails, SORT_REGULAR);
             foreach ($emails_to_be_sent as $email_data) {
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $email_data['to_user'], 'email' => $email_data['to_email']], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $email_data['to_user_name'], 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $email_data['to_user_name'], 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
+                try {
+                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $email_data['to_user'], 'email' => $email_data['to_email']], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $email_data['to_user_name'], 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $email_data['to_user_name'], 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
+                } catch (\Exception $e) {
+                }
             }
-
             return ['0' => $ticket_number2, '1' => true];
         }
     }

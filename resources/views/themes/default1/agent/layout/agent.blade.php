@@ -30,6 +30,7 @@
         <link type="text/css" href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />        
         <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/faveo-css.css")}}">
+        <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/notification-style.css")}}">
 
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
@@ -205,7 +206,7 @@ $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->where('dept_i
 $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id','=',Auth::user())->get();
 }
 if (Auth::user()->role == 'agent') {
-            $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
+            $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->get();
         } else {
             $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
@@ -400,7 +401,34 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
 
                      <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" ></script>
                       <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" ></script>
+<script>
+                function myFunction() {
 
+                    document.getElementById("count").innerHTML = "0";
+
+                }
+        </script>
+        <script>
+                $(document).ready(function () {
+                    
+                    $('.noti_User').click(function () {
+                        var id = this.id;
+                    var dataString = 'id=' + id;
+                        $.ajax
+                                ({
+                                    type: "POST",
+                                    url: "{{url('mark-read')}}" + "/" + id,
+                                    data: dataString,
+                                    cache: false,
+                                    success: function (html)
+                                    {
+//$(".city").html(html);
+                                    }
+                                });
+                    });
+
+                });
+        </script>
 <script>
 $(function() {
     // Enable iCheck plugin for checkboxes
