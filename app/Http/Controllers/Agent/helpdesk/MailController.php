@@ -92,7 +92,9 @@ class MailController extends Controller
                             }
                             $protocol = $fetching_protocol.$fetching_encryption;
                         }
+                        // dd($fetching_encryption);
                         $imap_config = '{'.$host.':'.$port.$protocol.'}INBOX';
+                        // dd($imap_config);
                         $password = Crypt::decrypt($e_mail->password);
                         $mailbox = new ImapMailbox($imap_config, $e_mail->email_address, $password, __DIR__);
                         $mails = [];

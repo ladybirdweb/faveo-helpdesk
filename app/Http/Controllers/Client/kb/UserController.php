@@ -104,6 +104,7 @@ class UserController extends Controller
         date_default_timezone_set($tz);
         $date = \Carbon\Carbon::now()->toDateTimeString();
         $arti = $article->where('slug', $slug)->where('status', '1')->where('type', '1')->where('publish_time', '<', $date)->first();
+
         if ($arti) {
             return view('themes.default1.client.kb.article-list.show', compact('arti'));
         } else {

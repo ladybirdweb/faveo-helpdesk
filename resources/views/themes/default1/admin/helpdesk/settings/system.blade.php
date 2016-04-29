@@ -107,7 +107,7 @@ class="active"
 
                     {!! Form::label('department',Lang::get('lang.default_department')) !!}
                     {!! $errors->first('department', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('department', [''=>'Select a Department','Department'=>$departments->lists('name','id')],null,['class'=>'form-control']) !!}
+                    {!!Form::select('department', [''=>'Select a Department','Department'=>$departments->lists('name','id')->toArray()],null,['class'=>'form-control']) !!}
 
                 </div>
             </div>
@@ -117,7 +117,7 @@ class="active"
                 <div class="form-group {{ $errors->has('time_zone') ? 'has-error' : '' }}">
                     {!! Form::label('time_zone',Lang::get('lang.timezone')) !!}
                     {!! $errors->first('time_zone', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('time_zone',[''=>'Select a Time Zone','Time Zones'=>$timezones->lists('name','id')],null,['class'=>'form-control']) !!}
+                    {!!Form::select('time_zone',[''=>'Select a Time Zone','Time Zones'=>$timezones->lists('name','id')->toArray()],null,['class'=>'form-control']) !!}
                 </div>
             </div>
 
@@ -129,7 +129,7 @@ class="active"
 
                     {!! Form::label('date_time_format',Lang::get('lang.date_time')) !!}
                     {!! $errors->first('date_time_format', '<spam class="help-block">:message</spam>') !!}
-                    {!! Form::select('date_time_format',[''=>'Select a date Time Format','Date Time Formats'=>$date_time->lists('format','id')],null,['class' => 'form-control']) !!}
+                    {!! Form::select('date_time_format',[''=>'Select a date Time Format','Date Time Formats'=>$date_time->lists('format','id')->toArray()],null,['class' => 'form-control']) !!}
 
                 </div>
             </div>

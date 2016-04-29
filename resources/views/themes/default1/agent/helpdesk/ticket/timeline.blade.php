@@ -1029,13 +1029,12 @@ $count_teams = count($teams);
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
     <!-- add or search user Modal -->
     <div class="modal fade" id="addccc">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="modal-title">{!! Lang::get('lang.add_collaborator') !!}</h4>
                 </div>
                 <div class="nav-tabs-custom">
@@ -1103,12 +1102,12 @@ $count_teams = count($teams);
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    <!-- Surrender Modal -->
+    <!-- Collaborator Modal -->
     <div class="modal fade" id="surrender2">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="modal-title">{!! Lang::get('lang.list_of_collaborators_of_this_ticket') !!}</h4>
                 </div>
                 <div class="modal-body" id="surrender22">
@@ -1118,7 +1117,7 @@ $count_teams = count($teams);
                     ?>
                     <div id="alert11" class="alert alert-dismissable" style="background-color:#F2F2F2">
                     <meta name="_token" content="{{ csrf_token() }}"/>
-                        <button id="dismiss11" type="button" class="close" data-dismiss="alert" onclick="remove_collaborator({!! $ccc->id !!})" aria-hidden="true">×</button>
+                        <button id="dismiss11" type="button" class="close" data-dismiss="alert" onclick="remove_collaborator({!! $ccc->id !!})" aria-hidden="true"><span aria-hidden="true">×</span></button>
                         @if($collab_user->role == 'agent' || $collab_user->role == 'admin')
                             <i class="icon fa fa-user"></i>{!! $collab_user->first_name . " " . $collab_user->last_name !!}
                         @elseif($collab_user->role == 'user')
@@ -1195,7 +1194,6 @@ $count_teams = count($teams);
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="row">
                                 <div class="col-md-8">
                             
@@ -1697,7 +1695,7 @@ jQuery(document).ready(function() {
                         $("#newtextarea").empty();
                         var div = document.getElementById('newtextarea');
                         div.innerHTML = div.innerHTML + '<textarea style="width:98%;height:200px;" name="reply_content" class="form-control" id="reply_content"/></textarea>';
-                        
+
                         $("#newtextarea1").empty();
                         var div1 = document.getElementById('newtextarea1');
                         div1.innerHTML = div1.innerHTML + '<textarea style="width:98%;height:200px;" name="InternalContent" class="form-control" id="InternalContent"/></textarea>';

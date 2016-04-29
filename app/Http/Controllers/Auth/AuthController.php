@@ -188,7 +188,7 @@ class AuthController extends Controller
         }
         // If auth ok, redirect to restricted area
         \Session::put('loginAttempts', $loginAttempts + 1);
-        if ($this->auth->attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
+        if (Auth::Attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
             if (Auth::user()->role == 'user') {
                 return \Redirect::route('/');
             } else {

@@ -75,19 +75,19 @@ class="active"
             <div class="col-xs-4 form-group {{ $errors->has('department') ? 'has-error' : '' }}">
                 {!! Form::label('department',Lang::get('lang.department')) !!}
                 {!! $errors->first('department', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('department', [''=>'--System Default--','departments'=>$departments->lists('name','id')],null,['class' => 'form-control select']) !!}
+                {!!Form::select('department', [''=>'--System Default--','departments'=>$departments->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
             <!-- priority -->
             <div class="col-xs-4 form-group {{ $errors->has('priority') ? 'has-error' : '' }}">
                 {!! Form::label('priority',Lang::get('lang.priority')) !!}
                 {!! $errors->first('priority', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('priority', [''=>'--System Default--','Priorities'=>$priority->lists('priority_desc','priority_id')],null,['class' => 'form-control select']) !!}
+                {!!Form::select('priority', [''=>'--System Default--','Priorities'=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
             <!-- help topic -->
             <div class="col-xs-4 form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
                 {!! Form::label('help_topic',Lang::get('lang.help_topic')) !!}
                 {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('help_topic', [''=>'--System Default--','Help Topics'=>$helps->lists('topic','id')],null,['class' => 'form-control select']) !!}
+                {!!Form::select('help_topic', [''=>'--System Default--','Help Topics'=>$helps->lists('topic','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
             <!-- status -->
             <div class="col-xs-2 form-group">
