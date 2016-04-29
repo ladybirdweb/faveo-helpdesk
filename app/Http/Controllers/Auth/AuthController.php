@@ -9,16 +9,15 @@ use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\LoginRequest;
 use App\Http\Requests\helpdesk\RegisterRequest;
-
 // classes
+use App\User;
 use Auth;
 use Hash;
-use App\User;
-use Validator;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Lang;
 use Mail;
+use Validator;
 
 /**
  * ---------------------------------------------------
@@ -214,6 +213,7 @@ class AuthController extends Controller
     {
         return 'This Field do not match our records.';
     }
+
     /**
      * Get a validator for an incoming registration request.
      *
