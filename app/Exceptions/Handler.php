@@ -5,8 +5,8 @@ namespace App\Exceptions;
 // controller
 use App\Http\Controllers\Common\PhpMailController;
 use Exception;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Foundation\Validation\ValidationException;
 
 class Handler extends ExceptionHandler

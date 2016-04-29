@@ -369,27 +369,26 @@ class EmailsController extends Controller
             $emails = Emails::whereId($id)->first();
             // insert all the requested parameters with except
             $emails->fill($request->except('password', 'department', 'priority', 'help_topic', 'fetching_status', 'fetching_encryption', 'sending_status', 'auto_response'))->save();
-            if ($request->fetching_status == 'on') {
-                $emails->fetching_status = 1;
-            } else {
-                $emails->fetching_status = 0;
-            }
-            if ($request->sending_status == 'on') {
-                $emails->sending_status = 1;
-            } else {
-                $emails->sending_status = 0;
-            }
-            if ($request->auto_response == 'on') {
-                $emails->auto_response = 1;
-            } else {
-                $emails->auto_response = 0;
-            }
-            if ($imap_check !== null) {
-                $emails->fetching_encryption = $imap_check;
-
-            } else {
-                $emails->fetching_encryption = $request->fetching_encryption;
-            }
+        if ($request->fetching_status == 'on') {
+            $emails->fetching_status = 1;
+        } else {
+            $emails->fetching_status = 0;
+        }
+        if ($request->sending_status == 'on') {
+            $emails->sending_status = 1;
+        } else {
+            $emails->sending_status = 0;
+        }
+        if ($request->auto_response == 'on') {
+            $emails->auto_response = 1;
+        } else {
+            $emails->auto_response = 0;
+        }
+        if ($imap_check !== null) {
+            $emails->fetching_encryption = $imap_check;
+        } else {
+            $emails->fetching_encryption = $request->fetching_encryption;
+        }
             // dd($email->fetching_encryption);
             // fetching department value
             $emails->department = $this->departmentValue($request->input('department'));
@@ -399,7 +398,7 @@ class EmailsController extends Controller
             $emails->help_topic = $this->helpTopicValue($request->input('help_topic'));
             // inserting the encrypted value of password
             $emails->password = Crypt::encrypt($request->input('password'));
-            $emails->save();
+        $emails->save();
             // returns success message for successful email update
             $return = 1;
         // } catch (Exception $e) {

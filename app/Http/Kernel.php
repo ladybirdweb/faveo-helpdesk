@@ -33,7 +33,7 @@ class Kernel extends HttpKernel
         'auth'        => \App\Http\Middleware\Authenticate::class,
         'auth.basic'  => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest'       => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'throttle'    => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'roles'       => \App\Http\Middleware\CheckRole::class,
         'role.agent'  => \App\Http\Middleware\CheckRoleAgent::class,
         'role.user'   => \App\Http\Middleware\CheckRoleUser::class,
