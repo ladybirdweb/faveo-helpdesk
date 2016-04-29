@@ -17,12 +17,6 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<!-- <h3> -->
-<!-- {{Lang::get('lang.agent')}} -->
-<!-- <small>Add</small> -->
-<!-- </h3> -->
-
-
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -211,21 +205,21 @@ class="active"
             <div class="col-xs-4 form-group {{ $errors->has('assign_group') ? 'has-error' : '' }}">
                 {!! Form::label('assign_group', Lang::get('lang.assigned_group')) !!}
                 {!! $errors->first('assign_group', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('assign_group', $groups->lists('name','id'),null,['class' => 'form-control select']) !!}
+                {!!Form::select('assign_group', [''=>'Select a Group','Groups'=>$groups->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
 
             <!-- primary department -->
             <div class="col-xs-4 form-group {{ $errors->has('primary_dpt') ? 'has-error' : '' }}">
                 {!! Form::label('primary_dpt', Lang::get('lang.primary_department')) !!}
                 {!! $errors->first('primary_dpt', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('primary_dpt', $departments->lists('name','id'),null,['class' => 'form-control select']) !!}
+                {!!Form::select('primary_dpt', [''=>'Select a Department','Departments'=>$departments->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
 
             <!-- agent timezone -->
             <div class="col-xs-4 form-group {{ $errors->has('agent_tzone') ? 'has-error' : '' }}">
                 {!! Form::label('agent_tzone', Lang::get('lang.agent_time_zone')) !!}
                 {!! $errors->first('agent_tzone', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('agent_tzone', $timezones->lists('name','id'),null,['class' => 'form-control select']) !!}
+                {!!Form::select('agent_tzone', [''=>'Select a Time Zone', 'Time Zones'=>$timezones->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
         </div>
 
@@ -234,14 +228,16 @@ class="active"
             <h4>{{Lang::get('lang.assigned_team')}}</h4>
             {!! $errors->first('team_id', '<spam class="help-block">Assign Team is Required</spam>') !!}
         </div>
-        @while (list($key, $val) = each($teams))
+    
+        @foreach($teams->all() as $key=>$val)
         <div class="form-group ">
-            <input type="checkbox" name="team_id[]" value="<?php echo $val; ?> " <?php
-            if (in_array($val, $assign)) {
+            <input type="checkbox" name="team_id[]" value="<?php echo $val; ?> " 
+            <?php
+            if (in_array($val, $assign->all())) {
                 echo ('checked');
             }
             ?> > &nbsp;<?php echo "  " . $key; ?><br/>
         </div>
-        @endwhile
+        @endforeach
     </div>
     @stop

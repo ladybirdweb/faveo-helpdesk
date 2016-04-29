@@ -68,6 +68,9 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
     Route::get('activate-set/{dir}', ['as' => 'active.set', 'uses' => 'Admin\helpdesk\TemplateController@activateset']);
 
     Route::get('list-templates/{template}/{directory}', ['as' => 'template.list', 'uses' => 'Admin\helpdesk\TemplateController@listtemplates']);
+    // Route::get('list-templates/{template}/{directory}',function($t,$d){
+        // dd($_GET['dir']);
+    // });
 
     Route::get('read-templates/{template}/{directory}', ['as' => 'template.read', 'uses' => 'Admin\helpdesk\TemplateController@readtemplate']);
 

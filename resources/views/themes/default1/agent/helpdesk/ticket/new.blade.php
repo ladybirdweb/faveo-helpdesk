@@ -122,7 +122,7 @@ class="active"
                             <label>{!! Lang::get('lang.help_topic') !!}:</label>
                             <!-- helptopic -->
                                 <?php $helptopic = App\Model\helpdesk\Manage\Help_topic::all();?>
-                                    {!! Form::select('helptopic', ['Helptopic'=>$helptopic->lists('topic','id')],null,['class' => 'form-control select']) !!}
+                                    {!! Form::select('helptopic', ['Helptopic'=>$helptopic->lists('topic','id')->toArray()],null,['class' => 'form-control select']) !!}
                                         {!! $errors->first('helptopic', '<spam class="help-block text-red">:message</spam>') !!}
                                     </div>
                                 </div>
@@ -131,7 +131,7 @@ class="active"
                                     <div class="form-group">
                                         <label>{!! Lang::get('lang.sla_plan') !!}:</label>
                                         <?php $sla_plan = App\Model\helpdesk\Manage\Sla_plan::all();?>
-                                        {!! Form::select('sla', ['SLA'=>$sla_plan->lists('grace_period','id')],null,['class' => 'form-control select']) !!}
+                                        {!! Form::select('sla', ['SLA'=>$sla_plan->lists('grace_period','id')->toArray()],null,['class' => 'form-control select']) !!}
                                         {!! $errors->first('sla', '<spam class="help-block text-red">:message</spam>') !!}
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@ class="active"
                                         <label>{!! Lang::get('lang.assign_to') !!}:</label>
                                             <?php $agents = App\User::where('role','!=','user')->get();?>
 
-                                            {!! Form::select('assignto', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')],null,['class' => 'form-control select']) !!}
+                                            {!! Form::select('assignto', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')->toArray()],null,['class' => 'form-control select']) !!}
                                     </div>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@ class="active"
                                                         </div>
                                                         <div class="col-md-3">
                                                         <?php $Priority = App\Model\helpdesk\Ticket\Ticket_Priority::all();?>
-                                                            {!! Form::select('priority', ['Priority'=>$Priority->lists('priority_desc','priority_id')],null,['class' => 'form-control select']) !!}
+                                                            {!! Form::select('priority', ['Priority'=>$Priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control select']) !!}
                                                         </div>
                                                     </div>
                                                 </div>

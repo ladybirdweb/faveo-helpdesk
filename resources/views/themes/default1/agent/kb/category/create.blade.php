@@ -55,7 +55,7 @@
 
 			{!! Form::label('parent',Lang::get('lang.parent')) !!}
 			{!! $errors->first('parent', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('parent',[''=>'Select a Group','Categorys'=>$category->lists('name','name')],null,['class' => 'form-control select']) !!}
+			{!!Form::select('parent',[''=>'Select a Group','Categorys'=>$category->lists('name','name')->toArray()],null,['class' => 'form-control select']) !!}
 
 		</div>
 
