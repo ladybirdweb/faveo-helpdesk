@@ -31,7 +31,7 @@ class StreamHandler extends AbstractProcessingHandler
 
     /**
      * @param resource|string $stream
-     * @param integer         $level          The minimum logging level at which this handler will be triggered
+     * @param int             $level          The minimum logging level at which this handler will be triggered
      * @param Boolean         $bubble         Whether the messages that are handled can bubble up the stack or not
      * @param int|null        $filePermission Optional file permissions (default (0644) are only for owner read/write)
      * @param Boolean         $useLocking     Try to lock log file before doing any writes
@@ -59,10 +59,20 @@ class StreamHandler extends AbstractProcessingHandler
      */
     public function close()
     {
-        if (is_resource($this->stream)) {
+        if ($this->url && is_resource($this->stream)) {
             fclose($this->stream);
         }
         $this->stream = null;
+    }
+
+    /**
+     * Return the currently active stream if it is open
+     *
+     * @return resource|null
+     */
+    public function getStream()
+    {
+        return $this->stream;
     }
 
     /**

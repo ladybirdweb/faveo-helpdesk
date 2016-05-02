@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -149,15 +149,26 @@ class ForkingLoop extends Loop
     private function serializeReturn(array $return)
     {
         $serializable = array();
+
         foreach ($return as $key => $value) {
+            // No need to return magic variables
+            if ($key === '_' || $key === '_e') {
+                continue;
+            }
+
+            // Resources don't error, but they don't serialize well either.
+            if (is_resource($value) || $value instanceof \Closure) {
+                continue;
+            }
+
             try {
-                serialize($value);
+                @serialize($value);
                 $serializable[$key] = $value;
             } catch (\Exception $e) {
                 // we'll just ignore this one...
             }
         }
 
-        return serialize($serializable);
+        return @serialize($serializable);
     }
 }

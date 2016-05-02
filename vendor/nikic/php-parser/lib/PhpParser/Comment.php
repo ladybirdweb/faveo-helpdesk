@@ -6,16 +6,19 @@ class Comment
 {
     protected $text;
     protected $line;
+    protected $filePos;
 
     /**
      * Constructs a comment node.
      *
-     * @param string $text Comment text (including comment delimiters like /*)
-     * @param int    $line Line number the comment started on
+     * @param string $text         Comment text (including comment delimiters like /*)
+     * @param int    $startLine    Line number the comment started on
+     * @param int    $startFilePos File offset the comment started on
      */
-    public function __construct($text, $line = -1) {
+    public function __construct($text, $startLine = -1, $startFilePos = -1) {
         $this->text = $text;
-        $this->line = $line;
+        $this->line = $startLine;
+        $this->filePos = $startFilePos;
     }
 
     /**
@@ -31,6 +34,8 @@ class Comment
      * Sets the comment text.
      *
      * @param string $text The comment text (including comment delimiters like /*)
+     *
+     * @deprecated Construct a new comment instead
      */
     public function setText($text) {
         $this->text = $text;
@@ -49,9 +54,20 @@ class Comment
      * Sets the line number the comment started on.
      *
      * @param int $line Line number
+     *
+     * @deprecated Construct a new comment instead
      */
     public function setLine($line) {
         $this->line = $line;
+    }
+
+    /**
+     * Gets the file offset the comment started on.
+     *
+     * @return int File offset
+     */
+    public function getFilePos() {
+        return $this->filePos;
     }
 
     /**
@@ -75,7 +91,8 @@ class Comment
      */
     public function getReformattedText() {
         $text = trim($this->text);
-        if (false === strpos($text, "\n")) {
+        $newlinePos = strpos($text, "\n");
+        if (false === $newlinePos) {
             // Single line comments don't need further processing
             return $text;
         } elseif (preg_match('((*BSR_ANYCRLF)(*ANYCRLF)^.*(?:\R\s+\*.*)+$)', $text)) {
@@ -105,15 +122,30 @@ class Comment
             //
             //     /* Some text.
             //        Some more text.
+            //          Indented text.
             //        Even more text. */
             //
-            // is handled by taking the length of the "/* " segment and leaving only that
-            // many space characters before the lines. Thus in the above example only three
-            // space characters are left at the start of every line.
-            return preg_replace('(^\s*(?= {' . strlen($matches[0]) . '}(?!\s)))m', '', $text);
+            // is handled by removing the difference between the shortest whitespace prefix on all
+            // lines and the length of the "/* " opening sequence.
+            $prefixLen = $this->getShortestWhitespacePrefixLen(substr($text, $newlinePos + 1));
+            $removeLen = $prefixLen - strlen($matches[0]);
+            return preg_replace('(^\s{' . $removeLen . '})m', '', $text);
         }
 
         // No idea how to format this comment, so simply return as is
         return $text;
+    }
+
+    private function getShortestWhitespacePrefixLen($str) {
+        $lines = explode("\n", $str);
+        $shortestPrefixLen = INF;
+        foreach ($lines as $line) {
+            preg_match('(^\s*)', $line, $matches);
+            $prefixLen = strlen($matches[0]);
+            if ($prefixLen < $shortestPrefixLen) {
+                $shortestPrefixLen = $prefixLen;
+            }
+        }
+        return $shortestPrefixLen;
     }
 }

@@ -17,12 +17,19 @@ $a->$b['c']();
 $a->b()['c'];
 $a->b(){'c'}; // invalid PHP: drop Support?
 -----
+!!php5
 array(
     0: Expr_PropertyFetch(
         var: Expr_Variable(
             name: a
+            comments: array(
+                0: // property fetch variations
+            )
         )
         name: b
+        comments: array(
+            0: // property fetch variations
+        )
     )
     1: Expr_ArrayDimFetch(
         var: Expr_PropertyFetch(
@@ -49,9 +56,15 @@ array(
     3: Expr_MethodCall(
         var: Expr_Variable(
             name: a
+            comments: array(
+                0: // method call variations
+            )
         )
         name: b
         args: array(
+        )
+        comments: array(
+            0: // method call variations
         )
     )
     4: Expr_MethodCall(
@@ -93,13 +106,22 @@ array(
         var: Expr_MethodCall(
             var: Expr_Variable(
                 name: a
+                comments: array(
+                    0: // array dereferencing
+                )
             )
             name: b
             args: array(
             )
+            comments: array(
+                0: // array dereferencing
+            )
         )
         dim: Scalar_String(
             value: c
+        )
+        comments: array(
+            0: // array dereferencing
         )
     )
     8: Expr_ArrayDimFetch(
@@ -113,6 +135,11 @@ array(
         )
         dim: Scalar_String(
             value: c
+        )
+    )
+    9: Stmt_Nop(
+        comments: array(
+            0: // invalid PHP: drop Support?
         )
     )
 )

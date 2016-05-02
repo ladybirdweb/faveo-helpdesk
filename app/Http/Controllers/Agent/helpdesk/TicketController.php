@@ -33,6 +33,7 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Auth;
 use DB;
+use ForceUTF8\Encoding;
 use Exception;
 // classes
 use Hash;
@@ -61,51 +62,7 @@ class TicketController extends Controller
         $this->NotificationController = $NotificationController;
         $this->middleware('auth');
     }
-    public function updateStatuses($id,$state, Tickets $ticket) {
-        if($state == 'open') {
-        $ticket_status = $ticket->where('id', '=', $id)->first();
-        $ticket_status->status = 1;
-        $ticket_status->reopened_at = date('Y-m-d H:i:s');
-        $ticket_status->save();
-        $ticket_status_message = Ticket_Status::where('id', '=', $ticket_status->status)->first();
-        $thread = New Ticket_Thread;
-        $thread->ticket_id = $ticket_status->id;
-        $thread->user_id = Auth::user()->id;
-        $thread->is_internal = 1;
-        $thread->body = $ticket_status_message->message . " " . Auth::user()->full_name;
-        $thread->save();
-        return "your ticket" . $ticket_status->ticket_number . " has been opened";
-        }
-        else {
-            $ticket_status = $ticket->where('id', '=', $id)->first();
-        $ticket_status->status = 3;
-        $ticket_status->closed = 1;
-        $ticket_status->closed_at = date('Y-m-d H:i:s');
-        $ticket_status->save();
-        $ticket_thread = Ticket_Thread::where('ticket_id', '=', $ticket_status->id)->first();
-        $ticket_subject = $ticket_thread->title;
-        $ticket_status_message = Ticket_Status::where('id', '=', $ticket_status->status)->first();
-        $thread = New Ticket_Thread;
-        $thread->ticket_id = $ticket_status->id;
-        $thread->user_id = Auth::user()->id;
-        $thread->is_internal = 1;
-        $thread->body = $ticket_status_message->message . " " . Auth::user()->full_name;
-        $thread->save();
 
-        $user_id = $ticket_status->user_id;
-        $user = User::where('id', '=', $user_id)->first();
-        $email = $user->email;
-        $user_name = $user->user_name;
-        $ticket_number = $ticket_status->ticket_number;
-        try {
-            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket_status->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
-        } catch (\Exception $e) {
-            return 0;
-        }
-
-        return "your ticket" . $ticket_status->ticket_number . " has been closed";
-        }
-    }
     /**
      * Show the Inbox ticket list page.
      *
@@ -465,7 +422,10 @@ class TicketController extends Controller
         try {
             $this->NotificationController->create($ticket_id, Auth::user()->id, '2');
             $this->PhpMailController->sendmail(
-                    $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
+                $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id),
+                $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators],
+                $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files],
+                $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
             );
         } catch (\Exception $e) {
             return 0;
@@ -711,11 +671,10 @@ class TicketController extends Controller
             $emails_to_be_sent = array_unique($set_mails, SORT_REGULAR);
             foreach ($emails_to_be_sent as $email_data) {
                 try {
-                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $email_data['to_user'], 'email' => $email_data['to_email']], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $email_data['to_user_name'], 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $email_data['to_user_name'], 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
+                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $email_data['to_user'], 'email' => $email_data['to_email']], $message = ['subject' => $updated_subject, 'body' => Encoding::fixUTF8($body), 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $email_data['to_user_name'], 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $email_data['to_user_name'], 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
                 } catch (\Exception $e) {
                 }
             }
-
             return ['0' => $ticket_number2, '1' => true];
         }
     }
@@ -1453,9 +1412,9 @@ class TicketController extends Controller
             $ticket_collaborator->role = 'ccc';
             $ticket_collaborator->save();
 
-            return '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">Ã—</button><h4><i class="icon fa fa-check"></i>Success!</h4><h4><i class="icon fa fa-user"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'</div></div>';
+            return '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-check"></i>Success!</h4><h4><i class="icon fa fa-user"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'</div></div>';
         } else {
-            return '<div id="alert11" class="alert alert-warning alert-dismissable"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">Ã—</button><h4><i class="icon fa fa-warning"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'<br/>This user already Collaborated</div></div>';
+            return '<div id="alert11" class="alert alert-warning alert-dismissable"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-warning"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'<br/>This user already Collaborated</div></div>';
         }
     }
 
@@ -1473,7 +1432,7 @@ class TicketController extends Controller
         $ticket_id = Input::get('ticket_id');
         $user_search = User::where('email', '=', $email)->first();
         if (isset($user_serach)) {
-            return '<div id="alert11" class="alert alert-warning alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">Ã—</button><h4><i class="icon fa fa-alert"></i>Alert!</h4><div id="message-success1">This user already Exists</div></div>';
+            return '<div id="alert11" class="alert alert-warning alert-dismissable" ><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-alert"></i>Alert!</h4><div id="message-success1">This user already Exists</div></div>';
         } else {
             $company = $this->company();
             $user = new User();
@@ -1495,7 +1454,7 @@ class TicketController extends Controller
             $ticket_collaborator->role = 'ccc';
             $ticket_collaborator->save();
 
-            return '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">Ã—</button><h4><i class="icon fa fa-user"></i>'.$user->user_name.'</h4><div id="message-success1">'.$user->email.'</div></div>';
+            return '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-user"></i>'.$user->user_name.'</h4><div id="message-success1">'.$user->email.'</div></div>';
         }
     }
 
@@ -1728,7 +1687,7 @@ class TicketController extends Controller
 //$new_number = $rating;
 //$new_average = (($last_average * $total_numbers) + $new_number) / ($total_numbers + 1);
 //$thread->rating_count += 1;
-$thread->reply_rating = $rating;
+        $thread->reply_rating = $rating;
         $thread->save();
 //        $thread->set('rating_count', 'rating_count+1', FALSE)->update(['ratingreply' => $new_average]);
         return redirect()->back()->with('Success', 'Thank you for your rating!');
@@ -1843,7 +1802,7 @@ $thread->reply_rating = $rating;
                 // ticket assigned send mail
                 Mail::send('emails.Ticket_assign', ['agent' => $agent, 'ticket_number' => $ticket_number, 'from' => $company, 'master' => $master, 'system' => $system], function ($message) use ($agent_email, $agent, $ticket_number, $ticket_subject) {
                         $message->to($agent_email, $agent)->subject($ticket_subject.'[#'.$ticket_number.']');
-                    });
+                });
             }
 
             return 1;

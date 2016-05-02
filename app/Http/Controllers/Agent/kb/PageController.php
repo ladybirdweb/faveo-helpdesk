@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Agent\kb;
 
-use App\Http\Controllers\Agent\helpdesk\TicketController;
+// controllersuse App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 // request
 use App\Http\Requests\kb\PageRequest;
@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
  * PageController
  * This controller is used to CRUD Pages.
  *
- * @author     	Ladybird <info@ladybirdweb.com>
+ * @author      Ladybird <info@ladybirdweb.com>
  */
 class PageController extends Controller
 {

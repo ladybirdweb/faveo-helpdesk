@@ -28,8 +28,6 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-  <div class="row">
-<div class="col-md-12">
 <div class="box box-primary">
 <div class="box-header">
   <h2 class="box-title">{{Lang::get('lang.template_set')}}</h2>
@@ -94,9 +92,9 @@ class="active"
                 <th width="100px">{{Lang::get('lang.action')}}</th>
   </tr>
   <!-- Foreach @var templates as @var template -->
-        
     @foreach($directories as $dir)
                 <?php if ($dir === '.' or $dir === '..' or $dir === 'notifications') continue; ?>
+                <?php //dd($directory); ?>
   <tr>  
     <!-- Template Name with Link to Edit page along Id -->
     <td><a href="{{route('template.list',[$dir,$directory])}}"><?php $parts = explode('.',$dir); $names  = $parts[0]; $name = str_replace('_', ' ', $names);$name1 = ucfirst($name); echo $name1?></a></td>
@@ -133,16 +131,7 @@ if($dir == 'default')  {
                                                             </div> </td>
   </tr>
 @endforeach
-
-  <!-- Set a link to Create Page -->
-
-
-
-
 </table>
-@stop
-</div><!-- /.box -->
-@section('FooterInclude')
 <!-- page script -->
 <script type="text/javascript">
 $(function() {
@@ -158,7 +147,7 @@ $(function() {
 });
 
 </script>
+</div><!-- /.box -->
+</div>
+@stop
 
-@stop
-@stop
-<!-- /content -->

@@ -169,12 +169,12 @@ CKEDITOR.replace('editor', {
                                     <div class="form-group {{ $errors->has('category_id') ? 'has-error' : '' }}">
                                         {{-- {!! Form::label('category_id','Category') !!} --}}
                                         {!! $errors->first('category_id', '<spam class="help-block">:message</spam>') !!}
-                                        @while (list($key, $val) = each($category))
+                                        @foreach($category->toArray() as $key=>$val)
                                         <div class="row">
                                             <div class="form-group">
                                                 <div class="col-md-1">
                                                     <input type="radio" name="category_id[]" value="<?php echo $val; ?>" <?php
-                                                    if (in_array($val, $assign)) {
+                                                    if (in_array($val, $assign->all())) {
                                                         echo ('checked');
                                                     }
                                                     ?> ></div>
@@ -183,7 +183,7 @@ CKEDITOR.replace('editor', {
                                                 </div>
                                             </div>
                                         </div>
-                                        @endwhile
+                                        @endforeach
 
                                     </div>
                                 </div>

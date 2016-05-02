@@ -27,7 +27,7 @@ use Redirect;
  * ArticleController
  * This controller is used to CRUD Articles.
  *
- * @author     	Ladybird <info@ladybirdweb.com>
+ * @author      Ladybird <info@ladybirdweb.com>
  */
 class ArticleController extends Controller
 {

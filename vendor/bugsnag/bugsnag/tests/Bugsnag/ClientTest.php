@@ -22,7 +22,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
         // Mock the notify function
         $this->client = $this->getMockBuilder('Bugsnag_Client')
                              ->setMethods(array('notify'))
-                             ->setConstructorArgs(array('example-api_key'))
+                             ->setConstructorArgs(array('example-api-key'))
                              ->getMock();
     }
 

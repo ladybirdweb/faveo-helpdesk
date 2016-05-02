@@ -24,12 +24,11 @@ class NotificationController extends Controller
      */
     public static function getNotifications()
     {
-        $notifications = Notification::join('user_notification', 'user_notification.notification_id', '=', 'notifications.id')
+        $notifications = UserNotification::join('notifications', 'user_notification.notification_id', '=', 'notifications.id')
                 ->join('notification_types', 'notifications.type_id', '=', 'notification_types.id')
                 ->where('user_notification.is_read', '=', '0')
                 ->where('user_notification.user_id', '=', \Auth::user()->id)
-                ->select('notifications.id','notifications.model_id','notifications.type_id','user_notification.user_id','user_notification.notification_id','user_notification.is_read','notification_types.message','notification_types.type','notification_types.icon_class','notifications.created_at')
-                ->paginate(10);
+                ->get();
 
         return $notifications;
     }
@@ -42,7 +41,7 @@ class NotificationController extends Controller
             }
         //dd($forwhome);
         //system notification
-        $notification = new Notification();
+            $notification = new Notification();
             $UN = new UserNotification();
 
             $notify = $notification->create(['model_id' => $model_id, 'userid_created' => $userid_created, 'type_id' => $type_id]);
@@ -57,17 +56,6 @@ class NotificationController extends Controller
     public function markRead($id)
     {
         $markasread = UserNotification::where('notification_id', '=', $id)->where('user_id', '=', \Auth::user()->id)->where('is_read', '=', '0')->get();
-        foreach ($markasread as $mark) {
-            $mark->is_read = '1';
-            $mark->save();
-        }
-
-        return 1;
-    }
-    
-    public function markAllRead($id)
-    {
-        $markasread = UserNotification::where('user_id', '=', \Auth::user()->id)->where('is_read', '=', '0')->get();
         foreach ($markasread as $mark) {
             $mark->is_read = '1';
             $mark->save();

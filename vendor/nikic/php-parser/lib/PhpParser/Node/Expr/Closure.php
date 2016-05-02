@@ -34,7 +34,7 @@ class Closure extends Expr implements FunctionLike
      * @param array $attributes Additional attributes
      */
     public function __construct(array $subNodes = array(), array $attributes = array()) {
-        parent::__construct(null, $attributes);
+        parent::__construct($attributes);
         $this->static = isset($subNodes['static']) ? $subNodes['static'] : false;
         $this->byRef = isset($subNodes['byRef']) ? $subNodes['byRef'] : false;
         $this->params = isset($subNodes['params']) ? $subNodes['params'] : array();

@@ -74,7 +74,7 @@ class="active"
 
 				{!! Form::label('sla',Lang::get('lang.SLA_plan')) !!}
 				{!! $errors->first('sla', '<spam class="help-block">:message</spam>') !!}
-				{!!Form::select('sla', ['SLA Plans'=>$slas->lists('grace_period','id')],null,['class' => 'form-control select']) !!}
+				{!!Form::select('sla', ['SLA Plans'=>$slas->lists('grace_period','id')->toArray()],null,['class' => 'form-control select']) !!}
 
 			</div>
 			<!-- manager -->
@@ -82,7 +82,7 @@ class="active"
 
 				{!! Form::label('manager',Lang::get('lang.manager')) !!}
 				{!! $errors->first('manager', '<spam class="help-block">:message</spam>') !!}
-				{!!Form::select('manager',[null=>'Select a Manager','Managers'=>$user->lists('user_name','id')],null,['class' => 'form-control select']) !!}
+				{!!Form::select('manager',[null=>'Select a Manager','Managers'=>$user->lists('user_name','id')->toArray()],null,['class' => 'form-control select']) !!}
 
 			</div>
 
@@ -99,7 +99,7 @@ class="active"
 
 				{!! Form::label('outgoing_email',Lang::get('lang.outgoing_email')) !!}
 				{!! $errors->first('outgoing_email', '<spam class="help-block">:message</spam>') !!}
-				{!!Form::select('outgoing_email', ['' => 'System Default', 'Emails'=>$emails->lists('email_name','id')],null,['class' => 'form-control select']) !!}
+				{!!Form::select('outgoing_email', ['' => 'System Default', 'Emails'=>$emails->lists('email_name','id')->toArray()],null,['class' => 'form-control select']) !!}
 
 			</div>
 

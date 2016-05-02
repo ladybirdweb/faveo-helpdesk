@@ -3,7 +3,7 @@
 /*
  * This file is part of Class Preloader.
  *
- * (c) Graham Campbell <graham@cachethq.io>
+ * (c) Graham Campbell <graham@alt-three.com>
  * (c) Michael Dowling <mtdowling@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -12,7 +12,7 @@
 
 namespace ClassPreloader\Parser;
 
-use ClassPreloader\Exception\SkipFileException;
+use ClassPreloader\Exceptions\FileConstantException;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\MagicConst\File as FileNode;
 use PhpParser\Node\Scalar\String_ as StringNode;
@@ -32,7 +32,7 @@ class FileVisitor extends AbstractNodeVisitor
     protected $skip = false;
 
     /**
-     * Create a new file visitor.
+     * Create a new file visitor instance.
      *
      * @param bool $skip
      *
@@ -48,13 +48,15 @@ class FileVisitor extends AbstractNodeVisitor
      *
      * @param \PhpParser\Node $node
      *
-     * @return void
+     * @throws \ClassPreloader\Exceptions\FileConstantException
+     *
+     * @return \PhpParser\Node\Scalar\String_|null
      */
     public function enterNode(Node $node)
     {
         if ($node instanceof FileNode) {
             if ($this->skip) {
-                throw new SkipFileException('__FILE__ constant found, skipping...');
+                throw new FileConstantException();
             }
 
             return new StringNode($this->getFilename());

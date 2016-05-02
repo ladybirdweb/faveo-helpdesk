@@ -109,7 +109,7 @@ class AuthController extends Controller
         $user->save();
         // send mail for successful registration
         // $mail = Mail::send('auth.activate', array('link' => url('getmail', $code), 'username' => $name), function ($message) use ($user) {
-        // 	$message->to($user->email, $user->full_name)->subject('active your account');
+        //  $message->to($user->email, $user->full_name)->subject('active your account');
         // });
 
         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => 'password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('password/reset/'.$code)]);
@@ -228,23 +228,23 @@ class AuthController extends Controller
      * @return type Response
      */
     public function addLoginAttempt($value,$field) {
-	  $result = DB::table('login_attempts')->where('IP','=',$value)->first();
-	  $data = $result;
-	          $security = Security::whereId('1')->first();
+      $result = DB::table('login_attempts')->where('IP','=',$value)->first();
+      $data = $result;
+              $security = Security::whereId('1')->first();
                   $apt = $security->backlist_threshold;
-	  if($data)
+      if($data)
       {
         $attempts = $data->Attempts+1;
         if($attempts==$apt) {
-		 $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts.", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
-		}
+         $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts.", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
+        }
         else {
-		 $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
-		}
+         $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
+        }
        }
       else {
-	   $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
-	  }
+       $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
+      }
     }
      /**
      * Clear login attempt.
@@ -255,7 +255,7 @@ class AuthController extends Controller
      */
      public function clearLoginAttempts($value,$field) {
          $data =  DB::table('login_attempts')->where('IP','=',$value)->orWhere('User','=',$field)->update(['attempts' => '0']);
-	return $data;
+    return $data;
    }
    
     /**

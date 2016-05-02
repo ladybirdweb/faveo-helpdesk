@@ -26,14 +26,16 @@ use Input;
  * ***************************
  * Controller to keep smtp details and fetch where ever needed.
  */
-class SettingsController extends Controller {
+class SettingsController extends Controller
+{
 
     /**
      * Create a new controller instance.
      *
      * @return type void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // $this->smtp();
         $this->middleware('auth');
         $this->middleware('roles');
@@ -51,7 +53,8 @@ class SettingsController extends Controller {
      *
      * @return response
      */
-    public function widgets() {
+    public function widgets()
+    {
         return view('themes.default1.admin.helpdesk.theme.widgets');
     }
 
@@ -60,7 +63,8 @@ class SettingsController extends Controller {
      *
      * @return response
      */
-    public function list_widget() {
+    public function list_widget()
+    {
         return \Datatable::collection(Widgets::where('id', '<', '7')->get())
                         ->searchColumns('name')
                         ->orderColumns('name', 'title', 'value')
@@ -119,7 +123,8 @@ class SettingsController extends Controller {
      *
      * @return type response
      */
-    public function edit_widget($id, Widgets $widgets, Request $request) {
+    public function edit_widget($id, Widgets $widgets, Request $request)
+    {
         $widget = $widgets->where('id', '=', $id)->first();
         $widget->title = $request->title;
         $widget->value = $request->content;
@@ -137,7 +142,8 @@ class SettingsController extends Controller {
      *
      * @return response
      */
-    public function social_buttons() {
+    public function social_buttons()
+    {
         return view('themes.default1.admin.helpdesk.theme.social');
     }
 
@@ -146,7 +152,8 @@ class SettingsController extends Controller {
      *
      * @return response
      */
-    public function list_social_buttons() {
+    public function list_social_buttons()
+    {
         return \Datatable::collection(Widgets::where('id', '>', '6')->get())
                         ->searchColumns('name')
                         ->orderColumns('name', 'value')
@@ -193,7 +200,8 @@ class SettingsController extends Controller {
      *
      * @return type response
      */
-    public function edit_social_buttons($id, Widgets $widgets, Request $request) {
+    public function edit_social_buttons($id, Widgets $widgets, Request $request)
+    {
         $widget = $widgets->where('id', '=', $id)->first();
         $widget->title = $request->title;
         $widget->value = $request->content;
@@ -211,7 +219,8 @@ class SettingsController extends Controller {
      *
      * @return type void
      */
-    public static function driver() {
+    public static function driver()
+    {
         $set = new Smtp();
         $settings = Smtp::where('id', '=', '1')->first();
         Config::set('mail.host', $settings->driver);
@@ -222,7 +231,8 @@ class SettingsController extends Controller {
      *
      * @return type void
      */
-    public static function host() {
+    public static function host()
+    {
         $set = new Smtp();
         $settings = Smtp::where('id', '=', '1')->first();
         Config::set('mail.host', $settings->host);
@@ -233,7 +243,8 @@ class SettingsController extends Controller {
      *
      * @return type void
      */
-    public static function port() {
+    public static function port()
+    {
         $set = new Smtp();
         $settings = Smtp::where('id', '=', '1')->first();
         Config::set('mail.port', intval($settings->port));
@@ -244,7 +255,8 @@ class SettingsController extends Controller {
      *
      * @return type void
      */
-    public static function from() {
+    public static function from()
+    {
         $set = new Smtp();
         $settings = Smtp::where('id', '=', '1')->first();
         Config::set('mail.from', ['address' => $settings->email, 'name' => $settings->company_name]);
@@ -255,7 +267,8 @@ class SettingsController extends Controller {
      *
      * @return type void
      */
-    public static function encryption() {
+    public static function encryption()
+    {
         $set = new Smtp();
         $settings = Smtp::where('id', '=', '1')->first();
         Config::set('mail.encryption', $settings->encryption);
@@ -266,7 +279,8 @@ class SettingsController extends Controller {
      *
      * @return type void
      */
-    public static function username() {
+    public static function username()
+    {
         $set = new Smtp();
         $settings = Smtp::where('id', '=', '1')->first();
         Config::set('mail.username', $settings->email);
@@ -277,7 +291,8 @@ class SettingsController extends Controller {
      *
      * @return type void
      */
-    public static function password() {
+    public static function password()
+    {
         $settings = Smtp::first();
         if ($settings->password) {
             $pass = $settings->password;
@@ -291,7 +306,8 @@ class SettingsController extends Controller {
      *
      * @return type view
      */
-    public function getsmtp() {
+    public function getsmtp()
+    {
         $settings = Smtp::where('id', '=', '1')->first();
 
         return view('themes.default1.admin.helpdesk.emails.smtp', compact('settings'));
@@ -302,7 +318,8 @@ class SettingsController extends Controller {
      *
      * @return type view
      */
-    public function postsmtp(SmtpRequest $request) {
+    public function postsmtp(SmtpRequest $request)
+    {
         $data = Smtp::where('id', '=', 1)->first();
         $data->driver = $request->input('driver');
         $data->host = $request->input('host');
@@ -325,7 +342,8 @@ class SettingsController extends Controller {
      *
      * @return type void
      */
-    public static function smtp() {
+    public static function smtp()
+    {
         $settings = Smtp::where('id', '=', '1')->first();
         if ($settings->password) {
             $password = Crypt::decrypt($settings->password);
@@ -346,7 +364,8 @@ class SettingsController extends Controller {
      *
      * @return type view\
      */
-    public function settings(Smtp $set) {
+    public function settings(Smtp $set)
+    {
         $settings = $set->where('id', '1')->first();
 
         return view('themes.default1.admin.settings', compact('settings'));
@@ -360,7 +379,8 @@ class SettingsController extends Controller {
      *
      * @return type view
      */
-    public function PostSettings(Settings $set, Request $request) {
+    public function PostSettings(Settings $set, Request $request)
+    {
         $settings = $set->where('id', '1')->first();
         $pass = $request->input('password');
         $password = Crypt::encrypt($pass);
@@ -392,14 +412,13 @@ class SettingsController extends Controller {
      *
      * @return type
      */
-    public function version_check() {
-        $title = \Config::get('app.version');
-        $title1 = explode(" ", $title);
-        $version = 'Faveo Helpdesk ' . $title1[0];
+    public function version_check()
+    {
         $response_url = \URL::route('post-version-check');
-        echo "<form action='http://www.faveohelpdesk.com/billing/version' method='post' name='redirect'>";
+        echo "<form action='http://www.faveohelpdesk.com/bill/version' method='post' name='redirect'>";
         echo "<input type='hidden' name='_token' value='csrf_token()'/>";
-        echo "<input type='hidden' name='title' value='".$version."'/>";
+        echo "<input type='hidden' name='title' value='helpdeskcommunityedition'/>";
+        echo "<input type='hidden' name='id' value='19'/>";
         echo "<input type='hidden' name='response_url' value='" . $response_url . "' />";
         echo '</form>';
         echo "<script language='javascript'>document.redirect.submit();</script>";
@@ -410,7 +429,8 @@ class SettingsController extends Controller {
      *
      * @return type
      */
-    public function post_version_check(Request $request) {
+    public function post_version_check(Request $request)
+    {
         $current_version = \Config::get('app.version');
         $new_version = $request->value;
         if ($current_version == $new_version) {
@@ -429,21 +449,24 @@ class SettingsController extends Controller {
         }
     }
 
-    public function getupdate() {
+    public function getupdate()
+    {
         return \View::make('themes.default1.admin.helpdesk.settings.checkupdate');
     }
 
-    public function Plugins() {
+    public function Plugins()
+    {
         return view('themes.default1.admin.helpdesk.settings.plugins');
     }
 
-    public function GetPlugin() {
+    public function GetPlugin()
+    {
         $plugins = $this->fetchConfig();
         //dd($plugins);
 
         return \Datatable::collection(new Collection($plugins))
                         ->searchColumns('name')
-                        ->addColumn('name', function($model) {
+                        ->addColumn('name', function ($model) {
                             if (array_has($model, 'path')) {
                                 if ($model['status'] == 0) {
                                     $activate = "<a href=" . url('plugin/status/' . $model['path']) . ">Activate</a>";
@@ -478,16 +501,16 @@ class SettingsController extends Controller {
                             }
                             return ucfirst($model['name']) . $action;
                         })
-                        ->addColumn('description', function($model) {
+                        ->addColumn('description', function ($model) {
                             return ucfirst($model['description']);
                         })
-                        ->addColumn('author', function($model) {
+                        ->addColumn('author', function ($model) {
                             return ucfirst($model['author']);
                         })
-                        ->addColumn('website', function($model) {
+                        ->addColumn('website', function ($model) {
                             return "<a href=" . $model['website'] . " target=_blank>" . $model['website'] . "</a>";
                         })
-                        ->addColumn('version', function($model) {
+                        ->addColumn('version', function ($model) {
                             return $model['version'];
                         })
                         ->make();
@@ -497,7 +520,8 @@ class SettingsController extends Controller {
      * Reading the Filedirectory
      * @return type
      */
-    public function ReadPlugins() {
+    public function ReadPlugins()
+    {
         $dir = app_path() .DIRECTORY_SEPARATOR.'Plugins';
         $plugins = array_diff(scandir($dir), array('.', '..'));
         return $plugins;
@@ -508,7 +532,8 @@ class SettingsController extends Controller {
      * @param Request $request
      * @return type
      */
-    public function PostPlugins(Request $request) {
+    public function PostPlugins(Request $request)
+    {
         $v = $this->validate($request, ['plugin' => 'required|mimes:application/zip,zip,Zip']);
         $plug = new Plugin();
         $file = $request->file('plugin');
@@ -581,7 +606,8 @@ class SettingsController extends Controller {
      * @param type $dir
      * @return boolean
      */
-    public function deleteDirectory($dir) {
+    public function deleteDirectory($dir)
+    {
 
         if (!file_exists($dir)) {
             return true;
@@ -593,7 +619,7 @@ class SettingsController extends Controller {
             if ($item == '.' || $item == '..') {
                 continue;
             }
-           chmod($dir . DIRECTORY_SEPARATOR . $item,0777);
+            chmod($dir . DIRECTORY_SEPARATOR . $item, 0777);
             if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
                 return false;
             }
@@ -602,13 +628,15 @@ class SettingsController extends Controller {
         return rmdir($dir);
     }
 
-    public function ReadConfigs() {
+    public function ReadConfigs()
+    {
         $dir = app_path() .DIRECTORY_SEPARATOR.'Plugins'.DIRECTORY_SEPARATOR;
         $directories = scandir($dir);
         $files = [];
         foreach ($directories as $key => $file) {
-            if ($file === '.' or $file === '..')
+            if ($file === '.' or $file === '..') {
                 continue;
+            }
 
             if (is_dir($dir .DIRECTORY_SEPARATOR. $file)) {
                 $files[$key] = $file;
@@ -641,7 +669,8 @@ class SettingsController extends Controller {
         }
     }
 
-    public function fetchConfig() {
+    public function fetchConfig()
+    {
         $configs = $this->ReadConfigs();
         //dd($configs);
         $plug = new Plugin;
@@ -664,7 +693,8 @@ class SettingsController extends Controller {
         }
     }
 
-    public function DeletePlugin($slug) {
+    public function DeletePlugin($slug)
+    {
         $dir = app_path() . DIRECTORY_SEPARATOR . 'Plugins' . DIRECTORY_SEPARATOR . $slug;
         $this->deleteDirectory($dir);
         /**
@@ -683,7 +713,8 @@ class SettingsController extends Controller {
         return redirect()->back()->with('success', 'Deleted Successfully');
     }
 
-    public function StatusPlugin($slug) {
+    public function StatusPlugin($slug)
+    {
         $plugs = new Plugin;
         $plug = $plugs->where('name', $slug)->first();
         if (!$plug) {
@@ -722,5 +753,4 @@ class SettingsController extends Controller {
         $plug->save();
         return redirect()->back()->with('success', 'Status has changed');
     }
-
 }

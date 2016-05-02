@@ -63,7 +63,7 @@ class="active"
                 {!! Form::label('team_lead',Lang::get('lang.team_lead')) !!}
                 {!! $errors->first('team_lead', '<spam class="help-block">:message</spam>') !!}
                 <?php $user = App\User::where('role', 'admin')->orWhere('role', 'agent')->get(); ?>
-                {!! Form::select('team_lead',[''=>'Select a Team Leader','Members'=>$user->lists('user_name','id')],null,['class' => 'form-control']) !!}	
+                {!! Form::select('team_lead',[''=>'Select a Team Leader','Members'=>$user->lists('user_name','id')->toArray()],null,['class' => 'form-control']) !!}	
 
             </div>
 

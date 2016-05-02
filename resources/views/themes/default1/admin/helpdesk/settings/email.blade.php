@@ -64,7 +64,7 @@ class="active"
                             <div class="form-group {{ $errors->has('sys_email') ? 'has-error' : '' }}">
                                 {!! Form::label('sys_email',Lang::get('lang.default_system_email')) !!}
                                 {!! $errors->first('sys_email', '<spam class="help-block">:message</spam>') !!}
-                                {!!Form::select('sys_email', [ 'Select an Email', 'Emails' => $emails1->lists('email_name','id')],null,['class'=>'form-control']) !!}
+                                {!!Form::select('sys_email', [ 'Select an Email', 'Emails' => $emails1->lists('email_name','id')->toArray()],null,['class'=>'form-control']) !!}
                             </div>
                         </div>
                     </div>

@@ -108,7 +108,7 @@ class="active"
 		<div class="form-group {{ $errors->has('priority') ? 'has-error' : '' }}">
 			{!! Form::label('priority',Lang::get('lang.default_priority')) !!}
 			{!! $errors->first('priority', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('priority', [''=>'select a priority','Priorities'=>$priority->lists('priority_desc','priority_id')],null,['class' => 'form-control']) !!}
+			{!!Form::select('priority', [''=>'select a priority','Priorities'=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control']) !!}
 			</div>
 		</div>
 

@@ -1,5 +1,6 @@
 {
     "providers": [
+        "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
         "Illuminate\\Auth\\AuthServiceProvider",
         "Illuminate\\Bus\\BusServiceProvider",
         "Illuminate\\Cache\\CacheServiceProvider",
@@ -67,6 +68,31 @@
         "Tymon\\JWTAuth\\Providers\\JWTAuthServiceProvider"
     ],
     "deferred": {
+        "command.app.name": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.clear-compiled": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.command.make": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.config.cache": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.config.clear": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.console.make": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.event.generate": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.event.make": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.down": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.environment": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.fresh": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.handler.command": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.handler.event": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.key.generate": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.model.make": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.optimize": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.provider.make": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.request.make": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.route.cache": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.route.clear": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.route.list": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.serve": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.tinker": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.up": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
+        "command.vendor.publish": "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider",
         "Illuminate\\Bus\\Dispatcher": "Illuminate\\Bus\\BusServiceProvider",
         "Illuminate\\Contracts\\Bus\\Dispatcher": "Illuminate\\Bus\\BusServiceProvider",
         "Illuminate\\Contracts\\Bus\\QueueingDispatcher": "Illuminate\\Bus\\BusServiceProvider",
@@ -122,6 +148,7 @@
         "form": "Illuminate\\Html\\HtmlServiceProvider"
     },
     "when": {
+        "Illuminate\\Foundation\\Providers\\ArtisanServiceProvider": [],
         "Illuminate\\Bus\\BusServiceProvider": [],
         "Illuminate\\Cache\\CacheServiceProvider": [],
         "Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider": [],

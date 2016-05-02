@@ -33,6 +33,6 @@ class Kernel extends ConsoleKernel
             $user = new User();
             $user->save();
 
-            })->everyFiveMinutes();
+        })->everyFiveMinutes();
     }
 }

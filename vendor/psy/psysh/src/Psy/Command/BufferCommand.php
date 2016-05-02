@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -36,7 +36,7 @@ class BufferCommand extends Command
             ))
             ->setDescription('Show (or clear) the contents of the code input buffer.')
             ->setHelp(
-                <<<HELP
+                <<<'HELP'
 Show the contents of the code buffer for the current multi-line expression.
 
 Optionally, clear the buffer by passing the <info>--clear</info> option.

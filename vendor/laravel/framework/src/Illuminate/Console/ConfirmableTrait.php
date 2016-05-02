@@ -1,50 +1,55 @@
-<?php namespace Illuminate\Console;
+<?php
+
+namespace Illuminate\Console;
 
 use Closure;
 
-trait ConfirmableTrait {
+trait ConfirmableTrait
+{
+    /**
+     * Confirm before proceeding with the action.
+     *
+     * @param  string    $warning
+     * @param  \Closure|bool|null  $callback
+     * @return bool
+     */
+    public function confirmToProceed($warning = 'Application In Production!', $callback = null)
+    {
+        $callback = is_null($callback) ? $this->getDefaultConfirmCallback() : $callback;
 
-	/**
-	 * Confirm before proceeding with the action.
-	 *
-	 * @param  string    $warning
-	 * @param  \Closure|null  $callback
-	 * @return bool
-	 */
-	public function confirmToProceed($warning = 'Application In Production!', Closure $callback = null)
-	{
-		$shouldConfirm = $callback ?: $this->getDefaultConfirmCallback();
+        $shouldConfirm = $callback instanceof Closure ? call_user_func($callback) : $callback;
 
-		if (call_user_func($shouldConfirm))
-		{
-			if ($this->option('force')) return true;
+        if ($shouldConfirm) {
+            if ($this->option('force')) {
+                return true;
+            }
 
-			$this->comment(str_repeat('*', strlen($warning) + 12));
-			$this->comment('*     '.$warning.'     *');
-			$this->comment(str_repeat('*', strlen($warning) + 12));
-			$this->output->writeln('');
+            $this->comment(str_repeat('*', strlen($warning) + 12));
+            $this->comment('*     '.$warning.'     *');
+            $this->comment(str_repeat('*', strlen($warning) + 12));
+            $this->output->writeln('');
 
-			$confirmed = $this->confirm('Do you really wish to run this command? [y/N]');
+            $confirmed = $this->confirm('Do you really wish to run this command?');
 
-			if ( ! $confirmed)
-			{
-				$this->comment('Command Cancelled!');
+            if (! $confirmed) {
+                $this->comment('Command Cancelled!');
 
-				return false;
-			}
-		}
+                return false;
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Get the default confirmation callback.
-	 *
-	 * @return \Closure
-	 */
-	protected function getDefaultConfirmCallback()
-	{
-		return function() { return $this->getLaravel()->environment() == 'production'; };
-	}
-
+    /**
+     * Get the default confirmation callback.
+     *
+     * @return \Closure
+     */
+    protected function getDefaultConfirmCallback()
+    {
+        return function () {
+            return $this->getLaravel()->environment() == 'production';
+        };
+    }
 }

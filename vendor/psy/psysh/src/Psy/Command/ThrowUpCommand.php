@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -52,14 +52,14 @@ class ThrowUpCommand extends Command implements ContextAware
             ))
             ->setDescription('Throw an exception out of the Psy Shell.')
             ->setHelp(
-                <<<HELP
+                <<<'HELP'
 Throws an exception out of the current the Psy Shell instance.
 
 By default it throws the most recent exception.
 
 e.g.
 <return>>>> throw-up</return>
-<return>>>> throw-up \$e</return>
+<return>>>> throw-up $e</return>
 HELP
             );
     }

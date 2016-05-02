@@ -20,7 +20,7 @@ use Redirect;
  * CategoryController
  * This controller is used to CRUD category.
  *
- * @author     	Ladybird <info@ladybirdweb.com>
+ * @author      Ladybird <info@ladybirdweb.com>
  */
 class CategoryController extends Controller
 {

@@ -1,8 +1,12 @@
-<?php namespace Illuminate\View;
+<?php
 
-use Closure;
+namespace Illuminate\View;
+
+use Exception;
+use Throwable;
 use ArrayAccess;
 use BadMethodCallException;
+use Illuminate\Support\Str;
 use Illuminate\Support\MessageBag;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\View\Engines\EngineInterface;
@@ -12,7 +16,6 @@ use Illuminate\Contracts\View\View as ViewContract;
 
 class View implements ArrayAccess, ViewContract
 {
-
     /**
      * The view factory instance.
      *
@@ -55,10 +58,10 @@ class View implements ArrayAccess, ViewContract
      * @param  \Illuminate\View\Engines\EngineInterface  $engine
      * @param  string  $view
      * @param  string  $path
-     * @param  array   $data
+     * @param  mixed  $data
      * @return void
      */
-    public function __construct(Factory $factory, EngineInterface $engine, $view, $path, $data = array())
+    public function __construct(Factory $factory, EngineInterface $engine, $view, $path, $data = [])
     {
         $this->view = $view;
         $this->path = $path;
@@ -71,23 +74,29 @@ class View implements ArrayAccess, ViewContract
     /**
      * Get the string contents of the view.
      *
-     * @param  \Closure|null  $callback
+     * @param  callable|null  $callback
      * @return string
+     *
+     * @throws \Throwable
      */
-    public function render(Closure $callback = null)
+    public function render(callable $callback = null)
     {
         try {
             $contents = $this->renderContents();
 
-            $response = isset($callback) ? $callback($this, $contents) : null;
+            $response = isset($callback) ? call_user_func($callback, $this, $contents) : null;
 
             // Once we have the contents of the view, we will flush the sections if we are
             // done rendering all views so that there is nothing left hanging over when
             // another view gets rendered in the future by the application developer.
             $this->factory->flushSectionsIfDoneRendering();
 
-            return $response ?: $contents;
+            return ! is_null($response) ? $response : $contents;
         } catch (Exception $e) {
+            $this->factory->flushSections();
+
+            throw $e;
+        } catch (Throwable $e) {
             $this->factory->flushSections();
 
             throw $e;
@@ -125,10 +134,8 @@ class View implements ArrayAccess, ViewContract
      */
     public function renderSections()
     {
-        $env = $this->factory;
-
-        return $this->render(function ($view) use ($env) {
-            return $env->getSections();
+        return $this->render(function () {
+            return $this->factory->getSections();
         });
     }
 
@@ -186,7 +193,7 @@ class View implements ArrayAccess, ViewContract
      * @param  array   $data
      * @return $this
      */
-    public function nest($key, $view, array $data = array())
+    public function nest($key, $view, array $data = [])
     {
         return $this->with($key, $this->factory->make($view, $data));
     }
@@ -380,8 +387,8 @@ class View implements ArrayAccess, ViewContract
      */
     public function __call($method, $parameters)
     {
-        if (starts_with($method, 'with')) {
-            return $this->with(snake_case(substr($method, 4)), $parameters[0]);
+        if (Str::startsWith($method, 'with')) {
+            return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
         }
 
         throw new BadMethodCallException("Method [$method] does not exist on view.");

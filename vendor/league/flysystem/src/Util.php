@@ -17,7 +17,9 @@ class Util
     public static function pathinfo($path)
     {
         $pathinfo = pathinfo($path) + compact('path');
-        $pathinfo['dirname'] = static::normalizeDirname($pathinfo['dirname']);
+        $pathinfo['dirname'] = array_key_exists('dirname', $pathinfo)
+            ? static::normalizeDirname($pathinfo['dirname'])
+            : '';
 
         return $pathinfo;
     }
@@ -106,7 +108,7 @@ class Util
     public static function normalizeRelativePath($path)
     {
         // Path remove self referring paths ("/./").
-        $path = preg_replace('#/\.(?=/)|^\./|/\./?$#', '', $path);
+        $path = preg_replace('#/\.(?=/)|^\./|(/|^)\./?$#', '', $path);
 
         // Regex for resolving relative paths
         $regex = '#/*[^/\.]+/\.\.#Uu';
@@ -147,7 +149,7 @@ class Util
      * Guess MIME Type based on the path of the file and it's content.
      *
      * @param string $path
-     * @param string $content
+     * @param string|resource $content
      *
      * @return string|null MIME Type or NULL if no extension detected
      */
@@ -155,15 +157,11 @@ class Util
     {
         $mimeType = MimeType::detectByContent($content);
 
-        if (empty($mimeType) || in_array($mimeType, ['application/x-empty', 'text/plain', 'text/x-asm'])) {
-            $extension = pathinfo($path, PATHINFO_EXTENSION);
-
-            if ($extension) {
-                $mimeType = MimeType::detectByFileExtension($extension) ?: 'text/plain';
-            }
+        if ( ! (empty($mimeType) || in_array($mimeType, ['application/x-empty', 'text/plain', 'text/x-asm']))) {
+            return $mimeType;
         }
 
-        return $mimeType;
+        return MimeType::detectByFilename($path);
     }
 
     /**

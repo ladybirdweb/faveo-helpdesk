@@ -6,6 +6,8 @@ namespace App\Exceptions;
 use App\Http\Controllers\Common\PhpMailController;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -17,6 +19,8 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
+        AuthorizationException::class,
+        ValidationException::class,
         'Symfony\Component\HttpKernel\Exception\HttpException',
     ];
 
@@ -73,7 +77,7 @@ class Handler extends ExceptionHandler
             }
         }
         //  returns non oops error message
-         return parent::render($request, $e);
+        // return parent::render($request, $e);
         // checking if the error is related to http error i.e. page not found
         if ($this->isHttpException($e)) {
             // returns error for page not found
@@ -102,7 +106,9 @@ class Handler extends ExceptionHandler
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
 
         return new \Illuminate\Http\Response(
-                $whoops->handleException($e), $e->getStatusCode(), $e->getHeaders()
+            $whoops->handleException($e),
+            $e->getStatusCode(),
+            $e->getHeaders()
         );
     }
 }
