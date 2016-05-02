@@ -56,18 +56,24 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                                 <div class="col-md-12">
                             <div class="ticketratings pull-right">    
         <table><tbody>
+                <?php $ratings = DB::table('settings_ratings')->get(); ?>
+                @foreach($ratings as $rating) 
                 <form id="foo">
    <tr>
-        <th><div class="ticketratingtitle">Overall Satisfaction &nbsp;</div></th>&nbsp
+        <th><div class="ticketratingtitle">{!! $rating->rating_name !!} &nbsp;</div></th>&nbsp
+                <?php              $r_name =  str_replace(' ', '_',$rating->rating_name); ?>
     <td>
-    <input type="radio" class="star" id="star5" name="rating" value="1"<?php echo ($tickets->rating=='1')?'checked':'' ?> />
-    <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating=='2')?'checked':'' ?> />
+        <?php for($i = 1; $i<=5; $i++) { ?>
+        <input type="radio" class="star" id="star5" name="{!! $r_name !!}" value="{!! $i !!}"<?php echo ($tickets->rating==$i)?'checked':'' ?> onclick="helpdeskArea({!! $rating->id!!}, {!! $i !!})"/>
+        <?php } ?>
+<!--    <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating=='2')?'checked':'' ?> />
     <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating=='3')?'checked':'' ?>/>
     <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating=='4')?'checked':'' ?>/>
-    <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating=='5')?'checked':'' ?> />
+    <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating=='5')?'checked':'' ?> />-->
     </td> 
 </tr>
                 </form>
+            @endforeach
  </tbody> </table> 
                         </div>
                             </div>
@@ -383,6 +389,9 @@ $data = $ConvDate[0];
 
 
 <script type="text/javascript">
+   function helpdeskArea(ratingId, ratingValue) {
+       alert(ratingId);
+   }
        $("#cc_page").on('click', '.search_r', function(){
     var search_r = $('a', this).attr('id');
                     $.ajax({
@@ -415,7 +424,7 @@ $(document).ready(function() {
         jQuery('.star').attr('disabled', true);
        
     }
-    $('input[name=rating]').change(function() { 
+    $('.star').change(function() { 
 $('#foo').submit();
     });
     $('input[name=rating2]').change(function() { 
@@ -426,13 +435,13 @@ $('#foo2').submit();
 
         // get the form data
         // there are many ways to get this data using jQuery (you can use the class or id also)
-        var formData = $('input[name="rating"]:checked').val();
+        var formData = $(this).serialize();
         
 //$('#foo').serialize();
         // process the form
         $.ajax({
             type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-            url         : '../rating/'+<?php echo $tickets->id ?>+'/'+formData, // the url where we want to POST
+            url         : '../rating/'+<?php echo $tickets->id ?>, // the url where we want to POST
             data        : formData, // our data object
             dataType    : 'json', // what type of data do we expect back from the server
             

@@ -405,7 +405,7 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function ()
 
     Route::get('/{dept}/closed', ['as' => 'dept.closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptclose']); // Closed
 
-    Route::post('rating/{id}/{rating}', ['as' => 'ticket.rating', 'uses' => 'Agent\helpdesk\TicketController@rating']); /* Get overall Ratings */
+    Route::post('rating/{id}', ['as' => 'ticket.rating', 'uses' => 'Agent\helpdesk\TicketController@rating']); /* Get overall Ratings */
 
     Route::post('rating2/{id}/{rating}', ['as' => 'ticket.rating2', 'uses' => 'Agent\helpdesk\TicketController@ratingReply']); /* Get reply Ratings */
     // To check and lock tickets
@@ -471,10 +471,17 @@ Route::get('check', 'CheckController@getcheck'); //testing checkbox auto-populat
 
 Route::post('postcheck/{id}', 'CheckController@postcheck');
 
+Breadcrumbs::register('home', function($breadcrumbs) {
+    $breadcrumbs->push('Home', route('home'));
+});
 Route::get('home', ['as' => 'home', 'uses' => 'Client\helpdesk\WelcomepageController@index']); //guest layout
-
+Breadcrumbs::register('/', function($breadcrumbs) {
+    $breadcrumbs->push('Home', route('/'));
+});
 Route::get('/', ['as' => '/', 'uses' => 'Client\helpdesk\WelcomepageController@index']);
-
+Breadcrumbs::register('create-ticket', function($breadcrumbs) {
+    $breadcrumbs->push('Create Ticket', route('form'));
+});
 Route::get('create-ticket', ['as' => 'form', 'uses' => 'Client\helpdesk\FormController@getForm']); //getform
 
 Route::get('mytickets/{id}', ['as' => 'ticketinfo', 'uses' => 'Client\helpdesk\GuestController@singleThread']); //detail ticket information

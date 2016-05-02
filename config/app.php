@@ -139,6 +139,7 @@ return [
     'providers' => [
 
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
+        DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
         /*
     	* Faveo Plugins
     	*/
@@ -244,6 +245,7 @@ return [
         'Image'      => Intervention\Image\Facades\Image::class,
         'JWTAuth'    => 'Tymon\JWTAuth\Facades\JWTAuth',
         'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory',
+        'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
 
     ],
 

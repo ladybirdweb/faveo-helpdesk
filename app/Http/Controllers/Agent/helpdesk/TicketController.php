@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\CreateTicketRequest;
 use App\Http\Requests\helpdesk\TicketRequest;
+use Illuminate\Http\Request;
 // models
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Agent\Teams;
@@ -1667,8 +1668,9 @@ class TicketController extends Controller
      *
      * @return type Redirect
      */
-    public function rating($id, $rating)
+    public function rating($id, Request $request)
     {
+        dd($request->Overall_Rating);
         Tickets::where('id', $id)->update(['rating' => $rating]);
 
         return redirect()->back()->with('Success', 'Thank you for your rating!');
