@@ -54,5 +54,12 @@ Faveo is designed & developed by <a href="http://www.ladybirdweb.com/" target="_
 <p>Join Faveo discussion group and stay tuned to latest updates. 
 <a href="https://www.linkedin.com/groups/8429668" target="_blank">Join here</a></p>
 
+<h3>Support the community edition</h3>
+<p>If you are using our product and want to support us <a href="https://github.com/ladybirdweb/faveo-helpdesk/wiki/Support-the-community-edition" target="_blank">Click here</a></p>
+
+<h3>Language translate</h3>
+<p>Help us translate Faveo into your native language <a href="https://github.com/ladybirdweb/faveo-helpdesk/wiki/Help-in-language-translate" target="_blank">Click here</a></p>
+
 <h3>Don't panic if you come across bugs</h3>
 <p>Faveo is very very new in the market, the product is fully working and is production worthy but it definitely will have some bugs like any software. We fully support Faveo whether free or pro edition, incase you come across any bugs, email us through the <a href="http://www.faveohelpdesk.com/contact-us/">contact form</a>. We want to make your experience of using Faveo as memorable as possible, so help us make Faveo a World, top class helpdesk application. Do check out our roadmap to stayed tuned with future releases </p>
+<p><a href="https://play.google.com/store/apps/details?id=co.helpdesk.faveo" target="_blank"><img src="http://www.faveohelpdesk.com/wp-content/uploads/2016/04/get-it-on-google-play-1.png"  /></a></p>
