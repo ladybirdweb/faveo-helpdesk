@@ -9,8 +9,8 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
-        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
+        '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '3919eeb97e98d4648304477f8ef734ba' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
@@ -95,6 +95,7 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         array (
             'Dotenv\\' => 7,
             'Doctrine\\Instantiator\\' => 22,
+            'DaveJamesMiller\\Breadcrumbs\\' => 28,
         ),
         'C' => 
         array (
@@ -263,6 +264,10 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
+        ),
+        'DaveJamesMiller\\Breadcrumbs\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src',
         ),
         'ClassPreloader\\' => 
         array (
@@ -464,6 +469,7 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'App\\Http\\Controllers\\Admin\\helpdesk\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/helpdesk/HomeController.php',
         'App\\Http\\Controllers\\Admin\\helpdesk\\LanguageController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/helpdesk/LanguageController.php',
         'App\\Http\\Controllers\\Admin\\helpdesk\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/helpdesk/ProfileController.php',
+        'App\\Http\\Controllers\\Admin\\helpdesk\\SecurityController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/helpdesk/SecurityController.php',
         'App\\Http\\Controllers\\Admin\\helpdesk\\SettingsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/helpdesk/SettingsController.php',
         'App\\Http\\Controllers\\Admin\\helpdesk\\SlaController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/helpdesk/SlaController.php',
         'App\\Http\\Controllers\\Admin\\helpdesk\\TeamController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/helpdesk/TeamController.php',
@@ -500,6 +506,7 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'App\\Http\\Controllers\\Common\\NotificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Common/NotificationController.php',
         'App\\Http\\Controllers\\Common\\PhpMailController' => __DIR__ . '/../..' . '/app/Http/Controllers/Common/PhpMailController.php',
         'App\\Http\\Controllers\\Common\\SettingsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Common/SettingsController.php',
+        'App\\Http\\Controllers\\Common\\TemplateController' => __DIR__ . '/../..' . '/app/Http/Controllers/Common/TemplateController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\Error\\ErrorController' => __DIR__ . '/../..' . '/app/Http/Controllers/Error/ErrorController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
@@ -578,6 +585,8 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'App\\Http\\Requests\\kb\\SettingsRequests' => __DIR__ . '/../..' . '/app/Http/Requests/kb/SettingsRequests.php',
         'App\\Http\\Requests\\kb\\SocialRequest' => __DIR__ . '/../..' . '/app/Http/Requests/kb/SocialRequest.php',
         'App\\Jobs\\Job' => __DIR__ . '/../..' . '/app/Jobs/Job.php',
+        'App\\Model\\Common\\Template' => __DIR__ . '/../..' . '/app/Model/Common/Template.php',
+        'App\\Model\\Common\\TemplateType' => __DIR__ . '/../..' . '/app/Model/Common/TemplateType.php',
         'App\\Model\\helpdesk\\Agent\\Agents' => __DIR__ . '/../..' . '/app/Model/helpdesk/Agent/Agents.php',
         'App\\Model\\helpdesk\\Agent\\Assign_team_agent' => __DIR__ . '/../..' . '/app/Model/helpdesk/Agent/Assign_team_agent.php',
         'App\\Model\\helpdesk\\Agent\\Department' => __DIR__ . '/../..' . '/app/Model/helpdesk/Agent/Department.php',
@@ -610,6 +619,7 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'App\\Model\\helpdesk\\Settings\\Email' => __DIR__ . '/../..' . '/app/Model/helpdesk/Settings/Email.php',
         'App\\Model\\helpdesk\\Settings\\Plugin' => __DIR__ . '/../..' . '/app/Model/helpdesk/Settings/Plugin.php',
         'App\\Model\\helpdesk\\Settings\\Responder' => __DIR__ . '/../..' . '/app/Model/helpdesk/Settings/Responder.php',
+        'App\\Model\\helpdesk\\Settings\\Security' => __DIR__ . '/../..' . '/app/Model/helpdesk/Settings/Security.php',
         'App\\Model\\helpdesk\\Settings\\System' => __DIR__ . '/../..' . '/app/Model/helpdesk/Settings/System.php',
         'App\\Model\\helpdesk\\Settings\\Ticket' => __DIR__ . '/../..' . '/app/Model/helpdesk/Settings/Ticket.php',
         'App\\Model\\helpdesk\\Theme\\Footer' => __DIR__ . '/../..' . '/app/Model/helpdesk/Theme/Footer.php',
@@ -806,6 +816,13 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'DOMPDF_Exception' => __DIR__ . '/..' . '/dompdf/dompdf/include/dompdf_exception.cls.php',
         'DOMPDF_Image_Exception' => __DIR__ . '/..' . '/dompdf/dompdf/include/dompdf_image_exception.cls.php',
         'DatabaseSeeder' => __DIR__ . '/../..' . '/database/seeds/DatabaseSeeder.php',
+        'DaveJamesMiller\\Breadcrumbs\\CurrentRoute' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/CurrentRoute.php',
+        'DaveJamesMiller\\Breadcrumbs\\Exception' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/Exception.php',
+        'DaveJamesMiller\\Breadcrumbs\\Facade' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/Facade.php',
+        'DaveJamesMiller\\Breadcrumbs\\Generator' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/Generator.php',
+        'DaveJamesMiller\\Breadcrumbs\\Manager' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/Manager.php',
+        'DaveJamesMiller\\Breadcrumbs\\ServiceProvider' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/ServiceProvider.php',
+        'DaveJamesMiller\\Breadcrumbs\\View' => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src/View.php',
         'Diff' => __DIR__ . '/..' . '/phpspec/php-diff/lib/Diff.php',
         'Diff_Renderer_Abstract' => __DIR__ . '/..' . '/phpspec/php-diff/lib/Diff/Renderer/Abstract.php',
         'Diff_Renderer_Html_Array' => __DIR__ . '/..' . '/phpspec/php-diff/lib/Diff/Renderer/Html/Array.php',

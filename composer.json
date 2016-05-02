@@ -24,7 +24,8 @@
         "bestmomo/filemanager": "1.1.*",
         "unisharp/laravel-filemanager": "^1.1",
         "tymon/jwt-auth": "0.5.*",
-        "php": ">=5.5.9"
+        "php": ">=5.5.9",
+        "davejamesmiller/laravel-breadcrumbs": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
