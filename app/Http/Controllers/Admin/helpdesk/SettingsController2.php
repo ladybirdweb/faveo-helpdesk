@@ -122,8 +122,16 @@ foreach ($markasread as $mark) {
             /* fetch the values of company from company table */
             $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->first();
             $statuss->name = Input::get('name');
-            $statuss->state = Input::get('state');
+            $statuss->icon_class = Input::get('icon_class');
             $statuss->email_user = Input::get('email_user');
+            $statuss->sort = Input::get('sort');
+            $delete = Input::get('delete');
+            if($delete == 'yes') {
+                $statuss->state = 'delete';
+            }
+            else {
+                            $statuss->state = Input::get('state');
+            }
             $statuss->sort = Input::get('sort');
             $statuss->save();
             /* Direct to Company Settings Page */
@@ -133,11 +141,23 @@ foreach ($markasread as $mark) {
         }
     }
     
-    public function createStatuses() {
+    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss) {
 //        try {
             /* fetch the values of company from company table */
-            $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::create(['name' => Input::get('name'),'state' => Input::get('state'),'sort' => Input::get('sort'),'email_user' => Input::get('email_user')]);
-            /* Direct to Company Settings Page */
+                    $statuss->name = Input::get('name');
+            $statuss->icon_class = Input::get('icon_class');
+            $statuss->email_user = Input::get('email_user');
+            $statuss->sort = Input::get('sort');
+            $delete = Input::get('delete');
+            if($delete == 'yes') {
+                $statuss->state = 'delete';
+            }
+            else {
+                            $statuss->state = Input::get('state');
+            }
+            $statuss->sort = Input::get('sort');
+            $statuss->save();    
+        /* Direct to Company Settings Page */
             return redirect()->back()->with('success','Status has been created!');
 //        } catch (Exception $ex) {
 //            return redirect()->back()->with('fails', $ex->errorInfo[2]);

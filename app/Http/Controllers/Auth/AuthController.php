@@ -52,12 +52,11 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct(Guard $auth, Registrar $registrar, PhpMailController $PhpMailController)
+    public function __construct(PhpMailController $PhpMailController)
     {
         $this->PhpMailController = $PhpMailController;
         SettingsController::smtp();
-        $this->auth = $auth;
-        $this->registrar = $registrar;
+
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
@@ -204,7 +203,7 @@ class AuthController extends Controller
         }
         // If auth ok, redirect to restricted area
         \Session::put('loginAttempts', $loginAttempts + 1);
-        if ($this->auth->attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
+        if (Auth::Attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
             if (Auth::user()->role == 'user') {
                 return \Redirect::route('/');
             } else {

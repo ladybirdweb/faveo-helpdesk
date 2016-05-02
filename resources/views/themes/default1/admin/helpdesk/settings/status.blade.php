@@ -16,25 +16,11 @@
     <div class="row">
         <div class="col-xs-12">
             
-                @if(Session::has('success'))
-                    <div class="alert alert-success alert-dismissable">
-                        <i class="fa fa-ban"></i>
-                        <b>Alert!</b> Success.
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <p>{{Session::get('success')}}</p>                
-                    </div>
-                @endif
-@if(Session::has('failed'))
-                    <div class="alert alert-danger alert-dismissable">
-                        <i class="fa fa-ban"></i>
-                        <b>Alert!</b> Failed.
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <p>{{Session::get('failed')}}</p>                
-                    </div>
-                @endif
             <!-- -->    
             <div class="box">
+                
                 <div class="box-header with-border">
+                    
                     <h3 class="box-title">Current Statuses</h3>
                      <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-toggle="modal" data-target="#create" title="Create"><i class="fa fa-plus-circle fa-2x"></i></button>
@@ -68,6 +54,10 @@
                     <label for="title">Display Order:</label><br>
 {!! Form::text('sort',null,['class'=>'form-control'])!!}
               </div>  
+            <div class="col-md-6">
+                    <label for="title">Icon Class:</label><br>
+{!! Form::text('icon_class',null,['class'=>'form-control'])!!}
+              </div>  
         </div></div>
                          <div class="form-group">
 		<!-- gender -->
@@ -80,9 +70,24 @@
 				<div class="col-xs-3">
 					{!! Form::radio('state','open') !!} {{Lang::get('lang.no')}}
 				</div>
+                                       
 			</div>
 		</div>
                            <div class="form-group">
+		<!-- Email user -->
+						
+{!! Form::label('gender','Is this a deleted ticket status?') !!}
+                        <blockquote>If you choose 'YES' then the ticket status will be set as deleted.</blockquote>
+			<div class="row">
+				<div class="col-xs-3">
+					{!! Form::radio('delete','yes') !!} {{Lang::get('lang.yes')}}
+				</div>
+				<div class="col-xs-3">
+					{!! Form::radio('delete','no') !!} {{Lang::get('lang.no')}}
+				</div>
+		</div>        
+                     </div>
+                          <div class="form-group">
 		<!-- Email user -->
 						
 {!! Form::label('gender','Notify user on this status?') !!}
@@ -111,6 +116,23 @@
               </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
+                    
+                @if(Session::has('success'))
+                    <div class="alert alert-success alert-dismissable">
+                        <i class="fa fa-ban"></i>
+  
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <p>{{Session::get('success')}}</p>                
+                    </div>
+                @endif
+@if(Session::has('failed'))
+                    <div class="alert alert-danger alert-dismissable">
+                        <i class="fa fa-ban"></i>
+                        <b>Alert!</b> Failed.
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <p>{{Session::get('failed')}}</p>                
+                    </div>
+                @endif
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -162,7 +184,11 @@
             <div class="col-md-6">
                     <label for="title">Display Order:</label><br>
 {!! Form::text('sort',null,['class'=>'form-control'])!!}
-              </div>     
+              </div> 
+             <div class="col-md-6">
+                    <label for="title">Icon Class:</label><br>
+{!! Form::text('icon_class',null,['class'=>'form-control'])!!}
+              </div>  
         </div></div>
                          <div class="form-group">
 		<!-- gender -->
@@ -177,6 +203,20 @@
 				</div>
 			</div>
 		</div>
+                           <div class="form-group">
+		<!-- Email user -->
+						
+{!! Form::label('gender','Is this a deleted ticket status?') !!}
+                        <blockquote>If you choose 'YES' then the ticket status will be set as deleted.</blockquote>
+			<div class="row">
+				<div class="col-xs-3">
+					{!! Form::radio('delete','yes') !!} {{Lang::get('lang.yes')}}
+				</div>
+				<div class="col-xs-3">
+					{!! Form::radio('delete','no') !!} {{Lang::get('lang.no')}}
+				</div>
+		</div>        
+                     </div>
                                                   <div class="form-group">
 		<!-- gender -->
 						
