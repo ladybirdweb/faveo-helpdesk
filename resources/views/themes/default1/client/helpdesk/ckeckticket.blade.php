@@ -42,7 +42,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                         <ul class="dropdown-menu" id='cc_page'>
                             @foreach($statuses as $status)
                             <?php if($status->name == 'Deleted' or $status->name == 'Accepted') continue; ?>
-                            <li class="search_r"><a href="#" id="{!! $status->state !!}"><i class="fa fa-folder-open" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
+                            <li class="search_r"><a href="#" id="{!! $status->state !!}"><i class="{!! $status->icon_class !!}" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
                             </li>
                             @endforeach
                             

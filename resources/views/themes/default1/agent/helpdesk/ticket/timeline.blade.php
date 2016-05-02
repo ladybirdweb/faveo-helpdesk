@@ -105,11 +105,11 @@ active
                             @foreach($statuses as $status)
                             <?php if ($group->can_edit_ticket == 1) {?>
                             <?php if($status->name == 'Deleted' or $status->name == 'Accepted' or $status->name == 'Archived') continue; ?>
-                            <li class="search_r"><a href="#" id="{!! $status->state !!}"><i class="fa fa-folder-open" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
+                            <li class="search_r"><a href="#" id="{!! $status->state !!}"><i class="{!! $status->icon_class !!}" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
                             </li>
                             <?php } else { ?>
                             <?php if($status->name == 'Deleted' or $status->name == 'Accepted' or $status->name == 'Closed' or $status->name == 'Archived') continue; ?>
-                            <li class="search_r"><a href="#" id="{!! $status->state !!}"><i class="fa fa-folder-open" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
+                            <li class="search_r"><a href="#" id="{!! $status->state !!}"><i class="{!! $status->icon_class !!}" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
                             </li>
                             <?php } ?>
                             @endforeach
