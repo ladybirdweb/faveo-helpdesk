@@ -1255,7 +1255,6 @@ class TicketController extends Controller
                 $collaborator_store->save();
             }
         }
-
         return true;
     }
 

@@ -566,6 +566,19 @@ return [
     'directory_listing'      => 'Directory Listing',
     'vocation_mode'          => 'Vocation Mode',
     'assigned_team'          => 'Assigned Team',
+    'agent_send_mail_error_on_agent_creation'  => 'Some error occurred while sending mail to the agent. Please check email settings and try again',
+    'agent_creation_success'    =>  'Agent Created sucessfully',
+    'failed_to_create_agent'    =>  'Failed to create agent',
+    'failed_to_edit_agent'      =>  'Failed to Edit Agent',
+    'agent_updated_sucessfully' =>  'Agent Updated sucessfully',
+    'unable_to_update_agent'    =>  'Unable to update agent',
+    'agent_deleted_sucessfully'  =>  'Agent Deleted sucessfully',
+    'this_staff_is_related_to_some_tickets' =>  'This staff is related to some tickets',
+    'list_of_agents'        =>  'List of Agents',
+    'create_an_agent'   =>  'Create an Agent',
+    'edit_an_agent'     =>  'Edit an Agent',
+    
+    
     /*
       |--------------------------------------
       |  Department Create Page
@@ -584,6 +597,14 @@ return [
     'recipient'                                        => 'Recipient',
     'group_access'                                     => 'Group Access',
     'department_signature'                             => 'Department Signature',
+    'list_of_departments'                              => 'List of Departments',
+    'create_a_department'                              => 'Create a Department',
+    'outgoing_email_settings'                          => 'Outgoing Email Settings',
+    'edit_department'                                  => 'Edit Department',
+    'select_a_sla'                                     => 'Select a SLA',
+    'select_a_manager'                                 => 'Select a Manager',
+    'department_created_sucessfully'                   => 'Department Created sucessfully',
+    'failed_to_create_department'                      => 'Failed to create Department',
     /*
       |--------------------------------------
       |  Team Create Page

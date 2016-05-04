@@ -210,7 +210,7 @@ class InstallController extends Controller
         // $_ENV['DB_USERNAME'] = $dbusername;
         // $_ENV['DB_PASSWORD'] = $dbpassword;
 
-                $ENV['APP_ENV'] = 'local';
+        $ENV['APP_ENV'] = 'local';
         $ENV['APP_DEBUG'] = 'false';
         $ENV['APP_KEY'] = 'SomeRandomString';
         $ENV['DB_TYPE'] = $default;

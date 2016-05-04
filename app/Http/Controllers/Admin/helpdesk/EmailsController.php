@@ -470,7 +470,6 @@ class EmailsController extends Controller
             $mailbox = '{'.$host.':'.$port.$mailbox_protocol.$validate.'}INBOX';
             $mailbox_protocol = $fetching_encryption.$validate;
         }
-
         try {
             $imap_stream = imap_open($mailbox, $username, $password);
         } catch (\Exception $ex) {
@@ -529,7 +528,6 @@ class EmailsController extends Controller
         } else {
             $return = 0;
         }
-
         return $return;
     }
 
@@ -583,7 +581,6 @@ class EmailsController extends Controller
         } else {
             $email_help_topic = null;
         }
-
         return $email_help_topic;
     }
 }

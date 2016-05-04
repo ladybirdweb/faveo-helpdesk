@@ -50,7 +50,7 @@ class="active"
 
 			{!! Form::label('name',Lang::get('lang.name')) !!}
 			{!! $errors->first('name', '<spam class="help-block">:message</spam>') !!}
-			{!! Form::text('name',null,['disabled'=>'disabled','class' => 'form-control']) !!}
+			{!! Form::text('name',null,['class' => 'form-control']) !!}
 
 		</div>
 			<!-- group status -->

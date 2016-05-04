@@ -5,11 +5,11 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * TeamRequest.
+ * GroupRequest.
  *
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class TeamRequest extends Request
+class GroupUpdateRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,8 +29,7 @@ class TeamRequest extends Request
     public function rules()
     {
         return [
-            'name'   => 'required|unique:teams|max:30',
-            'status' => 'required',
+            'name' => 'required|max:30',
         ];
     }
 }

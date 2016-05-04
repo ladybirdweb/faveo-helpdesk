@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin\helpdesk;
 use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\GroupRequest;
+use App\Http\Requests\helpdesk\GroupUpdateRequest;
 use App\Model\helpdesk\Agent\Department;
 // models
 use App\Model\helpdesk\Agent\Group_assign_department;
@@ -118,7 +119,7 @@ class GroupController extends Controller
      *
      * @return type Response
      */
-    public function update($id, Groups $group, Request $request)
+    public function update($id, Groups $group, GroupUpdateRequest $request)
     {
         $var = $group->whereId($id)->first();
         //Updating Status

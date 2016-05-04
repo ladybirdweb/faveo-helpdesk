@@ -76,15 +76,14 @@ class DepartmentController extends Controller
     {
         try {
             $slas = $sla->get();
-            $user = $user->where('role', 'agent')->get();
+            $user = $user->where('role', 'agent2')->get();
             $emails = $email->get();
             $templates = $template->get();
             $department = $department->get();
             $groups = $group->lists('id', 'name');
-
             return view('themes.default1.admin.helpdesk.agent.departments.create', compact('department', 'templates', 'slas', 'user', 'emails', 'groups'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -99,7 +98,12 @@ class DepartmentController extends Controller
     public function store(Department $department, DepartmentRequest $request)
     {
         try {
-            $department->fill($request->except('group_id', 'manager'))->save();
+            $department->fill($request->except('group_id', 'manager','sla'))->save();
+            if ($request->sla) {
+                $department->sla = $request->input('sla');
+            } else {
+                $department->sla = null;
+            }
             $requests = $request->input('group_id');
             $id = $department->id;
             if ($request->manager) {
@@ -107,18 +111,15 @@ class DepartmentController extends Controller
             } else {
                 $department->manager = null;
             }
-            // foreach ($requests as $req) {
-            // DB::insert('insert into group_assign_department(group_id, department_id) values (?,?)', [$req, $id]);
-            // }
             /* Succes And Failure condition */
             /*  Check Whether the function Success or Fail */
             if ($department->save() == true) {
                 return redirect('departments')->with('success', 'Department Created sucessfully');
             } else {
-                return redirect('departments')->with('fails', 'Department can not Create');
+                return redirect('departments')->with('fails', Lang::get('lang.failed_to_create_department'));
             }
         } catch (Exception $e) {
-            return redirect('departments')->with('fails', 'Department can not Create');
+            return redirect('departments')->with('fails', Lang::get('lang.failed_to_create_department'));
         }
     }
 
@@ -141,13 +142,12 @@ class DepartmentController extends Controller
     {
         try {
             $slas = $sla->get();
-            $user = $user->where('role', 'agent')->get();
+            $user = $user->where('primary_dpt', $id)->get();
             $emails = $email->get();
             $templates = $template->get();
             $departments = $department->whereId($id)->first();
             $groups = $group->lists('id', 'name');
             $assign = $group_assign_department->where('department_id', $id)->lists('group_id');
-
             return view('themes.default1.admin.helpdesk.agent.departments.edit', compact('assign', 'team', 'templates', 'departments', 'slas', 'user', 'emails', 'groups'));
         } catch (Exception $e) {
             return view('404');
@@ -182,8 +182,14 @@ class DepartmentController extends Controller
                 $departments->manager = null;
             }
             $departments->save();
-
-            if ($departments->fill($request->except('group_access', 'manager'))->save()) {
+            if ($request->sla) {
+                $departments->sla = $request->input('sla');
+                $departments->save();
+            } else {
+                $departments->sla = null;
+                $departments->save();
+            }
+            if ($departments->fill($request->except('group_access', 'manager', 'sla'))->save()) {
                 return redirect('departments')->with('success', 'Department Updated sucessfully');
             } else {
                 return redirect('departments')->with('fails', 'Department not Updated');

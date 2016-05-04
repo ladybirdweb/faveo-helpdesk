@@ -23,54 +23,51 @@ class="active"
 <!-- breadcrumbs -->
 @section('breadcrumbs')
 <ol class="breadcrumb">
-
 </ol>
 @stop
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-
 <!-- open a form -->
-
-
 {!!Form::model($teams, ['url'=>'teams/'.$teams->id , 'method'=> 'PATCH'])!!}
-
-
 <div class="box box-primary">
-    <div class="content-header">
-
-        <h4>{!! Lang::get('lang.edit') !!}	{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}</h4>
-
+    <div class="box-header with-border">
+        <h3 class="box-title">{!! Lang::get('lang.edit') !!}</h3>	
     </div>
-
     <div class="box-body">
-
+        @if(Session::has('errors'))
+            <div class="alert alert-danger alert-dismissable">
+                <i class="fa fa-ban"></i>
+                <b>Alert!</b>
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <br/>
+                @if($errors->first('name'))
+                <li class="error-message-padding">{!! $errors->first('name', ':message') !!}</li>
+                @endif
+                @if($errors->first('team_lead'))
+                <li class="error-message-padding">{!! $errors->first('team_lead', ':message') !!}</li>
+                @endif
+                @if($errors->first('status'))
+                <li class="error-message-padding">{!! $errors->first('status', ':message') !!}</li>
+                @endif
+            </div>
+        @endif
         <div class="row">
             <!-- name -->
             <div class="col-xs-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-
                 {!! Form::label('name',Lang::get('lang.name')) !!}
-                {!! $errors->first('name', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('name',null,['class' => 'form-control']) !!}
-
             </div>
-
-
             <!-- team lead -->
             <div class="col-xs-6 form-group {{ $errors->has('team_lead') ? 'has-error' : '' }}">
                 {!! Form::label('team_lead',Lang::get('lang.team_lead')) !!}
-                {!! $errors->first('team_lead', '<spam class="help-block">:message</spam>') !!}
                 <?php $user = App\User::where('role', 'admin')->orWhere('role', 'agent')->get(); ?>
                 {!! Form::select('team_lead',[''=>'Select a Team Leader','Members'=>$user->lists('user_name','id')->toArray()],null,['class' => 'form-control']) !!}	
-
             </div>
-
         </div>
         <!-- status -->
         <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
-
             {!! Form::label('status',Lang::get('lang.status')) !!}
-            {!! $errors->first('status', '<spam class="help-block">:message</spam>') !!}
             <div class="row">
                 <div class="col-xs-1">
                     {!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}
@@ -79,20 +76,16 @@ class="active"
                     {!! Form::radio('status','0',null) !!} {{Lang::get('lang.inactive')}}
                 </div>
             </div>
-
         </div>
-
-
-
         <!-- admin notes -->
         <div class="form-group">
-
             {!! Form::label('admin_notes',Lang::get('lang.admin_notes')) !!}
             {!! Form::textarea('admin_notes',null,['class' => 'form-control','size' => '30x5']) !!}
-
         </div>
-
-        {!!Form::close()!!}
     </div>
+    <div class="box-footer">
+        {!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary'])!!}
+    </div>
+    {!!Form::close()!!}
 </div>
 @stop

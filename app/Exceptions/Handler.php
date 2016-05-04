@@ -7,7 +7,7 @@ use App\Http\Controllers\Common\PhpMailController;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Foundation\Validation\ValidationException;
+use Illuminate\Foundation\ValidationException\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -21,6 +21,7 @@ class Handler extends ExceptionHandler
     protected $dontReport = [
         AuthorizationException::class,
         ValidationException::class,
+        \Illuminate\Foundation\ValidationException\ValidationException::class,
         'Symfony\Component\HttpKernel\Exception\HttpException',
     ];
 
@@ -67,28 +68,26 @@ class Handler extends ExceptionHandler
                     // checking if the error log send to Ladybirdweb is enabled or not
                     if (\Config::get('app.ErrorLog') == '1') {
                         try {
-                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['system_error' => "<pre style='background-color: #FFC7C7;/* border-color: red; */border: 1px solid red;border-radius: 3px;'> <b>Message:</b>".$e->getMessage().'<br/> <b>Code:</b>'.$e->getCode().'<br/> <b>File:</b>'.$e->getFile().'<br/> <b>Line:</b>'.$e->getLine().'</pre>']);
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo Community Edition error report', 'scenario' => 'error-report'], $template_variables = ['system_error' => "<pre style='background-color: #FFC7C7;/* border-color: red; */border: 1px solid red;border-radius: 3px;'> <b>Message:</b>".$e->getMessage().'<br/> <b>Code:</b>'.$e->getCode().'<br/> <b>File:</b>'.$e->getFile().'<br/> <b>Line:</b>'.$e->getLine().'</pre>']);
                         } catch (Exception $exx) {
                         }
                     }
                 }
-
                 return response()->view('errors.500', []);
             }
         }
-        //  returns non oops error message
-        // return parent::render($request, $e);
-        // checking if the error is related to http error i.e. page not found
-        if ($this->isHttpException($e)) {
-            // returns error for page not found
-            return $this->renderHttpException($e);
-        }
+//        //  returns non oops error message
+        return parent::render($request, $e);
+//        // checking if the error is related to http error i.e. page not found
+//        if ($this->isHttpException($e)) {
+//            // returns error for page not found
+//            return $this->renderHttpException($e);
+//        }
         // checking if the config app sebug is enabled or not
         if (config('app.debug')) {
             // returns oops error page i.e. colour full error page
             return $this->renderExceptionWithWhoops($e);
         }
-
         return parent::render($request, $e);
     }
 
@@ -102,7 +101,7 @@ class Handler extends ExceptionHandler
     protected function renderExceptionWithWhoops(Exception $e)
     {
         // new instance of whoops class to display customized error page
-        $whoops = new \Whoops\Run();
+        $whoops = new \Whoops\Run;
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
 
         return new \Illuminate\Http\Response(
