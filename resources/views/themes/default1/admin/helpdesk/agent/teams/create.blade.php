@@ -32,7 +32,7 @@ class="active"
 {!! Form::open(array('action' => 'Admin\helpdesk\TeamController@store' , 'method' => 'post') )!!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title"></h3>{!! Lang::get('lang.create') !!}	
+        <h3 class="box-title">{!! Lang::get('lang.create_a_team') !!}	</h3>
     </div>
     <div class="box-body">
         @if(Session::has('errors'))
@@ -62,7 +62,7 @@ class="active"
             <div class="col-xs-6 form-group {{ $errors->has('team_lead') ? 'has-error' : '' }}">
                 {!! Form::label('team_lead',Lang::get('lang.team_lead')) !!}
                 <?php $user = App\User::where('role', 'admin')->orWhere('role', 'agent')->get(); ?>
-                {!! Form::select('team_lead',[''=>'Select a Team Leader','Members'=>$user->lists('user_name','id')->toArray()],null,['class' => 'form-control']) !!}	
+                {!! Form::select('team_lead',[''=>Lang::get('lang.select_a_team_lead'), Lang::get('lang.members')=>$user->lists('user_name','id')->toArray()],null,['class' => 'form-control']) !!}	
             </div>
         </div>
         <!-- status -->

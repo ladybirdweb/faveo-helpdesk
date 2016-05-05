@@ -21,20 +21,13 @@ return [
     'success'        => 'Success',
     'fails'          => 'Fails',
     'alert'          => 'Alert',
-    'required-error' => 'Please fill all required feilds',
+    'required-error' => 'Please fill all required fields',
     'invalid'        => 'Incorrect User id or password',
     /*
       |--------------------------------------
       |   Login Page
       |--------------------------------------
      */
-    'template-types' => 'Template Types',
-    'modify' => 'Modify',
-    'rating_name' => 'Rating Name',
-    'add_user_to_this_organization' => 'Add User to this Organization',
-    'Tickets_of' => 'Tickets Of',
-    'security' => 'Security',
-    'manage_status'=> 'Manage Status',
     'Login_to_start_your_session' => 'Login to start your session',
     'login'                       => 'Login',
     'remember'                    => 'Remember Me',
@@ -100,7 +93,7 @@ return [
      */
     'emails'                         => 'Emails',
     'incoming_emails'                => 'Incoming Emails',
-    'reuired_authentication'         => 'Reuired Authentication',
+    'reuired_authentication'         => 'Required Authentication',
     'fetching_email_via_imap'        => 'Fetching Email via IMAP',
     'create_email'                   => 'Create Email',
     'email_address'                  => 'Email Address',
@@ -348,11 +341,11 @@ return [
     'Send_app_crash_reports_to_help_Ladybird_improve_Faveo' => 'Send app crash reports to help Ladybird improve Faveo',
     /*
       |------------------------------------------------
-      | Language page
+      |Language page
       |------------------------------------------------
      */
     'iso-code'           => 'ISO-CODE',
-    'download'           => 'Downlaod',
+    'download'           => 'Download',
     'upload_file'        => 'Upload File',
     'enter_iso-code'     => 'Enter ISO-CODE',
     'eg.'                => 'Example',
@@ -408,7 +401,7 @@ return [
     'Custom_form'          => 'Custom Form',
     'SLA_plan'             => 'SLA Plan',
     'auto_assign'          => 'Auto assign',
-    'auto_respons'         => 'Auto Respons',
+    'auto_respons'         => 'Auto Response',
     'ticket_number_format' => 'Ticket Number Format',
     'system_default'       => 'System Default',
     'custom'               => 'Custom',
@@ -542,8 +535,6 @@ return [
     'edit'         => 'Edit',
     'departments'  => 'Departments',
     'groups'       => 'Groups',
-    'select_a_time_zone'        =>  'Select a Timezone',
-    'time_zones'        =>      'Timezones',
     /*
       |--------------------------------------
       |  Staff Create Page
@@ -568,18 +559,6 @@ return [
     'directory_listing'      => 'Directory Listing',
     'vocation_mode'          => 'Vocation Mode',
     'assigned_team'          => 'Assigned Team',
-    'agent_send_mail_error_on_agent_creation'  => 'Some error occurred while sending mail to the agent. Please check email settings and try again',
-    'agent_creation_success'    =>  'Agent Created sucessfully',
-    'failed_to_create_agent'    =>  'Failed to create agent',
-    'failed_to_edit_agent'      =>  'Failed to Edit Agent',
-    'agent_updated_sucessfully' =>  'Agent Updated sucessfully',
-    'unable_to_update_agent'    =>  'Unable to update agent',
-    'agent_deleted_sucessfully'  =>  'Agent Deleted sucessfully',
-    'this_staff_is_related_to_some_tickets' =>  'This staff is related to some tickets',
-    'list_of_agents'        =>  'List of Agents',
-    'create_an_agent'   =>  'Create an Agent',
-    'edit_an_agent'     =>  'Edit an Agent',
-    
     /*
       |--------------------------------------
       |  Department Create Page
@@ -592,28 +571,12 @@ return [
     'outgoing_emails'                                  => 'Outgoing Emails',
     'outgoing_email'                                   => 'Outgoing Email',
     'template_set'                                     => 'Template Set',
-    'auto_responding_settings'                         => 'Auto-Responding Settigs',
+    'auto_responding_settings'                         => 'Auto-Responding Settings',
     'disable_for_this_department'                      => 'Disable for this department',
     'auto_response_email'                              => 'Auto-Response Email',
     'recipient'                                        => 'Recipient',
     'group_access'                                     => 'Group Access',
     'department_signature'                             => 'Department Signature',
-    'list_of_departments'                              => 'List of Departments',
-    'create_a_department'                              => 'Create a Department',
-    'outgoing_email_settings'                          => 'Outgoing Email Settings',
-    'edit_department'                                  => 'Edit Department',
-    'select_a_sla'                                     => 'Select a SLA',
-    'select_a_manager'                                 => 'Select a Manager',
-    'department_created_sucessfully'                   => 'Department Created sucessfully',
-    'failed_to_create_department'                      => 'Failed to create Department',
-    'department_updated_sucessfully'                   => 'Department Updated sucessfully',
-    'department_not_updated'                           => 'Department not Updated',
-    'you_cannot_delete_default_department'             => 'You cannot delete default department',
-    'have_been_moved_to_default_department'            => 'have been moved to default department',
-    'the_associated_helptopic_has_been_deactivated'    => 'The associated helptopic has been deactivated',
-    'department_deleted_sucessfully'                   => 'Department Deleted sucessfully',
-    'department_can_not_delete'                        => 'Department can not Delete',
-    'select_a_department'        =>  'Select a Department',
     /*
       |--------------------------------------
       |  Team Create Page
@@ -624,18 +587,6 @@ return [
     'assignment_alert'      => 'Assignment Alert',
     'disable_for_this_team' => 'Disable for this team',
     'teams'                 => 'Teams',
-    'list_of_teams'         => 'List of Teams', 
-    'create_a_team'         => 'Create a Team',
-    'edit_a_team'           => 'Edit a Team',
-    'teams_created_successfully'   =>  'Teams Created Successfully',
-    'teams_can_not_create'      => 'Teams can not Create',
-    'teams_updated_successfully'    =>  'Teams Updated Successfully',
-    'teams_can_not_update'     =>  'Teams  can not Update',
-    'teams_deleted_successfully'       =>  'Teams  Deleted Successfully',
-    'teams_can_not_delete'          =>      'Teams can not Delete',
-    'select_a_team'        =>  'Select a Team',
-    'select_a_team_lead'       =>   'Select a Team Lead',
-    'members'       =>  'Members',
     /*
       |--------------------------------------
       |  Group Create Page
@@ -658,20 +609,6 @@ return [
     'admin_notes'          => 'Admin Notes',
     'group_members'        => 'Group Members',
     'group_name'           => 'Group Name',
-    'select_a_group'       => 'Select a Group',
-    'create_a_group'       => 'Create a Group',
-    'edit_a_group'         => 'Edit a Group',
-    'group_created_successfully'    =>'Group Created Successfully',
-    'group_can_not_create'          =>  'Group can not Create',
-    'group_updated_successfully'    =>  'Group Updated Successfully',
-    'group_can_not_update'          =>  'Group can not Update',
-    'there_are_agents_assigned_to_this_group_please_unassign_them_from_this_group_to_delete'   =>  'There are agents assigned to this group. Please unassign them from this group to delete',
-    'group_cannot_delete'           =>  'Group cannot Delete',
-    'group_deleted_successfully'    =>  'Group Deleted Successfully',
-    'group_cannot_delete'           =>  'Group cannot Delete',
-    'failed_to_load_the_page'       =>   'Failed to load the page',
-    
-    
     /*
       |--------------------------------------
       |  SMTP Page
@@ -876,7 +813,7 @@ return [
       |-----------------------------------------------
      */
     'copyright'           => 'Copyright',
-    'all_rights_reserved' => 'All right Reserved',
+    'all_rights_reserved' => 'All rights Reserved',
     'powered_by'          => 'Powered by',
     /*
       |------------------------------------------------
