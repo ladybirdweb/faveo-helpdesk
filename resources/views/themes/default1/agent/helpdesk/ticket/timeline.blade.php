@@ -1321,7 +1321,7 @@ $(document).ready(function () {
         $("#auto-submit").submit(function(){
             $.ajax({
                 type: "POST",
-                url: "{!! URL::route('lock') !!}",
+                url: "{!! URL::route('lock',$tickets->id) !!}",
             })
             return false;            
         });
@@ -2012,7 +2012,7 @@ $(document).ready(function() {
 function lockAjaxCall(locktime){
         $.ajax({
                 type: "GET",
-                url: "../check/lock/{{$tickets->id}}",
+                url: "{{URL::route('lock',$tickets->id)}}",
                 dataType: "html",
                 data: $(this).serialize(),
                 success: function(response) {

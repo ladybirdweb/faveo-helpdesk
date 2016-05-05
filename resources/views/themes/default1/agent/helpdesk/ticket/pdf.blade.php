@@ -73,13 +73,13 @@
                     foreach($attachments as $attachment)
                     {
                         // $i++;
-                        if ($attachment->type == 'pdf') {
+                        if ($attachment->type == 'pdf' || $attachment->type == 'PDF') {
                             // echo "hello";
-                        } elseif ($attachment->type == 'docx') {
+                        } elseif ($attachment->type == 'docx' || $attachment->type =='DOCX') {
                             // echo "hello";
-                        } elseif ($attachment->type == 'html') {
+                        } elseif ($attachment->type == 'html' || $attachment->type =='HTML') {
                             // echo "hello";
-                        } elseif ($attachment->type == 'zip') {
+                        } elseif ($attachment->type == 'zip' || $attachment->type =='ZIP') {
                             // echo "hello";
                         } else {
                         $image = @imagecreatefromstring($attachment->file); 
