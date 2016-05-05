@@ -254,6 +254,9 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
     </div>
 </div>
 {{-- Event fire --}}
+<div id="gifshow" style="display:none">
+    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}">
+</div>  <!-- added 05/05/2016-->
 <div id="resultdiv">
 </div>
 
