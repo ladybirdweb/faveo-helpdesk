@@ -30,7 +30,7 @@ class ClientRequest extends Request
     {
         return [
             'Name'    => 'required',
-            'Email'   => 'required',
+            'Email'   => 'required|email',
             'Subject' => 'required',
             'Details' => 'required',
         ];

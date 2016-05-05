@@ -239,7 +239,8 @@ class AuthController extends Controller
          $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts.", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
         }
         else {
-         $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
+            $result = DB::table('login_attempts')->where('IP','=',$value)->orWhere('User','=',$field)->update(['Attempts'=>$attempts]);
+         // $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
         }
        }
       else {
