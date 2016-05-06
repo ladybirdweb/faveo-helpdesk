@@ -170,8 +170,8 @@ class LanguageController extends Controller
                 // checking file is valid.
                 if (Input::file('File')->isValid()) {
                     $name = Input::file('File')->getClientOriginalName(); //uploaded file's original name
-                    $destinationPath = '../public/uploads/'; // defining uploading path
-                    $extractpath = '../resources/lang/'.strtolower(Input::get('iso-code')); //defining extracting path
+                    $destinationPath = base_path('public/uploads/'); // defining uploading path
+                    $extractpath = base_path('resources/lang').'/'.strtolower(Input::get('iso-code')); //defining extracting path
                     mkdir($extractpath); //creating directroy for extracting uploadd file
                     //mkdir($destinationPath);
                     Input::file('File')->move($destinationPath, $name); // uploading file to given path
@@ -212,8 +212,8 @@ class LanguageController extends Controller
      * @return type
      */
     public function download()
-    {
-        return response()->download('../public/downloads/en.zip');
+    {   $file_path = base_path('public/downloads/en.zip');
+        return response()->download($file_path);
     }
 
     /**
@@ -226,7 +226,7 @@ class LanguageController extends Controller
     public function deleteLanguage($lang)
     {
         if ($lang !== App::getLocale()) {
-            $deletePath = base_path('resources/lang').$lang;     //define file path to delete
+            $deletePath = base_path('resources/lang').'/'.$lang;     //define file path to delete
             $success = File::deleteDirectory($deletePath); //remove extracted folder and it's subfolder from lang
             if ($success) {
                 //sending back with success message
