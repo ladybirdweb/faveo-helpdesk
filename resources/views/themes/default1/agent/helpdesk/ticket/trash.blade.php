@@ -64,7 +64,7 @@ class="active"
            
                 </ul>
             </div>
-            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="hard-delete" value="{{Lang::get('lang.delete-forever')}}" title="{{Lang::get('lang.trash-delete-title-msg')}}">
+            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="hard-delete" value="{{Lang::get('lang.clean-up')}}" title="{{Lang::get('lang.trash-delete-title-msg')}}">
             
         </div>
         <div class="mailbox-messages"  id="refresh">
