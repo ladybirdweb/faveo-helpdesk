@@ -1498,7 +1498,7 @@ class TicketController extends Controller
                     $ticket->closed = 0;
                     $ticket->closed_at = null;
                     $ticket->save();
-                } elseif ($value == 'Clean up') {
+                } elseif ($value == 'Delete forever') {
                     $thread = Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
                     foreach ($thread as $th_id) {
                         // echo $th_id->id." ";
@@ -1966,7 +1966,7 @@ class TicketController extends Controller
             $new_thread->title = $thread->title;
             $new_thread->body = Lang::get('lang.get_merge_message').
             "&nbsp;&nbsp;<a href='".route('ticket.thread', [$p_id]).
-            "'>#".$parent_ticket->ticket_number.'</a><br><br><b>'.Lang::get('lang.merge-reason').'</b>'.$reason;
+            "'>#".$parent_ticket->ticket_number.'</a><br><br><b>'.Lang::get('lang.merge-reason').':</b>&nbsp;&nbsp;'.$reason;
             $new_thread->format = $thread->format;
             $new_thread->ip_address = $thread->ip_address;
 
@@ -1977,7 +1977,7 @@ class TicketController extends Controller
             $new_parent_thread->source = $parent_thread->source;
             $new_parent_thread->is_internal = 1;
             $new_parent_thread->title = $thread->title;
-            $new_parent_thread->body = Lang::get('lang.ticket')."&nbsp;<a href='".route('ticket.thread', [$value])."'>#".$ticket->ticket_number.'</a>&nbsp'.Lang::get('lang.ticket_merged').'<br><br><b>'.Lang::get('lang.merge-reason').'</b>'.$reason;
+            $new_parent_thread->body = Lang::get('lang.ticket')."&nbsp;<a href='".route('ticket.thread', [$value])."'>#".$ticket->ticket_number.'</a>&nbsp'.Lang::get('lang.ticket_merged').'<br><br><b>'.Lang::get('lang.merge-reason').':</b>&nbsp;&nbsp;'.$reason;
             $new_parent_thread->format = $parent_thread->format;
             $new_parent_thread->ip_address = $parent_thread->ip_address;
             if ($new_thread->save() && $new_parent_thread->save()) {

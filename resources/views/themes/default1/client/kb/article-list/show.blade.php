@@ -19,7 +19,10 @@ $category_id = $all->lists('category_id')->toArray();
         <li class="active">{{$arti->name}}</li>
     </ol>
 </div>
-@stop		
+@stop	
+@section('title')
+    {!! $arti->name !!} -
+@stop	
 @section('content')
 <div id="content" class="site-content col-md-9">
     <!--

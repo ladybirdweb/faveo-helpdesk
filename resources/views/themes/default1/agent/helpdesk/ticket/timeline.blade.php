@@ -71,12 +71,17 @@ active
     </a>
 </li>
 @stop 
+<?php if ($thread->title != "") {
+    $title = wordwrap($thread->title,70,"<br>\n");
+    } else {
+    $title = "";
+    }?>
 
 @section('content')
 <!-- Main content -->
 <div class="box box-primary">
     <div class="box-header">
-        <h3 class="box-title" id="refresh2"><i class="fa fa-user"> </i> @if($thread->title){!! $thread->title !!} @endif</h3>
+        <h3 class="box-title" id="refresh2"><i class="fa fa-user"> </i> <?= $title ?></h3>
         <div class="pull-right">
             <!-- <button type="button" class="btn btn-default"><i class="fa fa-edit" style="color:green;"> </i> Edit</button> -->
 <?php
@@ -1048,7 +1053,7 @@ $count_teams = count($teams);
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" id="cc-close" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">{!! Lang::get('lang.add_collaborator') !!}</h4>
                 </div>
                 <div class="nav-tabs-custom">
@@ -1803,6 +1808,13 @@ jQuery(document).ready(function() {
                     $('#here').html(response);
                     $("#recepients").load("../thread/{{$tickets->id}}   #recepients");
                     $("#surrender22").load("../thread/{{$tickets->id}}   #surrender22");
+                    setTimeout(function() {
+                            // var link = document.querySelector('#load-inbox');
+                            // if(link) {
+                            //     link.click();
+                            // }
+                            $('#cc-close').trigger('click');
+                        }, 500);
                 
                 }
             })
@@ -1828,6 +1840,13 @@ jQuery(document).ready(function() {
                 $('#here2').html(response);
                 $("#recepients").load("../thread/{{$tickets->id}}   #recepients");
                 $("#surrender22").load("../thread/{{$tickets->id}}   #surrender22");
+                setTimeout(function() {
+                            // var link = document.querySelector('#load-inbox');
+                            // if(link) {
+                            //     link.click();
+                            // }
+                            $('#cc-close').trigger('click');
+                        }, 500);
                 }
             })
             return false;

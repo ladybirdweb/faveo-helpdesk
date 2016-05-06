@@ -108,7 +108,12 @@ class MailController extends Controller
                             if ($var == 'unread') {
                                 $mail = $mailbox->getMail($mailId);
                                 if ($settings_email->first()->email_collaborator == 1) {
-                                    $collaborator = $mail->cc;
+                                    if (count($mail->to) > 1) {
+                                        $collaborator = array_slice($mail->to,1);
+                                        $collaborator = array_merge($collaborator, $mail->cc);
+                                    } else {
+                                        $collaborator = $mail->cc;
+                                    }
                                 } else {
                                     $collaborator = null;
                                 }
