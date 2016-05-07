@@ -57,8 +57,9 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                             <div class="ticketratings pull-right">    
         <table><tbody>
                 <?php $ratings = DB::table('settings_ratings')->get(); ?>
+                         <form id="foo">
                 @foreach($ratings as $rating) 
-                <form id="foo">
+       
    <tr>
         <th><div class="ticketratingtitle">{!! $rating->rating_name !!} &nbsp;</div></th>&nbsp
                 <?php              $r_name =  str_replace(' ', '_',$rating->rating_name); ?>
@@ -66,14 +67,12 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
         <?php for($i = 1; $i<=5; $i++) { ?>
         <input type="radio" class="star" id="star5" name="{!! $r_name !!}" value="{!! $i !!}"<?php echo ($tickets->rating==$i)?'checked':'' ?> onclick="helpdeskArea({!! $rating->id!!}, {!! $i !!})"/>
         <?php } ?>
-<!--    <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating=='2')?'checked':'' ?> />
-    <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating=='3')?'checked':'' ?>/>
-    <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating=='4')?'checked':'' ?>/>
-    <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating=='5')?'checked':'' ?> />-->
+
     </td> 
 </tr>
-                </form>
             @endforeach
+                            </form>
+
  </tbody> </table> 
                         </div>
                             </div>

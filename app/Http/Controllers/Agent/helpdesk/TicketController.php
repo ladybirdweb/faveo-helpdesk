@@ -1669,7 +1669,7 @@ class TicketController extends Controller
      */
     public function rating($id, Request $request)
     {
-        dd($request->Overall_Rating);
+        dd($request->all());
         Tickets::where('id', $id)->update(['rating' => $rating]);
 
         return redirect()->back()->with('Success', 'Thank you for your rating!');
