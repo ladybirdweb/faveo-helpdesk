@@ -668,7 +668,7 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::get('ticket', 'Api\v1\ApiController@getTicketById');
         Route::get('inbox', 'Api\v1\ApiController@inbox');
         Route::get('trash', 'Api\v1\ApiController@getTrash');
-        Route::get('my-tickets', 'Api\v1\ApiController@getMyTickets');
+        Route::get('my-tickets-agent', 'Api\v1\ApiController@getMyTicketsAgent');
         Route::post('internal-note', 'Api\v1\ApiController@internalNote');
 
         /*
@@ -680,6 +680,7 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::post('collaborator/create', 'Api\v1\ApiController@addCollaboratorForTicket');
         Route::post('collaborator/remove', 'Api\v1\ApiController@deleteCollaborator');
         Route::post('collaborator/get-ticket', 'Api\v1\ApiController@getCollaboratorForTicket');
+        Route::get('my-tickets-user', 'Api\v1\ApiController@getMyTicketsUser');
     });
 
     /*

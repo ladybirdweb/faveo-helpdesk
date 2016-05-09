@@ -57,14 +57,14 @@ class ApiController extends Controller {
     public function __construct(Request $request) {
         $this->request = $request;
 
-        $this->middleware('jwt.auth');
-        $this->middleware('api', ['except' => 'GenerateApiKey']);
-        try {
-            $user = \JWTAuth::parseToken()->authenticate();
-            $this->user = $user;
-        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-           
-        }
+//        $this->middleware('jwt.auth');
+//        $this->middleware('api', ['except' => 'GenerateApiKey']);
+//        try {
+//            $user = \JWTAuth::parseToken()->authenticate();
+//            $this->user = $user;
+//        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+//           
+//        }
 
         $ticket = new TicketController();
         $this->ticket = $ticket;
@@ -930,9 +930,9 @@ class ApiController extends Controller {
 
             return $inbox;
         } catch (\Exception $ex) {
-            $error = $e->getMessage();
-            $line = $e->getLine();
-            $file = $e->getFile();
+            $error = $ex->getMessage();
+            $line = $ex->getLine();
+            $file = $ex->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
         } catch (\TokenExpiredException $e) {
@@ -1015,7 +1015,7 @@ class ApiController extends Controller {
         }
     }
 
-    public function getMyTickets() {
+    public function getMyTicketsAgent() {
         try {
             $v = \Validator::make($this->request->all(), [
                         'user_id' => 'required|exists:users,id',
@@ -1027,7 +1027,56 @@ class ApiController extends Controller {
             }
             $id = $this->request->input('user_id');
             if ($this->user->where('id', $id)->first()->role == 'user') {
-                $error = 'This user is not an Aget or Admin';
+                $error = 'This user is not an Agent or Admin';
+
+                return response()->json(compact('error'));
+            }
+            $result = $this->user->join('tickets', function ($join) use ($id) {
+                        $join->on('users.id', '=', 'tickets.assigned_to')
+                        ->where('user_id', '=', $id);
+                    })
+                    ->join('department', 'department.id', '=', 'tickets.dept_id')
+                    ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
+                    ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
+                    ->join('help_topic', 'help_topic.id', '=', 'tickets.help_topic_id')
+                    ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
+                    ->join('ticket_thread', function ($join) {
+                        $join->on('tickets.id', '=', 'ticket_thread.ticket_id')
+                        ->whereNotNull('title');
+                    })
+                    ->select('first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+                     ->orderBy('ticket_thread.updated_at','desc')
+                    ->groupby('tickets.id')
+                    ->distinct()
+                    ->paginate(10)
+                    ->toJson();
+
+            return $result;
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+            $line = $e->getLine();
+            $file = $e->getFile();
+
+            return response()->json(compact('error', 'file', 'line'));
+        } catch (\TokenExpiredException $e) {
+            $error = $e->getMessage();
+
+            return response()->json(compact('error'));
+        }
+    }
+    public function getMyTicketsUser() {
+        try {
+            $v = \Validator::make($this->request->all(), [
+                        'user_id' => 'required|exists:users,id',
+            ]);
+            if ($v->fails()) {
+                $error = $v->errors();
+
+                return response()->json(compact('error'));
+            }
+            $id = $this->request->input('user_id');
+            if ($this->user->where('id', $id)->first()->role == 'admin'||$this->user->where('id', $id)->first()->role == 'agent') {
+                $error = 'This is not a client';
 
                 return response()->json(compact('error'));
             }
@@ -1081,7 +1130,37 @@ class ApiController extends Controller {
 
                 return response()->json(compact('error'));
             }
-            $result = $this->model->where('id', $id)->first();
+            $tickets= $this->model->leftJoin('ticket_thread',function($join) use($id){
+                    $join->on('ticket_thread.ticket_id','=','tickets.id');
+                         
+                         
+                    })
+                    ->leftJoin('users AS u1','tickets.user_id','=','u1.id')
+                    ->leftJoin('users AS u2','tickets.assigned_to','=','u2.id')
+                    ->where('tickets.id', $id)
+                    ->select('ticket_thread.title'
+                            ,'u1.first_name AS created_user_first_name'
+                            ,'u1.last_name AS created_user_last_name','u1.email AS created_user_email'
+                            ,'tickets.duedate'
+                            ,'u2.first_name AS assigned_first_name'
+                            ,'u2.last_name AS assigned_last_name'
+                            
+                            )
+                    ->first();
+                    
+             $lastreplay = $this->thread
+                     ->join('users','ticket_thread.user_id','=','users.id')
+                     ->where('ticket_id',$id)
+                     ->where('is_internal','!=',1)
+                     ->select('users.first_name AS last_reply_first_name'
+                             ,'users.last_name AS last_reply_last_name')
+                     ->orderBy('ticket_thread.created_at','desc')
+                     ->first();
+                     
+                     
+                     
+             
+             $result = $tickets.$lastreplay;
 
             return response()->json(compact('result'));
         } catch (\Exception $e) {
