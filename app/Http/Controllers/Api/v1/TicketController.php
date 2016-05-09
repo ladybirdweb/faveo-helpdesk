@@ -269,11 +269,16 @@ class TicketController extends Controller
         try {
             $check_attachment = null;
             $eventthread = $thread->where('ticket_id', $request->input('ticket_ID'))->first();
+            //dd($request->input('ticket_ID'));
+            //dd($eventthread);
             $eventuserid = $eventthread->user_id;
             $emailadd = User::where('id', $eventuserid)->first()->email;
+            //dd($emailadd);
             $source = $eventthread->source;
+            
             $form_data = $request->except('reply_content', 'ticket_ID', 'attachment');
             \Event::fire(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
+            //dd('yes');
             $reply_content = $request->input('reply_content');
             $thread->ticket_id = $request->input('ticket_ID');
             $thread->poster = 'support';
@@ -333,10 +338,16 @@ class TicketController extends Controller
 // //                    }
 // //                }
 //             }, true);
-
+            //dd('reply');
+            /**
+             * Getting the subject of the thread
+             */
+            //dd($eventthread);
             try {
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body], $template_variables = ['agent_sign' => Auth::user()->agent_sign, 'ticket_number' => $ticket_number2]);
+                $re = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $eventthread->title, 'scenario' => 'create-ticket-by-agent', 'body' => $thread->body], $template_variables = ['agent_sign' => Auth::user()->agent_sign, 'ticket_number' => $tickets->number]);
+                //dd($re);
             } catch (\Exception $e) {
+                throw new \Exception($e->getMessage());
             }
 
             $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket_id)->get();
@@ -368,6 +379,7 @@ class TicketController extends Controller
 
             return $thread;
         } catch (\Exception $e) {
+            //dd($e);
             return $e->getMessage();
         }
     }
