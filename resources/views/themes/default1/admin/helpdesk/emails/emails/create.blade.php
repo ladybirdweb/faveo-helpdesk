@@ -134,7 +134,7 @@ class="active"
                 <div class="col-xs-2 form-group {!! $errors->has('fetching_encryption') ? 'has-error' : ''!!}" id="fetching_encryption_error">
                     {!! Form::label('fetching_encryption',Lang::get('lang.encryption')) !!}
                     {!! $errors->first('fetching_encryption', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('fetching_encryption',['none' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS'],null,['class' => 'form-control select', 'id' => 'fetching_encryption']) !!}
+                    {!!Form::select('fetching_encryption',['none' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS', 'starttls' => 'STARTTLS'],null,['class' => 'form-control select', 'id' => 'fetching_encryption']) !!}
                 </div>
                 <div class="col-xs-4 form-group">
                     <div class="callout callout-default" style="font-style: oblique; margin-top: -47px; margin-bottom: -30px; margin-left: -12px; margin-right: -6px;">If this checkbox is not checked SSL certificates will not be validated</div>
@@ -184,7 +184,7 @@ class="active"
                 <div class="col-xs-3 form-group {!! $errors->has('sending_encryption') ? 'has-error' : ''!!}" id="sending_encryption_error">
                     {!! Form::label('sending_encryption',Lang::get('lang.encryption')) !!}
                     {!! $errors->first('sending_encryption', '<spam class="help-block">:message</spam>') !!} 
-                    {!!Form::select('sending_encryption',['ssl'=>'SSL','tls'=>'TLS'],null,['class' => 'form-control select']) !!}
+                    {!!Form::select('sending_encryption',['ssl'=>'SSL','tls'=>'TLS', 'starttls' => 'STARTTLS'],null,['class' => 'form-control select']) !!}
                 </div> 
             </div>
             <!-- Internal notes -->
