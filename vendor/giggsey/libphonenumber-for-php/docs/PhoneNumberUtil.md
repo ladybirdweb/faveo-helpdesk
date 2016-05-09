@@ -6,7 +6,7 @@
 
 Returns a `PhoneNumber` object version of the `$number`  supplied with the `$region` code.
 
-If the number is passed in an international format (e.g. `+44 117 496 123`), then the region code is not needed, and can be `null`. Failing that, the library will use the region code to work out the phone number based on rules loaded for that region. 
+If the number is passed in an international format (e.g. `+44 117 496 0123`), then the region code is not needed, and can be `null`. Failing that, the library will use the region code to work out the phone number based on rules loaded for that region. 
 
 ```php
 $phoneNumberUtil = \libphonenumber\PhoneNumberUtil::getInstance();
@@ -196,8 +196,27 @@ var_dump($phoneNumberUtil->getExampleNumber('GB'));
 
 Returns an example `PhoneNumber` object for the `$regionCode` supplied of the `PhoneNumberType`.
 
+This also accepts the first parameter being a `PhoneNumberType`, where it will return a valid number
+for the specified number type from any country. Just leave the second parameter as null.
+
 ```php
 var_dump($phoneNumberUtil->getExampleNumberForType('GB', PhoneNumberType::MOBILE));
 // (PhoneNumber) Country Code: 44 National Number: 7400123456 ...
+
+var_dump($phoneNumberUtil->getExampleNumberForType(PhoneNumberType::MOBILE));
+// (PhoneNumber) Country Code: 1 National Number: 2015555555 ...
+```
+
+### `getInvalidExampleNumber()`
+
+Returns an example invalid `PhoneNumber` object for the `$regionCode` supplied.
+
+This can be useful for unit testing, where you want to test with an invalid number.
+The number returned will be able to be parsed. It may also be a valid short number
+for the region.
+
+```php
+var_dump($phoneNumberUtil->getInvalidExampleNumber('GB'));
+// (PhoneNumber) Country Code: 44 National Number: 121234567 ...
 ```
 

@@ -1,7 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Manage')
-class="active"
+active
 @stop
 
 @section('manage-bar')
@@ -93,7 +93,7 @@ class="active"
 
 		<!-- topic Status : if status==1 active -->
 		<td>
-			@if($topic->ticket_status=='1')
+			@if($topic->status=='1')
 				<span style="color:green">Active</span>
 			@else
 				<span style="color:red">Disable</span>

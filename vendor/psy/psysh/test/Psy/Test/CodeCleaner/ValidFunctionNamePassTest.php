@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -36,26 +36,29 @@ class ValidFunctionNamePassTest extends CodeCleanerTestCase
             // function declarations
             array('function array_merge() {}'),
             array('function Array_Merge() {}'),
-            array("
+            array('
                 function psy_test_codecleaner_validfunctionnamepass_alpha() {}
                 function psy_test_codecleaner_validfunctionnamepass_alpha() {}
-            "),
-            array("
+            '),
+            array('
                 namespace Psy\\Test\\CodeCleaner\\ValidFunctionNamePass {
                     function beta() {}
                 }
                 namespace Psy\\Test\\CodeCleaner\\ValidFunctionNamePass {
                     function beta() {}
                 }
-            "),
+            '),
 
             // function calls
             array('psy_test_codecleaner_validfunctionnamepass_gamma()'),
-            array("
+            array('
                 namespace Psy\\Test\\CodeCleaner\\ValidFunctionNamePass {
                     delta();
                 }
-            "),
+            '),
+
+            // recursion
+            array('function a() { a(); } function a() {}'),
         );
     }
 
@@ -72,53 +75,56 @@ class ValidFunctionNamePassTest extends CodeCleanerTestCase
     {
         return array(
             array('function psy_test_codecleaner_validfunctionnamepass_epsilon() {}'),
-            array("
+            array('
                 namespace Psy\\Test\\CodeCleaner\\ValidFunctionNamePass {
                     function zeta() {}
                 }
-            "),
-            array("
+            '),
+            array('
                 namespace {
                     function psy_test_codecleaner_validfunctionnamepass_eta() {}
                 }
                 namespace Psy\\Test\\CodeCleaner\\ValidFunctionNamePass {
                     function psy_test_codecleaner_validfunctionnamepass_eta() {}
                 }
-            "),
-            array("
+            '),
+            array('
                 namespace Psy\\Test\\CodeCleaner\\ValidFunctionNamePass {
                     function psy_test_codecleaner_validfunctionnamepass_eta() {}
                 }
                 namespace {
                     function psy_test_codecleaner_validfunctionnamepass_eta() {}
                 }
-            "),
-            array("
+            '),
+            array('
                 namespace Psy\\Test\\CodeCleaner\\ValidFunctionNamePass {
                     function array_merge() {}
                 }
-            "),
+            '),
 
             // function calls
             array('array_merge();'),
-            array("
+            array('
                 namespace Psy\\Test\\CodeCleaner\\ValidFunctionNamePass {
                     function theta() {}
                 }
                 namespace Psy\\Test\\CodeCleaner\\ValidFunctionNamePass {
                     theta();
                 }
-            "),
+            '),
             // closures
             array('$test = function(){};$test()'),
-            array("
+            array('
                 namespace Psy\\Test\\CodeCleaner\\ValidFunctionNamePass {
                     function theta() {}
                 }
                 namespace {
                     Psy\\Test\\CodeCleaner\\ValidFunctionNamePass\\theta();
                 }
-            "),
+            '),
+
+            // recursion
+            array('function a() { a(); }'),
         );
     }
 }

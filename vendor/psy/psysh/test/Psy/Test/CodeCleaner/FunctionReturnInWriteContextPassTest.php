@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,7 +11,7 @@
 
 namespace Psy\Test\CodeCleaner;
 
-use PHPParser_NodeTraverser as NodeTraverser;
+use PhpParser\NodeTraverser;
 use Psy\CodeCleaner\FunctionReturnInWriteContextPass;
 use Psy\Exception\FatalErrorException;
 
@@ -53,7 +53,10 @@ class FunctionReturnInWriteContextPassTest extends CodeCleanerTestCase
             $this->fail();
         } catch (FatalErrorException $e) {
             if (version_compare(PHP_VERSION, '5.5', '>=')) {
-                $this->assertContains('Cannot use isset() on the result of a function call (you can use "null !== func()" instead)', $e->getMessage());
+                $this->assertContains(
+                    'Cannot use isset() on the result of a function call (you can use "null !== func()" instead)',
+                    $e->getMessage()
+                );
             } else {
                 $this->assertContains("Can't use function return value in write context", $e->getMessage());
             }

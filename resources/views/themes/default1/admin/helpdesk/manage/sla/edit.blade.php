@@ -1,7 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Manage')
-class="active"
+active
 @stop
 
 @section('manage-bar')
@@ -71,9 +71,9 @@ class="active"
 		          <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
 
 			       {!! Form::label('status',Lang::get('lang.status')) !!}&nbsp;
-			       {!! $errors->first('status', '<spam class="help-block">:message</spam>') !!}
-			       {!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}&nbsp;&nbsp;
-			       {!! Form::radio('status','0') !!} {{Lang::get('lang.disabled')}}
+			       {!! $errors->first('status', '<spam class="help-block">:message</spam>') !!}&nbsp;&nbsp;
+			       {!! Form::radio('status','1',true) !!} &nbsp; {{Lang::get('lang.active')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			       {!! Form::radio('status','0') !!} &nbsp; {{Lang::get('lang.inactive')}}
 			</div>
 
 	</div>

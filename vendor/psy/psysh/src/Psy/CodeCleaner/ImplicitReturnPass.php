@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,6 +12,7 @@
 namespace Psy\CodeCleaner;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Stmt\Return_ as ReturnStmt;
 
 /**
@@ -26,7 +27,7 @@ class ImplicitReturnPass extends CodeCleanerPass
     {
         $last = end($nodes);
 
-        if ($last instanceof Expr) {
+        if ($last instanceof Expr && !($last instanceof Exit_)) {
             $nodes[count($nodes) - 1] = new ReturnStmt($last, array(
                 'startLine' => $last->getLine(),
                 'endLine'   => $last->getLine(),

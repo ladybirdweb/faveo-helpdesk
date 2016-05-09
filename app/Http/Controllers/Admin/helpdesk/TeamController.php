@@ -14,6 +14,7 @@ use App\User;
 // classes
 use DB;
 use Exception;
+use Lang;
 
 /**
  * TeamController.
@@ -51,7 +52,7 @@ class TeamController extends Controller
 
             return view('themes.default1.admin.helpdesk.agent.teams.index', compact('assign_team_agent', 'teams'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -69,7 +70,7 @@ class TeamController extends Controller
 
             return view('themes.default1.admin.helpdesk.agent.teams.create', compact('user'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -93,10 +94,10 @@ class TeamController extends Controller
             /* Check whether function success or not */
             $team->fill($request->except('team_lead'))->save();
             /* redirect to Index page with Success Message */
-            return redirect('teams')->with('success', 'Teams  Created Successfully');
+            return redirect('teams')->with('success', Lang::get('lang.teams_created_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('teams')->with('fails', 'Teams can not Create'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('teams')->with('fails', Lang::get('lang.teams_can_not_create').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -120,7 +121,7 @@ class TeamController extends Controller
 
             return view('themes.default1.admin.helpdesk.agent.teams.edit', compact('agent_id', 'user', 'teams', 'allagents'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -153,10 +154,10 @@ class TeamController extends Controller
         try {
             $teams->fill($request->except('team_lead'))->save();
             /* redirect to Index page with Success Message */
-            return redirect('teams')->with('success', 'Teams  Updated Successfully');
+            return redirect('teams')->with('success', Lang::get('lang.teams_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('teams')->with('fails', 'Teams  can not Update'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('teams')->with('fails', Lang::get('lang.teams_can_not_update').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -178,10 +179,10 @@ class TeamController extends Controller
             /* Check whether function success or not */
             $teams->delete();
             /* redirect to Index page with Success Message */
-            return redirect('teams')->with('success', 'Teams  Deleted Successfully');
+            return redirect('teams')->with('success', Lang::get('lang.teams_deleted_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('teams')->with('fails', 'Teams can not Delete'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('teams')->with('fails', Lang::get('lang.teams_can_not_delete').'<li>'.$e->getMessage().'</li>');
         }
     }
 }

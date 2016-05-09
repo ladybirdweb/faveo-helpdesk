@@ -17,9 +17,9 @@
         "fileSorting": "default",
         "chars_only_latin": true,
         "dateFormat": "d M Y H:i",
-        "serverRoot": false,
+        "serverRoot": true,
         "fileRoot": "/",
-        "baseUrl": "/",
+        "baseUrl": false,
         "logger": false,
         "capabilities": ["select", "download", "rename", "delete", "replace"],
         "plugins": []
@@ -138,5 +138,5 @@
         "default": "default.png"
     },
     "url": "https://github.com/simogeo/Filemanager",
-    "version": "2.0.0-dev"
+    "version": "2.4.0"
 }

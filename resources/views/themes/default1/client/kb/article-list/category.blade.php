@@ -1,13 +1,14 @@
 @extends('themes.default1.client.layout.client')
 
+<?php  $category = App\Model\kb\Category::where('id','=',$id)->first(); ?>
 @section('title')
-    All Category -
+    {!! $category->name !!} -
 @stop
 
 @section('kb')
     class = "active"
 @stop
-<?php  $category = App\Model\kb\Category::where('id','=',$id)->first(); ?>
+
 @section('breadcrumb')
 <div class="site-hero clearfix">
 

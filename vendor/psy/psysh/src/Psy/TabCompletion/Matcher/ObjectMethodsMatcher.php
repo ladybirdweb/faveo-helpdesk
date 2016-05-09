@@ -1,15 +1,17 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
 namespace Psy\TabCompletion\Matcher;
+
+use InvalidArgumentException;
 
 /**
  * An object method tab completion Matcher.
@@ -22,7 +24,7 @@ namespace Psy\TabCompletion\Matcher;
 class ObjectMethodsMatcher extends AbstractContextAwareMatcher
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getMatches(array $tokens, array $info = array())
     {
@@ -35,7 +37,12 @@ class ObjectMethodsMatcher extends AbstractContextAwareMatcher
         }
         $objectToken = array_pop($tokens);
         $objectName = str_replace('$', '', $objectToken[1]);
-        $object = $this->getVariable($objectName);
+
+        try {
+            $object = $this->getVariable($objectName);
+        } catch (InvalidArgumentException $e) {
+            return array();
+        }
 
         return array_filter(
             get_class_methods($object),
@@ -46,7 +53,7 @@ class ObjectMethodsMatcher extends AbstractContextAwareMatcher
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function hasMatched(array $tokens)
     {

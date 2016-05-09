@@ -29,18 +29,18 @@ class AgentRequest extends Request
     public function rules()
     {
         return [
-            'user_name'  => 'required|unique:users',
-            'first_name' => 'required',
-            'last_name'  => 'required',
+            'user_name'  => 'required|unique:users|max:30',
+            'first_name' => 'required|max:30',
+            'last_name'  => 'required|max:30',
             'email'      => 'required|unique:users',
             'active'     => 'required',
             // 'account_status' => 'required',
-            'assign_group' => 'required',
-            'primary_dpt'  => 'required',
-            'agent_tzone'  => 'required',
+            'group' => 'required',
+            'primary_department'  => 'required',
+            'agent_time_zone'  => 'required',
             // 'phone_number' => 'phone:IN',
             // 'mobile' => 'phone:IN',
-            'team_id' => 'required',
+            'team' => 'required',
         ];
     }
 }

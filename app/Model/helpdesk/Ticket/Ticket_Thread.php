@@ -18,7 +18,7 @@ class Ticket_Thread extends Model
 
     public function delete()
     {
-        $$this->attach()->delete();
+        $this->attach()->delete();
         parent::delete();
     }
 }

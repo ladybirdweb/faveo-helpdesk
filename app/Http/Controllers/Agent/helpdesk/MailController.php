@@ -35,9 +35,9 @@ class MailController extends Controller
      *
      * @param type TicketController $TicketController
      */
-    public function __construct(TicketController $TicketController)
+    public function __construct(TicketWorkflowController $TicketWorkflowController)
     {
-        $this->TicketController = $TicketController;
+        $this->TicketWorkflowController = $TicketWorkflowController;
     }
 
     /**
@@ -76,6 +76,9 @@ class MailController extends Controller
                             $protocol_value = $e_mail->mailbox_protocol;
                             $get_mailboxprotocol = MailboxProtocol::where('id', '=', $protocol_value)->first();
                             $protocol = $get_mailboxprotocol->value;
+                        } elseif ($e_mail->fetching_encryption == '/none') {
+                            $fetching_encryption2 = '/novalidate-cert';
+                            $protocol = $fetching_encryption2;
                         } else {
                             if ($e_mail->fetching_protocol) {
                                 $fetching_protocol = '/'.$e_mail->fetching_protocol;
@@ -83,13 +86,15 @@ class MailController extends Controller
                                 $fetching_protocol = '';
                             }
                             if ($e_mail->fetching_encryption) {
-                                $fetching_encryption = '/'.$e_mail->fetching_encryption;
+                                $fetching_encryption = $e_mail->fetching_encryption;
                             } else {
                                 $fetching_encryption = '';
                             }
                             $protocol = $fetching_protocol.$fetching_encryption;
                         }
+                        // dd($fetching_encryption);
                         $imap_config = '{'.$host.':'.$port.$protocol.'}INBOX';
+                        // dd($imap_config);
                         $password = Crypt::decrypt($e_mail->password);
                         $mailbox = new ImapMailbox($imap_config, $e_mail->email_address, $password, __DIR__);
                         $mails = [];
@@ -103,7 +108,12 @@ class MailController extends Controller
                             if ($var == 'unread') {
                                 $mail = $mailbox->getMail($mailId);
                                 if ($settings_email->first()->email_collaborator == 1) {
-                                    $collaborator = $mail->cc;
+                                    if (count($mail->to) > 1) {
+                                        $collaborator = array_slice($mail->to,1);
+                                        $collaborator = array_merge($collaborator, $mail->cc);
+                                    } else {
+                                        $collaborator = $mail->cc;
+                                    }
                                 } else {
                                     $collaborator = null;
                                 }
@@ -130,7 +140,9 @@ class MailController extends Controller
 
                                 $assign = $get_helptopic->auto_assign;
                                 $form_data = null;
-                                $result = $this->TicketController->create_user($fromaddress, $fromname, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $form_data, $auto_response);
+                                $team_assign = null;
+                                $ticket_status = null;
+                                $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
 // dd($result);
                                 if ($result[1] == true) {
                                     $ticket_table = Tickets::where('ticket_number', '=', $result[0])->first();
@@ -225,7 +237,6 @@ class MailController extends Controller
         foreach ($decode_header as $obj) {
             $result .= htmlspecialchars(rtrim($obj->text, "\t"));
         }
-
         return $result;
     }
 

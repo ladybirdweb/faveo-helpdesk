@@ -19,8 +19,6 @@ use Crypt;
 use Exception;
 use Illuminate\Http\Request;
 
-//use PhpImap\Mailbox as ImapMailbox;
-
 /**
  * ======================================
  * EmailsController.
@@ -100,11 +98,12 @@ class EmailsController extends Controller
     public function validatingEmailSettings(Request $request)
     {
         $validator = \Validator::make(
-                        [
+            [
                     'email_address' => $request->email_address,
                     'email_name'    => $request->email_name,
                     'password'      => $request->password,
-                        ], [
+                        ],
+            [
                     'email_address' => 'required|email|unique:emails',
                     'email_name'    => 'required',
                     'password'      => 'required',
@@ -120,9 +119,14 @@ class EmailsController extends Controller
 
             return $return_data;
         }
+        if ($request->validate == 'on') {
+            $validate = '/validate-cert';
+        } else {
+            $validate = '/novalidate-cert';
+        }
         if ($request->fetching_status == 'on') {
-            $imap_check = $this->getImapStream($request);
-            if ($imap_check == 0) {
+            $imap_check = $this->getImapStream($request, $validate);
+            if ($imap_check[0] == 0) {
                 return 'Incoming email connection failed';
             }
             $need_to_check_imap = 1;
@@ -143,17 +147,17 @@ class EmailsController extends Controller
 
         if ($need_to_check_imap == 1 && $need_to_check_smtp == 1) {
             if ($imap_check != 0 && $smtp_check != 0) {
-                $this->store($request);
+                $this->store($request, $imap_check[1]);
                 $return = 1;
             }
         } elseif ($need_to_check_imap == 1 && $need_to_check_smtp == 0) {
             if ($imap_check != 0 && $smtp_check == 0) {
-                $this->store($request);
+                $this->store($request, $imap_check[1]);
                 $return = 1;
             }
         } elseif ($need_to_check_imap == 0 && $need_to_check_smtp == 1) {
             if ($imap_check == 0 && $smtp_check != 0) {
-                $this->store($request);
+                $this->store($request, null);
                 $return = 1;
             }
         } elseif ($need_to_check_imap == 0 && $need_to_check_smtp == 0) {
@@ -174,14 +178,14 @@ class EmailsController extends Controller
      *
      * @return type Redirect
      */
-    public function store($request)
+    public function store($request, $imap_check)
     {
         //        dd($request);
         $email = new Emails();
         try {
             //            getConnection($request->input('email_name'), $request->input('email_address'), $request->input('email_address'))
             // saving all the fields to the database
-            if ($email->fill($request->except('password', 'department', 'priority', 'help_topic', 'fetching_status', 'sending_status', 'auto_response'))->save() == true) {
+            if ($email->fill($request->except('password', 'department', 'priority', 'help_topic', 'fetching_status', 'fetching_encryption', 'sending_status', 'auto_response'))->save() == true) {
                 if ($request->fetching_status == 'on') {
                     $email->fetching_status = 1;
                 } else {
@@ -197,7 +201,12 @@ class EmailsController extends Controller
                 } else {
                     $email->auto_response = 0;
                 }
-                // fetching department value
+                if ($imap_check !== null) {
+                    $email->fetching_encryption = $imap_check;
+                } else {
+                    $email->fetching_encryption = $request->fetching_encryption;
+                }
+                 // fetching department value
                 $email->department = $this->departmentValue($request->input('department'));
                 // fetching priority value
                 $email->priority = $this->priorityValue($request->input('priority'));
@@ -268,11 +277,12 @@ class EmailsController extends Controller
     public function validatingEmailSettingsUpdate($id, Request $request)
     {
         $validator = \Validator::make(
-                        [
+            [
                     'email_address' => $request->email_address,
                     'email_name'    => $request->email_name,
                     'password'      => $request->password,
-                        ], [
+                        ],
+            [
                     'email_address' => 'email',
                     'email_name'    => 'required',
                     'password'      => 'required',
@@ -289,9 +299,14 @@ class EmailsController extends Controller
             return $return_data;
         }
 //        return $request;
+        if ($request->validate == 'on') {
+            $validate = '/validate-cert';
+        } else {
+            $validate = '/novalidate-cert';
+        }
         if ($request->fetching_status == 'on') {
-            $imap_check = $this->getImapStream($request);
-            if ($imap_check == 0) {
+            $imap_check = $this->getImapStream($request, $validate);
+            if ($imap_check[0] == 0) {
                 return 'Incoming email connection failed';
             }
             $need_to_check_imap = 1;
@@ -312,22 +327,22 @@ class EmailsController extends Controller
 
         if ($need_to_check_imap == 1 && $need_to_check_smtp == 1) {
             if ($imap_check != 0 && $smtp_check != 0) {
-                $this->update($id, $request);
+                $this->update($id, $request, $imap_check[1]);
                 $return = 1;
             }
         } elseif ($need_to_check_imap == 1 && $need_to_check_smtp == 0) {
             if ($imap_check != 0 && $smtp_check == 0) {
-                $this->update($id, $request);
+                $this->update($id, $request, $imap_check[1]);
                 $return = 1;
             }
         } elseif ($need_to_check_imap == 0 && $need_to_check_smtp == 1) {
             if ($imap_check == 0 && $smtp_check != 0) {
-                $this->update($id, $request);
+                $this->update($id, $request, null);
                 $return = 1;
             }
         } elseif ($need_to_check_imap == 0 && $need_to_check_smtp == 0) {
             if ($imap_check == 0 && $smtp_check == 0) {
-                $this->update($id, $request);
+                $this->update($id, $request, null);
                 $return = 1;
             }
         }
@@ -344,13 +359,16 @@ class EmailsController extends Controller
      *
      * @return type Response
      */
-    public function update($id, $request)
+    public function update($id, $request, $imap_check)
     {
-        try {
+        // try {
+            // dd($id);
+            // dd($request);
+            // dd($imap_check);
             // fetch the selected emails
             $emails = Emails::whereId($id)->first();
             // insert all the requested parameters with except
-            $emails->fill($request->except('password', 'department', 'priority', 'help_topic', 'fetching_status', 'sending_status'))->save();
+            $emails->fill($request->except('password', 'department', 'priority', 'help_topic', 'fetching_status', 'fetching_encryption', 'sending_status', 'auto_response'))->save();
             if ($request->fetching_status == 'on') {
                 $emails->fetching_status = 1;
             } else {
@@ -366,6 +384,13 @@ class EmailsController extends Controller
             } else {
                 $emails->auto_response = 0;
             }
+            if ($imap_check !== null) {
+                $emails->fetching_encryption = $imap_check;
+
+            } else {
+                $emails->fetching_encryption = $request->fetching_encryption;
+            }
+            // dd($email->fetching_encryption);
             // fetching department value
             $emails->department = $this->departmentValue($request->input('department'));
             // fetching priority value
@@ -377,11 +402,10 @@ class EmailsController extends Controller
             $emails->save();
             // returns success message for successful email update
             $return = 1;
-        } catch (Exception $e) {
-            // returns if try fails
-            $return = $e->getMessage();
-        }
-
+        // } catch (Exception $e) {
+        //     // returns if try fails
+        //     $return = $e->getMessage();
+        // }
         return $return;
     }
 
@@ -425,7 +449,7 @@ class EmailsController extends Controller
      *
      * @return type int
      */
-    public function getImapStream($request)
+    public function getImapStream($request, $validate)
     {
         $fetching_status = $request->input('fetching_status');
         $username = $request->input('email_address');
@@ -433,13 +457,19 @@ class EmailsController extends Controller
         $protocol_id = $request->input('mailbox_protocol');
         $fetching_protocol = '/'.$request->input('fetching_protocol');
         $fetching_encryption = '/'.$request->input('fetching_encryption');
-        if ($fetching_encryption == 'none') {
-            $fetching_encryption = 'novalidate-cert';
+        if ($fetching_encryption == '/none') {
+            $fetching_encryption2 = '/novalidate-cert';
+            $mailbox_protocol = $fetching_encryption2;
+            $host = $request->input('fetching_host');
+            $port = $request->input('fetching_port');
+            $mailbox = '{'.$host.':'.$port.$mailbox_protocol.'}INBOX';
+        } else {
+            $mailbox_protocol = $fetching_protocol.$fetching_encryption;
+            $host = $request->input('fetching_host');
+            $port = $request->input('fetching_port');
+            $mailbox = '{'.$host.':'.$port.$mailbox_protocol.$validate.'}INBOX';
+            $mailbox_protocol = $fetching_encryption.$validate;
         }
-        $mailbox_protocol = $fetching_protocol.$fetching_encryption;
-        $host = $request->input('fetching_host');
-        $port = $request->input('fetching_port');
-        $mailbox = '{'.$host.':'.$port.$mailbox_protocol.'}INBOX';
         try {
             $imap_stream = imap_open($mailbox, $username, $password);
         } catch (\Exception $ex) {
@@ -447,9 +477,9 @@ class EmailsController extends Controller
         }
         $imap_stream = imap_open($mailbox, $username, $password);
         if ($imap_stream) {
-            $return = 1;
+            $return = [0 => 1, 1 => $mailbox_protocol];
         } else {
-            $return = 0;
+            $return = [0 => 0];
         }
 
         return $return;
@@ -498,7 +528,6 @@ class EmailsController extends Controller
         } else {
             $return = 0;
         }
-
         return $return;
     }
 
@@ -552,7 +581,6 @@ class EmailsController extends Controller
         } else {
             $email_help_topic = null;
         }
-
         return $email_help_topic;
     }
 }

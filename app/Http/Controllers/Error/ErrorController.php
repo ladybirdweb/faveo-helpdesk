@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 /**
  * ErrorController.
  *
- * @author     	Ladybird <info@ladybirdweb.com>
+ * @author      Ladybird <info@ladybirdweb.com>
  */
 class ErrorController extends Controller
 {

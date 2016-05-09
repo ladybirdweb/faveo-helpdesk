@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -29,7 +29,7 @@ class LeavePsyshAlonePass extends CodeCleanerPass
      */
     public function enterNode(Node $node)
     {
-        if ($node instanceof Variable && $node->name === "__psysh__") {
+        if ($node instanceof Variable && $node->name === '__psysh__') {
             throw new RuntimeException('Don\'t mess with $__psysh__. Bad things will happen.');
         }
     }

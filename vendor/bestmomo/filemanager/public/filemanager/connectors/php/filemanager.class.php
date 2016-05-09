@@ -141,10 +141,11 @@ class Filemanager {
 		} else {
 			$this->doc_root =  $path; // i.e  '/var/www/'
 		}
+		$this->doc_root = str_replace('//', '/', $this->doc_root); 
 		
 		// necessary for retrieving path when set dynamically with $fm->setFileRoot() method
 		// https://github.com/simogeo/Filemanager/issues/258 @todo to explore deeper
-		$this->dynamic_fileroot = str_replace("//","/",str_replace($_SERVER['DOCUMENT_ROOT'], '', $this->doc_root));
+		$this->dynamic_fileroot = '/' . str_replace($_SERVER['DOCUMENT_ROOT'], '', $this->doc_root);
 		$this->path_to_files = $this->doc_root;
 		$this->separator = basename($this->doc_root);
 		

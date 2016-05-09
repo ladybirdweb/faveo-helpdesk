@@ -13,6 +13,8 @@ use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Email\Template;
 use App\Model\helpdesk\Manage\Help_topic;
+use App\Model\helpdesk\Notification\UserNotification;
+use DateTime;
 use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Settings\Access;
 use App\Model\helpdesk\Settings\Alert;
@@ -31,6 +33,7 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Input;
+use Lang;
 
 /**
  * SettingsController.
@@ -60,7 +63,123 @@ class SettingsController extends Controller
     {
         return view('themes.default1.admin.helpdesk.setting');
     }
-
+        public function notificationSettings()
+    {
+        return view('themes.default1.admin.helpdesk.settings.notification');
+    }
+public function deleteReadNoti()
+    {
+        $markasread = UserNotification::where('is_read', '=', 1)->get();
+        foreach ($markasread as $mark) {
+            
+            $mark->delete();
+            \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
+        }
+        return redirect()->back()->with('success','You have deleted all the read notifications');
+    }
+    
+    public function deleteNotificationLog()
+    {
+        $days = Input::get('no_of_days');
+        $date = new DateTime;
+$date->modify($days.' day');
+$formatted_date = $date->format('Y-m-d H:i:s');
+       $markasread = DB::table('user_notification')->where('created_at','<=',$formatted_date)->get();
+foreach ($markasread as $mark) {
+            
+            $mark->delete();
+            \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
+        }
+        return redirect()->back()->with('success','You have deleted all the notification records since '.$days.' days.');
+    }
+     /**
+     * @param int $id
+     * @return Response
+     * @param $compant instance of company table
+     *
+     * get the form for company setting page
+     */
+    public function getStatuses() {
+        try {
+            /* fetch the values of company from company table */
+            $statuss = \DB::table('ticket_status')->get();
+            /* Direct to Company Settings Page */
+            return view('themes.default1.admin.helpdesk.settings.status', compact('statuss'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
+        }
+    }
+    
+        /**
+     * @param int $id
+     * @return Response
+     * @param $compant instance of company table
+     *
+     * get the form for company setting page
+     */
+    public function editStatuses($id) {
+        try {
+            /* fetch the values of company from company table */
+            $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->first();
+            $statuss->name = Input::get('name');
+            $statuss->icon_class = Input::get('icon_class');
+            $statuss->email_user = Input::get('email_user');
+            $statuss->sort = Input::get('sort');
+            $delete = Input::get('deleted');
+            if($delete == 'yes') {
+                $statuss->state = 'delete';
+            }
+            else {
+                            $statuss->state = Input::get('state');
+            }
+            $statuss->sort = Input::get('sort');
+            $statuss->save();
+            /* Direct to Company Settings Page */
+            return redirect()->back()->with('success','Status has been updated!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
+        }
+    }
+    
+    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss) {
+//        try {
+            /* fetch the values of company from company table */
+                    $statuss->name = Input::get('name');
+            $statuss->icon_class = Input::get('icon_class');
+            $statuss->email_user = Input::get('email_user');
+            $statuss->sort = Input::get('sort');
+            $delete = Input::get('delete');
+            if($delete == 'yes') {
+                $statuss->state = 'deleted';
+            }
+            else {
+                            $statuss->state = Input::get('state');
+            }
+            $statuss->sort = Input::get('sort');
+            $statuss->save();    
+        /* Direct to Company Settings Page */
+            return redirect()->back()->with('success','Status has been created!');
+//        } catch (Exception $ex) {
+//            return redirect()->back()->with('fails', $ex->errorInfo[2]);
+//        }
+    }
+    
+    public function deleteStatuses($id) {
+        try {
+            if($id > 5) {
+            /* fetch the values of company from company table */
+             \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->delete();
+            /* Direct to Company Settings Page */
+            return redirect()->back()->with('success','Status has been deleted');
+            }
+            else {
+                return redirect()->back()->with('failed','You cannot delete this status');
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
+        }
+    }
+    
     /**
      * @param int $id
      * @param $compant instance of company table
@@ -77,7 +196,7 @@ class SettingsController extends Controller
             /* Direct to Company Settings Page */
             return view('themes.default1.admin.helpdesk.settings.company', compact('companys'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -111,7 +230,7 @@ class SettingsController extends Controller
             return redirect('getcompany')->with('success', 'Company Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getcompany')->with('fails', 'Company can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('getcompany')->with('fails', 'Company can not Updated'.'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -160,7 +279,7 @@ class SettingsController extends Controller
             /* Direct to System Settings Page */
             return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -186,7 +305,7 @@ class SettingsController extends Controller
             return redirect('getsystem')->with('success', 'System Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getsystem')->with('fails', 'System can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('getsystem')->with('fails', 'System can not Updated'.'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -212,7 +331,7 @@ class SettingsController extends Controller
             /* Direct to Ticket Settings Page */
             return view('themes.default1.admin.helpdesk.settings.ticket', compact('tickets', 'slas', 'topics', 'priority'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -247,7 +366,7 @@ class SettingsController extends Controller
             return redirect('getticket')->with('success', 'Ticket Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getticket')->with('fails', 'Ticket can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('getticket')->with('fails', 'Ticket can not Updated'.'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -272,7 +391,7 @@ class SettingsController extends Controller
             /* Direct to Email Settings Page */
             return view('themes.default1.admin.helpdesk.settings.email', compact('emails', 'templates', 'emails1'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -293,8 +412,8 @@ class SettingsController extends Controller
             /* fill the values to email table */
             $emails->fill($request->except('email_fetching', 'all_emails', 'email_collaborator', 'strip', 'attachment'))->save();
             /* insert checkboxes  to database */
-            $emails->email_fetching = $request->input('email_fetching');
-            $emails->notification_cron = $request->input('notification_cron');
+            // $emails->email_fetching = $request->input('email_fetching');
+            // $emails->notification_cron = $request->input('notification_cron');
             $emails->all_emails = $request->input('all_emails');
             $emails->email_collaborator = $request->input('email_collaborator');
             $emails->strip = $request->input('strip');
@@ -305,7 +424,65 @@ class SettingsController extends Controller
             return redirect('getemail')->with('success', 'Email Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getemail')->with('fails', 'Email can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('getemail')->with('fails', 'Email can not Updated'.'<li>'.$e->getMessage().'</li>');
+        }
+    }
+
+    /**
+     * get the form for cron job setting page.
+     *
+     * @param type Email    $email
+     * @param type Template $template
+     * @param type Emails   $email1
+     *
+     * @return type Response
+     */
+    public function getSchedular(Email $email, Template $template, Emails $email1)
+    {
+        // try {
+             /* fetch the values of email from Email table */
+            $emails = $email->whereId('1')->first();
+            /* Fetch the values from Template table */
+            $templates = $template->get();
+            /* Fetch the values from Emails table */
+            $emails1 = $email1->get();
+
+        return view('themes.default1.admin.helpdesk.settings.crone', compact('emails', 'templates', 'emails1'));
+        // } catch {
+
+        // }
+    }
+
+    /**
+     * Update the specified resource in storage for cron job.
+     *
+     * @param type Email        $email
+     * @param type EmailRequest $request
+     *
+     * @return type Response
+     */
+    public function postSchedular(Email $email, Template $template, Emails $email1, Request $request)
+    {
+        // dd($request);
+        try {
+            /* fetch the values of email request  */
+            $emails = $email->whereId('1')->first();
+            if ($request->email_fetching) {
+                $emails->email_fetching = $request->email_fetching;
+            } else {
+                $emails->email_fetching = 0;
+            }
+            if ($request->notification_cron) {
+                $emails->notification_cron = $request->notification_cron;
+            } else {
+                $emails->notification_cron = 0;
+            }
+            $emails->save();
+            /* redirect to Index page with Success Message */
+            return redirect('job-scheduler')->with('success', Lang::get('lang.job-scheduler-success'));
+        } catch (Exception $e) {
+            /* redirect to Index page with Fails Message */
+            return redirect('job-scheduler')->with('fails', Lang::get('lang.job-scheduler-error').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -375,7 +552,7 @@ class SettingsController extends Controller
             /* Direct to Responder Settings Page */
             return view('themes.default1.admin.helpdesk.settings.responder', compact('responders'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -405,7 +582,7 @@ class SettingsController extends Controller
             return redirect('getresponder')->with('success', 'Responder Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getresponder')->with('fails', 'Responder can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('getresponder')->with('fails', 'Responder can not Updated'.'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -424,7 +601,7 @@ class SettingsController extends Controller
             /* Direct to Alert Settings Page */
             return view('themes.default1.admin.helpdesk.settings.alert', compact('alerts'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -493,7 +670,7 @@ class SettingsController extends Controller
             return redirect('getalert')->with('success', 'Alert Updated Successfully');
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getalert')->with('fails', 'Alert can not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('getalert')->with('fails', 'Alert can not Updated'.'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -522,6 +699,16 @@ class SettingsController extends Controller
         DB::table('settings_ratings')->whereSlug($slug)->update(['rating_name' => $name, 'publish' => $publish, 'modify' => $modify]);
 
         return redirect()->back()->with('success', 'Successfully updated');
+    }
+
+    public function createRating()
+    {
+        $name = Input::get('rating_name');
+        $publish = Input::get('publish');
+        $modify = Input::get('modify');
+        DB::table('settings_ratings')->insert(['rating_name' => $name, 'publish' => $publish, 'modify' => $modify]);
+
+        return redirect()->back()->with('success', 'Successfully created this rating');
     }
 
     /**

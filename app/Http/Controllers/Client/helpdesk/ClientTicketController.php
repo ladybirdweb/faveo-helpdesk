@@ -19,7 +19,7 @@ use Input;
 /**
  * TicketController2.
  *
- * @author     	Ladybird <info@ladybirdweb.com>
+ * @author      Ladybird <info@ladybirdweb.com>
  */
 class ClientTicketController extends Controller
 {

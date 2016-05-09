@@ -13,7 +13,8 @@ class="active"
 @stop
 
 @section('content')
-<?php 
+<?php
+    // $date_time_format = UTC::getDateTimeFormat();
     if(Auth::user()->role == 'agent') {
         $dept = App\Model\helpdesk\Agent\Department::where('id','=',Auth::user()->primary_dpt)->first();
         $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 5)->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
@@ -49,8 +50,21 @@ class="active"
         <div class="mailbox-controls">
             <!-- Check all button -->
             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-            <input type="submit" class="btn btn-default text-blue btn-sm" id="delete"  name="submit" value="{!! Lang::get('lang.open') !!}">
-            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="close" value="{!! Lang::get('lang.close') !!}">
+            <!--<input type="submit" class="btn btn-default text-blue btn-sm" id="delete"  name="submit" value="{!! Lang::get('lang.open') !!}">
+            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="close" value="{!! Lang::get('lang.close') !!}">-->
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" id="d1"><i class="fa fa-exchange" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
+                    {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li ><input type="submit" class="btn btn-block btn-default btn-flat btn-sm text-blue" id="delete"  name="submit" value="{!! Lang::get('lang.open') !!}">
+</li>
+                    
+                    <li ><input type="submit" class="btn btn-block btn-default btn-flat btn-sm text-yellow" name="submit"  id="close" value="{!! Lang::get('lang.close') !!}"></li>
+           
+                </ul>
+            </div>
+            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit"  id="hard-delete" value="{{Lang::get('lang.clean-up')}}" title="{{Lang::get('lang.trash-delete-title-msg')}}">
             
         </div>
         <div class="mailbox-messages"  id="refresh">
@@ -64,12 +78,31 @@ class="active"
                     Lang::get('lang.ticket_id'),
                     Lang::get('lang.priority'),
                     Lang::get('lang.from'),
-                    Lang::get('lang.last_replier'),
                     Lang::get('lang.assigned_to'),
                     Lang::get('lang.last_activity'))
-        ->setUrl(route('get.trash.ticket')) 
-        ->setOrder(array(7=>'desc'))  
-        ->setClass('table table-hover table-bordered table-striped')       
+        ->setUrl(route('get.trash.ticket'))
+        ->setOrder(array(6=>'desc'))  
+        ->setClass('table table-hover table-bordered table-striped')
+        ->setCallbacks("fnRowCallback",'function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
+            var str = aData[3];
+            if(str.search("#000") == -1) {
+                $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #F3F3F3"});
+                $("td", nRow).mouseenter(function(){
+                    $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #DEDFE0"});
+                });
+                $("td", nRow).mouseleave(function(){
+                    $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd","border-right":"solid 0.5px #F3F3F3"});
+                });
+            } else {
+                $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
+                $("td", nRow).mouseenter(function(){
+                    $("td", nRow).css({"background-color":"#DEDFE0", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #DEDFE0"});
+                });
+                $("td", nRow).mouseleave(function(){
+                    $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
+                });   
+            }
+        }')                 
         ->render();!!}
 
         </div><!-- /.mail-box-messages -->
@@ -83,7 +116,7 @@ class="active"
                         <div class="col-md-8">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
                                     <h4 class="modal-title" id="myModalLabel"></h4>
                                 </div>
                                 <div class="modal-body" id="custom-alert-body" >
@@ -150,6 +183,11 @@ class="active"
             $('#myModalLabel').html("{{Lang::get('lang.close-tickets')}}");
         });
 
+        $('#hard-delete').on('click', function(){
+            option = 2;
+            $('#myModalLabel').html("{{Lang::get('lang.trash-delete-ticket')}}");
+        });
+
          $("#modalpopup").on('submit', function(e){
             e.preventDefault();
             var msg ="{{Lang::get('lang.confirm')}}";
@@ -180,9 +218,11 @@ class="active"
                 if (option == 0) {
                     //alert('delete');
                     $('#delete').click();
-                } else {
+                } else if(option ==1) {
                     //alert('close');
                     $('#close').click();
+                } else {
+                    $('#hard-delete').click();
                 }
             }
         });

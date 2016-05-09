@@ -1,13 +1,13 @@
 ## Filemanager ##
 
-This package is to add [simogeo/Filemanager](https://github.com/simogeo/Filemanager) to Laravel 5.1 installation.
+This package is to add [simogeo/Filemanager](https://github.com/simogeo/Filemanager) to Laravel 5.2 installation.
 
 ### Installation ###
 
 Add Filemanager to your composer.json file to require Filemanager :
 ```
     require : {
-        "laravel/framework": "5.1.*",
+        "laravel/framework": "5.2.*",
         "bestmomo/filemanager": "1.1.*"
     }
 ```

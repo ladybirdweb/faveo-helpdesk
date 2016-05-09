@@ -1,7 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Manage')
-class="active"
+active
 @stop
 
 @section('manage-bar')
@@ -52,9 +52,9 @@ class="active"
 		<div class="form-group {{ $errors->has('ticket_status') ? 'has-error' : '' }}">
 
 			{!! Form::label('ticket_status',Lang::get('lang.status')) !!}&nbsp;&nbsp;
-			{!! $errors->first('ticket_status', '<spam class="help-block">:message</spam>') !!}
-			{!! Form::radio('ticket_status','1',true) !!} {{Lang::get('lang.active')}}&nbsp;&nbsp;&nbsp;
-			{!! Form::radio('ticket_status','0') !!} {{Lang::get('lang.inactive')}}
+			{!! $errors->first('status', '<spam class="help-block">:message</spam>') !!}
+			{!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}&nbsp;&nbsp;&nbsp;
+			{!! Form::radio('status','0') !!} {{Lang::get('lang.inactive')}}
 			</div>
 		</div>
 
@@ -83,7 +83,7 @@ class="active"
 
 			{!! Form::label('parent_topic',Lang::get('lang.parent_topic')) !!}
 			{!! $errors->first('parent_topic', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('parent_topic', [''=>'Select a Parent Topic','Help Topics'=>$topics->lists('topic','topic')],1,['class' => 'form-control']) !!}
+			{!!Form::select('parent_topic', [''=>'Select a Parent Topic','Help Topics'=>$topics->lists('topic','topic')->toArray()],1,['class' => 'form-control']) !!}
 			</div>
 		</div>
 
@@ -94,7 +94,7 @@ class="active"
 
 			{!! Form::label('custom_form',Lang::get('lang.Custom_form')) !!}
 			{!! $errors->first('custom_form', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('custom_form', [''=>'Select a Form','Custom Forms'=>$forms->lists('formname','id')],1,['class' => 'form-control']) !!}
+			{!!Form::select('custom_form', [''=>'Select a Form','Custom Forms'=>$forms->lists('formname','id')->toArray()],1,['class' => 'form-control']) !!}
 			</div>
 		</div>
 
@@ -105,7 +105,7 @@ class="active"
 
 			{!! Form::label('department',Lang::get('lang.department')) !!}
 			{!! $errors->first('department', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('department', [''=>'Select a Department','Departments'=>$departments->lists('name','id')],1,['class' => 'form-control']) !!}
+			{!!Form::select('department', [''=>'Select a Department','Departments'=>$departments->lists('name','id')->toArray()],1,['class' => 'form-control']) !!}
 			</div>
 		</div>
 </div>
@@ -117,7 +117,7 @@ class="active"
 
 			{!! Form::label('priority',Lang::get('lang.priority')) !!}
 			{!! $errors->first('priority', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('priority', [''=>'Select a Proirity','Priorities'=>$priority->lists('priority_desc','priority_id')],null,['class' => 'form-control']) !!}
+			{!!Form::select('priority', [''=>'Select a Proirity','Priorities'=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control']) !!}
 			</div>
 		</div>
 
@@ -128,7 +128,7 @@ class="active"
 
 			{!! Form::label('sla_plan',Lang::get('lang.SLA_plan')) !!}
 			{!! $errors->first('sla_plan', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('sla_plan', [''=>'Select a SLA Plan','SLA Plans'=>$slas->lists('name','id')],1,['class' => 'form-control']) !!}
+			{!!Form::select('sla_plan', [''=>'Select a SLA Plan','SLA Plans'=>$slas->lists('name','id')->toArray()],1,['class' => 'form-control']) !!}
 			</div>
 		</div>
 
@@ -139,7 +139,7 @@ class="active"
 
 			{!! Form::label('auto_assign',Lang::get('lang.auto_assign')) !!}
 			{!! $errors->first('auto_assign', '<spam class="help-block">:message</spam>') !!}
-			{!!Form::select('auto_assign', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')],null,['class' => 'form-control']) !!}
+			{!!Form::select('auto_assign', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')->toArray()],null,['class' => 'form-control']) !!}
 			</div>
 		</div>
 		</div>

@@ -2,4 +2,4 @@
 Homestead.yaml
 Homestead.json
 /nbproject/private/
-nbproject/project.xml
+.env

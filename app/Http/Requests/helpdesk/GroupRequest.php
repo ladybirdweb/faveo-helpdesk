@@ -29,7 +29,7 @@ class GroupRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required|unique:groups',
+            'name' => 'required|unique:groups|max:30',
         ];
     }
 }

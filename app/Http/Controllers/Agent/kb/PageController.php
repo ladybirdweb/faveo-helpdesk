@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
  * PageController
  * This controller is used to CRUD Pages.
  *
- * @author     	Ladybird <info@ladybirdweb.com>
+ * @author      Ladybird <info@ladybirdweb.com>
  */
 class PageController extends Controller
 {

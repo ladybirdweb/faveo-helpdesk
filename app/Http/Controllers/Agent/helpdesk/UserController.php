@@ -85,14 +85,14 @@ class UserController extends Controller
                                 $username = substr($model->user_name, 0, 30);
                                 $username = substr($username, 0, strrpos($username, ' ')).' ...';
                             } else {
-                                $username = "<a href='".route('user.edit', $model->id)."'>".$model->user_name.'</a>';
+                                $username = "<a href='".route('user.show', $model->id)."'>".$model->user_name.'</a>';
                             }
 
                             return $username;
                         })
                         /* column email */
                         ->addColumn('email', function ($model) {
-                            $email = "<a href='".route('user.edit', $model->id)."'>".$model->email.'</a>';
+                            $email = "<a href='".route('user.show', $model->id)."'>".$model->email.'</a>';
 
                             return $email;
                         })
@@ -379,6 +379,26 @@ class UserController extends Controller
         $user_org->save();
 
         return 1;
+    }
+    
+        public function orgAssignUser($id)
+    {
+        $org = Input::get('org');
+        $user_org = new User_org();
+        $user_org->org_id = $id;
+        $user_org->user_id = $org;
+        $user_org->save();
+
+        return 1;
+    }
+    
+    public function removeUserOrg($id)
+    {
+        
+        $user_org = User_org::where('org_id','=',$id)->first();
+        $user_org->delete();
+        
+        return redirect()->back()->with('success', 'The user has been removed from this organization');
     }
 
     /**

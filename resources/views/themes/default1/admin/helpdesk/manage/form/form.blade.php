@@ -1,7 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Manage')
-class="active"
+active
 @stop
 
 @section('manage-bar')
@@ -124,7 +124,7 @@ $(document).ready(function() {
         e.preventDefault();
         if(x < max_fields){ 
             x++;
-            $(wrapper).append('<tr><td><input type="text" name="label[]"></td><td><input type="text" name="name[]"></td><td><select name="type[]"><option>text</option><option>email</option><option>password</option><option>textarea</option><option>select</option><option>radio</option><option>checkbox</option><option>submit</option><option>file</option></select></td><td><textarea name="value[]"></textarea></td><td>{!! Lang::get("lang.yes") !!}&nbsp;&nbsp;<input type=radio name="required['+x+'][]" value=1 checked>&nbsp;&nbsp;{!! Lang::get("lang.no") !!}&nbsp;&nbsp;<input type=radio name="required['+x+'][]" value=0></td><td><button type="button" class="remove_field btn btn-danger"><i class="fa fa-trash-o"></i>&nbsp {!! Lang::get("lang.remove") !!}</button></td></tr>'); 
+            $(wrapper).append('<tr><td><input type="text" name="label[]"></td><td><input type="text" name="name[]"></td><td><select name="type[]"><option>text</option><option>email</option><option>password</option><option>textarea</option><option>select</option><option>radio</option><option>checkbox</option><option>submit</option></select></td><td><textarea name="value[]"></textarea></td><td>{!! Lang::get("lang.yes") !!}&nbsp;&nbsp;<input type=radio name="required['+x+'][]" value=1 checked>&nbsp;&nbsp;{!! Lang::get("lang.no") !!}&nbsp;&nbsp;<input type=radio name="required['+x+'][]" value=0></td><td><button type="button" class="remove_field btn btn-danger"><i class="fa fa-trash-o"></i>&nbsp {!! Lang::get("lang.remove") !!}</button></td></tr>'); 
         }
     });
     

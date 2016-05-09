@@ -1,7 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Settings')
-class="active"
+active
 @stop
 
 @section('settings-bar')
@@ -64,24 +64,13 @@ class="active"
                             <div class="form-group {{ $errors->has('sys_email') ? 'has-error' : '' }}">
                                 {!! Form::label('sys_email',Lang::get('lang.default_system_email')) !!}
                                 {!! $errors->first('sys_email', '<spam class="help-block">:message</spam>') !!}
-                                {!!Form::select('sys_email', [ 'Select an Email', 'Emails' => $emails1->lists('email_name','id')],null,['class'=>'form-control']) !!}
+                                {!!Form::select('sys_email', [ 'Select an Email', 'Emails' => $emails1->lists('email_name','id')->toArray()],null,['class'=>'form-control']) !!}
                             </div>
                         </div>
                     </div>
-                    <!-- Email Fetching: CHECKBOX  : Enable ,Fetch on auto-cron   -->
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            {!! Form::label('email_fetching',Lang::get('lang.email_fetch')) !!}<br>
-                            {!! Form::checkbox('email_fetching',1,true) !!}&nbsp;{{Lang::get('lang.fetch_auto-corn')}}
-                        </div>
-                    </div>
+                   
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            {!! Form::checkbox('notification_cron',1,true) !!}&nbsp;{{Lang::get('lang.cron_notification')}}
-                        </div>
-                    </div>
                 </div>
                 <!-- Accept All Emails:	CHECKBOX: Accept email from unknown Users  -->
                 <div class="row">

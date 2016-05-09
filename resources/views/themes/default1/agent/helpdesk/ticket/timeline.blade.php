@@ -61,6 +61,7 @@ active
 <li>
     <a href="">Reply Rating:
         <small class="pull-right">
+            
             <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($avg_rating=='1')?'checked':'' ?>  />
             <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($avg_rating=='2')?'checked':'' ?>  />
             <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($avg_rating=='3')?'checked':'' ?>  />
@@ -70,12 +71,17 @@ active
     </a>
 </li>
 @stop 
+<?php if ($thread->title != "") {
+    $title = wordwrap($thread->title,70,"<br>\n");
+    } else {
+    $title = "";
+    }?>
 
 @section('content')
 <!-- Main content -->
 <div class="box box-primary">
     <div class="box-header">
-        <h3 class="box-title" id="refresh2"><i class="fa fa-user"> </i> @if($thread->title){!! $thread->title !!} @endif</h3>
+        <h3 class="box-title" id="refresh2"><i class="fa fa-user"> </i> <?= $title ?></h3>
         <div class="pull-right">
             <!-- <button type="button" class="btn btn-default"><i class="fa fa-edit" style="color:green;"> </i> Edit</button> -->
 <?php
@@ -98,13 +104,23 @@ active
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="d1"><i class="fa fa-exchange" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
                     {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu">
-                    <li id="open"><a href="#"><i class="fa fa-folder-open-o" style="color:red;"> </i>{!! Lang::get('lang.open') !!}</a></li>
-                    <?php if ($group->can_edit_ticket == 1) {?>
-                    <li id="close"><a href="#"><i class="fa fa-check" style="color:green;"> </i>{!! Lang::get('lang.close') !!}</a></li>
-                    <?php } ?>
-                    <li id="resolved"><a href="#"><i class="fa fa-check-circle-o " style="color:green;"> </i>{!! Lang::get('lang.resolved') !!} </a></li>
-                </ul>
+                   <?php               $statuses = \App\Model\helpdesk\Ticket\Ticket_Status::all(); ?>
+                        
+                        <ul class="dropdown-menu" id='cc_page'>
+                            @foreach($statuses as $status)
+                            <?php if ($group->can_edit_ticket == 1) {?>
+                            <?php if($status->name == 'Deleted' or $status->name == 'Accepted' or $status->name == 'Archived') continue; ?>
+                            <li class="search_r"><a href="#" id="{!! $status->state !!}"><i class="{!! $status->icon_class !!}" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
+                            </li>
+                            <?php } else { ?>
+                            <?php if($status->name == 'Deleted' or $status->name == 'Accepted' or $status->name == 'Closed' or $status->name == 'Archived') continue; ?>
+                            <li class="search_r"><a href="#" id="{!! $status->state !!}"><i class="{!! $status->icon_class !!}" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
+                            </li>
+                            <?php } ?>
+                            @endforeach
+                            
+                        </ul> 
+                
             </div>
             <?php if ($group->can_delete_ticket == 1 || $group->can_ban_email == 1) {?>
             <div id="more-option" class="btn-group">
@@ -196,7 +212,7 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
                         <div id="refresh">
                             <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $tickets->status)->first();?><td title="{{$status->properties}}">{{$status->name}}</td></tr>
                             <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first();?><td title="{{$priority->priority_desc}}">{{$priority->priority_desc}}</td></tr>
-                            <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first();?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
+                            <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   <?php $dept123 = App\Model\helpdesk\Agent\Department::where('id', '=', $tickets->dept_id)->first();?><td title="{{$dept123->name}}">{{$dept123->name}}</td></tr>
                             <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        <td>{{$user->email}}</td></tr>
                             @if($user->ban > 0)  <tr><td style="color:orange;"><i class="fa fa-warning"></i><b>
                             {!!  Lang::get('lang.this_ticket_is_under_banned_user')!!}</td><td></td></tr>@endif
@@ -243,6 +259,9 @@ echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
     </div>
 </div>
 {{-- Event fire --}}
+<div id="gifshow" style="display:none">
+    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}">
+</div>  <!-- added 05/05/2016-->
 <div id="resultdiv">
 </div>
 
@@ -633,7 +652,7 @@ $data = $ConvDate[0];
                                     <div class="user-block" style="margin-bottom:-5px;margin-top:-2px;">
                                        
                                             @if($role->profile_pic != null)
-                                                <img src="{{asset('lb-faveo/media/profilepic')}}{{'/'}}{{$role->profile_pic}}"class="img-circle img-bordered-sm" alt="User Image"/>
+                                                <img src="{{$role->profile_pic}}"class="img-circle img-bordered-sm" alt="User Image"/>
                                             @else
                                                 <img src="{{ Gravatar::src($role->email) }}" class="img-circle img-bordered-sm" alt="img-circle img-bordered-sm">
                                             @endif
@@ -1034,7 +1053,7 @@ $count_teams = count($teams);
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" id="cc-close" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">{!! Lang::get('lang.add_collaborator') !!}</h4>
                 </div>
                 <div class="nav-tabs-custom">
@@ -1274,7 +1293,30 @@ $(function() {
         source: 'auto/<?php echo $tickets->id; ?>'
     });
 });
-
+    jQuery(document).ready(function() {
+           $("#cc_page").on('click', '.search_r', function(){
+    var search_r = $('a', this).attr('id');
+                    $.ajax({
+                type: "GET",
+                url: "../ticket/status/{{$tickets->id}}/"+search_r,
+                beforeSend: function () {
+                    $("#refresh").hide();
+                    $("#loader").show();
+                },
+                success: function (response) {
+                    
+                    $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
+                    $("#refresh").show();
+                    $("#loader").hide();
+                    var message = response;
+                    $("#alert11").show();
+                    $('#message-success1').html(message);
+                    setInterval(function(){$("#alert11").hide(); },4000);    
+                }
+            });
+            return false;
+    });
+    });
 $(document).ready(function () {
     
     //Initialize Select2 Elements
@@ -1284,7 +1326,7 @@ $(document).ready(function () {
         $("#auto-submit").submit(function(){
             $.ajax({
                 type: "POST",
-                url: "{!! URL::route('lock') !!}",
+                url: "{!! URL::route('lock',$tickets->id) !!}",
             })
             return false;            
         });
@@ -1766,6 +1808,13 @@ jQuery(document).ready(function() {
                     $('#here').html(response);
                     $("#recepients").load("../thread/{{$tickets->id}}   #recepients");
                     $("#surrender22").load("../thread/{{$tickets->id}}   #surrender22");
+                    setTimeout(function() {
+                            // var link = document.querySelector('#load-inbox');
+                            // if(link) {
+                            //     link.click();
+                            // }
+                            $('#cc-close').trigger('click');
+                        }, 500);
                 
                 }
             })
@@ -1791,6 +1840,13 @@ jQuery(document).ready(function() {
                 $('#here2').html(response);
                 $("#recepients").load("../thread/{{$tickets->id}}   #recepients");
                 $("#surrender22").load("../thread/{{$tickets->id}}   #surrender22");
+                setTimeout(function() {
+                            // var link = document.querySelector('#load-inbox');
+                            // if(link) {
+                            //     link.click();
+                            // }
+                            $('#cc-close').trigger('click');
+                        }, 500);
                 }
             })
             return false;
@@ -1975,17 +2031,11 @@ $(document).ready(function() {
 function lockAjaxCall(locktime){
         $.ajax({
                 type: "GET",
-                url: "../check/lock/{{$tickets->id}}",
+                url: "{{URL::route('lock',$tickets->id)}}",
                 dataType: "html",
                 data: $(this).serialize(),
                 success: function(response) {
-                    if(response == 0) {
-                       var message = "{{Lang::get('lang.locked-ticket')}}";
-                        $("#alert22").show();
-                        $('#message-warning2').html(message);
-                        $('#replybtn').attr('disabled', true);
-                        //setInterval(function(){$("#alert23").hide(); },10000);
-                    } else if(response == 2) {
+                    if(response == 2) {
                         // alert(response);
                         // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)
                         // +"{{Lang::get('lang.minutes')}}";
@@ -1999,7 +2049,7 @@ function lockAjaxCall(locktime){
                         // $('#message-success2').html(message);
                         $('#replybtn').attr('disabled', false); 
                         // setInterval(function(){$("#alert21").hide(); },8000);  
-                    } else {
+                    } else if(response == 1 || response == 4){
                         // alert(response);
                         // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)
                         // +"{{Lang::get('lang.minutes')}}";
@@ -2012,6 +2062,12 @@ function lockAjaxCall(locktime){
                         // $('#message-success2').html(message);
                         $('#replybtn').attr('disabled', false); 
                         // setInterval(function(){$("#alert21").hide(); },8000); 
+                    } else {
+                       var message = response;
+                        $("#alert22").show();
+                        $('#message-warning2').html(message);
+                        $('#replybtn').attr('disabled', true);
+                        //setInterval(function(){$("#alert23").hide(); },10000);
                     }
                 }
         })

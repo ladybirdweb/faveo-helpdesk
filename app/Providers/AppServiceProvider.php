@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use mjanssen\BreadcrumbsBundle\Breadcrumbs;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,16 +17,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(
-                'Illuminate\Contracts\Auth\Registrar', 'App\Services\Registrar'
-        );
+        $this->app->bind('Illuminate\Contracts\Auth\Registrar');
     }
 
     public function boot()
     {
         // Please note the different namespace
         // and please add a \ in front of your classes in the global namespace
-        $this->composer();
         \Event::listen('cron.collectJobs', function () {
 
             \Cron::add('example1', '* * * * *', function () {
@@ -44,17 +40,6 @@ class AppServiceProvider extends ServiceProvider
             \Cron::add('disabled job', '0 * * * *', function () {
                 // Do some crazy things successfully every hour
             }, false);
-        });
-    }
-    
-    public function composer() {
-        \View::composer('breadcrumbs', function() {
-
-            $data = [
-                'global_breadcrumbs' => Breadcrumbs::automatic()
-            ];
-            
-            view()->share($data);
         });
     }
 }

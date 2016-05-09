@@ -7,9 +7,7 @@ class="active"
 @section('dashboard-bar')
 active
 @stop
-@section('PageHeader')
-Dashboard
-@stop
+
 @section('dashboard')
 class="active"
 @stop
@@ -242,16 +240,8 @@ $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id
           //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
           maintainAspectRatio: false,
           //Boolean - whether to make the chart responsive to window resizing
-          responsive: true,
+          responsive: true
           
-          legendTemplate : '<ul style="list-style-type: square;">'
-                      +'<% for (var i=0; i<datasets.length; i++) { %>'
-                        +'<li style="color: <%=datasets[i].pointColor%>;">'
-                        +'<span style=\"background-color:<%=datasets[i].pointColor%>\"></span>'
-                        +'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-                      +'</li>'
-                    +'<% } %>'
-                  +'</ul>'
         });
     document.getElementById("legendDiv").innerHTML = myLineChart.generateLegend();
   });
@@ -372,16 +362,8 @@ $('#foo').submit();
           //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
           maintainAspectRatio: false,
           //Boolean - whether to make the chart responsive to window resizing
-          responsive: true,
+          responsive: true
           
-          legendTemplate : '<ul style="list-style-type: square;">'
-                      +'<% for (var i=0; i<datasets.length; i++) { %>'
-                        +'<li style="color: <%=datasets[i].pointColor%>;">'
-                        +'<span style=\"background-color:<%=datasets[i].pointColor%>\"></span>'
-                        +'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-                      +'</li>'
-                    +'<% } %>'
-                  +'</ul>'
         });
     myLineChart.options.responsive = false;
       $("#tickets-graph").remove();
@@ -420,16 +402,8 @@ $('#foo').submit();
           //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
           maintainAspectRatio: false,
           //Boolean - whether to make the chart responsive to window resizing
-          responsive: true,
+          responsive: true
           
-          legendTemplate : '<ul style="list-style-type: square;">'
-                      +'<% for (var i=0; i<datasets.length; i++) { %>'
-                        +'<li style="color: <%=datasets[i].pointColor%>;">'
-                        +'<span style=\"background-color:<%=datasets[i].pointColor%>\"></span>'
-                        +'<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-                      +'</li>'
-                    +'<% } %>'
-                  +'</ul>'
         });
       
     document.getElementById("legendDiv").innerHTML = myLineChart1.generateLegend();

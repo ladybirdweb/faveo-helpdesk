@@ -19,6 +19,7 @@ use App\User;
 use DB;
 use Exception;
 use Hash;
+use Lang;
 
 /**
  * AgentController
@@ -26,8 +27,8 @@ use Hash;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class AgentController extends Controller
-{
+class AgentController extends Controller {
+
     /**
      * Create a new controller instance.
      * constructor to check
@@ -37,8 +38,7 @@ class AgentController extends Controller
      *
      * @return void
      */
-    public function __construct(PhpMailController $PhpMailController)
-    {
+    public function __construct(PhpMailController $PhpMailController) {
         // creating an instance for the PhpmailController
         $this->PhpMailController = $PhpMailController;
         // checking authentication
@@ -52,8 +52,7 @@ class AgentController extends Controller
      *
      * @return type view
      */
-    public function index()
-    {
+    public function index() {
         try {
             return view('themes.default1.admin.helpdesk.agent.agents.index');
         } catch (Exception $e) {
@@ -72,8 +71,7 @@ class AgentController extends Controller
      *
      * @return type view
      */
-    public function create(Timezones $timezone, Groups $group, Department $department, Teams $team_all)
-    {
+    public function create(Timezones $timezone, Groups $group, Department $department, Teams $team_all) {
         try {
             // gte all the teams
             $team = $team_all->get();
@@ -84,7 +82,7 @@ class AgentController extends Controller
             // get all department
             $departments = $department->get();
             // list all the teams in a single variable
-            $teams = $team->lists('id', 'name');
+            $teams = $team->lists('id', 'name')->toArray();
             // returns to the page with all the variables and their datas
             return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team'));
         } catch (Exception $e) {
@@ -102,14 +100,17 @@ class AgentController extends Controller
      *
      * @return type Response
      */
-    public function store(User $user, AgentRequest $request)
-    {
+    public function store(User $user, AgentRequest $request) {
         // fixing the user role to agent
-        $user->fill($request->input())->save();
+        $user->fill($request->except(['group', 'primary_department', 'agent_time_zone']))->save();
+        $user->assign_group = $request->group;
+        $user->primary_dpt = $request->primary_department;
+        $user->agent_tzone = $request->agent_time_zone;
         // generate password and has immediately to store
-        $user->password = Hash::make($this->generateRandomString());
+        $password = $this->generateRandomString();
+        $user->password = Hash::make($password);
         // fetching all the team details checked for this user
-        $requests = $request->input('team_id');
+        $requests = $request->input('team');
         // get user id of the inserted user detail
         $id = $user->id;
         // insert team
@@ -127,13 +128,13 @@ class AgentController extends Controller
                 $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'Password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
             } catch (Exception $e) {
                 // returns if try fails
-                return redirect('agents')->with('fails', 'Some error occured while sending mail to the agent. Please check email settings and try again');
+                return redirect('agents')->with('fails', Lang::get('lang.agent_send_mail_error_on_agent_creation'));
             }
             // returns for the success case
-            return redirect('agents')->with('success', 'Agent Created sucessfully');
+            return redirect('agents')->with('success', Lang::get('lang.agent_creation_success'));
         } else {
             // returns if fails
-            return redirect('agents')->with('fails', 'Agent can not Create');
+            return redirect('agents')->with('fails', Lang::get('lang.failed_to_create_agent'));
         }
     }
 
@@ -150,8 +151,7 @@ class AgentController extends Controller
      *
      * @return type Response
      */
-    public function edit($id, User $user, Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team)
-    {
+    public function edit($id, User $user, Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team) {
         try {
             $user = $user->whereId($id)->first();
             $team = $team->get();
@@ -160,12 +160,12 @@ class AgentController extends Controller
             $groups = $group->get();
             $departments = $department->get();
             $table = $team_assign_agent->where('agent_id', $id)->first();
-            $teams = $team->lists('id', 'name');
-            $assign = $team_assign_agent->where('agent_id', $id)->lists('team_id');
+            $teams = $team->lists('id', 'name')->toArray();
+            $assign = $team_assign_agent->where('agent_id', $id)->lists('team_id')->toArray();
 
             return view('themes.default1.admin.helpdesk.agent.agents.edit', compact('teams', 'assign', 'table', 'teams1', 'selectedTeams', 'user', 'timezones', 'groups', 'departments', 'team', 'exp', 'counted'));
         } catch (Exception $e) {
-            return redirect('agents')->with('fail', 'No such file');
+            return redirect('agents')->with('fail', Lang::get('lang.failed_to_edit_agent'));
         }
     }
 
@@ -179,9 +179,7 @@ class AgentController extends Controller
      *
      * @return type Response
      */
-    public function update($id, User $user, AgentUpdate $request, Assign_team_agent $team_assign_agent)
-    {
-
+    public function update($id, User $user, AgentUpdate $request, Assign_team_agent $team_assign_agent) {
         // storing all the details
         $user = $user->whereId($id)->first();
         $daylight_save = $request->input('daylight_save');
@@ -191,7 +189,7 @@ class AgentController extends Controller
         //==============================================
         $table = $team_assign_agent->where('agent_id', $id);
         $table->delete();
-        $requests = $request->input('team_id');
+        $requests = $request->input('team');
         // inserting team details
         foreach ($requests as $req) {
             DB::insert('insert into team_assign_agent (team_id, agent_id) values (?,?)', [$req, $id]);
@@ -199,10 +197,13 @@ class AgentController extends Controller
         //Todo For success and failure conditions
         try {
             $user->fill($request->except('daylight_save', 'limit_access', 'directory_listing', 'vocation_mode', 'assign_team'))->save();
-
-            return redirect('agents')->with('success', 'Agent Updated sucessfully');
+            $user->assign_group = $request->group;
+            $user->primary_dpt = $request->primary_department;
+            $user->agent_tzone = $request->agent_time_zone;
+            $user->save();
+            return redirect('agents')->with('success', Lang::get('lang.agent_updated_sucessfully'));
         } catch (Exception $e) {
-            return redirect('agents')->with('fails', 'Agent did not update'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('agents')->with('fails', Lang::get('lang.unable_to_update_agent') . '<li>' . $e->errorInfo[2] . '</li>');
         }
     }
 
@@ -217,20 +218,18 @@ class AgentController extends Controller
      *
      * @return type Response
      */
-    public function destroy($id, User $user, Assign_team_agent $team_assign_agent)
-    {
+    public function destroy($id, User $user, Assign_team_agent $team_assign_agent) {
         /* Becouse of foreign key we delete team_assign_agent first */
         error_reporting(E_ALL & ~E_NOTICE);
         $team_assign_agent = $team_assign_agent->where('agent_id', $id);
         $team_assign_agent->delete();
         $user = $user->whereId($id)->first();
         try {
-            $error = 'This staff is related to some tickets';
+            $error = Lang::get('lang.this_staff_is_related_to_some_tickets');
             $user->id;
             $user->delete();
             throw new \Exception($error);
-
-            return redirect('agents')->with('success', 'Agent Deleted sucessfully');
+            return redirect('agents')->with('success', Lang::get('lang.agent_deleted_sucessfully'));
         } catch (\Exception $e) {
             return redirect('agents')->with('fails', $error);
         }
@@ -243,8 +242,7 @@ class AgentController extends Controller
      *
      * @return string
      */
-    public function generateRandomString($length = 10)
-    {
+    public function generateRandomString($length = 10) {
         // list of supported characters
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         // character length checked
@@ -258,4 +256,5 @@ class AgentController extends Controller
         // return random string
         return $randomString;
     }
+
 }

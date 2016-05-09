@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -105,11 +105,12 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         $stream = $output->getStream();
         $e      = new ParseErrorException('message', 13);
 
+        $shell->setOutput($output);
         $shell->addCode('code');
         $this->assertTrue($shell->hasCode());
         $this->assertNotEmpty($shell->getCodeBuffer());
 
-        $shell->renderException($e, $output);
+        $shell->writeException($e);
 
         $this->assertSame($e, $shell->getScopeVariable('_e'));
         $this->assertFalse($shell->hasCode());
@@ -285,8 +286,8 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     public function getReturnValues()
     {
         return array(
-            array('{{return value}}', '=> <string>"{{return value}}"</string>' . PHP_EOL),
-            array(1, '=> <number>1</number>' . PHP_EOL),
+            array('{{return value}}', "=> \"\033[32m{{return value}}\033[39m\"" . PHP_EOL),
+            array(1, "=> \033[35m1\033[39m" . PHP_EOL),
         );
     }
 

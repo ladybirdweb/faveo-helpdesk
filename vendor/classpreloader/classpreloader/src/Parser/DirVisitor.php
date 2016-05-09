@@ -3,7 +3,7 @@
 /*
  * This file is part of Class Preloader.
  *
- * (c) Graham Campbell <graham@cachethq.io>
+ * (c) Graham Campbell <graham@alt-three.com>
  * (c) Michael Dowling <mtdowling@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -12,7 +12,7 @@
 
 namespace ClassPreloader\Parser;
 
-use ClassPreloader\Exception\SkipFileException;
+use ClassPreloader\Exceptions\DirConstantException;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\MagicConst\Dir as DirNode;
 use PhpParser\Node\Scalar\String_ as StringNode;
@@ -32,7 +32,7 @@ class DirVisitor extends AbstractNodeVisitor
     protected $skip = false;
 
     /**
-     * Create a new directory visitor.
+     * Create a new directory visitor instance.
      *
      * @param bool $skip
      *
@@ -48,13 +48,15 @@ class DirVisitor extends AbstractNodeVisitor
      *
      * @param \PhpParser\Node $node
      *
-     * @return void
+     * @throws \ClassPreloader\Exceptions\DirConstantException
+     *
+     * @return \PhpParser\Node\Scalar\String_|null
      */
     public function enterNode(Node $node)
     {
         if ($node instanceof DirNode) {
             if ($this->skip) {
-                throw new SkipFileException('__DIR__ constant found, skipping...');
+                throw new DirConstantException();
             }
 
             return new StringNode($this->getDir());

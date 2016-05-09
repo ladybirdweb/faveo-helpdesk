@@ -1,7 +1,7 @@
 @extends('themes.default1.admin.layout.admin')
  <link href="{{asset("lb-faveo/css/faveo-css.css")}}" rel="stylesheet" type="text/css" />
 @section('Settings')
-class="active"
+active
 @stop
 
 @section('settings-bar')
@@ -70,8 +70,8 @@ class="active"
                 <div class="form-group {{ $errors->has('company_name') ? 'has-error' : '' }}">
 
                     {!! Form::label('company_name',Lang::get('lang.name')) !!}
-			        {!! $errors->first('company_name', '<spam class="help-block">:message</spam>') !!}
 					{!! Form::text('company_name',$companys->company_name,['class' => 'form-control']) !!}
+                    {!! $errors->first('company_name', '<spam class="help-block">:message</spam>') !!}
 
                 </div>
                 </div>
@@ -82,8 +82,9 @@ class="active"
                 <div class="form-group {{ $errors->has('website') ? 'has-error' : '' }}">
 
                     {!! Form::label('website',Lang::get('lang.website')) !!}
-                    {!! $errors->first('website', '<spam class="help-block">:message</spam>') !!}
 			        {!! Form::url('website',$companys->website,['class' => 'form-control']) !!}
+                    {!! $errors->first('website', '<spam class="help-block">:message</spam>') !!}
+                    
 
                 </div>
                 </div>
@@ -93,8 +94,8 @@ class="active"
                 <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
 
                     {!! Form::label('phone',Lang::get('lang.phone')) !!}
-                    {!! $errors->first('phone', '<spam class="help-block">:message</spam>') !!}
 			        {!! Form::text('phone',$companys->phone,['class' => 'form-control']) !!}
+                    {!! $errors->first('phone', '<spam class="help-block">:message</spam>') !!}
 
                 </div>
                 </div>

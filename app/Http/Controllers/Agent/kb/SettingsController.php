@@ -27,7 +27,7 @@ use Input;
  * SettingsController
  * This controller is used to perform settings in the setting page of knowledgebase.
  *
- * @author     	Ladybird <info@ladybirdweb.com>
+ * @author      Ladybird <info@ladybirdweb.com>
  */
 class SettingsController extends Controller
 {

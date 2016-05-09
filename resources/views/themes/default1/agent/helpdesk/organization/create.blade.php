@@ -43,20 +43,20 @@ class="active"
         <div class="row">
             <div class="col-xs-4 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                 {!! Form::label('name',Lang::get('lang.name')) !!}
-                {!! $errors->first('name', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('name',null,['class' => 'form-control']) !!}
+                {!! $errors->first('name', '<spam class="help-block">:message</spam>') !!}
             </div>
             <!-- phone : Text : -->
             <div class="col-xs-4 form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
                 {!! Form::label('phone',Lang::get('lang.phone')) !!}
-                {!! $errors->first('phone', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('phone',null,['class' => 'form-control']) !!}
+                {!! $errors->first('phone', '<spam class="help-block">:message</spam>') !!}
             </div>
             <!-- website : Text :  -->
             <div class="col-xs-4 form-group {{ $errors->has('website') ? 'has-error' : '' }}">
                 {!! Form::label('website',Lang::get('lang.website')) !!}
-                {!! $errors->first('website', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('website',null,['class' => 'form-control']) !!}
+                {!! $errors->first('website', '<spam class="help-block">:message</spam>') !!}
             </div>
         </div>
         <!-- Internal Notes : Textarea -->

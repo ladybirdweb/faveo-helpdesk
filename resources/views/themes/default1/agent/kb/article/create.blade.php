@@ -137,7 +137,7 @@ CKEDITOR.replace('editor', {
 
                             <?php
                             $format = App\Model\helpdesk\Settings\System::where('id', '1')->first()->date_time_format;
-                            $format = \App\Model\helpdesk\Utility\Time_format::where('id',$format)->first()->format;
+                            $format = \App\Model\helpdesk\Utility\Date_time_format::where('id',$format)->first()->format;
                             $tz = App\Model\helpdesk\Settings\System::where('id', '1')->first()->time_zone;
                             $tz = App\Model\helpdesk\Utility\Timezones::where('id',$tz)->first()->name;
                             date_default_timezone_set($tz);
@@ -189,7 +189,7 @@ CKEDITOR.replace('editor', {
                                         <div class="form-group {{ $errors->has('category_id') ? 'has-error' : '' }}">
                                             {{-- {!! Form::label('category_id','Category') !!} --}}
                                             {!! $errors->first('category_id', '<spam class="help-block">:message</spam>') !!}
-                                            @while (list($key, $val) = each($category))
+                                            @foreach($category->toArray() as $key=>$val)
                                             <div class="row">
                                                 <div class="form-group">
                                                     <div class="col-md-1">
@@ -200,8 +200,7 @@ CKEDITOR.replace('editor', {
                                                     </div>
                                                 </div>
                                             </div>
-                                            @endwhile
-
+                                            @endforeach
                                         </div>
                                     </div>
                                     {!! Form::close() !!}

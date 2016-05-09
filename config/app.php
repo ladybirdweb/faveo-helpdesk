@@ -2,6 +2,9 @@
 
 return [
 
+    'env' => env('APP_ENV', 'production'),
+
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -38,7 +41,7 @@ return [
     |
      */
 
-    'version' => 'Community 1.0.6.4',
+    'version' => 'Community 1.0.7.4',
 
     /*
     |--------------------------------------------------------------------------
@@ -135,6 +138,8 @@ return [
 
     'providers' => [
 
+        Illuminate\Broadcasting\BroadcastServiceProvider::class,
+        DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
         /*
     	* Faveo Plugins
     	*/
@@ -142,12 +147,10 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
-        'Illuminate\Foundation\Providers\ArtisanServiceProvider',
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
         'Illuminate\Cache\CacheServiceProvider',
         'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
-        'Illuminate\Routing\ControllerServiceProvider',
         'Illuminate\Cookie\CookieServiceProvider',
         'Illuminate\Database\DatabaseServiceProvider',
         'Illuminate\Encryption\EncryptionServiceProvider',
@@ -169,8 +172,6 @@ return [
          * Application Service Providers...
          */
         'App\Providers\AppServiceProvider',
-        'App\Providers\BusServiceProvider',
-        'App\Providers\ConfigServiceProvider',
         'App\Providers\EventServiceProvider',
         'App\Providers\RouteServiceProvider',
         'Propaganistas\LaravelPhone\LaravelPhoneServiceProvider',
@@ -203,7 +204,6 @@ return [
         'Artisan'    => 'Illuminate\Support\Facades\Artisan',
         'Auth'       => 'Illuminate\Support\Facades\Auth',
         'Blade'      => 'Illuminate\Support\Facades\Blade',
-        'Bus'        => 'Illuminate\Support\Facades\Bus',
         'Cache'      => 'Illuminate\Support\Facades\Cache',
         'Config'     => 'Illuminate\Support\Facades\Config',
         'Cookie'     => 'Illuminate\Support\Facades\Cookie',
@@ -238,12 +238,14 @@ return [
         'PDF'        => 'Vsmoraes\Pdf\PdfFacade',
         'Gravatar'   => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
         'UTC'        => 'App\Http\Controllers\Agent\helpdesk\TicketController',
+        'Ttable'     => 'App\Http\Controllers\Agent\helpdesk\TicketController', //to use getTable function.
         'SMTPS'      => 'App\Http\Controllers\HomeController',
         'Datatable'  => 'Chumper\Datatable\Facades\DatatableFacade',
         'Zipper'     => 'Chumper\Zipper\Zipper',
         'Image'      => Intervention\Image\Facades\Image::class,
         'JWTAuth'    => 'Tymon\JWTAuth\Facades\JWTAuth',
         'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory',
+        'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
 
     ],
 

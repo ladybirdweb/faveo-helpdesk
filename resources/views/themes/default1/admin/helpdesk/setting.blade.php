@@ -117,7 +117,7 @@
                                         <!--/.col-md-2-->
                                        
                                         <!--/.col-md-2-->
-                                        <div class="col-md-2 col-sm-6">
+<!--                                        <div class="col-md-2 col-sm-6">
                                             <div class="settingiconblue">
                                                 <div class="settingdivblue">
                                                     <a href="{{ url('list-directories') }}"><span class="fa-stack fa-2x">
@@ -127,9 +127,19 @@
                                                 </div>
                                                 <center class="box-title" >{!! Lang::get('lang.templates') !!}</center>
                                             </div>
-                                        </div>
+                                        </div>-->
                                         <!--/.col-md-2-->
-                                       
+                                       <div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{ url('templates') }}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa fa-mail-forward fa-stack-1x"></i>
+                                                        </span></a>
+                                                </div>
+                                                <center class="box-title" >{!! Lang::get('lang.templates') !!}</center>
+                                            </div>
+                                        </div>
                                         <!--/.col-md-2-->
                                         <div class="col-md-2 col-sm-6">
                                             <div class="settingiconblue">
@@ -199,6 +209,19 @@
                                                         </span></a>
                                                 </div>
                                                 <center class="box-title" >{!! Lang::get('lang.forms') !!}</center>
+                                            </div>
+                                        </div>
+                                        <!--/.col-md-2-->
+                                        <!--/.col-md-2-->
+                                        <div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{url('workflow')}}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa fa-sitemap fa-stack-1x"></i>
+                                                        </span></a>
+                                                </div>
+                                                <center class="box-title" >{!! Lang::get('lang.workflow') !!}</center>
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
@@ -314,7 +337,63 @@
                                             </div>
                                         </div>
                                         <!--/.col-md-2-->
-
+                                        <div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{url('job-scheduler')}}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa  fa-hourglass-o fa-stack-1x"></i>
+                                                        </span></a>
+                                                </div>
+                                                <center class="box-title" >{!! Lang::get('lang.cron') !!}</center>
+                                            </div>
+                                        </div>
+                                        <!--/.col-md-2-->
+<div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{url('security')}}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa  fa-lock fa-stack-1x"></i>
+                                                        </span></a>
+                                                </div>
+                                                <center class="box-title" >{!! Lang::get('lang.security') !!}</center>
+                                            </div>
+                                        </div>
+                                        <!--/.col-md-2-->
+                                        <div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{url('setting-status')}}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa fa-file-text fa-stack-1x"></i>
+                                                        </span></a>
+                                                </div>
+                                                <p class="box-title" >Statuses</p>
+                                            </div>
+                                        </div>
+                                         <div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{url('settings-notification')}}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa fa-file-text fa-bell-o"></i>
+                                                        </span></a>
+                                                </div>
+                                                <p class="box-title" >Notification Settings</p>
+                                            </div>
+                                        </div>
+                                          <div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{url('getratings')}}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa fa-star-half"></i>
+                                                        </span></a>
+                                                </div>
+                                                <p class="box-title" >Ratings Settings</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- /.row -->

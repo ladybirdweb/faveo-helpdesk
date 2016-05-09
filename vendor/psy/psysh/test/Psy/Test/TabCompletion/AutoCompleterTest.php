@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -114,7 +114,11 @@ class AutoCompleterTest extends \PHPUnit_Framework_TestCase
             array('ls ', array(), array('ls')),
             array('sho', array('show'), array()),
             array('12 + clone $', array('foo'), array()),
-            // array('$foo ', array('+', 'clone'), array('$foo', 'DOMDocument', 'array_map')), requires a operator matcher?
+            // array(
+            //   '$foo ',
+            //   array('+', 'clone'),
+            //   array('$foo', 'DOMDocument', 'array_map')
+            // ), requires a operator matcher?
             array('$', array('foo', 'bar'), array('require', 'array_search', 'T_OPEN_TAG', 'Psy')),
             array(
                 'Psy\\',

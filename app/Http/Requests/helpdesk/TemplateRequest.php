@@ -30,9 +30,9 @@ class TemplateRequest extends Request
     {
         return [
             'name'                  => 'required|unique:template',
-            'ban_status'            => 'required',
-            'template_set_to_clone' => 'required',
-            'language'              => 'required',
+            'subject'            => 'required',
+            'type' => 'required',
+            'message'              => 'required',
         ];
     }
 }

@@ -112,24 +112,7 @@ class FormController extends Controller
         }
         Fields::insert($fields);
 
-        return redirect('forms')->with('success', 'Successfully created Form');
-    }
-
-    public function edit($id,Forms $form) {
-        $forms = $form->whereId($id)->first();
-//        $forms = Fields::where('forms_id',$fill->id)->get();
-        return view('themes.default1.admin.helpdesk.manage.form.edit', compact('forms'));
-    }
-    
-    public function update($id) {
-        
-        $fields = Fields::whereId($id)->first();
-        $fields->label = Input::get('label');
-        $fields->type = Input::get('type');
-        $fields->value = Input::get('value');
-        $fields->required = Input::get('required');
-        $fields->save();
-        return redirect()->back()->with('success', 'successfully saved!');
+        return Redirect::back()->with('success', 'Successfully created Form');
     }
 
     public function delete($id, Forms $forms, Fields $field, Help_topic $help_topic)

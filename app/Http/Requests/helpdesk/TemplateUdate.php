@@ -29,10 +29,10 @@ class TemplateUdate extends Request
     public function rules()
     {
         return [
-
-            'ban_status'            => 'required',
-            'template_set_to_clone' => 'required',
-            'language'              => 'required',
+            'name'                  => 'required',
+            'subject'            => 'required',
+            'type' => 'required',
+            'message'              => 'required',
         ];
     }
 }

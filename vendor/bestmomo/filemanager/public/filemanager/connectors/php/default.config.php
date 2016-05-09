@@ -31,8 +31,7 @@ $app['session']->driver()->setId($id);
 $app['session']->driver()->start();
 
 // Folder path
-$folderPath = $app->publicPath() . '/'. config('filemanager.folder_path');   
-$folderPath = str_replace('\\', '/', $folderPath); 
+$folderPath = config('filemanager.folder_path');   
 
 // Check if user in authentified
 if(!$app['auth']->check()) 
@@ -53,11 +52,6 @@ else
     {
       // Folder name with user id
       $folderPath .= 'user' . $app['auth']->id();
-      // Create folder if doesn't exist
-      if (!is_dir($folderPath))
-      {
-        mkdir($folderPath); 
-      }  
       $laravelAuth = true;  
     } 
     else
@@ -84,6 +78,6 @@ function auth()
 
 $fm = new Filemanager();
 
-$fm->setFileRoot($folderPath);
+$fm->setFileRoot($folderPath, true);
 
 ?>

@@ -1,14 +1,14 @@
 @extends('themes.default1.admin.layout.admin')
 
 @section('Themes')
-class="active"
+active
 @stop
 
 @section('theme-bar')
 active
 @stop
 
-@section('footer')
+@section('socail')
 class="active"
 @stop
 
