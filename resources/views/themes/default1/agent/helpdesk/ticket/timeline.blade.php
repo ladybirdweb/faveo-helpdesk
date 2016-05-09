@@ -2035,13 +2035,7 @@ function lockAjaxCall(locktime){
                 dataType: "html",
                 data: $(this).serialize(),
                 success: function(response) {
-                    if(response == 0) {
-                       var message = "{{Lang::get('lang.locked-ticket')}}";
-                        $("#alert22").show();
-                        $('#message-warning2').html(message);
-                        $('#replybtn').attr('disabled', true);
-                        //setInterval(function(){$("#alert23").hide(); },10000);
-                    } else if(response == 2) {
+                    if(response == 2) {
                         // alert(response);
                         // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)
                         // +"{{Lang::get('lang.minutes')}}";
@@ -2055,7 +2049,7 @@ function lockAjaxCall(locktime){
                         // $('#message-success2').html(message);
                         $('#replybtn').attr('disabled', false); 
                         // setInterval(function(){$("#alert21").hide(); },8000);  
-                    } else {
+                    } else if(response == 1 || response == 4){
                         // alert(response);
                         // var message = "{{Lang::get('lang.access-ticket')}}"+locktime/(60*1000)
                         // +"{{Lang::get('lang.minutes')}}";
@@ -2068,6 +2062,12 @@ function lockAjaxCall(locktime){
                         // $('#message-success2').html(message);
                         $('#replybtn').attr('disabled', false); 
                         // setInterval(function(){$("#alert21").hide(); },8000); 
+                    } else {
+                       var message = response;
+                        $("#alert22").show();
+                        $('#message-warning2').html(message);
+                        $('#replybtn').attr('disabled', true);
+                        //setInterval(function(){$("#alert23").hide(); },10000);
                     }
                 }
         })

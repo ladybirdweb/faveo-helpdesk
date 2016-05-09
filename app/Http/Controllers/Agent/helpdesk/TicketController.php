@@ -1725,7 +1725,13 @@ class TicketController extends Controller
         $diff = round(abs($to_time - $from_time) / 60, 2);
 
         if ($diff < $cad && Auth::user()->id != $ticket->lock_by) {
-            return 0;  //ticket is locked
+            $user_data = User::select('user_name','first_name','last_name')->where('id', '=', $ticket->lock_by)->first();
+            if ($user_data->first_name != '') {
+                $name = $user_data->first_name." ".$user_data->last_name;
+            } else {
+                $name = $user_data->username;
+            }
+            return Lang::get('lang.locked-ticket')." <a href='".route('user.show',$ticket->lock_by)."'>".$name."</a>&nbsp;".$diff."&nbsp".Lang::get('lang.minutes-ago');  //ticket is locked
         } elseif ($diff < $cad && Auth::user()->id == $ticket->lock_by) {
             $ticket = Tickets::where('id', '=', $id)->first();
             $ticket->lock_at = date('Y-m-d H:i:s');
@@ -2068,8 +2074,8 @@ class TicketController extends Controller
                         })
                         ->addColumn('from', function ($ticket) {
                             $from = DB::table('users')->select('user_name')->where('id', '=', $ticket->user_id)->first();
-
-                            return "<a href='../user/".$ticket->user_id."' title='".Lang::get('lang.see-profile1').' '.ucfirst($from->user_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".ucfirst($from->user_name).'</span></a>';
+                            $url  = route('user.show',$ticket->user_id); 
+                            return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.ucfirst($from->user_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".ucfirst($from->user_name).'</span></a>';
                         })
                         // ->addColumn('Last Replier', function ($ticket) {
                         //     $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '=', 0)->max('id');
@@ -2093,8 +2099,8 @@ class TicketController extends Controller
                                 return "<span style='color:red'>Unassigned</span>";
                             } else {
                                 $assign = DB::table('users')->where('id', '=', $ticket->assigned_to)->first();
-
-                                return "<a href='../user/".$ticket->assigned_to."' title='".Lang::get('lang.see-profile1').' '.ucfirst($assign->first_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:green'>".ucfirst($assign->first_name).' '.ucfirst($assign->last_name).'</span></a>';
+                                $url = route('user.show',$ticket->assigned_to);
+                                return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.ucfirst($assign->first_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:green'>".ucfirst($assign->first_name).' '.ucfirst($assign->last_name).'</span></a>';
                             }
                         })
                         ->addColumn('Last', function ($ticket) {
