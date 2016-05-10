@@ -176,7 +176,7 @@
         </header>
                             <!-- Left side column. contains the logo and sidebar -->
                             <!-- Right side column. Contains the navbar and content of the page -->
-@yield('breadcrumbs')
+{!! Breadcrumbs::render() !!}
         <!-- Main content -->
         <div id="main" class="site-main clearfix">
 			<div class="container">

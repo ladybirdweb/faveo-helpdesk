@@ -47,28 +47,47 @@ active
     {!! Lang::get('lang.ticket_ratings') !!}
 </li>
 <li> 
-    <a href="#">
-        Overall Rating:
-        <small class="pull-right">
-            <input type="radio" class="star" id="star5" name="rating" value="1"<?php echo ($tickets->rating=='1')?'checked':'' ?> />
-            <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating=='2')?'checked':'' ?> />
-            <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating=='3')?'checked':'' ?>/>
-            <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating=='4')?'checked':'' ?>/>
-            <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating=='5')?'checked':'' ?> />
-        </small>
-    </a>
-</li>
-<li>
-    <a href="">Reply Rating:
-        <small class="pull-right">
+    <?php $ratings = App\Model\helpdesk\Ratings\Rating::orderby('display_order')->get(); ?>
+                @foreach($ratings as $rating) 
             
-            <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($avg_rating=='1')?'checked':'' ?>  />
-            <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($avg_rating=='2')?'checked':'' ?>  />
-            <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($avg_rating=='3')?'checked':'' ?>  />
-            <input type="radio" class="star" id="star2" name="rating2" value="4"<?php echo ($avg_rating=='4')?'checked':'' ?>  />
-            <input type="radio" class="star" id="star1" name="rating2" value="5"<?php echo ($avg_rating=='5')?'checked':'' ?>  />
+                @if($rating->rating_area == 'Helpdesk Area')
+                <?php              $rating_value =  App\Model\helpdesk\Ratings\RatingRef::where('rating_id','=',$rating->id)->where('ticket_id','=',$tickets->id)->first();
+                if($rating_value == null) {
+                            $ratingval = '0';
+                        }
+                        else {
+                            $ratingval = $rating_value->rating_value;
+                        }
+                        ?>
+    <a href="#">
+        {!! $rating->name !!}:
+        <small class="pull-right">
+            <?php for($i = 1; $i<=$rating->rating_scale; $i++) { ?>
+        <input type="radio" class="star" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($rating_value->rating_value==$i)?'checked':'' ?> />
+        <?php } ?>
         </small>
     </a>
+                @else 
+                <?php              $rating_value =  App\Model\helpdesk\Ratings\RatingRef::where('rating_id','=',$rating->id)->where('ticket_id','=',$tickets->id)->avg('rating_value');
+                if($rating_value == null) {
+                           $avg_rating = '0';
+                        }
+                        else {
+                        
+                             $avg_rate = explode('.', $rating_value);
+        $avg_rating = $avg_rate[0];
+                        }
+                ?>
+    <a href="#">
+        {!! $rating->name !!}:
+        <small class="pull-right">
+            <?php for($i = 1; $i<=$rating->rating_scale; $i++) { ?>
+        <input type="radio" class="star" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($avg_rating==$i)?'checked':'' ?> />
+        <?php } ?>
+        </small>
+    </a>
+                            @endif
+            @endforeach
 </li>
 @stop 
 <?php if ($thread->title != "") {
@@ -662,7 +681,32 @@ $data = $ConvDate[0];
                                           
                                         </span>
                                         <span class="description" style="margin-bottom:4px;margin-top:4px;"><i class="fa fa-clock-o"></i> {{UTC::usertimezone($conversation->created_at)}}</span>
-                                      </div><!-- /.user-block -->
+                                                                                             <div class="ticketratings pull-right">   <table><tbody>
+           
+                @foreach($ratings as $rating) 
+            
+                @if($rating->rating_area == 'Comment Area')
+                <?php              $rating_value =  App\Model\helpdesk\Ratings\RatingRef::where('rating_id','=',$rating->id)->where('thread_id','=',$conversation->id)->first();
+                        if($rating_value == null) {
+                            $ratingval = '0';
+                        }
+                        else {
+                            $ratingval = $rating_value->rating_value;
+                        }
+?>
+                                               <tr>
+        <th><div class="ticketratingtitle">{!! $rating->name !!} &nbsp;</div></th>&nbsp
+            
+    <td>
+                                            <?php for($i = 1; $i<=$rating->rating_scale; $i++) { ?>
+        <input type="radio" class="star" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval==$i)?'checked':'' ?> />
+        <?php } ?>
+            </td> 
+</tr>
+                  @endif
+            @endforeach
+                </tbody></table></div>                  
+                                    </div><!-- /.user-block -->
                                         
                                     </h3>
                                     <div class="timeline-body" style="padding-left:30px;margin-bottom:-20px">

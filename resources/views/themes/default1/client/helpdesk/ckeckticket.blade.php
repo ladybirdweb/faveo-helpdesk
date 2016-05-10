@@ -56,25 +56,33 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
                                 <div class="col-md-12">
                             <div class="ticketratings pull-right">    
         <table><tbody>
-                <?php $ratings = DB::table('settings_ratings')->get(); ?>
+                <?php $ratings = App\Model\helpdesk\Ratings\Rating::orderby('display_order')->get(); ?>
+                   <form id="foo">
                 @foreach($ratings as $rating) 
-                <form id="foo">
+            
+                @if($rating->rating_area == 'Helpdesk Area')
+                <?php              $rating_value =  App\Model\helpdesk\Ratings\RatingRef::where('rating_id','=',$rating->id)->where('ticket_id','=',$tickets->id)->first();
+                if($rating_value == null) {
+                            $ratingval = '0';
+                        }
+                        else {
+                            $ratingval = $rating_value->rating_value;
+                        }
+                        ?>
+             
    <tr>
-        <th><div class="ticketratingtitle">{!! $rating->rating_name !!} &nbsp;</div></th>&nbsp
-                <?php              $r_name =  str_replace(' ', '_',$rating->rating_name); ?>
+        <th><div class="ticketratingtitle">{!! $rating->name !!} &nbsp;</div></th>&nbsp
+            
     <td>
-        <?php for($i = 1; $i<=5; $i++) { ?>
-        <input type="radio" class="star" id="star5" name="{!! $r_name !!}" value="{!! $i !!}"<?php echo ($tickets->rating==$i)?'checked':'' ?> onclick="helpdeskArea({!! $rating->id!!}, {!! $i !!})"/>
+        <?php for($i = 1; $i<=$rating->rating_scale; $i++) { ?>
+        <input type="radio" class="star" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($ratingval==$i)?'checked':'' ?> />
         <?php } ?>
-<!--    <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating=='2')?'checked':'' ?> />
-    <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating=='3')?'checked':'' ?>/>
-    <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating=='4')?'checked':'' ?>/>
-    <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating=='5')?'checked':'' ?> />-->
     </td> 
 </tr>
-                </form>
+                
+            @endif
             @endforeach
- </tbody> </table> 
+ </form></tbody> </table> 
                         </div>
                             </div>
                             </div>
@@ -261,16 +269,36 @@ $data = $ConvDate[0];
                                                     @else
                                                         <b class="fn"><a href="#" rel="external" class="url">{{$role->first_name." ".$role->last_name}}</a></b>
                                                  <div class="ticketratings pull-right">   <table><tbody>
-                <form id="foo2">
+           
+                @foreach($ratings as $rating) 
+            
+                @if($rating->rating_area == 'Comment Area')
+                <?php              $rating_value =  App\Model\helpdesk\Ratings\RatingRef::where('rating_id','=',$rating->id)->where('thread_id','=',$conversation->id)->first();
+                        if($rating_value == null) {
+                            $ratingval = '0';
+                        }
+                        else {
+                            $ratingval = $rating_value->rating_value;
+                        }
+?>
+                <form class="foo2">
    <tr>
-       <th>     <div class="ticketratingtitle">Reply rating &nbsp;</div></th>&nbsp
-                <td>            
-    <input type="radio" class="star" id="star5" name="rating2" value="1"<?php echo ($conversation->reply_rating=='1')?'checked':'' ?>  />
-    <input type="radio" class="star" id="star4" name="rating2" value="2"<?php echo ($conversation->reply_rating=='2')?'checked':'' ?>  />
-    <input type="radio" class="star" id="star3" name="rating2" value="3"<?php echo ($conversation->reply_rating=='3')?'checked':'' ?>  />
-    <input type="radio" class="star" id="star2" name="rating2" value="4"<?php echo ($conversation->reply_rating=='4')?'checked':'' ?>  />
-    <input type="radio" class="star" id="star1" name="rating2" value="5"<?php echo ($conversation->reply_rating=='5')?'checked':'' ?>  />
-                </td></tr></form></tbody></table></div>
+        <th><div class="ticketratingtitle">{!! $rating->name !!} &nbsp;</div></th>&nbsp
+            
+    <td>
+        <?php for($i = 1; $i<=$rating->rating_scale; $i++) { ?>
+        <input type="radio" class="star" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval==$i)?'checked':'' ?> />
+        <?php } ?>
+<!--    <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating=='2')?'checked':'' ?> />
+    <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating=='3')?'checked':'' ?>/>
+    <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating=='4')?'checked':'' ?>/>
+    <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating=='5')?'checked':'' ?> />-->
+    </td> 
+</tr>
+                </form>
+            @endif
+            @endforeach
+                </tbody></table></div>
                              
                                                     @endif
                                                 </div><!-- .comment-author -->
@@ -389,9 +417,6 @@ $data = $ConvDate[0];
 
 
 <script type="text/javascript">
-   function helpdeskArea(ratingId, ratingValue) {
-       alert(ratingId);
-   }
        $("#cc_page").on('click', '.search_r', function(){
     var search_r = $('a', this).attr('id');
                     $.ajax({
@@ -426,10 +451,9 @@ $(document).ready(function() {
     }
     $('.star').change(function() { 
 $('#foo').submit();
+$('.foo2').submit();
     });
-    $('input[name=rating2]').change(function() { 
-$('#foo2').submit();
-    });
+    
     // process the form
     $('#foo').submit(function(event) {
 
@@ -456,16 +480,16 @@ $('#foo2').submit();
         event.preventDefault();
     });
         // process the form
-    $('#foo2').submit(function(event) {
+    $('.foo2').submit(function(event) {
 
         // get the form data
         // there are many ways to get this data using jQuery (you can use the class or id also)
-        var formData = $('input[name="rating2"]:checked').val();
+        var formData = $(this).serialize();
 //$('#foo').serialize();
         // process the form
         $.ajax({
             type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-            url         : '../rating2/'+<?php echo $thread->id ?>+'/'+formData, // the url where we want to POST
+            url         : '../rating2/'+<?php echo $tickets->id ?>, // the url where we want to POST
             data        : formData, // our data object
             dataType    : 'json', // what type of data do we expect back from the server
             

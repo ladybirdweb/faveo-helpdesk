@@ -363,10 +363,12 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                             </div>
                             <section class="content-header">
                                 @yield('PageHeader')
-                                @yield('breadcrumbs')
+                                <div class="pull-right">
+                                {!! Breadcrumbs::renderIfExists() !!}
+                                </div>
                             </section>
                             <!-- Main content -->
-                            <section class="content">
+                            <section class="content" style="margin-top: 20px">
                                 @yield('content')
                             </section><!-- /.content -->
                         </div>

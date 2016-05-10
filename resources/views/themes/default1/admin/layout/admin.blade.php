@@ -185,7 +185,7 @@
             <ul class="treeview-menu">
                 <li @yield('emails')><a href="{{ url('emails') }}"><i class="fa fa-envelope"></i>{!! Lang::get('lang.emails') !!}</a></li>
                 <li @yield('ban')><a href="{{ url('banlist') }}"><i class="fa fa-ban"></i>{!! Lang::get('lang.ban_lists') !!}</a></li>
-                 <li @yield('template')><a href="{{ url('list-directories') }}"><i class="fa fa-mail-forward"></i>{!! Lang::get('lang.templates') !!}</a></li>
+                 <li @yield('template')><a href="{{ url('templates') }}"><i class="fa fa-mail-forward"></i>{!! Lang::get('lang.templates') !!}</a></li>
                 <li @yield('diagnostics')><a href="{{ url('getdiagno') }}"><i class="fa fa-plus"></i>{!! Lang::get('lang.diagnostics') !!}</a></li>
                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Auto Response</a></li> -->
                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Rules/a></li> -->
@@ -223,6 +223,10 @@
                 <li @yield('alert')><a href="{{url('getalert')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.alert_notices') !!}</a></li>
                 <li @yield('languages')><a href="{{url('languages')}}"><i class="fa fa-language"></i>{!! Lang::get('lang.language') !!}</a></li>
                 <li @yield('cron')><a href="{{url('job-scheduler')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.cron') !!}</a></li>
+                <li @yield('security')><a href="{{url('security')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.security') !!}</a></li>
+                <li @yield('status')><a href="{{url('setting-status')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.status') !!}</a></li>
+                <li @yield('notification')><a href="{{url('settings-notification')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.notifications') !!}</a></li>
+                <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.ratings') !!}</a></li>
             </ul>
         </li>
         <li class="treeview @yield('Themes')">
@@ -283,11 +287,13 @@
                                 <!-- Content Header (Page header) -->
                                 <section class="content-header">
                                     @yield('PageHeader')
-                                    @yield('breadcrumbs')
+                                    <div class="pull-right">
+                                {!! Breadcrumbs::renderIfExists() !!}
+                                </div>
                                 </section>
 
                                 <!-- Main content -->
-                                <section class="content">
+                                <section class="content" style="margin-top: 20px">
                                     @yield('content')
                                 </section><!-- /.content -->
                                 <!-- /.content-wrapper -->

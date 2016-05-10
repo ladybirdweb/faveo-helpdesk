@@ -1669,7 +1669,6 @@ class TicketController extends Controller
      */
     public function rating($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
     {
-     
         foreach($request->all() as $key => $value) {
             if (strpos($key, '_') !== false) {
             $ratName = str_replace('_', ' ',$key);
@@ -1705,7 +1704,7 @@ class TicketController extends Controller
      *
      * @return type Redirect
      */
-    public function ratingReply($id, $rating, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
+    public function ratingReply($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
     {
 
         foreach($request->all() as $key => $value) {
@@ -1723,7 +1722,7 @@ class TicketController extends Controller
            
         if($ratingrefs !== null) {
         $ratingrefs->rating_id = $ratID->id;
-        $ratingrefs->ticket_id = $rating;
+        $ratingrefs->ticket_id = $id;
        
         $ratingrefs->thread_id = $key1[1];
         $ratingrefs->rating_value = $value;
@@ -1731,7 +1730,7 @@ class TicketController extends Controller
         }
         else {
                     $rating_ref->rating_id = $ratID->id;
-        $rating_ref->ticket_id = $rating;
+        $rating_ref->ticket_id = $id;
        
         $rating_ref->thread_id = $key1[1];
         $rating_ref->rating_value = $value;
