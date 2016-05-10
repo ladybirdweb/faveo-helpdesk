@@ -29,6 +29,11 @@ return [
       |--------------------------------------
      */
     'template-types' => 'Template Types',
+    'rating_label' =>'Rating Label',
+    'display_order' => 'Display Order',
+    'rating_scale' => 'Rating Scale',
+    'rating_area' => 'Rating Area',
+    
     'modify' => 'Modify',
     'rating_name' => 'Rating Name',
     'add_user_to_this_organization' => 'Add User to this Organization',

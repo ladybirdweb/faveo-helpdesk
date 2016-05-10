@@ -51,39 +51,45 @@
         </div>
     </div>
 </div>
-                              <div class="form-group {{ $errors->has('rating_name') ? 'has-error' : '' }}">
-        <div class="row">
-                 
-              <div class="col-md-6">
-                    <label for="title">Name:</label><br>
-{!! Form::text('rating_name',null,['class'=>'form-control'])!!}
-              </div>
-            
-        </div></div>
-         <div class="form-group {{ $errors->has('publish') ? 'has-error' : '' }}">
+                             <div class="row">
+                              <div class="col-md-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+                {!! Form::label('name',Lang::get('lang.rating_label')) !!}
+                {!! Form::text('name',null,['class' => 'form-control']) !!}
+            </div>
+                             <div class="col-md-6 form-group {{ $errors->has('display_order') ? 'has-error' : '' }}">
+                {!! Form::label('display_order',Lang::get('lang.display_order')) !!}
+                {!! Form::text('display_order',null,['class' => 'form-control']) !!}
+            </div>
+                                     </div>
+                        
+                              <div class="form-group {{ $errors->has('rating_scale') ? 'has-error' : '' }}">
+                {!! Form::label('rating_scale',Lang::get('lang.rating_scale')) !!}
+                <blockquote>The maximum rating that can be given. For example, if 5 is selected, the lowest possible rating will be 1 and the highest 5.</blockquote>
+                {!! Form::select('rating_scale',['1' => '1','2'=>'2','3'=>'3','4'=>'4','5'=>'5','6'=>'6','7'=>'7','8'=>'8'],null,['class' => 'form-control']) !!}
+           </div>
+                             <div class="form-group {{ $errors->has('rating_area') ? 'has-error' : '' }}">
+                {!! Form::label('rating_area',Lang::get('lang.rating_area')) !!}
+                {!! Form::select('rating_area',['Helpdesk Area' => 'Helpdesk Area','Comment Area'=>'Comment Area'],null,['class' => 'form-control']) !!}
+            </div>
+                                
+         <div class="form-group {{ $errors->has('restrict') ? 'has-error' : '' }}">
 		<!-- gender -->
-			{!! Form::label('gender','Would you like to publish this rating?') !!}
-                        <blockquote>If you choose Yes then the rating will be publish in client and agent panel.</blockquote>
-			<div class="row">
-				<div class="col-xs-3">
-					{!! Form::radio('publish','1') !!} {{Lang::get('lang.yes')}}
-				</div>
-				<div class="col-xs-3">
-					{!! Form::radio('publish','0') !!} {{Lang::get('lang.no')}}
-				</div>
-			</div>
+			{!! Form::label('gender','Restrict rating to a department') !!}
+                        <blockquote>Select a department to restrict this rating to tickets or chats within a specific department. If no department is selected, the rating will appear across all departments.</blockquote>
+			{!! Form::select('restrict',['General' => 'general','Support'=>'support'],null,['class' => 'form-control']) !!}
+          
 		</div>
-                           <div class="form-group {{ $errors->has('modify') ? 'has-error' : '' }}">
+                           <div class="form-group {{ $errors->has('allow_modification') ? 'has-error' : '' }}">
 		<!-- Email user -->
 						
-{!! Form::label('modify','Allow user to change the rating?') !!}
+{!! Form::label('allow_modification','Allow user to change the rating?') !!}
                         <blockquote>If you choose 'YES' user can modify the rating.</blockquote>
 			<div class="row">
 				<div class="col-xs-3">
-					{!! Form::radio('modify','1') !!} {{Lang::get('lang.yes')}}
+					{!! Form::radio('allow_modification','1') !!} {{Lang::get('lang.yes')}}
 				</div>
 				<div class="col-xs-3">
-					{!! Form::radio('modify','0') !!} {{Lang::get('lang.no')}}
+					{!! Form::radio('allow_modification','0') !!} {{Lang::get('lang.no')}}
 				</div>
 		</div>        
                      </div>
@@ -109,7 +115,8 @@
                                 <th>ID</th>
                                 
                                 <th>Name</th>
-                                
+                                <th>Display Order</th>
+                                <th>Rating Area</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -118,8 +125,9 @@
                                
                             <tr>
                                 <td>{!! $rating->id !!}</td>
-                                <td>{!! $rating->rating_name !!}</td>
-                                
+                                <td>{!! $rating->name !!}</td>
+                                <td>{!! $rating->display_order !!}</td>
+                                <td>{!! $rating->rating_area !!}</td>
                                  <td>
                                      
                                    <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#{{$rating->id}}">Edit Details</button> 
@@ -148,35 +156,48 @@
     </div>
 </div>
                          <div class="row">
-                              <div class="col-md-6 form-group {{ $errors->has('rating_name') ? 'has-error' : '' }}">
-                {!! Form::label('rating_name',Lang::get('lang.rating_name')) !!}
-                {!! Form::text('rating_name',null,['class' => 'form-control']) !!}
+                              <div class="col-md-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+                {!! Form::label('name',Lang::get('lang.rating_label')) !!}
+                {!! Form::text('name',null,['class' => 'form-control']) !!}
+            </div>
+                             <div class="col-md-6 form-group {{ $errors->has('display_order') ? 'has-error' : '' }}">
+                {!! Form::label('display_order',Lang::get('lang.display_order')) !!}
+                {!! Form::text('display_order',null,['class' => 'form-control']) !!}
             </div>
                                      </div>
-                                              <div class=" form-group {{ $errors->has('publish') ? 'has-error' : '' }}">
-                {!! Form::label('publish',Lang::get('lang.publish')) !!}
-                   <blockquote>If you choose Yes then the rating will be publish in client and agent panel.</blockquote>
-                <div class="row">
-                    <div class="col-xs-12">
-                        {!! Form::radio('publish','1',true) !!} {{Lang::get('lang.yes')}}
-                    </div>
-                    <div class="col-xs-12">
-                        {!! Form::radio('publish','0') !!} {{Lang::get('lang.no')}}
-                    </div>
-                </div>
+                       
+                              <div class="form-group {{ $errors->has('rating_scale') ? 'has-error' : '' }}">
+                {!! Form::label('rating_scale',Lang::get('lang.rating_scale')) !!}
+                <blockquote>The maximum rating that can be given. For example, if 5 is selected, the lowest possible rating will be 1 and the highest 5.</blockquote>
+                {!! Form::select('rating_scale',['1' => '1','2'=>'2','3'=>'3','4'=>'4','5'=>'5','6'=>'6','7'=>'7','8'=>'8'],null,['class' => 'form-control']) !!}
+          
             </div>
-                                              <div class="form-group {{ $errors->has('modify') ? 'has-error' : '' }}">
-                {!! Form::label('modify',Lang::get('lang.modify')) !!}
-                          <blockquote>If you choose 'YES' user can modify the rating.</blockquote>
-                <div class="row">
-                    <div class="col-xs-12">
-                        {!! Form::radio('modify','1',true) !!} {{Lang::get('lang.yes')}}
-                    </div>
-                    <div class="col-xs-12">
-                        {!! Form::radio('modify','0') !!} {{Lang::get('lang.no')}}
-                    </div>
-                </div>
+                             <div class="form-group {{ $errors->has('rating_area') ? 'has-error' : '' }}">
+                {!! Form::label('rating_area',Lang::get('lang.rating_area')) !!}
+                {!! Form::select('rating_area',['Helpdesk Area' => 'Helpdesk Area','Comment Area'=>'Comment Area'],null,['class' => 'form-control']) !!}
             </div>
+                                    
+         <div class="form-group {{ $errors->has('restrict') ? 'has-error' : '' }}">
+		<!-- gender -->
+			{!! Form::label('gender','Restrict rating to a department') !!}
+                        <blockquote>Select a department to restrict this rating to tickets or chats within a specific department. If no department is selected, the rating will appear across all departments.</blockquote>
+			{!! Form::select('restrict',['General' => 'general','Support'=>'support'],null,['class' => 'form-control']) !!}
+          
+		</div>
+                           <div class="form-group {{ $errors->has('allow_modification') ? 'has-error' : '' }}">
+		<!-- Email user -->
+						
+{!! Form::label('allow_modification','Allow user to change the rating?') !!}
+                        <blockquote>If you choose 'YES' user can modify the rating.</blockquote>
+			<div class="row">
+				<div class="col-xs-3">
+					{!! Form::radio('allow_modification','1') !!} {{Lang::get('lang.yes')}}
+				</div>
+				<div class="col-xs-3">
+					{!! Form::radio('allow_modification','0') !!} {{Lang::get('lang.no')}}
+				</div>
+		</div>        
+                     </div>
                     </div>
                                           
                                                                         <div class="modal-footer">
@@ -192,9 +213,9 @@
                                                                 </div>
                                                             </div>
                                     
-                                                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$rating->slug}}delete">Delete</button>
+                                                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$rating->id}}delete">Delete</button>
                                                             
-                                                            <div class="modal fade" id="{{$rating->slug}}delete">
+                                                            <div class="modal fade" id="{{$rating->id}}delete">
                                                                 <div class="modal-dialog">
                                                                     <div class="modal-content">
                                                                         <div class="modal-header">

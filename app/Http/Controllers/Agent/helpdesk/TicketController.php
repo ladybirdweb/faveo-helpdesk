@@ -1667,30 +1667,79 @@ class TicketController extends Controller
      *
      * @return type Redirect
      */
-    public function rating($id, Request $request)
+    public function rating($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
     {
-        dd($request->all());
-        Tickets::where('id', $id)->update(['rating' => $rating]);
-
+     
+        foreach($request->all() as $key => $value) {
+            if (strpos($key, '_') !== false) {
+            $ratName = str_replace('_', ' ',$key);
+            }
+            else {
+                $ratName = $key;
+              
+            }
+            $ratID = \App\Model\helpdesk\Ratings\Rating::where('name','=',$ratName)->first();
+           $ratingrefs = $rating_ref->where('rating_id','=',$ratID->id)->where('ticket_id','=',$id)->first();
+            if($ratingrefs !== null) {
+        $ratingrefs->rating_id = $ratID->id;
+        $ratingrefs->ticket_id = $id;
+       
+        $ratingrefs->thread_id = '0';
+        $ratingrefs->rating_value = $value;
+        $ratingrefs->save();
+        }
+        else {
+                    $rating_ref->rating_id = $ratID->id;
+        $rating_ref->ticket_id = $id;
+       
+        $rating_ref->thread_id = '0';
+        $rating_ref->rating_value = $value;
+        $rating_ref->save();
+        }
+        }
         return redirect()->back()->with('Success', 'Thank you for your rating!');
+   
     }
-
     /**
      * Store Client rating about reply of agent quality.
      *
      * @return type Redirect
      */
-    public function ratingReply($id, $rating)
+    public function ratingReply($id, $rating, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
     {
-        $thread = Ticket_Thread::whereId($id)->first();
-//        $last_average = $thread->reply_rating;
-//$total_numbers = $thread->rating_count;
-//$new_number = $rating;
-//$new_average = (($last_average * $total_numbers) + $new_number) / ($total_numbers + 1);
-//$thread->rating_count += 1;
-        $thread->reply_rating = $rating;
-        $thread->save();
-//        $thread->set('rating_count', 'rating_count+1', FALSE)->update(['ratingreply' => $new_average]);
+
+        foreach($request->all() as $key => $value) {
+            $key1 = explode(',', $key);
+            if (strpos($key1[0], '_') !== false) {
+            $ratName = str_replace('_', ' ',$key1[0]);
+            }
+            else {
+                $ratName = $key1[0];
+              
+            }
+        
+            $ratID = \App\Model\helpdesk\Ratings\Rating::where('name','=',$ratName)->first();
+           $ratingrefs = $rating_ref->where('rating_id','=',$ratID->id)->where('thread_id','=',$key1[1])->first();
+           
+        if($ratingrefs !== null) {
+        $ratingrefs->rating_id = $ratID->id;
+        $ratingrefs->ticket_id = $rating;
+       
+        $ratingrefs->thread_id = $key1[1];
+        $ratingrefs->rating_value = $value;
+        $ratingrefs->save();
+        }
+        else {
+                    $rating_ref->rating_id = $ratID->id;
+        $rating_ref->ticket_id = $rating;
+       
+        $rating_ref->thread_id = $key1[1];
+        $rating_ref->rating_value = $value;
+        $rating_ref->save();
+        }
+        }
+        
+        
         return redirect()->back()->with('Success', 'Thank you for your rating!');
     }
 

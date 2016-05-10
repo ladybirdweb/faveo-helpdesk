@@ -88,7 +88,7 @@ class TemplateController extends Controller
 //            $cartUrl = $url.'/'.$i;
             //dd($cartUrl);
             $template = $this->template->where('id', $id)->first();
-            $type = $this->type->lists('name', 'id');
+            $type = $this->type->lists('name', 'id')->toArray();
 
             return view('themes.default1.common.template.edit', compact('type', 'template'));
         } catch (\Exception $ex) {

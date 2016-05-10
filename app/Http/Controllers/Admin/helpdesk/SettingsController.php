@@ -9,6 +9,7 @@ use App\Http\Requests\helpdesk\CompanyRequest;
 use App\Http\Requests\helpdesk\EmailRequest;
 use App\Http\Requests\helpdesk\SystemRequest;
 // models
+use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Email\Template;
@@ -681,7 +682,7 @@ foreach ($markasread as $mark) {
      */
     public function RatingSettings()
     {
-        $ratings = DB::table('settings_ratings')->get();
+        $ratings = Rating::orderBy('display_order', 'asc')->get();
 
         return view('themes.default1.admin.helpdesk.settings.ratings', compact('ratings'));
     }
@@ -691,23 +692,35 @@ foreach ($markasread as $mark) {
      *
      *  @return type Redirect
      */
-    public function PostRatingSettings($slug)
+    public function PostRatingSettings($id,Rating $ratings)
     {
-        $name = Input::get('rating_name');
-        $publish = Input::get('publish');
-        $modify = Input::get('modify');
-        DB::table('settings_ratings')->whereSlug($slug)->update(['rating_name' => $name, 'publish' => $publish, 'modify' => $modify]);
+        $rating = $ratings->whereId($id)->first();
+        $rating->name = Input::get('name');
+        $rating->display_order = Input::get('display_order');
+        $rating->allow_modification = Input::get('allow_modification');
+                $rating->rating_scale = Input::get('rating_scale');
+                        $rating->rating_area = Input::get('rating_area');
+                                $rating->restrict = Input::get('restrict');
+        $rating->save();
+        
+//        DB::table('settings_ratings')->whereSlug($slug)->update(['rating_name' => $name, 'publish' => $publish, 'modify' => $modify]);
 
         return redirect()->back()->with('success', 'Successfully updated');
     }
 
-    public function createRating()
+    public function createRating(Rating $rating,  \App\Model\helpdesk\Ratings\RatingRef $ratingrefs)
     {
-        $name = Input::get('rating_name');
-        $publish = Input::get('publish');
-        $modify = Input::get('modify');
-        DB::table('settings_ratings')->insert(['rating_name' => $name, 'publish' => $publish, 'modify' => $modify]);
+        $rating->name = Input::get('name');
+        $rating->display_order = Input::get('display_order');
+        $rating->allow_modification = Input::get('allow_modification');
+                $rating->rating_scale = Input::get('rating_scale');
+                        $rating->rating_area = Input::get('rating_area');
+                                $rating->restrict = Input::get('restrict');
+        $rating->save();
+        $ratingrefs->rating_id = $rating->id;
 
+        $ratingrefs->save();
+//        DB::table('settings_ratings')->insert(['rating_name' => $name, 'publish' => $publish, 'modify' => $modify]);
         return redirect()->back()->with('success', 'Successfully created this rating');
     }
 
@@ -716,10 +729,10 @@ foreach ($markasread as $mark) {
      *
      * 	@return type Redirect
      */
-    public function RatingDelete($slug)
+    public function RatingDelete($slug,  \App\Model\helpdesk\Ratings\RatingRef $ratingrefs)
     {
-        DB::table('settings_ratings')->whereSlug($slug)->delete();
-
+        $ratingrefs->where('rating_id','=',$slug)->delete();
+        Rating::whereId($slug)->delete();
         return redirect()->back()->with('success', 'Successfully Deleted');
     }
 
