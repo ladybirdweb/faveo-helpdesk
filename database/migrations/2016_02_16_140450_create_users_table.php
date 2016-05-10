@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->integer('active');
             $table->string('ext');
+            $table->integer('counrty_code');
             $table->string('phone_number');
             $table->string('mobile');
             $table->text('agent_sign', 65535);
