@@ -35,7 +35,7 @@ class UpgradeController extends Controller {
             'request_type' => 'check_update',
             'url' => $url
         ];
-        $url = "http://localhost/billings/agorainvoicing/agorainvoicing/public/verification";
+        $url = "http://www.faveohelpdesk.com/billing/verification";
         if (str_contains($url, ' ')) {
             $url = str_replace(' ', "%20", $url);
         }
@@ -54,7 +54,7 @@ class UpgradeController extends Controller {
 
     public function downloadLatestCode() {
         $name = \Config::get('app.name');
-        $url = "http://localhost/billings/agorainvoicing/agorainvoicing/public/download-url";
+        $url = "http://www.faveohelpdesk.com/billing/download-url";
         if (str_contains($url, ' ')) {
             $url = str_replace(' ', "%20", $url);
         }
