@@ -12,6 +12,7 @@
                 $updated = false;
                 $controller = new \App\Http\Controllers\Update\UpgradeController();
                 if ($latest_version > $current_version) {
+
                     echo '<p>New Update Found: v' . $latest_version . '</p>';
                     $found = true;
                     if (!is_file("$controller->dir/UPDATES/faveo-helpdesk-master.zip")) {
@@ -32,20 +33,45 @@
                         //echo '<p>Update already downloaded.</p>';
                     }
                     if ($request->get('doUpdate') == true) {
-                        $updated = $controller->doUpdate();
-                    }
+                        ?>
+                        <div class="col-md-12" style="padding-top: 20px; padding-right: 20px;">
+                            <div class="box" style="border-top: 0px solid #3C8DBC;">
 
-                    if ($updated == true) {
-                        $controller->copyToActualDirectory($latest_version);
-                    } elseif ($found != true) {
-                        echo '<p>&raquo; No update is available.</p>';
-                    }
-                } else
-                    echo '<p>Could not find latest realeases.</p>';
-                ?>
-                
+
+                                <div class="box-header" style="padding: 20px; padding-top: 1px; ">
+                                    <h4 style="padding: 1px;font-size: 18px;margin-left: -7px; color:#021CA2;"><strong>&nbsp;Updating Status</strong>
+
+                                        <br><br>
+
+
+                                        </div>
+                                <div class="box-body"  style="background-color: black; height: 410px; overflow: scroll;" id="data">
+                                            <?php $updated = $controller->doUpdate(); ?>
+                                        </div>
+                                </div>
+                            </div>
+                            <?php
+                        }
+
+                        if ($updated == true) {
+                            $controller->copyToActualDirectory($latest_version);
+                        } elseif ($found != true) {
+                            echo '<p>&raquo; No update is available.</p>';
+                        }
+                    } else
+                        echo '<p>Could not find latest realeases.</p>';
+                    ?>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
-@stop
+
+<script>
+    window.setInterval(function() {
+  var elem = document.getElementById('data');
+  elem.scrollTop = elem.scrollHeight;
+}, 500);
+</script>
+
+    @stop

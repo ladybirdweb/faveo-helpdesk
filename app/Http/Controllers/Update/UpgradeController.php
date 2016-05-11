@@ -23,9 +23,9 @@ class UpgradeController extends Controller {
 
         $name = \Config::get('app.name');
         //serial key should be encrypted data
-        $serial_key = Utility::encryptByFaveoPublicKey('Z4OOFUO2NPWH0WQD');
+        $serial_key = Utility::encryptByFaveoPublicKey('O5Y647RJF8QHLDOE');
         //order number should be encrypted data
-        $order_number = Utility::encryptByFaveoPublicKey('99013685');
+        $order_number = Utility::encryptByFaveoPublicKey('23540755');
         $url = url();
         $post_data = [
             'serial_key' => $serial_key,
@@ -92,11 +92,12 @@ class UpgradeController extends Controller {
     }
 
     public function doUpdate() {
+        Artisan::call('down');
         $update = $this->dir . '/UPDATES';
         //Open The File And Do Stuff
         $zipHandle = zip_open($update . '/faveo-helpdesk-master.zip');
         //dd($update . '/faveo-' . $aV . '.zip');
-        echo "<div style='overflow: scroll;'>";
+        
         echo '<ul class=list-unstyled>';
         while ($aF = zip_read($zipHandle)) {
             $thisFileName = zip_entry_name($aF);
@@ -111,12 +112,12 @@ class UpgradeController extends Controller {
             if (!is_dir($update . '/' . $thisFileDir . '/')) {
                 \File::makeDirectory($update . '/' . $thisFileDir, 0775, true, true);
                 // mkdir($update.'/'. $thisFileDir, 0775);
-                echo '<li>Created Directory ' . $thisFileDir . '</li>';
+                echo '<li style="color:white;">Created Directory ' . $thisFileDir . '</li>';
             }
 
             //Overwrite the file
             if (!is_dir($update . '/' . $thisFileName)) {
-                echo '<li>' . $thisFileName . '...........';
+                echo '<li style="color:white;">' . $thisFileName . '...........';
                 $contents = zip_entry_read($aF, zip_entry_filesize($aF));
                 $contents = str_replace("\r\n", "\n", $contents);
                 $updateThis = '';
@@ -125,6 +126,7 @@ class UpgradeController extends Controller {
                 if ($thisFileName == $thisFileDir . '/.env') {
                     if (is_file($update . '/' . $thisFileDir . '/.env')) {
                         unlink($update . '/' . $thisFileDir . '/.env');
+                        unlink($update . '/' . $thisFileDir . '/config/database.php');
                     }
                     echo' EXECUTED</li>';
                 } else {
@@ -137,7 +139,8 @@ class UpgradeController extends Controller {
             }
         }
         echo '</ul>';
-        echo '</div>';
+       
+        Artisan::call('up');
         return TRUE;
     }
 
@@ -191,20 +194,33 @@ class UpgradeController extends Controller {
     public function fileUpgrading(Request $request) {
         try {
             if (Utility::getFileVersion() < Utility::getDatabaseVersion()) {
+                
                 $latest_version = $this->getLatestVersion();
                 $current_version = Utility::getFileVersion();
                 if ($latest_version != '') {
                     $_this = new UpgradeController();
-                    return view('themes.default1.update.update',compact('latest_version','current_version','request'));
+                    return view('themes.default1.update.test',compact('latest_version','current_version','request'));
                 } else {
                     return redirect()->back()->with('fails', 'Could not find latest realeases from repository.');
                 }
+                
             } else {
                 return redirect()->back();
             }
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
+    }
+    
+    public function testScroll(){
+        $ex = 1000;
+        echo "<ul style=list-unstyled>";
+        for($i=0;$i<$ex;$i++){
+            
+            echo "<li style='color:white;'>updated</li>";
+           
+        }
+         echo "</ul>";
     }
 
     public function fileUpgrading1(Request $request) {
