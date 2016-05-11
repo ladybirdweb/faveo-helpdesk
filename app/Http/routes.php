@@ -90,13 +90,15 @@ Breadcrumbs::register('templates.create', function($breadcrumbs)
 Breadcrumbs::register('templates.show', function($breadcrumbs, $photo)
 {
     $breadcrumbs->parent('templates.index');
-    $breadcrumbs->push($photo->title, route('templates.show', $photo->id));
+    $photo = App\Model\Common\Template::whereId(1)->first();
+    $breadcrumbs->push('View Templates', route('templates.show', $photo->id));
 });
 
 // Templates > [Templates Name] > Edit Templates
 Breadcrumbs::register('templates.edit', function($breadcrumbs, $photo)
 {
     $breadcrumbs->parent('templates.show', $photo);
+     $photo = App\Model\Common\Template::whereId(1)->first();
     $breadcrumbs->push('Edit templates', route('templates.edit', $photo->id));
 });
 
