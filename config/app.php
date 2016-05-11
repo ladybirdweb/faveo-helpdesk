@@ -174,6 +174,7 @@ return [
         'App\Providers\AppServiceProvider',
         'App\Providers\EventServiceProvider',
         'App\Providers\RouteServiceProvider',
+        'App\Providers\ConfigServiceProvider',
         'Propaganistas\LaravelPhone\LaravelPhoneServiceProvider',
         'Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider',
         'Vsmoraes\Pdf\PdfServiceProvider',
