@@ -58,7 +58,7 @@ class TemplateController extends Controller
 //            $url = $controller->GetMyUrl();
             $i = $this->template->orderBy('created_at', 'desc')->first()->id + 1;
 //            $cartUrl = $url.'/'.$i;
-            $type = $this->type->lists('name', 'id');
+            $type = $this->type->lists('name', 'id')->toArray();
 
             return view('themes.default1.common.template.create', compact('type'));
         } catch (\Exception $ex) {
@@ -66,7 +66,7 @@ class TemplateController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(TemplateRequest $request)
     {
         try {
             //dd($request);

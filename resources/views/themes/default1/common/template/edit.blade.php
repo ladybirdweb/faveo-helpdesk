@@ -70,7 +70,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12 form-group">
+                    <div class="col-md-12 form-group {{ $errors->has('message') ? 'has-error' : '' }}">
                         
                         {!! Form::label('message',Lang::get('lang.content'),['class'=>'required']) !!}
                         {!! Form::textarea('message',null,['class'=>'form-control','id'=>'textarea']) !!}

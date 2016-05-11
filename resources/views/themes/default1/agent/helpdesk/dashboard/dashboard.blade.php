@@ -7,7 +7,9 @@ class="active"
 @section('dashboard-bar')
 active
 @stop
-
+@section('PageHeader')
+<h4>Reports</h4>
+@stop
 @section('dashboard')
 class="active"
 @stop
@@ -16,7 +18,50 @@ class="active"
 
 <link type="text/css" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet">
 {{-- <script src="{{asset("lb-faveo/dist/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script> --}}
+<div class="row">
+                            
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Inbox</span>
+                  <span class="info-box-number">25 <small> Tickets</small></span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-user-times"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Unassigned</span>
+                  <span class="info-box-number">5 <small> Tickets</small></span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
 
+            <!-- fix for small devices only -->
+            <div class="clearfix visible-sm-block"></div>
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="fa fa-calendar-times-o"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">Overdue</span>
+                  <span class="info-box-number">12 <small> Tickets</small></span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
+                <div class="info-box-content">
+                  <span class="info-box-text">My Tickets</span>
+                  <span class="info-box-number">8 <small> Tickets</small></span>
+                </div><!-- /.info-box-content -->
+              </div><!-- /.info-box -->
+            </div><!-- /.col -->
+          
+                            </div>
             <div class="box box-info">
                 <div class="box-header with-border">
                     <h3 class="box-title">{!! Lang::get('lang.line_chart') !!}</h3>
