@@ -24,7 +24,7 @@ class TemplateSetRequest extends Request
     public function rules()
     {
         return [
-            'name' => 'required'
+            'name' => 'required|unique:template_sets'
         ];
     }
 }
