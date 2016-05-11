@@ -46,19 +46,14 @@ class="active"
                 <div class="box-body">
                     <div class="row">
 
-                        <div class="col-md-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}" >
+                        <div class="col-md-12 form-group {{ $errors->has('name') ? 'has-error' : '' }}" >
 
                             {!! Form::label('name',Lang::get('lang.name')) !!}
                             {!! $errors->first('name', '<spam class="help-block">:message</spam>') !!}
                             {!! Form::text('name',null,['class' => 'form-control']) !!}
                         </div>
 
-                        <div class="col-md-6 form-group {{ $errors->has('slug') ? 'has-error' : '' }}" >
-
-                            {!! Form::label('slug',Lang::get('lang.slug')) !!}
-                            {!! $errors->first('slug', '<spam class="help-block">:message</spam>') !!}
-                            {!! Form::text('slug',null,['class' => 'form-control']) !!}
-                        </div>
+                       
                     </div>
 
                     <div class="form-group {{ $errors->has('description') ? 'has-error' : '' }}">
@@ -161,7 +156,7 @@ CKEDITOR.replace('editor', {
                                         {!! Form::selectMonth('month', $month)  !!}
                                         {!! Form::selectRange('day', 1, 31, $day)  !!}
                                         
-                                        {!! Form::selectYear('year', 2015,2035,null)  !!}@
+                                        {!! Form::text('year',date('Y'),['style'=>'width: 50px;'])  !!}@
                                         <input type="text" name="hour" value="{{$hour}}" style="width: 30px;">:<input type="text" name="minute" value="{{$minute}}" style="width: 30px;" >
                                     </span>
                                 </div>

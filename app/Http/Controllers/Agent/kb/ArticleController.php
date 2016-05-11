@@ -62,8 +62,9 @@ class ArticleController extends Controller
      */
     public function getData()
     {
+        $article = new Article();
         // returns chumper datatable
-        return Datatable::collection(Article::All())
+        return Datatable::query($article)
                         /* searcable column name */
                         ->searchColumns('name')
                         /* order column name and description */
@@ -73,10 +74,9 @@ class ArticleController extends Controller
                             return $model->name;
                         })
                         /* add column Created */
-                        ->addColumn('Created', function ($model) {
-                            $t = $model->created_at;
-
-                            return TicketController::usertimezone($t);
+                        ->addColumn('publish_time', function ($model) {
+                            $t = $model->publish_time;
+                            return $t;
                         })
                         /* add column action */
                         ->addColumn('Actions', function ($model) {
@@ -150,7 +150,7 @@ class ArticleController extends Controller
         // requesting the values to store article data
         $publishTime = $request->input('year').'-'.$request->input('month').'-'.$request->input('day').' '.$request->input('hour').':'.$request->input('minute').':00';
 
-        $sl = $request->input('slug');
+        $sl = $request->input('name');
         $slug = str_slug($sl, '-');
         $article->slug = $slug;
         $article->publish_time = $publishTime;
@@ -182,8 +182,11 @@ class ArticleController extends Controller
      *
      * @return view
      */
-    public function edit($slug, Article $article, Relationship $relation, Category $category)
+    public function edit($slug)
     {
+        $article = new Article();
+        $relation = new Relationship();
+        $category = new Category();
         $aid = $article->where('id', $slug)->first();
         $id = $aid->id;
         /* define the selected fields */
@@ -211,8 +214,11 @@ class ArticleController extends Controller
      *
      * @return Response
      */
-    public function update($slug, Article $article, Relationship $relation, ArticleUpdate $request)
+    public function update($slug, ArticleUpdate $request)
     {
+        
+        $article = new Article();
+        $relation = new Relationship();
         $aid = $article->where('id', $slug)->first();
         $publishTime = $request->input('year').'-'.$request->input('month').'-'.$request->input('day').' '.$request->input('hour').':'.$request->input('minute').':00';
 

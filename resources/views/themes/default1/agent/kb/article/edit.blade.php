@@ -140,7 +140,7 @@ CKEDITOR.replace('editor', {
                                 <span>
                                     {!! Form::selectMonth('month', $month)  !!}
                                     {!! Form::selectRange('day', 1, 31, $day)  !!}
-                                    {!! Form::selectYear('year', $year,$year + 20,$year)  !!}@
+                                    {!! Form::text('year',$year,['style'=>'width: 50px;'])  !!}@
                                     <input type="text" name="hour" value="{{$hour}}" style="width: 30px;">:<input type="text" name="minute" value="{{$minute}}" style="width: 30px;" >
                                 </span>
                             </div>
