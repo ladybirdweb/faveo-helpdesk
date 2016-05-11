@@ -19,13 +19,55 @@ class="active"
 <link type="text/css" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet">
 {{-- <script src="{{asset("lb-faveo/dist/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script> --}}
 <div class="row">
-                            
+                            <?php
+if(Auth::user()->role == 'admin') {
+//$inbox = App\Model\helpdesk\Ticket\Tickets::all();
+$myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status','1')->get();
+$unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=',null)->where('status', '=', '1')->get();
+$tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->get();
+$deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->get();
+} elseif(Auth::user()->role == 'agent') {
+//$inbox = App\Model\helpdesk\Ticket\Tickets::where('dept_id','',Auth::user()->primary_dpt)->get();
+$myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status','1')->get();
+$unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=',null)->where('status', '=', '1')->where('dept_id','=',Auth::user()->primary_dpt)->get();
+$tickets = App\Model\helpdesk\Ticket\Tickets::where('status','1')->where('dept_id','=',Auth::user()->primary_dpt)->get();
+$deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id','=',Auth::user())->get();
+}
+if (Auth::user()->role == 'agent') {
+            $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
+            $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->get();
+        } else {
+            $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
+        }
+$i = count($overdues);
+if ($i == 0) {
+            $overdue_ticket = 0;
+        } else {
+            $j = 0;
+            foreach ($overdues as $overdue) {
+                $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $overdue->sla)->first();
+
+                $ovadate = $overdue->created_at;
+                $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)).'<br/><br/>';
+                if (date('Y-m-d H:i:s') > $new_date) {
+                    $j++;
+                    //$value[] = $overdue;
+                }
+            }
+            // dd(count($value));
+            if ($j > 0) {
+                $overdue_ticket = $j;
+            } else {
+                $overdue_ticket = 0;
+            }
+        }
+?>
             <div class="col-md-3 col-sm-6 col-xs-12">
               <div class="info-box">
                 <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
                 <div class="info-box-content">
-                  <span class="info-box-text">Inbox</span>
-                  <span class="info-box-number">25 <small> Tickets</small></span>
+                  <span class="info-box-text">{!! Lang::get('lang.inbox') !!}</span>
+                  <span class="info-box-number"><?php echo count($tickets); ?> <small> {!! Lang::get('lang.tickets') !!}</small></span>
                 </div><!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
@@ -33,8 +75,8 @@ class="active"
               <div class="info-box">
                 <span class="info-box-icon bg-red"><i class="fa fa-user-times"></i></span>
                 <div class="info-box-content">
-                  <span class="info-box-text">Unassigned</span>
-                  <span class="info-box-number">5 <small> Tickets</small></span>
+                  <span class="info-box-text">{!! Lang::get('lang.unassigned') !!}</span>
+                  <span class="info-box-number">{{count($unassigned) }} <small> {!! Lang::get('lang.tickets') !!}</small></span>
                 </div><!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
@@ -46,8 +88,8 @@ class="active"
               <div class="info-box">
                 <span class="info-box-icon bg-green"><i class="fa fa-calendar-times-o"></i></span>
                 <div class="info-box-content">
-                  <span class="info-box-text">Overdue</span>
-                  <span class="info-box-number">12 <small> Tickets</small></span>
+                  <span class="info-box-text">{!! Lang::get('lang.overdue') !!}</span>
+                  <span class="info-box-number">{{count($overdue_ticket) }} <small> Tickets</small></span>
                 </div><!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
@@ -55,8 +97,8 @@ class="active"
               <div class="info-box">
                 <span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
                 <div class="info-box-content">
-                  <span class="info-box-text">My Tickets</span>
-                  <span class="info-box-number">8 <small> Tickets</small></span>
+                  <span class="info-box-text">{!! Lang::get('lang.my_tickets') !!}</span>
+                  <span class="info-box-number">{{count($myticket) }} <small> Tickets</small></span>
                 </div><!-- /.info-box-content -->
               </div><!-- /.info-box -->
             </div><!-- /.col -->
@@ -71,6 +113,60 @@ class="active"
                     </div>
                 </div>
                 <div class="box-body">
+                                                    <div class="box-header with-border">
+                                    <h3 class="box-title">Ticket Report</h3>
+                            <div class="row">
+                                <div class="col-sm-3">
+
+                                    <div class="input-group">
+                                      <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                      </div>
+                                      <input type="text" class="form-control pull-right" id="reservation" placeholder="Pick a Date">
+                                    </div><!-- /.input group -->
+                                </div>
+                                <div class="col-sm-1">
+                                    <input type="submit" class="btn btn-primary">
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="btn-group pull-right">
+                                        <button type="button" class="btn btn-primary">Day</button>
+                                        <button type="button" class="btn btn-default">Week</button>
+                                        <button type="button" class="btn btn-default">Month</button>
+                                        <button type="button" class="btn btn-default">Year</button>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="btn-group">
+                                      <button type="button" class="btn btn-default">All Actions</button>
+                                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                      </button>
+                                      <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#">Total Tickets</a></li>
+                                        <li><a href="#">Open Tickets</a></li>
+                                        <li><a href="#">Closed Tickets</a></li>
+                                        <li><a href="#">Overdue Tickets</a></li>
+                                        <li><a href="#">Deleted Tickets</a></li>
+                                      </ul>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="btn-group">
+                                      <button type="button" class="btn btn-default">Generate</button>
+                                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                      </button>
+                                      <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#">Generate PDF</a></li>
+                                        <li><a href="#">Generate Excel</a></li>
+                                      </ul>
+                                    </div>
+                                </div>
+                            </div>
+                                    </div>
                                           <form id="foo">
                     <div  class="form-group">
     <div class="row">
@@ -208,7 +304,7 @@ $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id
       labels : labels,
       datasets : [
         {
-          label : "Total Tickets" , 
+          label : "Open Tickets" , 
           fillColor : "rgba(240, 127, 110, 0.3)",
           strokeColor : "#f56954",
           pointColor : "#A62121",
@@ -218,7 +314,7 @@ $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id
           data : open      
         }
         ,{
-          label : "Open Tickets" , 
+          label : "Closed Tickets" , 
           fillColor : "rgba(255, 102, 204, 0.4)",
           strokeColor : "#f56954",
           pointColor : "#FF66CC",
@@ -229,7 +325,7 @@ $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$department->id
           
         }
         ,{
-          label : "Closed Tickets",
+          label : "Reopened Tickets",
           fillColor : "rgba(151,187,205,0.2)",
           strokeColor : "rgba(151,187,205,1)",
           pointColor : "rgba(151,187,205,1)",
@@ -330,34 +426,34 @@ $('#foo').submit();
       labels : labels,
       datasets : [
         {
-          label : "Total Tickets" , 
-          fillColor : "rgba(240, 127, 110, 0.3)",
-          strokeColor : "#f56954",
-          pointColor : "#A62121",
-          pointStrokeColor : "#E60073",
-          pointHighlightFill : "#FF4DC3",
-          pointHighlightStroke : "rgba(151,187,205,1)",
+          label : "Open Tickets" , 
+          fillColor: "rgba(93, 189, 255, 0.05)",
+                                strokeColor: "rgba(2, 69, 195, 0.9)",
+                                pointColor: "rgba(2, 69, 195, 0.9)",
+                                pointStrokeColor: "#c1c7d1",
+                                pointHighlightFill: "#fff",
+                                pointHighlightStroke: "rgba(220,220,220,1)",
           data : open      
         }
         ,{
-          label : "Open Tickets" , 
-          fillColor : "rgba(255, 102, 204, 0.4)",
-          strokeColor : "#f56954",
-          pointColor : "#FF66CC",
-          pointStrokeColor : "#fff",
-          pointHighlightFill : "#FF4DC3",
-          pointHighlightStroke : "rgba(151,187,205,1)",
+          label : "Closed Tickets" , 
+          fillColor: "rgba(140, 113, 255, 0.06)",
+                                strokeColor: "rgba(42, 0, 193, 0.92)",
+                                pointColor: "rgba(42, 0, 193, 0.92)",
+                                pointStrokeColor: "rgba(60,141,188,1)",
+                                pointHighlightFill: "#fff",
+                                pointHighlightStroke: "rgba(60,141,188,1)",
           data : closed
           
         }
         ,{
-          label : "Closed Tickets",
-          fillColor : "rgba(151,187,205,0.2)",
-          strokeColor : "rgba(151,187,205,1)",
-          pointColor : "rgba(151,187,205,1)",
-          pointStrokeColor : "#0000CC",
-          pointHighlightFill : "#0000E6",
-          pointHighlightStroke : "rgba(151,187,205,1)",
+          label : "Reopened Tickets",
+          fillColor: "rgba(255, 206, 96, 0.08)",
+                                strokeColor: "rgba(221, 129, 0, 0.94)",
+                                pointColor: "rgba(221, 129, 0, 0.94)",
+                                pointStrokeColor: "rgba(60,141,188,1)",
+                                pointHighlightFill: "#fff",
+                                pointHighlightStroke: "rgba(60,141,188,1)",
           data : reopened
         }
         // ,{

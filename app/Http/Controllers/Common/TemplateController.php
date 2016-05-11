@@ -26,7 +26,7 @@ class TemplateController extends Controller
         $this->type = $type;
     }
 
-    public function index()
+    public function index($id)
     {
         try {
             return view('themes.default1.common.template.inbox');
@@ -35,9 +35,18 @@ class TemplateController extends Controller
         }
     }
 
-    public function GetTemplates()
+    public function showTemplate($id) {
+        try {
+            $templates = Template::where('set_id','=',$id)->get();
+            return view('themes.default1.common.template.list-templates',compact('templates'));
+        } catch (\Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
+    }
+    public function GetTemplates(Request $request)
     {
-        return \Datatable::collection($this->template->select('id', 'name', 'type')->get())
+        $id = $request->input('id');
+        return \Datatable::collection($this->template->where('set_id','=',$id)->select('id', 'name', 'type')->get())
                         
                         ->showColumns('name')
                         ->addColumn('type', function ($model) {

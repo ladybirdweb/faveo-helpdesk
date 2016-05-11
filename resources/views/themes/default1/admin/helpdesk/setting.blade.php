@@ -132,7 +132,7 @@
                                        <div class="col-md-2 col-sm-6">
                                             <div class="settingiconblue">
                                                 <div class="settingdivblue">
-                                                    <a href="{{ url('templates') }}"><span class="fa-stack fa-2x">
+                                                    <a href="{{ url('template-sets') }}"><span class="fa-stack fa-2x">
                                                         
                                                         <i class="fa fa-mail-forward fa-stack-1x"></i>
                                                         </span></a>

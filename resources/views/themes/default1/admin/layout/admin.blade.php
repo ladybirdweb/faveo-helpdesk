@@ -286,9 +286,13 @@
                             <div class="content-wrapper">
                                 <!-- Content Header (Page header) -->
                                 <section class="content-header">
-                                    @yield('PageHeader')
-                                    <div class="pull-right">
+                                    <div class="row">
+                                    <div class="col-md-6">
+                                @yield('PageHeader')
+                                    </div>
+                                <div class="col-md-4 pull-right">
                                 {!! Breadcrumbs::renderIfExists() !!}
+                                </div>
                                 </div>
                                 </section>
 

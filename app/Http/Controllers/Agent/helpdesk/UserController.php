@@ -197,9 +197,10 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function show($id, User $user)
+    public function show($id)
     {
         try {
+            $user = new User();
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
 
@@ -217,9 +218,10 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function edit($id, User $user)
+    public function edit($id)
     {
         try {
+             $user = new User();
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
 
