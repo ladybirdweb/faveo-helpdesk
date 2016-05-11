@@ -102,6 +102,13 @@ Breadcrumbs::register('templates.edit', function($breadcrumbs, $photo)
     $breadcrumbs->push('Edit templates', route('templates.edit', $photo->id));
 });
 
+    Route::resource('template-sets', 'Common\TemplateSetController'); // in template module, for CRUD
+    
+    Route::get('delete-sets/{id}', ['as' => 'sets.delete', 'uses' => 'Common\TemplateSetController@deleteSet']);
+    
+        Route::get('show-template/{id}', ['as' => 'show.templates', 'uses' => 'Common\TemplateController@showTemplate']);
+    
+    Route::get('activate-templateset/{name}', ['as' => 'active.template-set', 'uses' => 'Common\TemplateSetController@activateSet']);
     
     Route::resource('template', 'Admin\helpdesk\TemplateController'); // in template module, for CRUD
 
@@ -310,6 +317,15 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth','middleware' 
     Route::get('agen1', 'Agent\helpdesk\DashboardController@ChartData');
 
     Route::post('chart-range', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
+    
+    Route::post('user-chart-range/{id}/{date1}/{date2}', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
+
+    Route::get('user-agen/{id}', 'Agent\helpdesk\DashboardController@userChartData');
+        
+    Route::get('user-agen1', 'Agent\helpdesk\DashboardController@userChartData');
+
+    Route::post('user-chart-range', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
+
 
     Route::resource('user', 'Agent\helpdesk\UserController'); /* User router is used to control the CRUD of user */
 
