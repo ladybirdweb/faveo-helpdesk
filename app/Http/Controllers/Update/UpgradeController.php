@@ -26,7 +26,8 @@ class UpgradeController extends Controller {
         $serial_key = Utility::encryptByFaveoPublicKey('O5Y647RJF8QHLDOE');
         //order number should be encrypted data
         $order_number = Utility::encryptByFaveoPublicKey('23540755');
-        $url = url();
+        $url = url('/');
+        //dd($url);
         $post_data = [
             'serial_key' => $serial_key,
             'order_number' => $order_number,

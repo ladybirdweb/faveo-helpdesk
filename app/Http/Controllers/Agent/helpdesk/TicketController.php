@@ -827,7 +827,7 @@ class TicketController extends Controller
         $new_date = date_add($ovdate, date_interval_create_from_date_string($sla_plan->grace_period));
         $ticket->duedate = $new_date;
         $ticket->save();
-
+        
         $ticket_number = $ticket->ticket_number;
         $id = $ticket->id;
         $this->NotificationController->create($id, $user_id, '3');
@@ -874,6 +874,7 @@ class TicketController extends Controller
         $thread->title = $subject;
         $thread->body = $body;
         if ($thread->save()) {
+          \Event::fire('ticket.details',array('ticket'=>$thread));//get the ticket details
             return true;
         }
     }

@@ -18,13 +18,16 @@ class CheckUpdate {
      * @return mixed
      */
     public function handle($request, Closure $next) {
-        $this->notificationBar();
-        $this->checkNewUpdate();
-        if (Utility::getFileVersion() > Utility::getDatabaseVersion()) {
-            return redirect('database-update');
-        }
-        if (Utility::getFileVersion() < Utility::getDatabaseVersion()) {
-            return redirect('file-update');
+        $check = false;
+        if ($check == true) {
+            $this->notificationBar();
+            $this->checkNewUpdate();
+            if (Utility::getFileVersion() > Utility::getDatabaseVersion()) {
+                return redirect('database-update');
+            }
+            if (Utility::getFileVersion() < Utility::getDatabaseVersion()) {
+                return redirect('file-update');
+            }
         }
 
         return $next($request);
@@ -70,6 +73,7 @@ class CheckUpdate {
             }
         } else {
             $check_version = $this->checkNewVersion();
+
             if ($check_version == true) {
                 $notify->create(['key' => 'new-version', 'value' => 'new version found please click <a href=' . url('file-update') . '><b>here to download</b></a>']);
             }

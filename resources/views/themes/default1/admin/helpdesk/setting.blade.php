@@ -476,6 +476,34 @@
                             </div>
                             <!-- ./box-body -->
                         </div>
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">{!! Lang::get('lang.api') !!}</h3>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!--/.col-md-2-->
+                                        <div class="col-md-2 col-sm-6">
+                                            <div class="settingiconblue">
+                                                <div class="settingdivblue">
+                                                    <a href="{{ url('api') }}"><span class="fa-stack fa-2x">
+                                                        
+                                                        <i class="fa fa-archive"></i>
+                                                    </span></a>
+                                                </div>
+                                                <center class="box-title" >{!! Lang::get('lang.api') !!}</center>
+                                            </div>
+                                        </div>
+                                        <!--/.col-md-2-->
+                                        
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                            </div>
+                            <!-- ./box-body -->
+                        </div>
 
 
 @stop

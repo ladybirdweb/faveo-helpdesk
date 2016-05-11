@@ -988,4 +988,16 @@ return [
     'ticket_status'       => 'Ticket Status',
     'post_comment'        => 'Post Comment',
     'plugin'              => 'Plugin',
+    
+    /**
+    * |---------------------------------------------------------------------------------------
+      |Api settings
+    * |----------------------------------------------------------------------------------
+    * |The following lanuage line used to get english traslation of api settings in admin panel
+    * |
+    * |
+    */
+
+   'webhooks'=>'Webhooks',
+   'enter_url_to_send_ticket_details'=>'Enter the url to send the ticket details',
 ];
