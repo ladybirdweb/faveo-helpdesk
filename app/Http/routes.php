@@ -39,7 +39,7 @@ $router->get('getmail/{token}', 'Auth\AuthController@getMail');
   | Here is defining entire routes for the Admin Panel
   |
  */
-Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
+Route::group(['middleware' => 'roles', 'middleware' => 'auth','middleware' => 'update'], function () {
 
         //Notification marking
     Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
@@ -303,7 +303,7 @@ Breadcrumbs::register('security.edit', function($breadcrumbs, $photo)
   |
   |
  */
-Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function () {
+Route::group(['middleware' => 'role.agent', 'middleware' => 'auth','middleware' => 'update'], function () {
 
     Route::post('chart-range/{date1}/{date2}', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
 
@@ -848,3 +848,10 @@ Route::group(['prefix' => 'api/v1'], function () {
     Route::get('generate/token', 'Api\v1\TestController@generateToken');
     Route::get('get/user', 'Api\v1\TestController@getAuthUser');
 });
+/**
+ * Update module
+ */
+Route::get('database-update','Update\UpgradeController@databaseUpdate');
+Route::get('database-upgrade','Update\UpgradeController@databaseUpgrade');
+Route::get('file-update','Update\UpgradeController@fileUpdate');
+Route::get('file-upgrade','Update\UpgradeController@fileUpgrading');

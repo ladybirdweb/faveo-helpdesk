@@ -41,5 +41,17 @@ class AppServiceProvider extends ServiceProvider
                 // Do some crazy things successfully every hour
             }, false);
         });
+        
+        $this->composer();
+    }
+    
+    public function composer() {
+        View::composer('themes.default1.update.notification', function() {
+            $notification = new BarNotification();
+            $data = [
+                'data'=>$notification->get()
+            ];
+            view()->share($data);
+        });
     }
 }

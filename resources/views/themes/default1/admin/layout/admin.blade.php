@@ -294,6 +294,7 @@
 
                                 <!-- Main content -->
                                 <section class="content" style="margin-top: 20px">
+                                    @include('themes.default1.update.notification')
                                     @yield('content')
                                 </section><!-- /.content -->
                                 <!-- /.content-wrapper -->
