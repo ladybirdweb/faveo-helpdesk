@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use View;
+use App\Model\Update\BarNotification;
 
 class AppServiceProvider extends ServiceProvider
 {
