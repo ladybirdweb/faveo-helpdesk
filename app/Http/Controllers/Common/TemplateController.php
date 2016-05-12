@@ -26,7 +26,7 @@ class TemplateController extends Controller
         $this->type = $type;
     }
 
-    public function index($id)
+    public function index()
     {
         try {
             return view('themes.default1.common.template.inbox');
@@ -112,7 +112,7 @@ class TemplateController extends Controller
             $template = $this->template->where('id', $id)->first();
             $template->fill($request->input())->save();
 
-            return redirect('templates')->with('success', 'Template updated successfully');
+            return redirect()->back()->with('success', 'Template updated successfully');
         } catch (\Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

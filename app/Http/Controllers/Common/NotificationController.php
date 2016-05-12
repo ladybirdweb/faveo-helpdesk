@@ -26,9 +26,8 @@ class NotificationController extends Controller
     {
         $notifications = UserNotification::join('notifications', 'user_notification.notification_id', '=', 'notifications.id')
                 ->join('notification_types', 'notifications.type_id', '=', 'notification_types.id')
-                ->where('user_notification.is_read', '=', '0')
                 ->where('user_notification.user_id', '=', \Auth::user()->id)
-                ->get();
+                ->paginate(10);
 
         return $notifications;
     }
