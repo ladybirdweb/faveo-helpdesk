@@ -57,7 +57,7 @@ class LibraryController extends Controller {
             $plaintext = gzcompress($plaintext);
 
             // Get the public Key of the recipient
-            $path = storage_path('app/faveo-public.key');
+            $path = storage_path('app'.DIRECTORY_SEPARATOR.'faveo-public.key');
             $key_content = file_get_contents($path);
             
             //dd($path);

@@ -187,7 +187,8 @@ class PhpMailController extends Controller
 //            $handle = fopen($directory.$template.'.blade.php', 'r');
 //            $contents = fread($handle, filesize($directory.$template.'.blade.php'));
 //            fclose($handle);
-            $template_data = \App\Model\Common\Template::where('variable','=',$template)->first();
+            $set = \App\Model\Common\TemplateSet::where('name','=',$status->template)->first();
+            $template_data = \App\Model\Common\Template::where('set_id','=',$set->id)->where('variable','=',$template)->first();
             $contents = $template_data->message;
             $variables = ['{!!$user!!}', '{!!$agent!!}', '{!!$ticket_number!!}', '{!!$content!!}', '{!!$from!!}', '{!!$ticket_agent_name!!}', '{!!$ticket_client_name!!}', '{!!$ticket_client_email!!}', '{!!$ticket_body!!}', '{!!$ticket_assigner!!}', '{!!$ticket_link_with_number!!}', '{!!$system_error!!}', '{!!$agent_sign!!}', '{!!$department_sign!!}', '{!!$password_reset_link!!}', '{!!$email_address!!}', '{!!$user_password!!}', '{!!$system_from!!}', '{!!$system_link!!}'];
 
