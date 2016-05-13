@@ -241,7 +241,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('checkUpdate', ['as' => 'checkupdate', 'uses' => 'Common\SettingsController@getupdate']); /* get Check update */
 
         Breadcrumbs::register('setting', function($breadcrumbs) {
-        $breadcrumbs->push('Settings', route('setting'));
+        $breadcrumbs->push('Admin Panel', route('setting'));
     });
     
     Route::get('admin', ['as' => 'setting', 'uses' => 'Admin\helpdesk\SettingsController@settings']);
