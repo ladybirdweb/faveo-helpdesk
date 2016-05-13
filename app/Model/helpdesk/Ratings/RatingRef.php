@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Ratings;
 
 use Illuminate\Database\Eloquent\Model;
-
-class RatingRef extends Model
+use App\BaseModel;
+class RatingRef extends BaseModel
 {
      protected $table = 'rating_ref';
     protected $fillable = [

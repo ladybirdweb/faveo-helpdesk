@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Email;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Template extends Model
+use App\BaseModel;
+class Template extends BaseModel
 {
     protected $table = 'template';
     protected $fillable = [

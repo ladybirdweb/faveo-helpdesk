@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Agent_panel;
 
 use Illuminate\Database\Eloquent\Model;
-
-class User_org_head extends Model
+use App\BaseModel;
+class User_org_head extends BaseModel
 {
     /* define table name  */
 

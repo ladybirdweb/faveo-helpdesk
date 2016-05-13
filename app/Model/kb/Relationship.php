@@ -3,8 +3,8 @@
 namespace App\Model\kb;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Relationship extends Model
+use App\BaseModel;
+class Relationship extends BaseModel
 {
     /* define the table  */
 

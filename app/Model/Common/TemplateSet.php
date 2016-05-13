@@ -3,8 +3,8 @@
 namespace App\Model\Common;
 
 use Illuminate\Database\Eloquent\Model;
-
-class TemplateSet extends Model
+use App\BaseModel;
+class TemplateSet extends BaseModel
 {
      protected $table = 'template_sets';
     protected $fillable = ['name', 'active'];

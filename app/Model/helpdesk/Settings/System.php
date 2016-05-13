@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Settings;
 
 use Illuminate\Database\Eloquent\Model;
-
-class System extends Model
+use App\BaseModel;
+class System extends BaseModel
 {
     /* Using System Table */
 

@@ -4,8 +4,8 @@ namespace App\Model\kb;
 
 use Illuminate\Database\Eloquent\Model;
 use Nicolaslopezj\Searchable\SearchableTrait;
-
-class Article extends Model
+use App\BaseModel;
+class Article extends BaseModel
 {
     use SearchableTrait;
 

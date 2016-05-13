@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Workflow;
 
 use Illuminate\Database\Eloquent\Model;
-
-class WorkflowRules extends Model
+use App\BaseModel;
+class WorkflowRules extends BaseModel
 {
     public $timestamps = false;
     protected $table = 'workflow_rules';

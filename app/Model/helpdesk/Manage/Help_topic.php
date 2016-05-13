@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Manage;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Help_topic extends Model
+use App\BaseModel;
+class Help_topic extends BaseModel
 {
     protected $table = 'help_topic';
     protected $fillable = [

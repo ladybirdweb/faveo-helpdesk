@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Ticket;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Ticket_Status extends Model
+use App\BaseModel;
+class Ticket_Status extends BaseModel
 {
     protected $table = 'ticket_status';
     protected $fillable = [

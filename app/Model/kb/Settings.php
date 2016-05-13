@@ -3,8 +3,8 @@
 namespace App\Model\kb;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Settings extends Model
+use App\BaseModel;
+class Settings extends BaseModel
 {
     /**
      * @param $table, $fillable
