@@ -71,32 +71,6 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('get-templates', 'Common\TemplateController@GetTemplates');
     Route::get('templates-delete', 'Common\TemplateController@destroy');
     Route::get('testmail/{id}', 'Common\TemplateController@mailtest');
-    // Templates
-    Breadcrumbs::register('templates.index', function($breadcrumbs) {
-        $breadcrumbs->parent('dashboard');
-        $breadcrumbs->push('Templates', route('templates.index'));
-    });
-
-// Templates > Upload Templates
-    Breadcrumbs::register('templates.create', function($breadcrumbs) {
-        $breadcrumbs->parent('templates.index');
-        $breadcrumbs->push('Upload Templates', route('templates.create'));
-    });
-
-// Templates > [Templates Name]
-    Breadcrumbs::register('templates.show', function($breadcrumbs, $photo) {
-        $breadcrumbs->parent('templates.index');
-        $photo = App\Model\Common\Template::whereId(1)->first();
-        $breadcrumbs->push('View Templates', route('templates.show', $photo->id));
-    });
-
-// Templates > [Templates Name] > Edit Templates
-    Breadcrumbs::register('templates.edit', function($breadcrumbs, $photo) {
-        $breadcrumbs->parent('templates.show', $photo);
-        $photo = App\Model\Common\Template::whereId(1)->first();
-        $breadcrumbs->push('Edit templates', route('templates.edit', $photo->id));
-    });
-
 
     Route::resource('template-sets', 'Common\TemplateSetController'); // in template module, for CRUD
     
