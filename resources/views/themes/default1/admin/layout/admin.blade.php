@@ -312,14 +312,14 @@
                                     <div class="col-md-6">
                                 @yield('PageHeader')
                                     </div>
-                                <div class="col-md-4 pull-right">
+                                <div class="pull-right">
                                 {!! Breadcrumbs::renderIfExists() !!}
                                 </div>
                                 </div>
                                 </section>
 
                                 <!-- Main content -->
-                                <section class="content" style="margin-top: 20px">
+                                <section class="content">
                                     @include('themes.default1.update.notification')
                                     @yield('content')
                                 </section><!-- /.content -->

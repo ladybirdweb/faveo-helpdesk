@@ -63,7 +63,7 @@ active
         {!! $rating->name !!}:
         <small class="pull-right">
             <?php for($i = 1; $i<=$rating->rating_scale; $i++) { ?>
-        <input type="radio" class="star" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($rating_value->rating_value==$i)?'checked':'' ?> />
+        <input type="radio" class="star" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($ratingval==$i)?'checked':'' ?> />
         <?php } ?>
         </small>
     </a>
