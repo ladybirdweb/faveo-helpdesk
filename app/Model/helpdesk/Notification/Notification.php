@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Notification;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Notification extends Model
+use App\BaseModel;
+class Notification extends BaseModel
 {
     protected $table = 'notifications';
     protected $fillable = [

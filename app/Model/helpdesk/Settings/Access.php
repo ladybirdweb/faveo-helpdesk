@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Settings;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Access extends Model
+use App\BaseModel;
+class Access extends BaseModel
 {
     protected $table = 'access';
     protected $fillable = [

@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Utility;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Date_time_format extends Model
+use App\BaseModel;
+class Date_time_format extends BaseModel
 {
     public $timestamps = false;
     protected $table = 'date_time_format';

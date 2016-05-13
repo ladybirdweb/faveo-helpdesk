@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Email;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Banlist extends Model
+use App\BaseModel;
+class Banlist extends BaseModel
 {
     protected $table = 'banlist';
     protected $fillable = [

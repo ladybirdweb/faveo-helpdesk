@@ -3,8 +3,8 @@
 namespace App\Model\kb;
 
 use Illuminate\Database\Eloquent\Model;
-
-class DateFormat extends Model
+use App\BaseModel;
+class DateFormat extends BaseModel
 {
     protected $table = 'date_time_format';
 

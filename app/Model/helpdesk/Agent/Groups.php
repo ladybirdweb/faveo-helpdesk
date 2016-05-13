@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Agent;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Groups extends Model
+use App\BaseModel;
+class Groups extends BaseModel
 {
     protected $table = 'groups';
     protected $fillable = [

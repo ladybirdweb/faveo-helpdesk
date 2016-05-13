@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Email;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Smtp extends Model
+use App\BaseModel;
+class Smtp extends BaseModel
 {
     public $timestamps = false;
     protected $table = 'send_mail';

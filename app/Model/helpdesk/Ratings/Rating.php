@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Ratings;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Rating extends Model
+use App\BaseModel;
+class Rating extends BaseModel
 {
      protected $table = 'ratings';
     protected $fillable = [

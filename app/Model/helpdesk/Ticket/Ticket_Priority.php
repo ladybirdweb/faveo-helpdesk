@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Ticket;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Ticket_Priority extends Model
+use App\BaseModel;
+class Ticket_Priority extends BaseModel
 {
     public $timestamps = false;
     protected $table = 'ticket_priority';

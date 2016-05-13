@@ -41,6 +41,7 @@ class UpgradeController extends Controller {
             $url = str_replace(' ', "%20", $url);
         }
         $curl = $this->postCurl($url, $post_data);
+        //dd($curl);
         if (is_array($curl)) {
             if (key_exists('status', $curl)) {
                 if ($curl['status'] == 'success') {
@@ -194,9 +195,11 @@ class UpgradeController extends Controller {
 
     public function fileUpgrading(Request $request) {
         try {
+            
             if (Utility::getFileVersion() < Utility::getDatabaseVersion()) {
                 
                 $latest_version = $this->getLatestVersion();
+                //dd($latest_version);
                 $current_version = Utility::getFileVersion();
                 if ($latest_version != '') {
                     $_this = new UpgradeController();
@@ -209,6 +212,7 @@ class UpgradeController extends Controller {
                 return redirect()->back();
             }
         } catch (Exception $ex) {
+            dd($ex);
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }

@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Form;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Form_details extends Model
+use App\BaseModel;
+class Form_details extends BaseModel
 {
     public $timestamps = false;
     protected $table = 'form_details';

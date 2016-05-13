@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Settings;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Security extends Model
+use App\BaseModel;
+class Security extends BaseModel
 {
     /* Using auto_response table  */
 

@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Ticket;
 
 use Illuminate\Database\Eloquent\Model;
-
-class Ticket_Thread extends Model
+use App\BaseModel;
+class Ticket_Thread extends BaseModel
 {
     protected $table = 'ticket_thread';
     protected $fillable = [

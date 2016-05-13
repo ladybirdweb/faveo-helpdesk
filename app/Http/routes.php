@@ -847,10 +847,10 @@ Route::group(['prefix' => 'api/v1'], function () {
 /**
  * Update module
  */
-Route::get('database-update', 'Update\UpgradeController@databaseUpdate');
-Route::get('database-upgrade', 'Update\UpgradeController@databaseUpgrade');
-Route::get('file-update', 'Update\UpgradeController@fileUpdate');
-Route::get('file-upgrade', 'Update\UpgradeController@fileUpgrading');
+Route::get('database-update', ['as'=>'database.update','uses'=>'Update\UpgradeController@databaseUpdate']);
+Route::get('database-upgrade', ['as'=>'database','uses'=>'Update\UpgradeController@databaseUpgrade']);
+Route::get('file-update', ['as'=>'file.update','uses'=>'Update\UpgradeController@fileUpdate']);
+Route::get('file-upgrade', ['as'=>'file.upgrade','uses'=>'Update\UpgradeController@fileUpgrading']);
 
 /**
  * Webhook
