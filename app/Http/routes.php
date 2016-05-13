@@ -66,7 +66,20 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     /*
      * Templates
      */
-
+        Breadcrumbs::register('template-sets.index', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push('All Template sets', route('template-sets.index'));
+    });
+            Breadcrumbs::register('show.templates', function($breadcrumbs) {
+                    $page = App\Model\Common\Template::whereId(1)->first();
+        $breadcrumbs->parent('template-sets.index');
+        $breadcrumbs->push('All Templates', route('show.templates', $page->id));
+    });
+                Breadcrumbs::register('templates.edit', function($breadcrumbs) {
+                    $page = App\Model\Common\Template::whereId(1)->first();
+        $breadcrumbs->parent('show.templates');
+        $breadcrumbs->push('Edit Template', route('templates.edit', $page->id));
+    });
     Route::resource('templates', 'Common\TemplateController');
     Route::get('get-templates', 'Common\TemplateController@GetTemplates');
     Route::get('templates-delete', 'Common\TemplateController@destroy');
@@ -595,6 +608,7 @@ Route::post('/postconnection', ['as' => 'postconnection', 'uses' => 'Installer\h
  */
 Route::get('readmails', ['as' => 'readmails', 'uses' => 'Agent\helpdesk\MailController@readmails']);
 Route::get('notification', ['as' => 'notification', 'uses' => 'Agent\helpdesk\NotificationController@send_notification']);
+Route::get('auto-close-tickets', ['as' => 'auto.close', 'uses' => 'Agent\helpdesk\TicketController@autoCloseTicket']);
 
 /*
   |=============================================================

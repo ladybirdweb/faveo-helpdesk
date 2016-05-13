@@ -2163,4 +2163,36 @@ class TicketController extends Controller
                         ->orderColumns('id')
                         ->make();
     }
+    
+    //Auto-close tickets
+        public function autoCloseTickets()
+    {
+
+            $overdues = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
+        
+        if (count($overdues) == 0) {
+            $tickets = null;
+        } else {
+            $i = 0;
+            foreach ($overdues as $overdue) {
+                $sla_plan = Sla_plan::where('id', '=', $overdue->sla)->first();
+
+                $ovadate = $overdue->created_at;
+                $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)).'<br/><br/>';
+                if (date('Y-m-d H:i:s') > $new_date) {
+                    $i++;
+                            $overdue->status = 3;
+        $overdue->closed = 1;
+        $overdue->closed_at = date('Y-m-d H:i:s');
+        $overdue->save();
+                }
+            }
+            // dd(count($value));
+//            if ($i > 0) {
+//                $tickets = new collection($value);
+//            } else {
+//                $tickets = null;
+//            }
+        }
+    }
 }
