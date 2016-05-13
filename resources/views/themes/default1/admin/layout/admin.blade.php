@@ -60,33 +60,55 @@
                         <ul class="nav navbar-nav navbar-left">
                             <li @yield('settings')><a href="{!! url('admin') !!}">{!! Lang::get('lang.home') !!}</a></li>
                         </ul>
+                                                                         <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id','=',Auth::user()->id)->where('is_read','0')->get(); ?>
+               
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="{{url('dashboard')}}">{!! Lang::get('lang.agent_panel') !!}</a></li>
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown notifications-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
                                     <i class="fa fa-bell-o"></i>
-                                    <span class="label label-warning" id="count"><?php echo count($notifications); ?></span>
+                                    <span class="label label-warning" id="count"><?php echo count($noti); ?></span>
                                 </a>
                                 <ul class="dropdown-menu">
-                                    <li class="header">You have <?php echo count($notifications); ?> notifications</li>
+                                    <li class="header">You have <?php echo count($noti); ?> notifications</li>
                                     <li>
                                         <ul class="menu">
                                             @foreach($notifications as $notification)
+                                                     <?php $user = App\User::whereId($notification->user_id)->first(); ?>
                                             @if($notification->type == 'registration')
-                                            <li>
-                                                <a href="{!! route('user.show', $notification->notification_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
-                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
-                                                </a>
+                                            @if($notification->is_read == 1)
+                                            <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
+                                                    {!! $notification->message !!}
+                                                </a></span>
                                             </li>
                                             @else
-                                            <li>
-                                                <a href="{!! route('ticket.thread', $notification->notification_id) !!}" id='{{ $notification->notification_id }}' class='noti_User'>
-                                                    <i class="{!! $notification->icon_class !!}"></i> {!! $notification->message !!}
-                                                </a>
+                                            <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
+                                                    {!! $notification->message !!}
+                                                </a></span>
                                             </li>
                                             @endif
+                                            @else
+                                            
+                                            <?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification -> model_id)->first(); ?>
+                                            @if($notification->is_read == 1)
+                                            <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
+                                                   {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
+                                                </a></span>
+                                            </li>
+                                            @else
+                                                 <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
+                                                   {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
+                                                </a></span>
+                                            </li>
+                                            @endif
+                                            @endif
                                             @endforeach
+
                                         </ul>
                                     </li>
                                     <li class="footer"><a href="{{ url('notifications-list') }}">View all</a></li>

@@ -67,7 +67,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
      * Templates
      */
         Breadcrumbs::register('template-sets.index', function($breadcrumbs) {
-        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->parent('setting');
         $breadcrumbs->push('All Template sets', route('template-sets.index'));
     });
             Breadcrumbs::register('show.templates', function($breadcrumbs) {
@@ -154,7 +154,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::patch('postalert/{id}', 'Admin\helpdesk\SettingsController@postalert'); // Updating the Alert table with requests
     // Templates
     Breadcrumbs::register('security.index', function($breadcrumbs) {
-        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->parent('setting');
         $breadcrumbs->push('Security', route('security.index'));
     });
 
@@ -181,14 +181,14 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::patch('security/{id}', ['as' => 'securitys.update', 'uses' => 'Admin\helpdesk\SecurityController@update']); // direct to security setting page  
     Breadcrumbs::register('statuss.index', function($breadcrumbs) {
-        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->parent('setting');
         $breadcrumbs->push('All Status', route('statuss.index'));
     });
     Route::get('setting-status', ['as' => 'statuss.index', 'uses' => 'Admin\helpdesk\SettingsController@getStatuses']); // direct to status setting page
 
     Route::patch('status-update/{id}', ['as' => 'statuss.update', 'uses' => 'Admin\helpdesk\SettingsController@editStatuses']);
     Breadcrumbs::register('statuss.create', function($breadcrumbs) {
-        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->parent('setting');
         $breadcrumbs->push('Create Status', route('statuss.create'));
     });
     Route::post('status-create', ['as' => 'statuss.create', 'uses' => 'Admin\helpdesk\SettingsController@createStatuses']);
@@ -197,7 +197,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::get('ticket/status/{id}/{state}', ['as' => 'statuss.state', 'uses' => 'Agent\helpdesk\TicketController@updateStatuses']);
     Breadcrumbs::register('ratings.index', function($breadcrumbs) {
-        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->parent('setting');
         $breadcrumbs->push('All Ratings', route('ratings.index'));
     });
     Route::get('getratings', ['as' => 'ratings.index', 'uses' => 'Admin\helpdesk\SettingsController@RatingSettings']);
@@ -240,6 +240,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::get('checkUpdate', ['as' => 'checkupdate', 'uses' => 'Common\SettingsController@getupdate']); /* get Check update */
 
+        Breadcrumbs::register('setting', function($breadcrumbs) {
+        $breadcrumbs->push('Settings', route('setting'));
+    });
+    
     Route::get('admin', ['as' => 'setting', 'uses' => 'Admin\helpdesk\SettingsController@settings']);
 
     Route::get('plugins', ['as' => 'plugins', 'uses' => 'Common\SettingsController@Plugins']);

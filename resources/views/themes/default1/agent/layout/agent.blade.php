@@ -72,6 +72,7 @@ if ($company != null) {
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
                         </ul>
+                                                                <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id','=',Auth::user()->id)->where('is_read','0')->get(); ?>
                         <ul class="nav navbar-nav navbar-right">
                             @if(Auth::user()->role == 'admin')
                                 <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
@@ -80,7 +81,7 @@ if ($company != null) {
                             <li class="dropdown notifications-menu" id="myDropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
                                     <i class="fa fa-bell-o"></i>
-                                    <span class="label label-warning" id="count">{!! count($notifications) !!}</span>
+                                    <span class="label label-warning" id="count">{!! count($noti) !!}</span>
                                 </a>
                                 <ul class="dropdown-menu" style="width: -moz-max-content">
                                          
@@ -91,7 +92,7 @@ if ($company != null) {
     </div>
                                    
                                     <li id="refreshNote">
-                                        <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id','=',Auth::user()->id)->where('is_read','0')->get(); ?>
+
  <li class="header">You have {!! count($noti) !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
                                     
                                         <ul class="menu">

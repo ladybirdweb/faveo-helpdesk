@@ -29,6 +29,7 @@ return [
       |--------------------------------------
      */
     'template-types' => 'Template Types',
+    'template' => 'Template',
     'rating_label' =>'Rating Label',
     'display_order' => 'Display Order',
     'rating_scale' => 'Rating Scale',
