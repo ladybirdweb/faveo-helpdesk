@@ -18,7 +18,7 @@ class CheckUpdate {
      * @return mixed
      */
     public function handle($request, Closure $next) {
-        $check = true;
+        $check = false;
         if ($check == true) {
             $this->notificationBar();
             $this->checkNewUpdate();
