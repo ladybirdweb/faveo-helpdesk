@@ -135,8 +135,10 @@
                                                                     </div> 
                                                                 </div>
                                                             </div>
+                                   
                                     <?php 
-if($set->name == 'default')  {
+                                  $settings =   DB::table('settings_email')->whereId(1)->first();
+if($set->name == $settings->template)  {
   $dis = "disabled";  
 } else {
   $dis = "";
