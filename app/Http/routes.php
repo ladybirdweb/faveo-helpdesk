@@ -66,17 +66,17 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     /*
      * Templates
      */
-        Breadcrumbs::register('template-sets.index', function($breadcrumbs) {
+    Breadcrumbs::register('template-sets.index', function($breadcrumbs) {
         $breadcrumbs->parent('setting');
         $breadcrumbs->push('All Template sets', route('template-sets.index'));
     });
-            Breadcrumbs::register('show.templates', function($breadcrumbs) {
-                    $page = App\Model\Common\Template::whereId(1)->first();
+    Breadcrumbs::register('show.templates', function($breadcrumbs) {
+        $page = App\Model\Common\Template::whereId(1)->first();
         $breadcrumbs->parent('template-sets.index');
         $breadcrumbs->push('All Templates', route('show.templates', $page->id));
     });
-                Breadcrumbs::register('templates.edit', function($breadcrumbs) {
-                    $page = App\Model\Common\Template::whereId(1)->first();
+    Breadcrumbs::register('templates.edit', function($breadcrumbs) {
+        $page = App\Model\Common\Template::whereId(1)->first();
         $breadcrumbs->parent('show.templates');
         $breadcrumbs->push('Edit Template', route('templates.edit', $page->id));
     });
@@ -86,11 +86,11 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('testmail/{id}', 'Common\TemplateController@mailtest');
 
     Route::resource('template-sets', 'Common\TemplateSetController'); // in template module, for CRUD
-    
+
     Route::get('delete-sets/{id}', ['as' => 'sets.delete', 'uses' => 'Common\TemplateSetController@deleteSet']);
-    
-        Route::get('show-template/{id}', ['as' => 'show.templates', 'uses' => 'Common\TemplateController@showTemplate']);
-    
+
+    Route::get('show-template/{id}', ['as' => 'show.templates', 'uses' => 'Common\TemplateController@showTemplate']);
+
     Route::get('activate-templateset/{name}', ['as' => 'active.template-set', 'uses' => 'Common\TemplateSetController@activateSet']);
 
     Route::resource('template', 'Admin\helpdesk\TemplateController'); // in template module, for CRUD
@@ -204,23 +204,23 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::get('deleter/{rating}', ['as' => 'ratings.delete', 'uses' => 'Admin\helpdesk\SettingsController@RatingDelete']);
 
-        Breadcrumbs::register('rating.create', function($breadcrumbs) {
-                $breadcrumbs->parent('ratings.index');
+    Breadcrumbs::register('rating.create', function($breadcrumbs) {
+        $breadcrumbs->parent('ratings.index');
         $breadcrumbs->push('Create Ratings', route('rating.create'));
     });
-    
+
     Route::get('create-ratings', ['as' => 'rating.create', 'uses' => 'Admin\helpdesk\SettingsController@createRating']);
-    
+
     Route::post('store-ratings', ['as' => 'rating.store', 'uses' => 'Admin\helpdesk\SettingsController@storeRating']);
-    
-            Breadcrumbs::register('rating.edit', function($breadcrumbs) {
-                     $page = App\Model\helpdesk\Ratings\Rating::whereId(1)->first();
+
+    Breadcrumbs::register('rating.edit', function($breadcrumbs) {
+        $page = App\Model\helpdesk\Ratings\Rating::whereId(1)->first();
         $breadcrumbs->parent('ratings.index');
-        $breadcrumbs->push('Edit Ratings', route('rating.edit',$page->id));
+        $breadcrumbs->push('Edit Ratings', route('rating.edit', $page->id));
     });
-    
+
     Route::get('editratings/{slug}', ['as' => 'rating.edit', 'uses' => 'Admin\helpdesk\SettingsController@editRatingSettings']);
-    
+
     Route::patch('postratings/{slug}', ['as' => 'settings.rating', 'uses' => 'Admin\helpdesk\SettingsController@PostRatingSettings']);
 
     Route::get('remove-user-org/{id}', ['as' => 'removeuser.org', 'uses' => 'Agent\helpdesk\UserController@removeUserOrg']);
@@ -255,10 +255,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::get('checkUpdate', ['as' => 'checkupdate', 'uses' => 'Common\SettingsController@getupdate']); /* get Check update */
 
-        Breadcrumbs::register('setting', function($breadcrumbs) {
+    Breadcrumbs::register('setting', function($breadcrumbs) {
         $breadcrumbs->push('Admin Panel', route('setting'));
     });
-    
+
     Route::get('admin', ['as' => 'setting', 'uses' => 'Admin\helpdesk\SettingsController@settings']);
 
     Route::get('plugins', ['as' => 'plugins', 'uses' => 'Common\SettingsController@Plugins']);
@@ -296,6 +296,16 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::post('validating-email-settings', ['as' => 'validating.email.settings', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettings']); // route to check email input validation
     Route::post('validating-email-settings-on-update/{id}', ['as' => 'validating.email.settings.update', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettingsUpdate']); // route to check email input validation
 
+
+    Route::get('workflow', ['as' => 'workflow', 'uses' => 'Admin\helpdesk\WorkflowController@index']);
+    Route::get('workflow-list', ['as' => 'workflow.list', 'uses' => 'Admin\helpdesk\WorkflowController@workFlowList']);
+    Route::get('workflow/create', ['as' => 'workflow.create', 'uses' => 'Admin\helpdesk\WorkflowController@create']);
+    Route::post('workflow/store', ['as' => 'workflow.store', 'uses' => 'Admin\helpdesk\WorkflowController@store']);
+    Route::get('workflow/edit/{id}', ['as' => 'workflow.edit', 'uses' => 'Admin\helpdesk\WorkflowController@edit']);
+    Route::post('workflow/update/{id}', ['as' => 'workflow.update', 'uses' => 'Admin\helpdesk\WorkflowController@update']);
+    Route::get('workflow/action-rule/{id}', ['as' => 'workflow.dept', 'uses' => 'Admin\helpdesk\WorkflowController@selectAction']);
+    Route::get('workflow/delete/{id}', ['as' => 'workflow.delete', 'uses' => 'Admin\helpdesk\WorkflowController@destroy']);
+
     /**
      * Api Settings
      */
@@ -318,11 +328,11 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth', 'middleware'
     Route::get('agen1', 'Agent\helpdesk\DashboardController@ChartData');
 
     Route::post('chart-range', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
-    
+
     Route::post('user-chart-range/{id}/{date1}/{date2}', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
 
     Route::get('user-agen/{id}', 'Agent\helpdesk\DashboardController@userChartData');
-        
+
     Route::get('user-agen1', 'Agent\helpdesk\DashboardController@userChartData');
 
     Route::post('user-chart-range', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
@@ -862,10 +872,10 @@ Route::group(['prefix' => 'api/v1'], function () {
 /**
  * Update module
  */
-Route::get('database-update', ['as'=>'database.update','uses'=>'Update\UpgradeController@databaseUpdate']);
-Route::get('database-upgrade', ['as'=>'database','uses'=>'Update\UpgradeController@databaseUpgrade']);
-Route::get('file-update', ['as'=>'file.update','uses'=>'Update\UpgradeController@fileUpdate']);
-Route::get('file-upgrade', ['as'=>'file.upgrade','uses'=>'Update\UpgradeController@fileUpgrading']);
+Route::get('database-update', ['as' => 'database.update', 'uses' => 'Update\UpgradeController@databaseUpdate']);
+Route::get('database-upgrade', ['as' => 'database', 'uses' => 'Update\UpgradeController@databaseUpgrade']);
+Route::get('file-update', ['as' => 'file.update', 'uses' => 'Update\UpgradeController@fileUpdate']);
+Route::get('file-upgrade', ['as' => 'file.upgrade', 'uses' => 'Update\UpgradeController@fileUpgrading']);
 
 /**
  * Webhook
