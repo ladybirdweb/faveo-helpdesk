@@ -692,15 +692,15 @@ foreach ($markasread as $mark) {
      *
      *  @return type Redirect
      */
-    public function PostRatingSettings($id,Rating $ratings)
+    public function PostRatingSettings($id,Rating $ratings, \App\Http\Requests\helpdesk\RatingUpdateRequest $request)
     {
         $rating = $ratings->whereId($id)->first();
-        $rating->name = Input::get('name');
-        $rating->display_order = Input::get('display_order');
-        $rating->allow_modification = Input::get('allow_modification');
-                $rating->rating_scale = Input::get('rating_scale');
-                        $rating->rating_area = Input::get('rating_area');
-                                $rating->restrict = Input::get('restrict');
+        $rating->name = $request->input('name');
+        $rating->display_order = $request->input('display_order');
+        $rating->allow_modification = $request->input('allow_modification');
+                $rating->rating_scale = $request->input('rating_scale');
+                        $rating->rating_area = $request->input('rating_area');
+                                $rating->restrict = $request->input('restrict');
         $rating->save();
         
 //        DB::table('settings_ratings')->whereSlug($slug)->update(['rating_name' => $name, 'publish' => $publish, 'modify' => $modify]);
@@ -708,14 +708,14 @@ foreach ($markasread as $mark) {
         return redirect()->back()->with('success', 'Successfully updated');
     }
 
-    public function createRating(Rating $rating,  \App\Model\helpdesk\Ratings\RatingRef $ratingrefs)
+    public function createRating(Rating $rating,  \App\Model\helpdesk\Ratings\RatingRef $ratingrefs, \App\Http\Requests\helpdesk\RatingRequest $request)
     {
-        $rating->name = Input::get('name');
-        $rating->display_order = Input::get('display_order');
-        $rating->allow_modification = Input::get('allow_modification');
-                $rating->rating_scale = Input::get('rating_scale');
-                        $rating->rating_area = Input::get('rating_area');
-                                $rating->restrict = Input::get('restrict');
+        $rating->name = $request->input('name');
+        $rating->display_order = $request->input('display_order');
+        $rating->allow_modification = $request->input('allow_modification');
+                $rating->rating_scale = $request->input('rating_scale');
+                        $rating->rating_area = $request->input('rating_area');
+                                $rating->restrict = $request->input('restrict');
         $rating->save();
         $ratingrefs->rating_id = $rating->id;
 
