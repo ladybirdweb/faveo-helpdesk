@@ -47,14 +47,14 @@
 
                     <div class="col-md-4 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                         <!-- first name -->
-                        {!! Form::label('name',Lang::get('lang.name'),['class'=>'required']) !!}
+                        {!! Form::label('name',Lang::get('lang.name'),['class'=>'required']) !!}<span style="color:red;">*</span>
                         {!! Form::text('name',null,['class' => 'form-control']) !!}
 
                     </div>
 
                     <div class="col-md-4 form-group {{ $errors->has('type') ? 'has-error' : '' }}">
                         <!-- last name -->
-                        {!! Form::label('type',Lang::get('lang.template-types'),['class'=>'required']) !!}
+                        {!! Form::label('type',Lang::get('lang.template-types'),['class'=>'required']) !!}<span style="color:red;">*</span>
                         {!! Form::select('type',[''=>'Select','Type'=>$type],null,['class' => 'form-control']) !!}
 
                     </div>
@@ -63,7 +63,7 @@
          <div class="row">
                     <div class="col-md-12 form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
          
-                        {!! Form::label('subject',Lang::get('lang.subject')) !!}
+                        {!! Form::label('subject',Lang::get('lang.subject')) !!}<span style="color:red;">*</span>
                         {!! Form::text('subject',null,['class' => 'form-control']) !!}
 
                     </div>
@@ -72,7 +72,7 @@
                 <div class="row">
                     <div class="col-md-12 form-group {{ $errors->has('message') ? 'has-error' : '' }}">
                         
-                        {!! Form::label('message',Lang::get('lang.content'),['class'=>'required']) !!}
+                        {!! Form::label('message',Lang::get('lang.content'),['class'=>'required']) !!}<span style="color:red;">*</span>
                         {!! Form::textarea('message',null,['class'=>'form-control','id'=>'textarea']) !!}
                        
                     </div>

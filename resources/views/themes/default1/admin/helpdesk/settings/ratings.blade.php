@@ -41,16 +41,7 @@
             <h4 class="modal-title">Create</h4>
         </div>
                      <div class="modal-body">
-                         <h3 id="conn" style="display:none;">Successfully Saved</h3>
-                                              <div id="show" style="display:none;">
-    <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-9">
-            <img src="{{asset("dist/img/loading.gif")}}">
-        </div>
-    </div>
-</div>
+                         
                              <div class="row">
                               <div class="col-md-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                 {!! Form::label('name',Lang::get('lang.rating_label')) !!}
@@ -104,8 +95,8 @@
                                                                     </div> 
                                                                 </div>
                                                             </div>
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+<!--                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>-->
               </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
@@ -130,9 +121,9 @@
                                 <td>{!! $rating->rating_area !!}</td>
                                  <td>
                                      
-                                   <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#{{$rating->id}}">Edit Details</button> 
+                                   <a class="btn btn-info btn-sm" data-toggle="modal" href="#rat{{$rating->id}}">Edit Details</a> 
                                    
-                                  <div class="modal fade" id="{{$rating->id}}">
+                                   <div class="modal fade" id="rat{{$rating->id}}">
                                        <div class="modal-dialog">
                                           <div class="modal-content">
                                              
@@ -145,16 +136,7 @@
             <h4 class="modal-title">Edit Details</h4>
         </div>
                     <div class="modal-body">
-                         <h3 id="conn" style="display:none;">Successfully Saved</h3>
-                                              <div id="show" style="display:none;">
-    <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-9">
-            <img src="{{asset("dist/img/loading.gif")}}">
-        </div>
-    </div>
-</div>
+                        
                          <div class="row">
                               <div class="col-md-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                 {!! Form::label('name',Lang::get('lang.rating_label')) !!}

@@ -21,10 +21,10 @@
                 
                 <div class="box-header with-border">
                     
-                    <h3 class="box-title">Current Templates</h3>
+                    <h3 class="box-title">Edit Email Templates</h3>
                      
                                                      
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                <!--<button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>-->
             
                 </div><!-- /.box-header -->
                 <div class="box-body">

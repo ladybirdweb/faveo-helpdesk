@@ -21,7 +21,7 @@
                 
                 <div class="box-header with-border">
                     
-                    <h3 class="box-title">Current Sets</h3>
+                    <h3 class="box-title">Create/View Sets</h3>
                      <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-toggle="modal" data-target="#create" title="Create"><i class="fa fa-plus-circle fa-2x"></i></button>
                  <div class="modal fade" id="create">
@@ -36,7 +36,7 @@
                         
                               <div class="form-group">
 
-                    <label for="title">Name:</label><br>
+                   <label for="title">Name:<span style="color:red;">*</span></label><br>
 {!! Form::text('name',null,['class'=>'form-control'])!!}
               
                         
@@ -52,7 +52,7 @@
                                                                     </div> 
                                                                 </div>
                                                             </div>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                <!--<button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>-->
               </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
