@@ -687,6 +687,10 @@ foreach ($markasread as $mark) {
         return view('themes.default1.admin.helpdesk.settings.ratings', compact('ratings'));
     }
 
+    public function editRatingSettings($id) {
+        $rating = Rating::whereId($id)->first();
+                return view('themes.default1.admin.helpdesk.settings.edit-ratings', compact('rating'));
+    }
     /**
      * 	To store rating data.
      *
@@ -708,7 +712,15 @@ foreach ($markasread as $mark) {
         return redirect()->back()->with('success', 'Successfully updated');
     }
 
-    public function createRating(Rating $rating,  \App\Model\helpdesk\Ratings\RatingRef $ratingrefs, \App\Http\Requests\helpdesk\RatingRequest $request)
+    public function createRating() {
+        try{
+            return view('themes.default1.admin.helpdesk.settings.create-ratings');
+        } catch (Exception $ex) {
+            return redirect('getratings')->with('fails', 'Ratings can not be created'.'<li>'.$ex->getMessage().'</li>');
+        }
+    }
+
+    public function storeRating(Rating $rating,  \App\Model\helpdesk\Ratings\RatingRef $ratingrefs, \App\Http\Requests\helpdesk\RatingRequest $request)
     {
         $rating->name = $request->input('name');
         $rating->display_order = $request->input('display_order');

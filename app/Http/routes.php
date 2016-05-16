@@ -204,8 +204,23 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::get('deleter/{rating}', ['as' => 'ratings.delete', 'uses' => 'Admin\helpdesk\SettingsController@RatingDelete']);
 
-    Route::post('create-ratings', ['as' => 'rating.create', 'uses' => 'Admin\helpdesk\SettingsController@createRating']);
-
+        Breadcrumbs::register('rating.create', function($breadcrumbs) {
+                $breadcrumbs->parent('ratings.index');
+        $breadcrumbs->push('Create Ratings', route('rating.create'));
+    });
+    
+    Route::get('create-ratings', ['as' => 'rating.create', 'uses' => 'Admin\helpdesk\SettingsController@createRating']);
+    
+    Route::post('store-ratings', ['as' => 'rating.store', 'uses' => 'Admin\helpdesk\SettingsController@storeRating']);
+    
+            Breadcrumbs::register('rating.edit', function($breadcrumbs) {
+                     $page = App\Model\helpdesk\Ratings\Rating::whereId(1)->first();
+        $breadcrumbs->parent('ratings.index');
+        $breadcrumbs->push('Edit Ratings', route('rating.edit',$page->id));
+    });
+    
+    Route::get('editratings/{slug}', ['as' => 'rating.edit', 'uses' => 'Admin\helpdesk\SettingsController@editRatingSettings']);
+    
     Route::patch('postratings/{slug}', ['as' => 'settings.rating', 'uses' => 'Admin\helpdesk\SettingsController@PostRatingSettings']);
 
     Route::get('remove-user-org/{id}', ['as' => 'removeuser.org', 'uses' => 'Agent\helpdesk\UserController@removeUserOrg']);
