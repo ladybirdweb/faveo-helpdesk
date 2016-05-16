@@ -34,6 +34,15 @@ class="active"
 	<div class="row">
 <div class="col-md-12">
 <div class="box box-primary">
+    
+                @if(Session::has('success'))
+                    <div class="alert alert-success alert-dismissable">
+                        <i class="fa fa-ban"></i>
+                        <b>Alert!</b> Success.
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <p>{{Session::get('success')}}</p>                
+                    </div>
+                @endif
 <div class="box-body">
 <div class="box-header">
 <h2 class="box-title">{{Lang::get('lang.edit')}}</h2>
