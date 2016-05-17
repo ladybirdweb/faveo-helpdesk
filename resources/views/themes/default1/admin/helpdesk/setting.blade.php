@@ -3,9 +3,9 @@
 @stop
 <!-- header -->
 @section('PageHeader')
-<div class="content-header">
-        <h1>{!! Lang::get('lang.admin_panel') !!}</h1>
-</div>
+
+        <h4>{!! Lang::get('lang.admin_panel') !!}</h4>
+
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -16,7 +16,7 @@
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-                        <div class="box">
+<div class="box" style="margin-top: 50px">
                             <div class="box-header with-border">
                                 <h3 class="box-title">{!! Lang::get('lang.staffs') !!}</h3>
                             </div>

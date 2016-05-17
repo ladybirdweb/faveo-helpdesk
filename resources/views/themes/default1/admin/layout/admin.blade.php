@@ -207,7 +207,7 @@
             <ul class="treeview-menu">
                 <li @yield('emails')><a href="{{ url('emails') }}"><i class="fa fa-envelope"></i>{!! Lang::get('lang.emails') !!}</a></li>
                 <li @yield('ban')><a href="{{ url('banlist') }}"><i class="fa fa-ban"></i>{!! Lang::get('lang.ban_lists') !!}</a></li>
-                 <li @yield('template')><a href="{{ url('templates') }}"><i class="fa fa-mail-forward"></i>{!! Lang::get('lang.templates') !!}</a></li>
+                 <li @yield('template')><a href="{{ url('template-sets') }}"><i class="fa fa-mail-forward"></i>{!! Lang::get('lang.templates') !!}</a></li>
                 <li @yield('diagnostics')><a href="{{ url('getdiagno') }}"><i class="fa fa-plus"></i>{!! Lang::get('lang.diagnostics') !!}</a></li>
                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Auto Response</a></li> -->
                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Rules/a></li> -->
@@ -308,14 +308,14 @@
                             <div class="content-wrapper">
                                 <!-- Content Header (Page header) -->
                                 <section class="content-header">
-                                    <div class="row">
+                                    <!--<div class="row">-->
                                     <div class="col-md-6">
                                 @yield('PageHeader')
                                     </div>
                                 <div class="pull-right">
                                 {!! Breadcrumbs::renderIfExists() !!}
                                 </div>
-                                </div>
+                                <!--</div>-->
                                 </section>
 
                                 <!-- Main content -->

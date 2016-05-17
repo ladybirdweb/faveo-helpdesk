@@ -48,7 +48,7 @@
                     <div class="col-md-4 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                         <!-- first name -->
                         {!! Form::label('name',Lang::get('lang.name'),['class'=>'required']) !!}<span style="color:red;">*</span>
-                        {!! $errors->first('name', '<spam class="help-block">:message</spam>') !!}
+                        <!--{!! $errors->first('name', '<spam class="help-block">:message</spam>') !!}-->
                         {!! Form::text('name',null,['class' => 'form-control']) !!}
 
                     </div>
@@ -56,7 +56,7 @@
                     <div class="col-md-4 form-group {{ $errors->has('type') ? 'has-error' : '' }}">
                         <!-- last name -->
                         {!! Form::label('type',Lang::get('lang.template-types'),['class'=>'required']) !!}<span style="color:red;">*</span>
-                            {!! $errors->first('type', '<spam class="help-block">:message</spam>') !!}
+                            <!--{!! $errors->first('type', '<spam class="help-block">:message</spam>') !!}-->
                         {!! Form::select('type',[''=>'Select','Type'=>$type],null,['class' => 'form-control']) !!}
 
                     </div>
@@ -66,7 +66,7 @@
                     <div class="col-md-12 form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
          
                         {!! Form::label('subject',Lang::get('lang.subject')) !!}<span style="color:red;">*</span>
-                            {!! $errors->first('subject', '<spam class="help-block">:message</spam>') !!}
+                            <!--{!! $errors->first('subject', '<spam class="help-block">:message</spam>') !!}-->
                         {!! Form::text('subject',null,['class' => 'form-control']) !!}
 
                     </div>
@@ -76,7 +76,7 @@
                     <div class="col-md-12 form-group {{ $errors->has('message') ? 'has-error' : '' }}">
                         
                         {!! Form::label('message',Lang::get('lang.content'),['class'=>'required']) !!}<span style="color:red;">*</span>
-                            {!! $errors->first('message', '<spam class="help-block">:message</spam>') !!}
+                            <!--{!! $errors->first('message', '<spam class="help-block">:message</spam>') !!}-->
                         {!! Form::textarea('message',null,['class'=>'form-control','id'=>'textarea']) !!}
                        
                     </div>

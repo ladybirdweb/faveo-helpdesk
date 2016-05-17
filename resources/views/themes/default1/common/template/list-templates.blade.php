@@ -17,7 +17,7 @@
         <div class="col-xs-12">
             
             <!-- -->    
-            <div class="box">
+            <div class="box box-primary">
                 
                 <div class="box-header with-border">
                     
