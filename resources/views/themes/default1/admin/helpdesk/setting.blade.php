@@ -3,7 +3,9 @@
 @stop
 <!-- header -->
 @section('PageHeader')
+<div class="content-header">
         <h1>{!! Lang::get('lang.admin_panel') !!}</h1>
+</div>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->

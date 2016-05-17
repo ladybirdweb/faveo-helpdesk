@@ -12,7 +12,7 @@
 @stop
 
 @section('content')
-<section class="content" style='padding-top: 30px'>
+<section class="content">
     <div class="row">
         <div class="col-xs-12">
             
