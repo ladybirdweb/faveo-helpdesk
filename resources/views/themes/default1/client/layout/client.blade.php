@@ -176,7 +176,9 @@
         </header>
                             <!-- Left side column. contains the logo and sidebar -->
                             <!-- Right side column. Contains the navbar and content of the page -->
+<div class="site-hero clearfix">                            
 {!! Breadcrumbs::render() !!}
+</div>
         <!-- Main content -->
         <div id="main" class="site-main clearfix">
 			<div class="container">
