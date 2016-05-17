@@ -16,6 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
+<h1>Notification Settings</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->

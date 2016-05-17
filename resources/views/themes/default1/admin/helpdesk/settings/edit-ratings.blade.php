@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-
+<h1>Edit Ratings</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->

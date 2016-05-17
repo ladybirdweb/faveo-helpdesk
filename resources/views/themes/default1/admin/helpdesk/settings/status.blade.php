@@ -1,6 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
-@section('head')
-
+@section('PageHeader')
+<h1>Status Settings</h1>
 @stop
 @section('header')
 
@@ -12,12 +12,9 @@
 @stop
 
 @section('content')
-<section class="content" style='padding-top: 30px'>
-    <div class="row">
-        <div class="col-xs-12">
-            
+ 
             <!-- -->    
-            <div class="box">
+            <div class="box box-primary with border">
                 
                 <div class="box-header with-border">
                     
@@ -33,16 +30,6 @@
             <h4 class="modal-title">Create</h4>
         </div>
                      <div class="modal-body">
-                         <h3 id="conn" style="display:none;">Successfully Saved</h3>
-                                              <div id="show" style="display:none;">
-    <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-9">
-            <img src="{{asset("dist/img/loading.gif")}}">
-        </div>
-    </div>
-</div>
                               <div class="form-group">
         <div class="row">
                  
@@ -112,7 +99,7 @@
                                                                     </div> 
                                                                 </div>
                                                             </div>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                <!--<button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>-->
               </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
@@ -269,12 +256,7 @@
                     </table>
                 </div><!-- /.box-body -->
             </div>
-            <!-- -->
-        </div>
-    </div>
 
-          
-    </section>
 
 @stop
 @section('footer')

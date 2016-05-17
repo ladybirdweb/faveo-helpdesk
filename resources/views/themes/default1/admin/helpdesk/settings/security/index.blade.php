@@ -1,6 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
-@section('head')
-
+@section('PageHeader')
+<h1>Security</h1>
 @stop
 @section('header')
 
@@ -12,9 +12,6 @@
 @stop
 
 @section('content')
-<section class="content" style='padding-top: 30px'>
-    <div class="row">
-        <div class="col-xs-12">
 
             @if(Session::has('success'))
             <div class="alert alert-success alert-dismissable">
@@ -33,7 +30,7 @@
             </div>
             @endif
             <!-- -->    
-            <div class="box">
+            <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Security Settings</h3>
                 </div><!-- /.box-header -->
@@ -116,12 +113,6 @@
                     {!! Form::close() !!}
                 </div><!-- /.box-body -->
             </div>
-            <!-- -->
-        </div>
-    </div>
-
-
-</section>
 
 @stop
 @section('footer')

@@ -1,6 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
-@section('head')
-
+@section('PageHeader')
+<h1>Ratings</h1>
 @stop
 @section('header')
 
@@ -12,10 +12,7 @@
 @stop
 
 @section('content')
-<section class="content">
-    <div class="row">
-        <div class="col-xs-12">
-            
+
                 @if(Session::has('success'))
                     <div class="alert alert-success alert-dismissable">
                         <i class="fa fa-ban"></i>
@@ -26,7 +23,7 @@
                 @endif
 
             <!-- -->    
-            <div class="box">
+            <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Current Ratings</h3>
                      <div class="box-tools pull-right">
@@ -37,6 +34,7 @@
                 <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>-->
               </div>
                 </div><!-- /.box-header -->
+                </div>
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -58,7 +56,7 @@
                                 <td>{!! $rating->display_order !!}</td>
                                 <td>{!! $rating->rating_area !!}</td>
                                  <td>
-                                      {!! link_to_route('rating.edit','Edit Templates',[$rating->id],['class'=>'btn btn-info btn-sm']) !!}
+                                      {!! link_to_route('rating.edit','Edit Ratings',[$rating->id],['class'=>'btn btn-info btn-sm']) !!}
                                    
                                     
                                                             <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$rating->id}}delete">Delete</button>
@@ -87,11 +85,7 @@
                     </table>
                 </div><!-- /.box-body -->
             </div>
-            <!-- -->
-        </div>
-    </div>
 
-    </section>
 
 @stop
 @section('footer')

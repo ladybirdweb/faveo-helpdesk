@@ -50,7 +50,13 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('notifications-list', ['as' => 'notification.list', 'uses' => 'Common\NotificationController@show']);
 
     Route::post('notification-delete/{id}', ['as' => 'notification.delete', 'uses' => 'Common\NotificationController@delete']);
-
+    Breadcrumbs::register('notification.settings', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push('Notifications Settings', route('notification.settings'));
+    });
+    Route::get('settings-notification', ['as' => 'notification.settings', 'uses' => 'Admin\helpdesk\SettingsController@notificationSettings']);
+    Route::get('delete-read-notification', 'Admin\helpdesk\SettingsController@deleteReadNoti');
+    Route::post('delete-notification-log', 'Admin\helpdesk\SettingsController@deleteNotificationLog');
     // resource is a function to process create,edit,read and delete
     Route::resource('groups', 'Admin\helpdesk\GroupController'); // for group module, for CRUD
 

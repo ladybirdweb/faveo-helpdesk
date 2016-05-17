@@ -1,6 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
-@section('head')
-
+@section('PageHeader')
+<h1>Templates</h1>
 @stop
 @section('header')
 
@@ -12,12 +12,8 @@
 @stop
 
 @section('content')
-<section class="content" style='padding-top: 30px'>
-    <div class="row">
-        <div class="col-xs-12">
-            
-            <!-- -->    
-            <div class="box">
+  
+            <div class="box box-primary">
                 @foreach ($errors->all() as $error)
                 <div class="alert alert-danger alert-dismissable">
                         <i class="fa fa-ban"></i>
@@ -28,7 +24,7 @@
                                 
                     </div>
  @endforeach 
-                <div class="box box-primary with-border">
+                <div class="box-header with-border">
                     
                     <h3 class="box-title">Create/View Sets</h3>
                      <div class="box-tools pull-right">
@@ -179,11 +175,6 @@ if($set->name == $settings->template)  {
                 </div><!-- /.box-body -->
             </div>
             <!-- -->
-        </div>
-    </div>
-
-          
-    </section>
 
 @stop
 @section('footer')

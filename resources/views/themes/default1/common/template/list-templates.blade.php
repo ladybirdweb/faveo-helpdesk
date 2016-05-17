@@ -1,6 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
-@section('head')
-
+@section('PageHeader')
+<h1>Templates</h1>
 @stop
 @section('header')
 
@@ -12,10 +12,7 @@
 @stop
 
 @section('content')
-<section class="content">
-    <div class="row">
-        <div class="col-xs-12">
-            
+
             <!-- -->    
             <div class="box box-primary">
                 
@@ -73,12 +70,7 @@
                     </table>
                 </div><!-- /.box-body -->
             </div>
-            <!-- -->
-        </div>
-    </div>
 
-          
-    </section>
 
 @stop
 @section('footer')

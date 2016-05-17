@@ -1,4 +1,7 @@
-    @extends('themes.default1.admin.layout.admin')
+@extends('themes.default1.admin.layout.admin')
+@section('PageHeader')
+<h1>Edit Template</h1>
+@stop
 @section('content')
 <div class="box box-primary">
 
