@@ -8,7 +8,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
-class User extends BaseModel implements AuthenticatableContract, CanResetPasswordContract {
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
     use Authenticatable,
         CanResetPassword;

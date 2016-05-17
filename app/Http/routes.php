@@ -554,7 +554,9 @@ Route::post('postedform', 'Client\helpdesk\FormController@postedForm'); /* post 
 Route::get('check', 'CheckController@getcheck'); //testing checkbox auto-populate
 
 Route::post('postcheck/{id}', 'CheckController@postcheck');
-
+Breadcrumbs::register('home', function($breadcrumbs) {
+    $breadcrumbs->push('Home', route('home'));
+});
 Route::get('home', ['as' => 'home', 'uses' => 'Client\helpdesk\WelcomepageController@index']); //guest layout
 Breadcrumbs::register('/', function($breadcrumbs) {
     $breadcrumbs->push('Home', route('/'));
