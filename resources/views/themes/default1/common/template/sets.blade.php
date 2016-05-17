@@ -28,7 +28,7 @@
                                 
                     </div>
  @endforeach 
-                <div class="box box-primary box-header with-border">
+                <div class="box box-primary with-border">
                     
                     <h3 class="box-title">Create/View Sets</h3>
                      <div class="box-tools pull-right">

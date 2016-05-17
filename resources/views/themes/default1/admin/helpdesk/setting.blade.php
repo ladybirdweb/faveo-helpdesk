@@ -4,7 +4,7 @@
 <!-- header -->
 @section('PageHeader')
 
-        <h4>{!! Lang::get('lang.admin_panel') !!}</h4>
+        <h3>{!! Lang::get('lang.admin_panel') !!}</h3>
 
 @stop
 <!-- /header -->
