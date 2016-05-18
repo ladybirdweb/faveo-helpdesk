@@ -1,6 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
-@section('head')
-
+@section('PageHeader')
+<h1>Ratings</h1>
 @stop
 @section('header')
 
@@ -12,10 +12,7 @@
 @stop
 
 @section('content')
-<section class="content">
-    <div class="row">
-        <div class="col-xs-12">
-            
+
                 @if(Session::has('success'))
                     <div class="alert alert-success alert-dismissable">
                         <i class="fa fa-ban"></i>
@@ -26,88 +23,18 @@
                 @endif
 
             <!-- -->    
-            <div class="box">
+            <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Current Ratings</h3>
                      <div class="box-tools pull-right">
                                               <div class="box-tools pull-right">
-                <button class="btn btn-box-tool" data-toggle="modal" data-target="#create" title="Create"><i class="fa fa-plus-circle fa-2x"></i></button>
-                 <div class="modal fade" id="create">
-                                       <div class="modal-dialog">
-                                          <div class="modal-content">
-                                  {!! Form::open(['route'=>'rating.create']) !!}
-                    <div class="modal-header">
-                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Create</h4>
-        </div>
-                     <div class="modal-body">
-                         <h3 id="conn" style="display:none;">Successfully Saved</h3>
-                                              <div id="show" style="display:none;">
-    <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-9">
-            <img src="{{asset("dist/img/loading.gif")}}">
-        </div>
-    </div>
-</div>
-                             <div class="row">
-                              <div class="col-md-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                {!! Form::label('name',Lang::get('lang.rating_label')) !!}
-                {!! Form::text('name',null,['class' => 'form-control']) !!}
-            </div>
-                             <div class="col-md-6 form-group {{ $errors->has('display_order') ? 'has-error' : '' }}">
-                {!! Form::label('display_order',Lang::get('lang.display_order')) !!}
-                {!! Form::text('display_order',null,['class' => 'form-control']) !!}
-            </div>
-                                     </div>
-                        
-                              <div class="form-group {{ $errors->has('rating_scale') ? 'has-error' : '' }}">
-                {!! Form::label('rating_scale',Lang::get('lang.rating_scale')) !!}
-                <blockquote>The maximum rating that can be given. For example, if 5 is selected, the lowest possible rating will be 1 and the highest 5.</blockquote>
-                {!! Form::select('rating_scale',['1' => '1','2'=>'2','3'=>'3','4'=>'4','5'=>'5','6'=>'6','7'=>'7','8'=>'8'],null,['class' => 'form-control']) !!}
-           </div>
-                             <div class="form-group {{ $errors->has('rating_area') ? 'has-error' : '' }}">
-                {!! Form::label('rating_area',Lang::get('lang.rating_area')) !!}
-                {!! Form::select('rating_area',['Helpdesk Area' => 'Helpdesk Area','Comment Area'=>'Comment Area'],null,['class' => 'form-control']) !!}
-            </div>
-                                
-         <div class="form-group {{ $errors->has('restrict') ? 'has-error' : '' }}">
-		<!-- gender -->
-			{!! Form::label('gender','Restrict rating to a department') !!}
-                        <blockquote>Select a department to restrict this rating to tickets or chats within a specific department. If no department is selected, the rating will appear across all departments.</blockquote>
-			{!! Form::select('restrict',['General' => 'general','Support'=>'support'],null,['class' => 'form-control']) !!}
-          
-		</div>
-                           <div class="form-group {{ $errors->has('allow_modification') ? 'has-error' : '' }}">
-		<!-- Email user -->
-						
-{!! Form::label('allow_modification','Allow user to change the rating?') !!}
-                        <blockquote>If you choose 'YES' user can modify the rating.</blockquote>
-			<div class="row">
-				<div class="col-xs-3">
-					{!! Form::radio('allow_modification','1') !!} {{Lang::get('lang.yes')}}
-				</div>
-				<div class="col-xs-3">
-					{!! Form::radio('allow_modification','0') !!} {{Lang::get('lang.no')}}
-				</div>
-		</div>        
-                     </div>
-                         </div>
-                                                                        <div class="modal-footer">
-                                                                            <div class="form-group">
-                                                                                {!! Form::submit('Create Rating',['class'=>'btn btn-primary'])!!}
-                                                                            
-                                                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                                                        </div></div>
-                                                                        {!! Form::close() !!}
-                                                                    </div> 
-                                                                </div>
-                                                            </div>
-                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                                                  <a class="btn btn-box-tool" href="{{ route('rating.create') }}" title="Create"><i class="fa fa-plus-circle fa-2x"></i></a>
+
+<!--                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>-->
               </div>
                 </div><!-- /.box-header -->
+                </div>
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>
@@ -129,89 +56,8 @@
                                 <td>{!! $rating->display_order !!}</td>
                                 <td>{!! $rating->rating_area !!}</td>
                                  <td>
-                                     
-                                   <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#{{$rating->id}}">Edit Details</button> 
+                                      {!! link_to_route('rating.edit','Edit Ratings',[$rating->id],['class'=>'btn btn-info btn-sm']) !!}
                                    
-                                  <div class="modal fade" id="{{$rating->id}}">
-                                       <div class="modal-dialog">
-                                          <div class="modal-content">
-                                             
-                                             
-                                  {!! Form::model($rating,['route'=>['settings.rating', $rating->id],'method'=>'PATCH','files' => true]) !!} 
-                                  {{-- <input type="hidden" name="_token" value="{{ csrf_token() }}"> --}}
-                    <div class="modal-header">
-                       
-                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Edit Details</h4>
-        </div>
-                    <div class="modal-body">
-                         <h3 id="conn" style="display:none;">Successfully Saved</h3>
-                                              <div id="show" style="display:none;">
-    <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-9">
-            <img src="{{asset("dist/img/loading.gif")}}">
-        </div>
-    </div>
-</div>
-                         <div class="row">
-                              <div class="col-md-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                {!! Form::label('name',Lang::get('lang.rating_label')) !!}
-                {!! Form::text('name',null,['class' => 'form-control']) !!}
-            </div>
-                             <div class="col-md-6 form-group {{ $errors->has('display_order') ? 'has-error' : '' }}">
-                {!! Form::label('display_order',Lang::get('lang.display_order')) !!}
-                {!! Form::text('display_order',null,['class' => 'form-control']) !!}
-            </div>
-                                     </div>
-                       
-                              <div class="form-group {{ $errors->has('rating_scale') ? 'has-error' : '' }}">
-                {!! Form::label('rating_scale',Lang::get('lang.rating_scale')) !!}
-                <blockquote>The maximum rating that can be given. For example, if 5 is selected, the lowest possible rating will be 1 and the highest 5.</blockquote>
-                {!! Form::select('rating_scale',['1' => '1','2'=>'2','3'=>'3','4'=>'4','5'=>'5','6'=>'6','7'=>'7','8'=>'8'],null,['class' => 'form-control']) !!}
-          
-            </div>
-                             <div class="form-group {{ $errors->has('rating_area') ? 'has-error' : '' }}">
-                {!! Form::label('rating_area',Lang::get('lang.rating_area')) !!}
-                {!! Form::select('rating_area',['Helpdesk Area' => 'Helpdesk Area','Comment Area'=>'Comment Area'],null,['class' => 'form-control']) !!}
-            </div>
-                                    
-         <div class="form-group {{ $errors->has('restrict') ? 'has-error' : '' }}">
-		<!-- gender -->
-			{!! Form::label('gender','Restrict rating to a department') !!}
-                        <blockquote>Select a department to restrict this rating to tickets or chats within a specific department. If no department is selected, the rating will appear across all departments.</blockquote>
-			{!! Form::select('restrict',['General' => 'general','Support'=>'support'],null,['class' => 'form-control']) !!}
-          
-		</div>
-                           <div class="form-group {{ $errors->has('allow_modification') ? 'has-error' : '' }}">
-		<!-- Email user -->
-						
-{!! Form::label('allow_modification','Allow user to change the rating?') !!}
-                        <blockquote>If you choose 'YES' user can modify the rating.</blockquote>
-			<div class="row">
-				<div class="col-xs-3">
-					{!! Form::radio('allow_modification','1') !!} {{Lang::get('lang.yes')}}
-				</div>
-				<div class="col-xs-3">
-					{!! Form::radio('allow_modification','0') !!} {{Lang::get('lang.no')}}
-				</div>
-		</div>        
-                     </div>
-                    </div>
-                                          
-                                                                        <div class="modal-footer">
-                                                                            <div class="form-group">
-                                                                                {!! Form::submit('Update Details',['class'=>'btn btn-primary'])!!}
-                                                                            
-                                                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                                                        </div></div>
-                                                                        {!! Form::close() !!}
-
-                                                                            
-                                                                    </div> 
-                                                                </div>
-                                                            </div>
                                     
                                                             <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$rating->id}}delete">Delete</button>
                                                             
@@ -239,11 +85,7 @@
                     </table>
                 </div><!-- /.box-body -->
             </div>
-            <!-- -->
-        </div>
-    </div>
 
-    </section>
 
 @stop
 @section('footer')
@@ -266,6 +108,10 @@ $(function() {
 
 </script>
 
-    
+  <script type="text/javascript">
+<?php if (count($errors) > 0) { ?>
+    $('#create').modal('show');
+<?php } ?>
+</script>  
 
 @stop

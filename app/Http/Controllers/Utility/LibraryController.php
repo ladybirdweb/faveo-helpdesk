@@ -91,7 +91,7 @@ class LibraryController extends Controller {
         try {
             //$encrypted = p¥Ùn¿olÓ¥9)OÞÝ¸Ôvh§=Ìtt1rkC‰É§%YœfÐS\BâkHW€mùÌØg¹+VŠ¥²?áÙ{/<¶¡£e¡ˆr°(V)Öíàr„Ž]K9¤ÿÖ¡Åmž”üÈoò×´î¢“µºŽ06¼e€rœ['4çhH¾ö:¨œ–S„œ¦,|¤ÇqÂrÈŸd+ml‡ uötÏ†ûóŽ&›áyÙ(ÆŒÁ$‘¥±Zj*îàÒöL‘ˆD†aÉö_§è¶°·V„Þú]%ÅR*B=žéršæñ*i+á­±èç|c¹ÑßŸ­F$;
             // Get the private Key
-            $path = storage_path('app/faveo-private.key');
+            $path = storage_path('app'.DIRECTORY_SEPARATOR.'faveo-private.key');
             $key_content = file_get_contents($path);
             if (!$privateKey = openssl_pkey_get_private($key_content)) {
                 die('Private Key failed');

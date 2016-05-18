@@ -687,20 +687,24 @@ foreach ($markasread as $mark) {
         return view('themes.default1.admin.helpdesk.settings.ratings', compact('ratings'));
     }
 
+    public function editRatingSettings($id) {
+        $rating = Rating::whereId($id)->first();
+                return view('themes.default1.admin.helpdesk.settings.edit-ratings', compact('rating'));
+    }
     /**
      * 	To store rating data.
      *
      *  @return type Redirect
      */
-    public function PostRatingSettings($id,Rating $ratings)
+    public function PostRatingSettings($id,Rating $ratings, \App\Http\Requests\helpdesk\RatingUpdateRequest $request)
     {
         $rating = $ratings->whereId($id)->first();
-        $rating->name = Input::get('name');
-        $rating->display_order = Input::get('display_order');
-        $rating->allow_modification = Input::get('allow_modification');
-                $rating->rating_scale = Input::get('rating_scale');
-                        $rating->rating_area = Input::get('rating_area');
-                                $rating->restrict = Input::get('restrict');
+        $rating->name = $request->input('name');
+        $rating->display_order = $request->input('display_order');
+        $rating->allow_modification = $request->input('allow_modification');
+                $rating->rating_scale = $request->input('rating_scale');
+                        $rating->rating_area = $request->input('rating_area');
+                                $rating->restrict = $request->input('restrict');
         $rating->save();
         
 //        DB::table('settings_ratings')->whereSlug($slug)->update(['rating_name' => $name, 'publish' => $publish, 'modify' => $modify]);
@@ -708,14 +712,22 @@ foreach ($markasread as $mark) {
         return redirect()->back()->with('success', 'Successfully updated');
     }
 
-    public function createRating(Rating $rating,  \App\Model\helpdesk\Ratings\RatingRef $ratingrefs)
+    public function createRating() {
+        try{
+            return view('themes.default1.admin.helpdesk.settings.create-ratings');
+        } catch (Exception $ex) {
+            return redirect('getratings')->with('fails', 'Ratings can not be created'.'<li>'.$ex->getMessage().'</li>');
+        }
+    }
+
+    public function storeRating(Rating $rating,  \App\Model\helpdesk\Ratings\RatingRef $ratingrefs, \App\Http\Requests\helpdesk\RatingRequest $request)
     {
-        $rating->name = Input::get('name');
-        $rating->display_order = Input::get('display_order');
-        $rating->allow_modification = Input::get('allow_modification');
-                $rating->rating_scale = Input::get('rating_scale');
-                        $rating->rating_area = Input::get('rating_area');
-                                $rating->restrict = Input::get('restrict');
+        $rating->name = $request->input('name');
+        $rating->display_order = $request->input('display_order');
+        $rating->allow_modification = $request->input('allow_modification');
+                $rating->rating_scale = $request->input('rating_scale');
+                        $rating->rating_area = $request->input('rating_area');
+                                $rating->restrict = $request->input('restrict');
         $rating->save();
         $ratingrefs->rating_id = $rating->id;
 

@@ -4,7 +4,7 @@ namespace App\Model\helpdesk\Workflow;
 
 use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
-class WorkflowName extends BaseModel
+class WorkflowName extends Model
 {
     public $timestamps = false;
     protected $table = 'workflow_name';

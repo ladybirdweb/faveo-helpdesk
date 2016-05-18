@@ -1,6 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
-@section('head')
-
+@section('PageHeader')
+<h1>Templates</h1>
 @stop
 @section('header')
 
@@ -12,19 +12,24 @@
 @stop
 
 @section('content')
-<section class="content" style='padding-top: 30px'>
-    <div class="row">
-        <div class="col-xs-12">
-            
-            <!-- -->    
-            <div class="box">
-                
+  
+            <div class="box box-primary">
+                @foreach ($errors->all() as $error)
+                <div class="alert alert-danger alert-dismissable">
+                        <i class="fa fa-ban"></i>
+  
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                       
+                <li style="list-style: none">{{ $error }}</li>
+                                
+                    </div>
+ @endforeach 
                 <div class="box-header with-border">
                     
-                    <h3 class="box-title">Current Sets</h3>
+                    <h3 class="box-title">Create/View Sets</h3>
                      <div class="box-tools pull-right">
                 <button class="btn btn-box-tool" data-toggle="modal" data-target="#create" title="Create"><i class="fa fa-plus-circle fa-2x"></i></button>
-                 <div class="modal fade" id="create">
+                 <div class="modal fade" id="create" class="modal fade in {{ $errors->has('name') ? 'has-error' : '' }}">
                                        <div class="modal-dialog">
                                           <div class="modal-content">
                                   {!! Form::open(['route'=>'template-sets.store']) !!}
@@ -33,10 +38,10 @@
             <h4 class="modal-title">Create</h4>
         </div>
                      <div class="modal-body">
-                        
-                              <div class="form-group">
+                              <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
 
-                    <label for="title">Name:</label><br>
+                   <label for="title">Name:<span style="color:red;">*</span></label><br>
+                                           {!! $errors->first('name', '<spam class="help-block">:message</spam>') !!}
 {!! Form::text('name',null,['class'=>'form-control'])!!}
               
                         
@@ -52,7 +57,7 @@
                                                                     </div> 
                                                                 </div>
                                                             </div>
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                <!--<button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>-->
               </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
@@ -135,8 +140,10 @@
                                                                     </div> 
                                                                 </div>
                                                             </div>
+                                   
                                     <?php 
-if($set->name == 'default')  {
+                                  $settings =   DB::table('settings_email')->whereId(1)->first();
+if($set->name == $settings->template)  {
   $dis = "disabled";  
 } else {
   $dis = "";
@@ -168,11 +175,6 @@ if($set->name == 'default')  {
                 </div><!-- /.box-body -->
             </div>
             <!-- -->
-        </div>
-    </div>
-
-          
-    </section>
 
 @stop
 @section('footer')

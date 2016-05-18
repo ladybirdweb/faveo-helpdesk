@@ -113,7 +113,7 @@ if ($i == 0) {
                     </div>
                 </div>
                 <div class="box-body">
-                                                    <div class="box-header with-border">
+<!--                                                    <div class="box-header with-border">
                                     <h3 class="box-title">Ticket Report</h3>
                             <div class="row">
                                 <div class="col-sm-3">
@@ -123,7 +123,7 @@ if ($i == 0) {
                                         <i class="fa fa-calendar"></i>
                                       </div>
                                       <input type="text" class="form-control pull-right" id="reservation" placeholder="Pick a Date">
-                                    </div><!-- /.input group -->
+                                    </div> /.input group 
                                 </div>
                                 <div class="col-sm-1">
                                     <input type="submit" class="btn btn-primary">
@@ -166,7 +166,7 @@ if ($i == 0) {
                                     </div>
                                 </div>
                             </div>
-                                    </div>
+                                    </div>-->
                                           <form id="foo">
                     <div  class="form-group">
     <div class="row">

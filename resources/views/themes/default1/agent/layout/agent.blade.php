@@ -385,13 +385,13 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                                     <div class="col-md-6">
                                 @yield('PageHeader')
                                     </div>
-                                <div class="col-md-6 pull-right">
+                                <div class="pull-right">
                                 {!! Breadcrumbs::renderIfExists() !!}
                                 </div>
                                 </div>
                             </section>
                             <!-- Main content -->
-                            <section class="content" style="margin-top: 20px">
+                            <section class="content">
                                 @yield('content')
                             </section><!-- /.content -->
                         </div>

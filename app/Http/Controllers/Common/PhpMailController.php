@@ -7,13 +7,13 @@ use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
+use App\Model\common\TemplateType;
 use App\User;
 use Auth;
 
-class PhpMailController extends Controller
-{
-    public function fetch_smtp_details($id)
-    {
+class PhpMailController extends Controller {
+
+    public function fetch_smtp_details($id) {
         $emails = Emails::where('id', '=', $id)->first();
         if ($emails->sending_status == 1) {
             return $emails;
@@ -29,8 +29,7 @@ class PhpMailController extends Controller
      *
      * @return Mail
      */
-    public function sendmail($from, $to, $message, $template_variables)
-    {
+    public function sendmail($from, $to, $message, $template_variables) {
         // dd($from);
         $from_address = $this->fetch_smtp_details($from);
         if ($from_address == null) {
@@ -64,11 +63,11 @@ class PhpMailController extends Controller
             } else {
                 $bc = null;
             }
-            if (isset($message['subject'])) {
-                $subject = $message['subject'];
-            } else {
-                $subject = null;
-            }
+//            if (isset($message['subject'])) {
+//                $subject = $message['subject'];
+//            } else {
+//                $subject = null;
+//            }
             if (isset($message['body'])) {
                 $content = $message['body'];
             } else {
@@ -187,9 +186,24 @@ class PhpMailController extends Controller
 //            $handle = fopen($directory.$template.'.blade.php', 'r');
 //            $contents = fread($handle, filesize($directory.$template.'.blade.php'));
 //            fclose($handle);
-            $set = \App\Model\Common\TemplateSet::where('name','=',$status->template)->first();
-            $template_data = \App\Model\Common\Template::where('set_id','=',$set->id)->where('variable','=',$template)->first();
-            $contents = $template_data->message;
+
+            $template = TemplateType::where('name', '=', $template)->first();
+
+            $set = \App\Model\Common\TemplateSet::where('name', '=', $status->template)->first();
+
+            if (isset($set['id'])) {
+                $template_data = \App\Model\Common\Template::where('set_id', '=', $set->id)->where('type', '=', $template->id)->first();
+                $contents = $template_data->message;
+                if ($template_data->subject) {
+                    $subject = $template_data->subject;
+                } else {
+                    $subject = $message['subject'];
+                }
+            } else {
+                $contents = null;
+                $subject = null;
+            }
+
             $variables = ['{!!$user!!}', '{!!$agent!!}', '{!!$ticket_number!!}', '{!!$content!!}', '{!!$from!!}', '{!!$ticket_agent_name!!}', '{!!$ticket_client_name!!}', '{!!$ticket_client_email!!}', '{!!$ticket_body!!}', '{!!$ticket_assigner!!}', '{!!$ticket_link_with_number!!}', '{!!$system_error!!}', '{!!$agent_sign!!}', '{!!$department_sign!!}', '{!!$password_reset_link!!}', '{!!$email_address!!}', '{!!$user_password!!}', '{!!$system_from!!}', '{!!$system_link!!}'];
 
             $data = [$user, $agent, $ticket_number, $content, $from, $ticket_agent_name, $ticket_client_name, $ticket_client_email, $ticket_body, $ticket_assigner, $ticket_link_with_number, $system_error, $agent_sign, $department_sign, $password_reset_link, $email_address, $user_password, $system_from, $system_link];
@@ -246,7 +260,7 @@ class PhpMailController extends Controller
             $mail->Subject = $subject;
             if ($template == 'ticket-reply-agent') {
                 $line = '---Reply above this line--- <br/><br/>';
-                $mail->Body = $line.$messagebody;
+                $mail->Body = $line . $messagebody;
             } else {
                 $mail->Body = $messagebody;
             }
@@ -269,8 +283,7 @@ class PhpMailController extends Controller
      *
      * @return MailNotification
      */
-    public function sendEmail($from, $to, $message)
-    {
+    public function sendEmail($from, $to, $message) {
         // dd($from);
         $from_address = $this->fetch_smtp_details($from);
 
@@ -396,8 +409,7 @@ class PhpMailController extends Controller
      *
      * @return type
      */
-    public function company()
-    {
+    public function company() {
         $company = Company::Where('id', '=', '1')->first();
         if ($company->company_name == null) {
             $company = 'Support Center';
@@ -459,8 +471,7 @@ class PhpMailController extends Controller
      *
      * @return type integer
      */
-    public function mailfrom($reg, $dept_id)
-    {
+    public function mailfrom($reg, $dept_id) {
         $email = Email::where('id', '=', '1')->first();
         if ($reg == 1) {
             return $email->sys_email;
@@ -473,4 +484,5 @@ class PhpMailController extends Controller
             }
         }
     }
+
 }

@@ -1,6 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
-@section('head')
-
+@section('PageHeader')
+<h1>Templates</h1>
 @stop
 @section('header')
 
@@ -12,19 +12,16 @@
 @stop
 
 @section('content')
-<section class="content" style='padding-top: 30px'>
-    <div class="row">
-        <div class="col-xs-12">
-            
+
             <!-- -->    
-            <div class="box">
+            <div class="box box-primary">
                 
                 <div class="box-header with-border">
                     
-                    <h3 class="box-title">Current Templates</h3>
+                    <h3 class="box-title">Edit Email Templates</h3>
                      
                                                      
-                <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                <!--<button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>-->
             
                 </div><!-- /.box-header -->
                 <div class="box-body">
@@ -73,12 +70,7 @@
                     </table>
                 </div><!-- /.box-body -->
             </div>
-            <!-- -->
-        </div>
-    </div>
 
-          
-    </section>
 
 @stop
 @section('footer')
