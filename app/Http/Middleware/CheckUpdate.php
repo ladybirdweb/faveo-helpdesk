@@ -19,6 +19,7 @@ class CheckUpdate {
      */
     public function handle($request, Closure $next) {
         $check = $this->proceess();
+        //dd($check);
         if ($check == true) {
             //$this->notificationBar();
             $this->checkNewUpdate();
@@ -44,7 +45,8 @@ class CheckUpdate {
     public function checkNewUpdate() {
 
         $notify = new BarNotification();
-        if ($notify->find(1)) {
+        $not = $notify->get();
+        if ($not->count()>0) {
             $now = \Carbon\Carbon::now();
             $yesterday = \Carbon\Carbon::now(-24);
             $notifications = $notify->whereBetween('created_at', [$yesterday, $now])->lists('value', 'key');
@@ -72,10 +74,15 @@ class CheckUpdate {
                 }
             }
         } else {
+            
             $check_version = $this->checkNewVersion();
 
             if ($check_version == true) {
-                $notify->create(['key' => 'new-version', 'value' => 'new version found please click <a href=' . url('file-update') . '><b>here to download</b></a>']);
+                //dd('if');
+                $notify->create(['key' => 'new-version', 'value' => 'new version found please click <a href=' . url('file-update') . '><b>here to download</b></a>','created_at'=>\Carbon\Carbon::now()]);
+            }else{
+                //dd('else');
+                $notify->create(['key' => 'new-version', 'value' => '','created_at'=>\Carbon\Carbon::now()]);
             }
         }
     }
@@ -91,9 +98,11 @@ class CheckUpdate {
 
     public function proceess() {
         $notify = new BarNotification();
-        if ($notify->find(1)) {
+        $not = $notify->get();
+        if ($not->count()>0) {
 
             $n = $notify->where('key', 'new-version')->first();
+            
             if ($n) {
                 $now = \Carbon\Carbon::now();
                 $yesterday = \Carbon\Carbon::now(-24);
