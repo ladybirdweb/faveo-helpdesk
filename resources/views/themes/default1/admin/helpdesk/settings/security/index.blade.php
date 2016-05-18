@@ -1,7 +1,17 @@
 @extends('themes.default1.admin.layout.admin')
 @section('PageHeader')
+
+@section('Settings')
+active
+@stop
+
+@section('security')
+class="active"
+@stop
+
 <h1>Security</h1>
 @stop
+
 @section('header')
 <h1> List of Security </h1>
 <ol class="breadcrumb">
@@ -20,7 +30,7 @@
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <p>{{Session::get('success')}}</p>                
+            <p>{!! Session::get('success') !!}</p>
         </div>
         @endif
         @if(Session::has('failed'))
