@@ -70,7 +70,9 @@
                                     <i class="fa fa-bell-o"></i>
                                     <span class="label label-warning" id="count"><?php echo count($noti); ?></span>
                                 </a>
-                                <ul class="dropdown-menu" style="width: -moz-max-content">
+                                <ul class="dropdown-menu" style="width: -moz-max-content;
+    width: -webkit-max-content;
+    width: -o-max-content;">
                                     <li class="header">You have <?php echo count($noti); ?> notifications</li>
                                     <li>
                                         <ul class="menu">

@@ -69,8 +69,9 @@ class SecurityController extends Controller
      *
      * @return Response
      */
-    public function update($id, Security $security, SecurityRequest $request)
+    public function update($id, SecurityRequest $request)
     {
+        $security = new Security();
 $securitys = $security->whereId($id)->first();
   $securitys->lockout_message = $request->input('lockout_message');
     $securitys->backlist_offender = $request->input('backlist_offender');

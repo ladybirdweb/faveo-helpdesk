@@ -83,7 +83,9 @@ if ($company != null) {
                                     <i class="fa fa-bell-o"></i>
                                     <span class="label label-warning" id="count">{!! count($noti) !!}</span>
                                 </a>
-                                <ul class="dropdown-menu" style="width: -moz-max-content">
+                                <ul class="dropdown-menu" style="width: -moz-max-content;
+    width: -webkit-max-content;
+    width: -o-max-content;">
                                          
                                     <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
         <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
