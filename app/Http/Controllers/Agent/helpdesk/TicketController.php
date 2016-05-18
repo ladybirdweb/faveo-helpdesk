@@ -2167,6 +2167,9 @@ class TicketController extends Controller
     //Auto-close tickets
         public function autoCloseTickets()
     {
+            $workflow = \App\Model\helpdesk\Workflow\WorkflowClose::whereId(1)->first();
+            
+            if($workflow->condition == 1) {
 
             $overdues = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
         
@@ -2178,13 +2181,16 @@ class TicketController extends Controller
                 $sla_plan = Sla_plan::where('id', '=', $overdue->sla)->first();
 
                 $ovadate = $overdue->created_at;
-                $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)).'<br/><br/>';
+                $new_date = date_add($ovadate, date_interval_create_from_date_string($workflow->days.' days')).'<br/><br/>';
                 if (date('Y-m-d H:i:s') > $new_date) {
                     $i++;
                             $overdue->status = 3;
         $overdue->closed = 1;
         $overdue->closed_at = date('Y-m-d H:i:s');
         $overdue->save();
+        if($workflow->send_email == 1) {
+             $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $overdue->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
+        }
                 }
             }
             // dd(count($value));
@@ -2194,5 +2200,9 @@ class TicketController extends Controller
 //                $tickets = null;
 //            }
         }
+    }
+    else{
+        
+    }
     }
 }

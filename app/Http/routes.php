@@ -185,6 +185,8 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::resource('security', 'Admin\helpdesk\SecurityController'); // direct to security setting page
 
+        Route::resource('close-workflow', 'Admin\helpdesk\CloseWrokflowController'); // direct to security setting page
+    
     Route::patch('security/{id}', ['as' => 'securitys.update', 'uses' => 'Admin\helpdesk\SecurityController@update']); // direct to security setting page  
     Breadcrumbs::register('statuss.index', function($breadcrumbs) {
         $breadcrumbs->parent('setting');
