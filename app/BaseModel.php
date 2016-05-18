@@ -19,7 +19,9 @@ class BaseModel extends Model {
         require_once base_path('vendor' . DIRECTORY_SEPARATOR . 'htmlpurifier' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'HTMLPurifier.auto.php');
 
         $config = \HTMLPurifier_Config::createDefault();
+
         $purifier = new \HTMLPurifier($config);
+
         //settings name
         if ($this->table == 'settings_system') {
             if ($this->$property != 'name') {
@@ -28,8 +30,9 @@ class BaseModel extends Model {
                 $value = $purifier->purify($value);
             }
         }
-
-        $value = $purifier->purify($value);
+        if ($value != strip_tags($value)) {
+            $value = $purifier->purify($value);
+        }
         parent::setAttribute($property, $value);
     }
 
