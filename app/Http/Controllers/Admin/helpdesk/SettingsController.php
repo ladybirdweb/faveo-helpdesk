@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\helpdesk\CompanyRequest;
 use App\Http\Requests\helpdesk\EmailRequest;
 use App\Http\Requests\helpdesk\SystemRequest;
+use App\Http\Requests\helpdesk\StatusRequest;
 // models
 use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Agent\Department;
@@ -82,6 +83,9 @@ public function deleteReadNoti()
     public function deleteNotificationLog()
     {
         $days = Input::get('no_of_days');
+        if($days == null || is_string($days)) {
+            return redirect()->back()->with('fails','Please enter valid no of days');
+    }
         $date = new DateTime;
 $date->modify($days.' day');
 $formatted_date = $date->format('Y-m-d H:i:s');
@@ -118,22 +122,22 @@ foreach ($markasread as $mark) {
      *
      * get the form for company setting page
      */
-    public function editStatuses($id) {
+    public function editStatuses($id, StatusRequest $request) {
         try {
             /* fetch the values of company from company table */
             $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->first();
-            $statuss->name = Input::get('name');
-            $statuss->icon_class = Input::get('icon_class');
-            $statuss->email_user = Input::get('email_user');
-            $statuss->sort = Input::get('sort');
-            $delete = Input::get('deleted');
+            $statuss->name = $request->input('name');
+            $statuss->icon_class = $request->input('icon_class');
+            $statuss->email_user = $request->input('email_user');
+            $statuss->sort = $request->input('sort');
+            $delete = $request->input('deleted');
             if($delete == 'yes') {
                 $statuss->state = 'delete';
             }
             else {
-                            $statuss->state = Input::get('state');
+                            $statuss->state = $request->input('state');
             }
-            $statuss->sort = Input::get('sort');
+            $statuss->sort = $request->input('sort');
             $statuss->save();
             /* Direct to Company Settings Page */
             return redirect()->back()->with('success','Status has been updated!');
@@ -142,21 +146,21 @@ foreach ($markasread as $mark) {
         }
     }
     
-    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss) {
+    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss, StatusRequest $request) {
 //        try {
             /* fetch the values of company from company table */
-                    $statuss->name = Input::get('name');
-            $statuss->icon_class = Input::get('icon_class');
-            $statuss->email_user = Input::get('email_user');
-            $statuss->sort = Input::get('sort');
-            $delete = Input::get('delete');
+                    $statuss->name = $request->input('name');
+            $statuss->icon_class = $request->input('icon_class');
+            $statuss->email_user = $request->input('email_user');
+            $statuss->sort = $request->input('sort');
+            $delete = $request->input('delete');
             if($delete == 'yes') {
                 $statuss->state = 'deleted';
             }
             else {
-                            $statuss->state = Input::get('state');
+                            $statuss->state = $request->input('state');
             }
-            $statuss->sort = Input::get('sort');
+            $statuss->sort = $request->input('sort');
             $statuss->save();    
         /* Direct to Company Settings Page */
             return redirect()->back()->with('success','Status has been created!');

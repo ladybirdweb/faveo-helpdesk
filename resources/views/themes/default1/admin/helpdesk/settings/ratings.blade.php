@@ -13,14 +13,6 @@
 
 @section('content')
 
-                @if(Session::has('success'))
-                    <div class="alert alert-success alert-dismissable">
-                        <i class="fa fa-ban"></i>
-                        <b>Alert!</b> Success.
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        <p>{{Session::get('success')}}</p>                
-                    </div>
-                @endif
 
             <!-- -->    
             <div class="box box-primary">
@@ -35,6 +27,13 @@
               </div>
                 </div><!-- /.box-header -->
                 </div>
+                
+                @if(Session::has('success'))
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <p>{{Session::get('success')}}</p>                
+                    </div>
+                @endif
                 <div class="box-body">
                     <table id="example1" class="table table-bordered table-striped">
                         <thead>

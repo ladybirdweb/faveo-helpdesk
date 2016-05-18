@@ -30,22 +30,28 @@
             <h4 class="modal-title">Create</h4>
         </div>
                      <div class="modal-body">
-                              <div class="form-group">
+                              
         <div class="row">
                  
               <div class="col-md-6">
+                  <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                     <label for="title">Name:</label><br>
 {!! Form::text('name',null,['class'=>'form-control'])!!}
               </div>
+              </div>
             <div class="col-md-6">
+                <div class="form-group {{ $errors->has('sort') ? 'has-error' : '' }}">
                     <label for="title">Display Order:</label><br>
 {!! Form::text('sort',null,['class'=>'form-control'])!!}
               </div>  
+            </div>
             <div class="col-md-6">
+                <div class="form-group {{ $errors->has('icon_class') ? 'has-error' : '' }}">
                     <label for="title">Icon Class:</label><br>
 {!! Form::text('icon_class',null,['class'=>'form-control'])!!}
-              </div>  
-        </div></div>
+              </div> 
+            </div>
+        </div>
                          <div class="form-group">
 		<!-- gender -->
 			{!! Form::label('gender','Is this a resolved ticket status?') !!}
@@ -103,7 +109,15 @@
               </div>
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                    
+                     @foreach ($errors->all() as $error)
+                <div class="alert alert-danger alert-dismissable">
+                        
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                       
+                <li style="list-style: none">{{ $error }}</li>
+                                
+                    </div>
+ @endforeach 
                 @if(Session::has('success'))
                     <div class="alert alert-success alert-dismissable">
                         <i class="fa fa-ban"></i>
@@ -161,22 +175,27 @@
         </div>
     </div>
 </div>
-                              <div class="form-group">
-        <div class="row">
+ <div class="row">
                  
               <div class="col-md-6">
+                  <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                     <label for="title">Name:</label><br>
 {!! Form::text('name',null,['class'=>'form-control'])!!}
               </div>
+              </div>
             <div class="col-md-6">
+                <div class="form-group {{ $errors->has('sort') ? 'has-error' : '' }}">
                     <label for="title">Display Order:</label><br>
 {!! Form::text('sort',null,['class'=>'form-control'])!!}
-              </div> 
-             <div class="col-md-6">
+              </div>  
+            </div>
+            <div class="col-md-6">
+                <div class="form-group {{ $errors->has('icon_class') ? 'has-error' : '' }}">
                     <label for="title">Icon Class:</label><br>
 {!! Form::text('icon_class',null,['class'=>'form-control'])!!}
-              </div>  
-        </div></div>
+              </div> 
+            </div>
+        </div>
                          <div class="form-group">
 		<!-- gender -->
 			{!! Form::label('gender','Is this a resolved ticket status?') !!}

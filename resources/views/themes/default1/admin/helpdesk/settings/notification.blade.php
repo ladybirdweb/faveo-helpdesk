@@ -37,7 +37,8 @@ class="active"
                 <h3 class="box-title">{{Lang::get('lang.settings')}}</h3>
             </div>
             <!-- check whether success or not -->
-            @if(Session::has('success'))
+            @if(Session::has('success'))<!-- open a form -->
+
             <div class="alert alert-success alert-dismissable">
                 <i class="fa  fa-check-circle"></i>
                 <b>Success!</b>
