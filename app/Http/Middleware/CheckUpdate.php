@@ -18,9 +18,9 @@ class CheckUpdate {
      * @return mixed
      */
     public function handle($request, Closure $next) {
-        $check = true;
+        $check = $this->proceess();
         if ($check == true) {
-            $this->notificationBar();
+            //$this->notificationBar();
             $this->checkNewUpdate();
             if (Utility::getFileVersion() > Utility::getDatabaseVersion()) {
                 return redirect('database-update');
@@ -87,6 +87,23 @@ class CheckUpdate {
         if ($version_from_billing > $app_version) {
             return true;
         }
+    }
+
+    public function proceess() {
+        $notify = new BarNotification();
+        if ($notify->find(1)) {
+
+            $n = $notify->where('key', 'new-version')->first();
+            if ($n) {
+                $now = \Carbon\Carbon::now();
+                $yesterday = \Carbon\Carbon::now(-24);
+                $notifications = $notify->where('key', 'new-version')->whereBetween('created_at', [$yesterday, $now])->lists('value', 'key');
+                if ($notifications->count() > 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }
