@@ -75,7 +75,7 @@ class="active"
                              <div class="form-group {{ $errors->has('rating_area') ? 'has-error' : '' }}">
                 {!! Form::label('rating_area',Lang::get('lang.rating_area')) !!}<span style="color:red;">*</span>
                         {!! $errors->first('rating_area', '<spam class="help-block">:message</spam>') !!}
-                {!! Form::select('rating_area',['Helpdesk Area' => 'Helpdesk Area','Comment Area'=>'Comment Area'],null,['class' => 'form-control']) !!}
+                {!! Form::select('rating_area',['Helpdesk Area' => 'Helpdesk Area','Comment Area'=>'Comment Area'],null,['class' => 'form-control','disabled' => 'disabled']) !!}
             </div>
                                     
          <div class="form-group {{ $errors->has('restrict') ? 'has-error' : '' }}">

@@ -1,6 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
 @section('PageHeader')
-<h1>Security</h1>
+<h1>Auto-close Workflow</h1>
 @stop
 @section('header')
 

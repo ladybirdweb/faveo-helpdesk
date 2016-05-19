@@ -28,7 +28,6 @@ class RatingUpdateRequest extends Request
             'display_order'     => 'required|integer',
             'allow_modification' => 'required',
             'rating_scale' => 'required',
-            'rating_area' => 'required',
             'restrict' => 'required'
         ];
     }

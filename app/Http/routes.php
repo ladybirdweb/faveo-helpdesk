@@ -647,7 +647,7 @@ Route::post('/postconnection', ['as' => 'postconnection', 'uses' => 'Installer\h
  */
 Route::get('readmails', ['as' => 'readmails', 'uses' => 'Agent\helpdesk\MailController@readmails']);
 Route::get('notification', ['as' => 'notification', 'uses' => 'Agent\helpdesk\NotificationController@send_notification']);
-Route::get('auto-close-tickets', ['as' => 'auto.close', 'uses' => 'Agent\helpdesk\TicketController@autoCloseTicket']);
+Route::get('auto-close-tickets', ['as' => 'auto.close', 'uses' => 'Agent\helpdesk\TicketController@autoCloseTickets']);
 
 /*
   |=============================================================

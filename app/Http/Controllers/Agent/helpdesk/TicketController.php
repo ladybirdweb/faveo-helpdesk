@@ -2178,19 +2178,20 @@ class TicketController extends Controller
         } else {
             $i = 0;
             foreach ($overdues as $overdue) {
-                $sla_plan = Sla_plan::where('id', '=', $overdue->sla)->first();
+//                $sla_plan = Sla_plan::where('id', '=', $overdue->sla)->first();
 
                 $ovadate = $overdue->created_at;
-                $new_date = date_add($ovadate, date_interval_create_from_date_string($workflow->days.' days')).'<br/><br/>';
+                $hours = $workflow->days * 24;
+                $new_date = date_add($ovadate, date_interval_create_from_date_string($hours.' hours')).'<br/><br/>';
                 if (date('Y-m-d H:i:s') > $new_date) {
                     $i++;
                             $overdue->status = 3;
         $overdue->closed = 1;
         $overdue->closed_at = date('Y-m-d H:i:s');
         $overdue->save();
-        if($workflow->send_email == 1) {
-             $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $overdue->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
-        }
+//        if($workflow->send_email == 1) {
+//             $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $overdue->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
+//        }
                 }
             }
             // dd(count($value));
