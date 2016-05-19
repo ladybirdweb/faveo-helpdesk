@@ -621,7 +621,7 @@ if ($thread->title != "") {
                                                     <td>
                                                         <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
                                                             <input type="radio" class="star" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
-        <?php } ?>
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
                                                     </td> 
                                                     </tr>
                                                     @endif
