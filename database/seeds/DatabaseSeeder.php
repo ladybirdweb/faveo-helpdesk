@@ -26,6 +26,7 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\helpdesk\Utility\CountryCode;
 use App\Model\kb\Settings;
+use App\Model\helpdesk\Workflow\WorkflowClose;
 use App\Model\helpdesk\Notification\NotificationType;
 // Knowledge base
 use Illuminate\Database\Seeder;
@@ -58,6 +59,7 @@ class DatabaseSeeder extends Seeder
         NotificationType::create(['id' => '1','message' => 'A new user is registered','type' => 'registration','icon_class' => 'fa fa-user' ]);
         NotificationType::create(['id' => '2','message' => 'You have a new reply on this ticket','type' => 'reply','icon_class' => 'fa fa-envelope' ]);
         NotificationType::create(['id' => '3','message' => 'A new ticket has been created','type' => 'new_ticket','icon_class' => 'fa fa-envelope' ]);
+        WorkflowClose::create(['id' => '1','days' => '2','condition' => '1','send_email' => '1','status' => '3' ]);
 
         /* Date format */
         $date_formats = [
