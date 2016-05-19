@@ -68,7 +68,7 @@ class="active"
                               <div class="form-group {{ $errors->has('rating_scale') ? 'has-error' : '' }}">
                 {!! Form::label('rating_scale',Lang::get('lang.rating_scale')) !!}<span style="color:red;">*</span>
                         {!! $errors->first('rating_scale', '<spam class="help-block">:message</spam>') !!}
-                <blockquote>The maximum rating that can be given. For example, if 5 is selected, the lowest possible rating will be 1 and the highest 5.</blockquote>
+                <blockquote>{!! Lang::get('lang.rating-msg1') !!}</blockquote>
                 {!! Form::select('rating_scale',['1' => '1','2'=>'2','3'=>'3','4'=>'4','5'=>'5','6'=>'6','7'=>'7','8'=>'8'],null,['class' => 'form-control']) !!}
           
             </div>
@@ -80,18 +80,18 @@ class="active"
                                     
          <div class="form-group {{ $errors->has('restrict') ? 'has-error' : '' }}">
 		<!-- gender -->
-			{!! Form::label('gender','Restrict rating to a department') !!}<span style="color:red;">*</span>
+			{!! Form::label('gender',Lang::get('lang.rating_restrict')) !!}<span style="color:red;">*</span>
                         {!! $errors->first('restrict', '<spam class="help-block">:message</spam>') !!}
-                        <blockquote>Select a department to restrict this rating to tickets or chats within a specific department. If no department is selected, the rating will appear across all departments.</blockquote>
+                        <blockquote>{!! Lang::get('lang.rating-msg2') !!}</blockquote>
 			{!! Form::select('restrict',['General' => 'general','Support'=>'support'],null,['class' => 'form-control']) !!}
           
 		</div>
                            <div class="form-group {{ $errors->has('allow_modification') ? 'has-error' : '' }}">
 		<!-- Email user -->
 						
-{!! Form::label('allow_modification','Allow user to change the rating?') !!}<span style="color:red;">*</span>
+{!! Form::label('allow_modification',Lang::get('lang.rating_change')) !!}<span style="color:red;">*</span>
                         {!! $errors->first('allow_modification', '<spam class="help-block">:message</spam>') !!}
-                        <blockquote>If you choose 'YES' user can modify the rating.</blockquote>
+                        <blockquote>{!! Lang::get('lang.rating-msg3') !!}</blockquote>
 			<div class="row">
 				<div class="col-xs-3">
 					{!! Form::radio('allow_modification','1') !!} {{Lang::get('lang.yes')}}

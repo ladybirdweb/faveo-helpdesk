@@ -48,7 +48,7 @@ class="active"
                     <label for="title">Lockout Message:</label>
                 </div>
                 <div  class="col-md-9">
-                    <div class="callout callout-default" style="font-style: oblique;">The message to display when a user (host) has been locked out.</div>
+                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.security_msg1') !!}</div>
                     {!! $errors->first('lockout_message', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::textarea('lockout_message',null,['class'=>'form-control'])!!}
                 </div>
@@ -57,10 +57,10 @@ class="active"
         <div class="form-group {{ $errors->has('backlist_threshold') ? 'has-error' : '' }}">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="title">Max Login Attempts Per Host/User:</label>
+                    <label for="title">{!! Lang::get('lang.max_attempt') !!}:</label>
                 </div>
                 <div class="col-md-9">
-                    <div class="callout callout-default" style="font-style: oblique;">The number of login attempts a user has before their host/user or computer is locked out of the system. Set to 0 to record bad login attempts without locking out the host/user..</div>
+                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.security_msg2') !!}</div>
                     {!! $errors->first('backlist_threshold', '<spam class="help-block">:message</spam>') !!}
                     <span>{!! Form::text('backlist_threshold',null,['class'=>'form-control'])!!} Lockouts</span>
                 </div>     
@@ -72,7 +72,7 @@ class="active"
                     <label for="title">Lockout Period:</label>
                 </div>
                 <div class="col-md-8">
-                    <div class="callout callout-default" style="font-style: oblique;">The length of minutes a host or user will be banned from this site after hitting the limit of bad logins.</div>
+                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.security_msg3') !!}</div>
                     {!! $errors->first('lockout_period', '<spam class="help-block">:message</spam>') !!}
                     <span> {!! Form::text('lockout_period',null,['class'=>'form-control'])!!} Minutes</span>
                 </div>
