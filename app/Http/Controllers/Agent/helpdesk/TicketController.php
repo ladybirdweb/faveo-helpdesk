@@ -2172,7 +2172,6 @@ class TicketController extends Controller
             if($workflow->condition == 1) {
 
             $overdues = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
-        
         if (count($overdues) == 0) {
             $tickets = null;
         } else {
@@ -2181,8 +2180,7 @@ class TicketController extends Controller
 //                $sla_plan = Sla_plan::where('id', '=', $overdue->sla)->first();
 
                 $ovadate = $overdue->created_at;
-                $hours = $workflow->days * 24;
-                $new_date = date_add($ovadate, date_interval_create_from_date_string($hours.' hours')).'<br/><br/>';
+                $new_date = date_add($ovadate, date_interval_create_from_date_string($workflow->days.' days')).'<br/><br/>';
                 if (date('Y-m-d H:i:s') > $new_date) {
                     $i++;
                             $overdue->status = 3;
