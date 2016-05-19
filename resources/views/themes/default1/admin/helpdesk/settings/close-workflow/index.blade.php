@@ -36,10 +36,10 @@
             <div class="row">
 
                 <div class="col-md-3">
-                    <label for="title">No of days:</label>
+                    <label for="title">{!! Lang::get('lang.no_of_days') !!}:</label>
                 </div>
                 <div  class="col-md-9">
-                    <div class="callout callout-default" style="font-style: oblique;">The number of days to after which the tickets will be auto-closed.</div>
+                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.close-msg1') !!}</div>
                     {!! $errors->first('days', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::text('days',null,['class'=>'form-control'])!!}
                 </div>
@@ -49,10 +49,10 @@
             <div class="row">
 
                 <div class="col-md-3">
-                    <label for="title">Enable Workflow:</label>
+                    <label for="title">{!! Lang::get('lang.enable_workflow') !!}:</label>
                 </div>
                 <div class="col-md-9">
-                    <div class="callout callout-default" style="font-style: oblique;">Enable auto-close workflow?</div>
+                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.close-msg2') !!}</div>
                     {!! $errors->first('condition', '<spam class="help-block">:message</spam>') !!}
                     <div class="row">
                         <div class="col-xs-3">
@@ -69,10 +69,10 @@
             <div class="row">
 
                 <div class="col-md-3">
-                    <label for="title">Send email to user:</label>
+                    <label for="title">{!! Lang::get('lang.send_email_to_user') !!}:</label>
                 </div>
                 <div class="col-md-6">
-                    <div class="callout callout-default" style="font-style: oblique;">Send email to user on auto-closing the ticket?.</div>
+                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.close-msg4') !!}</div>
                     {!! $errors->first('send_email', '<spam class="help-block">:message</spam>') !!}
                     <div class="row">
                         <div class="col-xs-3">
@@ -90,10 +90,10 @@
             <div class="row">
 
                 <div class="col-md-3">
-                    <label for="title">Ticket status:</label>
+                    <label for="title">{!! Lang::get('lang.ticket_status') !!}:</label>
                 </div>
                 <div class="col-md-6">
-                    <div class="callout callout-default" style="font-style: oblique;">Select a status to choose on closing the ticket.</div>
+                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.close-msg3') !!}</div>
                     {!! $errors->first('status', '<spam class="help-block">:message</spam>') !!}
                     <?php $user = \App\Model\helpdesk\Ticket\Ticket_Status::where('state', '=', 'closed')->get(); ?>
                     {!! Form::select('status',[ Lang::get('lang.status')=>$user->lists('name','id')->toArray()],null,['class' => 'form-control']) !!}	

@@ -251,6 +251,7 @@
                                 <li @yield('status')><a href="{{url('setting-status')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.status') !!}</a></li>
                                 <li @yield('notification')><a href="{{url('settings-notification')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.notifications') !!}</a></li>
                                 <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.ratings') !!}</a></li>
+                                <li @yield('close-workflow')><a href="{{url('close-workflow')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.close-workflow') !!}</a></li>
                             </ul>
                         </li>
                         <li class="treeview @yield('Themes')">

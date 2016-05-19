@@ -190,7 +190,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
 
     Breadcrumbs::register('close-workflow.index', function($breadcrumbs) {
-        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->parent('setting');
         $breadcrumbs->push('Close Ticket Workflow', route('close-workflow.index'));
     });
     Route::resource('close-workflow', 'Admin\helpdesk\CloseWrokflowController'); // direct to security setting page

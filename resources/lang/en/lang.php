@@ -28,7 +28,17 @@ return [
       |   Login Page
       |--------------------------------------
      */
+    
+    //auto-close workflow
+    'close-msg1' => 'The number of days to after which the tickets will be auto-closed.',
+    'no_of_days' => 'No of days',
+    'close-msg2' => 'Enable auto-close workflow?',
+    'enable_workflow' => 'Enable Workflow',
+    'send_email_to_user' => 'Send Email to user',
+    'close-msg3' => 'Select a status to choose on closing the ticket.',
+    'close-msg4' => 'Send email to user on auto-closing the ticket?.',
     'template-types' => 'Template Types',
+    'close-workflow' => 'Close Ticket Workflow',
     'template' => 'Template',
     'rating_label' =>'Rating Label',
     'display_order' => 'Display Order',
