@@ -1,4 +1,13 @@
 @extends('themes.default1.admin.layout.admin')
+
+@section('Settings')
+active
+@stop
+
+@section('status')
+class="active"
+@stop
+
 @section('PageHeader')
 <h1>Status Settings</h1>
 @stop
@@ -100,7 +109,8 @@
                                 {!! Form::submit('Create Status',['class'=>'btn btn-primary'])!!}
 
                                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                            </div></div>
+                            </div>
+                        </div>
                         {!! Form::close() !!}
                     </div> 
                 </div>
@@ -122,8 +132,6 @@
         @endif
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
-            <i class="fa fa-ban"></i>
-
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <p>{{Session::get('success')}}</p>                
         </div>
@@ -140,7 +148,6 @@
             <thead>
                 <tr>
                     <th>ID</th>
-
                     <th>Status Name</th>
                     <th>Display Order</th>
                     <th>Action</th>
@@ -285,7 +292,7 @@
 <script src="{{asset("lb-sample/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
 <!-- status script -->
 <script type="text/javascript">
-$(function () {
+$(function() {
     $("#example1").dataTable();
     $('#example2').dataTable({
         "bPaginate": true,
