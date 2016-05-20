@@ -19,17 +19,9 @@ class BaseModel extends Model {
         require_once base_path('vendor' . DIRECTORY_SEPARATOR . 'htmlpurifier' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'HTMLPurifier.auto.php');
 
         $config = \HTMLPurifier_Config::createDefault();
-
+        //dd($config);
         $purifier = new \HTMLPurifier($config);
-
-        //settings name
-        if ($this->table == 'settings_system') {
-            if ($this->$property != 'name') {
-                $value = strip_tags($value);
-            } else {
-                $value = $purifier->purify($value);
-            }
-        }
+        
         if ($value != strip_tags($value)) {
             $value = $purifier->purify($value);
         }

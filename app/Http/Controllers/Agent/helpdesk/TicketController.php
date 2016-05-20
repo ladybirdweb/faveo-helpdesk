@@ -281,12 +281,13 @@ class TicketController extends Controller
             $status = 1;
             //create user
             if ($this->create_user($email, $fullname, $subject, $body, $phone, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response, $status)) {
-                return Redirect('newticket')->with('success', 'Ticket created successfully!');
+                return redirect('newticket')->with('success', 'Ticket created successfully!');
             } else {
-                return Redirect('newticket')->with('fails', 'fails');
+                return redirect('newticket')->with('fails', 'fails');
             }
         } catch (Exception $e) {
-            return Redirect()->back()->with('fails', '<li>'.$e->getMessage().'</li>');
+            dd($e);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
