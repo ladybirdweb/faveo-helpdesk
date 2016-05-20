@@ -29,40 +29,6 @@ return [
       |--------------------------------------
      */
     
-    //auto-close workflow
-    'close-msg1' => 'The number of days to after which the tickets will be auto-closed.',
-    'no_of_days' => 'No of days',
-    'close-msg2' => 'Enable auto-close workflow?',
-    'enable_workflow' => 'Enable Workflow',
-    'send_email_to_user' => 'Send Email to user',
-    'close-msg3' => 'Select a status to choose on closing the ticket.',
-    'close-msg4' => 'Send email to user on auto-closing the ticket?.',
-    'rating-msg2' => 'Select a department to restrict this rating to tickets or chats within a specific department. If no department is selected, the rating will appear across all departments.',
-    'rating-msg3' => 'If you choose YES user can modify the rating.',
-    'rating_restrict' => 'Restrict rating to a department',
-    'rating_change' => 'Allow user to change the rating?',
-    'security_msg1' => 'The message to display when a user (host) has been locked out.',
-    'security_msg2' => 'The number of login attempts a user has before their host/user or computer is locked out of the system. Set to 0 to record bad login attempts without locking out the host/user..',
-    'secutity_msg3' => 'The length of minutes a host or user will be banned from this site after hitting the limit of bad logins.',
-    'max_attempt' => 'Max Login Attempts Per Host/User',
-    'rating-msg1' => 'The maximum rating that can be given. For example, if 5 is selected, the lowest possible rating will be 1 and the highest 5.',
-    
-    'template-types' => 'Template Types',
-    'close-workflow' => 'Close Ticket Workflow',
-    'template' => 'Template',
-    'rating_label' =>'Rating Label',
-    'display_order' => 'Display Order',
-    'rating_scale' => 'Rating Scale',
-    'rating_area' => 'Rating Area',
-    
-    'modify' => 'Modify',
-    'rating_name' => 'Rating Name',
-    'add_user_to_this_organization' => 'Add User to this Organization',
-    'Tickets_of' => 'Tickets Of',
-    'security' => 'Security',
-    'manage_status'=> 'Manage Status',
-    'notifications' =>  'Notifications',
-    
     'Login_to_start_your_session' => 'Login to start your session',
     'login'                       => 'Login',
     'remember'                    => 'Remember Me',
@@ -930,6 +896,53 @@ return [
     'gender'               => 'Gender',
     'ticket_number'        => 'Ticket Number',
     'content'              => 'Content',
+    
+        
+    //auto-close workflow
+    'close-msg1' => 'The number of days to after which the tickets will be auto-closed.',
+    'no_of_days' => 'No of days',
+    'close-msg2' => 'Enable auto-close workflow?',
+    'enable_workflow' => 'Enable Workflow',
+    'send_email_to_user' => 'Send Email to user',
+    'close-msg3' => 'Select a status to choose on closing the ticket.',
+    'close-msg4' => 'Send email to user on auto-closing the ticket?.',
+    'rating-msg2' => 'Select a department to restrict this rating to tickets or chats within a specific department. If no department is selected, the rating will appear across all departments.',
+    'rating-msg3' => 'If you choose YES user can modify the rating.',
+    'rating_restrict' => 'Restrict rating to a department',
+    'rating_change' => 'Allow user to change the rating?',
+    'security_msg1' => 'The message to display when a user (host) has been locked out.',
+    'security_msg2' => 'The number of login attempts a user has before their host/user or computer is locked out of the system. Set to 0 to record bad login attempts without locking out the host/user..',
+    'secutity_msg3' => 'The length of minutes a host or user will be banned from this site after hitting the limit of bad logins.',
+    'max_attempt' => 'Max Login Attempts Per Host/User',
+    'rating-msg1' => 'The maximum rating that can be given. For example, if 5 is selected, the lowest possible rating will be 1 and the highest 5.',
+    
+    'template-types' => 'Template Types',
+    'close-workflow' => 'Close Ticket Workflow',
+    'template' => 'Template',
+    'rating_label' =>'Rating Label',
+    'display_order' => 'Display Order',
+    'rating_scale' => 'Rating Scale',
+    'rating_area' => 'Rating Area',
+    
+    'modify' => 'Modify',
+    'rating_name' => 'Rating Name',
+    'add_user_to_this_organization' => 'Add User to this Organization',
+    'Tickets_of' => 'Tickets Of',
+    'security' => 'Security',
+    'manage_status'=> 'Manage Status',
+    'notifications' =>  'Notifications',
+    
+        /*
+      |------------------------------------------------
+      |   Notification Settings Pages
+      |------------------------------------------------
+     */
+    'notification_settings' => 'Notification Settings',
+    'delete_noti' => 'Delete All read notification?',
+    'noti_msg1' => 'Days to delete notification logs',
+    'noti_msg2' => 'You can enter the no of days of database logs to be deleted and the history of notifications will be deleted since the day specified.',
+    'del_all_read' => 'Delete All Read',
+    'You_have_deleted_all_the_read_notifications' =>'You have deleted all the read notifications',
     /*
       |------------------------------------------------
       |   Error Pages

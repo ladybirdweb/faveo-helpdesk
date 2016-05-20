@@ -77,7 +77,7 @@ public function deleteReadNoti()
             $mark->delete();
             \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
         }
-        return redirect()->back()->with('success','You have deleted all the read notifications');
+        return redirect()->back()->with('success',Lang::get('lang.You_have_deleted_all the_read_notifications'));
     }
     
     public function deleteNotificationLog()

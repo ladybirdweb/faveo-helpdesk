@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>Notification Settings</h1>
+<h1>{!! Lang::get('lang.notification_settings') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -57,25 +57,25 @@ class="active"
                     <div class="col-md-12">
                         <div class="col-md-3 no-padding">
                             <div class="form-group">
-                                {!! Form::label('del_noti','Delete All read notification?') !!}
+                                {!! Form::label('del_noti', Lang::get('lang.delete_noti')) !!}
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <a href="{{ url('delete-read-notification') }}" class="btn btn-danger">Delete All Read</a>
+                            <a href="{{ url('delete-read-notification') }}" class="btn btn-danger">{!! Lang::get('lang.del_all_read') !!}</a>
                         </div>
                     </div>
                     <br>
                     <div class="col-md-12">
                         <div class="col-md-3 no-padding">
                             <div class="form-group">
-                                {!! Form::label('del_noti','Days to delete notification logs') !!}
+                                {!! Form::label('del_noti', Lang::get('lang.noti_msg1')) !!}
                             </div>
                         </div>
                         <div class="col-md-6">
                             <form action="{{ url('delete-notification-log') }}" method="post">
-                                <div class="callout callout-default" style="font-style: oblique;">You can enter the no of days of database logs to be deleted and the history of notifications will be deleted since the day specified.</div>
+                                <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.noti_msg2') !!}</div>
                                 <input type="number" class="form-control" name='no_of_days' placeholder="Enter No of days">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">{!! Lang::get('lang.submit') !!}</button>
                             </form>
                         </div>
                     </div>
