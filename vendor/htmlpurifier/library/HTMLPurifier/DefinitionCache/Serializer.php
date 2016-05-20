@@ -128,7 +128,9 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
             }
             $key = substr($filename, 0, strlen($filename) - 4);
             if ($this->isOld($key, $config)) {
-                unlink($dir . '/' . $filename);
+                
+                chmod($dir . DIRECTORY_SEPARATOR . $filename, 0777);
+                unlink($dir . DIRECTORY_SEPARATOR . $filename);
             }
         }
     }
@@ -143,7 +145,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
     public function generateFilePath($config)
     {
         $key = $this->generateKey($config);
-        return $this->generateDirectoryPath($config) . '/' . $key . '.ser';
+        return $this->generateDirectoryPath($config) . DIRECTORY_SEPARATOR . $key . '.ser';
     }
 
     /**
@@ -156,7 +158,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
     public function generateDirectoryPath($config)
     {
         $base = $this->generateBaseDirectoryPath($config);
-        return $base . '/' . $this->type;
+        return $base;
     }
 
     /**
@@ -169,7 +171,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
     public function generateBaseDirectoryPath($config)
     {
         $base = $config->get('Cache.SerializerPath');
-        $base = is_null($base) ? HTMLPURIFIER_PREFIX . '/HTMLPurifier/DefinitionCache/Serializer' : $base;
+        $base = is_null($base) ? HTMLPURIFIER_PREFIX . DIRECTORY_SEPARATOR.'HTMLPurifier'.DIRECTORY_SEPARATOR.'DefinitionCache' : $base;
         return $base;
     }
 
@@ -203,7 +205,9 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
     private function _prepareDir($config)
     {
         $directory = $this->generateDirectoryPath($config);
+        
         $chmod = $config->get('Cache.SerializerPermissions');
+        //dd($directory);
         if (!$chmod) {
             $chmod = 0755; // invalid config or simpletest
         }
