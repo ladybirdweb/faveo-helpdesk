@@ -921,6 +921,7 @@ return [
     'notify_user' => 'Notify user on this status?',
     'deleted_status' => 'Is this a deleted ticket status?',
     'resolved_status' => 'Is this a resolved ticket status?',
+    'status_msg3' => 'If you choose YES then the ticket status will be set as resolved.',
     'status_msg2' => 'If you choose YES then the ticket status will be set as deleted.',
     'rating-msg2' => 'Select a department to restrict this rating to tickets or chats within a specific department. If no department is selected, the rating will appear across all departments.',
     'rating-msg3' => 'If you choose YES user can modify the rating.',

@@ -64,8 +64,8 @@ class="active"
                             </div>
                             <div class="form-group">
                                 <!-- gender -->
-                                {!! Form::label('gender','Is this a resolved ticket status?') !!}
-                                <blockquote>If tickets set to this status are resolved or closed (i.e. fixed, resolved, finished), enable this option. It will hide them from open ticket lists.</blockquote>
+                                {!! Form::label('gender',Lang::get('resolved_status')) !!}
+                                <blockquote>{!! Lang::get('lang.status_msg3') !!}</blockquote>
                                 <div class="row">
                                     <div class="col-xs-3">
                                         {!! Form::radio('state','closed') !!} {{Lang::get('lang.yes')}}
@@ -79,8 +79,8 @@ class="active"
                             <div class="form-group">
                                 <!-- Email user -->
 
-                                {!! Form::label('gender','Is this a deleted ticket status?') !!}
-                                <blockquote>If you choose 'YES' then the ticket status will be set as deleted.</blockquote>
+                                {!! Form::label('gender',Lang::get('deleted_status')) !!}
+                                <blockquote>{!! Lang::get('lang.status_msg2') !!}</blockquote>
                                 <div class="row">
                                     <div class="col-xs-3">
                                         {!! Form::radio('delete','yes') !!} {{Lang::get('lang.yes')}}
@@ -93,8 +93,8 @@ class="active"
                             <div class="form-group">
                                 <!-- Email user -->
 
-                                {!! Form::label('gender','Notify user on this status?') !!}
-                                <blockquote>If you choose 'YES' an email notification will be sent to the user.</blockquote>
+                                {!! Form::label('gender',Lang::get('lang.notify_user')) !!}
+                                <blockquote>{!! Lang::get('lang.status_msg1') !!}</blockquote>
                                 <div class="row">
                                     <div class="col-xs-3">
                                         {!! Form::radio('email_user','yes') !!} {{Lang::get('lang.yes')}}
@@ -209,7 +209,7 @@ class="active"
                                         <div class="form-group">
                                             <!-- gender -->
                                             {!! Form::label('gender',Lang::get('resolved_status')) !!}
-                                            <blockquote>{!! Lang::get('lang.status_msg1') !!}</blockquote>
+                                            <blockquote>{!! Lang::get('lang.status_msg3') !!}</blockquote>
                                             <div class="row">
                                                 <div class="col-xs-3">
                                                     {!! Form::radio('state','closed',true) !!} {{Lang::get('lang.yes')}}

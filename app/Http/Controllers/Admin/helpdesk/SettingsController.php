@@ -75,11 +75,8 @@ class SettingsController extends Controller {
             $mark->delete();
             \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
         }
-<<<<<<< HEAD
+
         return redirect()->back()->with('success',Lang::get('lang.You_have_deleted_all the_read_notifications'));
-=======
-        return redirect()->back()->with('success', 'You have deleted all the read notifications');
->>>>>>> a49913887027d675f25539bff8d339e5795a093b
     }
 
     public function deleteNotificationLog() {
