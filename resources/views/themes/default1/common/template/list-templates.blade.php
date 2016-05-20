@@ -4,13 +4,6 @@
 @stop
 @section('header')
 
-<h1> List of Statuses </h1>
-<ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
-    <li class="active"> Edit Status </li>
-</ol>
-@stop
-
 @section('content')
 
 <!-- -->    
@@ -18,7 +11,7 @@
 
     <div class="box-header with-border">
 
-        <h3 class="box-title">Edit Email Templates</h3>
+        <h3 class="box-title">{!! Lang::get('lang.edit_templates') !!}</h3>
 
 
 <!--<button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>-->
@@ -62,7 +55,7 @@
                     <td>{!! $template->subject !!}</td>
 
                     <td>
-                        {!! link_to_route('templates.edit','Edit Templates',[$template->id],['class'=>'btn btn-success btn-sm']) !!}
+                        {!! link_to_route('templates.edit', Lang::get('lang.edit_templates'),[$template->id],['class'=>'btn btn-success btn-sm']) !!}
                     </td>
                 </tr>
                 @endforeach

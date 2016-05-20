@@ -896,7 +896,13 @@ return [
     'gender'               => 'Gender',
     'ticket_number'        => 'Ticket Number',
     'content'              => 'Content',
-    
+    'edit_template' => 'Edit Template',
+    'edit_status' => 'Edit Status',
+    'edit_details' => 'Edit Details',
+    'edit_templates' => 'Edit Templates',
+    'activate_this_set' => 'Activate This Set',
+    'show' => 'Show',
+    'no_notification_available'=> 'No Notification Available',
         
     //auto-close workflow
     'close-msg1' => 'The number of days to after which the tickets will be auto-closed.',
@@ -906,13 +912,23 @@ return [
     'send_email_to_user' => 'Send Email to user',
     'close-msg3' => 'Select a status to choose on closing the ticket.',
     'close-msg4' => 'Send email to user on auto-closing the ticket?.',
+    'edit_status' => 'Edit Status',
+    'current_status' => 'Current Status',
+    
+    //status msg
+    
+    'status_msg1' => 'If you choose YES an email notification will be sent to the user.',
+    'notify_user' => 'Notify user on this status?',
+    'deleted_status' => 'Is this a deleted ticket status?',
+    'resolved_status' => 'Is this a resolved ticket status?',
+    'status_msg2' => 'If you choose YES then the ticket status will be set as deleted.',
     'rating-msg2' => 'Select a department to restrict this rating to tickets or chats within a specific department. If no department is selected, the rating will appear across all departments.',
     'rating-msg3' => 'If you choose YES user can modify the rating.',
     'rating_restrict' => 'Restrict rating to a department',
     'rating_change' => 'Allow user to change the rating?',
     'security_msg1' => 'The message to display when a user (host) has been locked out.',
     'security_msg2' => 'The number of login attempts a user has before their host/user or computer is locked out of the system. Set to 0 to record bad login attempts without locking out the host/user..',
-    'secutity_msg3' => 'The length of minutes a host or user will be banned from this site after hitting the limit of bad logins.',
+    'security_msg3' => 'The length of minutes a host or user will be banned from this site after hitting the limit of bad logins.',
     'max_attempt' => 'Max Login Attempts Per Host/User',
     'rating-msg1' => 'The maximum rating that can be given. For example, if 5 is selected, the lowest possible rating will be 1 and the highest 5.',
     

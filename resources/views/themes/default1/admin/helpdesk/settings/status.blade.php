@@ -16,7 +16,8 @@ class="active"
 <h1> List of Statuses </h1>
 <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
-    <li class="active"> Edit Status </li>
+    <li class="active"> {!! Lang::get('lang.edit_status') !!} </li><ol class="breadcrumb">
+
 </ol>
 @stop
 
@@ -27,7 +28,7 @@ class="active"
 
     <div class="box-header with-border">
 
-        <h3 class="box-title">Current Statuses</h3>
+        <h3 class="box-title">{!! Lang::get('lang.current_status') !!}</h3>
         <div class="box-tools pull-right">
             <button class="btn btn-box-tool" data-toggle="modal" data-target="#create" title="Create"><i class="fa fa-plus-circle fa-2x"></i></button>
             <div class="modal fade" id="create">
@@ -188,7 +189,7 @@ class="active"
 
                                             <div class="col-md-6">
                                                 <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                                                    <label for="title">Name:</label><br>
+                                                    <label for="title">{!! Lang::get('lang.name') !!}:</label><br>
                                                     {!! Form::text('name',null,['class'=>'form-control'])!!}
                                                 </div>
                                             </div>
@@ -207,8 +208,8 @@ class="active"
                                         </div>
                                         <div class="form-group">
                                             <!-- gender -->
-                                            {!! Form::label('gender','Is this a resolved ticket status?') !!}
-                                            <blockquote>If tickets set to this status are resolved or closed (i.e. fixed, resolved, finished), enable this option. It will hide them from open ticket lists.</blockquote>
+                                            {!! Form::label('gender',Lang::get('resolved_status')) !!}
+                                            <blockquote>{!! Lang::get('lang.status_msg1') !!}</blockquote>
                                             <div class="row">
                                                 <div class="col-xs-3">
                                                     {!! Form::radio('state','closed',true) !!} {{Lang::get('lang.yes')}}
@@ -221,8 +222,8 @@ class="active"
                                         <div class="form-group">
                                             <!-- Email user -->
 
-                                            {!! Form::label('gender','Is this a deleted ticket status?') !!}
-                                            <blockquote>If you choose 'YES' then the ticket status will be set as deleted.</blockquote>
+                                            {!! Form::label('gender',Lang::get('deleted_status')) !!}
+                                            <blockquote>{!! Lang::get('lang.status_msg2') !!}</blockquote>
                                             <div class="row">
                                                 <div class="col-xs-3">
                                                     {!! Form::radio('delete','yes') !!} {{Lang::get('lang.yes')}}
@@ -235,8 +236,8 @@ class="active"
                                         <div class="form-group">
                                             <!-- gender -->
 
-                                            {!! Form::label('gender','Notify user on this status?') !!}
-                                            <blockquote>If you choose 'YES' an email notification will be sent to the user.</blockquote>
+                                            {!! Form::label('gender',Lang::get('lang.notify_user')) !!}
+                                            <blockquote>{!! Lang::get('lang.status_msg1') !!}</blockquote>
                                             <div class="row">
                                                 <div class="col-xs-3">
                                                     {!! Form::radio('email_user','yes') !!} {{Lang::get('lang.yes')}}

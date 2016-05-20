@@ -7,7 +7,7 @@
 <h1> List of Statuses </h1>
 <ol class="breadcrumb">
     <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
-    <li class="active"> Edit Status </li>
+    <li class="active"> {!! Lang::get('lang.edit_status') !!} </li>
 </ol>
 @stop
 @section('content')
@@ -101,8 +101,8 @@
 
                     <td><input type="radio" disabled="disabled" value="Active"<?php echo ($ratName == $set->name) ? 'checked' : '' ?> /></td>
                     <td>
-                        {!! link_to_route('active.template-set','Activate This Set',[$set->name],['class'=>'btn btn-success btn-sm']) !!}
-                        {!! link_to_route('show.templates','Show',[$set->id],['class'=>'btn btn-success btn-sm']) !!}
+                        {!! link_to_route('active.template-set',Lang::get('lang.activate_this_set'),[$set->name],['class'=>'btn btn-success btn-sm']) !!}
+                        {!! link_to_route('show.templates',Lang::get('lang.show'),[$set->id],['class'=>'btn btn-success btn-sm']) !!}
                         <!--<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#{{$set->id}}">Edit Details</button>--> 
                         <div class="modal fade" id="{{$set->id}}">
                             <div class="modal-dialog">
@@ -110,7 +110,7 @@
                                     {!! Form::model($set,['route'=>['template-sets.update', $set->id],'method'=>'PATCH','files' => true]) !!}
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">Edit Details</h4>
+                                        <h4 class="modal-title">{!! Lang::get('lang.edit_details') !!}</h4>
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-group">
@@ -150,7 +150,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                        {!! link_to_route('sets.delete','Delete',[$set->id],['id'=>'delete','class'=>'btn btn-danger btn-sm']) !!}
+                                        {!! link_to_route('sets.delete',Lang::get('lang.delete'),[$set->id],['id'=>'delete','class'=>'btn btn-danger btn-sm']) !!}
                                     </div>
                                 </div> 
                             </div>

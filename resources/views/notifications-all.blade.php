@@ -74,7 +74,7 @@ class="active"
     </div>
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Notification Page</h3>
+                    <h3 class="box-title">{!! Lang::get('lang.notifications') !!}</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="row">
@@ -183,7 +183,7 @@ class="active"
                                     @else
                                     <li>
 
-                                        <h6 class="textcontent marginzero">No Notifications Available!</h6>
+                                        <h6 class="textcontent marginzero">{!! Lang::get('lang.no_notification_available') !!}</h6>
                                         <small class="label label-warning" ><i class="fa fa-bell-slash-o"></i></small>
 
                                     </li>
