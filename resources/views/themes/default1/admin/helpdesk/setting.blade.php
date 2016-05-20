@@ -245,7 +245,7 @@
                 <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
                         <div class="settingdivblue">
-                            <a href="{{url('getcompany')}}"><span class="fa-stack fa-2x">
+                            <a href="{!! url('getcompany') !!}"><span class="fa-stack fa-2x">
 
                                     <i class="fa fa-building-o fa-stack-1x"></i>
                                 </span></a>

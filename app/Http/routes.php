@@ -131,31 +131,31 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::get('agent-profile-page/{id}', ['as' => 'agent.profile.page', 'uses' => 'Admin\helpdesk\AgentController@agent_profile']);
 
-    Route::get('getcompany', 'Admin\helpdesk\SettingsController@getcompany'); // direct to company setting page
+    Route::get('getcompany', ['as' => 'getcompany', 'uses' => 'Admin\helpdesk\SettingsController@getcompany']); // direct to company setting page
 
     Route::patch('postcompany/{id}', 'Admin\helpdesk\SettingsController@postcompany'); // Updating the Company table with requests
 
     Route::get('delete-logo', ['as' => 'delete.logo', 'uses' => 'Admin\helpdesk\SettingsController@deleteLogo']); // deleting a logo
 
-    Route::get('getsystem', 'Admin\helpdesk\SettingsController@getsystem'); // direct to system setting page
+    Route::get('getsystem', ['as' => 'getsystem', 'uses' => 'Admin\helpdesk\SettingsController@getsystem']); // direct to system setting page
 
     Route::patch('postsystem/{id}', 'Admin\helpdesk\SettingsController@postsystem'); // Updating the System table with requests
 
-    Route::get('getticket', 'Admin\helpdesk\SettingsController@getticket'); // direct to ticket setting page
+    Route::get('getticket', ['as' => 'getticket', 'uses' => 'Admin\helpdesk\SettingsController@getticket']); // direct to ticket setting page
 
     Route::patch('postticket/{id}', 'Admin\helpdesk\SettingsController@postticket'); // Updating the Ticket table with requests
 
-    Route::get('getemail', 'Admin\helpdesk\SettingsController@getemail'); // direct to email setting page
+    Route::get('getemail', ['as' => 'getemail', 'uses' => 'Admin\helpdesk\SettingsController@getemail']); // direct to email setting page
 
     Route::patch('postemail/{id}', 'Admin\helpdesk\SettingsController@postemail'); // Updating the Email table with requests
     // Route::get('getaccess', 'Admin\helpdesk\SettingsController@getaccess'); // direct to access setting page
     // Route::patch('postaccess/{id}', 'Admin\helpdesk\SettingsController@postaccess'); // Updating the Access table with requests
 
-    Route::get('getresponder', 'Admin\helpdesk\SettingsController@getresponder'); // direct to responder setting page
+    Route::get('getresponder', ['as' => 'getresponder', 'uses' => 'Admin\helpdesk\SettingsController@getresponder']); // direct to responder setting page
 
     Route::patch('postresponder/{id}', 'Admin\helpdesk\SettingsController@postresponder'); // Updating the Responder table with requests
 
-    Route::get('getalert', 'Admin\helpdesk\SettingsController@getalert'); // direct to alert setting page
+    Route::get('getalert', ['as' => 'getalert', 'uses' => 'Admin\helpdesk\SettingsController@getalert']); // direct to alert setting page
 
     Route::patch('postalert/{id}', 'Admin\helpdesk\SettingsController@postalert'); // Updating the Alert table with requests
     // Templates

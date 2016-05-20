@@ -1,10 +1,10 @@
 @extends('themes.default1.admin.layout.admin')
 
-@section('Emails')
+@section('system-settings')
 active
 @stop
 
-@section('emails-bar')
+@section('settings-bar')
 active
 @stop
 
