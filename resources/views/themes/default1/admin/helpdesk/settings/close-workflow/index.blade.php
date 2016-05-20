@@ -126,6 +126,4 @@ $(function() {
 });
 </script>
 
-
-
 @stop

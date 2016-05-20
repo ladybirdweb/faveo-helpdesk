@@ -37,25 +37,24 @@ class="active"
                 <h3 class="box-title">{{Lang::get('lang.settings')}}</h3>
             </div>
             <!-- check whether success or not -->
-            @if(Session::has('success'))<!-- open a form -->
 
-            <div class="alert alert-success alert-dismissable">
-                <i class="fa  fa-check-circle"></i>
-                <b>Success!</b>
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {!!Session::get('success')!!}
-            </div>
-            @endif
-            <!-- failure message -->
-            @if(Session::has('fails'))
-            <div class="alert alert-danger alert-dismissable">
-                <i class="fa fa-ban"></i>
-                <b>Fail!</b>
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {!!Session::get('fails')!!}
-            </div>
-            @endif
             <div class="box-body table-responsive"style="overflow:hidden;">
+                @if(Session::has('success'))
+                <div class="alert alert-success alert-dismissable">
+                    <i class="fa fa-check-circle"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {!!Session::get('success')!!}
+                </div>
+                @endif
+                <!-- failure message -->
+                @if(Session::has('fails'))
+                <div class="alert alert-danger alert-dismissable">
+                    <i class="fa fa-ban"></i>
+                    <b>Fail!</b>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {!!Session::get('fails')!!}
+                </div>
+                @endif
                 <div class="row">
                     <!-- Default System Email:	DROPDOWN value from emails table : Required -->
                     <div class="col-md-12">
@@ -77,11 +76,12 @@ class="active"
                         </div>
                         <div class="col-md-6">
                             <form action="{{ url('delete-notification-log') }}" method="post">
-                                <blockquote><em>You can enter the no of days of database logs to be deleted and the history of notifications will be deleted since the day specified.</em></blockquote>
+                                <div class="callout callout-default" style="font-style: oblique;">You can enter the no of days of database logs to be deleted and the history of notifications will be deleted since the day specified.</div>
                                 <input type="text" class="form-control" name='no_of_days' placeholder="Enter No of days">
                                 <button type="submit" class="btn btn-default">Submit</button>
                             </form>
-                        </div></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
