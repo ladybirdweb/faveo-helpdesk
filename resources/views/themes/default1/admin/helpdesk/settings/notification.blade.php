@@ -8,7 +8,7 @@ active
 active
 @stop
 
-@section('email')
+@section('notification')
 class="active"
 @stop
 
@@ -22,13 +22,11 @@ class="active"
 <!-- breadcrumbs -->
 @section('breadcrumbs')
 <ol class="breadcrumb">
-
 </ol>
 @stop
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-
 <!-- open a form -->
 <div class="row">
     <div class="col-md-12">
@@ -37,7 +35,6 @@ class="active"
                 <h3 class="box-title">{{Lang::get('lang.settings')}}</h3>
             </div>
             <!-- check whether success or not -->
-
             <div class="box-body table-responsive"style="overflow:hidden;">
                 @if(Session::has('success'))
                 <div class="alert alert-success alert-dismissable">
@@ -50,9 +47,9 @@ class="active"
                 @if(Session::has('fails'))
                 <div class="alert alert-danger alert-dismissable">
                     <i class="fa fa-ban"></i>
-                    <b>Fail!</b>
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    {!!Session::get('fails')!!}
+                    <b> {!! Lang::get('lang.alert') !!} ! </b>
+                    <li class="error-message-padding">{!!Session::get('fails')!!}</li>
                 </div>
                 @endif
                 <div class="row">
@@ -61,13 +58,13 @@ class="active"
                         <div class="col-md-3 no-padding">
                             <div class="form-group">
                                 {!! Form::label('del_noti','Delete All read notification?') !!}
-
-                            </div></div>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <a href="{{ url('delete-read-notification') }}" class="btn btn-danger">Delete All Read</a>
                         </div>
-                    </div><br>
-
+                    </div>
+                    <br>
                     <div class="col-md-12">
                         <div class="col-md-3 no-padding">
                             <div class="form-group">
@@ -77,18 +74,14 @@ class="active"
                         <div class="col-md-6">
                             <form action="{{ url('delete-notification-log') }}" method="post">
                                 <div class="callout callout-default" style="font-style: oblique;">You can enter the no of days of database logs to be deleted and the history of notifications will be deleted since the day specified.</div>
-                                <input type="text" class="form-control" name='no_of_days' placeholder="Enter No of days">
-                                <button type="submit" class="btn btn-default">Submit</button>
+                                <input type="number" class="form-control" name='no_of_days' placeholder="Enter No of days">
+                                <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 </div>
-
-
 @stop
