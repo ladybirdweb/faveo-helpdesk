@@ -22,7 +22,6 @@ class="active"
 <!-- breadcrumbs -->
 @section('breadcrumbs')
 <ol class="breadcrumb">
-
 </ol>
 @stop
 <!-- /breadcrumbs -->
@@ -72,9 +71,9 @@ class="active"
                 <td><a href="{{route('agents.edit', $use->id)}}"> {!! $use->user_name !!}</td>
                 <?php
                 if ($use->role == 'admin') {
-                    echo '<td><button class="btn btn-success btn-xs">'.Lang::get('lang.admin').'</button></td>';
+                    echo '<td><button class="btn btn-success btn-xs">' . Lang::get('lang.admin') . '</button></td>';
                 } elseif ($use->role == 'agent') {
-                    echo '<td><button class="btn btn-primary btn-xs">'.Lang::get('lang.agent').'</button></td>';
+                    echo '<td><button class="btn btn-primary btn-xs">' . Lang::get('lang.agent') . '</button></td>';
                 }
                 ?>
                 <td>

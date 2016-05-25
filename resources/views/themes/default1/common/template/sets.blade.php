@@ -1,94 +1,47 @@
 @extends('themes.default1.admin.layout.admin')
-@section('PageHeader')
-<h1>Templates</h1>
-@stop
-@section('header')
 
-<h1> List of Statuses </h1>
-<ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
-    <li class="active"> {!! Lang::get('lang.edit_status') !!} </li>
-</ol>
+@section('PageHeader')
+<h1>{!! Lang::get('lang.template_set') !!}</h1>
 @stop
+
 @section('content')
 <div class="box box-primary">
-    @foreach ($errors->all() as $error)
-    <div class="alert alert-danger alert-dismissable">
-        <i class="fa fa-ban"></i>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <li style="list-style: none">{{ $error }}</li>
-    </div>
-    @endforeach 
     <div class="box-header with-border">
-
-        <h3 class="box-title">Create/View Sets</h3>
+        <h3 class="box-title">{!! Lang::get('lang.list_of_templates_sets') !!}</h3>
         <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-toggle="modal" data-target="#create" title="Create"><i class="fa fa-plus-circle fa-2x"></i></button>
-            <div class="modal fade" id="create" class="modal fade in {{ $errors->has('name') ? 'has-error' : '' }}">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        {!! Form::open(['route'=>'template-sets.store']) !!}
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">Create</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+            <button class="btn btn-box-tool" data-toggle="modal" data-target="#create" title="Create" id="2create"><i class="fa fa-plus-circle fa-2x"></i></button>
 
-                                <label for="title">Name:<span style="color:red;">*</span></label><br>
-                                {!! $errors->first('name', '<spam class="help-block">:message</spam>') !!}
-                                {!! Form::text('name',null,['class'=>'form-control'])!!}
-
-
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <div class="form-group">
-                                {!! Form::submit('Create Set',['class'=>'btn btn-primary'])!!}
-
-                                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                            </div></div>
-                        {!! Form::close() !!}
-                    </div> 
-                </div>
-            </div>
-<!--<button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>-->
         </div>
     </div><!-- /.box-header -->
     <div class="box-body">
 
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
-            <i class="fa fa-ban"></i>
-
+            <i class="fa fa-check-circle"></i>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <p>{{Session::get('success')}}</p>                
+            {{Session::get('success')}}
         </div>
         @endif
+
         @if(Session::has('failed'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>Alert!</b> Failed.
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <p>{{Session::get('failed')}}</p>                
+            <b>{!! Lang::get('lang.alert') !!} !</b> <br>
+            <li>{{Session::get('failed')}}</li>
         </div>
         @endif
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-
-                    <th>Set Name</th>
-                    <th>Status</th>
-                    <th>Action</th>
-
+                    <th>{!! Lang::get('lang.name') !!}</th>
+                    <th>{!! Lang::get('lang.status') !!}</th>
+                    <th>{!! Lang::get('lang.action') !!}</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($sets as $set)
-
                 <tr>
-                    <td>{!! $set->id !!}</td>
                     <td>{!! $set->name !!}</td>
                     <?php
                     $status = DB::table('settings_email')->first();
@@ -98,12 +51,10 @@
                         $ratName = $status->template;
                     }
                     ?>
-
                     <td><input type="radio" disabled="disabled" value="Active"<?php echo ($ratName == $set->name) ? 'checked' : '' ?> /></td>
                     <td>
                         {!! link_to_route('active.template-set',Lang::get('lang.activate_this_set'),[$set->name],['class'=>'btn btn-success btn-sm']) !!}
                         {!! link_to_route('show.templates',Lang::get('lang.show'),[$set->id],['class'=>'btn btn-success btn-sm']) !!}
-                        <!--<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#{{$set->id}}">Edit Details</button>--> 
                         <div class="modal fade" id="{{$set->id}}">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -137,13 +88,13 @@
                             $dis = "";
                         }
                         ?>
-                        <button class="btn btn-danger btn-sm {!! $dis !!}" data-toggle="modal" data-target="#{{$set->id}}delete">Delete</button>
+                        <button class="btn btn-danger btn-sm {!! $dis !!}" data-toggle="modal" data-target="#{{$set->id}}delete">{!! Lang::get('lang.delete') !!}</button>
                         <div class="modal fade" id="{{$set->id}}delete">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">Delete</h4>
+                                        <h4 class="modal-title">{!! Lang::get('lang.delete') !!}</h4>
                                     </div>
                                     <div class="modal-body">
                                         <p>Are you sure you want to Delete ?</p>
@@ -162,27 +113,56 @@
         </table>
     </div><!-- /.box-body -->
 </div>
-<!-- -->
 
-@stop
-@section('footer')
-<script src="{{asset("lb-sample/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
-<script src="{{asset("lb-sample/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
+<div class="modal fade" id="create" class="modal fade in {{ $errors->has('name') ? 'has-error' : '' }}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {!! Form::open(['route'=>'template-sets.store']) !!}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{!! Lang::get('lang.create') !!}</h4>
+            </div>
+            <div class="modal-body">
+                @foreach ($errors->all() as $error)
+                <div class="alert alert-danger alert-dismissable">
+                    <i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <b>{!! Lang::get('lang.alert') !!} !</b><br>
+                    <li style="list-style: none">{{ $error }}</li>
+                </div>
+                @if($error == "The name field is required.")
+                <script type="text/javascript">
+                    $(document).ready(function() {
+                        $("#2create").click();
+                    });
+                </script>
+                @endif
+                @endforeach 
+                <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+                    <label for="title">{!! Lang::get('lang.name') !!}:<span style="color:red;">*</span></label><br>
+                    {!! Form::text('name',null,['class'=>'form-control'])!!}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    {!! Form::submit(Lang::get('lang.create_set'),['class'=>'btn btn-primary'])!!}
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">{!! Lang::get('lang.close') !!}</button>
+                </div></div>
+            {!! Form::close() !!}
+        </div> 
+    </div>
+</div>  
 <!-- set script -->
 <script type="text/javascript">
-$(function() {
-    $("#example1").dataTable();
-    $('#example2').dataTable({
-        "bPaginate": true,
-        "bLengthChange": false,
-        "bFilter": false,
-        "bSort": true,
-        "bInfo": true,
-        "bAutoWidth": false
+    $(function() {
+        $("#example1").dataTable();
+        $('#example2').dataTable({
+            "bPaginate": true,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bSort": true,
+            "bInfo": true,
+            "bAutoWidth": false
+        });
     });
-});
 </script>
-
-
-
 @stop

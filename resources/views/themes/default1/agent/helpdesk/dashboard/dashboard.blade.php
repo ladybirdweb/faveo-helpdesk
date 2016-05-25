@@ -8,7 +8,7 @@ class="active"
 active
 @stop
 @section('PageHeader')
-<h4>Reports</h4>
+<h4>Dashboard Reports</h4>
 @stop
 @section('dashboard')
 class="active"

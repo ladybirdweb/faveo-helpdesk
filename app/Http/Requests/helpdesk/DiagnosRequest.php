@@ -5,11 +5,11 @@ namespace App\Http\Requests\helpdesk;
 use App\Http\Requests\Request;
 
 /**
- * SlaUpdate.
+ * EmailsEditRequest.
  *
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class SlaUpdate extends Request
+class DiagnosRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,8 +29,10 @@ class SlaUpdate extends Request
     public function rules()
     {
         return [
-            'name'      =>  'required',
-            'grace_period' => 'required',
+            'from'    => 'required',
+            'to'      => 'required|email',
+            'subject' => 'required',
+            'message' => 'required',
         ];
     }
 }

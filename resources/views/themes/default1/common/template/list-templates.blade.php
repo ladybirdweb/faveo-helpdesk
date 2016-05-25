@@ -1,36 +1,26 @@
 @extends('themes.default1.admin.layout.admin')
+
 @section('PageHeader')
-<h1>Templates</h1>
+<h1>{!! Lang::get('lang.templates') !!}</h1>
 @stop
-@section('header')
 
 @section('content')
-
-<!-- -->    
 <div class="box box-primary">
-
     <div class="box-header with-border">
-
         <h3 class="box-title">{!! Lang::get('lang.edit_templates') !!}</h3>
-
-
-<!--<button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>-->
-
     </div><!-- /.box-header -->
     <div class="box-body">
-
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
-            <i class="fa fa-ban"></i>
-
+            <i class="fa fa-check"></i>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <p>{{Session::get('success')}}</p>                
+            {{Session::get('success')}}
         </div>
         @endif
         @if(Session::has('failed'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>Alert!</b> Failed.
+            <b>{!! Lang::get('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <p>{{Session::get('failed')}}</p>                
         </div>
@@ -38,22 +28,16 @@
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-
-                    <th>Template Name</th>
-                    <th>Subject</th>
-                    <th>Action</th>
-
+                    <th>{!! Lang::get('lang.template_name') !!}</th>
+                    <th>{!! Lang::get('lang.subject') !!}</th>
+                    <th>{!! Lang::get('lang.action') !!}</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($templates as $template)
-
                 <tr>
-                    <td>{!! $template->id !!}</td>
                     <td>{!! $template->name !!}</td>
                     <td>{!! $template->subject !!}</td>
-
                     <td>
                         {!! link_to_route('templates.edit', Lang::get('lang.edit_templates'),[$template->id],['class'=>'btn btn-success btn-sm']) !!}
                     </td>
@@ -64,11 +48,6 @@
     </div><!-- /.box-body -->
 </div>
 
-
-@stop
-@section('footer')
-<script src="{{asset("lb-sample/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
-<script src="{{asset("lb-sample/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
 <!-- status script -->
 <script type="text/javascript">
 $(function() {
@@ -83,7 +62,6 @@ $(function() {
     });
 });
 </script>
-
-
-
+<script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
+<script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
 @stop

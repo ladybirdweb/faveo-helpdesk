@@ -41,6 +41,7 @@ return [
     'login'                       => 'Login',
     'e-mail'                      => 'E-mail',
     'reg_new_member'              => 'Register a new membership',
+    'this_account_is_currently_inactive'    => 'This account is currently Inactive!',
     /*
       |--------------------------------------
       |   Register Page
@@ -121,6 +122,8 @@ return [
     'add_an_email'                   => 'Add an Email',
     'edit_an_email'                  => 'Edit an Email',
     'disable_for_this_email_address' => 'Disable for this Email address',
+    'validate_certificates_from_tls_or_ssl_server'  =>  'Validate Certificates from TLS/SSL server',
+    'authentication'                 => 'Authentication',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
@@ -130,6 +133,15 @@ return [
     'ban_email'  => 'Ban Email',
     'banlists'   => 'Ban lists',
     'ban_status' => 'Ban Status',
+    'list_of_banned_emails' =>  'List of banned Emails',
+    'edit_banned_email' =>  'Edit banned Email',
+    'create_a_banned_email' =>  'Create a banned Email',
+    'email_banned_sucessfully'  =>  'Email Banned sucessfully',
+    'email_can_not_ban'     =>  'Email can not Ban',
+    'banned_email_updated_sucessfully'  =>  'Banned Email Updated sucessfully',
+    'banned_email_not_updated'      =>  'Banned Email not Updated',
+    'banned_removed_sucessfully'    =>  'Banned removed sucessfully',
+    
     /*
       |--------------------------------------
       |  Templates Index Page
@@ -139,7 +151,15 @@ return [
     'template_set'    => 'Template Sets',
     'create_template' => 'Create Template',
     'edit_template'   => 'Edit Template',
+    'list_of_templates_sets' =>  'List of Templates Set',
+    'create_set'        =>      'Create Set',
+    'template_name'     =>  'Template Name',
+    'template_saved_successfully'   =>  'Template saved successfully',
+    'template_updated_successfully' =>  'Template updated successfully',
     'in_use'          => 'In Use',
+    'you_have_created_a_new_template_set'   =>  'You have created a new Template Set',
+    'you_have_successfully_activated_this_set'  =>  'You have Successfully Activated this Set',
+    'template_set_deleted_successfully' =>  'Template Set Deleted successfully',
     //Template Description
     'Create ticket agent'       => 'Notification email that is sent to Agent & Admin when ticket is created',
     'Assign ticket'             => 'Ticket assigned to an agent',
@@ -171,6 +191,11 @@ return [
     'subject'     => 'Subject',
     'message'     => 'Message',
     'send'        => 'Send',
+    'choose_an_email'   =>  'Choose an email',
+    'email_diagnostic' =>  'Email Diagnostic',
+    'message_has_been_sent' =>  'Message has been sent',
+    'message_sent_from_php_mail' => 'Message sent from Php-Mail',
+    'mailer_error' => 'Mailer Error',      
     /*
       |----------------------------------------------------------------------------------------
       | Settings Pages [English(en)]
@@ -198,6 +223,9 @@ return [
     'save'         => 'Save',
     'delete-logo'  => 'Delete logo',
     'click-delete' => 'Click here to delete',
+    'use_logo'  =>  'Use Logo',
+    'company_updated_successfully'  =>  'Company Updated Successfully',
+    'company_can_not_updated'   =>  'Company can not Updated',
     /*
       |--------------------------------------
       |   System Settings Page
@@ -224,6 +252,12 @@ return [
     'api_key_mandatory'     => 'Api key mandatory',
     'api_configurations'    => 'Api Configurations',
     'generate_key'          => 'Generate key',
+    'system_updated_successfully'   =>  'System Updated Successfully',
+    'system_can_not_updated'        =>  'System can not Updated',
+    'ticket_updated_successfully'   =>  'Ticket Updated Successfully',
+    'ticket_can_not_updated'        =>  'Ticket can not Updated',
+    'email_updated_successfully'    =>  'Email Updated Successfully',
+    'email_can_not_updated'         =>  'Email can not Updated',
     /*
       |--------------------------------------
       |   Email Settings Page
@@ -407,6 +441,23 @@ return [
     'system_default'       => 'System Default',
     'custom'               => 'Custom',
     'internal_notes'       => 'Internal Notes',
+    'select_a_parent_topic' => 'Select a parent topic',
+    'custom_form'           => 'Custom Form',
+    'select_a_form'         => 'Select a Form',
+    'select_a_department'   => 'Select a Department',
+    'departments'           => 'Departments',
+    'select_a_priority'     => 'Select a Priority',
+    'priorities'            => 'Priorities',
+    'select_a_sla_plan'     => 'Select a SLA Plan',
+    'sla_plans'             => 'SLA Plans',
+    'select_an_agent'       => 'Select an Agent',
+    'helptopic_created_successfully' => 'Helptopic Created Successfully',
+    'helptopic_can_not_create' => 'Helptopic can not Create',
+    'helptopic_updated_successfully' => 'Helptopic Updated Successfully',
+    'helptopic_can_not_update'  =>  'Helptopic can not Update',
+    'you_cannot_delete_default_department' => 'You cannot delete default department',
+    'have_been_moved_to_default_help_topic' =>  'have been moved to default Help Topic',
+    'helptopic_deleted_successfully'    =>  'Helptopic Deleted Successfully',    
     /*
       |--------------------------------------
       |  SLA plan Index Page
@@ -423,7 +474,16 @@ return [
      */
     'transient'            => 'Transient',
     'ticket_overdue_alert' => 'Ticket Overdue Alerts',
-
+    'sla_plan_created_successfully' =>'SLA Plan Created Successfully',
+    'sla_plan_can_not_create'   =>  'SLA Plan can not Create',
+    'sla_plan_updated_successfully' =>'SLA Plan Updated Successfully',
+    'sla_plan_can_not_update'  => 'SLA Plan can not Update',
+    'you_cannot_delete_default_department'  =>  'You cannot delete default department',
+    'have_been_moved_to_default_sla'    =>  'have been moved to default SLA',
+    'associated_department_have_been_moved_to_default_sla'  =>  'Associated department have been moved to default SLA',
+    'associated_help_topic_have_been_moved_to_default_sla'  =>  'Associated Help Topic have been moved to default SLA',
+    'sla_plan_deleted_successfully' =>  'SLA Plan Deleted Successfully',
+    'sla_plan_can_not_delete'   =>  'SLA Plan can not Delete',
     /*
       |--------------------------------------
       |  Work Flow
@@ -444,7 +504,28 @@ return [
     'order'                      => 'Order',
     'condition'                  => 'Condition',
     'statement'                  => 'Statement',
-
+    'select_a_channel'           => 'Select a Channel',
+    'body'      =>      'Body',
+    'select_one'=>      'Select One',
+    'equal_to'  =>      'Equal to',
+    'not_equal_to'  =>  'Not equal to',
+    'contains'      =>  'Contains',
+    'does_not_contain'  =>  'Does Not Contain',
+    'starts_with'        =>  'Starts With',
+    'ends_with'         =>  'Ends With',
+    'select_an_action'  =>  'Select an Action',
+    'reject_ticket'     =>  'Reject Ticket',
+    'set_department'    =>  'Set Department',
+    'set_priority'      =>  'Set Priority',
+    'set_sla_plan'      =>  'Set SLA Plan',
+    'assign_team'       =>  'Assign Team',
+    'assign_agent'      =>  'Assign Agent',
+    'set_help_topic'    =>  'Set Help Topic',
+    'set_ticket_status' =>  'Set Ticket Status',
+    'workflow_created_successfully'   =>  'Workflow Created Successfully',
+    'workflow_updated_successfully'     =>  'Workflow Updated Successfully',
+    'workflow_deleted_successfully'     =>  'Workflow Deleted Successfully',
+    
     /*
       |--------------------------------------
       |  Form Create Page
@@ -476,6 +557,10 @@ return [
     'required'                              => 'Required',
     'Action'                                => 'Action',
     'remove'                                => 'Remove',
+    'form_deleted_successfully'             => 'Form Deleted Successfully',
+    'successfully_created_form'     =>      'Successfully created Form',
+    'please_fill_form_name'         =>      'Please fill Form name',
+    
     /*
       |----------------------------------------------------------------------------------------
       | Theme Pages [English(en)]

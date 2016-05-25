@@ -16,14 +16,12 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.edit_an_email')}}</h1> 
-
+<h1>{{Lang::get('lang.edit_an_email')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
 @section('breadcrumbs')
 <ol class="breadcrumb">
-
 </ol>
 @stop
 <!-- /breadcrumbs -->
@@ -144,7 +142,29 @@ class="active"
             <div class="col-xs-2 form-group {!! $errors->has('fetching_encryption') ? 'has-error' : ''!!}" id="fetching_encryption_error">
                 {!! Form::label('fetching_encryption',Lang::get('lang.encryption')) !!}
                 {!! $errors->first('fetching_encryption', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('fetching_encryption',[''=>'-----Select-----', 'none' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS', 'starttls' => 'STARTTLS'],null,['class' => 'form-control select', 'id' => 'fetching_encryption']) !!}
+                <select name="fetching_encryption" class='form-control'  id='fetching_encryption'>
+                    <option value=""> -----Select----- </option>
+                    <option <?php
+                    if ($emails->fetching_encryption == 'none') {
+                        echo 'selected="selected"';
+                    }
+                    ?> value="none">None</option>
+                    <option <?php
+                    if ($emails->fetching_encryption == '/ssl/novalidate-cert' || $emails->fetching_encryption === '/ssl/validate-cert') {
+                        echo 'selected="selected"';
+                    }
+                    ?> value="ssl">SSL</option>
+                    <option <?php
+                    if ($emails->fetching_encryption == '/tls/novalidate-cert' || $emails->fetching_encryption === '/tls/validate-cert') {
+                        echo 'selected="selected"';
+                    }
+                    ?> value="tls">TLS</option>
+                    <option <?php
+                    if ($emails->fetching_encryption == '/starttls/novalidate-cert' || $emails->fetching_encryption === '/starttls/validate-cert') {
+                        echo 'selected="selected"';
+                    }
+                    ?> value="starttls">STARTTLS</option>
+                </select>
             </div>
             <div class="col-xs-2 form-group {!! $errors->has('imap_authentication') ? 'has-error' : ''!!}" id="imap_authentication_error">
                 {!! Form::label('fetching_authentication',Lang::get('lang.authentication')) !!}
@@ -152,7 +172,7 @@ class="active"
             </div>
             <div class="col-xs-2 form-group">
                 <br>
-                <input type="checkbox" name="imap_validate" id="imap_validate">&nbsp; {!! Lang::get('lang.calidate_certificates_from_tls_or_ssl_server') !!}
+                <input type="checkbox" name="imap_validate" id="imap_validate">&nbsp; {!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
             </div>
         </div>
     </div>
@@ -209,7 +229,7 @@ class="active"
             </div>
             <div class="col-xs-2 form-group">
                 <br>
-                <input type="checkbox" name="smtp_validate" id="smtp_validate">&nbsp; {!! Lang::get('lang.calidate_certificates_from_tls_or_ssl_server') !!}
+                <input type="checkbox" name="smtp_validate" id="smtp_validate">&nbsp; {!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
             </div>
         </div>
         <!-- Internal notes -->

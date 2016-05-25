@@ -13,21 +13,21 @@ use App\Model\helpdesk\Settings\Ticket;
 //classes
 use DB;
 use Exception;
+use Lang;
 
 /**
  * SlaController.
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class SlaController extends Controller
-{
+class SlaController extends Controller {
+
     /**
      * Create a new controller instance.
      *
      * @return type void
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth');
         $this->middleware('roles');
     }
@@ -39,15 +39,14 @@ class SlaController extends Controller
      *
      * @return type Response
      */
-    public function index(Sla_plan $sla)
-    {
+    public function index(Sla_plan $sla) {
         try {
             /* Declare a Variable $slas to store all Values From Sla_plan Table */
             $slas = $sla->get();
             /* Listing the values From Sla_plan Table */
             return view('themes.default1.admin.helpdesk.manage.sla.index', compact('slas'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -56,13 +55,12 @@ class SlaController extends Controller
      *
      * @return type Response
      */
-    public function create()
-    {
+    public function create() {
         try {
             /* Direct to Create Page */
             return view('themes.default1.admin.helpdesk.manage.sla.create');
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -74,17 +72,16 @@ class SlaController extends Controller
      *
      * @return type Response
      */
-    public function store(Sla_plan $sla, SlaRequest $request)
-    {
+    public function store(Sla_plan $sla, SlaRequest $request) {
         try {
             /* Fill the request values to Sla_plan Table  */
             /* Check whether function success or not */
             $sla->fill($request->input())->save();
             /* redirect to Index page with Success Message */
-            return redirect('sla')->with('success', 'SLA Plan Created Successfully');
+            return redirect('sla')->with('success', Lang::get('lang.sla_plan_created_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('sla')->with('fails', 'SLA Plan can not Create'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('sla')->with('fails', Lang::get('lang.sla_plan_can_not_create') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -96,16 +93,14 @@ class SlaController extends Controller
      *
      * @return type Response
      */
-    public function edit($id, Sla_plan $sla)
-    {
+    public function edit($id) {
         try {
             /* Direct to edit page along values of perticular field using Id */
-            $slas = $sla->whereId($id)->first();
+            $slas = Sla_plan::whereId($id)->first();
             $slas->get();
-
             return view('themes.default1.admin.helpdesk.manage.sla.edit', compact('slas'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -118,11 +113,10 @@ class SlaController extends Controller
      *
      * @return type Response
      */
-    public function update($id, Sla_plan $sla, SlaUpdate $request)
-    {
+    public function update($id, SlaUpdate $request) {
         try {
             /* Fill values to selected field using Id except Check box */
-            $slas = $sla->whereId($id)->first();
+            $slas = Sla_plan::whereId($id)->first();
             $slas->fill($request->except('transient', 'ticket_overdue'))->save();
             /* Update transient checkox field */
             $slas->transient = $request->input('transient');
@@ -131,10 +125,10 @@ class SlaController extends Controller
             /* Check whether function success or not */
             $slas->save();
             /* redirect to Index page with Success Message */
-            return redirect('sla')->with('success', 'SLA Plan Updated Successfully');
+            return redirect('sla')->with('success', Lang::get('lang.sla_plan_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('sla')->with('fails', 'SLA Plan can not Update'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('sla')->with('fails', Lang::get('lang.sla_plan_can_not_update') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -146,11 +140,10 @@ class SlaController extends Controller
      *
      * @return type Response
      */
-    public function destroy($id, Sla_plan $sla)
-    {
+    public function destroy($id, Sla_plan $sla) {
         $default_sla = Ticket::where('id', '=', '1')->first();
         if ($default_sla->sla == $id) {
-            return redirect('departments')->with('fails', 'You cannot delete default department');
+            return redirect('departments')->with('fails', Lang::get('lang.you_cannot_delete_default_department'));
         } else {
             $tickets = DB::table('tickets')->where('sla', '=', $id)->update(['sla' => $default_sla->sla]);
             if ($tickets > 0) {
@@ -159,7 +152,7 @@ class SlaController extends Controller
                 } else {
                     $text_tickets = 'Ticket';
                 }
-                $ticket = '<li>'.$tickets.' '.$text_tickets.' have been moved to default SLA</li>';
+                $ticket = '<li>' . $tickets . ' ' . $text_tickets . Lang::get('lang.have_been_moved_to_default_sla') . '</li>';
             } else {
                 $ticket = '';
             }
@@ -170,7 +163,7 @@ class SlaController extends Controller
                 } else {
                     $text_dept = 'Email';
                 }
-                $dept = '<li>Associated department have been moved to default SLA</li>';
+                $dept = '<li>' . Lang::get('lang.associated_department_have_been_moved_to_default_sla') . '</li>';
             } else {
                 $dept = '';
             }
@@ -181,22 +174,23 @@ class SlaController extends Controller
                 } else {
                     $text_topic = 'Email';
                 }
-                $topic = '<li>Associated Help Topic have been moved to default SLA</li>';
+                $topic = '<li>' . Lang::get('lang.associated_help_topic_have_been_moved_to_default_sla') . '</li>';
             } else {
                 $topic = '';
             }
-            $message = $ticket.$dept.$topic;
+            $message = $ticket . $dept . $topic;
             /* Delete a perticular field from the database by delete() using Id */
             $slas = $sla->whereId($id)->first();
             /* Check whether function success or not */
             try {
                 $slas->delete();
                 /* redirect to Index page with Success Message */
-                return redirect('sla')->with('success', 'SLA Plan Deleted Successfully'.$message);
+                return redirect('sla')->with('success', Lang::get('lang.sla_plan_deleted_successfully') . $message);
             } catch (Exception $e) {
                 /* redirect to Index page with Fails Message */
-                return redirect('sla')->with('fails', 'SLA Plan can not Delete'.'<li>'.$e->errorInfo[2].'</li>');
+                return redirect('sla')->with('fails', Lang::get('lang.sla_plan_can_not_delete') . '<li>' . $e->getMessage() . '</li>');
             }
         }
     }
+
 }

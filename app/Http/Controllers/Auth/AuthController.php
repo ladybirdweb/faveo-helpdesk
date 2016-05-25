@@ -31,8 +31,8 @@ use Mail;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class AuthController extends Controller
-{
+class AuthController extends Controller {
+
     use AuthenticatesAndRegistersUsers;
     /* to redirect after login */
 
@@ -52,8 +52,7 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct(PhpMailController $PhpMailController)
-    {
+    public function __construct(PhpMailController $PhpMailController) {
         $this->PhpMailController = $PhpMailController;
         SettingsController::smtp();
 
@@ -65,8 +64,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function getRegister()
-    {
+    public function getRegister() {
         // Event for login
         \Event::fire(new \App\Events\FormRegisterEvent());
         if (Auth::user()) {
@@ -88,8 +86,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function postRegister(User $user, RegisterRequest $request)
-    {
+    public function postRegister(User $user, RegisterRequest $request) {
         // Event for login
         \Event::fire(new \App\Events\LoginEvent($request));
 
@@ -111,7 +108,7 @@ class AuthController extends Controller
         //  $message->to($user->email, $user->full_name)->subject('active your account');
         // });
 
-        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => 'password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('password/reset/'.$code)]);
+        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => 'password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('password/reset/' . $code)]);
 
         return redirect('home')->with('success', 'Activate Your Account ! Click on Link that send to your mail');
     }
@@ -124,8 +121,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function getMail($token, User $user)
-    {
+    public function getMail($token, User $user) {
         $user = $user->where('remember_token', $token)->where('active', 0)->first();
         if ($user) {
             $user->active = 1;
@@ -142,8 +138,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function getLogin()
-    {
+    public function getLogin() {
         if (Auth::user()) {
             if (Auth::user()->role == 'admin' || Auth::user()->role == 'agent') {
                 return \Redirect::route('dashboard');
@@ -162,26 +157,34 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function postLogin(LoginRequest $request)
-    {
+    public function postLogin(LoginRequest $request) {
         // Set login attempts and login time
 
         $value = $_SERVER['REMOTE_ADDR'];
         $usernameinput = $request->input('email');
         $password = $request->input('password');
         $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
-        $result = $this->confirmIPAddress($value,$usernameinput);
-         // If attempts > 3 and time < 30 minutes
+        $result = $this->confirmIPAddress($value, $usernameinput);
+        // If attempts > 3 and time < 30 minutes
         $security = Security::whereId('1')->first();
-        if($result == 1){
-         return redirect()->back()->withErrors('email', 'Incorrect details')->with('error', $security->lockout_message);
-      } 
+        if ($result == 1) {
+            return redirect()->back()->withErrors('email', 'Incorrect details')->with('error', $security->lockout_message);
+        }
+        $check_active = User::where('email', '=', $request->input('email'))->first();
+        if ($check_active->active == 0) {
+            return redirect()->back()
+                            ->withInput($request->only('email', 'remember'))
+                            ->withErrors([
+                                'email' => $this->getFailedLoginMessage(),
+                                'password' => $this->getFailedLoginMessage(),
+                            ])->with('error', Lang::get('lang.this_account_is_currently_inactive'));
+        }
         $loginAttempts = 1;
         // If session has login attempts, retrieve attempts counter and attempts time
         if (\Session::has('loginAttempts')) {
             $loginAttempts = \Session::get('loginAttempts');
             $loginAttemptTime = \Session::get('loginAttemptTime');
-            $this->addLoginAttempt($value,$usernameinput);
+            $this->addLoginAttempt($value, $usernameinput);
             // $credentials = $request->only('email', 'password');
             $usernameinput = $request->input('email');
             $password = $request->input('password');
@@ -199,11 +202,11 @@ class AuthController extends Controller
         } else { // If no login attempts stored, init login attempts and time
             \Session::put('loginAttempts', $loginAttempts);
             \Session::put('loginAttemptTime', time());
-            $this->clearLoginAttempts($value,$usernameinput);
+            $this->clearLoginAttempts($value, $usernameinput);
         }
         // If auth ok, redirect to restricted area
         \Session::put('loginAttempts', $loginAttempts + 1);
-        \Event::fire('auth.login.event', array());//added 5/5/2016
+        \Event::fire('auth.login.event', array()); //added 5/5/2016
         if (Auth::Attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
             if (Auth::user()->role == 'user') {
                 return \Redirect::route('/');
@@ -215,50 +218,49 @@ class AuthController extends Controller
         return redirect()->back()
                         ->withInput($request->only('email', 'remember'))
                         ->withErrors([
-                            'email'    => $this->getFailedLoginMessage(),
+                            'email' => $this->getFailedLoginMessage(),
                             'password' => $this->getFailedLoginMessage(),
-        ])->with('error', Lang::get('lang.invalid'));
+                        ])->with('error', Lang::get('lang.invalid'));
         // Increment login attempts
     }
- /**
+
+    /**
      * Add login attempt.
      *
      * @param type IPaddress $value
      *
      * @return type Response
      */
-    public function addLoginAttempt($value,$field) {
-      $result = DB::table('login_attempts')->where('IP','=',$value)->first();
-      $data = $result;
-              $security = Security::whereId('1')->first();
-                  $apt = $security->backlist_threshold;
-      if($data)
-      {
-        $attempts = $data->Attempts+1;
-        if($attempts==$apt) {
-         $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts.", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
+    public function addLoginAttempt($value, $field) {
+        $result = DB::table('login_attempts')->where('IP', '=', $value)->first();
+        $data = $result;
+        $security = Security::whereId('1')->first();
+        $apt = $security->backlist_threshold;
+        if ($data) {
+            $attempts = $data->Attempts + 1;
+            if ($attempts == $apt) {
+                $result = DB::select("UPDATE login_attempts SET Attempts=" . $attempts . ", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
+            } else {
+                $result = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['Attempts' => $attempts]);
+                // $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
+            }
+        } else {
+            $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
         }
-        else {
-            $result = DB::table('login_attempts')->where('IP','=',$value)->orWhere('User','=',$field)->update(['Attempts'=>$attempts]);
-         // $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
-        }
-       }
-      else {
-       $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
-      }
     }
-     /**
+
+    /**
      * Clear login attempt.
      *
      * @param type IPaddress $value
      *
      * @return type Response
      */
-     public function clearLoginAttempts($value,$field) {
-         $data =  DB::table('login_attempts')->where('IP','=',$value)->orWhere('User','=',$field)->update(['attempts' => '0']);
-    return $data;
-   }
-   
+    public function clearLoginAttempts($value, $field) {
+        $data = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['attempts' => '0']);
+        return $data;
+    }
+
     /**
      * Confiem IP.
      *
@@ -266,40 +268,37 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-   public function confirmIPAddress($value,$field) {
-         $security = Security::whereId('1')->first();
-       $time = $security->lockout_period;
-       $max_attempts = $security->backlist_threshold;
-       $table = 'login_attempts';
-     $result = DB::select("SELECT Attempts, (CASE when LastLogin is not NULL and DATE_ADD(LastLogin, INTERVAL ".$time." MINUTE)>NOW() then 1 else 0 end) as Denied ".
-   " FROM ".$table." WHERE IP = '$value' OR User = '$field'");
-  
- $data = $result;
-   //Verify that at least one login attempt is in database
-   if (!$data) {
-     return 0;
-   } 
-   if ($data[0]->Attempts >= $max_attempts)
-   {
-      if($data[0]->Denied == 1)
-      {
-         return 1;
-      }
-     else
-     {
-        $this->clearLoginAttempts($value,$field);
+    public function confirmIPAddress($value, $field) {
+        $security = Security::whereId('1')->first();
+        $time = $security->lockout_period;
+        $max_attempts = $security->backlist_threshold;
+        $table = 'login_attempts';
+        $result = DB::select("SELECT Attempts, (CASE when LastLogin is not NULL and DATE_ADD(LastLogin, INTERVAL " . $time . " MINUTE)>NOW() then 1 else 0 end) as Denied " .
+                        " FROM " . $table . " WHERE IP = '$value' OR User = '$field'");
+
+        $data = $result;
+        //Verify that at least one login attempt is in database
+        if (!$data) {
+            return 0;
+        }
+        if ($data[0]->Attempts >= $max_attempts) {
+            if ($data[0]->Denied == 1) {
+                return 1;
+            } else {
+                $this->clearLoginAttempts($value, $field);
+                return 0;
+            }
+        }
         return 0;
-     }
-   }
-   return 0;  
-  }
+    }
+
     /**
      * Get Failed login message.
      *
      * @return type string
      */
-    protected function getFailedLoginMessage()
-    {
+    protected function getFailedLoginMessage() {
         return 'This Field do not match our records.';
     }
+
 }

@@ -12,6 +12,7 @@ use App\Model\helpdesk\Email\Banlist;
 use App\User;
 //classes
 use Exception;
+use Lang;
 
 /**
  * BanlistController
@@ -19,8 +20,8 @@ use Exception;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class BanlistController extends Controller
-{
+class BanlistController extends Controller {
+
     /**
      * Create a new controller instance.
      * constructor to check
@@ -30,8 +31,7 @@ class BanlistController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         // checking authentication
         $this->middleware('auth');
         // checking admin roles
@@ -43,14 +43,12 @@ class BanlistController extends Controller
      *
      * @return type
      */
-    public function index()
-    {
+    public function index() {
         try {
             $bans = User::where('ban', '=', 1)->get();
-
             return view('themes.default1.admin.helpdesk.emails.banlist.index', compact('bans'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -59,12 +57,11 @@ class BanlistController extends Controller
      *
      * @return type Response
      */
-    public function create()
-    {
+    public function create() {
         try {
             return view('themes.default1.admin.helpdesk.emails.banlist.create');
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -76,8 +73,7 @@ class BanlistController extends Controller
      *
      * @return type Response
      */
-    public function store(BanRequest $request, User $user)
-    {
+    public function store(BanRequest $request, User $user) {
         // dd($request);
         try {
             //adding field to user whether it is banned or not
@@ -88,18 +84,17 @@ class BanlistController extends Controller
                 $use->internal_note = $request->input('internal_note');
                 $use->save();
                 // $user->create($request->input())->save();
-                return redirect('banlist')->with('success', 'Email Banned sucessfully');
+                return redirect('banlist')->with('success', Lang::get('lang.email_banned_sucessfully'));
             } else {
                 $user = new User();
                 $user->email = $adban;
                 $user->ban = $request->input('ban');
                 $user->internal_note = $request->input('internal_note');
                 $user->save();
-
-                return redirect('banlist')->with('success', 'Email Banned sucessfully');
+                return redirect('banlist')->with('success', Lang::get('lang.email_banned_sucessfully'));
             }
         } catch (Exception $e) {
-            return redirect('banlist')->with('fails', 'Email can not Ban');
+            return redirect('banlist')->with('fails', Lang::get('lang.email_can_not_ban'));
         }
     }
 
@@ -111,14 +106,12 @@ class BanlistController extends Controller
      *
      * @return type Response
      */
-    public function edit($id, User $ban)
-    {
+    public function edit($id, User $ban) {
         try {
             $bans = $ban->whereId($id)->first();
-
             return view('themes.default1.admin.helpdesk.emails.banlist.edit', compact('bans'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -131,19 +124,36 @@ class BanlistController extends Controller
      *
      * @return type Response
      */
-    public function update($id, User $ban, BanlistRequest $request)
-    {
+    public function update($id, User $ban, BanlistRequest $request) {
         try {
             $bans = $ban->whereId($id)->first();
             $bans->internal_note = $request->input('internal_note');
             $bans->ban = $request->input('ban');
             if ($bans->save()) {
-                return redirect('banlist')->with('success', 'Banned Email Updated sucessfully');
+                return redirect('banlist')->with('success', Lang::get('lang.banned_email_updated_sucessfully'));
             } else {
-                return redirect('banlist')->with('fails', 'Banned Email not Updated');
+                return redirect('banlist')->with('fails', Lang::get('lang.banned_email_not_updated'));
             }
         } catch (Exception $e) {
-            return redirect('banlist')->with('fails', 'Banned Email not Updated');
+            return redirect('banlist')->with('fails', Lang::get('lang.banned_email_not_updated'));
         }
     }
+
+    /**
+     * delete the banned users
+     * @param type $id
+     * @param \App\User $ban
+     * @return type view
+     */
+    public function delete($id, User $ban) {
+        try {
+            $ban_user = $ban->where('id', '=', $id)->first();
+            $ban_user->ban = 0;
+            $ban_user->save();
+            return redirect('banlist')->with('success', Lang::get('lang.banned_removed_sucessfully'));
+        } catch (Exception $ex) {
+            return redirect('banlist')->with('fails', $ex->getMessage());
+        }
+    }
+
 }

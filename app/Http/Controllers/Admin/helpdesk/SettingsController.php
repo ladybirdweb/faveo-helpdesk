@@ -56,131 +56,6 @@ class SettingsController extends Controller {
     }
 
     /**
-     * Main Settings Page.
-     *
-     * @return type view
-     */
-    public function settings() {
-        return view('themes.default1.admin.helpdesk.setting');
-    }
-
-    public function notificationSettings() {
-        return view('themes.default1.admin.helpdesk.settings.notification');
-    }
-
-    public function deleteReadNoti() {
-        $markasread = UserNotification::where('is_read', '=', 1)->get();
-        foreach ($markasread as $mark) {
-
-            $mark->delete();
-            \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
-        }
-
-        return redirect()->back()->with('success',Lang::get('lang.You_have_deleted_all the_read_notifications'));
-    }
-
-    public function deleteNotificationLog() {
-        $days = Input::get('no_of_days');
-        if ($days == null) {
-            return redirect()->back()->with('fails', 'Please enter valid no of days');
-        }
-        $date = new DateTime;
-        $date->modify($days . ' day');
-        $formatted_date = $date->format('Y-m-d H:i:s');
-        $markasread = UserNotification::where('created_at', '<=', $formatted_date)->get();
-        foreach ($markasread as $mark) {
-            $mark->delete();
-            \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
-        }
-        return redirect()->back()->with('success', 'You have deleted all the notification records since ' . $days . ' days.');
-    }
-
-    /**
-     * @param int $id
-     * @return Response
-     * @param $compant instance of company table
-     *
-     * get the form for company setting page
-     */
-    public function getStatuses() {
-        try {
-            /* fetch the values of company from company table */
-            $statuss = \DB::table('ticket_status')->get();
-            /* Direct to Company Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.status', compact('statuss'));
-        } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
-        }
-    }
-
-    /**
-     * @param int $id
-     * @return Response
-     * @param $compant instance of company table
-     *
-     * get the form for company setting page
-     */
-    public function editStatuses($id, StatusRequest $request) {
-        try {
-            /* fetch the values of company from company table */
-            $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->first();
-            $statuss->name = $request->input('name');
-            $statuss->icon_class = $request->input('icon_class');
-            $statuss->email_user = $request->input('email_user');
-            $statuss->sort = $request->input('sort');
-            $delete = $request->input('deleted');
-            if ($delete == 'yes') {
-                $statuss->state = 'delete';
-            } else {
-                $statuss->state = $request->input('state');
-            }
-            $statuss->sort = $request->input('sort');
-            $statuss->save();
-            /* Direct to Company Settings Page */
-            return redirect()->back()->with('success', 'Status has been updated!');
-        } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
-        }
-    }
-
-    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss, StatusRequest $request) {
-//        try {
-        /* fetch the values of company from company table */
-        $statuss->name = $request->input('name');
-        $statuss->icon_class = $request->input('icon_class');
-        $statuss->email_user = $request->input('email_user');
-        $statuss->sort = $request->input('sort');
-        $delete = $request->input('delete');
-        if ($delete == 'yes') {
-            $statuss->state = 'deleted';
-        } else {
-            $statuss->state = $request->input('state');
-        }
-        $statuss->sort = $request->input('sort');
-        $statuss->save();
-        /* Direct to Company Settings Page */
-        return redirect()->back()->with('success', 'Status has been created!');
-//        } catch (Exception $ex) {
-//            return redirect()->back()->with('fails', $ex->errorInfo[2]);
-//        }
-    }
-
-    public function deleteStatuses($id) {
-        try {
-            if ($id > 5) {
-                /* fetch the values of company from company table */
-                \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->delete();
-                /* Direct to Company Settings Page */
-                return redirect()->back()->with('success', 'Status has been deleted');
-            } else {
-                return redirect()->back()->with('failed', 'You cannot delete this status');
-            }
-        } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
-        }
-    }
-
-    /**
      * @param int $id
      * @param $compant instance of company table
      *
@@ -225,10 +100,10 @@ class SettingsController extends Controller {
         try {
             $companys->fill($request->except('logo'))->save();
             /* redirect to Index page with Success Message */
-            return redirect('getcompany')->with('success', 'Company Updated Successfully');
+            return redirect('getcompany')->with('success', Lang::get('lang.company_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getcompany')->with('fails', 'Company can not Updated' . '<li>' . $e->getMessage() . '</li>');
+            return redirect('getcompany')->with('fails', Lang::get('lang.company_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -246,7 +121,6 @@ class SettingsController extends Controller {
             $companys->logo = null;
             $companys->use_logo = '0';
             $companys->save();
-
             return 'true';
         }
         // return $res;
@@ -297,10 +171,10 @@ class SettingsController extends Controller {
             /* Check whether function success or not */
             $systems->fill($request->input())->save();
             /* redirect to Index page with Success Message */
-            return redirect('getsystem')->with('success', 'System Updated Successfully');
+            return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getsystem')->with('fails', 'System can not Updated' . '<li>' . $e->getMessage() . '</li>');
+            return redirect('getsystem')->with('fails', Lang::get('lang.system_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -356,10 +230,10 @@ class SettingsController extends Controller {
             /* Check whether function success or not */
             $tickets->save();
             /* redirect to Index page with Success Message */
-            return redirect('getticket')->with('success', 'Ticket Updated Successfully');
+            return redirect('getticket')->with('success', Lang::get('lang.ticket_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getticket')->with('fails', 'Ticket can not Updated' . '<li>' . $e->getMessage() . '</li>');
+            return redirect('getticket')->with('fails', Lang::get('lang.ticket_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -412,10 +286,10 @@ class SettingsController extends Controller {
             /* Check whether function success or not */
             $emails->save();
             /* redirect to Index page with Success Message */
-            return redirect('getemail')->with('success', 'Email Updated Successfully');
+            return redirect('getemail')->with('success', Lang::get('lang.email_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getemail')->with('fails', 'Email can not Updated' . '<li>' . $e->getMessage() . '</li>');
+            return redirect('getemail')->with('fails', Lang::get('lang.email_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -660,7 +534,6 @@ class SettingsController extends Controller {
 
     /**
      * 	To display the list of ratings in the system.
-     *
      *  @return type View
      */
     public function RatingSettings() {
@@ -669,6 +542,11 @@ class SettingsController extends Controller {
         return view('themes.default1.admin.helpdesk.settings.ratings', compact('ratings'));
     }
 
+    /**
+     * edit a rating
+     * @param type $id
+     * @return type view
+     */
     public function editRatingSettings($id) {
         $rating = Rating::whereId($id)->first();
         return view('themes.default1.admin.helpdesk.settings.edit-ratings', compact('rating'));
@@ -676,7 +554,6 @@ class SettingsController extends Controller {
 
     /**
      * 	To store rating data.
-     *
      *  @return type Redirect
      */
     public function PostRatingSettings($id, Rating $ratings, \App\Http\Requests\helpdesk\RatingUpdateRequest $request) {
@@ -688,12 +565,13 @@ class SettingsController extends Controller {
         $rating->rating_area = $request->input('rating_area');
         $rating->restrict = $request->input('restrict');
         $rating->save();
-
-//        DB::table('settings_ratings')->whereSlug($slug)->update(['rating_name' => $name, 'publish' => $publish, 'modify' => $modify]);
-
         return redirect()->back()->with('success', 'Successfully updated');
     }
 
+    /**
+     * get the create rating page
+     * @return type redirect
+     */
     public function createRating() {
         try {
             return view('themes.default1.admin.helpdesk.settings.create-ratings');
@@ -702,6 +580,13 @@ class SettingsController extends Controller {
         }
     }
 
+    /**
+     * store a rating value
+     * @param \App\Model\helpdesk\Ratings\Rating $rating
+     * @param \App\Model\helpdesk\Ratings\RatingRef $ratingrefs
+     * @param \App\Http\Requests\helpdesk\RatingRequest $request
+     * @return type redirect
+     */
     public function storeRating(Rating $rating, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs, \App\Http\Requests\helpdesk\RatingRequest $request) {
         $rating->name = $request->input('name');
         $rating->display_order = $request->input('display_order');
@@ -711,9 +596,7 @@ class SettingsController extends Controller {
         $rating->restrict = $request->input('restrict');
         $rating->save();
         $ratingrefs->rating_id = $rating->id;
-
         $ratingrefs->save();
-//        DB::table('settings_ratings')->insert(['rating_name' => $name, 'publish' => $publish, 'modify' => $modify]);
         return redirect()->back()->with('success', 'Successfully created this rating');
     }
 
@@ -730,13 +613,158 @@ class SettingsController extends Controller {
 
     /**
      *  Generate Api key.
-     *
      *  @return type json
      */
     public function generateApiKey() {
         $key = str_random(32);
-
         return $key;
+    }
+
+    /**
+     * Main Settings Page.
+     * @return type view
+     */
+    public function settings() {
+        return view('themes.default1.admin.helpdesk.setting');
+    }
+
+    /**
+     * get the page of notification settings
+     * @return type view
+     */
+    public function notificationSettings() {
+        return view('themes.default1.admin.helpdesk.settings.notification');
+    }
+
+    /**
+     * delete a notification
+     * @return type redirect
+     */
+    public function deleteReadNoti() {
+        $markasread = UserNotification::where('is_read', '=', 1)->get();
+        foreach ($markasread as $mark) {
+
+            $mark->delete();
+            \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
+        }
+
+        return redirect()->back()->with('success', Lang::get('lang.You_have_deleted_all the_read_notifications'));
+    }
+
+    /**
+     * delete a notification log
+     * @return type redirect
+     */
+    public function deleteNotificationLog() {
+        $days = Input::get('no_of_days');
+        if ($days == null) {
+            return redirect()->back()->with('fails', 'Please enter valid no of days');
+        }
+        $date = new DateTime;
+        $date->modify($days . ' day');
+        $formatted_date = $date->format('Y-m-d H:i:s');
+        $markasread = UserNotification::where('created_at', '<=', $formatted_date)->get();
+        foreach ($markasread as $mark) {
+            $mark->delete();
+            \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
+        }
+        return redirect()->back()->with('success', 'You have deleted all the notification records since ' . $days . ' days.');
+    }
+
+    /**
+     * @param int $id
+     * @return Response
+     * @param $compant instance of company table
+     *
+     * get the form for company setting page
+     */
+    public function getStatuses() {
+        try {
+            /* fetch the values of company from company table */
+            $statuss = \DB::table('ticket_status')->get();
+            /* Direct to Company Settings Page */
+            return view('themes.default1.admin.helpdesk.settings.status', compact('statuss'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->getMessage());
+        }
+    }
+
+    /**
+     * @param int $id
+     * @return Response
+     * @param $compant instance of company table
+     *
+     * get the form for company setting page
+     */
+    public function editStatuses($id, StatusRequest $request) {
+        try {
+            /* fetch the values of company from company table */
+            $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->first();
+            $statuss->name = $request->input('name');
+            $statuss->icon_class = $request->input('icon_class');
+            $statuss->email_user = $request->input('email_user');
+            $statuss->sort = $request->input('sort');
+            $delete = $request->input('deleted');
+            if ($delete == 'yes') {
+                $statuss->state = 'delete';
+            } else {
+                $statuss->state = $request->input('state');
+            }
+            $statuss->sort = $request->input('sort');
+            $statuss->save();
+            /* Direct to Company Settings Page */
+            return redirect()->back()->with('success', 'Status has been updated!');
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->getMessage());
+        }
+    }
+
+    /**
+     * create a status
+     * @param \App\Model\helpdesk\Ticket\Ticket_Status $statuss
+     * @param \App\Http\Requests\helpdesk\StatusRequest $request
+     * @return type redirect
+     */
+    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss, StatusRequest $request) {
+        try {
+            /* fetch the values of company from company table */
+            $statuss->name = $request->input('name');
+            $statuss->icon_class = $request->input('icon_class');
+            $statuss->email_user = $request->input('email_user');
+            $statuss->sort = $request->input('sort');
+            $delete = $request->input('delete');
+            if ($delete == 'yes') {
+                $statuss->state = 'deleted';
+            } else {
+                $statuss->state = $request->input('state');
+            }
+            $statuss->sort = $request->input('sort');
+            $statuss->save();
+            /* Direct to Company Settings Page */
+            return redirect()->back()->with('success', 'Status has been created!');
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
+    }
+
+    /**
+     * delete a status
+     * @param type $id
+     * @return type redirect
+     */
+    public function deleteStatuses($id) {
+        try {
+            if ($id > 5) {
+                /* fetch the values of company from company table */
+                \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->delete();
+                /* Direct to Company Settings Page */
+                return redirect()->back()->with('success', 'Status has been deleted');
+            } else {
+                return redirect()->back()->with('failed', 'You cannot delete this status');
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->getMessage());
+        }
     }
 
 }

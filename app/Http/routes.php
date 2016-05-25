@@ -22,18 +22,6 @@ $router->get('getmail/{token}', 'Auth\AuthController@getMail');
 
 /*
   |-------------------------------------------------------------------------------
-  | API Routes
-  |-------------------------------------------------------------------------------
-  | These routes are the API calls.
-  |
- */
-// Route::group(['prefix' => 'api'], function () {
-// 	Route::get('/database-config',['as'=>'database-config','uses'=>'Api\v1\InstallerApiController@config_database']);
-// 	Route::get('/system-config',['as'=>'database-config','uses'=>'Api\v1\InstallerApiController@config_system']);
-// });
-
-/*
-  |-------------------------------------------------------------------------------
   | Admin Routes
   |-------------------------------------------------------------------------------
   | Here is defining entire routes for the Admin Panel
@@ -69,6 +57,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::resource('emails', 'Admin\helpdesk\EmailsController'); // in emails module, for CRUD
 
     Route::resource('banlist', 'Admin\helpdesk\BanlistController'); // in banlist module, for CRUD
+    Route::get('banlist/delete/{id}', ['as' => 'banlist.delete', 'uses' => 'Admin\helpdesk\BanlistController@delete']); // in banlist module, for CRUD
     /*
      * Templates
      */
@@ -117,7 +106,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::get('getdiagno', ['as' => 'getdiagno', 'uses' => 'Admin\helpdesk\TemplateController@formDiagno']); // for getting form for diagnostic
 
-    Route::post('postdiagno', 'Admin\helpdesk\TemplateController@postDiagno'); // for getting form for diagnostic
+    Route::post('postdiagno', ['as' => 'postdiagno', 'uses' => 'Admin\helpdesk\TemplateController@postDiagno']); // for getting form for diagnostic
 
     Route::resource('helptopic', 'Admin\helpdesk\HelptopicController'); // in helptopics module, for CRUD
 
