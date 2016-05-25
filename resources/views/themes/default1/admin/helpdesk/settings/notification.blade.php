@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.notification_settings') !!}</h1>
+<h1>{!! Lang::get('lang.settings') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -31,8 +31,8 @@ class="active"
 <div class="row">
     <div class="col-md-12">
         <div class="box box-primary">
-            <div class="box-header">
-                <h3 class="box-title">{{Lang::get('lang.settings')}}</h3>
+            <div class="box-header with-border">
+                <h3 class="box-title">{{Lang::get('lang.notification_settings')}}</h3>
             </div>
             <!-- check whether success or not -->
             <div class="box-body table-responsive"style="overflow:hidden;">
@@ -74,7 +74,7 @@ class="active"
                         <div class="col-md-6">
                             <form action="{{ url('delete-notification-log') }}" method="post">
                                 <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.noti_msg2') !!}</div>
-                                <input type="number" class="form-control" name='no_of_days' placeholder="Enter No of days">
+                                <input type="number" class="form-control" name='no_of_days' placeholder="{!! lang::get('lang.enter_no_of_days') !!}">
                                 <button type="submit" class="btn btn-primary">{!! Lang::get('lang.submit') !!}</button>
                             </form>
                         </div>

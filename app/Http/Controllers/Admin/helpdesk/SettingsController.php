@@ -9,6 +9,7 @@ use App\Http\Requests\helpdesk\CompanyRequest;
 use App\Http\Requests\helpdesk\EmailRequest;
 use App\Http\Requests\helpdesk\SystemRequest;
 use App\Http\Requests\helpdesk\StatusRequest;
+use App\Http\Requests\helpdesk\RatingUpdateRequest;
 // models
 use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Agent\Department;
@@ -174,7 +175,7 @@ class SettingsController extends Controller {
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getsystem')->with('fails', Lang::get('lang.system_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
+            return redirect('getsystem')->with('fails', Lang::get('lang.system_can_not_updated') . '<br>' . $e->getMessage());
         }
     }
 
@@ -349,57 +350,6 @@ class SettingsController extends Controller {
     }
 
     /**
-     * get the form for Access setting page.
-     *
-     * @param type Access $access
-     *
-     * @return type Response
-     */
-    // public function getaccess(Access $access) {
-    // 	try {
-    // 		/* fetch the values of access from access table */
-    // 		$accesses = $access->whereId('1')->first();
-//	// 		 Direct to Access Settings Page
-    // 		return view('themes.default1.admin.helpdesk.settings.access', compact('accesses'));
-    // 	} catch (Exception $e) {
-    // 		return view('404');
-    // 	}
-    // }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param type Access  $access
-     * @param type Request $request
-     *
-     * @return type Response
-     */
-    // public function postaccess(Access $access, Request $request) {
-    // 	try {
-    // 		/* fetch the values of access request  */
-    // 		$accesses = $access->whereId('1')->first();
-    // 		/* fill the values to access table */
-    // 		$accesses->fill($request->except('password_reset', 'bind_agent_ip', 'reg_require', 'quick_access'))->save();
-    // 		/* insert checkbox value to DB  */
-    // 		$accesses->password_reset = $request->input('password_reset');
-    // 		$accesses->bind_agent_ip = $request->input('bind_agent_ip');
-    // 		$accesses->reg_require = $request->input('reg_require');
-    // 		$accesses->quick_access = $request->input('quick_access');
-    // 		/* Check whether function success or not */
-    // 		if ($accesses->save() == true) {
-    // 			/* redirect to Index page with Success Message */
-    // 			return redirect('getaccess')->with('success', 'Access Updated Successfully');
-    // 		} else {
-    // 			/* redirect to Index page with Fails Message */
-    // 			return redirect('getaccess')->with('fails', 'Access can not Updated');
-    // 		}
-    // 	} catch (Exception $e) {
-    // 		/* redirect to Index page with Fails Message */
-    // 		return redirect('getaccess')->with('fails', 'Access can not Updated');
-    // 	}
-    // }
-
-    /**
      * get the form for Responder setting page.
      *
      * @param type Responder $responder
@@ -439,10 +389,10 @@ class SettingsController extends Controller {
             /* Check whether function success or not */
             $responders->save();
             /* redirect to Index page with Success Message */
-            return redirect('getresponder')->with('success', 'Responder Updated Successfully');
+            return redirect('getresponder')->with('success', Lang::get('lang.auto_response_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getresponder')->with('fails', 'Responder can not Updated' . '<li>' . $e->getMessage() . '</li>');
+            return redirect('getresponder')->with('fails', Lang::get('lang.auto_response_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -525,90 +475,11 @@ class SettingsController extends Controller {
             /* Check whether function success or not */
             $alerts->save();
             /* redirect to Index page with Success Message */
-            return redirect('getalert')->with('success', 'Alert Updated Successfully');
+            return redirect('getalert')->with('success', Lang::get('lang.alert_&_notices_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getalert')->with('fails', 'Alert can not Updated' . '<li>' . $e->getMessage() . '</li>');
+            return redirect('getalert')->with('fails', Lang::get('lang.alert_&_notices_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
         }
-    }
-
-    /**
-     * 	To display the list of ratings in the system.
-     *  @return type View
-     */
-    public function RatingSettings() {
-        $ratings = Rating::orderBy('display_order', 'asc')->get();
-
-        return view('themes.default1.admin.helpdesk.settings.ratings', compact('ratings'));
-    }
-
-    /**
-     * edit a rating
-     * @param type $id
-     * @return type view
-     */
-    public function editRatingSettings($id) {
-        $rating = Rating::whereId($id)->first();
-        return view('themes.default1.admin.helpdesk.settings.edit-ratings', compact('rating'));
-    }
-
-    /**
-     * 	To store rating data.
-     *  @return type Redirect
-     */
-    public function PostRatingSettings($id, Rating $ratings, \App\Http\Requests\helpdesk\RatingUpdateRequest $request) {
-        $rating = $ratings->whereId($id)->first();
-        $rating->name = $request->input('name');
-        $rating->display_order = $request->input('display_order');
-        $rating->allow_modification = $request->input('allow_modification');
-        $rating->rating_scale = $request->input('rating_scale');
-        $rating->rating_area = $request->input('rating_area');
-        $rating->restrict = $request->input('restrict');
-        $rating->save();
-        return redirect()->back()->with('success', 'Successfully updated');
-    }
-
-    /**
-     * get the create rating page
-     * @return type redirect
-     */
-    public function createRating() {
-        try {
-            return view('themes.default1.admin.helpdesk.settings.create-ratings');
-        } catch (Exception $ex) {
-            return redirect('getratings')->with('fails', 'Ratings can not be created' . '<li>' . $ex->getMessage() . '</li>');
-        }
-    }
-
-    /**
-     * store a rating value
-     * @param \App\Model\helpdesk\Ratings\Rating $rating
-     * @param \App\Model\helpdesk\Ratings\RatingRef $ratingrefs
-     * @param \App\Http\Requests\helpdesk\RatingRequest $request
-     * @return type redirect
-     */
-    public function storeRating(Rating $rating, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs, \App\Http\Requests\helpdesk\RatingRequest $request) {
-        $rating->name = $request->input('name');
-        $rating->display_order = $request->input('display_order');
-        $rating->allow_modification = $request->input('allow_modification');
-        $rating->rating_scale = $request->input('rating_scale');
-        $rating->rating_area = $request->input('rating_area');
-        $rating->restrict = $request->input('restrict');
-        $rating->save();
-        $ratingrefs->rating_id = $rating->id;
-        $ratingrefs->save();
-        return redirect()->back()->with('success', 'Successfully created this rating');
-    }
-
-    /**
-     *  To delete a type of rating.
-     *
-     * 	@return type Redirect
-     */
-    public function RatingDelete($slug, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs) {
-        $ratingrefs->where('rating_id', '=', $slug)->delete();
-        Rating::whereId($slug)->delete();
-        return redirect()->back()->with('success', 'Successfully Deleted');
     }
 
     /**
@@ -626,49 +497,6 @@ class SettingsController extends Controller {
      */
     public function settings() {
         return view('themes.default1.admin.helpdesk.setting');
-    }
-
-    /**
-     * get the page of notification settings
-     * @return type view
-     */
-    public function notificationSettings() {
-        return view('themes.default1.admin.helpdesk.settings.notification');
-    }
-
-    /**
-     * delete a notification
-     * @return type redirect
-     */
-    public function deleteReadNoti() {
-        $markasread = UserNotification::where('is_read', '=', 1)->get();
-        foreach ($markasread as $mark) {
-
-            $mark->delete();
-            \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
-        }
-
-        return redirect()->back()->with('success', Lang::get('lang.You_have_deleted_all the_read_notifications'));
-    }
-
-    /**
-     * delete a notification log
-     * @return type redirect
-     */
-    public function deleteNotificationLog() {
-        $days = Input::get('no_of_days');
-        if ($days == null) {
-            return redirect()->back()->with('fails', 'Please enter valid no of days');
-        }
-        $date = new DateTime;
-        $date->modify($days . ' day');
-        $formatted_date = $date->format('Y-m-d H:i:s');
-        $markasread = UserNotification::where('created_at', '<=', $formatted_date)->get();
-        foreach ($markasread as $mark) {
-            $mark->delete();
-            \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
-        }
-        return redirect()->back()->with('success', 'You have deleted all the notification records since ' . $days . ' days.');
     }
 
     /**
@@ -713,7 +541,7 @@ class SettingsController extends Controller {
             $statuss->sort = $request->input('sort');
             $statuss->save();
             /* Direct to Company Settings Page */
-            return redirect()->back()->with('success', 'Status has been updated!');
+            return redirect()->back()->with('success', Lang::get('lang.status_has_been_updated_successfully'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -741,7 +569,7 @@ class SettingsController extends Controller {
             $statuss->sort = $request->input('sort');
             $statuss->save();
             /* Direct to Company Settings Page */
-            return redirect()->back()->with('success', 'Status has been created!');
+            return redirect()->back()->with('success', Lang::get('lang.status_has_been_created_successfully'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -758,13 +586,144 @@ class SettingsController extends Controller {
                 /* fetch the values of company from company table */
                 \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->delete();
                 /* Direct to Company Settings Page */
-                return redirect()->back()->with('success', 'Status has been deleted');
+                return redirect()->back()->with('success', Lang::get('lang.status_has_been_deleted'));
             } else {
-                return redirect()->back()->with('failed', 'You cannot delete this status');
+                return redirect()->back()->with('failed', Lang::get('lang.you_cannot_delete_this_status'));
             }
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
+    }
+
+    /**
+     * get the page of notification settings
+     * @return type view
+     */
+    public function notificationSettings() {
+        return view('themes.default1.admin.helpdesk.settings.notification');
+    }
+
+    /**
+     * delete a notification
+     * @return type redirect
+     */
+    public function deleteReadNoti() {
+        $markasread = UserNotification::where('is_read', '=', 1)->get();
+        foreach ($markasread as $mark) {
+            $mark->delete();
+            \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
+        }
+        return redirect()->back()->with('success', Lang::get('lang.you_have_deleted_all_the_read_notifications'));
+    }
+
+    /**
+     * delete a notification log
+     * @return type redirect
+     */
+    public function deleteNotificationLog() {
+        $days = Input::get('no_of_days');
+        if ($days == null) {
+            return redirect()->back()->with('fails', 'Please enter valid no of days');
+        }
+        $date = new DateTime;
+        $date->modify($days . ' day');
+        $formatted_date = $date->format('Y-m-d H:i:s');
+        $markasread = UserNotification::where('created_at', '<=', $formatted_date)->get();
+        foreach ($markasread as $mark) {
+            $mark->delete();
+            \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
+        }
+        return redirect()->back()->with('success', Lang::get('lang.you_have_deleted_all_the_notification_records_since') . $days . ' days.');
+    }
+
+    /**
+     * 	To display the list of ratings in the system.
+     *  @return type View
+     */
+    public function RatingSettings() {
+        try {
+            $ratings = Rating::orderBy('display_order', 'asc')->get();
+            return view('themes.default1.admin.helpdesk.settings.ratings', compact('ratings'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
+    }
+
+    /**
+     * edit a rating
+     * @param type $id
+     * @return type view
+     */
+    public function editRatingSettings($id) {
+        try {
+            $rating = Rating::whereId($id)->first();
+            return view('themes.default1.admin.helpdesk.settings.edit-ratings', compact('rating'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
+    }
+
+    /**
+     * 	To store rating data.
+     *  @return type Redirect
+     */
+    public function PostRatingSettings($id, Rating $ratings, RatingUpdateRequest $request) {
+        try {
+            $rating = $ratings->whereId($id)->first();
+            $rating->name = $request->input('name');
+            $rating->display_order = $request->input('display_order');
+            $rating->allow_modification = $request->input('allow_modification');
+            $rating->rating_scale = $request->input('rating_scale');
+            $rating->rating_area = $request->input('rating_area');
+            $rating->restrict = $request->input('restrict');
+            $rating->save();
+            return redirect()->back()->with('success', Lang::get('lang.ratings_updated_successfully'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
+    }
+
+    /**
+     * get the create rating page
+     * @return type redirect
+     */
+    public function createRating() {
+        try {
+            return view('themes.default1.admin.helpdesk.settings.create-ratings');
+        } catch (Exception $ex) {
+            return redirect('getratings')->with('fails', Lang::get('lang.ratings_can_not_be_created') . '<li>' . $ex->getMessage() . '</li>');
+        }
+    }
+
+    /**
+     * store a rating value
+     * @param \App\Model\helpdesk\Ratings\Rating $rating
+     * @param \App\Model\helpdesk\Ratings\RatingRef $ratingrefs
+     * @param \App\Http\Requests\helpdesk\RatingRequest $request
+     * @return type redirect
+     */
+    public function storeRating(Rating $rating, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs, \App\Http\Requests\helpdesk\RatingRequest $request) {
+        $rating->name = $request->input('name');
+        $rating->display_order = $request->input('display_order');
+        $rating->allow_modification = $request->input('allow_modification');
+        $rating->rating_scale = $request->input('rating_scale');
+        $rating->rating_area = $request->input('rating_area');
+        $rating->restrict = $request->input('restrict');
+        $rating->save();
+        $ratingrefs->rating_id = $rating->id;
+        $ratingrefs->save();
+        return redirect()->back()->with('success', Lang::get('lang.successfully_created_this_rating'));
+    }
+
+    /**
+     *  To delete a type of rating.
+     *
+     * 	@return type Redirect
+     */
+    public function RatingDelete($slug, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs) {
+        $ratingrefs->where('rating_id', '=', $slug)->delete();
+        Rating::whereId($slug)->delete();
+        return redirect()->back()->with('success', Lang::get('lang.rating_deleted_successfully'));
     }
 
 }

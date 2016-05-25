@@ -126,9 +126,9 @@ class SettingsController extends Controller {
         try {
             $widget->save();
 
-            return redirect()->back()->with('success', $widget->name . ' Saved Successfully');
+            return redirect()->back()->with('success', $widget->name . Lang::get('lang.saved_successfully'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -681,7 +681,6 @@ class SettingsController extends Controller {
                 $attributes[$key]['version'] = $field['version'];
                 $attributes[$key]['author'] = $field['author'];
             }
-            
         }
         //dd($attributes);
         return $attributes;

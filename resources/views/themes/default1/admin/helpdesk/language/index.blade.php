@@ -23,7 +23,6 @@ class="active"
 <!-- breadcrumbs -->
 @section('breadcrumbs')
 <ol class="breadcrumb">
-
 </ol>
 @stop
 <!-- /breadcrumbs -->

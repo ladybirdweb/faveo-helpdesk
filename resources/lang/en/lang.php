@@ -258,6 +258,8 @@ return [
     'ticket_can_not_updated'        =>  'Ticket can not Updated',
     'email_updated_successfully'    =>  'Email Updated Successfully',
     'email_can_not_updated'         =>  'Email can not Updated',
+    'select_a_time_zone'        =>      'Select a Time Zone',
+    'select_a_date_time_format'     =>      'Select a date Time Format',
     /*
       |--------------------------------------
       |   Email Settings Page
@@ -347,6 +349,9 @@ return [
     'send_new_activity_notice'      => 'Send new activity notice',
     'overlimit_notice'              => 'Overlimit Notice',
     'email_attachments_to_the_user' => 'Email attachments to the user',
+    'auto_response_updated_successfully'    =>  'Auto Response Updated Successfully',
+    'auto_response_can_not_updated'     =>  'Auto Response can not Updated',
+    
     /*
       |--------------------------------------
       |   Alert & Notice Settings Page
@@ -374,6 +379,17 @@ return [
     'excessive_failed_login_attempts'                       => 'Excessive failed login attempts',
     'system_error_reports'                                  => 'System error Reports',
     'Send_app_crash_reports_to_help_Ladybird_improve_Faveo' => 'Send app crash reports to help Ladybird improve Faveo',
+    'alert_&_notices_updated_successfully'  =>  'Alert & Notices Updated Successfully',
+    'alert_&_notices_can_not_updated'   =>  'Alert & Notices can not Updated',
+    
+    /*
+      |-----------------------------------------------
+      | Ratings Settings
+      |-----------------------------------------------
+     */
+    'current_ratings' => 'Current Ratings',
+    'edit_ratings'      =>  'Edit Ratings',
+    
     /*
       |------------------------------------------------
       | Language page
@@ -400,6 +416,16 @@ return [
     'lang-doesnot-exist' => 'Language package does not exist.',
     'active-lang-error'  => 'Language package can not be deleted when it is active.',
     'language-error'     => 'Language package not found in your lang directroy.',
+    
+    /*
+      |--------------------------------------
+      | Plugin Settings
+      |--------------------------------------
+     */
+    'add_plugin'    =>  'Add Plugin',
+    'plugins'       =>  'Plugins',
+    'upload'        =>  'Upload',
+    
     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]
@@ -998,8 +1024,18 @@ return [
     'close-msg3' => 'Select a status to choose on closing the ticket.',
     'close-msg4' => 'Send email to user on auto-closing the ticket?.',
     'edit_status' => 'Edit Status',
-    'current_status' => 'Current Status',
-    
+    'list_of_status' => 'List of Status',
+    'status_settings'   =>  'Status Settings',
+    'status_has_been_updated_successfully'  =>  'Status has been updated Successfully',
+    'status_has_been_created_successfully'  =>  'Status has been created Successfully',
+    'status_has_been_deleted'       =>      'Status has been deleted',
+    'you_cannot_delete_this_status'     =>  'You cannot delete this status',
+    'you_have_deleted_all_the_read_notifications'   =>  'You have deleted all the read Notifications',
+    'you_have_deleted_all_the_notification_records_since'  =>  'You have deleted all the notification records since ',
+    'ratings_updated_successfully'      =>  'Ratings updated Successfully',
+    'ratings_can_not_be_created'        =>  'Ratings can not be created',
+    'successfully_created_this_rating'  =>  'Successfully created this rating',
+    'rating_deleted_successfully'       =>  'Rating deleted Successfully',
     //status msg
     
     'status_msg1' => 'If you choose YES an email notification will be sent to the user.',
@@ -1017,7 +1053,7 @@ return [
     'security_msg3' => 'The length of minutes a host or user will be banned from this site after hitting the limit of bad logins.',
     'max_attempt' => 'Max Login Attempts Per Host/User',
     'rating-msg1' => 'The maximum rating that can be given. For example, if 5 is selected, the lowest possible rating will be 1 and the highest 5.',
-    
+    'enter_no_of_days'  =>  'Enter No of days',
     'template-types' => 'Template Types',
     'close-workflow' => 'Close Ticket Workflow',
     'template' => 'Template',
@@ -1031,10 +1067,18 @@ return [
     'add_user_to_this_organization' => 'Add User to this Organization',
     'Tickets_of' => 'Tickets Of',
     'security' => 'Security',
+    'security_settings' =>  'Security Settings',
+    'lockouts'      =>  'Lockouts',
+    'security_settings_saved_successfully'  =>  'Security Settings saved Successfully',
     'manage_status'=> 'Manage Status',
     'notifications' =>  'Notifications',
     
-        /*
+    
+    'auto_close_workflow'       =>      'Auto-close Workflow',
+    'close_ticket_workflow_settings'    =>  'Close ticket workflow Settings',
+    'successfully_saved_your_settings'  =>  'Successfully saved your Settings',
+    
+    /*
       |------------------------------------------------
       |   Notification Settings Pages
       |------------------------------------------------

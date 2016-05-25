@@ -22,20 +22,15 @@ class="active"
 <!-- breadcrumbs -->
 @section('breadcrumbs')
 <ol class="breadcrumb">
-
 </ol>
 @stop
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-
 <!-- open a form -->
-
 {!! Form::model($companys,['url' => 'postcompany/'.$companys->id, 'method' => 'PATCH','files'=>true]) !!}
-
 <!-- <div class="form-group {{ $errors->has('company_name') ? 'has-error' : '' }}"> -->
 <!-- table  -->
-
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">{{Lang::get('lang.company')}}</h3>
@@ -153,40 +148,40 @@ class="active"
         </div>
     </div>
 </div>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $(".image").on("click", function() {
-                $("#myModal").css("display", "block");
-                $("#myModalLabel").html("{!! Lang::get('lang.delete-logo') !!}");
-                $(".yes").html("{!! Lang::get('lang.yes') !!}");
-                $(".no").html("{{Lang::get('lang.cancel')}}");
-                $("#custom-alert-body").html("{{Lang::get('lang.confirm')}}");
-            });
-            $('.no,.closemodal').on("click", function() {
-                $("#myModal").css("display", "none");
-            });
-            $('.yes').on('click', function() {
-                var src = $('#company-logo').attr('src').split('/');
-                var file = src[src.length - 1];
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".image").on("click", function() {
+            $("#myModal").css("display", "block");
+            $("#myModalLabel").html("{!! Lang::get('lang.delete-logo') !!}");
+            $(".yes").html("{!! Lang::get('lang.yes') !!}");
+            $(".no").html("{{Lang::get('lang.cancel')}}");
+            $("#custom-alert-body").html("{{Lang::get('lang.confirm')}}");
+        });
+        $('.no,.closemodal').on("click", function() {
+            $("#myModal").css("display", "none");
+        });
+        $('.yes').on('click', function() {
+            var src = $('#company-logo').attr('src').split('/');
+            var file = src[src.length - 1];
 
-                var path = "lb-faveo/media/company/" + file;
-                // alert(path); 
-                $.ajax({
-                    type: "GET",
-                    url: "{{route('delete.logo')}}",
-                    dataType: "html",
-                    data: {data1: path},
-                    success: function(data) {
-                        if (data == "true") {
-                            var msg = "Logo deleted succesfully."
-                            $("#logo-display").css("display", "none");
-                            $("#myModal").css("display", "none");
-                        } else {
-                            $("#myModal").css("display", "none");
-                        }
+            var path = "lb-faveo/media/company/" + file;
+            // alert(path); 
+            $.ajax({
+                type: "GET",
+                url: "{{route('delete.logo')}}",
+                dataType: "html",
+                data: {data1: path},
+                success: function(data) {
+                    if (data == "true") {
+                        var msg = "Logo deleted succesfully."
+                        $("#logo-display").css("display", "none");
+                        $("#myModal").css("display", "none");
+                    } else {
+                        $("#myModal").css("display", "none");
                     }
-                });
+                }
             });
         });
-    </script>
-    @stop
+    });
+</script>
+@stop

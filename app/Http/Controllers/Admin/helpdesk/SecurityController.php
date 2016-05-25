@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 // Class
 use Input;
 use Redirect;
+use Lang;
 
 /**
  * FormController
@@ -19,14 +20,12 @@ use Redirect;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class SecurityController extends Controller
-{
+class SecurityController extends Controller {
+
     private $security;
 
-    public function __construct(Security $security)
-    {
+    public function __construct(Security $security) {
         $this->security = $security;
-       
     }
 
     /**
@@ -36,54 +35,64 @@ class SecurityController extends Controller
      *
      * @return Response
      */
-    public function index(Security $securitys)
-    {
-        $security = $securitys->whereId('1')->first();
-        return view('themes.default1.admin.helpdesk.settings.security.index', compact('security'));
+    public function index(Security $securitys) {
+        try {
+            $security = $securitys->whereId('1')->first();
+            return view('themes.default1.admin.helpdesk.settings.security.index', compact('security'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
     }
 
     /**
-     * Show the security for creating a new resource.
-     *
+     * Create security setting
      * @return Response
      */
-    public function create()
-    {
+    public function create() {
         return view('themes.default1.admin.helpdesk.setting.security.security');
     }
 
     /**
-     * Display the specified resource.
+     * Show security
      *
      * @param int $id
      *
      * @return Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         return view('themes.default1.admin.helpdesk.setting.security.preview', compact('id'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Update security details
      *
      * @return Response
      */
-    public function update($id, SecurityRequest $request)
-    {
-        $security = new Security();
-$securitys = $security->whereId($id)->first();
-  $securitys->lockout_message = $request->input('lockout_message');
-    $securitys->backlist_offender = $request->input('backlist_offender');
-      $securitys->backlist_threshold = $request->input('backlist_threshold');
-      $securitys->lockout_period = $request->input('lockout_period');  
-          $securitys->days_to_keep_logs = $request->input('days_to_keep_logs'); 
-          $securitys->save();
-        return Redirect::back()->with('success', 'Successfully Saved your Settings');
+    public function update($id, SecurityRequest $request) {
+        try {
+            $security = new Security();
+            $securitys = $security->whereId($id)->first();
+            $securitys->lockout_message = $request->input('lockout_message');
+            $securitys->backlist_offender = $request->input('backlist_offender');
+            $securitys->backlist_threshold = $request->input('backlist_threshold');
+            $securitys->lockout_period = $request->input('lockout_period');
+            $securitys->days_to_keep_logs = $request->input('days_to_keep_logs');
+            $securitys->save();
+            return Redirect::back()->with('success', Lang::get('lang.security_settings_saved_successfully'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
     }
 
-    public function delete($id, Security $securitys, Fields $field, Help_topic $help_topic)
-    {
+    /**
+     * Delete security details
+     * @param type $id
+     * @param \App\Model\helpdesk\Settings\Security $securitys
+     * @param type $field
+     * @param \App\Http\Controllers\Admin\helpdesk\Help_topic $help_topic
+     * @return type redirect
+     */
+    public function delete($id, Security $securitys, Fields $field, Help_topic $help_topic) {
         $fields = $field->where('securitys_id', $id)->get();
         $help_topics = $help_topic->where('custom_security', '=', $id)->get();
         foreach ($help_topics as $help_topic) {
@@ -98,4 +107,5 @@ $securitys = $security->whereId($id)->first();
 
         return redirect()->back()->with('success', 'Deleted Successfully');
     }
+
 }

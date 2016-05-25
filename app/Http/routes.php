@@ -118,6 +118,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     //$router->model('id','getcompany');
 
+    Route::get('job-scheduler', ['as' => 'get.job.scheder', 'uses' => 'Admin\helpdesk\SettingsController@getSchedular']); //to get ob scheduler form page
+
+    Route::patch('post-scheduler', ['as' => 'post.job.scheduler', 'uses' => 'Admin\helpdesk\SettingsController@postSchedular']); //to update job scheduler
+
     Route::get('agent-profile-page/{id}', ['as' => 'agent.profile.page', 'uses' => 'Admin\helpdesk\AgentController@agent_profile']);
 
     Route::get('getcompany', ['as' => 'getcompany', 'uses' => 'Admin\helpdesk\SettingsController@getcompany']); // direct to company setting page
@@ -222,7 +226,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Breadcrumbs::register('rating.edit', function($breadcrumbs) {
         $page = App\Model\helpdesk\Ratings\Rating::whereId(1)->first();
         $breadcrumbs->parent('ratings.index');
-        $breadcrumbs->push('Edit Ratings', route('rating.edit', $page->id));
+        $breadcrumbs->push('Edit Ratings');
     });
 
     Route::get('editratings/{slug}', ['as' => 'rating.edit', 'uses' => 'Admin\helpdesk\SettingsController@editRatingSettings']);
@@ -239,15 +243,15 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::patch('admin-profile-password', 'Admin\helpdesk\ProfileController@postProfilePassword'); /*  Admin Profile Password Post */
 
-    Route::get('widgets', 'Common\SettingsController@widgets'); /* get the create footer page for admin */
+    Route::get('widgets', ['as' => 'widgets', 'uses' => 'Common\SettingsController@widgets']); /* get the create footer page for admin */
 
     Route::get('list-widget', 'Common\SettingsController@list_widget'); /* get the list widget page for admin */
 
     Route::post('edit-widget/{id}', 'Common\SettingsController@edit_widget'); /* get the create footer page for admin */
 
-    Route::get('social-buttons', 'Common\SettingsController@social_buttons'); /* get the create footer page for admin */
+    Route::get('social-buttons', ['as' => 'social.buttons', 'uses' => 'Common\SettingsController@social_buttons']); /* get the create footer page for admin */
 
-    Route::get('list-social-buttons', 'Common\SettingsController@list_social_buttons'); /* get the list widget page for admin */
+    Route::get('list-social-buttons', ['as' => 'list.social.buttons', 'uses' => 'Common\SettingsController@list_social_buttons']); /* get the list widget page for admin */
 
     Route::post('edit-widget/{id}', 'Common\SettingsController@edit_social_buttons'); /* get the create footer page for admin */
 

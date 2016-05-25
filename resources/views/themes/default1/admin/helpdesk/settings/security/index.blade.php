@@ -1,5 +1,4 @@
 @extends('themes.default1.admin.layout.admin')
-@section('PageHeader')
 
 @section('Settings')
 active
@@ -9,36 +8,49 @@ active
 class="active"
 @stop
 
-<h1>Security</h1>
+@section('PageHeader')
+<h1>{!! Lang::get('lang.security') !!}</h1>
 @stop
 
 @section('header')
-<h1> List of Security </h1>
-<ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
-    <li class="active"> Security Settings </li>
-</ol>
 @stop
 
 @section('content')
-<!-- -->    
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">Security Settings</h3>
+        <h3 class="box-title">{!! Lang::get('lang.security_settings') !!}</h3>
     </div><!-- /.box-header -->
     <div class="box-body">
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
+            <i class="fa fa-check-circle"></i>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <p>{!! Session::get('success') !!}</p>
+            {!! Session::get('success') !!}
         </div>
         @endif
         @if(Session::has('failed'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>Alert!</b> Failed.
+            <b>{!! Lang::get('lang/alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <p>{{Session::get('failed')}}</p>                
+        </div>
+        @endif
+        @if(Session::has('errors'))
+        <div class="alert alert-danger alert-dismissable">
+            <i class="fa fa-ban"></i>
+            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <br/>
+            @if($errors->first('lockout_message'))
+            <li class="error-message-padding">{!! $errors->first('lockout_message', ':message') !!}</li>
+            @endif
+            @if($errors->first('backlist_threshold'))
+            <li class="error-message-padding">{!! $errors->first('backlist_threshold', ':message') !!}</li>
+            @endif
+            @if($errors->first('lockout_period'))
+            <li class="error-message-padding">{!! $errors->first('lockout_period', ':message') !!}</li>
+            @endif
         </div>
         @endif
         {!! Form::model($security,['route'=>['securitys.update', $security->id],'method'=>'PATCH','files' => true]) !!}
@@ -49,7 +61,6 @@ class="active"
                 </div>
                 <div  class="col-md-9">
                     <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.security_msg1') !!}</div>
-                    {!! $errors->first('lockout_message', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::textarea('lockout_message',null,['class'=>'form-control'])!!}
                 </div>
             </div>
@@ -61,8 +72,7 @@ class="active"
                 </div>
                 <div class="col-md-9">
                     <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.security_msg2') !!}</div>
-                    {!! $errors->first('backlist_threshold', '<spam class="help-block">:message</spam>') !!}
-                    <span>{!! Form::text('backlist_threshold',null,['class'=>'form-control'])!!} Lockouts</span>
+                    <span>{!! Form::text('backlist_threshold',null,['class'=>'form-control'])!!} {!! Lang::get('lang.lockouts') !!}</span>
                 </div>     
             </div>
         </div>
@@ -73,36 +83,14 @@ class="active"
                 </div>
                 <div class="col-md-8">
                     <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.security_msg3') !!}</div>
-                    {!! $errors->first('lockout_period', '<spam class="help-block">:message</spam>') !!}
-                    <span> {!! Form::text('lockout_period',null,['class'=>'form-control'])!!} Minutes</span>
+                    <span> {!! Form::text('lockout_period',null,['class'=>'form-control'])!!} {!! Lang::get('lang.minutes') !!}</span>
                 </div>
             </div>
         </div>
     </div><!-- /.box-body -->
     <div class="box-footer">
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">{!! lang::get('lang.submit') !!}</button>
     </div>
     {!! Form::close() !!}
 </div>
-@stop
-@section('footer')
-<script src="{{asset("lb-sample/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
-<script src="{{asset("lb-sample/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
-<!-- security script -->
-<script type="text/javascript">
-$(function() {
-    $("#example1").dataTable();
-    $('#example2').dataTable({
-        "bPaginate": true,
-        "bLengthChange": false,
-        "bFilter": false,
-        "bSort": true,
-        "bInfo": true,
-        "bAutoWidth": false
-    });
-});
-</script>
-
-
-
 @stop

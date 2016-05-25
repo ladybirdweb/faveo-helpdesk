@@ -7,7 +7,14 @@ use App\Http\Requests;
 use App\Model\helpdesk\Workflow\WorkflowClose;
 use App\Http\Requests\helpdesk\WorkflowCloseRequest;
 use App\Http\Controllers\Controller;
+use Lang;
 
+/**
+ * |=================================================
+ * | CloseWrokflowController
+ * |=================================================
+ * In this controller the functionalities fo close ticket workflow defined
+ */
 class CloseWrokflowController extends Controller {
 
     private $security;
@@ -16,21 +23,39 @@ class CloseWrokflowController extends Controller {
         $this->security = $security;
     }
 
+    /**
+     * get the workflow settings page
+     * @param \App\Model\helpdesk\Workflow\WorkflowClose $securitys
+     * @return type view
+     */
     public function index(WorkflowClose $securitys) {
-        $security = $securitys->whereId('1')->first();
-        return view('themes.default1.admin.helpdesk.settings.close-workflow.index', compact('security'));
+        try {
+            $security = $securitys->whereId('1')->first();
+            return view('themes.default1.admin.helpdesk.settings.close-workflow.index', compact('security'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
     }
 
+    /**
+     * updating the workflow settings for closing ticket
+     * @param type $id
+     * @param \App\Http\Requests\helpdesk\WorkflowCloseRequest $request
+     * @return type redirect
+     */
     public function update($id, WorkflowCloseRequest $request) {
-        $security = new WorkflowClose();
-        $securitys = $security->whereId($id)->first();
-        $securitys->days = $request->input('days');
-        $securitys->condition = $request->input('condition');
-        $securitys->send_email = $request->input('send_email');
-        $securitys->status = $request->input('status');
-
-        $securitys->save();
-        return \Redirect::back()->with('success', 'Successfully Saved your Settings');
+        try {
+            $security = new WorkflowClose();
+            $securitys = $security->whereId($id)->first();
+            $securitys->days = $request->input('days');
+            $securitys->condition = $request->input('condition');
+            $securitys->send_email = $request->input('send_email');
+            $securitys->status = $request->input('status');
+            $securitys->save();
+            return \Redirect::back()->with('success', Lang::get('lang.successfully_saved_your_settings'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
     }
 
 }
