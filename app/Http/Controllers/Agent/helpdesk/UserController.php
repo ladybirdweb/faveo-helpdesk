@@ -23,6 +23,7 @@ use Exception;
 use Hash;
 use Input;
 use Redirect;
+use Lang;
 
 /**
  * UserController
@@ -30,8 +31,8 @@ use Redirect;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class UserController extends Controller
-{
+class UserController extends Controller {
+
     /**
      * Create a new controller instance.
      * constructor to check
@@ -41,8 +42,7 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         // checking authentication
         $this->middleware('auth');
         // checking if role is agent
@@ -56,13 +56,12 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function index()
-    {
+    public function index() {
         try {
             /* get all values in Sys_user */
             return view('themes.default1.agent.helpdesk.user.index');
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -71,11 +70,10 @@ class UserController extends Controller
      *
      * @return datatable
      */
-    public function user_list()
-    {
+    public function user_list() {
         // displaying list of users with chumper datatables
         return \Datatable::collection(User::where('role', '!=', 'admin')->where('role', '!=', 'agent')->get())
-                        /* searchable column username and email*/
+                        /* searchable column username and email */
                         ->searchColumns('user_name', 'email', 'phone')
                         /* order column username and email */
                         ->orderColumns('user_name', 'email')
@@ -83,31 +81,28 @@ class UserController extends Controller
                         ->addColumn('user_name', function ($model) {
                             if (strlen($model->user_name) > 20) {
                                 $username = substr($model->user_name, 0, 30);
-                                $username = substr($username, 0, strrpos($username, ' ')).' ...';
+                                $username = substr($username, 0, strrpos($username, ' ')) . ' ...';
                             } else {
-                                $username = "<a href='".route('user.show', $model->id)."'>".$model->user_name.'</a>';
+                                $username = "<a href='" . route('user.show', $model->id) . "'>" . $model->user_name . '</a>';
                             }
-
                             return $username;
                         })
                         /* column email */
                         ->addColumn('email', function ($model) {
-                            $email = "<a href='".route('user.show', $model->id)."'>".$model->email.'</a>';
-
+                            $email = "<a href='" . route('user.show', $model->id) . "'>" . $model->email . '</a>';
                             return $email;
                         })
                         /* column phone */
                         ->addColumn('phone', function ($model) {
                             $phone = '';
                             if ($model->phone_number) {
-                                $phone = $model->ext.' '.$model->phone_number;
+                                $phone = $model->ext . ' ' . $model->phone_number;
                             }
                             $mobile = '';
                             if ($model->mobile) {
                                 $mobile = $model->mobile;
                             }
-                            $phone = $phone.'&nbsp;&nbsp;&nbsp;'.$mobile;
-
+                            $phone = $phone . '&nbsp;&nbsp;&nbsp;' . $mobile;
                             return $phone;
                         })
                         /* column account status */
@@ -118,7 +113,6 @@ class UserController extends Controller
                             } else {
                                 $stat = '<button class="btn btn-danger btn-xs">Inactive</button>';
                             }
-
                             return $stat;
                         })
                         /* column ban status */
@@ -129,18 +123,16 @@ class UserController extends Controller
                             } else {
                                 $stat = '<button class="btn btn-success btn-xs">Active</button>';
                             }
-
                             return $stat;
                         })
                         /* column last login date */
                         ->addColumn('lastlogin', function ($model) {
                             $t = $model->updated_at;
-
                             return TicketController::usertimezone($t);
                         })
                         /* column actions */
                         ->addColumn('Actions', function ($model) {
-                            return '<a href="'.route('user.edit', $model->id).'" class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp; <a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>';
+                            return '<a href="' . route('user.edit', $model->id) . '" class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp; <a href="' . route('user.show', $model->id) . '" class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>';
                         })
                         ->make();
     }
@@ -150,12 +142,11 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function create()
-    {
+    public function create() {
         try {
             return view('themes.default1.agent.helpdesk.user.create');
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -167,8 +158,7 @@ class UserController extends Controller
      *
      * @return type redirect
      */
-    public function store(User $user, Sys_userRequest $request)
-    {
+    public function store(User $user, Sys_userRequest $request) {
         /* insert the input request to sys_user table */
         /* Check whether function success or not */
         $user->email = $request->input('email');
@@ -182,10 +172,10 @@ class UserController extends Controller
         try {
             $user->save();
             /* redirect to Index page with Success Message */
-            return redirect('user')->with('success', 'User  Created Successfully');
+            return redirect('user')->with('success', Lang::get('lang.user_created_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('user')->with('fails', $e->errorInfo[2]);
+            return redirect('user')->with('fails', $e->getMessage());
         }
     }
 
@@ -197,16 +187,14 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function show($id)
-    {
+    public function show($id) {
         try {
             $user = new User();
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
-
             return view('themes.default1.agent.helpdesk.user.show', compact('users'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -218,16 +206,14 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         try {
-             $user = new User();
+            $user = new User();
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
-
             return view('themes.default1.agent.helpdesk.user.edit', compact('users'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -240,19 +226,18 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function update($id, User $user, Sys_userUpdate $request)
-    {
+    public function update($id, Sys_userUpdate $request) {
         /* select the field where id = $id(request Id) */
-        $users = $user->whereId($id)->first();
+        $users = User::whereId($id)->first();
         /* Update the value by selected field  */
         /* Check whether function success or not */
         try {
             $users->fill($request->input())->save();
             /* redirect to Index page with Success Message */
-            return redirect('user')->with('success', 'User  Updated Successfully');
+            return redirect('user')->with('success', Lang::get('lang.user_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -261,13 +246,12 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function getProfile()
-    {
+    public function getProfile() {
         $user = Auth::user();
         try {
             return view('themes.default1.agent.helpdesk.user.profile', compact('user'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -276,13 +260,12 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function getProfileedit()
-    {
+    public function getProfileedit() {
         $user = Auth::user();
         try {
             return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -294,8 +277,7 @@ class UserController extends Controller
      *
      * @return type Redirect
      */
-    public function postProfileedit(ProfileRequest $request)
-    {
+    public function postProfileedit(ProfileRequest $request) {
         // geet authenticated user details
         $user = Auth::user();
         $user->gender = $request->input('gender');
@@ -319,7 +301,7 @@ class UserController extends Controller
             // fetching upload destination path
             $destinationPath = 'lb-faveo/media/profilepic';
             // adding a random value to profile picture filename
-            $fileName = rand(0000, 9999).'.'.$name;
+            $fileName = rand(0000, 9999) . '.' . $name;
             // moving the picture to a destination folder
             Input::file('profile_pic')->move($destinationPath, $fileName);
             // saving filename to database
@@ -328,13 +310,13 @@ class UserController extends Controller
             try {
                 $user->fill($request->except('profile_pic', 'gender'))->save();
 
-                return Redirect::route('profile')->with('success', 'Profile Updated sucessfully');
+                return Redirect::route('profile')->with('success', Lang::get('lang.profile_updated_sucessfully'));
             } catch (Exception $e) {
-                return Redirect::route('profile')->with('success', $e->errorInfo[2]);
+                return Redirect::route('profile')->with('success', $e->getMessage());
             }
         }
         if ($user->fill($request->except('profile_pic'))->save()) {
-            return Redirect::route('profile')->with('success', 'Profile Updated sucessfully');
+            return Redirect::route('profile')->with('success', Lang::get('lang.profile_updated_sucessfully'));
         }
     }
 
@@ -346,8 +328,7 @@ class UserController extends Controller
      *
      * @return type Redirect
      */
-    public function postProfilePassword($id, ProfilePassword $request)
-    {
+    public function postProfilePassword($id, ProfilePassword $request) {
         // get authenticated user
         $user = Auth::user();
         // checking if the old password matches the new password
@@ -355,13 +336,12 @@ class UserController extends Controller
             $user->password = Hash::make($request->input('new_password'));
             try {
                 $user->save();
-
-                return redirect('profile-edit')->with('success1', 'Password Updated sucessfully');
+                return redirect('profile-edit')->with('success1', Lang::get('lang.password_updated_sucessfully'));
             } catch (Exception $e) {
-                return redirect('profile-edit')->with('fails', $e->errorInfo[2]);
+                return redirect('profile-edit')->with('fails', $e->getMessage());
             }
         } else {
-            return redirect('profile-edit')->with('fails1', 'Password was not Updated. Incorrect old password');
+            return redirect('profile-edit')->with('fails1', Lang::get('lang.password_was_not_updated_incorrect_old_password'));
         }
     }
 
@@ -372,8 +352,7 @@ class UserController extends Controller
      *
      * @return type boolean
      */
-    public function UserAssignOrg($id)
-    {
+    public function UserAssignOrg($id) {
         $org = Input::get('org');
         $user_org = new User_org();
         $user_org->org_id = $org;
@@ -382,9 +361,8 @@ class UserController extends Controller
 
         return 1;
     }
-    
-        public function orgAssignUser($id)
-    {
+
+    public function orgAssignUser($id) {
         $org = Input::get('org');
         $user_org = new User_org();
         $user_org->org_id = $id;
@@ -393,14 +371,11 @@ class UserController extends Controller
 
         return 1;
     }
-    
-    public function removeUserOrg($id)
-    {
-        
-        $user_org = User_org::where('org_id','=',$id)->first();
+
+    public function removeUserOrg($id) {
+        $user_org = User_org::where('org_id', '=', $id)->first();
         $user_org->delete();
-        
-        return redirect()->back()->with('success', 'The user has been removed from this organization');
+        return redirect()->back()->with('success', Lang::get('lang.the_user_has_been_removed_from_this_organization'));
     }
 
     /**
@@ -410,8 +385,7 @@ class UserController extends Controller
      *
      * @return type
      */
-    public function User_Create_Org($id)
-    {
+    public function User_Create_Org($id) {
         // checking if the entered value for website is available in database
         if (Input::get('website') != null) {
             // checking website
@@ -446,4 +420,5 @@ class UserController extends Controller
             return 0;
         }
     }
+
 }

@@ -25,6 +25,7 @@ use Datatable;
 use Exception;
 use Illuminate\Http\Request;
 use Lang;
+
 /**
  * WorkflowController
  * In this controller in the CRUD function for all the workflow applied in faveo.
@@ -158,6 +159,7 @@ class WorkflowController extends Controller {
      * @return type view
      */
     public function store(WorkflowCreateRequest $request) {
+
         try {
             // store a new workflow credentials in to the system
             $workflow_name = new WorkflowName();
@@ -223,6 +225,7 @@ class WorkflowController extends Controller {
      * @return type view
      */
     public function update($id, WorkflowUpdateRequest $request) {
+        dd($request->input('rule'));
         try {
             // store a new workflow credentials in to the system
             $workflow_name = WorkflowName::whereId($id)->first();

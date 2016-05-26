@@ -12,6 +12,7 @@ use App\Model\helpdesk\Agent_panel\Canned;
 use App\User;
 // classes
 use Exception;
+use Lang;
 
 /**
  * CannedController.
@@ -20,8 +21,8 @@ use Exception;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class CannedController extends Controller
-{
+class CannedController extends Controller {
+
     /**
      * Create a new controller instance.
      * constructor to check
@@ -31,8 +32,7 @@ class CannedController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         // checking authentication
         $this->middleware('auth');
         // checking if role is agent
@@ -44,9 +44,12 @@ class CannedController extends Controller
      *
      * @return type View
      */
-    public function index()
-    {
-        return view('themes.default1.agent.helpdesk.canned.index');
+    public function index() {
+        try {
+            return view('themes.default1.agent.helpdesk.canned.index');
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
     }
 
     /**
@@ -54,9 +57,12 @@ class CannedController extends Controller
      *
      * @return type View
      */
-    public function create()
-    {
-        return view('themes.default1.agent.helpdesk.canned.create');
+    public function create() {
+        try {
+            return view('themes.default1.agent.helpdesk.canned.create');
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
     }
 
     /**
@@ -67,19 +73,17 @@ class CannedController extends Controller
      *
      * @return type Redirect
      */
-    public function store(CannedRequest $request, Canned $canned)
-    {
-        // fetching all the requested inputs
-        $canned->user_id = \Auth::user()->id;
-        $canned->title = $request->input('title');
-        $canned->message = $request->input('message');
+    public function store(CannedRequest $request, Canned $canned) {
         try {
+            // fetching all the requested inputs
+            $canned->user_id = \Auth::user()->id;
+            $canned->title = $request->input('title');
+            $canned->message = $request->input('message');
             // saving inputs
             $canned->save();
-
-            return redirect()->route('canned.list')->with('success', 'Added Successfully');
+            return redirect()->route('canned.list')->with('success', Lang::get('lang.added_successfully'));
         } catch (Exception $e) {
-            return redirect()->route('canned.list')->with('fails', $e->errorInfo[2]);
+            return redirect()->route('canned.list')->with('fails', $e->getMessage());
         }
     }
 
@@ -91,12 +95,14 @@ class CannedController extends Controller
      *
      * @return type View
      */
-    public function edit($id, Canned $canned)
-    {
-        // fetching requested canned response
-        $canned = $canned->where('user_id', '=', \Auth::user()->id)->where('id', '=', $id)->first();
-
-        return view('themes.default1.agent.helpdesk.canned.edit', compact('canned'));
+    public function edit($id, Canned $canned) {
+        try {
+            // fetching requested canned response
+            $canned = $canned->where('user_id', '=', \Auth::user()->id)->where('id', '=', $id)->first();
+            return view('themes.default1.agent.helpdesk.canned.edit', compact('canned'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
     }
 
     /**
@@ -108,21 +114,19 @@ class CannedController extends Controller
      *
      * @return type Redirect
      */
-    public function update($id, CannedUpdateRequest $request, Canned $canned)
-    {
-        /* select the field where id = $id(request Id) */
-        $canned = $canned->where('id', '=', $id)->where('user_id', '=', \Auth::user()->id)->first();
-        // fetching all the requested inputs
-        $canned->user_id = \Auth::user()->id;
-        $canned->title = $request->input('title');
-        $canned->message = $request->input('message');
+    public function update($id, CannedUpdateRequest $request, Canned $canned) {
         try {
+            /* select the field where id = $id(request Id) */
+            $canned = $canned->where('id', '=', $id)->where('user_id', '=', \Auth::user()->id)->first();
+            // fetching all the requested inputs
+            $canned->user_id = \Auth::user()->id;
+            $canned->title = $request->input('title');
+            $canned->message = $request->input('message');
             // saving inputs
             $canned->save();
-
-            return redirect()->route('canned.list')->with('success', 'Updated Successfully');
+            return redirect()->route('canned.list')->with('success', Lang::get('lang.updated_successfully'));
         } catch (Exception $e) {
-            return redirect()->route('canned.list')->with('fails', $e->errorInfo[2]);
+            return redirect()->route('canned.list')->with('fails', $e->getMessage());
         }
     }
 
@@ -134,19 +138,18 @@ class CannedController extends Controller
      *
      * @return type Redirect
      */
-    public function destroy($id, Canned $canned)
-    {
-        /* select the field where id = $id(request Id) */
-        $canned = $canned->whereId($id)->first();
-        /* delete the selected field */
-        /* Check whether function success or not */
+    public function destroy($id, Canned $canned) {
         try {
+            /* select the field where id = $id(request Id) */
+            $canned = $canned->whereId($id)->first();
+            /* delete the selected field */
+            /* Check whether function success or not */
             $canned->delete();
             /* redirect to Index page with Success Message */
-            return redirect()->route('canned.list')->with('success', 'User  Deleted Successfully');
+            return redirect()->route('canned.list')->with('success', Lang::get('lang.user_deleted_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect()->route('canned.list')->with('fails', $e->errorInfo[2]);
+            return redirect()->route('canned.list')->with('fails', $e->getMessage());
         }
     }
 
@@ -157,8 +160,7 @@ class CannedController extends Controller
      *
      * @return type json
      */
-    public function get_canned($id)
-    {
+    public function get_canned($id) {
         // checking for the canned response with requested value
         if ($id != 'zzz') {
             // fetching canned response
@@ -170,4 +172,5 @@ class CannedController extends Controller
         // returning the canned response in JSON format
         return \Response::json($msg);
     }
+
 }

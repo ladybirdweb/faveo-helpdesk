@@ -15,7 +15,7 @@ class="active"
 
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.edit') !!}</h1>
+<h1>{!! Lang::get('lang.user') !!}</h1>
 @stop
 <!-- /header -->
 
@@ -26,14 +26,14 @@ class="active"
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">
-            User Credentials
+            {!! Lang::get('lang.create') !!}
         </h3>
     </div>
     <div class="box-body">
         @if(Session::has('errors'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>Alert!</b>
+            <b>{!! Lang::get('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('email'))
@@ -60,7 +60,7 @@ class="active"
         <div class="row">
             <div class="col-md-4 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
                 {!! Form::label('email',Lang::get('lang.email')) !!}
-                {!! Form::email('email',null,['disabled'=>'disabled', 'class' => 'form-control']) !!}
+                {!! Form::email('email',null,['class' => 'form-control']) !!}
             </div>
             <!-- Full Name : Text : Required-->
             <div class="col-md-4 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
@@ -110,7 +110,7 @@ class="active"
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary'])!!}
+        {!! Form::submit(Lang::get('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
     </div>        
 </div>
 <script>

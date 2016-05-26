@@ -12,7 +12,6 @@ active
 class="active"
 @stop
 
-
 @section('HeadInclude')
 @stop
 <!-- header -->

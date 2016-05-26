@@ -16,10 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-{{-- <div><h1 style="margin-top:-10px;margin-bottom:-10px;">Organization Profile</h1></div>
-<a href="{{route('organizations.edit', $orgs->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> Edit</a>
- --}}
-<div class="box-header" style="margin-top:-15px;margin-bottom:-15px;"><h3 class="box-title">{!! Lang::get('lang.organization_profile') !!}</h3><a href="{{route('organizations.edit', $orgs->id)}}" class="btn btn-info btn-sm btn-flat pull-right"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a></div>
+<div class="box-header" style="margin-top:-5px;margin-bottom:-15px;"><h3 class="box-title">{!! Lang::get('lang.organization_profile') !!}</h3><a href="{{route('organizations.edit', $orgs->id)}}" class="btn btn-info btn-sm btn-flat pull-right"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a></div>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
