@@ -80,7 +80,7 @@ class="active"
                 <span class="info-box-icon bg-aqua"><i class="fa fa-cloud-upload"></i></span>
                 <div class="info-box-content">
                     <i class="fa fa-clipboard pull-right" title="{!!Lang::get('lang.click-url-copy')!!}" onclick="copyToClipboard('#p2')"></i>
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="form-group">
                             {!! Form::label('email_fetching',Lang::get('lang.notification-email')) !!}<br>
                             {!! Form::checkbox('notification_cron',1,true) !!}&nbsp;{{Lang::get('lang.cron_notification')}}
