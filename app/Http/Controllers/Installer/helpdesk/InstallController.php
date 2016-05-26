@@ -170,6 +170,7 @@ class InstallController extends Controller
      */
     public function configurationcheck(DatabaseRequest $request)
     {
+        
         Session::put('step4', 'step4');
         // dd($request->input('default'));
         // dd($request->input('host'));
@@ -183,7 +184,7 @@ class InstallController extends Controller
         Session::put('username', $request->input('username'));
         Session::put('password', $request->input('password'));
         Session::put('port', $request->input('port'));
-
+        
         return Redirect::route('database');
     }
 
@@ -194,6 +195,7 @@ class InstallController extends Controller
      */
     public function postconnection()
     {
+        
         error_reporting(E_ALL & ~E_NOTICE);
         $default = Input::get('default');
         $host = Input::get('host');
@@ -236,7 +238,7 @@ class InstallController extends Controller
         $fp = fopen(base_path().'/.env', 'w');
         fwrite($fp, $config);
         fclose($fp);
-
+        
         return 1;
     }
 

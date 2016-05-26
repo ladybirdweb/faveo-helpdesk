@@ -1,8 +1,6 @@
 <?php
-
 class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCache
 {
-
     /**
      * @param HTMLPurifier_Definition $def
      * @param HTMLPurifier_Config $config
@@ -22,7 +20,6 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         }
         return $this->_write($file, serialize($def), $config);
     }
-
     /**
      * @param HTMLPurifier_Definition $def
      * @param HTMLPurifier_Config $config
@@ -39,7 +36,6 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         }
         return $this->_write($file, serialize($def), $config);
     }
-
     /**
      * @param HTMLPurifier_Definition $def
      * @param HTMLPurifier_Config $config
@@ -59,7 +55,6 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         }
         return $this->_write($file, serialize($def), $config);
     }
-
     /**
      * @param HTMLPurifier_Config $config
      * @return bool|HTMLPurifier_Config
@@ -72,7 +67,6 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         }
         return unserialize(file_get_contents($file));
     }
-
     /**
      * @param HTMLPurifier_Config $config
      * @return bool
@@ -85,7 +79,6 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         }
         return unlink($file);
     }
-
     /**
      * @param HTMLPurifier_Config $config
      * @return bool
@@ -107,7 +100,6 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
             unlink($dir . '/' . $filename);
         }
     }
-
     /**
      * @param HTMLPurifier_Config $config
      * @return bool
@@ -128,13 +120,10 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
             }
             $key = substr($filename, 0, strlen($filename) - 4);
             if ($this->isOld($key, $config)) {
-                
-                chmod($dir . DIRECTORY_SEPARATOR . $filename, 0777);
-                unlink($dir . DIRECTORY_SEPARATOR . $filename);
+                unlink($dir . '/' . $filename);
             }
         }
     }
-
     /**
      * Generates the file path to the serial file corresponding to
      * the configuration and definition name
@@ -145,9 +134,8 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
     public function generateFilePath($config)
     {
         $key = $this->generateKey($config);
-        return $this->generateDirectoryPath($config) . DIRECTORY_SEPARATOR . $key . '.ser';
+        return $this->generateDirectoryPath($config) . '/' . $key . '.ser';
     }
-
     /**
      * Generates the path to the directory contain this cache's serial files
      * @param HTMLPurifier_Config $config
@@ -158,9 +146,8 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
     public function generateDirectoryPath($config)
     {
         $base = $this->generateBaseDirectoryPath($config);
-        return $base;
+        return $base . '/' . $this->type;
     }
-
     /**
      * Generates path to base directory that contains all definition type
      * serials
@@ -171,10 +158,9 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
     public function generateBaseDirectoryPath($config)
     {
         $base = $config->get('Cache.SerializerPath');
-        $base = is_null($base) ? HTMLPURIFIER_PREFIX . DIRECTORY_SEPARATOR.'HTMLPurifier'.DIRECTORY_SEPARATOR.'DefinitionCache' : $base;
+        $base = is_null($base) ? HTMLPURIFIER_PREFIX . '/HTMLPurifier/DefinitionCache/Serializer' : $base;
         return $base;
     }
-
     /**
      * Convenience wrapper function for file_put_contents
      * @param string $file File name to write to
@@ -196,7 +182,6 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         }
         return $result;
     }
-
     /**
      * Prepares the directory that this type stores the serials in
      * @param HTMLPurifier_Config $config
@@ -205,9 +190,7 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
     private function _prepareDir($config)
     {
         $directory = $this->generateDirectoryPath($config);
-        
         $chmod = $config->get('Cache.SerializerPermissions');
-        //dd($directory);
         if (!$chmod) {
             $chmod = 0755; // invalid config or simpletest
         }
@@ -237,7 +220,6 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         }
         return true;
     }
-
     /**
      * Tests permissions on a directory and throws out friendly
      * error messages and attempts to chmod it itself if possible
@@ -291,5 +273,3 @@ class HTMLPurifier_DefinitionCache_Serializer extends HTMLPurifier_DefinitionCac
         return false;
     }
 }
-
-// vim: et sw=4 sts=4

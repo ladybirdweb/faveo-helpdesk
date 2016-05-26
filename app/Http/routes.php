@@ -201,9 +201,9 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
         $breadcrumbs->parent('setting');
         $breadcrumbs->push('Create Status', route('statuss.create'));
     });
-    
+
     Route::get('status/edit/{id}', ['as' => 'status.edit', 'uses' => 'Admin\helpdesk\SettingsController@getEditStatuses']);
-    
+
     Route::post('status-create', ['as' => 'statuss.create', 'uses' => 'Admin\helpdesk\SettingsController@createStatuses']);
 
     Route::get('status-delete/{id}', ['as' => 'statuss.delete', 'uses' => 'Admin\helpdesk\SettingsController@deleteStatuses']);
@@ -888,7 +888,7 @@ Route::group(['prefix' => 'api/v1'], function () {
  * Update module
  */
 Route::get('database-update', ['as' => 'database.update', 'uses' => 'Update\UpgradeController@databaseUpdate']);
-Route::get('database-upgrade', ['as' => 'database', 'uses' => 'Update\UpgradeController@databaseUpgrade']);
+Route::get('database-upgrade', ['as' => 'database.upgrade', 'uses' => 'Update\UpgradeController@databaseUpgrade']);
 Route::get('file-update', ['as' => 'file.update', 'uses' => 'Update\UpgradeController@fileUpdate']);
 Route::get('file-upgrade', ['as' => 'file.upgrade', 'uses' => 'Update\UpgradeController@fileUpgrading']);
 
