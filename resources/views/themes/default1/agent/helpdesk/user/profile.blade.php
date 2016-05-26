@@ -17,69 +17,90 @@ class="active"
 @stop
 
 @section('content')
-
-<section class="content">
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title"><b>{!! Lang::get('lang.profile') !!}</b>&nbsp;&nbsp;<a href="{{URL::route('agent-profile-edit')}}"><i class="fa fa-fw fa-edit"> </i></a></h3>
+        @if(Session::has('success'))
+        <br><br>
+        <div class="alert alert-success alert-dismissable">
+            <i class="fa fa-check-circle"></i>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{Session::get('success')}}
+        </div>
+        @endif
+        <!-- fail message -->
+        @if(Session::has('fails'))
+        <div class="alert alert-danger alert-dismissable">
+            <i class="fa fa-ban"></i>
+            <b>{!! Lang::get('lang.alert') !!} !</b>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{Session::get('fails')}}
+        </div>
+        @endif
+    </div>
+    <?php
+    if ($user->primary_dpt) {
+        $dept = App\Model\helpdesk\Agent\Department::where('id', '=', $user->primary_dpt)->first();
+        $dept = $dept->name;
+    } else {
+        $dept = "";
+    }
+    if ($user->assign_group) {
+        $grp = App\Model\helpdesk\Agent\Groups::where('id', '=', $user->assign_group)->first();
+        $grp = $grp->name;
+    } else {
+        $grp = "";
+    }
+    if ($user->agent_tzone) {
+        $timezone = App\Model\helpdesk\Utility\Timezones::where('id', '=', $user->agent_tzone)->first();
+        $timezone = $timezone->name;
+    } else {
+        $timezone = "";
+    }
+    ?>
     <div class="row">
-        {{-- style="background-image:url({{ URL::asset('/dist/img/boxed-bg.jpg')}}); color:#DBDBDB;" --}}
-        <div class="col-md-12 box box-primary">
-            <div class="col-md-6">
-                {{-- <div class="box box-success"> --}}
-                {{-- <section class="content"> --}}
-                {{-- <div class=" box-header"> --}}
-                <h3><b>{!! Lang::get('lang.user_information') !!}</b>&nbsp;&nbsp;<a href="{{URL::route('agent-profile-edit')}}"><i class="fa fa-fw fa-edit"> </i></a></h3>
-                {{-- </div> --}}
-                <div class="box-body">
-                    <table class="row">
-                        @if($user->gender == 1)
-                        <tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.gender') !!}:<b></h4></th><td class="col-md-6"><h4>{{ 'Male' }}</h4></td></tr>
-                                    @else
-                                    <tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.gender') !!}:</b></h4></th><td class="col-md-6"><h4>{{ 'Female' }}</h4></td></tr>
-                                    @endif
-                                    <?php
-                                    if ($user->primary_dpt) {
-                                        $dept = App\Model\helpdesk\Agent\Department::where('id', '=', $user->primary_dpt)->first();
-                                        $dept = $dept->name;
-                                    } else {
-                                        $dept = "";
-                                    }
-                                    if ($user->assign_group) {
-                                        $grp = App\Model\helpdesk\Agent\Groups::where('id', '=', $user->assign_group)->first();
-                                        $grp = $grp->name;
-                                    } else {
-                                        $grp = "";
-                                    }
-                                    if ($user->agent_tzone) {
-                                        $timezone = App\Model\helpdesk\Utility\Timezones::where('id', '=', $user->agent_tzone)->first();
-                                        $timezone = $timezone->name;
-                                    } else {
-                                        $timezone = "";
-                                    }
-                                    ?>
-                                    <tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.department') !!}:</b></h4></th><td class="col-md-6"><h4>{{ $dept }}</h4></td></tr>
-                                    <tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.group') !!}:</b></h4></th><td  class="col-md-6"><h4>{{ $grp }}</h4></td></tr>
-                                    <tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.company') !!}:</b></h4></th><td  class="col-md-6"> <h4>{{ $user->company }}</h4></td></tr>
-                                    {{-- <tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.time_zone') !!}:</b></h4></th><td  class="col-md-6"><h4> {{ $timezone }}</h4></td></tr> --}}
-                                    <tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.role') !!}:</b></h4></th><td  class="col-md-6"> <h4>{{ $user->role }}</h4></td></tr>
-                                    </table>
-                                    </div>
-                                    {{-- </section> --}}
-                                    {{-- </div> --}}
-                                    </div>
-                                    <div class="col-md-6">
-                                        {{-- <div class="box box-primary"> --}}
-                                        {{-- <section class="content"> --}}
-                                        <h3><b>{!! Lang::get('lang.contact_information') !!}</b></h3>
-                                        <div class="box-body">
-                                            <table>
-                                                <tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.email') !!}:</b></h4> </th> <td class="col-md-6"><h4> {{ $user->email }}</h4> </td></tr>
-                                                <tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.phone_number') !!}:</b></h4> </th> <td class="col-md-6"><h4> {{ $user->ext }}{{ $user->phone_number }}</h4> </td></tr>
-                                                <tr><th class="col-md-8"><h4><b>{!! Lang::get('lang.mobile') !!}:</b></h4></th><td class="col-md-6"><h4> {{ $user->mobile }}</h4></td></tr>
-                                            </table>
-                                        </div>
-                                        {{-- </section> --}}
-                                    </div>
-                                    {{-- </div> --}}
-                                    </div>
-                                    </div>
-                                    </section>
-                                    @stop
+        <div class="col-md-6">
+            <div class="box-header  with-border">
+                <h3 class="box-title"><b>{!! Lang::get('lang.user_information') !!}</b></h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group row">
+                    @if($user->gender == 1)
+                    <div class='col-xs-4'><label>{!! Lang::get('lang.gender') !!}:</label></div> <div class='col-xs-7'>{{ 'Male' }}</div>
+                    @else
+                    <div class='col-xs-4'><label>{!! Lang::get('lang.gender') !!}:</label></div> <div class='col-xs-7'>{{ 'Female' }}</div>
+                    @endif
+                </div>
+                <div class="form-group  row">
+                    <div class='col-xs-4'><label>{!! Lang::get('lang.department') !!}:</label></div> <div class='col-xs-7'> {{ $dept }}</div>
+                </div>
+                <div class="form-group  row">
+                    <div class='col-xs-4'><label>{!! Lang::get('lang.group') !!}:</label></div> <div class='col-xs-7'> {{ $grp }}</div>
+                </div>
+                <div class="form-group  row">
+                    <div class='col-xs-4'><label>{!! Lang::get('lang.company') !!}:</label></div> <div class='col-xs-7'> {{ $user->role }}</div>
+                </div>
+                <div class="form-group  row">
+                    <div class='col-xs-4'><label>{!! Lang::get('lang.role') !!}:</label></div> <div class='col-xs-7'> {{ $user->company }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box-header  with-border">
+                <h3 class="box-title"><b>{!! Lang::get('lang.contact_information') !!}</b></h3>
+            </div>
+            <div class="box-body">
+                <div class="form-group row">
+                    <div class='col-xs-4'><label>{!! Lang::get('lang.email') !!}:</label></div> <div class='col-xs-7'> {{ $user->email }}</div>
+                </div>
+                <div class="form-group row">
+                    <div class='col-xs-4'><label>{!! Lang::get('lang.phone_number') !!}:</label></div> <div class='col-xs-7'> {{ $user->ext }}{{ $user->phone_number }}</div>
+                </div>
+                <div class="form-group row">
+                    <div class='col-xs-4'><label>{!! Lang::get('lang.mobile') !!}:</label></div> <div class='col-xs-7'> {{ $user->mobile }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@stop

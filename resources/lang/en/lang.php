@@ -859,6 +859,14 @@ return [
     'open_tickets'    => 'Open Tickets',
     'closed_tickets'  => 'Closed Tickets',
     'deleted_tickets' => 'Deleted Tickets',
+    'user_created_successfully' =>  'User Created Successfully',
+    'user_updated_successfully'    =>  'User  Updated Successfully',
+    'profile_updated_sucessfully'   =>  'Profile Updated sucessfully',
+    'password_updated_sucessfully'  =>  'Password Updated sucessfully',
+    'password_was_not_updated_incorrect_old_password'  =>  'Password was not Updated. Incorrect old password',
+    'the_user_has_been_removed_from_this_organization'  =>  'The user has been removed from this organization',
+    
+    
     /*
       |------------------------------------------------
       |Organization Page
@@ -875,6 +883,11 @@ return [
     'organization-s_head'           => "Organization's Head",
     'select_department_manager'     => 'Select Department Manager',
     'users_of'                      => 'Users of',
+    'organization_created_successfully'    =>  'Organization  Created Successfully',
+    'organization_can_not_create'          =>  'Organization can not Create',
+    'organization_updated_successfully'    =>  'Organization  Updated Successfully',
+    'organization_can_not_update'          =>  'Organization  can not Update',
+    'organization_deleted_successfully'    =>  'Organization  Deleted Successfully',
     /*
       |----------------------------------------------
       |  Ticket page
@@ -976,6 +989,9 @@ return [
     'canned_response'        => 'Canned Response',
     'create_canned_response' => 'Create Canned Response',
     'surrender'              => 'Surrender',
+    'added_successfully'     => 'Added Successfully',
+    'updated_successfully'   => 'Updated Successfully',
+    'user_deleted_successfully'    =>  'User  Deleted Successfully',
     'view'                   => 'View',
     /*
       |-----------------------------------------------

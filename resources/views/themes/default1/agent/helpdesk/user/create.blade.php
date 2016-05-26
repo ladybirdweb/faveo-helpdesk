@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.create') !!}</h1>
+<h1>{!! Lang::get('lang.user') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -32,14 +32,14 @@ class="active"
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">
-            User Credentials
+            {!! Lang::get('lang.create') !!}
         </h3>
     </div>
     <div class="box-body">
         @if(Session::has('errors'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>Alert!</b>
+            <b>{!! Lang::get('lang.alert') !!} !</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('email'))
@@ -105,10 +105,9 @@ class="active"
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary'])!!}
+        {!! Form::submit(Lang::get('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
     </div>
 </div>
-
 <script>
     $(function () {
         $("textarea").wysihtml5();

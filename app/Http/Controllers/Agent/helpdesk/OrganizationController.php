@@ -15,6 +15,7 @@ use App\Model\helpdesk\Agent_panel\Organization;
 use App\Model\helpdesk\Agent_panel\User_org;
 // classes
 use Exception;
+use Lang;
 
 /**
  * OrganizationController
@@ -22,8 +23,8 @@ use Exception;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class OrganizationController extends Controller
-{
+class OrganizationController extends Controller {
+
     /**
      * Create a new controller instance.
      * constructor to check
@@ -33,8 +34,7 @@ class OrganizationController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         // checking for authentication
         $this->middleware('auth');
         // checking if the role is agent
@@ -48,13 +48,12 @@ class OrganizationController extends Controller
      *
      * @return type Response
      */
-    public function index()
-    {
+    public function index() {
         try {
             /* get all values of table organization */
             return view('themes.default1.agent.helpdesk.organization.index');
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -63,8 +62,7 @@ class OrganizationController extends Controller
      *
      * @return datatable
      */
-    public function org_list()
-    {
+    public function org_list() {
         // chumper datable package call to display Advance datatable
         return \Datatable::collection(Organization::all())
                         /* searchable name */
@@ -76,7 +74,7 @@ class OrganizationController extends Controller
                             // return $model->name;
                             if (strlen($model->name) > 20) {
                                 $orgname = substr($model->name, 0, 25);
-                                $orgname = substr($orgname, 0, strrpos($orgname, ' ')).' ...';
+                                $orgname = substr($orgname, 0, strrpos($orgname, ' ')) . ' ...';
                             } else {
                                 $orgname = $model->name;
                             }
@@ -99,8 +97,8 @@ class OrganizationController extends Controller
                         ->addColumn('Actions', function ($model) {
                             // displaying action buttons
                             // modal popup to delete data
-                            return '<span  data-toggle="modal" data-target="#deletearticle'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.\Lang::get('lang.delete').' </button></span>&nbsp;<a href="'.route('organizations.edit', $model->id).'" class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href="'.route('organizations.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
-				<div class="modal fade" id="deletearticle'.$model->id.'">
+                            return '<span  data-toggle="modal" data-target="#deletearticle' . $model->id . '"><a href="#" ><button class="btn btn-danger btn-xs"></a> ' . \Lang::get('lang.delete') . ' </button></span>&nbsp;<a href="' . route('organizations.edit', $model->id) . '" class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp;<a href="' . route('organizations.show', $model->id) . '" class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>
+				<div class="modal fade" id="deletearticle' . $model->id . '">
 			        <div class="modal-dialog">
 			            <div class="modal-content">
                 			<div class="modal-header">
@@ -108,11 +106,11 @@ class OrganizationController extends Controller
                     			<h4 class="modal-title">Are You Sure ?</h4>
                 			</div>
                 			<div class="modal-body">
-                				'.$model->user_name.'
+                				' . $model->user_name . '
                 			</div>
                 			<div class="modal-footer">
                     			<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">Close</button>
-                    			<a href="'.route('org.delete', $model->id).'"><button class="btn btn-danger">delete</button></a>
+                    			<a href="' . route('org.delete', $model->id) . '"><button class="btn btn-danger">delete</button></a>
                 			</div>
             			</div><!-- /.modal-content -->
         			</div><!-- /.modal-dialog -->
@@ -126,12 +124,11 @@ class OrganizationController extends Controller
      *
      * @return type Response
      */
-    public function create()
-    {
+    public function create() {
         try {
             return view('themes.default1.agent.helpdesk.organization.create');
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -143,21 +140,20 @@ class OrganizationController extends Controller
      *
      * @return type Redirect
      */
-    public function store(Organization $org, OrganizationRequest $request)
-    {
+    public function store(Organization $org, OrganizationRequest $request) {
         try {
             /* Insert the all input request to organization table */
             /* Check whether function success or not */
             if ($org->fill($request->input())->save() == true) {
                 /* redirect to Index page with Success Message */
-                return redirect('organizations')->with('success', 'Organization  Created Successfully');
+                return redirect('organizations')->with('success', Lang::get('lang.organization_created_successfully'));
             } else {
                 /* redirect to Index page with Fails Message */
-                return redirect('organizations')->with('fails', 'Organization can not Create');
+                return redirect('organizations')->with('fails', Lang::get('lang.organization_can_not_create'));
             }
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('organizations')->with('fails', 'Organization can not Create');
+            return redirect('organizations')->with('fails', Lang::get('lang.organization_can_not_create'));
         }
     }
 
@@ -169,15 +165,14 @@ class OrganizationController extends Controller
      *
      * @return type view
      */
-    public function show($id, Organization $org)
-    {
+    public function show($id, Organization $org) {
         try {
             /* select the field by id  */
             $orgs = $org->whereId($id)->first();
             /* To view page */
             return view('themes.default1.agent.helpdesk.organization.show', compact('orgs'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -189,15 +184,14 @@ class OrganizationController extends Controller
      *
      * @return type view
      */
-    public function edit($id, Organization $org)
-    {
+    public function edit($id, Organization $org) {
         try {
             /* select the field by id  */
             $orgs = $org->whereId($id)->first();
             /* To view page */
             return view('themes.default1.agent.helpdesk.organization.edit', compact('orgs'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -210,24 +204,22 @@ class OrganizationController extends Controller
      *
      * @return type Redirect
      */
-    public function update($id, Organization $org, OrganizationUpdate $request)
-    {
-
-        /* select the field by id  */
-        $orgs = $org->whereId($id)->first();
-        /* update the organization table   */
-        /* Check whether function success or not */
+    public function update($id, Organization $org, OrganizationUpdate $request) {
         try {
+            /* select the field by id  */
+            $orgs = $org->whereId($id)->first();
+            /* update the organization table   */
+            /* Check whether function success or not */
             if ($orgs->fill($request->input())->save() == true) {
                 /* redirect to Index page with Success Message */
-                return redirect('organizations')->with('success', 'Organization  Updated Successfully');
+                return redirect('organizations')->with('success', Lang::get('lang.organization_updated_successfully'));
             } else {
                 /* redirect to Index page with Fails Message */
-                return redirect('organizations')->with('fails', 'Organization  can not Update');
+                return redirect('organizations')->with('fails', Lang::get('lang.organization_can_not_update'));
             }
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('organizations')->with('fails', $e->errorInfo[2]);
+            return redirect('organizations')->with('fails', $e->getMessage());
         }
     }
 
@@ -238,24 +230,22 @@ class OrganizationController extends Controller
      *
      * @return type Redirect
      */
-    public function destroy($id, Organization $org, User_org $user_org)
-    {
-
-        /* select the field by id  */
-        $orgs = $org->whereId($id)->first();
-        $user_orgs = $user_org->where('org_id', '=', $id)->get();
-        foreach ($user_orgs as $user_org) {
-            $user_org->delete();
-        }
-        /* Delete the field selected from the table */
-        /* Check whether function success or not */
+    public function destroy($id, Organization $org, User_org $user_org) {
         try {
+            /* select the field by id  */
+            $orgs = $org->whereId($id)->first();
+            $user_orgs = $user_org->where('org_id', '=', $id)->get();
+            foreach ($user_orgs as $user_org) {
+                $user_org->delete();
+            }
+            /* Delete the field selected from the table */
+            /* Check whether function success or not */
             $orgs->delete();
             /* redirect to Index page with Success Message */
-            return redirect('organizations')->with('success', 'Organization  Deleted Successfully');
+            return redirect('organizations')->with('success', Lang::get('lang.organization_deleted_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('organizations')->with('fails', $e->errorInfo[2]);
+            return redirect('organizations')->with('fails', $e->getMessage());
         }
     }
 
@@ -266,8 +256,7 @@ class OrganizationController extends Controller
      *
      * @return type boolean
      */
-    public function Head_Org($id)
-    {
+    public function Head_Org($id) {
         // get the user to make organization head
         $head_user = \Input::get('user');
         // get an instance of the selected organization
@@ -275,7 +264,7 @@ class OrganizationController extends Controller
         $org_head->head = $head_user;
         // save the user to organization head
         $org_head->save();
-
         return 1;
     }
+
 }
