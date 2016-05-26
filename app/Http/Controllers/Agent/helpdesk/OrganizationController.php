@@ -218,6 +218,7 @@ class OrganizationController extends Controller {
                 return redirect('organizations')->with('fails', Lang::get('lang.organization_can_not_update'));
             }
         } catch (Exception $e) {
+            dd($e);
             /* redirect to Index page with Fails Message */
             return redirect('organizations')->with('fails', $e->getMessage());
         }
