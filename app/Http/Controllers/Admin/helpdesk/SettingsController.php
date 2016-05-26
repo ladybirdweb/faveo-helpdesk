@@ -524,6 +524,24 @@ class SettingsController extends Controller {
      *
      * get the form for company setting page
      */
+    public function getEditStatuses($id) {
+        try {
+            /* fetch the values of company from company table */
+            $status = \DB::table('ticket_status')->where('id','=',$id)->first();
+            /* Direct to Company Settings Page */
+            return view('themes.default1.admin.helpdesk.settings.status-edit', compact('status'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->getMessage());
+        }
+    }
+
+    /**
+     * @param int $id
+     * @return Response
+     * @param $compant instance of company table
+     *
+     * get the form for company setting page
+     */
     public function editStatuses($id, StatusRequest $request) {
         try {
             /* fetch the values of company from company table */
