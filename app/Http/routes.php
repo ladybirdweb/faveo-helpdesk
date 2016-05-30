@@ -452,11 +452,11 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth', 'middleware'
 
     Route::get('/aaaa', 'Client\helpdesk\GuestController@ticket_number');
 
-    Route::get('trash', 'Agent\helpdesk\TicketController@trash'); /* To show Deleted Tickets */
+    Route::get('trash', ['as' => 'get-trash', 'uses' => 'Agent\helpdesk\TicketController@trash']); /* To show Deleted Tickets */
 
     Route::get('/ticket/trash', ['as' => 'get.trash.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_trash']);  /* Get tickets in datatable */
 
-    Route::get('unassigned', 'Agent\helpdesk\TicketController@unassigned'); /* To show Unassigned Tickets */
+    Route::get('unassigned', ['as' => 'unassigned', 'uses' => 'Agent\helpdesk\TicketController@unassigned']); /* To show Unassigned Tickets */
 
     Route::get('/ticket/unassigned', ['as' => 'get.unassigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_unassigned']);  /* Get tickets in datatable */
     Breadcrumbs::register('dashboard', function($breadcrumbs) {
