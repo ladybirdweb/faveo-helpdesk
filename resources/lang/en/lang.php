@@ -841,6 +841,9 @@ return [
     'resolved'   => 'Resolved',
     'closed'     => 'Closed',
     'deleted'    => 'Deleted',
+    'start_date'    =>  'Start Date',
+    'end_date'      =>  'End Date',
+    'filter'        =>  'Filter',
     /*
       |------------------------------------------------
       |User Page
@@ -865,7 +868,7 @@ return [
     'password_updated_sucessfully'  =>  'Password Updated sucessfully',
     'password_was_not_updated_incorrect_old_password'  =>  'Password was not Updated. Incorrect old password',
     'the_user_has_been_removed_from_this_organization'  =>  'The user has been removed from this organization',
-    
+    'user_report'   =>  'User Report',
     
     /*
       |------------------------------------------------
@@ -888,6 +891,8 @@ return [
     'organization_updated_successfully'    =>  'Organization  Updated Successfully',
     'organization_can_not_update'          =>  'Organization  can not Update',
     'organization_deleted_successfully'    =>  'Organization  Deleted Successfully',
+    'report_of'     =>  'Report of',
+    'ticket_of'     =>  'Tickets of',
     /*
       |----------------------------------------------
       |  Ticket page

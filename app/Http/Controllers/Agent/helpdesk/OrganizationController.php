@@ -11,6 +11,7 @@ use App\Http\Requests\helpdesk\OrganizationUpdate;
 // models
 /* Define OrganizationRequest to validate the create form */
 use App\Model\helpdesk\Agent_panel\Organization;
+use App\User;
 /* Define OrganizationUpdate to validate the create form */
 use App\Model\helpdesk\Agent_panel\User_org;
 // classes
@@ -218,7 +219,7 @@ class OrganizationController extends Controller {
                 return redirect('organizations')->with('fails', Lang::get('lang.organization_can_not_update'));
             }
         } catch (Exception $e) {
-            dd($e);
+//            dd($e);
             /* redirect to Index page with Fails Message */
             return redirect('organizations')->with('fails', $e->getMessage());
         }
@@ -266,6 +267,51 @@ class OrganizationController extends Controller {
         // save the user to organization head
         $org_head->save();
         return 1;
+    }
+
+    /**
+     * get the report of organizations
+     * @param type $id
+     * @param type $date111
+     * @param type $date122
+     * @return type array
+     */
+    public function orgChartData($id, $date111 = '', $date122 = '') {
+        $date11 = strtotime($date122);
+        $date12 = strtotime($date111);
+        if ($date11 && $date12) {
+            $date2 = $date12;
+            $date1 = $date11;
+        } else {
+            // generating current date
+            $date2 = strtotime(date('Y-m-d'));
+            $date3 = date('Y-m-d');
+            $format = 'Y-m-d';
+            // generating a date range of 1 month
+            $date1 = strtotime(date($format, strtotime('-1 month' . $date3)));
+        }
+        $return = '';
+        $last = '';
+        for ($i = $date1; $i <= $date2; $i = $i + 86400) {
+            $thisDate = date('Y-m-d', $i);
+
+            $user_orga_relation_id = "";
+            $user_orga_relations = User_org::where('org_id', '=', $id)->get();
+            foreach ($user_orga_relations as $user_orga_relation) {
+                $user_orga_relation_id[] = $user_orga_relation->user_id;
+            }
+            $created = \DB::table('tickets')->select('created_at')->whereIn('user_id', $user_orga_relation_id)->where('created_at', 'LIKE', '%' . $thisDate . '%')->count();
+            $closed = \DB::table('tickets')->select('closed_at')->whereIn('user_id', $user_orga_relation_id)->where('closed_at', 'LIKE', '%' . $thisDate . '%')->count();
+            $reopened = \DB::table('tickets')->select('reopened_at')->whereIn('user_id', $user_orga_relation_id)->where('reopened_at', 'LIKE', '%' . $thisDate . '%')->count();
+
+            $value = ['date' => $thisDate, 'open' => $created, 'closed' => $closed, 'reopened' => $reopened];
+            $array = array_map('htmlentities', $value);
+            $json = html_entity_decode(json_encode($array));
+            $return .= $json . ',';
+        }
+        $last = rtrim($return, ',');
+        $users = User::whereId($id)->first();
+        return '[' . $last . ']';
     }
 
 }

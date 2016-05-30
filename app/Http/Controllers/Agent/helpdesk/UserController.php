@@ -375,7 +375,7 @@ class UserController extends Controller {
     public function removeUserOrg($id) {
         $user_org = User_org::where('org_id', '=', $id)->first();
         $user_org->delete();
-        return redirect()->back()->with('success', Lang::get('lang.the_user_has_been_removed_from_this_organization'));
+        return redirect()->back()->with('success1', Lang::get('lang.the_user_has_been_removed_from_this_organization'));
     }
 
     /**
