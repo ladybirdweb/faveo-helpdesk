@@ -2160,8 +2160,8 @@ class TicketController extends Controller
                             // return UTC::usertimezone($TicketDatarow->updated_at);
                             return date('Y-m-d H:i:s', strtotime($TicketDatarow->updated_at) + UTC::timeOffset($TicketDatarow->updated_at));
                         })
-                        ->searchColumns('id')
-                        ->orderColumns('id')
+                        ->searchColumns('subject', 'from', 'assigned_to', 'ticket_number', 'priority')
+                        ->orderColumns('subject', 'from', 'assigned_to', 'Last Replier', 'ticket_number', 'priority', 'Last')
                         ->make();
     }
     
