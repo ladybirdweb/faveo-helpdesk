@@ -132,7 +132,7 @@ class = "active"
                 {!! Form::text('Email',null,['class' => 'form-control']) !!}
 
             </div>
-            <div class="col-md-2 form-group {{ $errors->has('Code') ? 'has-error' : '' }}">
+            <div class="col-md-2 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
 
                 {!! Form::label('Code',Lang::get('lang.country-code')) !!}
 

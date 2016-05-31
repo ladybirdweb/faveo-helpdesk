@@ -256,14 +256,17 @@ return [
     'api_key_mandatory'     => 'Api key mandatory',
     'api_configurations'    => 'Api Configurations',
     'generate_key'          => 'Generate key',
+    'Ticket-created-successfully' =>   'Ticket created successfully!',
     'system_updated_successfully'   =>  'System Updated Successfully',
     'system_can_not_updated'        =>  'System can not Updated',
     'ticket_updated_successfully'   =>  'Ticket Updated Successfully',
     'ticket_can_not_updated'        =>  'Ticket can not Updated',
     'email_updated_successfully'    =>  'Email Updated Successfully',
     'email_can_not_updated'         =>  'Email can not Updated',
-    'select_a_time_zone'        =>      'Select a Time Zone',
-    'select_a_date_time_format'     =>      'Select a date Time Format',
+    'select_a_time_zone'            =>  'Select a Time Zone',
+    'select_a_date_time_format'     =>  'Select a date Time Format',
+    'Ticket-has-been-created-successfully-your-ticket-number-is' => 'Ticket has been created successfully, your ticket number is',
+    'Please-save-this-for-future-reference'                      => 'Please save this for future reference',
     /*
       |--------------------------------------
       |   Email Settings Page
