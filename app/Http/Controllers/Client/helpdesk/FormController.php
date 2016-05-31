@@ -57,29 +57,17 @@ class FormController extends Controller {
      *
      * @return type
      */
-<<<<<<< HEAD
     public function getForm(Help_topic $topic, CountryCode $code) {
-=======
-    public function getForm(Help_topic $topic, CountryCode $code)
-    {
->>>>>>> origin/master
+
         if (\Config::get('database.install') == '%0%') {
             return \Redirect::route('license');
         }
         $location = GeoIP::getLocation('');
-<<<<<<< HEAD
         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
         if (System::first()->status == 1) {
             $topics = $topic->get();
             $codes = $code->get();
             return view('themes.default1.client.helpdesk.form', compact('topics', 'codes'))->with('phonecode', $phonecode->phonecode);
-=======
-        $phonecode = $code->where('iso', '=' , $location['isoCode'])->first();
-        if (System::first()->status == 1) {
-            $topics = $topic->get();
-            $codes  = $code->get();
-            return view('themes.default1.client.helpdesk.form', compact('topics','codes'))->with('phonecode', $phonecode->phonecode);
->>>>>>> origin/master
         } else {
             return \Redirect::route('home');
         }
@@ -115,13 +103,8 @@ class FormController extends Controller {
                     } elseif ($value->type == 'radio') {
                         $type2 = $value->value;
                         $val = explode(',', $type2);
-<<<<<<< HEAD
                         echo '<label class="radio-inline">' . $value->label . '</label>&nbsp&nbsp&nbsp<input type="' . $value->type . '" name="' . $value->name . '">&nbsp;&nbsp;' . $val[0] . '
                         &nbsp&nbsp&nbsp<input type="' . $value->type . '" name="' . $value->name . '">&nbsp;&nbsp;' . $val[1] . '</br>';
-=======
-                        echo '<label class="radio-inline">'.$value->label.'</label>&nbsp&nbsp&nbsp<input type="'.$value->type.'" name="'.$value->name.'">&nbsp;&nbsp;'.$val[0].'
-                        &nbsp&nbsp&nbsp<input type="'.$value->type.'" name="'.$value->name.'">&nbsp;&nbsp;'.$val[1].'</br>';
->>>>>>> origin/master
                     } elseif ($value->type == 'textarea') {
                         $type3 = $value->value;
                         $v = explode(',', $type3);
@@ -151,12 +134,7 @@ class FormController extends Controller {
      * @param type Request $request
      * @param type User    $user
      */
-<<<<<<< HEAD
     public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code) {
-=======
-    public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code)
-    {
->>>>>>> origin/master
         $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token');
 
         $name = $request->input('Name');
@@ -181,41 +159,22 @@ class FormController extends Controller {
         $team_assign = null;
         if ($phone != null || $mobile_number != null) {
             $location = GeoIP::getLocation();
-<<<<<<< HEAD
             $geoipcode = $code->where('iso', '=', $location['isoCode'])->first();
             if ($phonecode == null) {
                 $data = array(
                     'fails' => Lang::get('lang.country-code-required-error'),
                     'phonecode' => $geoipcode->phonecode,
                 );
-=======
-            $geoipcode = $code->where('iso', '=' , $location['isoCode'])->first();
-            if ($phonecode == null) {
-                    $data = array(
-                        'fails'  => Lang::get('lang.country-code-required-error'),
-                        'phonecode'   => $geoipcode->phonecode,
-                        
-                    );
->>>>>>> origin/master
                 return Redirect::back()->with($data)->withInput($request->except('password'));
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $phonecode)->get();
                 if (!count($code)) {
                     $data = array(
-<<<<<<< HEAD
                         'fails' => Lang::get('lang.incorrect-country-code-error'),
                         'phonecode' => $geoipcode->phonecode,
                     );
                     return Redirect::back()->with($data)->withInput($request->except('password'));
                 }
-=======
-                        'fails'  => Lang::get('lang.incorrect-country-code-error'),
-                        'phonecode'   => $geoipcode->phonecode,
-                        
-                    );
-                    return Redirect::back()->with($data)->withInput($request->except('password'));
-                }     
->>>>>>> origin/master
             }
         }
         $result = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response);
@@ -236,11 +195,7 @@ class FormController extends Controller {
                 }
             }
 
-<<<<<<< HEAD
             return Redirect::back()->with('success', 'Ticket has been created successfully, your ticket number is <b>' . $result[0] . '</b> Please save this for future reference.');
-=======
-            return Redirect::back()->with('success', 'Ticket has been created successfully, your ticket number is <b>'.$result[0].'</b> Please save this for future reference.');
->>>>>>> origin/master
         }
     }
 
