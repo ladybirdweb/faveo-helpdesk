@@ -619,7 +619,7 @@ class Router implements RegistrarContract
             return false;
         }
 
-        return is_string($action) || is_string(isset($action['uses']) ? $action['uses'] : null);
+        return is_string($action) || (isset($action['uses']) && is_string($action['uses']));
     }
 
     /**
@@ -755,13 +755,11 @@ class Router implements RegistrarContract
         // set of middleware under single keys that can be conveniently referenced.
         if (isset($this->middlewareGroups[$name])) {
             return $this->parseMiddlewareGroup($name);
-
         // When the middleware is simply a Closure, we will return this Closure instance
         // directly so that Closures can be registered as middleware inline, which is
         // convenient on occasions when the developers are experimenting with them.
         } elseif (isset($map[$name]) && $map[$name] instanceof Closure) {
             return $map[$name];
-
         // Finally, when the middleware is simply a string mapped to a class name the
         // middleware name will get parsed into the full class name and parameters
         // which may be run using the Pipeline which accepts this string format.

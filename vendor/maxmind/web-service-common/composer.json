@@ -1,0 +1,27 @@
+{
+  "name": "maxmind/web-service-common",
+  "description": "Internal MaxMind Web Service API",
+  "minimum-stability": "stable",
+  "homepage": "https://github.com/maxmind/mm-web-service-api-php",
+  "type": "library",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Gregory Oschwald",
+      "email": "goschwald@maxmind.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.3",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.6.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "MaxMind\\": "src"
+    }
+  }
+}

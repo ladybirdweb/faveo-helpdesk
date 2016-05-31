@@ -375,7 +375,6 @@ class Route
         if (isset($this->parameters)) {
             return array_map(function ($value) {
                 return is_string($value) ? rawurldecode($value) : $value;
-
             }, $this->parameters);
         }
 
@@ -518,8 +517,8 @@ class Route
      */
     protected function replaceDefaults(array $parameters)
     {
-        foreach ($parameters as $key => &$value) {
-            $value = isset($value) ? $value : Arr::get($this->defaults, $key);
+        foreach ($parameters as $key => $value) {
+            $parameters[$key] = isset($value) ? $value : Arr::get($this->defaults, $key);
         }
 
         foreach ($this->defaults as $key => $value) {

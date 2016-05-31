@@ -13,6 +13,18 @@ trait ResetsPasswords
     use RedirectsUsers;
 
     /**
+     * Get the name of the guest middleware.
+     *
+     * @return string
+     */
+    protected function guestMiddleware()
+    {
+        $guard = $this->getGuard();
+
+        return $guard ? 'guest:'.$guard : 'guest';
+    }
+
+    /**
      * Display the form to request a password reset link.
      *
      * @return \Illuminate\Http\Response
@@ -70,7 +82,6 @@ trait ResetsPasswords
         switch ($response) {
             case Password::RESET_LINK_SENT:
                 return $this->getSendResetLinkEmailSuccessResponse($response);
-
             case Password::INVALID_USER:
             default:
                 return $this->getSendResetLinkEmailFailureResponse($response);
@@ -202,7 +213,6 @@ trait ResetsPasswords
         switch ($response) {
             case Password::PASSWORD_RESET:
                 return $this->getResetSuccessResponse($response);
-
             default:
                 return $this->getResetFailureResponse($request, $response);
         }

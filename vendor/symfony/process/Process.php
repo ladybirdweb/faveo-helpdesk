@@ -158,7 +158,7 @@ class Process
             $this->setEnv($env);
         }
 
-        $this->input = $input;
+        $this->setInput($input);
         $this->setTimeout($timeout);
         $this->useFileHandles = '\\' === DIRECTORY_SEPARATOR;
         $this->pty = false;
@@ -1049,7 +1049,7 @@ class Process
             throw new LogicException('Input can not be set while the process is running.');
         }
 
-        $this->input = ProcessUtils::validateInput(sprintf('%s::%s', __CLASS__, __FUNCTION__), $input);
+        $this->input = ProcessUtils::validateInput(__METHOD__, $input);
 
         return $this;
     }

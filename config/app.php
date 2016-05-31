@@ -185,6 +185,7 @@ return [
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
+        'Torann\GeoIP\GeoIPServiceProvider',
 
     ],
 
@@ -247,6 +248,7 @@ return [
         'JWTAuth'    => 'Tymon\JWTAuth\Facades\JWTAuth',
         'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory',
         'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+        'GeoIP' => 'Torann\GeoIP\GeoIPFacade',
 
     ],
 
