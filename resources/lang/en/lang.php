@@ -229,6 +229,7 @@ return [
     'company_can_not_updated'       => 'Company can not Updated',
     'enter-country-phone-code'      => 'Enter your country\'s phone code',
     'country-code-required-error'   => 'Code is required with phone/mobile number.',
+    'incorrect-country-code-error' => 'Incorrect Country Code.',
     /*
       |--------------------------------------
       |   System Settings Page
