@@ -1332,7 +1332,7 @@ if ($thread->title != "") {
                             // if(link) {
                             //     link.click();
                             // }
-                            history.go( - 1);
+                            window.location = document.referrer;
                             }, 500);
                     }, 2000);
             }
@@ -1362,7 +1362,7 @@ if ($thread->title != "") {
                             // if(link) {
                             //     link.click();
                             // }
-                            history.go( - 1);
+                            window.location = document.referrer;
                             }, 500);
                     }, 2000);
             }
@@ -1408,13 +1408,14 @@ if ($thread->title != "") {
                     var message = "{!! Lang::get('lang.your_ticket_have_been_moved_to_trash') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
+                    //alert(document.referrer);
                     setInterval(function(){$("#alert11").hide();
                             setTimeout(function() {
                             // var link = document.querySelector('#load-inbox');
                             // if(link) {
                             //     link.click();
                             // }
-                            history.go( - 1);
+                            window.location = document.referrer;
                             }, 500);
                     }, 2000);
             }

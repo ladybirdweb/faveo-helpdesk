@@ -85,7 +85,7 @@ class="active"
                 </div>
             </div>
             <div class="row">
-                 <div class="col-md-1 form-group {{ $errors->has('code') ? 'has-error' : '' }}">
+                 <div class="col-md-1 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
 
                     {!! Form::label('code',Lang::get('lang.country-code')) !!}
                     {!! Form::text('code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}

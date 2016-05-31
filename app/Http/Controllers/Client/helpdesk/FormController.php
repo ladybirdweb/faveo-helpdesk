@@ -157,6 +157,7 @@ class FormController extends Controller {
                 $data = array(
                     'fails' => Lang::get('lang.country-code-required-error'),
                     'phonecode' => $geoipcode->phonecode,
+                    'country_code_error' => 1,
                 );
                 return Redirect::back()->with($data)->withInput($request->except('password'));
             } else {
@@ -165,6 +166,7 @@ class FormController extends Controller {
                     $data = array(
                         'fails' => Lang::get('lang.incorrect-country-code-error'),
                         'phonecode' => $geoipcode->phonecode,
+                        'country_code_error' => 1,
                     );
                     return Redirect::back()->with($data)->withInput($request->except('password'));
                 }
@@ -188,7 +190,7 @@ class FormController extends Controller {
                 }
             }
 
-            return Redirect::back()->with('success', 'Ticket has been created successfully, your ticket number is <b>' . $result[0] . '</b> Please save this for future reference.');
+            return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is').'<b>' . $result[0] . '</b>'.Lang::get('lang.Please-save-this-for-future-reference'));
         }
     }
 

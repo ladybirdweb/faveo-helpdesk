@@ -282,7 +282,7 @@ class TicketController extends Controller {
                         $data = array(
                             'fails'  => Lang::get('lang.country-code-required-error'),
                             'phonecode'   => $geoipcode->phonecode,
-                        
+                            'country_code_error' => 1,
                         );
                         return  Redirect()->back()->with($data)->withInput($request->except('password'));
                     } else {
@@ -291,6 +291,7 @@ class TicketController extends Controller {
                             $data = array(
                             'fails'  => Lang::get('lang.incorrect-country-code-error'),
                             'phonecode'   => $geoipcode->phonecode,
+                            'country_code_error' => 1,
                         
                             );
                         return  Redirect()->back()->with($data)->withInput($request->except('password'));
@@ -299,7 +300,7 @@ class TicketController extends Controller {
             }
             //create user
             if ($this->create_user($email, $fullname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response, $status)) {
-                return Redirect('newticket')->with('success', 'Ticket created successfully!');
+                return Redirect('newticket')->with('success', Lang::get('lang.Ticket-created-successfully'));
             } else {
                 return Redirect('newticket')->with('fails', 'fails');
             }
