@@ -35,16 +35,15 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class FormController extends Controller
-{
+class FormController extends Controller {
+
     /**
      * Create a new controller instance.
      * Constructor to check.
      *
      * @return void
      */
-    public function __construct(TicketWorkflowController $TicketWorkflowController)
-    {
+    public function __construct(TicketWorkflowController $TicketWorkflowController) {
         // mail smtp settings
 //        SettingsController::smtp();
         // creating a TicketController instance
@@ -58,17 +57,16 @@ class FormController extends Controller
      *
      * @return type
      */
-    public function getForm(Help_topic $topic, CountryCode $code)
-    {
+    public function getForm(Help_topic $topic, CountryCode $code) {
         if (\Config::get('database.install') == '%0%') {
             return \Redirect::route('license');
         }
         $location = GeoIP::getLocation('');
-        $phonecode = $code->where('iso', '=' , $location['isoCode'])->first();
+        $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
         if (System::first()->status == 1) {
             $topics = $topic->get();
-            $codes  = $code->get();
-            return view('themes.default1.client.helpdesk.form', compact('topics','codes'))->with('phonecode', $phonecode->phonecode);
+            $codes = $code->get();
+            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes'))->with('phonecode', $phonecode->phonecode);
         } else {
             return \Redirect::route('home');
         }
@@ -82,14 +80,14 @@ class FormController extends Controller
      *
      * @return type string
      */
-    public function postForm($id, Help_topic $topic)
-    {
+    public function postForm($id, Help_topic $topic) {
         // dd($id);
         if ($id != 0) {
             $helptopic = $topic->where('id', '=', $id)->first();
             $custom_form = $helptopic->custom_form;
             $values = Fields::where('forms_id', '=', $custom_form)->get();
             if (!$values) {
+                
             }
             if ($values) {
                 foreach ($values as $value) {
@@ -98,29 +96,29 @@ class FormController extends Controller
                         $value = explode(',', $data);
                         echo '<select class="form-control">';
                         foreach ($value as $option) {
-                            echo '<option>'.$option.'</option>';
+                            echo '<option>' . $option . '</option>';
                         }
                         echo '</select></br>';
                     } elseif ($value->type == 'radio') {
                         $type2 = $value->value;
                         $val = explode(',', $type2);
-                        echo '<label class="radio-inline">'.$value->label.'</label>&nbsp&nbsp&nbsp<input type="'.$value->type.'" name="'.$value->name.'">&nbsp;&nbsp;'.$val[0].'
-                        &nbsp&nbsp&nbsp<input type="'.$value->type.'" name="'.$value->name.'">&nbsp;&nbsp;'.$val[1].'</br>';
+                        echo '<label class="radio-inline">' . $value->label . '</label>&nbsp&nbsp&nbsp<input type="' . $value->type . '" name="' . $value->name . '">&nbsp;&nbsp;' . $val[0] . '
+                        &nbsp&nbsp&nbsp<input type="' . $value->type . '" name="' . $value->name . '">&nbsp;&nbsp;' . $val[1] . '</br>';
                     } elseif ($value->type == 'textarea') {
                         $type3 = $value->value;
                         $v = explode(',', $type3);
                         //dd($v);
                         if (array_key_exists(1, $v)) {
-                            echo '<label>'.$value->label.'</label></br><textarea class=form-control rows="'.$v[0].'" cols="'.$v[1].'"></textarea></br>';
+                            echo '<label>' . $value->label . '</label></br><textarea class=form-control rows="' . $v[0] . '" cols="' . $v[1] . '"></textarea></br>';
                         } else {
-                            echo '<label>'.$value->label.'</label></br><textarea class=form-control rows="10" cols="60"></textarea></br>';
+                            echo '<label>' . $value->label . '</label></br><textarea class=form-control rows="10" cols="60"></textarea></br>';
                         }
                     } elseif ($value->type == 'checkbox') {
                         $type4 = $value->value;
                         $check = explode(',', $type4);
-                        echo '<label class="radio-inline">'.$value->label.'&nbsp&nbsp&nbsp<input type="'.$value->type.'" name="'.$value->name.'">&nbsp&nbsp'.$check[0].'</label><label class="radio-inline"><input type="'.$value->type.'" name="'.$value->name.'">&nbsp&nbsp'.$check[1].'</label></br>';
+                        echo '<label class="radio-inline">' . $value->label . '&nbsp&nbsp&nbsp<input type="' . $value->type . '" name="' . $value->name . '">&nbsp&nbsp' . $check[0] . '</label><label class="radio-inline"><input type="' . $value->type . '" name="' . $value->name . '">&nbsp&nbsp' . $check[1] . '</label></br>';
                     } else {
-                        echo '<label>'.$value->label.'</label><input type="'.$value->type.'" class="form-control"   name="'.$value->name.'" /></br>';
+                        echo '<label>' . $value->label . '</label><input type="' . $value->type . '" class="form-control"   name="' . $value->name . '" /></br>';
                     }
                 }
             }
@@ -135,8 +133,7 @@ class FormController extends Controller
      * @param type Request $request
      * @param type User    $user
      */
-    public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code)
-    {
+    public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code) {
         $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token');
 
         $name = $request->input('Name');
@@ -161,24 +158,22 @@ class FormController extends Controller
         $team_assign = null;
         if ($phone != null || $mobile_number != null) {
             $location = GeoIP::getLocation();
-            $geoipcode = $code->where('iso', '=' , $location['isoCode'])->first();
+            $geoipcode = $code->where('iso', '=', $location['isoCode'])->first();
             if ($phonecode == null) {
-                    $data = array(
-                        'fails'  => Lang::get('lang.country-code-required-error'),
-                        'phonecode'   => $geoipcode->phonecode,
-                        
-                    );
+                $data = array(
+                    'fails' => Lang::get('lang.country-code-required-error'),
+                    'phonecode' => $geoipcode->phonecode,
+                );
                 return Redirect::back()->with($data)->withInput($request->except('password'));
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $phonecode)->get();
                 if (!count($code)) {
                     $data = array(
-                        'fails'  => Lang::get('lang.incorrect-country-code-error'),
-                        'phonecode'   => $geoipcode->phonecode,
-                        
+                        'fails' => Lang::get('lang.incorrect-country-code-error'),
+                        'phonecode' => $geoipcode->phonecode,
                     );
                     return Redirect::back()->with($data)->withInput($request->except('password'));
-                }     
+                }
             }
         }
         $result = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response);
@@ -199,7 +194,7 @@ class FormController extends Controller
                 }
             }
 
-            return Redirect::back()->with('success', 'Ticket has been created successfully, your ticket number is <b>'.$result[0].'</b> Please save this for future reference.');
+            return Redirect::back()->with('success', 'Ticket has been created successfully, your ticket number is <b>' . $result[0] . '</b> Please save this for future reference.');
         }
     }
 
@@ -210,8 +205,7 @@ class FormController extends Controller
      *
      * @return type view
      */
-    public function post_ticket_reply($id, Request $request)
-    {
+    public function post_ticket_reply($id, Request $request) {
         $comment = $request->input('comment');
         if ($comment != null) {
             $tickets = Tickets::where('id', '=', $id)->first();
@@ -236,4 +230,5 @@ class FormController extends Controller
             return \Redirect::back()->with('fails1', 'Please fill some data!');
         }
     }
+
 }
