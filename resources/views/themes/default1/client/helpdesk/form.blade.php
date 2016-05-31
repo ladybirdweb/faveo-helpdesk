@@ -55,7 +55,7 @@
 {!! Form::open(['action'=>'Client\helpdesk\FormController@postedForm','method'=>'post', 'enctype'=>'multipart/form-data']) !!}
 <div>
     <div class="content-header">
-        <h4>{!! Lang::get('lang.ticket') !!} {!! Form::submit(Lang::get('lang.send'),['class'=>'form-group btn btn-info pull-right'])!!}</h4>
+        <h4>{!! Lang::get('lang.ticket') !!} </h4>
     </div>
     <div class="row col-md-12">
         <div class="col-md-12 form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
@@ -143,6 +143,7 @@ $helptopic = App\Model\helpdesk\Manage\Help_topic::get();
         
         <div class="col-md-12" id="response"> </div>
         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
+        <div class="col-md-12 form-group">{!! Form::submit(Lang::get('lang.send'),['class'=>'form-group btn btn-info pull-left'])!!}</div>
     </div>
 </div>
 {!! Form::close() !!}
