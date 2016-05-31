@@ -1,22 +1,41 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
+        <title>PDF</title>
         <!-- <link href="{{asset("downloads/bootstrap.min.css")}}" rel="stylesheet" type="text/css" /> -->
         <link href="{{asset("lb-faveo/aaaaaa/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <h2>
-            <div class="logo"><b>Faveo</b>HELPDESK</div><hr>	
-        </h2>
+           <div id="logo" class="site-logo text-center" style="font-size: 30px;">
+                <?php 
+                $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
+				$system = App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
+				?>
+				@if($system->url)
+					<a href="{!! $system->url !!}" rel="home">
+				@else
+					<a href="{{url('/')}}" rel="home">
+				@endif
+                @if($company->use_logo == 1)
+                	<img src="{{asset('lb-faveo/media/company')}}{{'/'}}{{$company->logo}}" alt="User Image" width="200px" height="200px"/>
+                @else
+                	@if($system->name)
+                		{!! $system->name !!}
+                	@else
+                		<b>SUPPORT</b> CENTER
+                	@endif
+                @endif
+                </a>
+           </div>
 
+        </h2>
+<hr>
         <h4>{{$thread->title}}</h4><br/>
 
 <?php   $ticket_source = App\Model\helpdesk\Ticket\Ticket_source::where('id','=',$tickets->source)->first();
         $ticket_source = $ticket_source->value;
 
-        
-        
         $user = App\User::where('id', '=', $tickets->user_id)->first(); ?>
         <?php $response = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->get(); ?>
         @foreach($response as $last)
@@ -30,13 +49,13 @@
 <?php $dept = App\Model\helpdesk\Agent\Department::where('id','=',$help_topic->department)->first();   ?>
         <table class="table">    
             <tr><th></th><th></th></tr>
-            <tr><td><b>Status:</b></td>       	<td>{{$status->state}}</td></tr>
-            <tr><td><b>Priority:</b></td>     	<td>{{$priority->priority}}</td></tr>
-            <tr><td><b>Department:</b></td>   	<td>{{$dept->name}}</td></tr> 
-            <tr><td><b>Email:</b></td>        	<td>{{$user->email}}</td></tr>
-            <tr><td><b>Phone:</b></td>        	<td>{{$user->mobile}}</td></tr>
-            <tr><td><b>Source:</b></td>         <td>{{$ticket_source}}</td></tr>
-            <tr><td><b>Help Topic:</b></td>     <td>{{$help_topic->topic}}</td></tr>
+            <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       	<td>{{$status->state}}</td></tr>
+            <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     	<td>{{$priority->priority}}</td></tr>
+            <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   	<td>{{$dept->name}}</td></tr> 
+            <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        	<td>{{$user->email}}</td></tr>
+            <tr><td><b>{!! Lang::get('lang.phone') !!}:</b></td>        	<td>{{$user->mobile}}</td></tr>
+            <tr><td><b>{!! Lang::get('lang.source') !!}:</b></td>         <td>{{$ticket_source}}</td></tr>
+            <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <td>{{$help_topic->topic}}</td></tr>
         </table>
 
         <?php $conversations = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->get(); ?>
@@ -65,11 +84,7 @@
         // header("Content-type: image/jpeg");
         // echo "<img src='".base64_decode($attachment->file)."' style='width:128px;height:128px'/> ";
         $body = $conversation->body;
-
         $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id','=',$conversation->id)->orderBy('id', 'DESC')->get();
-
-        // $i = 0;
-
                     foreach($attachments as $attachment)
                     {
                         // $i++;
@@ -161,7 +176,7 @@
                                     }
                                         ?>;
                                         ">
-                                        <a href="#" style="color:#fff;"><?php if($role->role == "user") {echo $role->user_name; } else { echo $role->first_name . " " . $role->last_name; } ?> </a><strong>Date:</strong> {!! $thread->created_at !!}<br/></h3>
+                                        <a href="#" style="color:#fff;"><?php if($role->role == "user") {echo $role->user_name; } else { echo $role->first_name . " " . $role->last_name; } ?> </a><strong>{!! Lang::get('lang.date') !!}:</strong> {!! $thread->created_at !!}<br/></h3>
                                     <div class="timeline-body" style="padding-left:30px;">
                                             {!! $body !!}
                                     </div>

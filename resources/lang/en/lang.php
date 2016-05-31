@@ -584,9 +584,29 @@ return [
     'Action'                                => 'Action',
     'remove'                                => 'Remove',
     'form_deleted_successfully'             => 'Form Deleted Successfully',
-    'successfully_created_form'     =>      'Successfully created Form',
-    'please_fill_form_name'         =>      'Please fill Form name',
-    
+    'successfully_created_form'         =>  'Successfully created Form',
+    'please_fill_form_name'             =>  'Please fill Form name',
+    'category_inserted_successfully'    =>  'Category Inserted Successfully',
+    'category_not_inserted'             =>  'Category Not Inserted',
+    'category_updated_successfully'     =>  'Category Updated Successfully',
+    'category_not_updated'              =>  'Category Not Updated',
+    'category_deleted_successfully'     =>  'Category Deleted Successfully',
+    'category_not_deleted'              =>  'Category Not Deleted',
+    'article_inserted_successfully'     =>  'Article Inserted Successfully',
+    'article_not_inserted'              =>  'Article Not Inserted',
+    'article_updated_successfully'      =>  'Article Updated Successfully',
+    'article_not_updated'               =>  'Article Not Updated',
+    'article_deleted_successfully'      =>  'Article Deleted Successfully',
+    'article_not_deleted'               =>  'Article Not Deleted',
+    'article_can_not_deleted'           =>  'Article can Not Deleted',
+    'page_created_successfully'         =>  'Page created successfully',
+    'your_page_updated_successfully'    =>  'Your Page Updated Successfully',
+    'page_deleted_successfully'         =>  'Page Deleted Successfully',
+    'settings_updated_successfully'     =>  'Settings Updated Successfully',
+    'settings_can_not_updated'          =>  'Settings can not Updated',
+    'can_not_process'                   =>  'Can not Process',
+    'comment_published'                 =>  'Comment Published',
+    'comment_deleted'                   =>  'Comment Deleted',
     /*
       |----------------------------------------------------------------------------------------
       | Theme Pages [English(en)]
@@ -822,6 +842,29 @@ return [
     'ticket_ratings'    => 'TICKET RATING',
     /*
       |-----------------------------------------------
+      |  Ticket
+      |-----------------------------------------------
+     */
+    'ticket_created_successfully'            =>      'Ticket created successfully',
+    'failed_to_create_a_new_ticket'            =>      'Failed to create a new ticket',
+    'your_ticket_have_been_closed'            =>      'Your Ticket have been Closed',
+    'your_ticket_have_been_resolved'            =>      'Your Ticket have been Resolved',
+    'your_ticket_have_been_opened'            =>      'Your Ticket have been Opened',
+    'your_ticket_have_been_moved_to_trash'            =>      'Your Ticket have been moved to Trash',   
+    'this_email_have_been_banned'            =>      'This Email have been banned',
+    'ticket_updated_successfully'            =>      'Ticket Updated Successfully',
+    'you_have_successfully_replied_to_your_ticket'            =>      'You have successfully replied to your ticket',
+    'for_some_reason_your_message_was_not_posted_please_try_again_later'            =>      'For some reason your message was not posted. Please try again later',
+    'you_have_successfully_replied_to_your_ticket'      =>      'You have successfully replied to your ticket',
+    'for_some_reason_your_reply_was_not_posted_please_try_again_later'     =>      'For some reason your reply was not posted. Please try again later',
+    'you_have_unassigned_your_ticket'   =>      'You have Unassigned your ticket',
+    'for_some_reason_your_request_failed'   =>      'For some reason your request failed',
+    
+    
+    
+    
+    /*
+      |-----------------------------------------------
       |  Profile
       |-----------------------------------------------
      */
@@ -844,6 +887,10 @@ return [
     'start_date'    =>  'Start Date',
     'end_date'      =>  'End Date',
     'filter'        =>  'Filter',
+    'report'        =>  'Report',
+    'Legend'        =>  'LEGENDS',
+    'total'         =>  'Total',
+    'dashboard_reports' =>  'Dashboard Reports',
     /*
       |------------------------------------------------
       |User Page
@@ -1150,6 +1197,7 @@ return [
     'description'                                     => 'Description',
     'enter_the_description'                           => 'Enter the Description',
     'publish'                                         => 'Publish',
+    'publish_immediately'                             => 'Publish Immediately',
     'published'                                       => 'Published',
     'draft'                                           => 'Draft',
     'create_a_category'                               => 'Create a Category',

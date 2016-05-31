@@ -22,6 +22,7 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Redirect;
+use Lang;
 
 /**
  * ArticleController
@@ -114,7 +115,7 @@ class ArticleController extends Controller
         try {
             return view('themes.default1.agent.kb.article.index');
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -133,7 +134,7 @@ class ArticleController extends Controller
         try {
             return view('themes.default1.agent.kb.article.create', compact('category'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -166,9 +167,9 @@ class ArticleController extends Controller
         try {
             $article->fill($request->except('slug'))->save();
 
-            return redirect('article')->with('success', 'Article Inserted Successfully');
+            return redirect('article')->with('success', Lang::get('lang.article_inserted_successfully'));
         } catch (Exception $e) {
-            return redirect('article')->with('fails', 'Article Not Inserted'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('article')->with('fails', Lang::get('lang.article_not_inserted').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -200,7 +201,7 @@ class ArticleController extends Controller
         try {
             return view('themes.default1.agent.kb.article.edit', compact('assign', 'article', 'category'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -245,9 +246,9 @@ class ArticleController extends Controller
             $article->publish_time = $publishTime;
             $article->save();
 
-            return redirect('article')->with('success', 'Article Updated Successfully');
+            return redirect('article')->with('success', Lang::get('lang.article_updated_successfully'));
         } catch (Exception $e) {
-            return redirect('article')->with('fails', 'Article Not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('article')->with('fails', Lang::get('lang.article_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -277,12 +278,12 @@ class ArticleController extends Controller
         }
         if ($article) {
             if ($article->delete()) {//true:redirect to index page with success message
-                return Redirect::back()->with('success', 'Article Deleted Successfully');
+                return Redirect::back()->with('success', Lang::get('lang.article_deleted_successfully'));
             } else { //redirect to index page with fails message
-                return Redirect::back()->with('fails', 'Article Not Deleted');
+                return Redirect::back()->with('fails', Lang::get('lang.article_not_deleted'));
             }
         } else {
-            return Redirect::back()->with('fails', 'Article can Not Deleted');
+            return Redirect::back()->with('fails', Lang::get('lang.article_can_not_deleted'));
         }
     }
 

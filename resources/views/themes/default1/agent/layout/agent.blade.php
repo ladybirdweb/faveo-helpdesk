@@ -72,7 +72,7 @@ if ($company != null) {
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
                         </ul>
-                                                                <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id','=',Auth::user()->id)->where('is_read','0')->get(); ?>
+                        <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id','=',Auth::user()->id)->where('is_read','0')->get(); ?>
                         <ul class="nav navbar-nav navbar-right">
                             @if(Auth::user()->role == 'admin')
                                 <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>

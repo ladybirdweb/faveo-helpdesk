@@ -127,7 +127,6 @@ if ($thread->title != "") {
                     {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
                 </button>
                 <?php $statuses = \App\Model\helpdesk\Ticket\Ticket_Status::all(); ?>
-
                 <ul class="dropdown-menu" id='cc_page'>
                     @foreach($statuses as $status)
                     <?php if ($group->can_edit_ticket == 1) { ?>
@@ -140,9 +139,7 @@ if ($thread->title != "") {
                         </li>
                     <?php } ?>
                     @endforeach
-
                 </ul> 
-
             </div>
             <?php if ($group->can_delete_ticket == 1 || $group->can_ban_email == 1) { ?>
                 <div id="more-option" class="btn-group">
@@ -171,17 +168,17 @@ if ($thread->title != "") {
     <div class="box-body">
         <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
             <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h4><i class="icon fa fa-check"></i>Alert!</h4>
+            <h4><i class="icon fa fa-check"></i>{!! Lang::get('lang.alert') !!}!</h4>
             <div id="message-success1"></div>
         </div>
         <div id="alert12" class="alert alert-warning alert-dismissable" style="display:none;">
             <button id="dismiss12" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h4><i class="icon fa fa-warning"></i>Alert!</h4>
+            <h4><i class="icon fa fa-warning"></i>{!! Lang::get('lang.alert') !!}!</h4>
             <div id="message-warning1"></div>
         </div>
         <div id="alert13" class="alert alert-danger alert-dismissable" style="display:none;">
             <button id="dismiss13" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-            <h4><i class="icon fa fa-ban"></i>Alert!</h4>
+            <h4><i class="icon fa fa-ban"></i>{!! Lang::get('lang.alert') !!}!</h4>
             <div id="message-danger1"></div>
         </div>
         <div class="row">
@@ -266,8 +263,8 @@ if ($thread->title != "") {
                         <table class="table table-hover">
                             <div id="refresh3">
 
-                                @if($user->phone_number !=null)<tr><td><b>Phone:</b></td>          <td>{{$user->phone_number}}</td></tr>@endif
-                                @if($user->mobile !=null)<tr><td><b>Phone:</b></td>          <td>{{$user->ext . $user->phone_number}}</td></tr>@endif
+                                @if($user->phone_number !=null)<tr><td><b>{!! Lang::get('lang.phone') !!}:</b></td>          <td>{{$user->phone_number}}</td></tr>@endif
+                                @if($user->mobile !=null)<tr><td><b>{!! Lang::get('lang.mobile') !!}:</b></td>          <td>{{$user->ext . $user->phone_number}}</td></tr>@endif
                                 <tr><td><b>{!! Lang::get('lang.source') !!}:</b></td>         <td>{{$ticket_source}}</td></tr>
                                 <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first(); ?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
                                 <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
@@ -299,16 +296,16 @@ if ($thread->title != "") {
             <div class="tab-content">
                 <div id="alert21" class="alert alert-success alert-dismissable" style="display:none;">
                     <button id="dismiss21" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                    <h4><i class="icon fa fa-check"></i>{!! Lang::get('lang.alert') !!}!</h4>
                     <div id="message-success2"></div>
                 </div>
                 <div id="alert22" class="alert alert-warning alert-dismissable" style="display:none;">
-                    <h4><i class="icon fa fa-warning"></i>Alert!</h4>
+                    <h4><i class="icon fa fa-warning"></i>{!! Lang::get('lang.alert') !!}!</h4>
                     <div id="message-warning2"></div>
                 </div>
                 <div id="alert23" class="alert alert-danger alert-dismissable" style="display:none;">
                     <button id="dismiss23" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <h4><i class="icon fa fa-ban"></i>Alert!</h4>
+                    <h4><i class="icon fa fa-ban"></i>{!! Lang::get('lang.alert') !!}!</h4>
                     <div id="message-danger2"></div>
                 </div>
                 <div class="tab-pane active" id="General">
@@ -412,7 +409,6 @@ if ($thread->title != "") {
                         </div>
                     </div>
                     {!!Form::close()!!}
-
                 </div>
                 <div class="tab-pane" id="Internal">
                     <!-- ticket reply -->
@@ -471,10 +467,8 @@ if ($thread->title != "") {
         $conversations = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->orderBy('id', 'DESC')->paginate(10);
         $ij = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
         ?>
-
         <!-- row -->
         <div class="row" >
-
             <div id="refresh1">
                 <style type="text/css">
                     .pagination{
@@ -491,11 +485,8 @@ if ($thread->title != "") {
                     <ul class="timeline">
                         <!-- timeline time label -->
                         <?php
-// $ij = 0;
                         foreach ($conversations as $conversation) {
-// $ij++;
-                            if ($conversation == null) {
-                                
+                            if ($conversation == null) {      
                             } else {
                                 ?>
                                 <li class="time-label">
@@ -571,7 +562,6 @@ if ($thread->title != "") {
                                                     $body = str_replace($body2, " ", $body);
                                                 }
                                             } else {
-                                                
                                             }
                                         }
                                         // echo $body;
@@ -582,7 +572,6 @@ if ($thread->title != "") {
                                     $start = "<head>";
                                     $end = "</head>";
                                     if (strpos($string, $start) == false || strpos($string, $start) == false) {
-                                        
                                     } else {
                                         $ini = strpos($string, $start);
                                         $ini += strlen($start);
@@ -690,13 +679,10 @@ if ($thread->title != "") {
                                             <ul class='mailbox-attachments clearfix'>
                                                 <?php
                                                 foreach ($attachments as $attachment) {
-
                                                     $size = $attachment->size;
                                                     $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
                                                     $power = $size > 0 ? floor(log($size, 1024)) : 0;
                                                     $value = number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
-
-
                                                     if ($attachment->poster == 'ATTACHMENT') {
                                                         if ($attachment->type == 'jpg' || $attachment->type == 'JPG' || $attachment->type == 'jpeg' || $attachment->type == 'JPEG' || $attachment->type == 'png' || $attachment->type == 'PNG' || $attachment->type == 'gif' || $attachment->type == 'GIF') {
                                                             $image = @imagecreatefromstring($attachment->file);
@@ -705,8 +691,6 @@ if ($thread->title != "") {
                                                             $data = ob_get_contents();
                                                             ob_end_clean();
                                                             $var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;height:133px;" src="data:image/jpg;base64,' . base64_encode($data) . '"/></a>';
-
-
                                                             echo '<li style="background-color:#f4f4f4;"><span class="mailbox-attachment-icon has-img">' . $var . '</span><div class="mailbox-attachment-info"><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></div></li>';
                                                         } else {
                                                             $var = '<a style="max-width:200px;height:133px;color:#666;" href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff;">' . strtoupper($attachment->type) . '</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></span></div></a>';
@@ -737,7 +721,6 @@ if ($thread->title != "") {
     </div>
 </div>
 <!-- </section>/.content -->
-
 
 <!-- page modals -->
 <div>
@@ -899,9 +882,7 @@ if ($thread->title != "") {
                                 </div>
                                 <div id="change_body">
 <?php $users = App\User::where('role', '=', 'user')->get(); ?>
-
                                     {!! Lang::get('lang.add_another_owner') !!}
-
                                     <input type="text" class="form-control" id="tags2" name="email" placeholder="{!! Lang::get('lang.search_user') !!}"\>
                                     <input type="hidden" name="ticket_id" value="{!! $tickets->id !!}">
                                     <input type="hidden" name="action" value="change-owner">
@@ -909,7 +890,6 @@ if ($thread->title != "") {
                                         <div class="col-md-2"><spam class="glyphicon glyphicon-user fa-5x"></spam></div>
                                         <div id="change-refresh" class="col-md-10">
 <?php $user = App\User::where('id', '=', $tickets->user_id)->first(); ?>
-
                                             <!-- <b>{!! Lang::get('lang.user_details') !!}User Details</b><br/> -->
                                             <b>Current owner</b><br/>
                                             {!! $user->user_name !!}<br/>{!! $user->email !!}<br/>
@@ -993,7 +973,6 @@ if ($thread->title != "") {
                         </div>
                         <div id="assign_body">
                             <p>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}?</p>
-
                             <select id="asssign" class="form-control" name="assign_to">
                                 <?php
                                 $assign = App\User::where('role', '!=', 'user')->get();
@@ -1343,7 +1322,7 @@ if ($thread->title != "") {
                     $("#hide2").show();
                     $("#hidespin").show();
                     $("#d1").trigger("click");
-                    var message = "Success! Your Ticket have been Closed";
+                    var message = "{!! Lang::get('lang.your_ticket_have_been_closed') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){
@@ -1374,7 +1353,7 @@ if ($thread->title != "") {
                     $("#d1").trigger("click");
                     $("#hide2").show();
                     $("#show2").hide();
-                    var message = "Success! Your Ticket have been Resolved";
+                    var message = "{!! Lang::get('lang.your_ticket_have_been_resolved') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){$("#alert11").hide();
@@ -1404,7 +1383,7 @@ if ($thread->title != "") {
                     $("#d1").trigger("click");
                     $("#hide2").show();
                     $("#show2").hide();
-                    var message = "Success! Your Ticket have been Opened";
+                    var message = "{!! Lang::get('lang.your_ticket_have_been_opened') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){$("#alert11").hide(); }, 4000);
@@ -1426,7 +1405,7 @@ if ($thread->title != "") {
                     $("#d2").trigger("click");
                     $("#hide2").show();
                     $("#show2").hide();
-                    var message = "Success! Your Ticket have been moved to Trash";
+                    var message = "{!! Lang::get('lang.your_ticket_have_been_moved_to_trash') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){$("#alert11").hide();
@@ -1450,7 +1429,7 @@ if ($thread->title != "") {
             success: function(response) {
             $("#dismis2").trigger("click");
                     $("#refresh").load("../thread/{{$tickets->id}}   #refresh");
-                    var message = "Success! This Email have been banned";
+                    var message = "{!! Lang::get('lang.this_email_have_been_banned') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){$("#alert11").hide(); }, 4000);
@@ -1485,7 +1464,7 @@ if ($thread->title != "") {
             $("#show").hide();
                     $("#hide").show();
                     if (response == 0) {
-            message = "Ticket Updated Successfully!"
+            message = "{!! Lang::get('lang.ticket_updated_successfully') !!}"
                     $("#dismis").trigger("click");
                     $("#refresh1").load("../thread/{{$tickets->id}}   #refresh1");
                     $("#refresh2").load("../thread/{{$tickets->id}}   #refresh2");
@@ -1647,7 +1626,7 @@ if ($thread->title != "") {
             {
             $("#refresh1").load("../thread/{{$tickets->id}}   #refresh1");
                     // $("#t4").load("../thread/{{$tickets->id}}   #t4");
-                    var message = "Success! You have successfully replied to your ticket";
+                    var message = "Lang::get('lang.you_have_successfully_replied_to_your_ticket')";
                     $("#alert21").show();
                     $('#message-success2').html(message);
                     setInterval(function(){$("#alert21").hide(); }, 4000);
@@ -1660,7 +1639,7 @@ if ($thread->title != "") {
                     var wysihtml5Editor = $('textarea').wysihtml5().data("wysihtml5").editor;
             } else {
             // alert('fail');
-            var message = "Fail! For some reason your message was not posted. Please try again later";
+            var message = "{!! Lang::get('lang.for_some_reason_your_message_was_not_posted_please_try_again_later') !!}";
                     $("#alert23").show();
                     $('#message-danger2').html(message);
                     setInterval(function(){$("#alert23").hide(); }, 4000);
@@ -1694,7 +1673,7 @@ if ($thread->title != "") {
                     {
                     $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                             // $("#t1").load("../thread/{{$tickets->id}}  #t1");
-                            var message = "Success! You have successfully replied to your ticket";
+                            var message = "{!! Lang::get('lang.you_have_successfully_replied_to_your_ticket') !!}";
                             $("#alert21").show();
                             $('#message-success2').html(message);
                             setInterval(function(){$("#alert21").hide(); }, 4000);
@@ -1709,7 +1688,7 @@ if ($thread->title != "") {
                     } else {
                     // alert('fail');
                     // $( "#dismis4" ).trigger( "click" );
-                    var message = "Fail! For some reason your reply was not posted. Please try again later";
+                    var message = "{!! Lang::get('lang.for_some_reason_your_reply_was_not_posted_please_try_again_later') !!}";
                             $("#alert23").show();
                             $('#message-danger2').html(message);
                             setInterval(function(){$("#alert23").hide(); }, 4000);
@@ -1730,7 +1709,7 @@ if ($thread->title != "") {
             if (response == 1)
             {
             // alert('ticket has been un assigned');
-            var message = "Success! You have Unassigned your ticket";
+            var message = "{!! Lang::get('lang.you_have_unassigned_your_ticket') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){$("#dismiss11").trigger("click"); }, 2000);
@@ -1739,7 +1718,7 @@ if ($thread->title != "") {
             }
             else
             {
-            var message = "Fail! For some reason your request failed";
+            var message = "{!! Lang::get('lang.for_some_reason_your_request_failed') !!}";
                     $("#alert13").show();
                     $('#message-danger1').html(message);
                     setInterval(function(){$("#dismiss13").trigger("click"); }, 2000);

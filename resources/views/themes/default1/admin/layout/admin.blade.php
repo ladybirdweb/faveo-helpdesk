@@ -65,47 +65,56 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="{{url('dashboard')}}">{!! Lang::get('lang.agent_panel') !!}</a></li>
                             <!-- User Account: style can be found in dropdown.less -->
-                            <li class="dropdown notifications-menu">
+                            <li class="dropdown notifications-menu" id="myDropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
                                     <i class="fa fa-bell-o"></i>
-                                    <span class="label label-warning" id="count"><?php echo count($noti); ?></span>
+                                    <span class="label label-warning" id="count">{!! count($noti) !!}</span>
                                 </a>
                                 <ul class="dropdown-menu" style="width: -moz-max-content;
-                                    width: -webkit-max-content;
-                                    width: -o-max-content;">
-                                    <li class="header">You have <?php echo count($noti); ?> notifications</li>
-                                    <li>
+    width: -webkit-max-content;
+    width: -o-max-content;">
+                                         
+                                    <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
+        <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4><i class="icon fa fa-check"></i>Alert!</h4>
+        <div id="message-success1"></div>
+    </div>
+                                   
+                                    <li id="refreshNote">
+
+ <li class="header">You have {!! count($noti) !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
+                                    
                                         <ul class="menu">
                                             @foreach($notifications as $notification)
-                                            <?php $user = App\User::whereId($notification->user_id)->first(); ?>
+                                                     <?php $user = App\User::whereId($notification->user_id)->first(); ?>
                                             @if($notification->type == 'registration')
                                             @if($notification->is_read == 1)
                                             <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                    <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
-                                                        {!! $notification->message !!}
-                                                    </a></span>
+                                                <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
+                                                    {!! $notification->message !!}
+                                                </a></span>
                                             </li>
                                             @else
                                             <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                    <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
-                                                        {!! $notification->message !!}
-                                                    </a></span>
+                                                <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
+                                                    {!! $notification->message !!}
+                                                </a></span>
                                             </li>
                                             @endif
                                             @else
-
-                                            <?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification->model_id)->first(); ?>
+                                            
+                                            <?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification -> model_id)->first(); ?>
                                             @if($notification->is_read == 1)
                                             <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                    <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
-                                                        {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
-                                                    </a></span>
+                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
+                                                   {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
+                                                </a></span>
                                             </li>
                                             @else
-                                            <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                    <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
-                                                        {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
-                                                    </a></span>
+                                                 <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
+                                                   {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
+                                                </a></span>
                                             </li>
                                             @endif
                                             @endif
@@ -113,7 +122,12 @@
 
                                         </ul>
                                     </li>
-                                    <li class="footer"><a href="{{ url('notifications-list') }}">View all</a></li>
+                                    <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
+                                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;" id="notification-loader">
+                                            </div><div class="col-md-5"></div></li>
+                                    <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
+                                    </li>
+
                                 </ul>
                             </li>
                             <li class="dropdown user user-menu">
@@ -175,15 +189,6 @@
                             @endif
                         </div>
                     </div>
-                    <!-- search form -->
-                    {{-- <form action="#" method="get" class="sidebar-form"> --}}
-                    {{-- <div class="input-group"> --}}
-                    {{-- <input type="text" name="q" class="form-control" placeholder="Search..."/> --}}
-                    {{-- <span class="input-group-btn"> --}}
-                    {{-- <button type='submit' name='seach' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button> --}}
-                    {{-- </span> --}}
-                    {{-- </div> --}}
-                    {{-- </form> --}}
                     <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
@@ -263,24 +268,13 @@
                             <ul class="treeview-menu">
                                 <li @yield('widget')><a href="{{ url('widgets') }}"><i class="fa fa-list-alt"></i> {!! Lang::get('lang.widgets') !!}</a></li>
                                 <li @yield('socail')><a href="{{ url('social-buttons') }}"><i class="fa fa-cubes"></i> {!! Lang::get('lang.social') !!}</a></li>
-
-
-
                             </ul>
                         </li>
                         <li class="treeview @yield('Plugins')">
                             <a href="{{ url('plugins') }}">
                                 <i class="fa fa-plug"></i>
                                 <span>{!! Lang::get('lang.plugin') !!}</span>
-                                <!-- <i class="fa fa-angle-left pull-right"></i> -->
                             </a>
-                            <!-- <ul class="treeview-menu">
-                                <li @yield('plugin')><a href="{{ url('plugins') }}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.view-all')!!}</a></li>
-                                <li @yield('a')><a href="#"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.add-new')!!}</a></li>
-                            
-                            
-                           
-                            </ul> -->
                         </li>
                         <li class="header">{!! Lang::get('lang.Updates') !!}</li>
                         <li @yield('update')>
@@ -291,7 +285,6 @@
                                     <span>{!! Lang::get('lang.no_new_updates') !!}!</span><br/>
                                     <br/>
                                     <i class="fa fa-inbox"></i> <span>{!! Lang::get('lang.check_for_updates') !!}.</span>
-
                                     <img  id="gif-update" src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="width:12%; height:12%; margin-bottom:5%;margin-left:10%;display:none">
 
                                     <small class="label pull-right bg-green"></small>
