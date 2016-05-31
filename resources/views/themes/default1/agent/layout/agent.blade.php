@@ -147,17 +147,14 @@ if ($company != null) {
                             <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
-                                    
                                         <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
                                     <span class="hidden-xs">{{Auth::user()->first_name." ".Auth::user()->last_name}}</span>
                                 @endif          
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
-                                    <li class="user-header"  style="background-color:#343F44;">
-                                        
-                                        <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                        
+                                    <li class="user-header"  style="background-color:#343F44;">     
+                                        <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />                                        
                                         <p>
                                             {{Auth::user()->first_name." ".Auth::user()->last_name}} - {{Auth::user()->role}}
                                             <small></small>

@@ -22,7 +22,7 @@ class = "active"
     <h3 class="banner-title text-center text-info h4">{!! Lang::get('lang.have_a_ticket') !!}?</h3>
     @if(Session::has('check'))
     @if (count($errors) > 0)
-    <div class="alert alert-danger alert-dismissable" >
+    <div class="alert alert-danger alert-dismissable">
         <i class="fa fa-ban"></i>
         <b>{!! Lang::get('lang.alert') !!} !</b>
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

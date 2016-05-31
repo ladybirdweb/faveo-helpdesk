@@ -17,7 +17,7 @@
     @if(Session::has('error'))    
         <li>{!! Session::get('error') !!}</li>
     @else
-        <li>Please fill all required feilds.</li>
+        <li>{!! Lang::get('lang.please_fill_all_required_feilds') !!}</li>
     @endif
 </div>
 @endif

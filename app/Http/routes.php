@@ -593,6 +593,11 @@ Route::get('check_ticket/{id}', ['as' => 'check_ticket', 'uses' => 'Client\helpd
 Route::group(['middleware' => 'role.user', 'middleware' => 'auth'], function () {
 
     Route::get('client-profile', ['as' => 'client.profile', 'uses' => 'Client\helpdesk\GuestController@getProfile']); /*  User profile get  */
+    Breadcrumbs::register('client.profile', function($breadcrumbs) {
+        $breadcrumbs->push('My Profile');
+    });
+    
+    
     Breadcrumbs::register('ticket2', function($breadcrumbs) {
         $breadcrumbs->push('My Tickets', route('ticket2'));
     });

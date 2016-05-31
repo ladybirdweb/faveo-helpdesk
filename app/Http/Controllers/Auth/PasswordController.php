@@ -18,18 +18,16 @@ use Illuminate\Http\Request;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class PasswordController extends Controller
-{
+class PasswordController extends Controller {
+
     use ResetsPasswords;
 
     /**
      * Create a new password controller instance.
      *
-     *
      * @return void
      */
-    public function __construct(PhpMailController $PhpMailController)
-    {
+    public function __construct(PhpMailController $PhpMailController) {
         $this->PhpMailController = $PhpMailController;
         $this->middleware('guest');
         SettingsController::smtp();
@@ -40,8 +38,7 @@ class PasswordController extends Controller
      *
      * @return Response
      */
-    public function getEmail()
-    {
+    public function getEmail() {
         return view('auth.password');
     }
 
@@ -50,8 +47,7 @@ class PasswordController extends Controller
      *
      * @return Response
      */
-    public function postEmail(Request $request)
-    {
+    public function postEmail(Request $request) {
         $date = date('Y-m-d H:i:s');
         $this->validate($request, ['email' => 'required|email']);
         $user = User::where('email', '=', $request->only('email'))->first();
@@ -68,11 +64,12 @@ class PasswordController extends Controller
                 $create_password_reset = \DB::table('password_resets')->insert(['email' => $user->email, 'token' => $code, 'created_at' => $date]);
             }
 
-            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user->user_name, 'email' => $user->email], $message = ['subject' => 'Your Password Reset Link', 'scenario' => 'reset-password'], $template_variables = ['user' => $user->user_name, 'email_address' => $user->email, 'password_reset_link' => url('password/reset/'.$code)]);
+            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user->user_name, 'email' => $user->email], $message = ['subject' => 'Your Password Reset Link', 'scenario' => 'reset-password'], $template_variables = ['user' => $user->user_name, 'email_address' => $user->email, 'password_reset_link' => url('password/reset/' . $code)]);
 
-            return redirect()->back()->with('status', 'We have e-mailed your password reset link!');
+            return redirect()->back()->with('status', Lang::get('lang.we_have_e-mailed_your_password_reset_link'));
         } else {
-            return redirect()->back()->with('errors', "We can't find a user with that e-mail address.");
+            return redirect()->back()->with('errors', Lang::get("lang.we_can't_find_a_user_with_that_e-mail_address"));
         }
     }
+
 }

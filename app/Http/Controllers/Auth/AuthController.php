@@ -107,10 +107,8 @@ class AuthController extends Controller {
         // $mail = Mail::send('auth.activate', array('link' => url('getmail', $code), 'username' => $name), function ($message) use ($user) {
         //  $message->to($user->email, $user->full_name)->subject('active your account');
         // });
-
         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => 'password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('password/reset/' . $code)]);
-
-        return redirect('home')->with('success', 'Activate Your Account ! Click on Link that send to your mail');
+        return redirect('home')->with('success', Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail'));
     }
 
     /**
@@ -214,7 +212,6 @@ class AuthController extends Controller {
                 return redirect()->intended($this->redirectPath());
             }
         }
-
         return redirect()->back()
                         ->withInput($request->only('email', 'remember'))
                         ->withErrors([
@@ -275,7 +272,6 @@ class AuthController extends Controller {
         $table = 'login_attempts';
         $result = DB::select("SELECT Attempts, (CASE when LastLogin is not NULL and DATE_ADD(LastLogin, INTERVAL " . $time . " MINUTE)>NOW() then 1 else 0 end) as Denied " .
                         " FROM " . $table . " WHERE IP = '$value' OR User = '$field'");
-
         $data = $result;
         //Verify that at least one login attempt is in database
         if (!$data) {
@@ -298,7 +294,7 @@ class AuthController extends Controller {
      * @return type string
      */
     protected function getFailedLoginMessage() {
-        return 'This Field do not match our records.';
+        return Lang::get('lang.this_field_do_not_match_our_records');
     }
 
 }

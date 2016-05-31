@@ -81,15 +81,21 @@ class UserController extends Controller {
         return $excerpt;
     }
 
+    /**
+     * function to search an article
+     * @param \App\Http\Requests\kb\SearchRequest $request
+     * @param \App\Model\kb\Category $category
+     * @param \App\Model\kb\Article $article
+     * @param \App\Model\kb\Settings $settings
+     * @return type view
+     */
     public function search(SearchRequest $request, Category $category, Article $article, Settings $settings) {
         $settings = $settings->first();
         $pagination = $settings->pagination;
         $search = $request->input('s');
-        $result = $article->search($search)->paginate($pagination);
-        $result->setPath('search');
-        //dd($result);
+        $result = $article->search($search)->first();
+        $result->setPath('search');        
         $categorys = $category->get();
-
         return view('themes.default1.client.kb.article-list.search', compact('categorys', 'result'));
     }
 
