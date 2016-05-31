@@ -44,21 +44,16 @@ class FormController extends Controller {
      * @return void
      */
     public function __construct(TicketWorkflowController $TicketWorkflowController) {
-        // mail smtp settings
-//        SettingsController::smtp();
         // creating a TicketController instance
         $this->TicketWorkflowController = $TicketWorkflowController;
     }
 
     /**
      * getform.
-     *
      * @param type Help_topic $topic
-     *
      * @return type
      */
     public function getForm(Help_topic $topic, CountryCode $code) {
-
         if (\Config::get('database.install') == '%0%') {
             return \Redirect::route('license');
         }
@@ -82,13 +77,11 @@ class FormController extends Controller {
      * @return type string
      */
     public function postForm($id, Help_topic $topic) {
-        // dd($id);
         if ($id != 0) {
             $helptopic = $topic->where('id', '=', $id)->first();
             $custom_form = $helptopic->custom_form;
             $values = Fields::where('forms_id', '=', $custom_form)->get();
             if (!$values) {
-                
             }
             if ($values) {
                 foreach ($values as $value) {

@@ -55,7 +55,6 @@ class AuthController extends Controller {
     public function __construct(PhpMailController $PhpMailController) {
         $this->PhpMailController = $PhpMailController;
         SettingsController::smtp();
-
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
@@ -89,7 +88,6 @@ class AuthController extends Controller {
     public function postRegister(User $user, RegisterRequest $request) {
         // Event for login
         \Event::fire(new \App\Events\LoginEvent($request));
-
         $password = Hash::make($request->input('password'));
         $user->password = $password;
         $name = $request->input('full_name');

@@ -36,8 +36,8 @@ use Redirect;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class UserController extends Controller
-{
+class UserController extends Controller {
+
     /**
      * Create a new controller instance.
      * constructor to check
@@ -47,8 +47,7 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth');
         $this->middleware('role.agent');
         // $this->middleware('roles');
@@ -61,8 +60,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function index()
-    {
+    public function index() {
         try {
             /* get all values in Sys_user */
             return view('themes.default1.agent.helpdesk.user.index');
@@ -76,8 +74,7 @@ class UserController extends Controller
      *
      * @return datatable
      */
-    public function user_list()
-    {
+    public function user_list() {
         return \Datatable::collection(User::where('role', '!=', 'admin')->where('role', '!=', 'agent')->get())
                         ->searchColumns('user_name')
                         ->orderColumns('user_name', 'email')
@@ -92,13 +89,13 @@ class UserController extends Controller
                         ->addColumn('phone', function ($model) {
                             $phone = '';
                             if ($model->phone_number) {
-                                $phone = $model->ext.' '.$model->phone_number;
+                                $phone = $model->ext . ' ' . $model->phone_number;
                             }
                             $mobile = '';
                             if ($model->mobile) {
                                 $mobile = $model->mobile;
                             }
-                            $phone = $phone.'&nbsp;&nbsp;&nbsp;'.$mobile;
+                            $phone = $phone . '&nbsp;&nbsp;&nbsp;' . $mobile;
 
                             return $phone;
                         })
@@ -109,7 +106,6 @@ class UserController extends Controller
                             } else {
                                 $stat = '<button class="btn btn-danger btn-xs">Inactive</button>';
                             }
-
                             return $stat;
                         })
                         ->addColumn('lastlogin', function ($model) {
@@ -120,8 +116,8 @@ class UserController extends Controller
                         ->addColumn('Actions', function ($model) {
                             //return '<a href=article/delete/ ' . $model->id . ' class="btn btn-danger btn-flat" onclick="myFunction()">Delete</a>&nbsp;<a href=article/' . $model->id . '/edit class="btn btn-warning btn-flat">Edit</a>&nbsp;<a href=show/' . $model->id . ' class="btn btn-warning btn-flat">View</a>';
                             //return '<form action="article/delete/ ' . $model->id . '" method="post" onclick="alert()"><button type="sumbit" value="Delete"></button></form><a href=article/' . $model->id . '/edit class="btn btn-warning btn-flat">Edit</a>&nbsp;<a href=show/' . $model->id . ' class="btn btn-warning btn-flat">View</a>';
-                            return '<span  data-toggle="modal" data-target="#deletearticle'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.\Lang::get('lang.delete').' </button></span>&nbsp;<a href="'.route('user.edit', $model->id).'" class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
-				<div class="modal fade" id="deletearticle'.$model->id.'">
+                            return '<span  data-toggle="modal" data-target="#deletearticle' . $model->id . '"><a href="#" ><button class="btn btn-danger btn-xs"></a> ' . \Lang::get('lang.delete') . ' </button></span>&nbsp;<a href="' . route('user.edit', $model->id) . '" class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp;<a href="' . route('user.show', $model->id) . '" class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>
+				<div class="modal fade" id="deletearticle' . $model->id . '">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -129,11 +125,11 @@ class UserController extends Controller
                     <h4 class="modal-title">Are You Sure ?</h4>
                 </div>
                 <div class="modal-body">
-                '.$model->user_name.'
+                ' . $model->user_name . '
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">Close</button>
-                    <a href="'.route('user.delete', $model->id).'"><button class="btn btn-danger">delete</button></a>
+                    <a href="' . route('user.delete', $model->id) . '"><button class="btn btn-danger">delete</button></a>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -147,8 +143,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function create()
-    {
+    public function create() {
         try {
             return view('themes.default1.agent.helpdesk.user.create');
         } catch (Exception $e) {
@@ -164,8 +159,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function store(User $user, Sys_userRequest $request)
-    {
+    public function store(User $user, Sys_userRequest $request) {
         try {
             /* insert the input request to sys_user table */
             /* Check whether function success or not */
@@ -198,8 +192,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function show($id, User $user)
-    {
+    public function show($id, User $user) {
         try {
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
@@ -218,8 +211,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function edit($id, User $user)
-    {
+    public function edit($id, User $user) {
         try {
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
@@ -239,8 +231,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function update($id, User $user, Sys_userUpdate $request)
-    {
+    public function update($id, User $user, Sys_userUpdate $request) {
         try {
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
@@ -267,8 +258,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function destroy($id, User $user)
-    {
+    public function destroy($id, User $user) {
         try {
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
@@ -292,8 +282,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function getProfile()
-    {
+    public function getProfile() {
         $user = Auth::user();
 
         return view('themes.default1.agent.helpdesk.user.profile', compact('user'));
@@ -304,8 +293,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function getProfileedit()
-    {
+    public function getProfileedit() {
         $user = Auth::user();
 
         return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'));
@@ -319,8 +307,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function postProfileedit(ProfileRequest $request)
-    {
+    public function postProfileedit(ProfileRequest $request) {
         $user = Auth::user();
         $user->gender = $request->input('gender');
         $user->save();
@@ -339,7 +326,7 @@ class UserController extends Controller
             //$extension = Input::file('profile_pic')->getClientOriginalExtension();
             $name = Input::file('profile_pic')->getClientOriginalName();
             $destinationPath = 'lb-faveo/profilepic';
-            $fileName = rand(0000, 9999).'.'.$name;
+            $fileName = rand(0000, 9999) . '.' . $name;
             //echo $fileName;
             Input::file('profile_pic')->move($destinationPath, $fileName);
             $user->profile_pic = $fileName;
@@ -361,8 +348,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function postProfilePassword($id, ProfilePassword $request)
-    {
+    public function postProfilePassword($id, ProfilePassword $request) {
         $user = Auth::user();
         //echo $user->password;
         if (Hash::check($request->input('old_password'), $user->getAuthPassword())) {
@@ -382,8 +368,7 @@ class UserController extends Controller
      *
      * @return type boolean
      */
-    public function UserAssignOrg($id)
-    {
+    public function UserAssignOrg($id) {
         $org = Input::get('org');
         $user_org = new User_org();
         $user_org->org_id = $org;
@@ -398,8 +383,7 @@ class UserController extends Controller
      *
      * @return type value
      */
-    public function User_Create_Org($id)
-    {
+    public function User_Create_Org($id) {
         if (Input::get('website') != null) {
             // checking website
             $check = Organization::where('website', '=', Input::get('website'))->first();
@@ -433,4 +417,5 @@ class UserController extends Controller
             return 0;
         }
     }
+
 }

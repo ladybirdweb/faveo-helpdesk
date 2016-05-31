@@ -21,15 +21,14 @@ use Input;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class ClientTicketController extends Controller
-{
+class ClientTicketController extends Controller {
+
     /**
      * Create a new controller instance.
      *
      * @return type response
      */
-    public function __construct()
-    {
+    public function __construct() {
         SettingsController::smtp();
         // $this->middleware('auth');
         // $this->middleware('role.user');
@@ -43,8 +42,7 @@ class ClientTicketController extends Controller
      *
      * @return type response
      */
-    public function getCheckTicket(Tickets $ticket, User $user)
-    {
+    public function getCheckTicket(Tickets $ticket, User $user) {
         return view('themes.default1.client.helpdesk.guest-user.newticket', compact('ticket'));
     }
 
@@ -55,8 +53,7 @@ class ClientTicketController extends Controller
      *
      * @return type view
      */
-    public function reply($id, Request $request)
-    {
+    public function reply($id, Request $request) {
         $comment = $request->input('comment');
         if ($comment != null) {
             $tickets = Tickets::where('id', '=', $id)->first();
@@ -73,13 +70,13 @@ class ClientTicketController extends Controller
             try {
                 $threads->save();
                 $tickets->save();
-
-                return \Redirect::back()->with('success1', 'Successfully replied');
+                return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
             } catch (Exception $e) {
-                return \Redirect::back()->with('fails1', $e->errorInfo[2]);
+                return \Redirect::back()->with('fails1', $e->getMessage());
             }
         } else {
-            return \Redirect::back()->with('fails1', 'Please fill some data!');
+            return \Redirect::back()->with('fails1', Lang::get('lang.please_fill_some_data'));
         }
     }
+
 }

@@ -1260,6 +1260,10 @@ return [
     'no_article'          => 'No Article',
     'profile_settings'    => 'Profile Settings',
     'please_fill_all_required_feilds'  =>  'Please fill all required feilds.',
+    'successfully_replied'      =>  'Successfully replied',
+    'please_fill_some_data'    =>  'Please fill some data!',
+    'ticket_has_been_created_successfully_your_ticket_number_is' => 'Ticket has been created successfully, your ticket number is ',
+
     /**
     * |---------------------------------------------------------------------------------------
       |Api settings
