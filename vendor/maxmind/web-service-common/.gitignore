@@ -1,0 +1,14 @@
+_site
+.gh-pages
+.idea
+apigen.phar
+box.phar
+build
+composer.lock
+composer.phar
+phpunit.xml
+t.php
+vendor/
+*.iml
+*.sw?
+*.old

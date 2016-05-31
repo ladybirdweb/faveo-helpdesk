@@ -143,17 +143,23 @@ class Worker
      */
     public function pop($connectionName, $queue = null, $delay = 0, $sleep = 3, $maxTries = 0)
     {
-        $connection = $this->manager->connection($connectionName);
+        try {
+            $connection = $this->manager->connection($connectionName);
 
-        $job = $this->getNextJob($connection, $queue);
+            $job = $this->getNextJob($connection, $queue);
 
-        // If we're able to pull a job off of the stack, we will process it and
-        // then immediately return back out. If there is no job on the queue
-        // we will "sleep" the worker for the specified number of seconds.
-        if (! is_null($job)) {
-            return $this->process(
-                $this->manager->getName($connectionName), $job, $maxTries, $delay
-            );
+            // If we're able to pull a job off of the stack, we will process it and
+            // then immediately return back out. If there is no job on the queue
+            // we will "sleep" the worker for the specified number of seconds.
+            if (! is_null($job)) {
+                return $this->process(
+                    $this->manager->getName($connectionName), $job, $maxTries, $delay
+                );
+            }
+        } catch (Exception $e) {
+            if ($this->exceptions) {
+                $this->exceptions->report($e);
+            }
         }
 
         $this->sleep($sleep);
@@ -217,13 +223,15 @@ class Worker
     }
 
     /**
-     * Handle an exception that occured while the job was running.
+     * Handle an exception that occurred while the job was running.
      *
      * @param  string  $connection
      * @param  \Illuminate\Contracts\Queue\Job  $job
      * @param  int  $delay
      * @param  \Throwable  $e
      * @return void
+     *
+     * @throws \Throwable
      */
     protected function handleJobException($connection, Job $job, $delay, $e)
     {

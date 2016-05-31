@@ -68,7 +68,7 @@ class="active"
 
         <div class="form-group">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <!-- email -->
                     <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
                         {!! Form::label('email',Lang::get('lang.email')) !!}
@@ -76,20 +76,44 @@ class="active"
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <!-- full name -->
                     <div class="form-group {{ $errors->has('fullname') ? 'has-error' : '' }}">
                         {!! Form::label('fullname',Lang::get('lang.full_name')) !!}
                         {!! Form::text('fullname',null,['class' => 'form-control']) !!}
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <!-- phone -->
+            </div>
+            <div class="row">
+                 <div class="col-md-1 form-group {{ $errors->has('code') ? 'has-error' : '' }}">
+
+                    {!! Form::label('code',Lang::get('lang.country-code')) !!}
+                    {!! Form::text('code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
+                </div>
+                <div class="col-md-5">
+                <!-- phone -->
+                    <div class="form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
+                        <label>{!! Lang::get('lang.mobile_number') !!}:</label>
+                        {!! Form::input('number','mobile',null,['class' => 'form-control']) !!}
+                        {!! $errors->first('mobile', '<spam class="help-block text-red">:message</spam>') !!}
+                    </div>
+                </div>
+                <div class="col-md-5">
+                <!-- phone -->
                     <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
                         <label>{!! Lang::get('lang.phone') !!}:</label>
                         {!! Form::input('number','phone',null,['class' => 'form-control']) !!}
+                        {!! $errors->first('phone', '<spam class="help-block text-red">:message</spam>') !!}
                     </div>
                 </div>
+                <!--  <div class="form-group">
+                     <div class="col-md-2">
+                         <label>Ticket Notice:</label>
+                     </div>
+                     <div class="col-md-6">
+                         <input type="checkbox" name="notice" id=""> Send alert to User
+                     </div>
+                 </div> -->
             </div>
         </div>
     </div>

@@ -1,5 +1,21 @@
 # ChangeLog
 
+## Version 5.2.15 (May 1th 2016)
+* Added ability to inject custom address validators, and set the default validator
+* Fix TLS 1.2 compatibility
+* Remove some excess line breaks in MIME structure
+* Updated Polish, Russian, Brazilian Portuguese, Georgian translations
+* More DRY!
+* Improve error messages
+* Update dependencies
+* Add example showing how to handle multiple form file uploads
+* Improve SMTP example
+* Improve Windows compatibility
+* Use consistent names for temp files
+* Fix gmail XOAUTH2 scope, thanks to @sherryl4george
+* Fix extra line break in getSentMIMEMessage()
+* Improve DKIM signing to use SHA-2
+
 ## Version 5.2.14 (Nov 1st 2015)
 * Allow addresses with IDN (Internationalized Domain Name) in PHP 5.3+, thanks to @fbonzon
 * Allow access to POP3 errors

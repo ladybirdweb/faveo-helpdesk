@@ -16,6 +16,7 @@ return array(
     'PhpSpec' => array($vendorDir . '/phpspec/phpspec/src'),
     'Net' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
     'Namshi\\JOSE' => array($vendorDir . '/namshi/jose/src'),
+    'MaxMind' => array($vendorDir . '/maxmind-db/reader/src'),
     'Math' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
     'JakubOnderka\\PhpConsoleHighlighter' => array($vendorDir . '/jakub-onderka/php-console-highlighter/src'),
     'JakubOnderka\\PhpConsoleColor' => array($vendorDir . '/jakub-onderka/php-console-color/src'),

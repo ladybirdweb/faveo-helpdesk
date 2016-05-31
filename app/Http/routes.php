@@ -581,7 +581,7 @@ Route::get('create-ticket', ['as' => 'form', 'uses' => 'Client\helpdesk\FormCont
 
 Route::get('mytickets/{id}', ['as' => 'ticketinfo', 'uses' => 'Client\helpdesk\GuestController@singleThread']); //detail ticket information
 
-Route::post('checkmyticket', 'Client\helpdesk\GuestController@PostCheckTicket'); //ticket ckeck
+Route::post('checkmyticket', 'Client\helpdesk\UnAuthController@PostCheckTicket'); //ticket ckeck
 Breadcrumbs::register('check_ticket', function($breadcrumbs, $id) {
     $page = \App\Model\helpdesk\Ticket\Tickets::whereId(1)->first();
     $breadcrumbs->parent('/');
