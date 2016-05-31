@@ -16,6 +16,7 @@ use App\Http\Requests\helpdesk\Sys_userUpdate;
 // models
 use App\Model\helpdesk\Agent_panel\Organization;
 use App\Model\helpdesk\Agent_panel\User_org;
+use App\Model\helpdesk\Utility\CountryCode;
 use App\User;
 // classes
 use Auth;
@@ -23,6 +24,7 @@ use Exception;
 use Hash;
 use Input;
 use Redirect;
+use GeoIP;
 use Lang;
 
 /**
@@ -142,11 +144,14 @@ class UserController extends Controller {
      *
      * @return type view
      */
-    public function create() {
+    public function create(CountryCode $code)
+    {
         try {
-            return view('themes.default1.agent.helpdesk.user.create');
+            $location = GeoIP::getLocation('');
+            $phonecode = $code->where('iso', '=' , $location['isoCode'])->first();
+            return view('themes.default1.agent.helpdesk.user.create')->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->getMessage());
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
     }
 
@@ -158,7 +163,8 @@ class UserController extends Controller {
      *
      * @return type redirect
      */
-    public function store(User $user, Sys_userRequest $request) {
+    public function store(User $user, Sys_userRequest $request)
+    {
         /* insert the input request to sys_user table */
         /* Check whether function success or not */
         $user->email = $request->input('email');
@@ -166,16 +172,25 @@ class UserController extends Controller {
         $user->mobile = $request->input('mobile');
         $user->ext = $request->input('ext');
         $user->phone_number = $request->input('phone_number');
+        $user->country_code = $request->input('country_code');
         $user->active = $request->input('active');
         $user->internal_note = $request->input('internal_note');
         $user->role = 'user';
         try {
+            if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '' )) {
+                return redirect()->back()->with(['fails'=> Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
+            } else {
+                    $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+                    if (!count($code)) {
+                        return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'),'country_code_error' => 1])->withInput();
+                    }
+            }
             $user->save();
             /* redirect to Index page with Success Message */
-            return redirect('user')->with('success', Lang::get('lang.user_created_successfully'));
+            return redirect('user')->with('success', Lang::get('lang.User-Created-Successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('user')->with('fails', $e->getMessage());
+            return redirect('user')->with('fails', $e->errorInfo[2]);
         }
     }
 
@@ -206,14 +221,17 @@ class UserController extends Controller {
      *
      * @return type Response
      */
-    public function edit($id) {
+    public function edit($id,  CountryCode $code)
+    {
         try {
-            $user = new User();
+            $user = new User;
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
-            return view('themes.default1.agent.helpdesk.user.edit', compact('users'));
+            $location = GeoIP::getLocation('');
+            $phonecode = $code->where('iso', '=' , $location['isoCode'])->first();
+            return view('themes.default1.agent.helpdesk.user.edit', compact('users'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->getMessage());
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
     }
 
@@ -226,20 +244,34 @@ class UserController extends Controller {
      *
      * @return type Response
      */
-    public function update($id, Sys_userUpdate $request) {
+    public function update($id, Sys_userUpdate $request)
+    {
+        $user = new User;
         /* select the field where id = $id(request Id) */
-        $users = User::whereId($id)->first();
+        $users = $user->whereId($id)->first();
         /* Update the value by selected field  */
         /* Check whether function success or not */
         try {
+            if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '' )) {
+                return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' =>1])->withInput();
+            } else {
+                    $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+                    if (!count($code)) {
+                        return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
+                    } else {
+                        $users->country_code = $request->country_code;
+                    }
+            }
+            // dd($request->input());
             $users->fill($request->input())->save();
             /* redirect to Index page with Success Message */
-            return redirect('user')->with('success', Lang::get('lang.user_updated_successfully'));
+            return redirect('user')->with('success', Lang::get('lang.User-profile-Updated-Successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect()->back()->with('fails', $e->getMessage());
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
     }
+
 
     /**
      * get agent profile page.
@@ -260,12 +292,15 @@ class UserController extends Controller {
      *
      * @return type view
      */
-    public function getProfileedit() {
+    public function getProfileedit(CountryCode $code)
+    {
         $user = Auth::user();
+        $location = GeoIP::getLocation('');
+        $phonecode = $code->where('iso', '=' , $location['isoCode'])->first();
         try {
-            return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'));
+            return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->getMessage());
+            return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
     }
 
@@ -277,7 +312,8 @@ class UserController extends Controller {
      *
      * @return type Redirect
      */
-    public function postProfileedit(ProfileRequest $request) {
+    public function postProfileedit(ProfileRequest $request)
+    {
         // geet authenticated user details
         $user = Auth::user();
         $user->gender = $request->input('gender');
@@ -301,22 +337,31 @@ class UserController extends Controller {
             // fetching upload destination path
             $destinationPath = 'lb-faveo/media/profilepic';
             // adding a random value to profile picture filename
-            $fileName = rand(0000, 9999) . '.' . $name;
+            $fileName = rand(0000, 9999).'.'.$name;
             // moving the picture to a destination folder
             Input::file('profile_pic')->move($destinationPath, $fileName);
             // saving filename to database
             $user->profile_pic = $fileName;
         } else {
             try {
+                if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '' )) {
+                return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
+                } else {
+                    $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+                    if (!count($code)) {
+                        return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
+                    }
+                    $user->country_code = $request->country_code;
+                }
                 $user->fill($request->except('profile_pic', 'gender'))->save();
 
-                return Redirect::route('profile')->with('success', Lang::get('lang.profile_updated_sucessfully'));
+                return Redirect::route('profile')->with('success', Lang::get('lang.Profile-Updated-sucessfully'));
             } catch (Exception $e) {
-                return Redirect::route('profile')->with('success', $e->getMessage());
+                return Redirect::route('profile')->with('success', $e->errorInfo[2]);
             }
         }
         if ($user->fill($request->except('profile_pic'))->save()) {
-            return Redirect::route('profile')->with('success', Lang::get('lang.profile_updated_sucessfully'));
+            return Redirect::route('profile')->with('success', Lang::get('lang.Profile-Updated-sucessfully'));
         }
     }
 

@@ -872,10 +872,13 @@ return [
       |  Profile
       |-----------------------------------------------
      */
-    'user_information'    => 'User Information',
-    'time_zone'           => 'Time-zone',
-    'phone_number'        => 'Phone Number',
-    'contact_information' => 'Contact Information',
+    'user_information'                      => 'User Information',
+    'time_zone'                             => 'Time-zone',
+    'phone_number'                          => 'Phone Number',
+    'contact_information'                   => 'Contact Information',
+    'Profile-Updated-sucessfully'           => 'Profile updated successfully.',
+    'User-profile-Updated-Successfully'     => 'User\'s profile updated successfully.',
+    'User-Created-Successfully'             => 'User created successfully.',
     /*
       |-----------------------------------------------
       |  Dashboard
