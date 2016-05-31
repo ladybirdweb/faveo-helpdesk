@@ -12,7 +12,6 @@ class = "active"
 @if(Session::has('success'))
 <div class="alert alert-success alert-dismissable">
     <i class="fa  fa-check-circle"></i>
-    <b>Success!</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('success')}}
 </div>
@@ -21,23 +20,12 @@ class = "active"
 @if(Session::has('fails'))
 <div class="alert alert-danger alert-dismissable">
     <i class="fa fa-ban"></i>
-    <b>Alert!</b> Failed.
+    <b>{!! Lang::get('lang.alert') !!}!</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('fails')}}
 </div>
 @endif
-@section('breadcrumb')
-<div class="site-hero clearfix">
 
-    <ol class="breadcrumb breadcrumb-custom">
-
-        <li>{!! Lang::get('lang.you_are_here') !!}: </li>
-        <li>{!! Lang::get('lang.home') !!}</li>
-        <li>{!! Lang::get('lang.knowledge_base') !!}</li>
-    </ol>
-
-</div>
-@stop
 <div id="content" class="site-content col-md-9">
     <div class="row">
         <?php $categories = App\Model\kb\Category::all();
@@ -79,7 +67,6 @@ class = "active"
                         }
                         $article = $article->where('type', '1');
                         $article = $article->get();
-                        
                         ?>
                         @forelse($article as $arti)
                         <li>
@@ -95,9 +82,9 @@ class = "active"
                             {!! strip_tags($excerpt) !!} <br/><a class="more-link text-center" href="{{url('show/'.$arti->slug)}}" style="color: orange">{!! Lang::get('lang.read_more') !!}</a>
                         </li>
                         @empty
-                        <p>No Articles</p>
+                        <p>{!! Lang::get('lang.no_article') !!}</p>
                         @endforelse
-<?php } ?>
+                    <?php } ?>
                 </ul>
 
 

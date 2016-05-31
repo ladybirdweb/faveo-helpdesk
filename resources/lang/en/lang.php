@@ -1250,7 +1250,8 @@ return [
     'plugin'              => 'Plugin',
     'edit_profile'        => 'Edit Profile',
     'you_are_here'        => 'You are here',
-    
+    'Send'                => 'SEND',
+    'no_article'          => 'No Article',
     /**
     * |---------------------------------------------------------------------------------------
       |Api settings
