@@ -633,6 +633,7 @@ Route::post('post-ticket-reply/{id}', 'Client\helpdesk\FormController@post_ticke
  */
 Route::get('/serial', ['as' => 'serialkey', 'uses' => 'Installer\helpdesk\InstallController@serialkey']);
 Route::post('/CheckSerial/{id}', ['as' => 'CheckSerial', 'uses' => 'Installer\helpdesk\InstallController@PostSerialKey']);
+Route::get('/JavaScript-disabled', ['as' => 'js-disabled', 'uses' => 'Installer\helpdesk\InstallController@jsDisabled']);
 Route::get('/step1', ['as' => 'licence', 'uses' => 'Installer\helpdesk\InstallController@licence']);
 Route::post('/step1post', ['as' => 'postlicence', 'uses' => 'Installer\helpdesk\InstallController@licencecheck']);
 Route::get('/step2', ['as' => 'prerequisites', 'uses' => 'Installer\helpdesk\InstallController@prerequisites']);
@@ -647,6 +648,7 @@ Route::post('/step6post', ['as' => 'postaccount', 'uses' => 'Installer\helpdesk\
 Route::get('/final', ['as' => 'final', 'uses' => 'Installer\helpdesk\InstallController@finalize']);
 Route::post('/finalpost', ['as' => 'postfinal', 'uses' => 'Installer\helpdesk\InstallController@finalcheck']);
 Route::post('/postconnection', ['as' => 'postconnection', 'uses' => 'Installer\helpdesk\InstallController@postconnection']);
+Route::get('/change-file-permission', ['as' => 'change-permission', 'uses' => 'Installer\helpdesk\InstallController@changeFilePermission']);
 
 /*
   |=============================================================

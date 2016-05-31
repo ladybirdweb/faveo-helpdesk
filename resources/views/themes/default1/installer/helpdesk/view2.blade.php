@@ -11,11 +11,13 @@ active
 
 
 @section('content')
-
+ <div id="form-content">
 <center><h1>Environment Test</h1></center>
-
-
-
+         @if (Session::has('fail_to_change'))
+           <div class="woocommerce-message woocommerce-tracker" >
+                <p id="fail">{!!Session::get('fail_to_change')!!}</p>
+            </div>
+         @endif
 <?php
 define('PROBE_VERSION', '1.0');
 define('PROBE_FOR', 'Faveo HELPDESK '. Config::get('app.version').' and Newer');
@@ -26,7 +28,7 @@ class TestResult {
     var $message;
     var $status;
 
-    function TestResult($message, $status = STATUS_OK) {
+    function __construct($message, $status = STATUS_OK) {
         $this->message = $message;
         $this->status = $status;
     }
@@ -45,7 +47,8 @@ class TestResult {
         <br/>
     This test will check prerequisites required to install Faveo
     
-    <br/><br/>    
+    <br/><br/>
+    <p>NOTE:&nbsp;FAVEO doesn't work properly without JavaScript.  In order to install and run FAVEO to its full extent please make sure JavaScript is enabled in your browser.</p>
      <?php
 
 function validate_php(&$results) {
@@ -61,7 +64,7 @@ function validate_php(&$results) {
 /**
  * Convert filesize value from php.ini to bytes
  *
- * Convert PHP config value (2M, 8M, 200K...) to bytes. This function was taken from PHP documentation. $val is string
+ * Convert PHP config value (2M, 8M, 200K...) to bytes. This function was taken  from PHP documentation. $val is string
  * value that need to be converted
  *
  * @param string $val
@@ -82,6 +85,27 @@ function php_config_value_to_bytes($val) {
 
     return (integer) $val;
 } // php_config_value_to_bytes
+
+/**
+ * to check file permissions 
+ *
+ */
+function checkFilePermission(&$results) {
+    $path1 = base_path().DIRECTORY_SEPARATOR.'.env';
+    $path2 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'database.php';
+    $path3 = base_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'routes.php';
+    $path4 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'lfm.php';
+    $f1 = substr(sprintf("%o",fileperms($path1)),-3);
+    $f2 = substr(sprintf("%o",fileperms($path2)),-3);
+    $f3 = substr(sprintf("%o",fileperms($path3)),-3);
+    $f4 = substr(sprintf("%o",fileperms($path4)),-3);
+        $results[] = new TestResult('File permission looks fine', STATUS_OK);
+        return true;
+    } else {
+        $results[] = new TestResult('File permissions needed.<ul><b>Change file permission to "777" for following files</b><li>'.$path1.'</li><li>'.$path2.'</li><li>'.$path3.'</li><li>'.$path4.'</li></ul></br>Change the permission manually on your server or <a href="change-file-permission">click here.</a>', STATUS_ERROR);
+        return false;
+    }
+}
 
 /**
  * Validate memory limit
@@ -201,6 +225,7 @@ $results = array();
 $php_ok = validate_php($results);
 $memory_ok = validate_memory_limit($results);
 $extensions_ok = validate_extensions($results);
+$file_permission = checkFilePermission($results);
 ?>
 <p class="wc-setup-actions step">
 <?php 
@@ -210,7 +235,7 @@ foreach ($results as $result) {
 ?>
 </p>
 <?php
-if ($php_ok && $memory_ok && $extensions_ok ) {
+if ($php_ok && $memory_ok && $extensions_ok && $file_permission ) {
     ?>
 </div>  
 
@@ -250,5 +275,5 @@ if ($php_ok && $memory_ok && $extensions_ok ) {
         {{-- </ul> --}}
       </div>
 </div>
-
+</div>
 @stop

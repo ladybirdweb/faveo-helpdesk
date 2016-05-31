@@ -17,6 +17,7 @@ active
 @stop
 
 @section('content')
+ <div id="form-content">
 <div ng-app="myApp">
         <h1 style="text-align: center;">Locale Information</h1>
         {!! Form::open(['url'=>route('postaccount')]) !!}
@@ -330,7 +331,9 @@ active
                     </tr>
                 </div>
             </table>
-            <br>
+            <input id="dummy-data" class="input-checkbox" type="checkbox" name="dummy-data">
+            <label for="dummy-data" style="color:#3AA7D9">Install dummy data</label>
+            <br><br>
             <p class="wc-setup-actions step">
                 <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Install">
                 <a href="{{url('step4')}}" class="button button-large button-next" style="float: left">Previous</a>
@@ -342,4 +345,6 @@ active
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
     <script src="{{asset("lb-faveo/js/angular2.js")}}" type="text/javascript"></script>
     </div>
+    </div>
+    
 @stop

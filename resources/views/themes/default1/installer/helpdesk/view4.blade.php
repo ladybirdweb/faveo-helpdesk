@@ -43,7 +43,7 @@ define('STATUS_ERROR', 'Error');
 class TestResult {
     var $message;
     var $status;
-    function TestResult($message, $status = STATUS_OK) {
+    function __construct($message, $status = STATUS_OK) {
         $this->message = $message;
         $this->status = $status;
     }
