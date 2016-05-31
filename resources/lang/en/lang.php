@@ -1244,6 +1244,8 @@ return [
     'ticket_status'       => 'Ticket Status',
     'post_comment'        => 'Post Comment',
     'plugin'              => 'Plugin',
+    'edit_profile'        => 'Edit Profile',
+    'you_are_here'        => 'You are here',
     
     /**
     * |---------------------------------------------------------------------------------------

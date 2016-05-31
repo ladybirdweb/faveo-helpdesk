@@ -132,6 +132,7 @@ class FormController extends Controller
      */
     public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta)
     {
+        
         $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token');
 
         $name = $request->input('Name');
@@ -173,8 +174,7 @@ class FormController extends Controller
                     }
                 }
             }
-
-            return Redirect::route('guest.getform')->with('success', 'Ticket has been created successfully, your ticket number is <b>'.$result[0].'</b> Please save this for future reference.');
+            return Redirect::route('form')->with('success', 'Ticket has been created successfully, your ticket number is '.$result[0].' Please save this for future reference.');
         }
     }
 
