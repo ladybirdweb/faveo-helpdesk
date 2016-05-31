@@ -31,6 +31,7 @@ use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
+use App\Model\helpdesk\Utility\CountryCode;
 use App\User;
 use Auth;
 use DB;
@@ -44,6 +45,8 @@ use Lang;
 use Mail;
 use PDF;
 use UTC;
+use GeoIP;
+
 
 /**
  * TicketController.
@@ -233,8 +236,11 @@ class TicketController extends Controller {
      *
      * @return type response
      */
-    public function newticket() {
-        return view('themes.default1.agent.helpdesk.ticket.new');
+    public function newticket(CountryCode $code)
+    {
+        $location = GeoIP::getLocation();
+        $phonecode = $code->where('iso', '=' , $location['isoCode'])->first();
+        return view('themes.default1.agent.helpdesk.ticket.new')->with('phonecode', $phonecode->phonecode);
     }
 
     /**
@@ -244,7 +250,8 @@ class TicketController extends Controller {
      *
      * @return type response
      */
-    public function post_newticket(CreateTicketRequest $request) {
+    public function post_newticket(CreateTicketRequest $request, CountryCode $code)
+    {
         try {
             $email = $request->input('email');
             $fullname = $request->input('fullname');
@@ -260,21 +267,44 @@ class TicketController extends Controller {
             $body = $request->input('body');
             $priority = $request->input('priority');
             $phone = $request->input('phone');
+            $phonecode = $request->input('code');
+            $mobile_number = $request->input('mobile');
             $source = Ticket_source::where('name', '=', 'agent')->first();
             $headers = null;
             $help = Help_topic::where('id', '=', $helptopic)->first();
             $form_data = null;
             $auto_response = 0;
             $status = 1;
+            if ($phone != null || $mobile_number != null) {
+                $location = GeoIP::getLocation();
+                $geoipcode = $code->where('iso', '=' , $location['isoCode'])->first();
+                    if ($phonecode == null) {
+                        $data = array(
+                            'fails'  => Lang::get('lang.country-code-required-error'),
+                            'phonecode'   => $geoipcode->phonecode,
+                        
+                        );
+                        return  Redirect()->back()->with($data)->withInput($request->except('password'));
+                    } else {
+                        $code = CountryCode::select('phonecode')->where('phonecode', '=', $phonecode)->get();
+                        if (!count($code)) {
+                            $data = array(
+                            'fails'  => Lang::get('lang.incorrect-country-code-error'),
+                            'phonecode'   => $geoipcode->phonecode,
+                        
+                            );
+                        return  Redirect()->back()->with($data)->withInput($request->except('password'));
+                        }     
+                    }
+            }
             //create user
-            if ($this->create_user($email, $fullname, $subject, $body, $phone, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response, $status)) {
-                return redirect('newticket')->with('success', Lang::get('lang.ticket_created_successfully'));
+            if ($this->create_user($email, $fullname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response, $status)) {
+                return Redirect('newticket')->with('success', 'Ticket created successfully!');
             } else {
-                return redirect('newticket')->with('fails', Lang::get('lang.failed_to_create_a_new_ticket'));
+                return Redirect('newticket')->with('fails', 'fails');
             }
         } catch (Exception $e) {
-            dd($e);
-            return redirect()->back()->with('fails', $e->getMessage());
+            return Redirect()->back()->with('fails', '<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -533,7 +563,7 @@ class TicketController extends Controller {
      *
      * @return type bool
      */
-    public function create_user($emailadd, $username, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $auto_response, $status) {
+    public function create_user($emailadd, $username, $subject, $body, $phone, $phonecode, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $auto_response, $status) {
         // define global variables
         $email;
         $username;
@@ -554,6 +584,7 @@ class TicketController extends Controller {
             $user->email = $emailadd;
             $user->password = Hash::make($password);
             $user->phone_number = $phone;
+            $user->country_code = $phonecode;
             $user->role = 'user';
             $user->active = '1';
             // mail user his/her password

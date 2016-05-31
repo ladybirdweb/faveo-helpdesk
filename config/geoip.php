@@ -41,10 +41,10 @@ return array(
 
 	'default_location' => array (
 		"ip"           => "127.0.0.0",
-		"isoCode"      => "US",
-		"country"      => "United States",
-		"city"         => "New Haven",
-		"state"        => "CT",
+		"isoCode"      => "IN",
+		"country"      => "INDIA",
+		"city"         => "Bangalore",
+		"state"        => "KT",
 		"postal_code"  => "06510",
 		"lat"          => 41.31,
 		"lon"          => -72.92,

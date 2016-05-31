@@ -212,20 +212,23 @@ return [
       |   Company Settings Page
       |--------------------------------------
      */
-    'company'      => 'Company',
-    'website'      => 'Website',
-    'phone'        => 'Phone',
-    'address'      => 'Address',
-    'landing'      => 'Landing Page',
-    'offline'      => 'Offline Page',
-    'thank'        => 'Thank Page',
-    'logo'         => 'Logo',
-    'save'         => 'Save',
-    'delete-logo'  => 'Delete logo',
-    'click-delete' => 'Click here to delete',
-    'use_logo'  =>  'Use Logo',
-    'company_updated_successfully'  =>  'Company Updated Successfully',
-    'company_can_not_updated'   =>  'Company can not Updated',
+    'country-code'                  => 'Code',
+    'company'                       => 'Company',
+    'website'                       => 'Website',
+    'phone'                         => 'Phone',
+    'address'                       => 'Address',
+    'landing'                       => 'Landing Page',
+    'offline'                       => 'Offline Page',
+    'thank'                         => 'Thank Page',
+    'logo'                          => 'Logo',
+    'save'                          => 'Save',
+    'delete-logo'                   => 'Delete logo',
+    'click-delete'                  => 'Click here to delete',
+    'use_logo'                      => 'Use Logo',
+    'company_updated_successfully'  => 'Company Updated Successfully',
+    'company_can_not_updated'       => 'Company can not Updated',
+    'enter-country-phone-code'      => 'Enter your country\'s phone code',
+    'country-code-required-error'   => 'Code is required with phone/mobile number.',
     /*
       |--------------------------------------
       |   System Settings Page
