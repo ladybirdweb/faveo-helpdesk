@@ -764,12 +764,23 @@ $router->get('article-list', ['as' => 'article-list', 'uses' => 'Client\kb\UserC
 $router->get('search', ['as' => 'search', 'uses' => 'Client\kb\UserController@search']);
 /* get the selected article */
 $router->get('show/{slug}', ['as' => 'show', 'uses' => 'Client\kb\UserController@show']);
+Breadcrumbs::register('show', function($breadcrumbs) {
+    $breadcrumbs->push('Knowledge-base', route('home'));
+    $breadcrumbs->push('Article List', route('article-list'));
+    $breadcrumbs->push('Article');
+});
+
+
+$router->get('category-list', ['as' => 'category-list', 'uses' => 'Client\kb\UserController@getCategoryList']);
 Breadcrumbs::register('category-list', function($breadcrumbs) {
     $breadcrumbs->push('Category List', route('category-list'));
 });
-$router->get('category-list', ['as' => 'category-list', 'uses' => 'Client\kb\UserController@getCategoryList']);
 /* get the categories with article */
 $router->get('category-list/{id}', ['as' => 'categorylist', 'uses' => 'Client\kb\UserController@getCategory']);
+Breadcrumbs::register('categorylist', function($breadcrumbs) {
+    $breadcrumbs->push('Category List', route('category-list'));
+    $breadcrumbs->push('Category');
+});
 /* get the home page */
 $router->get('knowledgebase', ['as' => 'home', 'uses' => 'Client\kb\UserController@home']);
 /* get the faq value to user */
@@ -780,6 +791,9 @@ $router->get('contact', ['as' => 'contact', 'uses' => 'Client\kb\UserController@
 $router->post('post-contact', ['as' => 'post-contact', 'uses' => 'Client\kb\UserController@postContact']);
 //to get the value for page content
 $router->get('pages/{name}', ['as' => 'pages', 'uses' => 'Client\kb\UserController@getPage']);
+Breadcrumbs::register('pages', function($breadcrumbs) {
+    $breadcrumbs->push('Pages');
+});
 //profile
 // $router->get('client-profile',['as' => 'client-profile', 'uses' => 'Client\kb\UserController@clientProfile']);
 // Route::patch('client-profile-edit',['as' => 'client-profile-edit', 'uses' => 'Client\kb\UserController@postClientProfile']);

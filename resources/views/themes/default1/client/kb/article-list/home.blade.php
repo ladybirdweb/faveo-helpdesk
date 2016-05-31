@@ -86,15 +86,10 @@ class = "active"
                         @endforelse
                     <?php } ?>
                 </ul>
-
-
                 <p class="more-link text-center"><a href="{{url('category-list/'.$category->slug)}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.view_all') !!}</a></p>
-
-
             </section>
         </div>
         @endforeach
-
     </div>
     <section class="section">
         <div class="banner-wrapper banner-horizontal clearfix">
