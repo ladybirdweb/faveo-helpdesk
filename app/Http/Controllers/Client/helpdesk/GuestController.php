@@ -7,7 +7,7 @@ use App\Http\Controllers\Common\PhpMailController;
 use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Controller;
 // requests
-use App\Http\Requests\helpdesk\CheckTicket;
+use Illuminate\Http\Request;
 use App\Http\Requests\helpdesk\ProfilePassword;
 use App\Http\Requests\helpdesk\ProfileRequest;
 use App\Http\Requests\helpdesk\TicketRequest;
@@ -29,17 +29,15 @@ use Input;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class GuestController extends Controller
-{
+class GuestController extends Controller {
+
     /**
      * Create a new controller instance.
      *
      * @return type void
      */
-    public function __construct(PhpMailController $PhpMailController)
-    {
+    public function __construct(PhpMailController $PhpMailController) {
         $this->PhpMailController = $PhpMailController;
-        SettingsController::smtp();
         // checking authentication
         $this->middleware('auth');
     }
@@ -49,8 +47,7 @@ class GuestController extends Controller
      *
      * @return type Response
      */
-    public function getProfile()
-    {
+    public function getProfile() {
         $user = Auth::user();
 
         return view('themes.default1.client.helpdesk.profile', compact('user'));
@@ -64,8 +61,7 @@ class GuestController extends Controller
      *
      * @return type Response
      */
-    public function postProfile(ProfileRequest $request)
-    {
+    public function postProfile(ProfileRequest $request) {
         $user = User::where('id', '=', Auth::user()->id)->first();
         $user->gender = $request->get('gender');
         $user->save();
@@ -84,7 +80,7 @@ class GuestController extends Controller
             //$extension = Input::file('profile_pic')->getClientOriginalExtension();
             $name = Input::file('profile_pic')->getClientOriginalName();
             $destinationPath = 'lb-faveo/media/profilepic';
-            $fileName = rand(0000, 9999).'.'.$name;
+            $fileName = rand(0000, 9999) . '.' . $name;
             //echo $fileName;
             Input::file('profile_pic')->move($destinationPath, $fileName);
             $user->profile_pic = $fileName;
@@ -105,8 +101,7 @@ class GuestController extends Controller
      *
      * @return type Response
      */
-    public function getTicket(Help_topic $topic)
-    {
+    public function getTicket(Help_topic $topic) {
         $topics = $topic->get();
 
         return view('themes.default1.client.helpdesk.tickets.form', compact('topics'));
@@ -119,8 +114,7 @@ class GuestController extends Controller
      *
      * @return type
      */
-    public function getForm(Help_topic $topic)
-    {
+    public function getForm(Help_topic $topic) {
         if (\Config::get('database.install') == '%0%') {
             return \Redirect::route('license');
         }
@@ -142,8 +136,7 @@ class GuestController extends Controller
      *
      * @return type Response
      */
-    public function getMyticket()
-    {
+    public function getMyticket() {
         return view('themes.default1.client.helpdesk.mytickets');
     }
 
@@ -156,8 +149,7 @@ class GuestController extends Controller
      *
      * @return type Response
      */
-    public function thread(Ticket_Thread $thread, Tickets $tickets, User $user)
-    {
+    public function thread(Ticket_Thread $thread, Tickets $tickets, User $user) {
         $user_id = Auth::user()->id;
         //dd($user_id);
         /* get the ticket's id == ticket_id of thread  */
@@ -174,8 +166,8 @@ class GuestController extends Controller
      *
      * @return
      */
-    public function ticketEdit()
-    {
+    public function ticketEdit() {
+        
     }
 
     /**
@@ -186,8 +178,7 @@ class GuestController extends Controller
      *
      * @return type Response
      */
-    public function postProfilePassword(ProfilePassword $request)
-    {
+    public function postProfilePassword(ProfilePassword $request) {
         $user = Auth::user();
         //echo $user->password;
         if (Hash::check($request->input('old_password'), $user->getAuthPassword())) {
@@ -212,8 +203,7 @@ class GuestController extends Controller
      *
      * @return type Response
      */
-    public function reply(Ticket_Thread $thread, TicketRequest $request)
-    {
+    public function reply(Ticket_Thread $thread, TicketRequest $request) {
         $thread->ticket_id = $request->input('ticket_ID');
         $thread->title = $request->input('To');
         $thread->user_id = Auth::user()->id;
@@ -224,7 +214,7 @@ class GuestController extends Controller
         $tickets = Tickets::where('id', '=', $ticket_id)->first();
         $thread = Ticket_Thread::where('ticket_id', '=', $ticket_id)->first();
 
-        return Redirect('thread/'.$ticket_id);
+        return Redirect('thread/' . $ticket_id);
     }
 
     /**
@@ -235,8 +225,7 @@ class GuestController extends Controller
      *
      * @return type response
      */
-    public function getCheckTicket(Tickets $ticket, User $user)
-    {
+    public function getCheckTicket(Tickets $ticket, User $user) {
         return view('themes.default1.client.helpdesk.guest-user.newticket', compact('ticket'));
     }
 
@@ -250,10 +239,20 @@ class GuestController extends Controller
      *
      * @return type Response
      */
-    public function PostCheckTicket()
-    {
-        $Email = \Input::get('email');
-        $Ticket_number = \Input::get('ticket_number');
+    public function PostCheckTicket(Request $request) {
+
+        $validator = \Validator::make($request->all(), [
+                    'email' => 'required|email',
+                    'ticket_number' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                            ->withErrors($validator)
+                            ->withInput()
+                            ->with('check','1');
+        }
+        $Email = $request->input('email');
+        $Ticket_number = $request->input('ticket_number');
 
         $ticket = Tickets::where('ticket_number', '=', $Ticket_number)->first();
         if ($ticket == null) {
@@ -265,7 +264,7 @@ class GuestController extends Controller
             if ($user->role == 'user') {
                 $username = $user->user_name;
             } else {
-                $username = $user->first_name.' '.$user->last_name;
+                $username = $user->first_name . ' ' . $user->last_name;
             }
 
             if ($user->email != $Email) {
@@ -277,10 +276,7 @@ class GuestController extends Controller
                 $company = $this->company();
 
                 $this->PhpMailController->sendmail(
-                    $from = $this->PhpMailController->mailfrom('1', '0'),
-                    $to = ['name' => $username, 'email' => $user->email],
-                    $message = ['subject' => 'Ticket link Request ['.$Ticket_number.']', 'scenario' => 'check-ticket'],
-                    $template_variables = ['user' => $username, 'ticket_link_with_number' => \URL::route('check_ticket', $code)]
+                        $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $user->email], $message = ['subject' => 'Ticket link Request [' . $Ticket_number . ']', 'scenario' => 'check-ticket'], $template_variables = ['user' => $username, 'ticket_link_with_number' => \URL::route('check_ticket', $code)]
                 );
 
                 return \Redirect::back()
@@ -296,8 +292,7 @@ class GuestController extends Controller
      *
      * @return type
      */
-    public function get_ticket_email($id)
-    {
+    public function get_ticket_email($id) {
         $id1 = \Crypt::decrypt($id);
 
         return view('themes.default1.client.helpdesk.ckeckticket', compact('id'));
@@ -310,8 +305,7 @@ class GuestController extends Controller
      *
      * @return type
      */
-    public function getTicketStat(Tickets $ticket)
-    {
+    public function getTicketStat(Tickets $ticket) {
         return view('themes.default1.client.helpdesk.ckeckticket', compact('ticket'));
     }
 
@@ -320,8 +314,7 @@ class GuestController extends Controller
      *
      * @return type
      */
-    public function company()
-    {
+    public function company() {
         $company = Company::Where('id', '=', '1')->first();
         if ($company->company_name == null) {
             $company = 'Support Center';
@@ -331,4 +324,5 @@ class GuestController extends Controller
 
         return $company;
     }
+
 }
