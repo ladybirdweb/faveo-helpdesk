@@ -218,12 +218,12 @@ class FormController extends Controller {
                 $threads->save();
                 $tickets->save();
 
-                return \Redirect::back()->with('success1', 'Successfully replied');
+                return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
             } catch (Exception $e) {
-                return \Redirect::back()->with('fails1', $e->errorInfo[2]);
+                return \Redirect::back()->with('fails1', $e->getMessage());
             }
         } else {
-            return \Redirect::back()->with('fails1', 'Please fill some data!');
+            return \Redirect::back()->with('fails1', Lang::get('lang.please_fill_some_data'));
         }
     }
 

@@ -87,10 +87,10 @@ class GuestController extends Controller {
         } else {
             $user->fill($request->except('profile_pic', 'gender'))->save();
 
-            return redirect()->back()->with('success1', 'Profile Updated sucessfully');
+            return redirect()->back()->with('success1', Lang::get('lang.profile_updated_sucessfully'));
         }
         if ($user->fill($request->except('profile_pic'))->save()) {
-            return redirect()->back()->with('success1', 'Profile Updated sucessfully');
+            return redirect()->back()->with('success1', Lang::get('lang.profile_updated_sucessfully'));
         }
     }
 
@@ -186,12 +186,12 @@ class GuestController extends Controller {
             try {
                 $user->save();
 
-                return redirect()->back()->with('success2', 'Password Updated sucessfully');
+                return redirect()->back()->with('success2', Lang::get('lang.password_updated_sucessfully'));
             } catch (Exception $e) {
-                return redirect()->back()->with('fails2', $e->errorInfo[2]);
+                return redirect()->back()->with('fails2', $e->getMessage());
             }
         } else {
-            return redirect()->back()->with('fails2', 'Password was not Updated. Incorrect old password');
+            return redirect()->back()->with('fails2',  Lang::get('lang.password_was_not_updated_incorrect_old_password'));
         }
     }
 
@@ -249,26 +249,23 @@ class GuestController extends Controller {
             return redirect()->back()
                             ->withErrors($validator)
                             ->withInput()
-                            ->with('check','1');
+                            ->with('check', '1');
         }
         $Email = $request->input('email');
         $Ticket_number = $request->input('ticket_number');
-
         $ticket = Tickets::where('ticket_number', '=', $Ticket_number)->first();
         if ($ticket == null) {
-            return \Redirect::route('form')->with('fails', 'There is no such Ticket Number');
+            return \Redirect::route('form')->with('fails',  Lang::get('lang.there_is_no_such_ticket_number'));
         } else {
             $userId = $ticket->user_id;
             $user = User::where('id', '=', $userId)->first();
-
             if ($user->role == 'user') {
                 $username = $user->user_name;
             } else {
                 $username = $user->first_name . ' ' . $user->last_name;
             }
-
             if ($user->email != $Email) {
-                return \Redirect::route('form')->with('fails', "Email didn't match with Ticket Number");
+                return \Redirect::route('form')->with('fails', Lang::get("lang.email_didn't_match_with_ticket_number"));
             } else {
                 $code = $ticket->id;
                 $code = \Crypt::encrypt($code);
@@ -278,9 +275,8 @@ class GuestController extends Controller {
                 $this->PhpMailController->sendmail(
                         $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $user->email], $message = ['subject' => 'Ticket link Request [' . $Ticket_number . ']', 'scenario' => 'check-ticket'], $template_variables = ['user' => $username, 'ticket_link_with_number' => \URL::route('check_ticket', $code)]
                 );
-
                 return \Redirect::back()
-                                ->with('success', 'We have sent you a link by Email. Please click on that link to view ticket');
+                                ->with('success', Lang::get("lang.we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket"));
             }
         }
     }
@@ -294,7 +290,6 @@ class GuestController extends Controller {
      */
     public function get_ticket_email($id) {
         $id1 = \Crypt::decrypt($id);
-
         return view('themes.default1.client.helpdesk.ckeckticket', compact('id'));
     }
 
@@ -321,7 +316,6 @@ class GuestController extends Controller {
         } else {
             $company = $company->company_name;
         }
-
         return $company;
     }
 

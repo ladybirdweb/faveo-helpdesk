@@ -1268,8 +1268,21 @@ return [
     'please_fill_all_required_feilds'  =>  'Please fill all required feilds.',
     'successfully_replied'      =>  'Successfully replied',
     'please_fill_some_data'    =>  'Please fill some data!',
-    'ticket_has_been_created_successfully_your_ticket_number_is' => 'Ticket has been created successfully, your ticket number is ',
-
+    'profile_updated_sucessfully'   =>  'Profile Updated sucessfully',
+    'password_updated_sucessfully'  =>  'Password Updated sucessfully',
+    'password_was_not_updated_incorrect_old_password'  =>  'Password was not Updated. Incorrect old password',
+    'there_is_no_such_ticket_number'    =>  'There is no such Ticket Number',
+    "email_didn't_match_with_ticket_number"   =>  "Email didn't match with Ticket Number",
+    'we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'        =>  'We have sent you a link by Email. Please click on that link to view ticket',
+    'no_records_on_publish_time'    =>  'No records on publish time',
+    'your_details_send_to_system'   =>  'Your details send to System',
+    'your_details_can_not_send_to_system'   =>  'Your details can not send to System',
+    'your_comment_posted'   =>  'Your comment posted',
+    'sorry_not_processed'   =>  'Sorry not processed',
+    'profile_updated_sucessfully'   =>  'Profile Updated sucessfully',
+    'password_was_not_updated'      =>  'Password was not Updated',
+    
+    
     /**
     * |---------------------------------------------------------------------------------------
       |Api settings
