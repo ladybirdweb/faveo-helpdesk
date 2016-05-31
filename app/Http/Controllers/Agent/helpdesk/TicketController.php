@@ -563,7 +563,7 @@ class TicketController extends Controller {
      *
      * @return type bool
      */
-    public function create_user($emailadd, $username, $subject, $body, $phone, $phonecode, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $auto_response, $status) {
+    public function create_user($emailadd, $username, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $auto_response, $status) {
         // define global variables
         $email;
         $username;
