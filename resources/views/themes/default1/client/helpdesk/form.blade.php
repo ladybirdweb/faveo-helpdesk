@@ -1,23 +1,28 @@
 @extends('themes.default1.client.layout.client')
 
 @section('title')
+<<<<<<< HEAD
 Submit A Ticket -
+=======
+    Submit A Ticket -
+>>>>>>> origin/master
 @stop
 
 @section('submit')
-class = "active"
+    class = "active"
 @stop
 <!-- breadcrumbs -->
 @section('breadcrumb')
-<div class="site-hero clearfix">
-    <ol class="breadcrumb breadcrumb-custom">
-        <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
-        <li><a href="{!! URL::route('form') !!}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
-    </ol>
-</div>
+    <div class="site-hero clearfix">
+        <ol class="breadcrumb breadcrumb-custom">
+            <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
+            <li><a href="{!! URL::route('form') !!}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
+        </ol>
+    </div>
 @stop
 <!-- /breadcrumbs -->
 @section('check')
+<<<<<<< HEAD
 <div class="banner-wrapper  clearfix">
     <h3 class="banner-title text-center text-info h4">{!! Lang::get('lang.have_a_ticket') !!}?</h3>
     @if(Session::has('check'))
@@ -44,14 +49,30 @@ class = "active"
         {!! Form::text('ticket_number',null,['class' => 'form-control']) !!}
         <br/><input type="submit" value="{!! Lang::get('lang.check_ticket_status') !!}" class="btn btn-info">
 
+=======
+    <div class="banner-wrapper text-center clearfix">
+        <h3 class="banner-title text-info h4">{!! Lang::get('lang.have_a_ticket') !!}?</h3>
+        <div class="banner-content">
+        {!! Form::open(['url' => 'checkmyticket' , 'method' => 'POST'] )!!}
+    
+            {!! Form::label('email',Lang::get('lang.email')) !!}
+            {!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
+            {!! Form::text('email',null,['class' => 'form-control']) !!}
+                
+            {!! Form::label('ticket_number',Lang::get('lang.ticket_number'),['style' => 'display: block']) !!}
+            {!! $errors->first('ticket_number', '<spam class="help-block">:message</spam>') !!}
+            {!! Form::text('ticket_number',null,['class' => 'form-control']) !!}
+            <br/><input type="submit" value="{!! Lang::get('lang.check_ticket_status') !!}" class="btn btn-info">
+                        
+>>>>>>> origin/master
         {!! Form::close() !!}
-    </div>
-</div>  
+        </div>
+    </div>  
 @stop
-
 <!-- content -->
 @section('content')
 <div id="content" class="site-content col-md-9">
+<<<<<<< HEAD
     @if(Session::has('message'))
     <div class="alert alert-success alert-dismissable">
         <i class="fa  fa-check-circle"></i>
@@ -114,21 +135,70 @@ class = "active"
                     }
                     ?>  
                     @foreach($helptopic as $topic)
-                    <option value="{!! $topic->id !!}">{!! $topic->topic !!}</option>
-                    @endforeach
-                    {{-- @foreach($forms as $key=>$value) --}}
-                    {{-- <option value="{!! $value->id !!}">{!! ucfirst($value->formname) !!}</option> --}}
-                    {{-- @endforeach --}}
-                </select>
-            </div>
-            <div class="col-md-12 form-group {{ $errors->has('Name') ? 'has-error' : '' }}">
+=======
+<!-- open a form -->
+{{-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script> --}}
+<script src="{{asset("lb-faveo/js/jquery2.0.2.min.js")}}" type="text/javascript"></script>
+<!--
+|====================================================
+| SELECT FROM
+|====================================================
+ -->
+<?php
+    $encrypter = app('Illuminate\Encryption\Encrypter');
+        $encrypted_token = $encrypter->encrypt(csrf_token());
+ ?>
+<input id="token" type="hidden" value="{{$encrypted_token}}">
+{!! Form::open(['action'=>'Client\helpdesk\FormController@postedForm','method'=>'post', 'enctype'=>'multipart/form-data']) !!}
+<div>
+    <div class="content-header">
+        <h4>{!! Lang::get('lang.ticket') !!} </h4>
+    </div>
+    <div class="row col-md-12">
+        <div class="col-md-12 form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
+            {!! Form::label('help_topic', Lang::get('lang.choose_a_help_topic')) !!} 
+            {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
+<?php 
+$forms = App\Model\helpdesk\Form\Forms::get(); 
+$helptopic = App\Model\helpdesk\Manage\Help_topic::get();
+?>                  
+            <select name="helptopic" class="form-control" id="selectid">
+            <?php  
+            $system_default_department = App\Model\helpdesk\Settings\System::where('id','=',1)->first();
+            if($system_default_department->department) {
+                $department_relation_helptopic = App\Model\helpdesk\Manage\Help_topic::where('department','=',$system_default_department->department)->first();
+                $default_helptopic = $department_relation_helptopic->id;
+            } else {
+                $default_helptopic = 0;
+            }
 
+             ?>  
+                @foreach($helptopic as $topic)
+>>>>>>> origin/master
+                    <option value="{!! $topic->id !!}">{!! $topic->topic !!}</option>
+                @endforeach
+                {{-- @foreach($forms as $key=>$value) --}}
+                    {{-- <option value="{!! $value->id !!}">{!! ucfirst($value->formname) !!}</option> --}}
+                {{-- @endforeach --}}
+            </select>
+        </div>
+        <div class="col-md-12 form-group {{ $errors->has('Name') ? 'has-error' : '' }}">
+
+<<<<<<< HEAD
                 {!! Form::label('Name',Lang::get('lang.name')) !!}
               
                 {!! Form::text('Name',null,['class' => 'form-control']) !!}
+=======
+            {!! Form::label('Name',Lang::get('lang.name')) !!}
+            {!! $errors->first('Name', '<spam class="help-block">:message</spam>') !!}
+            {!! Form::text('Name',null,['class' => 'form-control']) !!}
+>>>>>>> origin/master
 
-            </div>
+        </div>
+        
+        <div class="col-md-12 form-group {{ $errors->has('Email') ? 'has-error' : '' }}">
 
+<<<<<<< HEAD
             <div class="col-md-12 form-group {{ $errors->has('Email') ? 'has-error' : '' }}">
 
                 {!! Form::label('Email',Lang::get('lang.email')) !!}
@@ -154,17 +224,42 @@ class = "active"
                 {!! Form::label('Phone',Lang::get('lang.phone')) !!}
               
                 {!! Form::text('Phone',null,['class' => 'form-control']) !!}
+=======
+            {!! Form::label('Email',Lang::get('lang.email')) !!}
+            {!! $errors->first('Email', '<spam class="help-block">:message</spam>') !!}
+            {!! Form::text('Email',null,['class' => 'form-control']) !!}
 
-            </div>
-            <div class="col-md-12 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
+        </div>
+        <div class="col-md-2 form-group {{ $errors->has('Code') ? 'has-error' : '' }}">
 
+            {!! Form::label('Code',Lang::get('lang.country-code')) !!}
+            {!! $errors->first('Code', '<spam class="help-block">:message</spam>') !!}
+            {!! Form::text('Code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
+        </div>
+        <div class="col-md-5 form-group {{ $errors->has('Phone') ? 'has-error' : '' }}">
+
+            {!! Form::label('Mobile',Lang::get('lang.mobile_number')) !!}
+            {!! $errors->first('Mobile', '<spam class="help-block">:message</spam>') !!}
+            {!! Form::text('Mobile',null,['class' => 'form-control']) !!}
+>>>>>>> origin/master
+
+        </div>
+        <div class="col-md-5 form-group {{ $errors->has('Phone') ? 'has-error' : '' }}">
+
+<<<<<<< HEAD
                 {!! Form::label('Subject',Lang::get('lang.subject')) !!}
              
                 {!! Form::text('Subject',null,['class' => 'form-control']) !!}
+=======
+            {!! Form::label('Phone',Lang::get('lang.phone')) !!}
+            {!! $errors->first('Phone', '<spam class="help-block">:message</spam>') !!}
+            {!! Form::text('Phone',null,['class' => 'form-control']) !!}
+>>>>>>> origin/master
 
-            </div>
-            <div class="col-md-12 form-group {{ $errors->has('Details') ? 'has-error' : '' }}">
+        </div>
+        <div class="col-md-12 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
 
+<<<<<<< HEAD
                 {!! Form::label('Details',Lang::get('lang.message')) !!}
              
                 {!! Form::textarea('Details',null,['class' => 'form-control']) !!}
@@ -181,32 +276,65 @@ class = "active"
             <div class="col-md-12" id="response"> </div>
             <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
             <div class="col-md-12 form-group">{!! Form::submit(Lang::get('lang.send'),['class'=>'form-group btn btn-info pull-left'])!!}</div>
+=======
+            {!! Form::label('Subject',Lang::get('lang.subject')) !!}
+            {!! $errors->first('Subject', '<spam class="help-block">:message</spam>') !!}
+            {!! Form::text('Subject',null,['class' => 'form-control']) !!}
+
         </div>
+        <div class="col-md-12 form-group {{ $errors->has('Details') ? 'has-error' : '' }}">
+
+            {!! Form::label('Details',Lang::get('lang.message')) !!}
+            {!! $errors->first('Details', '<spam class="help-block">:message</spam>') !!}
+            {!! Form::textarea('Details',null,['class' => 'form-control']) !!}
+
+        </div>
+        <div class="col-md-12 form-group">
+
+        <div class="btn btn-default btn-file"><i class="fa fa-paperclip"> </i> {!! Lang::get('lang.attachment') !!}<input type="file" name="attachment[]" multiple/></div><br/>
+                                        {!! Lang::get('lang.max') !!}. 10MB
+>>>>>>> origin/master
+        </div>
+        {{-- Event fire --}}
+        <?php Event::fire(new App\Events\ClientTicketForm()); ?>
+        
+        <div class="col-md-12" id="response"> </div>
+        <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
+        <div class="col-md-12 form-group">{!! Form::submit(Lang::get('lang.send'),['class'=>'form-group btn btn-info pull-left'])!!}</div>
     </div>
-    {!! Form::close() !!}
 </div>
+<<<<<<< HEAD
+=======
+{!! Form::close() !!}
+</div>
+>>>>>>> origin/master
 <!--
 |====================================================
 | SELECTED FORM STORED IN SCRIPT
 |====================================================
--->
+ -->
 <script type="text/javascript">
 
-$('#selectid').on('change', function() {
+$('#selectid').on('change',function() {
     var value = $('#selectid').val();
     $.ajax({
-        url: "postform/" + value,
+        url:  "postform/"+ value,
         type: "post",
         data: value,
         success: function(data) {
-            $('#response').html(data);
-            //location.reload();
+        $('#response').html(data);
+        //location.reload();
         }
     });
 });
 
+<<<<<<< HEAD
 $(function() {
 //Add text editor
+=======
+$(function () {
+    //Add text editor
+>>>>>>> origin/master
     $("textarea").wysihtml5();
 });
 
