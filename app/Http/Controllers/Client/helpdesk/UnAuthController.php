@@ -20,6 +20,7 @@ use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Ticket\TicketToken;
 use App\Model\helpdesk\Ticket\Ticket_Status;
 use App\Model\helpdesk\Email\Emails;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\User;
 // classes
 use Auth;
@@ -128,6 +129,12 @@ class UnAuthController extends Controller {
     public function showTicketCode($ticket_id, $token) {
         $check_token = TicketToken::where('ticket_id', '=', $ticket_id)->first();
         if (Hash::check($token, $check_token->token) == true) {
+            $token_time = CommonSettings::where('option_name', '=', 'ticket_token_time_duration')->first();
+            $time = $token_time->option_value;
+            $new_time = date_add($check_token->updated_at, date_interval_create_from_date_string($time.' Hours'));
+            if (date('Y-m-d H:i:s') > $new_time) {
+                return redirect()->route('form')->with('fails', 'Sorry your Ticket token has Expired! Please try to resend the Ticket link request');
+            }
             $tickets = Tickets::where('id', '=', $ticket_id)->first();
             return view('themes.default1.client.helpdesk.unauth.showticket', compact('tickets', 'token'));
         } else {
@@ -207,7 +214,6 @@ class UnAuthController extends Controller {
      * @return string
      */
     public function changeStatus($status, $id) {
-//        dd($status, $id);
         $tickets = Tickets::where('id', '=', $id)->first();
         $tickets->status = $status;
         $ticket_status = Ticket_Status::where('id', '=', $status)->first();
@@ -220,7 +226,7 @@ class UnAuthController extends Controller {
         $ticket_subject = $ticket_thread->title;
 
         $user = User::where('id', '=', $tickets->user_id)->first();
-        
+
         $thread = new Ticket_Thread();
         $thread->ticket_id = $tickets->id;
         $thread->user_id = $tickets->user_id;
@@ -228,13 +234,11 @@ class UnAuthController extends Controller {
         $thread->body = $ticket_status->message . ' ' . $user->user_name;
         $thread->save();
 
-        
         $email = $user->email;
         $user_name = $user->user_name;
 
         $ticket_number = $tickets->ticket_number;
-
-//        $system_from = $this->company();
+        
         $sending_emails = Emails::where('department', '=', $ticket_status->dept_id)->first();
         if ($sending_emails == null) {
             $from_email = $this->system_mail();
@@ -242,12 +246,11 @@ class UnAuthController extends Controller {
             $from_email = $sending_emails->id;
         }
         try {
-//        dd($this->PhpMailController->mailfrom('0', $tickets->dept_id));
             $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
         } catch (\Exception $e) {
             return 0;
         }
-        return 'Your ticket has been '.$ticket_status->state;
+        return 'Your ticket has been ' . $ticket_status->state;
     }
 
 }

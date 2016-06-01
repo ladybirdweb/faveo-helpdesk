@@ -191,7 +191,7 @@ class FormController extends Controller {
                 }
             }
 
-            return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is') . $result[0] . Lang::get('lang.Please-save-this-for-future-reference'));
+            return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is') ." ". $result[0] .". ". Lang::get('lang.Please-save-this-for-future-reference'));
         }
     }
 
