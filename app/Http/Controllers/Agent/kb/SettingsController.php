@@ -104,14 +104,14 @@ class SettingsController extends Controller {
             /* Check whether function success or not */
             if ($settings->fill($request->except('logo', 'background'))->save() == true) {
                 /* redirect to Index page with Success Message */
-                return redirect('settings')->with('success', Lang::get('lang.settings_updated_successfully'));
+                return redirect()->back()->with('success', Lang::get('lang.settings_updated_successfully'));
             } else {
                 /* redirect to Index page with Fails Message */
-                return redirect('settings')->with('fails', Lang::get('lang.settings_can_not_updated'));
+                return redirect()->back()->with('fails', Lang::get('lang.settings_can_not_updated'));
             }
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('settings')->with('fails', Lang::get('lang.settings_can_not_updated'));
+            return redirect()->back()->with('fails', Lang::get('lang.settings_can_not_updated'));
         }
     }
 

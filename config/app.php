@@ -142,8 +142,7 @@ return [
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
         
         
-
-'App\Plugins\ServiceDesk\ServiceProvider',
+//
         /*
     	*/
 
