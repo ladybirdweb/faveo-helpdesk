@@ -14,12 +14,15 @@ use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Agent\Groups;
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Utility\Timezones;
+use App\Model\helpdesk\Utility\CountryCode;
 use App\User;
 // classes
 use DB;
 use Exception;
 use Hash;
 use Lang;
+use GeoIP;
+
 
 /**
  * AgentController
@@ -71,7 +74,7 @@ class AgentController extends Controller {
      *
      * @return type view
      */
-    public function create(Timezones $timezone, Groups $group, Department $department, Teams $team_all) {
+    public function create(Timezones $timezone, Groups $group, Department $department, Teams $team_all, CountryCode $code) {
         try {
             // gte all the teams
             $team = $team_all->get();
@@ -83,8 +86,10 @@ class AgentController extends Controller {
             $departments = $department->get();
             // list all the teams in a single variable
             $teams = $team->lists('id', 'name')->toArray();
+            $location = GeoIP::getLocation('');
+            $phonecode = $code->where('iso', '=' , $location['isoCode'])->first();
             // returns to the page with all the variables and their datas
-            return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team'));
+            return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team'))->with('phonecode', $phonecode->phonecode);;
         } catch (Exception $e) {
             // returns if try fails with exception meaagse
             return redirect()->back()->with('fails', $e->getMessage());
@@ -100,7 +105,16 @@ class AgentController extends Controller {
      *
      * @return type Response
      */
-    public function store(User $user, AgentRequest $request) {
+    public function store(User $user, AgentRequest $request)
+    {
+        if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '' )) {
+                return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' =>1])->withInput();
+            } else {
+                    $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+                    if (!count($code)) {
+                        return redirect()->back()->with(['fails2' => Lang::get('lang.incorrect-country-code-error'), 'country_code' => 1])->withInput();
+                    }
+        }
         // fixing the user role to agent
         $user->fill($request->except(['group', 'primary_department', 'agent_time_zone']))->save();
         $user->assign_group = $request->group;
@@ -151,8 +165,11 @@ class AgentController extends Controller {
      *
      * @return type Response
      */
-    public function edit($id, User $user, Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team) {
+    public function edit($id, User $user, Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team, CountryCode $code)
+    {
         try {
+            $location = GeoIP::getLocation('');
+            $phonecode = $code->where('iso', '=' , $location['isoCode'])->first();
             $user = $user->whereId($id)->first();
             $team = $team->get();
             $teams1 = $team->lists('name', 'id');
@@ -163,7 +180,7 @@ class AgentController extends Controller {
             $teams = $team->lists('id', 'name')->toArray();
             $assign = $team_assign_agent->where('agent_id', $id)->lists('team_id')->toArray();
 
-            return view('themes.default1.admin.helpdesk.agent.agents.edit', compact('teams', 'assign', 'table', 'teams1', 'selectedTeams', 'user', 'timezones', 'groups', 'departments', 'team', 'exp', 'counted'));
+            return view('themes.default1.admin.helpdesk.agent.agents.edit', compact('teams', 'assign', 'table', 'teams1', 'selectedTeams', 'user', 'timezones', 'groups', 'departments', 'team', 'exp', 'counted'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             return redirect('agents')->with('fail', Lang::get('lang.failed_to_edit_agent'));
         }
@@ -179,7 +196,16 @@ class AgentController extends Controller {
      *
      * @return type Response
      */
-    public function update($id, User $user, AgentUpdate $request, Assign_team_agent $team_assign_agent) {
+    public function update($id, User $user, AgentUpdate $request, Assign_team_agent $team_assign_agent)
+    {
+        if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '' )) {
+                return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' =>1])->withInput();
+            } else {
+                    $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+                    if (!count($code)) {
+                        return redirect()->back()->with(['fails2' => Lang::get('lang.incorrect-country-code-error'), 'country_code' => 1])->withInput();
+                    }
+        }
         // storing all the details
         $user = $user->whereId($id)->first();
         $daylight_save = $request->input('daylight_save');
@@ -196,6 +222,9 @@ class AgentController extends Controller {
         }
         //Todo For success and failure conditions
         try {
+            if ($request->input('country_code') != '' or $request->input('country_code') != null) {
+                $user->country_code = $request->input('country_code');
+            }
             $user->fill($request->except('daylight_save', 'limit_access', 'directory_listing', 'vocation_mode', 'assign_team'))->save();
             $user->assign_group = $request->group;
             $user->primary_dpt = $request->primary_department;

@@ -767,6 +767,11 @@ Breadcrumbs::register('article-list', function($breadcrumbs) {
 $router->get('article-list', ['as' => 'article-list', 'uses' => 'Client\kb\UserController@getArticle']);
 // /* get search values */
 $router->get('search', ['as' => 'search', 'uses' => 'Client\kb\UserController@search']);
+Breadcrumbs::register('show', function($breadcrumbs) {
+    $breadcrumbs->push('Knowledge-base', route('home'));
+    $breadcrumbs->push('Search Result');
+});
+
 /* get the selected article */
 $router->get('show/{slug}', ['as' => 'show', 'uses' => 'Client\kb\UserController@show']);
 Breadcrumbs::register('show', function($breadcrumbs) {

@@ -141,8 +141,6 @@ return [
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
         
-        
-//
         /*
     	*/
 

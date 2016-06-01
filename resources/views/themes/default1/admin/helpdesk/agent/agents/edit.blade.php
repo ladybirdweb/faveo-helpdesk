@@ -91,6 +91,15 @@ class="active"
             @endif 
         </div>
         @endif
+        @if(Session::has('fails2'))
+            <div class="alert alert-danger alert-dismissable">
+            <i class="fa fa-ban"></i>
+            <b>Alert!</b>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <br/>
+                <li class="error-message-padding">{!! Session::get('fails2') !!}</li>
+            </div>
+        @endif
         <div class="row">
             <!-- username -->
             <div class="col-xs-4 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
@@ -138,7 +147,13 @@ class="active"
                 {!! Form::text('ext',null,['class' => 'form-control']) !!}
 
             </div>
+            <!--country code-->
+            <div class="col-xs-1 form-group {{ Session::has('country_code') ? 'has-error' : '' }}">
 
+                {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
+                {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
+
+            </div>
             <!-- phone -->
             <div class="col-xs-3 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
 
@@ -149,7 +164,7 @@ class="active"
             </div>
 
             <!-- Mobile -->
-            <div class="col-xs-4 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
+            <div class="col-xs-3 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
 
                 {!! Form::label('mobile',Lang::get('lang.mobile_number')) !!}
 
