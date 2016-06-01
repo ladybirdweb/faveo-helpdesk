@@ -3,3 +3,4 @@ Homestead.yaml
 Homestead.json
 /nbproject/private/
 .env
+/app/Plugins/ServiceDesk/

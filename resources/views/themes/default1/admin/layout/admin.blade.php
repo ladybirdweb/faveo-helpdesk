@@ -42,6 +42,20 @@
         @yield('HeadInclude')
     </head>
     <body class="skin-yellow fixed">
+        <?php 
+        $replacetop = 0;
+                $replacetop = \Event::fire('service.desk.admin.topbar.replace', array());
+
+                if (count($replacetop) == 0) {
+                    $replacetop = 0;
+                }
+                $replaceside = 0;
+                $replaceside = \Event::fire('service.desk.admin.sidebar.replace', array());
+
+                if (count($replaceside) == 0) {
+                    $replaceside = 0;
+                }
+        ?>
         <div class="wrapper">
             <header class="main-header">
                 <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png') }}" width="100px"></a>
@@ -57,9 +71,15 @@
                     <?php $notifications = App\Http\Controllers\Common\NotificationController::getNotifications(); ?>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbar-collapse">
+                        
                         <ul class="nav navbar-nav navbar-left">
+                            @if($replacetop==0)
                             <li @yield('settings')><a href="{!! url('admin') !!}">{!! Lang::get('lang.home') !!}</a></li>
+                            @endif
+                            <?php \Event::fire('service.desk.admin.topbar', array()); ?>
                         </ul>
+                        
+                        
                         <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id', '=', Auth::user()->id)->where('is_read', '0')->get(); ?>
 
                         <ul class="nav navbar-nav navbar-right">
@@ -192,6 +212,7 @@
                     <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
+                        @if($replaceside==0)
                         <li class="header">{!! Lang::get('lang.settings-2') !!}</li>
                         <li class="treeview @yield('Staffs')">
                             <a  href="#">
@@ -296,6 +317,8 @@
                                 </a>
 <?php } ?>
                         </li>
+                        @endif
+                        <?php \Event::fire('service.desk.admin.sidebar', array()); ?>
                     </ul>
                 </section>
                 <!-- /.sidebar -->

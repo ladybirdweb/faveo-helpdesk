@@ -520,6 +520,7 @@
     </div>
     <!-- ./box-body -->
 </div>
+<?php \Event::fire('service.desk.admin.settings', array()); ?>
 
 
 @stop

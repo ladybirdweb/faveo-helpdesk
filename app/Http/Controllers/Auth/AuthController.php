@@ -163,10 +163,20 @@ class AuthController extends Controller {
         $result = $this->confirmIPAddress($value, $usernameinput);
         // If attempts > 3 and time < 30 minutes
         $security = Security::whereId('1')->first();
+        //dd($security->lockout_message);
         if ($result == 1) {
             return redirect()->back()->withErrors('email', 'Incorrect details')->with('error', $security->lockout_message);
         }
+        //dd($request->input('email'));
         $check_active = User::where('email', '=', $request->input('email'))->first();
+        if(!$check_active){
+            return redirect()->back()
+                            ->withInput($request->only('email', 'remember'))
+                            ->withErrors([
+                                'email' => $this->getFailedLoginMessage(),
+                                'password' => $this->getFailedLoginMessage(),
+                            ])->with('error', Lang::get('lang.this_account_is_currently_inactive'));
+        }
         if ($check_active->active == 0) {
             return redirect()->back()
                             ->withInput($request->only('email', 'remember'))

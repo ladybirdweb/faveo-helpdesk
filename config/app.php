@@ -140,8 +140,11 @@ return [
 
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
+        
+        
+
+'App\Plugins\ServiceDesk\ServiceProvider',
         /*
-    	* Faveo Plugins
     	*/
 
         /*
