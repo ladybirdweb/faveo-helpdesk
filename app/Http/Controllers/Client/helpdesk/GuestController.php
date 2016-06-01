@@ -17,12 +17,15 @@ use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
+use App\Model\helpdesk\Utility\CountryCode;
 use App\User;
 // classes
 use Auth;
 use Exception;
 use Hash;
 use Input;
+use GeoIP;
+use Lang;
 
 /**
  * GuestController.
@@ -47,10 +50,12 @@ class GuestController extends Controller {
      *
      * @return type Response
      */
-    public function getProfile() {
+     public function getProfile(CountryCode $code)
+    {
         $user = Auth::user();
-
-        return view('themes.default1.client.helpdesk.profile', compact('user'));
+        $location = GeoIP::getLocation('');
+        $phonecode = $code->where('iso', '=' , $location['isoCode'])->first();
+        return view('themes.default1.client.helpdesk.profile', compact('user'))->with('phonecode', $phonecode->phonecode);
     }
 
     /**
@@ -85,6 +90,18 @@ class GuestController extends Controller {
             Input::file('profile_pic')->move($destinationPath, $fileName);
             $user->profile_pic = $fileName;
         } else {
+            if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '' )) {
+                return redirect()->back()->with(['fails1' => Lang::get('lang.country-code-required-error'),
+                                                 'country_code' => 1])->withInput();
+            } else {
+                    $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+                    if (!count($code)) {
+                        return redirect()->back()->with(['fails1' => Lang::get('lang.incorrect-country-code-error'),
+                                                         'country_code' =>1])->withInput();
+                    } else {
+                        $user->country_code = $request->input('country_code');
+                    }
+            }
             $user->fill($request->except('profile_pic', 'gender'))->save();
 
             return redirect()->back()->with('success1', Lang::get('lang.profile_updated_sucessfully'));

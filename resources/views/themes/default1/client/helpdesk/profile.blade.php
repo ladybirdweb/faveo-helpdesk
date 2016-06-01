@@ -85,13 +85,19 @@ class="active"
                         {!! Form::text('company',null,['class' => 'form-control']) !!}
                     </div>
                     <div class="row">
-                        <div class="col-xs-3 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">
+                        <div class="col-xs-2 form-group {{ $errors->has('country_code') ? 'has-error' : '' }}">
+                            <!-- phone extensionn -->
+                            {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
+                            {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
+
+                        </div>  
+                        <div class="col-xs-2 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">
                             <!-- phone extensionn -->
                             {!! Form::label('ext',Lang::get('lang.ext')) !!}
                            
                             {!! Form::text('ext',null,['class' => 'form-control']) !!}
                         </div>
-                        <div class="col-xs-9 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
+                        <div class="col-xs-8 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
                             <!-- phone number -->
                             {!! Form::label('phone_number',Lang::get('lang.phone')) !!}
                            
