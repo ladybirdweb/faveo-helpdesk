@@ -76,7 +76,7 @@ class Handler extends ExceptionHandler {
             }
         }
 //       //  returns non oops error message
-        return parent::render($request, $e);
+//        return parent::render($request, $e);
         // checking if the error is related to http error i.e. page not found
         if ($this->isHttpException($e)) {
             // returns error for page not found

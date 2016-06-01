@@ -2,8 +2,7 @@
 
 @section('content')               
 <?php
-$tickets = App\Model\helpdesk\Ticket\Tickets::where('id', '=', \Crypt::decrypt($id))->first();
-$thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Crypt::decrypt($id))->first();
+$thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
 //$user = App\User::where('id','=',$id1)->first();
 ?>
 <!-- Main content -->
@@ -28,7 +27,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                         <ul class="dropdown-menu" id='cc_page'>
                             @foreach($statuses as $status)
                             <?php if ($status->name == 'Deleted' or $status->name == 'Accepted') continue; ?>
-                            <li class="search_r"><a href="#" id="{!! $status->state !!}"><i class="{!! $status->icon_class !!}" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
+                            <li class="search_r"><a href="#" onclick="changeStatus({!! $status->id !!})"><i class="{!! $status->icon_class !!}" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
                             </li>
                             @endforeach
 
@@ -38,8 +37,14 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                 </div>
             </div>
         </div>
+        <br/>
         <div class="row">
             <div class="col-md-12">
+                <div class="alert alert-success alert-dismissable" id="alert11" style="display:none;">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <i class="fa  fa-check-circle"></i> <span id="message-success1">
+                    </span>
+                </div>
                 <div class="ticketratings pull-right">    
                     <table><tbody>
                             <?php $ratings = App\Model\helpdesk\Ratings\Rating::orderby('display_order')->get(); ?>
@@ -55,24 +60,20 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                                 $ratingval = $rating_value->rating_value;
                             }
                             ?>
-
                             <tr>
                                 <th><div class="ticketratingtitle">{!! $rating->name !!} &nbsp;</div></th>&nbsp
-
                             <td>
                                 <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
                                     <input type="radio" class="star" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
                                 <?php } ?>
                             </td> 
                             </tr>
-
                             @endif
                             @endforeach
                         </form></tbody> </table> 
                 </div>
             </div>
         </div>
-
     </div>
     <div class="box-body" style="margin-bottom:-10px">
         <div class="row">
@@ -263,10 +264,10 @@ foreach ($conversations as $conversation) {
                                         <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
                                             <input type="radio" class="star" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
                                         <?php } ?>
-                <!--    <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating == '2') ? 'checked' : '' ?> />
-                    <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating == '3') ? 'checked' : '' ?>/>
-                    <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating == '4') ? 'checked' : '' ?>/>
-                    <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating == '5') ? 'checked' : '' ?> />-->
+                    <!--    <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating == '2') ? 'checked' : '' ?> />
+                        <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating == '3') ? 'checked' : '' ?>/>
+                        <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating == '4') ? 'checked' : '' ?>/>
+                        <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating == '5') ? 'checked' : '' ?> />-->
                                     </td> 
                                     </tr>
                                 </form>
@@ -333,7 +334,7 @@ foreach ($conversations as $conversation) {
 <?php }
 ?>
 <div class="pull-right" style="margin-top:-30px;margin-bottom:-30px">
-    <?php echo $conversations->setPath(url('check_ticket/{' . $id . '}'))->render(); ?>
+    <?php echo $conversations->setPath(url('show-ticket/{' . $tickets->id . '}/' . $token))->render(); ?>
 </div>
 <br/><br/>
 @if(Session::has('success1'))
@@ -352,13 +353,13 @@ foreach ($conversations as $conversation) {
     {{Session::get('fails1')}}
 </div>
 @endif
-<?php $id2 = Crypt::decrypt($id); ?>
+<?php $id2 = $tickets->id; ?>
 <div id="respond" class="comment-respond form-border">
     <h3 id="reply-title" class="comment-reply-title section-title"><i class="line"></i>{!! Lang::get('lang.leave_a_reply') !!}</h3>
     @if(Auth::user()) 
     {!! Form::open(['url'=>'post/reply/'.$id2.'#formabc']) !!}
     @else
-    {!! Form::open(['url'=>'post-ticket-reply/'.$id.'#formabc']) !!}
+    {!! Form::open(['url'=>'post-ticket-reply/'.$tickets->id.'#formabc']) !!}
     @endif
     <div class="row">
         <div class="form-group">
@@ -376,29 +377,29 @@ foreach ($conversations as $conversation) {
 </div>
 
 <script type="text/javascript">
-    $("#cc_page").on('click', '.search_r', function() {
-        var search_r = $('a', this).attr('id');
-        $.ajax({
-            type: "GET",
-            url: "../ticket/status/{{$tickets->id}}/" + search_r,
-            beforeSend: function() {
-                $("#refresh").hide();
-                $("#loader").show();
-            },
-            success: function(response) {
-                $("#refresh").load("../check_ticket/{!! $id !!}  #refresh");
-                $("#refresh").show();
-                $("#loader").hide();
-                var message = response;
-                $("#alert11").show();
-                $('#message-success1').html(message);
-                setInterval(function() {
-                    $("#alert11").hide();
-                }, 4000);
-            }
-        });
-        return false;
-    });
+//    $("#cc_page").on('click', '.search_r', function() {
+//        var search_r = $('a', this).attr('id');
+//        $.ajax({
+//            type: "GET",
+//            url: "../ticket/status/{{$tickets->id}}/" + search_r,
+//            beforeSend: function() {
+//                $("#refresh").hide();
+//                $("#loader").show();
+//            },
+//            success: function(response) {
+//                $("#refresh").load("../show-ticket/{!! $tickets->id !!}/{!! $token !!}  #refresh");
+//                $("#refresh").show();
+//                $("#loader").hide();
+//                var message = response;
+//                $("#alert11").show();
+//                $('#message-success1').html(message);
+//                setInterval(function() {
+//                    $("#alert11").hide();
+//                }, 4000);
+//            }
+//        });
+//        return false;
+//    });
 
     $(document).ready(function() {
         var Data = $('input[name="rating"]:checked').val();
@@ -420,7 +421,7 @@ foreach ($conversations as $conversation) {
             // process the form
             $.ajax({
                 type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
-                url: '../rating/' +<?php echo $tickets->id ?>, // the url where we want to POST
+                url: '../../show/rating/' +<?php echo $tickets->id ?>, // the url where we want to POST
                 data: formData, // our data object
                 dataType: 'json', // what type of data do we expect back from the server
                 success: function() {
@@ -439,7 +440,7 @@ foreach ($conversations as $conversation) {
             // process the form
             $.ajax({
                 type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
-                url: '../rating2/' +<?php echo $tickets->id ?>, // the url where we want to POST
+                url: '../../show/rating2/' +<?php echo $tickets->id ?>, // the url where we want to POST
                 data: formData, // our data object
                 dataType: 'json', // what type of data do we expect back from the server
                 success: function() {
@@ -450,97 +451,30 @@ foreach ($conversations as $conversation) {
             event.preventDefault();
         });
     });
+
     $(function() {
         //Add text editor
         $("textarea").wysihtml5();
     });
 
-    jQuery(document).ready(function() {
-        // Close a ticket
-        $('#close').on('click', function(e) {
-            $.ajax({
+    function changeStatus(id, ticket_id){
+        $.ajax({
                 type: "GET",
-                url: "../ticket/close/{{$tickets->id}}",
+                url: "../../show/change-status/"+ id +"/"+ {!! $tickets->id !!},
                 beforeSend: function() {
                     $("#refresh").hide();
                     $("#loader").show();
                 },
                 success: function(response) {
-                    $("#refresh").load("../check_ticket/{!! $id !!}  #refresh");
+                    $("#refresh").load("../../show-ticket/{!! $tickets->id !!}/{!! $token !!}  #refresh");
                     $("#refresh").show();
                     $("#loader").hide();
-                    // $("#d1").trigger("click");
-                    // var message = "Success! Your Ticket have been Closed";
-                    // $("#alert11").show();
-                    // $('#message-success1').html(message);
-                    // setInterval(function(){
-                    //     $("#alert11").hide();
-                    //     setTimeout(function() {
-                    //         var link = document.querySelector('#load-inbox');
-                    //         if(link) {
-                    //             link.click();
-                    //         }
-                    //     }, 500);
-                    // },2000);   
-                }
-            })
-            return false;
-        });
-
-        // Resolved  a ticket
-        $('#resolved').on('click', function(e) {
-            $.ajax({
-                type: "GET",
-                url: "../ticket/resolve/{{$tickets->id}}",
-                beforeSend: function() {
-                    $("#refresh").hide();
-                    $("#loader").show();
-                },
-                success: function(response) {
-                    $("#refresh").load("../check_ticket/{!! $id !!}  #refresh");
-                    $("#refresh").show();
-                    $("#loader").hide();
-                    var message = "Success! Your Ticket have been Resolved";
+                    var message = response;
                     $("#alert11").show();
                     $('#message-success1').html(message);
-                    setInterval(function() {
-                        $("#alert11").hide();
-                        setTimeout(function() {
-                            var link = document.querySelector('#load-inbox');
-                            if (link) {
-                                link.click();
-                            }
-                        }, 500);
-                    }, 2000);
                 }
             })
             return false;
-        });
-
-        // Open a ticket
-        $('#open').on('click', function(e) {
-            $.ajax({
-                type: "GET",
-                url: "../ticket/open/{{$tickets->id}}",
-                beforeSend: function() {
-                    $("#refresh").hide();
-                    $("#loader").show();
-                },
-                success: function(response) {
-                    $("#refresh").load("../check_ticket/{!! $id !!}  #refresh");
-                    $("#refresh").show();
-                    $("#loader").hide();
-
-                    var message = "Success! Your Ticket have been Opened";
-                    $("#alert11").show();
-                    $('#message-success1').html(message);
-                    setInterval(function() {
-                        $("#alert11").hide();
-                    }, 4000);
-                }
-            })
-            return false;
-        });
-    });
+    }
 </script>
 @stop

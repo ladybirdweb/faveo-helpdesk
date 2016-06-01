@@ -588,6 +588,12 @@ Breadcrumbs::register('check_ticket', function($breadcrumbs, $id) {
     $breadcrumbs->push('Check Ticket', route('check_ticket', $page->id));
 });
 Route::get('check_ticket/{id}', ['as' => 'check_ticket', 'uses' => 'Client\helpdesk\GuestController@get_ticket_email']); //detail ticket information
+// show ticket via have a ticket
+Route::get('show-ticket/{id}/{code}', ['as' => 'show.ticket', 'uses' => 'Client\helpdesk\UnAuthController@showTicketCode']); //detail ticket information
+Breadcrumbs::register('show.ticket', function($breadcrumbs) {
+    $breadcrumbs->push('Ticket', route('form'));
+});
+
 //testing ckeditor
 //===================================================================================
 Route::group(['middleware' => 'role.user', 'middleware' => 'auth'], function () {
@@ -596,8 +602,8 @@ Route::group(['middleware' => 'role.user', 'middleware' => 'auth'], function () 
     Breadcrumbs::register('client.profile', function($breadcrumbs) {
         $breadcrumbs->push('My Profile');
     });
-    
-    
+
+
     Breadcrumbs::register('ticket2', function($breadcrumbs) {
         $breadcrumbs->push('My Tickets', route('ticket2'));
     });
@@ -791,6 +797,12 @@ Breadcrumbs::register('categorylist', function($breadcrumbs) {
     $breadcrumbs->push('Category List', route('category-list'));
     $breadcrumbs->push('Category');
 });
+
+Route::post('show/rating/{id}', ['as' => 'show.rating', 'uses' => 'Client\helpdesk\UnauthController@rating']); /* Get overall Ratings */
+
+Route::post('show/rating2/{id}', ['as' => 'show.rating2', 'uses' => 'Client\helpdesk\UnauthController@ratingReply']); /* Get reply Ratings */
+
+Route::get('show/change-status/{status}/{id}', ['as' => 'show.change.status', 'uses' => 'Client\helpdesk\UnauthController@changeStatus']); /* Get reply Ratings */
 /* get the home page */
 $router->get('knowledgebase', ['as' => 'home', 'uses' => 'Client\kb\UserController@home']);
 /* get the faq value to user */

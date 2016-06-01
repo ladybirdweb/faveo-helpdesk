@@ -190,7 +190,7 @@ class UserController extends Controller {
             return redirect('user')->with('success', Lang::get('lang.User-Created-Successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('user')->with('fails', $e->errorInfo[2]);
+            return redirect('user')->with('fails', $e->getMessage());
         }
     }
 
@@ -231,7 +231,7 @@ class UserController extends Controller {
             $phonecode = $code->where('iso', '=' , $location['isoCode'])->first();
             return view('themes.default1.agent.helpdesk.user.edit', compact('users'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -268,7 +268,7 @@ class UserController extends Controller {
             return redirect('user')->with('success', Lang::get('lang.User-profile-Updated-Successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -300,7 +300,7 @@ class UserController extends Controller {
         try {
             return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -357,7 +357,7 @@ class UserController extends Controller {
 
                 return Redirect::route('profile')->with('success', Lang::get('lang.Profile-Updated-sucessfully'));
             } catch (Exception $e) {
-                return Redirect::route('profile')->with('success', $e->errorInfo[2]);
+                return Redirect::route('profile')->with('success', $e->getMessage());
             }
         }
         if ($user->fill($request->except('profile_pic'))->save()) {

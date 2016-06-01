@@ -191,7 +191,7 @@ class FormController extends Controller {
                 }
             }
 
-            return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is') . '<b>' . $result[0] . '</b>' . Lang::get('lang.Please-save-this-for-future-reference'));
+            return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is') . $result[0] . Lang::get('lang.Please-save-this-for-future-reference'));
         }
     }
 
@@ -218,7 +218,6 @@ class FormController extends Controller {
             try {
                 $threads->save();
                 $tickets->save();
-
                 return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
             } catch (Exception $e) {
                 return \Redirect::back()->with('fails1', $e->getMessage());

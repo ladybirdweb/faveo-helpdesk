@@ -164,7 +164,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id','=',\Crypt:
 <?php
 $conversations = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->where('is_internal', '=', 0)->paginate(10);
 foreach ($conversations as $conversation) {
-$ConvDate1 = $conversation->created_at;
+    $ConvDate1 = $conversation->created_at;
     $ConvDate = explode(' ', $ConvDate1);
 
     $date = $ConvDate[0];
@@ -173,26 +173,23 @@ $ConvDate1 = $conversation->created_at;
     if (isset($data) && $date == $data) {
 
     } else {
-$data = $ConvDate[0];
+        $data = $ConvDate[0];
     }
-    $role = App\User::where('id','=',$conversation->user_id)->first();
+    $role = App\User::where('id', '=', $conversation->user_id)->first();
 
     $attachment = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id','=',$conversation->id)->first();
-    if($attachment == null ) {
+    if ($attachment == null ) {
         $body = $conversation->body;
-    }
-    else {
+    } else {
         $body = $conversation->body;
         $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id','=',$conversation->id)->orderBy('id', 'DESC')->get();
                     foreach($attachments as $attachment)
                     {
-                        if($attachment->type == 'pdf')
-                        {
-                        }elseif($attachment->type == 'docx')
-                        {
-                        }
-                        else
-                        {
+                        if($attachment->type == 'pdf') {
+                            
+                        } elseif($attachment->type == 'docx') {
+                            
+                        } else {
                         $image = @imagecreatefromstring($attachment->file); 
                         ob_start();
                         imagejpeg($image, null, 80);
