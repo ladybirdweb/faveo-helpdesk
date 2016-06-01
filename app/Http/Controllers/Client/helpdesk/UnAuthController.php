@@ -52,7 +52,7 @@ class UnAuthController extends Controller {
      */
     public function PostCheckTicket(Request $request) {
         $validator = \Validator::make($request->all(), [
-                    'email' => 'required|email',
+                    'email_address' => 'required|email',
                     'ticket_number' => 'required',
         ]);
         if ($validator->fails()) {
@@ -61,7 +61,7 @@ class UnAuthController extends Controller {
                             ->withInput()
                             ->with('check', '1');
         }
-        $Email = $request->input('email');
+        $Email = $request->input('email_address');
         $Ticket_number = $request->input('ticket_number');
 
         $ticket = Tickets::where('ticket_number', '=', $Ticket_number)->first();
@@ -89,5 +89,7 @@ class UnAuthController extends Controller {
             }
         }
     }
+    
+    public function 
 
 }

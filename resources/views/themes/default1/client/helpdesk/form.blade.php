@@ -37,7 +37,7 @@ class = "active"
 
         {!! Form::label('email',Lang::get('lang.email')) !!}
 
-        {!! Form::text('email',null,['class' => 'form-control']) !!}
+        {!! Form::text('email_address',null,['class' => 'form-control']) !!}
 
         {!! Form::label('ticket_number',Lang::get('lang.ticket_number'),['style' => 'display: block']) !!}
 

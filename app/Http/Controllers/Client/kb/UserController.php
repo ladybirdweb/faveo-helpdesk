@@ -93,7 +93,7 @@ class UserController extends Controller {
         $settings = $settings->first();
         $pagination = $settings->pagination;
         $search = $request->input('s');
-        $result = $article->search($search)->first();
+        $result = $article->search($search)->paginate($pagination);
         $result->setPath('search');
         $categorys = $category->get();
         return view('themes.default1.client.kb.article-list.search', compact('categorys', 'result'));

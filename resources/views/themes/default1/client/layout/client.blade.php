@@ -127,6 +127,9 @@
                             <div id="login-form" <?php if ($errors->first('email') || $errors->first('password')) { ?> class="login-form collapse fade clearfix in" <?php } else { ?> class="login-form collapse fade clearfix" <?php } ?> >
                                 {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}  
                                 @if(Session::has('errors'))
+                                @if(Session::has('check'))
+                                <?php goto b; ?>
+                                @endif
                                 <div class="alert alert-danger alert-dismissable">
                                         <!-- <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b> -->
                                     <!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> -->
@@ -136,6 +139,7 @@
                                     {!! Lang::get('lang.required-error') !!}
                                     @endif
                                 </div>
+                                <?php b: ?>
                                 @endif
                                 <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
                                     {!! Form::text('email',null,['placeholder'=>Lang::get('lang.e-mail'),'class' => 'form-control']) !!}
@@ -190,12 +194,16 @@
                             @endif
                             <!-- failure message -->
                             @if(Session::has('fails'))
+                            @if(Session::has('check'))
+                            <?php goto a; ?>
+                            @endif
                             <div class="alert alert-danger alert-dismissable">
                                 <i class="fa fa-ban"></i>
                                 <b>{!! Lang::get('lang.alert') !!} !</b>
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                 {{Session::get('fails')}}
                             </div>
+                            <?php a: ?>
                             @endif
                             @yield('content')
                             <div id="sidebar" class="site-sidebar col-md-3">
@@ -282,7 +290,7 @@
                             <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
                         </div>
                         <div class="site-social text-right col-md-6">
-<?php $socials = App\Model\helpdesk\Theme\Widgets::all(); ?>
+                            <?php $socials = App\Model\helpdesk\Theme\Widgets::all(); ?>
                             <ul class="list-inline hidden-print">
                                 @foreach($socials as $social)
                                 @if($social->name == 'facebook')

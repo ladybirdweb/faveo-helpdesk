@@ -82,6 +82,7 @@ class FormController extends Controller {
             $custom_form = $helptopic->custom_form;
             $values = Fields::where('forms_id', '=', $custom_form)->get();
             if (!$values) {
+                
             }
             if ($values) {
                 foreach ($values as $value) {
@@ -190,7 +191,7 @@ class FormController extends Controller {
                 }
             }
 
-            return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is').'<b>' . $result[0] . '</b>'.Lang::get('lang.Please-save-this-for-future-reference'));
+            return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is') . '<b>' . $result[0] . '</b>' . Lang::get('lang.Please-save-this-for-future-reference'));
         }
     }
 
