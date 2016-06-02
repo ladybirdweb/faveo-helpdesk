@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Client\helpdesk;
 use App\Http\Controllers\Controller;
 // models
 use App\Model\helpdesk\Email\Emails;
-
+use Lang;
 // classes
 
 /**

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWorkflowCloseTable extends Migration
+class CreateRatingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,14 @@ class CreateWorkflowCloseTable extends Migration
      */
     public function up()
     {
-        Schema::create('workflow_close', function (Blueprint $table) {
+        Schema::create('ratings', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('days');
-            $table->integer('condition');
-            $table->integer('send_email');
-            $table->integer('status');
+            $table->string('name');
+            $table->integer('display_order');
+            $table->integer('allow_modification');
+            $table->integer('rating_scale');
+            $table->string('rating_area');
+            $table->string('restrict');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateWorkflowCloseTable extends Migration
      */
     public function down()
     {
-        Schema::drop('workflow_close');
+        Schema::drop('ratings');
     }
 }

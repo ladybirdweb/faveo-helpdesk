@@ -22,6 +22,7 @@ use Hash;
 use Illuminate\Http\Request;
 use Mail;
 use Redirect;
+use Lang;
 
 class UserController extends Controller {
 

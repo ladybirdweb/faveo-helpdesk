@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWorkflowCloseTable extends Migration
+class CreateLoginAttemptsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,12 @@ class CreateWorkflowCloseTable extends Migration
      */
     public function up()
     {
-        Schema::create('workflow_close', function (Blueprint $table) {
+        Schema::create('login_attempts', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('days');
-            $table->integer('condition');
-            $table->integer('send_email');
-            $table->integer('status');
+            $table->string('User');
+            $table->string('IP');
+            $table->string('Attempts');
+            $table->datetime('LastLogin');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateWorkflowCloseTable extends Migration
      */
     public function down()
     {
-        Schema::drop('workflow_close');
+        Schema::drop('login_attempts');
     }
 }

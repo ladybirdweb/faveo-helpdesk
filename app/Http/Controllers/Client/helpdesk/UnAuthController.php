@@ -27,6 +27,7 @@ use Auth;
 use Exception;
 use Hash;
 use Input;
+use Lang;
 
 /**
  * GuestController.

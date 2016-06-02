@@ -62,7 +62,7 @@ class Handler extends ExceptionHandler {
         if (config('app.debug') == false) {
             // checking if the error is actually an error page or if its an system error page
             if ($this->isHttpException($e) && $e->getStatusCode() == 404) {
-                return response()->view('errors.404', []);
+                return redirect()->route('error404');
             } else {
                 // checking if the application is installed
                 if (\Config::get('database.install') == 1) {
@@ -71,12 +71,11 @@ class Handler extends ExceptionHandler {
                         $this->phpmail->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['e' => $e]);
                     }
                 }
-
-                return response()->view('errors.500', []);
+                return redirect()->route('error500');
             }
         }
 //       //  returns non oops error message
-//        return parent::render($request, $e);
+        return parent::render($request, $e);
         // checking if the error is related to http error i.e. page not found
         if ($this->isHttpException($e)) {
             // returns error for page not found

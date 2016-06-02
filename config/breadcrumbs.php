@@ -5,3 +5,4 @@ return [
 	'view' => '_partials/breadcrumbs',
 
 ];
+?>

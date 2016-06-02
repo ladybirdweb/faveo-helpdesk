@@ -15,6 +15,7 @@ use Auth;
 use Exception;
 use Illuminate\Http\Request;
 use Input;
+use Lang;
 
 /**
  * TicketController2.

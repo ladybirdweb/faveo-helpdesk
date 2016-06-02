@@ -570,12 +570,23 @@ class="active"
                                         {!! Form::label('filter', Lang::get("lang.filter").':') !!}<br>
                                         <input type="submit" value="{!! Lang::get('lang.submit') !!}" class="btn btn-primary">
                                     </div>
+                                    <div class="col-sm-10">
+                                        <label>{!! Lang::get('lang.Legend') !!}:</label>
+                                        <div class="row">
+                                            <style>
+                                                #legend-holder { border: 2px solid #ccc; float: left; width: 25px; height: 15px; margin: 2px; }
+                                            </style>
+                                            <div class="col-md-4"><span id="legend-holder" style="background-color: #A62121;"> </span> {!! Lang::get('lang.total') !!} {!! Lang::get('lang.tickets') !!}</div>
+                                            <div class="col-md-4"><span id="legend-holder" style="background-color: #FF66CC;"> </span> {!! Lang::get('lang.open') !!} {!! Lang::get('lang.tickets') !!}</div>
+                                            <div class="col-md-4"><span id="legend-holder" style="background-color: #97BBCD;"> </span> {!! Lang::get('lang.closed') !!} {!! Lang::get('lang.tickets') !!}</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>
                         <div id="legendDiv"></div>
                         <div class="chart">
-                            <canvas class="chart-data" id="tickets-graph" width="1000" height="300"></canvas>   
+                            <canvas class="chart-data" id="tickets-graph" width="1000" height="250"></canvas>   
                         </div>
                     </div><!-- /.box-body -->
                 </div><!-- /.box -->
@@ -739,7 +750,6 @@ class="active"
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-
     <script type="text/javascript">
         // Assign a ticket
         jQuery(document).ready(function($) {
@@ -775,8 +785,6 @@ class="active"
                 return false;
             });
         });
-
-
 
         $(function() {
             //Enable check and uncheck all functionality
@@ -911,16 +919,8 @@ class="active"
                     maintainAspectRatio: false,
                     //Boolean - whether to make the chart responsive to window resizing
                     responsive: true,
-                    legendTemplate: '<ul style="list-style-type: square;">'
-                            + '<% for (var i=0; i<datasets.length; i++) { %>'
-                            + '<li style="color: <%=datasets[i].pointColor%>;">'
-                            + '<span style=\"background-color:<%=datasets[i].pointColor%>\"></span>'
-                            + '<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-                            + '</li>'
-                            + '<% } %>'
-                            + '</ul>'
                 });
-                document.getElementById("legendDiv").innerHTML = myLineChart.generateLegend();
+
             });
             $('#click me').click(function() {
                 $('#foo').submit();
@@ -1022,14 +1022,6 @@ class="active"
                             maintainAspectRatio: false,
                             //Boolean - whether to make the chart responsive to window resizing
                             responsive: true,
-                            legendTemplate: '<ul style="list-style-type: square;">'
-                                    + '<% for (var i=0; i<datasets.length; i++) { %>'
-                                    + '<li style="color: <%=datasets[i].pointColor%>;">'
-                                    + '<span style=\"background-color:<%=datasets[i].pointColor%>\"></span>'
-                                    + '<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-                                    + '</li>'
-                                    + '<% } %>'
-                                    + '</ul>'
                         });
                         myLineChart.options.responsive = false;
                         $("#tickets-graph").remove();
@@ -1069,17 +1061,9 @@ class="active"
                             maintainAspectRatio: false,
                             //Boolean - whether to make the chart responsive to window resizing
                             responsive: true,
-                            legendTemplate: '<ul style="list-style-type: square;">'
-                                    + '<% for (var i=0; i<datasets.length; i++) { %>'
-                                    + '<li style="color: <%=datasets[i].pointColor%>;">'
-                                    + '<span style=\"background-color:<%=datasets[i].pointColor%>\"></span>'
-                                    + '<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-                                    + '</li>'
-                                    + '<% } %>'
-                                    + '</ul>'
                         });
 
-                        document.getElementById("legendDiv").innerHTML = myLineChart1.generateLegend();
+
                     }
                 });
                 // using the done promise callback

@@ -8,6 +8,7 @@ use App\Http\Requests\helpdesk\TemplateRequest;
 use App\Http\Requests\helpdesk\TemplateUdate;
 use App\Model\Common\TemplateType;
 use Illuminate\Http\Request;
+use Lang;
 
 /**
  * |======================================================

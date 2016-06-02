@@ -10,6 +10,7 @@ use App\Model\helpdesk\Settings\Email;
 use App\Model\common\TemplateType;
 use App\User;
 use Auth;
+use Lang;
 
 class PhpMailController extends Controller {
 

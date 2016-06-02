@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateWorkflowCloseTable extends Migration
+class CreateCommonSettingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,12 @@ class CreateWorkflowCloseTable extends Migration
      */
     public function up()
     {
-        Schema::create('workflow_close', function (Blueprint $table) {
+        Schema::create('common_settings', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('days');
-            $table->integer('condition');
-            $table->integer('send_email');
-            $table->integer('status');
+            $table->string('option_name');
+            $table->string('option_value');
+            $table->string('status');
+            $table->string('optional_field');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateWorkflowCloseTable extends Migration
      */
     public function down()
     {
-        Schema::drop('workflow_close');
+        Schema::drop('common_settings');
     }
 }

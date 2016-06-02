@@ -19,6 +19,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Input;
+use Lang;
 
 /**
  * ***************************

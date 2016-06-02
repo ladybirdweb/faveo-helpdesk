@@ -515,7 +515,7 @@ class="active"
                 <form id="foo">
                     <div  class="form-group">
                         <div class="row">
-                            <div class='col-sm-4'>
+                            <div class='col-sm-3'>
                                 {!! Form::label('date', Lang::get("lang.start_date").':') !!}
                                 {!! Form::text('start_date',null,['class'=>'form-control','id'=>'datepicker4'])!!}
                             </div>
@@ -542,7 +542,7 @@ class="active"
                                     //                $('#datepicker').datepicker()
                                 });
                             </script>
-                            <div class='col-sm-4'>
+                            <div class='col-sm-3'>
                                 {!! Form::label('start_time', Lang::get("lang.end_date").':') !!}
                                 {!! Form::text('end_date',null,['class'=>'form-control','id'=>'datetimepicker3'])!!}
                             </div>
@@ -557,16 +557,27 @@ class="active"
                                     });
                                 });
                             </script>
-                            <div class='col-sm-3'>
+                            <div class='col-sm-2'>
                                 {!! Form::label('filter', Lang::get("lang.filter").':') !!}<br>
                                 <input type="submit" value="{!! Lang::get('lang.submit') !!}" class="btn btn-primary">
+                            </div>
+                            <div class="col-sm-10">
+                                <label>{!! Lang::get('lang.Legend') !!}:</label>
+                                <div class="row">
+                                    <style>
+                                        #legend-holder { border: 2px solid #ccc; float: left; width: 25px; height: 15px; margin: 2px; }
+                                    </style>
+                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #A62121;"> </span> {!! Lang::get('lang.total') !!} {!! Lang::get('lang.tickets') !!}</div>
+                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #FF66CC;"> </span> {!! Lang::get('lang.open') !!} {!! Lang::get('lang.tickets') !!}</div>
+                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #97BBCD;"> </span> {!! Lang::get('lang.closed') !!} {!! Lang::get('lang.tickets') !!}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </form>
                 <div id="legendDiv"></div>
                 <div class="chart">
-                    <canvas class="chart-data" id="tickets-graph" width="1000" height="300"></canvas>   
+                    <canvas class="chart-data" id="tickets-graph" width="1000" height="270"></canvas>   
                 </div>
             </div>
         </div>
@@ -579,277 +590,253 @@ class="active"
 
         <link type="text/css" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet">
         <script type="text/javascript">
-                                    $(document).ready(function() {
-                                        $.getJSON("../org-chart/<?php echo $orgs->id; ?>", function(result) {
-                                            var labels = [], open = [], closed = [], reopened = [];
-                                            for (var i = 0; i < result.length; i++) {
-                                                labels.push(result[i].date);
-                                                open.push(result[i].open);
-                                                closed.push(result[i].closed);
-                                                reopened.push(result[i].reopened);
+                                $(document).ready(function() {
+                                    $.getJSON("../org-chart/<?php echo $orgs->id; ?>", function(result) {
+                                        var labels = [], open = [], closed = [], reopened = [];
+                                        for (var i = 0; i < result.length; i++) {
+                                            labels.push(result[i].date);
+                                            open.push(result[i].open);
+                                            closed.push(result[i].closed);
+                                            reopened.push(result[i].reopened);
+                                        }
+                                        var buyerData = {
+                                            labels: labels,
+                                            datasets: [
+                                                {
+                                                    label: "Total Tickets",
+                                                    fillColor: "rgba(240, 127, 110, 0.3)",
+                                                    strokeColor: "#f56954",
+                                                    pointColor: "#A62121",
+                                                    pointStrokeColor: "#E60073",
+                                                    pointHighlightFill: "#FF4DC3",
+                                                    pointHighlightStroke: "rgba(151,187,205,1)",
+                                                    data: open
+                                                }
+                                                , {
+                                                    label: "Open Tickets",
+                                                    fillColor: "rgba(255, 102, 204, 0.4)",
+                                                    strokeColor: "#f56954",
+                                                    pointColor: "#FF66CC",
+                                                    pointStrokeColor: "#fff",
+                                                    pointHighlightFill: "#FF4DC3",
+                                                    pointHighlightStroke: "rgba(151,187,205,1)",
+                                                    data: closed
+                                                }
+                                                , {
+                                                    label: "Closed Tickets",
+                                                    fillColor: "rgba(151,187,205,0.2)",
+                                                    strokeColor: "rgba(151,187,205,1)",
+                                                    pointColor: "rgba(151,187,205,1)",
+                                                    pointStrokeColor: "#0000CC",
+                                                    pointHighlightFill: "#0000E6",
+                                                    pointHighlightStroke: "rgba(151,187,205,1)",
+                                                    data: reopened
+                                                }
+                                            ]
+                                        };
+
+                                        var myLineChart = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
+                                            showScale: true,
+                                            //Boolean - Whether grid lines are shown across the chart
+                                            scaleShowGridLines: false,
+                                            //String - Colour of the grid lines
+                                            scaleGridLineColor: "rgba(0,0,0,.05)",
+                                            //Number - Width of the grid lines
+                                            scaleGridLineWidth: 1,
+                                            //Boolean - Whether to show horizontal lines (except X axis)
+                                            scaleShowHorizontalLines: true,
+                                            //Boolean - Whether to show vertical lines (except Y axis)
+                                            scaleShowVerticalLines: true,
+                                            //Boolean - Whether the line is curved between points
+                                            bezierCurve: false,
+                                            //Number - Tension of the bezier curve between points
+                                            bezierCurveTension: 0.3,
+                                            //Boolean - Whether to show a dot for each point
+                                            pointDot: true,
+                                            //Number - Radius of each point dot in pixels
+                                            pointDotRadius: 4,
+                                            //Number - Pixel width of point dot stroke
+                                            pointDotStrokeWidth: 1,
+                                            //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+                                            pointHitDetectionRadius: 20,
+                                            //Boolean - Whether to show a stroke for datasets
+                                            datasetStroke: true,
+                                            //Number - Pixel width of dataset stroke
+                                            datasetStrokeWidth: 1,
+                                            //Boolean - Whether to fill the dataset with a color
+                                            datasetFill: false,
+                                            //String - A legend template
+                                            //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+                                            maintainAspectRatio: false,
+                                            //Boolean - whether to make the chart responsive to window resizing
+                                            responsive: true,
+                                        });
+
+                                    });
+                                    $('#click me').click(function() {
+                                        $('#foo').submit();
+                                    });
+                                    $('#foo').submit(function(event) {
+                                        // get the form data
+                                        // there are many ways to get this data using jQuery (you can use the class or id also)
+                                        var date1 = $('#datepicker4').val();
+                                        var date2 = $('#datetimepicker3').val();
+                                        var formData = date1.split("/").join('-');
+                                        var dateData = date2.split("/").join('-');
+
+                                        // process the form
+                                        $.ajax({
+                                            type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
+                                            url: '../org-chart-range/<?php echo $orgs->id; ?>/' + dateData + '/' + formData, // the url where we want to POST
+                                            data: formData, // our data object
+                                            dataType: 'json', // what type of data do we expect back from the server
+
+                                            success: function(result2) {
+
+                                                var labels = [], open = [], closed = [], reopened = [];
+
+                                                for (var i = 0; i < result2.length; i++) {
+
+                                                    labels.push(result2[i].date);
+                                                    open.push(result2[i].open);
+                                                    closed.push(result2[i].closed);
+                                                    reopened.push(result2[i].reopened);
+                                                }
+                                                var buyerData = {
+                                                    labels: labels,
+                                                    datasets: [
+                                                        {
+                                                            label: "Total Tickets",
+                                                            fillColor: "rgba(240, 127, 110, 0.3)",
+                                                            strokeColor: "#f56954",
+                                                            pointColor: "#A62121",
+                                                            pointStrokeColor: "#E60073",
+                                                            pointHighlightFill: "#FF4DC3",
+                                                            pointHighlightStroke: "rgba(151,187,205,1)",
+                                                            data: open
+                                                        }
+                                                        , {
+                                                            label: "Open Tickets",
+                                                            fillColor: "rgba(255, 102, 204, 0.4)",
+                                                            strokeColor: "#f56954",
+                                                            pointColor: "#FF66CC",
+                                                            pointStrokeColor: "#fff",
+                                                            pointHighlightFill: "#FF4DC3",
+                                                            pointHighlightStroke: "rgba(151,187,205,1)",
+                                                            data: closed
+                                                        }
+                                                        , {
+                                                            label: "Closed Tickets",
+                                                            fillColor: "rgba(151,187,205,0.2)",
+                                                            strokeColor: "rgba(151,187,205,1)",
+                                                            pointColor: "rgba(151,187,205,1)",
+                                                            pointStrokeColor: "#0000CC",
+                                                            pointHighlightFill: "#0000E6",
+                                                            pointHighlightStroke: "rgba(151,187,205,1)",
+                                                            data: reopened
+                                                        }
+                                                    ]
+                                                };
+
+                                                var myLineChart = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
+                                                    showScale: true,
+                                                    //Boolean - Whether grid lines are shown across the chart
+                                                    scaleShowGridLines: false,
+                                                    //String - Colour of the grid lines
+                                                    scaleGridLineColor: "rgba(0,0,0,.05)",
+                                                    //Number - Width of the grid lines
+                                                    scaleGridLineWidth: 1,
+                                                    //Boolean - Whether to show horizontal lines (except X axis)
+                                                    scaleShowHorizontalLines: true,
+                                                    //Boolean - Whether to show vertical lines (except Y axis)
+                                                    scaleShowVerticalLines: true,
+                                                    //Boolean - Whether the line is curved between points
+                                                    bezierCurve: true,
+                                                    //Number - Tension of the bezier curve between points
+                                                    bezierCurveTension: 0.3,
+                                                    //Boolean - Whether to show a dot for each point
+                                                    pointDot: true,
+                                                    //Number - Radius of each point dot in pixels
+                                                    pointDotRadius: 4,
+                                                    //Number - Pixel width of point dot stroke
+                                                    pointDotStrokeWidth: 1,
+                                                    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+                                                    pointHitDetectionRadius: 20,
+                                                    //Boolean - Whether to show a stroke for datasets
+                                                    datasetStroke: true,
+                                                    //Number - Pixel width of dataset stroke
+                                                    datasetStrokeWidth: 1,
+                                                    //Boolean - Whether to fill the dataset with a color
+                                                    datasetFill: false,
+                                                    //String - A legend template
+                                                    //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+                                                    maintainAspectRatio: false,
+                                                    //Boolean - whether to make the chart responsive to window resizing
+                                                    responsive: true,
+                                                });
+                                                myLineChart.options.responsive = false;
+                                                $("#tickets-graph").remove();
+                                                $(".chart").html("<canvas id='tickets-graph' width='1000' height='300'></canvas>");
+                                                var myLineChart1 = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
+                                                    showScale: true,
+                                                    //Boolean - Whether grid lines are shown across the chart
+                                                    scaleShowGridLines: false,
+                                                    //String - Colour of the grid lines
+                                                    scaleGridLineColor: "rgba(0,0,0,.05)",
+                                                    //Number - Width of the grid lines
+                                                    scaleGridLineWidth: 1,
+                                                    //Boolean - Whether to show horizontal lines (except X axis)
+                                                    scaleShowHorizontalLines: true,
+                                                    //Boolean - Whether to show vertical lines (except Y axis)
+                                                    scaleShowVerticalLines: true,
+                                                    //Boolean - Whether the line is curved between points
+                                                    bezierCurve: true,
+                                                    //Number - Tension of the bezier curve between points
+                                                    bezierCurveTension: 0.3,
+                                                    //Boolean - Whether to show a dot for each point
+                                                    pointDot: true,
+                                                    //Number - Radius of each point dot in pixels
+                                                    pointDotRadius: 4,
+                                                    //Number - Pixel width of point dot stroke
+                                                    pointDotStrokeWidth: 1,
+                                                    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+                                                    pointHitDetectionRadius: 20,
+                                                    //Boolean - Whether to show a stroke for datasets
+                                                    datasetStroke: true,
+                                                    //Number - Pixel width of dataset stroke
+                                                    datasetStrokeWidth: 1,
+                                                    //Boolean - Whether to fill the dataset with a color
+                                                    datasetFill: false,
+                                                    //String - A legend template
+                                                    //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+                                                    maintainAspectRatio: false,
+                                                    //Boolean - whether to make the chart responsive to window resizing
+                                                    responsive: true,
+                                                });
+
+
                                             }
-                                            var buyerData = {
-                                                labels: labels,
-                                                datasets: [
-                                                    {
-                                                        label: "Total Tickets",
-                                                        fillColor: "rgba(240, 127, 110, 0.3)",
-                                                        strokeColor: "#f56954",
-                                                        pointColor: "#A62121",
-                                                        pointStrokeColor: "#E60073",
-                                                        pointHighlightFill: "#FF4DC3",
-                                                        pointHighlightStroke: "rgba(151,187,205,1)",
-                                                        data: open
-                                                    }
-                                                    , {
-                                                        label: "Open Tickets",
-                                                        fillColor: "rgba(255, 102, 204, 0.4)",
-                                                        strokeColor: "#f56954",
-                                                        pointColor: "#FF66CC",
-                                                        pointStrokeColor: "#fff",
-                                                        pointHighlightFill: "#FF4DC3",
-                                                        pointHighlightStroke: "rgba(151,187,205,1)",
-                                                        data: closed
-                                                    }
-                                                    , {
-                                                        label: "Closed Tickets",
-                                                        fillColor: "rgba(151,187,205,0.2)",
-                                                        strokeColor: "rgba(151,187,205,1)",
-                                                        pointColor: "rgba(151,187,205,1)",
-                                                        pointStrokeColor: "#0000CC",
-                                                        pointHighlightFill: "#0000E6",
-                                                        pointHighlightStroke: "rgba(151,187,205,1)",
-                                                        data: reopened
-                                                    }
-                                                ]
-                                            };
-
-                                            var myLineChart = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
-                                                showScale: true,
-                                                //Boolean - Whether grid lines are shown across the chart
-                                                scaleShowGridLines: false,
-                                                //String - Colour of the grid lines
-                                                scaleGridLineColor: "rgba(0,0,0,.05)",
-                                                //Number - Width of the grid lines
-                                                scaleGridLineWidth: 1,
-                                                //Boolean - Whether to show horizontal lines (except X axis)
-                                                scaleShowHorizontalLines: true,
-                                                //Boolean - Whether to show vertical lines (except Y axis)
-                                                scaleShowVerticalLines: true,
-                                                //Boolean - Whether the line is curved between points
-                                                bezierCurve: false,
-                                                //Number - Tension of the bezier curve between points
-                                                bezierCurveTension: 0.3,
-                                                //Boolean - Whether to show a dot for each point
-                                                pointDot: true,
-                                                //Number - Radius of each point dot in pixels
-                                                pointDotRadius: 4,
-                                                //Number - Pixel width of point dot stroke
-                                                pointDotStrokeWidth: 1,
-                                                //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-                                                pointHitDetectionRadius: 20,
-                                                //Boolean - Whether to show a stroke for datasets
-                                                datasetStroke: true,
-                                                //Number - Pixel width of dataset stroke
-                                                datasetStrokeWidth: 1,
-                                                //Boolean - Whether to fill the dataset with a color
-                                                datasetFill: false,
-                                                //String - A legend template
-                                                //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-                                                maintainAspectRatio: false,
-                                                //Boolean - whether to make the chart responsive to window resizing
-                                                responsive: true,
-                                                legendTemplate: '<ul style="list-style-type: square;">'
-                                                        + '<% for (var i=0; i<datasets.length; i++) { %>'
-                                                        + '<li style="color: <%=datasets[i].pointColor%>;">'
-                                                        + '<span style=\"background-color:<%=datasets[i].pointColor%>\"></span>'
-                                                        + '<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-                                                        + '</li>'
-                                                        + '<% } %>'
-                                                        + '</ul>'
-                                            });
-                                            document.getElementById("legendDiv").innerHTML = myLineChart.generateLegend();
                                         });
-                                        $('#click me').click(function() {
-                                            $('#foo').submit();
-                                        });
-                                        $('#foo').submit(function(event) {
-                                            // get the form data
-                                            // there are many ways to get this data using jQuery (you can use the class or id also)
-                                            var date1 = $('#datepicker4').val();
-                                            var date2 = $('#datetimepicker3').val();
-                                            var formData = date1.split("/").join('-');
-                                            var dateData = date2.split("/").join('-');
-
-                                            // process the form
-                                            $.ajax({
-                                                type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
-                                                url: '../org-chart-range/<?php echo $orgs->id; ?>/' + dateData + '/' + formData, // the url where we want to POST
-                                                data: formData, // our data object
-                                                dataType: 'json', // what type of data do we expect back from the server
-
-                                                success: function(result2) {
-
-                                                    var labels = [], open = [], closed = [], reopened = [];
-
-                                                    for (var i = 0; i < result2.length; i++) {
-
-                                                        labels.push(result2[i].date);
-                                                        open.push(result2[i].open);
-                                                        closed.push(result2[i].closed);
-                                                        reopened.push(result2[i].reopened);
-                                                    }
-                                                    var buyerData = {
-                                                        labels: labels,
-                                                        datasets: [
-                                                            {
-                                                                label: "Total Tickets",
-                                                                fillColor: "rgba(240, 127, 110, 0.3)",
-                                                                strokeColor: "#f56954",
-                                                                pointColor: "#A62121",
-                                                                pointStrokeColor: "#E60073",
-                                                                pointHighlightFill: "#FF4DC3",
-                                                                pointHighlightStroke: "rgba(151,187,205,1)",
-                                                                data: open
-                                                            }
-                                                            , {
-                                                                label: "Open Tickets",
-                                                                fillColor: "rgba(255, 102, 204, 0.4)",
-                                                                strokeColor: "#f56954",
-                                                                pointColor: "#FF66CC",
-                                                                pointStrokeColor: "#fff",
-                                                                pointHighlightFill: "#FF4DC3",
-                                                                pointHighlightStroke: "rgba(151,187,205,1)",
-                                                                data: closed
-                                                            }
-                                                            , {
-                                                                label: "Closed Tickets",
-                                                                fillColor: "rgba(151,187,205,0.2)",
-                                                                strokeColor: "rgba(151,187,205,1)",
-                                                                pointColor: "rgba(151,187,205,1)",
-                                                                pointStrokeColor: "#0000CC",
-                                                                pointHighlightFill: "#0000E6",
-                                                                pointHighlightStroke: "rgba(151,187,205,1)",
-                                                                data: reopened
-                                                            }
-                                                        ]
-                                                    };
-
-                                                    var myLineChart = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
-                                                        showScale: true,
-                                                        //Boolean - Whether grid lines are shown across the chart
-                                                        scaleShowGridLines: false,
-                                                        //String - Colour of the grid lines
-                                                        scaleGridLineColor: "rgba(0,0,0,.05)",
-                                                        //Number - Width of the grid lines
-                                                        scaleGridLineWidth: 1,
-                                                        //Boolean - Whether to show horizontal lines (except X axis)
-                                                        scaleShowHorizontalLines: true,
-                                                        //Boolean - Whether to show vertical lines (except Y axis)
-                                                        scaleShowVerticalLines: true,
-                                                        //Boolean - Whether the line is curved between points
-                                                        bezierCurve: true,
-                                                        //Number - Tension of the bezier curve between points
-                                                        bezierCurveTension: 0.3,
-                                                        //Boolean - Whether to show a dot for each point
-                                                        pointDot: true,
-                                                        //Number - Radius of each point dot in pixels
-                                                        pointDotRadius: 4,
-                                                        //Number - Pixel width of point dot stroke
-                                                        pointDotStrokeWidth: 1,
-                                                        //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-                                                        pointHitDetectionRadius: 20,
-                                                        //Boolean - Whether to show a stroke for datasets
-                                                        datasetStroke: true,
-                                                        //Number - Pixel width of dataset stroke
-                                                        datasetStrokeWidth: 1,
-                                                        //Boolean - Whether to fill the dataset with a color
-                                                        datasetFill: false,
-                                                        //String - A legend template
-                                                        //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-                                                        maintainAspectRatio: false,
-                                                        //Boolean - whether to make the chart responsive to window resizing
-                                                        responsive: true,
-                                                        legendTemplate: '<ul style="list-style-type: square;">'
-                                                                + '<% for (var i=0; i<datasets.length; i++) { %>'
-                                                                + '<li style="color: <%=datasets[i].pointColor%>;">'
-                                                                + '<span style=\"background-color:<%=datasets[i].pointColor%>\"></span>'
-                                                                + '<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-                                                                + '</li>'
-                                                                + '<% } %>'
-                                                                + '</ul>'
-                                                    });
-                                                    myLineChart.options.responsive = false;
-                                                    $("#tickets-graph").remove();
-                                                    $(".chart").html("<canvas id='tickets-graph' width='1000' height='300'></canvas>");
-                                                    var myLineChart1 = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
-                                                        showScale: true,
-                                                        //Boolean - Whether grid lines are shown across the chart
-                                                        scaleShowGridLines: false,
-                                                        //String - Colour of the grid lines
-                                                        scaleGridLineColor: "rgba(0,0,0,.05)",
-                                                        //Number - Width of the grid lines
-                                                        scaleGridLineWidth: 1,
-                                                        //Boolean - Whether to show horizontal lines (except X axis)
-                                                        scaleShowHorizontalLines: true,
-                                                        //Boolean - Whether to show vertical lines (except Y axis)
-                                                        scaleShowVerticalLines: true,
-                                                        //Boolean - Whether the line is curved between points
-                                                        bezierCurve: true,
-                                                        //Number - Tension of the bezier curve between points
-                                                        bezierCurveTension: 0.3,
-                                                        //Boolean - Whether to show a dot for each point
-                                                        pointDot: true,
-                                                        //Number - Radius of each point dot in pixels
-                                                        pointDotRadius: 4,
-                                                        //Number - Pixel width of point dot stroke
-                                                        pointDotStrokeWidth: 1,
-                                                        //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-                                                        pointHitDetectionRadius: 20,
-                                                        //Boolean - Whether to show a stroke for datasets
-                                                        datasetStroke: true,
-                                                        //Number - Pixel width of dataset stroke
-                                                        datasetStrokeWidth: 1,
-                                                        //Boolean - Whether to fill the dataset with a color
-                                                        datasetFill: false,
-                                                        //String - A legend template
-                                                        //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-                                                        maintainAspectRatio: false,
-                                                        //Boolean - whether to make the chart responsive to window resizing
-                                                        responsive: true,
-                                                        legendTemplate: '<ul style="list-style-type: square;">'
-                                                                + '<% for (var i=0; i<datasets.length; i++) { %>'
-                                                                + '<li style="color: <%=datasets[i].pointColor%>;">'
-                                                                + '<span style=\"background-color:<%=datasets[i].pointColor%>\"></span>'
-                                                                + '<% if (datasets[i].label) { %><%= datasets[i].label %><% } %>'
-                                                                + '</li>'
-                                                                + '<% } %>'
-                                                                + '</ul>'
-                                                    });
-
-                                                    document.getElementById("legendDiv").innerHTML = myLineChart1.generateLegend();
-                                                }
-                                            });
-                                            // using the done promise callback
-                                            // stop the form from submitting the normal way and refreshing the page
-                                            event.preventDefault();
-                                        });
+                                        // using the done promise callback
+                                        // stop the form from submitting the normal way and refreshing the page
+                                        event.preventDefault();
                                     });
+                                });
 
-                                    jQuery(document).ready(function() {
-                                        // Close a ticket
-                                        $('#close').on('click', function(e) {
-                                            $.ajax({
-                                                type: "GET",
-                                                url: "agen",
-                                                beforeSend: function() {
-                                                },
-                                                success: function(response) {
-                                                }
-                                            })
-                                            return false;
-                                        });
+                                jQuery(document).ready(function() {
+                                    // Close a ticket
+                                    $('#close').on('click', function(e) {
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "agen",
+                                            beforeSend: function() {
+                                            },
+                                            success: function(response) {
+                                            }
+                                        })
+                                        return false;
                                     });
+                                });
         </script>
         <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/plugins/moment-develop/moment.js")}}" type="text/javascript"></script>
@@ -881,12 +868,12 @@ class="active"
                 <div id="assign_body">
                     <p>{!! Lang::get('lang.please_select_an_user') !!}</p>
                     <select id="user" class="form-control" name="user">
-                        <?php
-                        $org_heads = App\Model\helpdesk\Agent_panel\User_org::where('org_id', '=', $orgs->id)->get();
-                        ?>
+<?php
+$org_heads = App\Model\helpdesk\Agent_panel\User_org::where('org_id', '=', $orgs->id)->get();
+?>
                         <optgroup label="Select Organizations">
                             @foreach($org_heads as $org_head)
-                            <?php $user_org_heads = App\User::where('id', '=', $org_head->user_id)->first(); ?>
+                        <?php $user_org_heads = App\User::where('id', '=', $org_head->user_id)->first(); ?>
                             <option  value="{{$user_org_heads->id}}">{!! $user_org_heads->user_name !!}</option>
                             @endforeach
                         </optgroup>

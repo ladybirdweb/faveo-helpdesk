@@ -631,10 +631,6 @@ Route::post('postcheck', 'Client\helpdesk\GuestController@PostCheckTicket'); /* 
 Route::get('postcheck', 'Client\helpdesk\GuestController@PostCheckTicket');
 
 Route::post('post-ticket-reply/{id}', 'Client\helpdesk\FormController@post_ticket_reply');
-
-/* 404 page */
-// Route::get('404', 'error\ErrorController@error404');
-
 /*
   |============================================================
   |  Installer Routes
@@ -702,13 +698,17 @@ Route::get('/aaa', function () {
   |  Error Routes
   |=============================================================
  */
-Route::get('503', function () {
-    return view('errors.503');
-});
-Route::get('404', function () {
-    return view('errors.404');
+Route::get('500',  ['as' => 'error500', function () { return view('errors.500'); } ] );
+
+Breadcrumbs::register('500', function($breadcrumbs) {
+    $breadcrumbs->push('500');
 });
 
+Route::get('404',  ['as' => 'error404', function () { return view('errors.404'); } ] );
+
+Breadcrumbs::register('error404', function($breadcrumbs) {
+    $breadcrumbs->push('404');
+});
 /*
   |=============================================================
   |  Test mail Routes
