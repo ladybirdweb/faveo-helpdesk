@@ -28,7 +28,7 @@ Faveo is designed & developed by <a href="http://www.ladybirdweb.com/" target="_
 <li> Database: MySQL(5.0+) or Postgres or SQLite or SQL Server</li>
 <li> Web Server Extension: Pretty URLs or Search Engine Friendly URL's have to be enabled in your web server configuration</li>
 </ul>
-<p><small>note: php5 dependencies for <em>nginx/php-fpm</em> setup are as follow</small></p>
+<p><small><b>Note:</b> php5 dependencies for <em>nginx/php-fpm</em> setup are as follow</small></p>
 ```php5-curl php5-mysql php5-mcrypt php5-cli php5-gd php5-imap```
 
 <h3>Faveo Web Hosting</h3>
