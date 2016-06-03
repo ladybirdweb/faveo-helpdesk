@@ -21,8 +21,8 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class CannedController extends Controller {
-
+class CannedController extends Controller
+{
     /**
      * Create a new controller instance.
      * constructor to check
@@ -32,7 +32,8 @@ class CannedController extends Controller {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // checking authentication
         $this->middleware('auth');
         // checking if role is agent
@@ -44,7 +45,8 @@ class CannedController extends Controller {
      *
      * @return type View
      */
-    public function index() {
+    public function index()
+    {
         try {
             return view('themes.default1.agent.helpdesk.canned.index');
         } catch (Exception $ex) {
@@ -57,7 +59,8 @@ class CannedController extends Controller {
      *
      * @return type View
      */
-    public function create() {
+    public function create()
+    {
         try {
             return view('themes.default1.agent.helpdesk.canned.create');
         } catch (Exception $ex) {
@@ -73,7 +76,8 @@ class CannedController extends Controller {
      *
      * @return type Redirect
      */
-    public function store(CannedRequest $request, Canned $canned) {
+    public function store(CannedRequest $request, Canned $canned)
+    {
         try {
             // fetching all the requested inputs
             $canned->user_id = \Auth::user()->id;
@@ -81,6 +85,7 @@ class CannedController extends Controller {
             $canned->message = $request->input('message');
             // saving inputs
             $canned->save();
+
             return redirect()->route('canned.list')->with('success', Lang::get('lang.added_successfully'));
         } catch (Exception $e) {
             return redirect()->route('canned.list')->with('fails', $e->getMessage());
@@ -95,10 +100,12 @@ class CannedController extends Controller {
      *
      * @return type View
      */
-    public function edit($id, Canned $canned) {
+    public function edit($id, Canned $canned)
+    {
         try {
             // fetching requested canned response
             $canned = $canned->where('user_id', '=', \Auth::user()->id)->where('id', '=', $id)->first();
+
             return view('themes.default1.agent.helpdesk.canned.edit', compact('canned'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -114,7 +121,8 @@ class CannedController extends Controller {
      *
      * @return type Redirect
      */
-    public function update($id, CannedUpdateRequest $request, Canned $canned) {
+    public function update($id, CannedUpdateRequest $request, Canned $canned)
+    {
         try {
             /* select the field where id = $id(request Id) */
             $canned = $canned->where('id', '=', $id)->where('user_id', '=', \Auth::user()->id)->first();
@@ -124,6 +132,7 @@ class CannedController extends Controller {
             $canned->message = $request->input('message');
             // saving inputs
             $canned->save();
+
             return redirect()->route('canned.list')->with('success', Lang::get('lang.updated_successfully'));
         } catch (Exception $e) {
             return redirect()->route('canned.list')->with('fails', $e->getMessage());
@@ -138,7 +147,8 @@ class CannedController extends Controller {
      *
      * @return type Redirect
      */
-    public function destroy($id, Canned $canned) {
+    public function destroy($id, Canned $canned)
+    {
         try {
             /* select the field where id = $id(request Id) */
             $canned = $canned->whereId($id)->first();
@@ -160,7 +170,8 @@ class CannedController extends Controller {
      *
      * @return type json
      */
-    public function get_canned($id) {
+    public function get_canned($id)
+    {
         // checking for the canned response with requested value
         if ($id != 'zzz') {
             // fetching canned response
@@ -172,5 +183,4 @@ class CannedController extends Controller {
         // returning the canned response in JSON format
         return \Response::json($msg);
     }
-
 }

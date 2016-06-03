@@ -9,14 +9,15 @@ use App\Http\Requests\Request;
  *
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class HelptopicUpdate extends Request {
-
+class HelptopicUpdate extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -25,15 +26,19 @@ class HelptopicUpdate extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             // 'parent_topic' => 'required',
+<<<<<<< HEAD
             'topic' => 'required|max:50',
+=======
+            'topic'      => 'required',
+>>>>>>> origin/master
             'department' => 'required',
-            'priority' => 'required',
-            'sla_plan' => 'required',
+            'priority'   => 'required',
+            'sla_plan'   => 'required',
                 // 'auto_assign' => 'required',
         ];
     }
-
 }

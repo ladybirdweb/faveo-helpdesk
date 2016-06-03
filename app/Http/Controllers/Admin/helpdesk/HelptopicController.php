@@ -26,14 +26,15 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class HelptopicController extends Controller {
-
+class HelptopicController extends Controller
+{
     /**
      * Create a new controller instance.
      *
      * @return type vodi
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
         $this->middleware('roles');
     }
@@ -45,9 +46,11 @@ class HelptopicController extends Controller {
      *
      * @return type Response
      */
-    public function index(Help_topic $topic) {
+    public function index(Help_topic $topic)
+    {
         try {
             $topics = $topic->get();
+
             return view('themes.default1.admin.helpdesk.manage.helptopic.index', compact('topics'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -76,7 +79,8 @@ class HelptopicController extends Controller {
       | 5.Forms Model
       ================================================
      */
-    public function create(Ticket_Priority $priority, Department $department, Help_topic $topic, Forms $form, User $agent, Sla_plan $sla) {
+    public function create(Ticket_Priority $priority, Department $department, Help_topic $topic, Forms $form, User $agent, Sla_plan $sla)
+    {
         try {
             $departments = $department->get();
             $topics = $topic->get();
@@ -84,6 +88,7 @@ class HelptopicController extends Controller {
             $agents = $agent->where('role', '=', 'agent')->get();
             $slas = $sla->get();
             $priority = $priority->get();
+
             return view('themes.default1.admin.helpdesk.manage.helptopic.create', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -98,7 +103,8 @@ class HelptopicController extends Controller {
      *
      * @return type Response
      */
-    public function store(Help_topic $topic, HelptopicRequest $request) {
+    public function store(Help_topic $topic, HelptopicRequest $request)
+    {
         try {
             if ($request->custom_form) {
                 $custom_form = $request->custom_form;
@@ -117,7 +123,7 @@ class HelptopicController extends Controller {
             return redirect('helptopic')->with('success', Lang::get('lang.helptopic_created_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('helptopic')->with('fails', Lang::get('lang.helptopic_can_not_create') . '<li>' . $e->getMessage() . '</li>');
+            return redirect('helptopic')->with('fails', Lang::get('lang.helptopic_can_not_create').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -134,7 +140,8 @@ class HelptopicController extends Controller {
      *
      * @return type Response
      */
-    public function edit($id, Ticket_Priority $priority, Department $department, Help_topic $topic, Forms $form, Sla_plan $sla) {
+    public function edit($id, Ticket_Priority $priority, Department $department, Help_topic $topic, Forms $form, Sla_plan $sla)
+    {
         try {
             $agents = User::where('role', '=', 'agent')->get();
             $departments = $department->get();
@@ -142,9 +149,10 @@ class HelptopicController extends Controller {
             $forms = $form->get();
             $slas = $sla->get();
             $priority = $priority->get();
+
             return view('themes.default1.admin.helpdesk.manage.helptopic.edit', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas'));
         } catch (Exception $e) {
-            return redirect('helptopic')->with('fails', '<li>' . $e->getMessage() . '</li>');
+            return redirect('helptopic')->with('fails', '<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -157,7 +165,8 @@ class HelptopicController extends Controller {
      *
      * @return type Response
      */
-    public function update($id, Help_topic $topic, HelptopicUpdate $request) {
+    public function update($id, Help_topic $topic, HelptopicUpdate $request)
+    {
         try {
             $topics = $topic->whereId($id)->first();
             if ($request->custom_form) {
@@ -179,7 +188,7 @@ class HelptopicController extends Controller {
             return redirect('helptopic')->with('success', Lang::get('lang.helptopic_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('helptopic')->with('fails', Lang::get('lang.helptopic_can_not_update') . '<li>' . $e->getMessage() . '</li>');
+            return redirect('helptopic')->with('fails', Lang::get('lang.helptopic_can_not_update').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -191,7 +200,8 @@ class HelptopicController extends Controller {
      *
      * @return type Response
      */
-    public function destroy($id, Help_topic $topic, Ticket $ticket_setting) {
+    public function destroy($id, Help_topic $topic, Ticket $ticket_setting)
+    {
         $ticket_settings = $ticket_setting->where('id', '=', '1')->first();
         if ($ticket_settings->help_topic == $id) {
             return redirect('departments')->with('fails', Lang::get('lang.you_cannot_delete_default_department'));
@@ -203,7 +213,7 @@ class HelptopicController extends Controller {
                 } else {
                     $text_tickets = 'Ticket';
                 }
-                $ticket = '<li>' . $tickets . ' ' . $text_tickets . Lang::get('lang.have_been_moved_to_default_help_topic') . ' </li>';
+                $ticket = '<li>'.$tickets.' '.$text_tickets.Lang::get('lang.have_been_moved_to_default_help_topic').' </li>';
             } else {
                 $ticket = '';
             }
@@ -214,22 +224,21 @@ class HelptopicController extends Controller {
                 } else {
                     $text_emails = 'Email';
                 }
-                $email = '<li>' . $emails . ' System ' . $text_emails . Lang::get('lang.have_been_moved_to_default_help_topic') . ' </li>';
+                $email = '<li>'.$emails.' System '.$text_emails.Lang::get('lang.have_been_moved_to_default_help_topic').' </li>';
             } else {
                 $email = '';
             }
-            $message = $ticket . $email;
+            $message = $ticket.$email;
             $topics = $topic->whereId($id)->first();
             /* Check whether function success or not */
             try {
                 $topics->delete();
                 /* redirect to Index page with Success Message */
-                return redirect('helptopic')->with('success', Lang::get('lang.helptopic_deleted_successfully') . $message);
+                return redirect('helptopic')->with('success', Lang::get('lang.helptopic_deleted_successfully').$message);
             } catch (Exception $e) {
                 /* redirect to Index page with Fails Message */
-                return redirect('helptopic')->with('fails', Lang::get('lang.helptopic_can_not_update') . '<li>' . $e->getMessage() . '</li>');
+                return redirect('helptopic')->with('fails', Lang::get('lang.helptopic_can_not_update').'<li>'.$e->getMessage().'</li>');
             }
         }
     }
-
 }

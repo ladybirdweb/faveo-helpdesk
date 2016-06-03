@@ -13,9 +13,8 @@ use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Email\Template;
 use App\Model\helpdesk\Manage\Help_topic;
-use App\Model\helpdesk\Notification\UserNotification;
-use DateTime;
 use App\Model\helpdesk\Manage\Sla_plan;
+use App\Model\helpdesk\Notification\UserNotification;
 use App\Model\helpdesk\Settings\Access;
 use App\Model\helpdesk\Settings\Alert;
 use App\Model\helpdesk\Settings\Company;
@@ -28,6 +27,7 @@ use App\Model\helpdesk\Utility\Date_format;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
+use DateTime;
 // classes
 use DB;
 use Exception;
@@ -40,7 +40,7 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class SettingsController extends Controller
+class SettingsController2 extends Controller
 {
     /**
      * Create a new controller instance.
@@ -63,43 +63,48 @@ class SettingsController extends Controller
     {
         return view('themes.default1.admin.helpdesk.setting');
     }
-        public function notificationSettings()
+
+    public function notificationSettings()
     {
         return view('themes.default1.admin.helpdesk.settings.notification');
     }
-public function deleteReadNoti()
+
+    public function deleteReadNoti()
     {
         $markasread = UserNotification::where('is_read', '=', 1)->get();
         foreach ($markasread as $mark) {
-            
             $mark->delete();
             \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
         }
-        return redirect()->back()->with('success','You have deleted all the read notifications');
+
+        return redirect()->back()->with('success', 'You have deleted all the read notifications');
     }
-    
+
     public function deleteNotificationLog()
     {
         $days = Input::get('no_of_days');
-        $date = new DateTime;
-$date->modify($days.' day');
-$formatted_date = $date->format('Y-m-d H:i:s');
-       $markasread = DB::table('user_notification')->where('created_at','<=',$formatted_date)->get();
-foreach ($markasread as $mark) {
-            
+        $date = new DateTime();
+        $date->modify($days.' day');
+        $formatted_date = $date->format('Y-m-d H:i:s');
+        $markasread = DB::table('user_notification')->where('created_at', '<=', $formatted_date)->get();
+        foreach ($markasread as $mark) {
             $mark->delete();
             \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
         }
-        return redirect()->back()->with('success','You have deleted all the notification records since '.$days.' days.');
+
+        return redirect()->back()->with('success', 'You have deleted all the notification records since '.$days.' days.');
     }
-     /**
+
+    /**
      * @param int $id
-     * @return Response
      * @param $compant instance of company table
      *
      * get the form for company setting page
+     *
+     * @return Response
      */
-    public function getStatuses() {
+    public function getStatuses()
+    {
         try {
             /* fetch the values of company from company table */
             $statuss = \DB::table('ticket_status')->get();
@@ -109,15 +114,17 @@ foreach ($markasread as $mark) {
             return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
     }
-    
-        /**
+
+    /**
      * @param int $id
-     * @return Response
      * @param $compant instance of company table
      *
      * get the form for company setting page
+     *
+     * @return Response
      */
-    public function editStatuses($id) {
+    public function editStatuses($id)
+    {
         try {
             /* fetch the values of company from company table */
             $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->first();
@@ -126,60 +133,59 @@ foreach ($markasread as $mark) {
             $statuss->email_user = Input::get('email_user');
             $statuss->sort = Input::get('sort');
             $delete = Input::get('delete');
-            if($delete == 'yes') {
+            if ($delete == 'yes') {
                 $statuss->state = 'delete';
-            }
-            else {
-                            $statuss->state = Input::get('state');
+            } else {
+                $statuss->state = Input::get('state');
             }
             $statuss->sort = Input::get('sort');
             $statuss->save();
             /* Direct to Company Settings Page */
-            return redirect()->back()->with('success','Status has been updated!');
+            return redirect()->back()->with('success', 'Status has been updated!');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
     }
-    
-    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss) {
-//        try {
+
+    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss)
+    {
+        //        try {
             /* fetch the values of company from company table */
                     $statuss->name = Input::get('name');
-            $statuss->icon_class = Input::get('icon_class');
-            $statuss->email_user = Input::get('email_user');
-            $statuss->sort = Input::get('sort');
-            $delete = Input::get('delete');
-            if($delete == 'yes') {
-                $statuss->state = 'delete';
-            }
-            else {
-                            $statuss->state = Input::get('state');
-            }
-            $statuss->sort = Input::get('sort');
-            $statuss->save();    
+        $statuss->icon_class = Input::get('icon_class');
+        $statuss->email_user = Input::get('email_user');
+        $statuss->sort = Input::get('sort');
+        $delete = Input::get('delete');
+        if ($delete == 'yes') {
+            $statuss->state = 'delete';
+        } else {
+            $statuss->state = Input::get('state');
+        }
+        $statuss->sort = Input::get('sort');
+        $statuss->save();
         /* Direct to Company Settings Page */
-            return redirect()->back()->with('success','Status has been created!');
+            return redirect()->back()->with('success', 'Status has been created!');
 //        } catch (Exception $ex) {
 //            return redirect()->back()->with('fails', $ex->errorInfo[2]);
 //        }
     }
-    
-    public function deleteStatuses($id) {
+
+    public function deleteStatuses($id)
+    {
         try {
-            if($id > 5) {
-            /* fetch the values of company from company table */
+            if ($id > 5) {
+                /* fetch the values of company from company table */
              \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->delete();
             /* Direct to Company Settings Page */
-            return redirect()->back()->with('success','Status has been deleted');
-            }
-            else {
-                return redirect()->back()->with('failed','You cannot delete this status');
+            return redirect()->back()->with('success', 'Status has been deleted');
+            } else {
+                return redirect()->back()->with('failed', 'You cannot delete this status');
             }
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
     }
-    
+
     /**
      * @param int $id
      * @param $compant instance of company table

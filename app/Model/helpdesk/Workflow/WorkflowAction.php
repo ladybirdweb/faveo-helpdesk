@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Workflow;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class WorkflowAction extends BaseModel
 {
     public $timestamps = false;

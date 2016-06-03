@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Agent_panel;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Canned extends BaseModel
 {
     /* define the table name */

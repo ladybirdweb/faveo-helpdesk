@@ -29,7 +29,11 @@ class SlaUpdate extends Request
     public function rules()
     {
         return [
+<<<<<<< HEAD
             'name'      =>  'required|max:50',
+=======
+            'name'         => 'required',
+>>>>>>> origin/master
             'grace_period' => 'required',
         ];
     }

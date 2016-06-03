@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
-use App\Model\Common\Template;
 use App\Http\Requests\helpdesk\TemplateRequest;
 use App\Http\Requests\helpdesk\TemplateUdate;
+use App\Model\Common\Template;
 use App\Model\Common\TemplateType;
 use Illuminate\Http\Request;
 use Lang;
@@ -14,14 +14,15 @@ use Lang;
  * |======================================================
  * | Class Template Controller
  * |======================================================
- * This controller is for CRUD email templates
+ * This controller is for CRUD email templates.
  */
-class TemplateController extends Controller {
-
+class TemplateController extends Controller
+{
     public $template;
     public $type;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
         $this->middleware('roles');
 
@@ -33,10 +34,12 @@ class TemplateController extends Controller {
     }
 
     /**
-     * get the list of templates
+     * get the list of templates.
+     *
      * @return type view
      */
-    public function index() {
+    public function index()
+    {
         try {
             return view('themes.default1.common.template.inbox');
         } catch (\Exception $ex) {
@@ -46,13 +49,17 @@ class TemplateController extends Controller {
 
     /**
      * Show template
-     * This template to show a particular template
+     * This template to show a particular template.
+     *
      * @param type $id
+     *
      * @return type view
      */
-    public function showTemplate($id) {
+    public function showTemplate($id)
+    {
         try {
             $templates = Template::where('set_id', '=', $id)->get();
+
             return view('themes.default1.common.template.list-templates', compact('templates'));
         } catch (\Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -60,19 +67,23 @@ class TemplateController extends Controller {
     }
 
     /**
-     * This function is used to display chumper datatables of the template list
+     * This function is used to display chumper datatables of the template list.
+     *
      * @param \Illuminate\Http\Request $request
+     *
      * @return type datatable
      */
-    public function GetTemplates(Request $request) {
+    public function GetTemplates(Request $request)
+    {
         $id = $request->input('id');
+
         return \Datatable::collection($this->template->where('set_id', '=', $id)->select('id', 'name', 'type')->get())
                         ->showColumns('name')
                         ->addColumn('type', function ($model) {
                             return $this->type->where('id', $model->type)->first()->name;
                         })
                         ->addColumn('action', function ($model) {
-                            return '<a href=' . url('templates/' . $model->id . '/edit') . " class='btn btn-sm btn-primary'>Edit</a>";
+                            return '<a href='.url('templates/'.$model->id.'/edit')." class='btn btn-sm btn-primary'>Edit</a>";
                         })
                         ->searchColumns('name')
                         ->orderColumns('name')
@@ -80,13 +91,14 @@ class TemplateController extends Controller {
     }
 
     /**
-     * 
      * @return type view
      */
-    public function create() {
+    public function create()
+    {
         try {
             $i = $this->template->orderBy('created_at', 'desc')->first()->id + 1;
             $type = $this->type->lists('name', 'id')->toArray();
+
             return view('themes.default1.common.template.create', compact('type'));
         } catch (\Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -94,21 +106,26 @@ class TemplateController extends Controller {
     }
 
     /**
-     * To store a set of templates
+     * To store a set of templates.
+     *
      * @param \App\Http\Requests\helpdesk\TemplateRequest $request
+     *
      * @return type redirect
      */
-    public function store(TemplateRequest $request) {
+    public function store(TemplateRequest $request)
+    {
         try {
             //dd($request);
             $this->template->fill($request->input())->save();
+
             return redirect('templates')->with('success', Lang::get('lang.template_saved_successfully'));
         } catch (\Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         try {
             $i = $this->template->orderBy('created_at', 'desc')->first()->id + 1;
             $template = $this->template->where('id', $id)->first();
@@ -120,7 +137,8 @@ class TemplateController extends Controller {
         }
     }
 
-    public function update($id, TemplateUdate $request) {
+    public function update($id, TemplateUdate $request)
+    {
         try {
             //dd($request);
             $template = $this->template->where('id', $id)->first();
@@ -139,7 +157,8 @@ class TemplateController extends Controller {
      *
      * @return Response
      */
-    public function destroy(Request $request) {
+    public function destroy(Request $request)
+    {
         try {
             $ids = $request->input('select');
             if (!empty($ids)) {
@@ -150,9 +169,9 @@ class TemplateController extends Controller {
                     } else {
                         echo "<div class='alert alert-danger alert-dismissable'>
                     <i class='fa fa-ban'></i>
-                    <b>" . \Lang::get('message.alert') . '!</b>
+                    <b>".\Lang::get('message.alert').'!</b>
                     <button type=button class=close data-dismiss=alert aria-hidden=true>&times;</button>
-                        ' . \Lang::get('message.no-record') . '
+                        '.\Lang::get('message.no-record').'
                 </div>';
                     }
                 }
@@ -160,27 +179,28 @@ class TemplateController extends Controller {
                     <i class='fa fa-ban'></i>
                     <b>
                     <button type=button class=close data-dismiss=alert aria-hidden=true>&times;</button>
-                        " . \Lang::get('message.deleted-successfully') . "
-                </div>";
+                        ".\Lang::get('message.deleted-successfully').'
+                </div>';
             } else {
                 echo "<div class='alert alert-danger alert-dismissable'>
                     <i class='fa fa-ban'></i>
-                    <b>" . \Lang::get('message.alert') . '!</b> 
+                    <b>".\Lang::get('message.alert').'!</b> 
                     <button type=button class=close data-dismiss=alert aria-hidden=true>&times;</button>
-                        ' . \Lang::get('message.select-a-row') . '
+                        '.\Lang::get('message.select-a-row').'
                 </div>';
             }
         } catch (\Exception $e) {
             echo "<div class='alert alert-danger alert-dismissable'>
                     <i class='fa fa-ban'></i>
-                    <b>" . \Lang::get('message.alert') . '!</b>
+                    <b>".\Lang::get('message.alert').'!</b>
                     <button type=button class=close data-dismiss=alert aria-hidden=true>&times;</button>
-                        ' . $e->getMessage() . '
+                        '.$e->getMessage().'
                 </div>';
         }
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         //dd($currency);
         try {
             if ($this->template->where('type', 3)->where('id', $id)->first()) {
@@ -235,6 +255,4 @@ class TemplateController extends Controller {
             return redirect('/')->with('fails', $e->getMessage());
         }
     }
-
-
 }

@@ -2,8 +2,8 @@
 
 namespace App\Model\kb;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Options extends BaseModel
 {
     protected $table = 'options';

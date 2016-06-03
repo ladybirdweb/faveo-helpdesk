@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Settings;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Security extends BaseModel
 {
     /* Using auto_response table  */
@@ -12,6 +12,6 @@ class Security extends BaseModel
     /* Set fillable fields in table */
     protected $fillable = [
 
-        'id', 'lockout_message','backlist_offender','backlist_threshold','lockout_period','days_to_keep_logs'
+        'id', 'lockout_message', 'backlist_offender', 'backlist_threshold', 'lockout_period', 'days_to_keep_logs',
     ];
 }

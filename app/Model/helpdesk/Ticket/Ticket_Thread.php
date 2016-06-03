@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Ticket;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Ticket_Thread extends BaseModel
 {
     protected $table = 'ticket_thread';

@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
+use App\Model\common\TemplateType;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
-use App\Model\common\TemplateType;
 use App\User;
 use Auth;
-use Lang;
 
-class PhpMailController extends Controller {
-
-    public function fetch_smtp_details($id) {
+class PhpMailController extends Controller
+{
+    public function fetch_smtp_details($id)
+    {
         $emails = Emails::where('id', '=', $id)->first();
         if ($emails->sending_status == 1) {
             return $emails;
@@ -30,7 +30,8 @@ class PhpMailController extends Controller {
      *
      * @return Mail
      */
-    public function sendmail($from, $to, $message, $template_variables) {
+    public function sendmail($from, $to, $message, $template_variables)
+    {
         // dd($from);
         $from_address = $this->fetch_smtp_details($from);
         if ($from_address == null) {
@@ -261,7 +262,7 @@ class PhpMailController extends Controller {
             $mail->Subject = $subject;
             if ($template == 'ticket-reply-agent') {
                 $line = '---Reply above this line--- <br/><br/>';
-                $mail->Body = $line . $messagebody;
+                $mail->Body = $line.$messagebody;
             } else {
                 $mail->Body = $messagebody;
             }
@@ -284,7 +285,8 @@ class PhpMailController extends Controller {
      *
      * @return MailNotification
      */
-    public function sendEmail($from, $to, $message) {
+    public function sendEmail($from, $to, $message)
+    {
         // dd($from);
         $from_address = $this->fetch_smtp_details($from);
 
@@ -410,7 +412,8 @@ class PhpMailController extends Controller {
      *
      * @return type
      */
-    public function company() {
+    public function company()
+    {
         $company = Company::Where('id', '=', '1')->first();
         if ($company->company_name == null) {
             $company = 'Support Center';
@@ -472,7 +475,8 @@ class PhpMailController extends Controller {
      *
      * @return type integer
      */
-    public function mailfrom($reg, $dept_id) {
+    public function mailfrom($reg, $dept_id)
+    {
         $email = Email::where('id', '=', '1')->first();
         if ($reg == 1) {
             return $email->sys_email;
@@ -485,5 +489,4 @@ class PhpMailController extends Controller {
             }
         }
     }
-
 }

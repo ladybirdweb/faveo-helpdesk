@@ -2,23 +2,20 @@
 
 namespace App\Http\Controllers\Common;
 
-use Illuminate\Http\Request;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Model\Api\ApiSetting;
-use Exception;
-use Event;
-use Log;
-use App\User;
-use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
+use App\Model\helpdesk\Ticket\Tickets;
+use Exception;
+use Illuminate\Http\Request;
+use Log;
 
-class ApiSettings extends Controller {
-
+class ApiSettings extends Controller
+{
     public $api;
 
-    public function __construct() {
-
+    public function __construct()
+    {
         $this->middleware('auth', ['except' => ['ticketDetailEvent', 'postHook', 'postForm']]);
         $this->middleware('roles', ['except' => ['ticketDetailEvent', 'postHook', 'postForm']]);
 
@@ -26,8 +23,8 @@ class ApiSettings extends Controller {
         $this->api = $api;
     }
 
-    public function show() {
-
+    public function show()
+    {
         try {
             $details = [];
             $ticket_detail = '';
@@ -35,16 +32,18 @@ class ApiSettings extends Controller {
             if ($settings->get()->count() > 0) {
                 $details = $this->api->lists('value', 'key')->toArray();
             }
-            if (key_exists('ticket_detail', $details)) {
+            if (array_key_exists('ticket_detail', $details)) {
                 $ticket_detail = $details['ticket_detail'];
             }
+
             return view('themes.default1.common.api.settings', compact('ticket_detail'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
 
-    public function postSettings(Request $request) {
+    public function postSettings(Request $request)
+    {
         $this->validate($request, [
             'ticket_detail' => 'url',
         ]);
@@ -58,19 +57,20 @@ class ApiSettings extends Controller {
             foreach ($request->except('_token') as $key => $value) {
                 $settings->create(['key' => $key, 'value' => $value]);
             }
+
             return redirect()->back()->with('success', 'Updated Successfully');
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
 
-    public function ticketDetailEvent($detail) {
+    public function ticketDetailEvent($detail)
+    {
         try {
-
             $ticket = new Tickets();
             $ticketid = $detail->ticket_id;
             $data = $ticket
-                    ->join('ticket_thread', function($join) use ($ticketid) {
+                    ->join('ticket_thread', function ($join) use ($ticketid) {
                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id')
                         ->where('ticket_thread.ticket_id', '=', $ticketid);
                     })
@@ -85,7 +85,8 @@ class ApiSettings extends Controller {
         }
     }
 
-    public function postHook($data) {
+    public function postHook($data)
+    {
         try {
             $set = $this->api->where('key', 'ticket_detail')->first();
             if ($set) {
@@ -99,17 +100,17 @@ class ApiSettings extends Controller {
         }
     }
 
-    public function postForm($data, $url) {
+    public function postForm($data, $url)
+    {
         try {
             $post_data = [
-                'data' => $data
+                'data' => $data,
             ];
             $upgrade_controller = new \App\Http\Controllers\Update\UpgradeController();
             $upgrade_controller->postCurl($url, $post_data);
-            Log::info('ticket details has send to : ' . $url . ' and details are : ' . $data);
+            Log::info('ticket details has send to : '.$url.' and details are : '.$data);
         } catch (Exception $ex) {
             throw new Exception($ex->getMessage());
         }
     }
-
 }

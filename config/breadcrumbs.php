@@ -2,7 +2,6 @@
 
 return [
 
-	'view' => '_partials/breadcrumbs',
+    'view' => '_partials/breadcrumbs',
 
 ];
-?>

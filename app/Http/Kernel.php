@@ -33,13 +33,13 @@ class Kernel extends HttpKernel
         'auth'        => \App\Http\Middleware\Authenticate::class,
         'auth.basic'  => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest'       => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'throttle'    => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'roles'       => \App\Http\Middleware\CheckRole::class,
         'role.agent'  => \App\Http\Middleware\CheckRoleAgent::class,
         'role.user'   => \App\Http\Middleware\CheckRoleUser::class,
         'api'         => \App\Http\Middleware\ApiKey::class,
         'jwt.auth'    => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
         'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
-        'update'=>\App\Http\Middleware\CheckUpdate::class
+        'update'      => \App\Http\Middleware\CheckUpdate::class,
     ];
 }

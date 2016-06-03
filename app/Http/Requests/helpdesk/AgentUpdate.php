@@ -29,16 +29,16 @@ class AgentUpdate extends Request
     public function rules()
     {
         return [
-            'user_name'    => 'required|max:30',
-            'first_name'   => 'required|max:30',
-            'last_name'    => 'required|max:30',
-            'email'        => 'required|email',
-            'active'       => 'required',
-            'role'         => 'required',
-            'group'        => 'required',
+            'user_name'           => 'required|max:30',
+            'first_name'          => 'required|max:30',
+            'last_name'           => 'required|max:30',
+            'email'               => 'required|email',
+            'active'              => 'required',
+            'role'                => 'required',
+            'group'               => 'required',
             'primary_department'  => 'required',
-            'agent_time_zone'  => 'required',
-            'team' => 'required',
+            'agent_time_zone'     => 'required',
+            'team'                => 'required',
         ];
     }
 }
