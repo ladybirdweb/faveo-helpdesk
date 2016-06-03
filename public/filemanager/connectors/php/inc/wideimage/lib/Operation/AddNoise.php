@@ -37,7 +37,7 @@
          * Returns image with every pixel changed by specififed function.
          *
          * @param WideImage_Image $image
-         * @param str             $function
+         * @param string          $function
          * @param int             $value
          *
          * @return WideImage_Image

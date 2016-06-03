@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Agent\kb;
 
 // Controllers
-use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 // Requests
 use App\Http\Requests\kb\ArticleRequest;
@@ -21,8 +20,8 @@ use Datatable;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
-use Redirect;
 use Lang;
+use Redirect;
 
 /**
  * ArticleController
@@ -77,6 +76,7 @@ class ArticleController extends Controller
                         /* add column Created */
                         ->addColumn('publish_time', function ($model) {
                             $t = $model->publish_time;
+
                             return $t;
                         })
                         /* add column action */
@@ -217,7 +217,6 @@ class ArticleController extends Controller
      */
     public function update($slug, ArticleUpdate $request)
     {
-        
         $article = new Article();
         $relation = new Relationship();
         $aid = $article->where('id', $slug)->first();

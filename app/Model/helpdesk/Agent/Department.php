@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Agent;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Department extends BaseModel
 {
     protected $table = 'department';

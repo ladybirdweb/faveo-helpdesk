@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Settings;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Company extends BaseModel
 {
     protected $table = 'settings_company';

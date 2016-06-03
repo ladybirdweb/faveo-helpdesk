@@ -4,14 +4,15 @@ namespace App\Http\Requests\helpdesk;
 
 use App\Http\Requests\Request;
 
-class RatingUpdateRequest extends Request {
-
+class RatingUpdateRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -20,14 +21,14 @@ class RatingUpdateRequest extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            'name' => 'required|max:20',
-            'display_order' => 'required|integer',
+            'name'               => 'required|max:20',
+            'display_order'      => 'required|integer',
             'allow_modification' => 'required',
-            'rating_scale' => 'required',
-            'restrict' => 'required'
+            'rating_scale'       => 'required',
+            'restrict'           => 'required',
         ];
     }
-
 }

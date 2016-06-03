@@ -11,9 +11,9 @@ use App\Http\Requests\helpdesk\OrganizationUpdate;
 // models
 /* Define OrganizationRequest to validate the create form */
 use App\Model\helpdesk\Agent_panel\Organization;
-use App\User;
-/* Define OrganizationUpdate to validate the create form */
 use App\Model\helpdesk\Agent_panel\User_org;
+/* Define OrganizationUpdate to validate the create form */
+use App\User;
 // classes
 use Exception;
 use Lang;
@@ -24,8 +24,8 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class OrganizationController extends Controller {
-
+class OrganizationController extends Controller
+{
     /**
      * Create a new controller instance.
      * constructor to check
@@ -35,7 +35,8 @@ class OrganizationController extends Controller {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // checking for authentication
         $this->middleware('auth');
         // checking if the role is agent
@@ -49,7 +50,8 @@ class OrganizationController extends Controller {
      *
      * @return type Response
      */
-    public function index() {
+    public function index()
+    {
         try {
             /* get all values of table organization */
             return view('themes.default1.agent.helpdesk.organization.index');
@@ -63,7 +65,8 @@ class OrganizationController extends Controller {
      *
      * @return datatable
      */
-    public function org_list() {
+    public function org_list()
+    {
         // chumper datable package call to display Advance datatable
         return \Datatable::collection(Organization::all())
                         /* searchable name */
@@ -75,7 +78,7 @@ class OrganizationController extends Controller {
                             // return $model->name;
                             if (strlen($model->name) > 20) {
                                 $orgname = substr($model->name, 0, 25);
-                                $orgname = substr($orgname, 0, strrpos($orgname, ' ')) . ' ...';
+                                $orgname = substr($orgname, 0, strrpos($orgname, ' ')).' ...';
                             } else {
                                 $orgname = $model->name;
                             }
@@ -98,8 +101,8 @@ class OrganizationController extends Controller {
                         ->addColumn('Actions', function ($model) {
                             // displaying action buttons
                             // modal popup to delete data
-                            return '<span  data-toggle="modal" data-target="#deletearticle' . $model->id . '"><a href="#" ><button class="btn btn-danger btn-xs"></a> ' . \Lang::get('lang.delete') . ' </button></span>&nbsp;<a href="' . route('organizations.edit', $model->id) . '" class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp;<a href="' . route('organizations.show', $model->id) . '" class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>
-				<div class="modal fade" id="deletearticle' . $model->id . '">
+                            return '<span  data-toggle="modal" data-target="#deletearticle'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.\Lang::get('lang.delete').' </button></span>&nbsp;<a href="'.route('organizations.edit', $model->id).'" class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href="'.route('organizations.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
+				<div class="modal fade" id="deletearticle'.$model->id.'">
 			        <div class="modal-dialog">
 			            <div class="modal-content">
                 			<div class="modal-header">
@@ -107,11 +110,11 @@ class OrganizationController extends Controller {
                     			<h4 class="modal-title">Are You Sure ?</h4>
                 			</div>
                 			<div class="modal-body">
-                				' . $model->user_name . '
+                				'.$model->user_name.'
                 			</div>
                 			<div class="modal-footer">
                     			<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">Close</button>
-                    			<a href="' . route('org.delete', $model->id) . '"><button class="btn btn-danger">delete</button></a>
+                    			<a href="'.route('org.delete', $model->id).'"><button class="btn btn-danger">delete</button></a>
                 			</div>
             			</div><!-- /.modal-content -->
         			</div><!-- /.modal-dialog -->
@@ -125,7 +128,8 @@ class OrganizationController extends Controller {
      *
      * @return type Response
      */
-    public function create() {
+    public function create()
+    {
         try {
             return view('themes.default1.agent.helpdesk.organization.create');
         } catch (Exception $e) {
@@ -141,7 +145,8 @@ class OrganizationController extends Controller {
      *
      * @return type Redirect
      */
-    public function store(Organization $org, OrganizationRequest $request) {
+    public function store(Organization $org, OrganizationRequest $request)
+    {
         try {
             /* Insert the all input request to organization table */
             /* Check whether function success or not */
@@ -166,7 +171,8 @@ class OrganizationController extends Controller {
      *
      * @return type view
      */
-    public function show($id, Organization $org) {
+    public function show($id, Organization $org)
+    {
         try {
             /* select the field by id  */
             $orgs = $org->whereId($id)->first();
@@ -185,7 +191,8 @@ class OrganizationController extends Controller {
      *
      * @return type view
      */
-    public function edit($id, Organization $org) {
+    public function edit($id, Organization $org)
+    {
         try {
             /* select the field by id  */
             $orgs = $org->whereId($id)->first();
@@ -205,7 +212,8 @@ class OrganizationController extends Controller {
      *
      * @return type Redirect
      */
-    public function update($id, Organization $org, OrganizationUpdate $request) {
+    public function update($id, Organization $org, OrganizationUpdate $request)
+    {
         try {
             /* select the field by id  */
             $orgs = $org->whereId($id)->first();
@@ -219,7 +227,7 @@ class OrganizationController extends Controller {
                 return redirect('organizations')->with('fails', Lang::get('lang.organization_can_not_update'));
             }
         } catch (Exception $e) {
-//            dd($e);
+            //            dd($e);
             /* redirect to Index page with Fails Message */
             return redirect('organizations')->with('fails', $e->getMessage());
         }
@@ -232,7 +240,8 @@ class OrganizationController extends Controller {
      *
      * @return type Redirect
      */
-    public function destroy($id, Organization $org, User_org $user_org) {
+    public function destroy($id, Organization $org, User_org $user_org)
+    {
         try {
             /* select the field by id  */
             $orgs = $org->whereId($id)->first();
@@ -258,7 +267,8 @@ class OrganizationController extends Controller {
      *
      * @return type boolean
      */
-    public function Head_Org($id) {
+    public function Head_Org($id)
+    {
         // get the user to make organization head
         $head_user = \Input::get('user');
         // get an instance of the selected organization
@@ -266,17 +276,21 @@ class OrganizationController extends Controller {
         $org_head->head = $head_user;
         // save the user to organization head
         $org_head->save();
+
         return 1;
     }
 
     /**
-     * get the report of organizations
+     * get the report of organizations.
+     *
      * @param type $id
      * @param type $date111
      * @param type $date122
+     *
      * @return type array
      */
-    public function orgChartData($id, $date111 = '', $date122 = '') {
+    public function orgChartData($id, $date111 = '', $date122 = '')
+    {
         $date11 = strtotime($date122);
         $date12 = strtotime($date111);
         if ($date11 && $date12) {
@@ -288,30 +302,30 @@ class OrganizationController extends Controller {
             $date3 = date('Y-m-d');
             $format = 'Y-m-d';
             // generating a date range of 1 month
-            $date1 = strtotime(date($format, strtotime('-1 month' . $date3)));
+            $date1 = strtotime(date($format, strtotime('-1 month'.$date3)));
         }
         $return = '';
         $last = '';
         for ($i = $date1; $i <= $date2; $i = $i + 86400) {
             $thisDate = date('Y-m-d', $i);
 
-            $user_orga_relation_id = "";
+            $user_orga_relation_id = '';
             $user_orga_relations = User_org::where('org_id', '=', $id)->get();
             foreach ($user_orga_relations as $user_orga_relation) {
                 $user_orga_relation_id[] = $user_orga_relation->user_id;
             }
-            $created = \DB::table('tickets')->select('created_at')->whereIn('user_id', $user_orga_relation_id)->where('created_at', 'LIKE', '%' . $thisDate . '%')->count();
-            $closed = \DB::table('tickets')->select('closed_at')->whereIn('user_id', $user_orga_relation_id)->where('closed_at', 'LIKE', '%' . $thisDate . '%')->count();
-            $reopened = \DB::table('tickets')->select('reopened_at')->whereIn('user_id', $user_orga_relation_id)->where('reopened_at', 'LIKE', '%' . $thisDate . '%')->count();
+            $created = \DB::table('tickets')->select('created_at')->whereIn('user_id', $user_orga_relation_id)->where('created_at', 'LIKE', '%'.$thisDate.'%')->count();
+            $closed = \DB::table('tickets')->select('closed_at')->whereIn('user_id', $user_orga_relation_id)->where('closed_at', 'LIKE', '%'.$thisDate.'%')->count();
+            $reopened = \DB::table('tickets')->select('reopened_at')->whereIn('user_id', $user_orga_relation_id)->where('reopened_at', 'LIKE', '%'.$thisDate.'%')->count();
 
             $value = ['date' => $thisDate, 'open' => $created, 'closed' => $closed, 'reopened' => $reopened];
             $array = array_map('htmlentities', $value);
             $json = html_entity_decode(json_encode($array));
-            $return .= $json . ',';
+            $return .= $json.',';
         }
         $last = rtrim($return, ',');
         $users = User::whereId($id)->first();
-        return '[' . $last . ']';
-    }
 
+        return '['.$last.']';
+    }
 }

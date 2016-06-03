@@ -7,9 +7,8 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
-use App\BaseModel;
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
-
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract
+{
     use Authenticatable,
         CanResetPassword;
 
@@ -28,7 +27,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $fillable = ['user_name', 'email', 'password', 'active', 'first_name', 'last_name', 'ban', 'ext', 'mobile', 'profile_pic',
         'phone_number', 'company', 'agent_sign', 'account_type', 'account_status',
         'assign_group', 'primary_dpt', 'agent_tzone', 'daylight_save', 'limit_access',
-        'directory_listing', 'vacation_mode', 'role', 'internal_note','counrty_code'];
+        'directory_listing', 'vacation_mode', 'role', 'internal_note', 'counrty_code', ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -36,18 +35,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
-    
 
-    public function getProfilePicAttribute($value) {
+    public function getProfilePicAttribute($value)
+    {
         //$n =1;
-        if(!$value){
+        if (!$value) {
             return \Gravatar::src($this->attributes['email']);
-        }else{
+        } else {
             return asset('lb-faveo/media/profilepic/'.$value);
         }
-        
     }
-    
-    
-
 }

@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Notification;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Notification extends BaseModel
 {
     protected $table = 'notifications';

@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Form;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Form_details extends BaseModel
 {
     public $timestamps = false;

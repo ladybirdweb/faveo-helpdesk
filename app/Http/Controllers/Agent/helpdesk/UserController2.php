@@ -30,7 +30,7 @@ use Redirect;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class UserController extends Controller
+class UserController2 extends Controller
 {
     /**
      * Create a new controller instance.

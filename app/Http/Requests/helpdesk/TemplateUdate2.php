@@ -9,7 +9,7 @@ use App\Http\Requests\Request;
  *
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class TemplateUdate extends Request
+class TemplateUdate2 extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

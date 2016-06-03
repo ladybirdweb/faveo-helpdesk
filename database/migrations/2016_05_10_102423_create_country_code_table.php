@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateCountryCodeTable extends Migration
 {
@@ -14,10 +14,10 @@ class CreateCountryCodeTable extends Migration
     {
         Schema::create('country_code', function (Blueprint $table) {
             $table->increments('id');
-            $table->char('iso',2);
+            $table->char('iso', 2);
             $table->string('name', 100);
             $table->string('nicename', 100);
-            $table->char('iso3',3);
+            $table->char('iso3', 3);
             $table->smallInteger('numcode');
             $table->integer('phonecode');
             $table->timestamps();

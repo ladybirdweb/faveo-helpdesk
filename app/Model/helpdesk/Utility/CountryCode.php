@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Utility;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class CountryCode extends BaseModel
 {
     protected $table = 'country_code';

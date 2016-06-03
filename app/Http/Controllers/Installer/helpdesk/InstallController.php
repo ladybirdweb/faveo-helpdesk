@@ -15,6 +15,7 @@ use App\User;
 // classes
 use Artisan;
 use Config;
+use DB;
 use Exception;
 use File;
 use Hash;
@@ -22,7 +23,6 @@ use Input;
 use Redirect;
 use Session;
 use View;
-use DB;
 
 /**
  * |=======================================================================
@@ -63,6 +63,7 @@ class InstallController extends Controller
         $accept = (Input::has('accept1')) ? true : false;
         if ($accept == 'accept') {
             Session::put('step1', 'step1');
+
             return Redirect::route('prerequisites');
         } else {
             return Redirect::route('licence')->with('fails', 'Failed! first accept the licence agreeement');
@@ -303,9 +304,8 @@ class InstallController extends Controller
             }
         } catch (Exception $e) {
         }
-        if( $request->input('dummy-data') == 'on')
-        {   
-            $path = base_path()."/DB/dummy-data.sql";
+        if ($request->input('dummy-data') == 'on') {
+            $path = base_path().'/DB/dummy-data.sql';
             // dd($path);
             DB::unprepared(file_get_contents($path));
         } else {
@@ -313,7 +313,7 @@ class InstallController extends Controller
             Artisan::call('migrate', ['--force' => true]);
             Artisan::call('db:seed', ['--force' => true]);
         }
-      
+
         // create user
         $firstname = $request->input('firstname');
         $lastname = $request->input('Lastname');
@@ -398,9 +398,9 @@ class InstallController extends Controller
             $content24 = File::get($path23);
             $content23 = str_replace('"%smtplink%"', $smtpfilepath, $content23);
             $content24 = str_replace("'%url%'", $lfmpath, $content24);
-            $link = "http://".$_SERVER["HTTP_HOST"].$_SERVER['REQUEST_URI'];
-            $pos = strpos($link,"final");
-            $link = substr($link,0,$pos);
+            $link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+            $pos = strpos($link, 'final');
+            $link = substr($link, 0, $pos);
             $app_url = app_path('../config/app.php');
             $datacontent2 = File::get($app_url);
             $datacontent2 = str_replace('http://localhost', $link, $datacontent2);
@@ -415,6 +415,7 @@ class InstallController extends Controller
                 Session::forget('step5');
                 Session::forget('step6');
                 Artisan::call('key:generate');
+
                 return View::make('themes/default1/installer/helpdesk/view6');
             } catch (Exception $e) {
                 return Redirect::route('npl');
@@ -438,19 +439,19 @@ class InstallController extends Controller
             return redirect('/auth/login');
         }
     }
-   
+
     public function changeFilePermission()
     {
         $path1 = base_path().DIRECTORY_SEPARATOR.'.env';
         $path2 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'database.php';
         $path3 = base_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'routes.php';
         $path4 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'lfm.php';
-        if ( chmod($path1, 0777) && chmod($path2, 0777) && chmod($path3, 0777) && chmod($path4, 0777)) {
-            $f1 = substr(sprintf("%o",fileperms($path1)),-3);
-            $f2 = substr(sprintf("%o",fileperms($path2)),-3);
-            $f3 = substr(sprintf("%o",fileperms($path3)),-3);
-            $f4 = substr(sprintf("%o",fileperms($path4)),-3);
-            if( $f1 == '777' && $f2 == '777' && $f3 == '777' && $f4 == '777') {
+        if (chmod($path1, 0777) && chmod($path2, 0777) && chmod($path3, 0777) && chmod($path4, 0777)) {
+            $f1 = substr(sprintf('%o', fileperms($path1)), -3);
+            $f2 = substr(sprintf('%o', fileperms($path2)), -3);
+            $f3 = substr(sprintf('%o', fileperms($path3)), -3);
+            $f4 = substr(sprintf('%o', fileperms($path4)), -3);
+            if ($f1 == '777' && $f2 == '777' && $f3 == '777' && $f4 == '777') {
                 return Redirect::back();
             } else {
                 return Redirect::back()->with('fail_to_change', 'We are unable to change file permission on your server please try to change permission manually.');
@@ -462,6 +463,6 @@ class InstallController extends Controller
 
     public function jsDisabled()
     {
-        return view('themes/default1/installer/helpdesk/check-js')->with('url',$_SERVER['HTTP_REFERER']);
+        return view('themes/default1/installer/helpdesk/check-js')->with('url', $_SERVER['HTTP_REFERER']);
     }
 }

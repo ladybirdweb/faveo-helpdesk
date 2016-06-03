@@ -212,7 +212,9 @@ class LanguageController extends Controller
      * @return type
      */
     public function download()
-    {   $file_path = base_path('public/downloads/en.zip');
+    {
+        $file_path = base_path('public/downloads/en.zip');
+
         return response()->download($file_path);
     }
 

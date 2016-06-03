@@ -82,6 +82,7 @@ class DepartmentController extends Controller
             $templates = $template->get();
             $department = $department->get();
             $groups = $group->lists('id', 'name');
+
             return view('themes.default1.admin.helpdesk.agent.departments.create', compact('department', 'templates', 'slas', 'user', 'emails', 'groups'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -99,7 +100,7 @@ class DepartmentController extends Controller
     public function store(Department $department, DepartmentRequest $request)
     {
         try {
-            $department->fill($request->except('group_id', 'manager','sla'))->save();
+            $department->fill($request->except('group_id', 'manager', 'sla'))->save();
             if ($request->sla) {
                 $department->sla = $request->input('sla');
             } else {
@@ -149,6 +150,7 @@ class DepartmentController extends Controller
             $departments = $department->whereId($id)->first();
             $groups = $group->lists('id', 'name');
             $assign = $group_assign_department->where('department_id', $id)->lists('group_id');
+
             return view('themes.default1.admin.helpdesk.agent.departments.edit', compact('assign', 'team', 'templates', 'departments', 'slas', 'user', 'emails', 'groups'));
         } catch (Exception $e) {
             return redirect('departments')->with('fails', $e->getMessage());
@@ -223,7 +225,7 @@ class DepartmentController extends Controller
                 } else {
                     $text_tickets = 'Ticket';
                 }
-                $ticket = '<li>'.$tickets.' '.$text_tickets . Lang::get('lang.have_been_moved_to_default_department').'</li>';
+                $ticket = '<li>'.$tickets.' '.$text_tickets.Lang::get('lang.have_been_moved_to_default_department').'</li>';
             } else {
                 $ticket = '';
             }
@@ -234,7 +236,7 @@ class DepartmentController extends Controller
                 } else {
                     $text_user = 'User';
                 }
-                $user = '<li>'.$users.' '.$text_user.Lang::get('lang.have_been_moved_to_default_department'). '</li>';
+                $user = '<li>'.$users.' '.$text_user.Lang::get('lang.have_been_moved_to_default_department').'</li>';
             } else {
                 $user = '';
             }

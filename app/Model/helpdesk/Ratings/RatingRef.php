@@ -2,13 +2,13 @@
 
 namespace App\Model\helpdesk\Ratings;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class RatingRef extends BaseModel
 {
-     protected $table = 'rating_ref';
+    protected $table = 'rating_ref';
     protected $fillable = [
 
-            'rating_id', 'ticket_id', 'thread_id','rating_value'
+            'rating_id', 'ticket_id', 'thread_id', 'rating_value',
                             ];
 }

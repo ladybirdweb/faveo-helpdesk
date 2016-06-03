@@ -18,7 +18,7 @@ class CreateUserNotificationTable extends Migration
             $table->integer('user_id');
             $table->integer('is_read');
             $table->timestamps();
-            });
+        });
     }
 
     /**

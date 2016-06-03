@@ -275,7 +275,7 @@ class TicketController extends Controller
             $emailadd = User::where('id', $eventuserid)->first()->email;
             //dd($emailadd);
             $source = $eventthread->source;
-            
+
             $form_data = $request->except('reply_content', 'ticket_ID', 'attachment');
             \Event::fire(new \App\Events\ClientTicketFormPost($form_data, $emailadd, $source));
             //dd('yes');
@@ -339,7 +339,7 @@ class TicketController extends Controller
 // //                }
 //             }, true);
             //dd('reply');
-            /**
+            /*
              * Getting the subject of the thread
              */
             //dd($eventthread);
