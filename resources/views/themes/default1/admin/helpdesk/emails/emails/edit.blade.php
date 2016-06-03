@@ -46,19 +46,19 @@ class="active"
         <div class="row">
             <!-- email address -->
             <div class="col-xs-4 form-group {{ $errors->has('email_address') ? 'has-error' : '' }}" id="email_address_error">
-                {!! Form::label('email_address',Lang::get('lang.email_address')) !!}
+                {!! Form::label('email_address',Lang::get('lang.email_address')) !!} <span class="text-red"> *</span>
                 {!! $errors->first('email_address', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('email_address',null,['class' => 'form-control']) !!}
             </div>
             <!-- Email name -->
             <div class="col-xs-4 form-group {!! $errors->has('email_name') ? 'has-error' : ''!!}" id="email_name_error">
-                {!! Form::label('email_name',Lang::get('lang.from_name')) !!}
+                {!! Form::label('email_name',Lang::get('lang.from_name')) !!} <span class="text-red"> *</span>
                 {!! $errors->first('email_name', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('email_name',null,['class' => 'form-control', 'id' => 'email_name']) !!}
             </div>
             <!-- password -->
             <div class="col-xs-4 form-group {!! $errors->has('password') ? 'has-error' : ''!!}" id="password_error">
-                {!! Form::label('password',Lang::get('lang.password')) !!}
+                {!! Form::label('password',Lang::get('lang.password')) !!} <span class="text-red"> *</span>
                 {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
                 <input type="password" name="password" class="form-control" id="password" value={!! Crypt::decrypt($emails->password) !!} >
             </div>

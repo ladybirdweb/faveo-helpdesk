@@ -52,7 +52,7 @@ class="active"
         <div class="row">
             <!-- name -->
             <div class="col-xs-4 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                {!! Form::label('name',Lang::get('lang.name')) !!}
+                {!! Form::label('name',Lang::get('lang.name')) !!} <span class="text-red"> *</span>
                 {!! Form::text('name',null,['class' => 'form-control']) !!}
             </div>
             <!-- group status -->
@@ -119,7 +119,7 @@ class="active"
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary'])!!}
+        {!! Form::submit(Lang::get('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
     </div>
 </div>
 {!!Form::close()!!}

@@ -35,11 +35,11 @@ class = "active"
     <div class="banner-content text-center">
         {!! Form::open(['url' => 'checkmyticket' , 'method' => 'POST'] )!!}
 
-        {!! Form::label('email',Lang::get('lang.email')) !!}
+        {!! Form::label('email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
 
         {!! Form::text('email_address',null,['class' => 'form-control']) !!}
 
-        {!! Form::label('ticket_number',Lang::get('lang.ticket_number'),['style' => 'display: block']) !!}
+        {!! Form::label('ticket_number',Lang::get('lang.ticket_number')) !!}<span class="text-red">*</span>
 
         {!! Form::text('ticket_number',null,['class' => 'form-control']) !!}
         <br/><input type="submit" value="{!! Lang::get('lang.check_ticket_status') !!}" class="btn btn-info">
@@ -119,7 +119,7 @@ class = "active"
             </div>
             <div class="col-md-12 form-group {{ $errors->has('Name') ? 'has-error' : '' }}">
 
-                {!! Form::label('Name',Lang::get('lang.name')) !!}
+                {!! Form::label('Name',Lang::get('lang.name')) !!}<span class="text-red"> *</span>
 
                 {!! Form::text('Name',null,['class' => 'form-control']) !!}
 
@@ -127,7 +127,7 @@ class = "active"
 
             <div class="col-md-12 form-group {{ $errors->has('Email') ? 'has-error' : '' }}">
 
-                {!! Form::label('Email',Lang::get('lang.email')) !!}
+                {!! Form::label('Email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
 
                 {!! Form::text('Email',null,['class' => 'form-control']) !!}
 
@@ -160,7 +160,7 @@ class = "active"
             </div>
             <div class="col-md-12 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
 
-                {!! Form::label('Details',Lang::get('lang.message')) !!}
+                {!! Form::label('Details',Lang::get('lang.message')) !!}<span class="text-red"> *</span>
 
                 {!! Form::textarea('Details',null,['class' => 'form-control']) !!}
 

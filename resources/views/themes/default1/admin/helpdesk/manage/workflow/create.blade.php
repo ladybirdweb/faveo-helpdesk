@@ -75,7 +75,7 @@ class="active"
             </div>
             @endif
             <div class="form-group {!! $errors->has('name') ? 'has-error' : '' !!}">
-                <label for="inputName" class="col-sm-2 control-label">{!! Lang::get('lang.name') !!}</label>
+                <label for="inputName" class="col-sm-2 control-label">{!! Lang::get('lang.name') !!} <span class="text-red"> *</span></label>
                 <div class="col-sm-6">
                     {!! Form::text('name',null,['class' => 'form-control', 'placeholder' => Lang::get('lang.name'), 'id' => 'name']) !!}
                 </div>
@@ -89,14 +89,14 @@ class="active"
             </div>
             <div class="form-group {!! $errors->has('execution_order') ? 'has-error' : '' !!}">
                 <div>
-                    <label for="Exceution" class="col-sm-2 control-label">{!! Lang::get('lang.exceution_order') !!}</label>
+                    <label for="Exceution" class="col-sm-2 control-label">{!! Lang::get('lang.exceution_order') !!} <span class="text-red"> *</span></label>
                     <div class="col-sm-6">
                         {!! Form::input('number', 'execution_order',null,['class' => 'form-control', 'placeholder' => Lang::get('lang.exceution_order'), 'id' => 'execution_order', 'min' => '0']) !!}
                     </div>
                 </div>
             </div>
             <div class="form-group {!! $errors->has('target_channel') ? 'has-error' : '' !!}">
-                <label class="col-sm-2 control-label">{!! Lang::get('lang.target_channel') !!}</label>
+                <label class="col-sm-2 control-label">{!! Lang::get('lang.target_channel') !!} <span class="text-red"> *</span></label>
                 <div class="col-sm-6">
                     {!! Form::select('target_channel', [''=> '-- '.Lang::get('lang.select_a_channel').' --', 'A-0' => 'Any', 'A-1' => 'Web Forms', 'A-4' => 'API Calls', 'A-2' => 'Emails'], null,['class' => 'form-control', 'id' => 'execution_order']) !!}
                 </div>
@@ -107,11 +107,11 @@ class="active"
         <div class="col-xs-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#open" data-toggle="tab">{!! Lang::get('lang.workflow_rules') !!}</a>
+                    <li class="active"><a href="#open" data-toggle="tab">{!! Lang::get('lang.workflow_rules') !!} <span class="text-red"> *</span></a>
                     </li>
-                    <li><a href="#close" data-toggle="tab">{!! Lang::get('lang.workflow_action') !!}</a>
+                    <li><a href="#close" data-toggle="tab">{!! Lang::get('lang.workflow_action') !!} <span class="text-red"> *</span></a>
                     </li>
-                    <li><a href="#delect" data-toggle="tab">{!! Lang::get('lang.internal_notes') !!}</a>
+                    <li><a href="#delect" data-toggle="tab">{!! Lang::get('lang.internal_notes') !!} </a>
                     </li>
                 </ul>
                 <div class="tab-content">
@@ -123,9 +123,9 @@ class="active"
                                     <table  class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <td>{!! Lang::get('lang.rules') !!}</td>
-                                                <td>{!! Lang::get('lang.condition') !!}</td>
-                                                <td>{!! Lang::get('lang.statement') !!}</td>
+                                                <td>{!! Lang::get('lang.rules') !!} <span class="text-red"> *</span></td>
+                                                <td>{!! Lang::get('lang.condition') !!} <span class="text-red"> *</span></td>
+                                                <td>{!! Lang::get('lang.statement') !!} <span class="text-red"> *</span></td>
                                                 <td>{!! Lang::get('lang.action') !!}</td>
                                             </tr>
                                         </thead>
@@ -187,8 +187,8 @@ class="active"
                                 <table  class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <td>{!! Lang::get('lang.condition') !!}</td>
-                                            <td>{!! Lang::get('lang.rules') !!}</td>
+                                            <td>{!! Lang::get('lang.condition') !!} <span class="text-red"> *</span></td>
+                                            <td>{!! Lang::get('lang.rules') !!} <span class="text-red"> *</span></td>
                                             <td>{!! Lang::get('lang.action') !!}</td>
                                         </tr>
                                     </thead>

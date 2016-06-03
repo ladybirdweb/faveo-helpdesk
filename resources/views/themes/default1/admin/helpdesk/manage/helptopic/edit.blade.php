@@ -90,7 +90,7 @@ class="active"
             <!-- Topic text form Required -->
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('topic') ? 'has-error' : '' }}">
-                    {!! Form::label('topic',Lang::get('lang.topic')) !!}
+                    {!! Form::label('topic',Lang::get('lang.topic')) !!} <span class="text-red"> *</span>
                     {!! Form::text('topic',null,['class' => 'form-control']) !!}
                 </div>
             </div>
@@ -120,7 +120,7 @@ class="active"
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group {{ $errors->has('priority') ? 'has-error' : '' }}">
-                    {!! Form::label('priority',Lang::get('lang.priority')) !!}
+                    {!! Form::label('priority',Lang::get('lang.priority')) !!} <span class="text-red"> *</span>
                     {!!Form::select('priority', [''=>Lang::get('lang.select_a_priority'),Lang::get('lang.priorities')=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control']) !!}
                 </div>
             </div>

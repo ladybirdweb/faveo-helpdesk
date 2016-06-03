@@ -63,7 +63,7 @@ class="active"
         <div class="form-group">
             <div class="row" style="margin-top: 10px;">
                 <div class="col-md-4">
-                    <h4 style="text-align: center">{!! Lang::get('lang.form_name') !!}:</h4>
+                    <h4 style="text-align: center">{!! Lang::get('lang.form_name') !!}: <span class="text-red"> *</span></h4>
                 </div>
                 <div class="col-md-4">
                     <input type="text" name="formname" class="form-control">

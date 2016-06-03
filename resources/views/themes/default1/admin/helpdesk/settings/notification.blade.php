@@ -68,7 +68,7 @@ class="active"
                     <div class="col-md-12">
                         <div class="col-md-3 no-padding">
                             <div class="form-group">
-                                {!! Form::label('del_noti', Lang::get('lang.noti_msg1')) !!}
+                                {!! Form::label('del_noti', Lang::get('lang.noti_msg1')) !!}<span class="text-red"> *</span>
                             </div>
                         </div>
                         <div class="col-md-6">

@@ -51,8 +51,8 @@ class="active"
             <!-- Name text form Required -->
             <div class="row">
                 <div class="col-md-3 form-group">
-                    {!! Form::label('pagination',Lang::get('lang.numberofelementstodisplay')) !!}
-                    {!! Form::text('pagination',$settings->pagination,['class' => 'form-control']) !!}
+                    {!! Form::label('pagination',Lang::get('lang.numberofelementstodisplay')) !!} <span class="text-red"> *</span>
+                    <input type="number" class="form-control" name='pagination' value="{!! $settings->pagination !!}" min="2">
                 </div>
             </div>
         </div><!-- /.tab-pane -->

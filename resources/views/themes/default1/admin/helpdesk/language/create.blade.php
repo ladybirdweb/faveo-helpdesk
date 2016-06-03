@@ -76,17 +76,17 @@ class="active"
         <div class="row">
             <!-- username -->
             <div class="col-xs-4 form-group {{ $errors->has('language-name') ? 'has-error' : '' }}">
-                {!! Form::label('language-name',Lang::get('lang.language-name')) !!}
+                {!! Form::label('language-name',Lang::get('lang.language-name')) !!} <span class="text-red"> *</span>
                 {!! Form::text('language-name',null,['placeholder'=>'English','class' => 'form-control']) !!}
             </div>
             <div class="col-xs-4 form-group {{ $errors->has('iso-code') ? 'has-error' : '' }}">
-                {!! Form::label('iso-code',Lang::get('lang.iso-code')) !!}
+                {!! Form::label('iso-code',Lang::get('lang.iso-code')) !!} <span class="text-red"> *</span>
                 {!! Form::text('iso-code',null,['placeholder'=>'en','class' => 'form-control']) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-xs-4 form-group {{ $errors->has('File') ? 'has-error' : '' }}">
-                {!! Form::label('File',Lang::get('lang.file')) !!}&nbsp
+                {!! Form::label('File',Lang::get('lang.file')) !!} <span class="text-red"> *</span>&nbsp
                 <div class="btn bg-olive btn-file" style="color:blue"> {!! Lang::get('lang.upload_file') !!}
                     {!! Form::file('File') !!}
                 </div>

@@ -58,11 +58,11 @@ class="active"
         @endif
         <div class="row">
             <div class="col-xs-3 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                {!! Form::label('name',Lang::get('lang.name')) !!}
+                {!! Form::label('name',Lang::get('lang.name')) !!}<span class="text-red"> *</span>
                 {!! Form::text('name',null,['class' => 'form-control']) !!}
             </div>
             <div class="col-xs-3 form-group {{ $errors->has('slug') ? 'has-error' : '' }}">
-                {!! Form::label('slug',Lang::get('lang.slug')) !!}
+                {!! Form::label('slug',Lang::get('lang.slug')) !!}<span class="text-red"> *</span>
                 {!! Form::text('slug',null,['class' => 'form-control']) !!}
             </div>
             <div class="col-xs-3 form-group {{ $errors->has('parent') ? 'has-error' : '' }}">
@@ -76,7 +76,7 @@ class="active"
                 {!! Form::radio('status','0',null) !!} {{Lang::get('lang.inactive')}}
             </div>
             <div class="col-md-12 form-group {{ $errors->has('description') ? 'has-error' : '' }}">
-                {!! Form::label('description',Lang::get('lang.description')) !!}
+                {!! Form::label('description',Lang::get('lang.description')) !!}<span class="text-red"> *</span>
                 {!! Form::textarea('description',null,['class' => 'form-control','id'=>'description','placeholder'=>Lang::get('lang.enter_the_description') ]) !!}
             </div>
         </div>

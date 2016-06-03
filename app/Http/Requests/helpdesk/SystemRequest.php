@@ -29,8 +29,7 @@ class SystemRequest extends Request
     public function rules()
     {
         return [
-
-            'name' => '',
+            'name' => 'max:50',
             'url'  => 'url',
         ];
     }

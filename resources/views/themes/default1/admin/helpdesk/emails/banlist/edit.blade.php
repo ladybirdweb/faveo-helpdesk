@@ -46,7 +46,7 @@ class="active"
         </div>
         @endif
         <div class="form-group {{ $errors->has('ban') ? 'has-error' : '' }}">
-            {!! Form::label('ban',Lang::get('lang.ban_status')) !!}
+            {!! Form::label('ban',Lang::get('lang.ban_status')) !!} <span class="text-red"> *</span>
             <div class="row">
                 <div class="col-xs-2">
                     {!! Form::radio('ban',1) !!} {{Lang::get('lang.active')}}
@@ -58,7 +58,7 @@ class="active"
         </div>
         <!-- email Address : Text form : Required -->
         <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-            {!! Form::label('email',Lang::get('lang.email_address')) !!}
+            {!! Form::label('email',Lang::get('lang.email_address')) !!} <span class="text-red"> *</span>
             {!! Form::text('email',null,['disabled'=>'disabled','class' => 'form-control']) !!}
         </div>
         <!-- intrnal Notes : Textarea :  -->

@@ -41,12 +41,12 @@ class="active"
         <div class="row">
             <!-- username -->
             <div class="col-xs-6 form-group {{ $errors->has('title') ? 'has-error' : '' }}">
-                {!! Form::label('title',Lang::get('lang.title')) !!}                
+                {!! Form::label('title',Lang::get('lang.title')) !!}         <span class="text-red"> *</span>       
                 {!! Form::text('title',null,['class' => 'form-control']) !!}
             </div>
             <!-- firstname -->
             <div class="col-xs-12 form-group {{ $errors->has('message') ? 'has-error' : '' }}">
-                {!! Form::label('message',Lang::get('lang.message')) !!}               
+                {!! Form::label('message',Lang::get('lang.message')) !!}         <span class="text-red"> *</span>      
                 {!! Form::textarea('message',null,['class' => 'form-control']) !!}
             </div>
         </div>

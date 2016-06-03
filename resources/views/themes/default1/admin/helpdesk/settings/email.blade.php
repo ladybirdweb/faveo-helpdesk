@@ -32,36 +32,36 @@ class="active"
     <div class="box-header with-border">
         <h3 class="box-title">{{Lang::get('lang.email')}}</h3>             
     </div>
-    <!-- check whether success or not -->
-    @if(Session::has('success'))
-    <div class="alert alert-success alert-dismissable">
-        <i class="fa  fa-check-circle"></i>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {!!Session::get('success')!!}
-    </div>
-    @endif
-    <!-- failure message -->
-    @if(Session::has('fails'))
-    <div class="alert alert-danger alert-dismissable">
-        <i class="fa fa-ban"></i>
-        <b>{!! lang::get('lang.success') !!} !</b>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {!!Session::get('fails')!!}
-    </div>
-    @endif
-    @if(Session::has('errors'))
-    <?php //dd($errors); ?>
-    <div class="alert alert-danger alert-dismissable">
-        <i class="fa fa-ban"></i>
-        <b>{!! Lang::get('lang.alert') !!}!</b>
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <br/>
-        @if($errors->first('sys_email'))
-        <li class="error-message-padding">{!! $errors->first('sys_email', ':message') !!}</li>
+    <div class="box-body">
+        <!-- check whether success or not -->
+        @if(Session::has('success'))
+        <div class="alert alert-success alert-dismissable">
+            <i class="fa  fa-check-circle"></i>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {!!Session::get('success')!!}
+        </div>
         @endif
-    </div>
-    @endif
-    <div class="box-body table-responsive"style="overflow:hidden;">
+        <!-- failure message -->
+        @if(Session::has('fails'))
+        <div class="alert alert-danger alert-dismissable">
+            <i class="fa fa-ban"></i>
+            <b>{!! lang::get('lang.success') !!} !</b>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {!!Session::get('fails')!!}
+        </div>
+        @endif
+        @if(Session::has('errors'))
+        <?php //dd($errors); ?>
+        <div class="alert alert-danger alert-dismissable">
+            <i class="fa fa-ban"></i>
+            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <br/>
+            @if($errors->first('sys_email'))
+            <li class="error-message-padding">{!! $errors->first('sys_email', ':message') !!}</li>
+            @endif
+        </div>
+        @endif
         <div class="row">
             <!-- Default System Email:	DROPDOWN value from emails table : Required -->
             <div class="col-md-12">
@@ -72,7 +72,6 @@ class="active"
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="row">
         </div>

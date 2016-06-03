@@ -63,19 +63,19 @@ class="active"
         <div class="box box-primary box-body">
             <div class="row">
                 <div class="col-md-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}" >
-                    {!! Form::label('name',Lang::get('lang.name')) !!}
+                    {!! Form::label('name',Lang::get('lang.name')) !!} <span class="text-red"> *</span>
 
                     {!! Form::text('name',null,['class' => 'form-control']) !!}
                 </div>
                 <div class="col-md-6 form-group {{ $errors->has('slug') ? 'has-error' : '' }}" >
-                    {!! Form::label('slug',Lang::get('lang.slug')) !!}
+                    {!! Form::label('slug',Lang::get('lang.slug')) !!} <span class="text-red"> *</span>
 
                     {!! Form::text('slug',null,['class' => 'form-control']) !!}
                 </div>
             </div>
 
             <div class="form-group {{ $errors->has('description') ? 'has-error' : '' }}">
-                {!! Form::label('description',Lang::get('lang.description')) !!}
+                {!! Form::label('description',Lang::get('lang.description')) !!} <span class="text-red"> *</span>
 
                 <div class="form-group" style="background-color:white">
                     {!! Form::textarea('description',$article->description,['class' => 'form-control','id'=>'editor','size' => '128x20','placeholder'=>Lang::get('lang.enter_the_description')]) !!}
@@ -170,7 +170,7 @@ CKEDITOR.replace('editor', {
                         <div class="col-md-4">
                             <div class="box box-default">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">{{Lang::get('lang.category')}}</h3>
+                                    <h3 class="box-title">{{Lang::get('lang.category')}} <span class="text-red"> *</span></h3>
                                 </div>
                                 <div class="box-body" style="height:190px; overflow-y:auto;">
                                     <div class="form-group {{ $errors->has('category_id') ? 'has-error' : '' }}">

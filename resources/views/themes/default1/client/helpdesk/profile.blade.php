@@ -49,7 +49,7 @@ class="active"
                     @endif
                     <div class="form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
                         <!-- first name -->
-                        {!! Form::label('first_name',Lang::get('lang.first_name')) !!}
+                        {!! Form::label('first_name',Lang::get('lang.first_name')) !!}<span class="text-red"> *</span>
                         
                         {!! Form::text('first_name',null,['class' => 'form-control']) !!}
                     </div>
@@ -149,21 +149,21 @@ class="active"
                     @endif
                     <!-- old password -->
                     <div class="form-group has-feedback {{ $errors->has('old_password') ? 'has-error' : '' }}">
-                        {!! Form::label('old_password',Lang::get('lang.old_password')) !!}
+                        {!! Form::label('old_password',Lang::get('lang.old_password')) !!}<span class="text-red"> *</span>
                         {!! Form::password('old_password',['placeholder'=>'Password','class' => 'form-control']) !!}
                         {!! $errors->first('old_password', '<spam class="help-block">:message</spam>') !!}
                         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                     </div>
                     <!-- new password -->
                     <div class="form-group has-feedback {{ $errors->has('new_password') ? 'has-error' : '' }}">
-                        {!! Form::label('new_password',Lang::get('lang.new_password')) !!}
+                        {!! Form::label('new_password',Lang::get('lang.new_password')) !!}<span class="text-red"> *</span>
                         {!! Form::password('new_password',['placeholder'=>'New Password','class' => 'form-control']) !!}
                         {!! $errors->first('new_password', '<spam class="help-block">:message</spam>') !!}
                         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                     </div>
                     <!-- cofirm password -->
                     <div class="form-group has-feedback {{ $errors->has('confirm_password') ? 'has-error' : '' }}">
-                        {!! Form::label('confirm_password',Lang::get('lang.confirm_password')) !!}
+                        {!! Form::label('confirm_password',Lang::get('lang.confirm_password')) !!}<span class="text-red"> *</span>
                         {!! Form::password('confirm_password',['placeholder'=>'Confirm Password','class' => 'form-control']) !!}
                         {!! $errors->first('confirm_password', '<spam class="help-block">:message</spam>') !!}
                         <span class="glyphicon glyphicon-lock form-control-feedback"></span>

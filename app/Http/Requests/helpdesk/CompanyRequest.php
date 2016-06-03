@@ -29,7 +29,7 @@ class CompanyRequest extends Request
     public function rules()
     {
         return [
-            'company_name' => 'required',
+            'company_name' => 'required|max:50',
             'website'      => 'active_url',
             'phone'        => 'numeric',
             'logo'         => 'image',

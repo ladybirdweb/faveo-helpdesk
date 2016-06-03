@@ -71,7 +71,7 @@ class="active"
                 <div class="col-md-6">
                     <!-- email -->
                     <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-                        {!! Form::label('email',Lang::get('lang.email')) !!}
+                        {!! Form::label('email',Lang::get('lang.email')) !!} <span class="text-red"> *</span>
                         {!! Form::text('email',null,['class' => 'form-control']) !!}
                     </div>
                 </div>
@@ -79,7 +79,7 @@ class="active"
                 <div class="col-md-6">
                     <!-- full name -->
                     <div class="form-group {{ $errors->has('fullname') ? 'has-error' : '' }}">
-                        {!! Form::label('fullname',Lang::get('lang.full_name')) !!}
+                        {!! Form::label('fullname',Lang::get('lang.full_name')) !!} <span class="text-red"> *</span>
                         {!! Form::text('fullname',null,['class' => 'form-control']) !!}
                     </div>
                 </div>
@@ -168,7 +168,7 @@ class="active"
             <div class="form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
                 <div class="row">
                     <div class="col-md-1">
-                        <label>{!! Lang::get('lang.subject') !!}:</label>
+                        <label>{!! Lang::get('lang.subject') !!}:<span class="text-red"> *</span></label>
                     </div>
                     <div class="col-md-4">
                         {!! Form::text('subject',null,['class' => 'form-control']) !!}
@@ -179,7 +179,7 @@ class="active"
                 <!-- details -->
                 <div class="row">
                     <div class="col-md-1">
-                        <label>{!! Lang::get('lang.detail') !!}:</label>
+                        <label>{!! Lang::get('lang.detail') !!}:<span class="text-red"> *</span></label>
                     </div>
                     <div class="col-md-9">
                         {!! Form::textarea('body',null,['class' => 'form-control','id' => 'body', 'style'=>"width:100%; height:150px;"]) !!}

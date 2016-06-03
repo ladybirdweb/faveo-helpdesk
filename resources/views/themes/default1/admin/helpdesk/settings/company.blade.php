@@ -77,7 +77,7 @@ class="active"
             <div class="col-md-4">
                 <!-- comapny name -->
                 <div class="form-group {{ $errors->has('company_name') ? 'has-error' : '' }}">
-                    {!! Form::label('company_name',Lang::get('lang.name')) !!}
+                    {!! Form::label('company_name',Lang::get('lang.name')) !!} <span class="text-red"> *</span>
                     {!! Form::text('company_name',$companys->company_name,['class' => 'form-control']) !!}
                 </div>
             </div>

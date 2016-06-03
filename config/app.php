@@ -27,7 +27,7 @@ return [
     | reporting about the errors we at faveo will start solving the issues already.
     | The errors mails will never share your files or data. it will only share
     | the line number and error occured.
-    | To dissable you may just change '%0%' to 0.
+    | To dissable you may just change '%1%' to 0.
      */
 
     'ErrorLog'  => '1',

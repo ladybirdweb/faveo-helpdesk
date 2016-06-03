@@ -108,19 +108,19 @@ class="active"
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                            <label for="title">{!! Lang::get('lang.name') !!}:</label><br>
+                            <label for="title">{!! Lang::get('lang.name') !!}: <span class="text-red"> *</span></label><br>
                             {!! Form::text('name',null,['class'=>'form-control'])!!}
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group {{ $errors->has('sort') ? 'has-error' : '' }}">
-                            <label for="title">{!! Lang::get('lang.display_order') !!}:</label><br>
+                            <label for="title">{!! Lang::get('lang.display_order') !!}: <span class="text-red"> *</span></label><br>
                             {!! Form::text('sort',null,['class'=>'form-control'])!!}
                         </div>  
                     </div>
                     <div class="col-md-6">
                         <div class="form-group {{ $errors->has('icon_class') ? 'has-error' : '' }}">
-                            <label for="title">{!! Lang::get('lang.icon_class') !!}:</label><br>
+                            <label for="title">{!! Lang::get('lang.icon_class') !!}: <span class="text-red"> *</span></label><br>
                             {!! Form::text('icon_class',null,['class'=>'form-control'])!!}
                         </div> 
                     </div>

@@ -55,12 +55,12 @@ class="active"
         <div class="row">
             <!-- name -->
             <div class="col-xs-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                {!! Form::label('name',Lang::get('lang.name')) !!}
+                {!! Form::label('name',Lang::get('lang.name')) !!} <span class="text-red"> *</span>
                 {!! Form::text('name',null,['class' => 'form-control']) !!}
             </div>
             <!-- team lead -->
             <div class="col-xs-6 form-group {{ $errors->has('team_lead') ? 'has-error' : '' }}">
-                {!! Form::label('team_lead',Lang::get('lang.team_lead')) !!}
+                {!! Form::label('team_lead',Lang::get('lang.team_lead')) !!} 
                 <?php $user = App\User::where('role', 'admin')->orWhere('role', 'agent')->get(); ?>
                 {!! Form::select('team_lead',[''=>Lang::get('lang.select_a_team_lead'), Lang::get('lang.members')=>$user->lists('user_name','id')->toArray()],null,['class' => 'form-control']) !!}	
             </div>
@@ -84,7 +84,7 @@ class="active"
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary'])!!}
+        {!! Form::submit(Lang::get('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
     </div>
 </div>
 {!!Form::close()!!}

@@ -916,6 +916,7 @@ return [
       |User Page
       |------------------------------------------------
      */
+    'user_credentials'  =>  'User Credentials',
     'user_directory'  => 'User Directory',
     'ban'             => 'Ban',
     'user'            => 'User',

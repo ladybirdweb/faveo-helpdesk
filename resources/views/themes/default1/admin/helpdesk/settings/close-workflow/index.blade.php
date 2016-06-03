@@ -61,7 +61,7 @@ class="active"
         <div class="form-group {{ $errors->has('days') ? 'has-error' : '' }}">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="title">{!! Lang::get('lang.no_of_days') !!}:</label>
+                    <label for="title">{!! Lang::get('lang.no_of_days') !!}: <span class="text-red"> *</span></label>
                 </div>
                 <div  class="col-md-9">
                     <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.close-msg1') !!}</div>

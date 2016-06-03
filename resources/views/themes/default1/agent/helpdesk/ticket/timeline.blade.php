@@ -381,7 +381,7 @@ if ($thread->title != "") {
                                 <!-- reply content -->
                                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                     <div class="col-md-2">
-                                        {!! Form::label('Reply Content', Lang::get('lang.reply_content').':') !!}
+                                        {!! Form::label('Reply Content', Lang::get('lang.reply_content').':') !!}<span class="text-red"> *</span>
                                     </div>
                                     <div class="col-md-10">
                                         <div id="newtextarea">
@@ -435,7 +435,7 @@ if ($thread->title != "") {
                                     <!-- internal note -->
                                     <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                         <div class="col-md-2">
-                                            <label>{!! Lang::get('lang.internal_note') !!}:</label>
+                                            <label>{!! Lang::get('lang.internal_note') !!}:<span class="text-red"> *</span></label>
                                         </div>
                                         <div class="col-md-10">
                                             <div id="newtextarea1">
@@ -736,14 +736,14 @@ if ($thread->title != "") {
                     </div>
                     <div class="modal-body" id="hide">
                         <div class="form-group">
-                            <label>{!! Lang::get('lang.title') !!}</label>
+                            <label>{!! Lang::get('lang.title') !!} <span class="text-red"> *</span></label>
                             <input type="text" name="subject" class="form-control" value="{{$thread->title}}" >
                             <spam id="error-subject" style="display:none" class="help-block text-red">This is a required field</spam>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{!! Lang::get('lang.sla_plan') !!}</label>
+                                    <label>{!! Lang::get('lang.sla_plan') !!} <span class="text-red"> *</span></label>
     <?php $sla_plans = App\Model\helpdesk\Manage\Sla_plan::all() ?>
                                     <select class="form-control" name="sla_paln">
                                         @foreach($sla_plans as $sla_plan)
@@ -759,7 +759,7 @@ if ($thread->title != "") {
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{!! Lang::get('lang.help_topic') !!}</label>
+                                    <label>{!! Lang::get('lang.help_topic') !!} <span class="text-red"> *</span></label>
     <?php $help_topics = App\Model\helpdesk\Manage\Help_topic::all() ?>
                                     <select class="form-control" name="help_topic">
                                         @foreach($help_topics as $helptopic)
@@ -775,7 +775,7 @@ if ($thread->title != "") {
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{!! Lang::get('lang.ticket_source') !!}</label>
+                                    <label>{!! Lang::get('lang.ticket_source') !!} <span class="text-red"> *</span></label>
     <?php $ticket_sources = App\Model\helpdesk\Ticket\Ticket_source::all() ?>
                                     <select class="form-control" name="ticket_source">
                                         @foreach($ticket_sources as $ticketsource)
@@ -792,7 +792,7 @@ if ($thread->title != "") {
     <?php ?>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{!! Lang::get('lang.priority') !!}</label>
+                                    <label>{!! Lang::get('lang.priority') !!} <span class="text-red"> *</span></label>
     <?php $ticket_prioritys = App\Model\helpdesk\Ticket\Ticket_Priority::all() ?>
                                     <select class="form-control" name="ticket_priority">
                                         @foreach($ticket_prioritys as $ticket_priority)

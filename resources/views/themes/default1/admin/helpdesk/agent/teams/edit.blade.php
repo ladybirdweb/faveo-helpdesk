@@ -55,7 +55,7 @@ class="active"
         <div class="row">
             <!-- name -->
             <div class="col-xs-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                {!! Form::label('name',Lang::get('lang.name')) !!}
+                {!! Form::label('name',Lang::get('lang.name')) !!} <span class="text-red"> *</span>
                 {!! Form::text('name',null,['class' => 'form-control']) !!}
             </div>
             <!-- team lead -->

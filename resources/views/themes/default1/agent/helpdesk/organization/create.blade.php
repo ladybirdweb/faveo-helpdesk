@@ -55,7 +55,7 @@ class="active"
         <!-- name : text : Required -->
         <div class="row">
             <div class="col-xs-4 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                {!! Form::label('name',Lang::get('lang.name')) !!}
+                {!! Form::label('name',Lang::get('lang.name')) !!} <span class="text-red"> *</span>
                 {!! Form::text('name',null,['class' => 'form-control']) !!}
             </div>
             <!-- phone : Text : -->

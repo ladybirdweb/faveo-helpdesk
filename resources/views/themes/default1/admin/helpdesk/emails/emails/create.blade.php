@@ -45,19 +45,19 @@ class="active"
             <div class="row">
                 <!-- email address -->
                 <div class="col-xs-4 form-group {!! $errors->has('email_address') ? 'has-error' : '' !!}" id = "email_address_error">
-                    {!! Form::label('email_address',Lang::get('lang.email_address')) !!}
+                    {!! Form::label('email_address',Lang::get('lang.email_address')) !!} <span class="text-red"> *</span>
                     {!! $errors->first('email_address', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::text('email_address',null,['class' => 'form-control', 'id' => 'email_address']) !!}
                 </div>
                 <!-- Email name -->
                 <div class="col-xs-4 form-group {!! $errors->has('email_name') ? 'has-error' : ''!!}" id="email_name_error">
-                    {!! Form::label('email_name',Lang::get('lang.from_name')) !!}
+                    {!! Form::label('email_name',Lang::get('lang.from_name')) !!} <span class="text-red"> *</span>
                     {!! $errors->first('email_name', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::text('email_name',null,['class' => 'form-control', 'id' => 'email_name']) !!}
                 </div>
                 <!-- password -->
                 <div class="col-xs-4 form-group {!! $errors->has('password') ? 'has-error' : ''!!}" id="password_error">
-                    {!! Form::label('password',Lang::get('lang.password')) !!}
+                    {!! Form::label('password',Lang::get('lang.password')) !!} <span class="text-red"> *</span>
                     {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::password('password',['class' => 'form-control', 'id' => 'password']) !!}
                 </div>
@@ -373,6 +373,11 @@ class="active"
                     error_list.push(error);
                     $("#sending_protocol_error").addClass("has-error");
                 }
+            } else if(sending_protocol == 'mail') {
+                $("#sending_host_error").val('');
+                $("#sending_port_error").val('');
+                $("#sending_encryption_error").val('');
+                $("#sending_protocol_error").val('');
             }
         } else {
             // checking for validation of fetching port
