@@ -32,8 +32,8 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class WorkflowController extends Controller {
-
+class WorkflowController extends Controller
+{
     /**
      * Create a new controller instance.
      * constructor to check
@@ -43,7 +43,8 @@ class WorkflowController extends Controller {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // checking authentication
         $this->middleware('auth');
         // checking admin roles
@@ -55,7 +56,8 @@ class WorkflowController extends Controller {
      *
      * @return type
      */
-    public function index() {
+    public function index()
+    {
         try {
             return view('themes.default1.admin.helpdesk.manage.workflow.index');
         } catch (Exception $e) {
@@ -68,7 +70,8 @@ class WorkflowController extends Controller {
      *
      * @return type
      */
-    public function workFlowList() {
+    public function workFlowList()
+    {
         // returns chumper datatable
         return Datatable::collection(WorkflowName::All())
                         /* searcable column name */
@@ -129,7 +132,7 @@ class WorkflowController extends Controller {
                         ->addColumn('Actions', function ($model) {
                             $confirmation = 'Are you sure?';
 
-                            return "<a class='btn btn-info btn-xs btn-flat' href='" . route('workflow.edit', $model->id) . "'><i class='fa fa-edit text-black'></i> Edit</a>  <a class='btn btn-danger btn-xs btn-flat' href='" . route('workflow.delete', $model->id) . "'><i class='fa fa-trash text-black'></i> Delete</a>";
+                            return "<a class='btn btn-info btn-xs btn-flat' href='".route('workflow.edit', $model->id)."'><i class='fa fa-edit text-black'></i> Edit</a>  <a class='btn btn-danger btn-xs btn-flat' href='".route('workflow.delete', $model->id)."'><i class='fa fa-trash text-black'></i> Delete</a>";
                         })
                         ->make();
     }
@@ -139,7 +142,8 @@ class WorkflowController extends Controller {
      *
      * @return type Response
      */
-    public function create(Emails $emails) {
+    public function create(Emails $emails)
+    {
         foreach ($emails->lists('email_address', 'id') as $key => $email) {
             $email_data["E-$key"] = $email;
         }
@@ -158,8 +162,8 @@ class WorkflowController extends Controller {
      *
      * @return type view
      */
-    public function store(WorkflowCreateRequest $request) {
-
+    public function store(WorkflowCreateRequest $request)
+    {
         try {
             // store a new workflow credentials in to the system
             $workflow_name = new WorkflowName();
@@ -189,6 +193,7 @@ class WorkflowController extends Controller {
                 $workflow_action->action = $action['b'];
                 $workflow_action->save();
             }
+
             return redirect('workflow')->with('success', Lang::get('lang.workflow_created_successfully'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -203,7 +208,8 @@ class WorkflowController extends Controller {
      *
      * @return type Response
      */
-    public function edit($id, WorkflowName $work_flow_name, Emails $emails, WorkflowRules $workflow_rule, WorkflowAction $workflow_action) {
+    public function edit($id, WorkflowName $work_flow_name, Emails $emails, WorkflowRules $workflow_rule, WorkflowAction $workflow_action)
+    {
         try {
             $emails = $emails->get();
             $workflow = $work_flow_name->whereId($id)->first();
@@ -224,7 +230,8 @@ class WorkflowController extends Controller {
      *
      * @return type view
      */
-    public function update($id, WorkflowUpdateRequest $request) {
+    public function update($id, WorkflowUpdateRequest $request)
+    {
         dd($request->input('rule'));
         try {
             // store a new workflow credentials in to the system
@@ -270,7 +277,8 @@ class WorkflowController extends Controller {
      *
      * @param type $id
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         try {
             // remove all the contents of workflow
             $workflow_action = WorkflowAction::where('workflow_id', '=', $id)->delete();
@@ -291,7 +299,8 @@ class WorkflowController extends Controller {
      *
      * @return type void
      */
-    public function selectAction($id, Request $request) {
+    public function selectAction($id, Request $request)
+    {
         if ($request->option == 'reject') {
             return $this->rejectTicket($id);
         } elseif ($request->option == 'department') {
@@ -316,8 +325,9 @@ class WorkflowController extends Controller {
      *
      * @return string
      */
-    public function rejectTicket($id) {
-        $var = '<input type="hidden" name="action[' . $id . '][b]" class="form-control" value="reject"><span text-red>Reject</span> ';
+    public function rejectTicket($id)
+    {
+        $var = '<input type="hidden" name="action['.$id.'][b]" class="form-control" value="reject"><span text-red>Reject</span> ';
 
         return $var;
     }
@@ -327,11 +337,12 @@ class WorkflowController extends Controller {
      *
      * @return type string
      */
-    public function department($id) {
+    public function department($id)
+    {
         $departments = Department::all();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($departments as $department) {
-            $var .= "<option value='" . $department->id . "'>" . $department->name . '</option>';
+            $var .= "<option value='".$department->id."'>".$department->name.'</option>';
         }
         $var .= '</select>';
 
@@ -343,11 +354,12 @@ class WorkflowController extends Controller {
      *
      * @return type string
      */
-    public function priority($id) {
+    public function priority($id)
+    {
         $priorities = Ticket_Priority::all();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($priorities as $priority) {
-            $var .= "<option value='" . $priority->priority_id . "'>" . $priority->priority_desc . '</option>';
+            $var .= "<option value='".$priority->priority_id."'>".$priority->priority_desc.'</option>';
         }
         $var .= '</select>';
 
@@ -359,11 +371,12 @@ class WorkflowController extends Controller {
      *
      * @return type string
      */
-    public function slaPlan($id) {
+    public function slaPlan($id)
+    {
         $sla_plans = Sla_plan::where('status', '=', 1)->get();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($sla_plans as $sla_plan) {
-            $var .= "<option value='" . $sla_plan->id . "'>" . $sla_plan->grace_period . '</option>';
+            $var .= "<option value='".$sla_plan->id."'>".$sla_plan->grace_period.'</option>';
         }
         $var .= '</select>';
 
@@ -375,11 +388,12 @@ class WorkflowController extends Controller {
      *
      * @return type string
      */
-    public function assignTeam($id) {
+    public function assignTeam($id)
+    {
         $teams = Teams::where('status', '=', 1)->get();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($teams as $team) {
-            $var .= "<option value='" . $team->id . "'>" . $team->name . '</option>';
+            $var .= "<option value='".$team->id."'>".$team->name.'</option>';
         }
         $var .= '</select>';
 
@@ -391,11 +405,12 @@ class WorkflowController extends Controller {
      *
      * @return type string
      */
-    public function assignAgent($id) {
+    public function assignAgent($id)
+    {
         $users = User::where('role', '!=', 'user')->where('active', '=', 1)->get();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($users as $user) {
-            $var .= "<option value='" . $user->id . "'>" . $user->first_name . ' ' . $user->last_name . '</option>';
+            $var .= "<option value='".$user->id."'>".$user->first_name.' '.$user->last_name.'</option>';
         }
         $var .= '</select>';
 
@@ -407,11 +422,12 @@ class WorkflowController extends Controller {
      *
      * @return type string
      */
-    public function helptopic($id) {
+    public function helptopic($id)
+    {
         $help_topics = Help_topic::where('status', '=', 1)->get();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($help_topics as $help_topic) {
-            $var .= "<option value='" . $help_topic->id . "'>" . $help_topic->topic . '</option>';
+            $var .= "<option value='".$help_topic->id."'>".$help_topic->topic.'</option>';
         }
         $var .= '</select>';
 
@@ -423,15 +439,15 @@ class WorkflowController extends Controller {
      *
      * @return type string
      */
-    public function ticketStatus($id) {
+    public function ticketStatus($id)
+    {
         $ticket_status = Ticket_Status::all();
-        $var = "<select name='action[" . $id . "][b]' class='form-control' required>";
+        $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($ticket_status as $status) {
-            $var .= "<option value='" . $status->id . "'>" . $status->name . '</option>';
+            $var .= "<option value='".$status->id."'>".$status->name.'</option>';
         }
         $var .= '</select>';
 
         return $var;
     }
-
 }

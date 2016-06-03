@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Settings;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Alert extends BaseModel
 {
     /* Using alert_notice table  */

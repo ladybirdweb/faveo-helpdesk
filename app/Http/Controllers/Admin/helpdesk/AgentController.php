@@ -13,16 +13,15 @@ use App\Model\helpdesk\Agent\Assign_team_agent;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Agent\Groups;
 use App\Model\helpdesk\Agent\Teams;
-use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\CountryCode;
+use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 // classes
 use DB;
 use Exception;
+use GeoIP;
 use Hash;
 use Lang;
-use GeoIP;
-
 
 /**
  * AgentController
@@ -30,8 +29,8 @@ use GeoIP;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class AgentController extends Controller {
-
+class AgentController extends Controller
+{
     /**
      * Create a new controller instance.
      * constructor to check
@@ -41,7 +40,8 @@ class AgentController extends Controller {
      *
      * @return void
      */
-    public function __construct(PhpMailController $PhpMailController) {
+    public function __construct(PhpMailController $PhpMailController)
+    {
         // creating an instance for the PhpmailController
         $this->PhpMailController = $PhpMailController;
         // checking authentication
@@ -55,7 +55,8 @@ class AgentController extends Controller {
      *
      * @return type view
      */
-    public function index() {
+    public function index()
+    {
         try {
             return view('themes.default1.admin.helpdesk.agent.agents.index');
         } catch (Exception $e) {
@@ -74,7 +75,8 @@ class AgentController extends Controller {
      *
      * @return type view
      */
-    public function create(Timezones $timezone, Groups $group, Department $department, Teams $team_all, CountryCode $code) {
+    public function create(Timezones $timezone, Groups $group, Department $department, Teams $team_all, CountryCode $code)
+    {
         try {
             // gte all the teams
             $team = $team_all->get();
@@ -87,9 +89,9 @@ class AgentController extends Controller {
             // list all the teams in a single variable
             $teams = $team->lists('id', 'name')->toArray();
             $location = GeoIP::getLocation('');
-            $phonecode = $code->where('iso', '=' , $location['isoCode'])->first();
+            $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
             // returns to the page with all the variables and their datas
-            return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team'))->with('phonecode', $phonecode->phonecode);;
+            return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             // returns if try fails with exception meaagse
             return redirect()->back()->with('fails', $e->getMessage());
@@ -107,13 +109,13 @@ class AgentController extends Controller {
      */
     public function store(User $user, AgentRequest $request)
     {
-        if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '' )) {
-                return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' =>1])->withInput();
-            } else {
-                    $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
-                    if (!count($code)) {
-                        return redirect()->back()->with(['fails2' => Lang::get('lang.incorrect-country-code-error'), 'country_code' => 1])->withInput();
-                    }
+        if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
+            return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' => 1])->withInput();
+        } else {
+            $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+            if (!count($code)) {
+                return redirect()->back()->with(['fails2' => Lang::get('lang.incorrect-country-code-error'), 'country_code' => 1])->withInput();
+            }
         }
         // fixing the user role to agent
         $user->fill($request->except(['group', 'primary_department', 'agent_time_zone']))->save();
@@ -169,7 +171,7 @@ class AgentController extends Controller {
     {
         try {
             $location = GeoIP::getLocation('');
-            $phonecode = $code->where('iso', '=' , $location['isoCode'])->first();
+            $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
             $user = $user->whereId($id)->first();
             $team = $team->get();
             $teams1 = $team->lists('name', 'id');
@@ -198,13 +200,13 @@ class AgentController extends Controller {
      */
     public function update($id, User $user, AgentUpdate $request, Assign_team_agent $team_assign_agent)
     {
-        if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '' )) {
-                return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' =>1])->withInput();
-            } else {
-                    $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
-                    if (!count($code)) {
-                        return redirect()->back()->with(['fails2' => Lang::get('lang.incorrect-country-code-error'), 'country_code' => 1])->withInput();
-                    }
+        if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
+            return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' => 1])->withInput();
+        } else {
+            $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+            if (!count($code)) {
+                return redirect()->back()->with(['fails2' => Lang::get('lang.incorrect-country-code-error'), 'country_code' => 1])->withInput();
+            }
         }
         // storing all the details
         $user = $user->whereId($id)->first();
@@ -230,9 +232,10 @@ class AgentController extends Controller {
             $user->primary_dpt = $request->primary_department;
             $user->agent_tzone = $request->agent_time_zone;
             $user->save();
+
             return redirect('agents')->with('success', Lang::get('lang.agent_updated_sucessfully'));
         } catch (Exception $e) {
-            return redirect('agents')->with('fails', Lang::get('lang.unable_to_update_agent') . '<li>' . $e->errorInfo[2] . '</li>');
+            return redirect('agents')->with('fails', Lang::get('lang.unable_to_update_agent').'<li>'.$e->errorInfo[2].'</li>');
         }
     }
 
@@ -247,7 +250,8 @@ class AgentController extends Controller {
      *
      * @return type Response
      */
-    public function destroy($id, User $user, Assign_team_agent $team_assign_agent) {
+    public function destroy($id, User $user, Assign_team_agent $team_assign_agent)
+    {
         /* Becouse of foreign key we delete team_assign_agent first */
         error_reporting(E_ALL & ~E_NOTICE);
         $team_assign_agent = $team_assign_agent->where('agent_id', $id);
@@ -258,6 +262,7 @@ class AgentController extends Controller {
             $user->id;
             $user->delete();
             throw new \Exception($error);
+
             return redirect('agents')->with('success', Lang::get('lang.agent_deleted_sucessfully'));
         } catch (\Exception $e) {
             return redirect('agents')->with('fails', $error);
@@ -271,7 +276,8 @@ class AgentController extends Controller {
      *
      * @return string
      */
-    public function generateRandomString($length = 10) {
+    public function generateRandomString($length = 10)
+    {
         // list of supported characters
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         // character length checked
@@ -285,5 +291,4 @@ class AgentController extends Controller {
         // return random string
         return $randomString;
     }
-
 }

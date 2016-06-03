@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Utility;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Limit_Login extends BaseModel
 {
     protected $table = 'limit_login';

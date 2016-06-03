@@ -220,7 +220,6 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth'], function () {
   |
  */
 Route::group(['middleware' => 'role.agent', 'middleware' => 'auth'], function () {
-
     Route::post('chart-range/{date1}/{date2}', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
 
     Route::get('agen1', 'Agent\helpdesk\DashboardController@ChartData');
@@ -416,7 +415,6 @@ Route::POST('tickets/search/', function () {
     return Illuminate\Support\Facades\Redirect::back()->with('contents', $models)->with('counts', $count);
 });
 Route::any('getdata', function () {
-
     $term = Illuminate\Support\Str::lower(Input::get('term'));
     $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
     foreach ($data as $v) {
@@ -450,7 +448,6 @@ Route::get('check_ticket/{id}', ['as' => 'check_ticket', 'uses' => 'Client\helpd
 //testing ckeditor
 //===================================================================================
 Route::group(['middleware' => 'role.user', 'middleware' => 'auth'], function () {
-
     Route::get('client-profile', ['as' => 'client.profile', 'uses' => 'Client\helpdesk\GuestController@getProfile']); /*  User profile get  */
 
     Route::get('mytickets', ['as' => 'ticket2', 'uses' => 'Client\helpdesk\GuestController@getMyticket']);
@@ -659,7 +656,6 @@ Route::group(['prefix' => 'api/v1'], function () {
      * Helpdesk
      */
     Route::group(['prefix' => 'helpdesk'], function () {
-
         Route::post('create', 'Api\v1\ApiController@createTicket');
         Route::post('reply', 'Api\v1\ApiController@ticketReply');
         Route::post('edit', 'Api\v1\ApiController@editTicket');

@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Form;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Forms extends BaseModel
 {
     protected $table = 'custom_forms';

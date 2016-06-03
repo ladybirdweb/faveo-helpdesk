@@ -2,8 +2,9 @@
 
 namespace App\Model\kb;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+use Illuminate\Database\Eloquent\Model;
+
 /**
  * Define the Model of comment table.
  */

@@ -7,8 +7,8 @@ use App\Http\Controllers\Common\PhpMailController;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
-class Handler extends ExceptionHandler {
-
+class Handler extends ExceptionHandler
+{
     /**
      * A list of the exception types that should not be reported.
      *
@@ -39,7 +39,8 @@ class Handler extends ExceptionHandler {
      *
      * @return void
      */
-    public function report(Exception $e) {
+    public function report(Exception $e)
+    {
         return parent::report($e);
     }
 
@@ -51,8 +52,9 @@ class Handler extends ExceptionHandler {
      *
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e) {
-        $phpmail = new PhpMailController;
+    public function render($request, Exception $e)
+    {
+        $phpmail = new PhpMailController();
         if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
             return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
         } elseif ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
@@ -71,6 +73,7 @@ class Handler extends ExceptionHandler {
                         $this->phpmail->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['e' => $e]);
                     }
                 }
+
                 return redirect()->route('error500');
             }
         }
@@ -97,7 +100,8 @@ class Handler extends ExceptionHandler {
      *
      * @return \Illuminate\Http\Response
      */
-    protected function renderExceptionWithWhoops(Exception $e) {
+    protected function renderExceptionWithWhoops(Exception $e)
+    {
         // new instance of whoops class to display customized error page
         $whoops = new \Whoops\Run();
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
@@ -106,5 +110,4 @@ class Handler extends ExceptionHandler {
                 $whoops->handleException($e), $e->getStatusCode(), $e->getHeaders()
         );
     }
-
 }

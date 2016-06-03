@@ -4,44 +4,35 @@ namespace App\Http\Controllers\Client\helpdesk;
 
 // controllers
 use App\Http\Controllers\Common\PhpMailController;
-use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Controller;
 // requests
-use Illuminate\Http\Request;
-use App\Http\Requests\helpdesk\ProfilePassword;
-use App\Http\Requests\helpdesk\ProfileRequest;
-use App\Http\Requests\helpdesk\TicketRequest;
+use App\Model\helpdesk\Email\Emails;
 // models
-use App\Model\helpdesk\Manage\Help_topic;
-use App\Model\helpdesk\Settings\Company;
-use App\Model\helpdesk\Settings\System;
+use App\Model\helpdesk\Settings\CommonSettings;
+use App\Model\helpdesk\Ticket\Ticket_Status;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Ticket\TicketToken;
-use App\Model\helpdesk\Ticket\Ticket_Status;
-use App\Model\helpdesk\Email\Emails;
-use App\Model\helpdesk\Settings\CommonSettings;
 use App\User;
-// classes
-use Auth;
-use Exception;
 use Hash;
+// classes
+use Illuminate\Http\Request;
 use Input;
-use Lang;
 
 /**
  * GuestController.
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class UnAuthController extends Controller {
-
+class UnAuthController extends Controller
+{
     /**
      * Create a new controller instance.
      *
      * @return type void
      */
-    public function __construct(PhpMailController $PhpMailController) {
+    public function __construct(PhpMailController $PhpMailController)
+    {
         $this->PhpMailController = $PhpMailController;
     }
 
@@ -55,7 +46,8 @@ class UnAuthController extends Controller {
      *
      * @return type Response
      */
-    public function PostCheckTicket(Request $request) {
+    public function PostCheckTicket(Request $request)
+    {
         $validator = \Validator::make($request->all(), [
                     'email_address' => 'required|email',
                     'ticket_number' => 'required',
@@ -79,7 +71,7 @@ class UnAuthController extends Controller {
             if ($user_details->role == 'user') {
                 $username = $user_details->user_name;
             } else {
-                $username = $user_details->first_name . ' ' . $user_details->last_name;
+                $username = $user_details->first_name.' '.$user_details->last_name;
             }
             // check for preentered ticket token
             $ticket_token = TicketToken::where('ticket_id', '=', $ticket->id)->first();
@@ -89,7 +81,7 @@ class UnAuthController extends Controller {
                 $ticket_token->token = $hashed_token;
                 $ticket_token->save();
             } else {
-                $ticket_token = new TicketToken;
+                $ticket_token = new TicketToken();
                 $ticket_token->ticket_id = $ticket->id;
                 $token = $this->generate_random_ticket_token();
                 $hashed_token = \Hash::make($token);
@@ -97,8 +89,9 @@ class UnAuthController extends Controller {
                 $ticket_token->save();
             }
             $this->PhpMailController->sendmail(
-                    $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $user_details->email], $message = ['subject' => 'Ticket link Request [' . $ticket_number . ']', 'scenario' => 'check-ticket'], $template_variables = ['user' => $username, 'ticket_link_with_number' => url('show-ticket/' . $ticket->id . '/' . $token)]
+                    $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $user_details->email], $message = ['subject' => 'Ticket link Request ['.$ticket_number.']', 'scenario' => 'check-ticket'], $template_variables = ['user' => $username, 'ticket_link_with_number' => url('show-ticket/'.$ticket->id.'/'.$token)]
             );
+
             return redirect()->back()
                             ->with('success', 'We have sent you a link by Email. Please click on that link to view ticket');
         } else {
@@ -107,27 +100,34 @@ class UnAuthController extends Controller {
     }
 
     /**
-     * generate random string token for ticket
+     * generate random string token for ticket.
+     *
      * @param type $length
+     *
      * @return string
      */
-    public function generate_random_ticket_token($length = 10) {
+    public function generate_random_ticket_token($length = 10)
+    {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
+
         return $randomString;
     }
 
     /**
      * function to check the ticket without loggin In.
+     *
      * @param type $ticket_id
      * @param type $token
+     *
      * @return type view
      */
-    public function showTicketCode($ticket_id, $token) {
+    public function showTicketCode($ticket_id, $token)
+    {
         $check_token = TicketToken::where('ticket_id', '=', $ticket_id)->first();
         if (Hash::check($token, $check_token->token) == true) {
             $token_time = CommonSettings::where('option_name', '=', 'ticket_token_time_duration')->first();
@@ -137,6 +137,7 @@ class UnAuthController extends Controller {
                 return redirect()->route('form')->with('fails', 'Sorry your Ticket token has Expired! Please try to resend the Ticket link request');
             }
             $tickets = Tickets::where('id', '=', $ticket_id)->first();
+
             return view('themes.default1.client.helpdesk.unauth.showticket', compact('tickets', 'token'));
         } else {
             return redirect()->route('form')->with('fails', 'Sorry you are not allowed. Token Expired!');
@@ -148,7 +149,8 @@ class UnAuthController extends Controller {
      *
      * @return type Redirect
      */
-    public function rating($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref) {
+    public function rating($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
+    {
         foreach ($request->all() as $key => $value) {
             if (strpos($key, '_') !== false) {
                 $ratName = str_replace('_', ' ', $key);
@@ -173,6 +175,7 @@ class UnAuthController extends Controller {
                 $rating_ref->save();
             }
         }
+
         return redirect()->back()->with('Success', 'Thank you for your rating!');
     }
 
@@ -181,7 +184,8 @@ class UnAuthController extends Controller {
      *
      * @return type Redirect
      */
-    public function ratingReply($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref) {
+    public function ratingReply($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
+    {
         foreach ($request->all() as $key => $value) {
             $key1 = explode(',', $key);
             if (strpos($key1[0], '_') !== false) {
@@ -205,16 +209,20 @@ class UnAuthController extends Controller {
                 $rating_ref->save();
             }
         }
+
         return redirect()->back()->with('Success', 'Thank you for your rating!');
     }
 
     /**
-     * function to change the status of the ticket
+     * function to change the status of the ticket.
+     *
      * @param type $status
      * @param type $id
+     *
      * @return string
      */
-    public function changeStatus($status, $id) {
+    public function changeStatus($status, $id)
+    {
         $tickets = Tickets::where('id', '=', $id)->first();
         $tickets->status = $status;
         $ticket_status = Ticket_Status::where('id', '=', $status)->first();
@@ -232,14 +240,14 @@ class UnAuthController extends Controller {
         $thread->ticket_id = $tickets->id;
         $thread->user_id = $tickets->user_id;
         $thread->is_internal = 1;
-        $thread->body = $ticket_status->message . ' ' . $user->user_name;
+        $thread->body = $ticket_status->message.' '.$user->user_name;
         $thread->save();
 
         $email = $user->email;
         $user_name = $user->user_name;
 
         $ticket_number = $tickets->ticket_number;
-        
+
         $sending_emails = Emails::where('department', '=', $ticket_status->dept_id)->first();
         if ($sending_emails == null) {
             $from_email = $this->system_mail();
@@ -247,11 +255,11 @@ class UnAuthController extends Controller {
             $from_email = $sending_emails->id;
         }
         try {
-            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
+            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
         } catch (\Exception $e) {
             return 0;
         }
-        return 'Your ticket has been ' . $ticket_status->state;
-    }
 
+        return 'Your ticket has been '.$ticket_status->state;
+    }
 }

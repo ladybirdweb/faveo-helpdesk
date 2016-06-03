@@ -18,7 +18,7 @@ use View;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class DashboardController extends Controller
+class DashboardController2 extends Controller
 {
     /**
      * Create a new controller instance.

@@ -7,19 +7,17 @@ use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\CompanyRequest;
 use App\Http\Requests\helpdesk\EmailRequest;
-use App\Http\Requests\helpdesk\SystemRequest;
-use App\Http\Requests\helpdesk\StatusRequest;
 use App\Http\Requests\helpdesk\RatingUpdateRequest;
+use App\Http\Requests\helpdesk\StatusRequest;
+use App\Http\Requests\helpdesk\SystemRequest;
 // models
-use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Email\Template;
 use App\Model\helpdesk\Manage\Help_topic;
-use App\Model\helpdesk\Notification\UserNotification;
-use DateTime;
 use App\Model\helpdesk\Manage\Sla_plan;
-use App\Model\helpdesk\Settings\Access;
+use App\Model\helpdesk\Notification\UserNotification;
+use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Settings\Alert;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
@@ -31,6 +29,7 @@ use App\Model\helpdesk\Utility\Date_format;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
+use DateTime;
 // classes
 use DB;
 use Exception;
@@ -43,14 +42,15 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class SettingsController extends Controller {
-
+class SettingsController extends Controller
+{
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // $this->smtp();
         $this->middleware('auth');
         $this->middleware('roles');
@@ -64,7 +64,8 @@ class SettingsController extends Controller {
      *
      * @return Response
      */
-    public function getcompany(Company $company) {
+    public function getcompany(Company $company)
+    {
         try {
             /* fetch the values of company from company table */
             $companys = $company->whereId('1')->first();
@@ -84,13 +85,14 @@ class SettingsController extends Controller {
      *
      * @return Response
      */
-    public function postcompany($id, Company $company, CompanyRequest $request) {
+    public function postcompany($id, Company $company, CompanyRequest $request)
+    {
         /* fetch the values of company request  */
         $companys = $company->whereId('1')->first();
         if (Input::file('logo')) {
             $name = Input::file('logo')->getClientOriginalName();
             $destinationPath = 'lb-faveo/media/company/';
-            $fileName = rand(0000, 9999) . '.' . $name;
+            $fileName = rand(0000, 9999).'.'.$name;
             Input::file('logo')->move($destinationPath, $fileName);
             $companys->logo = $fileName;
         }
@@ -104,7 +106,7 @@ class SettingsController extends Controller {
             return redirect('getcompany')->with('success', Lang::get('lang.company_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getcompany')->with('fails', Lang::get('lang.company_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
+            return redirect('getcompany')->with('fails', Lang::get('lang.company_can_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -113,7 +115,8 @@ class SettingsController extends Controller {
      *
      *  @return type string
      */
-    public function deleteLogo() {
+    public function deleteLogo()
+    {
         $path = $_GET['data1']; //get file path of logo image
         if (!unlink($path)) {
             return 'false';
@@ -122,6 +125,7 @@ class SettingsController extends Controller {
             $companys->logo = null;
             $companys->use_logo = '0';
             $companys->save();
+
             return 'true';
         }
         // return $res;
@@ -139,7 +143,8 @@ class SettingsController extends Controller {
      *
      * @return type Response
      */
-    public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time) {
+    public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time)
+    {
         try {
             /* fetch the values of system from system table */
             $systems = $system->whereId('1')->first();
@@ -163,7 +168,8 @@ class SettingsController extends Controller {
      *
      * @return type Response
      */
-    public function postsystem($id, System $system, SystemRequest $request) {
+    public function postsystem($id, System $system, SystemRequest $request)
+    {
         try {
             // dd($request);
             /* fetch the values of system request  */
@@ -175,7 +181,7 @@ class SettingsController extends Controller {
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getsystem')->with('fails', Lang::get('lang.system_can_not_updated') . '<br>' . $e->getMessage());
+            return redirect('getsystem')->with('fails', Lang::get('lang.system_can_not_updated').'<br>'.$e->getMessage());
         }
     }
 
@@ -189,7 +195,8 @@ class SettingsController extends Controller {
      *
      * @return type Response
      */
-    public function getticket(Ticket $ticket, Sla_plan $sla, Help_topic $topic, Ticket_Priority $priority) {
+    public function getticket(Ticket $ticket, Sla_plan $sla, Help_topic $topic, Ticket_Priority $priority)
+    {
         try {
             /* fetch the values of ticket from ticket table */
             $tickets = $ticket->whereId('1')->first();
@@ -213,7 +220,8 @@ class SettingsController extends Controller {
      *
      * @return type Response
      */
-    public function postticket($id, Ticket $ticket, Request $request) {
+    public function postticket($id, Ticket $ticket, Request $request)
+    {
         try {
             /* fetch the values of ticket request  */
             $tickets = $ticket->whereId('1')->first();
@@ -234,7 +242,7 @@ class SettingsController extends Controller {
             return redirect('getticket')->with('success', Lang::get('lang.ticket_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getticket')->with('fails', Lang::get('lang.ticket_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
+            return redirect('getticket')->with('fails', Lang::get('lang.ticket_can_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -247,7 +255,8 @@ class SettingsController extends Controller {
      *
      * @return type Response
      */
-    public function getemail(Email $email, Template $template, Emails $email1) {
+    public function getemail(Email $email, Template $template, Emails $email1)
+    {
         try {
             /* fetch the values of email from Email table */
             $emails = $email->whereId('1')->first();
@@ -271,7 +280,8 @@ class SettingsController extends Controller {
      *
      * @return type Response
      */
-    public function postemail($id, Email $email, EmailRequest $request) {
+    public function postemail($id, Email $email, EmailRequest $request)
+    {
         try {
             /* fetch the values of email request  */
             $emails = $email->whereId('1')->first();
@@ -290,7 +300,7 @@ class SettingsController extends Controller {
             return redirect('getemail')->with('success', Lang::get('lang.email_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getemail')->with('fails', Lang::get('lang.email_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
+            return redirect('getemail')->with('fails', Lang::get('lang.email_can_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -303,7 +313,8 @@ class SettingsController extends Controller {
      *
      * @return type Response
      */
-    public function getSchedular(Email $email, Template $template, Emails $email1) {
+    public function getSchedular(Email $email, Template $template, Emails $email1)
+    {
         // try {
         /* fetch the values of email from Email table */
         $emails = $email->whereId('1')->first();
@@ -325,7 +336,8 @@ class SettingsController extends Controller {
      *
      * @return type Response
      */
-    public function postSchedular(Email $email, Template $template, Emails $email1, Request $request) {
+    public function postSchedular(Email $email, Template $template, Emails $email1, Request $request)
+    {
         // dd($request);
         try {
             /* fetch the values of email request  */
@@ -345,7 +357,7 @@ class SettingsController extends Controller {
             return redirect('job-scheduler')->with('success', Lang::get('lang.job-scheduler-success'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('job-scheduler')->with('fails', Lang::get('lang.job-scheduler-error') . '<li>' . $e->getMessage() . '</li>');
+            return redirect('job-scheduler')->with('fails', Lang::get('lang.job-scheduler-error').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -356,7 +368,8 @@ class SettingsController extends Controller {
      *
      * @return type Response
      */
-    public function getresponder(Responder $responder) {
+    public function getresponder(Responder $responder)
+    {
         try {
             /* fetch the values of responder from responder table */
             $responders = $responder->whereId('1')->first();
@@ -375,7 +388,8 @@ class SettingsController extends Controller {
      *
      * @return type
      */
-    public function postresponder(Responder $responder, Request $request) {
+    public function postresponder(Responder $responder, Request $request)
+    {
         try {
             /* fetch the values of responder request  */
             $responders = $responder->whereId('1')->first();
@@ -392,7 +406,7 @@ class SettingsController extends Controller {
             return redirect('getresponder')->with('success', Lang::get('lang.auto_response_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getresponder')->with('fails', Lang::get('lang.auto_response_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
+            return redirect('getresponder')->with('fails', Lang::get('lang.auto_response_can_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -403,7 +417,8 @@ class SettingsController extends Controller {
      *
      * @return type Response
      */
-    public function getalert(Alert $alert) {
+    public function getalert(Alert $alert)
+    {
         try {
             /* fetch the values of alert from alert table */
             $alerts = $alert->whereId('1')->first();
@@ -423,7 +438,8 @@ class SettingsController extends Controller {
      *
      * @return type Response
      */
-    public function postalert($id, Alert $alert, Request $request) {
+    public function postalert($id, Alert $alert, Request $request)
+    {
         try {
             /* fetch the values of alert request  */
             $alerts = $alert->whereId('1')->first();
@@ -478,35 +494,42 @@ class SettingsController extends Controller {
             return redirect('getalert')->with('success', Lang::get('lang.alert_&_notices_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getalert')->with('fails', Lang::get('lang.alert_&_notices_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
+            return redirect('getalert')->with('fails', Lang::get('lang.alert_&_notices_can_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
     /**
      *  Generate Api key.
+     *
      *  @return type json
      */
-    public function generateApiKey() {
+    public function generateApiKey()
+    {
         $key = str_random(32);
+
         return $key;
     }
 
     /**
      * Main Settings Page.
+     *
      * @return type view
      */
-    public function settings() {
+    public function settings()
+    {
         return view('themes.default1.admin.helpdesk.setting');
     }
 
     /**
      * @param int $id
-     * @return Response
      * @param $compant instance of company table
      *
      * get the form for company setting page
+     *
+     * @return Response
      */
-    public function getStatuses() {
+    public function getStatuses()
+    {
         try {
             /* fetch the values of company from company table */
             $statuss = \DB::table('ticket_status')->get();
@@ -519,15 +542,17 @@ class SettingsController extends Controller {
 
     /**
      * @param int $id
-     * @return Response
      * @param $compant instance of company table
      *
      * get the form for company setting page
+     *
+     * @return Response
      */
-    public function getEditStatuses($id) {
+    public function getEditStatuses($id)
+    {
         try {
             /* fetch the values of company from company table */
-            $status = \DB::table('ticket_status')->where('id','=',$id)->first();
+            $status = \DB::table('ticket_status')->where('id', '=', $id)->first();
             /* Direct to Company Settings Page */
             return view('themes.default1.admin.helpdesk.settings.status-edit', compact('status'));
         } catch (Exception $e) {
@@ -537,12 +562,14 @@ class SettingsController extends Controller {
 
     /**
      * @param int $id
-     * @return Response
      * @param $compant instance of company table
      *
      * get the form for company setting page
+     *
+     * @return Response
      */
-    public function editStatuses($id, StatusRequest $request) {
+    public function editStatuses($id, StatusRequest $request)
+    {
         try {
             /* fetch the values of company from company table */
             $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->first();
@@ -566,12 +593,15 @@ class SettingsController extends Controller {
     }
 
     /**
-     * create a status
-     * @param \App\Model\helpdesk\Ticket\Ticket_Status $statuss
+     * create a status.
+     *
+     * @param \App\Model\helpdesk\Ticket\Ticket_Status  $statuss
      * @param \App\Http\Requests\helpdesk\StatusRequest $request
+     *
      * @return type redirect
      */
-    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss, StatusRequest $request) {
+    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss, StatusRequest $request)
+    {
         try {
             /* fetch the values of company from company table */
             $statuss->name = $request->input('name');
@@ -594,11 +624,14 @@ class SettingsController extends Controller {
     }
 
     /**
-     * delete a status
+     * delete a status.
+     *
      * @param type $id
+     *
      * @return type redirect
      */
-    public function deleteStatuses($id) {
+    public function deleteStatuses($id)
+    {
         try {
             if ($id > 5) {
                 /* fetch the values of company from company table */
@@ -614,53 +647,64 @@ class SettingsController extends Controller {
     }
 
     /**
-     * get the page of notification settings
+     * get the page of notification settings.
+     *
      * @return type view
      */
-    public function notificationSettings() {
+    public function notificationSettings()
+    {
         return view('themes.default1.admin.helpdesk.settings.notification');
     }
 
     /**
-     * delete a notification
+     * delete a notification.
+     *
      * @return type redirect
      */
-    public function deleteReadNoti() {
+    public function deleteReadNoti()
+    {
         $markasread = UserNotification::where('is_read', '=', 1)->get();
         foreach ($markasread as $mark) {
             $mark->delete();
             \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
         }
+
         return redirect()->back()->with('success', Lang::get('lang.you_have_deleted_all_the_read_notifications'));
     }
 
     /**
-     * delete a notification log
+     * delete a notification log.
+     *
      * @return type redirect
      */
-    public function deleteNotificationLog() {
+    public function deleteNotificationLog()
+    {
         $days = Input::get('no_of_days');
         if ($days == null) {
             return redirect()->back()->with('fails', 'Please enter valid no of days');
         }
-        $date = new DateTime;
-        $date->modify($days . ' day');
+        $date = new DateTime();
+        $date->modify($days.' day');
         $formatted_date = $date->format('Y-m-d H:i:s');
         $markasread = UserNotification::where('created_at', '<=', $formatted_date)->get();
         foreach ($markasread as $mark) {
             $mark->delete();
             \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
         }
-        return redirect()->back()->with('success', Lang::get('lang.you_have_deleted_all_the_notification_records_since') . $days . ' days.');
+
+        return redirect()->back()->with('success', Lang::get('lang.you_have_deleted_all_the_notification_records_since').$days.' days.');
     }
 
     /**
      * 	To display the list of ratings in the system.
+     *
      *  @return type View
      */
-    public function RatingSettings() {
+    public function RatingSettings()
+    {
         try {
             $ratings = Rating::orderBy('display_order', 'asc')->get();
+
             return view('themes.default1.admin.helpdesk.settings.ratings', compact('ratings'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -668,13 +712,17 @@ class SettingsController extends Controller {
     }
 
     /**
-     * edit a rating
+     * edit a rating.
+     *
      * @param type $id
+     *
      * @return type view
      */
-    public function editRatingSettings($id) {
+    public function editRatingSettings($id)
+    {
         try {
             $rating = Rating::whereId($id)->first();
+
             return view('themes.default1.admin.helpdesk.settings.edit-ratings', compact('rating'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -683,9 +731,11 @@ class SettingsController extends Controller {
 
     /**
      * 	To store rating data.
+     *
      *  @return type Redirect
      */
-    public function PostRatingSettings($id, Rating $ratings, RatingUpdateRequest $request) {
+    public function PostRatingSettings($id, Rating $ratings, RatingUpdateRequest $request)
+    {
         try {
             $rating = $ratings->whereId($id)->first();
             $rating->name = $request->input('name');
@@ -695,6 +745,7 @@ class SettingsController extends Controller {
             $rating->rating_area = $request->input('rating_area');
             $rating->restrict = $request->input('restrict');
             $rating->save();
+
             return redirect()->back()->with('success', Lang::get('lang.ratings_updated_successfully'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -702,25 +753,30 @@ class SettingsController extends Controller {
     }
 
     /**
-     * get the create rating page
+     * get the create rating page.
+     *
      * @return type redirect
      */
-    public function createRating() {
+    public function createRating()
+    {
         try {
             return view('themes.default1.admin.helpdesk.settings.create-ratings');
         } catch (Exception $ex) {
-            return redirect('getratings')->with('fails', Lang::get('lang.ratings_can_not_be_created') . '<li>' . $ex->getMessage() . '</li>');
+            return redirect('getratings')->with('fails', Lang::get('lang.ratings_can_not_be_created').'<li>'.$ex->getMessage().'</li>');
         }
     }
 
     /**
-     * store a rating value
-     * @param \App\Model\helpdesk\Ratings\Rating $rating
-     * @param \App\Model\helpdesk\Ratings\RatingRef $ratingrefs
+     * store a rating value.
+     *
+     * @param \App\Model\helpdesk\Ratings\Rating        $rating
+     * @param \App\Model\helpdesk\Ratings\RatingRef     $ratingrefs
      * @param \App\Http\Requests\helpdesk\RatingRequest $request
+     *
      * @return type redirect
      */
-    public function storeRating(Rating $rating, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs, \App\Http\Requests\helpdesk\RatingRequest $request) {
+    public function storeRating(Rating $rating, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs, \App\Http\Requests\helpdesk\RatingRequest $request)
+    {
         $rating->name = $request->input('name');
         $rating->display_order = $request->input('display_order');
         $rating->allow_modification = $request->input('allow_modification');
@@ -730,6 +786,7 @@ class SettingsController extends Controller {
         $rating->save();
         $ratingrefs->rating_id = $rating->id;
         $ratingrefs->save();
+
         return redirect()->back()->with('success', Lang::get('lang.successfully_created_this_rating'));
     }
 
@@ -738,10 +795,11 @@ class SettingsController extends Controller {
      *
      * 	@return type Redirect
      */
-    public function RatingDelete($slug, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs) {
+    public function RatingDelete($slug, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs)
+    {
         $ratingrefs->where('rating_id', '=', $slug)->delete();
         Rating::whereId($slug)->delete();
+
         return redirect()->back()->with('success', Lang::get('lang.rating_deleted_successfully'));
     }
-
 }

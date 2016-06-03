@@ -20,7 +20,7 @@ class CreateWorkflowRuleTable extends Migration
             $table->string('matching_relation');
             $table->text('matching_value');
             $table->timestamps();
-            });
+        });
 
         Schema::table('workflow_rules', function (Blueprint $table) {
             $table->foreign('workflow_id', 'workflow_rules_1')->references('id')->on('workflow_name')->onUpdate('NO ACTION')->onDelete('RESTRICT');

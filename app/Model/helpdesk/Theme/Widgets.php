@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Theme;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Widgets extends BaseModel
 {
     protected $table = 'widgets';

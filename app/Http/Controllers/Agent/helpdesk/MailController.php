@@ -109,7 +109,7 @@ class MailController extends Controller
                                 $mail = $mailbox->getMail($mailId);
                                 if ($settings_email->first()->email_collaborator == 1) {
                                     if (count($mail->to) > 1) {
-                                        $collaborator = array_slice($mail->to,1);
+                                        $collaborator = array_slice($mail->to, 1);
                                         $collaborator = array_merge($collaborator, $mail->cc);
                                     } else {
                                         $collaborator = $mail->cc;
@@ -238,6 +238,7 @@ class MailController extends Controller
         foreach ($decode_header as $obj) {
             $result .= htmlspecialchars(rtrim($obj->text, "\t"));
         }
+
         return $result;
     }
 

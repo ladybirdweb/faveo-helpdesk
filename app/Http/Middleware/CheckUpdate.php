@@ -2,22 +2,23 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
-use \App\Http\Controllers\Utility\LibraryController as Utility;
-use Session;
-use App\Model\Update\BarNotification;
 use App\Http\Controllers\Update\UpgradeController;
+use App\Http\Controllers\Utility\LibraryController as Utility;
+use App\Model\Update\BarNotification;
+use Closure;
 
-class CheckUpdate {
-
+class CheckUpdate
+{
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
-    public function handle($request, Closure $next) {
+    public function handle($request, Closure $next)
+    {
         $check = $this->proceess();
         //dd($check);
         if ($check == true) {
@@ -34,19 +35,20 @@ class CheckUpdate {
         return $next($request);
     }
 
-    public function notificationBar() {
+    public function notificationBar()
+    {
         $notify = new BarNotification();
         $path = base_path('UPDATES');
         if (is_dir($path)) {
-            $notify->create(['key' => 'update-ready', 'value' => "New version has downloaded, click <a href=" . url('file-update') . ">here</a> to update now"]);
+            $notify->create(['key' => 'update-ready', 'value' => 'New version has downloaded, click <a href='.url('file-update').'>here</a> to update now']);
         }
     }
 
-    public function checkNewUpdate() {
-
+    public function checkNewUpdate()
+    {
         $notify = new BarNotification();
         $not = $notify->get();
-        if ($not->count()>0) {
+        if ($not->count() > 0) {
             $now = \Carbon\Carbon::now();
             $yesterday = \Carbon\Carbon::now(-24);
             $notifications = $notify->whereBetween('created_at', [$yesterday, $now])->lists('value', 'key');
@@ -57,10 +59,10 @@ class CheckUpdate {
                 }
             }
             if (count($notifications) > 0) {
-                if (!key_exists('new-version', $notifications)) {
+                if (!array_key_exists('new-version', $notifications)) {
                     $check_version = $this->checkNewVersion();
                     if ($check_version == true) {
-                        $notify->create(['key' => 'new-version', 'value' => 'new version found please click <a href=' . url('file-update') . '><b>here to download</b></a>']);
+                        $notify->create(['key' => 'new-version', 'value' => 'new version found please click <a href='.url('file-update').'><b>here to download</b></a>']);
                     }
                 } else {
                     $n = $notify->where('key', 'new-version')->first();
@@ -74,20 +76,20 @@ class CheckUpdate {
                 }
             }
         } else {
-            
             $check_version = $this->checkNewVersion();
 
             if ($check_version == true) {
                 //dd('if');
-                $notify->create(['key' => 'new-version', 'value' => 'new version found please click <a href=' . url('file-update') . '><b>here to download</b></a>','created_at'=>\Carbon\Carbon::now()]);
-            }else{
+                $notify->create(['key' => 'new-version', 'value' => 'new version found please click <a href='.url('file-update').'><b>here to download</b></a>', 'created_at' => \Carbon\Carbon::now()]);
+            } else {
                 //dd('else');
-                $notify->create(['key' => 'new-version', 'value' => '','created_at'=>\Carbon\Carbon::now()]);
+                $notify->create(['key' => 'new-version', 'value' => '', 'created_at' => \Carbon\Carbon::now()]);
             }
         }
     }
 
-    public function checkNewVersion() {
+    public function checkNewVersion()
+    {
         $controller = new UpgradeController();
         $version_from_billing = $controller->getLatestVersion();
         $app_version = Utility::getFileVersion();
@@ -96,13 +98,13 @@ class CheckUpdate {
         }
     }
 
-    public function proceess() {
+    public function proceess()
+    {
         $notify = new BarNotification();
         $not = $notify->get();
-        if ($not->count()>0) {
-
+        if ($not->count() > 0) {
             $n = $notify->where('key', 'new-version')->first();
-            
+
             if ($n) {
                 $now = \Carbon\Carbon::now();
                 $yesterday = \Carbon\Carbon::now(-24);
@@ -112,7 +114,7 @@ class CheckUpdate {
                 }
             }
         }
+
         return true;
     }
-
 }

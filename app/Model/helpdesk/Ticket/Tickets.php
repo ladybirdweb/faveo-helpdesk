@@ -2,8 +2,8 @@
 
 namespace App\Model\helpdesk\Ticket;
 
-use Illuminate\Database\Eloquent\Model;
 use App\BaseModel;
+
 class Tickets extends BaseModel
 {
     protected $table = 'tickets';

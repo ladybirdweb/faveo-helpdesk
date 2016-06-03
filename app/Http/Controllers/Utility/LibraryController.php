@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Utility;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Exception;
 use Config;
+use Exception;
 use Schema;
 
-class LibraryController extends Controller {
-
-    static function getFileVersion() {
+class LibraryController extends Controller
+{
+    public static function getFileVersion()
+    {
         try {
             $app = Config::get('app.version');
             if ($app) {
-                return preg_replace("/[^0-9,.]/", "", $app);
+                return preg_replace('/[^0-9,.]/', '', $app);
             } else {
                 return 0;
             }
@@ -24,7 +23,8 @@ class LibraryController extends Controller {
         }
     }
 
-    static function getDatabaseVersion() {
+    public static function getDatabaseVersion()
+    {
         try {
             $database = self::isDatabaseSetup();
             if ($database == true) {
@@ -41,7 +41,8 @@ class LibraryController extends Controller {
         }
     }
 
-    public static function isDatabaseSetup() {
+    public static function isDatabaseSetup()
+    {
         try {
             if (Schema::hasTable('settings_system')) {
                 return true;
@@ -51,7 +52,8 @@ class LibraryController extends Controller {
         }
     }
 
-    static function encryptByFaveoPublicKey($plaintext) {
+    public static function encryptByFaveoPublicKey($plaintext)
+    {
         try {
             // Compress the data to be sent
             $plaintext = gzcompress($plaintext);
@@ -59,7 +61,7 @@ class LibraryController extends Controller {
             // Get the public Key of the recipient
             $path = storage_path('app'.DIRECTORY_SEPARATOR.'faveo-public.key');
             $key_content = file_get_contents($path);
-            
+
             //dd($path);
             $publicKey = openssl_pkey_get_public($key_content);
             //dd($publicKey);
@@ -82,12 +84,15 @@ class LibraryController extends Controller {
 
             // This is the final encrypted data to be sent to the recipient
             $encrypted = $output;
+
             return $encrypted;
         } catch (Exception $ex) {
             dd($ex);
         }
     }
-    public static function decryptByFaveoPrivateKey($encrypted) {
+
+    public static function decryptByFaveoPrivateKey($encrypted)
+    {
         try {
             //$encrypted = p¥Ùn¿olÓ¥9)OÞÝ¸Ôvh§=Ìtt1rkC‰É§%YœfÐS\BâkHW€mùÌØg¹+VŠ¥²?áÙ{/<¶¡£e¡ˆr°(V)Öíàr„Ž]K9¤ÿÖ¡Åmž”üÈoò×´î¢“µºŽ06¼e€rœ['4çhH¾ö:¨œ–S„œ¦,|¤ÇqÂrÈŸd+ml‡ uötÏ†ûóŽ&›áyÙ(ÆŒÁ$‘¥±Zj*îàÒöL‘ˆD†aÉö_§è¶°·V„Þú]%ÅR*B=žéršæñ*i+á­±èç|c¹ÑßŸ­F$;
             // Get the private Key
@@ -116,10 +121,9 @@ class LibraryController extends Controller {
             // Uncompress the unencrypted data.
             $output = gzuncompress($output);
 
-            echo '<br /><br /> Unencrypted Data: ' . $output;
+            echo '<br /><br /> Unencrypted Data: '.$output;
         } catch (Exception $ex) {
             dd($ex);
         }
     }
-
 }

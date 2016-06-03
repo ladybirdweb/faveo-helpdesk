@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Model\helpdesk\Notification\Notification;
 use App\Model\helpdesk\Notification\UserNotification;
 use App\User;
-use Lang;
 
 class NotificationController extends Controller
 {
