@@ -21,7 +21,7 @@ class CreateSettingsTicketTable extends Migration
             $table->string('help_topic');
             $table->string('max_open_ticket');
             $table->string('collision_avoid');
-            $table->string('lock_ticket_frequency')->default(0)
+            $table->string('lock_ticket_frequency')->default(0);
             $table->string('captcha');
             $table->boolean('status');
             $table->boolean('claim_response');
