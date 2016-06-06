@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'default_location' =>  [
+    'default_location' => [
         'ip'           => '127.0.0.0',
         'isoCode'      => 'IN',
         'country'      => 'INDIA',
