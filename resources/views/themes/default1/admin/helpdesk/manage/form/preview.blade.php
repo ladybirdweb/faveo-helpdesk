@@ -61,8 +61,10 @@ class="active"
             } elseif ($form_data->type == "radio") {
                 $type2 = $form_data->value;
                 $vals = explode(',', $type2);
-                echo '<label class="radio-inline">' . ucfirst($form_data->label) . '</label>&nbsp&nbsp&nbsp<input type="' . $form_data->type . '" name="' . $form_data->name . '">&nbsp;&nbsp;' . $val[0] . '
-            &nbsp&nbsp&nbsp<input type="' . $value->type . '" name="' . $value->name . '">&nbsp;&nbsp;' . $val[1] . '</br></br>';
+                echo '<br/><label>' . ucfirst($form_data->label) . '</label><br/>';
+                foreach ($vals as $val) {
+                    echo '<input type="' . $form_data->type . '" name="' . $form_data->name . '"> ' . $form_data->name . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                }
             } elseif ($form_data->type == "textarea") {
                 $type3 = $form_data->value;
                 $v = explode(',', $type3);

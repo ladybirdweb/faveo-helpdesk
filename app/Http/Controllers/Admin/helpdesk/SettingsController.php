@@ -755,7 +755,7 @@ class SettingsController extends Controller
             $rating->display_order = $request->input('display_order');
             $rating->allow_modification = $request->input('allow_modification');
             $rating->rating_scale = $request->input('rating_scale');
-            $rating->rating_area = $request->input('rating_area');
+//            $rating->rating_area = $request->input('rating_area');
             $rating->restrict = $request->input('restrict');
             $rating->save();
 

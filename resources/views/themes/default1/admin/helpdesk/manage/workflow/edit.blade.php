@@ -97,9 +97,9 @@ class="active"
             </div>
             <div class="form-group {!! $errors->has('execution_order') ? 'has-error' : '' !!}">
                 <div>
-                    <label for="Exceution" class="col-sm-2 control-label">{!! Lang::get('lang.exceution_order') !!}</label>
+                    <label for="Exceution" class="col-sm-2 control-label">{!! Lang::get('lang.execution_order') !!}</label>
                     <div class="col-sm-6">
-                        <input type="number" class="form-control" id="execution_order" name="execution_order" placeholder="{!! Lang::get('lang.exceution_order') !!}" value="{!! $workflow->order !!}" required>
+                        <input type="number" class="form-control" id="execution_order" name="execution_order" placeholder="{!! Lang::get('lang.execution_order') !!}" value="{!! $workflow->order !!}" required>
                     </div>
                 </div>
             </div>

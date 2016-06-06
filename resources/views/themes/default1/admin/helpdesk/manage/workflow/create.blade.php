@@ -89,9 +89,9 @@ class="active"
             </div>
             <div class="form-group {!! $errors->has('execution_order') ? 'has-error' : '' !!}">
                 <div>
-                    <label for="Exceution" class="col-sm-2 control-label">{!! Lang::get('lang.exceution_order') !!} <span class="text-red"> *</span></label>
+                    <label for="Exceution" class="col-sm-2 control-label">{!! Lang::get('lang.execution_order') !!} <span class="text-red"> *</span></label>
                     <div class="col-sm-6">
-                        {!! Form::input('number', 'execution_order',null,['class' => 'form-control', 'placeholder' => Lang::get('lang.exceution_order'), 'id' => 'execution_order', 'min' => '0']) !!}
+                        {!! Form::input('number', 'execution_order',null,['class' => 'form-control', 'placeholder' => Lang::get('lang.execution_order'), 'id' => 'execution_order', 'min' => '0']) !!}
                     </div>
                 </div>
             </div>

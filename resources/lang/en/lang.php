@@ -134,6 +134,11 @@ return [
     'disable_for_this_email_address'                => 'Disable for this Email address',
     'validate_certificates_from_tls_or_ssl_server'  => 'Validate Certificates from TLS/SSL server',
     'authentication'                                => 'Authentication',
+    'incoming_email_connection_failed_please_check_email_credentials_or_imap_settings'     =>  'Incoming email connection failed! Please check email credentials or Imap Settings',
+    'outgoing_email_connection_failed'      =>  'Outgoing email connection failed',
+    'you_cannot_delete_system_default_email'    =>  'You cannot delete system default Email',
+    'email_deleted_sucessfully'         =>      'Email Deleted sucessfully',
+    'email_can_not_delete'    =>   'Email can not  Delete',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
@@ -545,7 +550,7 @@ return [
     'updated'                           => 'Updated',
     'target'                            => 'Target',
     'target_channel'                    => 'Target Channel',
-    'exceution_order'                   => 'Exceution Order',
+    'execution_order'                   => 'Execution Order',
     'target_channel'                    => 'Target Channel',
     'workflow_rules'                    => 'Workflow Rules',
     'workflow_action'                   => 'Workflow Action',

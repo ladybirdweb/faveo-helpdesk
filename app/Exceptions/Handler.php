@@ -77,8 +77,8 @@ class Handler extends ExceptionHandler
                 return redirect()->route('error500');
             }
         }
-//       //  returns non oops error message
-//        return parent::render($request, $e);
+        // returns non oops error message
+        // return parent::render($request, $e);
         // checking if the error is related to http error i.e. page not found
         if ($this->isHttpException($e)) {
             // returns error for page not found
