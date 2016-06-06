@@ -1224,6 +1224,26 @@ if ($thread->title != "") {
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!-- Modal -->   
+<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none; padding-right: 15px;background-color: rgba(0, 0, 0, 0.7);">
+    <div class="modal-dialog" role="document">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body" id="custom-alert-body" >
+                </div>
+                <div class="modal-footer">
+                    <a href="{!! URL::route('ticket.thread',$tickets->id) !!}"><button type="button" class="btn btn-primary yes" data-dismiss="modal">{{Lang::get('lang.reload-now')}}</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php $var = App\Model\helpdesk\Settings\Ticket::where('id', '=', 1)->first(); ?>
 
 <!-- scripts used on page -->
@@ -1915,15 +1935,15 @@ if ($thread->title != "") {
             $(".select2").on('select2:unselect', function(){
     parentAjaxCall();
     });
-            function parentAjaxCall(){
+    function parentAjaxCall(){
             // alert();
             var arr = $("#select-merge-tickts").val();
-                    if (arr == null) {
+        if (arr == null) {
             document.getElementById("select-merge-parent").innerHTML = "<option value='{{$tickets->id}}'><?php
 $ticket_data = App\Model\helpdesk\Ticket\Ticket_Thread::select('title')->where('ticket_id', "=", $tickets->id)->first();
 echo $ticket_data->title;
 ?></option>"
-            } else {
+        } else {
             $.ajax({
             type: "GET",
                     url: "../get-parent-tickets/{{ $tickets->id }}",
@@ -1941,21 +1961,40 @@ echo $ticket_data->title;
                             // $( this ).off( event );
                     }
             });
-            }
+        }
 
-            }
-
-    var locktime = '<?php echo $var->collision_avoid; ?>' * 60 * 1000;
-    var ltf = '<?php echo $var->lock_ticket_frequency;?>';
-            if (locktime > 0 && ltf != 0) {
+    }
+        var locktime = '<?php echo $var->collision_avoid; ?>' * 60 * 1000;
+        var ltf = '<?php echo $var->lock_ticket_frequency;?>';
+        if (locktime > 0 && ltf != 0) {
+            lockAjaxCall(locktime);
+            if (ltf == 2) {
+                var myVar = setInterval(function() {// to call ajax for ticket lock repeatedly after defined lock time interval
                 lockAjaxCall(locktime);
-                if (ltf == 2) {
-                    setInterval(function() {// to call ajax for ticket lock repeatedly after defined lock time interval
-                    lockAjaxCall(locktime);
-                        return false;
-                    }, locktime);
-                }
+                    return false;
+                }, locktime);
+                $(window).on("blur focus", function(e) {
+                    var prevType = $(this).data("prevType");
+                    if (prevType != e.type) {   //  reduce double fire issues
+                        switch (e.type) {
+                        case "blur":
+                            // do work
+                            setTimeout(function(){
+                                clearInterval(myVar);
+                                $("#myModalLabel").html("{!! Lang::get('lang.alert') !!}");
+                                $("#custom-alert-body").html("{!! Lang::get('lang.ticket-lock-inactive') !!}");
+                                $("#myModal").css("display", "block");
+                            }, locktime);
+                            break;
+                        case "focus":
+                            break;
+                        }
+                    }
+
+                    $(this).data("prevType", e.type);
+                });
             }
+        }
     });
 //ajax call to check ticket and lock ticket
             function lockAjaxCall(locktime){

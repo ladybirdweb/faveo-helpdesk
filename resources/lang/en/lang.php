@@ -334,6 +334,8 @@ return [
     'lock_ticket_frequency'              => 'Lock tickets',
     'only-once'                          => 'Only once',
     'frequently'                         => 'Frequently',
+    'reload-now'                            => 'Relaod now',
+    'ticket-lock-inactive'               => 'You have been inactive for a while. Please reload the page.',
     /*
       |--------------------------------------
       |   Access Settings Page
