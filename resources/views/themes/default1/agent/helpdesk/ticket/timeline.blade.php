@@ -1946,12 +1946,15 @@ echo $ticket_data->title;
             }
 
     var locktime = '<?php echo $var->collision_avoid; ?>' * 60 * 1000;
-            if (locktime > 0) {
+    var ltf = '<?php echo $var->lock_ticket_frequency;?>';
+            if (locktime > 0 && ltf != 0) {
                 lockAjaxCall(locktime);
-                setInterval(function() {// to call ajax for ticket lock repeatedly after defined lock time interval
-                lockAjaxCall(locktime);
-                    return false;
-                }, locktime);
+                if (ltf == 2) {
+                    setInterval(function() {// to call ajax for ticket lock repeatedly after defined lock time interval
+                    lockAjaxCall(locktime);
+                        return false;
+                    }, locktime);
+                }
             }
     });
 //ajax call to check ticket and lock ticket

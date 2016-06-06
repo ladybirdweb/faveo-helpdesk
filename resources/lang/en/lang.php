@@ -331,6 +331,9 @@ return [
     'agent_identity_masking'             => 'Agent Identity Masking',
     'enable_HTML_ticket_thread'          => 'Enable HTML Ticket Thread',
     'allow_client_updates'               => 'Allow Client Updates',
+    'lock_ticket_frequency'              => 'Lock tickets',
+    'only-once'                          => 'Only once',
+    'frequently'                         => 'Frequently',
     /*
       |--------------------------------------
       |   Access Settings Page

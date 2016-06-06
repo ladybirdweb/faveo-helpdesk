@@ -77,7 +77,7 @@ class="active"
         @endif
         <div class="row">
             <!-- Default Status: Required : manual: Dropdowm  -->
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
                     {!! Form::label('status',Lang::get('lang.default_status')) !!}
                     <select class="form-control" id="status" name="status">
@@ -86,28 +86,28 @@ class="active"
                 </div>
             </div>
             <!-- Default Priority:	Required : manual : Dropdowm  -->
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <div class="form-group {{ $errors->has('priority') ? 'has-error' : '' }}">
                     {!! Form::label('priority',Lang::get('lang.default_priority')) !!}
                     {!!Form::select('priority', [''=>'select a priority','Priorities'=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control']) !!}
                 </div>
             </div>
             <!-- Default SLA:	Required : manual : Dropdowm  -->
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <div class="form-group {{ $errors->has('sla') ? 'has-error' : '' }}">
                     {!! Form::label('sla',Lang::get('lang.default_sla')) !!}
                     {!!Form::select('sla', $slas->lists('grace_period','id'),null,['class' => 'form-control']) !!}
                 </div>
             </div>
             <!-- Default Help Topic:  Dropdowm from Help topic table	 -->
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <div class="form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
                     {!! Form::label('help_topic',Lang::get('lang.default_help_topic')) !!}
                     {!!Form::select('help_topic', $topics->lists('topic','id'),null,['class' => 'form-control']) !!}
                 </div>
             </div>
             <!-- Agent Collision Avoidance Duration: text-number   -minutes  -->
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group {{ $errors->has('collision_avoid') ? 'has-error' : '' }}">
                     {!! Form::label('collision_avoid',Lang::get('lang.agent_collision_avoidance_duration')) !!} 
                     <div class="input-group">
@@ -118,6 +118,18 @@ class="active"
                     </div>
                 </div> 
             </div> 
+            <div class="col-md-4">
+                <div class="form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
+                    {!! Form::label('help_topic',Lang::get('lang.lock_ticket_frequency')) !!}
+                    
+                        <select name='lock_ticket_frequency' class="form-control">
+                                <option @if($tickets->lock_ticket_frequency == null) selected="true" @endif value="0">{!! Lang::get('lang.no')!!}</option>
+                                <option @if($tickets->lock_ticket_frequency == 1) selected="true" @endif value="1">{!! Lang::get('lang.only-once')!!}</option>
+                                <option @if($tickets->lock_ticket_frequency == 2) selected="true" @endif value="2">{!! Lang::get('lang.frequently')!!}</option>
+                        </select>
+                    
+                </div>
+            </div>
         </div>
     </div>
     <div class="box-footer">
