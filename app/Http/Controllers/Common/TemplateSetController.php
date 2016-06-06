@@ -63,8 +63,7 @@ class TemplateSetController extends Controller
             foreach ($templates as $template) {
                 \DB::table('templates')->insert(['set_id' => $sets->id, 'name' => $template->name, 'variable' => $template->variable, 'type' => $template->type, 'subject' => $template->subject, 'message' => $template->message]);
             }
-
-            return redirect('template-sets')->with('Success', Lang::get('lang.you_have_created_a_new_template_set'));
+            return redirect('template-sets')->with('success', Lang::get('lang.you_have_created_a_new_template_set'));
         } catch (Exception $ex) {
             return redirect('template-sets')->with('fails', $ex->getMessage());
         }

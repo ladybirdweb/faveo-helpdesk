@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client\helpdesk;
 // controllers
 use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Agent\helpdesk\TicketWorkflowController;
 // requests
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 // models
@@ -22,16 +23,15 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class ClientTicketController extends Controller
-{
+class ClientTicketController extends Controller {
+
     /**
      * Create a new controller instance.
      *
      * @return type response
      */
-    public function __construct()
-    {
-        SettingsController::smtp();
+    public function __construct(TicketWorkflowController $TicketWorkflowController) {
+        $this->TicketWorkflowController = $TicketWorkflowController;
         // $this->middleware('auth');
         // $this->middleware('role.user');
     }
@@ -44,8 +44,7 @@ class ClientTicketController extends Controller
      *
      * @return type response
      */
-    public function getCheckTicket(Tickets $ticket, User $user)
-    {
+    public function getCheckTicket(Tickets $ticket, User $user) {
         return view('themes.default1.client.helpdesk.guest-user.newticket', compact('ticket'));
     }
 
@@ -56,30 +55,36 @@ class ClientTicketController extends Controller
      *
      * @return type view
      */
-    public function reply($id, Request $request)
-    {
-        $comment = $request->input('comment');
-        if ($comment != null) {
-            $tickets = Tickets::where('id', '=', $id)->first();
-            $tickets->closed_at = null;
-            $tickets->closed = 0;
-            $tickets->reopened_at = date('Y-m-d H:i:s');
-            $tickets->reopened = 1;
-            $tickets->isanswered = 0;
-            $threads = new Ticket_Thread();
-            $threads->user_id = Auth::user()->id;
-            $threads->ticket_id = $tickets->id;
-            $threads->poster = 'client';
-            $threads->body = $comment;
-            try {
-                $threads->save();
-                $tickets->save();
-                return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
-            } catch (Exception $e) {
-                return \Redirect::back()->with('fails1', $e->getMessage());
-            }
-        } else {
-            return \Redirect::back()->with('fails1', Lang::get('lang.please_fill_some_data'));
-        }
+    public function reply($id, Request $request) {
+
+        $tickets = Tickets::where('id', '=', $id)->first();
+        $thread = Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
+
+        $subject = $thread->title . '[#' . $tickets->ticket_number . ']';
+        $body = $request->input('comment');
+
+        $user_cred = User::where('id', '=', $tickets->user_id)->first();
+
+        $fromaddress = $user_cred->email;
+        $fromname = $user_cred->user_name;
+        $phone = "";
+        $phonecode = "";
+        $mobile_number = "";
+
+        $helptopic = $tickets->help_topic_id;
+        $sla = $tickets->sla;
+        $priority = $tickets->priority_id;
+        $source = $tickets->source;
+        $collaborator = "";
+        $dept = $tickets->dept_id;
+        $assign = $tickets->assigned_to;
+        $form_data = null;
+        $team_assign = null;
+        $ticket_status = null;
+        $auto_response = 0;
+
+        $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
+        return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
     }
+
 }

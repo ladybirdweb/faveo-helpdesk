@@ -161,7 +161,6 @@ class FormController extends Controller {
                     'phonecode' => $geoipcode->phonecode,
                     'country_code_error' => 1,
                 ];
-
                 return Redirect::back()->with($data)->withInput($request->except('password'));
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $phonecode)->get();
@@ -171,7 +170,6 @@ class FormController extends Controller {
                         'phonecode' => $geoipcode->phonecode,
                         'country_code_error' => 1,
                     ];
-
                     return Redirect::back()->with($data)->withInput($request->except('password'));
                 }
             }

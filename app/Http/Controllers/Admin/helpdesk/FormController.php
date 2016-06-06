@@ -21,13 +21,12 @@ use Redirect;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class FormController extends Controller
-{
+class FormController extends Controller {
+
     private $fields;
     private $forms;
 
-    public function __construct(Fields $fields, Forms $forms)
-    {
+    public function __construct(Fields $fields, Forms $forms) {
         $this->fields = $fields;
         $this->forms = $forms;
         $this->middleware('auth');
@@ -38,8 +37,7 @@ class FormController extends Controller
      *
      * @return type
      */
-    public function home()
-    {
+    public function home() {
         return view('forms.home');
     }
 
@@ -50,8 +48,7 @@ class FormController extends Controller
      *
      * @return Response
      */
-    public function index(Forms $forms)
-    {
+    public function index(Forms $forms) {
         try {
             return view('themes.default1.admin.helpdesk.manage.form.index', compact('forms'));
         } catch (Exception $e) {
@@ -64,8 +61,7 @@ class FormController extends Controller
      *
      * @return Response
      */
-    public function create()
-    {
+    public function create() {
         try {
             return view('themes.default1.admin.helpdesk.manage.form.form');
         } catch (Exception $ex) {
@@ -80,8 +76,7 @@ class FormController extends Controller
      *
      * @return Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         try {
             return view('themes.default1.admin.helpdesk.manage.form.preview', compact('id'));
         } catch (Exception $ex) {
@@ -94,8 +89,7 @@ class FormController extends Controller
      *
      * @return Response
      */
-    public function store(Forms $forms)
-    {
+    public function store(Forms $forms) {
         if (!Input::get('formname')) {
             return Redirect::back()->with('fails', Lang::get('lang.please_fill_form_name'));
         }
@@ -115,10 +109,10 @@ class FormController extends Controller
             if (!empty(Input::get('name')[$i])) {
                 array_push($fields, [
                     'forms_id' => $forms->id,
-                    'label'    => Input::get('label')[$i],
-                    'name'     => Input::get('name')[$i],
-                    'type'     => Input::get('type')[$i],
-                    'value'    => Input::get('value')[$i],
+                    'label' => Input::get('label')[$i],
+                    'name' => Input::get('name')[$i],
+                    'type' => Input::get('type')[$i],
+                    'value' => Input::get('value')[$i],
                     'required' => $require[$i],
                 ]);
             }
@@ -138,8 +132,7 @@ class FormController extends Controller
      *
      * @return type redirect
      */
-    public function delete($id, Forms $forms, Fields $field, Help_topic $help_topic)
-    {
+    public function delete($id, Forms $forms, Fields $field, Help_topic $help_topic) {
         $fields = $field->where('forms_id', $id)->get();
         $help_topics = $help_topic->where('custom_form', '=', $id)->get();
         foreach ($help_topics as $help_topic) {
@@ -154,4 +147,5 @@ class FormController extends Controller
 
         return redirect()->back()->with('success', Lang::get('lang.form_deleted_successfully'));
     }
+
 }

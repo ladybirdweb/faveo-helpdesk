@@ -64,24 +64,24 @@ class="active"
     ?>
     <div class="col-md-3 col-sm-6 col-xs-12">
         <a href="{!! route('inbox.ticket') !!}">
-        <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
-            <div class="info-box-content">
-                <span class="info-box-text">{!! Lang::get('lang.inbox') !!}</span>
-                <span class="info-box-number"><?php echo count($tickets); ?> <small> {!! Lang::get('lang.tickets') !!}</small></span>
-            </div><!-- /.info-box-content -->
-        </div><!-- /.info-box -->
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">{!! Lang::get('lang.inbox') !!}</span>
+                    <span class="info-box-number"><?php echo count($tickets); ?> <small> {!! Lang::get('lang.tickets') !!}</small></span>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
         </a>
     </div><!-- /.col -->
     <div class="col-md-3 col-sm-6 col-xs-12">
         <a href="{!! route('unassigned') !!}">
-        <div class="info-box">
-            <span class="info-box-icon bg-orange"><i class="fa fa-user-times"></i></span>
-            <div class="info-box-content">
-                <span class="info-box-text">{!! Lang::get('lang.unassigned') !!}</span>
-                <span class="info-box-number">{{count($unassigned) }} <small> {!! Lang::get('lang.tickets') !!}</small></span>
-            </div><!-- /.info-box-content -->
-        </div><!-- /.info-box -->
+            <div class="info-box">
+                <span class="info-box-icon bg-orange"><i class="fa fa-user-times"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">{!! Lang::get('lang.unassigned') !!}</span>
+                    <span class="info-box-number">{{count($unassigned) }} <small> {!! Lang::get('lang.tickets') !!}</small></span>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
         </a>
     </div><!-- /.col -->
 
@@ -90,24 +90,24 @@ class="active"
 
     <div class="col-md-3 col-sm-6 col-xs-12">
         <a href="{!! route('overdue.ticket') !!}">
-        <div class="info-box">
-            <span class="info-box-icon bg-red"><i class="fa fa-calendar-times-o"></i></span>
-            <div class="info-box-content">
-                <span class="info-box-text">{!! Lang::get('lang.overdue') !!}</span>
-                <span class="info-box-number">{{count($overdue_ticket) }} <small> Tickets</small></span>
-            </div><!-- /.info-box-content -->
-        </div><!-- /.info-box -->
+            <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-calendar-times-o"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">{!! Lang::get('lang.overdue') !!}</span>
+                    <span class="info-box-number">{{count($overdue_ticket) }} <small> Tickets</small></span>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
         </a>
     </div><!-- /.col -->
     <div class="col-md-3 col-sm-6 col-xs-12">
         <a href="{!! route('myticket.ticket') !!}">
-        <div class="info-box">
-            <span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
-            <div class="info-box-content">
-                <span class="info-box-text">{!! Lang::get('lang.my_tickets') !!}</span>
-                <span class="info-box-number">{{count($myticket) }} <small> Tickets</small></span>
-            </div><!-- /.info-box-content -->
-        </div><!-- /.info-box -->
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">{!! Lang::get('lang.my_tickets') !!}</span>
+                    <span class="info-box-number">{{count($myticket) }} <small> Tickets</small></span>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
         </a>
     </div><!-- /.col -->
 
@@ -172,9 +172,9 @@ class="active"
                             <style>
                                 #legend-holder { border: 2px solid #ccc; float: left; width: 25px; height: 15px; margin: 2px; }
                             </style>
-                            <div class="col-md-4"><span id="legend-holder" style="background-color: #A62121;"> </span> {!! Lang::get('lang.total') !!} {!! Lang::get('lang.tickets') !!}</div>
-                            <div class="col-md-4"><span id="legend-holder" style="background-color: #FF66CC;"> </span> {!! Lang::get('lang.open') !!} {!! Lang::get('lang.tickets') !!}</div>
-                            <div class="col-md-4"><span id="legend-holder" style="background-color: #97BBCD;"> </span> {!! Lang::get('lang.closed') !!} {!! Lang::get('lang.tickets') !!}</div>
+                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"> </span> {!! Lang::get('lang.total') !!} {!! Lang::get('lang.tickets') !!}</div>
+                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6DC5B2;"> </span> {!! Lang::get('lang.open') !!} {!! Lang::get('lang.tickets') !!}</div>
+                            <div class="col-md-4"><span id="legend-holder" style="background-color: #E3B870;"> </span> {!! Lang::get('lang.closed') !!} {!! Lang::get('lang.tickets') !!}</div>
                         </div>
                     </div>
                 </div>
@@ -186,7 +186,6 @@ class="active"
         </div>
     </div><!-- /.box-body -->
 </div><!-- /.box -->
-
 <div class="box">
     <div class="box-header with-border  ">
         <h1 class="box-title">{!! Lang::get('lang.statistics') !!}</h1>
@@ -223,19 +222,14 @@ class="active"
 <div id="refresh"> 
     <script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
 </div>
-
 <script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
 <script type="text/javascript">
                         $(document).ready(function() {
                             $.getJSON("agen", function(result) {
-
                                 var labels = [], open = [], closed = [], reopened = [];
-//,data2=[],data3=[],data4=[];
+                                //,data2=[],data3=[],data4=[];
                                 for (var i = 0; i < result.length; i++) {
-
-
                                     // $var12 = result[i].day;
-
                                     // labels.push($var12);
                                     labels.push(result[i].date);
                                     open.push(result[i].open);
@@ -243,39 +237,38 @@ class="active"
                                     reopened.push(result[i].reopened);
                                     // data4.push(result[i].open);
                                 }
-
                                 var buyerData = {
                                     labels: labels,
                                     datasets: [
                                         {
                                             label: "Open Tickets",
-                                            fillColor: "rgba(240, 127, 110, 0.3)",
-                                            strokeColor: "#f56954",
-                                            pointColor: "#A62121",
-                                            pointStrokeColor: "#E60073",
-                                            pointHighlightFill: "#FF4DC3",
-                                            pointHighlightStroke: "rgba(151,187,205,1)",
+                                            fillColor: "rgba(93, 189, 255, 0.05)",
+                                            strokeColor: "rgba(2, 69, 195, 0.9)",
+                                            pointColor: "rgba(2, 69, 195, 0.9)",
+                                            pointStrokeColor: "#c1c7d1",
+                                            pointHighlightFill: "#fff",
+                                            pointHighlightStroke: "rgba(220,220,220,1)",
                                             data: open
                                         }
                                         , {
                                             label: "Closed Tickets",
-                                            fillColor: "rgba(255, 102, 204, 0.4)",
-                                            strokeColor: "#f56954",
-                                            pointColor: "#FF66CC",
-                                            pointStrokeColor: "#fff",
-                                            pointHighlightFill: "#FF4DC3",
-                                            pointHighlightStroke: "rgba(151,187,205,1)",
+                                            fillColor: "rgba(255, 206, 96, 0.08)",
+                                            strokeColor: "rgba(221, 129, 0, 0.94)",
+                                            pointColor: "rgba(221, 129, 0, 0.94)",
+                                            pointStrokeColor: "rgba(60,141,188,1)",
+                                            pointHighlightFill: "#fff",
+                                            pointHighlightStroke: "rgba(60,141,188,1)",
                                             data: closed
 
                                         }
                                         , {
                                             label: "Reopened Tickets",
-                                            fillColor: "rgba(151,187,205,0.2)",
-                                            strokeColor: "rgba(151,187,205,1)",
-                                            pointColor: "rgba(151,187,205,1)",
-                                            pointStrokeColor: "#0000CC",
-                                            pointHighlightFill: "#0000E6",
-                                            pointHighlightStroke: "rgba(151,187,205,1)",
+                                            fillColor: "rgba(104, 255, 220, 0.06)",
+                                            strokeColor: "rgba(0, 149, 115, 0.94)",
+                                            pointColor: "rgba(0, 149, 115, 0.94)",
+                                            pointStrokeColor: "rgba(60,141,188,1)",
+                                            pointHighlightFill: "#fff",
+                                            pointHighlightStroke: "rgba(60,141,188,1)",
                                             data: reopened
                                         }
                                         // ,{
@@ -294,7 +287,7 @@ class="active"
                                 var myLineChart = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
                                     showScale: true,
                                     //Boolean - Whether grid lines are shown across the chart
-                                    scaleShowGridLines: false,
+                                    scaleShowGridLines: true,
                                     //String - Colour of the grid lines
                                     scaleGridLineColor: "rgba(0,0,0,.05)",
                                     //Number - Width of the grid lines
@@ -304,26 +297,26 @@ class="active"
                                     //Boolean - Whether to show vertical lines (except Y axis)
                                     scaleShowVerticalLines: true,
                                     //Boolean - Whether the line is curved between points
-                                    bezierCurve: false,
+                                    bezierCurve: true,
                                     //Number - Tension of the bezier curve between points
                                     bezierCurveTension: 0.3,
                                     //Boolean - Whether to show a dot for each point
                                     pointDot: true,
                                     //Number - Radius of each point dot in pixels
-                                    pointDotRadius: 4,
+                                    pointDotRadius: 1,
                                     //Number - Pixel width of point dot stroke
                                     pointDotStrokeWidth: 1,
                                     //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-                                    pointHitDetectionRadius: 20,
+                                    pointHitDetectionRadius: 10,
                                     //Boolean - Whether to show a stroke for datasets
                                     datasetStroke: true,
                                     //Number - Pixel width of dataset stroke
                                     datasetStrokeWidth: 1,
                                     //Boolean - Whether to fill the dataset with a color
-                                    datasetFill: false,
+                                    datasetFill: true,
                                     //String - A legend template
                                     //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-                                    maintainAspectRatio: false,
+                                    maintainAspectRatio: true,
                                     //Boolean - whether to make the chart responsive to window resizing
                                     responsive: true
 
@@ -340,7 +333,7 @@ class="active"
                                 var date2 = $('#datetimepicker3').val();
                                 var formData = date1.split("/").join('-');
                                 var dateData = date2.split("/").join('-');
-//$('#foo').serialize();
+                                //$('#foo').serialize();
                                 // process the form
                                 $.ajax({
                                     type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
@@ -349,15 +342,11 @@ class="active"
                                     dataType: 'json', // what type of data do we expect back from the server
 
                                     success: function(result2) {
-
-//                 $.getJSON("agen", function (result) {
+                                        //  $.getJSON("agen", function (result) {
                                         var labels = [], open = [], closed = [], reopened = [];
-//,data2=[],data3=[],data4=[];
+                                        //,data2=[],data3=[],data4=[];
                                         for (var i = 0; i < result2.length; i++) {
-
-
                                             // $var12 = result[i].day;
-
                                             // labels.push($var12);
                                             labels.push(result2[i].date);
                                             open.push(result2[i].open);
@@ -381,9 +370,9 @@ class="active"
                                                 }
                                                 , {
                                                     label: "Closed Tickets",
-                                                    fillColor: "rgba(140, 113, 255, 0.06)",
-                                                    strokeColor: "rgba(42, 0, 193, 0.92)",
-                                                    pointColor: "rgba(42, 0, 193, 0.92)",
+                                                    fillColor: "rgba(255, 206, 96, 0.08)",
+                                                    strokeColor: "rgba(221, 129, 0, 0.94)",
+                                                    pointColor: "rgba(221, 129, 0, 0.94)",
                                                     pointStrokeColor: "rgba(60,141,188,1)",
                                                     pointHighlightFill: "#fff",
                                                     pointHighlightStroke: "rgba(60,141,188,1)",
@@ -392,9 +381,9 @@ class="active"
                                                 }
                                                 , {
                                                     label: "Reopened Tickets",
-                                                    fillColor: "rgba(255, 206, 96, 0.08)",
-                                                    strokeColor: "rgba(221, 129, 0, 0.94)",
-                                                    pointColor: "rgba(221, 129, 0, 0.94)",
+                                                    fillColor: "rgba(104, 255, 220, 0.06)",
+                                                    strokeColor: "rgba(0, 149, 115, 0.94)",
+                                                    pointColor: "rgba(0, 149, 115, 0.94)",
                                                     pointStrokeColor: "rgba(60,141,188,1)",
                                                     pointHighlightFill: "#fff",
                                                     pointHighlightStroke: "rgba(60,141,188,1)",
@@ -416,7 +405,7 @@ class="active"
                                         var myLineChart = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
                                             showScale: true,
                                             //Boolean - Whether grid lines are shown across the chart
-                                            scaleShowGridLines: false,
+                                            scaleShowGridLines: true,
                                             //String - Colour of the grid lines
                                             scaleGridLineColor: "rgba(0,0,0,.05)",
                                             //Number - Width of the grid lines
@@ -432,31 +421,31 @@ class="active"
                                             //Boolean - Whether to show a dot for each point
                                             pointDot: true,
                                             //Number - Radius of each point dot in pixels
-                                            pointDotRadius: 4,
+                                            pointDotRadius: 1,
                                             //Number - Pixel width of point dot stroke
                                             pointDotStrokeWidth: 1,
                                             //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-                                            pointHitDetectionRadius: 20,
+                                            pointHitDetectionRadius: 10,
                                             //Boolean - Whether to show a stroke for datasets
                                             datasetStroke: true,
                                             //Number - Pixel width of dataset stroke
                                             datasetStrokeWidth: 1,
                                             //Boolean - Whether to fill the dataset with a color
-                                            datasetFill: false,
+                                            datasetFill: true,
                                             //String - A legend template
                                             //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-                                            maintainAspectRatio: false,
+                                            maintainAspectRatio: true,
                                             //Boolean - whether to make the chart responsive to window resizing
                                             responsive: true
 
                                         });
                                         myLineChart.options.responsive = false;
                                         $("#tickets-graph").remove();
-                                        $(".chart").html("<canvas id='tickets-graph' width='1000' height='300'></canvas>");
+                                        $(".chart").html("<canvas id='tickets-graph' width='1000' height='250'></canvas>");
                                         var myLineChart1 = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
                                             showScale: true,
                                             //Boolean - Whether grid lines are shown across the chart
-                                            scaleShowGridLines: false,
+                                            scaleShowGridLines: true,
                                             //String - Colour of the grid lines
                                             scaleGridLineColor: "rgba(0,0,0,.05)",
                                             //Number - Width of the grid lines
@@ -472,42 +461,32 @@ class="active"
                                             //Boolean - Whether to show a dot for each point
                                             pointDot: true,
                                             //Number - Radius of each point dot in pixels
-                                            pointDotRadius: 4,
+                                            pointDotRadius: 1,
                                             //Number - Pixel width of point dot stroke
                                             pointDotStrokeWidth: 1,
                                             //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-                                            pointHitDetectionRadius: 20,
+                                            pointHitDetectionRadius: 10,
                                             //Boolean - Whether to show a stroke for datasets
                                             datasetStroke: true,
                                             //Number - Pixel width of dataset stroke
                                             datasetStrokeWidth: 1,
                                             //Boolean - Whether to fill the dataset with a color
-                                            datasetFill: false,
+                                            datasetFill: true,
                                             //String - A legend template
                                             //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-                                            maintainAspectRatio: false,
+                                            maintainAspectRatio: true,
                                             //Boolean - whether to make the chart responsive to window resizing
                                             responsive: true
-
                                         });
-
                                         document.getElementById("legendDiv").innerHTML = myLineChart1.generateLegend();
-
-//  });
                                     }
                                 });
-
                                 // using the done promise callback
-
                                 // stop the form from submitting the normal way and refreshing the page
                                 event.preventDefault();
                             });
-
                         });
-
-
 </script>
-
 <script type="text/javascript">
     jQuery(document).ready(function() {
         // Close a ticket
@@ -526,7 +505,6 @@ class="active"
         });
     });
 </script>
-
 <script src="{{asset("lb-faveo/plugins/moment-develop/moment.js")}}" type="text/javascript"></script>
 <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
 @stop

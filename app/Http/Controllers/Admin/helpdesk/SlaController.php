@@ -147,7 +147,7 @@ class SlaController extends Controller
      *
      * @return type Response
      */
-    public function destroy($id, Sla_plan $sla)
+    public function destroy($id)
     {
         $default_sla = Ticket::where('id', '=', '1')->first();
         if ($default_sla->sla == $id) {
@@ -188,7 +188,7 @@ class SlaController extends Controller
             }
             $message = $ticket.$dept.$topic;
             /* Delete a perticular field from the database by delete() using Id */
-            $slas = $sla->whereId($id)->first();
+            $slas = Sla_plan::whereId($id)->first();
             /* Check whether function success or not */
             try {
                 $slas->delete();

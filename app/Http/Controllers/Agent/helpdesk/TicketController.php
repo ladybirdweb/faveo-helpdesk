@@ -566,7 +566,6 @@ class TicketController extends Controller {
         // define global variables
         $email;
         $username;
-
         // check emails
         $ticket_creator = $username;
         $checkemail = $this->checkEmail($emailadd);
@@ -596,8 +595,7 @@ class TicketController extends Controller {
                     if ($auto_response == 0) {
                         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => 'Welcome to ' . $company . ' helpdesk', 'scenario' => 'registration-notification'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'user_password' => $password]);
                     }
-                } catch (\Exception $e) {
-                    
+                } catch (\Exception $e) {  
                 }
             }
         } else {
@@ -933,7 +931,6 @@ class TicketController extends Controller {
         $ticket_number = $ticket_status->ticket_number;
 
         $system_from = $this->company();
-
         $sending_emails = Emails::where('department', '=', $ticket_status->dept_id)->first();
         if ($sending_emails == null) {
             $from_email = $this->system_mail();
@@ -945,7 +942,6 @@ class TicketController extends Controller {
         } catch (\Exception $e) {
             return 0;
         }
-
         return 'your ticket' . $ticket_status->ticket_number . ' has been closed';
     }
 
