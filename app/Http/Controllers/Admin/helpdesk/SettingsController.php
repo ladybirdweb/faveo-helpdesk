@@ -33,10 +33,10 @@ use DateTime;
 // classes
 use DB;
 use Exception;
+use File;
 use Illuminate\Http\Request;
 use Input;
 use Lang;
-use File;
 
 /**
  * SettingsController.

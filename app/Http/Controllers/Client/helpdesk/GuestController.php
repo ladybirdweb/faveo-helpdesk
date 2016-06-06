@@ -98,7 +98,7 @@ class GuestController extends Controller
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
                 if (!count($code)) {
-                    return redirect()->back()->with(['fails1'       => Lang::get('lang.incorrect-country-code-error'),
+                    return redirect()->back()->with(['fails1'           => Lang::get('lang.incorrect-country-code-error'),
                                                          'country_code' => 1, ])->withInput();
                 } else {
                     $user->country_code = $request->input('country_code');

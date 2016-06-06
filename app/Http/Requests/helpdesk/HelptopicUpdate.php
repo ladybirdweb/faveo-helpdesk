@@ -29,7 +29,7 @@ class HelptopicUpdate extends Request
     public function rules()
     {
         return [
-            'topic' => 'required|max:50',
+            'topic'      => 'required|max:50',
             'department' => 'required',
             'priority'   => 'required',
             'sla_plan'   => 'required',

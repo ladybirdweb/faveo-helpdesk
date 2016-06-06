@@ -9,14 +9,15 @@ use App\Http\Requests\Request;
  *
  * @author  Ladybird <info@ladybirdweb.com>
  */
-class SlaUpdate extends Request {
-
+class SlaUpdate extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -25,11 +26,11 @@ class SlaUpdate extends Request {
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            'name' => 'required|max:50',
+            'name'         => 'required|max:50',
             'grace_period' => 'required',
         ];
     }
-
 }

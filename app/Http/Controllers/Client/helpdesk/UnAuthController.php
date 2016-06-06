@@ -25,14 +25,15 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class UnAuthController extends Controller {
-
+class UnAuthController extends Controller
+{
     /**
      * Create a new controller instance.
      *
      * @return type void
      */
-    public function __construct(PhpMailController $PhpMailController) {
+    public function __construct(PhpMailController $PhpMailController)
+    {
         $this->PhpMailController = $PhpMailController;
     }
 
@@ -46,7 +47,8 @@ class UnAuthController extends Controller {
      *
      * @return type Response
      */
-    public function PostCheckTicket(Request $request) {
+    public function PostCheckTicket(Request $request)
+    {
         try {
             $validator = \Validator::make($request->all(), [
                         'email_address' => 'required|email',
@@ -71,7 +73,7 @@ class UnAuthController extends Controller {
                 if ($user_details->role == 'user') {
                     $username = $user_details->user_name;
                 } else {
-                    $username = $user_details->first_name . ' ' . $user_details->last_name;
+                    $username = $user_details->first_name.' '.$user_details->last_name;
                 }
                 // check for preentered ticket token
                 $ticket_token = TicketToken::where('ticket_id', '=', $ticket->id)->first();
@@ -90,10 +92,9 @@ class UnAuthController extends Controller {
                 }
                 try {
                     $this->PhpMailController->sendmail(
-                            $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $user_details->email], $message = ['subject' => 'Ticket link Request [' . $ticket_number . ']', 'scenario' => 'check-ticket'], $template_variables = ['user' => $username, 'ticket_link_with_number' => url('show-ticket/' . $ticket->id . '/' . $token)]
+                            $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $user_details->email], $message = ['subject' => 'Ticket link Request ['.$ticket_number.']', 'scenario' => 'check-ticket'], $template_variables = ['user' => $username, 'ticket_link_with_number' => url('show-ticket/'.$ticket->id.'/'.$token)]
                     );
                 } catch (\Exception $e) {
-                    
                 }
 
                 return redirect()->back()
@@ -113,7 +114,8 @@ class UnAuthController extends Controller {
      *
      * @return string
      */
-    public function generate_random_ticket_token($length = 10) {
+    public function generate_random_ticket_token($length = 10)
+    {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
@@ -132,17 +134,19 @@ class UnAuthController extends Controller {
      *
      * @return type view
      */
-    public function showTicketCode($ticket_id, $token) {
+    public function showTicketCode($ticket_id, $token)
+    {
         try {
             $check_token = TicketToken::where('ticket_id', '=', $ticket_id)->first();
             if (Hash::check($token, $check_token->token) == true) {
                 $token_time = CommonSettings::where('option_name', '=', 'ticket_token_time_duration')->first();
                 $time = $token_time->option_value;
-                $new_time = date_add($check_token->updated_at, date_interval_create_from_date_string($time . ' Hours'));
+                $new_time = date_add($check_token->updated_at, date_interval_create_from_date_string($time.' Hours'));
                 if (date('Y-m-d H:i:s') > $new_time) {
                     return redirect()->route('form')->with('fails', Lang::get('lang.sorry_your_ticket_token_has_expired_please_try_to_resend_the_ticket_link_request'));
                 }
                 $tickets = Tickets::where('id', '=', $ticket_id)->first();
+
                 return view('themes.default1.client.helpdesk.unauth.showticket', compact('tickets', 'token'));
             } else {
                 return redirect()->route('form')->with('fails', Lang::get('lang.sorry_you_are_not_allowed_token_expired'));
@@ -157,7 +161,8 @@ class UnAuthController extends Controller {
      *
      * @return type Redirect
      */
-    public function rating($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref) {
+    public function rating($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
+    {
         foreach ($request->all() as $key => $value) {
             if (strpos($key, '_') !== false) {
                 $ratName = str_replace('_', ' ', $key);
@@ -182,6 +187,7 @@ class UnAuthController extends Controller {
                 $rating_ref->save();
             }
         }
+
         return redirect()->back()->with('Success', Lang::get('lang.thank_you_for_your_rating'));
     }
 
@@ -190,7 +196,8 @@ class UnAuthController extends Controller {
      *
      * @return type Redirect
      */
-    public function ratingReply($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref) {
+    public function ratingReply($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
+    {
         foreach ($request->all() as $key => $value) {
             $key1 = explode(',', $key);
             if (strpos($key1[0], '_') !== false) {
@@ -226,7 +233,8 @@ class UnAuthController extends Controller {
      *
      * @return string
      */
-    public function changeStatus($status, $id) {
+    public function changeStatus($status, $id)
+    {
         $tickets = Tickets::where('id', '=', $id)->first();
         $tickets->status = $status;
         $ticket_status = Ticket_Status::where('id', '=', $status)->first();
@@ -244,7 +252,7 @@ class UnAuthController extends Controller {
         $thread->ticket_id = $tickets->id;
         $thread->user_id = $tickets->user_id;
         $thread->is_internal = 1;
-        $thread->body = $ticket_status->message . ' ' . $user->user_name;
+        $thread->body = $ticket_status->message.' '.$user->user_name;
         $thread->save();
 
         $email = $user->email;
@@ -259,11 +267,11 @@ class UnAuthController extends Controller {
             $from_email = $sending_emails->id;
         }
         try {
-            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
+            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
         } catch (\Exception $e) {
             return 0;
         }
-        return Lang::get('lang.your_ticket_has_been') . ' ' . $ticket_status->state;
-    }
 
+        return Lang::get('lang.your_ticket_has_been').' '.$ticket_status->state;
+    }
 }
