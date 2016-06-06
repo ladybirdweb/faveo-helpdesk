@@ -245,6 +245,7 @@ return [
       |   System Settings Page
       |--------------------------------------
      */
+    'debugging'                                                  => 'Debugging',
     'system'                                                     => 'System',
     'online'                                                     => 'Online',
     'offline'                                                    => 'Offline',

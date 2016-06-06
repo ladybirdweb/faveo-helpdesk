@@ -36,6 +36,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Input;
 use Lang;
+use File;
 
 /**
  * SettingsController.
@@ -152,8 +153,11 @@ class SettingsController extends Controller
             $departments = $department->get();
             /* Fetch the values from Timezones table */
             $timezones = $timezone->get();
+
+            $debug = \Config::get('app.debug');
+            //dd($value);
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time'));
+            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time'))->with('debug', $debug);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -178,6 +182,15 @@ class SettingsController extends Controller
             /* Check whether function success or not */
             $systems->fill($request->input())->save();
             /* redirect to Index page with Success Message */
+            $debug = \Config::get('app.debug');
+            $debug = ($debug) ? 'true' : 'false';
+            // dd($request->input());
+            $debug_new = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
+            $datacontent = File::get($debug_new);
+            $datacontent = str_replace("'debug' => ".$debug, "'debug' => ".$request->input('debug'), $datacontent);
+            File::put($debug_new, $datacontent);
+            // dd($datacontent);
+            //\Config::set('app.debug', $request->input('debug'));
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
