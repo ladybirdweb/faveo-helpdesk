@@ -52,15 +52,14 @@ use UTC;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class TicketController extends Controller
-{
+class TicketController extends Controller {
+
     /**
      * Create a new controller instance.
      *
      * @return type response
      */
-    public function __construct(PhpMailController $PhpMailController, NotificationController $NotificationController)
-    {
+    public function __construct(PhpMailController $PhpMailController, NotificationController $NotificationController) {
         $this->PhpMailController = $PhpMailController;
         $this->NotificationController = $NotificationController;
         $this->middleware('auth');
@@ -71,13 +70,11 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function inbox_ticket_list()
-    {
+    public function inbox_ticket_list() {
         return view('themes.default1.agent.helpdesk.ticket.inbox');
     }
 
-    public function get_inbox()
-    {
+    public function get_inbox() {
         if (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('status', '=', 1)->get();
         } else {
@@ -93,13 +90,11 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function open_ticket_list()
-    {
+    public function open_ticket_list() {
         return view('themes.default1.agent.helpdesk.ticket.open');
     }
 
-    public function get_open()
-    {
+    public function get_open() {
         if (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->get();
         } else {
@@ -115,13 +110,11 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function answered_ticket_list()
-    {
+    public function answered_ticket_list() {
         return view('themes.default1.agent.helpdesk.ticket.answered');
     }
 
-    public function get_answered()
-    {
+    public function get_answered() {
         if (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 1)->get();
         } else {
@@ -137,13 +130,11 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function myticket_ticket_list()
-    {
+    public function myticket_ticket_list() {
         return view('themes.default1.agent.helpdesk.ticket.myticket');
     }
 
-    public function get_myticket()
-    {
+    public function get_myticket() {
         if (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '=', Auth::user()->id)->get();
         } else {
@@ -159,8 +150,7 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function overdue_ticket_list()
-    {
+    public function overdue_ticket_list() {
         return view('themes.default1.agent.helpdesk.ticket.overdue');
     }
 
@@ -169,8 +159,7 @@ class TicketController extends Controller
      *
      * @return type json
      */
-    public function getOverdueTickets()
-    {
+    public function getOverdueTickets() {
         if (Auth::user()->role == 'agent') {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $overdues = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->get();
@@ -185,7 +174,7 @@ class TicketController extends Controller
                 $sla_plan = Sla_plan::where('id', '=', $overdue->sla)->first();
 
                 $ovadate = $overdue->created_at;
-                $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)).'<br/><br/>';
+                $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)) . '<br/><br/>';
                 if (date('Y-m-d H:i:s') > $new_date) {
                     $i++;
                     $value[] = $overdue;
@@ -207,13 +196,11 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function closed_ticket_list()
-    {
+    public function closed_ticket_list() {
         return view('themes.default1.agent.helpdesk.ticket.closed');
     }
 
-    public function get_closed()
-    {
+    public function get_closed() {
         if (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('status', '>', 1)->where('status', '<', 4)->get();
         } else {
@@ -229,13 +216,11 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function assigned_ticket_list()
-    {
+    public function assigned_ticket_list() {
         return view('themes.default1.agent.helpdesk.ticket.assigned');
     }
 
-    public function get_assigned()
-    {
+    public function get_assigned() {
         if (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '>', 0)->get();
         } else {
@@ -251,8 +236,7 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function newticket(CountryCode $code)
-    {
+    public function newticket(CountryCode $code) {
         $location = GeoIP::getLocation();
         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
 
@@ -266,8 +250,7 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function post_newticket(CreateTicketRequest $request, CountryCode $code)
-    {
+    public function post_newticket(CreateTicketRequest $request, CountryCode $code) {
         try {
             $email = $request->input('email');
             $fullname = $request->input('fullname');
@@ -296,23 +279,20 @@ class TicketController extends Controller
                 $geoipcode = $code->where('iso', '=', $location['isoCode'])->first();
                 if ($phonecode == null) {
                     $data = [
-                            'fails'              => Lang::get('lang.country-code-required-error'),
-                            'phonecode'          => $geoipcode->phonecode,
-                            'country_code_error' => 1,
-                        ];
-
-                    return  Redirect()->back()->with($data)->withInput($request->except('password'));
+                        'fails' => Lang::get('lang.country-code-required-error'),
+                        'phonecode' => $geoipcode->phonecode,
+                        'country_code_error' => 1,
+                    ];
+                    return Redirect()->back()->with($data)->withInput($request->except('password'));
                 } else {
                     $code = CountryCode::select('phonecode')->where('phonecode', '=', $phonecode)->get();
                     if (!count($code)) {
                         $data = [
-                            'fails'              => Lang::get('lang.incorrect-country-code-error'),
-                            'phonecode'          => $geoipcode->phonecode,
+                            'fails' => Lang::get('lang.incorrect-country-code-error'),
+                            'phonecode' => $geoipcode->phonecode,
                             'country_code_error' => 1,
-
-                            ];
-
-                        return  Redirect()->back()->with($data)->withInput($request->except('password'));
+                        ];
+                        return Redirect()->back()->with($data)->withInput($request->except('password'));
                     }
                 }
             }
@@ -323,7 +303,7 @@ class TicketController extends Controller
                 return Redirect('newticket')->with('fails', 'fails');
             }
         } catch (Exception $e) {
-            return Redirect()->back()->with('fails', '<li>'.$e->getMessage().'</li>');
+            return Redirect()->back()->with('fails', '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -334,8 +314,7 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function thread($id)
-    {
+    public function thread($id) {
         if (Auth::user()->role == 'agent') {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
 
@@ -364,8 +343,7 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function reply(Ticket_Thread $thread, TicketRequest $request, Ticket_attachments $ta)
-    {
+    public function reply(Ticket_Thread $thread, TicketRequest $request, Ticket_attachments $ta) {
         $attachments = $request->file('attachment');
         $check_attachment = null;
         // Event fire
@@ -396,7 +374,7 @@ class TicketController extends Controller
             $thread2->ticket_id = $thread->ticket_id;
             $thread2->user_id = Auth::user()->id;
             $thread2->is_internal = 1;
-            $thread2->body = 'This Ticket have been assigned to '.Auth::user()->first_name.' '.Auth::user()->last_name;
+            $thread2->body = 'This Ticket have been assigned to ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
             $thread2->save();
         }
         if ($tickets->status > 1) {
@@ -460,7 +438,7 @@ class TicketController extends Controller
         try {
             $this->NotificationController->create($ticket_id, Auth::user()->id, '2');
             $this->PhpMailController->sendmail(
-                    $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
+                    $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
             );
         } catch (\Exception $e) {
             return 0;
@@ -477,8 +455,7 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function ticketEditPost($ticket_id, Ticket_Thread $thread, Tickets $ticket)
-    {
+    public function ticketEditPost($ticket_id, Ticket_Thread $thread, Tickets $ticket) {
         if (Input::get('subject') == null) {
             return 1;
         } elseif (Input::get('sla_paln') == null) {
@@ -514,8 +491,7 @@ class TicketController extends Controller
      *
      * @return type respponse
      */
-    public function ticket_print($id)
-    {
+    public function ticket_print($id) {
         $tickets = Tickets::where('id', '=', $id)->first();
         $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
         $html = view('themes.default1.agent.helpdesk.ticket.pdf', compact('id', 'tickets', 'thread'))->render();
@@ -530,8 +506,7 @@ class TicketController extends Controller
      *
      * @return type integer
      */
-    public function ticketNumber($ticket_number)
-    {
+    public function ticketNumber($ticket_number) {
         $number = $ticket_number;
         $number = explode('-', $number);
         $number1 = $number[0];
@@ -564,8 +539,7 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function checkEmail($email)
-    {
+    public function checkEmail($email) {
         $check = User::where('email', '=', $email)->first();
         if ($check == true) {
             return $check;
@@ -588,8 +562,7 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function create_user($emailadd, $username, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $auto_response, $status)
-    {
+    public function create_user($emailadd, $username, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $auto_response, $status) {
         // define global variables
         $email;
         $username;
@@ -621,9 +594,10 @@ class TicketController extends Controller
                 \Event::fire(new \App\Events\ReadMailEvent($user_id, $password));
                 try {
                     if ($auto_response == 0) {
-                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => 'Welcome to '.$company.' helpdesk', 'scenario' => 'registration-notification'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'user_password' => $password]);
+                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => 'Welcome to ' . $company . ' helpdesk', 'scenario' => 'registration-notification'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'user_password' => $password]);
                     }
                 } catch (\Exception $e) {
+                    
                 }
             }
         } else {
@@ -637,7 +611,7 @@ class TicketController extends Controller
         $is_reply = $ticket_number[1];
         // dd($is_reply);
         $system = $this->system();
-        $updated_subject = $threaddata->title.'[#'.$ticket_number2.']';
+        $updated_subject = $threaddata->title . '[#' . $ticket_number2 . ']';
         if ($ticket_number2) {
             // send ticket create details to user
             if ($is_reply == 0) {
@@ -647,13 +621,13 @@ class TicketController extends Controller
                 } else {
                     $sign = $company;
                 }
-
                 if ($source == 3) {
                     try {
                         if ($auto_response == 0) {
                             $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body], $template_variables = ['agent_sign' => Auth::user()->agent_sign, 'ticket_number' => $ticket_number2]);
                         }
                     } catch (\Exception $e) {
+                        
                     }
                 } else {
                     $body2 = null;
@@ -662,6 +636,7 @@ class TicketController extends Controller
                             $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'], $template_variables = ['user' => $username, 'ticket_number' => $ticket_number2, 'department_sign' => '']);
                         }
                     } catch (\Exception $e) {
+                        
                     }
                 }
             } elseif ($is_reply == 1) {
@@ -675,7 +650,7 @@ class TicketController extends Controller
                 foreach ($admins as $admin) {
                     $to_email = $admin->email;
                     $to_user = $admin->first_name;
-                    $to_user_name = $admin->first_name.' '.$admin->last_name;
+                    $to_user_name = $admin->first_name . ' ' . $admin->last_name;
                     $set_mails[] = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
                 }
             }
@@ -690,7 +665,7 @@ class TicketController extends Controller
                         if ($department_data->name == $agent->primary_dpt) {
                             $to_email = $agent->email;
                             $to_user = $agent->first_name;
-                            $to_user_name = $agent->first_name.' '.$agent->last_name;
+                            $to_user_name = $agent->first_name . ' ' . $agent->last_name;
                             $set_mails[] = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
                         }
                     }
@@ -701,7 +676,7 @@ class TicketController extends Controller
                 $assigned_to = User::where('id', '=', $ticketdata->assigned_to)->first();
                 $to_email = $assigned_to->email;
                 $to_user = $assigned_to->first_name;
-                $to_user_name = $assigned_to->first_name.' '.$assigned_to->last_name;
+                $to_user_name = $assigned_to->first_name . ' ' . $assigned_to->last_name;
                 $set_mails[] = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
             }
             $emails_to_be_sent = array_unique($set_mails, SORT_REGULAR);
@@ -709,6 +684,7 @@ class TicketController extends Controller
                 try {
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $email_data['to_user'], 'email' => $email_data['to_email']], $message = ['subject' => $updated_subject, 'body' => Encoding::fixUTF8($body), 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $email_data['to_user_name'], 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $email_data['to_user_name'], 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
                 } catch (\Exception $e) {
+                    
                 }
             }
 
@@ -721,8 +697,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function default_helptopic()
-    {
+    public function default_helptopic() {
         $helptopic = '1';
 
         return $helptopic;
@@ -733,8 +708,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function default_sla()
-    {
+    public function default_sla() {
         $sla = '1';
 
         return $sla;
@@ -745,8 +719,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function default_priority()
-    {
+    public function default_priority() {
         $priority = '1';
 
         return $prioirty;
@@ -764,8 +737,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status)
-    {
+    public function check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status) {
         $read_ticket_number = explode('[#', $subject);
         if (isset($read_ticket_number[1])) {
             $separate = explode(']', $read_ticket_number[1]);
@@ -791,14 +763,14 @@ class TicketController extends Controller
                     if ($user_name->role == 'user') {
                         $username = $user_name->user_name;
                     } elseif ($user_name->role == 'agent' or $user_name->role == 'admin') {
-                        $username = $user_name->first_name.' '.$user_name->last_name;
+                        $username = $user_name->first_name . ' ' . $user_name->last_name;
                     }
 
                     $ticket_threads = new Ticket_Thread();
                     $ticket_threads->ticket_id = $id;
                     $ticket_threads->user_id = $user_id;
                     $ticket_threads->is_internal = 1;
-                    $ticket_threads->body = $ticket_status->message.' '.$username;
+                    $ticket_threads->body = $ticket_status->message . ' ' . $username;
                     $ticket_threads->save();
                 }
                 if (isset($id)) {
@@ -830,8 +802,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status)
-    {
+    public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status) {
         $max_number = Tickets::whereRaw('id = (select max(`id`) from tickets)')->first();
         if ($max_number == null) {
             $ticket_number = 'AAAA-9999-9999999';
@@ -901,8 +872,7 @@ class TicketController extends Controller
      *
      * @return type
      */
-    public function ticketThread($subject, $body, $id, $user_id)
-    {
+    public function ticketThread($subject, $body, $id, $user_id) {
         $thread = new Ticket_Thread();
         $thread->user_id = $user_id;
         $thread->ticket_id = $id;
@@ -922,15 +892,13 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function generateRandomString($length = 10)
-    {
+    public function generateRandomString($length = 10) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
-
         return $randomString;
     }
 
@@ -942,8 +910,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function close($id, Tickets $ticket)
-    {
+    public function close($id, Tickets $ticket) {
         $ticket_status = $ticket->where('id', '=', $id)->first();
         $ticket_status->status = 3;
         $ticket_status->closed = 1;
@@ -956,7 +923,7 @@ class TicketController extends Controller
         $thread->ticket_id = $ticket_status->id;
         $thread->user_id = Auth::user()->id;
         $thread->is_internal = 1;
-        $thread->body = $ticket_status_message->message.' '.Auth::user()->first_name.' '.Auth::user()->last_name;
+        $thread->body = $ticket_status_message->message . ' ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
         $thread->save();
 
         $user_id = $ticket_status->user_id;
@@ -974,12 +941,12 @@ class TicketController extends Controller
             $from_email = $sending_emails->id;
         }
         try {
-            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket_status->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
+            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket_status->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
         } catch (\Exception $e) {
             return 0;
         }
 
-        return 'your ticket'.$ticket_status->ticket_number.' has been closed';
+        return 'your ticket' . $ticket_status->ticket_number . ' has been closed';
     }
 
     /**
@@ -990,8 +957,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function resolve($id, Tickets $ticket)
-    {
+    public function resolve($id, Tickets $ticket) {
         $ticket_status = $ticket->where('id', '=', $id)->first();
         $ticket_status->status = 2;
         $ticket_status->closed = 1;
@@ -1003,13 +969,13 @@ class TicketController extends Controller
         $thread->user_id = Auth::user()->id;
         $thread->is_internal = 1;
         if (Auth::user()->first_name != null) {
-            $thread->body = $ticket_status_message->message.' '.Auth::user()->first_name.' '.Auth::user()->last_name;
+            $thread->body = $ticket_status_message->message . ' ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
         } else {
-            $thread->body = $ticket_status_message->message.' '.Auth::user()->user_name;
+            $thread->body = $ticket_status_message->message . ' ' . Auth::user()->user_name;
         }
         $thread->save();
 
-        return 'your ticket'.$ticket_status->ticket_number.' has been resolved';
+        return 'your ticket' . $ticket_status->ticket_number . ' has been resolved';
     }
 
     /**
@@ -1020,8 +986,7 @@ class TicketController extends Controller
      *
      * @return type
      */
-    public function open($id, Tickets $ticket)
-    {
+    public function open($id, Tickets $ticket) {
         $ticket_status = $ticket->where('id', '=', $id)->first();
         $ticket_status->status = 1;
         $ticket_status->reopened_at = date('Y-m-d H:i:s');
@@ -1031,10 +996,10 @@ class TicketController extends Controller
         $thread->ticket_id = $ticket_status->id;
         $thread->user_id = Auth::user()->id;
         $thread->is_internal = 1;
-        $thread->body = $ticket_status_message->message.' '.Auth::user()->first_name.' '.Auth::user()->last_name;
+        $thread->body = $ticket_status_message->message . ' ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
         $thread->save();
 
-        return 'your ticket'.$ticket_status->ticket_number.' has been opened';
+        return 'your ticket' . $ticket_status->ticket_number . ' has been opened';
     }
 
     /**
@@ -1045,8 +1010,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function delete($id, Tickets $ticket)
-    {
+    public function delete($id, Tickets $ticket) {
         $ticket_delete = $ticket->where('id', '=', $id)->first();
         if ($ticket_delete->status == 5) {
             $ticket_delete->delete();
@@ -1069,10 +1033,10 @@ class TicketController extends Controller
             $thread->ticket_id = $ticket_delete->id;
             $thread->user_id = Auth::user()->id;
             $thread->is_internal = 1;
-            $thread->body = $ticket_status_message->message.' '.Auth::user()->first_name.' '.Auth::user()->last_name;
+            $thread->body = $ticket_status_message->message . ' ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
             $thread->save();
 
-            return 'your ticket'.$ticket_delete->ticket_number.' has been delete';
+            return 'your ticket' . $ticket_delete->ticket_number . ' has been delete';
         }
     }
 
@@ -1084,8 +1048,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function ban($id, Tickets $ticket)
-    {
+    public function ban($id, Tickets $ticket) {
         $ticket_ban = $ticket->where('id', '=', $id)->first();
         $ban_email = $ticket_ban->user_id;
         $user = User::where('id', '=', $ban_email)->first();
@@ -1103,8 +1066,7 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function assign($id)
-    {
+    public function assign($id) {
         $UserEmail = Input::get('assign_to');
         $assign_to = explode('_', $UserEmail);
         $ticket = Tickets::where('id', '=', $id)->first();
@@ -1124,12 +1086,12 @@ class TicketController extends Controller
             $thread->ticket_id = $ticket->id;
             $thread->user_id = Auth::user()->id;
             $thread->is_internal = 1;
-            $thread->body = 'This Ticket has been assigned to '.$assignee;
+            $thread->body = 'This Ticket has been assigned to ' . $assignee;
             $thread->save();
         } elseif ($assign_to[0] == 'user') {
             $ticket->assigned_to = $assign_to[1];
             $user_detail = User::where('id', '=', $assign_to[1])->first();
-            $assignee = $user_detail->first_name.' '.$user_detail->last_name;
+            $assignee = $user_detail->first_name . ' ' . $user_detail->last_name;
 
             $company = $this->company();
             $system = $this->system();
@@ -1144,15 +1106,15 @@ class TicketController extends Controller
             $thread->ticket_id = $ticket->id;
             $thread->user_id = Auth::user()->id;
             $thread->is_internal = 1;
-            $thread->body = 'This Ticket has been assigned to '.$assignee;
+            $thread->body = 'This Ticket has been assigned to ' . $assignee;
             $thread->save();
 
             $agent = $user_detail->first_name;
             $agent_email = $user_detail->email;
 
-            $master = Auth::user()->first_name.' '.Auth::user()->last_name;
+            $master = Auth::user()->first_name . ' ' . Auth::user()->last_name;
             try {
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket->dept_id), $to = ['name' => $agent, 'email' => $agent_email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'assign-ticket'], $template_variables = ['ticket_agent_name' => $agent, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master]);
+                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket->dept_id), $to = ['name' => $agent, 'email' => $agent_email], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'assign-ticket'], $template_variables = ['ticket_agent_name' => $agent, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master]);
             } catch (\Exception $e) {
                 return 0;
             }
@@ -1168,8 +1130,7 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function InternalNote($id)
-    {
+    public function InternalNote($id) {
         $InternalContent = Input::get('InternalContent');
         $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
         $NewThread = new Ticket_Thread();
@@ -1191,10 +1152,9 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function surrender($id)
-    {
+    public function surrender($id) {
         $ticket = Tickets::where('id', '=', $id)->first();
-        $InternalContent = Auth::user()->first_name.' '.Auth::user()->last_name.' has Surrendered the assigned Ticket';
+        $InternalContent = Auth::user()->first_name . ' ' . Auth::user()->last_name . ' has Surrendered the assigned Ticket';
         $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
         $NewThread = new Ticket_Thread();
         $NewThread->ticket_id = $thread->ticket_id;
@@ -1218,8 +1178,7 @@ class TicketController extends Controller
      *
      * @return type array
      */
-    public function search($keyword)
-    {
+    public function search($keyword) {
         if (isset($keyword)) {
             $data = ['ticket_number' => Tickets::search($keyword)];
 
@@ -1236,8 +1195,7 @@ class TicketController extends Controller
      *
      * @return type array
      */
-    public function stores($ticket_number)
-    {
+    public function stores($ticket_number) {
         $this->layout->header = $ticket_number;
         $content = View::make('themes.default1.admin.tickets.ticketsearch', with(new Tickets()))
                 ->with('header', $this->layout->header)
@@ -1256,8 +1214,7 @@ class TicketController extends Controller
      *
      * @return type
      */
-    public function storeCollaborators($headers, $id)
-    {
+    public function storeCollaborators($headers, $id) {
         $company = $this->company();
         if (isset($headers)) {
             foreach ($headers as $email => $name) {
@@ -1279,6 +1236,7 @@ class TicketController extends Controller
                     try {
                         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
                     } catch (\Exception $e) {
+                        
                     }
                 } else {
                     $user = $this->checkEmail($email);
@@ -1301,8 +1259,7 @@ class TicketController extends Controller
      *
      * @return type
      */
-    public function company()
-    {
+    public function company() {
         $company = Company::Where('id', '=', '1')->first();
         if ($company->company_name == null) {
             $company = 'Support Center';
@@ -1318,8 +1275,7 @@ class TicketController extends Controller
      *
      * @return type
      */
-    public function system()
-    {
+    public function system() {
         $system = System::Where('id', '=', '1')->first();
         if ($system->name == null) {
             $system = 'Support Center';
@@ -1335,13 +1291,11 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function trash()
-    {
+    public function trash() {
         return view('themes.default1.agent.helpdesk.ticket.trash');
     }
 
-    public function get_trash()
-    {
+    public function get_trash() {
         if (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('status', '=', 5)->get();
         } else {
@@ -1357,13 +1311,11 @@ class TicketController extends Controller
      *
      * @return type
      */
-    public function unassigned()
-    {
+    public function unassigned() {
         return view('themes.default1.agent.helpdesk.ticket.unassigned');
     }
 
-    public function get_unassigned()
-    {
+    public function get_unassigned() {
         if (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('assigned_to', '=', null)->where('status', '1')->get();
         } else {
@@ -1379,8 +1331,7 @@ class TicketController extends Controller
      *
      * @return type
      */
-    public function myticket()
-    {
+    public function myticket() {
         return view('themes.default1.agent.helpdesk.ticket.myticket');
     }
 
@@ -1391,8 +1342,7 @@ class TicketController extends Controller
      *
      * @return type
      */
-    public function cleanMe($input)
-    {
+    public function cleanMe($input) {
         $input = mysqli_real_escape_string($input);
         $input = htmlspecialchars($input, ENT_IGNORE, 'utf-8');
         $input = strip_tags($input);
@@ -1408,10 +1358,9 @@ class TicketController extends Controller
      *
      * @return type json
      */
-    public function autosearch($id)
-    {
+    public function autosearch($id) {
         $term = \Input::get('term');
-        $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->lists('email');
+        $user = \App\User::where('email', 'LIKE', '%' . $term . '%')->lists('email');
         echo json_encode($user);
     }
 
@@ -1422,8 +1371,7 @@ class TicketController extends Controller
      *
      * @return type json
      */
-    public function autosearch2(User $user)
-    {
+    public function autosearch2(User $user) {
         $user = $user->lists('email');
         echo json_encode($user);
     }
@@ -1435,8 +1383,7 @@ class TicketController extends Controller
      *
      * @return type json
      */
-    public function usersearch()
-    {
+    public function usersearch() {
         $email = Input::get('search');
         $ticket_id = Input::get('ticket_id');
         $data = User::where('email', '=', $email)->first();
@@ -1450,9 +1397,9 @@ class TicketController extends Controller
             $ticket_collaborator->role = 'ccc';
             $ticket_collaborator->save();
 
-            return '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-check"></i>Success!</h4><h4><i class="icon fa fa-user"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'</div></div>';
+            return '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-check"></i>Success!</h4><h4><i class="icon fa fa-user"></i>' . $data->user_name . '</h4><div id="message-success1">' . $data->email . '</div></div>';
         } else {
-            return '<div id="alert11" class="alert alert-warning alert-dismissable"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-warning"></i>'.$data->user_name.'</h4><div id="message-success1">'.$data->email.'<br/>This user already Collaborated</div></div>';
+            return '<div id="alert11" class="alert alert-warning alert-dismissable"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-warning"></i>' . $data->user_name . '</h4><div id="message-success1">' . $data->email . '<br/>This user already Collaborated</div></div>';
         }
     }
 
@@ -1463,8 +1410,7 @@ class TicketController extends Controller
      *
      * @return type json
      */
-    public function useradd()
-    {
+    public function useradd() {
         $name = Input::get('name');
         $email = Input::get('email');
         $ticket_id = Input::get('ticket_id');
@@ -1492,7 +1438,7 @@ class TicketController extends Controller
             $ticket_collaborator->role = 'ccc';
             $ticket_collaborator->save();
 
-            return '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-user"></i>'.$user->user_name.'</h4><div id="message-success1">'.$user->email.'</div></div>';
+            return '<div id="alert11" class="alert alert-dismissable" style="color:#60B23C;background-color:#F2F2F2;"><button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-user"></i>' . $user->user_name . '</h4><div id="message-success1">' . $user->email . '</div></div>';
         }
     }
 
@@ -1501,8 +1447,7 @@ class TicketController extends Controller
      *
      * @return type
      */
-    public function userremove()
-    {
+    public function userremove() {
         $id = Input::get('data1');
         $ticket_collaborator = Ticket_Collaborator::where('id', '=', $id)->delete();
 
@@ -1514,8 +1459,7 @@ class TicketController extends Controller
      *
      * @return type
      */
-    public function select_all()
-    {
+    public function select_all() {
         if (Input::has('select_all')) {
             $selectall = Input::get('select_all');
             $value = Input::get('submit');
@@ -1543,7 +1487,7 @@ class TicketController extends Controller
                         $attachment = Ticket_attachments::where('thread_id', '=', $th_id->id)->get();
                         if (count($attachment)) {
                             foreach ($attachment as $a_id) {
-                                echo $a_id->id.' ';
+                                echo $a_id->id . ' ';
                                 $attachment = Ticket_attachments::find($a_id->id);
                                 $attachment->delete();
                             }
@@ -1586,8 +1530,7 @@ class TicketController extends Controller
      *
      * @return type date
      */
-    public static function usertimezone($utc)
-    {
+    public static function usertimezone($utc) {
         $set = System::whereId('1')->first();
         $timezone = Timezones::whereId($set->time_zone)->first();
         $tz = $timezone->name;
@@ -1605,8 +1548,7 @@ class TicketController extends Controller
      *
      * @return date
      */
-    public static function timeOffset($utc)
-    {
+    public static function timeOffset($utc) {
         $set = System::whereId('1')->first();
         $timezone = Timezones::whereId($set->time_zone)->first();
         $tz = $timezone->name;
@@ -1621,8 +1563,7 @@ class TicketController extends Controller
      *
      * @return string
      */
-    public static function getDateTimeFormat()
-    {
+    public static function getDateTimeFormat() {
         $set = System::select('date_time_format')->whereId('1')->first();
 
         return $set->date_time_format;
@@ -1635,8 +1576,7 @@ class TicketController extends Controller
      *
      * @return type null
      */
-    public function lock($id)
-    {
+    public function lock($id) {
         $ticket = Tickets::where('id', '=', $id)->first();
         $ticket->lock_by = Auth::user()->id;
         $ticket->lock_at = date('Y-m-d H:i:s');
@@ -1648,8 +1588,7 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function deptopen($id)
-    {
+    public function deptopen($id) {
         $dept = Department::where('name', '=', $id)->first();
         if (Auth::user()->role == 'agent') {
             if (Auth::user()->primary_dpt == $dept->id) {
@@ -1667,8 +1606,7 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function deptclose($id)
-    {
+    public function deptclose($id) {
         $dept = Department::where('name', '=', $id)->first();
         if (Auth::user()->role == 'agent') {
             if (Auth::user()->primary_dpt == $dept->id) {
@@ -1686,8 +1624,7 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function deptinprogress($id)
-    {
+    public function deptinprogress($id) {
         $dept = Department::where('name', '=', $id)->first();
         if (Auth::user()->role == 'agent') {
             if (Auth::user()->primary_dpt == $dept->id) {
@@ -1705,8 +1642,7 @@ class TicketController extends Controller
      *
      * @return type Redirect
      */
-    public function rating($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
-    {
+    public function rating($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref) {
         foreach ($request->all() as $key => $value) {
             if (strpos($key, '_') !== false) {
                 $ratName = str_replace('_', ' ', $key);
@@ -1740,8 +1676,7 @@ class TicketController extends Controller
      *
      * @return type Redirect
      */
-    public function ratingReply($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
-    {
+    public function ratingReply($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref) {
         foreach ($request->all() as $key => $value) {
             $key1 = explode(',', $key);
             if (strpos($key1[0], '_') !== false) {
@@ -1777,8 +1712,7 @@ class TicketController extends Controller
     /**
      * System default email.
      */
-    public function system_mail()
-    {
+    public function system_mail() {
         $email = Email::where('id', '=', '1')->first();
 
         return $email->sys_email;
@@ -1792,8 +1726,7 @@ class TicketController extends Controller
      *
      * @return int
      */
-    public function checkLock($id)
-    {
+    public function checkLock($id) {
         $ticket = DB::table('tickets')->select('id', 'lock_at', 'lock_by')->where('id', '=', $id)->first();
         $cad = DB::table('settings_ticket')->select('collision_avoid')->where('id', '=', 1)->first();
         $cad = $cad->collision_avoid; //collision avoid duration defined in system
@@ -1807,12 +1740,12 @@ class TicketController extends Controller
         if ($diff < $cad && Auth::user()->id != $ticket->lock_by) {
             $user_data = User::select('user_name', 'first_name', 'last_name')->where('id', '=', $ticket->lock_by)->first();
             if ($user_data->first_name != '') {
-                $name = $user_data->first_name.' '.$user_data->last_name;
+                $name = $user_data->first_name . ' ' . $user_data->last_name;
             } else {
                 $name = $user_data->username;
             }
 
-            return Lang::get('lang.locked-ticket')." <a href='".route('user.show', $ticket->lock_by)."'>".$name.'</a>&nbsp;'.$diff.'&nbsp'.Lang::get('lang.minutes-ago');  //ticket is locked
+            return Lang::get('lang.locked-ticket') . " <a href='" . route('user.show', $ticket->lock_by) . "'>" . $name . '</a>&nbsp;' . $diff . '&nbsp' . Lang::get('lang.minutes-ago');  //ticket is locked
         } elseif ($diff < $cad && Auth::user()->id == $ticket->lock_by) {
             $ticket = Tickets::where('id', '=', $id)->first();
             $ticket->lock_at = date('Y-m-d H:i:s');
@@ -1843,8 +1776,7 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function changeOwner($id)
-    {
+    public function changeOwner($id) {
         $action = Input::get('action');
         $email = Input::get('email');
         $ticket_id = Input::get('ticket_id');
@@ -1875,7 +1807,7 @@ class TicketController extends Controller
             $thread->ticket_id = $ticket->id;
             $thread->user_id = Auth::user()->id;
             $thread->is_internal = 1;
-            $thread->body = 'This ticket now belongs to '.$user->user_name;
+            $thread->body = 'This ticket now belongs to ' . $user->user_name;
             $thread->save();
 
             //mail functionality
@@ -1885,11 +1817,11 @@ class TicketController extends Controller
             $agent = $user->first_name;
             $agent_email = $user->email;
 
-            $master = Auth::user()->first_name.' '.Auth::user()->last_name;
+            $master = Auth::user()->first_name . ' ' . Auth::user()->last_name;
             if (Alert::first()->internal_status == 1 || Alert::first()->internal_assigned_agent == 1) {
                 // ticket assigned send mail
                 Mail::send('emails.Ticket_assign', ['agent' => $agent, 'ticket_number' => $ticket_number, 'from' => $company, 'master' => $master, 'system' => $system], function ($message) use ($agent_email, $agent, $ticket_number, $ticket_subject) {
-                    $message->to($agent_email, $agent)->subject($ticket_subject.'[#'.$ticket_number.']');
+                    $message->to($agent_email, $agent)->subject($ticket_subject . '[#' . $ticket_number . ']');
                 });
             }
 
@@ -1906,14 +1838,13 @@ class TicketController extends Controller
      *
      * @return type json
      */
-    public function changeOwnerAdd($email, $name, $ticket_id)
-    {
+    public function changeOwnerAdd($email, $name, $ticket_id) {
         $name = $name;
         $email = $email;
         $ticket_id = $ticket_id;
         $validator = \Validator::make(
                         ['email' => $email,
-                    'name'       => $name, ], ['email'       => 'required|email',
+                    'name' => $name,], ['email' => 'required|email',
                         ]
         );
         $user = User::where('email', '=', $email)->first();
@@ -1935,6 +1866,7 @@ class TicketController extends Controller
                 try {
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'Password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
                 } catch (\Exception $e) {
+                    
                 }
             }
 
@@ -1942,13 +1874,12 @@ class TicketController extends Controller
         }
     }
 
-    public function getMergeTickets($id)
-    {
+    public function getMergeTickets($id) {
         if ($id == 0) {
             $t_id = Input::get('data1');
             foreach ($t_id as $value) {
                 $title = Ticket_Thread::select('title')->where('ticket_id', '=', $value)->first();
-                echo "<option value='$value'>".$title->title.'</option>';
+                echo "<option value='$value'>" . $title->title . '</option>';
             }
         } else {
             $ticket = Tickets::select('user_id')->where('id', '=', $id)->first();
@@ -1956,13 +1887,12 @@ class TicketController extends Controller
                             ->where('user_id', '=', $ticket->user_id)->where('id', '!=', $id)->where('status', '=', 1)->get();
             foreach ($ticket_data as $value) {
                 $title = Ticket_Thread::select('title')->where('ticket_id', '=', $value->id)->first();
-                echo "<option value='$value->id'>".$title->title.'</option>';
+                echo "<option value='$value->id'>" . $title->title . '</option>';
             }
         }
     }
 
-    public function checkMergeTickets($id)
-    {
+    public function checkMergeTickets($id) {
         if ($id == 0) {
             if (Input::get('data1') == null || count(Input::get('data1')) == 1) {
                 return 0;
@@ -1997,8 +1927,7 @@ class TicketController extends Controller
         }
     }
 
-    public function mergeTickets($id)
-    {
+    public function mergeTickets($id) {
         // split the phrase by any number of commas or space characters,
         // which include " ", \r, \t, \n and \f
         $t_id = preg_split("/[\s,]+/", $id);
@@ -2050,9 +1979,9 @@ class TicketController extends Controller
             $new_thread->source = $thread->source;
             $new_thread->is_internal = 0;
             $new_thread->title = $thread->title;
-            $new_thread->body = Lang::get('lang.get_merge_message').
-                    "&nbsp;&nbsp;<a href='".route('ticket.thread', [$p_id]).
-                    "'>#".$parent_ticket->ticket_number.'</a><br><br><b>'.Lang::get('lang.merge-reason').':</b>&nbsp;&nbsp;'.$reason;
+            $new_thread->body = Lang::get('lang.get_merge_message') .
+                    "&nbsp;&nbsp;<a href='" . route('ticket.thread', [$p_id]) .
+                    "'>#" . $parent_ticket->ticket_number . '</a><br><br><b>' . Lang::get('lang.merge-reason') . ':</b>&nbsp;&nbsp;' . $reason;
             $new_thread->format = $thread->format;
             $new_thread->ip_address = $thread->ip_address;
 
@@ -2063,7 +1992,7 @@ class TicketController extends Controller
             $new_parent_thread->source = $parent_thread->source;
             $new_parent_thread->is_internal = 1;
             $new_parent_thread->title = $thread->title;
-            $new_parent_thread->body = Lang::get('lang.ticket')."&nbsp;<a href='".route('ticket.thread', [$value])."'>#".$ticket->ticket_number.'</a>&nbsp'.Lang::get('lang.ticket_merged').'<br><br><b>'.Lang::get('lang.merge-reason').':</b>&nbsp;&nbsp;'.$reason;
+            $new_parent_thread->body = Lang::get('lang.ticket') . "&nbsp;<a href='" . route('ticket.thread', [$value]) . "'>#" . $ticket->ticket_number . '</a>&nbsp' . Lang::get('lang.ticket_merged') . '<br><br><b>' . Lang::get('lang.merge-reason') . ':</b>&nbsp;&nbsp;' . $reason;
             $new_parent_thread->format = $parent_thread->format;
             $new_parent_thread->ip_address = $parent_thread->ip_address;
             if ($new_thread->save() && $new_parent_thread->save()) {
@@ -2076,14 +2005,13 @@ class TicketController extends Controller
         return $success;
     }
 
-    public function getParentTickets($id)
-    {
+    public function getParentTickets($id) {
         $title = Ticket_Thread::select('title')->where('ticket_id', '=', $id)->first();
-        echo "<option value='$id'>".$title->title.'</option>';
+        echo "<option value='$id'>" . $title->title . '</option>';
         $tickets = Input::get('data1');
         foreach ($tickets as $value) {
             $title = Ticket_Thread::select('title')->where('ticket_id', '=', $value)->first();
-            echo "<option value='$value'>".$title->title.'</option>';
+            echo "<option value='$value'>" . $title->title . '</option>';
         }
     }
 
@@ -2094,11 +2022,10 @@ class TicketController extends Controller
      * @return Array-object
      */
 
-    public static function getTable($tickets)
-    {
+    public static function getTable($tickets) {
         return \Datatable::collection(new Collection($tickets))
                         ->addColumn('id', function ($ticket) {
-                            return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
+                            return "<input type='checkbox' name='select_all[]' id='" . $ticket->id . "' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='" . $ticket->id . "'></input>";
                         })
                         ->addColumn('subject', function ($ticket) {
                             $subject = DB::table('ticket_thread')->select('title')->where('ticket_id', '=', $ticket->id)->first();
@@ -2106,7 +2033,7 @@ class TicketController extends Controller
                                 $string = $subject->title;
                                 if (strlen($string) > 20) {
                                     $stringCut = substr($string, 0, 30);
-                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
+                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')) . ' ...';
                                 }
                             } else {
                                 $string = '(no subject)';
@@ -2129,10 +2056,10 @@ class TicketController extends Controller
                                 $attachString = '';
                             }
 
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".ucfirst($string)."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
+                            return "<a href='" . route('ticket.thread', [$ticket->id]) . "' title='" . $subject->title . "'>" . ucfirst($string) . "&nbsp;<span style='color:green'>(" . $count . ")<i class='fa fa-comment'></i></span></a>" . $collabString . $attachString;
                         })
                         ->addColumn('ticket_number', function ($ticket) {
-                            return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$ticket->ticket_number."'>#".$ticket->ticket_number.'</a>';
+                            return "<a href='" . route('ticket.thread', [$ticket->id]) . "' title='" . $ticket->ticket_number . "'>#" . $ticket->ticket_number . '</a>';
                         })
                         ->addColumn('priority', function ($ticket) {
                             $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '=', 0)->max('id');
@@ -2143,20 +2070,20 @@ class TicketController extends Controller
                                 $username = $LastResponse->user_name;
                             } else {
                                 $rep = '#000';
-                                $username = $LastResponse->first_name.' '.$LastResponse->last_name;
+                                $username = $LastResponse->first_name . ' ' . $LastResponse->last_name;
                                 if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
                                     $username = $LastResponse->user_name;
                                 }
                             }
                             $priority = DB::table('ticket_priority')->select('priority_desc', 'priority_color')->where('priority_id', '=', $ticket->priority_id)->first();
 
-                            return '<span class="btn btn-'.$priority->priority_color.' btn-xs '.$rep.'">'.ucfirst($priority->priority_desc).'</span>';
+                            return '<span class="btn btn-' . $priority->priority_color . ' btn-xs ' . $rep . '">' . ucfirst($priority->priority_desc) . '</span>';
                         })
                         ->addColumn('from', function ($ticket) {
                             $from = DB::table('users')->select('user_name')->where('id', '=', $ticket->user_id)->first();
                             $url = route('user.show', $ticket->user_id);
 
-                            return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.ucfirst($from->user_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".ucfirst($from->user_name).'</span></a>';
+                            return "<a href='" . $url . "' title='" . Lang::get('lang.see-profile1') . ' ' . ucfirst($from->user_name) . '&apos;' . Lang::get('lang.see-profile2') . "'><span style='color:#508983'>" . ucfirst($from->user_name) . '</span></a>';
                         })
                         // ->addColumn('Last Replier', function ($ticket) {
                         //     $TicketData = Ticket_Thread::where('ticket_id', '=', $ticket->id)->where('is_internal', '=', 0)->max('id');
@@ -2181,7 +2108,7 @@ class TicketController extends Controller
                                 $assign = DB::table('users')->where('id', '=', $ticket->assigned_to)->first();
                                 $url = route('user.show', $ticket->assigned_to);
 
-                                return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.ucfirst($assign->first_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:green'>".ucfirst($assign->first_name).' '.ucfirst($assign->last_name).'</span></a>';
+                                return "<a href='" . $url . "' title='" . Lang::get('lang.see-profile1') . ' ' . ucfirst($assign->first_name) . '&apos;' . Lang::get('lang.see-profile2') . "'><span style='color:green'>" . ucfirst($assign->first_name) . ' ' . ucfirst($assign->last_name) . '</span></a>';
                             }
                         })
                         ->addColumn('Last', function ($ticket) {
@@ -2197,8 +2124,7 @@ class TicketController extends Controller
     }
 
     //Auto-close tickets
-    public function autoCloseTickets()
-    {
+    public function autoCloseTickets() {
         $workflow = \App\Model\helpdesk\Workflow\WorkflowClose::whereId(1)->first();
 
         if ($workflow->condition == 1) {
@@ -2211,7 +2137,7 @@ class TicketController extends Controller
                     //                $sla_plan = Sla_plan::where('id', '=', $overdue->sla)->first();
 
                     $ovadate = $overdue->created_at;
-                    $new_date = date_add($ovadate, date_interval_create_from_date_string($workflow->days.' days')).'<br/><br/>';
+                    $new_date = date_add($ovadate, date_interval_create_from_date_string($workflow->days . ' days')) . '<br/><br/>';
                     if (date('Y-m-d H:i:s') > $new_date) {
                         $i++;
                         $overdue->status = 3;
@@ -2231,6 +2157,8 @@ class TicketController extends Controller
 //            }
             }
         } else {
+            
         }
     }
+
 }

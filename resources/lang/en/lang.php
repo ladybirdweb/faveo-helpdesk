@@ -916,7 +916,6 @@ return [
       |User Page
       |------------------------------------------------
      */
-<<<<<<< HEAD
     'user_credentials'  =>  'User Credentials',
     'user_directory'  => 'User Directory',
     'ban'             => 'Ban',
@@ -939,29 +938,6 @@ return [
     'the_user_has_been_removed_from_this_organization'  =>  'The user has been removed from this organization',
     'user_report'   =>  'User Report',
     
-=======
-    'user_directory'                                    => 'User Directory',
-    'ban'                                               => 'Ban',
-    'user'                                              => 'User',
-    'users'                                             => 'Users',
-    'create_user'                                       => 'Create User',
-    'full_name'                                         => 'Full Name',
-    'mobile'                                            => 'Mobile',
-    'last_login'                                        => 'Last Login',
-    'user_profile'                                      => 'User Profile',
-    'assign'                                            => 'Assign',
-    'open_tickets'                                      => 'Open Tickets',
-    'closed_tickets'                                    => 'Closed Tickets',
-    'deleted_tickets'                                   => 'Deleted Tickets',
-    'user_created_successfully'                         => 'User Created Successfully',
-    'user_updated_successfully'                         => 'User  Updated Successfully',
-    'profile_updated_sucessfully'                       => 'Profile Updated sucessfully',
-    'password_updated_sucessfully'                      => 'Password Updated sucessfully',
-    'password_was_not_updated_incorrect_old_password'   => 'Password was not Updated. Incorrect old password',
-    'the_user_has_been_removed_from_this_organization'  => 'The user has been removed from this organization',
-    'user_report'                                       => 'User Report',
-
->>>>>>> origin/master
     /*
       |------------------------------------------------
       |Organization Page
@@ -1310,8 +1286,10 @@ return [
     'sorry_not_processed'                                                              => 'Sorry not processed',
     'profile_updated_sucessfully'                                                      => 'Profile Updated sucessfully',
     'password_was_not_updated'                                                         => 'Password was not Updated',
-
-
+    'sorry_your_ticket_token_has_expired_please_try_to_resend_the_ticket_link_request' => 'Sorry your Ticket token has Expired! Please try to resend the Ticket link request',
+    'sorry_you_are_not_allowed_token_expired'     =>  'Sorry you are not allowed. Token Expired!',
+    'thank_you_for_your_rating'            =>      'Thank you for your rating!',
+    'your_ticket_has_been'                 =>      'Your ticket has been',
     /*
     * |---------------------------------------------------------------------------------------
       |Api settings

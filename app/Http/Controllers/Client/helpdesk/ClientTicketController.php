@@ -74,7 +74,6 @@ class ClientTicketController extends Controller
             try {
                 $threads->save();
                 $tickets->save();
-
                 return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
             } catch (Exception $e) {
                 return \Redirect::back()->with('fails1', $e->getMessage());
