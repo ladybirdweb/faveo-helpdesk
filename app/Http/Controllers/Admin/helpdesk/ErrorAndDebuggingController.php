@@ -50,9 +50,10 @@ class ErrorAndDebuggingController extends Controller
 	{
 		try{
 			$debug = \Config::get('app.debug');
+			$debug = ($debug) ? 'true' : 'false';
 			$bugsnag_debug = \Config::get('app.bugsnag_reporting');
-			if ($debug != \Input::get('debug') || $bugsnag_debug != \Input::get('bugsnag')) {
-	    	    $debug = ($debug) ? 'true' : 'false';
+			$bugsnag_debug = ($bugsnag_debug) ? 'true' : 'false';
+			if ($debug != \Input::get('debug') || $bugsnag_debug != \Input::get('bugsnag')) {   
     	        // dd($request->input());
         		$debug_new = base_path()
             		         .DIRECTORY_SEPARATOR.
@@ -64,7 +65,7 @@ class ErrorAndDebuggingController extends Controller
         		                           "'debug' => ".\Input::get('debug'),
             		                        $datacontent);
 	    	    File::put($debug_new, $datacontent);
-    	    	$bugsnag_debug = ($bugsnag_debug) ? 'true' : 'false';
+    	    	
             	// dd($request->input());
         		$bugsnag_debug_new = base_path()
             		         .DIRECTORY_SEPARATOR.
