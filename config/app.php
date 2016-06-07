@@ -134,6 +134,7 @@ return [
     |allow application to send error reports to FAVEO team's bugsnag log.
      */
 
+    'bugsnag_reporting' => true,
 
     /*
     |--------------------------------------------------------------------------
