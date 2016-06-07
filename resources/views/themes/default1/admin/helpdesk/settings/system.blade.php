@@ -77,24 +77,11 @@ class="active"
                 <div class="form-group">
                     {!! Form::label('status',Lang::get('lang.status')) !!}
                     <div class="row">
-                        <div class="col-xs-3">
+                        <div class="col-xs-6">
                             {!! Form::radio('status','1',true) !!} {{Lang::get('lang.online')}}
                         </div>
-                        <div class="col-xs-3">
+                        <div class="col-xs-6">
                             {!! Form::radio('status','0') !!} {{Lang::get('lang.offline')}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-             <div class="col-md-4">
-                <div class="form-group">
-                    {!! Form::label('debug',Lang::get('lang.debugging')) !!}
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <input type="radio" name="debug" value="true" @if($debug == true) checked="true" @endif> {{Lang::get('lang.enable')}}</input>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="radio" name="debug" value="false" @if($debug == false) checked="true" @endif> {{Lang::get('lang.disable')}}</input>
                         </div>
                     </div>
                 </div>

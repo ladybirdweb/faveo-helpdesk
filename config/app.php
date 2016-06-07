@@ -126,6 +126,16 @@ return [
     'log' => 'daily',
 
     /*
+    |---------------------------------------------------------------------------------
+    | Bugsnag error reporting
+    |-----------------------------------------------------------------------------------
+    |Accepts true or false as a value. It decides whether to send the error 
+    |to FAVEO team when any exception/error occurs or not. True value of this variable will
+    |allow application to send error reports to FAVEO team's bugsnag log.
+     */
+
+
+    /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
@@ -176,7 +186,7 @@ return [
         'App\Providers\RouteServiceProvider',
         'App\Providers\ConfigServiceProvider',
         'Propaganistas\LaravelPhone\LaravelPhoneServiceProvider',
-        'Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider',
+        Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider::class,
         'Vsmoraes\Pdf\PdfServiceProvider',
         'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
         'Chumper\Datatable\DatatableServiceProvider',
@@ -236,7 +246,7 @@ return [
         'Form'        => 'Illuminate\Html\FormFacade',
         'HTML'        => 'Illuminate\Html\HtmlFacade',
         'phone'       => 'The :attribute field contains an invalid number.',
-        'Bugsnag'     => 'Bugsnag\BugsnagLaravel\BugsnagFacade',
+        'Bugsnag'     => Bugsnag\BugsnagLaravel\BugsnagFacade::class,
         'PDF'         => 'Vsmoraes\Pdf\PdfFacade',
         'Gravatar'    => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
         'UTC'         => 'App\Http\Controllers\Agent\helpdesk\TicketController',
