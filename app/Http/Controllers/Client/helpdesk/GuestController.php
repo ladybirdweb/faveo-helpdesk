@@ -40,6 +40,7 @@ class GuestController extends Controller
      */
     public function __construct(PhpMailController $PhpMailController)
     {
+        $this->middleware('board');
         $this->PhpMailController = $PhpMailController;
         // checking authentication
         $this->middleware('auth');

@@ -160,7 +160,6 @@ class AuthController extends Controller
     public function postLogin(LoginRequest $request)
     {
         // Set login attempts and login time
-
         $value = $_SERVER['REMOTE_ADDR'];
         $usernameinput = $request->input('email');
         $password = $request->input('password');
@@ -173,7 +172,7 @@ class AuthController extends Controller
             return redirect()->back()->withErrors('email', 'Incorrect details')->with('error', $security->lockout_message);
         }
         //dd($request->input('email'));
-        $check_active = User::where('email', '=', $request->input('email'))->first();
+        $check_active = User::where('email', '=', $request->input('email'))->orwhere('user_name', '=', $request->input('email'))->first();
         if (!$check_active) {
             return redirect()->back()
                             ->withInput($request->only('email', 'remember'))

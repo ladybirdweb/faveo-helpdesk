@@ -17,7 +17,7 @@ class="active"
     <div class="box-header with-border">
         <h3 class="box-title">{!! Lang::get('lang.list_of_status') !!}</h3>
         <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-toggle="modal" data-target="#2create" id="create" title="{!! Lang::get('lang.create') !!}"><i class="fa fa-plus-circle fa-2x"></i></button>
+            <!--<button class="btn btn-box-tool" data-toggle="modal" data-target="#2create" id="create" title="{!! Lang::get('lang.create') !!}"><i class="fa fa-plus-circle fa-2x"></i></button>-->
         </div>
     </div><!-- /.box-header -->
     <div class="box-body">
@@ -42,7 +42,7 @@ class="active"
                 <tr>
                     <th>{!! Lang::get('lang.name') !!}</th>
                     <th>{!! Lang::get('lang.display_order') !!}</th>
-                    <th>{!! Lang::get('lang.action') !!}</th>
+                    <!--<th>{!! Lang::get('lang.action') !!}</th>-->
                 </tr>
             </thead>
             <tbody>
@@ -52,9 +52,9 @@ class="active"
                     <td>{!! $status->name !!}</td>
                     <td>{!! $status->sort !!}</td>
                     <td>
-                        <a href="{!! route('status.edit',$status->id) !!}"><button class="btn btn-info btn-sm">{!! Lang::get('lang.edit_details') !!}</button></a>
-                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$status->id}}delete">{!! Lang::get('lang.delete') !!}</button>
-                        <div class="modal fade" id="{{$status->id}}delete">
+                        <!--<a href="{!! route('status.edit',$status->id) !!}"><button class="btn btn-info btn-sm">{!! Lang::get('lang.edit_details') !!}</button></a>-->
+                        <!--<button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$status->id}}delete">{!! Lang::get('lang.delete') !!}</button>-->
+<!--                        <div class="modal fade" id="{{$status->id}}delete">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -70,7 +70,7 @@ class="active"
                                     </div>
                                 </div> 
                             </div>
-                        </div> 
+                        </div> -->
                     </td>
                 </tr>
                 @endforeach
@@ -80,7 +80,7 @@ class="active"
 </div>
 
 <!-- create modal -->
-<div class="modal fade" id="2create">
+<!--<div class="modal fade" id="2create">
     <div class="modal-dialog">
         <div class="modal-content">
             {!! Form::open(['route'=>'statuss.create']) !!}
@@ -91,9 +91,9 @@ class="active"
             <div class="modal-body">
                 @if(Session::has('errors'))
                 <script type="text/javascript">
-                    $(document).ready(function() {
-                        $("#create").click();
-                    });
+//                    $(document).ready(function() {
+//                        $("#create").click();
+//                    });
                 </script>
                 <div class="alert alert-danger alert-dismissable">
                     <i class="fa fa-ban"></i>
@@ -126,7 +126,7 @@ class="active"
                     </div>
                 </div>
                 <div class="form-group">
-                    <!-- gender -->
+                     gender 
                     {!! Form::label('gender',Lang::get('lang.resolved_status')) !!}
                     <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.status_msg3') !!}</div>
                     <div class="row">
@@ -139,7 +139,7 @@ class="active"
                     </div>
                 </div>
                 <div class="form-group">
-                    <!-- Email user -->
+                     Email user 
                     {!! Form::label('gender',Lang::get('lang.deleted_status')) !!}
                     <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.status_msg2') !!}</div>
                     <div class="row">
@@ -152,7 +152,7 @@ class="active"
                     </div>        
                 </div>
                 <div class="form-group">
-                    <!-- Email user -->
+                     Email user 
                     {!! Form::label('gender',Lang::get('lang.notify_user')) !!}
                     <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.status_msg1') !!}</div>
                     <div class="row">
@@ -172,5 +172,5 @@ class="active"
             {!! Form::close() !!}
         </div> 
     </div>
-</div>
+</div>-->
 @stop

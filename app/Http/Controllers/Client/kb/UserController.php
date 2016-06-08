@@ -28,6 +28,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('board');
         //$this->middleware('auth');
         //SettingsController::language();
         // $this->port();

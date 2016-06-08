@@ -34,6 +34,7 @@ class UnAuthController extends Controller
      */
     public function __construct(PhpMailController $PhpMailController)
     {
+        $this->middleware('board');
         $this->PhpMailController = $PhpMailController;
     }
 

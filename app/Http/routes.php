@@ -710,6 +710,14 @@ Route::get('404', ['as' => 'error404', function () {
 Breadcrumbs::register('error404', function ($breadcrumbs) {
     $breadcrumbs->push('404');
 });
+
+Route::get('board-offline', ['as' => 'board.offline', function () {
+    return view('errors.offline');
+}]);
+
+Breadcrumbs::register('board.offline', function ($breadcrumbs) {
+    $breadcrumbs->push('Board Offline');
+});
 /*
   |=============================================================
   |  Test mail Routes

@@ -25,13 +25,10 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                         </button>
                         <?php $statuses = \App\Model\helpdesk\Ticket\Ticket_Status::all(); ?>
 
-                        <ul class="dropdown-menu" id='cc_page'>
-                            @foreach($statuses as $status)
-                            <?php if ($status->name == 'Deleted' or $status->name == 'Accepted') continue; ?>
-                            <li class="search_r"><a href="#" id="{!! $status->state !!}"><i class="{!! $status->icon_class !!}" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
-                            </li>
-                            @endforeach
-
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="open"><i class="fa fa-folder-open" style="color:#FFD600;"> </i>{!! Lang::get('lang.open') !!}</a></li>
+                            <li><a href="#" id="close"><i class="fa fa-check" style="color:#15F109;"> </i>{!! Lang::get('lang.close') !!}</a></li>
+                            <li><a href="#" id="resolved"><i class="fa fa-check-circle " style="color:#0EF1BE;"> </i> {!! Lang::get('lang.resolved') !!}</a></li>
                         </ul>
                     </div>
                     {!! Form::close() !!}
@@ -263,10 +260,10 @@ foreach ($conversations as $conversation) {
                                         <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
                                             <input type="radio" class="star" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
                                         <?php } ?>
-                <!--    <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating == '2') ? 'checked' : '' ?> />
-                    <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating == '3') ? 'checked' : '' ?>/>
-                    <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating == '4') ? 'checked' : '' ?>/>
-                    <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating == '5') ? 'checked' : '' ?> />-->
+            <!--    <input type="radio" class="star" id="star4" name="rating" value="2"<?php echo ($tickets->rating == '2') ? 'checked' : '' ?> />
+                <input type="radio" class="star" id="star3" name="rating" value="3"<?php echo ($tickets->rating == '3') ? 'checked' : '' ?>/>
+                <input type="radio" class="star" id="star2" name="rating" value="4"<?php echo ($tickets->rating == '4') ? 'checked' : '' ?>/>
+                <input type="radio" class="star" id="star1" name="rating" value="5"<?php echo ($tickets->rating == '5') ? 'checked' : '' ?> />-->
                                     </td> 
                                     </tr>
                                 </form>

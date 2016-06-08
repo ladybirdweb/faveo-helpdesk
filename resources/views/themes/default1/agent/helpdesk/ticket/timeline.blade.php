@@ -126,20 +126,13 @@ if ($thread->title != "") {
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="d1"><i class="fa fa-exchange" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
                     {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
                 </button>
-                <?php $statuses = \App\Model\helpdesk\Ticket\Ticket_Status::all(); ?>
-                <ul class="dropdown-menu" id='cc_page'>
-                    @foreach($statuses as $status)
-                    <?php if ($group->can_edit_ticket == 1) { ?>
-                        <?php if ($status->name == 'Deleted' or $status->name == 'Accepted' or $status->name == 'Archived') continue; ?>
-                        <li class="search_r"><a href="#" id="{!! $status->state !!}"><i class="{!! $status->icon_class !!}" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
-                        </li>
-                    <?php } else { ?>
-                        <?php if ($status->name == 'Deleted' or $status->name == 'Accepted' or $status->name == 'Closed' or $status->name == 'Archived') continue; ?>
-                        <li class="search_r"><a href="#" id="{!! $status->state !!}"><i class="{!! $status->icon_class !!}" style="color:#FFD600;"> </i>{!! $status->name !!}</a>
-                        </li>
+                <ul class="dropdown-menu">
+                    <li id="open"><a href="#"><i class="fa fa-folder-open-o" style="color:red;"> </i>{!! Lang::get('lang.open') !!}</a></li>
+                    <?php if ($group->can_edit_ticket == 1) {?>
+                    <li id="close"><a href="#"><i class="fa fa-check" style="color:green;"> </i>{!! Lang::get('lang.close') !!}</a></li>
                     <?php } ?>
-                    @endforeach
-                </ul> 
+                    <li id="resolved"><a href="#"><i class="fa fa-check-circle-o " style="color:green;"> </i>{!! Lang::get('lang.resolved') !!} </a></li>
+                </ul>
             </div>
             <?php if ($group->can_delete_ticket == 1 || $group->can_ban_email == 1) { ?>
                 <div id="more-option" class="btn-group">

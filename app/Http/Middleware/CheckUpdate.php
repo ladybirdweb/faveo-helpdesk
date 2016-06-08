@@ -31,7 +31,6 @@ class CheckUpdate
                 return redirect('file-update');
             }
         }
-
         return $next($request);
     }
 

@@ -27,6 +27,7 @@ return [
     'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'        => "Were working on it and we'll get it fixed as soon as we can.",
     'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'    => 'We are sorry, but the page you are looking for can not be found.',
     'go_back'                                                           => 'Go Back',
+    'the_board_is_offline'                                              => 'The Board is Offline',
     /*
       |--------------------------------------
       |   Login Page

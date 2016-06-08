@@ -100,7 +100,7 @@
                             <li class="dropdown notifications-menu" id="myDropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
                                     <i class="fa fa-bell-o"></i>
-                                    <span class="label label-warning" id="count">{!! count($noti) !!}</span>
+                                    <span class="label label-danger" id="count">{!! count($noti) !!}</span>
                                 </a>
                                 <ul class="dropdown-menu" style="width: -moz-max-content;
                                     width: -webkit-max-content;

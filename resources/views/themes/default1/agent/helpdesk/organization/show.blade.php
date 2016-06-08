@@ -567,9 +567,9 @@ class="active"
                                     <style>
                                         #legend-holder { border: 2px solid #ccc; float: left; width: 25px; height: 15px; margin: 2px; }
                                     </style>
-                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #A62121;"> </span> {!! Lang::get('lang.total') !!} {!! Lang::get('lang.tickets') !!}</div>
-                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #FF66CC;"> </span> {!! Lang::get('lang.open') !!} {!! Lang::get('lang.tickets') !!}</div>
-                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #97BBCD;"> </span> {!! Lang::get('lang.closed') !!} {!! Lang::get('lang.tickets') !!}</div>
+                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"> </span> {!! Lang::get('lang.total') !!} {!! Lang::get('lang.tickets') !!}</div>
+                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #6DC5B2;"> </span> {!! Lang::get('lang.open') !!} {!! Lang::get('lang.tickets') !!}</div>
+                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #E3B870;"> </span> {!! Lang::get('lang.closed') !!} {!! Lang::get('lang.tickets') !!}</div>
                                 </div>
                             </div>
                         </div>
@@ -603,33 +603,34 @@ class="active"
                                             labels: labels,
                                             datasets: [
                                                 {
-                                                    label: "Total Tickets",
-                                                    fillColor: "rgba(240, 127, 110, 0.3)",
-                                                    strokeColor: "#f56954",
-                                                    pointColor: "#A62121",
-                                                    pointStrokeColor: "#E60073",
-                                                    pointHighlightFill: "#FF4DC3",
-                                                    pointHighlightStroke: "rgba(151,187,205,1)",
+                                                    label: "Open Tickets",
+                                                    fillColor: "rgba(93, 189, 255, 0.05)",
+                                                    strokeColor: "rgba(2, 69, 195, 0.9)",
+                                                    pointColor: "rgba(2, 69, 195, 0.9)",
+                                                    pointStrokeColor: "#c1c7d1",
+                                                    pointHighlightFill: "#fff",
+                                                    pointHighlightStroke: "rgba(220,220,220,1)",
                                                     data: open
                                                 }
                                                 , {
-                                                    label: "Open Tickets",
-                                                    fillColor: "rgba(255, 102, 204, 0.4)",
-                                                    strokeColor: "#f56954",
-                                                    pointColor: "#FF66CC",
-                                                    pointStrokeColor: "#fff",
-                                                    pointHighlightFill: "#FF4DC3",
-                                                    pointHighlightStroke: "rgba(151,187,205,1)",
+                                                    label: "Closed Tickets",
+                                                    fillColor: "rgba(255, 206, 96, 0.08)",
+                                                    strokeColor: "rgba(221, 129, 0, 0.94)",
+                                                    pointColor: "rgba(221, 129, 0, 0.94)",
+                                                    pointStrokeColor: "rgba(60,141,188,1)",
+                                                    pointHighlightFill: "#fff",
+                                                    pointHighlightStroke: "rgba(60,141,188,1)",
                                                     data: closed
+
                                                 }
                                                 , {
-                                                    label: "Closed Tickets",
-                                                    fillColor: "rgba(151,187,205,0.2)",
-                                                    strokeColor: "rgba(151,187,205,1)",
-                                                    pointColor: "rgba(151,187,205,1)",
-                                                    pointStrokeColor: "#0000CC",
-                                                    pointHighlightFill: "#0000E6",
-                                                    pointHighlightStroke: "rgba(151,187,205,1)",
+                                                    label: "Reopened Tickets",
+                                                    fillColor: "rgba(104, 255, 220, 0.06)",
+                                                    strokeColor: "rgba(0, 149, 115, 0.94)",
+                                                    pointColor: "rgba(0, 149, 115, 0.94)",
+                                                    pointStrokeColor: "rgba(60,141,188,1)",
+                                                    pointHighlightFill: "#fff",
+                                                    pointHighlightStroke: "rgba(60,141,188,1)",
                                                     data: reopened
                                                 }
                                             ]
@@ -638,7 +639,7 @@ class="active"
                                         var myLineChart = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
                                             showScale: true,
                                             //Boolean - Whether grid lines are shown across the chart
-                                            scaleShowGridLines: false,
+                                            scaleShowGridLines: true,
                                             //String - Colour of the grid lines
                                             scaleGridLineColor: "rgba(0,0,0,.05)",
                                             //Number - Width of the grid lines
@@ -648,26 +649,26 @@ class="active"
                                             //Boolean - Whether to show vertical lines (except Y axis)
                                             scaleShowVerticalLines: true,
                                             //Boolean - Whether the line is curved between points
-                                            bezierCurve: false,
+                                            bezierCurve: true,
                                             //Number - Tension of the bezier curve between points
                                             bezierCurveTension: 0.3,
                                             //Boolean - Whether to show a dot for each point
                                             pointDot: true,
                                             //Number - Radius of each point dot in pixels
-                                            pointDotRadius: 4,
+                                            pointDotRadius: 1,
                                             //Number - Pixel width of point dot stroke
                                             pointDotStrokeWidth: 1,
                                             //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-                                            pointHitDetectionRadius: 20,
+                                            pointHitDetectionRadius: 10,
                                             //Boolean - Whether to show a stroke for datasets
                                             datasetStroke: true,
                                             //Number - Pixel width of dataset stroke
                                             datasetStrokeWidth: 1,
                                             //Boolean - Whether to fill the dataset with a color
-                                            datasetFill: false,
+                                            datasetFill: true,
                                             //String - A legend template
                                             //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-                                            maintainAspectRatio: false,
+                                            maintainAspectRatio: true,
                                             //Boolean - whether to make the chart responsive to window resizing
                                             responsive: true,
                                         });
@@ -706,33 +707,34 @@ class="active"
                                                     labels: labels,
                                                     datasets: [
                                                         {
-                                                            label: "Total Tickets",
-                                                            fillColor: "rgba(240, 127, 110, 0.3)",
-                                                            strokeColor: "#f56954",
-                                                            pointColor: "#A62121",
-                                                            pointStrokeColor: "#E60073",
-                                                            pointHighlightFill: "#FF4DC3",
-                                                            pointHighlightStroke: "rgba(151,187,205,1)",
+                                                            label: "Open Tickets",
+                                                            fillColor: "rgba(93, 189, 255, 0.05)",
+                                                            strokeColor: "rgba(2, 69, 195, 0.9)",
+                                                            pointColor: "rgba(2, 69, 195, 0.9)",
+                                                            pointStrokeColor: "#c1c7d1",
+                                                            pointHighlightFill: "#fff",
+                                                            pointHighlightStroke: "rgba(220,220,220,1)",
                                                             data: open
                                                         }
                                                         , {
-                                                            label: "Open Tickets",
-                                                            fillColor: "rgba(255, 102, 204, 0.4)",
-                                                            strokeColor: "#f56954",
-                                                            pointColor: "#FF66CC",
-                                                            pointStrokeColor: "#fff",
-                                                            pointHighlightFill: "#FF4DC3",
-                                                            pointHighlightStroke: "rgba(151,187,205,1)",
+                                                            label: "Closed Tickets",
+                                                            fillColor: "rgba(255, 206, 96, 0.08)",
+                                                            strokeColor: "rgba(221, 129, 0, 0.94)",
+                                                            pointColor: "rgba(221, 129, 0, 0.94)",
+                                                            pointStrokeColor: "rgba(60,141,188,1)",
+                                                            pointHighlightFill: "#fff",
+                                                            pointHighlightStroke: "rgba(60,141,188,1)",
                                                             data: closed
+
                                                         }
                                                         , {
-                                                            label: "Closed Tickets",
-                                                            fillColor: "rgba(151,187,205,0.2)",
-                                                            strokeColor: "rgba(151,187,205,1)",
-                                                            pointColor: "rgba(151,187,205,1)",
-                                                            pointStrokeColor: "#0000CC",
-                                                            pointHighlightFill: "#0000E6",
-                                                            pointHighlightStroke: "rgba(151,187,205,1)",
+                                                            label: "Reopened Tickets",
+                                                            fillColor: "rgba(104, 255, 220, 0.06)",
+                                                            strokeColor: "rgba(0, 149, 115, 0.94)",
+                                                            pointColor: "rgba(0, 149, 115, 0.94)",
+                                                            pointStrokeColor: "rgba(60,141,188,1)",
+                                                            pointHighlightFill: "#fff",
+                                                            pointHighlightStroke: "rgba(60,141,188,1)",
                                                             data: reopened
                                                         }
                                                     ]
@@ -741,7 +743,7 @@ class="active"
                                                 var myLineChart = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
                                                     showScale: true,
                                                     //Boolean - Whether grid lines are shown across the chart
-                                                    scaleShowGridLines: false,
+                                                    scaleShowGridLines: true,
                                                     //String - Colour of the grid lines
                                                     scaleGridLineColor: "rgba(0,0,0,.05)",
                                                     //Number - Width of the grid lines
@@ -757,30 +759,30 @@ class="active"
                                                     //Boolean - Whether to show a dot for each point
                                                     pointDot: true,
                                                     //Number - Radius of each point dot in pixels
-                                                    pointDotRadius: 4,
+                                                    pointDotRadius: 1,
                                                     //Number - Pixel width of point dot stroke
                                                     pointDotStrokeWidth: 1,
                                                     //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-                                                    pointHitDetectionRadius: 20,
+                                                    pointHitDetectionRadius: 10,
                                                     //Boolean - Whether to show a stroke for datasets
                                                     datasetStroke: true,
                                                     //Number - Pixel width of dataset stroke
                                                     datasetStrokeWidth: 1,
                                                     //Boolean - Whether to fill the dataset with a color
-                                                    datasetFill: false,
+                                                    datasetFill: true,
                                                     //String - A legend template
                                                     //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-                                                    maintainAspectRatio: false,
+                                                    maintainAspectRatio: true,
                                                     //Boolean - whether to make the chart responsive to window resizing
-                                                    responsive: true,
+                                                    responsive: true
                                                 });
                                                 myLineChart.options.responsive = false;
                                                 $("#tickets-graph").remove();
-                                                $(".chart").html("<canvas id='tickets-graph' width='1000' height='300'></canvas>");
+                                                $(".chart").html("<canvas id='tickets-graph' width='1000' height='270'></canvas>");
                                                 var myLineChart1 = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
                                                     showScale: true,
                                                     //Boolean - Whether grid lines are shown across the chart
-                                                    scaleShowGridLines: false,
+                                                    scaleShowGridLines: true,
                                                     //String - Colour of the grid lines
                                                     scaleGridLineColor: "rgba(0,0,0,.05)",
                                                     //Number - Width of the grid lines
@@ -796,22 +798,22 @@ class="active"
                                                     //Boolean - Whether to show a dot for each point
                                                     pointDot: true,
                                                     //Number - Radius of each point dot in pixels
-                                                    pointDotRadius: 4,
+                                                    pointDotRadius: 1,
                                                     //Number - Pixel width of point dot stroke
                                                     pointDotStrokeWidth: 1,
                                                     //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-                                                    pointHitDetectionRadius: 20,
+                                                    pointHitDetectionRadius: 10,
                                                     //Boolean - Whether to show a stroke for datasets
                                                     datasetStroke: true,
                                                     //Number - Pixel width of dataset stroke
                                                     datasetStrokeWidth: 1,
                                                     //Boolean - Whether to fill the dataset with a color
-                                                    datasetFill: false,
+                                                    datasetFill: true,
                                                     //String - A legend template
                                                     //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-                                                    maintainAspectRatio: false,
+                                                    maintainAspectRatio: true,
                                                     //Boolean - whether to make the chart responsive to window resizing
-                                                    responsive: true,
+                                                    responsive: true
                                                 });
 
 
@@ -868,12 +870,12 @@ class="active"
                 <div id="assign_body">
                     <p>{!! Lang::get('lang.please_select_an_user') !!}</p>
                     <select id="user" class="form-control" name="user">
-<?php
-$org_heads = App\Model\helpdesk\Agent_panel\User_org::where('org_id', '=', $orgs->id)->get();
-?>
+                        <?php
+                        $org_heads = App\Model\helpdesk\Agent_panel\User_org::where('org_id', '=', $orgs->id)->get();
+                        ?>
                         <optgroup label="Select Organizations">
                             @foreach($org_heads as $org_head)
-                        <?php $user_org_heads = App\User::where('id', '=', $org_head->user_id)->first(); ?>
+                            <?php $user_org_heads = App\User::where('id', '=', $org_head->user_id)->first(); ?>
                             <option  value="{{$user_org_heads->id}}">{!! $user_org_heads->user_name !!}</option>
                             @endforeach
                         </optgroup>
