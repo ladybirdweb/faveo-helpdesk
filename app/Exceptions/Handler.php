@@ -8,8 +8,9 @@ use Exception;
 // use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
 use Bugsnag;
-class Handler extends ExceptionHandler
-{
+
+class Handler extends ExceptionHandler {
+
     /**
      * A list of the exception types that should not be reported.
      *
@@ -40,8 +41,7 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function report(Exception $e)
-    {
+    public function report(Exception $e) {
         return parent::report($e);
     }
 
@@ -53,8 +53,7 @@ class Handler extends ExceptionHandler
      *
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e)
-    {
+    public function render($request, Exception $e) {
         if (config('app.bugsnag_reporting')) {
             Bugsnag::notifyException(new Exception($e));
         }
@@ -82,7 +81,7 @@ class Handler extends ExceptionHandler
             }
         }
         // returns non oops error message
-        // return parent::render($request, $e);
+        return parent::render($request, $e);
         // checking if the error is related to http error i.e. page not found
         if ($this->isHttpException($e)) {
             // returns error for page not found
@@ -104,8 +103,7 @@ class Handler extends ExceptionHandler
      *
      * @return \Illuminate\Http\Response
      */
-    protected function renderExceptionWithWhoops(Exception $e)
-    {
+    protected function renderExceptionWithWhoops(Exception $e) {
         // new instance of whoops class to display customized error page
         $whoops = new \Whoops\Run();
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler());
@@ -114,4 +112,5 @@ class Handler extends ExceptionHandler
                 $whoops->handleException($e), $e->getStatusCode(), $e->getHeaders()
         );
     }
+
 }
