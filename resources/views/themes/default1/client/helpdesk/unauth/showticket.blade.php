@@ -355,12 +355,8 @@ foreach ($conversations as $conversation) {
 @endif
 <?php $id2 = $tickets->id; ?>
 <div id="respond" class="comment-respond form-border">
-    <h3 id="reply-title" class="comment-reply-title section-title"><i class="line"></i>{!! Lang::get('lang.leave_a_reply') !!}</h3>
-    @if(Auth::user()) 
-    {!! Form::open(['url'=>'post/reply/'.$id2.'#formabc']) !!}
-    @else
+    <h3 id="reply-title" class="comment-reply-title section-title"><i class="line"></i>{!! Lang::get('lang.leave_a_reply') !!}</h3>   
     {!! Form::open(['url'=>'post-ticket-reply/'.$tickets->id.'#formabc']) !!}
-    @endif
     <div class="row">
         <div class="form-group">
             <div class="col-md-12">

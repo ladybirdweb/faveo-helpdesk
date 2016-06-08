@@ -57,7 +57,7 @@ class ClientTicketController extends Controller
      * @return type view
      */
     public function reply($id, Request $request)
-    {
+    {   
         $tickets = Tickets::where('id', '=', $id)->first();
         $thread = Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
 

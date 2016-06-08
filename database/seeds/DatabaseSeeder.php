@@ -31,6 +31,7 @@ use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\helpdesk\Workflow\WorkflowClose;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\kb\Settings;
 // Knowledge base
 use Illuminate\Database\Seeder;
@@ -1991,6 +1992,7 @@ class DatabaseSeeder extends Seeder
         TemplateType::create(['id' => '9', 'name' => 'reset-password']);
         TemplateType::create(['id' => '10', 'name' => 'ticket-reply']);
         TemplateType::create(['id' => '11', 'name' => 'ticket-reply-agent']);
+        TemplateType::create(['id' => '12', 'name' => 'registration']);
 
         Template::create(['id' => '1', 'name' => 'assign-ticket', 'type' => '1', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br><br>Ticket No: {!!$ticket_number!!}<br>Has been assigned to you by {!!$ticket_assigner!!}&nbsp;<br><br>Thank You<br>Kind Regards,<br>{!!$system_from!!}</div>', 'set_id' => '1']);
         Template::create(['id' => '2', 'name' => 'check-ticket', 'type' => '2', 'message' => '<div>Hello {!!$user!!},<br><br>Click the link below to view your Requested ticket<br>{!!$ticket_link_with_number!!}<br><br>Kind Regards,<br>{!!$system_from!!} </div>', 'set_id' => '1']);
@@ -2003,5 +2005,12 @@ class DatabaseSeeder extends Seeder
         Template::create(['id' => '9', 'name' => 'reset-password', 'type' => '9', 'message' => 'Hello {!!$user!!}<br/><br/>You asked to reset your password. To do so, please click this link:<br/><br/>{!!$password_reset_link!!}</a><br/><br/><br/>This will let you change your password to something new. If you did not ask for this, do not worry, we will keep your password safe.<br/><br/>Thank You.<br/><br/>Kind Regards,<br/><br/> {!!$system_from!!}', 'set_id' => '1']);
         Template::create(['id' => '10', 'name' => 'ticket-reply', 'type' => '10', 'message' => '<span><div><span><p>{!!$content!!} &nbsp;&nbsp;<br></p><p>{!!$agent_sign!!}&nbsp;</p><p>Ticket Details</p><p>Ticket ID: {!!$ticket_number!!} &nbsp;&nbsp;&nbsp;&nbsp;</p><div><br></div></span><br></div><div><br></div></span>', 'set_id' => '1']);
         Template::create(['id' => '11', 'name' => 'ticket-reply-agent', 'type' => '11', 'message' => '<div>Hello {!!$ticket_agent_name!!},<b><br></b>A reply been made to ticket {!!$ticket_number!!}<b><br></b>From<br>Name: {!!$ticket_client_name!!}<br>E-mail: {!!$ticket_client_email!!}<b><br></b>{!!$content!!}<b><br></b>Kind Regards,<br>{!!$system_from!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '12', 'name' => 'registration', 'type' => '12', 'message' => '<span><p>Hello {!!$user!!} ,&nbsp;</p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!}&nbsp;</p></span>', 'set_id' => '1']);
+        
+        
+        /**
+         * All the common settings will be listed here
+         */
+        CommonSettings::create(['id' => '1', 'option_name' => 'ticket_token_time_duration', 'option_value' => '1']);
     }
 }
