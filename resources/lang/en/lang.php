@@ -251,7 +251,7 @@ return [
       |   System Settings Page
       |--------------------------------------
      */
-    'debugging'                                                  => 'Debugging',
+
     'system'                                                     => 'System',
     'online'                                                     => 'Online',
     'offline'                                                    => 'Offline',
@@ -1313,4 +1313,20 @@ return [
 
    'webhooks'                         => 'Webhooks',
    'enter_url_to_send_ticket_details' => 'Enter the url to send the ticket details',
+
+   /*
+    *-----------------------------------------------------------------------------
+    * Error log and debugging settings
+    *--------------------------------------------------------------------------
+    *
+    */
+   'error-debug'                          => 'Error logs and Debugging',
+   'debug-options'                        => 'Debugging options',
+   'view-logs'                            => 'View error logs',
+   'not-authorised-error-debug'           => 'You are not authorised to access the URL',
+   'error-debug-settings'                 => 'Error and debugging settings',
+   'debugging'                            => 'Debugging Mode',
+   'bugsnag-debugging'                    => 'Send error reports to FAVEO team',
+   'error-debug-settings-saved-message'   => 'Your error and debugging settings have been saved successfully',
+   'error-debug-settings-error-message'   => 'You have not made any change in the settings.',
 ];

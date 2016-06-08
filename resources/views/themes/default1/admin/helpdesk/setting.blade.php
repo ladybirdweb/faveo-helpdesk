@@ -12,6 +12,14 @@
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
+<!-- failure message -->
+        @if(Session::has('fails'))
+        <div class="alert alert-danger alert-dismissable">
+            <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{Session::get('fails')}}
+        </div>
+        @endif
 <div class="box">
     <div class="box-header with-border">
         <h3 class="box-title">{!! Lang::get('lang.staffs') !!}</h3>
@@ -419,6 +427,50 @@
     </div>
     <!-- ./box-body -->
 </div>
+
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">{!! Lang::get('lang.error-debug') !!}</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <!--/.col-md-2-->
+                <div class="col-md-2 col-sm-6">
+                    <div class="settingiconblue">
+                        <div class="settingdivblue">
+                            <a href="{{ url('widgets') }}">
+                                <span class="fa-stack fa-2x">
+                                    <i class="fa fa-list-alt fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <p class="box-title" >{!! Lang::get('lang.view-logs') !!}</p>
+                    </div>
+                </div>
+                <!--/.col-md-2-->                                        
+                <!--col-md-2-->
+                <div class="col-md-2 col-sm-6">
+                    <div class="settingiconblue">
+                        <div class="settingdivblue">
+                            <a href="{{ route('err.debug.settings') }}">
+                                <span class="fa-stack fa-2x">
+                                    <i class="fa fa-bug fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <p class="box-title" >{!! Lang::get('lang.debug-options') !!}</p>
+                    </div>
+                </div>
+                <!--/.col-md-2-->                                        
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- ./box-body -->
+</div>
+
 
 <div class="box">
     <div class="box-header with-border">

@@ -324,6 +324,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
      */
     Route::get('api', ['as' => 'api.settings.get', 'uses' => 'Common\ApiSettings@show']);
     Route::post('api', ['as' => 'api.settings.post', 'uses' => 'Common\ApiSettings@postSettings']);
+
+    Route::get('error-and-debugging-options',['as' => 'err.debug.settings', 'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showSettings']);
+    Route::post('post-settings',['as' => 'post.error.debug.settings',
+                    'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings']);
 });
 
 /*
