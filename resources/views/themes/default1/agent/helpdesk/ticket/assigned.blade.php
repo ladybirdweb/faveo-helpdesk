@@ -430,6 +430,13 @@ if (Auth::user()->role == 'agent') {
         if (document.getElementById(id).checked) {
             t_id.push(id);
             // alert(t_id);
+        } else if(document.getElementById(id).checked === undefined){
+            var index = t_id.indexOf(id);
+            if (index === -1){
+                t_id.push(id);
+            } else{
+                t_id.splice(index, 1);
+            }
         } else {
             var index = t_id.indexOf(id);
             t_id.splice(index, 1);

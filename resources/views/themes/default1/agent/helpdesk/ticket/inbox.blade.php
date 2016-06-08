@@ -446,7 +446,6 @@ if (Auth::user()->role == 'agent') {
             t_id.splice(index, 1);
             // alert(t_id);
         }
-//        alert(document.getElementById(id).checked+" "+id);
     }
 </script>
 @stop
