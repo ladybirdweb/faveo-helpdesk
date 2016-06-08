@@ -14,7 +14,7 @@ class CreateKbArticleTable extends Migration
     {
         Schema::create('kb_article', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->text('name');
             $table->string('slug');
             $table->text('description', 65535);
             $table->boolean('status');

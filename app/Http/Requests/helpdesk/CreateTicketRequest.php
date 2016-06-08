@@ -30,13 +30,13 @@ class CreateTicketRequest extends Request
     {
         return [
 
-            'email'     => 'required|email',
-            'fullname'  => 'required|min:3',
+            'email'     => 'required|email|max:60',
+            'fullname'  => 'required|min:3|max:40',
             'helptopic' => 'required',
             // 'dept' => 'required',
             'sla'      => 'required',
             'subject'  => 'required|min:5',
-            'body'     => 'required|min:20',
+            'body'     => 'required|min:10',
             'priority' => 'required',
         ];
     }

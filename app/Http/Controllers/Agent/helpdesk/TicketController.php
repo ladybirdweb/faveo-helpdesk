@@ -268,6 +268,7 @@ class TicketController extends Controller
      */
     public function post_newticket(CreateTicketRequest $request, CountryCode $code)
     {
+        dd($request);
         try {
             $email = $request->input('email');
             $fullname = $request->input('fullname');

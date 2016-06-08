@@ -14,9 +14,9 @@ class="active"
 
 @section('content')
 <!-- Main content -->
-{!! Form::open(['route'=>'post.newticket','method'=>'post']) !!}
+{!! Form::open(['route'=>'post.newticket','method'=>'post','id'=>'form']) !!}
 <div class="box box-primary">
-    <div class="box-header with-border">
+    <div class="box-header with-border" id='box-header1'>
         <h3 class="box-title">{!! Lang::get('lang.create_ticket') !!}</h3>
         @if(Session::has('success'))
         <br><br>        
@@ -85,13 +85,13 @@ class="active"
                 </div>
             </div>
             <div class="row">
-                 <div class="col-md-1 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
+                <div class="col-md-1 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
 
                     {!! Form::label('code',Lang::get('lang.country-code')) !!}
                     {!! Form::text('code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
                 </div>
                 <div class="col-md-5">
-                <!-- phone -->
+                    <!-- phone -->
                     <div class="form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
                         <label>{!! Lang::get('lang.mobile_number') !!}:</label>
                         {!! Form::input('number','mobile',null,['class' => 'form-control']) !!}
@@ -99,7 +99,7 @@ class="active"
                     </div>
                 </div>
                 <div class="col-md-5">
-                <!-- phone -->
+                    <!-- phone -->
                     <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
                         <label>{!! Lang::get('lang.phone') !!}:</label>
                         {!! Form::input('number','phone',null,['class' => 'form-control']) !!}
@@ -142,7 +142,7 @@ class="active"
                 </div>
                 <div class="col-md-3">
                     <!-- due date -->
-                    <div class="form-group">
+                    <div class="form-group" id="duedate">
                         <label>{!! Lang::get('lang.due_date') !!}:</label>
                         {!! Form::text('duedate',null,['class' => 'form-control','id'=>'datemask']) !!}
                     </div>
@@ -215,6 +215,24 @@ class="active"
 <script type="text/javascript">
     $(function() {
         $("textarea").wysihtml5();
+    });
+
+    $(document).ready(function() {
+        $('#form').submit(function() {
+            var duedate = document.getElementById('datemask').value;
+            if (duedate) {
+                var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+                if (pattern.test(duedate) === true) {
+                    $('#duedate').removeClass("has-error");
+                    $('#clear-up').remove();
+                } else {
+                    $('#duedate').addClass("has-error");
+                    $('#clear-up').remove();
+                    $('#box-header1').append("<div id='clear-up'><br><br><div class='alert alert-danger alert-dismissable'><i class='fa fa-ban'></i><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button> Invalid Due date</div></div>");
+                    return false;
+                }
+            }
+        });
     });
 
     $(function() {

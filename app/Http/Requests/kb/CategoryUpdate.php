@@ -24,7 +24,7 @@ class CategoryUpdate extends Request
     public function rules()
     {
         return [
-            'name'        => 'required',
+            'name'        => 'required|max:250',
             'slug'        => 'required',
             'description' => 'required',
         ];

@@ -84,14 +84,14 @@ class UserController extends Controller
                         ->orderColumns('user_name', 'email')
                         /* column username */
                         ->addColumn('user_name', function ($model) {
-                            if (strlen($model->user_name) > 20) {
-                                $username = substr($model->user_name, 0, 30);
-                                $username = substr($username, 0, strrpos($username, ' ')).' ...';
+                            $string = strip_tags($model->user_name);
+                            if (strlen($string) > 10) {
+                                // truncate string
+                                $stringCut = substr($string, 0, 10);
                             } else {
-                                $username = "<a href='".route('user.show', $model->id)."'>".$model->user_name.'</a>';
+                                $stringCut = $model->user_name;
                             }
-
-                            return $username;
+                            return $stringCut;
                         })
                         /* column email */
                         ->addColumn('email', function ($model) {

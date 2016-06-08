@@ -1,7 +1,5 @@
 <?php
 
-'%smtplink%';
-
 /*
   |--------------------------------------------------------------------------
   | Application Routes
@@ -17,6 +15,8 @@ Route::controllers([
     'auth'     => 'Auth\AuthController',
     'password' => 'Auth\PasswordController',
 ]);
+
+Route::get('account/activate/{token}',['as' => 'account.activate', 'uses' => 'Auth\AuthController@accountActivate']);
 
 $router->get('getmail/{token}', 'Auth\AuthController@getMail');
 
@@ -703,7 +703,7 @@ Route::get('500', ['as' => 'error500', function () {
     return view('errors.500');
 }]);
 
-Breadcrumbs::register('500', function ($breadcrumbs) {
+Breadcrumbs::register('error500', function ($breadcrumbs) {
     $breadcrumbs->push('500');
 });
 
