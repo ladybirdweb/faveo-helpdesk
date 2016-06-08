@@ -104,7 +104,15 @@ return [
      */
     'log' => 'daily',
     /*
-<<<<<<< HEAD
+      |---------------------------------------------------------------------------------
+      | Bugsnag error reporting
+      |-----------------------------------------------------------------------------------
+      |Accepts true or false as a value. It decides whether to send the error
+      |to FAVEO team when any exception/error occurs or not. True value of this variable will
+      |allow application to send error reports to FAVEO team's bugsnag log.
+     */
+    'bugsnag_reporting' => true,
+    /*
       |--------------------------------------------------------------------------
       | Autoloaded Service Providers
       |--------------------------------------------------------------------------
@@ -113,32 +121,11 @@ return [
       | request to your application. Feel free to add your own services to
       | this array to grant expanded functionality to your applications.
       |
-=======
-    |---------------------------------------------------------------------------------
-    | Bugsnag error reporting
-    |-----------------------------------------------------------------------------------
-    |Accepts true or false as a value. It decides whether to send the error 
-    |to FAVEO team when any exception/error occurs or not. True value of this variable will
-    |allow application to send error reports to FAVEO team's bugsnag log.
-     */
-
-    'bugsnag_reporting' => true,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Autoloaded Service Providers
-    |--------------------------------------------------------------------------
-    |
-    | The service providers listed here will be automatically loaded on the
-    | request to your application. Feel free to add your own services to
-    | this array to grant expanded functionality to your applications.
-    |
->>>>>>> origin/master
      */
     'providers' => [
 
-        Illuminate\Broadcasting\BroadcastServiceProvider::class,
-        DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
+        'Illuminate\Broadcasting\BroadcastServiceProvider',
+        'DaveJamesMiller\Breadcrumbs\ServiceProvider',
         /*
          */
 
@@ -174,14 +161,14 @@ return [
         'App\Providers\RouteServiceProvider',
         'App\Providers\ConfigServiceProvider',
         'Propaganistas\LaravelPhone\LaravelPhoneServiceProvider',
-        Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider::class,
+        'Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider',
         'Vsmoraes\Pdf\PdfServiceProvider',
         'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
         'Chumper\Datatable\DatatableServiceProvider',
         'Chumper\Zipper\ZipperServiceProvider',
-        Bestmomo\Filemanager\FilemanagerServiceProvider::class,
-        Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class,
+        'Bestmomo\Filemanager\FilemanagerServiceProvider',
+        'Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider',
+        'Intervention\Image\ImageServiceProvider',
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
         'Torann\GeoIP\GeoIPServiceProvider',
     ],
@@ -196,8 +183,6 @@ return [
       |
      */
     'aliases' => [
-
-<<<<<<< HEAD
         'App' => 'Illuminate\Support\Facades\App',
         'Artisan' => 'Illuminate\Support\Facades\Artisan',
         'Auth' => 'Illuminate\Support\Facades\Auth',
@@ -240,57 +225,10 @@ return [
         'SMTPS' => 'App\Http\Controllers\HomeController',
         'Datatable' => 'Chumper\Datatable\Facades\DatatableFacade',
         'Zipper' => 'Chumper\Zipper\Zipper',
-        'Image' => Intervention\Image\Facades\Image::class,
+        'Image' => 'Intervention\Image\Facades\Image',
         'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
         'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory',
-=======
-        'App'         => 'Illuminate\Support\Facades\App',
-        'Artisan'     => 'Illuminate\Support\Facades\Artisan',
-        'Auth'        => 'Illuminate\Support\Facades\Auth',
-        'Blade'       => 'Illuminate\Support\Facades\Blade',
-        'Cache'       => 'Illuminate\Support\Facades\Cache',
-        'Config'      => 'Illuminate\Support\Facades\Config',
-        'Cookie'      => 'Illuminate\Support\Facades\Cookie',
-        'Crypt'       => 'Illuminate\Support\Facades\Crypt',
-        'DB'          => 'Illuminate\Support\Facades\DB',
-        'Eloquent'    => 'Illuminate\Database\Eloquent\Model',
-        'Event'       => 'Illuminate\Support\Facades\Event',
-        'File'        => 'Illuminate\Support\Facades\File',
-        'Hash'        => 'Illuminate\Support\Facades\Hash',
-        'Input'       => 'Illuminate\Support\Facades\Input',
-        'Inspiring'   => 'Illuminate\Foundation\Inspiring',
-        'Lang'        => 'Illuminate\Support\Facades\Lang',
-        'Log'         => 'Illuminate\Support\Facades\Log',
-        'Mail'        => 'Illuminate\Support\Facades\Mail',
-        'Password'    => 'Illuminate\Support\Facades\Password',
-        'Queue'       => 'Illuminate\Support\Facades\Queue',
-        'Redirect'    => 'Illuminate\Support\Facades\Redirect',
-        'Redis'       => 'Illuminate\Support\Facades\Redis',
-        'Request'     => 'Illuminate\Support\Facades\Request',
-        'Response'    => 'Illuminate\Support\Facades\Response',
-        'Route'       => 'Illuminate\Support\Facades\Route',
-        'Schema'      => 'Illuminate\Support\Facades\Schema',
-        'Session'     => 'Illuminate\Support\Facades\Session',
-        'Storage'     => 'Illuminate\Support\Facades\Storage',
-        'URL'         => 'Illuminate\Support\Facades\URL',
-        'Validator'   => 'Illuminate\Support\Facades\Validator',
-        'View'        => 'Illuminate\Support\Facades\View',
-        'Form'        => 'Illuminate\Html\FormFacade',
-        'HTML'        => 'Illuminate\Html\HtmlFacade',
-        'phone'       => 'The :attribute field contains an invalid number.',
-        'Bugsnag'     => Bugsnag\BugsnagLaravel\BugsnagFacade::class,
-        'PDF'         => 'Vsmoraes\Pdf\PdfFacade',
-        'Gravatar'    => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
-        'UTC'         => 'App\Http\Controllers\Agent\helpdesk\TicketController',
-        'Ttable'      => 'App\Http\Controllers\Agent\helpdesk\TicketController', //to use getTable function.
-        'SMTPS'       => 'App\Http\Controllers\HomeController',
-        'Datatable'   => 'Chumper\Datatable\Facades\DatatableFacade',
-        'Zipper'      => 'Chumper\Zipper\Zipper',
-        'Image'       => Intervention\Image\Facades\Image::class,
-        'JWTAuth'     => 'Tymon\JWTAuth\Facades\JWTAuth',
-        'JWTFactory'  => 'Tymon\JWTAuth\Facades\JWTFactory',
->>>>>>> origin/master
-        'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+        'Breadcrumbs' => 'DaveJamesMiller\Breadcrumbs\Facade',
         'GeoIP' => 'Torann\GeoIP\GeoIPFacade',
     ],
     'token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaXNzIjoiaHR0cDpcL1wvbG9jYWxob3N0XC9mYXZlby1oZWxwZGVzay1naXRodWJcL3B1YmxpY1wvYXBpXC92MVwvYXV0aGVudGljYXRlIiwiaWF0IjoxNDU1NzAyNDEyLCJleHAiOjE0NTU3MDYwMTIsIm5iZiI6MTQ1NTcwMjQxMiwianRpIjoiOTdlODg1ODNjOWQyNDIzNWQ4MzI3Y2ExNzI1NDY1MDQifQ.37E7H2kRCQuz5oBRkQLKhNNpaNXyk4FiEYS9RQ7HZPY',
