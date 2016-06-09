@@ -93,12 +93,12 @@ class="active"
                 </div>
             </div>
             <!-- Default SLA:	Required : manual : Dropdowm  -->
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <div class="form-group {{ $errors->has('sla') ? 'has-error' : '' }}">
                     {!! Form::label('sla',Lang::get('lang.default_sla')) !!}
                     {!!Form::select('sla', $slas->lists('grace_period','id'),null,['class' => 'form-control']) !!}
                 </div>
-            </div>
+            </div> -->
             <!-- Default Help Topic:  Dropdowm from Help topic table	 -->
             <div class="col-md-4">
                 <div class="form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">

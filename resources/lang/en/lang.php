@@ -541,6 +541,7 @@ return [
     'associated_help_topic_have_been_moved_to_default_sla'  => 'Associated Help Topic have been moved to default SLA',
     'sla_plan_deleted_successfully'                         => 'SLA Plan Deleted Successfully',
     'sla_plan_can_not_delete'                               => 'SLA Plan can not Delete',
+    'make-default-sla'                                      => 'Make system\'s default SLA plan',
     /*
       |--------------------------------------
       |  Work Flow

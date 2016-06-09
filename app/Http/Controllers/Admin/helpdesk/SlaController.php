@@ -103,8 +103,8 @@ class SlaController extends Controller
             /* Direct to edit page along values of perticular field using Id */
             $slas = Sla_plan::whereId($id)->first();
             $slas->get();
-
-            return view('themes.default1.admin.helpdesk.manage.sla.edit', compact('slas'));
+            $sla = \DB::table('settings_ticket')->select('sla')->where('id', '=', 1)->first();
+            return view('themes.default1.admin.helpdesk.manage.sla.edit', compact('slas','sla'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -132,6 +132,11 @@ class SlaController extends Controller
             /* Check whether function success or not */
             $slas->save();
             /* redirect to Index page with Success Message */
+            if ($request->input('sys_sla') == 'on') {
+                \DB::table('settings_ticket')
+                     ->where('id', '=', 1)
+                     ->update(['sla' => $id]);
+            }
             return redirect('sla')->with('success', Lang::get('lang.sla_plan_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */

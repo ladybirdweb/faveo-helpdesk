@@ -90,6 +90,9 @@ class="active"
         </div>
     </div>
     <div class="box-footer">
+        <div class="form-group">
+            <input type="checkbox" name="sys_sla" @if($slas->id == $sla->sla) checked disabled @endif> {{ Lang::get('lang.make-default-sla')}}
+        </div>
         {!! Form::submit(Lang::get('lang.update'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>
