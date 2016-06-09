@@ -143,6 +143,10 @@ class DepartmentController extends Controller
     public function edit($id, User $user, Group_assign_department $group_assign_department, Template $template, Teams $team, Department $department, Sla_plan $sla, Emails $email, Groups $group)
     {
         try {
+             $sys_department = \DB::table('settings_system')
+                               ->select('department')
+                               ->where('id', '=', 1)
+                               ->first();
             $slas = $sla->get();
             $user = $user->where('primary_dpt', $id)->get();
             $emails = $email->get();
@@ -151,7 +155,7 @@ class DepartmentController extends Controller
             $groups = $group->lists('id', 'name');
             $assign = $group_assign_department->where('department_id', $id)->lists('group_id');
 
-            return view('themes.default1.admin.helpdesk.agent.departments.edit', compact('assign', 'team', 'templates', 'departments', 'slas', 'user', 'emails', 'groups'));
+            return view('themes.default1.admin.helpdesk.agent.departments.edit', compact('assign', 'team', 'templates', 'departments', 'slas', 'user', 'emails', 'groups', 'sys_department'));
         } catch (Exception $e) {
             return redirect('departments')->with('fails', $e->getMessage());
         }
@@ -171,6 +175,7 @@ class DepartmentController extends Controller
     {
         // dd($id);
         try {
+
             $table = $group_assign_department->where('department_id', $id);
             $table->delete();
             $requests = $request->input('group_id');
@@ -191,6 +196,11 @@ class DepartmentController extends Controller
             } else {
                 $departments->sla = null;
                 $departments->save();
+            }
+            if ($request->input('sys_department') == 'on') {
+                DB::table('settings_system')
+                ->where('id', 1)
+                ->update(['department' => $id]);
             }
             if ($departments->fill($request->except('group_access', 'manager', 'sla'))->save()) {
                 return redirect('departments')->with('success', Lang::get('lang.department_updated_sucessfully'));

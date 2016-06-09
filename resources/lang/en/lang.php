@@ -770,6 +770,7 @@ return [
     'department_deleted_sucessfully'                   => 'Department Deleted sucessfully',
     'department_can_not_delete'                        => 'Department can not Delete',
     'select_a_department'                              => 'Select a Department',
+    'make-default-department'                          => 'Make system\'s default department',
     /*
       |--------------------------------------
       |  Team Create Page

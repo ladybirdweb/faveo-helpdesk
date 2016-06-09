@@ -105,6 +105,9 @@ class="active"
 
     </div>
     <div class="box-footer">
+        <div class="form-group">
+            <input type="checkbox" name="sys_department" @if($sys_department->department == $departments->id) checked disabled @endif> {{ Lang::get('lang.make-default-department')}}
+        </div>
         {!! Form::submit(Lang::get('lang.update'),['class'=>'form-group btn btn-primary'])!!}    
     </div>
     {!!Form::close()!!}
