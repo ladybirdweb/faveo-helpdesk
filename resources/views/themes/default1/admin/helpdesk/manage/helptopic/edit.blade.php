@@ -152,6 +152,9 @@ class="active"
         </div>
     </div>
     <div class="box-footer">
+        <div class="form-group">
+            <input type="checkbox" name="sys_help_tpoic" @if($sys_help_topic->help_topic == $topics->id) checked disabled @endif> {{ Lang::get('lang.make-default-helptopic')}}
+        </div>
         {!! Form::submit(Lang::get('lang.update'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>

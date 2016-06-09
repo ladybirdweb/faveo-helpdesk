@@ -515,6 +515,7 @@ return [
     'you_cannot_delete_default_department'  => 'You cannot delete default department',
     'have_been_moved_to_default_help_topic' => 'have been moved to default Help Topic',
     'helptopic_deleted_successfully'        => 'Helptopic Deleted Successfully',
+    'make-default-helptopic'                => 'Make system\'s default help topic',
     /*
       |--------------------------------------
       |  SLA plan Index Page

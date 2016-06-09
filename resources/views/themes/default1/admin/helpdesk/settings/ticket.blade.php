@@ -92,6 +92,8 @@ class="active"
                     {!!Form::select('priority', [''=>'select a priority','Priorities'=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control']) !!}
                 </div>
             </div>
+        </div>
+        <div class="row">
             <!-- Default SLA:	Required : manual : Dropdowm  -->
             <!-- <div class="col-md-4">
                 <div class="form-group {{ $errors->has('sla') ? 'has-error' : '' }}">
@@ -100,13 +102,13 @@ class="active"
                 </div>
             </div> -->
             <!-- Default Help Topic:  Dropdowm from Help topic table	 -->
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <div class="form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
                     {!! Form::label('help_topic',Lang::get('lang.default_help_topic')) !!}
                     {!!Form::select('help_topic', $topics->lists('topic','id'),null,['class' => 'form-control']) !!}
                 </div>
             </div>
-            <!-- Agent Collision Avoidance Duration: text-number   -minutes  -->
+             --><!-- Agent Collision Avoidance Duration: text-number   -minutes  -->
             <div class="col-md-4">
                 <div class="form-group {{ $errors->has('collision_avoid') ? 'has-error' : '' }}">
                     {!! Form::label('collision_avoid',Lang::get('lang.agent_collision_avoidance_duration')) !!} 

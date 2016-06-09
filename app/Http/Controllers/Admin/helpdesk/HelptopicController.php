@@ -149,8 +149,11 @@ class HelptopicController extends Controller
             $forms = $form->get();
             $slas = $sla->get();
             $priority = $priority->get();
-
-            return view('themes.default1.admin.helpdesk.manage.helptopic.edit', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas'));
+            $sys_help_topic = \DB::table('settings_ticket')
+                                ->select('help_topic')
+                                ->where('id', '=', 1)->first();
+            
+            return view('themes.default1.admin.helpdesk.manage.helptopic.edit', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas', 'sys_help_topic'));
         } catch (Exception $e) {
             return redirect('helptopic')->with('fails', '<li>'.$e->getMessage().'</li>');
         }
@@ -184,6 +187,11 @@ class HelptopicController extends Controller
             $topics->custom_form = $custom_form;
             $topics->auto_assign = $auto_assign;
             $topics->save();
+            if ($request->input('sys_help_tpoic') == 'on') {
+                \DB::table('settings_ticket')
+                    ->where('id', '=', 1)
+                    ->update(['help_topic' => $id]);
+            }
             /* redirect to Index page with Success Message */
             return redirect('helptopic')->with('success', Lang::get('lang.helptopic_updated_successfully'));
         } catch (Exception $e) {
