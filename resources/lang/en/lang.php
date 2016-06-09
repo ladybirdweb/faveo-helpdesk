@@ -290,6 +290,7 @@ return [
       |--------------------------------------
      */
     'email'                               => 'Email',
+    'email-settings'                      => 'Email Settings',
     'default_template'                    => 'Default Template Set:',
     'default_system_email'                => 'Default System Email:',
     'default_alert_email'                 => 'Default Alert Email:',
@@ -343,6 +344,7 @@ return [
     'frequently'                            => 'Frequently',
     'reload-now'                            => 'Relaod now',
     'ticket-lock-inactive'                  => 'You have been inactive for a while. Please reload the page.',
+    'make-system-default-mail'              => 'Make this email system\'s default email',
     /*
       |--------------------------------------
       |   Access Settings Page

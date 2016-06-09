@@ -142,6 +142,19 @@
                     </div>
                 </div>
                 <!--/.col-md-2-->
+                <!--/.col-md-2-->
+                <div class="col-md-2 col-sm-6">
+                    <div class="settingiconblue">
+                        <div class="settingdivblue">
+                            <a href="{{url('getemail')}}">
+                                <span class="fa-stack fa-2x">
+                                    <i class="fa fa-at fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <p class="box-title" >{!! Lang::get('lang.email-settings') !!}</p>
+                    </div>
+                </div>
                 <!--col-md-2-->
                 <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
@@ -273,19 +286,7 @@
                 </div>
                 <!--/.col-md-2-->
 
-                <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                            <a href="{{url('getemail')}}">
-                                <span class="fa-stack fa-2x">
-                                    <i class="fa fa-at fa-stack-1x"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.email') !!}</p>
-                    </div>
-                </div>
+                
                 <!--/.col-md-2-->
 
                 <!--/.col-md-2-->

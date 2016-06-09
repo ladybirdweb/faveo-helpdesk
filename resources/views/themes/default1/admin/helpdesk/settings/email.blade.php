@@ -1,6 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
 
-@section('Settings')
+@section('Emails')
 active
 @stop
 
@@ -30,7 +30,7 @@ class="active"
 {!! Form::model($emails,['url' => 'postemail/'.$emails->id, 'method' => 'PATCH']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.email')}}</h3>             
+        <h3 class="box-title">{{Lang::get('lang.email-settings')}}</h3>             
     </div>
     <div class="box-body">
         <!-- check whether success or not -->
@@ -62,17 +62,7 @@ class="active"
             @endif
         </div>
         @endif
-        <div class="row">
-            <!-- Default System Email:	DROPDOWN value from emails table : Required -->
-            <div class="col-md-12">
-                <div class="col-md-3 no-padding">
-                    <div class="form-group {{ $errors->has('sys_email') ? 'has-error' : '' }}">
-                        {!! Form::label('sys_email',Lang::get('lang.default_system_email')) !!}
-                        {!!Form::select('sys_email', [ 'Select an Email', 'Emails' => $emails1->lists('email_name','id')->toArray()],null,['class'=>'form-control']) !!}
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <div class="row">
         </div>
         <!-- Accept All Emails:	CHECKBOX: Accept email from unknown Users  -->

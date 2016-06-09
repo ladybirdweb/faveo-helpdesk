@@ -257,6 +257,8 @@ class EmailsController extends Controller {
      */
     public function edit($id, Department $department, Help_topic $help, Emails $email, Ticket_Priority $ticket_priority, MailboxProtocol $mailbox_protocol) {
         try {
+            $sys_email = \DB::table('settings_email')->select('sys_email')->where('id', '=', 1)->first();
+            // dd($sys_email);
             // fetch the selected emails
             $emails = $email->whereId($id)->first();
             // get all the departments
@@ -268,7 +270,7 @@ class EmailsController extends Controller {
             // get all the mailbox protocols
             $mailbox_protocols = $mailbox_protocol->get();
             // return if the execution is succeeded
-            return view('themes.default1.admin.helpdesk.emails.emails.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails'));
+            return view('themes.default1.admin.helpdesk.emails.emails.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails', 'sys_email'));
         } catch (Exception $e) {
             // return if try fails
             return redirect()->back()->with('fails', $e->getMessage());
@@ -378,7 +380,6 @@ class EmailsController extends Controller {
             $emails->sending_port = $request->sending_port;
             $emails->sending_protocol = $request->sending_protocol;
             $emails->sending_encryption = $request->sending_encryption;
-
             if ($request->smtp_validate == 'on') {
                 $emails->smtp_validate = $request->smtp_validate;
             }
@@ -414,6 +415,11 @@ class EmailsController extends Controller {
             // inserting the encrypted value of password
 //            $emails->password = Crypt::encrypt($request->input('password'));
             $emails->save();
+            if($request->sys_email == 'on') {
+                $system = \DB::table('settings_email')
+                ->where('id', '=', 1)
+                ->update(['sys_email' => $id]);
+            }
             // returns success message for successful email update
             $return = 1;
         } catch (Exception $e) {
