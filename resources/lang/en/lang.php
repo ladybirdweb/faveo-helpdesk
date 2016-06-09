@@ -1329,4 +1329,5 @@ return [
    'bugsnag-debugging'                    => 'Send error reports to FAVEO team',
    'error-debug-settings-saved-message'   => 'Your error and debugging settings have been saved successfully',
    'error-debug-settings-error-message'   => 'You have not made any change in the settings.',
+   'error-logs'                           => 'Error logs',
 ];

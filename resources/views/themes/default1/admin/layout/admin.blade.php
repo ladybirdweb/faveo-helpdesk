@@ -287,7 +287,7 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li @yield('error-logs')><a href="{{ url('widgets') }}"><i class="fa fa-list-alt"></i> {!! Lang::get('lang.view-logs') !!}</a></li>
+                                <li @yield('error-logs')><a href="{{ route('error.logs') }}"><i class="fa fa-list-alt"></i> {!! Lang::get('lang.view-logs') !!}</a></li>
                                 <li @yield('debugging-option')><a href="{{ route('err.debug.settings') }}"><i class="fa fa-bug"></i> {!! Lang::get('lang.debug-options') !!}</a></li>
                             </ul>
                         </li>

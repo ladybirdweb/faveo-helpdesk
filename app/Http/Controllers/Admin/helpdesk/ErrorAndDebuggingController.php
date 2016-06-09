@@ -38,7 +38,7 @@ class ErrorAndDebuggingController extends Controller
 	{
 		$debug = \Config::get('app.debug');
 		$bugsnag = \Config::get('app.bugsnag_reporting');
-		return view('themes.default1.admin.helpdesk.settings.error-debug')->with(['debug'=> $debug, 'bugsnag' => $bugsnag]);
+		return view('themes.default1.admin.helpdesk.settings.error-and-logs.error-debug')->with(['debug'=> $debug, 'bugsnag' => $bugsnag]);
 	}
 
 	/**
@@ -88,4 +88,14 @@ class ErrorAndDebuggingController extends Controller
             return redirect()->back()->with('fails', $e->getMessage());
         } 
 	}
+
+    /**
+     * function to show error log table page
+     * @param void
+     * @return response view
+     */
+    public function showErrorLogs()
+    {
+        return view('themes.default1.admin.helpdesk.settings.error-and-logs.log-table');
+    }
 }

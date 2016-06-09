@@ -440,7 +440,7 @@
                 <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
                         <div class="settingdivblue">
-                            <a href="{{ url('widgets') }}">
+                            <a href="{{ route('error.logs') }}">
                                 <span class="fa-stack fa-2x">
                                     <i class="fa fa-list-alt fa-stack-1x"></i>
                                 </span>
