@@ -379,7 +379,7 @@
                         <div class="settingdivblue">
                             <a href="{{url('setting-status')}}">
                                 <span class="fa-stack fa-2x">
-                                    <i class="fa fa-hourglass-o"></i>
+                                    <i class="fa fa-plus-square-o"></i>
                                 </span>
                             </a>
                         </div>
