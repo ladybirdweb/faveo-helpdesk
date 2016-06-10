@@ -263,6 +263,8 @@ class EmailsController extends Controller {
             $emails = $email->whereId($id)->first();
             // get all the departments
             $departments = $department->get();
+            //get count of emails
+            $count = $email->count();
             // get all the helptopic
             $helps = $help->get();
             // get all the priority
@@ -270,7 +272,7 @@ class EmailsController extends Controller {
             // get all the mailbox protocols
             $mailbox_protocols = $mailbox_protocol->get();
             // return if the execution is succeeded
-            return view('themes.default1.admin.helpdesk.emails.emails.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails', 'sys_email'));
+            return view('themes.default1.admin.helpdesk.emails.emails.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails', 'sys_email'))->with('count', $count);
         } catch (Exception $e) {
             // return if try fails
             return redirect()->back()->with('fails', $e->getMessage());
@@ -415,10 +417,15 @@ class EmailsController extends Controller {
             // inserting the encrypted value of password
 //            $emails->password = Crypt::encrypt($request->input('password'));
             $emails->save();
+            //dd($request->sys_email);
             if($request->sys_email == 'on') {
                 $system = \DB::table('settings_email')
                 ->where('id', '=', 1)
                 ->update(['sys_email' => $id]);
+            } elseif ($request->input('count') <= 1 && $request->sys_email == null) {
+                 $system = \DB::table('settings_email')
+                ->where('id', '=', 1)
+                ->update(['sys_email' => null]);
             }
             // returns success message for successful email update
             $return = 1;
