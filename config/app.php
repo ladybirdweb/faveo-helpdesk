@@ -12,7 +12,7 @@ return [
       | application. If disabled, a simple generic error page is shown.
       |
      */
-    'debug' => true,
+    'debug' => false,
     /*
       |--------------------------------------------------------------------------
       | Error Log
@@ -33,7 +33,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.0.7.4',
+    'version' => 'Community 1.0.7.5',
     /*
       |--------------------------------------------------------------------------
       | Application URL
@@ -111,7 +111,7 @@ return [
       |to FAVEO team when any exception/error occurs or not. True value of this variable will
       |allow application to send error reports to FAVEO team's bugsnag log.
      */
-    'bugsnag_reporting' => true,
+    'bugsnag_reporting' => false,
     /*
       |--------------------------------------------------------------------------
       | Autoloaded Service Providers

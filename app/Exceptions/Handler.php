@@ -5,9 +5,9 @@ namespace App\Exceptions;
 // controller
 use App\Http\Controllers\Common\PhpMailController;
 use Exception;
- use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-//use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
-//use Bugsnag;
+// use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
+use Bugsnag;
 
 class Handler extends ExceptionHandler {
 
@@ -61,8 +61,7 @@ class Handler extends ExceptionHandler {
      *
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e)
-    {
+    public function render($request, Exception $e) {
         $phpmail = new PhpMailController();
         if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
             return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
@@ -83,7 +82,6 @@ class Handler extends ExceptionHandler {
                     }
                     return parent::render($request, $e);
                 }
-
                 return redirect()->route('error500');
             }
         }
