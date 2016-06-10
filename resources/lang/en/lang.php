@@ -1331,7 +1331,7 @@ return [
    'not-authorised-error-debug'           => 'You are not authorised to access the URL',
    'error-debug-settings'                 => 'Error and debugging settings',
    'debugging'                            => 'Debugging Mode',
-   'bugsnag-debugging'                    => 'Send error reports to FAVEO team',
+   'bugsnag-debugging'                    => 'Send app crash reports to help Ladybird improve Faveo',
    'error-debug-settings-saved-message'   => 'Your error and debugging settings have been saved successfully',
    'error-debug-settings-error-message'   => 'You have not made any change in the settings.',
    'error-logs'                           => 'Error logs',
