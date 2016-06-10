@@ -5,9 +5,9 @@ namespace App\Exceptions;
 // controller
 use App\Http\Controllers\Common\PhpMailController;
 use Exception;
-// use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
-use Bugsnag;
+ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+//use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
+//use Bugsnag;
 
 class Handler extends ExceptionHandler {
 
@@ -79,7 +79,7 @@ class Handler extends ExceptionHandler {
                 if (\Config::get('database.install') == 1) {
                     // checking if the error log send to Ladybirdweb is enabled or not
                     if (\Config::get('app.ErrorLog') == '1') {
-                        $this->phpmail->sendmail($from = $this->phpmail->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['e' => $e]);
+//                        $this->phpmail->sendmail($from = $this->phpmail->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['e' => $e]);
                     }
                     return parent::render($request, $e);
                 }

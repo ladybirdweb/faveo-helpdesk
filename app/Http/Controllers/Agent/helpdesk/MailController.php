@@ -91,9 +91,7 @@ class MailController extends Controller {
                             }
                             $protocol = $fetching_protocol . $fetching_encryption;
                         }
-                        // dd($fetching_encryption);
                         $imap_config = '{' . $host . ':' . $port . $protocol . '}INBOX';
-                        // dd($imap_config);
                         $password = Crypt::decrypt($e_mail->password);
                         $mailbox = new ImapMailbox($imap_config, $e_mail->email_address, $password, __DIR__);
                         $mails = [];
@@ -107,20 +105,33 @@ class MailController extends Controller {
                             if ($var == 'unread') {
                                 $mail = $mailbox->getMail($mailId);
                                 if ($settings_email->first()->email_collaborator == 1) {
-                                    if (count($mail->to) > 1) {
-                                        $collaborator = array_slice($mail->to, 1);
-                                        $collaborator = array_merge($collaborator, $mail->cc);
-                                    } else {
-                                        $collaborator = $mail->cc;
-                                    }
+                                    $collaborator = $mail->cc;
                                 } else {
                                     $collaborator = null;
                                 }
                                 $body = $mail->textHtml;
-                                if ($body == null) {
-                                    $body = $mailbox->backup_getmail($mailId);
-                                    $body = str_replace('\r\n', '<br/>', $body);
+                                if ($body != null) {
+                                    $body = self::trimTableTag($body);
                                 }
+                                // if mail body has no messages fetch backup mail
+                                if ($body == null) {
+                                    $body = $mail->textPlain;
+                                }
+                                if ($body == null) {
+                                    $attach = $mail->getAttachments();
+                                    $path = $attach['html-body']->filePath;
+                                    if ($path == null) {
+                                        $path = $attach['text-body']->filePath;
+                                    }
+
+                                    $body = file_get_contents($path);
+                                    //dd($body);
+                                    $body = self::trimTableTag($body);
+                                }
+//                                if ($body == null) {
+//                                    $body = $mailbox->backup_getmail($mailId);
+//                                    $body = str_replace('\r\n', '<br/>', $body);
+//                                }
                                 $date = $mail->date;
                                 $datetime = $overview[0]->date;
                                 $date_time = explode(' ', $datetime);
@@ -149,7 +160,6 @@ class MailController extends Controller {
                                     $thread_id = Ticket_Thread::where('ticket_id', '=', $ticket_table->id)->max('id');
 // $thread_id = Ticket_Thread::whereRaw('id = (select max(`id`) from ticket_thread)')->first();
                                     $thread_id = $thread_id;
-
                                     foreach ($mail->getAttachments() as $attachment) {
                                         $support = 'support';
 // echo $_SERVER['DOCUMENT_ROOT'];
@@ -171,7 +181,6 @@ class MailController extends Controller {
                                         $filename = str_replace('\\', '', $filename);
                                         $body = str_replace('cid:' . $imageid, $filepath[1], $body);
                                         $pos = strpos($body, $filepath[1]);
-
                                         if ($pos == false) {
                                             if ($settings_email->first()->attachment == 1) {
                                                 $upload = new Ticket_attachments();
@@ -272,6 +281,34 @@ class MailController extends Controller {
             header('Content-Transfer-Encoding: binary');
             echo $attachment->file;
         }
+    }
+
+    public static function trimTableTag($html) {
+        if (strpos('<table>', $html) != false) {
+            $first_pos = strpos($html, '<table');
+            $fist_string = substr_replace($html, '', 0, $first_pos);
+            $last_pos = strrpos($fist_string, '</table>', -1);
+            $total = strlen($fist_string);
+            $diff = $total - $last_pos;
+            $str = substr_replace($fist_string, '', $last_pos, -1);
+            $final_str = str_finish($str, '</table>');
+            return $final_str;
+        }
+        return $html;
+    }
+
+    public static function trim3D($html) {
+        $body = str_replace('=3D', '', $html);
+        return $body;
+    }
+
+    public static function trimInjections($html, $tags = ['<script>', '</script>', '<style>', '</style>', '<?php', '?>']) {
+        $replace = [];
+        foreach ($tags as $key => $tag) {
+            $replace[$key] = htmlspecialchars($tag);
+        }
+        $body = str_replace($tags, $replace, $html);
+        return $body;
     }
 
 }

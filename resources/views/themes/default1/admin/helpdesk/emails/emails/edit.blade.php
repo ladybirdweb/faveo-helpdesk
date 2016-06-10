@@ -380,30 +380,38 @@ class="active"
             }
         }
         // checking for validation of sending status
+        // checking for validation of sending status
         if (sending_status == 'on') {
-            // checking for validation of sending host
-            if (sending_host == "") {
-                var error = "Sending Host is a required field";
-                error_list.push(error);
-                $("#sending_host_error").addClass("has-error");
-            }
-            // checking for validation of sending port
-            if (sending_port == "") {
-                var error = "Sending Port is a required field";
-                error_list.push(error);
-                $("#sending_port_error").addClass("has-error");
-            }
-            // checking for validation of sending encryption
-            if (sending_encryption == "") {
-                var error = "Sending Encryption is a required field";
-                error_list.push(error);
-                $("#sending_encryption_error").addClass("has-error");
-            }
-            // checking for validation of sending protocol
-            if (sending_protocol == "") {
-                var error = "Transfer Protocol is a required field";
-                error_list.push(error);
-                $("#sending_protocol_error").addClass("has-error");
+            if (sending_protocol == 'smtp') {
+                // checking for validation of sending host
+                if (sending_host == "") {
+                    var error = "Sending Host is a required field";
+                    error_list.push(error);
+                    $("#sending_host_error").addClass("has-error");
+                }
+                // checking for validation of sending port
+                if (sending_port == "") {
+                    var error = "Sending Port is a required field";
+                    error_list.push(error);
+                    $("#sending_port_error").addClass("has-error");
+                }
+                // checking for validation of sending encryption
+                if (sending_encryption == "") {
+                    var error = "Sending Encryption is a required field";
+                    error_list.push(error);
+                    $("#sending_encryption_error").addClass("has-error");
+                }
+                // checking for validation of sending protocol
+                if (sending_protocol == "") {
+                    var error = "Transfer Protocol is a required field";
+                    error_list.push(error);
+                    $("#sending_protocol_error").addClass("has-error");
+                }
+            } else if(sending_protocol == 'mail') {
+                $("#sending_host_error").val('');
+                $("#sending_port_error").val('');
+                $("#sending_encryption_error").val('');
+                $("#sending_protocol_error").val('');
             }
         } else {
             // checking for validation of fetching port

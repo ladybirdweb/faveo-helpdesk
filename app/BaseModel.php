@@ -25,7 +25,6 @@ class BaseModel extends Model
         $config = \HTMLPurifier_Config::createDefault();
         //dd($config);
         $purifier = new \HTMLPurifier($config);
-
         if ($value != strip_tags($value)) {
             $value = $purifier->purify($value);
         }
