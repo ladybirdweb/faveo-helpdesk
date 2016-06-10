@@ -42,6 +42,13 @@ class Handler extends ExceptionHandler {
      * @return void
      */
     public function report(Exception $e) {
+        $debug = \Config::get('app.bugsnag_reporting');
+        $debug = ($debug) ? 'true' : 'false';
+        if ($debug == 'false') {
+            Bugsnag::setBeforeNotifyFunction(function ($error) {
+                return false;
+            });
+        }
         return parent::report($e);
     }
 
@@ -53,10 +60,8 @@ class Handler extends ExceptionHandler {
      *
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e) {
-        if (config('app.bugsnag_reporting')) {
-            Bugsnag::notifyException(new Exception($e));
-        }
+    public function render($request, Exception $e)
+    {
         $phpmail = new PhpMailController();
         if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
             return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);

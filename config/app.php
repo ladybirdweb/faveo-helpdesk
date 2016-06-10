@@ -111,7 +111,7 @@ return [
       |to FAVEO team when any exception/error occurs or not. True value of this variable will
       |allow application to send error reports to FAVEO team's bugsnag log.
      */
-    'bugsnag_reporting' => true,
+    'bugsnag_reporting' => false,
     /*
       |--------------------------------------------------------------------------
       | Autoloaded Service Providers
