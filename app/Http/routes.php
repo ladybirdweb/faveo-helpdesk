@@ -12,11 +12,11 @@
  */
 
 Route::controllers([
-    'auth'     => 'Auth\AuthController',
+    'auth' => 'Auth\AuthController',
     'password' => 'Auth\PasswordController',
 ]);
 
-Route::get('account/activate/{token}',['as' => 'account.activate', 'uses' => 'Auth\AuthController@accountActivate']);
+Route::get('account/activate/{token}', ['as' => 'account.activate', 'uses' => 'Auth\AuthController@accountActivate']);
 
 $router->get('getmail/{token}', 'Auth\AuthController@getMail');
 
@@ -326,20 +326,20 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::post('api', ['as' => 'api.settings.post', 'uses' => 'Common\ApiSettings@postSettings']);
 
     /*
-     *Error and debugging
+     * Error and debugging
      */
     //route for showing error and debugging setting form page
-    Route::get('error-and-debugging-options',['as' => 'err.debug.settings', 'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showSettings']);
+    Route::get('error-and-debugging-options', ['as' => 'err.debug.settings', 'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showSettings']);
 
     //route for submit error and debugging setting form page
-    Route::post('post-settings',['as' => 'post.error.debug.settings',
-                    'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings']);
+    Route::post('post-settings', ['as' => 'post.error.debug.settings',
+        'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings']);
 
     //route to error logs table page
-    Route::get('show-error-logs',[
-        'as'   => 'error.logs',
+    Route::get('show-error-logs', [
+        'as' => 'error.logs',
         'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs'
-        ]);
+    ]);
 });
 
 /*
@@ -563,7 +563,7 @@ Route::POST('tickets/search/', function () {
 });
 Route::any('getdata', function () {
     $term = Illuminate\Support\Str::lower(Input::get('term'));
-    $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
+    $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term . '%')->groupBy('ticket_number')->take(10)->get();
     foreach ($data as $v) {
         return [
             'value' => $v->ticket_number,
@@ -697,10 +697,10 @@ Route::get('/aaa', function () {
     echo '</tr>';
     foreach ($routeCollection as $value) {
         echo '<tr>';
-        echo '<td>'.$value->getMethods()[0].'</td>';
-        echo '<td>'.$value->getName().'</td>';
-        echo '<td>'.$value->getPath().'</td>';
-        echo '<td>'.$value->getActionName().'</td>';
+        echo '<td>' . $value->getMethods()[0] . '</td>';
+        echo '<td>' . $value->getName() . '</td>';
+        echo '<td>' . $value->getPath() . '</td>';
+        echo '<td>' . $value->getActionName() . '</td>';
         echo '</tr>';
     }
     echo '</table>';
@@ -712,7 +712,7 @@ Route::get('/aaa', function () {
   |=============================================================
  */
 Route::get('500', ['as' => 'error500', function () {
-    return view('errors.500');
+return view('errors.500');
 }]);
 
 Breadcrumbs::register('error500', function ($breadcrumbs) {
@@ -720,7 +720,7 @@ Breadcrumbs::register('error500', function ($breadcrumbs) {
 });
 
 Route::get('404', ['as' => 'error404', function () {
-    return view('errors.404');
+return view('errors.404');
 }]);
 
 Breadcrumbs::register('error404', function ($breadcrumbs) {
@@ -728,7 +728,7 @@ Breadcrumbs::register('error404', function ($breadcrumbs) {
 });
 
 Route::get('board-offline', ['as' => 'board.offline', function () {
-    return view('errors.offline');
+return view('errors.offline');
 }]);
 
 Breadcrumbs::register('board.offline', function ($breadcrumbs) {
