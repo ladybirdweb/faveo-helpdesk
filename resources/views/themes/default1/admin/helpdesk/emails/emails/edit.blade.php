@@ -238,9 +238,10 @@ class="active"
             {!! Form::textarea('internal_notes',null,['class' => 'form-control','size' => '30x10']) !!}
         </div>
     </div>
+    <input type="hidden" name="count" value="{{$count}}"> 
     <div class="box-footer">
         <div class="form-group">
-            <input type="checkbox" name="sys_email" @if($sys_email->sys_email == $emails->id) checked disabled @endif">&nbsp;&nbsp;{{Lang::get('lang.make-system-default-mail')}}
+            <input type="checkbox" name="sys_email" @if($sys_email->sys_email == $emails->id) checked  @endif @if($count > 1 && $sys_email->sys_email == $emails->id) disabled @endif">&nbsp;&nbsp;{{Lang::get('lang.make-system-default-mail')}}
         </div>
         {!! Form::button('<i id="spin" class="fa fa-spinner" style="display:none;"></i> <b>' . Lang::get("lang.update").'</b>' ,['class'=>'btn btn-primary', 'type' => 'submit'])!!}
     </div>
