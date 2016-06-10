@@ -21,6 +21,7 @@ return [
     'success'                                                           => 'Success',
     'fails'                                                             => 'Fails',
     'alert'                                                             => 'Alert',
+    'warning'                                                           => 'Warning',
     'required-error'                                                    => 'Please fill all required feilds',
     'invalid'                                                           => 'Incorrect User id or password',
     'sorry_something_went_wrong'                                        => 'Sorry, Something went wrong',

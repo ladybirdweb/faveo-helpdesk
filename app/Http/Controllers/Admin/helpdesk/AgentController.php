@@ -144,7 +144,7 @@ class AgentController extends Controller
                 $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'Password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
             } catch (Exception $e) {
                 // returns if try fails
-                return redirect('agents')->with('fails', Lang::get('lang.agent_send_mail_error_on_agent_creation'));
+                return redirect('agents')->with('warning', Lang::get('lang.agent_send_mail_error_on_agent_creation'));
             }
             // returns for the success case
             return redirect('agents')->with('success', Lang::get('lang.agent_creation_success'));

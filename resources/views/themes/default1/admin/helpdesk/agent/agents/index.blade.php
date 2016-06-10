@@ -51,6 +51,15 @@ class="active"
             {{Session::get('fails')}}
         </div>
         @endif
+        <!-- Warning Message -->
+        @if(Session::has('warning'))
+        <div class="alert alert-warning alert-dismissable">
+            <i class="fa fa-warning"></i>
+            <b>{!! Lang::get('lang.warning') !!}!</b>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{Session::get('warning')}}
+        </div>
+        @endif
         <!-- Agent table -->
         <table class="table table-bordered dataTable" style="overflow:hidden;">
             <tr>
