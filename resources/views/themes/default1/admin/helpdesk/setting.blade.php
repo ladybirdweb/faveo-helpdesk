@@ -438,7 +438,7 @@
         <div class="row">
             <div class="col-md-12">
                 <!--/.col-md-2-->
-                <div class="col-md-2 col-sm-6">
+                <!-- <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
                         <div class="settingdivblue">
                             <a href="{{ route('error.logs') }}">
@@ -450,7 +450,7 @@
                         <p class="box-title" >{!! Lang::get('lang.view-logs') !!}</p>
                     </div>
                 </div>
-                <!--/.col-md-2-->                                        
+         -->        <!--/.col-md-2-->                                        
                 <!--col-md-2-->
                 <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
