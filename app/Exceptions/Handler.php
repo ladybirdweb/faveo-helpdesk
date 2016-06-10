@@ -80,7 +80,7 @@ class Handler extends ExceptionHandler {
                     if (\Config::get('app.ErrorLog') == '1') {
 //                        $this->phpmail->sendmail($from = $this->phpmail->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['e' => $e]);
                     }
-                    return parent::render($request, $e);
+//                    return parent::render($request, $e);
                 }
                 return redirect()->route('error500');
             }
