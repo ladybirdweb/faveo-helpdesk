@@ -18,6 +18,7 @@ class Handler extends ExceptionHandler {
      */
     protected $dontReport = [
         'Symfony\Component\HttpKernel\Exception\HttpException',
+        'Illuminate\Http\Exception\HttpResponseException',
     ];
 
     /**
