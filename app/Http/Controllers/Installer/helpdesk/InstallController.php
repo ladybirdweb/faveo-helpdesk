@@ -446,12 +446,12 @@ class InstallController extends Controller
         $path2 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'database.php';
         $path3 = base_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'routes.php';
         $path4 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'lfm.php';
-        if (chmod($path1, 0777) && chmod($path2, 0777) && chmod($path3, 0777) && chmod($path4, 0777)) {
+        if (chmod($path1, 0655) && chmod($path2, 0655) && chmod($path3, 0655) && chmod($path4, 0655)) {
             $f1 = substr(sprintf('%o', fileperms($path1)), -3);
             $f2 = substr(sprintf('%o', fileperms($path2)), -3);
             $f3 = substr(sprintf('%o', fileperms($path3)), -3);
             $f4 = substr(sprintf('%o', fileperms($path4)), -3);
-            if ($f1 == '777' && $f2 == '777' && $f3 == '777' && $f4 == '777') {
+            if ($f1 == '655' && $f2 == '655' && $f3 == '655' && $f4 == '655') {
                 return Redirect::back();
             } else {
                 return Redirect::back()->with('fail_to_change', 'We are unable to change file permission on your server please try to change permission manually.');
