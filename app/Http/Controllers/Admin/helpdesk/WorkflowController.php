@@ -232,7 +232,6 @@ class WorkflowController extends Controller
      */
     public function update($id, WorkflowUpdateRequest $request)
     {
-        dd($request->input('rule'));
         try {
             // store a new workflow credentials in to the system
             $workflow_name = WorkflowName::whereId($id)->first();

@@ -5,6 +5,12 @@ namespace App\Exceptions;
 // controller
 use App\Http\Controllers\Common\PhpMailController;
 use Exception;
+
+use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 // use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
 use Bugsnag;
@@ -19,6 +25,10 @@ class Handler extends ExceptionHandler {
     protected $dontReport = [
         'Symfony\Component\HttpKernel\Exception\HttpException',
         'Illuminate\Http\Exception\HttpResponseException',
+        ValidationException::class,
+        AuthorizationException::class,
+        HttpException::class,
+        ModelNotFoundException::class,
     ];
 
     /**
@@ -81,8 +91,12 @@ class Handler extends ExceptionHandler {
 //                        $this->phpmail->sendmail($from = $this->phpmail->mailfrom('1', '0'), $to = ['name' => 'faveo logger', 'email' => 'faveoerrorlogger@gmail.com'], $message = ['subject' => 'Faveo downloaded from github has occured error', 'scenario' => 'error-report'], $template_variables = ['e' => $e]);
                     }
 //                    return parent::render($request, $e);
+                    if($this->isValidationException($e))
+                    {
+                        return parent::render($request, $e);
+                    }
+                    return redirect()->route('error500');
                 }
-                return redirect()->route('error500');
             }
         }
         // returns non oops error message
