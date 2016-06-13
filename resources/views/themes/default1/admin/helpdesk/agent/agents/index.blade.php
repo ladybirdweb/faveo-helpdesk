@@ -12,7 +12,6 @@ active
 class="active"
 @stop
 
-
 @section('HeadInclude')
 @stop
 <!-- header -->
@@ -23,28 +22,22 @@ class="active"
 <!-- breadcrumbs -->
 @section('breadcrumbs')
 <ol class="breadcrumb">
-
 </ol>
 @stop
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-
-
 <div class="box box-primary">
     <div class="box-header">
-        <h2 class="box-title">{!! Lang::get('lang.staffs') !!} </h2><a href="{{route('agents.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_agent')}}</a></div>
-
+        <h2 class="box-title">{!! Lang::get('lang.list_of_agents') !!} </h2><a href="{{route('agents.create')}}" class="btn btn-primary pull-right">{!! Lang::get('lang.create_an_agent') !!}</a></div>
     <div class="box-body table-responsive">
         <?php
         $user = App\User::where('role', '!=', 'user')->orderBy('id', 'ASC')->paginate(20);
         ?>
         <!-- check whether success or not -->
-
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
             <i class="fa  fa-check-circle"></i>
-            <b>{!! Lang::get('lang.success') !!}</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('success')}} 
         </div>
@@ -56,6 +49,15 @@ class="active"
             <b>{!! Lang::get('lang.fails') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
+        </div>
+        @endif
+        <!-- Warning Message -->
+        @if(Session::has('warning'))
+        <div class="alert alert-warning alert-dismissable">
+            <i class="fa fa-warning"></i>
+            <b>{!! Lang::get('lang.warning') !!}!</b>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{Session::get('warning')}}
         </div>
         @endif
         <!-- Agent table -->
@@ -78,23 +80,21 @@ class="active"
                 <td><a href="{{route('agents.edit', $use->id)}}"> {!! $use->user_name !!}</td>
                 <?php
                 if ($use->role == 'admin') {
-                    echo '<td><button class="btn btn-success btn-xs">Admin</button></td>';
+                    echo '<td><button class="btn btn-success btn-xs">' . Lang::get('lang.admin') . '</button></td>';
                 } elseif ($use->role == 'agent') {
-                    echo '<td><button class="btn btn-primary btn-xs">Agent</button></td>';
+                    echo '<td><button class="btn btn-primary btn-xs">' . Lang::get('lang.agent') . '</button></td>';
                 }
                 ?>
                 <td>
                     @if($use->active=='1')
-                    <span style="color:green">{{'Active'}}</span>
+                    <span style="color:green">{!! Lang::get('lang.active') !!}</span>
                     @else
-                    <span style="color:red">{{'Inactive'}}</span>
+                    <span style="color:red">{!! Lang::get('lang.inactive') !!}</span>
                     @endif
-
-<?php
-$group = App\Model\helpdesk\Agent\Groups::whereId($use->assign_group)->first();
-$department = App\Model\helpdesk\Agent\Department::whereId($use->primary_dpt)->first();
-?>
-
+                    <?php
+                    $group = App\Model\helpdesk\Agent\Groups::whereId($use->assign_group)->first();
+                    $department = App\Model\helpdesk\Agent\Department::whereId($use->primary_dpt)->first();
+                    ?>
                 <td>{{ $group->name }}</td>
                 <td>{{ $department->name }}</td>
                 <td>{{ UTC::usertimezone($use->created_at) }}</td>
@@ -111,6 +111,5 @@ $department = App\Model\helpdesk\Agent\Department::whereId($use->primary_dpt)->f
             @endforeach
         </table>
     </div>
-
 </div>
 @stop

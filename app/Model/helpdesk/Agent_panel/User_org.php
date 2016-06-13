@@ -2,9 +2,9 @@
 
 namespace App\Model\helpdesk\Agent_panel;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class User_org extends Model
+class User_org extends BaseModel
 {
     /* define table name  */
 

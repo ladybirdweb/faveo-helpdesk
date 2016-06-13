@@ -63,6 +63,17 @@ class InstallerApiController extends Controller
 
             return ['response' => 'fail', 'reason' => $return_data, 'status' => '0'];
         }
+        $path1 = base_path().DIRECTORY_SEPARATOR.'.env';
+        $path2 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'database.php';
+        $path3 = base_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'routes.php';
+        $path4 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'lfm.php';
+        $f1 = substr(sprintf('%o', fileperms($path1)), -3);
+        $f2 = substr(sprintf('%o', fileperms($path2)), -3);
+        $f3 = substr(sprintf('%o', fileperms($path3)), -3);
+        $f4 = substr(sprintf('%o', fileperms($path4)), -3);
+        if ($f1 != '777' || $f2 != '777' || $f3 != '777' || $f4 != '777') {
+            return ['response' => 'fail', 'reason' => 'File permission issue.', 'status' => '0'];
+        }
         // dd($validator->messages());
         // error_reporting(E_ALL & ~E_NOTICE);
         // Check for pre install
@@ -214,9 +225,16 @@ class InstallerApiController extends Controller
             $content24 = File::get($path23);
             $content23 = str_replace('"%smtplink%"', $smtpfilepath, $content23);
             $content24 = str_replace("'%url%'", $lfmpath, $content24);
+            $link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+            $pos = strpos($link, 'api/v1/system-config');
+            $link = substr($link, 0, $pos);
+            $app_url = app_path('../config/app.php');
+            $datacontent2 = File::get($app_url);
+            $datacontent2 = str_replace('http://localhost', $link, $datacontent2);
+            File::put($app_url, $datacontent2);
             File::put($path22, $content23);
             File::put($path23, $content24);
-
+            Artisan::call('key:generate');
             // If user created return success
             if ($user) {
                 return ['response' => 'success', 'status' => '1'];

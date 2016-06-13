@@ -12,6 +12,7 @@ use App\Model\helpdesk\Manage\Help_topic;
 use Illuminate\Http\Request;
 // Class
 use Input;
+use Lang;
 use Redirect;
 
 /**
@@ -29,7 +30,7 @@ class FormController extends Controller
     {
         $this->fields = $fields;
         $this->forms = $forms;
-        // $this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -51,21 +52,29 @@ class FormController extends Controller
      */
     public function index(Forms $forms)
     {
-        return view('themes.default1.admin.helpdesk.manage.form.index', compact('forms'));
+        try {
+            return view('themes.default1.admin.helpdesk.manage.form.index', compact('forms'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->getMessage());
+        }
     }
 
     /**
-     * Show the form for creating a new resource.
+     * create a new form.
      *
      * @return Response
      */
     public function create()
     {
-        return view('themes.default1.admin.helpdesk.manage.form.form');
+        try {
+            return view('themes.default1.admin.helpdesk.manage.form.form');
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $e->getMessage());
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Show a new form.
      *
      * @param int $id
      *
@@ -73,18 +82,22 @@ class FormController extends Controller
      */
     public function show($id)
     {
-        return view('themes.default1.admin.helpdesk.manage.form.preview', compact('id'));
+        try {
+            return view('themes.default1.admin.helpdesk.manage.form.preview', compact('id'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $e->getMessage());
+        }
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a new form.
      *
      * @return Response
      */
     public function store(Forms $forms)
     {
         if (!Input::get('formname')) {
-            return Redirect::back()->with('fails', 'Please fill Form name');
+            return Redirect::back()->with('fails', Lang::get('lang.please_fill_form_name'));
         }
         $required = Input::get('required');
         $count = count($required);
@@ -112,9 +125,19 @@ class FormController extends Controller
         }
         Fields::insert($fields);
 
-        return Redirect::back()->with('success', 'Successfully created Form');
+        return Redirect::back()->with('success', Lang::get('lang.successfully_created_form'));
     }
 
+    /**
+     * Delete Form.
+     *
+     * @param type                           $id
+     * @param \App\Model\helpdesk\Form\Forms $forms
+     * @param type                           $field
+     * @param type                           $help_topic
+     *
+     * @return type redirect
+     */
     public function delete($id, Forms $forms, Fields $field, Help_topic $help_topic)
     {
         $fields = $field->where('forms_id', $id)->get();
@@ -129,6 +152,6 @@ class FormController extends Controller
         $forms = $forms->where('id', $id)->first();
         $forms->delete();
 
-        return redirect()->back()->with('success', 'Deleted Successfully');
+        return redirect()->back()->with('success', Lang::get('lang.form_deleted_successfully'));
     }
 }

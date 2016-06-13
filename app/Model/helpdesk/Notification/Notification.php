@@ -2,9 +2,9 @@
 
 namespace App\Model\helpdesk\Notification;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class Notification extends Model
+class Notification extends BaseModel
 {
     protected $table = 'notifications';
     protected $fillable = [

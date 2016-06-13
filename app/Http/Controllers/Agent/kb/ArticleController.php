@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Agent\kb;
 
 // Controllers
-use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 // Requests
 use App\Http\Requests\kb\ArticleRequest;
@@ -21,16 +20,17 @@ use Datatable;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
+use Lang;
 use Redirect;
 
 /**
  * ArticleController
  * This controller is used to CRUD Articles.
  *
- * @author     	Ladybird <info@ladybirdweb.com>
+ * @author      Ladybird <info@ladybirdweb.com>
  */
-class ArticleController extends Controller
-{
+class ArticleController extends Controller {
+
     /**
      * Create a new controller instance.
      * constructor to check
@@ -40,8 +40,7 @@ class ArticleController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         // checking authentication
         $this->middleware('auth');
         // checking roles
@@ -49,8 +48,7 @@ class ArticleController extends Controller
         SettingsController::language();
     }
 
-    public function test()
-    {
+    public function test() {
         //$table = $this->setDatatable();
         return view('themes.default1.agent.kb.article.test');
     }
@@ -60,29 +58,37 @@ class ArticleController extends Controller
      *
      * @return type void
      */
-    public function getData()
-    {
+    public function getData() {
+        $article = new Article();
         // returns chumper datatable
-        return Datatable::collection(Article::All())
+        return Datatable::query($article)
                         /* searcable column name */
                         ->searchColumns('name')
                         /* order column name and description */
                         ->orderColumns('name', 'description')
                         /* add column name */
                         ->addColumn('name', function ($model) {
-                            return $model->name;
+
+                            $string = strip_tags($model->name);
+                            if (strlen($string) > 40) {
+                                // truncate string
+                                $stringCut = substr($string, 0, 40);
+                            } else {
+                                $stringCut = $model->name;
+                            }
+                            return $stringCut . '...';
                         })
                         /* add column Created */
-                        ->addColumn('Created', function ($model) {
-                            $t = $model->created_at;
+                        ->addColumn('publish_time', function ($model) {
+                            $t = $model->publish_time;
 
-                            return TicketController::usertimezone($t);
+                            return $t;
                         })
                         /* add column action */
                         ->addColumn('Actions', function ($model) {
                             /* here are all the action buttons and modal popup to delete articles with confirmations */
-                            return '<span  data-toggle="modal" data-target="#deletearticle'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.\Lang::get('lang.delete').' </button></span>&nbsp;<a href=article/'.$model->id.'/edit class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href=show/'.$model->slug.' class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
-				<div class="modal fade" id="deletearticle'.$model->id.'">
+                            return '<span  data-toggle="modal" data-target="#deletearticle' . $model->id . '"><a href="#" ><button class="btn btn-danger btn-xs"></a> ' . \Lang::get('lang.delete') . ' </button></span>&nbsp;<a href=article/' . $model->id . '/edit class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp;<a href=show/' . $model->slug . ' class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>
+				<div class="modal fade" id="deletearticle' . $model->id . '">
         			<div class="modal-dialog">
             			<div class="modal-content">
                 			<div class="modal-header">
@@ -90,11 +96,11 @@ class ArticleController extends Controller
                     			<h4 class="modal-title">Are You Sure ?</h4>
                 			</div>
                 			<div class="modal-body">
-                				'.$model->name.'
+                				' . $model->name . '
                 			</div>
                 			<div class="modal-footer">
                     			<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">Close</button>
-                    			<a href="article/delete/'.$model->slug.'"><button class="btn btn-danger">delete</button></a>
+                    			<a href="article/delete/' . $model->slug . '"><button class="btn btn-danger">delete</button></a>
                 			</div>
             			</div><!-- /.modal-content -->
         			</div><!-- /.modal-dialog -->
@@ -108,13 +114,12 @@ class ArticleController extends Controller
      *
      * @return type view
      */
-    public function index()
-    {
+    public function index() {
         /* show article list */
         try {
             return view('themes.default1.agent.kb.article.index');
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -125,15 +130,14 @@ class ArticleController extends Controller
      *
      * @return type view
      */
-    public function create(Category $category)
-    {
+    public function create(Category $category) {
         /* get the attributes of the category */
         $category = $category->lists('id', 'name');
         /* get the create page  */
         try {
             return view('themes.default1.agent.kb.article.create', compact('category'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -145,12 +149,11 @@ class ArticleController extends Controller
      *
      * @return type redirect
      */
-    public function store(Article $article, ArticleRequest $request)
-    {
+    public function store(Article $article, ArticleRequest $request) {
         // requesting the values to store article data
-        $publishTime = $request->input('year').'-'.$request->input('month').'-'.$request->input('day').' '.$request->input('hour').':'.$request->input('minute').':00';
+        $publishTime = $request->input('year') . '-' . $request->input('month') . '-' . $request->input('day') . ' ' . $request->input('hour') . ':' . $request->input('minute') . ':00';
 
-        $sl = $request->input('slug');
+        $sl = $request->input('name');
         $slug = str_slug($sl, '-');
         $article->slug = $slug;
         $article->publish_time = $publishTime;
@@ -166,9 +169,9 @@ class ArticleController extends Controller
         try {
             $article->fill($request->except('slug'))->save();
 
-            return redirect('article')->with('success', 'Article Inserted Successfully');
+            return redirect('article')->with('success', Lang::get('lang.article_inserted_successfully'));
         } catch (Exception $e) {
-            return redirect('article')->with('fails', 'Article Not Inserted'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('article')->with('fails', Lang::get('lang.article_not_inserted') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -182,8 +185,10 @@ class ArticleController extends Controller
      *
      * @return view
      */
-    public function edit($slug, Article $article, Relationship $relation, Category $category)
-    {
+    public function edit($slug) {
+        $article = new Article();
+        $relation = new Relationship();
+        $category = new Category();
         $aid = $article->where('id', $slug)->first();
         $id = $aid->id;
         /* define the selected fields */
@@ -197,7 +202,7 @@ class ArticleController extends Controller
         try {
             return view('themes.default1.agent.kb.article.edit', compact('assign', 'article', 'category'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -211,10 +216,11 @@ class ArticleController extends Controller
      *
      * @return Response
      */
-    public function update($slug, Article $article, Relationship $relation, ArticleUpdate $request)
-    {
+    public function update($slug, ArticleUpdate $request) {
+        $article = new Article();
+        $relation = new Relationship();
         $aid = $article->where('id', $slug)->first();
-        $publishTime = $request->input('year').'-'.$request->input('month').'-'.$request->input('day').' '.$request->input('hour').':'.$request->input('minute').':00';
+        $publishTime = $request->input('year') . '-' . $request->input('month') . '-' . $request->input('day') . ' ' . $request->input('hour') . ':' . $request->input('minute') . ':00';
 
         $id = $aid->id;
         $sl = $request->input('slug');
@@ -239,9 +245,9 @@ class ArticleController extends Controller
             $article->publish_time = $publishTime;
             $article->save();
 
-            return redirect('article')->with('success', 'Article Updated Successfully');
+            return redirect('article')->with('success', Lang::get('lang.article_updated_successfully'));
         } catch (Exception $e) {
-            return redirect('article')->with('fails', 'Article Not Updated'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('article')->with('fails', Lang::get('lang.article_not_updated') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -253,8 +259,7 @@ class ArticleController extends Controller
      *
      * @return Response
      */
-    public function destroy($slug, Article $article, Relationship $relation, Comment $comment)
-    {
+    public function destroy($slug, Article $article, Relationship $relation, Comment $comment) {
         /* delete the selected article from the table */
         $article = $article->where('slug', $slug)->first(); //get the selected article via id
         $id = $article->id;
@@ -271,12 +276,12 @@ class ArticleController extends Controller
         }
         if ($article) {
             if ($article->delete()) {//true:redirect to index page with success message
-                return Redirect::back()->with('success', 'Article Deleted Successfully');
+                return Redirect::back()->with('success', Lang::get('lang.article_deleted_successfully'));
             } else { //redirect to index page with fails message
-                return Redirect::back()->with('fails', 'Article Not Deleted');
+                return Redirect::back()->with('fails', Lang::get('lang.article_not_deleted'));
             }
         } else {
-            return Redirect::back()->with('fails', 'Article can Not Deleted');
+            return Redirect::back()->with('fails', Lang::get('lang.article_can_not_deleted'));
         }
     }
 
@@ -288,8 +293,7 @@ class ArticleController extends Controller
      *
      * @return type
      */
-    public static function usertimezone($utc)
-    {
+    public static function usertimezone($utc) {
         $user = Auth::user();
         $tz = $user->timezone;
         $set = Settings::whereId('1')->first();
@@ -300,4 +304,5 @@ class ArticleController extends Controller
         $date = date($format, strtotime($utc) + $offset);
         echo $date;
     }
+
 }

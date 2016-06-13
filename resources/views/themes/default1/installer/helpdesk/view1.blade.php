@@ -3,6 +3,13 @@
 active
 @stop
 @section('content')
+    <div id="no-js">
+   <noscript>
+        <meta http-equiv="refresh" content="0; URL=JavaScript-disabled">
+        <style type="text/css">#form-content {display: none;}</style>
+    </noscript>
+    </div>
+    <div id="form-content">
         <center><h1>License Agreement</h1></center>
 
         <p>Please read this software license agreement carefully before downloading or using the software. By clicking on the "accept" button, opening the package, or downloading the product, you are consenting to be bound by this agreement. If you do not agree to all of the terms of this agreement, stop the installation process and exit.</p>
@@ -53,8 +60,14 @@ active
                 <input type="submit" class="button button-large button-next" value="Cancel" style="float: left">
             </p>
         </form>
-
+        </div>
     <script>
+        window.onload = function() {
+            if(!window.location.hash) {
+                window.location = window.location + '#loaded';
+                window.location.reload();
+            }
+        }
         var second = document.getElementById('Acceptme').checked = false;
         var first = document.getElementById('submitme').disabled = true;
         var checkme = document.getElementById('Acceptme');

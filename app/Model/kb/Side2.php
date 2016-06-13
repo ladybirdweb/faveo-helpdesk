@@ -2,9 +2,9 @@
 
 namespace App\Model\kb;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class Side2 extends Model
+class Side2 extends BaseModel
 {
     protected $table = 'side2';
     protected $fillable = ['title', 'content'];

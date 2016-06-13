@@ -2,9 +2,9 @@
 
 namespace App\Model\helpdesk\Ticket;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class Ticket_Thread extends Model
+class Ticket_Thread extends BaseModel
 {
     protected $table = 'ticket_thread';
     protected $fillable = [
@@ -20,5 +20,13 @@ class Ticket_Thread extends Model
     {
         $this->attach()->delete();
         parent::delete();
+    }
+    
+//    public function setTitleAttribute($value) {
+//        $this->attributes['title'] = str_replace('"', "'", $value);
+//    }
+    
+     public function getTitleAttribute($value) {
+        return str_replace('"', "'", $value);
     }
 }

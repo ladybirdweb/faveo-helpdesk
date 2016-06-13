@@ -18,7 +18,7 @@ class CreateNotificationTypesTable extends Migration
             $table->string('type');
             $table->string('icon_class');
             $table->timestamps();
-            });
+        });
     }
 
     /**

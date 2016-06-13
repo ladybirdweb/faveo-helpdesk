@@ -9,9 +9,7 @@ use App\Http\Controllers\Controller;
 // request
 use App\User;
 // model
-use Illuminate\Contracts\Auth\Guard;
 // classes
-use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 
@@ -27,16 +25,11 @@ class PasswordController extends Controller
     /**
      * Create a new password controller instance.
      *
-     * @param \Illuminate\Contracts\Auth\Guard          $auth
-     * @param \Illuminate\Contracts\Auth\PasswordBroker $passwords
-     *
      * @return void
      */
-    public function __construct(Guard $auth, PasswordBroker $passwords, PhpMailController $PhpMailController)
+    public function __construct(PhpMailController $PhpMailController)
     {
         $this->PhpMailController = $PhpMailController;
-        $this->auth = $auth;
-        $this->passwords = $passwords;
         $this->middleware('guest');
         SettingsController::smtp();
     }
@@ -73,12 +66,11 @@ class PasswordController extends Controller
             } else {
                 $create_password_reset = \DB::table('password_resets')->insert(['email' => $user->email, 'token' => $code, 'created_at' => $date]);
             }
-
             $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user->user_name, 'email' => $user->email], $message = ['subject' => 'Your Password Reset Link', 'scenario' => 'reset-password'], $template_variables = ['user' => $user->user_name, 'email_address' => $user->email, 'password_reset_link' => url('password/reset/'.$code)]);
 
-            return redirect()->back()->with('status', 'We have e-mailed your password reset link!');
+            return redirect()->back()->with('status', Lang::get('lang.we_have_e-mailed_your_password_reset_link'));
         } else {
-            return redirect()->back()->with('errors', "We can't find a user with that e-mail address.");
+            return redirect()->back()->with('errors', Lang::get("lang.we_can't_find_a_user_with_that_e-mail_address"));
         }
     }
 }

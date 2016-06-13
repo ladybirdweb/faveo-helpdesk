@@ -16,12 +16,15 @@ use App\Http\Requests\helpdesk\Sys_userUpdate;
 // models
 use App\Model\helpdesk\Agent_panel\Organization;
 use App\Model\helpdesk\Agent_panel\User_org;
+use App\Model\helpdesk\Utility\CountryCode;
 use App\User;
 // classes
 use Auth;
 use Exception;
+use GeoIP;
 use Hash;
 use Input;
+use Lang;
 use Redirect;
 
 /**
@@ -62,7 +65,7 @@ class UserController extends Controller
             /* get all values in Sys_user */
             return view('themes.default1.agent.helpdesk.user.index');
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -75,24 +78,24 @@ class UserController extends Controller
     {
         // displaying list of users with chumper datatables
         return \Datatable::collection(User::where('role', '!=', 'admin')->where('role', '!=', 'agent')->get())
-                        /* searchable column username and email*/
+                        /* searchable column username and email */
                         ->searchColumns('user_name', 'email', 'phone')
                         /* order column username and email */
                         ->orderColumns('user_name', 'email')
                         /* column username */
                         ->addColumn('user_name', function ($model) {
-                            if (strlen($model->user_name) > 20) {
-                                $username = substr($model->user_name, 0, 30);
-                                $username = substr($username, 0, strrpos($username, ' ')).' ...';
+                            $string = strip_tags($model->user_name);
+                            if (strlen($string) > 10) {
+                                // truncate string
+                                $stringCut = substr($string, 0, 10);
                             } else {
-                                $username = "<a href='".route('user.edit', $model->id)."'>".$model->user_name.'</a>';
+                                $stringCut = $model->user_name;
                             }
-
-                            return $username;
+                            return $stringCut;
                         })
                         /* column email */
                         ->addColumn('email', function ($model) {
-                            $email = "<a href='".route('user.edit', $model->id)."'>".$model->email.'</a>';
+                            $email = "<a href='".route('user.show', $model->id)."'>".$model->email.'</a>';
 
                             return $email;
                         })
@@ -150,10 +153,13 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function create()
+    public function create(CountryCode $code)
     {
         try {
-            return view('themes.default1.agent.helpdesk.user.create');
+            $location = GeoIP::getLocation('');
+            $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+
+            return view('themes.default1.agent.helpdesk.user.create')->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
@@ -176,16 +182,25 @@ class UserController extends Controller
         $user->mobile = $request->input('mobile');
         $user->ext = $request->input('ext');
         $user->phone_number = $request->input('phone_number');
+        $user->country_code = $request->input('country_code');
         $user->active = $request->input('active');
         $user->internal_note = $request->input('internal_note');
         $user->role = 'user';
         try {
+            if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
+                return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
+            } else {
+                $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+                if (!count($code)) {
+                    return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
+                }
+            }
             $user->save();
             /* redirect to Index page with Success Message */
-            return redirect('user')->with('success', 'User  Created Successfully');
+            return redirect('user')->with('success', Lang::get('lang.User-Created-Successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('user')->with('fails', $e->errorInfo[2]);
+            return redirect('user')->with('fails', $e->getMessage());
         }
     }
 
@@ -197,15 +212,16 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function show($id, User $user)
+    public function show($id)
     {
         try {
+            $user = new User();
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
 
             return view('themes.default1.agent.helpdesk.user.show', compact('users'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -217,15 +233,18 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function edit($id, User $user)
+    public function edit($id, CountryCode $code)
     {
         try {
+            $user = new User();
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
+            $location = GeoIP::getLocation('');
+            $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
 
-            return view('themes.default1.agent.helpdesk.user.edit', compact('users'));
+            return view('themes.default1.agent.helpdesk.user.edit', compact('users'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -238,19 +257,31 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function update($id, User $user, Sys_userUpdate $request)
+    public function update($id, Sys_userUpdate $request)
     {
+        $user = new User();
         /* select the field where id = $id(request Id) */
         $users = $user->whereId($id)->first();
         /* Update the value by selected field  */
         /* Check whether function success or not */
         try {
+            if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
+                return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
+            } else {
+                $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+                if (!count($code)) {
+                    return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
+                } else {
+                    $users->country_code = $request->country_code;
+                }
+            }
+            // dd($request->input());
             $users->fill($request->input())->save();
             /* redirect to Index page with Success Message */
-            return redirect('user')->with('success', 'User  Updated Successfully');
+            return redirect('user')->with('success', Lang::get('lang.User-profile-Updated-Successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -265,7 +296,7 @@ class UserController extends Controller
         try {
             return view('themes.default1.agent.helpdesk.user.profile', compact('user'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -274,13 +305,15 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function getProfileedit()
+    public function getProfileedit(CountryCode $code)
     {
         $user = Auth::user();
+        $location = GeoIP::getLocation('');
+        $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
         try {
-            return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'));
+            return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -324,15 +357,24 @@ class UserController extends Controller
             $user->profile_pic = $fileName;
         } else {
             try {
+                if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
+                    return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
+                } else {
+                    $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+                    if (!count($code)) {
+                        return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
+                    }
+                    $user->country_code = $request->country_code;
+                }
                 $user->fill($request->except('profile_pic', 'gender'))->save();
 
-                return Redirect::route('profile')->with('success', 'Profile Updated sucessfully');
+                return Redirect::route('profile')->with('success', Lang::get('lang.Profile-Updated-sucessfully'));
             } catch (Exception $e) {
-                return Redirect::route('profile')->with('success', $e->errorInfo[2]);
+                return Redirect::route('profile')->with('success', $e->getMessage());
             }
         }
         if ($user->fill($request->except('profile_pic'))->save()) {
-            return Redirect::route('profile')->with('success', 'Profile Updated sucessfully');
+            return Redirect::route('profile')->with('success', Lang::get('lang.Profile-Updated-sucessfully'));
         }
     }
 
@@ -354,12 +396,12 @@ class UserController extends Controller
             try {
                 $user->save();
 
-                return redirect('profile-edit')->with('success1', 'Password Updated sucessfully');
+                return redirect('profile-edit')->with('success1', Lang::get('lang.password_updated_sucessfully'));
             } catch (Exception $e) {
-                return redirect('profile-edit')->with('fails', $e->errorInfo[2]);
+                return redirect('profile-edit')->with('fails', $e->getMessage());
             }
         } else {
-            return redirect('profile-edit')->with('fails1', 'Password was not Updated. Incorrect old password');
+            return redirect('profile-edit')->with('fails1', Lang::get('lang.password_was_not_updated_incorrect_old_password'));
         }
     }
 
@@ -379,6 +421,25 @@ class UserController extends Controller
         $user_org->save();
 
         return 1;
+    }
+
+    public function orgAssignUser($id)
+    {
+        $org = Input::get('org');
+        $user_org = new User_org();
+        $user_org->org_id = $id;
+        $user_org->user_id = $org;
+        $user_org->save();
+
+        return 1;
+    }
+
+    public function removeUserOrg($id)
+    {
+        $user_org = User_org::where('org_id', '=', $id)->first();
+        $user_org->delete();
+
+        return redirect()->back()->with('success1', Lang::get('lang.the_user_has_been_removed_from_this_organization'));
     }
 
     /**

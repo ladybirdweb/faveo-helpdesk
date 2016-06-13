@@ -6,7 +6,7 @@ For loop
 for ($i = 0; $i < $c; ++$i) {}
 
 // multiple expressions
-for (;$a,$b;) {}
+for ($a, $b; $c, $d; $e, $f) {}
 
 // infinite loop
 for (;;) {}
@@ -46,11 +46,12 @@ array(
         )
         stmts: array(
         )
+        comments: array(
+            0: // "classical" loop
+        )
     )
     1: Stmt_For(
         init: array(
-        )
-        cond: array(
             0: Expr_Variable(
                 name: a
             )
@@ -58,9 +59,26 @@ array(
                 name: b
             )
         )
+        cond: array(
+            0: Expr_Variable(
+                name: c
+            )
+            1: Expr_Variable(
+                name: d
+            )
+        )
         loop: array(
+            0: Expr_Variable(
+                name: e
+            )
+            1: Expr_Variable(
+                name: f
+            )
         )
         stmts: array(
+        )
+        comments: array(
+            0: // multiple expressions
         )
     )
     2: Stmt_For(
@@ -72,6 +90,9 @@ array(
         )
         stmts: array(
         )
+        comments: array(
+            0: // infinite loop
+        )
     )
     3: Stmt_For(
         init: array(
@@ -81,6 +102,9 @@ array(
         loop: array(
         )
         stmts: array(
+        )
+        comments: array(
+            0: // alternative syntax
         )
     )
 )

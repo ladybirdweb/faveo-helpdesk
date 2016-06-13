@@ -4,18 +4,8 @@
     class = "active"
 @stop
 
-@section('breadcrumb')
-<div class="site-hero clearfix">
-    <ol class="breadcrumb breadcrumb-custom">
-        <li class="text">You are here: </li>
-        <li>Home</li>
-        <li class="active">Contact Us</li>
-    </ol>
-</div>
-@stop	
 @section('check')
 <!-- Start of Page Container -->
-
 <div style="padding-top: 60px;">
 
     @if($settings->address)

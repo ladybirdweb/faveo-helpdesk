@@ -16,14 +16,12 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.edit_an_email')}}</h1> 
-
+<h1>{{Lang::get('lang.edit_an_email')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
 @section('breadcrumbs')
 <ol class="breadcrumb">
-
 </ol>
 @stop
 <!-- /breadcrumbs -->
@@ -48,19 +46,19 @@ class="active"
         <div class="row">
             <!-- email address -->
             <div class="col-xs-4 form-group {{ $errors->has('email_address') ? 'has-error' : '' }}" id="email_address_error">
-                {!! Form::label('email_address',Lang::get('lang.email_address')) !!}
+                {!! Form::label('email_address',Lang::get('lang.email_address')) !!} <span class="text-red"> *</span>
                 {!! $errors->first('email_address', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('email_address',null,['class' => 'form-control']) !!}
             </div>
             <!-- Email name -->
             <div class="col-xs-4 form-group {!! $errors->has('email_name') ? 'has-error' : ''!!}" id="email_name_error">
-                {!! Form::label('email_name',Lang::get('lang.from_name')) !!}
+                {!! Form::label('email_name',Lang::get('lang.from_name')) !!} <span class="text-red"> *</span>
                 {!! $errors->first('email_name', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('email_name',null,['class' => 'form-control', 'id' => 'email_name']) !!}
             </div>
             <!-- password -->
             <div class="col-xs-4 form-group {!! $errors->has('password') ? 'has-error' : ''!!}" id="password_error">
-                {!! Form::label('password',Lang::get('lang.password')) !!}
+                {!! Form::label('password',Lang::get('lang.password')) !!} <span class="text-red"> *</span>
                 {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
                 <input type="password" name="password" class="form-control" id="password" value={!! Crypt::decrypt($emails->password) !!} >
             </div>
@@ -75,19 +73,19 @@ class="active"
             <div class="col-xs-4 form-group {{ $errors->has('department') ? 'has-error' : '' }}">
                 {!! Form::label('department',Lang::get('lang.department')) !!}
                 {!! $errors->first('department', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('department', [''=>'--System Default--','departments'=>$departments->lists('name','id')],null,['class' => 'form-control select']) !!}
+                {!!Form::select('department', [''=>'--System Default--','departments'=>$departments->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
             <!-- priority -->
             <div class="col-xs-4 form-group {{ $errors->has('priority') ? 'has-error' : '' }}">
                 {!! Form::label('priority',Lang::get('lang.priority')) !!}
                 {!! $errors->first('priority', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('priority', [''=>'--System Default--','Priorities'=>$priority->lists('priority_desc','priority_id')],null,['class' => 'form-control select']) !!}
+                {!!Form::select('priority', [''=>'--System Default--','Priorities'=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
             <!-- help topic -->
             <div class="col-xs-4 form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
                 {!! Form::label('help_topic',Lang::get('lang.help_topic')) !!}
                 {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('help_topic', [''=>'--System Default--','Help Topics'=>$helps->lists('topic','id')],null,['class' => 'form-control select']) !!}
+                {!!Form::select('help_topic', [''=>'--System Default--','Help Topics'=>$helps->lists('topic','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
             <!-- status -->
             <div class="col-xs-2 form-group">
@@ -115,10 +113,10 @@ class="active"
                 <div class="col-xs-2 form-group">
                     <!--{!! Form::radio('fetching_status','1',true) !!} {{Lang::get('lang.enable')}}-->
                     <input type="checkbox" name="fetching_status" id="fetching_status"  <?php
-                if ($emails->fetching_status == 1) {
-                    echo "checked='checked'";
-                }
-                ?>> {{Lang::get('lang.enable')}}
+                    if ($emails->fetching_status == 1) {
+                        echo "checked='checked'";
+                    }
+                    ?>> {{Lang::get('lang.enable')}}
                 </div>
                 <div class="col-xs-2 form-group">
                     <!--<input type="radio" name="fetching_status" id="fetching_status" value="0"> {{Lang::get('lang.disabled')}}-->
@@ -129,7 +127,7 @@ class="active"
             <div class="col-xs-2 form-group {!! $errors->has('fetching_protocol') ? 'has-error' : ''!!}" id="fetching_protocol_error">
                 {!! Form::label('fetching_protocol',Lang::get('lang.fetching_protocol')) !!}
                 {!! $errors->first('fetching_protocol', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('fetching_protocol',['imap' => 'IMAP'],null,['class' => 'form-control select', 'id' => 'fetching_protocol']) !!}
+                {!!Form::select('fetching_protocol',['imap' => 'IMAP', 'pop' => 'POP3'],null,['class' => 'form-control select', 'id' => 'fetching_protocol']) !!}
             </div>
             <div class="col-xs-2 form-group  {!! $errors->has('fetching_host') ? 'has-error' : ''!!}" id="fetching_host_error">
                 {!! Form::label('fetching_host',Lang::get('lang.host_name')) !!}
@@ -144,12 +142,37 @@ class="active"
             <div class="col-xs-2 form-group {!! $errors->has('fetching_encryption') ? 'has-error' : ''!!}" id="fetching_encryption_error">
                 {!! Form::label('fetching_encryption',Lang::get('lang.encryption')) !!}
                 {!! $errors->first('fetching_encryption', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('fetching_encryption',['none' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS', 'starttls' => 'STARTTLS'],null,['class' => 'form-control select', 'id' => 'fetching_encryption']) !!}
+                <select name="fetching_encryption" class='form-control'  id='fetching_encryption'>
+                    <option value=""> -----Select----- </option>
+                    <option <?php
+                    if ($emails->fetching_encryption == 'none') {
+                        echo 'selected="selected"';
+                    }
+                    ?> value="none">None</option>
+                    <option <?php
+                    if ($emails->fetching_encryption == '/ssl/novalidate-cert' || $emails->fetching_encryption === '/ssl/validate-cert') {
+                        echo 'selected="selected"';
+                    }
+                    ?> value="ssl">SSL</option>
+                    <option <?php
+                    if ($emails->fetching_encryption == '/tls/novalidate-cert' || $emails->fetching_encryption === '/tls/validate-cert') {
+                        echo 'selected="selected"';
+                    }
+                    ?> value="tls">TLS</option>
+                    <option <?php
+                    if ($emails->fetching_encryption == '/starttls/novalidate-cert' || $emails->fetching_encryption === '/starttls/validate-cert') {
+                        echo 'selected="selected"';
+                    }
+                    ?> value="starttls">STARTTLS</option>
+                </select>
             </div>
-            <div class="col-xs-4 form-group">
-                <div class="callout callout-default" style="font-style: oblique; margin-top: -47px; margin-bottom: -30px; margin-left: -12px; margin-right: -6px;">If this checkbox is not checked SSL certificates will not be validated</div>
-                <br/><br/>
-                <input type="checkbox" name="validate" value="/novalidate-cert">&nbsp; Validate certificates from TLS/SSL server
+            <div class="col-xs-2 form-group {!! $errors->has('imap_authentication') ? 'has-error' : ''!!}" id="imap_authentication_error">
+                {!! Form::label('fetching_authentication',Lang::get('lang.authentication')) !!}
+                {!!Form::select('imap_authentication',['normal' => 'Normal Password'],null,['class' => 'form-control select', 'id' => 'imap_authentication']) !!}
+            </div>
+            <div class="col-xs-2 form-group">
+                <br>
+                <input type="checkbox" name="imap_validate" id="imap_validate">&nbsp; {!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
             </div>
         </div>
     </div>
@@ -165,10 +188,10 @@ class="active"
                 </div> 
                 <div class="col-xs-2 form-group"> 
                     <input type="checkbox" name="sending_status" id="sending_status" <?php
-                if ($emails->sending_status == 1) {
-                    echo "checked='checked'";
-                }
-                ?>> {!! Lang::get('lang.enable') !!} 
+                    if ($emails->sending_status == 1) {
+                        echo "checked='checked'";
+                    }
+                    ?>> {!! Lang::get('lang.enable') !!} 
                 </div> 
                 <div class="col-xs-2 form-group"> 
                     <!--<input type="radio" name="sending_status" id="sending_status" value=""> {!! Lang::get('lang.disabled') !!}--> 
@@ -177,29 +200,37 @@ class="active"
         </div>
         <div class="row">
             <!-- Encryption -->
-            <div class="col-xs-3 form-group {!! $errors->has('sending_protocol') ? 'has-error' : ''!!}" id="sending_protocol_error">
+            <div class="col-xs-2 form-group {!! $errors->has('sending_protocol') ? 'has-error' : ''!!}" id="sending_protocol_error">
                 {!! Form::label('sending_protocol',Lang::get('lang.transfer_protocol')) !!}
                 {!! $errors->first('sending_protocol', '<spam class="help-block">:message</spam>') !!} 
-                {!!Form::select('sending_protocol',['smtp'=>'SMTP'],null,['class' => 'form-control select']) !!}
+                {!!Form::select('sending_protocol',['smtp'=>'SMTP', 'mail' => 'PHP-MAIL'],null,['class' => 'form-control select']) !!}
             </div> 
             <!-- sending hoost -->
-            <div class="col-xs-3 form-group {!! $errors->has('sending_host') ? 'has-error' : ''!!}" id="sending_host_error">
+            <div class="col-xs-2 form-group {!! $errors->has('sending_host') ? 'has-error' : ''!!}" id="sending_host_error">
                 {!! Form::label('sending_host',Lang::get('lang.host_name')) !!}
                 {!! $errors->first('sending_host', '<spam class="help-block">:message</spam>') !!} 
                 {!! Form::text('sending_host',null,['class' => 'form-control']) !!}
             </div> 
             <!-- sending port -->
-            <div class="col-xs-3 form-group {!! $errors->has('sending_port') ? 'has-error' : ''!!}" id="sending_port_error">
+            <div class="col-xs-2 form-group {!! $errors->has('sending_port') ? 'has-error' : ''!!}" id="sending_port_error">
                 {!! Form::label('sending_port',Lang::get('lang.port_number')) !!}
                 {!! $errors->first('sending_port', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('sending_port',null,['class' => 'form-control']) !!}
             </div>
             <!-- Encryption -->
-            <div class="col-xs-3 form-group {!! $errors->has('sending_encryption') ? 'has-error' : ''!!}" id="sending_encryption_error">
+            <div class="col-xs-2 form-group {!! $errors->has('sending_encryption') ? 'has-error' : ''!!}" id="sending_encryption_error">
                 {!! Form::label('sending_encryption',Lang::get('lang.encryption')) !!}
                 {!! $errors->first('sending_encryption', '<spam class="help-block">:message</spam>') !!} 
-                {!!Form::select('sending_encryption',['ssl'=>'SSL','tls'=>'TLS', 'starttls' => 'STARTTLS'],null,['class' => 'form-control select']) !!}
+                {!!Form::select('sending_encryption',[''=>'-----Select-----', 'none' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS', 'starttls' => 'STARTTLS'],null,['class' => 'form-control select']) !!}
             </div> 
+            <div class="col-xs-2 form-group {!! $errors->has('smtp_authentication') ? 'has-error' : ''!!}" id="smtp_authentication_error">
+                {!! Form::label('sending_authentication',Lang::get('lang.authentication')) !!}
+                {!!Form::select('smtp_authentication',['normal' => 'Normal Password'],null,['class' => 'form-control select', 'id' => 'smtp_authentication']) !!}
+            </div>
+            <div class="col-xs-2 form-group">
+                <br>
+                <input type="checkbox" name="smtp_validate" id="smtp_validate">&nbsp; {!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
+            </div>
         </div>
         <!-- Internal notes -->
         <div class="form-group">
@@ -207,7 +238,11 @@ class="active"
             {!! Form::textarea('internal_notes',null,['class' => 'form-control','size' => '30x10']) !!}
         </div>
     </div>
+    <input type="hidden" name="count" value="{{$count}}"> 
     <div class="box-footer">
+        <div class="form-group">
+            <input type="checkbox" name="sys_email" @if($sys_email->sys_email == $emails->id) checked  @endif @if($count > 1 && $sys_email->sys_email == $emails->id) disabled @endif">&nbsp;&nbsp;{{Lang::get('lang.make-system-default-mail')}}
+        </div>
         {!! Form::button('<i id="spin" class="fa fa-spinner" style="display:none;"></i> <b>' . Lang::get("lang.update").'</b>' ,['class'=>'btn btn-primary', 'type' => 'submit'])!!}
     </div>
 </div>
@@ -254,7 +289,7 @@ class="active"
         var sending_host = document.getElementById('sending_host').value;
         var sending_port = document.getElementById('sending_port').value;
         var sending_encryption = document.getElementById('sending_encryption').value;
-        
+
         var filter_number = /^([0-9])/;
         var error_list = [];
         var error = "";
@@ -346,30 +381,38 @@ class="active"
             }
         }
         // checking for validation of sending status
+        // checking for validation of sending status
         if (sending_status == 'on') {
-            // checking for validation of sending host
-            if (sending_host == "") {
-                var error = "Sending Host is a required field";
-                error_list.push(error);
-                $("#sending_host_error").addClass("has-error");
-            }
-            // checking for validation of sending port
-            if (sending_port == "") {
-                var error = "Sending Port is a required field";
-                error_list.push(error);
-                $("#sending_port_error").addClass("has-error");
-            }
-            // checking for validation of sending encryption
-            if (sending_encryption == "") {
-                var error = "Sending Encryption is a required field";
-                error_list.push(error);
-                $("#sending_encryption_error").addClass("has-error");
-            }
-            // checking for validation of sending protocol
-            if (sending_protocol == "") {
-                var error = "Transfer Protocol is a required field";
-                error_list.push(error);
-                $("#sending_protocol_error").addClass("has-error");
+            if (sending_protocol == 'smtp') {
+                // checking for validation of sending host
+                if (sending_host == "") {
+                    var error = "Sending Host is a required field";
+                    error_list.push(error);
+                    $("#sending_host_error").addClass("has-error");
+                }
+                // checking for validation of sending port
+                if (sending_port == "") {
+                    var error = "Sending Port is a required field";
+                    error_list.push(error);
+                    $("#sending_port_error").addClass("has-error");
+                }
+                // checking for validation of sending encryption
+                if (sending_encryption == "") {
+                    var error = "Sending Encryption is a required field";
+                    error_list.push(error);
+                    $("#sending_encryption_error").addClass("has-error");
+                }
+                // checking for validation of sending protocol
+                if (sending_protocol == "") {
+                    var error = "Transfer Protocol is a required field";
+                    error_list.push(error);
+                    $("#sending_protocol_error").addClass("has-error");
+                }
+            } else if(sending_protocol == 'mail') {
+                $("#sending_host_error").val('');
+                $("#sending_port_error").val('');
+                $("#sending_encryption_error").val('');
+                $("#sending_protocol_error").val('');
             }
         } else {
             // checking for validation of fetching port

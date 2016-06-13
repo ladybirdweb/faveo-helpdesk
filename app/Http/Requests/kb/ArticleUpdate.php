@@ -23,9 +23,11 @@ class ArticleUpdate extends Request
      */
     public function rules()
     {
+        $id = $this->segments()[1];
+
         return [
             'name'        => 'required',
-            'slug'        => 'required',
+            'slug'        => 'required|unique:kb_article,slug,'.$id.',id',
             'description' => 'required',
             'category_id' => 'required',
         ];

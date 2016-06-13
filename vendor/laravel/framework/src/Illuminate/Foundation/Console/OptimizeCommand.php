@@ -1,135 +1,125 @@
-<?php namespace Illuminate\Foundation\Console;
+<?php
 
+namespace Illuminate\Foundation\Console;
+
+use ClassPreloader\Factory;
 use Illuminate\Console\Command;
-use Illuminate\Foundation\Composer;
-use ClassPreloader\Command\PreCompileCommand;
+use Illuminate\Support\Composer;
 use Symfony\Component\Console\Input\InputOption;
+use ClassPreloader\Exceptions\VisitorExceptionInterface;
 
-class OptimizeCommand extends Command {
+class OptimizeCommand extends Command
+{
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'optimize';
 
-	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $name = 'optimize';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Optimize the framework for better performance';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = "Optimize the framework for better performance";
+    /**
+     * The composer instance.
+     *
+     * @var \Illuminate\Support\Composer
+     */
+    protected $composer;
 
-	/**
-	 * The composer instance.
-	 *
-	 * @var \Illuminate\Foundation\Composer
-	 */
-	protected $composer;
+    /**
+     * Create a new optimize command instance.
+     *
+     * @param  \Illuminate\Support\Composer  $composer
+     * @return void
+     */
+    public function __construct(Composer $composer)
+    {
+        parent::__construct();
 
-	/**
-	 * Create a new optimize command instance.
-	 *
-	 * @param  \Illuminate\Foundation\Composer  $composer
-	 * @return void
-	 */
-	public function __construct(Composer $composer)
-	{
-		parent::__construct();
+        $this->composer = $composer;
+    }
 
-		$this->composer = $composer;
-	}
+    /**
+     * Execute the console command.
+     *
+     * @return void
+     */
+    public function fire()
+    {
+        $this->info('Generating optimized class loader');
 
-	/**
-	 * Execute the console command.
-	 *
-	 * @return void
-	 */
-	public function fire()
-	{
-		$this->info('Generating optimized class loader');
+        if ($this->option('psr')) {
+            $this->composer->dumpAutoloads();
+        } else {
+            $this->composer->dumpOptimized();
+        }
 
-		if ($this->option('psr'))
-		{
-			$this->composer->dumpAutoloads();
-		}
-		else
-		{
-			$this->composer->dumpOptimized();
-		}
+        if ($this->option('force') || ! $this->laravel['config']['app.debug']) {
+            $this->info('Compiling common classes');
+            $this->compileClasses();
+        } else {
+            $this->call('clear-compiled');
+        }
+    }
 
-		if ($this->option('force') || ! $this->laravel['config']['app.debug'])
-		{
-			$this->info('Compiling common classes');
+    /**
+     * Generate the compiled class file.
+     *
+     * @return void
+     */
+    protected function compileClasses()
+    {
+        $preloader = (new Factory)->create(['skip' => true]);
 
-			$this->compileClasses();
-		}
-		else
-		{
-			$this->call('clear-compiled');
-		}
-	}
+        $handle = $preloader->prepareOutput($this->laravel->getCachedCompilePath());
 
-	/**
-	 * Generate the compiled class file.
-	 *
-	 * @return void
-	 */
-	protected function compileClasses()
-	{
-		$this->registerClassPreloaderCommand();
+        foreach ($this->getClassFiles() as $file) {
+            try {
+                fwrite($handle, $preloader->getCode($file, false)."\n");
+            } catch (VisitorExceptionInterface $e) {
+                //
+            }
+        }
 
-		$this->callSilent('compile', array(
-			'--config' => implode(',', $this->getClassFiles()),
-			'--output' => $this->laravel->getCachedCompilePath(),
-			'--strip_comments' => 1,
-		));
-	}
+        fclose($handle);
+    }
 
-	/**
-	 * Get the classes that should be combined and compiled.
-	 *
-	 * @return array
-	 */
-	protected function getClassFiles()
-	{
-		$app = $this->laravel;
+    /**
+     * Get the classes that should be combined and compiled.
+     *
+     * @return array
+     */
+    protected function getClassFiles()
+    {
+        $app = $this->laravel;
 
-		$core = require __DIR__.'/Optimize/config.php';
+        $core = require __DIR__.'/Optimize/config.php';
 
-		$files = array_merge($core, $this->laravel['config']->get('compile.files', []));
+        $files = array_merge($core, $app['config']->get('compile.files', []));
 
-		foreach ($this->laravel['config']->get('compile.providers', []) as $provider)
-		{
-			$files = array_merge($files, forward_static_call([$provider, 'compiles']));
-		}
+        foreach ($app['config']->get('compile.providers', []) as $provider) {
+            $files = array_merge($files, forward_static_call([$provider, 'compiles']));
+        }
 
-		return $files;
-	}
+        return array_map('realpath', $files);
+    }
 
-	/**
-	 * Register the pre-compiler command instance with Artisan.
-	 *
-	 * @return void
-	 */
-	protected function registerClassPreloaderCommand()
-	{
-		$this->getApplication()->add(new PreCompileCommand);
-	}
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            ['force', null, InputOption::VALUE_NONE, 'Force the compiled class file to be written.'],
 
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return array(
-			array('force', null, InputOption::VALUE_NONE, 'Force the compiled class file to be written.'),
-
-			array('psr', null, InputOption::VALUE_NONE, 'Do not optimize Composer dump-autoload.'),
-		);
-	}
-
+            ['psr', null, InputOption::VALUE_NONE, 'Do not optimize Composer dump-autoload.'],
+        ];
+    }
 }

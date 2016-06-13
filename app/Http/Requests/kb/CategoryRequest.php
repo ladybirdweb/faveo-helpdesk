@@ -24,7 +24,7 @@ class CategoryRequest extends Request
     public function rules()
     {
         return [
-            'name'        => 'required',
+            'name'        => 'required|max:250',
             'slug'        => 'required|unique:kb_category',
             'description' => 'required',
         ];

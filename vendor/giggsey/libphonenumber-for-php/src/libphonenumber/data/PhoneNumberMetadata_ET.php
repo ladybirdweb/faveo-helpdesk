@@ -44,7 +44,7 @@ return array (
                 6[5-8]
               )|
               5(?:
-                1[57]|
+                1[578]|
                 44|
                 5[0-4]
               )|
@@ -136,9 +136,8 @@ return array (
   array (
     'NationalNumberPattern' => '
           9(?:
-            [1-4]\\d|
-            5[89]|
-            66
+            [1-46]\\d|
+            5[89]
           )\\d{6}
         ',
     'PossibleNumberPattern' => '\\d{9}',

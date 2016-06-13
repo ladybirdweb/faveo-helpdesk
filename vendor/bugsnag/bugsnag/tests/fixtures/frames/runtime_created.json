@@ -1,5 +1,0 @@
-{
-    "file": "path/some/file.php(123) : runtime-created function",
-    "line": "12",
-    "function": "something"
-}

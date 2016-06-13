@@ -127,8 +127,8 @@ return [
           |
          */
         'auth' => function ($app) {
-    return new Tymon\JWTAuth\Providers\Auth\IlluminateAuthAdapter($app['auth']);
-},
+            return new Tymon\JWTAuth\Providers\Auth\IlluminateAuthAdapter($app['auth']);
+        },
         /*
           |--------------------------------------------------------------------------
           | Storage Provider
@@ -138,7 +138,7 @@ return [
           |
          */
         'storage' => function ($app) {
-    return new Tymon\JWTAuth\Providers\Storage\IlluminateCacheAdapter($app['cache']);
-},
+            return new Tymon\JWTAuth\Providers\Storage\IlluminateCacheAdapter($app['cache']);
+        },
     ],
 ];

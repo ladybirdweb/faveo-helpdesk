@@ -2,9 +2,9 @@
 
 namespace App\Model\helpdesk\Manage;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class Help_topic extends Model
+class Help_topic extends BaseModel
 {
     protected $table = 'help_topic';
     protected $fillable = [

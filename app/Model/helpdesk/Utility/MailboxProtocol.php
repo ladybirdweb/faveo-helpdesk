@@ -2,9 +2,9 @@
 
 namespace App\Model\helpdesk\Utility;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class MailboxProtocol extends Model
+class MailboxProtocol extends BaseModel
 {
     public $timestamps = false;
     protected $table = 'mailbox_protocol';

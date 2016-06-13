@@ -22,12 +22,13 @@ use Hash;
 use Illuminate\Http\Request;
 use Image;
 use Input;
+use Lang;
 
 /**
  * SettingsController
  * This controller is used to perform settings in the setting page of knowledgebase.
  *
- * @author     	Ladybird <info@ladybirdweb.com>
+ * @author      Ladybird <info@ladybirdweb.com>
  */
 class SettingsController extends Controller
 {
@@ -106,14 +107,14 @@ class SettingsController extends Controller
             /* Check whether function success or not */
             if ($settings->fill($request->except('logo', 'background'))->save() == true) {
                 /* redirect to Index page with Success Message */
-                return redirect('settings')->with('success', 'Settings Updated Successfully');
+                return redirect()->back()->with('success', Lang::get('lang.settings_updated_successfully'));
             } else {
                 /* redirect to Index page with Fails Message */
-                return redirect('settings')->with('fails', 'Settings can not Updated');
+                return redirect()->back()->with('fails', Lang::get('lang.settings_can_not_updated'));
             }
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('settings')->with('fails', 'Settings can not Updated');
+            return redirect()->back()->with('fails', Lang::get('lang.settings_can_not_updated'));
         }
     }
 
@@ -181,9 +182,9 @@ class SettingsController extends Controller
         $comment = $comment->whereId($id)->first();
         $comment->status = 1;
         if ($comment->save()) {
-            return redirect('comment')->with('success', $comment->name.'-'.'Comment Published');
+            return redirect('comment')->with('success', $comment->name.'-'.Lang::get('lang.comment_published'));
         } else {
-            return redirect('comment')->with('fails', 'Can not Process');
+            return redirect('comment')->with('fails', Lang::get('lang.can_not_process'));
         }
     }
 
@@ -199,9 +200,9 @@ class SettingsController extends Controller
     {
         $comment = $comment->whereId($id)->first();
         if ($comment->delete()) {
-            return redirect('comment')->with('success', $comment->name."'s!".'Comment Deleted');
+            return redirect('comment')->with('success', $comment->name."'s!".Lang::get('lang.comment_deleted'));
         } else {
-            return redirect('comment')->with('fails', 'Can not Process');
+            return redirect('comment')->with('fails', Lang::get('lang.can_not_process'));
         }
     }
 

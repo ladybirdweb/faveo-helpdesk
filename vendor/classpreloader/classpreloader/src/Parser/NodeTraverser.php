@@ -3,7 +3,7 @@
 /*
  * This file is part of Class Preloader.
  *
- * (c) Graham Campbell <graham@cachethq.io>
+ * (c) Graham Campbell <graham@alt-three.com>
  * (c) Michael Dowling <mtdowling@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -27,7 +27,7 @@ class NodeTraverser extends BaseTraverser
      * @param array  $nodes
      * @param string $filename
      *
-     * @return void
+     * @return \PhpParser\Node[]
      */
     public function traverseFile(array $nodes, $filename)
     {

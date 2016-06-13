@@ -26,9 +26,8 @@ class NotificationController extends Controller
     {
         $notifications = UserNotification::join('notifications', 'user_notification.notification_id', '=', 'notifications.id')
                 ->join('notification_types', 'notifications.type_id', '=', 'notification_types.id')
-                ->where('user_notification.is_read', '=', '0')
                 ->where('user_notification.user_id', '=', \Auth::user()->id)
-                ->get();
+                ->paginate(10);
 
         return $notifications;
     }
@@ -41,7 +40,7 @@ class NotificationController extends Controller
             }
         //dd($forwhome);
         //system notification
-        $notification = new Notification();
+            $notification = new Notification();
             $UN = new UserNotification();
 
             $notify = $notification->create(['model_id' => $model_id, 'userid_created' => $userid_created, 'type_id' => $type_id]);

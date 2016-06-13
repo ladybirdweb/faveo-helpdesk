@@ -29,10 +29,8 @@ class Kernel extends ConsoleKernel
                  ->hourly();
 
         $schedule->call(function () {
-
             $user = new User();
             $user->save();
-
-            })->everyFiveMinutes();
+        })->everyFiveMinutes();
     }
 }

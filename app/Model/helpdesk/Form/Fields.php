@@ -2,9 +2,9 @@
 
 namespace App\Model\helpdesk\Form;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class Fields extends Model
+class Fields extends BaseModel
 {
     protected $table = 'custom_form_fields';
 

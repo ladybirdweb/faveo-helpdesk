@@ -124,6 +124,10 @@ class TraceableEventDispatcher implements TraceableEventDispatcherInterface
             $event = new Event();
         }
 
+        if (null !== $this->logger && $event->isPropagationStopped()) {
+            $this->logger->debug(sprintf('The "%s" event is already stopped. No listeners have been called.', $eventName));
+        }
+
         $this->preProcess($eventName);
         $this->preDispatch($eventName, $event);
 
@@ -260,7 +264,7 @@ class TraceableEventDispatcher implements TraceableEventDispatcherInterface
             $info = $this->getListenerInfo($listener->getWrappedListener(), $eventName);
             if ($listener->wasCalled()) {
                 if (null !== $this->logger) {
-                    $this->logger->debug(sprintf('Notified event "%s" to listener "%s".', $eventName, $info['pretty']));
+                    $this->logger->debug('Notified event "{event}" to listener "{listener}".', array('event' => $eventName, 'listener' => $info['pretty']));
                 }
 
                 if (!isset($this->called[$eventName])) {
@@ -271,12 +275,12 @@ class TraceableEventDispatcher implements TraceableEventDispatcherInterface
             }
 
             if (null !== $this->logger && $skipped) {
-                $this->logger->debug(sprintf('Listener "%s" was not called for event "%s".', $info['pretty'], $eventName));
+                $this->logger->debug('Listener "{listener}" was not called for event "{event}".', array('listener' => $info['pretty'], 'event' => $eventName));
             }
 
             if ($listener->stoppedPropagation()) {
                 if (null !== $this->logger) {
-                    $this->logger->debug(sprintf('Listener "%s" stopped propagation of the event "%s".', $info['pretty'], $eventName));
+                    $this->logger->debug('Listener "{listener}" stopped propagation of the event "{event}".', array('listener' => $info['pretty'], 'event' => $eventName));
                 }
 
                 $skipped = true;

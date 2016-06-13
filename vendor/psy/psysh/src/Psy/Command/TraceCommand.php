@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -35,7 +35,7 @@ class TraceCommand extends Command
             ))
             ->setDescription('Show the current call stack.')
             ->setHelp(
-                <<<HELP
+                <<<'HELP'
 Show the current call stack.
 
 Optionally, include PsySH in the call stack by passing the <info>--include-psy</info> option.
@@ -53,7 +53,7 @@ HELP
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $trace = $this->getBacktrace(new \Exception(), $input->getOption('num'), $input->getOption('include-psy'));
-        $output->page($trace, ShellOutput::NUMBER_LINES | ShellOutput::OUTPUT_RAW);
+        $output->page($trace, ShellOutput::NUMBER_LINES);
     }
 
     /**
@@ -106,7 +106,7 @@ HELP
             $line     = isset($trace[$i]['line']) ? $trace[$i]['line'] : 'n/a';
 
             $lines[] = sprintf(
-                ' %s%s%s() at <info>%s:%s</info>',
+                ' <class>%s</class>%s%s() at <info>%s:%s</info>',
                 OutputFormatter::escape($class),
                 OutputFormatter::escape($type),
                 OutputFormatter::escape($function),

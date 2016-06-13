@@ -24,6 +24,7 @@ use Datatable;
 //classes
 use Exception;
 use Illuminate\Http\Request;
+use Lang;
 
 /**
  * WorkflowController
@@ -60,7 +61,7 @@ class WorkflowController extends Controller
         try {
             return view('themes.default1.admin.helpdesk.manage.workflow.index');
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -143,18 +144,14 @@ class WorkflowController extends Controller
      */
     public function create(Emails $emails)
     {
-        //        dd($emails);
         foreach ($emails->lists('email_address', 'id') as $key => $email) {
             $email_data["E-$key"] = $email;
         }
-//        dd($email_data);
-//        dd($emails->lists('email_address' , 'id'));
         $emails = $email_data;
         try {
-            //            $emails = $emails->get();
             return view('themes.default1.admin.helpdesk.manage.workflow.create', compact('emails'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -167,10 +164,9 @@ class WorkflowController extends Controller
      */
     public function store(WorkflowCreateRequest $request)
     {
-        //dd($request);
         try {
             // store a new workflow credentials in to the system
-            $workflow_name = new WorkflowName();
+            $workflow_name = new WorkflowName;
             $workflow_name->name = $request->name;
             $workflow_name->status = $request->status;
             $workflow_name->order = $request->execution_order;
@@ -198,7 +194,7 @@ class WorkflowController extends Controller
                 $workflow_action->save();
             }
 
-            return redirect('workflow')->with('success', 'Workflow Created Successfully');
+            return redirect('workflow')->with('success', Lang::get('lang.workflow_created_successfully'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -222,7 +218,7 @@ class WorkflowController extends Controller
 
             return view('themes.default1.admin.helpdesk.manage.workflow.edit', compact('id', 'workflow', 'emails', 'workflow_rules', 'workflow_actions'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -269,7 +265,7 @@ class WorkflowController extends Controller
                 $workflow_action->save();
             }
 
-            return redirect('workflow')->with('success', 'Workflow Updated Successfully');
+            return redirect('workflow')->with('success', Lang::get('lang.workflow_updated_successfully'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -288,7 +284,7 @@ class WorkflowController extends Controller
             $workflow_rules = WorkflowRules::where('workflow_id', '=', $id)->delete();
             $workflow = WorkflowName::whereId($id)->delete();
 
-            return redirect('workflow')->with('success', 'Workflow Deleted Successfully');
+            return redirect('workflow')->with('success', Lang::get('lang.workflow_deleted_successfully'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }

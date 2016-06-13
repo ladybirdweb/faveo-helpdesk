@@ -23,6 +23,9 @@ CODE;
 <AST xmlns:node="http://nikic.github.com/PHPParser/XML/node" xmlns:subNode="http://nikic.github.com/PHPParser/XML/subNode" xmlns:attribute="http://nikic.github.com/PHPParser/XML/attribute" xmlns:scalar="http://nikic.github.com/PHPParser/XML/scalar">
  <scalar:array>
   <node:Stmt_Function>
+   <attribute:startLine>
+    <scalar:int>4</scalar:int>
+   </attribute:startLine>
    <attribute:comments>
     <scalar:array>
      <comment isDocComment="false" line="2">// comment
@@ -30,9 +33,6 @@ CODE;
      <comment isDocComment="true" line="3">/** doc comment */</comment>
     </scalar:array>
    </attribute:comments>
-   <attribute:startLine>
-    <scalar:int>4</scalar:int>
-   </attribute:startLine>
    <attribute:endLine>
     <scalar:int>6</scalar:int>
    </attribute:endLine>
@@ -71,6 +71,9 @@ CODE;
         <attribute:endLine>
          <scalar:int>4</scalar:int>
         </attribute:endLine>
+        <attribute:kind>
+         <scalar:int>10</scalar:int>
+        </attribute:kind>
         <subNode:value>
          <scalar:int>0</scalar:int>
         </subNode:value>
@@ -113,7 +116,7 @@ CODE;
     </scalar:array>
    </subNode:params>
    <subNode:returnType>
-     <scalar:null/>
+    <scalar:null/>
    </subNode:returnType>
    <subNode:stmts>
     <scalar:array>
@@ -133,6 +136,9 @@ CODE;
          <attribute:endLine>
           <scalar:int>5</scalar:int>
          </attribute:endLine>
+         <attribute:kind>
+          <scalar:int>1</scalar:int>
+         </attribute:kind>
          <subNode:value>
           <scalar:string>Foo</scalar:string>
          </subNode:value>
@@ -147,9 +153,10 @@ CODE;
 </AST>
 XML;
 
-        $parser     = new PhpParser\Parser(new PhpParser\Lexer);
+        $parser     = new PhpParser\Parser\Php7(new PhpParser\Lexer);
         $serializer = new XML;
 
+        $code = str_replace("\r\n", "\n", $code);
         $stmts = $parser->parse($code);
         $this->assertXmlStringEqualsXmlString($xml, $serializer->serialize($stmts));
     }

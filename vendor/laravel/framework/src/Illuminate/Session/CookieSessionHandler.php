@@ -1,95 +1,108 @@
-<?php namespace Illuminate\Session;
+<?php
 
+namespace Illuminate\Session;
+
+use Carbon\Carbon;
 use SessionHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
 
-class CookieSessionHandler implements SessionHandlerInterface {
+class CookieSessionHandler implements SessionHandlerInterface
+{
+    /**
+     * The cookie jar instance.
+     *
+     * @var \Illuminate\Contracts\Cookie\Factory
+     */
+    protected $cookie;
 
-	/**
-	 * The cookie jar instance.
-	 *
-	 * @var \Illuminate\Contracts\Cookie\Factory
-	 */
-	protected $cookie;
+    /**
+     * The request instance.
+     *
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    protected $request;
 
-	/**
-	 * The request instance.
-	 *
-	 * @var \Symfony\Component\HttpFoundation\Request
-	 */
-	protected $request;
+    /**
+     * Create a new cookie driven handler instance.
+     *
+     * @param  \Illuminate\Contracts\Cookie\QueueingFactory  $cookie
+     * @param  int  $minutes
+     * @return void
+     */
+    public function __construct(CookieJar $cookie, $minutes)
+    {
+        $this->cookie = $cookie;
+        $this->minutes = $minutes;
+    }
 
-	/**
-	 * Create a new cookie driven handler instance.
-	 *
-	 * @param  \Illuminate\Contracts\Cookie\QueueingFactory  $cookie
-	 * @param  int  $minutes
-	 * @return void
-	 */
-	public function __construct(CookieJar $cookie, $minutes)
-	{
-		$this->cookie = $cookie;
-		$this->minutes = $minutes;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function open($savePath, $sessionName)
+    {
+        return true;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function open($savePath, $sessionName)
-	{
-		return true;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function close()
+    {
+        return true;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function close()
-	{
-		return true;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function read($sessionId)
+    {
+        $value = $this->request->cookies->get($sessionId) ?: '';
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function read($sessionId)
-	{
-		return $this->request->cookies->get($sessionId) ?: '';
-	}
+        if (! is_null($decoded = json_decode($value, true)) && is_array($decoded)) {
+            if (isset($decoded['expires']) && time() <= $decoded['expires']) {
+                return $decoded['data'];
+            }
+        }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function write($sessionId, $data)
-	{
-		$this->cookie->queue($sessionId, $data, $this->minutes);
-	}
+        return '';
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function destroy($sessionId)
-	{
-		$this->cookie->queue($this->cookie->forget($sessionId));
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function write($sessionId, $data)
+    {
+        $this->cookie->queue($sessionId, json_encode([
+            'data' => $data,
+            'expires' => Carbon::now()->addMinutes($this->minutes)->getTimestamp(),
+        ]), $this->minutes);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function gc($lifetime)
-	{
-		return true;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function destroy($sessionId)
+    {
+        $this->cookie->queue($this->cookie->forget($sessionId));
+    }
 
-	/**
-	 * Set the request instance.
-	 *
-	 * @param  \Symfony\Component\HttpFoundation\Request  $request
-	 * @return void
-	 */
-	public function setRequest(Request $request)
-	{
-		$this->request = $request;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function gc($lifetime)
+    {
+        return true;
+    }
 
+    /**
+     * Set the request instance.
+     *
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @return void
+     */
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
+    }
 }

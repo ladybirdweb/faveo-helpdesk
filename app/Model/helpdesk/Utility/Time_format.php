@@ -2,9 +2,9 @@
 
 namespace App\Model\helpdesk\Utility;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class Time_format extends Model
+class Time_format extends BaseModel
 {
     public $timestamps = false;
     protected $table = 'time_format';

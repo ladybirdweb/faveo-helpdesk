@@ -20,6 +20,8 @@ class CreateTicketStatusTable extends Migration
             $table->string('message');
             $table->integer('flags');
             $table->integer('sort');
+            $table->integer('email_user');
+            $table->string('icon_class');
             $table->string('properties');
             $table->timestamps();
         });

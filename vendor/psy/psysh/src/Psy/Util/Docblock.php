@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -165,7 +165,7 @@ class Docblock
             } else {
                 // This block is tagged
                 $tag  = substr(self::strTag($body), 1);
-                $body = ltrim(substr($body, strlen($tag)+2));
+                $body = ltrim(substr($body, strlen($tag) + 2));
 
                 if (isset(self::$vectors[$tag])) {
                     // The tagged block is a vector

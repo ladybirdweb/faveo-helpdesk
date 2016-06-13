@@ -20,6 +20,7 @@ use Auth;
 use Config;
 use Hash;
 use Illuminate\Http\Request;
+use Lang;
 use Mail;
 use Redirect;
 
@@ -27,6 +28,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('board');
         //$this->middleware('auth');
         //SettingsController::language();
         // $this->port();
@@ -45,8 +47,14 @@ class UserController extends Controller
     {
         $settings = $settings->first();
         $pagination = $settings->pagination;
-        // $article = $article->where('status', '1');
-        // $article = $article->where('type', '1');
+        if (Auth::check()) {
+            if (\Auth::user()->role == 'user') {
+                $article = $article->where('status', '1');
+            }
+        } else {
+            $article = $article->where('status', '1');
+        }
+        $article = $article->where('type', '1');
         $article = $article->paginate($pagination);
         // dd($article);
         $article->setPath('article-list');
@@ -78,14 +86,26 @@ class UserController extends Controller
         return $excerpt;
     }
 
+    /**
+     * function to search an article.
+     *
+     * @param \App\Http\Requests\kb\SearchRequest $request
+     * @param \App\Model\kb\Category              $category
+     * @param \App\Model\kb\Article               $article
+     * @param \App\Model\kb\Settings              $settings
+     *
+     * @return type view
+     */
     public function search(SearchRequest $request, Category $category, Article $article, Settings $settings)
     {
         $settings = $settings->first();
         $pagination = $settings->pagination;
         $search = $request->input('s');
-        $result = $article->search($search)->paginate($pagination);
+        $result = $article->where('name', 'LIKE', '%'.$search.'%')
+                ->orWhere('slug', 'LIKE', '%'.$search.'%')
+                ->orWhere('description', 'LIKE', '%'.$search.'%')
+                ->paginate($pagination);
         $result->setPath('search');
-        //dd($result);
         $categorys = $category->get();
 
         return view('themes.default1.client.kb.article-list.search', compact('categorys', 'result'));
@@ -103,11 +123,22 @@ class UserController extends Controller
         $tz = \App\Model\helpdesk\Utility\Timezones::where('id', $tz)->first()->name;
         date_default_timezone_set($tz);
         $date = \Carbon\Carbon::now()->toDateTimeString();
-        $arti = $article->where('slug', $slug)->where('status', '1')->where('type', '1')->where('publish_time', '<', $date)->first();
+        $arti = $article->where('slug', $slug);
+        if (Auth::check()) {
+            if (\Auth::user()->role == 'user') {
+                $arti = $arti->where('status', '1');
+            }
+        } else {
+            $arti = $arti->where('status', '1');
+        }
+        $arti = $arti->where('type', '1');
+        $arti = $arti->where('publish_time', '<', $date);
+        $arti = $arti->first();
+
         if ($arti) {
             return view('themes.default1.client.kb.article-list.show', compact('arti'));
         } else {
-            return redirect()->back()->with('fails', 'No records on publish time');
+            return redirect()->back()->with('fails', Lang::get('lang.no_records_on_publish_time'));
         }
     }
 
@@ -183,12 +214,12 @@ class UserController extends Controller
         //echo $message;
         //echo $contact->email;
         $mail = Mail::send('themes.default1.client.kb.article-list.contact-details', ['name' => $name, 'email' => $email, 'subject' => $subject, 'details' => $details], function ($message) use ($contact) {
-                    $message->to($contact->email, $contact->name)->subject('Contact');
-                });
+            $message->to($contact->email, $contact->name)->subject('Contact');
+        });
         if ($mail) {
-            return redirect('contact')->with('success', 'Your details send to System');
+            return redirect('contact')->with('success', Lang::get('lang.your_details_send_to_system'));
         } else {
-            return redirect('contact')->with('fails', 'Your details can not send to System');
+            return redirect('contact')->with('fails', Lang::get('lang.your_details_can_not_send_to_system'));
         }
     }
 
@@ -213,9 +244,9 @@ class UserController extends Controller
         $id = $article->id;
         $comment->article_id = $id;
         if ($comment->fill($request->input())->save()) {
-            return Redirect::back()->with('success', 'Your comment posted');
+            return Redirect::back()->with('success', Lang::get('lang.your_comment_posted'));
         } else {
-            return Redirect::back()->with('fails', 'Sorry not processed');
+            return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed'));
         }
     }
 
@@ -314,10 +345,10 @@ class UserController extends Controller
         } else {
             $user->fill($request->except('profile_pic', 'gender'))->save();
 
-            return redirect('guest')->with('success', 'Profile Updated sucessfully');
+            return redirect('guest')->with('success', Lang::get('lang.profile_updated_sucessfully'));
         }
         if ($user->fill($request->except('profile_pic'))->save()) {
-            return redirect('guest')->with('success', 'Profile Updated sucessfully');
+            return redirect('guest')->with('success', Lang::get('lang.sorry_not_proprofile_updated_sucessfullycessed'));
         }
     }
 
@@ -329,9 +360,9 @@ class UserController extends Controller
             $user->password = Hash::make($request->input('new_password'));
             $user->save();
 
-            return redirect()->back()->with('success', 'Password Updated sucessfully');
+            return redirect()->back()->with('success', Lang::get('lang.password_updated_sucessfully'));
         } else {
-            return redirect()->back()->with('fails', 'Password was not Updated');
+            return redirect()->back()->with('fails', Lang::get('lang.password_was_not_updated'));
         }
     }
 }

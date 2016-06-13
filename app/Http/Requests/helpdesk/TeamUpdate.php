@@ -29,6 +29,8 @@ class TeamUpdate extends Request
     public function rules()
     {
         return [
+            'name'   => 'required|max:30',
+            'status' => 'required',
         ];
     }
 }

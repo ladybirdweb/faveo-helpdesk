@@ -29,10 +29,7 @@ class DepartmentUpdate extends Request
     public function rules()
     {
         return [
-
-                // 'outgoing_email' => 'required',
-                // 'auto_response_email' => 'required',
-                // 'group_id' => 'required',
+            'name' => 'required|max:30',
         ];
     }
 }

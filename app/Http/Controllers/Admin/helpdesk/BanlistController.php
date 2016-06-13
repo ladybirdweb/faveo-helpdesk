@@ -12,6 +12,7 @@ use App\Model\helpdesk\Email\Banlist;
 use App\User;
 //classes
 use Exception;
+use Lang;
 
 /**
  * BanlistController
@@ -50,7 +51,7 @@ class BanlistController extends Controller
 
             return view('themes.default1.admin.helpdesk.emails.banlist.index', compact('bans'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -64,7 +65,7 @@ class BanlistController extends Controller
         try {
             return view('themes.default1.admin.helpdesk.emails.banlist.create');
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -88,7 +89,7 @@ class BanlistController extends Controller
                 $use->internal_note = $request->input('internal_note');
                 $use->save();
                 // $user->create($request->input())->save();
-                return redirect('banlist')->with('success', 'Email Banned sucessfully');
+                return redirect('banlist')->with('success', Lang::get('lang.email_banned_sucessfully'));
             } else {
                 $user = new User();
                 $user->email = $adban;
@@ -96,10 +97,10 @@ class BanlistController extends Controller
                 $user->internal_note = $request->input('internal_note');
                 $user->save();
 
-                return redirect('banlist')->with('success', 'Email Banned sucessfully');
+                return redirect('banlist')->with('success', Lang::get('lang.email_banned_sucessfully'));
             }
         } catch (Exception $e) {
-            return redirect('banlist')->with('fails', 'Email can not Ban');
+            return redirect('banlist')->with('fails', Lang::get('lang.email_can_not_ban'));
         }
     }
 
@@ -118,7 +119,7 @@ class BanlistController extends Controller
 
             return view('themes.default1.admin.helpdesk.emails.banlist.edit', compact('bans'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -138,12 +139,33 @@ class BanlistController extends Controller
             $bans->internal_note = $request->input('internal_note');
             $bans->ban = $request->input('ban');
             if ($bans->save()) {
-                return redirect('banlist')->with('success', 'Banned Email Updated sucessfully');
+                return redirect('banlist')->with('success', Lang::get('lang.banned_email_updated_sucessfully'));
             } else {
-                return redirect('banlist')->with('fails', 'Banned Email not Updated');
+                return redirect('banlist')->with('fails', Lang::get('lang.banned_email_not_updated'));
             }
         } catch (Exception $e) {
-            return redirect('banlist')->with('fails', 'Banned Email not Updated');
+            return redirect('banlist')->with('fails', Lang::get('lang.banned_email_not_updated'));
+        }
+    }
+
+    /**
+     * delete the banned users.
+     *
+     * @param type      $id
+     * @param \App\User $ban
+     *
+     * @return type view
+     */
+    public function delete($id, User $ban)
+    {
+        try {
+            $ban_user = $ban->where('id', '=', $id)->first();
+            $ban_user->ban = 0;
+            $ban_user->save();
+
+            return redirect('banlist')->with('success', Lang::get('lang.banned_removed_sucessfully'));
+        } catch (Exception $ex) {
+            return redirect('banlist')->with('fails', $ex->getMessage());
         }
     }
 }

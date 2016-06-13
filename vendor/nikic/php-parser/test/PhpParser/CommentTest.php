@@ -5,11 +5,12 @@ namespace PhpParser;
 class CommentTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetSet() {
-        $comment = new Comment('/* Some comment */', 1);
+        $comment = new Comment('/* Some comment */', 1, 10);
 
         $this->assertSame('/* Some comment */', $comment->getText());
         $this->assertSame('/* Some comment */', (string) $comment);
         $this->assertSame(1, $comment->getLine());
+        $this->assertSame(10, $comment->getFilePos());
 
         $comment->setText('/* Some other comment */');
         $comment->setLine(10);
@@ -58,6 +59,14 @@ class CommentTest extends \PHPUnit_Framework_TestCase
                 '/* Some text.
    More text.
    Even more text. */'
+            ),
+            array(
+                '/* Some text.
+       More text.
+         Indented text. */',
+                '/* Some text.
+   More text.
+     Indented text. */',
             ),
             // invalid comment -> no reformatting
             array(

@@ -1,261 +1,303 @@
-<?php namespace Illuminate\Foundation\Http;
+<?php
+
+namespace Illuminate\Foundation\Http;
 
 use Exception;
+use Throwable;
 use Illuminate\Routing\Router;
-use Illuminate\Pipeline\Pipeline;
+use Illuminate\Routing\Pipeline;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\TerminableMiddleware;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Http\Kernel as KernelContract;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 
-class Kernel implements KernelContract {
+class Kernel implements KernelContract
+{
+    /**
+     * The application implementation.
+     *
+     * @var \Illuminate\Contracts\Foundation\Application
+     */
+    protected $app;
 
-	/**
-	 * The application implementation.
-	 *
-	 * @var \Illuminate\Contracts\Foundation\Application
-	 */
-	protected $app;
+    /**
+     * The router instance.
+     *
+     * @var \Illuminate\Routing\Router
+     */
+    protected $router;
 
-	/**
-	 * The router instance.
-	 *
-	 * @var \Illuminate\Routing\Router
-	 */
-	protected $router;
+    /**
+     * The bootstrap classes for the application.
+     *
+     * @var array
+     */
+    protected $bootstrappers = [
+        'Illuminate\Foundation\Bootstrap\DetectEnvironment',
+        'Illuminate\Foundation\Bootstrap\LoadConfiguration',
+        'Illuminate\Foundation\Bootstrap\ConfigureLogging',
+        'Illuminate\Foundation\Bootstrap\HandleExceptions',
+        'Illuminate\Foundation\Bootstrap\RegisterFacades',
+        'Illuminate\Foundation\Bootstrap\RegisterProviders',
+        'Illuminate\Foundation\Bootstrap\BootProviders',
+    ];
 
-	/**
-	 * The bootstrap classes for the application.
-	 *
-	 * @var array
-	 */
-	protected $bootstrappers = [
-		'Illuminate\Foundation\Bootstrap\DetectEnvironment',
-		'Illuminate\Foundation\Bootstrap\LoadConfiguration',
-		'Illuminate\Foundation\Bootstrap\ConfigureLogging',
-		'Illuminate\Foundation\Bootstrap\HandleExceptions',
-		'Illuminate\Foundation\Bootstrap\RegisterFacades',
-		'Illuminate\Foundation\Bootstrap\RegisterProviders',
-		'Illuminate\Foundation\Bootstrap\BootProviders',
-	];
+    /**
+     * The application's middleware stack.
+     *
+     * @var array
+     */
+    protected $middleware = [];
 
-	/**
-	 * The application's middleware stack.
-	 *
-	 * @var array
-	 */
-	protected $middleware = [];
+    /**
+     * The application's route middleware groups.
+     *
+     * @var array
+     */
+    protected $middlewareGroups = [];
 
-	/**
-	 * The application's route middleware.
-	 *
-	 * @var array
-	 */
-	protected $routeMiddleware = [];
+    /**
+     * The application's route middleware.
+     *
+     * @var array
+     */
+    protected $routeMiddleware = [];
 
-	/**
-	 * Create a new HTTP kernel instance.
-	 *
-	 * @param  \Illuminate\Contracts\Foundation\Application  $app
-	 * @param  \Illuminate\Routing\Router  $router
-	 * @return void
-	 */
-	public function __construct(Application $app, Router $router)
-	{
-		$this->app = $app;
-		$this->router = $router;
+    /**
+     * Create a new HTTP kernel instance.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Routing\Router  $router
+     * @return void
+     */
+    public function __construct(Application $app, Router $router)
+    {
+        $this->app = $app;
+        $this->router = $router;
 
-		foreach ($this->routeMiddleware as $key => $middleware)
-		{
-			$router->middleware($key, $middleware);
-		}
-	}
+        foreach ($this->middlewareGroups as $key => $middleware) {
+            $router->middlewareGroup($key, $middleware);
+        }
 
-	/**
-	 * Handle an incoming HTTP request.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	public function handle($request)
-	{
-		try
-		{
-			$response = $this->sendRequestThroughRouter($request);
-		}
-		catch (Exception $e)
-		{
-			$this->reportException($e);
+        foreach ($this->routeMiddleware as $key => $middleware) {
+            $router->middleware($key, $middleware);
+        }
+    }
 
-			$response = $this->renderException($request, $e);
-		}
+    /**
+     * Handle an incoming HTTP request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function handle($request)
+    {
+        try {
+            $request->enableHttpMethodParameterOverride();
 
-		$this->app['events']->fire('kernel.handled', [$request, $response]);
+            $response = $this->sendRequestThroughRouter($request);
+        } catch (Exception $e) {
+            $this->reportException($e);
 
-		return $response;
-	}
+            $response = $this->renderException($request, $e);
+        } catch (Throwable $e) {
+            $this->reportException($e = new FatalThrowableError($e));
 
-	/**
-	 * Send the given request through the middleware / router.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
-	 */
-	protected function sendRequestThroughRouter($request)
-	{
-		$this->app->instance('request', $request);
+            $response = $this->renderException($request, $e);
+        }
 
-		Facade::clearResolvedInstance('request');
+        $this->app['events']->fire('kernel.handled', [$request, $response]);
 
-		$this->bootstrap();
+        return $response;
+    }
 
-		return (new Pipeline($this->app))
-		            ->send($request)
-		            ->through($this->middleware)
-		            ->then($this->dispatchToRouter());
-	}
+    /**
+     * Send the given request through the middleware / router.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    protected function sendRequestThroughRouter($request)
+    {
+        $this->app->instance('request', $request);
 
-	/**
-	 * Call the terminate method on any terminable middleware.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Illuminate\Http\Response  $response
-	 * @return void
-	 */
-	public function terminate($request, $response)
-	{
-		$routeMiddlewares = $this->gatherRouteMiddlewares($request);
+        Facade::clearResolvedInstance('request');
 
-		foreach (array_merge($routeMiddlewares, $this->middleware) as $middleware)
-		{
-			$instance = $this->app->make($middleware);
+        $this->bootstrap();
 
-			if ($instance instanceof TerminableMiddleware)
-			{
-				$instance->terminate($request, $response);
-			}
-		}
+        return (new Pipeline($this->app))
+                    ->send($request)
+                    ->through($this->app->shouldSkipMiddleware() ? [] : $this->middleware)
+                    ->then($this->dispatchToRouter());
+    }
 
-		$this->app->terminate();
-	}
+    /**
+     * Call the terminate method on any terminable middleware.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Response  $response
+     * @return void
+     */
+    public function terminate($request, $response)
+    {
+        $middlewares = $this->app->shouldSkipMiddleware() ? [] : array_merge(
+            $this->gatherRouteMiddlewares($request),
+            $this->middleware
+        );
 
-	/**
-	 * Gather the route middleware for the given request.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return array
-	 */
-	protected function gatherRouteMiddlewares($request)
-	{
-		if ($request->route())
-		{
-			return $this->router->gatherRouteMiddlewares($request->route());
-		}
+        foreach ($middlewares as $middleware) {
+            list($name, $parameters) = $this->parseMiddleware($middleware);
 
-		return [];
-	}
+            $instance = $this->app->make($name);
 
-	/**
-	 * Add a new middleware to beginning of the stack if it does not already exist.
-	 *
-	 * @param  string  $middleware
-	 * @return $this
-	 */
-	public function prependMiddleware($middleware)
-	{
-		if (array_search($middleware, $this->middleware) === false)
-		{
-			array_unshift($this->middleware, $middleware);
-		}
+            if (method_exists($instance, 'terminate')) {
+                $instance->terminate($request, $response);
+            }
+        }
 
-		return $this;
-	}
+        $this->app->terminate();
+    }
 
-	/**
-	 * Add a new middleware to end of the stack if it does not already exist.
-	 *
-	 * @param  string  $middleware
-	 * @return $this
-	 */
-	public function pushMiddleware($middleware)
-	{
-		if (array_search($middleware, $this->middleware) === false)
-		{
-			$this->middleware[] = $middleware;
-		}
+    /**
+     * Gather the route middleware for the given request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    protected function gatherRouteMiddlewares($request)
+    {
+        if ($route = $request->route()) {
+            return $this->router->gatherRouteMiddlewares($route);
+        }
 
-		return $this;
-	}
+        return [];
+    }
 
-	/**
-	 * Bootstrap the application for HTTP requests.
-	 *
-	 * @return void
-	 */
-	public function bootstrap()
-	{
-		if ( ! $this->app->hasBeenBootstrapped())
-		{
-			$this->app->bootstrapWith($this->bootstrappers());
-		}
-	}
+    /**
+     * Parse a middleware string to get the name and parameters.
+     *
+     * @param  string  $middleware
+     * @return array
+     */
+    protected function parseMiddleware($middleware)
+    {
+        list($name, $parameters) = array_pad(explode(':', $middleware, 2), 2, []);
 
-	/**
-	 * Get the route dispatcher callback.
-	 *
-	 * @return \Closure
-	 */
-	protected function dispatchToRouter()
-	{
-		return function($request)
-		{
-			$this->app->instance('request', $request);
+        if (is_string($parameters)) {
+            $parameters = explode(',', $parameters);
+        }
 
-			return $this->router->dispatch($request);
-		};
-	}
+        return [$name, $parameters];
+    }
 
-	/**
-	 * Get the bootstrap classes for the application.
-	 *
-	 * @return array
-	 */
-	protected function bootstrappers()
-	{
-		return $this->bootstrappers;
-	}
+    /**
+     * Add a new middleware to beginning of the stack if it does not already exist.
+     *
+     * @param  string  $middleware
+     * @return $this
+     */
+    public function prependMiddleware($middleware)
+    {
+        if (array_search($middleware, $this->middleware) === false) {
+            array_unshift($this->middleware, $middleware);
+        }
 
-	/**
-	 * Report the exception to the exception handler.
-	 *
-	 * @param  \Exception  $e
-	 * @return void
-	 */
-	protected function reportException(Exception $e)
-	{
-		$this->app['Illuminate\Contracts\Debug\ExceptionHandler']->report($e);
-	}
+        return $this;
+    }
 
-	/**
-	 * Render the exception to a response.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Exception  $e
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 */
-	protected function renderException($request, Exception $e)
-	{
-		return $this->app['Illuminate\Contracts\Debug\ExceptionHandler']->render($request, $e);
-	}
+    /**
+     * Add a new middleware to end of the stack if it does not already exist.
+     *
+     * @param  string  $middleware
+     * @return $this
+     */
+    public function pushMiddleware($middleware)
+    {
+        if (array_search($middleware, $this->middleware) === false) {
+            $this->middleware[] = $middleware;
+        }
 
-	/**
-	 * Get the Laravel application instance.
-	 *
-	 * @return \Illuminate\Contracts\Foundation\Application
-	 */
-	public function getApplication()
-	{
-		return $this->app;
-	}
+        return $this;
+    }
 
+    /**
+     * Bootstrap the application for HTTP requests.
+     *
+     * @return void
+     */
+    public function bootstrap()
+    {
+        if (! $this->app->hasBeenBootstrapped()) {
+            $this->app->bootstrapWith($this->bootstrappers());
+        }
+    }
+
+    /**
+     * Get the route dispatcher callback.
+     *
+     * @return \Closure
+     */
+    protected function dispatchToRouter()
+    {
+        return function ($request) {
+            $this->app->instance('request', $request);
+
+            return $this->router->dispatch($request);
+        };
+    }
+
+    /**
+     * Determine if the kernel has a given middleware.
+     *
+     * @param  string  $middleware
+     * @return bool
+     */
+    public function hasMiddleware($middleware)
+    {
+        return in_array($middleware, $this->middleware);
+    }
+
+    /**
+     * Get the bootstrap classes for the application.
+     *
+     * @return array
+     */
+    protected function bootstrappers()
+    {
+        return $this->bootstrappers;
+    }
+
+    /**
+     * Report the exception to the exception handler.
+     *
+     * @param  \Exception  $e
+     * @return void
+     */
+    protected function reportException(Exception $e)
+    {
+        $this->app[ExceptionHandler::class]->report($e);
+    }
+
+    /**
+     * Render the exception to a response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Exception  $e
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function renderException($request, Exception $e)
+    {
+        return $this->app[ExceptionHandler::class]->render($request, $e);
+    }
+
+    /**
+     * Get the Laravel application instance.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application
+     */
+    public function getApplication()
+    {
+        return $this->app;
+    }
 }

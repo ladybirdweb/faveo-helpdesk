@@ -2,10 +2,11 @@
 
 namespace App\Model\kb;
 
+use App\BaseModel;
 use Illuminate\Database\Eloquent\Model;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
-class Article extends Model
+class Article extends BaseModel
 {
     use SearchableTrait;
 

@@ -17,7 +17,6 @@ class="active"
 <!-- header -->
 @section('PageHeader')
 
-
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -29,100 +28,121 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-
 <!-- open a form -->
-
 {!! Form::open(array('action' => 'Admin\helpdesk\AgentController@store' , 'method' => 'post') )!!}
-
-
 <div class="box box-primary">
-    <div class="content-header">
-
-        <h4>Create	{!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}</h4>
-
+    <div class="box-header with-border">
+        <h3 class="box-title">{!! Lang::get('lang.create_an_agent') !!}</h3>	
     </div>
-
     <div class="box-body">
-
+        @if(Session::has('errors'))
+        <?php //dd($errors); ?>
+        <div class="alert alert-danger alert-dismissable">
+            <i class="fa fa-ban"></i>
+            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <br/>
+            @if($errors->first('user_name'))
+            <li class="error-message-padding">{!! $errors->first('user_name', ':message') !!}</li>
+            @endif
+            @if($errors->first('first_name'))
+            <li class="error-message-padding">{!! $errors->first('first_name', ':message') !!}</li>
+            @endif
+            @if($errors->first('last_name'))
+            <li class="error-message-padding">{!! $errors->first('last_name', ':message') !!}</li>
+            @endif
+            @if($errors->first('email'))
+            <li class="error-message-padding">{!! $errors->first('email', ':message') !!}</li>
+            @endif
+            @if($errors->first('ext'))
+            <li class="error-message-padding">{!! $errors->first('ext', ':message') !!}</li>
+            @endif
+            @if($errors->first('phone_number'))
+            <li class="error-message-padding">{!! $errors->first('phone_number', ':message') !!}</li>
+            @endif
+            @if($errors->first('mobile'))
+            <li class="error-message-padding">{!! $errors->first('mobile', ':message') !!}</li>
+            @endif
+            @if($errors->first('active'))
+            <li class="error-message-padding">{!! $errors->first('active', ':message') !!}</li>
+            @endif
+            @if($errors->first('role'))
+            <li class="error-message-padding">{!! $errors->first('role', ':message') !!}</li>
+            @endif
+            @if($errors->first('group'))
+            <li class="error-message-padding">{!! $errors->first('group', ':message') !!}</li>
+            @endif
+            @if($errors->first('primary_department'))
+            <li class="error-message-padding">{!! $errors->first('primary_department', ':message') !!}</li>
+            @endif
+            @if($errors->first('agent_time_zone'))
+            <li class="error-message-padding">{!! $errors->first('agent_time_zone', ':message') !!}</li>
+            @endif
+            @if($errors->first('team'))
+            <li class="error-message-padding">{!! $errors->first('team', ':message') !!}</li>
+            @endif
+        </div>
+        @endif
+        @if(Session::has('fails2'))
+            <div class="alert alert-danger alert-dismissable">
+            <i class="fa fa-ban"></i>
+            <b>Alert!</b>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <br/>
+                <li class="error-message-padding">{!! Session::get('fails2') !!}</li>
+            </div>
+        @endif
         <div class="row">
             <!-- username -->
             <div class="col-xs-4 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
-
-                {!! Form::label('user_name',Lang::get('lang.user_name')) !!}
-                {!! $errors->first('user_name', '<spam class="help-block">:message</spam>') !!}
+                {!! Form::label('user_name',Lang::get('lang.user_name')) !!} <span class="text-red"> *</span>
                 {!! Form::text('user_name',null,['class' => 'form-control']) !!}
-
             </div>
             <!-- firstname -->
             <div class="col-xs-4 form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
-
-                {!! Form::label('first_name',Lang::get('lang.first_name')) !!}
-                {!! $errors->first('first_name', '<spam class="help-block">:message</spam>') !!}
+                {!! Form::label('first_name',Lang::get('lang.first_name')) !!} <span class="text-red"> *</span>
                 {!! Form::text('first_name',null,['class' => 'form-control']) !!}
-
             </div>
             <!-- lastname -->
             <div class="col-xs-4 form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
-
-                {!! Form::label('last_name',Lang::get('lang.last_name')) !!}
-                {!! $errors->first('last_name', '<spam class="help-block">:message</spam>') !!}
+                {!! Form::label('last_name',Lang::get('lang.last_name')) !!} <span class="text-red"> *</span>
                 {!! Form::text('last_name',null,['class' => 'form-control']) !!}
-
             </div>
-
         </div>
-
         <div class="row">
             <!-- email address -->
             <div class="col-xs-4 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-
-                {!! Form::label('email',Lang::get('lang.email_address')) !!}
-                {!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
+                {!! Form::label('email',Lang::get('lang.email_address')) !!} <span class="text-red"> *</span>
                 {!! Form::email('email',null,['class' => 'form-control']) !!}
-
             </div>
-
             <div class="col-xs-1 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">
-
                 <label for="ext">{!! Lang::get('lang.ext') !!}</label>	
-                {!! $errors->first('ext', '<spam class="help-block">:message</spam>') !!}			
                 {!! Form::text('ext',null,['class' => 'form-control']) !!}
+            </div>
+            <!--country code-->
+            <div class="col-xs-1 form-group {{ Session::has('country_code') ? 'has-error' : '' }}">
+
+                {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
+                {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
 
             </div>
-
             <!-- phone -->
             <div class="col-xs-3 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
-
                 {!! Form::label('phone_number',Lang::get('lang.phone')) !!}
-                {!! $errors->first('phone_number', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('phone_number',null,['class' => 'form-control']) !!}
-
             </div>
-
             <!-- Mobile -->
-            <div class="col-xs-4 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
-
+            <div class="col-xs-3 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
                 {!! Form::label('mobile',Lang::get('lang.mobile_number')) !!}
-                {!! $errors->first('mobile', '<spam class="help-block">:message</spam>') !!}
                 {!! Form::text('mobile',null,['class' => 'form-control']) !!}
-
             </div>
-
         </div>
-
         <div>
-
-            <h4>{{Lang::get('lang.agent_signature')}}</h4>
-
+            <h4>{!! Lang::get('lang.agent_signature') !!}</h4>
         </div>
-
         <div class="">
-
             {!! Form::textarea('agent_sign',null,['class' => 'form-control','size' => '30x5']) !!}
-
         </div>
-
-
         <div>
             <h4>{{Lang::get('lang.account_status_setting')}}</h4>
         </div>
@@ -130,9 +150,7 @@ class="active"
             <div class="col-xs-6">
                 <!-- acccount type -->
                 <div class="form-group {{ $errors->has('active') ? 'has-error' : '' }}">
-
                     {!! Form::label('active',Lang::get('lang.status')) !!}
-                    {!! $errors->first('active', '<spam class="help-block">:message</spam>') !!}
                     <div class="row">
                         <div class="col-xs-3">
                             {!! Form::radio('active','1',true) !!} {{Lang::get('lang.active')}}
@@ -141,14 +159,10 @@ class="active"
                             {!! Form::radio('active','0',null) !!} {{Lang::get('lang.inactive')}}
                         </div>
                     </div>
-
                 </div>
-
                 <!-- Role -->
                 <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
-
                     {!! Form::label('role',Lang::get('lang.role')) !!}
-                    {!! $errors->first('role', '<spam class="help-block">:message</spam>') !!}
                     <div class="row">
                         <div class="col-xs-3">
                             {!! Form::radio('role','admin',true) !!} {{Lang::get('lang.admin')}}
@@ -158,55 +172,40 @@ class="active"
                         </div>
                     </div>
                 </div>
-
             </div>
-
             <div class="col-xs-6">
             </div>
         </div>
-
         <div class="row">
             <!-- assigned group -->
-            <div class="col-xs-4 form-group {{ $errors->has('assign_group') ? 'has-error' : '' }}">
-
-                {!! Form::label('assign_group',Lang::get('lang.assigned_group')) !!}
-                {!! $errors->first('assign_group', '<spam class="help-block">:message</spam>') !!}
-                {!!Form::select('assign_group',[''=>'Select a Group','Groups'=>$groups->lists('name','id')],null,['class' => 'form-control select']) !!}
-
+            <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}">
+                {!! Form::label('assign_group',Lang::get('lang.assigned_group')) !!} <span class="text-red"> *</span>
+                {!!Form::select('group',[''=>Lang::get('lang.select_a_group'),Lang::get('lang.groups')=>$groups->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
-
             <!-- primary dept -->
-            <div class="col-xs-4 form-group {{ $errors->has('primary_dpt') ? 'has-error' : '' }}">
-
-                {!! Form::label('primary_dpt',Lang::get('lang.primary_department')) !!}
-                {!! $errors->first('primary_dpt', '<spam class="help-block">:message</spam>') !!}
-                {!! Form::select('primary_dpt', [''=>'Select a Department','Departments'=>$departments->lists('name','id')],null,['class' => 'form-control select']) !!}
-
+            <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}">
+                {!! Form::label('primary_dpt',Lang::get('lang.primary_department')) !!} <span class="text-red"> *</span>
+                {!! Form::select('primary_department', [''=>Lang::get('lang.select_a_department'),Lang::get('lang.departments')=>$departments->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
-
             <!-- timezone -->
-            <div class="col-xs-4 form-group {{ $errors->has('agent_tzone') ? 'has-error' : '' }}">
-
-                {!! Form::label('agent_tzone',Lang::get('lang.agent_time_zone')) !!}
-                {!! $errors->first('agent_tzone', '<spam class="help-block">:message</spam>') !!}
-                {!! Form::select('agent_tzone', [''=>'Select a Time Zone', 'Time Zones'=>$timezones->lists('name','id')],null,['class' => 'form-control select']) !!}
-
+            <div class="col-xs-4 form-group {{ $errors->has('agent_time_zone') ? 'has-error' : '' }}">
+                {!! Form::label('agent_tzone',Lang::get('lang.agent_time_zone')) !!} <span class="text-red"> *</span>
+                {!! Form::select('agent_time_zone', [''=>Lang::get('lang.select_a_time_zone'),Lang::get('lang.time_zones')=>$timezones->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
         </div>
-
         <!-- Assign team -->
-
-        <div class="{{ $errors->has('team_id') ? 'has-error' : '' }}">
-            <h4>{{Lang::get('lang.assigned_team')}}</h4>
-            {!! $errors->first('team_id', '<spam class="help-block">Assign Team is Required</spam>') !!}
-
+        <div class="form-group {{ $errors->has('team') ? 'has-error' : '' }}">
+            {!! Form::label('agent_tzone',Lang::get('lang.assigned_team')) !!} <span class="text-red"> *</span>
+            @while (list($key, $val) = each($teams))
+            <div class="form-group ">
+                <input type="checkbox" name="team[]" value="<?php echo $val; ?>"  > <?php echo $key; ?><br/>
+            </div>
+            @endwhile 
         </div>
-
-        @while (list($key, $val) = each($teams))
-        <div class="form-group ">
-            <input type="checkbox" name="team_id[]" value="<?php echo $val; ?>"  > <?php echo $key; ?><br/>
-        </div>
-        @endwhile
-
     </div>
-    @stop
+    <div class="box-footer">
+        {!! Form::submit(Lang::get('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
+    </div>
+</div>
+{!!Form::close()!!}
+@stop

@@ -21,19 +21,27 @@ class="active"
 
 <!-- content -->
 @section('content')
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fa fa-ban"></i>
+    <b>{!! Lang::get('lang.alert') !!}!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('fails')}}
+</div>
+@endif
 <!-- open a form -->
 {!! Form::model($users,['url'=>'user/'.$users->id,'method'=>'PATCH']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">
-            User Credentials
+            {!! Lang::get('lang.user_credentials') !!}
         </h3>
     </div>
     <div class="box-body">
         @if(Session::has('errors'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>Alert!</b>
+            <b>{!! Lang::get('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('email'))
@@ -59,12 +67,12 @@ class="active"
         <!-- Email Address : Email : Required -->
         <div class="row">
             <div class="col-md-4 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-                {!! Form::label('email',Lang::get('lang.email')) !!}
-                {!! Form::email('email',null,['disabled'=>'disabled', 'class' => 'form-control']) !!}
+                {!! Form::label('email',Lang::get('lang.email')) !!} <span class="text-red"> *</span>
+                {!! Form::email('email',null,['class' => 'form-control']) !!}
             </div>
             <!-- Full Name : Text : Required-->
             <div class="col-md-4 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
-                {!! Form::label('user_name',Lang::get('lang.full_name')) !!}
+                {!! Form::label('user_name',Lang::get('lang.full_name')) !!} <span class="text-red"> *</span>
                 {!! Form::text('user_name',null,['class' => 'form-control']) !!}
             </div>
             <!-- mobile Number : Text :  -->
@@ -72,11 +80,18 @@ class="active"
                 {!! Form::label('mobile',Lang::get('lang.mobile')) !!}
                 {!! Form::text('mobile',null,['class' => 'form-control']) !!}
             </div>
+            <div class="col-xs-1 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
+
+                {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
+                {!! $errors->first('country_code', '<spam class="help-block">:message</spam>') !!}
+                {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
+
+            </div>
             <div class="col-xs-1 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">
-                <label for="ext">{!! Lang::get('lang.ext') !!}</label>	
+                <label for="ext">{!! Lang::get('lang.ext') !!}</label>  
                 {!! Form::text('ext',null,['class' => 'form-control']) !!}
             </div>
-            <div class="col-xs-5 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
+            <div class="col-xs-3 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
                 <label for="phone_number">{!! Lang::get('lang.phone') !!}</label>
                 {!! Form::text('phone_number',null,['class' => 'form-control']) !!}
             </div>
@@ -114,7 +129,7 @@ class="active"
     </div>        
 </div>
 <script>
-    $(function () {
+    $(function() {
         $("textarea").wysihtml5();
     });
 </script>

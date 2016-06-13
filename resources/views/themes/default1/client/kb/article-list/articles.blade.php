@@ -8,17 +8,6 @@
     class = "active"
 @stop
 
-@section('breadcrumb')
-<div class="site-hero clearfix">
-    <ol class="breadcrumb breadcrumb-custom">
-        <li class="text">{!! Lang::get('lang.you_are_here')!!}: </li>
-        <li>{!! Lang::get('lang.home') !!}</li>
-        <li>{!! Lang::get('lang.knowledge_base') !!}</li>
-        <li class="active">{!! Lang::get('lang.article') !!}</li>
-    </ol>
-</div>
-@stop
-
 @section('content')
 <div id="content" class="site-content col-md-9 archive-list archive-article">
     @foreach($article as $arti)
@@ -33,8 +22,7 @@
                     <?php $content = trim(preg_replace("/<img[^>]+\>/i", "", $excerpt), " \t.") ?>
                     {!! strip_tags($content) !!}
                     <p><a class="readmore-link" href="{{url('show/'.$arti->slug)}}">{!! Lang::get('lang.read_more') !!}</a></p>
-                </blockquote>
-                   
+                </blockquote>    
                 <footer class="entry-footer">
                     <div class="entry-meta text-muted">
                         <span class="date"><i class="fa fa-clock-o fa-fw"></i> <time datetime="2013-10-22T20:01:58+00:00">{{$arti->created_at->format('l, d-m-Y')}}</time></span>

@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of Psy Shell
+ * This file is part of Psy Shell.
  *
- * (c) 2012-2014 Justin Hileman
+ * (c) 2012-2015 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,17 +11,18 @@
 
 namespace Psy;
 
+use Psy\Exception\DeprecatedException;
 use Psy\Exception\RuntimeException;
 use Psy\ExecutionLoop\ForkingLoop;
 use Psy\ExecutionLoop\Loop;
 use Psy\Output\OutputPager;
 use Psy\Output\ShellOutput;
-use Psy\Presenter\PresenterManager;
 use Psy\Readline\GNUReadline;
 use Psy\Readline\Libedit;
 use Psy\Readline\Readline;
 use Psy\Readline\Transient;
 use Psy\TabCompletion\AutoCompleter;
+use Psy\VarDumper\Presenter;
 use XdgBaseDir\Xdg;
 
 /**
@@ -29,10 +30,16 @@ use XdgBaseDir\Xdg;
  */
 class Configuration
 {
+    const COLOR_MODE_AUTO = 'auto';
+    const COLOR_MODE_FORCED = 'forced';
+    const COLOR_MODE_DISABLED = 'disabled';
+
     private static $AVAILABLE_OPTIONS = array(
         'defaultIncludes', 'useReadline', 'usePcntl', 'codeCleaner', 'pager',
         'loop', 'configDir', 'dataDir', 'runtimeDir', 'manualDbFile',
-        'requireSemicolons', 'historySize', 'eraseDuplicates', 'tabCompletion',
+        'requireSemicolons', 'useUnicode', 'historySize', 'eraseDuplicates',
+        'tabCompletion', 'errorLoggingLevel', 'warnOnMultipleConfigs',
+        'colorMode',
     );
 
     private $defaultIncludes;
@@ -50,8 +57,12 @@ class Configuration
     private $usePcntl;
     private $newCommands = array();
     private $requireSemicolons = false;
+    private $useUnicode;
     private $tabCompletion;
     private $tabCompletionMatchers = array();
+    private $errorLoggingLevel = E_ALL;
+    private $warnOnMultipleConfigs = false;
+    private $colorMode;
 
     // services
     private $readline;
@@ -61,7 +72,7 @@ class Configuration
     private $pager;
     private $loop;
     private $manualDb;
-    private $presenters;
+    private $presenter;
     private $completer;
 
     /**
@@ -73,6 +84,8 @@ class Configuration
      */
     public function __construct(array $config = array())
     {
+        $this->setColorMode(self::COLOR_MODE_AUTO);
+
         // explicit configFile option
         if (isset($config['configFile'])) {
             $this->configFile = $config['configFile'];
@@ -84,10 +97,7 @@ class Configuration
         if (isset($config['baseDir'])) {
             $msg = "The 'baseDir' configuration option is deprecated. " .
                 "Please specify 'configDir' and 'dataDir' options instead.";
-            trigger_error($msg, E_USER_DEPRECATED);
-
-            $this->setConfigDir($config['baseDir']);
-            $this->setDataDir($config['baseDir']);
+            throw new DeprecatedException($msg);
         }
 
         unset($config['configFile'], $config['baseDir']);
@@ -103,6 +113,9 @@ class Configuration
      * This checks for the presence of Readline and Pcntl extensions.
      *
      * If a config file is available, it will be loaded and merged with the current config.
+     *
+     * If no custom config file was specified and a local project config file
+     * is available, it will be loaded and merged with the current config.
      */
     public function init()
     {
@@ -112,6 +125,10 @@ class Configuration
 
         if ($configFile = $this->getConfigFile()) {
             $this->loadConfigFile($configFile);
+        }
+
+        if (!$this->configFile && $localConfig = $this->getLocalConfigFile()) {
+            $this->loadConfigFile($localConfig);
         }
     }
 
@@ -135,111 +152,33 @@ class Configuration
             return $this->configFile;
         }
 
-        foreach ($this->getConfigDirs() as $dir) {
-            $file = $dir . '/config.php';
-            if (@is_file($file)) {
-                return $this->configFile = $file;
+        $files = ConfigPaths::getConfigFiles(array('config.php', 'rc.php'), $this->configDir);
+
+        if (!empty($files)) {
+            if ($this->warnOnMultipleConfigs && count($files) > 1) {
+                $msg = sprintf('Multiple configuration files found: %s. Using %s', implode($files, ', '), $files[0]);
+                trigger_error($msg, E_USER_NOTICE);
             }
 
-            $file = $dir . '/rc.php';
-            if (@is_file($file)) {
-                return $this->configFile = $file;
-            }
+            return $files[0];
         }
     }
 
     /**
-     * Helper function to get the proper home directory.
+     * Get the local PsySH config file.
+     *
+     * Searches for a project specific config file `.psysh.php` in the current
+     * working directory.
      *
      * @return string
      */
-    private function getPsyHome()
+    public function getLocalConfigFile()
     {
-        if ($home = getenv('HOME')) {
-            return $home . '/.psysh';
+        $localConfig = getenv('PWD') . '/.psysh.php';
+
+        if (@is_file($localConfig)) {
+            return $localConfig;
         }
-
-        if (defined('PHP_WINDOWS_VERSION_MAJOR')) {
-            // Check the old default
-            $oldHome = strtr(getenv('HOMEDRIVE') . '/' . getenv('HOMEPATH') . '/.psysh', '\\', '/');
-
-            if ($appData = getenv('APPDATA')) {
-                $home = strtr($appData, '\\', '/') . '/PsySH';
-
-                if (is_dir($oldHome) && !is_dir($home)) {
-                    $msg = sprintf(
-                        "Config directory found at '%s'. Please move it to '%s'.",
-                        strtr($oldHome, '/', '\\'),
-                        strtr($home, '/', '\\')
-                    );
-                    trigger_error($msg, E_USER_DEPRECATED);
-
-                    return $oldHome;
-                }
-
-                return $home;
-            }
-        }
-    }
-
-    /**
-     * Get potential config directory paths.
-     *
-     * If a `configDir` option was explicitly set, returns an array containing
-     * just that directory.
-     *
-     * Otherwise, it returns `~/.psysh` and all XDG Base Directory config directories:
-     *
-     *     http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
-     *
-     * @return string[]
-     */
-    protected function getConfigDirs()
-    {
-        if (isset($this->configDir)) {
-            return array($this->configDir);
-        }
-
-        $xdg = new Xdg();
-        $dirs = array_map(function ($dir) {
-            return $dir . '/psysh';
-        }, $xdg->getConfigDirs());
-
-        if ($home = $this->getPsyHome()) {
-            array_unshift($dirs, $home);
-        }
-
-        return $dirs;
-    }
-
-    /**
-     * Get potential data directory paths.
-     *
-     * If a `dataDir` option was explicitly set, returns an array containing
-     * just that directory.
-     *
-     * Otherwise, it returns `~/.psysh` and all XDG Base Directory data directories:
-     *
-     *     http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
-     *
-     * @return string[]
-     */
-    protected function getDataDirs()
-    {
-        if (isset($this->dataDir)) {
-            return array($this->dataDir);
-        }
-
-        $xdg = new Xdg();
-        $dirs = array_map(function ($dir) {
-            return $dir . '/psysh';
-        }, $xdg->getDataDirs());
-
-        if ($home = $this->getPsyHome()) {
-            array_unshift($dirs, $home);
-        }
-
-        return $dirs;
     }
 
     /**
@@ -256,7 +195,7 @@ class Configuration
             }
         }
 
-        foreach (array('commands', 'tabCompletionMatchers', 'presenters') as $option) {
+        foreach (array('commands', 'tabCompletionMatchers', 'casters') as $option) {
             if (isset($options[$option])) {
                 $method = 'add' . ucfirst($option);
                 $this->$method($options[$option]);
@@ -376,8 +315,7 @@ class Configuration
     public function getRuntimeDir()
     {
         if (!isset($this->runtimeDir)) {
-            $xdg = new Xdg();
-            $this->runtimeDir = $xdg->getRuntimeDir() . '/psysh';
+            $this->runtimeDir = ConfigPaths::getRuntimeDir();
         }
 
         if (!is_dir($this->runtimeDir)) {
@@ -385,30 +323,6 @@ class Configuration
         }
 
         return $this->runtimeDir;
-    }
-
-    /**
-     * @deprecated Use setRuntimeDir() instead.
-     *
-     * @param string $dir
-     */
-    public function setTempDir($dir)
-    {
-        trigger_error("'setTempDir' is deprecated. Use 'setRuntimeDir' instead.", E_USER_DEPRECATED);
-
-        return $this->setRuntimeDir($dir);
-    }
-
-    /**
-     * @deprecated Use getRuntimeDir() instead.
-     *
-     * @return string
-     */
-    public function getTempDir()
-    {
-        trigger_error("'getTempDir' is deprecated. Use 'getRuntimeDir' instead.", E_USER_DEPRECATED);
-
-        return $this->getRuntimeDir();
     }
 
     /**
@@ -435,33 +349,42 @@ class Configuration
             return $this->historyFile;
         }
 
-        foreach ($this->getConfigDirs() as $dir) {
-            $file = $dir . '/psysh_history';
-            if (@is_file($file)) {
-                return $this->historyFile = $file;
-            }
+        // Deprecation warning for incorrect psysh_history path.
+        // TODO: remove this before v0.8.0
+        $xdg = new Xdg();
+        $oldHistory = $xdg->getHomeConfigDir() . '/psysh_history';
+        if (@is_file($oldHistory)) {
+            $dir = $this->configDir ?: ConfigPaths::getCurrentConfigDir();
+            $newHistory = $dir . '/psysh_history';
 
-            $file = $dir . '/history';
-            if (@is_file($file)) {
-                return $this->historyFile = $file;
-            }
+            $msg = sprintf(
+                "PsySH history file found at '%s'. Please delete it or move it to '%s'.",
+                strtr($oldHistory, '\\', '/'),
+                $newHistory
+            );
+            trigger_error($msg, E_USER_DEPRECATED);
+
+            return $this->historyFile = $oldHistory;
         }
 
-        // fallback: create our own
-        if (isset($this->configDir)) {
-            $dir = $this->configDir;
-        } else {
-            $xdg = new Xdg();
-            $dir = $xdg->getHomeConfigDir();
+        $files = ConfigPaths::getConfigFiles(array('psysh_history', 'history'), $this->configDir);
+
+        if (!empty($files)) {
+            if ($this->warnOnMultipleConfigs && count($files) > 1) {
+                $msg = sprintf('Multiple history files found: %s. Using %s', implode($files, ', '), $files[0]);
+                trigger_error($msg, E_USER_NOTICE);
+            }
+
+            return $this->historyFile = $files[0];
         }
 
+        // fallback: create our own history file
+        $dir = $this->configDir ?: ConfigPaths::getCurrentConfigDir();
         if (!is_dir($dir)) {
             mkdir($dir, 0700, true);
         }
 
-        $file = $dir . '/psysh_history';
-
-        return $this->historyFile = $file;
+        return $this->historyFile = $dir . '/psysh_history';
     }
 
     /**
@@ -684,6 +607,69 @@ class Configuration
     }
 
     /**
+     * Enable or disable Unicode in PsySH specific output.
+     *
+     * Note that this does not disable Unicode output in general, it just makes
+     * it so PsySH won't output any itself.
+     *
+     * @param bool $useUnicode
+     */
+    public function setUseUnicode($useUnicode)
+    {
+        $this->useUnicode = (bool) $useUnicode;
+    }
+
+    /**
+     * Check whether to use Unicode in PsySH specific output.
+     *
+     * Note that this does not disable Unicode output in general, it just makes
+     * it so PsySH won't output any itself.
+     *
+     * @return bool
+     */
+    public function useUnicode()
+    {
+        if (isset($this->useUnicode)) {
+            return $this->useUnicode;
+        }
+
+        // TODO: detect `chsh` != 65001 on Windows and return false
+        return true;
+    }
+
+    /**
+     * Set the error logging level.
+     *
+     * @see self::errorLoggingLevel
+     *
+     * @param bool $errorLoggingLevel
+     */
+    public function setErrorLoggingLevel($errorLoggingLevel)
+    {
+        $this->errorLoggingLevel = (E_ALL | E_STRICT) & $errorLoggingLevel;
+    }
+
+    /**
+     * Get the current error logging level.
+     *
+     * By default, PsySH will automatically log all errors, regardless of the
+     * current `error_reporting` level. Additionally, if the `error_reporting`
+     * level warrants, an ErrorException will be thrown.
+     *
+     * Set `errorLoggingLevel` to 0 to prevent logging non-thrown errors. Set it
+     * to any valid error_reporting value to log only errors which match that
+     * level.
+     *
+     *     http://php.net/manual/en/function.error-reporting.php
+     *
+     * @return int
+     */
+    public function errorLoggingLevel()
+    {
+        return $this->errorLoggingLevel;
+    }
+
+    /**
      * Set a CodeCleaner service instance.
      *
      * @param CodeCleaner $cleaner
@@ -755,10 +741,31 @@ class Configuration
     public function getOutput()
     {
         if (!isset($this->output)) {
-            $this->output = new ShellOutput(ShellOutput::VERBOSITY_NORMAL, null, null, $this->getPager());
+            $this->output = new ShellOutput(
+                ShellOutput::VERBOSITY_NORMAL,
+                $this->getOutputDecorated(),
+                null,
+                $this->getPager()
+            );
         }
 
         return $this->output;
+    }
+
+    /**
+     * Get the decoration (i.e. color) setting for the Shell Output service.
+     *
+     * @return null|bool 3-state boolean corresponding to the current color mode
+     */
+    public function getOutputDecorated()
+    {
+        if ($this->colorMode() === self::COLOR_MODE_AUTO) {
+            return;
+        } elseif ($this->colorMode() === self::COLOR_MODE_FORCED) {
+            return true;
+        } elseif ($this->colorMode() === self::COLOR_MODE_DISABLED) {
+            return false;
+        }
     }
 
     /**
@@ -946,11 +953,14 @@ class Configuration
             return $this->manualDbFile;
         }
 
-        foreach ($this->getDataDirs() as $dir) {
-            $file = $dir . '/php_manual.sqlite';
-            if (@is_file($file)) {
-                return $this->manualDbFile = $file;
+        $files = ConfigPaths::getDataFiles(array('php_manual.sqlite'), $this->dataDir);
+        if (!empty($files)) {
+            if ($this->warnOnMultipleConfigs && count($files) > 1) {
+                $msg = sprintf('Multiple manual database files found: %s. Using %s', implode($files, ', '), $files[0]);
+                trigger_error($msg, E_USER_NOTICE);
             }
+
+            return $this->manualDbFile = $files[0];
         }
     }
 
@@ -980,29 +990,85 @@ class Configuration
     }
 
     /**
-     * Add an array of Presenters.
+     * Add an array of casters definitions.
      *
-     * @param array $presenters
+     * @param array $casters
      */
-    public function addPresenters(array $presenters)
+    public function addCasters(array $casters)
     {
-        $manager = $this->getPresenterManager();
-        foreach ($presenters as $presenter) {
-            $manager->addPresenter($presenter);
+        $this->getPresenter()->addCasters($casters);
+    }
+
+    /**
+     * Get the Presenter service.
+     *
+     * @return Presenter
+     */
+    public function getPresenter()
+    {
+        if (!isset($this->presenter)) {
+            $this->presenter = new Presenter($this->getOutput()->getFormatter());
+        }
+
+        return $this->presenter;
+    }
+
+    /**
+     * Enable or disable warnings on multiple configuration or data files.
+     *
+     * @see self::warnOnMultipleConfigs()
+     *
+     * @param bool $warnOnMultipleConfigs
+     */
+    public function setWarnOnMultipleConfigs($warnOnMultipleConfigs)
+    {
+        $this->warnOnMultipleConfigs = (bool) $warnOnMultipleConfigs;
+    }
+
+    /**
+     * Check whether to warn on multiple configuration or data files.
+     *
+     * By default, PsySH will use the file with highest precedence, and will
+     * silently ignore all others. With this enabled, a warning will be emitted
+     * (but not an exception thrown) if multiple configuration or data files
+     * are found.
+     *
+     * This will default to true in a future release, but is false for now.
+     *
+     * @return bool
+     */
+    public function warnOnMultipleConfigs()
+    {
+        return $this->warnOnMultipleConfigs;
+    }
+
+    /**
+     * Set the current color mode.
+     *
+     * @param string $colorMode
+     */
+    public function setColorMode($colorMode)
+    {
+        $validColorModes = array(
+            self::COLOR_MODE_AUTO,
+            self::COLOR_MODE_FORCED,
+            self::COLOR_MODE_DISABLED,
+        );
+
+        if (in_array($colorMode, $validColorModes)) {
+            $this->colorMode = $colorMode;
+        } else {
+            throw new \InvalidArgumentException('invalid color mode: ' . $colorMode);
         }
     }
 
     /**
-     * Get the PresenterManager service.
+     * Get the current color mode.
      *
-     * @return PresenterManager
+     * @return string
      */
-    public function getPresenterManager()
+    public function colorMode()
     {
-        if (!isset($this->presenters)) {
-            $this->presenters = new PresenterManager();
-        }
-
-        return $this->presenters;
+        return $this->colorMode;
     }
 }

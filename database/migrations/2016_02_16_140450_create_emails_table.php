@@ -32,6 +32,8 @@ class CreateEmailsTable extends Migration
             $table->string('sending_port');
             $table->string('sending_protocol');
             $table->string('sending_encryption');
+            $table->string('smtp_validate');
+            $table->string('smtp_authentication');
             $table->string('internal_notes');
             $table->boolean('auto_response');
             $table->boolean('fetching_status');

@@ -19,6 +19,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Input;
+use Lang;
 
 /**
  * ***************************
@@ -130,9 +131,9 @@ class SettingsController extends Controller
         try {
             $widget->save();
 
-            return redirect()->back()->with('success', $widget->name.' Saved Successfully');
+            return redirect()->back()->with('success', $widget->name.Lang::get('lang.saved_successfully'));
         } catch (Exception $e) {
-            return redirect()->back()->with('fails', $e->errorInfo[2]);
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -461,7 +462,6 @@ class SettingsController extends Controller
     public function GetPlugin()
     {
         $plugins = $this->fetchConfig();
-        //dd($plugins);
 
         return \Datatable::collection(new Collection($plugins))
                         ->searchColumns('name')
@@ -683,24 +683,37 @@ class SettingsController extends Controller
     {
         $configs = $this->ReadConfigs();
         //dd($configs);
-        $plug = new Plugin();
-        $plug = $plug->select('path', 'status')->orderBy('name')->get()->toArray();
-        //$fields = [];
-        if ($configs !== 'null') {
+        $plugs = new Plugin();
+        $fields = [];
+        $attributes = [];
+        if ($configs != 'null') {
             foreach ($configs as $key => $config) {
                 $fields[$key] = include $config;
-
-                if ($plug != null) {
-                    $fields[$key]['path'] = $plug[$key]['path'];
-                    $fields[$key]['status'] = $plug[$key]['status'];
-                } else {
-                    $fields[$key]['path'] = $fields[$key]['name'];
-                    $fields[$key]['status'] = 0;
-                }
             }
-
-            return $fields;
         }
+        //dd($fields);
+        if (count($fields) > 0) {
+            foreach ($fields as $key => $field) {
+                $plug = $plugs->where('name', $field['name'])->select('path', 'status')->orderBy('name')->get()->toArray();
+                if ($plug) {
+                    foreach ($plug as $i => $value) {
+                        $attributes[$key]['path'] = $plug[$i]['path'];
+                        $attributes[$key]['status'] = $plug[$i]['status'];
+                    }
+                } else {
+                    $attributes[$key]['path'] = $field['name'];
+                    $attributes[$key]['status'] = 0;
+                }
+                $attributes[$key]['name'] = $field['name'];
+                $attributes[$key]['settings'] = $field['settings'];
+                $attributes[$key]['description'] = $field['description'];
+                $attributes[$key]['website'] = $field['website'];
+                $attributes[$key]['version'] = $field['version'];
+                $attributes[$key]['author'] = $field['author'];
+            }
+        }
+        //dd($attributes);
+        return $attributes;
     }
 
     public function DeletePlugin($slug)
@@ -730,7 +743,7 @@ class SettingsController extends Controller
         $plug = $plugs->where('name', $slug)->first();
         if (!$plug) {
             $app = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
-            $str = "'App\\Plugins\\$slug"."\\ServiceProvider',";
+            $str = "\n'App\\Plugins\\$slug"."\\ServiceProvider',";
             $line_i_am_looking_for = 144;
             $lines = file($app, FILE_IGNORE_NEW_LINES);
             $lines[$line_i_am_looking_for] = $str;
@@ -744,7 +757,7 @@ class SettingsController extends Controller
             $plug->status = 1;
 
             $app = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
-            $str = "'App\\Plugins\\$slug"."\\ServiceProvider',";
+            $str = "\n'App\\Plugins\\$slug"."\\ServiceProvider',";
             $line_i_am_looking_for = 144;
             $lines = file($app, FILE_IGNORE_NEW_LINES);
             $lines[$line_i_am_looking_for] = $str;
@@ -755,7 +768,7 @@ class SettingsController extends Controller
             /*
              * remove service provider from app.php
              */
-            $str = "'App\\Plugins\\$slug"."\\ServiceProvider',";
+            $str = "\n'App\\Plugins\\$slug"."\\ServiceProvider',";
             $path_to_file = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
 
             $file_contents = file_get_contents($path_to_file);
@@ -766,4 +779,8 @@ class SettingsController extends Controller
 
         return redirect()->back()->with('success', 'Status has changed');
     }
+
+    /*
+     *
+     */
 }

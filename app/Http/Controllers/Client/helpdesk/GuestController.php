@@ -4,25 +4,27 @@ namespace App\Http\Controllers\Client\helpdesk;
 
 // controllers
 use App\Http\Controllers\Common\PhpMailController;
-use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Controller;
 // requests
-use App\Http\Requests\helpdesk\CheckTicket;
 use App\Http\Requests\helpdesk\ProfilePassword;
 use App\Http\Requests\helpdesk\ProfileRequest;
 use App\Http\Requests\helpdesk\TicketRequest;
-// models
 use App\Model\helpdesk\Manage\Help_topic;
+// models
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
+use App\Model\helpdesk\Utility\CountryCode;
 use App\User;
-// classes
 use Auth;
+// classes
 use Exception;
+use GeoIP;
 use Hash;
+use Illuminate\Http\Request;
 use Input;
+use Lang;
 
 /**
  * GuestController.
@@ -38,23 +40,25 @@ class GuestController extends Controller
      */
     public function __construct(PhpMailController $PhpMailController)
     {
+        $this->middleware('board');
         $this->PhpMailController = $PhpMailController;
-        SettingsController::smtp();
         // checking authentication
         $this->middleware('auth');
     }
 
-    /**
-     * Get profile.
-     *
-     * @return type Response
-     */
-    public function getProfile()
-    {
-        $user = Auth::user();
+     /**
+      * Get profile.
+      *
+      * @return type Response
+      */
+     public function getProfile(CountryCode $code)
+     {
+         $user = Auth::user();
+         $location = GeoIP::getLocation('');
+         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
 
-        return view('themes.default1.client.helpdesk.profile', compact('user'));
-    }
+         return view('themes.default1.client.helpdesk.profile', compact('user'))->with('phonecode', $phonecode->phonecode);
+     }
 
     /**
      * Save profile data.
@@ -89,12 +93,24 @@ class GuestController extends Controller
             Input::file('profile_pic')->move($destinationPath, $fileName);
             $user->profile_pic = $fileName;
         } else {
+            if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
+                return redirect()->back()->with(['fails1'       => Lang::get('lang.country-code-required-error'),
+                                                 'country_code' => 1, ])->withInput();
+            } else {
+                $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+                if (!count($code)) {
+                    return redirect()->back()->with(['fails1'           => Lang::get('lang.incorrect-country-code-error'),
+                                                         'country_code' => 1, ])->withInput();
+                } else {
+                    $user->country_code = $request->input('country_code');
+                }
+            }
             $user->fill($request->except('profile_pic', 'gender'))->save();
 
-            return redirect()->back()->with('success1', 'Profile Updated sucessfully');
+            return redirect()->back()->with('success1', Lang::get('lang.profile_updated_sucessfully'));
         }
         if ($user->fill($request->except('profile_pic'))->save()) {
-            return redirect()->back()->with('success1', 'Profile Updated sucessfully');
+            return redirect()->back()->with('success1', Lang::get('lang.profile_updated_sucessfully'));
         }
     }
 
@@ -195,12 +211,12 @@ class GuestController extends Controller
             try {
                 $user->save();
 
-                return redirect()->back()->with('success2', 'Password Updated sucessfully');
+                return redirect()->back()->with('success2', Lang::get('lang.password_updated_sucessfully'));
             } catch (Exception $e) {
-                return redirect()->back()->with('fails2', $e->errorInfo[2]);
+                return redirect()->back()->with('fails2', $e->getMessage());
             }
         } else {
-            return redirect()->back()->with('fails2', 'Password was not Updated. Incorrect old password');
+            return redirect()->back()->with('fails2', Lang::get('lang.password_was_not_updated_incorrect_old_password'));
         }
     }
 
@@ -250,26 +266,33 @@ class GuestController extends Controller
      *
      * @return type Response
      */
-    public function PostCheckTicket()
+    public function PostCheckTicket(Request $request)
     {
-        $Email = \Input::get('email');
-        $Ticket_number = \Input::get('ticket_number');
-
+        $validator = \Validator::make($request->all(), [
+                    'email'         => 'required|email',
+                    'ticket_number' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                            ->withErrors($validator)
+                            ->withInput()
+                            ->with('check', '1');
+        }
+        $Email = $request->input('email');
+        $Ticket_number = $request->input('ticket_number');
         $ticket = Tickets::where('ticket_number', '=', $Ticket_number)->first();
         if ($ticket == null) {
-            return \Redirect::route('form')->with('fails', 'There is no such Ticket Number');
+            return \Redirect::route('form')->with('fails', Lang::get('lang.there_is_no_such_ticket_number'));
         } else {
             $userId = $ticket->user_id;
             $user = User::where('id', '=', $userId)->first();
-
             if ($user->role == 'user') {
                 $username = $user->user_name;
             } else {
                 $username = $user->first_name.' '.$user->last_name;
             }
-
             if ($user->email != $Email) {
-                return \Redirect::route('form')->with('fails', "Email didn't match with Ticket Number");
+                return \Redirect::route('form')->with('fails', Lang::get("lang.email_didn't_match_with_ticket_number"));
             } else {
                 $code = $ticket->id;
                 $code = \Crypt::encrypt($code);
@@ -281,7 +304,7 @@ class GuestController extends Controller
                 );
 
                 return \Redirect::back()
-                                ->with('success', 'We have sent you a link by Email. Please click on that link to view ticket');
+                                ->with('success', Lang::get('lang.we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'));
             }
         }
     }

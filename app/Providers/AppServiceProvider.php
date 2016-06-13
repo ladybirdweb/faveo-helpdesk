@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Model\Update\BarNotification;
 use Illuminate\Support\ServiceProvider;
+use View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,9 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(
-                'Illuminate\Contracts\Auth\Registrar', 'App\Services\Registrar'
-        );
+        $this->app->bind('Illuminate\Contracts\Auth\Registrar');
     }
 
     public function boot()
@@ -27,7 +27,6 @@ class AppServiceProvider extends ServiceProvider
         // Please note the different namespace
         // and please add a \ in front of your classes in the global namespace
         \Event::listen('cron.collectJobs', function () {
-
             \Cron::add('example1', '* * * * *', function () {
                 $this->index();
 
@@ -36,12 +35,24 @@ class AppServiceProvider extends ServiceProvider
 
             \Cron::add('example2', '*/2 * * * *', function () {
                 // Do some crazy things successfully every two minute
-
             });
 
             \Cron::add('disabled job', '0 * * * *', function () {
                 // Do some crazy things successfully every hour
             }, false);
+        });
+
+        $this->composer();
+    }
+
+    public function composer()
+    {
+        View::composer('themes.default1.update.notification', function () {
+            $notification = new BarNotification();
+            $data = [
+                'data' => $notification->get(),
+            ];
+            view()->share($data);
         });
     }
 }

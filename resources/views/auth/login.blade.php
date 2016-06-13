@@ -4,7 +4,7 @@
 <h4 class="login-box-msg">{!! Lang::get('lang.Login_to_start_your_session') !!}</h4>
 @if(Session::has('status'))
 <div class="alert alert-success alert-dismissable">
-    <i class="fa  fa-check-circle"> </i> <b> {!! Lang::get('lang.success') !!} </b>
+    <i class="fa  fa-check-circle"> </i>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('status')}}
 </div>
@@ -15,10 +15,18 @@
     <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     @if(Session::has('error'))    
-        <li>{!! Session::get('error') !!}</li>
+    <li>{!! Session::get('error') !!}</li>
     @else
-        <li>Please fill all required feilds.</li>
+    <li>{!! Lang::get('lang.please_fill_all_required_feilds') !!}</li>
     @endif
+</div>
+@endif
+<!-- failure message -->
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <li>{!! Session::get('fails') !!}</li>
 </div>
 @endif
 

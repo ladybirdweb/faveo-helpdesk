@@ -1,6 +1,0 @@
-{
-    "file": "controllers/ExampleController.php",
-    "line": "12",
-    "class": "Illuminate\\Support\\Facades\\Facade",
-    "function": "__callStatic"
-}

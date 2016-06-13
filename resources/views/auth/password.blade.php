@@ -8,12 +8,14 @@
     {{Session::get('status')}}
 </div>
 @endif
-<!-- failure message -->
-@if(Session::has('errors'))
+@if (count($errors) > 0)
 <div class="alert alert-danger alert-dismissable">
-    <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!}! </b>
+    <i class="fa fa-ban"></i>
+    <b>{!! Lang::get('lang.alert') !!} !</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    {!!  $errors !!}
+    @foreach ($errors->all() as $error)
+    <li>{{ $error }}</li>
+    @endforeach
 </div>
 @endif
 <p class="login-box-msg">{!! Lang::get('lang.enter_email_to_reset_password') !!}</p>

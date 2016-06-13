@@ -39,7 +39,6 @@ class="active"
             @if(Session::has('success'))
             <div class="alert alert-success alert-dismissable">
                 <i class="fa  fa-check-circle"></i>
-                <b>Success</b>
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {!! Session::get('success') !!}
             </div>
@@ -47,10 +46,9 @@ class="active"
             <!-- failure message -->
             @if(Session::has('fails'))
             <div class="alert alert-danger alert-dismissable">
-                <i class="fa fa-ban"></i>
-                <b>Fail!</b>
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {!! Session::get('fails') !!}
+                <i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <b>{!! Lang::get('lang.alert') !!} !</b><br>
+                <li class="error-message-padding">{!! Session::get('fails') !!}</li>
             </div>
             @endif
             @if(Session::has('errors'))
@@ -77,44 +75,43 @@ class="active"
             </div>
             @endif
             <div class="form-group {!! $errors->has('name') ? 'has-error' : '' !!}">
-                <label for="inputName" class="col-sm-2 control-label">{!! Lang::get('lang.name') !!}</label>
+                <label for="inputName" class="col-sm-2 control-label">{!! Lang::get('lang.name') !!} <span class="text-red"> *</span></label>
                 <div class="col-sm-6">
-                    {!! Form::text('name',null,['class' => 'form-control', 'placeholder' => 'Name', 'id' => 'name']) !!}
+                    {!! Form::text('name',null,['class' => 'form-control', 'placeholder' => Lang::get('lang.name'), 'id' => 'name']) !!}
                 </div>
             </div>
             <div class="form-group {!! $errors->has('status') ? 'has-error' : '' !!}">
                 <label class="col-sm-2 control-label"> {!! Lang::get('lang.status') !!}</label>
                 <div class="col-sm-6">
-                    <input type="radio" id="inputEmail2" name="status" value="1" >&nbsp;&nbsp;<label class="control-label" for="inputEmail2">Active</label>&nbsp;&nbsp;
-                    <input type="radio" id="inputEmail1" name="status" value="0" checked>&nbsp;&nbsp;<label class="control-label" for="inputEmail1">Inactive</label>&nbsp;&nbsp;
+                    <input type="radio" id="inputEmail2" name="status" value="1" >&nbsp;&nbsp;<label class="control-label" for="inputEmail2">{!! Lang::get('lang.active') !!}</label>&nbsp;&nbsp;
+                    <input type="radio" id="inputEmail1" name="status" value="0" checked>&nbsp;&nbsp;<label class="control-label" for="inputEmail1">{!! Lang::get('lang.inactive') !!}</label>&nbsp;&nbsp;
                 </div>
             </div>
             <div class="form-group {!! $errors->has('execution_order') ? 'has-error' : '' !!}">
                 <div>
-                    <label for="Exceution" class="col-sm-2 control-label">{!! Lang::get('lang.exceution_order') !!}</label>
+                    <label for="Exceution" class="col-sm-2 control-label">{!! Lang::get('lang.execution_order') !!} <span class="text-red"> *</span></label>
                     <div class="col-sm-6">
-                        {!! Form::input('number', 'execution_order',null,['class' => 'form-control', 'placeholder' => 'Exceution Order', 'id' => 'execution_order', 'min' => '0']) !!}
+                        {!! Form::input('number', 'execution_order',null,['class' => 'form-control', 'placeholder' => Lang::get('lang.execution_order'), 'id' => 'execution_order', 'min' => '0']) !!}
                     </div>
                 </div>
             </div>
             <div class="form-group {!! $errors->has('target_channel') ? 'has-error' : '' !!}">
-                <label class="col-sm-2 control-label">{!! Lang::get('lang.target_channel') !!}</label>
+                <label class="col-sm-2 control-label">{!! Lang::get('lang.target_channel') !!} <span class="text-red"> *</span></label>
                 <div class="col-sm-6">
-                    {!! Form::select('target_channel', [''=> '-- Select a Channel --', 'A-0' => 'Any', 'A-1' => 'Web Forms', 'A-4' => 'API Calls', 'A-2' => 'Emails'], null,['class' => 'form-control', 'id' => 'execution_order']) !!}
+                    {!! Form::select('target_channel', [''=> '-- '.Lang::get('lang.select_a_channel').' --', 'A-0' => 'Any', 'A-1' => 'Web Forms', 'A-4' => 'API Calls', 'A-2' => 'Emails'], null,['class' => 'form-control', 'id' => 'execution_order']) !!}
                 </div>
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-xs-12">
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#open" data-toggle="tab">{!! Lang::get('lang.workflow_rules') !!}</a>
+                    <li class="active"><a href="#open" data-toggle="tab">{!! Lang::get('lang.workflow_rules') !!} <span class="text-red"> *</span></a>
                     </li>
-                    <li><a href="#close" data-toggle="tab">{!! Lang::get('lang.workflow_action') !!}</a>
+                    <li><a href="#close" data-toggle="tab">{!! Lang::get('lang.workflow_action') !!} <span class="text-red"> *</span></a>
                     </li>
-                    <li><a href="#delect" data-toggle="tab">{!! Lang::get('lang.internal_notes') !!}</a>
+                    <li><a href="#delect" data-toggle="tab">{!! Lang::get('lang.internal_notes') !!} </a>
                     </li>
                 </ul>
                 <div class="tab-content">
@@ -126,9 +123,9 @@ class="active"
                                     <table  class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <td>{!! Lang::get('lang.rules') !!}</td>
-                                                <td>{!! Lang::get('lang.condition') !!}</td>
-                                                <td>{!! Lang::get('lang.statement') !!}</td>
+                                                <td>{!! Lang::get('lang.rules') !!} <span class="text-red"> *</span></td>
+                                                <td>{!! Lang::get('lang.condition') !!} <span class="text-red"> *</span></td>
+                                                <td>{!! Lang::get('lang.statement') !!} <span class="text-red"> *</span></td>
                                                 <td>{!! Lang::get('lang.action') !!}</td>
                                             </tr>
                                         </thead>
@@ -136,24 +133,24 @@ class="active"
                                             <tr id="firstdata">
                                                 <td>
                                                     <select class="form-control" name="rule[0][a]" required>
-                                                        <option value="">-- Select One --</option>
-                                                        <option value="email">Email</option>
-                                                        <option value="email_name">Email name</option>
-                                                        <option value="subject">Subject</option>
-                                                        <option value="message">Message/Body</option>
+                                                        <option value="">-- {!! Lang::get('lang.select_one') !!} --</option>
+                                                        <option value="email">{!! Lang::get('lang.email') !!}</option>
+                                                        <option value="email_name">{!! Lang::get('lang.email_name') !!}</option>
+                                                        <option value="subject">{!! Lang::get('lang.subject') !!}</option>
+                                                        <option value="message">{!! Lang::get('lang.message') !!}/{!! Lang::get('lang.body') !!}</option>
                                                     </select>
                                                 </td>
                                                 <td class="col-md-3">
                                                     <select class="form-control" name="rule[0][b]" required>
-                                                        <option value="">-- Select One --</option>
-                                                        <option value="equal">Equal to</option>
-                                                        <option value="not_equal">Not equal to</option>
-                                                        <option value="contains">Contains</option>
-                                                        <option value="dn_contain">Does Not Contain</option>
-                                                        <option value="starts">Starts With</option>
-                                                        <option value="ends">Ends With</option>
-<!--                                                        <option value="match">Match Regular Expressions</option>
-                                                        <option value="not_match">Does not match Regular Expression</option>-->
+                                                        <option value="">-- {!! Lang::get('lang.select_one') !!} --</option>
+                                                        <option value="equal">{!! Lang::get('lang.equal_to') !!}</option>
+                                                        <option value="not_equal">{!! Lang::get('lang.not_equal_to') !!}</option>
+                                                        <option value="contains">{!! Lang::get('lang.contains') !!}</option>
+                                                        <option value="dn_contain">{!! Lang::get('lang.does_not_contain') !!}</option>
+                                                        <option value="starts">{!! Lang::get('lang.starts_with') !!}</option>
+                                                        <option value="ends">{!! Lang::get('lang.ends_with') !!}</option>
+                                                        <!--                                                        <option value="match">Match Regular Expressions</option>
+                                                                                                                <option value="not_match">Does not match Regular Expression</option>-->
                                                     </select>
                                                 </td>
                                                 <td class="col-md-3">
@@ -190,8 +187,8 @@ class="active"
                                 <table  class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <td>{!! Lang::get('lang.condition') !!}</td>
-                                            <td>{!! Lang::get('lang.rules') !!}</td>
+                                            <td>{!! Lang::get('lang.condition') !!} <span class="text-red"> *</span></td>
+                                            <td>{!! Lang::get('lang.rules') !!} <span class="text-red"> *</span></td>
                                             <td>{!! Lang::get('lang.action') !!}</td>
                                         </tr>
                                     </thead>
@@ -199,16 +196,16 @@ class="active"
                                         <tr id="firstdata1">
                                             <td>
                                                 <select class="form-control" onChange="selectdata(0)" id="selected0" name="action[0][a]" required>
-                                                    <option value="">Select an Action</option>
+                                                    <option value="">-- {!! Lang::get('lang.select_an_action') !!} --</option>
                                                     <optgroup label="Ticket">
-                                                        <option value="reject">Reject Ticket</option>                        
-                                                        <option value="department">Set Department</option>
-                                                        <option value="priority">Set Priority</option>
-                                                        <option value="sla">Set SLA Plan</option>
-                                                        <option value="team">Assign Team</option>
-                                                        <option value="agent">Assign Agent</option>
-                                                        <option value="helptopic">Set Help Topic</option>
-                                                        <option value="status">Set Ticket Status</option>
+                                                        <option value="reject">{!! Lang::get('lang.reject_ticket') !!}</option>                        
+                                                        <option value="department">{!! Lang::get('lang.set_department') !!}</option>
+                                                        <option value="priority">{!! Lang::get('lang.set_priority') !!}</option>
+                                                        <option value="sla">{!! Lang::get('lang.set_sla_plan') !!}</option>
+                                                        <option value="team">{!! Lang::get('lang.assign_team') !!}</option>
+                                                        <option value="agent">{!! Lang::get('lang.assign_agent') !!}</option>
+                                                        <option value="helptopic">{!! Lang::get('lang.set_help_topic') !!}</option>
+                                                        <option value="status">{!! Lang::get('lang.set_ticket_status') !!}</option>
                                                     </optgroup> 
                                                 </select>
                                             </td>
@@ -256,7 +253,6 @@ class="active"
     </div>
     <!-- /.row -->
 </form>
-
 <script>
     $(function() {
         $("#example1").DataTable();
@@ -290,16 +286,16 @@ class="active"
             $('.buttons').append('<tr id="firstdata1">' +
                     '<td>' +
                     '<select class="form-control" onChange="selectdata(' + n + ')" name="action[' + n + '][a]" id="selected' + n + '" required>' +
-                    '<option value="">Select an Action</option>' +
+                    '<option value="">-- {!! Lang::get("lang.select_an_action") !!} --</option>' +
                     '<optgroup label="Ticket">' +
-                    '<option value="reject">Reject Ticket</option>' +
-                    '<option value="department">Set Department</option>' +
-                    '<option value="priority">Set Priority</option>' +
-                    '<option value="sla">Set SLA Plan</option>' +
-                    '<option value="team">Assign Team</option>' +
-                    '<option value="agent">Assign Agent</option>' +
-                    '<option value="helptopic">Set Help Topic</option>' +
-                    '<option value="status">Set Ticket Status</option>' +
+                    '<option value="reject">{!! Lang::get("lang.reject_ticket") !!} </option>' +
+                    '<option value="department">{!! Lang::get("lang.set_department") !!} </option>' +
+                    '<option value="priority">{!! Lang::get("lang.set_priority") !!} </option>' +
+                    '<option value="sla">{!! Lang::get("lang.set_sla_plan") !!}  </option>' +
+                    '<option value="team">{!! Lang::get("lang.assign_team") !!} </option>' +
+                    '<option value="agent">{!! Lang::get("lang.assign_agent") !!} </option>' +
+                    '<option value="helptopic">{!! Lang::get("lang.set_help_topic") !!}  </option>' +
+                    '<option value="status">{!! Lang::get("lang.set_ticket_status") !!}  </option>' +
                     '</select>' +
                     '</td>' +
                     '<td id="fill' + n + '">' +
@@ -330,22 +326,22 @@ class="active"
             $('.button1').append('<tr>' +
                     '<td>' +
                     '<select class="form-control" name="rule[' + n + '][a]" required>' +
-                    '<option>-- Select One --</option>' +
-                    '<option value="email">Email</option>' +
-                    '<option value="email_name">Email name</option>' +
-                    '<option value="subject">Subject</option>' +
-                    '<option value="message">Message/Body</option>' +
+                    '<option>-- {!! Lang::get("lang.select_one") !!} --</option>' +
+                    '<option value="email">{!! Lang::get("lang.email") !!}</option>' +
+                    '<option value="email_name">{!! Lang::get("lang.email_name") !!}</option>' +
+                    '<option value="subject">{!! Lang::get("lang.subject") !!}</option>' +
+                    '<option value="message">{!! Lang::get("lang.message") !!}/{!! Lang::get("lang.body") !!}</option>' +
                     '</select>' +
                     '</td>' +
                     '<td class="col-md-3">' +
                     '<select class="form-control" name="rule[' + n + '][b]" required>' +
-                    '<option value="">-- Select One --</option>' +
-                    '<option value="equal">Equal to</option>' +
-                    '<option value="not_equal">Not equal to</option>' +
-                    '<option value="contains">Contains</option>' +
-                    '<option value="dn_contain">Does Not Contain</option>' +
-                    '<option value="starts">Starts With</option>' +
-                    '<option value="ends">Ends With</option>' +
+                    '<option value="">-- {!! Lang::get("lang.select_one") !!} --</option>' +
+                    '<option value="equal">{!! Lang::get("lang.equal_to") !!}</option>' +
+                    '<option value="not_equal">{!! Lang::get("lang.not_equal_to") !!}</option>' +
+                    '<option value="contains">{!! Lang::get("lang.contains") !!}</option>' +
+                    '<option value="dn_contain">{!! Lang::get("lang.does_not_contain") !!}</option>' +
+                    '<option value="starts">{!! Lang::get("lang.starts_with") !!}</option>' +
+                    '<option value="ends">{!! Lang::get("lang.ends_with") !!}</option>' +
                     '</select>' +
                     '</td>' +
                     '<td class="col-md-3"> <input class="form-control" type="text" name="rule[' + n + '][c]" required> </td>' +
@@ -362,19 +358,19 @@ class="active"
     });
 
     function selectdata(id) {
-        var selected_data = document.getElementById('selected'+id).value;
-            $.ajax({
-                url: "{!! url('workflow/action-rule') !!}" + "/" + id,
-                type: "get",
-                data: {option: selected_data},
-                headers: {
-                    'X-CSRF-Token': $('meta[name="_token"]').attr('content')
-                },
-                success: function(data) {
-                    //adds the echoed response to our container
-                    $("#fill" + id).html(data);
-                }
-            });
+        var selected_data = document.getElementById('selected' + id).value;
+        $.ajax({
+            url: "{!! url('workflow/action-rule') !!}" + "/" + id,
+            type: "get",
+            data: {option: selected_data},
+            headers: {
+                'X-CSRF-Token': $('meta[name="_token"]').attr('content')
+            },
+            success: function(data) {
+                //adds the echoed response to our container
+                $("#fill" + id).html(data);
+            }
+        });
     }
 </script>
 

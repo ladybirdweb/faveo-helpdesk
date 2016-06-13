@@ -2,9 +2,9 @@
 
 namespace App\Model\helpdesk\Email;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class Template extends Model
+class Template extends BaseModel
 {
     protected $table = 'template';
     protected $fillable = [

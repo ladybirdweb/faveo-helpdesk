@@ -16,55 +16,47 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
 @section('breadcrumbs')
 <ol class="breadcrumb">
-
 </ol>
 @stop
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
 <div class="box box-primary">
-    <div class="box-header">
-        <h3>Plugins  
-            <button type="button" class="btn btn-default" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><b>Add New</b></button>
-        </h3>
+    <div class="box-header with-border">
+        <h3 class="box-title">{!! Lang::get('lang.plugins') !!}</h3>
+        <button type="button" class="btn btn-primary pull-right" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><b>{!! Lang::get('lang.add_plugin') !!}</b></button>        
         <div class="modal fade" id="Edit">
             <div class="modal-dialog">
                 <div class="modal-content">  
                     <div class="modal-header">
-                        <h4 class="modal-title">Add Plugin</h4>
+                        <h4 class="modal-title">{!! Lang::get('lang.add_plugin') !!}</h4>
                     </div>
                     <div class="modal-body">
                         {!! Form::open(['url'=>'post-plugin','files'=>true]) !!}
-                        <table>
-                            <tr>
-                                <td>Plugin :</td>
-                                <td><input type="file" name="plugin" class="btn btn-file"></td>
-
-                            </tr>
-                        </table>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis">{!! Lang::get('lang.close') !!}</button>
-                            <input type="submit" class="btn btn-primary pull-right" value="Upload">
+                        <label>{!! Lang::get('lang.plugin') !!} :</label> 
+                        <div class="btn bg-olive btn-file" style="color:blue">
+                            {!! Lang::get('lang.upload_file') !!}<input type="file" name="plugin">
                         </div>
-                        {!! Form::close() !!}
-
-                    </div><!-- /.modal-content -->
+                    </div><!-- /.modal-content -->   
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis">{!! Lang::get('lang.close') !!}</button>
+                        <input type="submit" class="btn btn-primary pull-right" value="{!! Lang::get('lang.upload') !!}">
+                    </div>
+                    {!! Form::close() !!}
                 </div>
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
     </div>
-
     <div class="box-body">
-
         @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+        <div class="alert alert-danger alert-dismissable">
+            <i class="fa fa-ban"></i>
+            <b>{!! Lang::get('lang.alert') !!}!</b><br/>
             <ul>
                 @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -72,12 +64,9 @@ class="active"
             </ul>
         </div>
         @endif
-
-
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
-            <i class="fa  fa-check-circle"></i>
-            <b>Success!</b>
+            <i class="fa fa-check-circle"></i>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {!!Session::get('success')!!}
         </div>
@@ -86,20 +75,17 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>Alert!</b> Failed.
+            <b>{!! Lang::get('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {!!Session::get('fails')!!}
         </div>
         @endif
-
-
         <div class="row">
             <div class="col-md-12">
                 <script src="{{asset('lb-faveo/plugins/jQuery/jQuery-2.1.4.min.js')}}" type="text/javascript"></script>
-        <script type="text/javascript" src="{{asset('lb-faveo/plugins/datatables/jquery.dataTables.js')}}"></script>
-        <script type="text/javascript" src="{{asset('lb-faveo/plugins/datatables/dataTables.bootstrap.js')}}"></script>
-         
-                
+                <script type="text/javascript" src="{{asset('lb-faveo/plugins/datatables/jquery.dataTables.js')}}"></script>
+                <script type="text/javascript" src="{{asset('lb-faveo/plugins/datatables/dataTables.bootstrap.js')}}"></script>
+
                 {!! Datatable::table()
                 ->addColumn('Name','Description','Author','Website','Version')       // these are the column headings to be shown
                 ->setUrl('getplugin')   // this is the route where data will be retrieved

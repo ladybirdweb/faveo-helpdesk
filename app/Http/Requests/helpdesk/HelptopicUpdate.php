@@ -29,12 +29,10 @@ class HelptopicUpdate extends Request
     public function rules()
     {
         return [
-            // 'parent_topic' => 'required',
-            // 'custom_form' => 'required',
+            'topic'      => 'required|max:50',
             'department' => 'required',
             'priority'   => 'required',
             'sla_plan'   => 'required',
-                // 'auto_assign' => 'required',
         ];
     }
 }

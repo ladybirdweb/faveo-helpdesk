@@ -75,11 +75,21 @@ $configurationFilePath = '{configurationFilePath}';
 if ('' !== $configurationFilePath) {
     $configuration = PHPUnit_Util_Configuration::getInstance($configurationFilePath);
     $configuration->handlePHPConfiguration();
+    unset($configuration);
 }
+
+function __phpunit_error_handler($errno, $errstr, $errfile, $errline, $errcontext)
+{
+   return true;
+}
+
+set_error_handler("__phpunit_error_handler");
 
 {constants}
 {included_files}
 {globals}
+
+restore_error_handler();
 
 if (isset($GLOBALS['__PHPUNIT_BOOTSTRAP'])) {
     require_once $GLOBALS['__PHPUNIT_BOOTSTRAP'];

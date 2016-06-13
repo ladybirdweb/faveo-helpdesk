@@ -19,6 +19,7 @@ use App\User;
 // classes
 use DB;
 use Exception;
+use Lang;
 
 /**
  * HelptopicController.
@@ -52,7 +53,7 @@ class HelptopicController extends Controller
 
             return view('themes.default1.admin.helpdesk.manage.helptopic.index', compact('topics'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -90,7 +91,7 @@ class HelptopicController extends Controller
 
             return view('themes.default1.admin.helpdesk.manage.helptopic.create', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas'));
         } catch (Exception $e) {
-            return view('404');
+            return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
@@ -119,10 +120,10 @@ class HelptopicController extends Controller
             $topic->fill($request->except('custom_form', 'auto_assign'))->save();
             // $topics->fill($request->except('custom_form','auto_assign'))->save();
             /* redirect to Index page with Success Message */
-            return redirect('helptopic')->with('success', 'Helptopic Created Successfully');
+            return redirect('helptopic')->with('success', Lang::get('lang.helptopic_created_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('helptopic')->with('fails', 'Helptopic can not Create'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('helptopic')->with('fails', Lang::get('lang.helptopic_can_not_create').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -148,10 +149,13 @@ class HelptopicController extends Controller
             $forms = $form->get();
             $slas = $sla->get();
             $priority = $priority->get();
-
-            return view('themes.default1.admin.helpdesk.manage.helptopic.edit', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas'));
+            $sys_help_topic = \DB::table('settings_ticket')
+                                ->select('help_topic')
+                                ->where('id', '=', 1)->first();
+            
+            return view('themes.default1.admin.helpdesk.manage.helptopic.edit', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas', 'sys_help_topic'));
         } catch (Exception $e) {
-            return redirect('helptopic')->with('fails', '<li>'.$e->errorInfo[2].'</li>');
+            return redirect('helptopic')->with('fails', '<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -166,7 +170,6 @@ class HelptopicController extends Controller
      */
     public function update($id, Help_topic $topic, HelptopicUpdate $request)
     {
-        // dd($request);
         try {
             $topics = $topic->whereId($id)->first();
             if ($request->custom_form) {
@@ -184,11 +187,16 @@ class HelptopicController extends Controller
             $topics->custom_form = $custom_form;
             $topics->auto_assign = $auto_assign;
             $topics->save();
+            if ($request->input('sys_help_tpoic') == 'on') {
+                \DB::table('settings_ticket')
+                    ->where('id', '=', 1)
+                    ->update(['help_topic' => $id]);
+            }
             /* redirect to Index page with Success Message */
-            return redirect('helptopic')->with('success', 'Helptopic Updated Successfully');
+            return redirect('helptopic')->with('success', Lang::get('lang.helptopic_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('helptopic')->with('fails', 'Helptopic can not Update'.'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('helptopic')->with('fails', Lang::get('lang.helptopic_can_not_update').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -204,45 +212,40 @@ class HelptopicController extends Controller
     {
         $ticket_settings = $ticket_setting->where('id', '=', '1')->first();
         if ($ticket_settings->help_topic == $id) {
-            return redirect('departments')->with('fails', 'You cannot delete default department');
+            return redirect('departments')->with('fails', Lang::get('lang.you_cannot_delete_default_department'));
         } else {
             $tickets = DB::table('tickets')->where('help_topic_id', '=', $id)->update(['help_topic_id' => $ticket_settings->help_topic]);
-
             if ($tickets > 0) {
                 if ($tickets > 1) {
                     $text_tickets = 'Tickets';
                 } else {
                     $text_tickets = 'Ticket';
                 }
-                $ticket = '<li>'.$tickets.' '.$text_tickets.' have been moved to default Help Topic</li>';
+                $ticket = '<li>'.$tickets.' '.$text_tickets.Lang::get('lang.have_been_moved_to_default_help_topic').' </li>';
             } else {
                 $ticket = '';
             }
-
             $emails = DB::table('emails')->where('help_topic', '=', $id)->update(['help_topic' => $ticket_settings->help_topic]);
-
             if ($emails > 0) {
                 if ($emails > 1) {
                     $text_emails = 'Emails';
                 } else {
                     $text_emails = 'Email';
                 }
-                $email = '<li>'.$emails.' System '.$text_emails.' have been moved to default Help Topic</li>';
+                $email = '<li>'.$emails.' System '.$text_emails.Lang::get('lang.have_been_moved_to_default_help_topic').' </li>';
             } else {
                 $email = '';
             }
-
             $message = $ticket.$email;
-
             $topics = $topic->whereId($id)->first();
             /* Check whether function success or not */
             try {
                 $topics->delete();
                 /* redirect to Index page with Success Message */
-                return redirect('helptopic')->with('success', 'Helptopic Deleted Successfully'.$message);
+                return redirect('helptopic')->with('success', Lang::get('lang.helptopic_deleted_successfully').$message);
             } catch (Exception $e) {
                 /* redirect to Index page with Fails Message */
-                return redirect('helptopic')->with('fails', 'Helptopic can not Delete'.'<li>'.$e->errorInfo[2].'</li>');
+                return redirect('helptopic')->with('fails', Lang::get('lang.helptopic_can_not_update').'<li>'.$e->getMessage().'</li>');
             }
         }
     }

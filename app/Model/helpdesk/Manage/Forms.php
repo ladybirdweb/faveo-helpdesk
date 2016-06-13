@@ -2,9 +2,9 @@
 
 namespace App\Model\helpdesk\Manage;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class Forms extends Model
+class Forms extends BaseModel
 {
     protected $table = 'forms';
     /*

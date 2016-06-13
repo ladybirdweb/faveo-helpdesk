@@ -2,9 +2,9 @@
 
 namespace App\Model\helpdesk\Utility;
 
-use Illuminate\Database\Eloquent\Model;
+use App\BaseModel;
 
-class Languages extends Model
+class Languages extends BaseModel
 {
     public $timestamps = false;
     protected $table = 'languages';

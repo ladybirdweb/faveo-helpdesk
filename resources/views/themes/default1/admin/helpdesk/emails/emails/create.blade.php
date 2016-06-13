@@ -45,19 +45,19 @@ class="active"
             <div class="row">
                 <!-- email address -->
                 <div class="col-xs-4 form-group {!! $errors->has('email_address') ? 'has-error' : '' !!}" id = "email_address_error">
-                    {!! Form::label('email_address',Lang::get('lang.email_address')) !!}
+                    {!! Form::label('email_address',Lang::get('lang.email_address')) !!} <span class="text-red"> *</span>
                     {!! $errors->first('email_address', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::text('email_address',null,['class' => 'form-control', 'id' => 'email_address']) !!}
                 </div>
                 <!-- Email name -->
                 <div class="col-xs-4 form-group {!! $errors->has('email_name') ? 'has-error' : ''!!}" id="email_name_error">
-                    {!! Form::label('email_name',Lang::get('lang.from_name')) !!}
+                    {!! Form::label('email_name',Lang::get('lang.from_name')) !!} <span class="text-red"> *</span>
                     {!! $errors->first('email_name', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::text('email_name',null,['class' => 'form-control', 'id' => 'email_name']) !!}
                 </div>
                 <!-- password -->
                 <div class="col-xs-4 form-group {!! $errors->has('password') ? 'has-error' : ''!!}" id="password_error">
-                    {!! Form::label('password',Lang::get('lang.password')) !!}
+                    {!! Form::label('password',Lang::get('lang.password')) !!} <span class="text-red"> *</span>
                     {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::password('password',['class' => 'form-control', 'id' => 'password']) !!}
                 </div>
@@ -72,26 +72,26 @@ class="active"
                 <div class="col-xs-4 form-group {!! $errors->has('department') ? 'has-error' : ''!!}" id="department_error">
                     {!! Form::label('department',Lang::get('lang.department')) !!}
                     {!! $errors->first('department', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('department', [''=>'--System Default--','departments'=>$departments->lists('name','id')],null,['class' => 'form-control select', 'id' => 'department' ]) !!}
+                    {!!Form::select('department', [''=>'--System Default--','departments'=>$departments->lists('name','id')->toArray()],null,['class' => 'form-control select', 'id' => 'department' ]) !!}
                 </div>
                 <!-- Priority -->
                 <div class="col-xs-4 form-group {!! $errors->has('priority') ? 'has-error' : ''!!}" id="priority_error">
                     {!! Form::label('priority',Lang::get('lang.priority')) !!}
                     {!! $errors->first('priority', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('priority', [''=>'--System Default--','Priorities'=>$priority->lists('priority_desc','priority_id')],null,['class' => 'form-control select', 'id' => 'priority']) !!}
+                    {!!Form::select('priority', [''=>'--System Default--','Priorities'=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control select', 'id' => 'priority']) !!}
                 </div>
                 <!-- Help topic -->
                 <div class="col-xs-4 form-group {!! $errors->has('help_topic') ? 'has-error' : ''!!}" id="help_topic_error">
                     {!! Form::label('help_topic',Lang::get('lang.help_topic')) !!}
                     {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('help_topic', [''=>'--System Default--','Help Topics'=>$helps->lists('topic','id')],null,['class' => 'form-control select', 'id' => 'help_topic']) !!}
+                    {!!Form::select('help_topic', [''=>'--System Default--','Help Topics'=>$helps->lists('topic','id')->toArray()],null,['class' => 'form-control select', 'id' => 'help_topic']) !!}
                 </div>
                 <!-- status -->
                 <div class="col-xs-2 form-group">
                     {!! Form::label('auto_response',Lang::get('lang.auto_response')) !!}
                 </div>
                 <div class="col-xs-3 form-group">
-                
+
                     <input type="checkbox" name="auto_response" id="auto_response"> {{Lang::get('lang.disable_for_this_email_address')}}
                 </div>
             </div>
@@ -117,9 +117,9 @@ class="active"
             </div>
             <div class="row">
                 <div class="col-xs-2 form-group {!! $errors->has('fetching_protocol') ? 'has-error' : ''!!}" id="fetching_protocol_error">
-                    {!! Form::label('fetching_protocol',Lang::get('lang.fetching_protocol')) !!}
+                    {!! Form::label('fetching_protocol',Lang::get('lang.protocol')) !!}
                     {!! $errors->first('fetching_protocol', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('fetching_protocol',['imap' => 'IMAP'],null,['class' => 'form-control select', 'id' => 'fetching_protocol']) !!}
+                    {!!Form::select('fetching_protocol',['imap' => 'IMAP', 'pop' => 'POP3'],null,['class' => 'form-control select', 'id' => 'fetching_protocol']) !!}
                 </div>
                 <div class="col-xs-2 form-group  {!! $errors->has('fetching_host') ? 'has-error' : ''!!}" id="fetching_host_error">
                     {!! Form::label('fetching_host',Lang::get('lang.host_name')) !!}
@@ -134,12 +134,15 @@ class="active"
                 <div class="col-xs-2 form-group {!! $errors->has('fetching_encryption') ? 'has-error' : ''!!}" id="fetching_encryption_error">
                     {!! Form::label('fetching_encryption',Lang::get('lang.encryption')) !!}
                     {!! $errors->first('fetching_encryption', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('fetching_encryption',['none' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS', 'starttls' => 'STARTTLS'],null,['class' => 'form-control select', 'id' => 'fetching_encryption']) !!}
+                    {!!Form::select('fetching_encryption',[''=>'-----Select-----', 'none' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS', 'starttls' => 'STARTTLS'],null,['class' => 'form-control select', 'id' => 'fetching_encryption']) !!}
                 </div>
-                <div class="col-xs-4 form-group">
-                    <div class="callout callout-default" style="font-style: oblique; margin-top: -47px; margin-bottom: -30px; margin-left: -12px; margin-right: -6px;">If this checkbox is not checked SSL certificates will not be validated</div>
-                    <br/><br/>
-                    <input type="checkbox" name="validate" id="validate">&nbsp; Validate certificates from TLS/SSL server
+                <div class="col-xs-2 form-group {!! $errors->has('imap_authentication') ? 'has-error' : ''!!}" id="imap_authentication_error">
+                    {!! Form::label('fetching_authentication',Lang::get('lang.authentication')) !!}
+                    {!!Form::select('imap_authentication',['normal' => 'Normal Password'],null,['class' => 'form-control select', 'id' => 'imap_authentication']) !!}
+                </div>
+                <div class="col-xs-2 form-group">
+                    <br>
+                    <input type="checkbox" name="imap_validate" id="imap_validate">&nbsp; {!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
                 </div>
             </div>
         </div>
@@ -163,29 +166,37 @@ class="active"
             </div>
             <div class="row">
                 <!-- Encryption -->
-                <div class="col-xs-3 form-group {!! $errors->has('sending_protocol') ? 'has-error' : ''!!}" id="sending_protocol_error">
+                <div class="col-xs-2 form-group {!! $errors->has('sending_protocol') ? 'has-error' : ''!!}" id="sending_protocol_error">
                     {!! Form::label('sending_protocol',Lang::get('lang.transfer_protocol')) !!}
                     {!! $errors->first('sending_protocol', '<spam class="help-block">:message</spam>') !!} 
-                    {!!Form::select('sending_protocol',['smtp'=>'SMTP'],null,['class' => 'form-control select']) !!}
+                    {!!Form::select('sending_protocol',['smtp'=>'SMTP', 'mail' => 'PHP-MAIL'],null,['class' => 'form-control select']) !!}
                 </div> 
                 <!-- sending hoost -->
-                <div class="col-xs-3 form-group {!! $errors->has('sending_host') ? 'has-error' : ''!!}" id="sending_host_error">
+                <div class="col-xs-2 form-group {!! $errors->has('sending_host') ? 'has-error' : ''!!}" id="sending_host_error">
                     {!! Form::label('sending_host',Lang::get('lang.host_name')) !!}
                     {!! $errors->first('sending_host', '<spam class="help-block">:message</spam>') !!} 
                     {!! Form::text('sending_host',null,['class' => 'form-control']) !!}
                 </div> 
                 <!-- sending port -->
-                <div class="col-xs-3 form-group {!! $errors->has('sending_port') ? 'has-error' : ''!!}" id="sending_port_error">
+                <div class="col-xs-2 form-group {!! $errors->has('sending_port') ? 'has-error' : ''!!}" id="sending_port_error">
                     {!! Form::label('sending_port',Lang::get('lang.port_number')) !!}
                     {!! $errors->first('sending_port', '<spam class="help-block">:message</spam>') !!}
                     {!! Form::text('sending_port',null,['class' => 'form-control']) !!}
                 </div>
                 <!-- Encryption -->
-                <div class="col-xs-3 form-group {!! $errors->has('sending_encryption') ? 'has-error' : ''!!}" id="sending_encryption_error">
+                <div class="col-xs-2 form-group {!! $errors->has('sending_encryption') ? 'has-error' : ''!!}" id="sending_encryption_error">
                     {!! Form::label('sending_encryption',Lang::get('lang.encryption')) !!}
                     {!! $errors->first('sending_encryption', '<spam class="help-block">:message</spam>') !!} 
-                    {!!Form::select('sending_encryption',['ssl'=>'SSL','tls'=>'TLS', 'starttls' => 'STARTTLS'],null,['class' => 'form-control select']) !!}
+                    {!!Form::select('sending_encryption',[''=>'-----Select-----', 'none' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS', 'starttls' => 'STARTTLS'],null,['class' => 'form-control select']) !!}
                 </div> 
+                <div class="col-xs-2 form-group {!! $errors->has('smtp_authentication') ? 'has-error' : ''!!}" id="smtp_authentication_error">
+                    {!! Form::label('sending_authentication',Lang::get('lang.authentication')) !!}
+                    {!!Form::select('smtp_authentication',['normal' => 'Normal Password'],null,['class' => 'form-control select', 'id' => 'smtp_authentication']) !!}
+                </div>
+                <div class="col-xs-2 form-group">
+                    <br>
+                    <input type="checkbox" name="smtp_validate" id="smtp_validate">&nbsp; {!! Lang::get('lang.validate_certificates_from_tls_or_ssl_server') !!}
+                </div>
             </div>
             <!-- Internal notes -->
             <div class="form-group">
@@ -195,7 +206,6 @@ class="active"
         </div>
         <div class="box-footer">
             {!! Form::button('<i id="spin" class="fa fa-spinner" style="display:none;"></i> <b>' . Lang::get("lang.create").'</b>' ,['class'=>'btn btn-primary', 'type' => 'submit'])!!}
-
         </div>
     </div>
 </form>
@@ -225,7 +235,7 @@ class="active"
 
 <script type="text/javascript">
     //submit form
-    $('#form').on('submit', function () {
+    $('#form').on('submit', function() {
         var form_data = $(this).serialize();
         $("#spin").addClass("fa-spin");
         var email_address = document.getElementById('email_address').value;
@@ -244,7 +254,6 @@ class="active"
         var sending_host = document.getElementById('sending_host').value;
         var sending_port = document.getElementById('sending_port').value;
         var sending_encryption = document.getElementById('sending_encryption').value;
-        var validate = $('input#validate[type="checkbox"]:checked', this).val();
 
         var filter_number = /^([0-9])/;
         var error_list = [];
@@ -339,29 +348,36 @@ class="active"
         }
         // checking for validation of sending status
         if (sending_status == 'on') {
-            // checking for validation of sending host
-            if (sending_host == "") {
-                var error = "Sending Host is a required field";
-                error_list.push(error);
-                $("#sending_host_error").addClass("has-error");
-            }
-            // checking for validation of sending port
-            if (sending_port == "") {
-                var error = "Sending Port is a required field";
-                error_list.push(error);
-                $("#sending_port_error").addClass("has-error");
-            }
-            // checking for validation of sending encryption
-            if (sending_encryption == "") {
-                var error = "Sending Encryption is a required field";
-                error_list.push(error);
-                $("#sending_encryption_error").addClass("has-error");
-            }
-            // checking for validation of sending protocol
-            if (sending_protocol == "") {
-                var error = "Transfer Protocol is a required field";
-                error_list.push(error);
-                $("#sending_protocol_error").addClass("has-error");
+            if (sending_protocol == 'smtp') {
+                // checking for validation of sending host
+                if (sending_host == "") {
+                    var error = "Sending Host is a required field";
+                    error_list.push(error);
+                    $("#sending_host_error").addClass("has-error");
+                }
+                // checking for validation of sending port
+                if (sending_port == "") {
+                    var error = "Sending Port is a required field";
+                    error_list.push(error);
+                    $("#sending_port_error").addClass("has-error");
+                }
+                // checking for validation of sending encryption
+                if (sending_encryption == "") {
+                    var error = "Sending Encryption is a required field";
+                    error_list.push(error);
+                    $("#sending_encryption_error").addClass("has-error");
+                }
+                // checking for validation of sending protocol
+                if (sending_protocol == "") {
+                    var error = "Transfer Protocol is a required field";
+                    error_list.push(error);
+                    $("#sending_protocol_error").addClass("has-error");
+                }
+            } else if(sending_protocol == 'mail') {
+                $("#sending_host_error").val('');
+                $("#sending_port_error").val('');
+                $("#sending_encryption_error").val('');
+                $("#sending_protocol_error").val('');
             }
         } else {
             // checking for validation of fetching port
@@ -376,7 +392,7 @@ class="active"
         // executing error chatch
         if (error) {
             var ssss = "";
-            $.each(error_list, function (key, value) {
+            $.each(error_list, function(key, value) {
                 ssss += "<li class='error-message-padding'>" + value + "</li>";
             });
             if (ssss) {
@@ -398,12 +414,12 @@ class="active"
             headers: {
                 'X-CSRF-Token': $('meta[name="_token"]').attr('content')
             },
-            beforeSend: function () {
+            beforeSend: function() {
                 $('#alert').empty();
                 $("#click").trigger("click");
 
             },
-            success: function (response) {
+            success: function(response) {
                 if (response == 1) {
                     $("#close").trigger("click");
                     var error_result = "<div class='alert alert-success alert-dismissable'> <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><div id='alert-message'>Your details saved successfully</div></div>";
@@ -416,7 +432,7 @@ class="active"
                     $('#alert').show();
                 }
             },
-            error: function (response) {
+            error: function(response) {
                 $("#close").trigger("click");
                 var errorsHtml = "<div class='alert alert-danger alert-dismissable'> <i class='fa fa-ban'> </i> <b> Alert!</b><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button><div id='alert-message'>Unable to process the details </div></div>";
                 $('#alert').empty();

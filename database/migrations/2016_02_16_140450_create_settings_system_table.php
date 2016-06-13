@@ -31,6 +31,7 @@ class CreateSettingsSystemTable extends Migration
             $table->string('day_date_time');
             $table->integer('time_zone')->unsigned()->nullable()->index('time_zone');
             $table->string('content');
+            $table->string('version');
             $table->timestamps();
         });
     }

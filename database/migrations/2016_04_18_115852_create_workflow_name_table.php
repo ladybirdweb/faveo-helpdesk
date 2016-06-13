@@ -20,7 +20,7 @@ class CreateWorkflowNameTable extends Migration
             $table->string('target');
             $table->text('internal_note');
             $table->timestamps();
-            });
+        });
     }
 
         /**

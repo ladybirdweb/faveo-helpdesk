@@ -1,138 +1,139 @@
-<?php namespace Illuminate\Redis;
+<?php
+
+namespace Illuminate\Redis;
 
 use Closure;
 use Predis\Client;
+use Illuminate\Support\Arr;
 use Illuminate\Contracts\Redis\Database as DatabaseContract;
 
-class Database implements DatabaseContract {
+class Database implements DatabaseContract
+{
+    /**
+     * The host address of the database.
+     *
+     * @var array
+     */
+    protected $clients;
 
-	/**
-	 * The host address of the database.
-	 *
-	 * @var array
-	 */
-	protected $clients;
+    /**
+     * Create a new Redis connection instance.
+     *
+     * @param  array  $servers
+     * @return void
+     */
+    public function __construct(array $servers = [])
+    {
+        $cluster = Arr::pull($servers, 'cluster');
 
-	/**
-	 * Create a new Redis connection instance.
-	 *
-	 * @param  array  $servers
-	 * @return void
-	 */
-	public function __construct(array $servers = array())
-	{
-		if (isset($servers['cluster']) && $servers['cluster'])
-		{
-			$this->clients = $this->createAggregateClient($servers);
-		}
-		else
-		{
-			$this->clients = $this->createSingleClients($servers);
-		}
-	}
+        $options = (array) Arr::pull($servers, 'options');
 
-	/**
-	 * Create a new aggregate client supporting sharding.
-	 *
-	 * @param  array  $servers
-	 * @return array
-	 */
-	protected function createAggregateClient(array $servers)
-	{
-		$servers = array_except($servers, array('cluster'));
+        if ($cluster) {
+            $this->clients = $this->createAggregateClient($servers, $options);
+        } else {
+            $this->clients = $this->createSingleClients($servers, $options);
+        }
+    }
 
-		$options = $this->getClientOptions($servers);
+    /**
+     * Create a new aggregate client supporting sharding.
+     *
+     * @param  array  $servers
+     * @param  array  $options
+     * @return array
+     */
+    protected function createAggregateClient(array $servers, array $options = [])
+    {
+        return ['default' => new Client(array_values($servers), $options)];
+    }
 
-		return array('default' => new Client(array_values($servers), $options));
-	}
+    /**
+     * Create an array of single connection clients.
+     *
+     * @param  array  $servers
+     * @param  array  $options
+     * @return array
+     */
+    protected function createSingleClients(array $servers, array $options = [])
+    {
+        $clients = [];
 
-	/**
-	 * Create an array of single connection clients.
-	 *
-	 * @param  array  $servers
-	 * @return array
-	 */
-	protected function createSingleClients(array $servers)
-	{
-		$clients = array();
+        foreach ($servers as $key => $server) {
+            $clients[$key] = new Client($server, $options);
+        }
 
-		$options = $this->getClientOptions($servers);
+        return $clients;
+    }
 
-		foreach ($servers as $key => $server)
-		{
-			$clients[$key] = new Client($server, $options);
-		}
+    /**
+     * Get a specific Redis connection instance.
+     *
+     * @param  string  $name
+     * @return \Predis\ClientInterface|null
+     */
+    public function connection($name = 'default')
+    {
+        return Arr::get($this->clients, $name ?: 'default');
+    }
 
-		return $clients;
-	}
+    /**
+     * Run a command against the Redis database.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return mixed
+     */
+    public function command($method, array $parameters = [])
+    {
+        return call_user_func_array([$this->clients['default'], $method], $parameters);
+    }
 
-	/**
-	 * Get any client options from the configuration array.
-	 *
-	 * @param  array  $servers
-	 * @return array
-	 */
-	protected function getClientOptions(array $servers)
-	{
-		return isset($servers['options']) ? (array) $servers['options'] : [];
-	}
+    /**
+     * Subscribe to a set of given channels for messages.
+     *
+     * @param  array|string  $channels
+     * @param  \Closure  $callback
+     * @param  string  $connection
+     * @param  string  $method
+     * @return void
+     */
+    public function subscribe($channels, Closure $callback, $connection = null, $method = 'subscribe')
+    {
+        $loop = $this->connection($connection)->pubSubLoop();
 
-	/**
-	 * Get a specific Redis connection instance.
-	 *
-	 * @param  string  $name
-	 * @return \Predis\ClientInterface
-	 */
-	public function connection($name = 'default')
-	{
-		return $this->clients[$name ?: 'default'];
-	}
+        call_user_func_array([$loop, $method], (array) $channels);
 
-	/**
-	 * Run a command against the Redis database.
-	 *
-	 * @param  string  $method
-	 * @param  array   $parameters
-	 * @return mixed
-	 */
-	public function command($method, array $parameters = array())
-	{
-		return call_user_func_array(array($this->clients['default'], $method), $parameters);
-	}
+        foreach ($loop as $message) {
+            if ($message->kind === 'message' || $message->kind === 'pmessage') {
+                call_user_func($callback, $message->payload, $message->channel);
+            }
+        }
 
-	/**
-	 * Subscribe to a set of given channels for messages.
-	 *
-	 * @param  array|string  $channels
-	 * @param  \Closure  $callback
-	 * @param  string  $connection
-	 * @return void
-	 */
-	public function subscribe($channels, Closure $callback, $connection = null)
-	{
-		$loop = $this->connection($connection)->pubSubLoop();
+        unset($loop);
+    }
 
-		call_user_func_array([$loop, 'subscribe'], (array) $channels);
+    /**
+     * Subscribe to a set of given channels with wildcards.
+     *
+     * @param  array|string  $channels
+     * @param  \Closure  $callback
+     * @param  string  $connection
+     * @return void
+     */
+    public function psubscribe($channels, Closure $callback, $connection = null)
+    {
+        return $this->subscribe($channels, $callback, $connection, __FUNCTION__);
+    }
 
-		foreach ($loop as $message) {
-			if ($message->kind === 'message') {
-				call_user_func($callback, $message->payload, $message->channel);
-			}
-		}
-
-		unset($loop);
-	}
-
-	/**
-	 * Dynamically make a Redis command.
-	 *
-	 * @param  string  $method
-	 * @param  array   $parameters
-	 * @return mixed
-	 */
-	public function __call($method, $parameters)
-	{
-		return $this->command($method, $parameters);
-	}
-
+    /**
+     * Dynamically make a Redis command.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return $this->command($method, $parameters);
+    }
 }

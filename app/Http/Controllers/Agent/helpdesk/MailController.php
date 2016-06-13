@@ -27,16 +27,16 @@ use PhpImap\Mailbox as ImapMailbox;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class MailController extends Controller
-{
+class MailController extends Controller {
+
     /**
      * constructor
      * Create a new controller instance.
      *
      * @param type TicketController $TicketController
      */
-    public function __construct(TicketWorkflowController $TicketWorkflowController)
-    {
+    public function __construct(TicketWorkflowController $TicketWorkflowController) {
+        $this->middleware('board');
         $this->TicketWorkflowController = $TicketWorkflowController;
     }
 
@@ -45,8 +45,7 @@ class MailController extends Controller
      *
      * @return type
      */
-    public function readmails(Emails $emails, Email $settings_email, System $system, Ticket $ticket)
-    {
+    public function readmails(Emails $emails, Email $settings_email, System $system, Ticket $ticket) {
         // $path_url = $system->first()->url;
         if ($settings_email->first()->email_fetching == 1) {
             if ($settings_email->first()->all_emails == 1) {
@@ -81,7 +80,7 @@ class MailController extends Controller
                             $protocol = $fetching_encryption2;
                         } else {
                             if ($e_mail->fetching_protocol) {
-                                $fetching_protocol = '/'.$e_mail->fetching_protocol;
+                                $fetching_protocol = '/' . $e_mail->fetching_protocol;
                             } else {
                                 $fetching_protocol = '';
                             }
@@ -90,13 +89,13 @@ class MailController extends Controller
                             } else {
                                 $fetching_encryption = '';
                             }
-                            $protocol = $fetching_protocol.$fetching_encryption;
+                            $protocol = $fetching_protocol . $fetching_encryption;
                         }
-                        $imap_config = '{'.$host.':'.$port.$protocol.'}INBOX';
+                        $imap_config = '{' . $host . ':' . $port . $protocol . '}INBOX';
                         $password = Crypt::decrypt($e_mail->password);
                         $mailbox = new ImapMailbox($imap_config, $e_mail->email_address, $password, __DIR__);
                         $mails = [];
-                        $mailsIds = $mailbox->searchMailBox('SINCE '.date('d-M-Y', strtotime('-1 day')));
+                        $mailsIds = $mailbox->searchMailBox('SINCE ' . date('d-M-Y', strtotime('-1 day')));
                         if (!$mailsIds) {
                             die('Mailbox is empty');
                         }
@@ -111,14 +110,32 @@ class MailController extends Controller
                                     $collaborator = null;
                                 }
                                 $body = $mail->textHtml;
-                                if ($body == null) {
-                                    $body = $mailbox->backup_getmail($mailId);
-                                    $body = str_replace('\r\n', '<br/>', $body);
+                                if ($body != null) {
+                                    $body = self::trimTableTag($body);
                                 }
+                                // if mail body has no messages fetch backup mail
+                                if ($body == null) {
+                                    $body = $mail->textPlain;
+                                }
+                                if ($body == null) {
+                                    $attach = $mail->getAttachments();
+                                    $path = $attach['html-body']->filePath;
+                                    if ($path == null) {
+                                        $path = $attach['text-body']->filePath;
+                                    }
+
+                                    $body = file_get_contents($path);
+                                    //dd($body);
+                                    $body = self::trimTableTag($body);
+                                }
+//                                if ($body == null) {
+//                                    $body = $mailbox->backup_getmail($mailId);
+//                                    $body = str_replace('\r\n', '<br/>', $body);
+//                                }
                                 $date = $mail->date;
                                 $datetime = $overview[0]->date;
                                 $date_time = explode(' ', $datetime);
-                                $date = $date_time[1].'-'.$date_time[2].'-'.$date_time[3].' '.$date_time[4];
+                                $date = $date_time[1] . '-' . $date_time[2] . '-' . $date_time[3] . ' ' . $date_time[4];
                                 $date = date('Y-m-d H:i:s', strtotime($date));
                                 if (isset($mail->subject)) {
                                     $subject = $mail->subject;
@@ -130,19 +147,19 @@ class MailController extends Controller
                                 $ticket_source = Ticket_source::where('name', '=', 'email')->first();
                                 $source = $ticket_source->id;
                                 $phone = '';
-
+                                $phonecode = '';
+                                $mobile_number = '';
                                 $assign = $get_helptopic->auto_assign;
                                 $form_data = null;
                                 $team_assign = null;
                                 $ticket_status = null;
-                                $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
+                                $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
 // dd($result);
                                 if ($result[1] == true) {
                                     $ticket_table = Tickets::where('ticket_number', '=', $result[0])->first();
                                     $thread_id = Ticket_Thread::where('ticket_id', '=', $ticket_table->id)->max('id');
 // $thread_id = Ticket_Thread::whereRaw('id = (select max(`id`) from ticket_thread)')->first();
                                     $thread_id = $thread_id;
-
                                     foreach ($mail->getAttachments() as $attachment) {
                                         $support = 'support';
 // echo $_SERVER['DOCUMENT_ROOT'];
@@ -153,7 +170,7 @@ class MailController extends Controller
 // var_dump($attachment->filePath);
 // dd($filepath);
 // $path = $dir_img_path[0]."/code/public/".$filepath[1];
-                                        $path = public_path().$filepath[1];
+                                        $path = public_path() . $filepath[1];
 // dd($path);
                                         $filesize = filesize($path);
                                         $file_data = file_get_contents($path);
@@ -162,9 +179,8 @@ class MailController extends Controller
                                         $string = str_replace('-', '', $attachment->name);
                                         $filename = explode('src', $attachment->filePath);
                                         $filename = str_replace('\\', '', $filename);
-                                        $body = str_replace('cid:'.$imageid, $filepath[1], $body);
+                                        $body = str_replace('cid:' . $imageid, $filepath[1], $body);
                                         $pos = strpos($body, $filepath[1]);
-
                                         if ($pos == false) {
                                             if ($settings_email->first()->attachment == 1) {
                                                 $upload = new Ticket_attachments();
@@ -208,8 +224,7 @@ class MailController extends Controller
      *
      * @return type string
      */
-    public function separate_reply($body)
-    {
+    public function separate_reply($body) {
         $body2 = explode('---Reply above this line---', $body);
         $body3 = $body2[0];
 
@@ -223,8 +238,7 @@ class MailController extends Controller
      *
      * @return type string
      */
-    public function decode_imap_text($str)
-    {
+    public function decode_imap_text($str) {
         $result = '';
         $decode_header = imap_mime_header_decode($str);
         foreach ($decode_header as $obj) {
@@ -239,8 +253,7 @@ class MailController extends Controller
      *
      * @return type
      */
-    public function fetch_attachments()
-    {
+    public function fetch_attachments() {
         $uploads = Upload::all();
         foreach ($uploads as $attachment) {
             $image = @imagecreatefromstring($attachment->file);
@@ -248,8 +261,8 @@ class MailController extends Controller
             imagejpeg($image, null, 80);
             $data = ob_get_contents();
             ob_end_clean();
-            $var = '<a href="" target="_blank"><img src="data:image/jpg;base64,'.base64_encode($data).'"/></a>';
-            echo '<br/><span class="mailbox-attachment-icon has-img">'.$var.'</span>';
+            $var = '<a href="" target="_blank"><img src="data:image/jpg;base64,' . base64_encode($data) . '"/></a>';
+            echo '<br/><span class="mailbox-attachment-icon has-img">' . $var . '</span>';
         }
     }
 
@@ -260,14 +273,42 @@ class MailController extends Controller
      *
      * @return type file
      */
-    public function get_data($id)
-    {
+    public function get_data($id) {
         $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('id', '=', $id)->get();
         foreach ($attachments as $attachment) {
-            header('Content-type: application/'.$attachment->type.'');
-            header('Content-Disposition: inline; filename='.$attachment->name.'');
+            header('Content-type: application/' . $attachment->type . '');
+            header('Content-Disposition: inline; filename=' . $attachment->name . '');
             header('Content-Transfer-Encoding: binary');
             echo $attachment->file;
         }
     }
+
+    public static function trimTableTag($html) {
+        if (strpos('<table>', $html) != false) {
+            $first_pos = strpos($html, '<table');
+            $fist_string = substr_replace($html, '', 0, $first_pos);
+            $last_pos = strrpos($fist_string, '</table>', -1);
+            $total = strlen($fist_string);
+            $diff = $total - $last_pos;
+            $str = substr_replace($fist_string, '', $last_pos, -1);
+            $final_str = str_finish($str, '</table>');
+            return $final_str;
+        }
+        return $html;
+    }
+
+    public static function trim3D($html) {
+        $body = str_replace('=3D', '', $html);
+        return $body;
+    }
+
+    public static function trimInjections($html, $tags = ['<script>', '</script>', '<style>', '</style>', '<?php', '?>']) {
+        $replace = [];
+        foreach ($tags as $key => $tag) {
+            $replace[$key] = htmlspecialchars($tag);
+        }
+        $body = str_replace($tags, $replace, $html);
+        return $body;
+    }
+
 }

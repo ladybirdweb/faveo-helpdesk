@@ -972,7 +972,7 @@ ol.with-line-border > li {
 /*-----------------------------------------------------------------------------------*/
 
 .error-title {
-	margin-bottom: 0.5em;
+	margin-bottom: 0.1em;
 	font-size: 5em;
 	letter-spacing: -0.01em;
 }
@@ -1306,11 +1306,11 @@ ol.with-line-border > li {
 		margin-bottom: 10px;
 	}
 	.error404 {
-		padding-top: 2em;
-		padding-bottom: 5em;
+		padding-top: 1em;
+		padding-bottom: 1em;
 	}
 	.error404 .error-title {
-		font-size: 12em;
+		font-size: 10em;
 	}
 	.comment-body {
 		margin-left: 25px;

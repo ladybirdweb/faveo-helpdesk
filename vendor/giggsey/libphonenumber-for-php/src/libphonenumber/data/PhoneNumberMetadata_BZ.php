@@ -16,13 +16,21 @@ return array (
   ),
   'fixedLine' => 
   array (
-    'NationalNumberPattern' => '[234578][02]\\d{5}',
+    'NationalNumberPattern' => '
+          (?:
+            [23458][02]\\d|
+            7(?:
+              [02]\\d|
+              32
+            )
+          )\\d{4}
+        ',
     'PossibleNumberPattern' => '\\d{7}',
     'ExampleNumber' => '2221234',
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '6[0-367]\\d{5}',
+    'NationalNumberPattern' => '6[0-35-7]\\d{5}',
     'PossibleNumberPattern' => '\\d{7}',
     'ExampleNumber' => '6221234',
   ),

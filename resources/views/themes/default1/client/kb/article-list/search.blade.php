@@ -10,7 +10,7 @@
 @stop
 @section('content')
 <div id="content" class="site-content col-md-9">
-    @foreach($result as $arti)
+    @forelse($result as $arti)
     <article class="format-standard type-post hentry clearfix">
 
         <header class="clearfix">
@@ -31,7 +31,9 @@
                 <span class="date"><i class="fa fa-clock-o fa-fw"></i> {{$arti->created_at->format('l, d-m-Y')}}</span>
             </div><!-- end of post meta -->
         <hr>
-        @endforeach
+        @empty 
+        <p><h3><b>Sorry!</b></h3> No result has found.</p>
+        @endforelse
 
     </article>
     <!-- end of page content -->
