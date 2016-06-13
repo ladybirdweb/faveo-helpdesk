@@ -1,6 +1,14 @@
 Changelog
 =========
 
+## 2.7.1 (2016-06-02)
+
+### Bug Fixes
+
+* Fix failure to merge array due to type conflicts
+  [Jesse Collis](https://github.com/jessedc)
+  [#118](https://github.com/bugsnag/bugsnag-php/pull/118)
+
 ## 2.7.0 (2016-03-09)
 
 ### Enhancements

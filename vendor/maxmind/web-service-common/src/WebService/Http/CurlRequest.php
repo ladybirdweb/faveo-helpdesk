@@ -63,7 +63,10 @@ class CurlRequest implements Request
 
         $opts[CURLOPT_HTTPHEADER] = $this->options['headers'];
         $opts[CURLOPT_USERAGENT] = $this->options['userAgent'];
+        $opts[CURLOPT_PROXY] = $this->options['proxy'];
 
+        // The defined()s are here as the *_MS opts are not available on older
+        // cURL versions
         $connectTimeout = $this->options['connectTimeout'];
         if (defined('CURLOPT_CONNECTTIMEOUT_MS')) {
             $opts[CURLOPT_CONNECTTIMEOUT_MS] = ceil($connectTimeout * 1000);
@@ -86,10 +89,10 @@ class CurlRequest implements Request
     {
         $body = curl_exec($curl);
         if ($errno = curl_errno($curl)) {
-            $error_message = curl_error($curl);
+            $errorMessage = curl_error($curl);
 
             throw new HttpException(
-                "cURL error ({$errno}): {$error_message}",
+                "cURL error ({$errno}): {$errorMessage}",
                 0,
                 $this->url
             );

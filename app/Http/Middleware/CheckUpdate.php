@@ -19,7 +19,7 @@ class CheckUpdate
      */
     public function handle($request, Closure $next)
     {
-        $check = $this->proceess();
+        $check = $this->process();
         //dd($check);
         if ($check == true) {
             //$this->notificationBar();
@@ -46,6 +46,12 @@ class CheckUpdate
     public function checkNewUpdate()
     {
         $notify = new BarNotification();
+        if(!\Schema::hasTable('bar_notifications')){
+            $url = url('database-upgrade');
+                //$string = "Your Database is outdated please upgrade <a href=$url>Now !</a>";
+                echo view('themes.default1.update.database', compact('url'));
+                exit;
+        }
         $not = $notify->get();
         if ($not->count() > 0) {
             $now = \Carbon\Carbon::now();
@@ -97,7 +103,7 @@ class CheckUpdate
         }
     }
 
-    public function proceess()
+    public function process()
     {
         $notify = new BarNotification();
         $not = $notify->get();

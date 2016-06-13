@@ -25,12 +25,12 @@ class Bugsnag_Request
         } else {
 
             if (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') === 0) {
-                $requestData['request']['params'] = json_decode(file_get_contents('php://input'));
+                $requestData['request']['params'] = json_decode(file_get_contents('php://input'), true);
             }
 
             if (isset($_SERVER['REQUEST_METHOD']) && in_array(strtoupper($_SERVER['REQUEST_METHOD']), $methodsWithPayload)) {
                 parse_str(file_get_contents('php://input'),$params);
-                if(isset($requestData['request']['params']))
+                if (isset($requestData['request']['params']) && is_array($requestData['request']['params']))
                 {
                     $requestData['request']['params'] = array_merge($requestData['request']['params'],$params);
                 }

@@ -33,7 +33,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.0.7.5',
+    'version' => 'Community 1.0.7.4',
     /*
       |--------------------------------------------------------------------------
       | Application URL
@@ -111,7 +111,7 @@ return [
       |to FAVEO team when any exception/error occurs or not. True value of this variable will
       |allow application to send error reports to FAVEO team's bugsnag log.
      */
-    'bugsnag_reporting' => false,
+    'bugsnag_reporting' => true,
     /*
       |--------------------------------------------------------------------------
       | Autoloaded Service Providers

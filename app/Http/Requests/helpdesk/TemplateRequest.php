@@ -30,7 +30,7 @@ class TemplateRequest extends Request
     {
         return [
             'name'                  => 'required|unique:template',
-            'subject'               => 'required',
+//            'subject'               => 'required',
             'type'                  => 'required',
             'message'               => 'required',
         ];

@@ -52,12 +52,12 @@
                         {!! Form::select('type',[''=>'Select','Type'=>$type],null,['class' => 'form-control']) !!}
                     </div>
                 </div>
-                <div class="row">
+<!--                <div class="row">
                     <div class="col-md-12 form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
                         {!! Form::label('subject',Lang::get('lang.subject')) !!}<span style="color:red;">*</span>
                         {!! Form::text('subject',null,['class' => 'form-control']) !!}
                     </div>
-                </div>
+                </div>-->
                 <div class="row">
                     <div class="col-md-12 form-group {{ $errors->has('message') ? 'has-error' : '' }}">
                         {!! Form::label('message',Lang::get('lang.content'),['class'=>'required']) !!}<span style="color:red;">*</span>

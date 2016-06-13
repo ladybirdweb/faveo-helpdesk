@@ -26,7 +26,6 @@ class="active"
 @stop
 <!-- /breadcrumbs -->
 <!-- content -->
-<?php dsdfdsf?>
 @section('content')
  <div class="box box-primary">
             <div class="box-header">

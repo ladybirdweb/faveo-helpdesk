@@ -8,6 +8,7 @@ use MaxMind\Exception\InsufficientFundsException;
 use MaxMind\Exception\InvalidInputException;
 use MaxMind\Exception\InvalidRequestException;
 use MaxMind\Exception\IpAddressNotFoundException;
+use MaxMind\Exception\PermissionRequiredException;
 use MaxMind\Exception\WebServiceException;
 use MaxMind\WebService\Http\RequestFactory;
 
@@ -20,16 +21,17 @@ use MaxMind\WebService\Http\RequestFactory;
  */
 class Client
 {
-    const VERSION = '0.0.1';
+    const VERSION = '0.2.0';
 
-    private $userId;
-    private $licenseKey;
-    private $userAgentPrefix;
+    private $caBundle;
+    private $connectTimeout;
     private $host = 'api.maxmind.com';
     private $httpRequestFactory;
+    private $licenseKey;
+    private $proxy;
     private $timeout;
-    private $connectTimeout;
-    private $caBundle;
+    private $userAgentPrefix;
+    private $userId;
 
     /**
      * @param int $userId Your MaxMind user ID
@@ -41,6 +43,8 @@ class Client
      * * `caBundle` - The bundle of CA root certificates to use in the request.
      * * `connectTimeout` - The connect timeout to use for the request.
      * * `timeout` - The timeout to use for the request.
+     * * `proxy` - The HTTP proxy to use. May include a schema, port,
+     *   username, and password, e.g., `http://username:password@127.0.0.1:10`.
      */
     public function __construct(
         $userId,
@@ -69,6 +73,10 @@ class Client
         }
         if (isset($options['timeout'])) {
             $this->timeout = $options['timeout'];
+        }
+
+        if (isset($options['proxy'])) {
+            $this->proxy = $options['proxy'];
         }
     }
 
@@ -149,10 +157,11 @@ class Client
             $this->urlFor($path),
             array(
                 'caBundle' => $this->caBundle,
-                'headers' => $headers,
-                'userAgent' => $this->userAgent(),
                 'connectTimeout' => $this->connectTimeout,
+                'headers' => $headers,
+                'proxy' => $this->proxy,
                 'timeout' => $this->timeout,
+                'userAgent' => $this->userAgent(),
             )
         );
 
@@ -311,6 +320,7 @@ class Client
             case 'AUTHORIZATION_INVALID':
             case 'LICENSE_KEY_REQUIRED':
             case 'USER_ID_REQUIRED':
+            case 'USER_ID_UNKNOWN':
                 throw new AuthenticationException(
                     $message,
                     $code,
@@ -320,6 +330,13 @@ class Client
             case 'OUT_OF_QUERIES':
             case 'INSUFFICIENT_FUNDS':
                 throw new InsufficientFundsException(
+                    $message,
+                    $code,
+                    $statusCode,
+                    $this->urlFor($path)
+                );
+            case 'PERMISSION_REQUIRED':
+                throw new PermissionRequiredException(
                     $message,
                     $code,
                     $statusCode,
@@ -401,7 +418,13 @@ class Client
         // Check if we are inside a phar. If so, we need to copy the cert to a
         // temp file so that curl can see it.
         if (substr($cert, 0, 7) == 'phar://') {
-             $newCert =  tempnam(sys_get_temp_dir(), 'geoip2-');
+            $tempDir = sys_get_temp_dir();
+            $newCert = tempnam($tempDir, 'geoip2-');
+            if ($newCart === false) {
+                throw new \RuntimeException(
+                    "Unable to create temporary file in $tempDir"
+                );
+            }
             if (!copy($cert, $newCert)) {
                 throw new \RuntimeException(
                     "Could not copy $cert to $newCert: "
