@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers\Agent\kb;
 
-<<<<<<< HEAD
-=======
-// controllers
->>>>>>> origin/master
 use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 // request
