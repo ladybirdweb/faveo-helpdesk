@@ -12,7 +12,7 @@ class CreateRatingRefTable extends Migration
      */
     public function up()
     {
-        Schema::create('ratings_ref', function (Blueprint $table) {
+        Schema::create('rating_ref', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('rating_id');
             $table->integer('ticket_id');
@@ -29,6 +29,6 @@ class CreateRatingRefTable extends Migration
      */
     public function down()
     {
-        Schema::drop('ratings_ref');
+        Schema::drop('rating_ref');
     }
 }

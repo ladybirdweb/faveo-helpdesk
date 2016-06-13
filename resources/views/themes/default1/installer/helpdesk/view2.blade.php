@@ -99,7 +99,7 @@ function checkFilePermission(&$results) {
     $f2 = substr(sprintf("%o",fileperms($path2)),-3);
     $f3 = substr(sprintf("%o",fileperms($path3)),-3);
     $f4 = substr(sprintf("%o",fileperms($path4)),-3);
-    if( $f1 == '655' && $f2 == '655' && $f3 == '655' && $f4 == '655') {
+    if( $f1 >= '644' && $f2 >= '644' && $f3 >= '644' && $f4 >= '644') {
         $results[] = new TestResult('File permission looks fine', STATUS_OK);
         return true;
     } else {
