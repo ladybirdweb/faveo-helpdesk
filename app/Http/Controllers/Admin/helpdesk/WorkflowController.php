@@ -166,7 +166,7 @@ class WorkflowController extends Controller
     {
         try {
             // store a new workflow credentials in to the system
-            $workflow_name = new WorkflowName;
+            $workflow_name = new WorkflowName();
             $workflow_name->name = $request->name;
             $workflow_name->status = $request->status;
             $workflow_name->order = $request->execution_order;
