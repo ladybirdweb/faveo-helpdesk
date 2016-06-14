@@ -15,13 +15,7 @@ class PhpMailController extends Controller {
 
     public function fetch_smtp_details($id) {
         $emails = Emails::where('id', '=', $id)->first();
-        if ($emails->sending_status == 1) {
-            return $emails;
-        } else {
-            $emails = null;
-
-            return $emails;
-        }
+        return $emails;
     }
 
     /**

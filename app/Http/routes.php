@@ -33,6 +33,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     //Notification marking
     Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
+    Route::post('mark-all-read/{id}', 'Common\NotificationController@markAllRead');
     Breadcrumbs::register('notification.list', function ($breadcrumbs) {
         $breadcrumbs->parent('dashboard');
         $breadcrumbs->push('All Notifications', route('notification.list'));

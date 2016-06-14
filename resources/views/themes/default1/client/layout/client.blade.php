@@ -192,6 +192,13 @@
                                 {{Session::get('success')}}
                             </div>
                             @endif
+                            @if(Session::has('warning'))
+                            <div class="alert alert-warning alert-dismissable">
+                                <i class="fa  fa-check-circle"></i>
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                {!! Session::get('warning') !!}
+                            </div>
+                            @endif
                             <!-- failure message -->
                             @if(Session::has('fails'))
                             @if(Session::has('check'))

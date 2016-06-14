@@ -42,19 +42,17 @@
         @yield('HeadInclude')
     </head>
     <body class="skin-yellow fixed">
-        <?php 
+        <?php
         $replacetop = 0;
-                $replacetop = \Event::fire('service.desk.admin.topbar.replace', array());
-
-                if (count($replacetop) == 0) {
-                    $replacetop = 0;
-                }
-                $replaceside = 0;
-                $replaceside = \Event::fire('service.desk.admin.sidebar.replace', array());
-
-                if (count($replaceside) == 0) {
-                    $replaceside = 0;
-                }
+        $replacetop = \Event::fire('service.desk.admin.topbar.replace', array());
+        if (count($replacetop) == 0) {
+            $replacetop = 0;
+        }
+        $replaceside = 0;
+        $replaceside = \Event::fire('service.desk.admin.sidebar.replace', array());
+        if (count($replaceside) == 0) {
+            $replaceside = 0;
+        }
         ?>
         <div class="wrapper">
             <header class="main-header">
@@ -71,15 +69,15 @@
                     <?php $notifications = App\Http\Controllers\Common\NotificationController::getNotifications(); ?>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="navbar-collapse">
-                        
+
                         <ul class="nav navbar-nav navbar-left">
                             @if($replacetop==0)
                             <li @yield('settings')><a href="{!! url('admin') !!}">{!! Lang::get('lang.home') !!}</a></li>
                             @endif
                             <?php \Event::fire('service.desk.admin.topbar', array()); ?>
                         </ul>
-                        
-                        
+
+
                         <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id', '=', Auth::user()->id)->where('is_read', '0')->get(); ?>
 
                         <ul class="nav navbar-nav navbar-right">
@@ -90,97 +88,95 @@
                                     <i class="fa fa-bell-o"></i>
                                     <span class="label label-danger" id="count">{!! count($noti) !!}</span>
                                 </a>
-                                <ul class="dropdown-menu" style="width: -moz-max-content;
-    width: -webkit-max-content;
-    width: -o-max-content;">
-                                         
+                                <ul class="dropdown-menu" style="width:500px">
+
                                     <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
-        <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h4><i class="icon fa fa-check"></i>Alert!</h4>
-        <div id="message-success1"></div>
-    </div>
-                                   
+                                        <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                                        <div id="message-success1"></div>
+                                    </div>
+
                                     <li id="refreshNote">
 
- <li class="header">You have {!! count($noti) !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
-                                    
-                                        <ul class="menu">
-                                            @foreach($notifications as $notification)
-                                                     <?php $user = App\User::whereId($notification->user_id)->first(); ?>
-                                            @if($notification->type == 'registration')
-                                            @if($notification->is_read == 1)
-                                            <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
+                                    <li class="header">You have {!! count($noti) !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a> </li>
+
+                                    <ul class="menu">
+                                        @foreach($notifications as $notification)
+                                        <?php $user = App\User::whereId($notification->user_id)->first(); ?>
+                                        @if($notification->type == 'registration')
+                                        @if($notification->is_read == 1)
+                                        <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
                                                 <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
                                                     {!! $notification->message !!}
                                                 </a></span>
-                                            </li>
-                                            @else
-                                            <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
+                                        </li>
+                                        @else
+                                        <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
                                                 <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
                                                     {!! $notification->message !!}
                                                 </a></span>
-                                            </li>
-                                            @endif
-                                            @else
-                                            
-                                            <?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification -> model_id)->first(); ?>
-                                            @if($notification->is_read == 1)
-                                            <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
-                                                   {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
-                                                </a></span>
-                                            </li>
-                                            @else
-                                                 <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
-                                                   {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
-                                                </a></span>
-                                            </li>
-                                            @endif
-                                            @endif
-                                            @endforeach
-
-                                        </ul>
-                                    </li>
-                                    <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
-                                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;" id="notification-loader">
-                                            </div><div class="col-md-5"></div></li>
-                                    <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
-                                    </li>
-
-                                </ul>
-                            </li>
-                            <li class="dropdown user user-menu">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    @if(Auth::user())
-
-                                    <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
-
-                                    <span class="hidden-xs">{!! Auth::user()->first_name." ".Auth::user()->last_name !!}</span>
-                                    @endif          
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <!-- User image -->
-                                    <li class="user-header" style="background-color:#343F44;">
-                                        @if(Auth::user())
-                                        <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                        <p>
-                                            {!! Auth::user()->first_name !!}{!! " ". Auth::user()->last_name !!} - {{Auth::user()->role}}
-                                            <small></small>
-                                        </p>
+                                        </li>
                                         @endif
-                                    </li>
-                                    <!-- Menu Footer-->
-                                    <li class="user-footer"  style="background-color:#1a2226;">
-                                        <div class="pull-left">
-                                            <a href="{{url('profile')}}" class="btn btn-info btn-sm"><b>{!! Lang::get('lang.profile') !!}</b></a>
-                                        </div>
-                                        <div class="pull-right">
-                                            <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! Lang::get('lang.sign_out') !!}</b></a>
-                                        </div>
-                                    </li>
-                                </ul>
+                                        @else
+
+                                        <?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification->model_id)->first(); ?>
+                                        @if($notification->is_read == 1)
+                                        <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
+                                                    {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
+                                                </a></span>
+                                        </li>
+                                        @else
+                                        <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
+                                                    {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
+                                                </a></span>
+                                        </li>
+                                        @endif
+                                        @endif
+                                        @endforeach
+
+                                    </ul>
                             </li>
+                            <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
+                                    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;" id="notification-loader">
+                                </div><div class="col-md-5"></div></li>
+                            <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
+                            </li>
+
+                        </ul>
+                        </li>
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                @if(Auth::user())
+
+                                <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
+
+                                <span class="hidden-xs">{!! Auth::user()->first_name." ".Auth::user()->last_name !!}</span>
+                                @endif          
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header" style="background-color:#343F44;">
+                                    @if(Auth::user())
+                                    <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
+                                    <p>
+                                        {!! Auth::user()->first_name !!}{!! " ". Auth::user()->last_name !!} - {{Auth::user()->role}}
+                                        <small></small>
+                                    </p>
+                                    @endif
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer"  style="background-color:#1a2226;">
+                                    <div class="pull-left">
+                                        <a href="{{url('admin-profile')}}" class="btn btn-info btn-sm"><b>{!! Lang::get('lang.profile') !!}</b></a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! Lang::get('lang.sign_out') !!}</b></a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
                         </ul>
                     </div>
                 </nav>
@@ -310,7 +306,8 @@
                         </li>
                         <li class="header">{!! Lang::get('lang.Updates') !!}</li>
                         <li @yield('update')>
-                        <?php $update = App\Model\helpdesk\Utility\Version_Check::where('id', '=', 1)->first();
+                        <?php
+                        $update = App\Model\helpdesk\Utility\Version_Check::where('id', '=', 1)->first();
                         if ($update->current_version == $update->new_version) {
                             ?>
                                  <a href="{!! URL::route('checkupdate') !!}" id="checkUpdate">
@@ -329,7 +326,7 @@
 <?php } ?>
                         </li>
                         @endif
-                        <?php \Event::fire('service.desk.admin.sidebar', array()); ?>
+<?php \Event::fire('service.desk.admin.sidebar', array()); ?>
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -388,7 +385,7 @@
     <script>
 $(function() {
 //Add text editor
-$("textarea").wysihtml5();
+    $("textarea").wysihtml5();
 });
 // $(function(){
 //     $("#checkUpdate").on('click',function(){        
@@ -402,55 +399,74 @@ $("textarea").wysihtml5();
 //                 alert(response);
 //                 $("#gif-update").hide();
 //                 }
-
 //             })
 //         return false;
 //     });
 // });
-
 $(function() {
 //Enable iCheck plugin for checkboxes
 //iCheck for checkbox and radio inputs
-$('input[type="checkbox"]').iCheck({
-checkboxClass: 'icheckbox_flat-blue',
-radioClass: 'iradio_flat-blue'
-});
-
+    $('input[type="checkbox"]').iCheck({
+        checkboxClass: 'icheckbox_flat-blue',
+        radioClass: 'iradio_flat-blue'
+    });
 //Enable check and uncheck all functionality
-$(".checkbox-toggle").click(function() {
-var clicks = $(this).data('clicks');
-if (clicks) {
+    $(".checkbox-toggle").click(function() {
+        var clicks = $(this).data('clicks');
+        if (clicks) {
 //Uncheck all checkboxes
-$("input[type='checkbox']", ".mailbox-messages").iCheck("uncheck");
-} else {
+            $("input[type='checkbox']", ".mailbox-messages").iCheck("uncheck");
+        } else {
 //Check all checkboxes
-$("input[type='checkbox']", ".mailbox-messages").iCheck("check");
-}
-$(this).data("clicks", !clicks);
-});
-
+            $("input[type='checkbox']", ".mailbox-messages").iCheck("check");
+        }
+        $(this).data("clicks", !clicks);
+    });
 //Handle starring for glyphicon and font awesome
-$(".mailbox-star").click(function(e) {
-e.preventDefault();
+    $(".mailbox-star").click(function(e) {
+        e.preventDefault();
 //detect type
-var $this = $(this).find("a > i");
-var glyph = $this.hasClass("glyphicon");
-var fa = $this.hasClass("fa");
-
+        var $this = $(this).find("a > i");
+        var glyph = $this.hasClass("glyphicon");
+        var fa = $this.hasClass("fa");
 //Switch states
-if (glyph) {
-$this.toggleClass("glyphicon-star");
-$this.toggleClass("glyphicon-star-empty");
-}
-
-if (fa) {
-$this.toggleClass("fa-star");
-$this.toggleClass("fa-star-o");
-}
-});
+        if (glyph) {
+            $this.toggleClass("glyphicon-star");
+            $this.toggleClass("glyphicon-star-empty");
+        }
+        if (fa) {
+            $this.toggleClass("fa-star");
+            $this.toggleClass("fa-star-o");
+        }
+    });
 });
     </script>
-   <!-- // <script src="../plugins/jQuery/jQuery-2.1.3.min.js"></script> -->
+    <script>
+        $('#read-all').click(function() {
+
+            var id2 = <?php echo \Auth::user()->id ?>;
+            var dataString = 'id=' + id2;
+            $.ajax
+                    ({
+                        type: "POST",
+                        url: "{{url('mark-all-read')}}" + "/" + id2,
+                        data: dataString,
+                        cache: false,
+                        beforeSend: function() {
+                            $('#myDropdown').on('hide.bs.dropdown', function() {
+                                return false;
+                            });
+                            $("#refreshNote").hide();
+                            $("#notification-loader").show();
+                        },
+                        success: function(response) {
+                            $("#refreshNote").load("<?php echo $_SERVER['REQUEST_URI']; ?>  #refreshNote");
+                            $("#notification-loader").hide();
+                            $('#myDropdown').removeClass('open');
+                        }
+                    });
+        });</script>
+ <!-- // <script src="../plugins/jQuery/jQuery-2.1.3.min.js"></script> -->
     <script src="{{asset("lb-faveo/js/tabby.js")}}"></script>
      <!-- // <script src="{{asset("dist/js/editor.js")}}"></script> -->
     <!-- CK Editor -->
