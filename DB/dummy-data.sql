@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2016 at 12:18 PM
+-- Generation Time: Jun 14, 2016 at 04:49 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -17,8 +17,23 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `demo_from_safraz`
+-- Database: `demodatabase`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `api_settings`
+--
+
+CREATE TABLE IF NOT EXISTS `api_settings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -31,10 +46,32 @@ CREATE TABLE IF NOT EXISTS `banlist` (
   `ban_status` tinyint(1) NOT NULL,
   `email_address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `internal_notes` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bar_notifications`
+--
+
+CREATE TABLE IF NOT EXISTS `bar_notifications` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `bar_notifications`
+--
+
+INSERT INTO `bar_notifications` (`id`, `key`, `value`, `created_at`, `updated_at`) VALUES
+(1, 'new-version', '', '2016-06-14 09:08:36', '2016-06-14 09:08:36');
 
 -- --------------------------------------------------------
 
@@ -47,19 +84,299 @@ CREATE TABLE IF NOT EXISTS `canned_response` (
   `user_id` int(10) unsigned NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `message` text COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `canned_response`
+-- Table structure for table `common_settings`
 --
 
-INSERT INTO `canned_response` (`id`, `user_id`, `title`, `message`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Ticket accepted Reply', 'Hi %Client Name%,<br><br>We are looking into your issue<br><br>Thank You,<br>Kind Regards,&nbsp;<br>Demo Admin,', '2016-05-16 03:02:43', '2016-05-16 03:03:18'),
-(2, 1, 'Issue Fixed Reply', 'Hi %Client Name%<br><br>We have fixed your issue.<br><br>Thank You,<br>Kind Regards,<br>Demo Admin.', '2016-05-16 03:04:15', '2016-05-16 03:04:15');
+CREATE TABLE IF NOT EXISTS `common_settings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `option_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `option_value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `status` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `optional_field` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `common_settings`
+--
+
+INSERT INTO `common_settings` (`id`, `option_name`, `option_value`, `status`, `optional_field`, `created_at`, `updated_at`) VALUES
+(1, 'ticket_token_time_duration', '1', '', '', '2016-06-14 09:07:17', '2016-06-14 09:07:17');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `country_code`
+--
+
+CREATE TABLE IF NOT EXISTS `country_code` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `iso` char(2) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `nicename` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `iso3` char(3) COLLATE utf8_unicode_ci NOT NULL,
+  `numcode` smallint(6) NOT NULL,
+  `phonecode` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=240 ;
+
+--
+-- Dumping data for table `country_code`
+--
+
+INSERT INTO `country_code` (`id`, `iso`, `name`, `nicename`, `iso3`, `numcode`, `phonecode`, `created_at`, `updated_at`) VALUES
+(1, 'AF', 'AFGHANISTAN', 'Afghanistan', 'AFG', 4, 93, '2016-06-14 09:07:07', '2016-06-14 09:07:07'),
+(2, 'AL', 'ALBANIA', 'Albania', 'ALB', 8, 355, '2016-06-14 09:07:07', '2016-06-14 09:07:07'),
+(3, 'DZ', 'ALGERIA', 'Algeria', 'DZA', 12, 213, '2016-06-14 09:07:07', '2016-06-14 09:07:07'),
+(4, 'AS', 'AMERICAN SAMOA', 'American Samoa', 'ASM', 16, 1684, '2016-06-14 09:07:07', '2016-06-14 09:07:07'),
+(5, 'AD', 'ANDORRA', 'Andorra', 'AND', 20, 376, '2016-06-14 09:07:07', '2016-06-14 09:07:07'),
+(6, 'AO', 'ANGOLA', 'Angola', 'AGO', 24, 244, '2016-06-14 09:07:07', '2016-06-14 09:07:07'),
+(7, 'AI', 'ANGUILLA', 'Anguilla', 'AIA', 660, 1264, '2016-06-14 09:07:07', '2016-06-14 09:07:07'),
+(8, 'AQ', 'ANTARCTICA', 'Antarctica', 'NUL', 0, 0, '2016-06-14 09:07:07', '2016-06-14 09:07:07'),
+(9, 'AG', 'ANTIGUA AND BARBUDA', 'Antigua and Barbuda', 'ATG', 28, 1268, '2016-06-14 09:07:07', '2016-06-14 09:07:07'),
+(10, 'AR', 'ARGENTINA', 'Argentina', 'ARG', 32, 54, '2016-06-14 09:07:07', '2016-06-14 09:07:07'),
+(11, 'AM', 'ARMENIA', 'Armenia', 'ARM', 51, 374, '2016-06-14 09:07:07', '2016-06-14 09:07:07'),
+(12, 'AW', 'ARUBA', 'Aruba', 'ABW', 533, 297, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(13, 'AU', 'AUSTRALIA', 'Australia', 'AUS', 36, 61, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(14, 'AT', 'AUSTRIA', 'Austria', 'AUT', 40, 43, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(15, 'AZ', 'AZERBAIJAN', 'Azerbaijan', 'AZE', 31, 994, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(16, 'BS', 'BAHAMAS', 'Bahamas', 'BHS', 44, 1242, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(17, 'BH', 'BAHRAIN', 'Bahrain', 'BHR', 48, 973, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(18, 'BD', 'BANGLADESH', 'Bangladesh', 'BGD', 50, 880, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(19, 'BB', 'BARBADOS', 'Barbados', 'BRB', 52, 1246, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(20, 'BY', 'BELARUS', 'Belarus', 'BLR', 112, 375, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(21, 'BE', 'BELGIUM', 'Belgium', 'BEL', 56, 32, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(22, 'BZ', 'BELIZE', 'Belize', 'BLZ', 84, 501, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(23, 'BJ', 'BENIN', 'Benin', 'BEN', 204, 229, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(24, 'BM', 'BERMUDA', 'Bermuda', 'BMU', 60, 1441, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(25, 'BT', 'BHUTAN', 'Bhutan', 'BTN', 64, 975, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(26, 'BO', 'BOLIVIA', 'Bolivia', 'BOL', 68, 591, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(27, 'BA', 'BOSNIA AND HERZEGOVINA', 'Bosnia and Herzegovina', 'BIH', 70, 387, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(28, 'BW', 'BOTSWANA', 'Botswana', 'BWA', 72, 267, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(29, 'BV', 'BOUVET ISLAND', 'Bouvet Island', 'NUL', 0, 0, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(30, 'BR', 'BRAZIL', 'Brazil', 'BRA', 76, 55, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(31, 'IO', 'BRITISH INDIAN OCEAN TERRITORY', 'British Indian Ocean Territory', 'NUL', 0, 246, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(32, 'BN', 'BRUNEI DARUSSALAM', 'Brunei Darussalam', 'BRN', 96, 673, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(33, 'BG', 'BULGARIA', 'Bulgaria', 'BGR', 100, 359, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(34, 'BF', 'BURKINA FASO', 'Burkina Faso', 'BFA', 854, 226, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(35, 'BI', 'BURUNDI', 'Burundi', 'BDI', 108, 257, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(36, 'KH', 'CAMBODIA', 'Cambodia', 'KHM', 116, 855, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(37, 'CM', 'CAMEROON', 'Cameroon', 'CMR', 120, 237, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(38, 'CA', 'CANADA', 'Canada', 'CAN', 124, 1, '2016-06-14 09:07:08', '2016-06-14 09:07:08'),
+(39, 'CV', 'CAPE VERDE', 'Cape Verde', 'CPV', 132, 238, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(40, 'KY', 'CAYMAN ISLANDS', 'Cayman Islands', 'CYM', 136, 1345, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(41, 'CF', 'CENTRAL AFRICAN REPUBLIC', 'Central African Republic', 'CAF', 140, 236, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(42, 'TD', 'CHAD', 'Chad', 'TCD', 148, 235, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(43, 'CL', 'CHILE', 'Chile', 'CHL', 152, 56, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(44, 'CN', 'CHINA', 'China', 'CHN', 156, 86, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(45, 'CX', 'CHRISTMAS ISLAND', 'Christmas Island', 'NUL', 0, 61, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(46, 'CC', 'COCOS (KEELING) ISLANDS', 'Cocos (Keeling) Islands', 'NUL', 0, 672, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(47, 'CO', 'COLOMBIA', 'Colombia', 'COL', 170, 57, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(48, 'KM', 'COMOROS', 'Comoros', 'COM', 174, 269, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(49, 'CG', 'CONGO', 'Congo', 'COG', 178, 242, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(50, 'CD', 'CONGO, THE DEMOCRATIC REPUBLIC OF THE', 'Congo, the Democratic Republic of the', 'COD', 180, 242, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(51, 'CK', 'COOK ISLANDS', 'Cook Islands', 'COK', 184, 682, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(52, 'CR', 'COSTA RICA', 'Costa Rica', 'CRI', 188, 506, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(53, 'CI', 'COTE DIVOIRE', 'Cote DIvoire', 'CIV', 384, 225, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(54, 'HR', 'CROATIA', 'Croatia', 'HRV', 191, 385, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(55, 'CU', 'CUBA', 'Cuba', 'CUB', 192, 53, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(56, 'CY', 'CYPRUS', 'Cyprus', 'CYP', 196, 357, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(57, 'CZ', 'CZECH REPUBLIC', 'Czech Republic', 'CZE', 203, 420, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(58, 'DK', 'DENMARK', 'Denmark', 'DNK', 208, 45, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(59, 'DJ', 'DJIBOUTI', 'Djibouti', 'DJI', 262, 253, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(60, 'DM', 'DOMINICA', 'Dominica', 'DMA', 212, 1767, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(61, 'DO', 'DOMINICAN REPUBLIC', 'Dominican Republic', 'DOM', 214, 1809, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(62, 'EC', 'ECUADOR', 'Ecuador', 'ECU', 218, 593, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(63, 'EG', 'EGYPT', 'Egypt', 'EGY', 818, 20, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(64, 'SV', 'EL SALVADOR', 'El Salvador', 'SLV', 222, 503, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(65, 'GQ', 'EQUATORIAL GUINEA', 'Equatorial Guinea', 'GNQ', 226, 240, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(66, 'ER', 'ERITREA', 'Eritrea', 'ERI', 232, 291, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(67, 'EE', 'ESTONIA', 'Estonia', 'EST', 233, 372, '2016-06-14 09:07:09', '2016-06-14 09:07:09'),
+(68, 'ET', 'ETHIOPIA', 'Ethiopia', 'ETH', 231, 251, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(69, 'FK', 'FALKLAND ISLANDS (MALVINAS)', 'Falkland Islands (Malvinas)', 'FLK', 238, 500, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(70, 'FO', 'FAROE ISLANDS', 'Faroe Islands', 'FRO', 234, 298, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(71, 'FJ', 'FIJI', 'Fiji', 'FJI', 242, 679, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(72, 'FI', 'FINLAND', 'Finland', 'FIN', 246, 358, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(73, 'FR', 'FRANCE', 'France', 'FRA', 250, 33, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(74, 'GF', 'FRENCH GUIANA', 'French Guiana', 'GUF', 254, 594, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(75, 'PF', 'FRENCH POLYNESIA', 'French Polynesia', 'PYF', 258, 689, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(76, 'TF', 'FRENCH SOUTHERN TERRITORIES', 'French Southern Territories', 'NUL', 0, 0, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(77, 'GA', 'GABON', 'Gabon', 'GAB', 266, 241, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(78, 'GM', 'GAMBIA', 'Gambia', 'GMB', 270, 220, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(79, 'GE', 'GEORGIA', 'Georgia', 'GEO', 268, 995, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(80, 'DE', 'GERMANY', 'Germany', 'DEU', 276, 49, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(81, 'GH', 'GHANA', 'Ghana', 'GHA', 288, 233, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(82, 'GI', 'GIBRALTAR', 'Gibraltar', 'GIB', 292, 350, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(83, 'GR', 'GREECE', 'Greece', 'GRC', 300, 30, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(84, 'GL', 'GREENLAND', 'Greenland', 'GRL', 304, 299, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(85, 'GD', 'GRENADA', 'Grenada', 'GRD', 308, 1473, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(86, 'GP', 'GUADELOUPE', 'Guadeloupe', 'GLP', 312, 590, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(87, 'GU', 'GUAM', 'Guam', 'GUM', 316, 1671, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(88, 'GT', 'GUATEMALA', 'Guatemala', 'GTM', 320, 502, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(89, 'GN', 'GUINEA', 'Guinea', 'GIN', 324, 224, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(90, 'GW', 'GUINEA-BISSAU', 'Guinea-Bissau', 'GNB', 624, 245, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(91, 'GY', 'GUYANA', 'Guyana', 'GUY', 328, 592, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(92, 'HT', 'HAITI', 'Haiti', 'HTI', 332, 509, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(93, 'HM', 'HEARD ISLAND AND MCDONALD ISLANDS', 'Heard Island and Mcdonald Islands', 'NUL', 0, 0, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(94, 'VA', 'HOLY SEE (VATICAN CITY STATE)', 'Holy See (Vatican City State)', 'VAT', 336, 39, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(95, 'HN', 'HONDURAS', 'Honduras', 'HND', 340, 504, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(96, 'HK', 'HONG KONG', 'Hong Kong', 'HKG', 344, 852, '2016-06-14 09:07:10', '2016-06-14 09:07:10'),
+(97, 'HU', 'HUNGARY', 'Hungary', 'HUN', 348, 36, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(98, 'IS', 'ICELAND', 'Iceland', 'ISL', 352, 354, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(99, 'IN', 'INDIA', 'India', 'IND', 356, 91, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(100, 'ID', 'INDONESIA', 'Indonesia', 'IDN', 360, 62, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(101, 'IR', 'IRAN, ISLAMIC REPUBLIC OF', 'Iran, Islamic Republic of', 'IRN', 364, 98, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(102, 'IQ', 'IRAQ', 'Iraq', 'IRQ', 368, 964, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(103, 'IE', 'IRELAND', 'Ireland', 'IRL', 372, 353, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(104, 'IL', 'ISRAEL', 'Israel', 'ISR', 376, 972, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(105, 'IT', 'ITALY', 'Italy', 'ITA', 380, 39, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(106, 'JM', 'JAMAICA', 'Jamaica', 'JAM', 388, 1876, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(107, 'JP', 'JAPAN', 'Japan', 'JPN', 392, 81, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(108, 'JO', 'JORDAN', 'Jordan', 'JOR', 400, 962, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(109, 'KZ', 'KAZAKHSTAN', 'Kazakhstan', 'KAZ', 398, 7, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(110, 'KE', 'KENYA', 'Kenya', 'KEN', 404, 254, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(111, 'KI', 'KIRIBATI', 'Kiribati', 'KIR', 296, 686, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(112, 'KP', 'KOREA, DEMOCRATIC PEOPLES REPUBLIC OF', 'Korea, Democratic Peoples Republic of', 'PRK', 408, 850, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(113, 'KR', 'KOREA, REPUBLIC OF', 'Korea, Republic of', 'KOR', 410, 82, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(114, 'KW', 'KUWAIT', 'Kuwait', 'KWT', 414, 965, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(115, 'KG', 'KYRGYZSTAN', 'Kyrgyzstan', 'KGZ', 417, 996, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(116, 'LA', 'LAO PEOPLES DEMOCRATIC REPUBLIC', 'Lao Peoples Democratic Republic', 'LAO', 418, 856, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(117, 'LV', 'LATVIA', 'Latvia', 'LVA', 428, 371, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(118, 'LB', 'LEBANON', 'Lebanon', 'LBN', 422, 961, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(119, 'LS', 'LESOTHO', 'Lesotho', 'LSO', 426, 266, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(120, 'LR', 'LIBERIA', 'Liberia', 'LBR', 430, 231, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(121, 'LY', 'LIBYAN ARAB JAMAHIRIYA', 'Libyan Arab Jamahiriya', 'LBY', 434, 218, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(122, 'LI', 'LIECHTENSTEIN', 'Liechtenstein', 'LIE', 438, 423, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(123, 'LT', 'LITHUANIA', 'Lithuania', 'LTU', 440, 370, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(124, 'LU', 'LUXEMBOURG', 'Luxembourg', 'LUX', 442, 352, '2016-06-14 09:07:11', '2016-06-14 09:07:11'),
+(125, 'MO', 'MACAO', 'Macao', 'MAC', 446, 853, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(126, 'MK', 'MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF', 'Macedonia, the Former Yugoslav Republic of', 'MKD', 807, 389, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(127, 'MG', 'MADAGASCAR', 'Madagascar', 'MDG', 450, 261, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(128, 'MW', 'MALAWI', 'Malawi', 'MWI', 454, 265, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(129, 'MY', 'MALAYSIA', 'Malaysia', 'MYS', 458, 60, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(130, 'MV', 'MALDIVES', 'Maldives', 'MDV', 462, 960, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(131, 'ML', 'MALI', 'Mali', 'MLI', 466, 223, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(132, 'MT', 'MALTA', 'Malta', 'MLT', 470, 356, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(133, 'MH', 'MARSHALL ISLANDS', 'Marshall Islands', 'MHL', 584, 692, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(134, 'MQ', 'MARTINIQUE', 'Martinique', 'MTQ', 474, 596, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(135, 'MR', 'MAURITANIA', 'Mauritania', 'MRT', 478, 222, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(136, 'MU', 'MAURITIUS', 'Mauritius', 'MUS', 480, 230, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(137, 'YT', 'MAYOTTE', 'Mayotte', 'NUL', 0, 269, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(138, 'MX', 'MEXICO', 'Mexico', 'MEX', 484, 52, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(139, 'FM', 'MICRONESIA, FEDERATED STATES OF', 'Micronesia, Federated States of', 'FSM', 583, 691, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(140, 'MD', 'MOLDOVA, REPUBLIC OF', 'Moldova, Republic of', 'MDA', 498, 373, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(141, 'MC', 'MONACO', 'Monaco', 'MCO', 492, 377, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(142, 'MN', 'MONGOLIA', 'Mongolia', 'MNG', 496, 976, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(143, 'MS', 'MONTSERRAT', 'Montserrat', 'MSR', 500, 1664, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(144, 'MA', 'MOROCCO', 'Morocco', 'MAR', 504, 212, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(145, 'MZ', 'MOZAMBIQUE', 'Mozambique', 'MOZ', 508, 258, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(146, 'MM', 'MYANMAR', 'Myanmar', 'MMR', 104, 95, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(147, 'NA', 'NAMIBIA', 'Namibia', 'NAM', 516, 264, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(148, 'NR', 'NAURU', 'Nauru', 'NRU', 520, 674, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(149, 'NP', 'NEPAL', 'Nepal', 'NPL', 524, 977, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(150, 'NL', 'NETHERLANDS', 'Netherlands', 'NLD', 528, 31, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(151, 'AN', 'NETHERLANDS ANTILLES', 'Netherlands Antilles', 'ANT', 530, 599, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(152, 'NC', 'NEW CALEDONIA', 'New Caledonia', 'NCL', 540, 687, '2016-06-14 09:07:12', '2016-06-14 09:07:12'),
+(153, 'NZ', 'NEW ZEALAND', 'New Zealand', 'NZL', 554, 64, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(154, 'NI', 'NICARAGUA', 'Nicaragua', 'NIC', 558, 505, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(155, 'NE', 'NIGER', 'Niger', 'NER', 562, 227, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(156, 'NG', 'NIGERIA', 'Nigeria', 'NGA', 566, 234, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(157, 'NU', 'NIUE', 'Niue', 'NIU', 570, 683, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(158, 'NF', 'NORFOLK ISLAND', 'Norfolk Island', 'NFK', 574, 672, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(159, 'MP', 'NORTHERN MARIANA ISLANDS', 'Northern Mariana Islands', 'MNP', 580, 1670, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(160, 'NO', 'NORWAY', 'Norway', 'NOR', 578, 47, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(161, 'OM', 'OMAN', 'Oman', 'OMN', 512, 968, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(162, 'PK', 'PAKISTAN', 'Pakistan', 'PAK', 586, 92, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(163, 'PW', 'PALAU', 'Palau', 'PLW', 585, 680, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(164, 'PS', 'PALESTINIAN TERRITORY, OCCUPIED', 'Palestinian Territory, Occupied', 'NUL', 0, 970, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(165, 'PA', 'PANAMA', 'Panama', 'PAN', 591, 507, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(166, 'PG', 'PAPUA NEW GUINEA', 'Papua New Guinea', 'PNG', 598, 675, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(167, 'PY', 'PARAGUAY', 'Paraguay', 'PRY', 600, 595, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(168, 'PE', 'PERU', 'Peru', 'PER', 604, 51, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(169, 'PH', 'PHILIPPINES', 'Philippines', 'PHL', 608, 63, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(170, 'PN', 'PITCAIRN', 'Pitcairn', 'PCN', 612, 0, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(171, 'PL', 'POLAND', 'Poland', 'POL', 616, 48, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(172, 'PT', 'PORTUGAL', 'Portugal', 'PRT', 620, 351, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(173, 'PR', 'PUERTO RICO', 'Puerto Rico', 'PRI', 630, 1787, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(174, 'QA', 'QATAR', 'Qatar', 'QAT', 634, 974, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(175, 'RE', 'REUNION', 'Reunion', 'REU', 638, 262, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(176, 'RO', 'ROMANIA', 'Romania', 'ROM', 642, 40, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(177, 'RU', 'RUSSIAN FEDERATION', 'Russian Federation', 'RUS', 643, 70, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(178, 'RW', 'RWANDA', 'Rwanda', 'RWA', 646, 250, '2016-06-14 09:07:13', '2016-06-14 09:07:13'),
+(179, 'SH', 'SAINT HELENA', 'Saint Helena', 'SHN', 654, 290, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(180, 'KN', 'SAINT KITTS AND NEVIS', 'Saint Kitts and Nevis', 'KNA', 659, 1869, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(181, 'LC', 'SAINT LUCIA', 'Saint Lucia', 'LCA', 662, 1758, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(182, 'PM', 'SAINT PIERRE AND MIQUELON', 'Saint Pierre and Miquelon', 'SPM', 666, 508, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(183, 'VC', 'SAINT VINCENT AND THE GRENADINES', 'Saint Vincent and the Grenadines', 'VCT', 670, 1784, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(184, 'WS', 'SAMOA', 'Samoa', 'WSM', 882, 684, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(185, 'SM', 'SAN MARINO', 'San Marino', 'SMR', 674, 378, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(186, 'ST', 'SAO TOME AND PRINCIPE', 'Sao Tome and Principe', 'STP', 678, 239, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(187, 'SA', 'SAUDI ARABIA', 'Saudi Arabia', 'SAU', 682, 966, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(188, 'SN', 'SENEGAL', 'Senegal', 'SEN', 686, 221, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(189, 'CS', 'SERBIA AND MONTENEGRO', 'Serbia and Montenegro', 'NUL', 0, 381, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(190, 'SC', 'SEYCHELLES', 'Seychelles', 'SYC', 690, 248, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(191, 'SL', 'SIERRA LEONE', 'Sierra Leone', 'SLE', 694, 232, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(192, 'SG', 'SINGAPORE', 'Singapore', 'SGP', 702, 65, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(193, 'SK', 'SLOVAKIA', 'Slovakia', 'SVK', 703, 421, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(194, 'SI', 'SLOVENIA', 'Slovenia', 'SVN', 705, 386, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(195, 'SB', 'SOLOMON ISLANDS', 'Solomon Islands', 'SLB', 90, 677, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(196, 'SO', 'SOMALIA', 'Somalia', 'SOM', 706, 252, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(197, 'ZA', 'SOUTH AFRICA', 'South Africa', 'ZAF', 710, 27, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(198, 'GS', 'SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS', 'South Georgia and the South Sandwich Islands', 'NUL', 0, 0, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(199, 'ES', 'SPAIN', 'Spain', 'ESP', 724, 34, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(200, 'LK', 'SRI LANKA', 'Sri Lanka', 'LKA', 144, 94, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(201, 'SD', 'SUDAN', 'Sudan', 'SDN', 736, 249, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(202, 'SR', 'SURINAME', 'Suriname', 'SUR', 740, 597, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(203, 'SJ', 'SVALBARD AND JAN MAYEN', 'Svalbard and Jan Mayen', 'SJM', 744, 47, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(204, 'SZ', 'SWAZILAND', 'Swaziland', 'SWZ', 748, 268, '2016-06-14 09:07:14', '2016-06-14 09:07:14'),
+(205, 'SE', 'SWEDEN', 'Sweden', 'SWE', 752, 46, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(206, 'CH', 'SWITZERLAND', 'Switzerland', 'CHE', 756, 41, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(207, 'SY', 'SYRIAN ARAB REPUBLIC', 'Syrian Arab Republic', 'SYR', 760, 963, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(208, 'TW', 'TAIWAN, PROVINCE OF CHINA', 'Taiwan, Province of China', 'TWN', 158, 886, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(209, 'TJ', 'TAJIKISTAN', 'Tajikistan', 'TJK', 762, 992, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(210, 'TZ', 'TANZANIA, UNITED REPUBLIC OF', 'Tanzania, United Republic of', 'TZA', 834, 255, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(211, 'TH', 'THAILAND', 'Thailand', 'THA', 764, 66, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(212, 'TL', 'TIMOR-LESTE', 'Timor-Leste', 'NUL', 0, 670, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(213, 'TG', 'TOGO', 'Togo', 'TGO', 768, 228, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(214, 'TK', 'TOKELAU', 'Tokelau', 'TKL', 772, 690, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(215, 'TO', 'TONGA', 'Tonga', 'TON', 776, 676, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(216, 'TT', 'TRINIDAD AND TOBAGO', 'Trinidad and Tobago', 'TTO', 780, 1868, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(217, 'TN', 'TUNISIA', 'Tunisia', 'TUN', 788, 216, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(218, 'TR', 'TURKEY', 'Turkey', 'TUR', 792, 90, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(219, 'TM', 'TURKMENISTAN', 'Turkmenistan', 'TKM', 795, 7370, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(220, 'TC', 'TURKS AND CAICOS ISLANDS', 'Turks and Caicos Islands', 'TCA', 796, 1649, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(221, 'TV', 'TUVALU', 'Tuvalu', 'TUV', 798, 688, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(222, 'UG', 'UGANDA', 'Uganda', 'UGA', 800, 256, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(223, 'UA', 'UKRAINE', 'Ukraine', 'UKR', 804, 380, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(224, 'AE', 'UNITED ARAB EMIRATES', 'United Arab Emirates', 'ARE', 784, 971, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(225, 'GB', 'UNITED KINGDOM', 'United Kingdom', 'GBR', 826, 44, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(226, 'US', 'UNITED STATES', 'United States', 'USA', 840, 1, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(227, 'UM', 'UNITED STATES MINOR OUTLYING ISLANDS', 'United States Minor Outlying Islands', 'NUL', 0, 1, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(228, 'UY', 'URUGUAY', 'Uruguay', 'URY', 858, 598, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(229, 'UZ', 'UZBEKISTAN', 'Uzbekistan', 'UZB', 860, 998, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(230, 'VU', 'VANUATU', 'Vanuatu', 'VUT', 548, 678, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(231, 'VE', 'VENEZUELA', 'Venezuela', 'VEN', 862, 58, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(232, 'VN', 'VIET NAM', 'Viet Nam', 'VNM', 704, 84, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(233, 'VG', 'VIRGIN ISLANDS, BRITISH', 'Virgin Islands, British', 'VGB', 92, 1284, '2016-06-14 09:07:15', '2016-06-14 09:07:15'),
+(234, 'VI', 'VIRGIN ISLANDS, U.S.', 'Virgin Islands, U.s.', 'VIR', 850, 1340, '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(235, 'WF', 'WALLIS AND FUTUNA', 'Wallis and Futuna', 'WLF', 876, 681, '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(236, 'EH', 'WESTERN SAHARA', 'Western Sahara', 'ESH', 732, 212, '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(237, 'YE', 'YEMEN', 'Yemen', 'YEM', 887, 967, '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(238, 'ZM', 'ZAMBIA', 'Zambia', 'ZMB', 894, 260, '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(239, 'ZW', 'ZIMBABWE', 'Zimbabwe', 'ZWE', 716, 263, '2016-06-14 09:07:16', '2016-06-14 09:07:16');
 
 -- --------------------------------------------------------
 
@@ -70,8 +387,8 @@ INSERT INTO `canned_response` (`id`, `user_id`, `title`, `message`, `created_at`
 CREATE TABLE IF NOT EXISTS `custom_forms` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `formname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
@@ -89,8 +406,8 @@ CREATE TABLE IF NOT EXISTS `custom_form_fields` (
   `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `required` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
@@ -169,8 +486,8 @@ CREATE TABLE IF NOT EXISTS `department` (
   `recipient` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `group_access` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `department_sign` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `sla` (`sla`),
   KEY `manager_2` (`manager`)
@@ -181,9 +498,9 @@ CREATE TABLE IF NOT EXISTS `department` (
 --
 
 INSERT INTO `department` (`id`, `name`, `type`, `sla`, `manager`, `ticket_assignment`, `outgoing_email`, `template_set`, `auto_ticket_response`, `auto_message_response`, `auto_response_email`, `recipient`, `group_access`, `department_sign`, `created_at`, `updated_at`) VALUES
-(1, 'Support', '', 1, NULL, '', '', '', '', '', '', '', '', '', '2016-05-02 06:32:36', '2016-05-02 06:32:36'),
-(2, 'Sales', '', 1, NULL, '', '', '', '', '', '', '', '', '', '2016-05-02 06:32:36', '2016-05-02 06:32:36'),
-(3, 'Operation', '', 1, NULL, '', '', '', '', '', '', '', '', '', '2016-05-02 06:32:36', '2016-05-02 06:32:36');
+(1, 'Support', '1', 1, NULL, '', '', '', '', '', '', '', '', '', '2016-06-14 09:07:05', '2016-06-14 09:07:05'),
+(2, 'Sales', '1', 1, NULL, '', '', '', '', '', '', '', '', '', '2016-06-14 09:07:05', '2016-06-14 09:07:05'),
+(3, 'Operation', '1', 1, NULL, '', '', '', '', '', '', '', '', '', '2016-06-14 09:07:05', '2016-06-14 09:07:05');
 
 -- --------------------------------------------------------
 
@@ -211,6 +528,8 @@ CREATE TABLE IF NOT EXISTS `emails` (
   `sending_port` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `sending_protocol` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `sending_encryption` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `smtp_validate` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `smtp_authentication` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `internal_notes` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `auto_response` tinyint(1) NOT NULL,
   `fetching_status` tinyint(1) NOT NULL,
@@ -220,8 +539,8 @@ CREATE TABLE IF NOT EXISTS `emails` (
   `sending_status` tinyint(1) NOT NULL,
   `authentication` tinyint(1) NOT NULL,
   `header_spoofing` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `department` (`department`,`priority`,`help_topic`),
   KEY `department_2` (`department`,`priority`,`help_topic`),
@@ -252,8 +571,8 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `can_view_agent_stats` tinyint(1) NOT NULL,
   `department_access` tinyint(1) NOT NULL,
   `admin_notes` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
@@ -262,9 +581,9 @@ CREATE TABLE IF NOT EXISTS `groups` (
 --
 
 INSERT INTO `groups` (`id`, `name`, `group_status`, `can_create_ticket`, `can_edit_ticket`, `can_post_ticket`, `can_close_ticket`, `can_assign_ticket`, `can_transfer_ticket`, `can_delete_ticket`, `can_ban_email`, `can_manage_canned`, `can_manage_faq`, `can_view_agent_stats`, `department_access`, `admin_notes`, `created_at`, `updated_at`) VALUES
-(1, 'Group A', 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, '', '2016-05-02 06:32:35', '2016-05-02 06:32:35'),
-(2, 'Group B', 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, '', '2016-05-02 06:32:36', '2016-05-02 06:32:36'),
-(3, 'Group C', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, '', '2016-05-02 06:32:36', '2016-05-02 06:32:36');
+(1, 'Group A', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, '', '2016-06-14 09:07:05', '2016-06-14 09:07:05'),
+(2, 'Group B', 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, '', '2016-06-14 09:07:05', '2016-06-14 09:07:05'),
+(3, 'Group C', 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, '', '2016-06-14 09:07:05', '2016-06-14 09:07:05');
 
 -- --------------------------------------------------------
 
@@ -276,8 +595,8 @@ CREATE TABLE IF NOT EXISTS `group_assign_department` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `group_id` int(10) unsigned NOT NULL,
   `department_id` int(10) unsigned NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `group_id` (`group_id`),
   KEY `department_id` (`department_id`)
@@ -305,8 +624,8 @@ CREATE TABLE IF NOT EXISTS `help_topic` (
   `type` tinyint(1) NOT NULL,
   `auto_assign` int(10) unsigned DEFAULT NULL,
   `auto_response` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `custom_form` (`custom_form`),
   KEY `department` (`department`),
@@ -321,9 +640,9 @@ CREATE TABLE IF NOT EXISTS `help_topic` (
 --
 
 INSERT INTO `help_topic` (`id`, `topic`, `parent_topic`, `custom_form`, `department`, `ticket_status`, `priority`, `sla_plan`, `thank_page`, `ticket_num_format`, `internal_notes`, `status`, `type`, `auto_assign`, `auto_response`, `created_at`, `updated_at`) VALUES
-(1, 'Support query', '', NULL, 1, 1, 2, 1, '', '1', '', 1, 1, NULL, 0, '2016-05-02 06:32:36', '2016-05-02 06:32:36'),
-(2, 'Sales query', '', NULL, 2, 1, 2, 1, '', '1', '', 0, 1, NULL, 0, '2016-05-02 06:32:36', '2016-05-02 06:32:36'),
-(3, 'Operational query', '', NULL, 3, 1, 2, 1, '', '1', '', 0, 1, NULL, 0, '2016-05-02 06:32:36', '2016-05-02 06:32:36');
+(1, 'Support query', '', NULL, 1, 1, 2, 1, '', '1', '', 1, 1, NULL, 0, '2016-06-14 09:07:06', '2016-06-14 09:07:06'),
+(2, 'Sales query', '', NULL, 2, 1, 2, 1, '', '1', '', 0, 1, NULL, 0, '2016-06-14 09:07:06', '2016-06-14 09:07:06'),
+(3, 'Operational query', '', NULL, 3, 1, 2, 1, '', '1', '', 0, 1, NULL, 0, '2016-06-14 09:07:06', '2016-06-14 09:07:06');
 
 -- --------------------------------------------------------
 
@@ -333,29 +652,16 @@ INSERT INTO `help_topic` (`id`, `topic`, `parent_topic`, `custom_form`, `departm
 
 CREATE TABLE IF NOT EXISTS `kb_article` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` text COLLATE utf8_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
   `type` tinyint(1) NOT NULL,
   `publish_time` datetime DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
-
---
--- Dumping data for table `kb_article`
---
-
-INSERT INTO `kb_article` (`id`, `name`, `slug`, `description`, `status`, `type`, `publish_time`, `created_at`, `updated_at`) VALUES
-(2, 'RETURN & CANCELLATION', 'cloth', '<p>Size doesn&rsquo;t fit you or the Apparel/ Product is damaged/ defective can be returned in its original packing within 7 days of delivery. Once we have verified the damage, defect and/or error, you shall receive a replacement or a full refund for the Product in the original means of payment.</p>\r\n\r\n<p><br />\r\nThe B Clothing reserves the right to refuse a payment on a return of product purchased from www.thebclothing.com if the product is not received in its original condition, or is received damaged or has been used. All products to be returned must be notified to The B Clothing within 7 Days of receipt of your order..</p>\r\n\r\n<p><br />\r\nIn case of International shipments, customers may return any products that they have a size issue with if they are willing to bear the shipping costs. In case of damaged or defective products, International customers would need to send images of the product in its original packaging to support@abcclothing.com to claim a refund. Also, for damages and defects, the customer must notify ABC Clothing within 2 days of receiving the product.</p>\r\n\r\n<p><br />\r\nIn case of any returns that are approved, the purchase amount will be refunded to the customer within 15 business days upon receipt of return package, deducting any applicable return-processing fee.</p>\r\n\r\n<p><br />\r\nThe following mode of refund payments will be used:<br />\r\n&bull; If online payment, then amount will be refunded online.</p>\r\n\r\n<p><br />\r\nAny requests for cancellation of orders placed should be made immediately by contacting support@abc clothing.com. If the order has been processed or shipped, the applicable order cancellation charges will be applied.</p>\r\n\r\n<p>&nbsp;</p>\r\n', 1, 1, '2015-05-03 23:56:00', '2016-05-03 12:57:11', '2016-05-04 01:32:24'),
-(3, ' SHIPPING POLICY', 'hello', '<p>We ship worldwide. We use FedEx/DTDC for shipping.</p>\r\n\r\n<p>Standard Shipping is usually 3-7 Working days for orders within India and 12-15 Working days for International Orders, but usually faster. IF your order doesn&rsquo;t reach you in time, you may write to us at support@abcclothing.com</p>\r\n\r\n<p><strong>International Orders</strong></p>\r\n\r\n<p>For international orders, please note, your shipping will be calculated at the time of Check out only, this is a System Generated amount, based on your Zip Code, Region and Order Weight. (Approx Costs Rs.1250-1500 for 500 gms &ndash; International Shipment, subject to region)</p>\r\n\r\n<p><strong>Tracking</strong></p>\r\n\r\n<p>For tracking your order go to the following website, it will require your tracking ID which is sent via mail in your invoice.</p>\r\n', 1, 1, '2015-05-03 23:58:00', '2016-05-03 13:01:10', '2016-05-16 03:08:03'),
-(4, 'PRIVACY POLICY', 'policy', '<p>The ABC Clothing collects your basic information to service your requests. This basic information is gathered when you purchase products/Gift card vouchers or when you sign up for e-mail notifications. Information gathered from you includes your name, mailing address, e-mail and phone number. Only when you place an order, your card information is requested and is submitted via the highest level of encryption to make sure of the greatest amount of safety and security. Reason why we gather this information:</p>\r\n\r\n<p><strong>To process your order</strong>.<br />\r\nShipping and Customer Service.<br />\r\nWe also use the information to upgrade our products, customer services, website content and navigation.</p>\r\n\r\n<p><br />\r\n<strong>Internal Record Keeping</strong>.<br />\r\nWe at The ABC Clothing respect that you do not want your personal information shared with other companies. The information you provide shall, therefore, be only used to process your order and customer support. The ABC Clothing does not share, sell or rent customer information to any other company.</p>\r\n', 1, 1, '2015-05-04 00:01:00', '2016-05-03 13:06:09', '2016-05-16 03:08:00'),
-(5, 'SECURE SHOPPING GUARANTEE', 'abc', '<p>We accept all major Indian and International Credit/ Debit Cards, and Net Banking with over 40 Banks.</p>\r\n\r\n<p>NO Cash on Delivery (as random people order and share false addresses for fun)</p>\r\n\r\n<p>Yes, shopping at our e-store is 100% safe. All payment requests are directed to the secured PayU Payment Gateway. This gives you the highest level of protection possible whenever you use credit cards or make other financial or confidential transactions over the Internet.</p>\r\n\r\n<p>You can be assured that our e-store offers you the highest standards of security currently available on the net so as to ensure that your shopping experience is private, safe and secure.</p>\r\n', 1, 1, '2015-05-04 00:09:00', '2016-05-03 13:11:15', '2016-05-04 01:32:53'),
-(8, 'TROUSER SKIRTS', 'tro', '<p>Paris takes its fashion very, very seriously. So seriously, in fact, that wearing the wrong thing has actually caused a riot.</p>\r\n\r\n<p>In 1911, two rival Parisian couture houses launched their &quot;trouser skirts,&quot; an innovation in fashion that trod the very fixed line between the genders and seemed to promise greater flexibility for women in general. There were two different versions of the trouser skirt: One was a sort of baggy pant with a very low hanging crotch, described as &quot;a sack with holes made for the legs to go through,&quot; not unlike the fashions on high streets today, and the other a pair of the same kind of pants topped with an over-skirt, again, not unlike high street fashions of today. Both versions were launched by models at the opening day of racing season to general revulsion and disgust, but thankfully, no violence.</p>\r\n\r\n<p>It wasn&#39;t until the ladies attempted to promenade their future fashions on the boulevards that the fisticuffs started&mdash;at the Place de l&#39;Opera, the poor models were attacked by a jeering mob of fashion Philistines, who pulled their hair, trampled their hats, and reduced them to tears. A squad of police officers on bicycles were dispatched to rescue the girls and escort them to safety.</p>\r\n', 1, 1, '2015-05-04 11:54:00', '2016-05-04 00:56:06', '2016-05-04 00:56:06'),
-(9, 'CUSTOM ORDER', 'cus', '<p>You saw, you liked but couldn&rsquo;t see your size? We will custom make it for you.</p>\r\n\r\n<p><strong>How it works:</strong></p>\r\n\r\n<ol>\r\n	<li>You liked something and want to modify a little or have something else on mind, do pen it down and share it with us on Support@abcclothing.com</li>\r\n	<li>We&rsquo;ll work out the price depending on how detailed or intricate you want your garment.</li>\r\n	<li>An advance would be required for any customized orders.</li>\r\n	<li>Once you&rsquo;ve placed a deposit, we&rsquo;ll make you a sketch of the garment.</li>\r\n	<li>We can complete your order in 15-20 days depending on the workload.</li>\r\n	<li>We will also share some updates on the garment in case something needs to be changed.</li>\r\n	<li>We finally ship it to your given address.</li>\r\n</ol>\r\n\r\n<p><strong>Note:</strong>&nbsp;No returns and refunds.</p>\r\n', 1, 1, '2015-05-04 11:56:00', '2016-05-04 01:01:08', '2016-05-04 01:27:43'),
-(10, 'DISCLAIMERS', 'dismiss', '<p>ABC clothing.com does not promise that the site will be inoffensive, error-free or uninterrupted, or that it will provide specific information from use of the site or any content, search, or link on it. The site and its content are delivered on an &ldquo;as-is&rdquo; and &ldquo;as-available&rdquo; basis. ABC clothing.com cannot ensure that files you download from the site will be free of viruses or contamination or destructive features.</p>\r\n\r\n<p>Thebclothing.com disclaims all warranties, express or implied, including any implied warranties of merchantability and fitness for a particular purpose. ABC clothing.com will not be liable for any damages of any kind arising from the use of this site, including, without limitation, direct, indirect, incidental, and punitive and consequential damages.</p>\r\n\r\n<p>ABC clothing.com disclaims any and all liability for the acts, omissions, and conduct of any third-party users, ABC clothing.com users, advertisers, and/or sponsors on the Site, in connection with the Site, or other-wise related to your use of the Site. ABC clothing.com is not responsible for the products, services, actions, or failure to act of any third party in connection with or referenced on the Site. Without limiting the fore-going, you may report the misconduct of users and/or third-party advertisers or service and/or product providers referenced on or included in the Site to ABC clothing.com at Support@abcclothing.com</p>\r\n\r\n<p>ABC clothing.com may investigate the claim and take appropriate action, at its sole discretion.</p>\r\n\r\n<p>For any query kindly drop mail us on&nbsp; Support@abcclothing.com.</p>\r\n', 1, 1, '2015-05-04 12:02:00', '2016-05-04 01:06:37', '2016-05-16 03:07:58');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -367,25 +673,12 @@ CREATE TABLE IF NOT EXISTS `kb_article_relationship` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `article_id` int(10) unsigned NOT NULL,
   `category_id` int(10) unsigned NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `article_relationship_article_id_foreign` (`article_id`),
   KEY `article_relationship_category_id_foreign` (`category_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=29 ;
-
---
--- Dumping data for table `kb_article_relationship`
---
-
-INSERT INTO `kb_article_relationship` (`id`, `article_id`, `category_id`, `created_at`, `updated_at`) VALUES
-(17, 8, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(20, 9, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(23, 2, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(24, 5, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(26, 10, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(27, 4, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(28, 3, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -400,18 +693,10 @@ CREATE TABLE IF NOT EXISTS `kb_category` (
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
   `parent` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `kb_category`
---
-
-INSERT INTO `kb_category` (`id`, `name`, `slug`, `description`, `status`, `parent`, `created_at`, `updated_at`) VALUES
-(1, 'Issue Handeling', 'issue-handling', 'These are the list of error handling issue.<br>', 1, 0, '2016-05-03 08:18:14', '2016-05-16 03:06:05'),
-(2, 'Policy', 'policy', 'These are the policies defined by this organization<br><br>', 1, 0, '2016-05-16 03:07:28', '2016-05-16 03:07:28');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -427,8 +712,8 @@ CREATE TABLE IF NOT EXISTS `kb_comment` (
   `website` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `comment` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `comment_article_id_foreign` (`article_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
@@ -446,17 +731,10 @@ CREATE TABLE IF NOT EXISTS `kb_pages` (
   `visibility` tinyint(1) NOT NULL,
   `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `kb_pages`
---
-
-INSERT INTO `kb_pages` (`id`, `name`, `status`, `visibility`, `slug`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'About Us', 1, 1, 'about-us', '<p>At ABC, our vision is to be Earth''s most customer centric company; to build a place where people can come to find and discover virtually anything they want to buy online. With ABC.com, we endeavor to build that same destination over globally by giving customers more of what they want – vast selection, low prices, fast and reliable delivery, and a trusted and convenient online shopping experience – and provide sellers a world-class e-commerce platform. We are committed to ensure 100% &nbsp;Purchase Protection for your shopping done on ABC.com so that you can benefit from a safe and secure online ordering experience, convenient payment options such as cash on delivery, easy returns and enjoy a completely hassle free online shopping experience.&nbsp;</p><p><br></p><p>We launched with Books and Movies &amp; TV shows and have expanded our offerings to include the Kindle family of E-Readers, the ABC store and various products under different categories. Customers can now buy products from popular brands across categories such as Samsung mobiles, Dell laptops, Canon cameras, Fastrack watches and many more at ABC.com. Don’t forget to check out the ABC Exclusives Store and also, shop for Today''s Deals on ABC and save big every day. On ABC, shopping is not only about buying, it''s also about gifting and through Gift a Smile you can give products online to charity through verified NGOs.&nbsp;</p><p><br></p><p>Customers can also shop our full selection of products using the ABC App for Android, iOS and Windows which offers customers a convenient, fast and secure way to search, browse, compare offers, and shop online quickly and easily, at anytime from anywhere.&nbsp;</p><p><br></p><p>It is still “Day 1” and we continue to relentlessly focus on using our investments in technology and innovation to transform the lives of our customers and all our partners.&nbsp;</p>', '2016-05-16 03:10:14', '2016-05-16 03:20:47');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -467,8 +745,8 @@ INSERT INTO `kb_pages` (`id`, `name`, `status`, `visibility`, `slug`, `descripti
 CREATE TABLE IF NOT EXISTS `kb_settings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `pagination` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
@@ -477,7 +755,7 @@ CREATE TABLE IF NOT EXISTS `kb_settings` (
 --
 
 INSERT INTO `kb_settings` (`id`, `pagination`, `created_at`, `updated_at`) VALUES
-(1, 10, '2016-05-02 06:32:38', '2016-05-02 06:32:38');
+(1, 10, '2016-06-14 09:07:07', '2016-06-14 09:07:07');
 
 -- --------------------------------------------------------
 
@@ -510,14 +788,31 @@ INSERT INTO `languages` (`id`, `name`, `locale`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `login_attempts`
+--
+
+CREATE TABLE IF NOT EXISTS `login_attempts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `User` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `IP` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `Attempts` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `LastLogin` datetime NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `log_notification`
 --
 
 CREATE TABLE IF NOT EXISTS `log_notification` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `log` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
@@ -526,7 +821,7 @@ CREATE TABLE IF NOT EXISTS `log_notification` (
 --
 
 INSERT INTO `log_notification` (`id`, `log`, `created_at`, `updated_at`) VALUES
-(1, 'NOT-1', '2016-05-02 06:32:36', '2016-05-02 06:32:36');
+(1, 'NOT-1', '2016-06-14 09:07:06', '2016-06-14 09:07:06');
 
 -- --------------------------------------------------------
 
@@ -639,7 +934,20 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES
 ('2016_03_31_061740_create_user_notification_table', 1),
 ('2016_04_18_115852_create_workflow_name_table', 1),
 ('2016_04_18_115900_create_workflow_rule_table', 1),
-('2016_04_18_115908_create_workflow_action_table', 1);
+('2016_04_18_115908_create_workflow_action_table', 1),
+('2016_05_10_102423_create_country_code_table', 1),
+('2016_05_10_102604_create_bar_notifications_table', 1),
+('2016_05_11_105244_create_api_settings_table', 1),
+('2016_05_19_055008_create_workflow_close_table', 1),
+('2016_06_02_072210_create_common_settings_table', 1),
+('2016_06_02_074913_create_login_attempts_table', 1),
+('2016_06_02_080005_create_ratings_table', 1),
+('2016_06_02_081020_create_rating_ref_table', 1),
+('2016_06_02_090225_create_settings_security_table', 1),
+('2016_06_02_090628_create_templates_table', 1),
+('2016_06_02_094409_create_template_sets_table', 1),
+('2016_06_02_094420_create_template_types_table', 1),
+('2016_06_02_095357_create_ticket_token_table', 1);
 
 -- --------------------------------------------------------
 
@@ -652,26 +960,18 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `model_id` int(11) NOT NULL,
   `userid_created` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `notifications`
 --
 
 INSERT INTO `notifications` (`id`, `model_id`, `userid_created`, `type_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 3, '2016-05-03 00:16:13', '2016-05-03 00:16:13'),
-(2, 2, 1, 3, '2016-05-03 00:27:13', '2016-05-03 00:27:13'),
-(3, 3, 2, 3, '2016-05-03 01:03:59', '2016-05-03 01:03:59'),
-(4, 4, 1, 3, '2016-05-03 01:07:15', '2016-05-03 01:07:15'),
-(5, 5, 3, 3, '2016-05-03 01:14:11', '2016-05-03 01:14:11'),
-(6, 6, 4, 3, '2016-05-03 01:19:19', '2016-05-03 01:19:19'),
-(7, 7, 1, 3, '2016-05-03 01:25:15', '2016-05-03 01:25:15'),
-(8, 3, 1, 2, '2016-05-16 02:49:22', '2016-05-16 02:49:22'),
-(9, 6, 1, 2, '2016-05-16 02:52:18', '2016-05-16 02:52:18'),
-(10, 6, 1, 2, '2016-05-16 03:00:29', '2016-05-16 03:00:29');
+(1, 1, 2, 3, '2016-06-14 09:18:09', '2016-06-14 09:18:09'),
+(2, 1, 1, 2, '2016-06-14 09:18:37', '2016-06-14 09:18:37');
 
 -- --------------------------------------------------------
 
@@ -684,10 +984,19 @@ CREATE TABLE IF NOT EXISTS `notification_types` (
   `message` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `icon_class` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `notification_types`
+--
+
+INSERT INTO `notification_types` (`id`, `message`, `type`, `icon_class`, `created_at`, `updated_at`) VALUES
+(1, 'A new user is registered', 'registration', 'fa fa-user', '2016-06-14 09:06:58', '2016-06-14 09:06:58'),
+(2, 'You have a new reply on this ticket', 'reply', 'fa fa-envelope', '2016-06-14 09:06:58', '2016-06-14 09:06:58'),
+(3, 'A new ticket has been created', 'new_ticket', 'fa fa-envelope', '2016-06-14 09:06:58', '2016-06-14 09:06:58');
 
 -- --------------------------------------------------------
 
@@ -703,18 +1012,11 @@ CREATE TABLE IF NOT EXISTS `organization` (
   `address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `head` int(10) unsigned DEFAULT NULL,
   `internal_notes` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `head` (`head`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `organization`
---
-
-INSERT INTO `organization` (`id`, `name`, `phone`, `website`, `address`, `head`, `internal_notes`, `created_at`, `updated_at`) VALUES
-(1, 'XYZ Organization', '', '', '', NULL, '', '2016-05-16 03:21:30', '2016-05-16 03:21:30');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -741,8 +1043,52 @@ CREATE TABLE IF NOT EXISTS `plugins` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ratings`
+--
+
+CREATE TABLE IF NOT EXISTS `ratings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `display_order` int(11) NOT NULL,
+  `allow_modification` int(11) NOT NULL,
+  `rating_scale` int(11) NOT NULL,
+  `rating_area` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `restrict` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `ratings`
+--
+
+INSERT INTO `ratings` (`id`, `name`, `display_order`, `allow_modification`, `rating_scale`, `rating_area`, `restrict`, `created_at`, `updated_at`) VALUES
+(1, 'OverAll Satisfaction', 1, 1, 5, 'Helpdesk Area', '', '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
+(2, 'Reply Rating', 1, 1, 5, 'Comment Area', '', '2016-06-14 09:07:17', '2016-06-14 09:07:17');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rating_ref`
+--
+
+CREATE TABLE IF NOT EXISTS `rating_ref` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `rating_id` int(11) NOT NULL,
+  `ticket_id` int(11) NOT NULL,
+  `thread_id` int(11) NOT NULL,
+  `rating_value` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
@@ -808,8 +1154,8 @@ CREATE TABLE IF NOT EXISTS `settings_alert_notice` (
   `system_error` tinyint(1) NOT NULL,
   `sql_error` tinyint(1) NOT NULL,
   `excessive_failure` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
@@ -818,7 +1164,7 @@ CREATE TABLE IF NOT EXISTS `settings_alert_notice` (
 --
 
 INSERT INTO `settings_alert_notice` (`id`, `ticket_status`, `ticket_admin_email`, `ticket_department_manager`, `ticket_department_member`, `ticket_organization_accmanager`, `message_status`, `message_last_responder`, `message_assigned_agent`, `message_department_manager`, `message_organization_accmanager`, `internal_status`, `internal_last_responder`, `internal_assigned_agent`, `internal_department_manager`, `assignment_status`, `assignment_assigned_agent`, `assignment_team_leader`, `assignment_team_member`, `transfer_status`, `transfer_assigned_agent`, `transfer_department_manager`, `transfer_department_member`, `overdue_status`, `overdue_assigned_agent`, `overdue_department_manager`, `overdue_department_member`, `system_error`, `sql_error`, `excessive_failure`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2016-05-02 06:32:36', '2016-05-02 06:32:36');
+(1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2016-06-14 09:07:06', '2016-06-14 09:07:06');
 
 -- --------------------------------------------------------
 
@@ -833,8 +1179,8 @@ CREATE TABLE IF NOT EXISTS `settings_auto_response` (
   `submitter` tinyint(1) NOT NULL,
   `participants` tinyint(1) NOT NULL,
   `overlimit` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
@@ -843,7 +1189,7 @@ CREATE TABLE IF NOT EXISTS `settings_auto_response` (
 --
 
 INSERT INTO `settings_auto_response` (`id`, `new_ticket`, `agent_new_ticket`, `submitter`, `participants`, `overlimit`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 0, 0, 0, '2016-05-02 06:32:36', '2016-05-02 06:32:36');
+(1, 1, 1, 0, 0, 0, '2016-06-14 09:07:06', '2016-06-14 09:07:06');
 
 -- --------------------------------------------------------
 
@@ -862,8 +1208,8 @@ CREATE TABLE IF NOT EXISTS `settings_company` (
   `thank_page` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `logo` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `use_logo` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
@@ -872,7 +1218,7 @@ CREATE TABLE IF NOT EXISTS `settings_company` (
 --
 
 INSERT INTO `settings_company` (`id`, `company_name`, `website`, `phone`, `address`, `landing_page`, `offline_page`, `thank_page`, `logo`, `use_logo`, `created_at`, `updated_at`) VALUES
-(1, 'ABC Company', '', '', '', '', '', '', '', '0', '2016-05-02 06:32:36', '2016-05-16 04:41:49');
+(1, 'ABC Company', '', '', '', '', '', '', '', '0', '2016-06-14 09:07:06', '2016-06-14 09:10:04');
 
 -- --------------------------------------------------------
 
@@ -894,8 +1240,8 @@ CREATE TABLE IF NOT EXISTS `settings_email` (
   `all_emails` tinyint(1) NOT NULL,
   `email_collaborator` tinyint(1) NOT NULL,
   `attachment` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
@@ -904,7 +1250,7 @@ CREATE TABLE IF NOT EXISTS `settings_email` (
 --
 
 INSERT INTO `settings_email` (`id`, `template`, `sys_email`, `alert_email`, `admin_email`, `mta`, `email_fetching`, `notification_cron`, `strip`, `separator`, `all_emails`, `email_collaborator`, `attachment`, `created_at`, `updated_at`) VALUES
-(1, 'default', NULL, '', '', '', 1, 0, 0, 0, 1, 1, 1, '2016-05-02 06:32:36', '2016-05-02 06:32:36');
+(1, 'default', NULL, '', '', '', 1, 1, 0, 0, 1, 1, 1, '2016-06-14 09:07:06', '2016-06-14 09:07:06');
 
 -- --------------------------------------------------------
 
@@ -918,11 +1264,36 @@ CREATE TABLE IF NOT EXISTS `settings_ratings` (
   `publish` int(11) NOT NULL,
   `modify` int(11) NOT NULL,
   `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `settings_ratings_slug_unique` (`slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `settings_security`
+--
+
+CREATE TABLE IF NOT EXISTS `settings_security` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `lockout_message` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `backlist_offender` int(11) NOT NULL,
+  `backlist_threshold` int(11) NOT NULL,
+  `lockout_period` int(11) NOT NULL,
+  `days_to_keep_logs` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `settings_security`
+--
+
+INSERT INTO `settings_security` (`id`, `lockout_message`, `backlist_offender`, `backlist_threshold`, `lockout_period`, `days_to_keep_logs`, `created_at`, `updated_at`) VALUES
+(1, 'You have been locked out of application due to too many failed login attempts.', 0, 15, 15, 0, '2016-06-14 09:07:16', '2016-06-14 09:07:16');
 
 -- --------------------------------------------------------
 
@@ -949,8 +1320,9 @@ CREATE TABLE IF NOT EXISTS `settings_system` (
   `day_date_time` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `time_zone` int(10) unsigned DEFAULT NULL,
   `content` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `time_farmat` (`time_farmat`),
   KEY `date_format` (`date_format`),
@@ -962,8 +1334,8 @@ CREATE TABLE IF NOT EXISTS `settings_system` (
 -- Dumping data for table `settings_system`
 --
 
-INSERT INTO `settings_system` (`id`, `status`, `url`, `name`, `department`, `page_size`, `log_level`, `purge_log`, `api_enable`, `api_key_mandatory`, `api_key`, `name_format`, `time_farmat`, `date_format`, `date_time_format`, `day_date_time`, `time_zone`, `content`, `created_at`, `updated_at`) VALUES
-(1, 1, '', '<div style="color:#7B7B7B"><b>ABC</b> SUPPORT CENTER</div>', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 79, '', '2016-05-02 06:32:38', '2016-05-16 04:44:53');
+INSERT INTO `settings_system` (`id`, `status`, `url`, `name`, `department`, `page_size`, `log_level`, `purge_log`, `api_enable`, `api_key_mandatory`, `api_key`, `name_format`, `time_farmat`, `date_format`, `date_time_format`, `day_date_time`, `time_zone`, `content`, `version`, `created_at`, `updated_at`) VALUES
+(1, 1, '', '<b>ABC</b> SUPPORT CENTER', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 79, '', '', '2016-06-14 09:07:18', '2016-06-14 09:10:38');
 
 -- --------------------------------------------------------
 
@@ -980,6 +1352,7 @@ CREATE TABLE IF NOT EXISTS `settings_ticket` (
   `help_topic` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `max_open_ticket` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `collision_avoid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `lock_ticket_frequency` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `captcha` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
   `claim_response` tinyint(1) NOT NULL,
@@ -989,8 +1362,8 @@ CREATE TABLE IF NOT EXISTS `settings_ticket` (
   `html` tinyint(1) NOT NULL,
   `client_update` tinyint(1) NOT NULL,
   `max_file_size` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
@@ -998,8 +1371,8 @@ CREATE TABLE IF NOT EXISTS `settings_ticket` (
 -- Dumping data for table `settings_ticket`
 --
 
-INSERT INTO `settings_ticket` (`id`, `num_format`, `num_sequence`, `priority`, `sla`, `help_topic`, `max_open_ticket`, `collision_avoid`, `captcha`, `status`, `claim_response`, `assigned_ticket`, `answered_ticket`, `agent_mask`, `html`, `client_update`, `max_file_size`, `created_at`, `updated_at`) VALUES
-(1, '#ABCD 1234 1234567', '0', '1', '2', '1', '', '2', '', 1, 0, 0, 0, 0, 0, 0, 0, '2016-05-02 06:32:36', '2016-05-02 06:32:36');
+INSERT INTO `settings_ticket` (`id`, `num_format`, `num_sequence`, `priority`, `sla`, `help_topic`, `max_open_ticket`, `collision_avoid`, `lock_ticket_frequency`, `captcha`, `status`, `claim_response`, `assigned_ticket`, `answered_ticket`, `agent_mask`, `html`, `client_update`, `max_file_size`, `created_at`, `updated_at`) VALUES
+(1, '#ABCD 1234 1234567', '0', '1', '2', '1', '', '2', '0', '', 1, 0, 0, 0, 0, 0, 0, 0, '2016-06-14 09:07:06', '2016-06-14 09:07:06');
 
 -- --------------------------------------------------------
 
@@ -1015,8 +1388,8 @@ CREATE TABLE IF NOT EXISTS `sla_plan` (
   `status` tinyint(1) NOT NULL,
   `transient` tinyint(1) NOT NULL,
   `ticket_overdue` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
@@ -1025,9 +1398,9 @@ CREATE TABLE IF NOT EXISTS `sla_plan` (
 --
 
 INSERT INTO `sla_plan` (`id`, `name`, `grace_period`, `admin_note`, `status`, `transient`, `ticket_overdue`, `created_at`, `updated_at`) VALUES
-(1, 'Sla 1', '6 Hours', '', 1, 0, 0, '2016-05-02 06:32:34', '2016-05-02 06:32:34'),
-(2, 'Sla 2', '12 Hours', '', 1, 0, 0, '2016-05-02 06:32:34', '2016-05-02 06:32:34'),
-(3, 'Sla 3', '24 Hours', '', 1, 0, 0, '2016-05-02 06:32:34', '2016-05-02 06:32:34');
+(1, 'Sla 1', '6 Hours', '', 1, 0, 0, '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
+(2, 'Sla 2', '12 Hours', '', 1, 0, 0, '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
+(3, 'Sla 3', '24 Hours', '', 1, 0, 0, '2016-06-14 09:07:04', '2016-06-14 09:07:04');
 
 -- --------------------------------------------------------
 
@@ -1042,8 +1415,8 @@ CREATE TABLE IF NOT EXISTS `teams` (
   `team_lead` int(10) unsigned DEFAULT NULL,
   `assign_alert` tinyint(1) NOT NULL,
   `admin_notes` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `team_lead` (`team_lead`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
@@ -1053,9 +1426,9 @@ CREATE TABLE IF NOT EXISTS `teams` (
 --
 
 INSERT INTO `teams` (`id`, `name`, `status`, `team_lead`, `assign_alert`, `admin_notes`, `created_at`, `updated_at`) VALUES
-(1, 'Level 1 Support', 1, NULL, 0, '', '2016-05-02 06:32:35', '2016-05-02 06:32:35'),
-(2, 'Level 2 Support', 0, NULL, 0, '', '2016-05-02 06:32:35', '2016-05-02 06:32:35'),
-(3, 'Developer', 0, NULL, 0, '', '2016-05-02 06:32:35', '2016-05-02 06:32:35');
+(1, 'Level 1 Support', 1, NULL, 0, '', '2016-06-14 09:07:05', '2016-06-14 09:07:05'),
+(2, 'Level 2 Support', 0, NULL, 0, '', '2016-06-14 09:07:05', '2016-06-14 09:07:05'),
+(3, 'Developer', 0, NULL, 0, '', '2016-06-14 09:07:05', '2016-06-14 09:07:05');
 
 -- --------------------------------------------------------
 
@@ -1067,8 +1440,8 @@ CREATE TABLE IF NOT EXISTS `team_assign_agent` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `team_id` int(10) unsigned DEFAULT NULL,
   `agent_id` int(10) unsigned DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `team_id` (`team_id`),
   KEY `agent_id` (`agent_id`)
@@ -1087,10 +1460,102 @@ CREATE TABLE IF NOT EXISTS `template` (
   `template_set_to_clone` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `language` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `internal_note` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `templates`
+--
+
+CREATE TABLE IF NOT EXISTS `templates` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `variable` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` int(11) NOT NULL,
+  `subject` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `message` text COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `set_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=13 ;
+
+--
+-- Dumping data for table `templates`
+--
+
+INSERT INTO `templates` (`id`, `name`, `variable`, `type`, `subject`, `message`, `description`, `set_id`, `created_at`, `updated_at`) VALUES
+(1, 'assign-ticket', '', 1, '', '<div>Hello {!!$ticket_agent_name!!},<br /><br />Ticket No: {!!$ticket_number!!}<br />Has been assigned to you by {!!$ticket_assigner!!} <br /><br />Thank You<br />Kind Regards,<br />{!!$system_from!!}</div>', '', 1, '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(2, 'check-ticket', '', 2, '', '<div>Hello {!!$user!!},<br /><br />Click the link below to view your Requested ticket<br />{!!$ticket_link_with_number!!}<br /><br />Kind Regards,<br />{!!$system_from!!} </div>', '', 1, '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
+(3, 'close-ticket', '', 3, '', '<div>Hello,<br /><br />This message is regarding your ticket ID {!!$ticket_number!!}. We are changing the status of this ticket to "Closed" as the issue appears to be resolved.<br /><br />Thank you<br />Kind regards,<br /> {!!$system_from!!} <br /><br /></div>', '', 1, '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
+(4, 'create-ticket', '', 4, '', '<div><span>Hello {!!$user!!}<br /><br /></span><span>Thank you for contacting us. This is an automated response confirming the receipt of your ticket. Our team will get back to you as soon as possible. When replying, please make sure that the ticket ID is kept in the subject so that we can track your replies.<br /><br /></span><span>Ticket ID: {!!$ticket_number!!} <br /></span><span>{!!$department_sign!!}<br /></span>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', '', 1, '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
+(5, 'create-ticket-agent', '', 5, '', '<div>Hello {!!$ticket_agent_name!!},       <br /><br />New ticket {!!$ticket_number!!} created <br />From<br />Name :- {!!$ticket_client_name!!}    <br />E-mail :- {!!$ticket_client_email!!}   <br /><br />{!!$content!!}     <br /><br />Kind Regards,<br />{!!$system_from!!}</div><br />', '', 1, '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
+(6, 'create-ticket-by-agent', '', 6, '', '<div>{!!$content!!}<br /><br />{!!$agent_sign!!}<br /><br />You can check the status of or update this ticket online at: {!!$system_link!!}</div>', '', 1, '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
+(7, 'error-report', '', 7, '', '&nbsp; {!!$system_error!!} &nbsp;', '', 1, '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
+(8, 'registration-notification', '', 8, '', '<span></span><p>Hello {!!$user!!} , </p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Password: {!!$user_password!!}</p><p>You can visit the helpdesk to browse articles and contact us at any time: {!!$system_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!} </p>', '', 1, '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
+(9, 'reset-password', '', 9, '', 'Hello {!!$user!!}<br /><br />You asked to reset your password. To do so, please click this link:<br /><br />{!!$password_reset_link!!}<br /><br /><br />This will let you change your password to something new. If you did not ask for this, do not worry, we will keep your password safe.<br /><br />Thank You.<br /><br />Kind Regards,<br /><br /> {!!$system_from!!}', '', 1, '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
+(10, 'ticket-reply', '', 10, '', '<span></span><div><span></span><p>{!!$content!!}   <br /></p><p>{!!$agent_sign!!} </p><p>Ticket Details</p><p>Ticket ID: {!!$ticket_number!!}     </p><div><br /></div><br /></div><div><br /></div>', '', 1, '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
+(11, 'ticket-reply-agent', '', 11, '', '<div>Hello {!!$ticket_agent_name!!},<b><br /></b>A reply been made to ticket {!!$ticket_number!!}<b><br /></b>From<br />Name: {!!$ticket_client_name!!}<br />E-mail: {!!$ticket_client_email!!}<b><br /></b>{!!$content!!}<b><br /></b>Kind Regards,<br />{!!$system_from!!}</div>', '', 1, '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
+(12, 'registration', '', 12, '', '<span></span><p>Hello {!!$user!!} , </p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!} </p>', '', 1, '2016-06-14 09:07:17', '2016-06-14 09:07:17');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `template_sets`
+--
+
+CREATE TABLE IF NOT EXISTS `template_sets` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `active` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `template_sets`
+--
+
+INSERT INTO `template_sets` (`id`, `name`, `active`, `created_at`, `updated_at`) VALUES
+(1, 'default', 1, '2016-06-14 09:07:16', '2016-06-14 09:07:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `template_types`
+--
+
+CREATE TABLE IF NOT EXISTS `template_types` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=13 ;
+
+--
+-- Dumping data for table `template_types`
+--
+
+INSERT INTO `template_types` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'assign-ticket', '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(2, 'check-ticket', '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(3, 'close-ticket', '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(4, 'create-ticket', '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(5, 'create-ticket-agent', '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(6, 'create-ticket-by-agent', '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(7, 'error-report', '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(8, 'registration-notification', '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(9, 'reset-password', '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(10, 'ticket-reply', '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(11, 'ticket-reply-agent', '2016-06-14 09:07:16', '2016-06-14 09:07:16'),
+(12, 'registration', '2016-06-14 09:07:16', '2016-06-14 09:07:16');
 
 -- --------------------------------------------------------
 
@@ -1129,8 +1594,8 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   `closed_at` datetime DEFAULT NULL,
   `last_message_at` datetime DEFAULT NULL,
   `last_response_at` datetime DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `dept_id` (`dept_id`),
@@ -1141,18 +1606,14 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   KEY `status` (`status`),
   KEY `assigned_to` (`assigned_to`),
   KEY `source` (`source`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `tickets`
 --
 
 INSERT INTO `tickets` (`id`, `ticket_number`, `user_id`, `dept_id`, `team_id`, `priority_id`, `sla`, `help_topic_id`, `status`, `rating`, `ratingreply`, `flags`, `ip_address`, `assigned_to`, `lock_by`, `lock_at`, `source`, `isoverdue`, `reopened`, `isanswered`, `html`, `is_deleted`, `closed`, `is_transferred`, `transferred_at`, `reopened_at`, `duedate`, `closed_at`, `last_message_at`, `last_response_at`, `created_at`, `updated_at`) VALUES
-(3, 'AAAD-0003-0000003', 2, 2, NULL, 1, 1, 2, 1, 0, 0, 0, 0, 1, 1, '2016-05-16 10:18:17', 3, 0, 0, 1, 0, 0, 0, 0, '0000-00-00 00:00:00', NULL, '2016-05-03 12:33:59', NULL, NULL, NULL, '2016-05-03 01:03:59', '2016-05-16 04:48:17'),
-(4, 'AAAE-0004-0000004', 2, 1, NULL, 1, 1, 1, 1, 0, 0, 0, 0, NULL, 1, '2016-05-16 10:06:55', 3, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', NULL, '2016-05-03 12:37:15', NULL, NULL, NULL, '2016-05-03 01:07:15', '2016-05-16 04:36:55'),
-(5, 'AAAF-0005-0000005', 2, 1, NULL, 1, 1, 1, 1, 0, 0, 0, 0, NULL, 1, '2016-05-16 10:06:53', 3, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', NULL, '2016-05-03 12:44:10', NULL, NULL, NULL, '2016-05-03 01:14:10', '2016-05-16 04:36:53'),
-(6, 'AAAG-0006-0000006', 2, 1, NULL, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, '2016-05-16 10:06:48', 3, 0, 0, 1, 0, 0, 0, 0, '0000-00-00 00:00:00', NULL, '2016-05-03 12:49:19', NULL, NULL, NULL, '2016-05-03 01:19:19', '2016-05-16 04:36:48'),
-(7, 'AAAH-0007-0000007', 2, 2, NULL, 1, 1, 2, 1, 0, 0, 0, 0, NULL, 1, '2016-05-16 10:06:50', 3, 0, 0, 0, 0, 0, 0, 0, '0000-00-00 00:00:00', NULL, '2016-05-03 12:55:15', NULL, NULL, NULL, '2016-05-03 01:25:15', '2016-05-16 04:36:50');
+(1, 'AAAB-0001-0000001', 2, 1, NULL, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, NULL, 3, 0, 0, 1, 0, 0, 0, 0, '0000-00-00 00:00:00', NULL, '2016-06-14 20:48:09', NULL, NULL, NULL, '2016-06-14 09:18:09', '2016-06-14 09:18:37');
 
 -- --------------------------------------------------------
 
@@ -1167,8 +1628,8 @@ CREATE TABLE IF NOT EXISTS `ticket_attachment` (
   `size` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `poster` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   `file` mediumblob,
   PRIMARY KEY (`id`),
   KEY `thread_id` (`thread_id`)
@@ -1186,8 +1647,8 @@ CREATE TABLE IF NOT EXISTS `ticket_collaborator` (
   `ticket_id` int(10) unsigned DEFAULT NULL,
   `user_id` int(10) unsigned DEFAULT NULL,
   `role` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ticket_id` (`ticket_id`),
   KEY `user_id` (`user_id`)
@@ -1204,8 +1665,8 @@ CREATE TABLE IF NOT EXISTS `ticket_form_data` (
   `ticket_id` int(10) unsigned DEFAULT NULL,
   `title` text COLLATE utf8_unicode_ci NOT NULL,
   `content` text COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ticket_id` (`ticket_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
@@ -1272,9 +1733,11 @@ CREATE TABLE IF NOT EXISTS `ticket_status` (
   `message` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `flags` int(11) NOT NULL,
   `sort` int(11) NOT NULL,
+  `email_user` int(11) NOT NULL,
+  `icon_class` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `properties` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
 
@@ -1282,12 +1745,12 @@ CREATE TABLE IF NOT EXISTS `ticket_status` (
 -- Dumping data for table `ticket_status`
 --
 
-INSERT INTO `ticket_status` (`id`, `name`, `state`, `mode`, `message`, `flags`, `sort`, `properties`, `created_at`, `updated_at`) VALUES
-(1, 'Open', 'open', 3, 'Ticket have been Reopened by', 0, 1, 'Open tickets.', '2016-05-02 06:32:34', '2016-05-02 06:32:34'),
-(2, 'Resolved', 'closed', 1, 'Ticket have been Resolved by', 0, 2, 'Resolved tickets.', '2016-05-02 06:32:34', '2016-05-02 06:32:34'),
-(3, 'Closed', 'closed', 3, 'Ticket have been Closed by', 0, 3, 'Closed tickets. Tickets will still be accessible on client and staff panels.', '2016-05-02 06:32:34', '2016-05-02 06:32:34'),
-(4, 'Archived', 'archived', 3, 'Ticket have been Archived by', 0, 4, 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.', '2016-05-02 06:32:34', '2016-05-02 06:32:34'),
-(5, 'Deleted', 'deleted', 3, 'Ticket have been Deleted by', 0, 5, 'Tickets queued for deletion. Not accessible on ticket queues.', '2016-05-02 06:32:34', '2016-05-02 06:32:34');
+INSERT INTO `ticket_status` (`id`, `name`, `state`, `mode`, `message`, `flags`, `sort`, `email_user`, `icon_class`, `properties`, `created_at`, `updated_at`) VALUES
+(1, 'Open', 'open', 3, 'Ticket have been Reopened by', 0, 1, 0, '', 'Open tickets.', '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
+(2, 'Resolved', 'closed', 1, 'Ticket have been Resolved by', 0, 2, 0, '', 'Resolved tickets.', '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
+(3, 'Closed', 'closed', 3, 'Ticket have been Closed by', 0, 3, 0, '', 'Closed tickets. Tickets will still be accessible on client and staff panels.', '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
+(4, 'Archived', 'archived', 3, 'Ticket have been Archived by', 0, 4, 0, '', 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.', '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
+(5, 'Deleted', 'deleted', 3, 'Ticket have been Deleted by', 0, 5, 0, '', 'Tickets queued for deletion. Not accessible on ticket queues.', '2016-06-14 09:07:04', '2016-06-14 09:07:04');
 
 -- --------------------------------------------------------
 
@@ -1308,29 +1771,36 @@ CREATE TABLE IF NOT EXISTS `ticket_thread` (
   `body` text COLLATE utf8_unicode_ci NOT NULL,
   `format` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `ip_address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ticket_id_2` (`ticket_id`),
   KEY `user_id` (`user_id`),
   KEY `source` (`source`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `ticket_thread`
 --
 
 INSERT INTO `ticket_thread` (`id`, `ticket_id`, `user_id`, `poster`, `source`, `reply_rating`, `rating_count`, `is_internal`, `title`, `body`, `format`, `ip_address`, `created_at`, `updated_at`) VALUES
-(3, 3, 2, 'client', NULL, 0, 0, 0, 'Sewing defects ', 'Hi ABC Team,\n<br/><br/>\nWe have taken delivery of the consignment sent against B/No.123789 dated 3th May 2016.<br/><br/>\n\nOn opening the parcel, we have observed that 3 items  of "Jake and jones T-shirt" are not there. We shall, therefore, appreciate your sending us the same through registered post. Alternatively please issue us the necessary credit note.<br/><br/>\n\nYours faithfully,\nFor Excel Packaging', '', '', '2016-05-03 01:03:59', '2016-05-03 01:03:59'),
-(4, 4, 2, 'client', NULL, 0, 0, 0, 'Colour effects', 'Hi ABC Team,\n<br/><br/>\nWhen we placed our T-shirt order with your representative when he called on us last time, we were given an undertaking that we would be provided free delivery. After some time i get call charged with the cost of delivery.<br/><br/>\n\nThis is something new, strange and in total violation of business morality and so were constrained not to send our further orders. First we thought to keep silent over <br/>\nthe matter but now we think that you should be informed about it. If you had been in our place, you too would have taken this matter as un-generous and unethical.<br/><br/>\n\n\n\nThank you', '', '', '2016-05-03 01:07:15', '2016-05-03 01:07:15'),
-(5, 5, 2, 'client', NULL, 0, 0, 0, 'Sizing defects ', 'Hi ABC Team,\n<br/><br/>\n\nWhen we placed our trial order with your representative when he called on us last time, we were given an undertaking that we would be provided free delivery. But to our surprise and annoyance we were charged with the cost of delivery.<br/><br/>\n\nThis is something new, strange and in total violation of business morality and so were constrained not to send our further orders. First we thought to keep silent over\nthe matter but now we think that you should be informed about it. If you had been in our place, you too would have taken this matter as un-generous and unethical.<br/><br/>\n\nWe look forward to your views and comments at the earliest.\n<br/><br/>\nThank You\n', '', '', '2016-05-03 01:14:11', '2016-05-03 01:14:11'),
-(6, 6, 2, 'client', NULL, 0, 0, 0, 'Garment defects', 'Hi ABC Team,\n<br/><br/>\nWe have recently received several complaints from customers about your T-shirt. The t-shirt are clearly not giving satisfaction and in some cases we have had to refund the purchase price.<br/><br/>\n\nThe T-shirt are part of the batch of 60 supplied against our order number 12345 dated 01 may. This order was placed on the basis of a sample  Shirt left by your representative. We have ourselves compared the performance of this sample with that of a number of the pens from this batch, and there is little doubt that many of them are faulty - some of them leak and others blot when writing.<br/><br/>\n\nThe complaints we have received relate only to shirt from the batch mentioned. shirt supplied before these have always been satisfactory.\n\nWe therefore wish to return the unsold balance, amounting to 10 shirt. Please replace them with shirt of the quality which our earlier dealings with you have led us to expect.<br/><br/>\n\nPlease let us know what arrangements you wish us to make for the return of these unsuitable shirt.<br/><br/>\n\nYours faithfully', '', '', '2016-05-03 01:19:20', '2016-05-03 01:19:20'),
-(7, 7, 2, 'client', NULL, 0, 0, 0, 'cash withdraw', 'Hi ABC Team,\n<br/><br/>\nI am writing to you to complain about the shipment of sweaters we received yesterday against the above order.\nThe boxes in which the sweaters were packed were damaged, and looked as if they had been broken open in transit. <br/><br/>\nFrom your invoice No.1234 we estimate that thirty garments have been stolen to the value of USD150. And because of\nthe rummaging in the boxes, quite a few other garments were crushed or stained and cannot be sold as new articles in our shops.\n<br/><br/>\nAs the sale was on a c.i.f. basis and the forwarding company your agents, we suggest you contact them with regard to compensation.\nYou will find a list of the damaged and missing articles attached, and the consignment will be put to one side until we receive your instructions.\n<br/><br/>\nThank You', '', '', '2016-05-03 01:25:15', '2016-05-03 01:25:15'),
-(8, 3, 1, '', NULL, 0, 0, 1, '', 'This Ticket have been assigned to demo admin', '', '', '2016-05-16 02:49:22', '2016-05-16 02:49:22'),
-(9, 3, 1, 'support', NULL, 0, 0, 0, '', 'Hi Client,<br><br>We will be looking into your issue.&nbsp;<br><br>Thanks<br>Regards ABC team.', '', '', '2016-05-16 02:49:22', '2016-05-16 02:49:22'),
-(10, 6, 1, '', NULL, 0, 0, 1, '', 'This Ticket have been assigned to demo admin', '', '', '2016-05-16 02:52:18', '2016-05-16 02:52:18'),
-(11, 6, 1, 'support', NULL, 0, 0, 0, '', 'Hi Client,<br><br>We are looking into your issue.<br><br>Thanks,<br>Regards Team ABC.<br>', '', '', '2016-05-16 02:52:18', '2016-05-16 02:52:18'),
-(12, 6, 1, 'support', NULL, 0, 0, 0, '', 'Hi Client,<br><br>We have Resend your orders<br><br>Thanks,<br>Regards Team ABC.<br>', '', '', '2016-05-16 03:00:29', '2016-05-16 03:00:29');
+(1, 1, 2, 'client', NULL, 0, 0, 0, 'Sewing defects', 'Hi ABC Team, <br /><br />We have taken delivery of the consignment sent against B/No.123789 dated 3th May 2016.<br /><br />On opening the parcel, we have observed that 3 items of "Jake and jones T-shirt" are not there. We shall, therefore, appreciate your sending us the same through registered post. Alternatively please issue us the necessary credit note.<br /><br />Yours faithfully, For Excel Packaging', '', '', '2016-06-14 09:18:09', '2016-06-14 09:18:09'),
+(2, 1, 1, 'support', NULL, 0, 0, 0, '', 'Hi Client,<br /><br />We will be looking into your issue. <br /><br />Thanks<br /><span>Regards ABC team.</span>', '', '', '2016-06-14 09:18:37', '2016-06-14 09:18:37');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ticket_token`
+--
+
+CREATE TABLE IF NOT EXISTS `ticket_token` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ticket_id` int(11) NOT NULL,
+  `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1501,6 +1971,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   `active` int(11) NOT NULL,
   `ext` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `country_code` int(11) NOT NULL,
   `phone_number` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `mobile` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `agent_sign` text COLLATE utf8_unicode_ci NOT NULL,
@@ -1518,23 +1989,21 @@ CREATE TABLE IF NOT EXISTS `users` (
   `internal_note` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `profile_pic` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`),
   KEY `assign_group_3` (`assign_group`),
   KEY `primary_dpt_2` (`primary_dpt`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `user_name`, `first_name`, `last_name`, `gender`, `email`, `ban`, `password`, `active`, `ext`, `phone_number`, `mobile`, `agent_sign`, `account_type`, `account_status`, `assign_group`, `primary_dpt`, `agent_tzone`, `daylight_save`, `limit_access`, `directory_listing`, `vacation_mode`, `company`, `role`, `internal_note`, `profile_pic`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'demo', 'admin', 0, 'demo@admin.com', 0, '$2y$10$YDp.gyUDTlZzcSyQ/APEB.Y.Y/2GJJ7ACkNhv9sCegvyhDCT7idEW', 1, '', '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'admin', '', '', 'sKedQEtnNhcu73PmFv7HHJR2iAfHy6PuU1xEs7Lx2qctQjZ4xEs02tG9LkJ1', '2016-05-02 06:32:39', '2016-05-03 05:40:26'),
-(2, 'Client', '', '', 0, 'demo@client.com', 0, '$2y$10$YDp.gyUDTlZzcSyQ/APEB.Y.Y/2GJJ7ACkNhv9sCegvyhDCT7idEW', 1, '', '9999999999', '', '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', NULL, '2016-05-03 00:16:13', '2016-05-03 00:16:13'),
-(3, 'Client', '', '', 0, 'demo@client2.com', 0, '$2y$10$YDp.gyUDTlZzcSyQ/APEB.Y.Y/2GJJ7ACkNhv9sCegvyhDCT7idEW', 1, '', '9999999999', '', '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', NULL, '2016-05-03 01:14:10', '2016-05-03 01:14:10'),
-(4, 'Client', '', '', 0, 'demo@client3.com', 0, '$2y$10$YDp.gyUDTlZzcSyQ/APEB.Y.Y/2GJJ7ACkNhv9sCegvyhDCT7idEW', 1, '', '9999999999', '', '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', NULL, '2016-05-03 01:19:19', '2016-05-03 01:19:19');
+INSERT INTO `users` (`id`, `user_name`, `first_name`, `last_name`, `gender`, `email`, `ban`, `password`, `active`, `ext`, `country_code`, `phone_number`, `mobile`, `agent_sign`, `account_type`, `account_status`, `assign_group`, `primary_dpt`, `agent_tzone`, `daylight_save`, `limit_access`, `directory_listing`, `vacation_mode`, `company`, `role`, `internal_note`, `profile_pic`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'demo@admin.com', 'demo', 'admin', 0, 'demo@admin.com', 0, '$2y$10$TvCyQp7lKuT7MF34IT9KwOz0e2BxYglT0HmiKdS6Po58MpKx5r9Du', 1, '', 0, '', '', '', '', '', 1, 1, '', '', '', '', '', '', 'admin', '', '', NULL, '2016-06-14 09:07:18', '2016-06-14 09:07:18'),
+(2, 'demo@client.com', 'demo', 'client', 1, 'demo@client.com', 0, '$2y$10$TvCyQp7lKuT7MF34IT9KwOz0e2BxYglT0HmiKdS6Po58MpKx5r9Du', 1, '', 0, '', '', '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', NULL, '2016-06-14 09:07:18', '2016-06-14 09:07:18');
 
 -- --------------------------------------------------------
 
@@ -1546,20 +2015,12 @@ CREATE TABLE IF NOT EXISTS `user_assign_organization` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `org_id` int(10) unsigned DEFAULT NULL,
   `user_id` int(10) unsigned DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `org_id` (`org_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `user_assign_organization`
---
-
-INSERT INTO `user_assign_organization` (`id`, `org_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, '2016-05-16 04:24:47', '2016-05-16 04:24:47'),
-(2, 1, 3, '2016-05-16 04:25:13', '2016-05-16 04:25:13');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1572,26 +2033,18 @@ CREATE TABLE IF NOT EXISTS `user_notification` (
   `notification_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `is_read` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `user_notification`
 --
 
 INSERT INTO `user_notification` (`id`, `notification_id`, `user_id`, `is_read`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 0, '2016-05-03 00:16:13', '2016-05-03 00:16:13'),
-(2, 2, 1, 0, '2016-05-03 00:27:13', '2016-05-03 00:27:13'),
-(3, 3, 1, 0, '2016-05-03 01:03:59', '2016-05-03 01:03:59'),
-(4, 4, 1, 0, '2016-05-03 01:07:15', '2016-05-03 01:07:15'),
-(5, 5, 1, 0, '2016-05-03 01:14:11', '2016-05-03 01:14:11'),
-(6, 6, 1, 0, '2016-05-03 01:19:20', '2016-05-03 01:19:20'),
-(7, 7, 1, 0, '2016-05-03 01:25:15', '2016-05-03 01:25:15'),
-(8, 8, 1, 0, '2016-05-16 02:49:22', '2016-05-16 02:49:22'),
-(9, 9, 1, 0, '2016-05-16 02:52:18', '2016-05-16 02:52:18'),
-(10, 10, 1, 0, '2016-05-16 03:00:29', '2016-05-16 03:00:29');
+(1, 1, 1, 0, '2016-06-14 09:18:09', '2016-06-14 09:18:09'),
+(2, 2, 1, 0, '2016-06-14 09:18:37', '2016-06-14 09:18:37');
 
 -- --------------------------------------------------------
 
@@ -1603,8 +2056,8 @@ CREATE TABLE IF NOT EXISTS `version_check` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `current_version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `new_version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
 
@@ -1613,7 +2066,7 @@ CREATE TABLE IF NOT EXISTS `version_check` (
 --
 
 INSERT INTO `version_check` (`id`, `current_version`, `new_version`, `created_at`, `updated_at`) VALUES
-(1, '', '', '2016-05-02 06:32:37', '2016-05-02 06:32:37');
+(1, '', '', '2016-06-14 09:07:06', '2016-06-14 09:07:06');
 
 -- --------------------------------------------------------
 
@@ -1626,8 +2079,8 @@ CREATE TABLE IF NOT EXISTS `widgets` (
   `name` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `title` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `value` text COLLATE utf8_unicode_ci,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=21 ;
 
@@ -1636,26 +2089,26 @@ CREATE TABLE IF NOT EXISTS `widgets` (
 --
 
 INSERT INTO `widgets` (`id`, `name`, `title`, `value`, `created_at`, `updated_at`) VALUES
-(1, 'footer1', 'Products', '<ul><li>Men</li><li>Women</li><li>Kids</li><li>Decor</li><li>Wedding Cloth<b><br></b></li></ul>', '2016-05-02 06:32:37', '2016-05-04 01:38:33'),
-(2, 'footer2', 'Company', '<ul><li>About Us</li><li>Road Map</li><li>Privacy Policy</li><li>Cancellation &amp; Refund Policy<br></li><li>Term &amp; Condition</li></ul><br>', '2016-05-02 06:32:37', '2016-05-03 23:45:32'),
-(3, 'footer3', 'Contact Us', '<div><i>BTM Layout, No: #28<br>9th Cross First Stage BTM Layout Near Water Tank<br></i><i>Bangalore – 560 029</i><br><i>Karnataka – India<br></i><span><i>Telephone:&nbsp;</i><i>+91 8861529581 <br></i></span><span><i>Email:&nbsp;</i><a rel="nofollow" target="_blank"><i>&nbsp;&nbsp;&nbsp;support@abcClothing.com</i></a></span></div><br>', '2016-05-02 06:32:37', '2016-05-04 01:40:32'),
-(4, 'footer4', NULL, NULL, '2016-05-02 06:32:37', '2016-05-02 06:32:37'),
-(5, 'side1', NULL, NULL, '2016-05-02 06:32:37', '2016-05-02 06:32:37'),
-(6, 'side2', NULL, NULL, '2016-05-02 06:32:37', '2016-05-02 06:32:37'),
-(7, 'linkedin', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:37', '2016-05-16 04:40:29'),
-(8, 'stumble', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:37', '2016-05-16 04:40:39'),
-(9, 'google', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:37', '2016-05-16 04:40:02'),
-(10, 'deviantart', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:37', '2016-05-16 04:39:53'),
-(11, 'flickr', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:38', '2016-05-16 04:40:07'),
-(12, 'skype', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:38', '2016-05-16 04:40:20'),
-(13, 'rss', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:38', '2016-05-16 04:40:25'),
-(14, 'twitter', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:38', '2016-05-16 04:40:46'),
-(15, 'facebook', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:38', '2016-05-16 04:40:11'),
-(16, 'youtube', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:38', '2016-05-16 04:41:02'),
-(17, 'vimeo', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:38', '2016-05-16 04:40:53'),
-(18, 'pinterest', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:38', '2016-05-16 04:40:33'),
-(19, 'dribbble', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:38', '2016-05-16 04:39:57'),
-(20, 'instagram', NULL, 'http://www.faveohelpdesk.com', '2016-05-02 06:32:38', '2016-05-16 04:40:15');
+(1, 'footer1', 'Products', '<ul><li>Men</li><li>Women</li><li>Kids</li><li>Decor</li><li>Wedding Cloth</li></ul>', '2016-06-14 09:07:06', '2016-06-14 09:11:21'),
+(2, 'footer2', 'Company', '<ul><li>About Us<br /></li><li>Road Map</li><li>Privacy Policy</li><li>Cancellation &amp; Refund Policy</li><li>Term &amp; Condition</li></ul>', '2016-06-14 09:07:06', '2016-06-14 09:12:12'),
+(3, 'footer3', 'Find out More', '<ul><li>Forums<br /></li><li>News</li><li>Blog</li><li>Partner NOC Directory</li></ul>', '2016-06-14 09:07:06', '2016-06-14 09:13:03'),
+(4, 'footer4', 'Contact Us', '<i>BTM Layout, No: #28<br />9th Cross First Stage BTM Layout Near Water Tank<br /></i><i>Bangalore – 560 029</i><br /><i>Karnataka – India<br /></i><i>Telephone: </i><i>+91 9999999999<br /></i><i>Email: </i><a><i>   support@abcclothing.com</i></a>', '2016-06-14 09:07:06', '2016-06-14 09:12:54'),
+(5, 'side1', NULL, NULL, '2016-06-14 09:07:06', '2016-06-14 09:07:06'),
+(6, 'side2', NULL, NULL, '2016-06-14 09:07:06', '2016-06-14 09:07:06'),
+(7, 'linkedin', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:14:01'),
+(8, 'stumble', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:14:23'),
+(9, 'google', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:13:56'),
+(10, 'deviantart', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:13:20'),
+(11, 'flickr', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:13:36'),
+(12, 'skype', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:13:51'),
+(13, 'rss', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:14:06'),
+(14, 'twitter', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:14:30'),
+(15, 'facebook', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:13:32'),
+(16, 'youtube', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:14:44'),
+(17, 'vimeo', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:14:36'),
+(18, 'pinterest', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:14:11'),
+(19, 'dribbble', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:13:28'),
+(20, 'instagram', NULL, 'http://www.faveohelpdesk.com', '2016-06-14 09:07:07', '2016-06-14 09:14:16');
 
 -- --------------------------------------------------------
 
@@ -1668,11 +2121,35 @@ CREATE TABLE IF NOT EXISTS `workflow_action` (
   `workflow_id` int(10) unsigned NOT NULL,
   `condition` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `action` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `workflow_action_1` (`workflow_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workflow_close`
+--
+
+CREATE TABLE IF NOT EXISTS `workflow_close` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `days` int(11) NOT NULL,
+  `condition` int(11) NOT NULL,
+  `send_email` int(11) NOT NULL,
+  `status` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `workflow_close`
+--
+
+INSERT INTO `workflow_close` (`id`, `days`, `condition`, `send_email`, `status`, `created_at`, `updated_at`) VALUES
+(1, 2, 1, 1, 3, '2016-06-14 09:06:59', '2016-06-14 09:06:59');
 
 -- --------------------------------------------------------
 
@@ -1687,8 +2164,8 @@ CREATE TABLE IF NOT EXISTS `workflow_name` (
   `order` int(11) NOT NULL,
   `target` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `internal_note` text COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
@@ -1705,8 +2182,8 @@ CREATE TABLE IF NOT EXISTS `workflow_rules` (
   `matching_scenario` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `matching_relation` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `matching_value` text COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `workflow_rules_1` (`workflow_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
