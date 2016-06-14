@@ -894,6 +894,11 @@ return [
     'for_some_reason_your_reply_was_not_posted_please_try_again_later'              => 'For some reason your reply was not posted. Please try again later',
     'you_have_unassigned_your_ticket'                                               => 'You have Unassigned your ticket',
     'for_some_reason_your_request_failed'                                           => 'For some reason your request failed',
+    'trash-delete-ticket'                                                           => 'Delete tickets permanently',
+    'trash-delete-title-msg'                                                        => 'Click here to delete tickets permanently.',
+    'moved_to_trash'                                                                => 'Moved selected tickets to trash.',
+    'tickets_have_been_closed'                                                      => 'Selected tickets have been closed.',
+    'tickets_have_been_opened'                                                      => 'Selected tickets have been opened.',
 
 
 
