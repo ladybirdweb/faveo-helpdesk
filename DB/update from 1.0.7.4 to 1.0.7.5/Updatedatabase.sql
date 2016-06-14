@@ -537,7 +537,7 @@ CREATE TABLE IF NOT EXISTS `ticket_token` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ticket_id` int(11) NOT NULL,
   `token` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
@@ -549,7 +549,7 @@ CREATE TABLE IF NOT EXISTS `ticket_token` (
 --
 
 ALTER TABLE `users` 
-	ADD `country_code` int(11) NOT NULL AFTER `profile_pic`;
+  ADD `country_code` int(11) NOT NULL AFTER `profile_pic`;
 
 -- --------------------------------------------------------
 
@@ -574,3 +574,24 @@ CREATE TABLE IF NOT EXISTS `workflow_close` (
 
 INSERT INTO `workflow_close` (`id`, `days`, `condition`, `send_email`, `status`, `created_at`, `updated_at`) VALUES
 (1, 3, 1, 1, 3, '2016-05-25 07:52:22', '2016-05-25 02:22:22');
+
+-- ----------------------------------------------------------
+
+--
+-- Alter Table structure for table `system_settings`
+--
+ALTER TABLE `settings_system`
+  ADD `version` varchar(222) NOT NULL AFTER `time_zone`;
+
+--
+-- Dumping data for table `system_settings`
+--
+
+UPDATE `settings_system` SET `version`='1.0.7.5' WHERE 1
+
+
+ALTER TABLE `settings_ticket`
+  ADD `lock_ticket_frequency` varchar(222) NOT NULL AFTER `max_file_size`;
+
+
+UPDATE `settings_ticket` SET `lock_ticket_frequency`='0' WHERE 1
