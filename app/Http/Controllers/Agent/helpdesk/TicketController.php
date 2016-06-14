@@ -1572,11 +1572,11 @@ class TicketController extends Controller
                 }
             }
             if ($value == 'Delete') {
-                return redirect()->back()->with('success', 'Moved to trash');
+                return redirect()->back()->with('success', lang::get('lang.moved_to_trash'));
             } elseif ($value == 'Close') {
-                return redirect()->back()->with('success', 'Tickets has been Closed');
+                return redirect()->back()->with('success', Lang::get('lang.tickets_have_been_closed'));
             } elseif ($value == 'Open') {
-                return redirect()->back()->with('success', 'Ticket has been Opened');
+                return redirect()->back()->with('success', Lang::get('lang.tickets_have_been_opened'));
             } else {
                 return redirect()->back()->with('success', Lang::get('lang.hard-delete-success-message'));
             }
