@@ -395,10 +395,9 @@ class SettingsController extends Controller {
      */
     public function version_check() {
         $response_url = \URL::route('post-version-check');
-        echo "<form action='http://www.faveohelpdesk.com/billing/version' method='post' name='redirect'>";
+        echo "<form action='http://www.faveohelpdesk.com/billing/public/version' method='post' name='redirect'>";
         echo "<input type='hidden' name='_token' value='csrf_token()'/>";
-        echo "<input type='hidden' name='title' value='helpdeskcommunityedition'/>";
-        echo "<input type='hidden' name='id' value='19'/>";
+        echo "<input type='hidden' name='title' value='Faveo helpdesk community'/>";
         echo "<input type='hidden' name='response_url' value='" . $response_url . "' />";
         echo '</form>';
         echo "<script language='javascript'>document.redirect.submit();</script>";
@@ -410,7 +409,10 @@ class SettingsController extends Controller {
      * @return type
      */
     public function post_version_check(Request $request) {
+//        dd($request);
         $current_version = \Config::get('app.version');
+        $current_version = explode(' ',$current_version);
+        $current_version = $current_version[1];
         $new_version = $request->value;
         if ($current_version == $new_version) {
             return redirect()->route('checkupdate')->with('info', ' No, new Updates');
