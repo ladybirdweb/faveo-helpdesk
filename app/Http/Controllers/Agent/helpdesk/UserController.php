@@ -91,7 +91,6 @@ class UserController extends Controller
                             } else {
                                 $stringCut = $model->user_name;
                             }
-
                             return $stringCut;
                         })
                         /* column email */

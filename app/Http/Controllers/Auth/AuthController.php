@@ -29,8 +29,8 @@ use Mail;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class AuthController extends Controller
-{
+class AuthController extends Controller {
+
     use AuthenticatesAndRegistersUsers;
     /* to redirect after login */
 
@@ -50,8 +50,7 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct(PhpMailController $PhpMailController)
-    {
+    public function __construct(PhpMailController $PhpMailController) {
         $this->PhpMailController = $PhpMailController;
         SettingsController::smtp();
         $this->middleware('guest', ['except' => 'getLogout']);
@@ -62,8 +61,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function getRegister()
-    {
+    public function getRegister() {
         // Event for login
         \Event::fire(new \App\Events\FormRegisterEvent());
         if (Auth::user()) {
@@ -85,8 +83,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function postRegister(User $user, RegisterRequest $request)
-    {
+    public function postRegister(User $user, RegisterRequest $request) {
         // Event for login
         \Event::fire(new \App\Events\LoginEvent($request));
         $password = Hash::make($request->input('password'));
@@ -100,26 +97,22 @@ class AuthController extends Controller
         $user->remember_token = $code;
         $user->save();
 
-        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => 'Activate your Account', 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/'.$code)]);
+        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => 'Activate your Account', 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/' . $code)]);
 
         return redirect('home')->with('success', Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail'));
     }
 
     /**
-     * Function to activate account.
-     *
+     * Function to activate account
      * @param type $token
-     *
      * @return type redirect
      */
-    public function accountActivate($token)
-    {
+    public function accountActivate($token) {
         $user = User::where('remember_token', '=', $token)->first();
         if ($user) {
             $user->active = 1;
-            $user->remember_token = null;
+            $user->remember_token = NULL;
             $user->save();
-
             return redirect('/auth/login')->with('status', 'Acount activated. Login to start');
         } else {
             return redirect('/auth/login')->with('fails', 'Invalid Token');
@@ -134,8 +127,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function getMail($token, User $user)
-    {
+    public function getMail($token, User $user) {
         $user = $user->where('remember_token', $token)->where('active', 0)->first();
         if ($user) {
             $user->active = 1;
@@ -152,8 +144,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function getLogin()
-    {
+    public function getLogin() {
         if (Auth::user()) {
             if (Auth::user()->role == 'admin' || Auth::user()->role == 'agent') {
                 return \Redirect::route('dashboard');
@@ -172,8 +163,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function postLogin(LoginRequest $request)
-    {
+    public function postLogin(LoginRequest $request) {
         // Set login attempts and login time
         $value = $_SERVER['REMOTE_ADDR'];
         $usernameinput = $request->input('email');
@@ -192,7 +182,7 @@ class AuthController extends Controller
             return redirect()->back()
                             ->withInput($request->only('email', 'remember'))
                             ->withErrors([
-                                'email'    => $this->getFailedLoginMessage(),
+                                'email' => $this->getFailedLoginMessage(),
                                 'password' => $this->getFailedLoginMessage(),
                             ])->with('error', Lang::get('lang.this_account_is_currently_inactive'));
         }
@@ -200,7 +190,7 @@ class AuthController extends Controller
             return redirect()->back()
                             ->withInput($request->only('email', 'remember'))
                             ->withErrors([
-                                'email'    => $this->getFailedLoginMessage(),
+                                'email' => $this->getFailedLoginMessage(),
                                 'password' => $this->getFailedLoginMessage(),
                             ])->with('error', Lang::get('lang.this_account_is_currently_inactive'));
         }
@@ -243,7 +233,7 @@ class AuthController extends Controller
         return redirect()->back()
                         ->withInput($request->only('email', 'remember'))
                         ->withErrors([
-                            'email'    => $this->getFailedLoginMessage(),
+                            'email' => $this->getFailedLoginMessage(),
                             'password' => $this->getFailedLoginMessage(),
                         ])->with('error', Lang::get('lang.invalid'));
         // Increment login attempts
@@ -256,8 +246,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function addLoginAttempt($value, $field)
-    {
+    public function addLoginAttempt($value, $field) {
         $result = DB::table('login_attempts')->where('IP', '=', $value)->first();
         $data = $result;
         $security = Security::whereId('1')->first();
@@ -265,7 +254,7 @@ class AuthController extends Controller
         if ($data) {
             $attempts = $data->Attempts + 1;
             if ($attempts == $apt) {
-                $result = DB::select('UPDATE login_attempts SET Attempts='.$attempts.", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
+                $result = DB::select('UPDATE login_attempts SET Attempts=' . $attempts . ", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
             } else {
                 $result = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['Attempts' => $attempts]);
                 // $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
@@ -282,8 +271,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function clearLoginAttempts($value, $field)
-    {
+    public function clearLoginAttempts($value, $field) {
         $data = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['attempts' => '0']);
 
         return $data;
@@ -296,14 +284,13 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function confirmIPAddress($value, $field)
-    {
+    public function confirmIPAddress($value, $field) {
         $security = Security::whereId('1')->first();
         $time = $security->lockout_period;
         $max_attempts = $security->backlist_threshold;
         $table = 'login_attempts';
-        $result = DB::select('SELECT Attempts, (CASE when LastLogin is not NULL and DATE_ADD(LastLogin, INTERVAL '.$time.' MINUTE)>NOW() then 1 else 0 end) as Denied '.
-                        ' FROM '.$table." WHERE IP = '$value' OR User = '$field'");
+        $result = DB::select('SELECT Attempts, (CASE when LastLogin is not NULL and DATE_ADD(LastLogin, INTERVAL ' . $time . ' MINUTE)>NOW() then 1 else 0 end) as Denied ' .
+                        ' FROM ' . $table . " WHERE IP = '$value' OR User = '$field'");
         $data = $result;
         //Verify that at least one login attempt is in database
         if (!$data) {
@@ -327,8 +314,8 @@ class AuthController extends Controller
      *
      * @return type string
      */
-    protected function getFailedLoginMessage()
-    {
+    protected function getFailedLoginMessage() {
         return Lang::get('lang.this_field_do_not_match_our_records');
     }
+
 }

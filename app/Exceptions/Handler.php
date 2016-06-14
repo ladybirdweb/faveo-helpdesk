@@ -3,19 +3,20 @@
 namespace App\Exceptions;
 
 // controller
-use Bugsnag;
-//use Illuminate\Validation\ValidationException;
-use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
 use Exception;
+//use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 // use Symfony\Component\HttpKernel\Exception\HttpException;
 // use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Foundation\Validation\ValidationException;
+use Bugsnag\BugsnagLaravel\BugsnagExceptionHandler as ExceptionHandler;
+use Bugsnag;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class Handler extends ExceptionHandler
-{
+class Handler extends ExceptionHandler {
+
     /**
      * A list of the exception types that should not be reported.
      *
@@ -52,8 +53,7 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function report(Exception $e)
-    {
+    public function report(Exception $e) {
         $debug = \Config::get('app.bugsnag_reporting');
         $debug = ($debug) ? 'true' : 'false';
         if ($debug == 'false') {
@@ -61,7 +61,6 @@ class Handler extends ExceptionHandler
                 return false;
             });
         }
-
         return parent::report($e);
     }
 
@@ -89,7 +88,7 @@ class Handler extends ExceptionHandler
 //                if (\Config::get('database.install') == 1) {
 //                    // checking if the error log send to Ladybirdweb is enabled or not
 //                    if (\Config::get('app.ErrorLog') == '1') {
-//
+//                        
 //                    }
 //                }
 //                return response()->view('errors.500', []);
@@ -129,79 +128,66 @@ class Handler extends ExceptionHandler
 
     /**
      * Render an exception into an HTTP response.
-     *
-     * @param type      $request
+     * @param type $request
      * @param Exception $e
-     *
      * @return type mixed
      */
-    public function render($request, Exception $e)
-    {
+    public function render($request, Exception $e) {
+
         switch ($e) {
-            case $e instanceof \Illuminate\Http\Exception\HttpResponseException:
+            case $e instanceof \Illuminate\Http\Exception\HttpResponseException :
                 return parent::render($request, $e);
-            case $e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException:
+            case $e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException :
                 return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
-            case $e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException:
+            case $e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException :
                 return response()->json(['message' => $e->getMessage(), 'code' => $e->getStatusCode()]);
-            default:
+            default :
                 return $this->common($request, $e);
         }
     }
 
     /**
-     * Function to render 500 error page.
-     *
+     * Function to render 500 error page
      * @param type $request
      * @param type $e
-     *
      * @return type mixed
      */
-    public function render500($request, $e)
-    {
+    public function render500($request, $e) {
         if (config('app.debug') == true) {
             return parent::render($request, $e);
         }
-
         return redirect()->route('error500', []);
     }
 
     /**
-     * Function to render 404 error page.
-     *
+     * Function to render 404 error page
      * @param type $request
      * @param type $e
-     *
      * @return type mixed
      */
-    public function render404($request, $e)
-    {
+    public function render404($request, $e) {
         if (config('app.debug') == true) {
             return parent::render($request, $e);
         }
-
         return redirect()->route('error404', []);
     }
 
     /**
-     * Common finction to render both types of codes.
-     *
+     * Common finction to render both types of codes
      * @param type $request
      * @param type $e
-     *
      * @return type mixed
      */
-    public function common($request, $e)
-    {
+    public function common($request, $e) {
         switch ($e) {
-            case $e instanceof HttpException:
+            case $e instanceof HttpException :
                 return $this->render404($request, $e);
-            case $e instanceof NotFoundHttpException:
+            case $e instanceof NotFoundHttpException :
                 return $this->render404($request, $e);
-            default:
+            default :
                 return $this->render500($request, $e);
         }
-
         return parent::render($request, $e);
     }
+
 }

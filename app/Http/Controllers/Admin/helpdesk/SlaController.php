@@ -104,8 +104,7 @@ class SlaController extends Controller
             $slas = Sla_plan::whereId($id)->first();
             $slas->get();
             $sla = \DB::table('settings_ticket')->select('sla')->where('id', '=', 1)->first();
-
-            return view('themes.default1.admin.helpdesk.manage.sla.edit', compact('slas', 'sla'));
+            return view('themes.default1.admin.helpdesk.manage.sla.edit', compact('slas','sla'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -138,7 +137,6 @@ class SlaController extends Controller
                      ->where('id', '=', 1)
                      ->update(['sla' => $id]);
             }
-
             return redirect('sla')->with('success', Lang::get('lang.sla_plan_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */

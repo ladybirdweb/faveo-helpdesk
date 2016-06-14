@@ -18,7 +18,7 @@ class="active"
         @endif
 	<div class="box-body">
 		Click to check Update
-		<a href="{!! URL::route('version-check') !!}" class="btn btn-primary">Check</a>
+                <a href="{!! URL::route('version-check') !!}" class="btn btn-primary">Check</a>
 	</div>
 	<div class="box-footer">
 		

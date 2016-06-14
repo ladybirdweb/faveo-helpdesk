@@ -21,8 +21,8 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class PageController extends Controller
-{
+class PageController extends Controller {
+
     /**
      * Create a new controller instance.
      * constructor to check
@@ -32,8 +32,7 @@ class PageController extends Controller
      *
      * @return void
      */
-    public function __construct(Page $page)
-    {
+    public function __construct(Page $page) {
         // checking authentication
         $this->middleware('auth');
         // checking roles
@@ -47,8 +46,7 @@ class PageController extends Controller
      *
      * @return type
      */
-    public function index()
-    {
+    public function index() {
         $pages = $this->page->paginate(3);
         $pages->setPath('page');
         try {
@@ -63,8 +61,7 @@ class PageController extends Controller
      *
      * @return type
      */
-    public function getData()
-    {
+    public function getData() {
         /* fetching chumper datatables */
         return Datatable::collection(Page::All())
                         /* search column name */
@@ -84,8 +81,8 @@ class PageController extends Controller
                         /* add column Actions */
                         /* there are action buttons and modal popup to delete a data column */
                         ->addColumn('Actions', function ($model) {
-                            return '<span  data-toggle="modal" data-target="#deletepage'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.\Lang::get('lang.delete').'</button></span>&nbsp;<a href=page/'.$model->slug.'/edit class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href=pages/'.$model->slug.' class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
-				<div class="modal fade" id="deletepage'.$model->id.'">
+                            return '<span  data-toggle="modal" data-target="#deletepage' . $model->id . '"><a href="#" ><button class="btn btn-danger btn-xs"></a> ' . \Lang::get('lang.delete') . '</button></span>&nbsp;<a href=page/' . $model->slug . '/edit class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp;<a href=pages/' . $model->slug . ' class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>
+				<div class="modal fade" id="deletepage' . $model->id . '">
         			<div class="modal-dialog">
             			<div class="modal-content">
                 			<div class="modal-header">
@@ -93,11 +90,11 @@ class PageController extends Controller
                     			<h4 class="modal-title">Are You Sure ?</h4>
                 			</div>
                 			<div class="modal-body">
-                				'.$model->name.'
+                				' . $model->name . '
                 			</div>
                 			<div class="modal-footer">
 	                    		<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">Close</button>
-    			                <a href="page/delete/'.$model->id.'"><button class="btn btn-danger">delete</button></a>
+    			                <a href="page/delete/' . $model->id . '"><button class="btn btn-danger">delete</button></a>
 			                </div>
 		            	</div>
 			        </div>
@@ -111,8 +108,7 @@ class PageController extends Controller
      *
      * @return type view
      */
-    public function create()
-    {
+    public function create() {
         return view('themes.default1.agent.kb.pages.create');
     }
 
@@ -123,8 +119,7 @@ class PageController extends Controller
      *
      * @return type
      */
-    public function store(PageRequest $request)
-    {
+    public function store(PageRequest $request) {
         $sl = $request->input('slug');
         $slug = str_slug($sl, '-');
         $this->page->slug = $slug;
@@ -144,8 +139,7 @@ class PageController extends Controller
      *
      * @return type view
      */
-    public function edit($slug)
-    {
+    public function edit($slug) {
         try {
             $page = $this->page->where('slug', $slug)->first();
 
@@ -163,8 +157,7 @@ class PageController extends Controller
      *
      * @return type redirect
      */
-    public function update($slug, PageUpdate $request)
-    {
+    public function update($slug, PageUpdate $request) {
         // get pages with respect to slug
         $pages = $this->page->where('slug', $slug)->first();
         $sl = $request->input('slug');
@@ -188,8 +181,7 @@ class PageController extends Controller
      *
      * @return type redirect
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         try {
             // get the page to be deleted
             $page = $this->page->whereId($id)->first();
@@ -200,4 +192,5 @@ class PageController extends Controller
             return redirect('page')->with('fails', $e->getMessage());
         }
     }
+
 }

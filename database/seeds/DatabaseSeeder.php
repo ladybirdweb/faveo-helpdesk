@@ -10,9 +10,7 @@ use App\Model\helpdesk\Email\Smtp;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Notification\NotificationType;
-use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Settings\Alert;
-use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Settings\Responder;
@@ -33,6 +31,8 @@ use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\helpdesk\Workflow\WorkflowClose;
+use App\Model\helpdesk\Settings\CommonSettings;
+use App\Model\helpdesk\Ratings\Rating;
 use App\Model\kb\Settings;
 // Knowledge base
 use Illuminate\Database\Seeder;
@@ -2007,17 +2007,17 @@ class DatabaseSeeder extends Seeder
         Template::create(['id' => '10', 'name' => 'ticket-reply', 'type' => '10', 'message' => '<span><div><span><p>{!!$content!!} &nbsp;&nbsp;<br></p><p>{!!$agent_sign!!}&nbsp;</p><p>Ticket Details</p><p>Ticket ID: {!!$ticket_number!!} &nbsp;&nbsp;&nbsp;&nbsp;</p><div><br></div></span><br></div><div><br></div></span>', 'set_id' => '1']);
         Template::create(['id' => '11', 'name' => 'ticket-reply-agent', 'type' => '11', 'message' => '<div>Hello {!!$ticket_agent_name!!},<b><br></b>A reply been made to ticket {!!$ticket_number!!}<b><br></b>From<br>Name: {!!$ticket_client_name!!}<br>E-mail: {!!$ticket_client_email!!}<b><br></b>{!!$content!!}<b><br></b>Kind Regards,<br>{!!$system_from!!}</div>', 'set_id' => '1']);
         Template::create(['id' => '12', 'name' => 'registration', 'type' => '12', 'message' => '<span><p>Hello {!!$user!!} ,&nbsp;</p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!}&nbsp;</p></span>', 'set_id' => '1']);
-
-
-        /*
+        
+        
+        /**
          * All the common settings will be listed here
          */
         CommonSettings::create(['id' => '1', 'option_name' => 'ticket_token_time_duration', 'option_value' => '1']);
-
-        /*
+        
+        /**
          * Ratings
          */
-        Rating::create(['id' => '1', 'name' => 'OverAll Satisfaction', 'display_order' => '1', 'allow_modification' => '1', 'rating_scale' => '5', 'rating_area' => 'Helpdesk Area']);
-        Rating::create(['id' => '2', 'name' => 'Reply Rating', 'display_order' => '1', 'allow_modification' => '1', 'rating_scale' => '5', 'rating_area' => 'Comment Area']);
-    }
+        Rating::create(['id'=>'1','name'=>'OverAll Satisfaction','display_order'=>'1','allow_modification' => '1', 'rating_scale'=>'5','rating_area'=>'Helpdesk Area']);
+        Rating::create(['id'=>'2','name'=>'Reply Rating','display_order'=>'1','allow_modification' => '1', 'rating_scale'=>'5','rating_area'=>'Comment Area']);
+        }
 }
