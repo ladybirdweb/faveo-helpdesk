@@ -33,6 +33,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     //Notification marking
     Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
+    Route::post('mark-all-read/{id}', 'Common\NotificationController@markAllRead');
     Breadcrumbs::register('notification.list', function ($breadcrumbs) {
         $breadcrumbs->parent('dashboard');
         $breadcrumbs->push('All Notifications', route('notification.list'));
@@ -676,7 +677,7 @@ Route::get('/change-file-permission', ['as' => 'change-permission', 'uses' => 'I
   |=============================================================
   |  Cron Job links
   |=============================================================
-  |	These links are for cron job execution
+  | These links are for cron job execution
   |
  */
 Route::get('readmails', ['as' => 'readmails', 'uses' => 'Agent\helpdesk\MailController@readmails']);
