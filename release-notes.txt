@@ -1,4 +1,93 @@
 |=======================================================
+| v1.0.7.5
+|=======================================================
+
+Enhancement
+
+    Changed email template from file system to database
+    Advanced Rating module
+    In App Notification Module is now per User
+    In App notification settings in admin panel
+    POP feature is added for fetching emails
+    Send mail from server using PHP mail feature is added for sending emails
+    Added more encryption options for sending emails
+    Removed Duplicate settings from system settings
+    One can do more advanced email diagnostics by choosing different emails
+    System Off line module Enhanced
+    Everything comes from language files now
+    Auto Close ticket workflow for closing a ticket in predefined days
+    Security settings added for secured login into the system
+    Error Debugging option added
+    Bugsnag integration added
+    Webhooks added for ticket creation
+    Added 3 new languages thanks to some of our clients (German, Russian, Italian)
+    Graph added to user profile
+    Remove organisation added in Client profile page
+    Graph and ticket list added Organisation page
+    GeoIp plugin added for Phone country code pickup
+    Faveo will be able to auto upgrade to new release from this version onwards
+    XSS Vulnerability check added
+    Upgrade from Laravel 5.0 to 5.2
+    Breadcrumbs
+    Auto update module
+
+Bug Fixes
+
+    Registration Module email issue
+    Pages in knowledge base had some issue
+    Complete UI improved and proper error messages are now displayed
+    Bug fixed in edit system workflow
+    Dashboard Graph smoothened
+    Check ticket details without logging
+    Install module – check for file permission issue
+    Added dummy data for dummy installation
+    
+    |------------------------------------------
+    |Updating from 1.0.7.4 to 1.0.7.5
+    |------------------------------------------
+
+    To upgrade read instructions here http://ladybirdweb.com/support/show/v107
+
+|=======================================================
+| v1.0.7.4
+|=======================================================
+
+Enhancement
+
+    Added STARTTLS encryption feature on email fetching settings
+
+|=======================================================
+| v1.0.7.3
+|=======================================================
+
+Bug Fixes
+
+    Email settings update issue
+
+|=======================================================
+| v1.0.7.2
+|=======================================================
+
+Bug Fixes
+
+    System failing if no system email is configured issue fixed
+
+Enhancement
+
+    Plugin Module updated for Pro Version
+
+|=======================================================
+| v1.0.7.1
+|=======================================================
+
+Bug Fixed
+
+    In app notification bug fixed
+    Ticket Listing hover issue fixed
+    Agent panel issue fixed for role agents
+    Template issue fixed    
+    
+|=======================================================
 | v1.0.7
 |=======================================================
 
