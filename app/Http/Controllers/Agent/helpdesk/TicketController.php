@@ -31,6 +31,8 @@ use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Utility\CountryCode;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
+use App\Model\helpdesk\Notification\Notification;
+use App\Model\helpdesk\Notification\UserNotification;
 use App\User;
 use Auth;
 use DB;
@@ -1533,6 +1535,14 @@ class TicketController extends Controller
                     $ticket->closed_at = null;
                     $ticket->save();
                 } elseif ($value == 'Delete forever') {
+                    $notification = Notification::select('id')->where('model_id', '=', $ticket->id)->get();
+                    foreach ($notification as $id) {
+                        $user_notification = UserNotification::where(
+                            'notification_id', '=', $id->id);
+                        $user_notification->delete();
+                    }
+                    $notification = Notification::select('id')->where('model_id', '=', $ticket->id);
+                    $notification->delete();
                     $thread = Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
                     foreach ($thread as $th_id) {
                         // echo $th_id->id." ";
