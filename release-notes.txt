@@ -46,7 +46,7 @@ Bug Fixes
     |Updating from 1.0.7.4 to 1.0.7.5
     |------------------------------------------
 
-    To upgrade read instructions here http://ladybirdweb.com/support/show/v107
+    To upgrade read instructions here http://ladybirdweb.com/support/show/v1075
 
 |=======================================================
 | v1.0.7.4

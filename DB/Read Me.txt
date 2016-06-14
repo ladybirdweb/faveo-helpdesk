@@ -1,12 +1,32 @@
-|-------------------------------------
-|Updating from 1.0.6.10 to 1.0.7
-|-------------------------------------
+|======================================
+|Updating from 1.0.7.4 to 1.0.7.5
+|======================================
 
-Database Update
+|------------------------
+|Database Update
+|------------------------
+
+To update copy Updatedatabase.sql from Github Project folder /DB/update from 1.0.7.4 to 1.0.7.5/Updatedatabase.sql
+
+Please take a backup of your database before following this step. Import this file to your existing Faveo database.
+
+
+|======================================
+|Updating from 1.0.6.10 to 1.0.7
+|======================================
+
+|------------------------
+|Database Update
+|------------------------
 
 To update copy Updatedatabase.sql from Github Project folder /DB/update from 1.0.6.10 to 1.0.7/Updatedatabase.sql
 
 Please take a backup of your database before following this step. Import this file to your existing Faveo database.
+
+
+|=======================================
+|General Update Instructions
+|=======================================
 
 File System update
 
