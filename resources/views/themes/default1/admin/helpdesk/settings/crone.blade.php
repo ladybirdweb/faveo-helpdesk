@@ -93,6 +93,25 @@ class="active"
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
+        <div class="col-md-6">
+            <div class="info-box">
+                <!-- Apply any bg-* class to to the icon to color it -->
+                <span class="info-box-icon bg-aqua"><i class="fa fa-check-circle"></i></span>
+                <div class="info-box-content">
+                    <i class="fa fa-clipboard pull-right" title="{!!Lang::get('lang.click-url-copy')!!}" onclick="copyToClipboard('#p3')"></i>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            {!! Form::label('auto_close',Lang::get('lang.auto_close_workflow')) !!}<br>
+                            {!! Form::checkbox('auto_close',1,true) !!}&nbsp;{{Lang::get('lang.cron_notification')}}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <em><span class="info-box-text" style="background: #F3F3F3" id='p3'></span></em>
+                        <!-- <div class="btn btn-default btn-xs pull-right" onclick="copyToClipboard('#p1')">Copy URL</div> -->
+                    </div>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
+        </div>
     </div>
     <div class="box-footer">
         {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
@@ -113,8 +132,10 @@ class="active"
         // var str = path;
         path = path.replace("job-scheduler", "readmails");
         path2 = path.replace("readmails", "notification");
+        path3 = path2.replace("notification", "auto-close-tickets")
         document.getElementById("p1").innerHTML = path;
         document.getElementById("p2").innerHTML = path2;
+        document.getElementById("p3").innerHTML = path3;
     })
 </script>
 @stop

@@ -315,7 +315,7 @@ return [
     'clipboard-copy-message'              => 'Copied to clipboard.',
     'click'                               => 'Click here',
     'check-cron-set'                      => 'to check how to set cron jobs on your server.',
-    'notification-email'                  => 'Email notifications',
+    'notification-email'                  => 'Email Notifications',
     'click-url-copy'                      => 'Click here to copy URL',
     'job-scheduler-error'                 => 'Job scheduler can not be updated.',
     'job-scheduler-success'               => 'Job scheduler updated successfully.',
