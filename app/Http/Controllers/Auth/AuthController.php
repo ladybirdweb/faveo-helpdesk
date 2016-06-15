@@ -259,13 +259,13 @@ class AuthController extends Controller {
         if ($data) {
             $attempts = $data->Attempts + 1;
             if ($attempts == $apt) {
-                $result = DB::update('UPDATE login_attempts SET Attempts=' . $attempts . ", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
+                $result = DB::select('UPDATE login_attempts SET Attempts=' . $attempts . ", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
             } else {
                 $result = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['Attempts' => $attempts]);
                 // $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
             }
         } else {
-            $result = DB::insert("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
+            $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
         }
     }
 
