@@ -1201,6 +1201,7 @@ return [
     'noti_msg2'                                   => 'You can enter the no of days of database logs to be deleted and the history of notifications will be deleted since the day specified.',
     'del_all_read'                                => 'Delete All Read',
     'You_have_deleted_all_the_read_notifications' => 'You have deleted all the read notifications',
+    'view_all_notifications'                      => 'View all notifications',
     /*
       |------------------------------------------------
       |   Error Pages
