@@ -152,7 +152,7 @@ class HelptopicController extends Controller
             $sys_help_topic = \DB::table('settings_ticket')
                                 ->select('help_topic')
                                 ->where('id', '=', 1)->first();
-            
+
             return view('themes.default1.admin.helpdesk.manage.helptopic.edit', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas', 'sys_help_topic'));
         } catch (Exception $e) {
             return redirect('helptopic')->with('fails', '<li>'.$e->getMessage().'</li>');

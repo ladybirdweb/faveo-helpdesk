@@ -143,7 +143,7 @@ class DepartmentController extends Controller
     public function edit($id, User $user, Group_assign_department $group_assign_department, Template $template, Teams $team, Department $department, Sla_plan $sla, Emails $email, Groups $group)
     {
         try {
-             $sys_department = \DB::table('settings_system')
+            $sys_department = \DB::table('settings_system')
                                ->select('department')
                                ->where('id', '=', 1)
                                ->first();
@@ -175,7 +175,6 @@ class DepartmentController extends Controller
     {
         // dd($id);
         try {
-
             $table = $group_assign_department->where('department_id', $id);
             $table->delete();
             $requests = $request->input('group_id');
