@@ -4,6 +4,22 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box-body">
+                <!-- check whether success or not -->
+                @if(Session::has('success'))
+                <div class="alert alert-success alert-dismissable">
+                    <i class="fa  fa-check-circle"></i>
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{Session::get('success')}}
+                </div>
+                @endif
+                <!-- failure message -->
+                @if(Session::has('fails'))
+                <div class="alert alert-danger alert-dismissable">
+                    <i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <b>{!! Lang::get('lang.alert') !!} !</b>            
+                    {{Session::get('fails')}}
+                </div>
+                @endif
 
                 <p>CURRENT VERSION: {{$current_version}}</p>
                 <p>Reading Current Releases List</p>
@@ -45,7 +61,7 @@
 
 
                                         </div>
-                                <div class="box-body"  style="background-color: black; height: 410px; overflow: scroll;" id="data">
+                                        <div class="box-body"  style="background-color: black; height: 410px; overflow: scroll;" id="data">
                                             <?php $updated = $controller->doUpdate(); ?>
                                         </div>
                                 </div>
@@ -67,11 +83,11 @@
         </div>
     </div>
 
-<script>
-    window.setInterval(function() {
-  var elem = document.getElementById('data');
-  elem.scrollTop = elem.scrollHeight;
-}, 500);
-</script>
+    <script>
+        window.setInterval(function () {
+            var elem = document.getElementById('data');
+            elem.scrollTop = elem.scrollHeight;
+        }, 500);
+    </script>
 
     @stop
