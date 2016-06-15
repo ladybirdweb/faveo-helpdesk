@@ -508,7 +508,7 @@ INSERT INTO `templates` (`id`, `name`, `variable`, `type`, `subject`, `message`,
 (2, 'check-ticket', '', 2, '', '<div>Hello {!!$user!!},<br><br>Click the link below to view your Requested ticket<br>{!!$ticket_link_with_number!!}<br><br>Kind Regards,<br>{!!$system_from!!} </div>', '', NULL, NULL, 1),
 (3, 'close-ticket', '', 3, '', '<div>Hello,<br><br>This message is regarding your ticket ID {!!$ticket_number!!}. We are changing the status of this ticket to ''Closed'' as the issue appears to be resolved.<br><br>Thank you<br>Kind regards,<br> {!!$system_from!!} <br><br></div>', '', NULL, NULL, 1),
 (4, 'create-ticket', '', 4, '', '<div><span>Hello {!!$user!!}<br><br></span><span>Thank you for contacting us. This is an automated response confirming the receipt of your ticket. Our team will get back to you as soon as possible. When replying, please make sure that the ticket ID is kept in the subject so that we can track your replies.<br><br></span><span>Ticket ID: {!!$ticket_number!!}&nbsp;<br></span><span>{!!$department_sign!!}<br></span>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', '', NULL, NULL, 1),
-(5, 'create-ticket-agent', '', 5, 'create-ticket-agent', '<div>Hello {!!$ticket_agent_name!!}, &nbsp; &nbsp; &nbsp;&nbsp;<br><br>New ticket {!!$ticket_number!!} created&nbsp;<br>From<br>Name :- {!!$ticket_client_name!!} &nbsp; &nbsp;<br>E-mail :- {!!$ticket_client_email!!} &nbsp;&nbsp;<br><br>{!!$content!!} &nbsp;&nbsp;&nbsp;&nbsp;<br><br>Kind Regards,<br>{!!$system_from!!}</div><br>', '', NULL, '2016-05-17 05:38:37', 1),
+(5, 'create-ticket-agent', '', 5, '', '<div>Hello {!!$ticket_agent_name!!}, &nbsp; &nbsp; &nbsp;&nbsp;<br><br>New ticket {!!$ticket_number!!} created&nbsp;<br>From<br>Name :- {!!$ticket_client_name!!} &nbsp; &nbsp;<br>E-mail :- {!!$ticket_client_email!!} &nbsp;&nbsp;<br><br>{!!$content!!} &nbsp;&nbsp;&nbsp;&nbsp;<br><br>Kind Regards,<br>{!!$system_from!!}</div><br>', '', NULL, '2016-05-17 05:38:37', 1),
 (6, 'create-ticket-by-agent', '', 6, '', '<div>{!!$content!!}<br><br>{!!$agent_sign!!}<br><br>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', '', NULL, NULL, 1),
 (7, 'error-report', '', 7, '', '&nbsp; {!!$system_error!!} &nbsp;', '', NULL, NULL, 1),
 (8, 'registration-notification', '', 8, '', '<span><p>Hello {!!$user!!} ,&nbsp;</p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Password: {!!$user_password!!}</p><p>You can visit the helpdesk to browse articles and contact us at any time: {!!$system_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!}&nbsp;</p></span>', '', NULL, NULL, 1),
@@ -580,8 +580,7 @@ INSERT INTO `workflow_close` (`id`, `days`, `condition`, `send_email`, `status`,
 --
 -- Alter Table structure for table `system_settings`
 --
-ALTER TABLE `settings_system`
-  ADD `version` varchar(222) NOT NULL AFTER `time_zone`;
+ALTER TABLE `settings_system` ADD `version` varchar(222) NOT NULL AFTER `time_zone`;
 
 --
 -- Dumping data for table `system_settings`
@@ -590,8 +589,11 @@ ALTER TABLE `settings_system`
 UPDATE `settings_system` SET `version`='1.0.7.5' WHERE 1
 
 
-ALTER TABLE `settings_ticket`
-  ADD `lock_ticket_frequency` varchar(222) NOT NULL AFTER `max_file_size`;
+ALTER TABLE `settings_ticket` ADD `lock_ticket_frequency` varchar(222) NOT NULL AFTER `max_file_size`;
 
 
 UPDATE `settings_ticket` SET `lock_ticket_frequency`='0' WHERE 1
+
+TRUNCATE TABLE `user_notification`;
+
+TRUNCATE TABLE `notifications`;

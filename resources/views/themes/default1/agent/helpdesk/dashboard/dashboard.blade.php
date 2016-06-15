@@ -41,6 +41,7 @@ class="active"
     } else {
         $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
     }
+    
     $i = count($overdues);
     if ($i == 0) {
         $overdue_ticket = 0;
@@ -53,8 +54,10 @@ class="active"
             $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)) . '<br/><br/>';
             if (date('Y-m-d H:i:s') > $new_date) {
                 $j++;
+                //$value[] = $overdue;
             }
         }
+        // dd(count($value));
         if ($j > 0) {
             $overdue_ticket = $j;
         } else {
@@ -94,7 +97,7 @@ class="active"
                 <span class="info-box-icon bg-red"><i class="fa fa-calendar-times-o"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">{!! Lang::get('lang.overdue') !!}</span>
-                    <span class="info-box-number">{{count($overdue_ticket) }} <small> Tickets</small></span>
+                    <span class="info-box-number">{{ $overdue_ticket }} <small> Tickets</small></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </a>

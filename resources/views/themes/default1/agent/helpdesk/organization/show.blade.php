@@ -255,7 +255,7 @@ class="active"
                                 </tbody>
                             </table><!-- /.table -->
                             <div class="pull-right">
-                                <?php echo $tickets->setPath(url('/ticket/open'))->render(); ?>&nbsp;
+                                <?php echo $tickets->setPath(url('/organizations/'.$orgs->id))->render(); ?>&nbsp;
                             </div>
                         </div><!-- /.mail-box-messages -->
                         {!! Form::close() !!}
@@ -374,7 +374,7 @@ class="active"
                             </table><!-- /.table -->
 
                             <div class="pull-right">
-                                <?php echo $tickets->setPath(url('/ticket/open'))->render(); ?>&nbsp;
+                                <?php echo $tickets->setPath(url('/organizations/'.$orgs->id))->render(); ?>&nbsp;
                             </div>
                         </div><!-- /.mail-box-messages -->
                         {!! Form::close() !!}
@@ -496,7 +496,7 @@ class="active"
                             </table><!-- /.table -->
 
                             <div class="pull-right">
-                                <?php echo $tickets->setPath(url('/ticket/open'))->render(); ?>&nbsp;
+                                <?php echo $tickets->setPath(url('/organizations/'.$orgs->id))->render(); ?>&nbsp;
                             </div>
                         </div><!-- /.mail-box-messages -->
                         {!! Form::close() !!}
