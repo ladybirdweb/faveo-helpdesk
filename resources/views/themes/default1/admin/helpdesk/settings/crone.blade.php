@@ -82,7 +82,7 @@ class="active"
                     <i class="fa fa-clipboard pull-right" title="{!!Lang::get('lang.click-url-copy')!!}" onclick="copyToClipboard('#p2')"></i>
                     <div class="col-md-8">
                         <div class="form-group">
-                            {!! Form::label('email_fetching',Lang::get('lang.notification-email')) !!}<br>
+                            {!! Form::label('notification_cron',Lang::get('lang.notification-email')) !!}<br>
                             {!! Form::checkbox('notification_cron',1,true) !!}&nbsp;{{Lang::get('lang.cron_notification')}}
                         </div>
                     </div>
@@ -101,8 +101,9 @@ class="active"
                     <i class="fa fa-clipboard pull-right" title="{!!Lang::get('lang.click-url-copy')!!}" onclick="copyToClipboard('#p3')"></i>
                     <div class="col-md-8">
                         <div class="form-group">
-                            {!! Form::label('auto_close',Lang::get('lang.auto_close_workflow')) !!}<br>
-                            {!! Form::checkbox('auto_close',1,true) !!}&nbsp;{{Lang::get('lang.cron_notification')}}
+                            {!! Form::label('condition',Lang::get('lang.auto_close_workflow')) !!}<br>
+                            <input type="checkbox" name="condition" @if($workflow->condition == 1) checked @endif">
+                            {{Lang::get('lang.enable_workflow')}}
                         </div>
                     </div>
                     <div class="col-md-12">

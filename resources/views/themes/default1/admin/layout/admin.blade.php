@@ -305,6 +305,12 @@
                                 <span>{!! Lang::get('lang.plugin') !!}</span>
                             </a>
                         </li>
+                        <li class="treeview @yield('API')">
+                            <a href="{{ url('api') }}">
+                                <i class="fa fa-cogs"></i>
+                                <span>{!! Lang::get('lang.api') !!}</span>
+                            </a>
+                        </li>
                         <li class="header">{!! Lang::get('lang.Updates') !!}</li>
                         <li @yield('update')>
                         <?php

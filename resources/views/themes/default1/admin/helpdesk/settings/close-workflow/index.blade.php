@@ -69,7 +69,7 @@ class="active"
                 </div>
             </div>
         </div>
-        <div class="form-group {{ $errors->has('condition') ? 'has-error' : '' }}">
+        <!-- <div class="form-group {{ $errors->has('condition') ? 'has-error' : '' }}">
             <div class="row">
                 <div class="col-md-3">
                     <label for="title">{!! Lang::get('lang.enable_workflow') !!}:</label>
@@ -86,7 +86,7 @@ class="active"
                     </div>       
                 </div>     
             </div>
-        </div>
+        </div> -->
         <div class="form-group {{ $errors->has('send_email') ? 'has-error' : '' }}"> 
             <div class="row">
                 <div class="col-md-3">

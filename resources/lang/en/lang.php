@@ -269,11 +269,6 @@ return [
     'date_time'                                                  => 'Date And Time Format',
     'day_date_time'                                              => 'Day,Date And Time Format',
     'timezone'                                                   => 'Default Time Zone',
-    'api'                                                        => 'Api',
-    'api_key'                                                    => 'Api Key',
-    'api_key_mandatory'                                          => 'Api key mandatory',
-    'api_configurations'                                         => 'Api Configurations',
-    'generate_key'                                               => 'Generate key',
     'Ticket-created-successfully'                                => 'Ticket created successfully!',
     'system_updated_successfully'                                => 'System Updated Successfully',
     'system_can_not_updated'                                     => 'System can not Updated',
@@ -1323,9 +1318,14 @@ return [
     * |
     */
 
-   'webhooks'                         => 'Webhooks',
-   'enter_url_to_send_ticket_details' => 'Enter the url to send the ticket details',
-
+    'webhooks'                         => 'Webhooks',
+    'enter_url_to_send_ticket_details' => 'Enter the url to send the ticket details',
+    'api'                              => 'Api',
+    'api_key'                          => 'Api Key',
+    'api_key_mandatory'                => 'Api key mandatory',
+    'api_configurations'               => 'Api Configurations',
+    'generate_key'                     => 'Generate key',
+    'api_settings'                    => 'API settings',
    /*
     *-----------------------------------------------------------------------------
     * Error log and debugging settings
