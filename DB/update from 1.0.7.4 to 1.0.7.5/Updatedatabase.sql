@@ -580,8 +580,7 @@ INSERT INTO `workflow_close` (`id`, `days`, `condition`, `send_email`, `status`,
 --
 -- Alter Table structure for table `system_settings`
 --
-ALTER TABLE `settings_system`
-  ADD `version` varchar(222) NOT NULL AFTER `time_zone`;
+ALTER TABLE `settings_system` ADD `version` varchar(222) NOT NULL AFTER `time_zone`;
 
 --
 -- Dumping data for table `system_settings`
@@ -590,8 +589,11 @@ ALTER TABLE `settings_system`
 UPDATE `settings_system` SET `version`='1.0.7.5' WHERE 1
 
 
-ALTER TABLE `settings_ticket`
-  ADD `lock_ticket_frequency` varchar(222) NOT NULL AFTER `max_file_size`;
+ALTER TABLE `settings_ticket` ADD `lock_ticket_frequency` varchar(222) NOT NULL AFTER `max_file_size`;
 
 
 UPDATE `settings_ticket` SET `lock_ticket_frequency`='0' WHERE 1
+
+TRUNCATE TABLE `user_notification`;
+
+TRUNCATE TABLE `notifications`;
