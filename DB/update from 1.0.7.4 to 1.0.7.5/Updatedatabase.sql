@@ -470,12 +470,11 @@ INSERT INTO `template_types` (`id`, `name`, `created_at`, `updated_at`) VALUES
 (4, 'create-ticket', NULL, NULL),
 (5, 'create-ticket-agent', NULL, NULL),
 (6, 'create-ticket-by-agent', NULL, NULL),
-(7, 'error-report', NULL, NULL),
-(8, 'registration-notification', NULL, NULL),
-(9, 'reset-password', NULL, NULL),
-(10, 'ticket-reply', NULL, NULL),
-(11, 'ticket-reply-agent', NULL, NULL),
-(12, 'registration', NULL, NULL);
+(7, 'registration-notification', NULL, NULL),
+(8, 'reset-password', NULL, NULL),
+(9, 'ticket-reply', NULL, NULL),
+(10, 'ticket-reply-agent', NULL, NULL),
+(11, 'registration', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -510,12 +509,11 @@ INSERT INTO `templates` (`id`, `name`, `variable`, `type`, `subject`, `message`,
 (4, 'create-ticket', '', 4, '', '<div><span>Hello {!!$user!!}<br><br></span><span>Thank you for contacting us. This is an automated response confirming the receipt of your ticket. Our team will get back to you as soon as possible. When replying, please make sure that the ticket ID is kept in the subject so that we can track your replies.<br><br></span><span>Ticket ID: {!!$ticket_number!!}&nbsp;<br></span><span>{!!$department_sign!!}<br></span>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', '', NULL, NULL, 1),
 (5, 'create-ticket-agent', '', 5, '', '<div>Hello {!!$ticket_agent_name!!}, &nbsp; &nbsp; &nbsp;&nbsp;<br><br>New ticket {!!$ticket_number!!} created&nbsp;<br>From<br>Name :- {!!$ticket_client_name!!} &nbsp; &nbsp;<br>E-mail :- {!!$ticket_client_email!!} &nbsp;&nbsp;<br><br>{!!$content!!} &nbsp;&nbsp;&nbsp;&nbsp;<br><br>Kind Regards,<br>{!!$system_from!!}</div><br>', '', NULL, '2016-05-17 05:38:37', 1),
 (6, 'create-ticket-by-agent', '', 6, '', '<div>{!!$content!!}<br><br>{!!$agent_sign!!}<br><br>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', '', NULL, NULL, 1),
-(7, 'error-report', '', 7, '', '&nbsp; {!!$system_error!!} &nbsp;', '', NULL, NULL, 1),
-(8, 'registration-notification', '', 8, '', '<span><p>Hello {!!$user!!} ,&nbsp;</p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Password: {!!$user_password!!}</p><p>You can visit the helpdesk to browse articles and contact us at any time: {!!$system_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!}&nbsp;</p></span>', '', NULL, NULL, 1),
-(9, 'reset-password', '', 9, '', 'Hello {!!$user!!}<br/><br/>You asked to reset your password. To do so, please click this link:<br/><br/>{!!$password_reset_link!!}</a><br/><br/><br/>This will let you change your password to something new. If you didn''t ask for this, don''t worry, we''ll keep your password safe.<br/><br/>Thank You.<br/><br/>Kind Regards,<br/><br/> {!!$system_from!!}', '', NULL, NULL, 1),
-(10, 'ticket-reply', '', 10, '', '<span><div><span><p>{!!$content!!} &nbsp;&nbsp;<br></p><p>{!!$agent_sign!!}&nbsp;</p><p>Ticket Details</p><p>Ticket ID: {!!$ticket_number!!} &nbsp;&nbsp;&nbsp;&nbsp;</p><div><br></div></span><br></div><div><br></div></span>', '', NULL, NULL, 1),
-(11, 'ticket-reply-agent', '', 11, '', '<div>Hello {!!$ticket_agent_name!!},<b><br></b>A reply been made to ticket {!!$ticket_number!!}<b><br></b>From<br>Name: {!!$ticket_client_name!!}<br>E-mail: {!!$ticket_client_email!!}<b><br></b>{!!$content!!}<b><br></b>Kind Regards,<br>{!!$system_from!!}</div>', '', NULL, NULL, 1),
-(78, 'registration', '', 12, '', '<span><p>Hello {!!$user!!} ,&nbsp;</p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!}&nbsp;</p></span>', '', NULL, NULL, 1);
+(7, 'registration-notification', '', 7, '', '<span><p>Hello {!!$user!!} ,&nbsp;</p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Password: {!!$user_password!!}</p><p>You can visit the helpdesk to browse articles and contact us at any time: {!!$system_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!}&nbsp;</p></span>', '', NULL, NULL, 1),
+(8, 'reset-password', '', 8, '', 'Hello {!!$user!!}<br/><br/>You asked to reset your password. To do so, please click this link:<br/><br/>{!!$password_reset_link!!}</a><br/><br/><br/>This will let you change your password to something new. If you didn''t ask for this, don''t worry, we''ll keep your password safe.<br/><br/>Thank You.<br/><br/>Kind Regards,<br/><br/> {!!$system_from!!}', '', NULL, NULL, 1),
+(9, 'ticket-reply', '', 9, '', '<span><div><span><p>{!!$content!!} &nbsp;&nbsp;<br></p><p>{!!$agent_sign!!}&nbsp;</p><p>Ticket Details</p><p>Ticket ID: {!!$ticket_number!!} &nbsp;&nbsp;&nbsp;&nbsp;</p><div><br></div></span><br></div><div><br></div></span>', '', NULL, NULL, 1),
+(10, 'ticket-reply-agent', '', 10, '', '<div>Hello {!!$ticket_agent_name!!},<b><br></b>A reply been made to ticket {!!$ticket_number!!}<b><br></b>From<br>Name: {!!$ticket_client_name!!}<br>E-mail: {!!$ticket_client_email!!}<b><br></b>{!!$content!!}<b><br></b>Kind Regards,<br>{!!$system_from!!}</div>', '', NULL, NULL, 1),
+(11, 'registration', '', 11, '', '<span><p>Hello {!!$user!!} ,&nbsp;</p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!}&nbsp;</p></span>', '', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -593,6 +591,7 @@ ALTER TABLE `settings_ticket` ADD `lock_ticket_frequency` varchar(222) NOT NULL 
 
 
 UPDATE `settings_ticket` SET `lock_ticket_frequency`='0' WHERE 1
+
 
 TRUNCATE TABLE `user_notification`;
 
