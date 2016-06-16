@@ -7,5 +7,5 @@ use App\BaseModel;
 class Template extends BaseModel
 {
     protected $table = 'templates';
-    protected $fillable = ['name', 'message', 'type', 'subject'];
+    protected $fillable = ['name', 'message', 'type', 'variable', 'subject'];
 }
