@@ -23,7 +23,7 @@
 	/*	Main Search
 	/*-----------------------------------------------------------------------------------*/
 	$.ajax({
-		url: 'search-terms.php',
+		url: '',
 		dataType: 'json'
 	}).done(function (data) {
 		$('#header-search .search-field').autocomplete({
