@@ -8,7 +8,7 @@
 {!! Form::model($template,['url'=>'templates/'.$template->id,'method'=>'patch']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        
+
         <h3 class="box-title">{{Lang::get('lang.edit_template')}}</h4>
     </div>
     <div class="box-body">
