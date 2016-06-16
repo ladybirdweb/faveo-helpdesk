@@ -28,16 +28,17 @@
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>{!! Lang::get('lang.template_name') !!}</th>
-                    <th>{!! Lang::get('lang.subject') !!}</th>
+                    <th>{!! Lang::get('lang.type') !!}</th>
+                    <th>{!! Lang::get('lang.description') !!}</th>
                     <th>{!! Lang::get('lang.action') !!}</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($templates as $template)
                 <tr>
+                    <?php $type = App\Model\Common\TemplateType::where('id','=',$template->type)->first(); ?>
+                    <td>{!! $type->name !!}</td>
                     <td>{!! $template->name !!}</td>
-                    <td>{!! $template->subject !!}</td>
                     <td>
                         {!! link_to_route('templates.edit', Lang::get('lang.edit_templates'),[$template->id],['class'=>'btn btn-success btn-sm']) !!}
                     </td>

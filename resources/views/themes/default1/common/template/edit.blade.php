@@ -54,10 +54,10 @@
                 </div>
                 <div class="row">
                     <div class="col-md-8 form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
-                        {!! Form::label('subject',Lang::get('lang.subject')) !!}<span style="color:red;">*</span>
-                        {!! Form::text('subject',null,['class' => 'form-control']) !!}
+                        {!! Form::label('subject',Lang::get('lang.subject')) !!}
+                        {!! Form::text('subject',null,['class' => 'form-control', 'id' =>'subject']) !!}
                     </div>
-                    <div class="col-md-3 form-group">
+                    <div class="col-md-3 form-group" id = "use-subject">
                         <br/>
                         {!! Form::hidden('variable','0') !!}
                         {!! Form::checkbox('variable','1') !!}
@@ -78,4 +78,17 @@
     </div>
 </div>
 {!! Form::close() !!}
+
+<script>
+    $(document).ready(function() {
+        $("#subject").keyup(function() {
+            var subject = document.getElementById('subject').value;
+            if (subject) {
+                $("#use-subject").show();
+            } else {
+                $("#use-subject").hide();
+            }
+        });
+    });
+</script>
 @stop
