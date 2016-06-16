@@ -1,8 +1,4 @@
 @extends('themes.default1.agent.layout.agent')
-
-@section('PageHeader')
-<h2>{!! Lang::get('lang.notifications') !!}</h2>
-@stop
 @section('Users')
 class="active"
 @stop
@@ -47,6 +43,9 @@ active
 
 @section('user')
 class="active"
+@stop
+@section('PageHeader')
+<h3>{!! Lang::get('lang.notifications') !!}</h3>
 @stop
 
 <!-- /breadcrumbs -->
