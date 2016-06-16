@@ -231,6 +231,7 @@ return [
      */
     'country-code'                  => 'Code',
     'company'                       => 'Company',
+    'company_settings'              => 'Company settings',
     'website'                       => 'Website',
     'phone'                         => 'Phone',
     'address'                       => 'Address',
@@ -306,6 +307,7 @@ return [
     'email_attahment_user'                => 'Email attachments to the user',
     'cron_notification'                   => 'Enable Notification cron',
     'cron'                                => 'Job Scheduler',
+    'cron-jobs'                           => 'Cron Jobs',
     'crone-url-message'                   => "These are Faveo's Job Scheduler(cron job) url for your system.",
     'clipboard-copy-message'              => 'Copied to clipboard.',
     'click'                               => 'Click here',
@@ -320,6 +322,7 @@ return [
       |--------------------------------------
      */
     'ticket'                                => 'Ticket',
+    'ticket-setting'                        => 'Ticket settings',
     'default_ticket_number_format'          => 'Default Ticket Number Format',
     'default_ticket_number_sequence'        => 'Default Ticket Number Sequence',
     'default_status'                        => 'Default Status',
@@ -358,6 +361,7 @@ return [
     'user_session_timeout'                             => 'User Session Timeout',
     'client_quick_access'                              => 'Client Quick Access',
     'cron'                                             => 'Cron',
+    'cron_settings'                                    => 'Cron Settings',
     'system-settings'                                  => 'System Settings',
     'settings-2'                                       => 'Settings',
 
@@ -367,6 +371,7 @@ return [
       |--------------------------------------
      */
     'auto_responce'                         => 'Auto Response',
+    'auto_responce-settings'                => 'Auto response settings',
     'new_ticket'                            => 'New Ticket',
     'new_ticket_by_agent'                   => 'New Ticket by Agent',
     'new_message'                           => 'New Message',
@@ -387,6 +392,7 @@ return [
     'disable'                                               => 'Disable',
     'admin_email_2'                                         => 'Admin Email',
     'alert_notices'                                         => 'Alert & Notices',
+    'alert_notices_setitngs'                                => 'Alert and Notice settings',
     'new_ticket_alert'                                      => 'New Ticket Alert',
     'department_manager'                                    => 'Department Manager',
     'department_members'                                    => 'Department Members',
@@ -422,6 +428,7 @@ return [
       | Language page
       |------------------------------------------------
      */
+    'language-settings'          => 'Language settings',
     'iso-code'           => 'ISO-CODE',
     'download'           => 'Downlaod',
     'upload_file'        => 'Upload File',
@@ -452,7 +459,7 @@ return [
     'add_plugin'    => 'Add Plugin',
     'plugins'       => 'Plugins',
     'upload'        => 'Upload',
-
+    'plugins-list'  => 'List of plugins',
     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]
@@ -859,6 +866,7 @@ return [
     'Updates'           => 'UPDATES',
     'no_new_updates'    => 'No new Updates',
     'check_for_updates' => 'Check for Updates',
+    'update-version'    => 'Update Version',
     'open'              => 'Open',
     'inprogress'        => 'Inprogress',
     'closed'            => 'Closed',
@@ -1225,6 +1233,7 @@ return [
     'addpages'                                        => 'Add Pages',
     'allpages'                                        => 'All Pages',
     'widgets'                                         => 'Widgets',
+    'widget-settings'                                 => 'Widget Settings',
     'footer1'                                         => 'Footer 1',
     'footer2'                                         => 'Footer 2',
     'footer3'                                         => 'Footer 3',
@@ -1243,6 +1252,7 @@ return [
     'create_a_category'                               => 'Create a Category',
     'add'                                             => 'Add',
     'social'                                          => 'Social',
+    'social-widget-settings'                          => 'Social widget settings',
     'comment'                                         => 'Comment',
     'not_published'                                   => 'Not Published',
     'numberofelementstodisplay'                       => 'Number of elements to display',

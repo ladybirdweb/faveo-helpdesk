@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-
+<h1>{{ Lang::get('lang.tickets') }}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -31,7 +31,7 @@ class="active"
 {!! Form::model($tickets,['url' => 'postticket/'.$tickets->id, 'method' => 'PATCH']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.ticket')}}</h3>
+        <h3 class="box-title">{{Lang::get('lang.ticket-setting')}}</h3>
     </div>
     <div class="box-body">
         <!-- check whether success or not -->

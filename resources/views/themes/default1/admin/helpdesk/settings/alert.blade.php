@@ -16,6 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
+<h1>{{Lang::get('lang.alert_notices')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -31,7 +32,7 @@ class="active"
 {!! Form::model($alerts,['url' => 'postalert/'.$alerts->id, 'method' => 'PATCH']) !!}
 <div class="box box-primary">
     <div class="box-header">
-        <h4 class="box-title">{{Lang::get('lang.alert_notices')}}</h4> {!! Form::submit(Lang::get('lang.submit'),['class'=>' btn btn-primary pull-right'])!!}
+        <h4 class="box-title">{{Lang::get('lang.alert_notices_setitngs')}}</h4> {!! Form::submit(Lang::get('lang.submit'),['class'=>' btn btn-primary pull-right'])!!}
     </div>
 
 </div>

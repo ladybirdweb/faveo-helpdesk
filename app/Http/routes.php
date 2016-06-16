@@ -122,22 +122,38 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     //$router->model('id','getcompany');
 
     Route::get('job-scheduler', ['as' => 'get.job.scheder', 'uses' => 'Admin\helpdesk\SettingsController@getSchedular']); //to get ob scheduler form page
+    Breadcrumbs::register('get.job.scheder', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.cron-jobs'),route('get.job.scheder'));
+    });
 
     Route::patch('post-scheduler', ['as' => 'post.job.scheduler', 'uses' => 'Admin\helpdesk\SettingsController@postSchedular']); //to update job scheduler
 
     Route::get('agent-profile-page/{id}', ['as' => 'agent.profile.page', 'uses' => 'Admin\helpdesk\AgentController@agent_profile']);
 
     Route::get('getcompany', ['as' => 'getcompany', 'uses' => 'Admin\helpdesk\SettingsController@getcompany']); // direct to company setting page
+    Breadcrumbs::register('getcompany', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.company'),route('getcompany'));
+    });
 
     Route::patch('postcompany/{id}', 'Admin\helpdesk\SettingsController@postcompany'); // Updating the Company table with requests
 
     Route::get('delete-logo', ['as' => 'delete.logo', 'uses' => 'Admin\helpdesk\SettingsController@deleteLogo']); // deleting a logo
 
     Route::get('getsystem', ['as' => 'getsystem', 'uses' => 'Admin\helpdesk\SettingsController@getsystem']); // direct to system setting page
+    Breadcrumbs::register('getsystem', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.system'),route('getsystem'));
+    });
 
     Route::patch('postsystem/{id}', 'Admin\helpdesk\SettingsController@postsystem'); // Updating the System table with requests
 
     Route::get('getticket', ['as' => 'getticket', 'uses' => 'Admin\helpdesk\SettingsController@getticket']); // direct to ticket setting page
+    Breadcrumbs::register('getticket', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.ticket-setting'),route('getticket'));
+    });
 
     Route::patch('postticket/{id}', 'Admin\helpdesk\SettingsController@postticket'); // Updating the Ticket table with requests
 
@@ -148,10 +164,18 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     // Route::patch('postaccess/{id}', 'Admin\helpdesk\SettingsController@postaccess'); // Updating the Access table with requests
 
     Route::get('getresponder', ['as' => 'getresponder', 'uses' => 'Admin\helpdesk\SettingsController@getresponder']); // direct to responder setting page
+    Breadcrumbs::register('getresponder', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.auto_responce'),route('getresponder'));
+    });
 
     Route::patch('postresponder/{id}', 'Admin\helpdesk\SettingsController@postresponder'); // Updating the Responder table with requests
 
     Route::get('getalert', ['as' => 'getalert', 'uses' => 'Admin\helpdesk\SettingsController@getalert']); // direct to alert setting page
+    Breadcrumbs::register('getalert', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.alert_notices'),route('getalert'));
+    });
 
     Route::patch('postalert/{id}', 'Admin\helpdesk\SettingsController@postalert'); // Updating the Alert table with requests
     // Templates
@@ -250,12 +274,20 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::patch('admin-profile-password', 'Admin\helpdesk\ProfileController@postProfilePassword'); /*  Admin Profile Password Post */
 
     Route::get('widgets', ['as' => 'widgets', 'uses' => 'Common\SettingsController@widgets']); /* get the create footer page for admin */
+    Breadcrumbs::register('widgets', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.widget-settings'),route('widgets'));
+    });
 
     Route::get('list-widget', 'Common\SettingsController@list_widget'); /* get the list widget page for admin */
 
     Route::post('edit-widget/{id}', 'Common\SettingsController@edit_widget'); /* get the create footer page for admin */
 
     Route::get('social-buttons', ['as' => 'social.buttons', 'uses' => 'Common\SettingsController@social_buttons']); /* get the create footer page for admin */
+    Breadcrumbs::register('social.buttons', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.social'), route('social.buttons'));
+    });
 
     Route::get('list-social-buttons', ['as' => 'list.social.buttons', 'uses' => 'Common\SettingsController@list_social_buttons']); /* get the list widget page for admin */
 
@@ -270,14 +302,22 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::post('post-version-check', ['as' => 'post-version-check', 'uses' => 'Common\SettingsController@post_version_check']); /* post Check version */
 
     Route::get('checkUpdate', ['as' => 'checkupdate', 'uses' => 'Common\SettingsController@getupdate']); /* get Check update */
-
-    Breadcrumbs::register('setting', function ($breadcrumbs) {
-        $breadcrumbs->push('Admin Panel', route('setting'));
+    Breadcrumbs::register('checkupdate', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.update-version'), route('checkupdate'));
     });
+   
 
     Route::get('admin', ['as' => 'setting', 'uses' => 'Admin\helpdesk\SettingsController@settings']);
+     Breadcrumbs::register('setting', function ($breadcrumbs) {
+        $breadcrumbs->push(Lang::get('lang.admin_panel'), route('setting'));
+    });
 
     Route::get('plugins', ['as' => 'plugins', 'uses' => 'Common\SettingsController@Plugins']);
+    Breadcrumbs::register('plugins', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.plugins'), route('plugins'));
+    });
 
     Route::get('getplugin', ['as' => 'get.plugin', 'uses' => 'Common\SettingsController@GetPlugin']);
 
@@ -291,6 +331,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     //Routes for showing language table and switching language
     Route::get('languages', ['as' => 'LanguageController', 'uses' => 'Admin\helpdesk\LanguageController@index']);
+    Breadcrumbs::register('LanguageController',function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.language'),route('LanguageController'));
+    });
 
     Route::get('get-languages', ['as' => 'getAllLanguages', 'uses' => 'Admin\helpdesk\LanguageController@getLanguages']);
 
@@ -303,6 +347,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::post('language/add', 'Admin\helpdesk\LanguageController@postForm');
 
     Route::get('language/add', ['as' => 'add-language', 'uses' => 'Admin\helpdesk\LanguageController@getForm']);
+    Breadcrumbs::register('add-language',function($breadcrumbs){
+        $breadcrumbs->parent('LanguageController');
+        $breadcrumbs->push(Lang::get('lang.add'),route('add-language'));
+    });
 
     //Routes for  delete language package
     Route::get('delete-language/{lang}', ['as' => 'lang.delete', 'uses' => 'Admin\helpdesk\LanguageController@deleteLanguage']);
@@ -326,6 +374,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
      * Api Settings
      */
     Route::get('api', ['as' => 'api.settings.get', 'uses' => 'Common\ApiSettings@show']);
+    Breadcrumbs::register('api.settings.get', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.api'), route('api.settings.get'));
+    });
     Route::post('api', ['as' => 'api.settings.post', 'uses' => 'Common\ApiSettings@postSettings']);
 
     /*
@@ -333,7 +385,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
      */
     //route for showing error and debugging setting form page
     Route::get('error-and-debugging-options', ['as' => 'err.debug.settings', 'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showSettings']);
-
+     Breadcrumbs::register('err.debug.settings', function ($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.error-debug'), route('err.debug.settings'));
+    });
     //route for submit error and debugging setting form page
     Route::post('post-settings', ['as' => 'post.error.debug.settings',
         'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings']);
@@ -479,7 +534,7 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth', 'middleware'
     Route::get('/ticket/unassigned', ['as' => 'get.unassigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_unassigned']);  /* Get tickets in datatable */
     Breadcrumbs::register('dashboard', function ($breadcrumbs) {
         $breadcrumbs->parent('/');
-        $breadcrumbs->push('Dashboard', route('dashboard'));
+        $breadcrumbs->push(Lang::get('lang.dashboard'), route('dashboard'));
     });
     Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'Agent\helpdesk\DashboardController@index']); /* To show dashboard pages */
 
@@ -689,25 +744,25 @@ Route::get('auto-close-tickets', ['as' => 'auto.close', 'uses' => 'Agent\helpdes
   |  View all the Routes
   |=============================================================
  */
-//Route::get('/aaa', function () {
-//    $routeCollection = Route::getRoutes();
-//    echo "<table style='width:100%'>";
-//    echo '<tr>';
-//    echo "<td width='10%'><h4>HTTP Method</h4></td>";
-//    echo "<td width='10%'><h4>Route</h4></td>";
-//    echo "<td width='10%'><h4>Url</h4></td>";
-//    echo "<td width='80%'><h4>Corresponding Action</h4></td>";
-//    echo '</tr>';
-//    foreach ($routeCollection as $value) {
-//        echo '<tr>';
-//        echo '<td>' . $value->getMethods()[0] . '</td>';
-//        echo '<td>' . $value->getName() . '</td>';
-//        echo '<td>' . $value->getPath() . '</td>';
-//        echo '<td>' . $value->getActionName() . '</td>';
-//        echo '</tr>';
-//    }
-//    echo '</table>';
-//});
+Route::get('/aaa', function () {
+   $routeCollection = Route::getRoutes();
+   echo "<table style='width:100%'>";
+   echo '<tr>';
+   echo "<td width='10%'><h4>HTTP Method</h4></td>";
+   echo "<td width='10%'><h4>Route</h4></td>";
+   echo "<td width='10%'><h4>Url</h4></td>";
+   echo "<td width='80%'><h4>Corresponding Action</h4></td>";
+   echo '</tr>';
+   foreach ($routeCollection as $value) {
+       echo '<tr>';
+       echo '<td>' . $value->getMethods()[0] . '</td>';
+       echo '<td>' . $value->getName() . '</td>';
+       echo '<td>' . $value->getPath() . '</td>';
+       echo '<td>' . $value->getActionName() . '</td>';
+       echo '</tr>';
+   }
+   echo '</table>';
+});
 
 /*
   |=============================================================

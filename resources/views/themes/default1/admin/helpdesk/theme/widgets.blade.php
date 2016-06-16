@@ -11,7 +11,9 @@ active
 @section('widget')
 class="active"
 @stop
-
+@section('PageHeader')
+<h1>{!! Lang::get('lang.widget-settings') !!}</h1>
+@stop
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
