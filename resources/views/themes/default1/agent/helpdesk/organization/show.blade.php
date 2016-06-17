@@ -567,8 +567,8 @@ class="active"
                                     <style>
                                         #legend-holder { border: 2px solid #ccc; float: left; width: 25px; height: 15px; margin: 2px; }
                                     </style>
-                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"> </span> {!! Lang::get('lang.total') !!} {!! Lang::get('lang.tickets') !!}</div>
-                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #6DC5B2;"> </span> {!! Lang::get('lang.open') !!} {!! Lang::get('lang.tickets') !!}</div>
+                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"> </span> {!! Lang::get('lang.created') !!} {!! Lang::get('lang.tickets') !!}</div>
+                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #6DC5B2;"> </span> {!! Lang::get('lang.reopen') !!} {!! Lang::get('lang.tickets') !!}</div>
                                     <div class="col-md-4"><span id="legend-holder" style="background-color: #E3B870;"> </span> {!! Lang::get('lang.closed') !!} {!! Lang::get('lang.tickets') !!}</div>
                                 </div>
                             </div>
