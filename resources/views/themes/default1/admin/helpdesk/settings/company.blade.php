@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{ Lang::get('lang.company') }}</h1>
+<h1>{{ Lang::get('lang.settings') }}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->

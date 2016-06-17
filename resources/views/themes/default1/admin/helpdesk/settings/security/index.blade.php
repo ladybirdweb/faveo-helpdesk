@@ -9,7 +9,7 @@ class="active"
 @stop
 
 @section('PageHeader')
-<h1>{!! Lang::get('lang.security') !!}</h1>
+<h1>{!! Lang::get('lang.settings') !!}</h1>
 @stop
 
 @section('header')

@@ -232,7 +232,7 @@ return [
      */
     'country-code'                  => 'Code',
     'company'                       => 'Company',
-    'company_settings'              => 'Company settings',
+    'company_settings'              => 'Company Settings',
     'website'                       => 'Website',
     'phone'                         => 'Phone',
     'address'                       => 'Address',
@@ -323,7 +323,7 @@ return [
       |--------------------------------------
      */
     'ticket'                                => 'Ticket',
-    'ticket-setting'                        => 'Ticket settings',
+    'ticket-setting'                        => 'Ticket Settings',
     'default_ticket_number_format'          => 'Default Ticket Number Format',
     'default_ticket_number_sequence'        => 'Default Ticket Number Sequence',
     'default_status'                        => 'Default Status',
@@ -430,7 +430,7 @@ return [
       | Language page
       |------------------------------------------------
      */
-    'language-settings'          => 'Language settings',
+    'language-settings'          => 'Language Settings',
     'iso-code'           => 'ISO-CODE',
     'download'           => 'Downlaod',
     'upload_file'        => 'Upload File',

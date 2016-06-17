@@ -12,7 +12,7 @@ active
 class="active"
 @stop
 @section('PageHeader')
-<h1>{!! Lang::get('lang.social') !!}</h1>
+<h1>{!! Lang::get('lang.widgets') !!}</h1>
 @stop
 @section('content')
 <div class="box box-primary">

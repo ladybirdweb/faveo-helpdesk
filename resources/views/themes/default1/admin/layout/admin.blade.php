@@ -259,7 +259,7 @@
                         <li class="treeview @yield('Settings')">
                             <a href="#">
                                 <i class="fa fa-cog"></i>
-                                <span>{!! Lang::get('lang.system-settings') !!}</span>
+                                <span>{!! Lang::get('lang.settings') !!}</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">

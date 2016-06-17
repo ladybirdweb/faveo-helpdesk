@@ -265,7 +265,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('getcompany', ['as' => 'getcompany', 'uses' => 'Admin\helpdesk\SettingsController@getcompany']); // direct to company setting page
     Breadcrumbs::register('getcompany', function($breadcrumbs){
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push(Lang::get('lang.company'),route('getcompany'));
+        $breadcrumbs->push(Lang::get('lang.company_settings'),route('getcompany'));
     });
 
     Route::patch('postcompany/{id}', 'Admin\helpdesk\SettingsController@postcompany'); // Updating the Company table with requests
@@ -275,7 +275,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('getsystem', ['as' => 'getsystem', 'uses' => 'Admin\helpdesk\SettingsController@getsystem']); // direct to system setting page
     Breadcrumbs::register('getsystem', function($breadcrumbs){
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push(Lang::get('lang.system'),route('getsystem'));
+        $breadcrumbs->push(Lang::get('lang.system-settings'),route('getsystem'));
     });
 
     Route::patch('postsystem/{id}', 'Admin\helpdesk\SettingsController@postsystem'); // Updating the System table with requests
@@ -309,14 +309,14 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('getalert', ['as' => 'getalert', 'uses' => 'Admin\helpdesk\SettingsController@getalert']); // direct to alert setting page
     Breadcrumbs::register('getalert', function($breadcrumbs){
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push(Lang::get('lang.alert_notices'),route('getalert'));
+        $breadcrumbs->push(Lang::get('lang.alert_notices_setitngs'),route('getalert'));
     });
 
     Route::patch('postalert/{id}', 'Admin\helpdesk\SettingsController@postalert'); // Updating the Alert table with requests
     // Templates
     Breadcrumbs::register('security.index', function ($breadcrumbs) {
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push('Security', route('security.index'));
+        $breadcrumbs->push(Lang::get('lang.security_settings'), route('security.index'));
     });
 
 // Templates > Upload Templates
@@ -346,17 +346,18 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Breadcrumbs::register('close-workflow.index', function ($breadcrumbs) {
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push('Close Ticket Workflow', route('close-workflow.index'));
+        $breadcrumbs->push(Lang::get('lang.close_ticket_workflow_settings'), route('close-workflow.index'));
     });
     Route::resource('close-workflow', 'Admin\helpdesk\CloseWrokflowController'); // direct to security setting page
 
 
     Route::patch('security/{id}', ['as' => 'securitys.update', 'uses' => 'Admin\helpdesk\SecurityController@update']); // direct to security setting page
+    
+    Route::get('setting-status', ['as' => 'statuss.index', 'uses' => 'Admin\helpdesk\SettingsController@getStatuses']); // direct to status setting page
     Breadcrumbs::register('statuss.index', function ($breadcrumbs) {
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push('All Status', route('statuss.index'));
+        $breadcrumbs->push(Lang::get('lang.status_settings'), route('statuss.index'));
     });
-    Route::get('setting-status', ['as' => 'statuss.index', 'uses' => 'Admin\helpdesk\SettingsController@getStatuses']); // direct to status setting page
 
     Route::patch('status-update/{id}', ['as' => 'statuss.update', 'uses' => 'Admin\helpdesk\SettingsController@editStatuses']);
     Breadcrumbs::register('statuss.create', function ($breadcrumbs) {
@@ -371,11 +372,12 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('status-delete/{id}', ['as' => 'statuss.delete', 'uses' => 'Admin\helpdesk\SettingsController@deleteStatuses']);
 
     Route::get('ticket/status/{id}/{state}', ['as' => 'statuss.state', 'uses' => 'Agent\helpdesk\TicketController@updateStatuses']);
+    
+    Route::get('getratings', ['as' => 'ratings.index', 'uses' => 'Admin\helpdesk\SettingsController@RatingSettings']);
     Breadcrumbs::register('ratings.index', function ($breadcrumbs) {
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push('All Ratings', route('ratings.index'));
+        $breadcrumbs->push(Lang::get('lang.ratings_settings'), route('ratings.index'));
     });
-    Route::get('getratings', ['as' => 'ratings.index', 'uses' => 'Admin\helpdesk\SettingsController@RatingSettings']);
 
     Route::get('deleter/{rating}', ['as' => 'ratings.delete', 'uses' => 'Admin\helpdesk\SettingsController@RatingDelete']);
 
@@ -421,7 +423,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('social-buttons', ['as' => 'social.buttons', 'uses' => 'Common\SettingsController@social_buttons']); /* get the create footer page for admin */
     Breadcrumbs::register('social.buttons', function($breadcrumbs){
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push(Lang::get('lang.social'), route('social.buttons'));
+        $breadcrumbs->push(Lang::get('lang.social-widget-settings'), route('social.buttons'));
     });
 
     Route::get('list-social-buttons', ['as' => 'list.social.buttons', 'uses' => 'Common\SettingsController@list_social_buttons']); /* get the list widget page for admin */
@@ -465,7 +467,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('languages', ['as' => 'LanguageController', 'uses' => 'Admin\helpdesk\LanguageController@index']);
     Breadcrumbs::register('LanguageController',function($breadcrumbs){
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push(Lang::get('lang.language'),route('LanguageController'));
+        $breadcrumbs->push(Lang::get('lang.language-settings'),route('LanguageController'));
     });
 
     Route::get('get-languages', ['as' => 'getAllLanguages', 'uses' => 'Admin\helpdesk\LanguageController@getLanguages']);
@@ -524,7 +526,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('api', ['as' => 'api.settings.get', 'uses' => 'Common\ApiSettings@show']);
     Breadcrumbs::register('api.settings.get', function($breadcrumbs){
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push(Lang::get('lang.api'), route('api.settings.get'));
+        $breadcrumbs->push(Lang::get('lang.api_settings'), route('api.settings.get'));
     });
     Route::post('api', ['as' => 'api.settings.post', 'uses' => 'Common\ApiSettings@postSettings']);
 
@@ -535,7 +537,7 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('error-and-debugging-options', ['as' => 'err.debug.settings', 'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showSettings']);
      Breadcrumbs::register('err.debug.settings', function ($breadcrumbs) {
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push(Lang::get('lang.error-debug'), route('err.debug.settings'));
+        $breadcrumbs->push(Lang::get('lang.error-debug-settings'), route('err.debug.settings'));
     });
     //route for submit error and debugging setting form page
     Route::post('post-settings', ['as' => 'post.error.debug.settings',
