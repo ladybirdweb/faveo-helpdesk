@@ -97,7 +97,7 @@ class AuthController extends Controller {
         $user->remember_token = $code;
         $user->save();
         $message12 = "";
-        $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => 'Activate your Account', 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/' . $code)]);
+        $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/' . $code)]);
         if ($var == null) {
             $message12 = Lang::get('lang.failed_to_send_email_contact_administrator');
             return redirect('home')->with('warning', $message12);

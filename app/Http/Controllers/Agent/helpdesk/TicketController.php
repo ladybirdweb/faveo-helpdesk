@@ -621,7 +621,7 @@ class TicketController extends Controller
                 \Event::fire(new \App\Events\ReadMailEvent($user_id, $password));
                 try {
                     if ($auto_response == 0) {
-                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => 'Welcome to '.$company.' helpdesk', 'scenario' => 'registration-notification'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'user_password' => $password]);
+                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'user_password' => $password]);
                     }
                 } catch (\Exception $e) {
                 }

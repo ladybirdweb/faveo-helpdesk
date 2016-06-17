@@ -262,7 +262,7 @@ class="active"
                                         </tbody>
                                     </table><!-- /.table -->
                                     <div class="pull-right">
-                                        <?php echo $tickets->setPath(url('user/'.$users->id))->render(); ?>&nbsp;
+                                        <?php echo $tickets->setPath(url('user/' . $users->id))->render(); ?>&nbsp;
                                     </div>
                                 </div><!-- /.mail-box-messages -->
                                 {!! Form::close() !!}
@@ -381,7 +381,7 @@ class="active"
                                     </table><!-- /.table -->
 
                                     <div class="pull-right">
-                                        <?php echo $tickets->setPath(url('user/'.$users->id))->render(); ?>&nbsp;
+                                        <?php echo $tickets->setPath(url('user/' . $users->id))->render(); ?>&nbsp;
                                     </div>
                                 </div><!-- /.mail-box-messages -->
                                 {!! Form::close() !!}
@@ -571,14 +571,14 @@ class="active"
                                         <input type="submit" value="{!! Lang::get('lang.submit') !!}" class="btn btn-primary">
                                     </div>
                                     <div class="col-sm-10">
-                                        <label>{!! Lang::get('lang.Legend') !!}:</label>
+                                        <label class="lead">{!! Lang::get('lang.Legend') !!}:</label>
                                         <div class="row">
                                             <style>
-                                                #legend-holder { border: 2px solid #ccc; float: left; width: 25px; height: 15px; margin: 2px; }
+                                                #legend-holder { border: 1px solid #ccc; float: left; width: 25px; height: 25px; margin: 1px; }
                                             </style>
-                                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"> </span> {!! Lang::get('lang.created') !!} {!! Lang::get('lang.tickets') !!}</div>
-                                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6DC5B2;"> </span> {!! Lang::get('lang.reopen') !!} {!! Lang::get('lang.tickets') !!}</div>
-                                            <div class="col-md-4"><span id="legend-holder" style="background-color: #E3B870;"> </span> {!! Lang::get('lang.closed') !!} {!! Lang::get('lang.tickets') !!}</div>
+                                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span class="lead"> <span id="total-created-tickets" ></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.created') !!} </span></div> 
+                                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6DC5B2;"></span>&nbsp; <span class="lead"> <span id="total-reopen-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.reopen') !!}  </span></div> 
+                                            <div class="col-md-4"><span id="legend-holder" style="background-color: #E3B870;"></span>&nbsp; <span class="lead"> <span id="total-closed-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.closed') !!}  </span></div> 
                                         </div>
                                     </div>
                                 </div>
@@ -841,12 +841,16 @@ class="active"
     <script type="text/javascript">
         $(document).ready(function() {
             $.getJSON("../user-agen/<?php echo $users->id; ?>", function(result) {
-                var labels = [], open = [], closed = [], reopened = [];
+                var labels = [], open = [], closed = [], reopened = [], open_total = 0, closed_total = 0, reopened_total = 0;
                 for (var i = 0; i < result.length; i++) {
                     labels.push(result[i].date);
                     open.push(result[i].open);
                     closed.push(result[i].closed);
                     reopened.push(result[i].reopened);
+
+                    open_total += parseInt(result[i].open);
+                    closed_total += parseInt(result[i].closed);
+                    reopened_total += parseInt(result[i].reopened);
                 }
                 var buyerData = {
                     labels: labels,
@@ -884,7 +888,9 @@ class="active"
                         }
                     ]
                 };
-
+                $("#total-created-tickets").html(open_total);
+                $("#total-reopen-tickets").html(reopened_total);
+                $("#total-closed-tickets").html(closed_total);
                 var myLineChart = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
                     showScale: true,
                     //Boolean - Whether grid lines are shown across the chart
@@ -933,7 +939,6 @@ class="active"
                 var date2 = $('#datetimepicker3').val();
                 var formData = date1.split("/").join('-');
                 var dateData = date2.split("/").join('-');
-
                 // process the form
                 $.ajax({
                     type: 'POST', // define the type of HTTP verb we want to use (POST for our form)
@@ -943,7 +948,7 @@ class="active"
 
                     success: function(result2) {
 
-                        var labels = [], open = [], closed = [], reopened = [];
+                        var labels = [], open = [], closed = [], reopened = [], open_total = 0, closed_total = 0, reopened_total = 0;
 
                         for (var i = 0; i < result2.length; i++) {
 
@@ -951,6 +956,10 @@ class="active"
                             open.push(result2[i].open);
                             closed.push(result2[i].closed);
                             reopened.push(result2[i].reopened);
+
+                            open_total += parseInt(result2[i].open);
+                            closed_total += parseInt(result2[i].closed);
+                            reopened_total += parseInt(result2[i].reopened);
                         }
                         var buyerData = {
                             labels: labels,
@@ -988,7 +997,9 @@ class="active"
                                 }
                             ]
                         };
-
+                        $("#total-created-tickets").html(open_total);
+                        $("#total-reopen-tickets").html(reopened_total);
+                        $("#total-closed-tickets").html(closed_total);
                         var myLineChart = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
                             showScale: true,
                             //Boolean - Whether grid lines are shown across the chart

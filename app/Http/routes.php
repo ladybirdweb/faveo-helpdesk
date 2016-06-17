@@ -887,7 +887,7 @@ Route::post('checkmyticket', 'Client\helpdesk\UnAuthController@PostCheckTicket')
 Breadcrumbs::register('check_ticket', function ($breadcrumbs, $id) {
     $page = \App\Model\helpdesk\Ticket\Tickets::whereId(1)->first();
     $breadcrumbs->parent('/');
-    $breadcrumbs->push('Check Ticket', route('check_ticket', $page->id));
+    $breadcrumbs->push('Check Ticket');
 });
 Route::get('check_ticket/{id}', ['as' => 'check_ticket', 'uses' => 'Client\helpdesk\GuestController@get_ticket_email']); //detail ticket information
 // show ticket via have a ticket
