@@ -23,8 +23,8 @@ use Redirect;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class CategoryController extends Controller {
-
+class CategoryController extends Controller
+{
     /**
      * Create a new controller instance.
      * constructor to check
@@ -34,7 +34,8 @@ class CategoryController extends Controller {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // checking authentication
         $this->middleware('auth');
         // checking roles
@@ -49,7 +50,8 @@ class CategoryController extends Controller {
      *
      * @return Response
      */
-    public function index() {
+    public function index()
+    {
         /*  get the view of index of the catogorys with all attributes
           of category model */
         try {
@@ -64,7 +66,8 @@ class CategoryController extends Controller {
      *
      * @return type chumper datatable
      */
-    public function getData() {
+    public function getData()
+    {
         /* fetching chumper datatables */
         return Datatable::collection(Category::All())
                         /* search column name */
@@ -73,7 +76,6 @@ class CategoryController extends Controller {
                         ->orderColumns('name', 'description')
                         /* add column name */
                         ->addColumn('name', function ($model) {
-                            
                             $string = strip_tags($model->name);
                             if (strlen($string) > 40) {
                                 // truncate string
@@ -81,6 +83,7 @@ class CategoryController extends Controller {
                             } else {
                                 $stringCut = $model->name;
                             }
+
                             return $stringCut.'...';
                         })
                         /* add column Created */
@@ -92,20 +95,20 @@ class CategoryController extends Controller {
                         /* add column Actions */
                         /* there are action buttons and modal popup to delete a data column */
                         ->addColumn('Actions', function ($model) {
-                            return '<span  data-toggle="modal" data-target="#deletecategory' . $model->slug . '"><a href="#" ><button class="btn btn-danger btn-xs"></a>' . \Lang::get('lang.delete') . '</button></span>&nbsp;<a href=category/' . $model->id . '/edit class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp;<a href=article-list class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>
-				<div class="modal fade" id="deletecategory' . $model->slug . '">
+                            return '<span  data-toggle="modal" data-target="#deletecategory'.$model->slug.'"><a href="#" ><button class="btn btn-danger btn-xs"></a>'.\Lang::get('lang.delete').'</button></span>&nbsp;<a href=category/'.$model->id.'/edit class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href=article-list class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
+				<div class="modal fade" id="deletecategory'.$model->slug.'">
         			<div class="modal-dialog">
             			<div class="modal-content">
                 			<div class="modal-header">
                     			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    			<h4 class="modal-title">' . Lang::get('lang.are_you_sure_you_want_to_delete') . '</h4>
+                    			<h4 class="modal-title">'.Lang::get('lang.are_you_sure_you_want_to_delete').'</h4>
                 			</div>
                 			<div class="modal-body">
-                				' . $model->name . '
+                				'.$model->name.'
                 			</div>
                 			<div class="modal-footer">
-                    			<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">' . Lang::get('lang.close') . '</button>
-                    			<a href="category/delete/' . $model->id . '"><button class="btn btn-danger">' . Lang::get('lang.delete') . '</button></a>
+                    			<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">'.Lang::get('lang.close').'</button>
+                    			<a href="category/delete/'.$model->id.'"><button class="btn btn-danger">'.Lang::get('lang.delete').'</button></a>
                 			</div>
             			</div>
         			</div>
@@ -121,7 +124,8 @@ class CategoryController extends Controller {
      *
      * @return type view
      */
-    public function create(Category $category) {
+    public function create(Category $category)
+    {
         /* Get the all attributes in the category model */
         $category = $category->get();
         /* get the view page to create new category with all attributes
@@ -141,7 +145,8 @@ class CategoryController extends Controller {
      *
      * @return type Redirect
      */
-    public function store(Category $category, CategoryRequest $request) {
+    public function store(Category $category, CategoryRequest $request)
+    {
         /* Get the whole request from the form and insert into table via model */
         $sl = $request->input('slug');
         $slug = str_slug($sl, '-');
@@ -152,7 +157,7 @@ class CategoryController extends Controller {
 
             return Redirect::back()->with('success', Lang::get('lang.category_inserted_successfully'));
         } catch (Exception $e) {
-            return Redirect::back()->with('fails', Lang::get('lang.category_not_inserted') . '<li>' . $e->getMessage() . '</li>');
+            return Redirect::back()->with('fails', Lang::get('lang.category_not_inserted').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -164,7 +169,8 @@ class CategoryController extends Controller {
      *
      * @return type view
      */
-    public function edit($slug) {
+    public function edit($slug)
+    {
         // fetch the category
         $cid = Category::where('id', $slug)->first();
         $id = $cid->id;
@@ -183,7 +189,8 @@ class CategoryController extends Controller {
      *
      * @return type redirect
      */
-    public function update($slug, CategoryUpdate $request) {
+    public function update($slug, CategoryUpdate $request)
+    {
 
         /* Edit the selected category via id */
         $category = Category::where('id', $slug)->first();
@@ -197,10 +204,11 @@ class CategoryController extends Controller {
             $category->fill($request->all())->save();
             $category->slug = $slug;
             $category->save();
+
             return redirect('category')->with('success', Lang::get('lang.category_updated_successfully'));
         } catch (Exception $e) {
             //redirect to index with fails message
-            return redirect('category')->with('fails', Lang::get('lang.category_not_updated') . '<li>' . $e->getMessage() . '</li>');
+            return redirect('category')->with('fails', Lang::get('lang.category_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -213,7 +221,8 @@ class CategoryController extends Controller {
      *
      * @return type Redirect
      */
-    public function destroy($id, Category $category, Relationship $relation) {
+    public function destroy($id, Category $category, Relationship $relation)
+    {
         $relation = $relation->where('category_id', $id)->first();
         if ($relation != null) {
             return Redirect::back()->with('fails', Lang::get('lang.category_not_deleted'));
@@ -226,9 +235,8 @@ class CategoryController extends Controller {
 
                 return Redirect::back()->with('success', Lang::get('lang.category_deleted_successfully'));
             } catch (Exception $e) {
-                return Redirect::back()->with('fails', Lang::get('lang.category_not_deleted') . '<li>' . $e->getMessage() . '</li>');
+                return Redirect::back()->with('fails', Lang::get('lang.category_not_deleted').'<li>'.$e->getMessage().'</li>');
             }
         }
     }
-
 }

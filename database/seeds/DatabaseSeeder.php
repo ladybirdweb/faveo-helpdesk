@@ -10,7 +10,9 @@ use App\Model\helpdesk\Email\Smtp;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Notification\NotificationType;
+use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Settings\Alert;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Settings\Responder;
@@ -31,8 +33,6 @@ use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\helpdesk\Workflow\WorkflowClose;
-use App\Model\helpdesk\Settings\CommonSettings;
-use App\Model\helpdesk\Ratings\Rating;
 use App\Model\kb\Settings;
 // Knowledge base
 use Illuminate\Database\Seeder;
@@ -2001,21 +2001,21 @@ class DatabaseSeeder extends Seeder
         Template::create(['id' => '5', 'variable' => '0', 'name' => 'This template is for sending notice to agent on new ticket creation', 'type' => '5', 'message' => '<div>Hello {!!$ticket_agent_name!!}, &nbsp; &nbsp; &nbsp;&nbsp;<br><br>New ticket {!!$ticket_number!!} created&nbsp;<br>From<br>Name :- {!!$ticket_client_name!!} &nbsp; &nbsp;<br>E-mail :- {!!$ticket_client_email!!} &nbsp;&nbsp;<br><br>{!!$content!!} &nbsp;&nbsp;&nbsp;&nbsp;<br><br>Kind Regards,<br>{!!$system_from!!}</div><br>', 'set_id' => '1']);
         Template::create(['id' => '6', 'variable' => '0', 'name' => 'This template is for sending notice to client on new ticket created by agent in name of client', 'type' => '6', 'message' => '<div>{!!$content!!}<br><br>{!!$agent_sign!!}<br><br>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', 'set_id' => '1']);
         Template::create(['id' => '7', 'variable' => '1', 'name' => 'This template is for sending notice to client on new registration during new ticket creation for un registered clients', 'type' => '7', 'subject' => 'Registration Confirmation', 'message' => '<span><p>Hello {!!$user!!} ,&nbsp;</p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Password: {!!$user_password!!}</p><p>You can visit the helpdesk to browse articles and contact us at any time: {!!$system_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!}&nbsp;</p></span>', 'set_id' => '1']);
-        Template::create(['id' => '8', 'variable' => '1', 'name' => 'This template is for sending notice to any user about reset password option', 'type' => '8', 'subject' => 'Reset your Password','message' => 'Hello {!!$user!!}<br/><br/>You asked to reset your password. To do so, please click this link:<br/><br/>{!!$password_reset_link!!}</a><br/><br/><br/>This will let you change your password to something new. If you did not ask for this, do not worry, we will keep your password safe.<br/><br/>Thank You.<br/><br/>Kind Regards,<br/><br/> {!!$system_from!!}', 'set_id' => '1']);
+        Template::create(['id' => '8', 'variable' => '1', 'name' => 'This template is for sending notice to any user about reset password option', 'type' => '8', 'subject' => 'Reset your Password', 'message' => 'Hello {!!$user!!}<br/><br/>You asked to reset your password. To do so, please click this link:<br/><br/>{!!$password_reset_link!!}</a><br/><br/><br/>This will let you change your password to something new. If you did not ask for this, do not worry, we will keep your password safe.<br/><br/>Thank You.<br/><br/>Kind Regards,<br/><br/> {!!$system_from!!}', 'set_id' => '1']);
         Template::create(['id' => '9', 'variable' => '0', 'name' => 'This template is for sending notice to client when a reply made to his/her ticket', 'type' => '9', 'message' => '<span><div><span><p>{!!$content!!} &nbsp;&nbsp;<br></p><p>{!!$agent_sign!!}&nbsp;</p><p>Ticket Details</p><p>Ticket ID: {!!$ticket_number!!} &nbsp;&nbsp;&nbsp;&nbsp;</p><div><br></div></span><br></div><div><br></div></span>', 'set_id' => '1']);
         Template::create(['id' => '10', 'variable' => '0', 'name' => 'This template is for sending notice to agent when ticket reply is made by client on a ticket', 'type' => '10', 'message' => '<div>Hello {!!$ticket_agent_name!!},<b><br></b>A reply been made to ticket {!!$ticket_number!!}<b><br></b>From<br>Name: {!!$ticket_client_name!!}<br>E-mail: {!!$ticket_client_email!!}<b><br></b>{!!$content!!}<b><br></b>Kind Regards,<br>{!!$system_from!!}</div>', 'set_id' => '1']);
         Template::create(['id' => '11', 'variable' => '1', 'name' => 'This template is for sending notice to client about registration confirmation link', 'type' => '11', 'subject' => 'Verify your email address', 'message' => '<span><p>Hello {!!$user!!} ,&nbsp;</p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!}&nbsp;</p></span>', 'set_id' => '1']);
-        
-        
-        /**
+
+
+        /*
          * All the common settings will be listed here
          */
         CommonSettings::create(['id' => '1', 'option_name' => 'ticket_token_time_duration', 'option_value' => '1']);
-        
-        /**
+
+        /*
          * Ratings
          */
-        Rating::create(['id'=>'1','name'=>'OverAll Satisfaction','display_order'=>'1','allow_modification' => '1', 'rating_scale'=>'5','rating_area'=>'Helpdesk Area']);
-        Rating::create(['id'=>'2','name'=>'Reply Rating','display_order'=>'1','allow_modification' => '1', 'rating_scale'=>'5','rating_area'=>'Comment Area']);
-        }
+        Rating::create(['id' => '1', 'name' => 'OverAll Satisfaction', 'display_order' => '1', 'allow_modification' => '1', 'rating_scale' => '5', 'rating_area' => 'Helpdesk Area']);
+        Rating::create(['id' => '2', 'name' => 'Reply Rating', 'display_order' => '1', 'allow_modification' => '1', 'rating_scale' => '5', 'rating_area' => 'Comment Area']);
+    }
 }

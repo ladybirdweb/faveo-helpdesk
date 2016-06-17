@@ -183,7 +183,7 @@ class SettingsController extends Controller
             /* Check whether function success or not */
             $systems->fill($request->input())->save();
             /* redirect to Index page with Success Message */
-            
+
             // dd($datacontent);
             //\Config::set('app.debug', $request->input('debug'));
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
@@ -368,7 +368,7 @@ class SettingsController extends Controller
             if ($request->condition == 'on') {
                 $work->condition = 1;
             } else {
-                 $work->condition = 0;
+                $work->condition = 0;
             }
             $work->save();
             /* redirect to Index page with Success Message */
