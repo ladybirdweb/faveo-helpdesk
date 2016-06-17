@@ -402,7 +402,11 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::get('remove-user-org/{id}', ['as' => 'removeuser.org', 'uses' => 'Agent\helpdesk\UserController@removeUserOrg']);
 
-    Route::get('admin-profile', 'Admin\helpdesk\ProfileController@getProfile'); /*  User profile edit get  */
+    Route::get('admin-profile', ['as' => 'admin-profile', 'uses' =>'Admin\helpdesk\ProfileController@getProfile']); /*  User profile edit get  */
+    Breadcrumbs::register('admin-profile', function($breadcrumbs){
+        $breadcrumbs->parent('/');
+        $breadcrumbs->push(Lang::get('lang.profile'), route('admin-profile'));
+    });
 
     Route::get('admin-profile-edit', 'Admin\helpdesk\ProfileController@getProfileedit'); /*  Admin profile get  */
 
