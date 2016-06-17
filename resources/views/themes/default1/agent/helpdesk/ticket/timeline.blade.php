@@ -7,7 +7,9 @@ class="active"
 @section('ticket-bar')
 active
 @stop
-
+@section('PageHeader')
+<h1>{{Lang::get('lang.ticket-details')}}</h1>
+@stop
 <?php
 $user = App\User::where('id', '=', $tickets->user_id)->first();
 $assignedto = App\User::where('id', '=', $tickets->assigned_to)->first();

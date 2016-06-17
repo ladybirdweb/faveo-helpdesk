@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-
+<h1>{{Lang::get('lang.error-debug')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -29,7 +29,7 @@ class="active"
 @section('content')
 	<div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.error-debug-settings')}}</h3> 
+        <h3 class="box-title">{{Lang::get('lang.debug-options')}}</h3> 
     </div>
     <!-- Helpdesk Status: radio Online Offline -->
     <div class="box-body">

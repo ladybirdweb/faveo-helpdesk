@@ -5,9 +5,10 @@
 @stop
 
 @section('content')
+{!! Form::model($template,['url'=>'templates/'.$template->id,'method'=>'patch']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        {!! Form::model($template,['url'=>'templates/'.$template->id,'method'=>'patch']) !!}
+
         <h3 class="box-title">{{Lang::get('lang.edit_template')}}</h4>
     </div>
     <div class="box-body">
@@ -41,10 +42,9 @@
                 </div>
                 @endif
                 <div class="row">
-                    <div class="col-md-4 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
+                    <div class="col-md-12 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                         <!-- first name -->
-                        {!! Form::label('name',Lang::get('lang.name'),['class'=>'required']) !!}<span style="color:red;">*</span>
-                        {!! Form::text('name',null,['class' => 'form-control']) !!}
+                        <p class="lead">{!! $template->name !!}</p>
                     </div>
                     <div class="col-md-4 form-group {{ $errors->has('type') ? 'has-error' : '' }}">
                         <!-- last name -->
@@ -52,12 +52,18 @@
                         {!! Form::select('type',[''=>'Select','Type'=>$type],null,['class' => 'form-control']) !!}
                     </div>
                 </div>
-<!--                <div class="row">
-                    <div class="col-md-12 form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
-                        {!! Form::label('subject',Lang::get('lang.subject')) !!}<span style="color:red;">*</span>
-                        {!! Form::text('subject',null,['class' => 'form-control']) !!}
+                <div class="row">
+                    <div class="col-md-8 form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
+                        {!! Form::label('subject',Lang::get('lang.subject')) !!}
+                        {!! Form::text('subject',null,['class' => 'form-control', 'id' =>'subject']) !!}
                     </div>
-                </div>-->
+                    <div class="col-md-3 form-group" id = "use-subject">
+                        <br/>
+                        {!! Form::hidden('variable','0') !!}
+                        {!! Form::checkbox('variable','1') !!}
+                        {!! Form::label('subject',Lang::get('lang.use_subject')) !!}
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-12 form-group {{ $errors->has('message') ? 'has-error' : '' }}">
                         {!! Form::label('message',Lang::get('lang.content'),['class'=>'required']) !!}<span style="color:red;">*</span>
@@ -72,4 +78,17 @@
     </div>
 </div>
 {!! Form::close() !!}
+
+<script>
+    $(document).ready(function() {
+        $("#subject").keyup(function() {
+            var subject = document.getElementById('subject').value;
+            if (subject) {
+                $("#use-subject").show();
+            } else {
+                $("#use-subject").hide();
+            }
+        });
+    });
+</script>
 @stop

@@ -12,6 +12,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.canned_response')}}</h1>
+@stop
+
 <!-- content -->
 @section('content')
 <!-- open a form -->

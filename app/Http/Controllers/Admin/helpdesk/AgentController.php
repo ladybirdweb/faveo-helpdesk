@@ -141,7 +141,7 @@ class AgentController extends Controller
             $email = $user->email;
             try {
                 // send mail on registration
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => 'Password', 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
+                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
             } catch (Exception $e) {
                 // returns if try fails
                 return redirect('agents')->with('warning', Lang::get('lang.agent_send_mail_error_on_agent_creation'));

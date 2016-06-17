@@ -12,6 +12,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.tickets')}}</h1>
+@stop
+
 @section('content')
 <?php 
 $date_time_format = UTC::getDateTimeFormat();
@@ -33,6 +37,7 @@ $dept = App\Model\helpdesk\Agent\Department::where('name','=',$id)->first();
             </div>
         </div>
     </div><!-- /.box-header -->
+    <div class="box-body">
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
             <i class="fa  fa-check-circle"> </i> 
@@ -50,7 +55,6 @@ $dept = App\Model\helpdesk\Agent\Department::where('name','=',$id)->first();
             {{Session::get('fails')}}
         </div>
         @endif
-    <div class="box-body">
     {!! Form::open(['id'=>'modalpopup', 'route'=>'select_all','method'=>'post']) !!}
         <div class="mailbox-controls">
             <!-- Check all button -->

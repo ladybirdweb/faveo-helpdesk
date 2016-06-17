@@ -15,7 +15,7 @@ class="active"
 
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.edit') !!}</h1>
+<h1>{!! Lang::get('lang.edit_user') !!}</h1>
 @stop
 <!-- /header -->
 

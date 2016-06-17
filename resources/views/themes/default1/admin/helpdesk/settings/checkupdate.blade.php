@@ -2,13 +2,18 @@
 @section('update')
 class="active"
 @stop
+@section('PageHeader')
+<h1>{{ Lang::get('lang.update-version')}}</h1>
+@stop
 @section('content')
 
 <div class="box box-primary">
 	<div class="box-header">
 		<h3 class="box-title">Check for Update</h3>
 	</div>
-	 @if(Session::has('info'))
+	 
+	<div class="box-body">
+	@if(Session::has('info'))
         <div class="alert alert-info alert-dismissable">
             <i class="fa  fa-info-circle"></i>
             <b>Info!</b>
@@ -16,7 +21,6 @@ class="active"
             {!!Session::get('info')!!}
         </div>
         @endif
-	<div class="box-body">
 		Click to check Update
                 <a href="{!! URL::route('version-check') !!}" class="btn btn-primary">Check</a>
 	</div>

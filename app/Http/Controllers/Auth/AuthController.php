@@ -97,7 +97,7 @@ class AuthController extends Controller {
         $user->remember_token = $code;
         $user->save();
         $message12 = "";
-        $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => 'Activate your Account', 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/' . $code)]);
+        $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/' . $code)]);
         if ($var == null) {
             $message12 = Lang::get('lang.failed_to_send_email_contact_administrator');
             return redirect('home')->with('warning', $message12);
@@ -259,13 +259,13 @@ class AuthController extends Controller {
         if ($data) {
             $attempts = $data->Attempts + 1;
             if ($attempts == $apt) {
-                $result = DB::update('UPDATE login_attempts SET Attempts=' . $attempts . ", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
+                $result = DB::select('UPDATE login_attempts SET Attempts=' . $attempts . ", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
             } else {
                 $result = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['Attempts' => $attempts]);
                 // $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
             }
         } else {
-            $result = DB::insert("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
+            $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
         }
     }
 

@@ -559,7 +559,7 @@
                         <div class="settingdivblue">
                             <a href="{{ url('api') }}">
                                 <span class="fa-stack fa-2x">
-                                    <i class="fa fa-archive"></i>
+                                    <i class="fa fa-cogs"></i>
                                 </span>
                             </a>
                         </div>

@@ -14,7 +14,7 @@ return [
      */
 
     'password' => 'Le Passwords devono essere almeno di sei caratteri e combaciare.',
-    'user'     => 'Non esiste un utente con questo indirizzo e-mail.',
+    'user'     => "Non esiste un utente con questo indirizzo e-mail.",
     'token'    => 'Il token per il reset della password non è valido.',
     'sent'     => 'Una email con il link al reset della passowrd ti è stato inviato!',
     'reset'    => 'La tua password è stata resettata!',

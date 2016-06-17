@@ -105,42 +105,42 @@ return [
       |  Emails Create Page
       |--------------------------------------
      */
-    'emails'                                                                               => 'Emails',
-    'incoming_emails'                                                                      => 'Incoming Emails',
-    'reuired_authentication'                                                               => 'Reuired Authentication',
-    'fetching_email_via_imap'                                                              => 'Fetching Email via IMAP',
-    'create_email'                                                                         => 'Create Email',
-    'email_address'                                                                        => 'Email Address',
-    'email_name'                                                                           => 'Email Name',
-    'help_topic'                                                                           => 'Help Topic',
-    'auto_response'                                                                        => 'Auto Response',
-    'host_name'                                                                            => 'Host Name',
-    'port_number'                                                                          => 'Port Number',
-    'mail_box_protocol'                                                                    => 'Mail Box Protocol',
-    'authentication_required'                                                              => 'Authentication Required',
-    'yes'                                                                                  => 'Yes',
-    'no'                                                                                   => 'No',
-    'header_spoofing'                                                                      => 'Header Spoofing',
-    'allow_for_this_email'                                                                 => 'Allow For This Email',
-    'imap_config'                                                                          => 'IMAP Configuration',
-    'email_information_and_settings'                                                       => 'Email Information and Settings',
-    'incoming_email_information'                                                           => 'Incoming Email Information',
-    'outgoing_email_information'                                                           => 'Outgoing Email Information',
-    'new_ticket_settings'                                                                  => 'New Ticket Settings',
-    'protocol'                                                                             => 'Protocol',
-    'fetching_protocol'                                                                    => 'Fetching Protocol',
-    'transfer_protocol'                                                                    => 'Transfer Protocol',
-    'from_name'                                                                            => 'From Name',
-    'add_an_email'                                                                         => 'Add an Email',
-    'edit_an_email'                                                                        => 'Edit an Email',
-    'disable_for_this_email_address'                                                       => 'Disable for this Email address',
-    'validate_certificates_from_tls_or_ssl_server'                                         => 'Validate Certificates from TLS/SSL server',
-    'authentication'                                                                       => 'Authentication',
-    'incoming_email_connection_failed_please_check_email_credentials_or_imap_settings'     => 'Incoming email connection failed! Please check email credentials or Imap Settings',
-    'outgoing_email_connection_failed'                                                     => 'Outgoing email connection failed',
-    'you_cannot_delete_system_default_email'                                               => 'You cannot delete system default Email',
-    'email_deleted_sucessfully'                                                            => 'Email Deleted sucessfully',
-    'email_can_not_delete'                                                                 => 'Email can not  Delete',
+    'emails'                                        => 'Emails',
+    'incoming_emails'                               => 'Incoming Emails',
+    'reuired_authentication'                        => 'Reuired Authentication',
+    'fetching_email_via_imap'                       => 'Fetching Email via IMAP',
+    'create_email'                                  => 'Create Email',
+    'email_address'                                 => 'Email Address',
+    'email_name'                                    => 'Email Name',
+    'help_topic'                                    => 'Help Topic',
+    'auto_response'                                 => 'Auto Response',
+    'host_name'                                     => 'Host Name',
+    'port_number'                                   => 'Port Number',
+    'mail_box_protocol'                             => 'Mail Box Protocol',
+    'authentication_required'                       => 'Authentication Required',
+    'yes'                                           => 'Yes',
+    'no'                                            => 'No',
+    'header_spoofing'                               => 'Header Spoofing',
+    'allow_for_this_email'                          => 'Allow For This Email',
+    'imap_config'                                   => 'IMAP Configuration',
+    'email_information_and_settings'                => 'Email Information and Settings',
+    'incoming_email_information'                    => 'Incoming Email Information',
+    'outgoing_email_information'                    => 'Outgoing Email Information',
+    'new_ticket_settings'                           => 'New Ticket Settings',
+    'protocol'                                      => 'Protocol',
+    'fetching_protocol'                             => 'Fetching Protocol',
+    'transfer_protocol'                             => 'Transfer Protocol',
+    'from_name'                                     => 'From Name',
+    'add_an_email'                                  => 'Add an Email',
+    'edit_an_email'                                 => 'Edit an Email',
+    'disable_for_this_email_address'                => 'Disable for this Email address',
+    'validate_certificates_from_tls_or_ssl_server'  => 'Validate Certificates from TLS/SSL server',
+    'authentication'                                => 'Authentication',
+    'incoming_email_connection_failed_please_check_email_credentials_or_imap_settings'     =>  'Incoming email connection failed! Please check email credentials or Imap Settings',
+    'outgoing_email_connection_failed'      =>  'Outgoing email connection failed',
+    'you_cannot_delete_system_default_email'    =>  'You cannot delete system default Email',
+    'email_deleted_sucessfully'         =>      'Email Deleted sucessfully',
+    'email_can_not_delete'    =>   'Email can not  Delete',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
@@ -210,6 +210,7 @@ return [
     'send'                       => 'Send',
     'choose_an_email'            => 'Choose an email',
     'email_diagnostic'           => 'Email Diagnostic',
+    'send-mail-to-diagnos'       => 'Send a mail to check outgoing email settings',
     'message_has_been_sent'      => 'Message has been sent',
     'message_sent_from_php_mail' => 'Message sent from Php-Mail',
     'mailer_error'               => 'Mailer Error',
@@ -231,6 +232,7 @@ return [
      */
     'country-code'                  => 'Code',
     'company'                       => 'Company',
+    'company_settings'              => 'Company Settings',
     'website'                       => 'Website',
     'phone'                         => 'Phone',
     'address'                       => 'Address',
@@ -269,11 +271,6 @@ return [
     'date_time'                                                  => 'Date And Time Format',
     'day_date_time'                                              => 'Day,Date And Time Format',
     'timezone'                                                   => 'Default Time Zone',
-    'api'                                                        => 'Api',
-    'api_key'                                                    => 'Api Key',
-    'api_key_mandatory'                                          => 'Api key mandatory',
-    'api_configurations'                                         => 'Api Configurations',
-    'generate_key'                                               => 'Generate key',
     'Ticket-created-successfully'                                => 'Ticket created successfully!',
     'system_updated_successfully'                                => 'System Updated Successfully',
     'system_can_not_updated'                                     => 'System can not Updated',
@@ -311,11 +308,12 @@ return [
     'email_attahment_user'                => 'Email attachments to the user',
     'cron_notification'                   => 'Enable Notification cron',
     'cron'                                => 'Job Scheduler',
+    'cron-jobs'                           => 'Cron Jobs',
     'crone-url-message'                   => "These are Faveo's Job Scheduler(cron job) url for your system.",
     'clipboard-copy-message'              => 'Copied to clipboard.',
     'click'                               => 'Click here',
     'check-cron-set'                      => 'to check how to set cron jobs on your server.',
-    'notification-email'                  => 'Email notifications',
+    'notification-email'                  => 'Email Notifications',
     'click-url-copy'                      => 'Click here to copy URL',
     'job-scheduler-error'                 => 'Job scheduler can not be updated.',
     'job-scheduler-success'               => 'Job scheduler updated successfully.',
@@ -325,6 +323,7 @@ return [
       |--------------------------------------
      */
     'ticket'                                => 'Ticket',
+    'ticket-setting'                        => 'Ticket Settings',
     'default_ticket_number_format'          => 'Default Ticket Number Format',
     'default_ticket_number_sequence'        => 'Default Ticket Number Sequence',
     'default_status'                        => 'Default Status',
@@ -346,6 +345,7 @@ return [
     'reload-now'                            => 'Relaod now',
     'ticket-lock-inactive'                  => 'You have been inactive for a while. Please reload the page.',
     'make-system-default-mail'              => 'Make this email system\'s default email',
+    'thread'                                => 'Thread',
     /*
       |--------------------------------------
       |   Access Settings Page
@@ -363,6 +363,7 @@ return [
     'user_session_timeout'                             => 'User Session Timeout',
     'client_quick_access'                              => 'Client Quick Access',
     'cron'                                             => 'Cron',
+    'cron_settings'                                    => 'Cron Settings',
     'system-settings'                                  => 'System Settings',
     'settings-2'                                       => 'Settings',
 
@@ -372,6 +373,7 @@ return [
       |--------------------------------------
      */
     'auto_responce'                         => 'Auto Response',
+    'auto_responce-settings'                => 'Auto response settings',
     'new_ticket'                            => 'New Ticket',
     'new_ticket_by_agent'                   => 'New Ticket by Agent',
     'new_message'                           => 'New Message',
@@ -392,6 +394,7 @@ return [
     'disable'                                               => 'Disable',
     'admin_email_2'                                         => 'Admin Email',
     'alert_notices'                                         => 'Alert & Notices',
+    'alert_notices_setitngs'                                => 'Alert and Notice settings',
     'new_ticket_alert'                                      => 'New Ticket Alert',
     'department_manager'                                    => 'Department Manager',
     'department_members'                                    => 'Department Members',
@@ -427,6 +430,7 @@ return [
       | Language page
       |------------------------------------------------
      */
+    'language-settings'          => 'Language Settings',
     'iso-code'           => 'ISO-CODE',
     'download'           => 'Downlaod',
     'upload_file'        => 'Upload File',
@@ -457,7 +461,7 @@ return [
     'add_plugin'    => 'Add Plugin',
     'plugins'       => 'Plugins',
     'upload'        => 'Upload',
-
+    'plugins-list'  => 'List of plugins',
     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]
@@ -493,6 +497,7 @@ return [
     'parent_topic'                          => 'Parent Topic',
     'Custom_form'                           => 'Custom Form',
     'SLA_plan'                              => 'SLA Plan',
+    'sla-plans'                             => 'SLA Plans',
     'auto_assign'                           => 'Auto assign',
     'auto_respons'                          => 'Auto Respons',
     'ticket_number_format'                  => 'Ticket Number Format',
@@ -852,29 +857,33 @@ return [
       | customize your views to better match your application.
       |
      */
-    'agent_panel'       => 'Agent Panel',
-    'profile'           => 'Profile',
-    'change_password'   => 'Change Password',
-    'sign_out'          => 'Sign Out',
-    'Tickets'           => 'TICKETS',
-    'inbox'             => 'Inbox',
-    'my_tickets'        => 'My Tickets',
-    'unassigned'        => 'Unassigned',
-    'trash'             => 'Trash',
-    'Updates'           => 'UPDATES',
-    'no_new_updates'    => 'No new Updates',
-    'check_for_updates' => 'Check for Updates',
-    'open'              => 'Open',
-    'inprogress'        => 'Inprogress',
-    'closed'            => 'Closed',
-    'Departments'       => 'DEPARTMENTS',
-    'tools'             => 'Tools',
-    'canned'            => 'Canned',
-    'knowledge_base'    => 'Knowledge Base',
-    'loading'           => 'Loading',
-    'ratings'           => 'Ratings',
-    'please_rate'       => 'Please rate:',
-    'ticket_ratings'    => 'TICKET RATING',
+    'agent_panel'         => 'Agent Panel',
+    'profile'             => 'Profile',
+    'change_password'     => 'Change Password',
+    'sign_out'            => 'Sign Out',
+    'Tickets'             => 'TICKETS',
+    'ticket-details'      => 'Ticket Details',
+    'inbox'               => 'Inbox',
+    'my_tickets'          => 'My Tickets',
+    'unassigned'          => 'Unassigned',
+    'trash'               => 'Trash',
+    'Updates'             => 'UPDATES',
+    'no_new_updates'      => 'No new Updates',
+    'check_for_updates'   => 'Check for Updates',
+    'update-version'      => 'Update Version',
+    'open'                => 'Open',
+    'inprogress'          => 'Inprogress',
+    'inprogress_tickets'  => 'Inprogress Tickets',
+    'closed'              => 'Closed',
+    'Departments'         => 'DEPARTMENTS',
+    'tools'               => 'Tools',
+    'canned'              => 'Canned',
+    'knowledge_base'      => 'Knowledge Base',
+    'kb-settings'         => 'Knowledge Base Settings',
+    'loading'             => 'Loading',
+    'ratings'             => 'Ratings',
+    'please_rate'         => 'Please rate:',
+    'ticket_ratings'      => 'TICKET RATING',
     /*
       |-----------------------------------------------
       |  Ticket
@@ -908,6 +917,8 @@ return [
       |  Profile
       |-----------------------------------------------
      */
+    'view-profile'                          => 'View Profile',
+    'edit-profile'                          => 'Edit Profile',
     'user_information'                      => 'User Information',
     'time_zone'                             => 'Time-zone',
     'phone_number'                          => 'Phone Number',
@@ -945,6 +956,7 @@ return [
     'user'                                              => 'User',
     'users'                                             => 'Users',
     'create_user'                                       => 'Create User',
+    'edit_user'                                         => 'Edit User', 
     'full_name'                                         => 'Full Name',
     'mobile'                                            => 'Mobile',
     'last_login'                                        => 'Last Login',
@@ -968,6 +980,8 @@ return [
      */
     'organizations'                        => 'Organizations',
     'organization'                         => 'Organization',
+    'organization_list'                    => 'List of organizations',
+    'view_organization_profile'            => 'View Organization Profile',
     'create_organization'                  => 'Create Organization',
     'account_manager'                      => 'Account Manager',
     'update'                               => 'Update',
@@ -1005,6 +1019,7 @@ return [
     'Ticket_Id'                                       => 'TICKET ID',
     'User'                                            => 'USER',
     'Unassigned'                                      => 'UNASSIGNED',
+    'unassigned-tickets'                              => 'Unassigned Tickets',
     'generate_pdf'                                    => 'Generate PDF',
     'change_status'                                   => 'Change Status',
     'more'                                            => 'More',
@@ -1075,6 +1090,7 @@ return [
     'clean-up'                                        => 'Delete forever',
     'hard-delete-success-message'                     => 'Tickets have been deleted permanently.',
     'overdue'                                         => 'Overdue',
+    'overdue-tickets'                                 => 'Overdue Tickets',
     'change_owner_for_ticket'                         => 'Change Owner for Ticket',
 
     /*
@@ -1206,6 +1222,7 @@ return [
     'noti_msg2'                                   => 'You can enter the no of days of database logs to be deleted and the history of notifications will be deleted since the day specified.',
     'del_all_read'                                => 'Delete All Read',
     'You_have_deleted_all_the_read_notifications' => 'You have deleted all the read notifications',
+    'view_all_notifications'                      => 'View all notifications',
     /*
       |------------------------------------------------
       |   Error Pages
@@ -1224,11 +1241,12 @@ return [
     'article'                                         => 'Article',
     'articles'                                        => 'Articles',
     'addarticle'                                      => 'Add Article',
-    'allarticle'                                      => 'All Article',
+    'allarticle'                                      => 'All Articles',
     'pages'                                           => 'Pages',
     'addpages'                                        => 'Add Pages',
     'allpages'                                        => 'All Pages',
     'widgets'                                         => 'Widgets',
+    'widget-settings'                                 => 'Widget Settings',
     'footer1'                                         => 'Footer 1',
     'footer2'                                         => 'Footer 2',
     'footer3'                                         => 'Footer 3',
@@ -1236,6 +1254,7 @@ return [
     'sidewidget1'                                     => 'Side Widget 1',
     'sidewidget2'                                     => 'Side Widget 2',
     'comments'                                        => 'Comments',
+    'comments-list'                                   => 'List of comments',
     'settings'                                        => 'Settings',
     'parent'                                          => 'Parent',
     'description'                                     => 'Description',
@@ -1247,6 +1266,7 @@ return [
     'create_a_category'                               => 'Create a Category',
     'add'                                             => 'Add',
     'social'                                          => 'Social',
+    'social-widget-settings'                          => 'Social widget settings',
     'comment'                                         => 'Comment',
     'not_published'                                   => 'Not Published',
     'numberofelementstodisplay'                       => 'Number of elements to display',
@@ -1323,24 +1343,36 @@ return [
     * |
     */
 
-   'webhooks'                         => 'Webhooks',
-   'enter_url_to_send_ticket_details' => 'Enter the url to send the ticket details',
-
+    'webhooks'                         => 'Webhooks',
+    'enter_url_to_send_ticket_details' => 'Enter the url to send the ticket details',
+    'api'                              => 'Api',
+    'api_key'                          => 'Api Key',
+    'api_key_mandatory'                => 'Api key mandatory',
+    'api_configurations'               => 'Api Configurations',
+    'generate_key'                     => 'Generate key',
+    'api_settings'                    => 'API settings',
    /*
     *-----------------------------------------------------------------------------
     * Error log and debugging settings
     *--------------------------------------------------------------------------
     *
     */
-   'error-debug'                          => 'Error logs and Debugging',
-   'debug-options'                        => 'Debugging options',
-   'view-logs'                            => 'View error logs',
-   'not-authorised-error-debug'           => 'You are not authorised to access the URL',
-   'error-debug-settings'                 => 'Error and debugging settings',
-   'debugging'                            => 'Debugging Mode',
-   'bugsnag-debugging'                    => 'Send app crash reports to help Ladybird improve Faveo',
-   'error-debug-settings-saved-message'   => 'Your error and debugging settings have been saved successfully',
-   'error-debug-settings-error-message'   => 'You have not made any change in the settings.',
-   'error-logs'                           => 'Error logs',
-
+   'error-debug'                                    => 'Error logs and Debugging',
+   'debug-options'                                  => 'Debugging options',
+   'view-logs'                                      => 'View error logs',
+   'not-authorised-error-debug'                     => 'You are not authorised to access the URL',
+   'error-debug-settings'                           => 'Error and debugging settings',
+   'debugging'                                      => 'Debugging Mode',
+   'bugsnag-debugging'                              => 'Send app crash reports to help Ladybird improve Faveo',
+   'error-debug-settings-saved-message'             => 'Your error and debugging settings have been saved successfully',
+   'error-debug-settings-error-message'             => 'You have not made any change in the settings.',
+   'error-logs'                                     => 'Error logs',
+   /*---------------------------------------------------------------------------------------
+    *Latest update 16-06-2016
+    *-----------------------------------------------------------------------------------
+    */
+   'that_email_is not_available_in_this_system'     => 'That Email is not available in this System',
+   'use_subject'                                    => 'Use Subject',
+   'reopen'                                         => 'Reopen',
+    
 ];

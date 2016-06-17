@@ -10,10 +10,14 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.article')}}</h1>
+@stop
+
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.articles')}}</h3>
+        <h3 class="box-title">{{Lang::get('lang.allarticle')}}</h3>
     </div>
     <div class="box-body">
         <!-- check whether success or not -->

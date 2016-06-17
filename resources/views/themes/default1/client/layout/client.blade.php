@@ -172,7 +172,7 @@
                             </div>
                         </div>
                         {!! Form::close() !!}
-                    </div>                          
+                    </div>	                        
                 </div>
             </header>
             <!-- Left side column. contains the logo and sidebar -->
@@ -184,7 +184,7 @@
             <div id="main" class="site-main clearfix">
                 <div class="container">
                     <div class="content-area">
-                        <div class="row">   
+                        <div class="row">	
                             @if(Session::has('success'))
                             <div class="alert alert-success alert-dismissable">
                                 <i class="fa  fa-check-circle"></i>
@@ -226,7 +226,7 @@
                         </div>
                     </div>
                 </div>
-            </div>          
+            </div>			
             <!-- /.content-wrapper -->
             <?php
             $footer1 = App\Model\helpdesk\Theme\Widgets::where('name', '=', 'footer1')->first();
@@ -257,7 +257,7 @@
                                 <section id="section-latest-news" class="section">
                                     <h2 class="section-title h4 clearfix">{!!$footer2->title!!}</h2>
                                     <div class="textwidget">
-                                        <p>{!! $footer2->value !!}</p>  
+                                        <p>{!! $footer2->value !!}</p>	
                                     </div>
                                 </section><!-- #section-latest-news -->
                             </div>

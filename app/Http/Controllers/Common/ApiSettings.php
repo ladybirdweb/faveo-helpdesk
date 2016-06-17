@@ -9,6 +9,8 @@ use App\Model\helpdesk\Ticket\Tickets;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
+use DB;
+use Input;
 
 class ApiSettings extends Controller
 {
@@ -26,6 +28,8 @@ class ApiSettings extends Controller
     public function show()
     {
         try {
+             /* fetch the values of system from system table */
+            $systems = DB::table('settings_system')->whereId('1')->first();
             $details = [];
             $ticket_detail = '';
             $settings = $this->api;
@@ -36,7 +40,7 @@ class ApiSettings extends Controller
                 $ticket_detail = $details['ticket_detail'];
             }
 
-            return view('themes.default1.common.api.settings', compact('ticket_detail'));
+            return view('themes.default1.common.api.settings', compact('ticket_detail', 'systems'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
@@ -48,6 +52,12 @@ class ApiSettings extends Controller
             'ticket_detail' => 'url',
         ]);
         try {
+            // dd($request->input());
+            DB::table('settings_system')
+            ->where('id',  1)
+            ->update(['api_enable' => Input::get('api_enable'),
+                'api_key_mandatory' =>Input::get('api_key_mandatory') ,
+                'api_key' =>Input::get('api_key')]);
             $settings = $this->api;
             if ($settings->get()->count() > 0) {
                 foreach ($settings->get() as $set) {

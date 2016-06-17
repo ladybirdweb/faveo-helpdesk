@@ -12,6 +12,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.tickets')}}</h1>
+@stop
+
 @section('content')
 <!-- Main content -->
 {!! Form::open(['route'=>'post.newticket','method'=>'post','id'=>'form']) !!}

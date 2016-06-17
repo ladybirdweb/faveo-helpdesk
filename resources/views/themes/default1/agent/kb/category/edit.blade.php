@@ -6,6 +6,10 @@
 active
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.category')}}</h1>
+@stop
+
 @section('content')
 {!! Form::model($category,['url' => 'category/'.$category->id , 'method' => 'PATCH'] )!!}
 <div class="box box-primary">

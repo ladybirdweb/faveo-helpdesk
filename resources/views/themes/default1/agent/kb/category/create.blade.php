@@ -9,6 +9,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.category')}}</h1>
+@stop
+
 @section('content')
 {!! Form::open(array('action' => 'Agent\kb\CategoryController@store' , 'method' => 'post') )!!}
 <div class="box box-primary">

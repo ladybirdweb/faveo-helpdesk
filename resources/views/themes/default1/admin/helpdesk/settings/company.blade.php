@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-
+<h1>{{ Lang::get('lang.settings') }}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -33,7 +33,7 @@ class="active"
 <!-- table  -->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.company')}}</h3>
+        <h3 class="box-title">{{Lang::get('lang.company_settings')}}</h3>
     </div>
     <!-- Name text form Required -->
     <div class="box-body">

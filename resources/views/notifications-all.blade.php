@@ -1,6 +1,4 @@
 @extends('themes.default1.agent.layout.agent')
-
-
 @section('Users')
 class="active"
 @stop
@@ -46,6 +44,9 @@ active
 @section('user')
 class="active"
 @stop
+@section('PageHeader')
+<h3>{!! Lang::get('lang.notifications') !!}</h3>
+@stop
 
 <!-- /breadcrumbs -->
 <!-- content -->
@@ -74,7 +75,7 @@ class="active"
     </div>
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">{!! Lang::get('lang.notifications') !!}</h3>
+                    <h3 class="box-title">{!! Lang::get('lang.view_all_notifications')!!}</h3>
                 </div>
                 <!-- /.box-header -->
                 <div class="row">

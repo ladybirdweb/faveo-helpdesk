@@ -16,6 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
+<h1>{{Lang::get('lang.user_directory')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->

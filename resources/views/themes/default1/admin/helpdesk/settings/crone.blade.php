@@ -16,6 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
+<h1>{{ Lang::get('lang.settings') }}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -30,7 +31,7 @@ class="active"
 {!! Form::model($emails,['url' => 'post-scheduler', 'method' => 'PATCH']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.cron')}}</h3>
+        <h3 class="box-title">{{Lang::get('lang.cron_settings')}}</h3>
     </div>
 
     <div class="box-body table-responsive"style="overflow:hidden;">
@@ -82,12 +83,32 @@ class="active"
                     <i class="fa fa-clipboard pull-right" title="{!!Lang::get('lang.click-url-copy')!!}" onclick="copyToClipboard('#p2')"></i>
                     <div class="col-md-8">
                         <div class="form-group">
-                            {!! Form::label('email_fetching',Lang::get('lang.notification-email')) !!}<br>
+                            {!! Form::label('notification_cron',Lang::get('lang.notification-email')) !!}<br>
                             {!! Form::checkbox('notification_cron',1,true) !!}&nbsp;{{Lang::get('lang.cron_notification')}}
                         </div>
                     </div>
                     <div class="col-md-12">
                         <em><span class="info-box-text" style="background: #F3F3F3" id='p2'></span></em>
+                        <!-- <div class="btn btn-default btn-xs pull-right" onclick="copyToClipboard('#p1')">Copy URL</div> -->
+                    </div>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
+        </div>
+        <div class="col-md-6">
+            <div class="info-box">
+                <!-- Apply any bg-* class to to the icon to color it -->
+                <span class="info-box-icon bg-aqua"><i class="fa fa-check-circle"></i></span>
+                <div class="info-box-content">
+                    <i class="fa fa-clipboard pull-right" title="{!!Lang::get('lang.click-url-copy')!!}" onclick="copyToClipboard('#p3')"></i>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            {!! Form::label('condition',Lang::get('lang.auto_close_workflow')) !!}<br>
+                            <input type="checkbox" name="condition" @if($workflow->condition == 1) checked @endif">
+                            {{Lang::get('lang.enable_workflow')}}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <em><span class="info-box-text" style="background: #F3F3F3" id='p3'></span></em>
                         <!-- <div class="btn btn-default btn-xs pull-right" onclick="copyToClipboard('#p1')">Copy URL</div> -->
                     </div>
                 </div><!-- /.info-box-content -->
@@ -113,8 +134,10 @@ class="active"
         // var str = path;
         path = path.replace("job-scheduler", "readmails");
         path2 = path.replace("readmails", "notification");
+        path3 = path2.replace("notification", "auto-close-tickets")
         document.getElementById("p1").innerHTML = path;
         document.getElementById("p2").innerHTML = path2;
+        document.getElementById("p3").innerHTML = path3;
     })
 </script>
 @stop

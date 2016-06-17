@@ -9,7 +9,7 @@ active
 @stop
 
 @section('PageHeader')
-<h4>{!! Lang::get('lang.dashboard_reports') !!}</h4>
+<h1>{!! Lang::get('lang.dashboard_reports') !!}</h1>
 @stop
 
 @section('dashboard')
@@ -41,6 +41,7 @@ class="active"
     } else {
         $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
     }
+
     $i = count($overdues);
     if ($i == 0) {
         $overdue_ticket = 0;
@@ -53,8 +54,10 @@ class="active"
             $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)) . '<br/><br/>';
             if (date('Y-m-d H:i:s') > $new_date) {
                 $j++;
+                //$value[] = $overdue;
             }
         }
+        // dd(count($value));
         if ($j > 0) {
             $overdue_ticket = $j;
         } else {
@@ -94,7 +97,7 @@ class="active"
                 <span class="info-box-icon bg-red"><i class="fa fa-calendar-times-o"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">{!! Lang::get('lang.overdue') !!}</span>
-                    <span class="info-box-number">{{count($overdue_ticket) }} <small> Tickets</small></span>
+                    <span class="info-box-number">{{ $overdue_ticket }} <small> Tickets</small></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </a>
@@ -121,7 +124,7 @@ class="active"
             <div  class="form-group">
                 <div class="row">
                     <div class='col-sm-2'>
-                        {!! Form::label('date', 'Date:') !!}
+                        {!! Form::label('date', 'Date:',['class' => 'lead']) !!}
                         {!! Form::text('start_date',null,['class'=>'form-control','id'=>'datepicker4'])!!}
                     </div>
                     <?php
@@ -148,7 +151,7 @@ class="active"
                         });
                     </script>
                     <div class='col-sm-2'>
-                        {!! Form::label('start_time', 'End Date:') !!}
+                        {!! Form::label('start_time', 'End Date:' ,['class' => 'lead']) !!}
                         {!! Form::text('end_date',null,['class'=>'form-control','id'=>'datetimepicker3'])!!}
                     </div>
                     <script type="text/javascript">
@@ -162,19 +165,19 @@ class="active"
                             });
                         });
                     </script>
-                    <div class='col-sm-2'>
-                        {!! Form::label('filter', 'Filter:') !!}<br>
+                    <div class='col-sm-1'>
+                        {!! Form::label('filter', 'Filter:',['class' => 'lead']) !!}<br>
                         <input type="submit" class="btn btn-primary">
                     </div>
-                    <div class="col-sm-6">
-                        <label>{!! Lang::get('lang.Legend') !!}:</label>
+                    <div class="col-sm-7">
+                        <label class="lead">{!! Lang::get('lang.Legend') !!}:</label>
                         <div class="row">
                             <style>
-                                #legend-holder { border: 2px solid #ccc; float: left; width: 25px; height: 15px; margin: 2px; }
+                                #legend-holder { border: 1px solid #ccc; float: left; width: 25px; height: 25px; margin: 1px; }
                             </style>
-                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"> </span> {!! Lang::get('lang.total') !!} {!! Lang::get('lang.tickets') !!}</div>
-                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6DC5B2;"> </span> {!! Lang::get('lang.open') !!} {!! Lang::get('lang.tickets') !!}</div>
-                            <div class="col-md-4"><span id="legend-holder" style="background-color: #E3B870;"> </span> {!! Lang::get('lang.closed') !!} {!! Lang::get('lang.tickets') !!}</div>
+                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span class="lead"> <span id="total-created-tickets" ></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.created') !!}</span></div> 
+                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6DC5B2;"></span>&nbsp; <span class="lead"> <span id="total-reopen-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.reopen') !!}</span></div> 
+                            <div class="col-md-4"><span id="legend-holder" style="background-color: #E3B870;"></span>&nbsp; <span class="lead"> <span id="total-closed-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.closed') !!}</span></div> 
                         </div>
                     </div>
                 </div>
@@ -226,7 +229,7 @@ class="active"
 <script type="text/javascript">
                         $(document).ready(function() {
                             $.getJSON("agen", function(result) {
-                                var labels = [], open = [], closed = [], reopened = [];
+                                var labels = [], open = [], closed = [], reopened = [], open_total = 0, closed_total = 0, reopened_total = 0;
                                 //,data2=[],data3=[],data4=[];
                                 for (var i = 0; i < result.length; i++) {
                                     // $var12 = result[i].day;
@@ -236,6 +239,9 @@ class="active"
                                     closed.push(result[i].closed);
                                     reopened.push(result[i].reopened);
                                     // data4.push(result[i].open);
+                                    open_total += parseInt(result[i].open);
+                                    closed_total += parseInt(result[i].closed);
+                                    reopened_total += parseInt(result[i].reopened);
                                 }
                                 var buyerData = {
                                     labels: labels,
@@ -271,19 +277,11 @@ class="active"
                                             pointHighlightStroke: "rgba(60,141,188,1)",
                                             data: reopened
                                         }
-                                        // ,{
-                                        //       label : "Reopened Tickets",
-                                        //         fillColor : "rgba(102,255,51,0.2)",
-                                        //       strokeColor : "rgba(151,187,205,1)",
-                                        //        pointColor : "rgba(46,184,0,1)",
-                                        //         pointStrokeColor : "#fff",
-                                        //         pointHighlightFill : "#fff",
-                                        //         pointHighlightStroke : "rgba(151,187,205,1)",
-                                        //        data : data3
-                                        //     }
                                     ]
                                 };
-
+                                $("#total-created-tickets").html(open_total);
+                                $("#total-reopen-tickets").html(reopened_total);
+                                $("#total-closed-tickets").html(closed_total);
                                 var myLineChart = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
                                     showScale: true,
                                     //Boolean - Whether grid lines are shown across the chart
@@ -343,7 +341,7 @@ class="active"
 
                                     success: function(result2) {
                                         //  $.getJSON("agen", function (result) {
-                                        var labels = [], open = [], closed = [], reopened = [];
+                                        var labels = [], open = [], closed = [], reopened = [], open_total = 0, closed_total = 0, reopened_total = 0;
                                         //,data2=[],data3=[],data4=[];
                                         for (var i = 0; i < result2.length; i++) {
                                             // $var12 = result[i].day;
@@ -353,6 +351,9 @@ class="active"
                                             closed.push(result2[i].closed);
                                             reopened.push(result2[i].reopened);
                                             // data4.push(result[i].open);
+                                            open_total += parseInt(result2[i].open);
+                                            closed_total += parseInt(result2[i].closed);
+                                            reopened_total += parseInt(result2[i].reopened);
                                         }
 
                                         var buyerData = {
@@ -401,7 +402,9 @@ class="active"
                                                 //     }
                                             ]
                                         };
-
+                                        $("#total-created-tickets").html(open_total);
+                                        $("#total-reopen-tickets").html(reopened_total);
+                                        $("#total-closed-tickets").html(closed_total);
                                         var myLineChart = new Chart(document.getElementById("tickets-graph").getContext("2d")).Line(buyerData, {
                                             showScale: true,
                                             //Boolean - Whether grid lines are shown across the chart

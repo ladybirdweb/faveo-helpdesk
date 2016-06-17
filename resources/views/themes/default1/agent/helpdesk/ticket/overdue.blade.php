@@ -11,7 +11,8 @@ active
 @section('overdue')
 class="active"
 @stop
-
+@section('PageHeader')
+<h1>{{Lang::get('lang.tickets')}}</h1>@stop
 @section('content')
 <?php
 $date_time_format = UTC::getDateTimeFormat();

@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-
+<h1>{{Lang::get('lang.agents')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->

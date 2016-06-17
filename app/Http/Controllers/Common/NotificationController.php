@@ -7,12 +7,11 @@ use App\Model\helpdesk\Notification\Notification;
 use App\Model\helpdesk\Notification\UserNotification;
 use App\User;
 
-class NotificationController extends Controller
-{
+class NotificationController extends Controller {
+
     public $user;
 
-    public function __construct()
-    {
+    public function __construct() {
         $user = new User();
         $this->user = $user;
     }
@@ -22,8 +21,7 @@ class NotificationController extends Controller
      *
      * @return response
      */
-    public static function getNotifications()
-    {
+    public static function getNotifications() {
         $notifications = UserNotification::join('notifications', 'user_notification.notification_id', '=', 'notifications.id')
                 ->join('notification_types', 'notifications.type_id', '=', 'notification_types.id')
                 ->where('user_notification.user_id', '=', \Auth::user()->id)
@@ -32,8 +30,7 @@ class NotificationController extends Controller
         return $notifications;
     }
 
-    public function create($model_id, $userid_created, $type_id, $forwhome = [])
-    {
+    public function create($model_id, $userid_created, $type_id, $forwhome = []) {
         try {
             if (empty($forwhome)) {
                 $forwhome = $this->user->where('role', '!=', 'user')->get()->toArray();
@@ -52,19 +49,16 @@ class NotificationController extends Controller
         }
     }
 
-    public function markAllRead($id)
-    {
+    public function markAllRead($id) {
         $markasread = UserNotification::where('user_id', '=', \Auth::user()->id)->where('is_read', '=', '0')->get();
         foreach ($markasread as $mark) {
             $mark->is_read = '1';
             $mark->save();
         }
-
         return 1;
     }
 
-    public function markRead($id)
-    {
+    public function markRead($id) {
         $markasread = UserNotification::where('notification_id', '=', $id)->where('user_id', '=', \Auth::user()->id)->where('is_read', '=', '0')->get();
         foreach ($markasread as $mark) {
             $mark->is_read = '1';
@@ -74,15 +68,13 @@ class NotificationController extends Controller
         return 1;
     }
 
-    public function show()
-    {
+    public function show() {
         $notifications = $this->getNotifications();
 
         return view('notifications-all', compact('notifications'));
     }
 
-    public function delete($id)
-    {
+    public function delete($id) {
         $markasread = UserNotification::where('notification_id', '=', $id)->where('user_id', '=', \Auth::user()->id)->get();
         foreach ($markasread as $mark) {
             $mark->delete();
@@ -90,4 +82,5 @@ class NotificationController extends Controller
 
         return 1;
     }
+
 }

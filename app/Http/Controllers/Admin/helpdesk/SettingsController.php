@@ -29,6 +29,7 @@ use App\Model\helpdesk\Utility\Date_format;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
+use App\Model\helpdesk\Workflow\WorkflowClose;
 use DateTime;
 // classes
 use DB;
@@ -182,7 +183,7 @@ class SettingsController extends Controller
             /* Check whether function success or not */
             $systems->fill($request->input())->save();
             /* redirect to Index page with Success Message */
-
+            
             // dd($datacontent);
             //\Config::set('app.debug', $request->input('debug'));
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
@@ -320,7 +321,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function getSchedular(Email $email, Template $template, Emails $email1)
+    public function getSchedular(Email $email, Template $template, Emails $email1, WorkflowClose $workflow)
     {
         // try {
         /* fetch the values of email from Email table */
@@ -330,7 +331,9 @@ class SettingsController extends Controller
         /* Fetch the values from Emails table */
         $emails1 = $email1->get();
 
-        return view('themes.default1.admin.helpdesk.settings.crone', compact('emails', 'templates', 'emails1'));
+        $workflow = $workflow->whereId('1')->first();
+
+        return view('themes.default1.admin.helpdesk.settings.crone', compact('emails', 'templates', 'emails1', 'workflow'));
         // } catch {
         // }
     }
@@ -343,7 +346,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function postSchedular(Email $email, Template $template, Emails $email1, Request $request)
+    public function postSchedular(Email $email, Template $template, Emails $email1, Request $request, WorkflowClose $workflow)
     {
         // dd($request);
         try {
@@ -360,6 +363,14 @@ class SettingsController extends Controller
                 $emails->notification_cron = 0;
             }
             $emails->save();
+            //workflow
+            $work = $workflow->whereId('1')->first();
+            if ($request->condition == 'on') {
+                $work->condition = 1;
+            } else {
+                 $work->condition = 0;
+            }
+            $work->save();
             /* redirect to Index page with Success Message */
             return redirect('job-scheduler')->with('success', Lang::get('lang.job-scheduler-success'));
         } catch (Exception $e) {

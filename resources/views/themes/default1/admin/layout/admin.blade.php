@@ -72,7 +72,7 @@
 
                         <ul class="nav navbar-nav navbar-left">
                             @if($replacetop==0)
-                            <li @yield('settings')><a href="{!! url('admin') !!}">{!! Lang::get('lang.home') !!}</a></li>
+                            <li @yield('settings')><a href="{!! url('dashboard') !!}">{!! Lang::get('lang.agent_panel') !!}</a></li>
                             @endif
                             <?php \Event::fire('service.desk.admin.topbar', array()); ?>
                         </ul>
@@ -81,7 +81,7 @@
                         <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id', '=', Auth::user()->id)->where('is_read', '0')->get(); ?>
 
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a href="{{url('dashboard')}}">{!! Lang::get('lang.agent_panel') !!}</a></li>
+                            <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown notifications-menu" id="myDropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
@@ -209,6 +209,7 @@
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         @if($replaceside==0)
+                        <center><a href="{{url('admin')}}"><li class="header"><span style="font-size:1.5em;">{{ Lang::get('lang.admin_panel') }}</span></li></a></center>
                         <li class="header">{!! Lang::get('lang.settings-2') !!}</li>
                         <li class="treeview @yield('Staffs')">
                             <a  href="#">
@@ -258,7 +259,7 @@
                         <li class="treeview @yield('Settings')">
                             <a href="#">
                                 <i class="fa fa-cog"></i>
-                                <span>{!! Lang::get('lang.system-settings') !!}</span>
+                                <span>{!! Lang::get('lang.settings') !!}</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
@@ -302,6 +303,12 @@
                             <a href="{{ url('plugins') }}">
                                 <i class="fa fa-plug"></i>
                                 <span>{!! Lang::get('lang.plugin') !!}</span>
+                            </a>
+                        </li>
+                        <li class="treeview @yield('API')">
+                            <a href="{{ url('api') }}">
+                                <i class="fa fa-cogs"></i>
+                                <span>{!! Lang::get('lang.api') !!}</span>
                             </a>
                         </li>
                         <li class="header">{!! Lang::get('lang.Updates') !!}</li>

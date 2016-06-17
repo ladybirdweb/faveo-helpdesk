@@ -11,11 +11,13 @@ active
 @section('widget')
 class="active"
 @stop
-
+@section('PageHeader')
+<h1>{!! Lang::get('lang.widgets') !!}</h1>
+@stop
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h4 class="box-title">{!! Lang::get('lang.widgets') !!} </h4>
+        <h4 class="box-title">{!! Lang::get('lang.widget-settings') !!} </h4>
     </div>
     <div class="box-body">
         <!-- check whether success or not -->

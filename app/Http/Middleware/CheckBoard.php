@@ -7,22 +7,19 @@ use Closure;
 
 /**
  * CheckBoard.
- * Checking if the system board is online or offline.
+ * Checking if the system board is online or offline
  *
  * @author   Ladybird <info@ladybirdweb.com>
  */
-class CheckBoard
-{
+class CheckBoard {
+
     /**
      * Handle an incoming request.
-     *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
-     *
+     * @param \Closure $next
      * @return type Mixed
      */
-    public function handle($request, Closure $next)
-    {
+    public function handle($request, Closure $next) {
         if ($this->checkBoard() == '1') {
             return $next($request);
         } else {
@@ -31,18 +28,16 @@ class CheckBoard
     }
 
     /**
-     * Function to get the system offline details.
-     *
+     * Function to get the system offline details
      * @return type Mixed
      */
-    public function checkBoard()
-    {
+    public function checkBoard() {
         $res = 0;
-        $system = new System();
+        $system = new System;
         if ($system->first()) {
             $res = $system->first()->status;
         }
-
         return $res;
     }
+
 }

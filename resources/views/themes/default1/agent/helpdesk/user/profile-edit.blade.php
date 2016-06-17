@@ -12,6 +12,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.edit-profile')}}</h1>
+@stop
+
 @section('content')
 <div class="row">
     <div class="col-md-6">

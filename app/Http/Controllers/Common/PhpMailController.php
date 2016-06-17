@@ -11,12 +11,10 @@ use App\Model\helpdesk\Settings\Email;
 use App\User;
 use Auth;
 
-class PhpMailController extends Controller
-{
-    public function fetch_smtp_details($id)
-    {
-        $emails = Emails::where('id', '=', $id)->first();
+class PhpMailController extends Controller {
 
+    public function fetch_smtp_details($id) {
+        $emails = Emails::where('id', '=', $id)->first();
         return $emails;
     }
 
@@ -25,8 +23,7 @@ class PhpMailController extends Controller
      *
      * @return Mail
      */
-    public function sendmail($from, $to, $message, $template_variables)
-    {
+    public function sendmail($from, $to, $message, $template_variables) {
         // dd($from);
         $from_address = $this->fetch_smtp_details($from);
         if ($from_address == null) {
@@ -192,8 +189,15 @@ class PhpMailController extends Controller
             if (isset($set['id'])) {
                 $template_data = \App\Model\Common\Template::where('set_id', '=', $set->id)->where('type', '=', $template->id)->first();
                 $contents = $template_data->message;
-                if ($template_data->subject) {
-                    $subject = $template_data->subject;
+                if ($template_data->variable == 1) {
+                    if ($template_data->subject) {
+                        $subject = $template_data->subject;
+                        if ($ticket_number != null) {
+                            $subject = $subject . ' [#' . $ticket_number . ']';
+                        }
+                    } else {
+                        $subject = $message['subject'];
+                    }
                 } else {
                     $subject = $message['subject'];
                 }
@@ -218,7 +222,8 @@ class PhpMailController extends Controller
 
             // dd($messagebody);
             //$mail->SMTPDebug = 3;                // Enable verbose debug output
-            if ($protocol == 'smtp') {
+            if ($protocol == "smtp") {
+
                 $mail->isSMTP();                   // Set mailer to use SMTP
                 $mail->Host = $host;               // Specify main and backup SMTP servers
                 $mail->SMTPAuth = true;            // Enable SMTP authentication
@@ -227,7 +232,7 @@ class PhpMailController extends Controller
                 $mail->SMTPSecure = $smtpsecure;   // Enable TLS encryption, `ssl` also accepted
                 $mail->Port = $port;               // TCP port to connect to
                 $mail->setFrom($username, $fromname);
-            } elseif ($protocol == 'mail') {
+            } elseif ($protocol == "mail") {
                 $mail->IsSendmail();               // telling the class to use SendMail transport
                 if ($username == $fromname) {
                     $mail->setFrom($username);
@@ -265,7 +270,7 @@ class PhpMailController extends Controller
             $mail->Subject = $subject;
             if ($template == 'ticket-reply-agent') {
                 $line = '---Reply above this line--- <br/><br/>';
-                $mail->Body = utf8_decode($line.$messagebody);
+                $mail->Body = utf8_decode($line . $messagebody);
             } else {
                 $mail->Body = utf8_decode($messagebody);
             }
@@ -288,12 +293,10 @@ class PhpMailController extends Controller
      *
      * @return MailNotification
      */
-    public function sendEmail($from, $to, $message)
-    {
-        // dd($from);
+    public function sendEmail($from, $to, $message) {
+
         $from_address = $this->fetch_smtp_details($from);
 
-        // dd($from_address);
         $username = $from_address->email_address;
         $fromname = $from_address->email_name;
         $password = \Crypt::decrypt($from_address->password);
@@ -415,8 +418,7 @@ class PhpMailController extends Controller
      *
      * @return type
      */
-    public function company()
-    {
+    public function company() {
         $company = Company::Where('id', '=', '1')->first();
         if ($company->company_name == null) {
             $company = 'Support Center';
@@ -427,49 +429,6 @@ class PhpMailController extends Controller
         return $company;
     }
 
-    // public function testmail($host = '', $username = '', $password = '', $smtpsecure = '', $port = '', $from = '', $recipants = '', $subject = '', $scenario = '', $cc = '', $bc = '', $ishtml = '', $altbody = '', $attachment = '', $agent = '', $ticket_number = '', $content = '') {
-    //     $mail = new \PHPMailer;
-    //     $status = \DB::table('settings_email')->first();
-    //     $path = '../resources/views/emails/';
-    //     $default = $status->template . '/';
-    //     $directory = $path . $default;
-    //     $template = "Admin_mail.blade.php";
-    //     $handle = fopen($directory . $template, "r");
-    //     $contents = fread($handle, filesize($directory . $template));
-    //     fclose($handle);
-    //     if ($template == 'Admin_mail.blade.php') {
-    //         $variables = array('{!! $agent !!}', '{!! $ticket_number !!}', '{!! $name !!}', '{!! $email !!}', '{!! $content !!}', '{!! $from !!}');
-    //         $data = array('sada', '12345', 'rahul', 'rahul@test.com', 'DemoContent', 'testing');
-    //         $messagebody = str_replace($variables, $data, $contents);
-    //     }
-    //     //$mail->SMTPDebug = 3;                               // Enable verbose debug output
-    //     $mail->isSMTP();                                      // Set mailer to use SMTP
-    //     $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
-    //     $mail->SMTPAuth = true;                               // Enable SMTP authentication
-    //     $mail->Username = 'sujitprasad4567@gmail.com';                 // SMTP username
-    //     $mail->Password = 'pankajprasad22.';                           // SMTP password
-    //     $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-    //     $mail->Port = 587;                                    // TCP port to connect to
-    //     $mail->setFrom('sujitprasad4567@gmail.com', 'Mailer');
-    //     $mail->addAddress('sada059@gmail.com', 'Joe User');     // Add a recipient
-    //     // Name is optional
-    //     $mail->addReplyTo('sada059@gmail.com', 'Information');
-    //     // Optional name
-    //     $mail->isHTML(true);                                  // Set email format to HTML
-    //     $mail->addCC('cc@example.com');
-    //     $mail->addBCC('bcc@example.com');
-    //     $mail->addAttachment($attachment);
-    //     $mail->Subject = 'Here is the subject';
-    //     $mail->Body = $messagebody;
-    //     $mail->AltBody = $altbody;
-    //     if (!$mail->send()) {
-    //         echo 'Message could not be sent.';
-    //         echo 'Mailer Error: ' . $mail->ErrorInfo;
-    //     } else {
-    //         echo 'Message has been sent';
-    //     }
-    // }
-
     /**
      * Function to choose from address.
      *
@@ -478,8 +437,7 @@ class PhpMailController extends Controller
      *
      * @return type integer
      */
-    public function mailfrom($reg, $dept_id)
-    {
+    public function mailfrom($reg, $dept_id) {
         $email = Email::where('id', '=', '1')->first();
         if ($reg == 1) {
             return $email->sys_email;
@@ -492,4 +450,5 @@ class PhpMailController extends Controller
             }
         }
     }
+
 }

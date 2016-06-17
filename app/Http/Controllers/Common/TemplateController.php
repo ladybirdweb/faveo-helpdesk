@@ -16,13 +16,12 @@ use Lang;
  * |======================================================
  * This controller is for CRUD email templates.
  */
-class TemplateController extends Controller
-{
+class TemplateController extends Controller {
+
     public $template;
     public $type;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth');
         $this->middleware('roles');
 
@@ -38,8 +37,7 @@ class TemplateController extends Controller
      *
      * @return type view
      */
-    public function index()
-    {
+    public function index() {
         try {
             return view('themes.default1.common.template.inbox');
         } catch (\Exception $ex) {
@@ -55,8 +53,7 @@ class TemplateController extends Controller
      *
      * @return type view
      */
-    public function showTemplate($id)
-    {
+    public function showTemplate($id) {
         try {
             $templates = Template::where('set_id', '=', $id)->get();
 
@@ -73,8 +70,7 @@ class TemplateController extends Controller
      *
      * @return type datatable
      */
-    public function GetTemplates(Request $request)
-    {
+    public function GetTemplates(Request $request) {
         $id = $request->input('id');
 
         return \Datatable::collection($this->template->where('set_id', '=', $id)->select('id', 'name', 'type')->get())
@@ -83,7 +79,7 @@ class TemplateController extends Controller
                             return $this->type->where('id', $model->type)->first()->name;
                         })
                         ->addColumn('action', function ($model) {
-                            return '<a href='.url('templates/'.$model->id.'/edit')." class='btn btn-sm btn-primary'>Edit</a>";
+                            return '<a href=' . url('templates/' . $model->id . '/edit') . " class='btn btn-sm btn-primary'>Edit</a>";
                         })
                         ->searchColumns('name')
                         ->orderColumns('name')
@@ -93,12 +89,10 @@ class TemplateController extends Controller
     /**
      * @return type view
      */
-    public function create()
-    {
+    public function create() {
         try {
             $i = $this->template->orderBy('created_at', 'desc')->first()->id + 1;
             $type = $this->type->lists('name', 'id')->toArray();
-
             return view('themes.default1.common.template.create', compact('type'));
         } catch (\Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -112,20 +106,21 @@ class TemplateController extends Controller
      *
      * @return type redirect
      */
-    public function store(TemplateRequest $request)
-    {
+    public function store(TemplateRequest $request) {
         try {
-            //dd($request);
             $this->template->fill($request->input())->save();
-
             return redirect('templates')->with('success', Lang::get('lang.template_saved_successfully'));
         } catch (\Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
 
-    public function edit($id)
-    {
+    /**
+     * function to get the edit page of template
+     * @param type $id
+     * @return type
+     */
+    public function edit($id) {
         try {
             $i = $this->template->orderBy('created_at', 'desc')->first()->id + 1;
             $template = $this->template->where('id', $id)->first();
@@ -137,8 +132,13 @@ class TemplateController extends Controller
         }
     }
 
-    public function update($id, TemplateUdate $request)
-    {
+    /**
+     * function to update a template
+     * @param type $id
+     * @param \App\Http\Requests\helpdesk\TemplateUdate $request
+     * @return type
+     */
+    public function update($id, TemplateUdate $request) {
         try {
             //dd($request);
             $template = $this->template->where('id', $id)->first();
@@ -151,14 +151,13 @@ class TemplateController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * function to delete a template
      *
      * @param int $id
      *
      * @return Response
      */
-    public function destroy(Request $request)
-    {
+    public function destroy(Request $request) {
         try {
             $ids = $request->input('select');
             if (!empty($ids)) {
@@ -169,9 +168,9 @@ class TemplateController extends Controller
                     } else {
                         echo "<div class='alert alert-danger alert-dismissable'>
                     <i class='fa fa-ban'></i>
-                    <b>".\Lang::get('message.alert').'!</b>
+                    <b>" . \Lang::get('message.alert') . '!</b>
                     <button type=button class=close data-dismiss=alert aria-hidden=true>&times;</button>
-                        '.\Lang::get('message.no-record').'
+                        ' . \Lang::get('message.no-record') . '
                 </div>';
                     }
                 }
@@ -179,28 +178,32 @@ class TemplateController extends Controller
                     <i class='fa fa-ban'></i>
                     <b>
                     <button type=button class=close data-dismiss=alert aria-hidden=true>&times;</button>
-                        ".\Lang::get('message.deleted-successfully').'
+                        " . \Lang::get('message.deleted-successfully') . '
                 </div>';
             } else {
                 echo "<div class='alert alert-danger alert-dismissable'>
                     <i class='fa fa-ban'></i>
-                    <b>".\Lang::get('message.alert').'!</b> 
+                    <b>" . \Lang::get('message.alert') . '!</b> 
                     <button type=button class=close data-dismiss=alert aria-hidden=true>&times;</button>
-                        '.\Lang::get('message.select-a-row').'
+                        ' . \Lang::get('message.select-a-row') . '
                 </div>';
             }
         } catch (\Exception $e) {
             echo "<div class='alert alert-danger alert-dismissable'>
                     <i class='fa fa-ban'></i>
-                    <b>".\Lang::get('message.alert').'!</b>
+                    <b>" . \Lang::get('message.alert') . '!</b>
                     <button type=button class=close data-dismiss=alert aria-hidden=true>&times;</button>
-                        '.$e->getMessage().'
+                        ' . $e->getMessage() . '
                 </div>';
         }
     }
 
-    public function show($id)
-    {
+    /**
+     * function to show the templates
+     * @param type $id
+     * @return type Mixed
+     */
+    public function show($id) {
         //dd($currency);
         try {
             if ($this->template->where('type', 3)->where('id', $id)->first()) {
@@ -255,4 +258,5 @@ class TemplateController extends Controller
             return redirect('/')->with('fails', $e->getMessage());
         }
     }
+
 }

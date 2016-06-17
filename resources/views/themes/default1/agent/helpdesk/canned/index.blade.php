@@ -12,6 +12,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.tools')}}</h1>
+@stop
+
 <!-- content -->
 @section('content')
 <div class="box box-primary">

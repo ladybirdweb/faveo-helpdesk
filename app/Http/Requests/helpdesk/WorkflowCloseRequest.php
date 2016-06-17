@@ -25,7 +25,7 @@ class WorkflowCloseRequest extends Request
     {
         return [
             'days'              => 'required|integer|min:1',
-            'condition'         => 'required|integer',
+            // 'condition'         => 'required|integer',
             'send_email'        => 'required|integer',
             'status'            => 'required|integer',
         ];

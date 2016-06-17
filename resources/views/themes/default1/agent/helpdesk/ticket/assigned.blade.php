@@ -12,6 +12,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.tickets')}}</h1>
+@stop
+
 @section('content')
 <?php
 $date_time_format = UTC::getDateTimeFormat();
@@ -27,6 +31,7 @@ if (Auth::user()->role == 'agent') {
     <div class="box-header with-border">
         <h3 class="box-title"> {!! Lang::get('lang.assigned') !!} </h3> <small  id="title_refresh"> {!! $tickets->total() !!}  {!! Lang::get('lang.tickets') !!}</small>
     </div><!-- /.box-header -->
+    <div class="box-body">
     @if(Session::has('success'))
     <div class="alert alert-success alert-dismissable">
         <i class="fa  fa-check-circle"> </i>
@@ -42,7 +47,6 @@ if (Auth::user()->role == 'agent') {
         {{Session::get('fails')}}
     </div>
     @endif
-    <div class="box-body">
         {!! Form::open(['id'=>'modalpopup', 'route'=>'select_all','method'=>'post']) !!}
         <!--<div class="mailbox-controls">-->
         <!-- Check all button -->

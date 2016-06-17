@@ -16,6 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
+<h1>{!! Lang::get('lang.plugins') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -28,7 +29,7 @@ class="active"
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.plugins') !!}</h3>
+        <h3 class="box-title">{!! Lang::get('lang.plugins-list') !!}</h3>
         <button type="button" class="btn btn-primary pull-right" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><b>{!! Lang::get('lang.add_plugin') !!}</b></button>        
         <div class="modal fade" id="Edit">
             <div class="modal-dialog">

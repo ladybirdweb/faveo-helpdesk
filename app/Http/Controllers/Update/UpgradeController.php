@@ -181,7 +181,7 @@ class UpgradeController extends Controller
                 $notify->delete();
             }
         } catch (Exception $ex) {
-            dd($ex);
+            throw new Exception($ex->getMessage());
         }
     }
 
@@ -196,7 +196,7 @@ class UpgradeController extends Controller
                 return redirect()->back();
             }
         } catch (Exception $ex) {
-            dd($ex);
+            return redirect()->back()->with('fails',$ex->getMessage());
         }
     }
 
@@ -218,9 +218,7 @@ class UpgradeController extends Controller
                 return redirect()->back();
             }
         } catch (Exception $ex) {
-            dd($ex);
-
-            return redirect()->back()->with('fails', $ex->getMessage());
+            return redirect()->back()->with('fails',$ex->getMessage());
         }
     }
 
@@ -328,7 +326,7 @@ class UpgradeController extends Controller
                 return redirect()->back();
             }
         } catch (Exception $ex) {
-            dd($ex);
+           return redirect()->back()->with('fails',$ex->getMessage());
         }
     }
 
@@ -343,7 +341,7 @@ class UpgradeController extends Controller
                 return redirect()->back();
             }
         } catch (Exception $ex) {
-            dd($ex);
+            return redirect()->back()->with('fails',$ex->getMessage());
         }
     }
 }

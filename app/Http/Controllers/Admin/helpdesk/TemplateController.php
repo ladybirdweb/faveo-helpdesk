@@ -24,15 +24,14 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class TemplateController extends Controller
-{
+class TemplateController extends Controller {
+
     /**
      * Create a new controller instance.
      *
      * @return type void
      */
-    public function __construct(PhpMailController $PhpMailController)
-    {
+    public function __construct(PhpMailController $PhpMailController) {
         $this->PhpMailController = $PhpMailController;
         $this->middleware('auth');
         $this->middleware('roles');
@@ -45,8 +44,7 @@ class TemplateController extends Controller
      *
      * @return type Response
      */
-    public function index(Template $template)
-    {
+    public function index(Template $template) {
         try {
             $templates = $template->get();
 
@@ -64,8 +62,7 @@ class TemplateController extends Controller
      *
      * @return type Response
      */
-    public function create(Languages $language, Template $template)
-    {
+    public function create(Languages $language, Template $template) {
         try {
             $templates = $template->get();
             $languages = $language->get();
@@ -84,8 +81,7 @@ class TemplateController extends Controller
      *
      * @return type Response
      */
-    public function store(Template $template, TemplateRequest $request)
-    {
+    public function store(Template $template, TemplateRequest $request) {
         try {
             /* Check whether function success or not */
             if ($template->fill($request->input())->save() == true) {
@@ -108,8 +104,7 @@ class TemplateController extends Controller
      *
      * @return Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
     }
 
@@ -122,41 +117,37 @@ class TemplateController extends Controller
      *
      * @return type Response
      */
-    public function listdirectories()
-    {
-        $path = \Config::get('view.paths')[0].'/emails/';
+    public function listdirectories() {
+        $path = \Config::get('view.paths')[0] . '/emails/';
         $directories = scandir($path);
         $directory = str_replace('/', '-', $path);
 
         return view('themes.default1.admin.helpdesk.emails.template.listdirectories', compact('directories', 'directory'));
     }
 
-    public function listtemplates($template, $path)
-    {
+    public function listtemplates($template, $path) {
         $paths = str_replace('-', '/', $path);
-        $directory2 = $paths.$template;
+        $directory2 = $paths . $template;
 
         $templates = scandir($directory2);
-        $directory = str_replace('/', '-', $directory2.'/');
+        $directory = str_replace('/', '-', $directory2 . '/');
 
         return view('themes.default1.admin.helpdesk.emails.template.listtemplates', compact('templates', 'directory'));
     }
 
-    public function readtemplate($template, $path)
-    {
+    public function readtemplate($template, $path) {
         $directory = str_replace('-', '/', $path);
-        $handle = fopen($directory.$template, 'r');
-        $contents = fread($handle, filesize($directory.$template));
+        $handle = fopen($directory . $template, 'r');
+        $contents = fread($handle, filesize($directory . $template));
         fclose($handle);
 
         return view('themes.default1.admin.helpdesk.emails.template.readtemplates', compact('contents', 'template', 'path'));
     }
 
-    public function createtemplate()
-    {
+    public function createtemplate() {
         $directory = '../resources/views/emails/';
         $fname = Input::get('folder_name');
-        $filename = $directory.$fname;
+        $filename = $directory . $fname;
 
 // images folder creation using php
 //   $mydir = dirname( __FILE__ )."/html/images";
@@ -168,7 +159,7 @@ class TemplateController extends Controller
         if (!file_exists($filename)) {
             mkdir($filename, 0777);
         }
-        $files = array_filter(scandir($directory.'default'));
+        $files = array_filter(scandir($directory . 'default'));
 
         foreach ($files as $file) {
             if ($file === '.' or $file === '..') {
@@ -176,29 +167,27 @@ class TemplateController extends Controller
             }
             if (!is_dir($file)) {
                 //   $file_to_go = str_replace("code/resources/views/emails/",'code/resources/views/emails/'.$fname,$file);
-                $destination = $directory.$fname.'/';
+                $destination = $directory . $fname . '/';
 
-                copy($directory.'default/'.$file, $destination.$file);
+                copy($directory . 'default/' . $file, $destination . $file);
             }
         }
 
         return \Redirect::back()->with('success', 'Successfully copied');
     }
 
-    public function writetemplate($template, $path)
-    {
+    public function writetemplate($template, $path) {
         $directory = str_replace('-', '/', $path);
         $b = Input::get('templatedata');
 
-        file_put_contents($directory.$template, print_r($b, true));
+        file_put_contents($directory . $template, print_r($b, true));
 
         return \Redirect::back()->with('success', 'Successfully updated');
     }
 
-    public function deletetemplate($template, $path)
-    {
+    public function deletetemplate($template, $path) {
         $directory = str_replace('-', '/', $path);
-        $dir = $directory.$template;
+        $dir = $directory . $template;
         $status = \DB::table('settings_email')->first();
         if ($template == 'default' or $template == $status->template) {
             return \Redirect::back()->with('fails', 'You cannot delete a default or active directory!');
@@ -207,7 +196,7 @@ class TemplateController extends Controller
             $objects = scandir($dir);
             foreach ($objects as $object) {
                 if ($object != '.' && $object != '..') {
-                    unlink($dir.'/'.$object);
+                    unlink($dir . '/' . $object);
                 }
             }
             rmdir($dir);
@@ -218,15 +207,13 @@ class TemplateController extends Controller
         return \Redirect::back()->with('success', 'Successfully Deleted');
     }
 
-    public function activateset($setname)
-    {
+    public function activateset($setname) {
         \DB::table('settings_email')->update(['template' => $setname]);
 
         return \Redirect::back()->with('success', 'You have Successfully Activated this Set');
     }
 
-    public function edit($id, Template $template, Languages $language)
-    {
+    public function edit($id, Template $template, Languages $language) {
         try {
             $templates = $template->whereId($id)->first();
             $languages = $language->get();
@@ -246,8 +233,7 @@ class TemplateController extends Controller
      *
      * @return type Response
      */
-    public function update($id, Template $template, TemplateUdate $request)
-    {
+    public function update($id, Template $template, TemplateUdate $request) {
         try {
             //TODO validation
             $templates = $template->whereId($id)->first();
@@ -273,8 +259,7 @@ class TemplateController extends Controller
      *
      * @return type Response
      */
-    public function destroy($id, Template $template)
-    {
+    public function destroy($id, Template $template) {
         try {
             $templates = $template->whereId($id)->first();
             /* Check whether function success or not */
@@ -298,8 +283,7 @@ class TemplateController extends Controller
      *
      * @return type Response
      */
-    public function formDiagno(Emails $email)
-    {
+    public function formDiagno(Emails $email) {
         try {
             $emails = $email->get();
 
@@ -316,8 +300,7 @@ class TemplateController extends Controller
      *
      * @return type
      */
-    public function postDiagno(DiagnosRequest $request)
-    {
+    public function postDiagno(DiagnosRequest $request) {
         try {
             $email_details = Emails::where('id', '=', $request->from)->first();
             if ($email_details->sending_protocol == 'mail') {
@@ -325,12 +308,12 @@ class TemplateController extends Controller
                 $mail->IsSendmail(); // telling the class to use SendMail transport
                 $mail->SetFrom($email_details->email_address, $email_details->email_name); // sender details
                 $address = $request->to; // receiver email
-                $mail->AddAddress($address);
+                $mail->AddAddress($address); 
                 $mail->Subject = $request->subject; // subject of the email
                 $body = $request->message; // body of the email
-                $mail->MsgHTML($body);
-                if (!$mail->Send()) {
-                    $return = Lang::get('lang.mailer_error').': '.$mail->ErrorInfo;
+                $mail->MsgHTML($body); 
+                if (!$mail->Send()) { 
+                    $return = Lang::get('lang.mailer_error') . ': ' . $mail->ErrorInfo;
                 } else {
                     $return = Lang::get('lang.message_has_been_sent');
                 }
@@ -340,8 +323,8 @@ class TemplateController extends Controller
                 if ($email_details->smtp_validate == '1') {
                     $mail->SMTPOptions = [
                         'ssl' => [
-                            'verify_peer'       => false,
-                            'verify_peer_name'  => false,
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
                             'allow_self_signed' => true,
                         ],
                     ];
@@ -358,15 +341,15 @@ class TemplateController extends Controller
                 $mail->Subject = $request->subject;
                 $mail->Body = utf8_decode($request->message);
                 if (!$mail->send()) {
-                    $return = Lang::get('lang.mailer_error').': '.$mail->ErrorInfo;
+                    $return = Lang::get('lang.mailer_error') . ': ' . $mail->ErrorInfo;
                 } else {
                     $return = Lang::get('lang.message_has_been_sent');
                 }
             }
-
             return redirect()->back()->with('success', $return);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
+
 }

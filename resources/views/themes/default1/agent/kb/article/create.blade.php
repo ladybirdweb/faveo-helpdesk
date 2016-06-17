@@ -10,6 +10,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.article')}}</h1>
+@stop
+
 @section('content')
 <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
 {!! Form::open(array('action' => 'Agent\kb\ArticleController@store' , 'method' => 'post') )!!}

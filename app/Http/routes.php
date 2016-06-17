@@ -13,7 +13,7 @@
 
 Route::group(['middleware' => 'update'], function () {
     Route::controllers([
-        'auth'     => 'Auth\AuthController',
+        'auth' => 'Auth\AuthController',
         'password' => 'Auth\PasswordController',
     ]);
 });
@@ -48,19 +48,102 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('settings-notification', ['as' => 'notification.settings', 'uses' => 'Admin\helpdesk\SettingsController@notificationSettings']);
     Route::get('delete-read-notification', 'Admin\helpdesk\SettingsController@deleteReadNoti');
     Route::post('delete-notification-log', 'Admin\helpdesk\SettingsController@deleteNotificationLog');
+
+
     // resource is a function to process create,edit,read and delete
     Route::resource('groups', 'Admin\helpdesk\GroupController'); // for group module, for CRUD
+    Breadcrumbs::register('groups.index', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.groups'), route('groups.index'));
+    });
+    Breadcrumbs::register('groups.create', function($breadcrumbs) {
+        $breadcrumbs->parent('groups.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('groups.create'));
+    });
+    Breadcrumbs::register('groups.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('groups.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('groups/{groups}/edit'));
+    });
+
 
     Route::resource('departments', 'Admin\helpdesk\DepartmentController'); // for departments module, for CRUD
+    Breadcrumbs::register('departments.index', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.departments'), route('departments.index'));
+    });
+    Breadcrumbs::register('departments.create', function($breadcrumbs) {
+        $breadcrumbs->parent('departments.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('departments.create'));
+    });
+    Breadcrumbs::register('departments.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('departments.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('departments/{departments}/edit'));
+    });
+
 
     Route::resource('teams', 'Admin\helpdesk\TeamController'); // in teams module, for CRUD
+    Breadcrumbs::register('teams.index', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.teams'), route('teams.index'));
+    });
+    Breadcrumbs::register('teams.create', function($breadcrumbs) {
+        $breadcrumbs->parent('teams.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('teams.create'));
+    });
+    Breadcrumbs::register('teams.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('teams.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('teams/{teams}/edit'));
+    });
+
+
 
     Route::resource('agents', 'Admin\helpdesk\AgentController'); // in agents module, for CRUD
+    Breadcrumbs::register('agents.index', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.agents'), route('agents.index'));
+    });
+    Breadcrumbs::register('agents.create', function($breadcrumbs) {
+        $breadcrumbs->parent('agents.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('agents.create'));
+    });
+    Breadcrumbs::register('agents.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('agents.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('agents/{agents}/edit'));
+    });
+
 
     Route::resource('emails', 'Admin\helpdesk\EmailsController'); // in emails module, for CRUD
+    Breadcrumbs::register('emails.index', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.emails'), route('emails.index'));
+    });
+    Breadcrumbs::register('emails.create', function($breadcrumbs) {
+        $breadcrumbs->parent('emails.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('emails.create'));
+    });
+    Breadcrumbs::register('emails.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('emails.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('emails/{emails}/edit'));
+    });
+
+
 
     Route::resource('banlist', 'Admin\helpdesk\BanlistController'); // in banlist module, for CRUD
+    Breadcrumbs::register('banlist.index', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.banlists'), route('banlist.index'));
+    });
+    Breadcrumbs::register('banlist.create', function($breadcrumbs) {
+        $breadcrumbs->parent('banlist.index');
+        $breadcrumbs->push(Lang::get('lang.add'), route('banlist.create'));
+    });
+    Breadcrumbs::register('banlist.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('banlist.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('agents/{agents}/edit'));
+    });
     Route::get('banlist/delete/{id}', ['as' => 'banlist.delete', 'uses' => 'Admin\helpdesk\BanlistController@delete']); // in banlist module, for CRUD
+
+
     /*
      * Templates
      */
@@ -108,56 +191,132 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('delete-template/{template}/{path}', ['as' => 'templates.delete', 'uses' => 'Admin\helpdesk\TemplateController@deletetemplate']);
 
     Route::get('getdiagno', ['as' => 'getdiagno', 'uses' => 'Admin\helpdesk\TemplateController@formDiagno']); // for getting form for diagnostic
+    Breadcrumbs::register('getdiagno', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.email_diagnostic'), route('getdiagno'));
+    });
 
     Route::post('postdiagno', ['as' => 'postdiagno', 'uses' => 'Admin\helpdesk\TemplateController@postDiagno']); // for getting form for diagnostic
 
+
     Route::resource('helptopic', 'Admin\helpdesk\HelptopicController'); // in helptopics module, for CRUD
+    Breadcrumbs::register('helptopic.index', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.help_topics'), route('helptopic.index'));
+    });
+    Breadcrumbs::register('helptopic.create', function($breadcrumbs) {
+        $breadcrumbs->parent('helptopic.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('helptopic.create'));
+    });
+    Breadcrumbs::register('helptopic.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('helptopic.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('helptopic/{helptopic}/edit'));
+    });
+
+
 
     Route::resource('sla', 'Admin\helpdesk\SlaController'); // in SLA Plan module, for CRUD
+    Breadcrumbs::register('sla.index', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.sla-plans'), route('sla.index'));
+    });
+    Breadcrumbs::register('sla.create', function($breadcrumbs) {
+        $breadcrumbs->parent('sla.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('sla.create'));
+    });
+    Breadcrumbs::register('sla.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('sla.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('sla/{sla}/edit'));
+    });
+
+
 
     Route::resource('forms', 'Admin\helpdesk\FormController');
-
+    Breadcrumbs::register('forms.index', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.forms'), route('forms.index'));
+    });
+    Breadcrumbs::register('forms.create', function($breadcrumbs) {
+        $breadcrumbs->parent('forms.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('forms.create'));
+    });
+    Breadcrumbs::register('forms.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('forms.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('forms/{forms}/edit'));
+    });
+    Breadcrumbs::register('forms.show', function($breadcrumbs) {
+        $breadcrumbs->parent('forms.index');
+        $breadcrumbs->push(Lang::get('lang.view'), url('forms/{forms}'));
+    });
     Route::get('delete-forms/{id}', ['as' => 'forms.delete', 'uses' => 'Admin\helpdesk\FormController@delete']);
 
     //$router->model('id','getcompany');
 
     Route::get('job-scheduler', ['as' => 'get.job.scheder', 'uses' => 'Admin\helpdesk\SettingsController@getSchedular']); //to get ob scheduler form page
+    Breadcrumbs::register('get.job.scheder', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.cron-jobs'), route('get.job.scheder'));
+    });
 
     Route::patch('post-scheduler', ['as' => 'post.job.scheduler', 'uses' => 'Admin\helpdesk\SettingsController@postSchedular']); //to update job scheduler
 
     Route::get('agent-profile-page/{id}', ['as' => 'agent.profile.page', 'uses' => 'Admin\helpdesk\AgentController@agent_profile']);
 
     Route::get('getcompany', ['as' => 'getcompany', 'uses' => 'Admin\helpdesk\SettingsController@getcompany']); // direct to company setting page
+    Breadcrumbs::register('getcompany', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.company_settings'), route('getcompany'));
+    });
 
     Route::patch('postcompany/{id}', 'Admin\helpdesk\SettingsController@postcompany'); // Updating the Company table with requests
 
     Route::get('delete-logo', ['as' => 'delete.logo', 'uses' => 'Admin\helpdesk\SettingsController@deleteLogo']); // deleting a logo
 
     Route::get('getsystem', ['as' => 'getsystem', 'uses' => 'Admin\helpdesk\SettingsController@getsystem']); // direct to system setting page
+    Breadcrumbs::register('getsystem', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.system-settings'), route('getsystem'));
+    });
 
     Route::patch('postsystem/{id}', 'Admin\helpdesk\SettingsController@postsystem'); // Updating the System table with requests
 
     Route::get('getticket', ['as' => 'getticket', 'uses' => 'Admin\helpdesk\SettingsController@getticket']); // direct to ticket setting page
+    Breadcrumbs::register('getticket', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.ticket-setting'), route('getticket'));
+    });
 
     Route::patch('postticket/{id}', 'Admin\helpdesk\SettingsController@postticket'); // Updating the Ticket table with requests
 
     Route::get('getemail', ['as' => 'getemail', 'uses' => 'Admin\helpdesk\SettingsController@getemail']); // direct to email setting page
+    Breadcrumbs::register('getemail', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.email-settings'), route('getemail'));
+    });
 
     Route::patch('postemail/{id}', 'Admin\helpdesk\SettingsController@postemail'); // Updating the Email table with requests
     // Route::get('getaccess', 'Admin\helpdesk\SettingsController@getaccess'); // direct to access setting page
     // Route::patch('postaccess/{id}', 'Admin\helpdesk\SettingsController@postaccess'); // Updating the Access table with requests
 
     Route::get('getresponder', ['as' => 'getresponder', 'uses' => 'Admin\helpdesk\SettingsController@getresponder']); // direct to responder setting page
+    Breadcrumbs::register('getresponder', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.auto_responce'), route('getresponder'));
+    });
 
     Route::patch('postresponder/{id}', 'Admin\helpdesk\SettingsController@postresponder'); // Updating the Responder table with requests
 
     Route::get('getalert', ['as' => 'getalert', 'uses' => 'Admin\helpdesk\SettingsController@getalert']); // direct to alert setting page
+    Breadcrumbs::register('getalert', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.alert_notices_setitngs'), route('getalert'));
+    });
 
     Route::patch('postalert/{id}', 'Admin\helpdesk\SettingsController@postalert'); // Updating the Alert table with requests
     // Templates
     Breadcrumbs::register('security.index', function ($breadcrumbs) {
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push('Security', route('security.index'));
+        $breadcrumbs->push(Lang::get('lang.security_settings'), route('security.index'));
     });
 
 // Templates > Upload Templates
@@ -187,17 +346,18 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Breadcrumbs::register('close-workflow.index', function ($breadcrumbs) {
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push('Close Ticket Workflow', route('close-workflow.index'));
+        $breadcrumbs->push(Lang::get('lang.close_ticket_workflow_settings'), route('close-workflow.index'));
     });
     Route::resource('close-workflow', 'Admin\helpdesk\CloseWrokflowController'); // direct to security setting page
 
 
     Route::patch('security/{id}', ['as' => 'securitys.update', 'uses' => 'Admin\helpdesk\SecurityController@update']); // direct to security setting page
+
+    Route::get('setting-status', ['as' => 'statuss.index', 'uses' => 'Admin\helpdesk\SettingsController@getStatuses']); // direct to status setting page
     Breadcrumbs::register('statuss.index', function ($breadcrumbs) {
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push('All Status', route('statuss.index'));
+        $breadcrumbs->push(Lang::get('lang.status_settings'), route('statuss.index'));
     });
-    Route::get('setting-status', ['as' => 'statuss.index', 'uses' => 'Admin\helpdesk\SettingsController@getStatuses']); // direct to status setting page
 
     Route::patch('status-update/{id}', ['as' => 'statuss.update', 'uses' => 'Admin\helpdesk\SettingsController@editStatuses']);
     Breadcrumbs::register('statuss.create', function ($breadcrumbs) {
@@ -212,11 +372,12 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('status-delete/{id}', ['as' => 'statuss.delete', 'uses' => 'Admin\helpdesk\SettingsController@deleteStatuses']);
 
     Route::get('ticket/status/{id}/{state}', ['as' => 'statuss.state', 'uses' => 'Agent\helpdesk\TicketController@updateStatuses']);
+
+    Route::get('getratings', ['as' => 'ratings.index', 'uses' => 'Admin\helpdesk\SettingsController@RatingSettings']);
     Breadcrumbs::register('ratings.index', function ($breadcrumbs) {
         $breadcrumbs->parent('setting');
-        $breadcrumbs->push('All Ratings', route('ratings.index'));
+        $breadcrumbs->push(Lang::get('lang.ratings_settings'), route('ratings.index'));
     });
-    Route::get('getratings', ['as' => 'ratings.index', 'uses' => 'Admin\helpdesk\SettingsController@RatingSettings']);
 
     Route::get('deleter/{rating}', ['as' => 'ratings.delete', 'uses' => 'Admin\helpdesk\SettingsController@RatingDelete']);
 
@@ -241,7 +402,11 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::get('remove-user-org/{id}', ['as' => 'removeuser.org', 'uses' => 'Agent\helpdesk\UserController@removeUserOrg']);
 
-    Route::get('admin-profile', 'Admin\helpdesk\ProfileController@getProfile'); /*  User profile edit get  */
+    Route::get('admin-profile', ['as' => 'admin-profile', 'uses' => 'Admin\helpdesk\ProfileController@getProfile']); /*  User profile edit get  */
+    Breadcrumbs::register('admin-profile', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.profile'), route('admin-profile'));
+    });
 
     Route::get('admin-profile-edit', 'Admin\helpdesk\ProfileController@getProfileedit'); /*  Admin profile get  */
 
@@ -250,34 +415,47 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::patch('admin-profile-password', 'Admin\helpdesk\ProfileController@postProfilePassword'); /*  Admin Profile Password Post */
 
     Route::get('widgets', ['as' => 'widgets', 'uses' => 'Common\SettingsController@widgets']); /* get the create footer page for admin */
+    Breadcrumbs::register('widgets', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.widget-settings'), route('widgets'));
+    });
 
     Route::get('list-widget', 'Common\SettingsController@list_widget'); /* get the list widget page for admin */
 
     Route::post('edit-widget/{id}', 'Common\SettingsController@edit_widget'); /* get the create footer page for admin */
 
     Route::get('social-buttons', ['as' => 'social.buttons', 'uses' => 'Common\SettingsController@social_buttons']); /* get the create footer page for admin */
+    Breadcrumbs::register('social.buttons', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.social-widget-settings'), route('social.buttons'));
+    });
 
     Route::get('list-social-buttons', ['as' => 'list.social.buttons', 'uses' => 'Common\SettingsController@list_social_buttons']); /* get the list widget page for admin */
 
     Route::post('edit-widget/{id}', 'Common\SettingsController@edit_social_buttons'); /* get the create footer page for admin */
 
-    Route::get('getsmtp', ['as' => 'getsmtp', 'uses' => 'Common\SettingsController@getsmtp']); /* get the create footer page for admin */
-
-    Route::patch('post-smtp', ['as' => 'post_smtp', 'uses' => 'Common\SettingsController@postsmtp']); /* post footer to insert to database */
 
     Route::get('version-check', ['as' => 'version-check', 'uses' => 'Common\SettingsController@version_check']); /* Check version  */
 
     Route::post('post-version-check', ['as' => 'post-version-check', 'uses' => 'Common\SettingsController@post_version_check']); /* post Check version */
 
     Route::get('checkUpdate', ['as' => 'checkupdate', 'uses' => 'Common\SettingsController@getupdate']); /* get Check update */
-
-    Breadcrumbs::register('setting', function ($breadcrumbs) {
-        $breadcrumbs->push('Admin Panel', route('setting'));
+    Breadcrumbs::register('checkupdate', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.update-version'), route('checkupdate'));
     });
 
+
     Route::get('admin', ['as' => 'setting', 'uses' => 'Admin\helpdesk\SettingsController@settings']);
+    Breadcrumbs::register('setting', function ($breadcrumbs) {
+        $breadcrumbs->push(Lang::get('lang.admin_panel'), route('setting'));
+    });
 
     Route::get('plugins', ['as' => 'plugins', 'uses' => 'Common\SettingsController@Plugins']);
+    Breadcrumbs::register('plugins', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.plugins'), route('plugins'));
+    });
 
     Route::get('getplugin', ['as' => 'get.plugin', 'uses' => 'Common\SettingsController@GetPlugin']);
 
@@ -291,6 +469,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     //Routes for showing language table and switching language
     Route::get('languages', ['as' => 'LanguageController', 'uses' => 'Admin\helpdesk\LanguageController@index']);
+    Breadcrumbs::register('LanguageController', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.language-settings'), route('LanguageController'));
+    });
 
     Route::get('get-languages', ['as' => 'getAllLanguages', 'uses' => 'Admin\helpdesk\LanguageController@getLanguages']);
 
@@ -303,6 +485,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::post('language/add', 'Admin\helpdesk\LanguageController@postForm');
 
     Route::get('language/add', ['as' => 'add-language', 'uses' => 'Admin\helpdesk\LanguageController@getForm']);
+    Breadcrumbs::register('add-language', function($breadcrumbs) {
+        $breadcrumbs->parent('LanguageController');
+        $breadcrumbs->push(Lang::get('lang.add'), route('add-language'));
+    });
 
     //Routes for  delete language package
     Route::get('delete-language/{lang}', ['as' => 'lang.delete', 'uses' => 'Admin\helpdesk\LanguageController@deleteLanguage']);
@@ -314,11 +500,27 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
 
     Route::get('workflow', ['as' => 'workflow', 'uses' => 'Admin\helpdesk\WorkflowController@index']);
+    Breadcrumbs::register('workflow', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.ticket_workflow'), route('workflow'));
+    });
+
     Route::get('workflow-list', ['as' => 'workflow.list', 'uses' => 'Admin\helpdesk\WorkflowController@workFlowList']);
+
     Route::get('workflow/create', ['as' => 'workflow.create', 'uses' => 'Admin\helpdesk\WorkflowController@create']);
+    Breadcrumbs::register('workflow.create', function($breadcrumbs) {
+        $breadcrumbs->parent('workflow');
+        $breadcrumbs->push(Lang::get('lang.create'), route('workflow.create'));
+    });
     Route::post('workflow/store', ['as' => 'workflow.store', 'uses' => 'Admin\helpdesk\WorkflowController@store']);
+
     Route::get('workflow/edit/{id}', ['as' => 'workflow.edit', 'uses' => 'Admin\helpdesk\WorkflowController@edit']);
+    Breadcrumbs::register('workflow.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('workflow');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('workflow/edit/{id}'));
+    });
     Route::post('workflow/update/{id}', ['as' => 'workflow.update', 'uses' => 'Admin\helpdesk\WorkflowController@update']);
+
     Route::get('workflow/action-rule/{id}', ['as' => 'workflow.dept', 'uses' => 'Admin\helpdesk\WorkflowController@selectAction']);
     Route::get('workflow/delete/{id}', ['as' => 'workflow.delete', 'uses' => 'Admin\helpdesk\WorkflowController@destroy']);
 
@@ -326,6 +528,10 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
      * Api Settings
      */
     Route::get('api', ['as' => 'api.settings.get', 'uses' => 'Common\ApiSettings@show']);
+    Breadcrumbs::register('api.settings.get', function($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.api_settings'), route('api.settings.get'));
+    });
     Route::post('api', ['as' => 'api.settings.post', 'uses' => 'Common\ApiSettings@postSettings']);
 
     /*
@@ -333,15 +539,18 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
      */
     //route for showing error and debugging setting form page
     Route::get('error-and-debugging-options', ['as' => 'err.debug.settings', 'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showSettings']);
-
+    Breadcrumbs::register('err.debug.settings', function ($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.error-debug-settings'), route('err.debug.settings'));
+    });
     //route for submit error and debugging setting form page
     Route::post('post-settings', ['as' => 'post.error.debug.settings',
-        'uses'                         => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings', ]);
+        'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings']);
 
     //route to error logs table page
     Route::get('show-error-logs', [
-        'as'   => 'error.logs',
-        'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs',
+        'as' => 'error.logs',
+        'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs'
     ]);
 });
 
@@ -370,12 +579,45 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth', 'middleware'
 
 
     Route::resource('user', 'Agent\helpdesk\UserController'); /* User router is used to control the CRUD of user */
+    Breadcrumbs::register('user.index', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.user_directory'), route('user.index'));
+    });
+    Breadcrumbs::register('user.create', function($breadcrumbs) {
+        $breadcrumbs->parent('user.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('user.create'));
+    });
+    Breadcrumbs::register('user.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('user.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('user/{user}/edit'));
+    });
+    Breadcrumbs::register('user.show', function($breadcrumbs) {
+        $breadcrumbs->parent('user.index');
+        $breadcrumbs->push(Lang::get('lang.view-profile'), url('user/{user}'));
+    });
 
     Route::get('user-list', ['as' => 'user.list', 'uses' => 'Agent\helpdesk\UserController@user_list']);
 
     // Route::get('user/delete/{id}', ['as' => 'user.delete' , 'uses' => 'Agent\helpdesk\UserController@destroy']);
 
     Route::resource('organizations', 'Agent\helpdesk\OrganizationController'); /* organization router used to deal CRUD function of organization */
+    Breadcrumbs::register('organizations.index', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.organizations'), route('organizations.index'));
+    });
+    Breadcrumbs::register('organizations.create', function($breadcrumbs) {
+        $breadcrumbs->parent('organizations.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('organizations.create'));
+    });
+    Breadcrumbs::register('organizations.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('organizations.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('organizations/{organizations}/edit'));
+    });
+    Breadcrumbs::register('organizations.show', function($breadcrumbs) {
+        $breadcrumbs->parent('organizations.index');
+        $breadcrumbs->push(Lang::get('lang.view_organization_profile'), url('organizations/{organizations}'));
+    });
+
 
     Route::get('org-list', ['as' => 'org.list', 'uses' => 'Agent\helpdesk\OrganizationController@org_list']);
 
@@ -387,20 +629,40 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth', 'middleware'
     Route::post('org-chart-range/{id}/{date1}/{date2}', ['as' => 'post.org.chart', 'uses' => 'Agent\helpdesk\OrganizationController@orgChartData']);
 
     Route::get('profile', ['as' => 'profile', 'uses' => 'Agent\helpdesk\UserController@getProfile']); /*  User profile get  */
+    Breadcrumbs::register('profile', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.my_profile'), route('profile'));
+    });
 
     Route::get('profile-edit', ['as' => 'agent-profile-edit', 'uses' => 'Agent\helpdesk\UserController@getProfileedit']); /*  User profile edit get  */
+    Breadcrumbs::register('agent-profile-edit', function($breadcrumbs) {
+        $breadcrumbs->parent('profile');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('profile-edit'));
+    });
 
     Route::patch('agent-profile', ['as' => 'agent-profile', 'uses' => 'Agent\helpdesk\UserController@postProfileedit']); /* User Profile Post */
 
     Route::patch('agent-profile-password/{id}', 'Agent\helpdesk\UserController@postProfilePassword'); /*  Profile Password Post */
 
     Route::get('canned/list', ['as' => 'canned.list', 'uses' => 'Agent\helpdesk\CannedController@index']); /* Canned list */
+    Breadcrumbs::register('canned.list', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.canned_response'), route('canned.list'));
+    });
 
     Route::get('canned/create', ['as' => 'canned.create', 'uses' => 'Agent\helpdesk\CannedController@create']); /* Canned create */
+    Breadcrumbs::register('canned.create', function($breadcrumbs) {
+        $breadcrumbs->parent('canned.list');
+        $breadcrumbs->push(Lang::get('lang.create'), route('canned.create'));
+    });
 
     Route::patch('canned/store', ['as' => 'canned.store', 'uses' => 'Agent\helpdesk\CannedController@store']); /* Canned store */
 
     Route::get('canned/edit/{id}', ['as' => 'canned.edit', 'uses' => 'Agent\helpdesk\CannedController@edit']); /* Canned edit */
+    Breadcrumbs::register('canned.edit', function($breadcrumbs) {
+        $breadcrumbs->parent('canned.list');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('canned/edit/{id}'));
+    });
 
     Route::patch('canned/update/{id}', ['as' => 'canned.update', 'uses' => 'Agent\helpdesk\CannedController@update']); /* Canned update */
 
@@ -413,38 +675,78 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth', 'middleware'
     Route::get('/ticket', ['as' => 'ticket', 'uses' => 'Agent\helpdesk\TicketController@ticket_list']); /*  Get Ticket */
 
     Route::get('/ticket/inbox', ['as' => 'inbox.ticket', 'uses' => 'Agent\helpdesk\TicketController@inbox_ticket_list']); /*  Get Inbox Ticket */
+    Breadcrumbs::register('inbox.ticket', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.inbox'), route('inbox.ticket'));
+    });
 
     Route::get('/ticket/get-inbox', ['as' => 'get.inbox.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);  /* Get tickets in datatable */
 
     Route::get('/ticket/open', ['as' => 'open.ticket', 'uses' => 'Agent\helpdesk\TicketController@open_ticket_list']); /*  Get Open Ticket */
+    Breadcrumbs::register('open.ticket', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.open-tickets'), route('open.ticket'));
+    });
+
 
     Route::get('/ticket/get-open', ['as' => 'get.open.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_open']);  /* Get tickets in datatable */
 
+
     Route::get('/ticket/answered', ['as' => 'answered.ticket', 'uses' => 'Agent\helpdesk\TicketController@answered_ticket_list']); /*  Get Answered Ticket */
+    Breadcrumbs::register('answered.ticket', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.answered_tickets'), route('answered.ticket'));
+    });
 
     Route::get('/ticket/get-answered', ['as' => 'get.answered.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_answered']);  /* Get tickets in datatable */
 
     Route::get('/ticket/myticket', ['as' => 'myticket.ticket', 'uses' => 'Agent\helpdesk\TicketController@myticket_ticket_list']); /*  Get Tickets Assigned to logged user */
+    Breadcrumbs::register('myticket.ticket', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.my_tickets'), route('myticket.ticket'));
+    });
 
     Route::get('/ticket/get-myticket', ['as' => 'get.myticket.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_myticket']);  /* Get tickets in datatable */
 
     Route::get('/ticket/overdue', ['as' => 'overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@overdue_ticket_list']); /*  Get Overdue Ticket */
+    Breadcrumbs::register('overdue.ticket', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.overdue-tickets'), route('overdue.ticket'));
+    });
 
     Route::get('/ticket/get-overdue', ['as' => 'get.overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@getOverdueTickets']); /*  Get Overdue Ticket */
 
     Route::get('/ticket/closed', ['as' => 'closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@closed_ticket_list']); /*  Get Closed Ticket */
+    Breadcrumbs::register('closed.ticket', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.closed_tickets'), route('closed.ticket'));
+    });
 
     Route::get('/ticket/get-closed', ['as' => 'get.closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_closed']);  /* Get tickets in datatable */
 
     Route::get('/ticket/assigned', ['as' => 'assigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@assigned_ticket_list']); /*  Get Assigned Ticket */
+    Breadcrumbs::register('assigned.ticket', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.assigned_tickets'), route('assigned.ticket'));
+    });
 
     Route::get('/ticket/get-assigned', ['as' => 'get.assigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_assigned']);  /* Get tickets in datatable */
 
     Route::get('/newticket', ['as' => 'newticket', 'uses' => 'Agent\helpdesk\TicketController@newticket']); /*  Get Create New Ticket */
+    Breadcrumbs::register('newticket', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.create_ticket'), route('newticket'));
+    });
 
     Route::post('/newticket/post', ['as' => 'post.newticket', 'uses' => 'Agent\helpdesk\TicketController@post_newticket']); /*  Post Create New Ticket */
 
     Route::get('/thread/{id}', ['as' => 'ticket.thread', 'uses' => 'Agent\helpdesk\TicketController@thread']); /*  Get Thread by ID */
+    Breadcrumbs::register('ticket.thread', function($breadcrumbs, $id) {
+        $breadcrumbs->parent('dashboard');
+        $ticket_number = App\Model\helpdesk\Ticket\Tickets::where('id', '=', $id)->first();
+        $breadcrumbs->push($ticket_number->ticket_number, url('/thread/{id}'));
+    });
+
 
     Route::patch('/thread/reply/{id}', ['as' => 'ticket.reply', 'uses' => 'Agent\helpdesk\TicketController@reply']); /*  Patch Thread Reply */
 
@@ -471,17 +773,26 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth', 'middleware'
     Route::get('/aaaa', 'Client\helpdesk\GuestController@ticket_number');
 
     Route::get('trash', ['as' => 'get-trash', 'uses' => 'Agent\helpdesk\TicketController@trash']); /* To show Deleted Tickets */
+    Breadcrumbs::register('get-trash', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.trash'), route('get-trash'));
+    });
 
     Route::get('/ticket/trash', ['as' => 'get.trash.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_trash']);  /* Get tickets in datatable */
 
     Route::get('unassigned', ['as' => 'unassigned', 'uses' => 'Agent\helpdesk\TicketController@unassigned']); /* To show Unassigned Tickets */
+    Breadcrumbs::register('unassigned', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.unassigned-tickets'), route('unassigned'));
+    });
 
     Route::get('/ticket/unassigned', ['as' => 'get.unassigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_unassigned']);  /* Get tickets in datatable */
-    Breadcrumbs::register('dashboard', function ($breadcrumbs) {
-        $breadcrumbs->parent('/');
-        $breadcrumbs->push('Dashboard', route('dashboard'));
-    });
+
     Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'Agent\helpdesk\DashboardController@index']); /* To show dashboard pages */
+    Breadcrumbs::register('dashboard', function ($breadcrumbs) {
+        //$breadcrumbs->parent('/');
+        $breadcrumbs->push(Lang::get('lang.dashboard'), route('dashboard'));
+    });
 
     Route::get('agen', 'Agent\helpdesk\DashboardController@ChartData');
 
@@ -514,10 +825,22 @@ Route::group(['middleware' => 'role.agent', 'middleware' => 'auth', 'middleware'
     // Department ticket
 
     Route::get('/{dept}/open', ['as' => 'dept.open.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptopen']); // Open
+    Breadcrumbs::register('dept.open.ticket', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.open_tickets'), url('/{dept}/open'));
+    });
 
     Route::get('/{dept}/inprogress', ['as' => 'dept.inprogress.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptinprogress']); // Inprogress
+    Breadcrumbs::register('dept.inprogress.ticket', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.inprogress_tickets'), url('/{dept}/inprogress'));
+    });
 
     Route::get('/{dept}/closed', ['as' => 'dept.closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptclose']); // Closed
+    Breadcrumbs::register('dept.closed.ticket', function($breadcrumbs) {
+        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->push(Lang::get('lang.closed_tickets'), url('/{dept}/closed'));
+    });
 
     Route::post('rating/{id}', ['as' => 'ticket.rating', 'uses' => 'Agent\helpdesk\TicketController@rating']); /* Get overall Ratings */
 
@@ -566,7 +889,7 @@ Route::POST('tickets/search/', function () {
 });
 Route::any('getdata', function () {
     $term = Illuminate\Support\Str::lower(Input::get('term'));
-    $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
+    $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term . '%')->groupBy('ticket_number')->take(10)->get();
     foreach ($data as $v) {
         return [
             'value' => $v->ticket_number,
@@ -601,8 +924,8 @@ Route::get('mytickets/{id}', ['as' => 'ticketinfo', 'uses' => 'Client\helpdesk\G
 Route::post('checkmyticket', 'Client\helpdesk\UnAuthController@PostCheckTicket'); //ticket ckeck
 Breadcrumbs::register('check_ticket', function ($breadcrumbs, $id) {
     $page = \App\Model\helpdesk\Ticket\Tickets::whereId(1)->first();
-    $breadcrumbs->parent('/');
-    $breadcrumbs->push('Check Ticket', route('check_ticket', $page->id));
+    $breadcrumbs->parent('dashboard');
+    $breadcrumbs->push('Check Ticket');
 });
 Route::get('check_ticket/{id}', ['as' => 'check_ticket', 'uses' => 'Client\helpdesk\GuestController@get_ticket_email']); //detail ticket information
 // show ticket via have a ticket
@@ -677,7 +1000,7 @@ Route::get('/change-file-permission', ['as' => 'change-permission', 'uses' => 'I
   |=============================================================
   |  Cron Job links
   |=============================================================
-  | These links are for cron job execution
+  |	These links are for cron job execution
   |
  */
 Route::get('readmails', ['as' => 'readmails', 'uses' => 'Agent\helpdesk\MailController@readmails']);
@@ -715,7 +1038,7 @@ Route::get('auto-close-tickets', ['as' => 'auto.close', 'uses' => 'Agent\helpdes
   |=============================================================
  */
 Route::get('500', ['as' => 'error500', function () {
-    return view('errors.500');
+return view('errors.500');
 }]);
 
 Breadcrumbs::register('error500', function ($breadcrumbs) {
@@ -723,7 +1046,7 @@ Breadcrumbs::register('error500', function ($breadcrumbs) {
 });
 
 Route::get('404', ['as' => 'error404', function () {
-    return view('errors.404');
+return view('errors.404');
 }]);
 
 Breadcrumbs::register('error404', function ($breadcrumbs) {
@@ -731,7 +1054,7 @@ Breadcrumbs::register('error404', function ($breadcrumbs) {
 });
 
 Route::get('board-offline', ['as' => 'board.offline', function () {
-    return view('errors.offline');
+return view('errors.offline');
 }]);
 
 Breadcrumbs::register('board.offline', function ($breadcrumbs) {
@@ -752,16 +1075,61 @@ Route::get('testmail', function () {
 
 /*  For the crud of catogory  */
 $router->resource('category', 'Agent\kb\CategoryController');
+Breadcrumbs::register('category.index', function($breadcrumbs) {
+    $breadcrumbs->parent('dashboard');
+    $breadcrumbs->push(Lang::get('lang.category'), route('category.index'));
+});
+Breadcrumbs::register('category.create', function($breadcrumbs) {
+    $breadcrumbs->parent('category.index');
+    $breadcrumbs->push(Lang::get('lang.add'), route('category.create'));
+});
+Breadcrumbs::register('category.edit', function($breadcrumbs) {
+    $breadcrumbs->parent('category.index');
+    $breadcrumbs->push(Lang::get('lang.edit'), url('category/{category}/edit'));
+});
+Breadcrumbs::register('category.show', function($breadcrumbs) {
+    $breadcrumbs->parent('category.index');
+    $breadcrumbs->push(Lang::get('lang.view'), url('category/{category}'));
+});
 $router->get('category/delete/{id}', 'Agent\kb\CategoryController@destroy');
 /*  For the crud of article  */
+
+
 $router->resource('article', 'Agent\kb\ArticleController');
+Breadcrumbs::register('article.index', function($breadcrumbs) {
+    $breadcrumbs->parent('dashboard');
+    $breadcrumbs->push(Lang::get('lang.article'), route('article.index'));
+});
+Breadcrumbs::register('article.create', function($breadcrumbs) {
+    $breadcrumbs->parent('article.index');
+    $breadcrumbs->push(Lang::get('lang.add'), route('article.create'));
+});
+Breadcrumbs::register('article.edit', function($breadcrumbs) {
+    $breadcrumbs->parent('article.index');
+    $breadcrumbs->push(Lang::get('lang.edit'), url('article/{article}/edit'));
+});
+Breadcrumbs::register('article.show', function($breadcrumbs) {
+    $breadcrumbs->parent('article.index');
+    $breadcrumbs->push(Lang::get('lang.view'), url('article/{article}'));
+});
 $router->get('article/delete/{id}', 'Agent\kb\ArticleController@destroy');
+
 /* get settings */
 $router->get('kb/settings', ['as' => 'settings', 'uses' => 'Agent\kb\SettingsController@settings']);
+Breadcrumbs::register('settings', function($breadcrumbs) {
+    $breadcrumbs->parent('dashboard');
+    $breadcrumbs->push(Lang::get('lang.settings'), route('settings'));
+});
 /* post settings */
 $router->patch('postsettings/{id}', 'Agent\kb\SettingsController@postSettings');
 //Route for administrater to access the comment
+
 $router->get('comment', ['as' => 'comment', 'uses' => 'Agent\kb\SettingsController@comment']);
+Breadcrumbs::register('comment', function($breadcrumbs) {
+    $breadcrumbs->parent('dashboard');
+    $breadcrumbs->push(Lang::get('lang.comments'), route('comment'));
+});
+
 /* Route to define the comment should Published */
 $router->get('published/{id}', ['as' => 'published', 'uses' => 'Agent\kb\SettingsController@publish']);
 /* Route for deleting comments */
@@ -776,7 +1144,27 @@ $router->delete('deleted/{id}', ['as' => 'deleted', 'uses' => 'Agent\kb\Settings
 $router->get('delete-logo/{id}', ['as' => 'delete-logo', 'uses' => 'Agent\kb\SettingsController@deleteLogo']);
 /* delete Background */
 $router->get('delete-background/{id}', ['as' => 'delete-background', 'uses' => 'Agent\kb\SettingsController@deleteBackground']);
+
 $router->resource('page', 'Agent\kb\PageController');
+Breadcrumbs::register('page.index', function($breadcrumbs) {
+    $breadcrumbs->parent('dashboard');
+    $breadcrumbs->push(Lang::get('lang.pages'), route('page.index'));
+});
+Breadcrumbs::register('page.create', function($breadcrumbs) {
+    $breadcrumbs->parent('page.index');
+    $breadcrumbs->push(Lang::get('lang.add'), route('page.create'));
+});
+Breadcrumbs::register('page.edit', function($breadcrumbs) {
+    $breadcrumbs->parent('page.index');
+    $breadcrumbs->push(Lang::get('lang.edit'), url('page/{page}/edit'));
+});
+Breadcrumbs::register('page.show', function($breadcrumbs) {
+    $breadcrumbs->parent('page.index');
+    $breadcrumbs->push(Lang::get('lang.view'), url('page/{page}'));
+});
+
+
+
 $router->get('get-pages', ['as' => 'api.page', 'uses' => 'Agent\kb\PageController@getData']);
 $router->get('page/delete/{id}', ['as' => 'pagedelete', 'uses' => 'Agent\kb\PageController@destroy']);
 $router->get('comment/delete/{id}', ['as' => 'commentdelete', 'uses' => 'Agent\kb\SettingsController@delete']);
