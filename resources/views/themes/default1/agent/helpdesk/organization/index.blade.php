@@ -12,11 +12,14 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{!! Lang::get('lang.organizations') !!}</h1>
+@stop
 <!-- content -->
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h2 class="box-title">{{Lang::get('lang.organization')}}</h2>
+        <h2 class="box-title">{{Lang::get('lang.organization_list')}}</h2>
         <a href="{{route('organizations.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_organization')}}</a>
     </div>
     <div class="box-body">

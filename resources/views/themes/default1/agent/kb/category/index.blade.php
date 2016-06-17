@@ -6,6 +6,10 @@
 active
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.category')}}</h1>
+@stop
+
 @section('all-category')
 class="active"
 @stop
@@ -13,7 +17,7 @@ class="active"
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.category')}}</h3>
+        <h3 class="box-title">{{Lang::get('lang.allcategory')}}</h3>
     </div>
     <div class="box-body">
         <!-- check whether success or not -->

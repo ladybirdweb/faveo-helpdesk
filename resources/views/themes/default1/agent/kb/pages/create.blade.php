@@ -10,6 +10,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.pages')}}</h1>
+@stop
+
 @section('content')
 {!! Form::open(array('action' => 'Agent\kb\PageController@store' , 'method' => 'post') )!!}
 <div class="box-body">

@@ -13,7 +13,7 @@ class="active"
 @stop
 
 @section('PageHeader')
-<br>
+<h1>{{Lang::get('lang.tools')}}</h1>
 @stop
 
 <!-- content -->

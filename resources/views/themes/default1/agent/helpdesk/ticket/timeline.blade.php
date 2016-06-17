@@ -8,7 +8,7 @@ class="active"
 active
 @stop
 @section('PageHeader')
-<br>
+<h1>{{Lang::get('lang.ticket-details')}}</h1>
 @stop
 <?php
 $user = App\User::where('id', '=', $tickets->user_id)->first();

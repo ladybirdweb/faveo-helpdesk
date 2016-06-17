@@ -5,12 +5,13 @@
 class="active"
 @stop
 
+
 @section('content')
 <!-- open a form -->
 {!! Form::model($settings,['url' => 'postsettings/'.$settings->id, 'method' => 'PATCH','files'=>true]) !!}
 
 <div class="box-header" style="margin:-5px;margin-top:-25px;">
-    <h3 class="box-title">{{Lang::get('lang.settings')}}</h3> 
+    <h3 class="box-title">{{Lang::get('lang.kb-settings')}}</h3> 
 </div>
 <!-- Custom Tabs -->
 <div class="nav-tabs-custom">

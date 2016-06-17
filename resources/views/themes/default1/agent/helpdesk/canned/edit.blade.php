@@ -14,7 +14,7 @@ class="active"
 @stop
 
 @section('PageHeader')
-<br>
+<h1>{{Lang::get('lang.canned_response')}}</h1>
 @stop
 <!-- content -->
 @section('content')
