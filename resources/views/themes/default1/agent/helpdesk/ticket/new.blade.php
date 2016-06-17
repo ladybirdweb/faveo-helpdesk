@@ -12,6 +12,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<br>
+@stop
+
 @section('content')
 <!-- Main content -->
 {!! Form::open(['route'=>'post.newticket','method'=>'post','id'=>'form']) !!}

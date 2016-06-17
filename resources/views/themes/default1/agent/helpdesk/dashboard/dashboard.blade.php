@@ -9,7 +9,7 @@ active
 @stop
 
 @section('PageHeader')
-<h4>{!! Lang::get('lang.dashboard_reports') !!}</h4>
+<h1>{!! Lang::get('lang.dashboard_reports') !!}</h1>
 @stop
 
 @section('dashboard')

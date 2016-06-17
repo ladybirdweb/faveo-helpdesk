@@ -210,6 +210,7 @@ return [
     'send'                       => 'Send',
     'choose_an_email'            => 'Choose an email',
     'email_diagnostic'           => 'Email Diagnostic',
+    'send-mail-to-diagnos'       => 'Send a mail to check outgoing email settings',
     'message_has_been_sent'      => 'Message has been sent',
     'message_sent_from_php_mail' => 'Message sent from Php-Mail',
     'mailer_error'               => 'Mailer Error',
@@ -344,6 +345,7 @@ return [
     'reload-now'                            => 'Relaod now',
     'ticket-lock-inactive'                  => 'You have been inactive for a while. Please reload the page.',
     'make-system-default-mail'              => 'Make this email system\'s default email',
+    'thread'                                => 'Thread',
     /*
       |--------------------------------------
       |   Access Settings Page
@@ -911,6 +913,8 @@ return [
       |  Profile
       |-----------------------------------------------
      */
+    'view-profile'                          => 'View Profile',
+    'edit-profile'                          => 'Edit Profile',
     'user_information'                      => 'User Information',
     'time_zone'                             => 'Time-zone',
     'phone_number'                          => 'Phone Number',
@@ -1343,15 +1347,22 @@ return [
     *--------------------------------------------------------------------------
     *
     */
-   'error-debug'                          => 'Error logs and Debugging',
-   'debug-options'                        => 'Debugging options',
-   'view-logs'                            => 'View error logs',
-   'not-authorised-error-debug'           => 'You are not authorised to access the URL',
-   'error-debug-settings'                 => 'Error and debugging settings',
-   'debugging'                            => 'Debugging Mode',
-   'bugsnag-debugging'                    => 'Send app crash reports to help Ladybird improve Faveo',
-   'error-debug-settings-saved-message'   => 'Your error and debugging settings have been saved successfully',
-   'error-debug-settings-error-message'   => 'You have not made any change in the settings.',
-   'error-logs'                           => 'Error logs',
+   'error-debug'                                    => 'Error logs and Debugging',
+   'debug-options'                                  => 'Debugging options',
+   'view-logs'                                      => 'View error logs',
+   'not-authorised-error-debug'                     => 'You are not authorised to access the URL',
+   'error-debug-settings'                           => 'Error and debugging settings',
+   'debugging'                                      => 'Debugging Mode',
+   'bugsnag-debugging'                              => 'Send app crash reports to help Ladybird improve Faveo',
+   'error-debug-settings-saved-message'             => 'Your error and debugging settings have been saved successfully',
+   'error-debug-settings-error-message'             => 'You have not made any change in the settings.',
+   'error-logs'                                     => 'Error logs',
+   /*---------------------------------------------------------------------------------------
+    *Latest update 16-06-2016
+    *-----------------------------------------------------------------------------------
+    */
+   'that_email_is not_available_in_this_system'     => 'That Email is not available in this System',
+   'use_subject'                                    => 'Use Subject',
+   'reopen'                                         => 'Reopen',
     
 ];

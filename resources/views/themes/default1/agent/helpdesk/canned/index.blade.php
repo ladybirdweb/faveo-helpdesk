@@ -12,6 +12,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<br>
+@stop
+
 <!-- content -->
 @section('content')
 <div class="box box-primary">

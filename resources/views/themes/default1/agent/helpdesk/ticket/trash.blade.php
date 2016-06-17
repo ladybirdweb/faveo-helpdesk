@@ -11,7 +11,9 @@ active
 @section('trash')
 class="active"
 @stop
-
+@section('PageHeader')
+<br>
+@stop
 @section('content')
 <?php
 // $date_time_format = UTC::getDateTimeFormat();

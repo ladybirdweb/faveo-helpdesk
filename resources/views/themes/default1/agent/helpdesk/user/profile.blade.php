@@ -12,6 +12,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.view-profile')}}</h1>
+@stop
+
 @section('profileimg')
 <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" width="100%"/>
 @stop

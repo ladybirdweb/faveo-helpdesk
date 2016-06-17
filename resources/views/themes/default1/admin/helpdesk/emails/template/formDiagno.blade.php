@@ -16,6 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
+<h1>{{Lang::get('lang.email_diagnostic')}}</h1>
 @stop
 <!-- /header -->
 <!-- content -->
@@ -25,7 +26,7 @@ class="active"
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h4 class="box-title">{{Lang::get('lang.email_diagnostic')}}</h4>	
+            <h4 class="box-title">{{Lang::get('lang.send-mail-to-diagnos')}}</h4>	
         </div>
         <div class="box-body">
             @if(Session::has('success'))

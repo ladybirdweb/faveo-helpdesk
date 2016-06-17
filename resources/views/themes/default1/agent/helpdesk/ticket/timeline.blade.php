@@ -7,7 +7,9 @@ class="active"
 @section('ticket-bar')
 active
 @stop
-
+@section('PageHeader')
+<br>
+@stop
 <?php
 $user = App\User::where('id', '=', $tickets->user_id)->first();
 $assignedto = App\User::where('id', '=', $tickets->assigned_to)->first();

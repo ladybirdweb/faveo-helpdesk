@@ -13,6 +13,9 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<br>
+@stop
 <!-- content -->
 @section('content')
 <!-- open a form -->
