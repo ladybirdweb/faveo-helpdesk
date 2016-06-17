@@ -65,7 +65,7 @@ class UnAuthController extends Controller
             $ticket_number = $request->input('ticket_number');
             // get user details
             $user_details = User::where('email', '=', $email)->first();
-            if($user_details == null) {
+            if ($user_details == null) {
                 return \Redirect::route('form')->with('fails', Lang::get('lang.sorry_that_email_is not_available_in_this_system'));
             }
             // get ticket details
