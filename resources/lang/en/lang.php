@@ -862,6 +862,7 @@ return [
     'change_password'     => 'Change Password',
     'sign_out'            => 'Sign Out',
     'Tickets'             => 'TICKETS',
+    'ticket-details'      => 'Ticket Details',
     'inbox'               => 'Inbox',
     'my_tickets'          => 'My Tickets',
     'unassigned'          => 'Unassigned',
