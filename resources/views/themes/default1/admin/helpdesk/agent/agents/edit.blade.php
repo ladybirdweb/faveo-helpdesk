@@ -16,11 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<!-- <h3> -->
-<!-- {{Lang::get('lang.agent')}} -->
-<!-- <small>Add</small> -->
-<!-- </h3> -->
-
+<h1>{{Lang::get('lang.staffs')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->

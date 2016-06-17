@@ -497,6 +497,7 @@ return [
     'parent_topic'                          => 'Parent Topic',
     'Custom_form'                           => 'Custom Form',
     'SLA_plan'                              => 'SLA Plan',
+    'sla-plans'                             => 'SLA Plans',
     'auto_assign'                           => 'Auto assign',
     'auto_respons'                          => 'Auto Respons',
     'ticket_number_format'                  => 'Ticket Number Format',

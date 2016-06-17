@@ -48,19 +48,102 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('settings-notification', ['as' => 'notification.settings', 'uses' => 'Admin\helpdesk\SettingsController@notificationSettings']);
     Route::get('delete-read-notification', 'Admin\helpdesk\SettingsController@deleteReadNoti');
     Route::post('delete-notification-log', 'Admin\helpdesk\SettingsController@deleteNotificationLog');
+    
+
     // resource is a function to process create,edit,read and delete
     Route::resource('groups', 'Admin\helpdesk\GroupController'); // for group module, for CRUD
+    Breadcrumbs::register('groups.index', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.groups'), route('groups.index'));
+    });
+    Breadcrumbs::register('groups.create', function($breadcrumbs){
+        $breadcrumbs->parent('groups.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('groups.create'));
+    });
+    Breadcrumbs::register('groups.edit', function($breadcrumbs){
+        $breadcrumbs->parent('groups.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('groups/{groups}/edit'));
+    });
+
 
     Route::resource('departments', 'Admin\helpdesk\DepartmentController'); // for departments module, for CRUD
+    Breadcrumbs::register('departments.index', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.departments'), route('departments.index'));
+    });
+    Breadcrumbs::register('departments.create', function($breadcrumbs){
+        $breadcrumbs->parent('departments.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('departments.create'));
+    });
+    Breadcrumbs::register('departments.edit', function($breadcrumbs){
+        $breadcrumbs->parent('departments.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('departments/{departments}/edit'));
+    });
+
 
     Route::resource('teams', 'Admin\helpdesk\TeamController'); // in teams module, for CRUD
+    Breadcrumbs::register('teams.index', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.teams'), route('teams.index'));
+    });
+    Breadcrumbs::register('teams.create', function($breadcrumbs){
+        $breadcrumbs->parent('teams.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('teams.create'));
+    });
+    Breadcrumbs::register('teams.edit', function($breadcrumbs){
+        $breadcrumbs->parent('teams.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('teams/{teams}/edit'));
+    });
+
+
 
     Route::resource('agents', 'Admin\helpdesk\AgentController'); // in agents module, for CRUD
+    Breadcrumbs::register('agents.index', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.agents'), route('agents.index'));
+    });
+    Breadcrumbs::register('agents.create', function($breadcrumbs){
+        $breadcrumbs->parent('agents.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('agents.create'));
+    });
+    Breadcrumbs::register('agents.edit', function($breadcrumbs){
+        $breadcrumbs->parent('agents.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('agents/{agents}/edit'));
+    });
+
 
     Route::resource('emails', 'Admin\helpdesk\EmailsController'); // in emails module, for CRUD
+    Breadcrumbs::register('emails.index', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.emails'), route('emails.index'));
+    });
+    Breadcrumbs::register('emails.create', function($breadcrumbs){
+        $breadcrumbs->parent('emails.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('emails.create'));
+    });
+    Breadcrumbs::register('emails.edit', function($breadcrumbs){
+        $breadcrumbs->parent('emails.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('emails/{emails}/edit'));
+    });
+
+
 
     Route::resource('banlist', 'Admin\helpdesk\BanlistController'); // in banlist module, for CRUD
+    Breadcrumbs::register('banlist.index', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.banlists'), route('banlist.index'));
+    });
+    Breadcrumbs::register('banlist.create', function($breadcrumbs){
+        $breadcrumbs->parent('banlist.index');
+        $breadcrumbs->push(Lang::get('lang.add'), route('banlist.create'));
+    });
+    Breadcrumbs::register('banlist.edit', function($breadcrumbs){
+        $breadcrumbs->parent('banlist.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('agents/{agents}/edit'));
+    });
     Route::get('banlist/delete/{id}', ['as' => 'banlist.delete', 'uses' => 'Admin\helpdesk\BanlistController@delete']); // in banlist module, for CRUD
+    
+
     /*
      * Templates
      */
@@ -115,12 +198,56 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
     Route::post('postdiagno', ['as' => 'postdiagno', 'uses' => 'Admin\helpdesk\TemplateController@postDiagno']); // for getting form for diagnostic
 
+
     Route::resource('helptopic', 'Admin\helpdesk\HelptopicController'); // in helptopics module, for CRUD
+    Breadcrumbs::register('helptopic.index', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.help_topics'), route('helptopic.index'));
+    });
+    Breadcrumbs::register('helptopic.create', function($breadcrumbs){
+        $breadcrumbs->parent('helptopic.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('helptopic.create'));
+    });
+    Breadcrumbs::register('helptopic.edit', function($breadcrumbs){
+        $breadcrumbs->parent('helptopic.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('helptopic/{helptopic}/edit'));
+    });
+
+
 
     Route::resource('sla', 'Admin\helpdesk\SlaController'); // in SLA Plan module, for CRUD
+    Breadcrumbs::register('sla.index', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.sla-plans'), route('sla.index'));
+    });
+    Breadcrumbs::register('sla.create', function($breadcrumbs){
+        $breadcrumbs->parent('sla.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('sla.create'));
+    });
+    Breadcrumbs::register('sla.edit', function($breadcrumbs){
+        $breadcrumbs->parent('sla.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('sla/{sla}/edit'));
+    });
+
+
 
     Route::resource('forms', 'Admin\helpdesk\FormController');
-
+    Breadcrumbs::register('forms.index', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.forms'), route('forms.index'));
+    });
+    Breadcrumbs::register('forms.create', function($breadcrumbs){
+        $breadcrumbs->parent('forms.index');
+        $breadcrumbs->push(Lang::get('lang.create'), route('forms.create'));
+    });
+    Breadcrumbs::register('forms.edit', function($breadcrumbs){
+        $breadcrumbs->parent('forms.index');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('forms/{forms}/edit'));
+    });
+    Breadcrumbs::register('forms.show', function($breadcrumbs){
+        $breadcrumbs->parent('forms.index');
+        $breadcrumbs->push(Lang::get('lang.view'), url('forms/{forms}'));
+    });
     Route::get('delete-forms/{id}', ['as' => 'forms.delete', 'uses' => 'Admin\helpdesk\FormController@delete']);
 
     //$router->model('id','getcompany');
@@ -367,11 +494,27 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
 
 
     Route::get('workflow', ['as' => 'workflow', 'uses' => 'Admin\helpdesk\WorkflowController@index']);
+    Breadcrumbs::register('workflow', function($breadcrumbs){
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.ticket_workflow'), route('workflow'));
+    });
+
     Route::get('workflow-list', ['as' => 'workflow.list', 'uses' => 'Admin\helpdesk\WorkflowController@workFlowList']);
+
     Route::get('workflow/create', ['as' => 'workflow.create', 'uses' => 'Admin\helpdesk\WorkflowController@create']);
+    Breadcrumbs::register('workflow.create', function($breadcrumbs){
+        $breadcrumbs->parent('workflow');
+        $breadcrumbs->push(Lang::get('lang.create'), route('workflow.create'));
+    });
     Route::post('workflow/store', ['as' => 'workflow.store', 'uses' => 'Admin\helpdesk\WorkflowController@store']);
+
     Route::get('workflow/edit/{id}', ['as' => 'workflow.edit', 'uses' => 'Admin\helpdesk\WorkflowController@edit']);
+    Breadcrumbs::register('workflow.edit', function($breadcrumbs){
+        $breadcrumbs->parent('workflow');
+        $breadcrumbs->push(Lang::get('lang.edit'), url('workflow/edit/{id}'));
+    });
     Route::post('workflow/update/{id}', ['as' => 'workflow.update', 'uses' => 'Admin\helpdesk\WorkflowController@update']);
+
     Route::get('workflow/action-rule/{id}', ['as' => 'workflow.dept', 'uses' => 'Admin\helpdesk\WorkflowController@selectAction']);
     Route::get('workflow/delete/{id}', ['as' => 'workflow.delete', 'uses' => 'Admin\helpdesk\WorkflowController@destroy']);
 
