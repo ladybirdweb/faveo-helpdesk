@@ -10,6 +10,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.pages')}}</h1>
+@stop
+
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">

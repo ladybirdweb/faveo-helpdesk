@@ -13,7 +13,7 @@ class="active"
 @stop
 
 @section('PageHeader')
-<br>
+<h1>{{Lang::get('lang.tickets')}}</h1>
 @stop
 
 @section('content')
@@ -31,7 +31,7 @@ if (Auth::user()->role == 'agent') {
 <!-- Main content -->
 <div class="box box-primary">
      <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.open') !!} </h3> <small id="title_refresh">{!! $tickets->total() !!} {!! Lang::get('lang.tickets') !!}</small>
+        <h3 class="box-title">{!! Lang::get('lang.inprogress') !!} </h3> <small id="title_refresh">{!! $tickets->total() !!} {!! Lang::get('lang.tickets') !!}</small>
         <div class="box-tools pull-right">
         <div class="has-feedback">
 

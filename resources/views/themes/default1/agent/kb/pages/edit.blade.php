@@ -8,6 +8,10 @@ active
 class="active"
 @stop
 
+@section('PageHeader')
+<h1>{{Lang::get('lang.pages')}}</h1>
+@stop
+
 @section('content')
 {!! Form::model($page,['url' => 'page/'.$page->slug, 'method' => 'PATCH','files'=>true]) !!}
 <div class="box-body">

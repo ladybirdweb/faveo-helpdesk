@@ -1,7 +1,9 @@
 @extends('themes.default1.agent.layout.agent')
 
 @extends('themes.default1.agent.layout.sidebar')    
-
+@section('PageHeader')
+<h1>{!! Lang::get('lang.comments') !!}</h1>
+@stop
 @section('comment')
 class="active"
 @stop
@@ -9,7 +11,7 @@ class="active"
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.comments')}}</h3>
+        <h3 class="box-title">{{Lang::get('lang.comments-list')}}</h3>
     </div>
     <div class="box-body">
         <!-- check whether success or not -->

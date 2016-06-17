@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.create') !!}</h1>
+<h1>{!! Lang::get('lang.create_user') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
