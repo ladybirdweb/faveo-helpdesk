@@ -12,7 +12,7 @@ return [
       | application. If disabled, a simple generic error page is shown.
       |
      */
-    'debug' => true,
+    'debug' => false,
     /*
       |--------------------------------------------------------------------------
       | Error Log
@@ -44,7 +44,7 @@ return [
       | your application so that it is used when running Artisan tasks.
       |
      */
-    'url' => 'http://localhost',
+    'url' => 'http://localhost/sujit/faveo-helpdesk/public//sujit/faveo-helpdesk/public//sujit/faveo-helpdesk/public/',
     /*
       |--------------------------------------------------------------------------
       | Application Timezone
