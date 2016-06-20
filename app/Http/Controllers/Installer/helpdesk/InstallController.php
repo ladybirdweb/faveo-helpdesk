@@ -451,15 +451,15 @@ class InstallController extends Controller
     public function changeFilePermission()
     {
         $path1 = base_path().DIRECTORY_SEPARATOR.'.env';
-        $path2 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'database.php';
-        $path3 = base_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'routes.php';
-        $path4 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'lfm.php';
-        if (chmod($path1, 0644) && chmod($path2, 0644) && chmod($path3, 0644) && chmod($path4, 0644)) {
+        // $path2 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'database.php';
+        // $path3 = base_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'routes.php';
+        // $path4 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'lfm.php';
+        if (chmod($path1, 0644)) {
             $f1 = substr(sprintf('%o', fileperms($path1)), -3);
-            $f2 = substr(sprintf('%o', fileperms($path2)), -3);
-            $f3 = substr(sprintf('%o', fileperms($path3)), -3);
-            $f4 = substr(sprintf('%o', fileperms($path4)), -3);
-            if ($f1 >= '644' && $f2 >= '644' && $f3 >= '644' && $f4 >= '644') {
+            // $f2 = substr(sprintf('%o', fileperms($path2)), -3);
+            // $f3 = substr(sprintf('%o', fileperms($path3)), -3);
+            // $f4 = substr(sprintf('%o', fileperms($path4)), -3);
+            if ($f1 >= '644') {
                 return Redirect::back();
             } else {
                 return Redirect::back()->with('fail_to_change', 'We are unable to change file permission on your server please try to change permission manually.');
