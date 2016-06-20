@@ -144,7 +144,7 @@ class WorkflowController extends Controller
      */
     public function create(Emails $emails)
     {
-        $email_data = "";
+        $email_data = '';
         foreach ($emails->lists('email_address', 'id') as $key => $email) {
             $email_data["E-$key"] = $email;
         }
@@ -167,7 +167,7 @@ class WorkflowController extends Controller
     {
         try {
             // store a new workflow credentials in to the system
-            $workflow_name = new WorkflowName;
+            $workflow_name = new WorkflowName();
             $workflow_name->name = $request->name;
             $workflow_name->status = $request->status;
             $workflow_name->order = $request->execution_order;
