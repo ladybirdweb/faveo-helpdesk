@@ -1075,11 +1075,8 @@ Route::get('testmail', function () {
 });
 
 /*  For the crud of catogory  */
-<<<<<<< HEAD
 Route::resource('category', 'Agent\kb\CategoryController');
-=======
-$router->resource('category', 'Agent\kb\CategoryController');
->>>>>>> origin/master
+
 Breadcrumbs::register('category.index', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
     $breadcrumbs->push(Lang::get('lang.category'), route('category.index'));
@@ -1100,11 +1097,9 @@ Route::get('category/delete/{id}', 'Agent\kb\CategoryController@destroy');
 /*  For the crud of article  */
 
 
-<<<<<<< HEAD
+
 Route::resource('article', 'Agent\kb\ArticleController');
-=======
-$router->resource('article', 'Agent\kb\ArticleController');
->>>>>>> origin/master
+
 Breadcrumbs::register('article.index', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
     $breadcrumbs->push(Lang::get('lang.article'), route('article.index'));
@@ -1124,11 +1119,7 @@ Breadcrumbs::register('article.show', function ($breadcrumbs) {
 Route::get('article/delete/{id}', 'Agent\kb\ArticleController@destroy');
 
 /* get settings */
-<<<<<<< HEAD
 Route::get('kb/settings', ['as' => 'settings', 'uses' => 'Agent\kb\SettingsController@settings']);
-=======
-$router->get('kb/settings', ['as' => 'settings', 'uses' => 'Agent\kb\SettingsController@settings']);
->>>>>>> origin/master
 Breadcrumbs::register('settings', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
     $breadcrumbs->push(Lang::get('lang.settings'), route('settings'));
@@ -1137,11 +1128,8 @@ Breadcrumbs::register('settings', function ($breadcrumbs) {
 Route::patch('postsettings/{id}', 'Agent\kb\SettingsController@postSettings');
 //Route for administrater to access the comment
 
-<<<<<<< HEAD
+
 Route::get('comment', ['as' => 'comment', 'uses' => 'Agent\kb\SettingsController@comment']);
-=======
-$router->get('comment', ['as' => 'comment', 'uses' => 'Agent\kb\SettingsController@comment']);
->>>>>>> origin/master
 Breadcrumbs::register('comment', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
     $breadcrumbs->push(Lang::get('lang.comments'), route('comment'));
@@ -1162,11 +1150,9 @@ Route::get('delete-logo/{id}', ['as' => 'delete-logo', 'uses' => 'Agent\kb\Setti
 /* delete Background */
 Route::get('delete-background/{id}', ['as' => 'delete-background', 'uses' => 'Agent\kb\SettingsController@deleteBackground']);
 
-<<<<<<< HEAD
+
 Route::resource('page', 'Agent\kb\PageController');
-=======
-$router->resource('page', 'Agent\kb\PageController');
->>>>>>> origin/master
+
 Breadcrumbs::register('page.index', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
     $breadcrumbs->push(Lang::get('lang.pages'), route('page.index'));

@@ -27,14 +27,14 @@ class Kernel extends HttpKernel {
      */
     protected $middlewareGroups = [
         'web' => [
-        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-        \App\Http\Middleware\EncryptCookies::class,
-        \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-        \Illuminate\Session\Middleware\StartSession::class,
-        \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        //\App\Http\Middleware\VerifyCsrfToken::class,
-        \App\Http\Middleware\LanguageMiddleware::class,
-    ],
+            \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            //\App\Http\Middleware\VerifyCsrfToken::class,
+            \App\Http\Middleware\LanguageMiddleware::class,
+        ],
         'api' => [
             'throttle:60,1',
         ],
@@ -57,13 +57,8 @@ class Kernel extends HttpKernel {
         'api' => \App\Http\Middleware\ApiKey::class,
         'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
         'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
-<<<<<<< HEAD
         'update' => \App\Http\Middleware\CheckUpdate::class,
         'board' => \App\Http\Middleware\CheckBoard::class,
-=======
-        'update'      => \App\Http\Middleware\CheckUpdate::class,
-        'board'       => \App\Http\Middleware\CheckBoard::class,
->>>>>>> origin/master
     ];
 
 }
