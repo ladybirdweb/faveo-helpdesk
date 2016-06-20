@@ -59,12 +59,16 @@
 
                 if (count($replacetop) == 0) {
                     $replacetop = 0;
+                } else {
+                    $replacetop = $replacetop[0];
                 }
                 $replaceside = 0;
                 $replaceside = \Event::fire('service.desk.agent.sidebar.replace', array());
 
                 if (count($replaceside) == 0) {
                     $replaceside = 0;
+                } else {
+                    $replaceside = $replaceside[0];
                 }
                 ?>
 
@@ -86,11 +90,12 @@
                             <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
-                            @endif
+                            @else 
                             <?php \Event::fire('service.desk.agent.topbar', array()); ?>
+                            @endif
                         </ul>
 
-<?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id', '=', Auth::user()->id)->where('is_read', '0')->get(); ?>
+                        <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id', '=', Auth::user()->id)->where('is_read', '0')->get(); ?>
 
                         <ul class="nav navbar-nav navbar-right">
                             @if(Auth::user()->role == 'admin')
@@ -116,7 +121,7 @@
 
                                     <ul class="menu">
                                         @foreach($notifications as $notification)
-<?php $user = App\User::whereId($notification->user_id)->first(); ?>
+                                        <?php $user = App\User::whereId($notification->user_id)->first(); ?>
                                         @if($notification->type == 'registration')
                                         @if($notification->is_read == 1)
                                         <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
@@ -133,7 +138,7 @@
                                         @endif
                                         @else
 
-<?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification->model_id)->first(); ?>
+                                        <?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification->model_id)->first(); ?>
                                         @if($notification->is_read == 1)
                                         <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
                                                 <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
@@ -164,30 +169,30 @@
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
-                                        <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
-                                    <span class="hidden-xs">{{Auth::user()->first_name." ".Auth::user()->last_name}}</span>
+                                <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
+                                <span class="hidden-xs">{{Auth::user()->first_name." ".Auth::user()->last_name}}</span>
                                 @endif          
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <!-- User image -->
-                                    <li class="user-header"  style="background-color:#343F44;">     
-                                        <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />                                        
-                                        <p>
-                                            {{Auth::user()->first_name." ".Auth::user()->last_name}} - {{Auth::user()->role}}
-                                            <small></small>
-                                        </p>
-                                    </li>
-                                    <!-- Menu Footer-->
-                                    <li class="user-footer" style="background-color:#1a2226;">
-                                        <div class="pull-left">
-                                            <a href="{{URL::route('profile')}}" class="btn btn-info btn-sm"><b>{!! Lang::get('lang.profile') !!}</b></a>
-                                        </div>
-                                        <div class="pull-right">
-                                            <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! Lang::get('lang.sign_out') !!}</b></a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header"  style="background-color:#343F44;">     
+                                    <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />                                        
+                                    <p>
+                                        {{Auth::user()->first_name." ".Auth::user()->last_name}} - {{Auth::user()->role}}
+                                        <small></small>
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer" style="background-color:#1a2226;">
+                                    <div class="pull-left">
+                                        <a href="{{URL::route('profile')}}" class="btn btn-info btn-sm"><b>{!! Lang::get('lang.profile') !!}</b></a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! Lang::get('lang.sign_out') !!}</b></a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
                         </ul>
                     </div>
                 </nav>
@@ -338,7 +343,7 @@
                                         <li><a href="{!! url::route('dept.closed.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.closed') !!}<small class="label pull-right bg-green">{!! $closed !!}</small></a></li>
                                     </ul>
                                 </li>
-    <?php } if (Auth::user()->role == 'agent' && Auth::user()->primary_dpt == $dept->id) { ?>
+                            <?php } if (Auth::user()->role == 'agent' && Auth::user()->primary_dpt == $dept->id) { ?>
                                 <li class="treeview">
                                     <a href="#">
                                         <i class="fa fa-folder-open"></i> <span>{!! $dept->name !!}</span> <i class="fa fa-angle-left pull-right"></i>
@@ -350,7 +355,8 @@
                                     </ul>
                                 </li>
                             <?php }
-                        } ?>
+                        }
+                        ?>
 
                         @endif
 <?php \Event::fire('service.desk.agent.sidebar', array()); ?>
@@ -358,11 +364,11 @@
                 </section>
                 <!-- /.sidebar -->
             </aside>
-<?php
-$agent_group = Auth::user()->assign_group;
-$group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
+            <?php
+            $agent_group = Auth::user()->assign_group;
+            $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
 // dd($group); 
-?>
+            ?>
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
@@ -391,7 +397,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                                     {{-- < li id = "bar" @yield('overdue') > < a href = "{{ url('/ticket/overdue') }}" >Overdue</a></li> --}}
                                     <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
                                     <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
-<?php if ($group->can_create_ticket == 1) { ?>
+                                    <?php if ($group->can_create_ticket == 1) { ?>
                                         <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
 <?php } ?>
                                 </ul>
@@ -502,7 +508,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                         beforeSend: function () {
                         $('#myDropdown').on('hide.bs.dropdown', function () {
                         return false;
-                                });
+                        });
                                 $("#refreshNote").hide();
                                 $("#notification-loader").show();
                         },
@@ -512,7 +518,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                                 $('#myDropdown').removeClass('open');
                         }
                 });
-        });    </script>
+        });</script>
     <script>
                 $(function() {
                 // Enable iCheck plugin for checkboxes
@@ -550,7 +556,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                         $this.toggleClass("fa-star-o");
                 }
                 });
-                });    </script>
+                });</script>
     <script type="text/javascript">
                 //     $(document).ready(function() {
                 //         $("#content").Editor();

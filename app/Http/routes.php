@@ -1308,6 +1308,7 @@ Route::group(['prefix' => 'api/v1'], function () {
         Route::post('collaborator/remove', 'Api\v1\ApiController@deleteCollaborator');
         Route::post('collaborator/get-ticket', 'Api\v1\ApiController@getCollaboratorForTicket');
         Route::get('my-tickets-user', 'Api\v1\ApiController@getMyTicketsUser');
+        Route::get('dependency', 'Api\v1\ApiController@dependency');
     });
 
     /*
