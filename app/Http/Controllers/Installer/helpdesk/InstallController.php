@@ -282,10 +282,9 @@ class InstallController extends Controller
         if (Config::get('database.install') == '%0%') {
             if (Session::get('step4') == 'step4') {
                 Session::put('step5', 'step5');
-                Session::forget('step1');
-                Session::forget('step2');
-                Session::forget('step3');
-
+//                Session::forget('step1');
+//                Session::forget('step2');
+//                Session::forget('step3');
                 return View::make('themes/default1/installer/helpdesk/view5');
             } else {
                 return Redirect::route('configuration');
@@ -360,6 +359,10 @@ class InstallController extends Controller
         $system->department = 1;
         $system->date_time_format = $date_time_format->id;
         $system->time_zone = $timezones->id;
+        $version = \Config::get('app.version');
+        $version = explode(" ", $version);
+        $version = $version[1];
+        $system->version = $version;
         $system->save();
 
         // creating an user
