@@ -103,6 +103,7 @@ function checkFilePermission(&$results) {
         $results[] = new TestResult('File permission looks fine', STATUS_OK);
         return true;
     } else {
+        $results[] = new TestResult('File permissions needed.<ul><b>Change file permission to "644" for following files</b><li>'.$path1.'</li></ul></br>Change the permission manually on your server or <a href="change-file-permission">click here.</a>', STATUS_ERROR);
         return false;
     }
 }
