@@ -574,6 +574,7 @@ class SettingsController extends Controller
                      * write provider list in app.php line 128
                      */
                     $app = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
+                    chmod($app, 0644);
                     $str = "\n\n\t\t\t'App\\Plugins\\$filename"."\\ServiceProvider',";
                     $line_i_am_looking_for = 144;
                     $lines = file($app, FILE_IGNORE_NEW_LINES);

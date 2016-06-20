@@ -220,12 +220,15 @@ class InstallController extends Controller
         $ENV['APP_ENV'] = 'local';
         $ENV['APP_DEBUG'] = 'false';
         $ENV['APP_KEY'] = 'SomeRandomString';
+        $ENV['APP_URL'] = 'http://localhost';
+        $ENV['APP_BUGSNAG'] = 'true';
         $ENV['DB_TYPE'] = $default;
         $ENV['DB_HOST'] = $host;
         $ENV['DB_PORT'] = $port;
         $ENV['DB_DATABASE'] = $database;
         $ENV['DB_USERNAME'] = $dbusername;
         $ENV['DB_PASSWORD'] = $dbpassword;
+        $ENV['DB_INSTALL'] = '%0%';
         $ENV['MAIL_DRIVER'] = 'smtp';
         $ENV['MAIL_HOST'] = 'mailtrap.io';
         $ENV['MAIL_PORT'] = '2525';
@@ -390,7 +393,7 @@ class InstallController extends Controller
         // checking if the installation have been completed or not
         if (Session::get('step6') == 'step6') {
             $value = '1';
-            $install = app_path('../config/database.php');
+            $install = base_path().DIRECTORY_SEPARATOR.'.env';
             $datacontent = File::get($install);
             $datacontent = str_replace('%0%', $value, $datacontent);
             File::put($install, $datacontent);
@@ -406,7 +409,7 @@ class InstallController extends Controller
             $link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $pos = strpos($link, 'final');
             $link = substr($link, 0, $pos);
-            $app_url = app_path('../config/app.php');
+            $app_url = base_path().DIRECTORY_SEPARATOR.'.env';
             $datacontent2 = File::get($app_url);
             $datacontent2 = str_replace('http://localhost', $link, $datacontent2);
             File::put($app_url, $datacontent2);

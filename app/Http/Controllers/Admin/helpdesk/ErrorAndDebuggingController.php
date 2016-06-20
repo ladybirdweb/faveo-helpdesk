@@ -58,28 +58,26 @@ class ErrorAndDebuggingController extends Controller
             $debug = ($debug) ? 'true' : 'false';
             $bugsnag_debug = \Config::get('app.bugsnag_reporting');
             $bugsnag_debug = ($bugsnag_debug) ? 'true' : 'false';
+            // dd($debug, $bugsnag_debug);
             if ($debug != \Input::get('debug') || $bugsnag_debug != \Input::get('bugsnag')) {
                 // dd($request->input());
                 $debug_new = base_path()
                              .DIRECTORY_SEPARATOR.
-                             'config'
-                             .DIRECTORY_SEPARATOR.
-                             'app.php';
+                             '.env';
                 $datacontent = File::get($debug_new);
-                $datacontent = str_replace("'debug' => ".$debug,
-                                           "'debug' => ".\Input::get('debug'),
+                // dd($datacontent);
+                $datacontent = str_replace("APP_DEBUG=".$debug,
+                                           "APP_DEBUG=".\Input::get('debug'),
                                             $datacontent);
                 File::put($debug_new, $datacontent);
 
                 // dd($request->input());
                 $bugsnag_debug_new = base_path()
                              .DIRECTORY_SEPARATOR.
-                             'config'
-                             .DIRECTORY_SEPARATOR.
-                             'app.php';
+                             '.env';
                 $datacontent2 = File::get($bugsnag_debug_new);
-                $datacontent2 = str_replace("'bugsnag_reporting' => ".$bugsnag_debug,
-                                           "'bugsnag_reporting' => ".\Input::get('bugsnag'),
+                $datacontent2 = str_replace("APP_BUGSNAG=".$bugsnag_debug,
+                                           "APP_BUGSNAG=".\Input::get('bugsnag'),
                                             $datacontent2);
                 File::put($bugsnag_debug_new, $datacontent2);
 
