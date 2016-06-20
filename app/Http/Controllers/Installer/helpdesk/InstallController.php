@@ -43,12 +43,6 @@ class InstallController extends Controller
      */
     public function licence()
     {
-        Session::forget('step1');
-        Session::forget('step2');
-        Session::forget('step3');
-        Session::forget('step4');
-        Session::forget('step5');
-        Session::forget('step6');
         // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             return view('themes/default1/installer/helpdesk/view1');
@@ -68,7 +62,7 @@ class InstallController extends Controller
         // checking if the user have accepted the licence agreement
         $accept = (Input::has('accept1')) ? true : false;
         if ($accept == 'accept') {
-            Session::put('step1', 'step1');
+            Session::set('step1', 'step1');
 
             return Redirect::route('prerequisites');
         } else {
@@ -107,7 +101,7 @@ class InstallController extends Controller
      */
     public function prerequisitescheck()
     {
-        Session::put('step2', 'step2');
+        Session::set('step2', 'step2');
 
         return Redirect::route('configuration');
     }
@@ -140,11 +134,11 @@ class InstallController extends Controller
      */
     public function localizationcheck()
     {
-        Session::put('step3', 'step3');
-        Session::put('language', Input::get('language'));
-        Session::put('timezone', Input::get('timezone'));
-        Session::put('date', Input::get('date'));
-        Session::put('datetime', Input::get('datetime'));
+        Session::set('step3', 'step3');
+        Session::set('language', Input::get('language'));
+        Session::set('timezone', Input::get('timezone'));
+        Session::set('date', Input::get('date'));
+        Session::set('datetime', Input::get('datetime'));
 
         return Redirect::route('configuration');
     }
@@ -177,19 +171,19 @@ class InstallController extends Controller
      */
     public function configurationcheck(DatabaseRequest $request)
     {
-        Session::put('step4', 'step4');
+        Session::set('step4', 'step4');
         // dd($request->input('default'));
         // dd($request->input('host'));
         // dd($request->input('databasename'));
         // dd($request->input('username'));
         // dd($request->input('password'));
         // dd($request->input('port'));
-        Session::put('default', $request->input('default'));
-        Session::put('host', $request->input('host'));
-        Session::put('databasename', $request->input('databasename'));
-        Session::put('username', $request->input('username'));
-        Session::put('password', $request->input('password'));
-        Session::put('port', $request->input('port'));
+        Session::set('default', $request->input('default'));
+        Session::set('host', $request->input('host'));
+        Session::set('databasename', $request->input('databasename'));
+        Session::set('username', $request->input('username'));
+        Session::set('password', $request->input('password'));
+        Session::set('port', $request->input('port'));
 
         return Redirect::route('database');
     }
@@ -281,10 +275,10 @@ class InstallController extends Controller
         // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             if (Session::get('step4') == 'step4') {
-                Session::put('step5', 'step5');
-//                Session::forget('step1');
-//                Session::forget('step2');
-//                Session::forget('step3');
+                Session::set('step5', 'step5');
+                Session::forget('step1');
+                Session::forget('step2');
+                Session::forget('step3');
                 return View::make('themes/default1/installer/helpdesk/view5');
             } else {
                 return Redirect::route('configuration');
