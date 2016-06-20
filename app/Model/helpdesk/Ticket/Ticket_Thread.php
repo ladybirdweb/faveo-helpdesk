@@ -21,12 +21,13 @@ class Ticket_Thread extends BaseModel
         $this->attach()->delete();
         parent::delete();
     }
-    
+
 //    public function setTitleAttribute($value) {
 //        $this->attributes['title'] = str_replace('"', "'", $value);
 //    }
-    
-     public function getTitleAttribute($value) {
-        return str_replace('"', "'", $value);
-    }
+
+     public function getTitleAttribute($value)
+     {
+         return str_replace('"', "'", $value);
+     }
 }

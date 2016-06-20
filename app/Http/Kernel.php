@@ -57,8 +57,13 @@ class Kernel extends HttpKernel {
         'api' => \App\Http\Middleware\ApiKey::class,
         'jwt.auth' => \Tymon\JWTAuth\Middleware\GetUserFromToken::class,
         'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
+<<<<<<< HEAD
         'update' => \App\Http\Middleware\CheckUpdate::class,
         'board' => \App\Http\Middleware\CheckBoard::class,
+=======
+        'update'      => \App\Http\Middleware\CheckUpdate::class,
+        'board'       => \App\Http\Middleware\CheckBoard::class,
+>>>>>>> origin/master
     ];
 
 }

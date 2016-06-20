@@ -101,7 +101,7 @@ return [
       | installed or not.
       |
      */
-    'install' => '1',
+    'install' => env('DB_INSTALL'),
     /*
       |--------------------------------------------------------------------------
       | Redis Databases
