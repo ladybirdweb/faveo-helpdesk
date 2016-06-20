@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Model\Api\ApiSetting;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
+use DB;
 use Exception;
 use Illuminate\Http\Request;
-use Log;
-use DB;
 use Input;
+use Log;
 
 class ApiSettings extends Controller
 {
@@ -28,7 +28,7 @@ class ApiSettings extends Controller
     public function show()
     {
         try {
-             /* fetch the values of system from system table */
+            /* fetch the values of system from system table */
             $systems = DB::table('settings_system')->whereId('1')->first();
             $details = [];
             $ticket_detail = '';
@@ -54,10 +54,10 @@ class ApiSettings extends Controller
         try {
             // dd($request->input());
             DB::table('settings_system')
-            ->where('id',  1)
-            ->update(['api_enable' => Input::get('api_enable'),
-                'api_key_mandatory' =>Input::get('api_key_mandatory') ,
-                'api_key' =>Input::get('api_key')]);
+            ->where('id', 1)
+            ->update(['api_enable'  => Input::get('api_enable'),
+                'api_key_mandatory' => Input::get('api_key_mandatory'),
+                'api_key'           => Input::get('api_key'), ]);
             $settings = $this->api;
             if ($settings->get()->count() > 0) {
                 foreach ($settings->get() as $set) {

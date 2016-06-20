@@ -146,8 +146,8 @@ class UserController extends Controller
     {
         /* get the article_id where category_id == current category */
         $catid = $category->where('slug', $slug)->first();
-        if(!$catid){
-            return redirect()->back()->with('fails',Lang::get('lang.we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'));
+        if (!$catid) {
+            return redirect()->back()->with('fails', Lang::get('lang.we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'));
         }
         $id = $catid->id;
         $all = $relation->where('category_id', $id)->get();
