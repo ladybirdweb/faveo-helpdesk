@@ -193,9 +193,9 @@ class InstallController extends Controller {
         $port = Input::get('port');
 
         $ENV['APP_ENV'] = 'local';
-        $ENV['APP_DEBUG'] = 'true';
+        $ENV['APP_DEBUG'] = 'false';
         $ENV['APP_KEY'] = 'SomeRandomString';
-        $ENV['APP_BUGSNAG'] = 'false';
+        $ENV['APP_BUGSNAG'] = 'true';
         $ENV['APP_URL'] = 'http://localhost';
         $ENV['DB_INSTALL'] = '%0%';
         $ENV['DB_TYPE'] = $default;
