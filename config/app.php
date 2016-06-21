@@ -12,7 +12,7 @@ return [
       | application. If disabled, a simple generic error page is shown.
       |
      */
-    'debug' => false,
+    'debug' => env('APP_DEBUG'),
     /*
       |--------------------------------------------------------------------------
       | Error Log
@@ -33,7 +33,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.0.7.5',
+    'version' => 'Community 1.0.7.7',
     /*
       |--------------------------------------------------------------------------
       | Application URL
@@ -44,7 +44,7 @@ return [
       | your application so that it is used when running Artisan tasks.
       |
      */
-    'url' => 'http://localhost/sujit/faveo-helpdesk/public//sujit/faveo-helpdesk/public//sujit/faveo-helpdesk/public/',
+    'url' => env('APP_URL'),
     /*
       |--------------------------------------------------------------------------
       | Application Timezone
@@ -111,7 +111,7 @@ return [
       |to FAVEO team when any exception/error occurs or not. True value of this variable will
       |allow application to send error reports to FAVEO team's bugsnag log.
      */
-    'bugsnag_reporting' => true,
+    'bugsnag_reporting' => env('APP_BUGSNAG'),
     /*
       |--------------------------------------------------------------------------
       | Autoloaded Service Providers

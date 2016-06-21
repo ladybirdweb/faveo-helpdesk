@@ -47,12 +47,17 @@
         $replacetop = \Event::fire('service.desk.admin.topbar.replace', array());
         if (count($replacetop) == 0) {
             $replacetop = 0;
+        } else {
+            $replacetop = $replacetop[0];
         }
         $replaceside = 0;
         $replaceside = \Event::fire('service.desk.admin.sidebar.replace', array());
         if (count($replaceside) == 0) {
             $replaceside = 0;
+        } else {
+            $replaceside = $replaceside[0];
         }
+        //dd($replacetop);
         ?>
         <div class="wrapper">
             <header class="main-header">
@@ -73,8 +78,9 @@
                         <ul class="nav navbar-nav navbar-left">
                             @if($replacetop==0)
                             <li @yield('settings')><a href="{!! url('dashboard') !!}">{!! Lang::get('lang.agent_panel') !!}</a></li>
-                            @endif
+                            @else 
                             <?php \Event::fire('service.desk.admin.topbar', array()); ?>
+                            @endif
                         </ul>
 
 
@@ -325,15 +331,15 @@
 
                                     <small class="label pull-right bg-green"></small>
                                 </a>
-<?php } elseif ($update->current_version < $update->new_version) { ?>
+                            <?php } elseif ($update->current_version < $update->new_version) { ?>
                                 <a>
                                     <i class="fa fa-inbox"></i> <span>Version {!! $update->new_version !!}  is Available</span>
                                     <small class="label pull-right bg-green"></small>
                                 </a>
-<?php } ?>
+                            <?php } ?>
                         </li>
                         @endif
-<?php \Event::fire('service.desk.admin.sidebar', array()); ?>
+                        <?php \Event::fire('service.desk.admin.sidebar', array()); ?>
                     </ul>
                 </section>
                 <!-- /.sidebar -->
@@ -390,7 +396,7 @@
     <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}"  type="text/javascript"></script>
     <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
     <script>
-$(function() {
+$(function () {
 //Add text editor
     $("textarea").wysihtml5();
 });
@@ -410,7 +416,7 @@ $(function() {
 //         return false;
 //     });
 // });
-$(function() {
+$(function () {
 //Enable iCheck plugin for checkboxes
 //iCheck for checkbox and radio inputs
     $('input[type="checkbox"]').iCheck({
@@ -418,7 +424,7 @@ $(function() {
         radioClass: 'iradio_flat-blue'
     });
 //Enable check and uncheck all functionality
-    $(".checkbox-toggle").click(function() {
+    $(".checkbox-toggle").click(function () {
         var clicks = $(this).data('clicks');
         if (clicks) {
 //Uncheck all checkboxes
@@ -430,7 +436,7 @@ $(function() {
         $(this).data("clicks", !clicks);
     });
 //Handle starring for glyphicon and font awesome
-    $(".mailbox-star").click(function(e) {
+    $(".mailbox-star").click(function (e) {
         e.preventDefault();
 //detect type
         var $this = $(this).find("a > i");
@@ -449,7 +455,7 @@ $(function() {
 });
     </script>
     <script>
-        $('#read-all').click(function() {
+        $('#read-all').click(function () {
 
             var id2 = <?php echo \Auth::user()->id ?>;
             var dataString = 'id=' + id2;
@@ -459,14 +465,14 @@ $(function() {
                         url: "{{url('mark-all-read')}}" + "/" + id2,
                         data: dataString,
                         cache: false,
-                        beforeSend: function() {
-                            $('#myDropdown').on('hide.bs.dropdown', function() {
+                        beforeSend: function () {
+                            $('#myDropdown').on('hide.bs.dropdown', function () {
                                 return false;
                             });
                             $("#refreshNote").hide();
                             $("#notification-loader").show();
                         },
-                        success: function(response) {
+                        success: function (response) {
                             $("#refreshNote").load("<?php echo $_SERVER['REQUEST_URI']; ?>  #refreshNote");
                             $("#notification-loader").hide();
                             $('#myDropdown').removeClass('open');
