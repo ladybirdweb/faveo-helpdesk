@@ -45,12 +45,13 @@ class InstallController extends Controller {
      */
     public function licence() {
         // checking if the installation is running for the first time or not
-        if (Config::get('database.install') == '%0%') {
+        $directory = base_path();
+        if (file_exists($directory . DIRECTORY_SEPARATOR . ".env")) {
+            return redirect('/auth/login');
+        } else {
             Cache::flush();
             Artisan::call('config:clear');
             return view('themes/default1/installer/helpdesk/view1');
-        } else {
-            return redirect('/auth/login');
         }
     }
 
@@ -80,14 +81,10 @@ class InstallController extends Controller {
      */
     public function prerequisites(Request $request) {
         // checking if the installation is running for the first time or not
-        if (Config::get('database.install') == '%0%') {
-            if (Cache::get('step1') == 'step1') {
-                return View::make('themes/default1/installer/helpdesk/view2');
-            } else {
-                return Redirect::route('licence');
-            }
+        if (Cache::get('step1') == 'step1') {
+            return View::make('themes/default1/installer/helpdesk/view2');
         } else {
-            return redirect('/auth/login');
+            return Redirect::route('licence');
         }
     }
 
@@ -110,14 +107,10 @@ class InstallController extends Controller {
      */
     public function localization(Request $request) {
         // checking if the installation is running for the first time or not
-        if (Config::get('database.install') == '%0%') {
-            if (Cache::get('step2') == 'step2') {
-                return View::make('themes/default1/installer/helpdesk/view3');
-            } else {
-                return Redirect::route('prerequisites');
-            }
+        if (Cache::get('step2') == 'step2') {
+            return View::make('themes/default1/installer/helpdesk/view3');
         } else {
-            return redirect('/auth/login');
+            return Redirect::route('prerequisites');
         }
     }
 
@@ -147,14 +140,10 @@ class InstallController extends Controller {
      */
     public function configuration(Request $request) {
         // checking if the installation is running for the first time or not
-        if (Config::get('database.install') == '%0%') {
-            if (Cache::get('step2') == 'step2') {
-                return View::make('themes/default1/installer/helpdesk/view3');
-            } else {
-                return Redirect::route('prerequisites');
-            }
+        if (Cache::get('step2') == 'step2') {
+            return View::make('themes/default1/installer/helpdesk/view3');
         } else {
-            return redirect('/auth/login');
+            return Redirect::route('prerequisites');
         }
     }
 
@@ -233,14 +222,10 @@ class InstallController extends Controller {
      */
     public function database(Request $request) {
         // checking if the installation is running for the first time or not
-        if (Config::get('database.install') == '%0%') {
-            if (Cache::get('step4') == 'step4') {
-                return View::make('themes/default1/installer/helpdesk/view4');
-            } else {
-                return Redirect::route('configuration');
-            }
+        if (Cache::get('step4') == 'step4') {
+            return View::make('themes/default1/installer/helpdesk/view4');
         } else {
-            return redirect('/auth/login');
+            return Redirect::route('configuration');
         }
     }
 
@@ -252,15 +237,11 @@ class InstallController extends Controller {
      */
     public function account(Request $request) {
         // checking if the installation is running for the first time or not
-        if (Config::get('database.install') == '%0%') {
-            if (Cache::get('step4') == 'step4') {
-                $request->session()->put('step5', $request->input('step5'));
-                return View::make('themes/default1/installer/helpdesk/view5');
-            } else {
-                return Redirect::route('configuration');
-            }
+        if (Cache::get('step4') == 'step4') {
+            $request->session()->put('step5', $request->input('step5'));
+            return View::make('themes/default1/installer/helpdesk/view5');
         } else {
-            return redirect('/auth/login');
+            return Redirect::route('configuration');
         }
     }
 
@@ -307,6 +288,7 @@ class InstallController extends Controller {
         if ($timezones == null) {
             return redirect()->back()->with('fails', 'Invalid time-zone');
         }
+
         // checking requested date time format for the admin and system
         $date_time_format = Date_time_format::where('format', '=', $datetime)->first();
         if ($date_time_format == null) {
@@ -351,14 +333,14 @@ class InstallController extends Controller {
      * @return type view
      */
     public function finalize() {
-        // checking if the installation have been completed or not
+// checking if the installation have been completed or not
         if (Cache::get('step6') == "step6") {
             $value = '1';
             $install = base_path() . DIRECTORY_SEPARATOR . '.env';
             $datacontent = File::get($install);
             $datacontent = str_replace('%0%', $value, $datacontent);
             File::put($install, $datacontent);
-            // setting email settings in route
+// setting email settings in route
             $smtpfilepath = "\App\Http\Controllers\Common\SettingsController::smtp()";
             $lfmpath = "url('photos').'/'";
             $path22 = app_path('Http/routes.php');
