@@ -24,6 +24,7 @@ use Input;
 use Redirect;
 use Session;
 use View;
+use Cache;
 
 /**
  * |=======================================================================
@@ -44,11 +45,11 @@ class InstallController extends Controller {
      */
     public function licence() {
         Session::flush();
-        // checking if the installation is running for the first time or not
+// checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
             return view('themes/default1/installer/helpdesk/view1');
         } else {
-            // return 1;
+// return 1;
             return redirect('/auth/login');
         }
     }
@@ -59,17 +60,18 @@ class InstallController extends Controller {
      * @return type view
      */
     public function licencecheck(Request $request) {
-        // checking if the user have accepted the licence agreement
+// checking if the user have accepted the licence agreement
         $accept = (Input::has('accept1')) ? true : false;
         if ($accept == 'accept') {
 //            Session::set('step1', 'step1');
             $request->session()->put('step1', 'step1');
-
+//            Cache::get('step1');
+            Cache::forever('step1', 'step1');
             return Redirect::route('prerequisites');
         } else {
             return Redirect::route('licence')->with('fails', 'Failed! first accept the licence agreeement');
         }
-        // return 1;
+// return 1;
     }
 
     /**
@@ -82,10 +84,14 @@ class InstallController extends Controller {
      */
     public function prerequisites(Request $request) {
 //        dd($request->session()->get('step1'));
-        // checking if the installation is running for the first time or not
+// checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
 //            if (Session::get('step1') == 'step1') {
-            if ($request->session()->get('step1') == 'step1') {
+//            dd(Cache::get('step1'));
+//            Cache::forget('step1');
+//            Cache::flush();
+            
+            if (Cache::get('step1') == 'step1') {
                 return View::make('themes/default1/installer/helpdesk/view2');
             } else {
                 return Redirect::route('licence');
@@ -103,6 +109,7 @@ class InstallController extends Controller {
      */
     public function prerequisitescheck(Request $request) {
 //        Session::set('step2', 'step2');
+        Cache::forever('step2', 'step2');
         $request->session()->put('step2', 'step2');
         return Redirect::route('configuration');
     }
@@ -115,10 +122,11 @@ class InstallController extends Controller {
      */
     public function localization(Request $request) {
 //        dd($request->session()->get('step1'));
-        // checking if the installation is running for the first time or not
+// checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
 //            if (Session::get('step2') == 'step2') {
-            if ($request->session()->get('step2') == 'step2') {
+            if (Cache::get('step2') == 'step2') {
+//            if ($request->session()->get('step2') == 'step2') {
                 return View::make('themes/default1/installer/helpdesk/view3');
             } else {
                 return Redirect::route('prerequisites');
@@ -136,7 +144,7 @@ class InstallController extends Controller {
      */
     public function localizationcheck(Request $request) {
 //        dd($request->session()->get('step1'));
-//        Session::set('step3', 'step3');
+        Cache::forever('step3', 'step3');
 //        Session::set('language', Input::get('language'));
 //        Session::set('timezone', Input::get('timezone'));
 //        Session::set('date', Input::get('date'));
@@ -160,10 +168,11 @@ class InstallController extends Controller {
      */
     public function configuration(Request $request) {
 //        dd($request->session()->get('step1'));
-        // checking if the installation is running for the first time or not
+// checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
 //            if (Session::get('step2') == 'step2') {
-            if ($request->session()->get('step2') == 'step2') {
+            if (Cache::get('step2') == 'step2') {
+//            if ($request->session()->get('step2') == 'step2') {
                 return View::make('themes/default1/installer/helpdesk/view3');
             } else {
                 return Redirect::route('prerequisites');
@@ -181,23 +190,23 @@ class InstallController extends Controller {
      */
     public function configurationcheck(DatabaseRequest $request) {
 //        dd($request->session()->get('step1'));
-        $request->session()->put('step4', 'step4');
+//        $request->session()->put('step4', 'step4');
 //        Session::set('step4', 'step4');
-      
+        Cache::forever('step4', 'step4');
 //        Session::set('default', $request->input('default'));
 //        Session::set('host', $request->input('host'));
 //        Session::set('databasename', $request->input('databasename'));
 //        Session::set('username', $request->input('username'));
 //        Session::set('password', $request->input('password'));
 //        Session::set('port', $request->input('port'));
-        
+
         $request->session()->put('default', $request->input('default'));
         $request->session()->put('host', $request->input('host'));
         $request->session()->put('databasename', $request->input('databasename'));
         $request->session()->put('username', $request->input('username'));
         $request->session()->put('password', $request->input('password'));
         $request->session()->put('port', $request->input('port'));
-        
+
 
         return Redirect::route('database');
     }
@@ -218,13 +227,13 @@ class InstallController extends Controller {
         $dbpassword = Input::get('password');
         $port = Input::get('port');
 
-        // Setting environment values
-        // $_ENV['DB_TYPE'] = $default;
-        // $_ENV['DB_HOST'] = $host;
-        // $_ENV['DB_PORT'] = $port;
-        // $_ENV['DB_DATABASE'] = $database;
-        // $_ENV['DB_USERNAME'] = $dbusername;
-        // $_ENV['DB_PASSWORD'] = $dbpassword;
+// Setting environment values
+// $_ENV['DB_TYPE'] = $default;
+// $_ENV['DB_HOST'] = $host;
+// $_ENV['DB_PORT'] = $port;
+// $_ENV['DB_DATABASE'] = $database;
+// $_ENV['DB_USERNAME'] = $dbusername;
+// $_ENV['DB_PASSWORD'] = $dbpassword;
 
         $ENV['APP_ENV'] = 'local';
         $ENV['APP_DEBUG'] = 'false';
@@ -251,7 +260,7 @@ class InstallController extends Controller {
         foreach ($ENV as $key => $val) {
             $config .= "{$key}={$val}\n";
         }
-        // Write environment file
+// Write environment file
         $fp = fopen(base_path() . '/.env', 'w');
         fwrite($fp, $config);
         fclose($fp);
@@ -267,10 +276,11 @@ class InstallController extends Controller {
      */
     public function database(Request $request) {
 //        dd($request->session());
-        // checking if the installation is running for the first time or not
+// checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
 //            if (Session::get('step4') == 'step4') {
-            if ($request->session()->get('step4') == 'step4') {
+            if (Cache::get('step4') == 'step4') {
+//if ($request->session()->get('step4') == 'step4') {
                 return View::make('themes/default1/installer/helpdesk/view4');
             } else {
                 return Redirect::route('configuration');
@@ -287,10 +297,11 @@ class InstallController extends Controller {
      * @return type view
      */
     public function account(Request $request) {
-        // checking if the installation is running for the first time or not
+// checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
 //            if (Session::get('step4') == 'step4') {
-            if ($request->session()->get('step4') == 'step4') {
+            if (Cache::get('step4') == 'step4') {
+//            if ($request->session()->get('step4') == 'step4') {
 //                Session::set('step5', 'step5');
                 $request->session()->put('step5', $request->input('step5'));
 //                Session::forget('step1');
@@ -314,7 +325,7 @@ class InstallController extends Controller {
      * @return type view
      */
     public function accountcheck(InstallerRequest $request) {
-        // checking is the installation was done previously
+// checking is the installation was done previously
         try {
             $check_for_pre_installation = System::all();
             if ($check_for_pre_installation) {
@@ -325,14 +336,14 @@ class InstallController extends Controller {
         }
         if ($request->input('dummy-data') == 'on') {
             $path = base_path() . '/DB/dummy-data.sql';
-            // dd($path);
+// dd($path);
             DB::unprepared(file_get_contents($path));
         } else {
-            // migrate database
+// migrate database
             Artisan::call('migrate', ['--force' => true]);
             Artisan::call('db:seed', ['--force' => true]);
         }
-        // create user
+// create user
         $firstname = $request->input('firstname');
         $lastname = $request->input('Lastname');
         $email = $request->input('email');
@@ -344,26 +355,26 @@ class InstallController extends Controller {
         $date = $request->input('date');
         $datetime = $request->input('datetime');
 
-        //\Cache::forever('language', $language);
-        //\App::setLocale($language);
-        // $system = System::where('id','=','1')->first();
-        // $system->time_zone = $timezone;
-        // $system->date_time_format = $datetime;
-        // $system->save();
-        // checking requested timezone for the admin and system
+//\Cache::forever('language', $language);
+//\App::setLocale($language);
+// $system = System::where('id','=','1')->first();
+// $system->time_zone = $timezone;
+// $system->date_time_format = $datetime;
+// $system->save();
+// checking requested timezone for the admin and system
         $timezones = Timezones::where('name', '=', $timezone)->first();
         if ($timezones == null) {
             return redirect()->back()->with('fails', 'Invalid time-zone');
-            // return ['response' => 'fail', 'reason' => 'Invalid time-zone', 'status' => '0'];
+// return ['response' => 'fail', 'reason' => 'Invalid time-zone', 'status' => '0'];
         }
-        // checking requested date time format for the admin and system
+// checking requested date time format for the admin and system
         $date_time_format = Date_time_format::where('format', '=', $datetime)->first();
         if ($date_time_format == null) {
             return redirect()->back()->with('fails', 'invalid date-time format');
-            // return ['response' => 'fail', 'reason' => 'invalid date-time format', 'status' => '0'];
+// return ['response' => 'fail', 'reason' => 'invalid date-time format', 'status' => '0'];
         }
 
-        // Creating minum settings for system
+// Creating minum settings for system
         $system = new System();
         $system->status = 1;
         $system->department = 1;
@@ -375,7 +386,7 @@ class InstallController extends Controller {
         $system->version = $version;
         $system->save();
 
-        // creating an user
+// creating an user
         $user = User::create([
                     'first_name' => $firstname,
                     'last_name' => $lastname,
@@ -387,7 +398,7 @@ class InstallController extends Controller {
                     'active' => 1,
                     'role' => 'admin',
         ]);
-        // checking if the user have been created
+// checking if the user have been created
         if ($user) {
             Session::put('step6', 'step6');
 
@@ -402,7 +413,7 @@ class InstallController extends Controller {
      * @return type view
      */
     public function finalize(Request $request) {
-        // checking if the installation have been completed or not
+// checking if the installation have been completed or not
 //        if (Session::get('step6') == 'step6') {
         if ($request->session()->get('step6') == 'step6') {
             $value = '1';
@@ -410,7 +421,7 @@ class InstallController extends Controller {
             $datacontent = File::get($install);
             $datacontent = str_replace('%0%', $value, $datacontent);
             File::put($install, $datacontent);
-            // setting email settings in route
+// setting email settings in route
             $smtpfilepath = "\App\Http\Controllers\Common\SettingsController::smtp()";
             $lfmpath = "url('photos').'/'";
             $path22 = app_path('Http/routes.php');
@@ -464,14 +475,14 @@ class InstallController extends Controller {
 
     public function changeFilePermission() {
         $path1 = base_path() . DIRECTORY_SEPARATOR . '.env';
-        // $path2 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'database.php';
-        // $path3 = base_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'routes.php';
-        // $path4 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'lfm.php';
+// $path2 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'database.php';
+// $path3 = base_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'Http'.DIRECTORY_SEPARATOR.'routes.php';
+// $path4 = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'lfm.php';
         if (chmod($path1, 0644)) {
             $f1 = substr(sprintf('%o', fileperms($path1)), -3);
-            // $f2 = substr(sprintf('%o', fileperms($path2)), -3);
-            // $f3 = substr(sprintf('%o', fileperms($path3)), -3);
-            // $f4 = substr(sprintf('%o', fileperms($path4)), -3);
+// $f2 = substr(sprintf('%o', fileperms($path2)), -3);
+// $f3 = substr(sprintf('%o', fileperms($path3)), -3);
+// $f4 = substr(sprintf('%o', fileperms($path4)), -3);
             if ($f1 >= '644') {
                 return Redirect::back();
             } else {
