@@ -44,10 +44,10 @@ class InstallController extends Controller {
      * @return type view
      */
     public function licence() {
-        Cache::flush();
-        Artisan::call('config:clear');
         // checking if the installation is running for the first time or not
         if (Config::get('database.install') == '%0%') {
+            Cache::flush();
+            Artisan::call('config:clear');
             return view('themes/default1/installer/helpdesk/view1');
         } else {
             return redirect('/auth/login');
@@ -377,7 +377,7 @@ class InstallController extends Controller {
             File::put($path22, $content23);
             File::put($path23, $content24);
             try {
-                
+
                 Cache::flush();
 
                 Artisan::call('key:generate');
