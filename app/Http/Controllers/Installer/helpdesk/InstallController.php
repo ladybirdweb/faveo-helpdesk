@@ -494,7 +494,7 @@ class InstallController extends Controller {
     }
 
     public function jsDisabled() {
-        return view('themes/default1/installer/helpdesk/check-js')->with('url', $_SERVER['HTTP_REFERER']);
+        return view('themes/default1/installer/helpdesk/check-js')->with('url', 'step1');
     }
 
 }
