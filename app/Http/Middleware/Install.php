@@ -9,19 +9,18 @@ class Install
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
         $env = base_path('.env');
-        if(\File::exists($env)){
-
-        return $next($request);
-    }else{
-       
-       return redirect('step1');
-    }
+        if (\File::exists($env)) {
+            return $next($request);
+        } else {
+            return redirect('step1');
+        }
     }
 }
