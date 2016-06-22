@@ -11,9 +11,9 @@
   |
  */
 Route::group(['middleware' => ['web']], function () {
-    Route::group(['middleware' => 'update', 'middleware'=>'install'], function () {
+    Route::group(['middleware' => 'update', 'middleware' => 'install'], function () {
         Route::controllers([
-            'auth' => 'Auth\AuthController',
+            'auth'     => 'Auth\AuthController',
             'password' => 'Auth\PasswordController',
         ]);
     });
@@ -29,7 +29,7 @@ Route::group(['middleware' => ['web']], function () {
       | Here is defining entire routes for the Admin Panel
       |
      */
-    Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware'=>'install', 'middleware' => 'update'], function () {
+    Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => 'install', 'middleware' => 'update'], function () {
 
         //Notification marking
         Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
@@ -545,11 +545,11 @@ Route::group(['middleware' => ['web']], function () {
         });
         //route for submit error and debugging setting form page
         Route::post('post-settings', ['as' => 'post.error.debug.settings',
-            'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings',]);
+            'uses'                         => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings', ]);
 
         //route to error logs table page
         Route::get('show-error-logs', [
-            'as' => 'error.logs',
+            'as'   => 'error.logs',
             'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs',
         ]);
     });
@@ -562,7 +562,7 @@ Route::group(['middleware' => ['web']], function () {
       |
       |
      */
-    Route::group(['middleware' => 'role.agent', 'middleware' => 'auth', 'middleware'=>'install', 'middleware' => 'update'], function () {
+    Route::group(['middleware' => 'role.agent', 'middleware' => 'auth', 'middleware' => 'install', 'middleware' => 'update'], function () {
         Route::post('chart-range/{date1}/{date2}', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
 
         Route::get('agen1', 'Agent\helpdesk\DashboardController@ChartData');
@@ -889,7 +889,7 @@ Route::group(['middleware' => ['web']], function () {
     });
     Route::any('getdata', function () {
         $term = Illuminate\Support\Str::lower(Input::get('term'));
-        $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term . '%')->groupBy('ticket_number')->take(10)->get();
+        $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
         foreach ($data as $v) {
             return [
                 'value' => $v->ticket_number,
@@ -1039,24 +1039,24 @@ Route::group(['middleware' => ['web']], function () {
       |=============================================================
      */
     Route::get('500', ['as' => 'error500', function () {
-    return view('errors.500');
-}]);
+        return view('errors.500');
+    }]);
 
     Breadcrumbs::register('error500', function ($breadcrumbs) {
         $breadcrumbs->push('500');
     });
 
     Route::get('404', ['as' => 'error404', function () {
-    return view('errors.404');
-}]);
+        return view('errors.404');
+    }]);
 
     Breadcrumbs::register('error404', function ($breadcrumbs) {
         $breadcrumbs->push('404');
     });
 
     Route::get('board-offline', ['as' => 'board.offline', function () {
-    return view('errors.offline');
-}]);
+        return view('errors.offline');
+    }]);
 
     Breadcrumbs::register('board.offline', function ($breadcrumbs) {
         $breadcrumbs->push('Board Offline');

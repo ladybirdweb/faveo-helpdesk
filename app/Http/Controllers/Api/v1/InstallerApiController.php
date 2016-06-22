@@ -63,10 +63,10 @@ class InstallerApiController extends Controller
 
             return ['response' => 'fail', 'reason' => $return_data, 'status' => '0'];
         }
-        
+
         // Check for pre install
         $directory = base_path();
-        if (file_exists($directory . DIRECTORY_SEPARATOR . ".env") && \Config::get('database.install') != '%0%') {
+        if (file_exists($directory.DIRECTORY_SEPARATOR.'.env') && \Config::get('database.install') != '%0%') {
             return ['response' => 'fail', 'reason' => 'this system is already installed', 'status' => '0'];
         } else {
             $default = $request->database;
@@ -106,6 +106,7 @@ class InstallerApiController extends Controller
                 fwrite($fp, $config);
                 fclose($fp);
                 rename(base_path().DIRECTORY_SEPARATOR.'example.env', base_path().DIRECTORY_SEPARATOR.'.env');
+
                 return ['response' => 'success', 'status' => '1'];
             } else {
                 return ['response' => 'fail', 'reason' => 'insufficient parameters', 'status' => '0'];
@@ -153,7 +154,6 @@ class InstallerApiController extends Controller
         }
         // Check for pre install
         if (\Config::get('database.install') == '%0%') {
-            
             $firstname = $request->firstname;
             $lastname = $request->lastname;
             $email = $request->email;
@@ -203,11 +203,11 @@ class InstallerApiController extends Controller
 
             // Setting database installed status
             $value = '1';
-            $install = base_path() . DIRECTORY_SEPARATOR . '.env';
+            $install = base_path().DIRECTORY_SEPARATOR.'.env';
             $datacontent = File::get($install);
             $datacontent = str_replace('%0%', $value, $datacontent);
             File::put($install, $datacontent);
-            
+
             // Applying email configuration on route
             $smtpfilepath = "\App\Http\Controllers\Common\SettingsController::smtp()";
             $lfmpath = "url('photos').'/'";
@@ -217,10 +217,10 @@ class InstallerApiController extends Controller
             $content24 = File::get($path23);
             $content23 = str_replace('"%smtplink%"', $smtpfilepath, $content23);
             $content24 = str_replace("'%url%'", $lfmpath, $content24);
-            $link = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            $link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $pos = strpos($link, 'final');
             $link = substr($link, 0, $pos);
-            $app_url = base_path() . DIRECTORY_SEPARATOR . '.env';
+            $app_url = base_path().DIRECTORY_SEPARATOR.'.env';
             $datacontent2 = File::get($app_url);
             $datacontent2 = str_replace('http://localhost', $link, $datacontent2);
             File::put($app_url, $datacontent2);
