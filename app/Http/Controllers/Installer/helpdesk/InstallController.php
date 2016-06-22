@@ -207,9 +207,10 @@ class InstallController extends Controller {
             $config .= "{$key}={$val}\n";
         }
         // Write environment file
-        $fp = fopen(base_path() . '/.env', 'w');
+        $fp = fopen(base_path() .DIRECTORY_SEPARATOR.'example.env', 'w');
         fwrite($fp, $config);
         fclose($fp);
+        rename(base_path().DIRECTORY_SEPARATOR.'example.env', base_path().DIRECTORY_SEPARATOR.'.env');
 
         return 1;
     }
@@ -259,6 +260,7 @@ class InstallController extends Controller {
             $check_for_pre_installation = System::all();
             if ($check_for_pre_installation) {
                 return redirect()->back()->with('fails', 'The data in database already exist. Please provide fresh database');
+                unlink(base_path().DIRECTORY_SEPARATOR.'.env');
             }
         } catch (Exception $e) {
             
