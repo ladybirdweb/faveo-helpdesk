@@ -77,9 +77,10 @@ class InstallerApiController extends Controller
             $port = $request->port;
             if (isset($default) && isset($host) && isset($database) && isset($dbusername)) {
                 // Setting environment values
-                $ENV['APP_ENV'] = 'local';
-                $ENV['APP_DEBUG'] = 'true';
+                $ENV['APP_ENV'] = 'production';
+                $ENV['APP_DEBUG'] = 'false';
                 $ENV['APP_KEY'] = 'SomeRandomString';
+                $ENV['APP_URL'] = 'http://localhost';
                 $ENV['DB_TYPE'] = $default;
                 $ENV['DB_HOST'] = $host;
                 $ENV['DB_PORT'] = $port;
