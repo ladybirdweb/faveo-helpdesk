@@ -91,7 +91,7 @@ function php_config_value_to_bytes($val) {
  *
  */
 function checkFilePermission(&$results) {
-    if (file_exists($directory . DIRECTORY_SEPARATOR . "example.env")) {
+    if (file_exists(base_path() . DIRECTORY_SEPARATOR . "example.env")) {
         $path1 = base_path().DIRECTORY_SEPARATOR.'example.env';
         $f1 = substr(sprintf("%o",fileperms($path1)),-3);
         if( $f1 >= '644') {

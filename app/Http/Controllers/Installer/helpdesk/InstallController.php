@@ -259,8 +259,8 @@ class InstallController extends Controller {
         try {
             $check_for_pre_installation = System::all();
             if ($check_for_pre_installation) {
+                rename(base_path().DIRECTORY_SEPARATOR.'.env', base_path().DIRECTORY_SEPARATOR.'example.env')
                 return redirect()->back()->with('fails', 'The data in database already exist. Please provide fresh database');
-                unlink(base_path().DIRECTORY_SEPARATOR.'.env');
             }
         } catch (Exception $e) {
             
