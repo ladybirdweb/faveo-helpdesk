@@ -63,14 +63,10 @@ class InstallerApiController extends Controller
 
             return ['response' => 'fail', 'reason' => $return_data, 'status' => '0'];
         }
-        $path1 = base_path().DIRECTORY_SEPARATOR.'.env';
-        if ($f1 != '644') {
-            return ['response' => 'fail', 'reason' => 'File permission issue.', 'status' => '0'];
-        }
-
+        
         // Check for pre install
         $directory = base_path();
-        if (file_exists($directory . DIRECTORY_SEPARATOR . ".env")) {
+        if (file_exists($directory . DIRECTORY_SEPARATOR . ".env") && \Config::get('database.install') != '%0%') {
             return ['response' => 'fail', 'reason' => 'this system is already installed', 'status' => '0'];
         } else {
             $default = $request->database;
@@ -82,7 +78,7 @@ class InstallerApiController extends Controller
             if (isset($default) && isset($host) && isset($database) && isset($dbusername)) {
                 // Setting environment values
                 $ENV['APP_ENV'] = 'local';
-                $ENV['APP_DEBUG'] = 'false';
+                $ENV['APP_DEBUG'] = 'true';
                 $ENV['APP_KEY'] = 'SomeRandomString';
                 $ENV['DB_TYPE'] = $default;
                 $ENV['DB_HOST'] = $host;
@@ -105,10 +101,10 @@ class InstallerApiController extends Controller
                     $config .= "{$key}={$val}\n";
                 }
                 // Write environment file
-                $fp = fopen(base_path().'/.env', 'w');
+                $fp = fopen(base_path().DIRECTORY_SEPARATOR.'example.env', 'w');
                 fwrite($fp, $config);
                 fclose($fp);
-
+                rename(base_path().DIRECTORY_SEPARATOR.'example.env', base_path().DIRECTORY_SEPARATOR.'.env');
                 return ['response' => 'success', 'status' => '1'];
             } else {
                 return ['response' => 'fail', 'reason' => 'insufficient parameters', 'status' => '0'];
@@ -156,6 +152,7 @@ class InstallerApiController extends Controller
         }
         // Check for pre install
         if (\Config::get('database.install') == '%0%') {
+            
             $firstname = $request->firstname;
             $lastname = $request->lastname;
             $email = $request->email;
@@ -205,11 +202,11 @@ class InstallerApiController extends Controller
 
             // Setting database installed status
             $value = '1';
-            $install = app_path('../config/database.php');
+            $install = base_path() . DIRECTORY_SEPARATOR . '.env';
             $datacontent = File::get($install);
             $datacontent = str_replace('%0%', $value, $datacontent);
             File::put($install, $datacontent);
-
+            
             // Applying email configuration on route
             $smtpfilepath = "\App\Http\Controllers\Common\SettingsController::smtp()";
             $lfmpath = "url('photos').'/'";

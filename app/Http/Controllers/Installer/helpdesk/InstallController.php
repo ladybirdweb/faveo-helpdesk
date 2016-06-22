@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Installer\helpdesk;
 
 // controllers
 use App\Http\Controllers\Controller;
+
 // requests
 use App\Http\Requests\helpdesk\DatabaseRequest;
 use App\Http\Requests\helpdesk\InstallerRequest;
