@@ -401,9 +401,9 @@ class PhpMailController extends Controller
             }
         }
 
-        $mail->Subject = $subject;
+        $mail->Subject = utf8_decode($subject);
 
-        $mail->Body = $content;
+        $mail->Body = utf8_decode($content);
 
         // $mail->AltBody = $altbody;
 
