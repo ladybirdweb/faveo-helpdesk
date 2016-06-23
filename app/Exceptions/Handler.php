@@ -23,10 +23,10 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
 //        'Symfony\Component\HttpKernel\Exception\HttpException',
-//        'Illuminate\Http\Exception\HttpResponseException',
+       \Illuminate\Http\Exception\HttpResponseException::class,
         ValidationException::class,
         AuthorizationException::class,
-        HttpResponseException ::class,
+        HttpResponseException::class,
         ModelNotFoundException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
     ];
@@ -61,7 +61,6 @@ class Handler extends ExceptionHandler
                 return false;
             });
         }
-
         return parent::report($e);
     }
 
