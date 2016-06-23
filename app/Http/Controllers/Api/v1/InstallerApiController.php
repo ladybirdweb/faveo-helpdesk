@@ -81,6 +81,7 @@ class InstallerApiController extends Controller
                 $ENV['APP_DEBUG'] = 'false';
                 $ENV['APP_KEY'] = 'SomeRandomString';
                 $ENV['APP_URL'] = 'http://localhost';
+                $ENV['APP_BUGSNAG'] = 'true';
                 $ENV['DB_TYPE'] = $default;
                 $ENV['DB_HOST'] = $host;
                 $ENV['DB_PORT'] = $port;
