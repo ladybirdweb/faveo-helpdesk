@@ -1,4 +1,29 @@
 |=======================================================
+| v1.0.7.7
+|=======================================================
+
+Bug Fixes
+
+    Removed multifile writing for installation.
+    Bug fixed on Installation for unwanted redirection back to first step
+    Email subject issue fixed for encrypted formats
+    Close ticket workflow issue fixed
+
+    |------------------------------------------
+    |Updating from 1.0.7.6 to 1.0.7.7
+    |------------------------------------------
+
+    To upgrade read instructions here http://ladybirdweb.com/support/show/v1077
+
+|=======================================================
+| v1.0.7.6
+|=======================================================
+
+Bug Fixes
+
+    Updated Config file for releasing
+
+|=======================================================
 | v1.0.7.5
 |=======================================================
 
