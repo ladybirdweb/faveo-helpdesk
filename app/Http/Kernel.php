@@ -34,6 +34,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             //\App\Http\Middleware\VerifyCsrfToken::class,
             \App\Http\Middleware\LanguageMiddleware::class,
+
         ],
         'api' => [
             'throttle:60,1',
@@ -59,5 +60,6 @@ class Kernel extends HttpKernel
         'jwt.refresh' => \Tymon\JWTAuth\Middleware\RefreshToken::class,
         'update'      => \App\Http\Middleware\CheckUpdate::class,
         'board'       => \App\Http\Middleware\CheckBoard::class,
+        'install'     => \App\Http\Middleware\Install::class,
     ];
 }

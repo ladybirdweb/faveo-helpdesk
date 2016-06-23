@@ -17,14 +17,15 @@ active
     <h1 style="text-align: center;">Database Setup</h1>
     <p class="wc-setup-content">Below you should enter your database connection details. If you’re not sure about these, contact your host.</p>
 
-    @if(Session::has('fails'))
+    @if(Cache::has('fails'))
     <div class="wc-setup-content">
         <div class="woocommerce-message woocommerce-tracker">
             <div class="fail">
-                <span id="fail">{!! Lang::get('lang.fails') !!}! {{Session::get('fails')}}</span><br/><br/>
+                <span id="fail">{!! Lang::get('lang.fails') !!}! {{Cache::get('fails')}}</span><br/><br/>
             </div>
         </div>        
     </div>  
+    <?php Cache::forget('fails')?>
     @endif
 
     @if($errors->has('default') || $errors->has('host') || $errors->has('port') || $errors->has('databasename') || $errors->has('username') || $errors->has('password'))
