@@ -269,7 +269,7 @@ class PhpMailController extends Controller
                 }
             }
 
-            $mail->Subject = $subject;
+            $mail->Subject = utf8_decode($subject);
             if ($template == 'ticket-reply-agent') {
                 $line = '---Reply above this line--- <br/><br/>';
                 $mail->Body = utf8_decode($line.$messagebody);
