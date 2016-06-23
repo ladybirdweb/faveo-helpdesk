@@ -34,6 +34,17 @@ return [
       |
      */
     'version' => 'Community 1.0.7.7',
+    
+    /*
+      |--------------------------------------------------------------------------
+      | Application Name
+      |--------------------------------------------------------------------------
+      |
+      | This Applocation name is used for installation and update checking
+      |
+     */
+    'name' => 'Faveo helpdesk community',
+    
     /*
       |--------------------------------------------------------------------------
       | Application URL
