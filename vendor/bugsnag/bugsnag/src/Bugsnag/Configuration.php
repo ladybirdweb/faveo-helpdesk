@@ -17,9 +17,9 @@ class Bugsnag_Configuration
     public $projectRootRegex;
     public $proxySettings = array();
     public $notifier = array(
-        'name'    => 'Bugsnag PHP (Official)',
-        'version' => '2.7.1',
-        'url'     => 'https://bugsnag.com',
+        'name' => 'Bugsnag PHP (Official)',
+        'version' => '2.8.0',
+        'url' => 'https://bugsnag.com',
     );
     public $sendEnvironment = false;
     public $sendCookies = true;
@@ -45,17 +45,17 @@ class Bugsnag_Configuration
 
     public function __construct()
     {
-        $this->timeout = Bugsnag_Configuration::$DEFAULT_TIMEOUT;
+        $this->timeout = self::$DEFAULT_TIMEOUT;
     }
 
     public function getNotifyEndpoint()
     {
         if (is_null($this->endpoint)) {
-            return $this->useSSL ? Bugsnag_Configuration::$DEFAULT_ENDPOINT : Bugsnag_Configuration::$DEFAULT_NON_SSL_ENDPOINT;
+            return $this->useSSL ? self::$DEFAULT_ENDPOINT : self::$DEFAULT_NON_SSL_ENDPOINT;
         } elseif (preg_match('/^(http:\/\/|https:\/\/)/', $this->endpoint)) {
             return $this->endpoint;
         } else {
-            return ($this->useSSL ? "https" : "http")."://".$this->endpoint;
+            return ($this->useSSL ? 'https' : 'http').'://'.$this->endpoint;
         }
     }
 
@@ -76,7 +76,7 @@ class Bugsnag_Configuration
     public function setProjectRoot($projectRoot)
     {
         $this->projectRoot = $projectRoot;
-        $this->projectRootRegex = '/'.preg_quote($projectRoot, '/')."[\\/]?/i";
+        $this->projectRootRegex = '/'.preg_quote($projectRoot, '/').'[\\/]?/i';
         if (is_null($this->stripPath)) {
             $this->setStripPath($projectRoot);
         }
@@ -85,7 +85,7 @@ class Bugsnag_Configuration
     public function setStripPath($stripPath)
     {
         $this->stripPath = $stripPath;
-        $this->stripPathRegex = '/'.preg_quote($stripPath, '/')."[\\/]?/i";
+        $this->stripPathRegex = '/'.preg_quote($stripPath, '/').'[\\/]?/i';
     }
 
     public function get($prop, $default = null)

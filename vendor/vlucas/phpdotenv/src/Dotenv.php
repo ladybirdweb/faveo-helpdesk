@@ -39,27 +39,23 @@ class Dotenv
     }
 
     /**
-     * Load `.env` file in given directory.
+     * Load environment file in given directory.
      *
      * @return array
      */
     public function load()
     {
-        $this->loader = new Loader($this->filePath, true);
-
-        return $this->loader->load();
+        return $this->loadData();
     }
 
     /**
-     * Load `.env` file in given directory.
+     * Load environment file in given directory.
      *
      * @return array
      */
     public function overload()
     {
-        $this->loader = new Loader($this->filePath, false);
-
-        return $this->loader->load();
+        return $this->loadData(true);
     }
 
     /**
@@ -82,7 +78,21 @@ class Dotenv
     }
 
     /**
-     * Required ensures that the specified variables exist, and returns a new Validator object.
+     * Actually load the data.
+     *
+     * @param bool $overload
+     *
+     * @return array
+     */
+    protected function loadData($overload = false)
+    {
+        $this->loader = new Loader($this->filePath, !$overload);
+
+        return $this->loader->load();
+    }
+
+    /**
+     * Required ensures that the specified variables exist, and returns a new validator object.
      *
      * @param string|string[] $variable
      *

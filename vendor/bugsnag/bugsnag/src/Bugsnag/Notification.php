@@ -40,7 +40,7 @@ class Bugsnag_Notification
 
         // Add environment meta-data to error
         if ($this->config->sendEnvironment && !empty($_ENV)) {
-            $error->setMetaData(array("Environment" => $_ENV));
+            $error->setMetaData(array('Environment' => $_ENV));
         }
 
         // Add user-specified meta-data to error
@@ -113,7 +113,7 @@ class Bugsnag_Notification
         curl_setopt($http, CURLOPT_HEADER, false);
         curl_setopt($http, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($http, CURLOPT_POST, true);
-        curl_setopt($http, CURLOPT_HTTPHEADER, array(Bugsnag_Notification::$CONTENT_TYPE_HEADER));
+        curl_setopt($http, CURLOPT_HTTPHEADER, array(self::$CONTENT_TYPE_HEADER, 'Expect:'));
         curl_setopt($http, CURLOPT_POSTFIELDS, $body);
         curl_setopt($http, CURLOPT_CONNECTTIMEOUT, $this->config->timeout);
         curl_setopt($http, CURLOPT_SSL_VERIFYPEER, false);
@@ -125,7 +125,7 @@ class Bugsnag_Notification
         }
 
         if (!empty($this->config->curlOptions)) {
-            foreach ($this->config->curlOptions as $option => $value)  {
+            foreach ($this->config->curlOptions as $option => $value) {
                 curl_setopt($http, $option, $value);
             }
         }
@@ -151,7 +151,7 @@ class Bugsnag_Notification
         if ($statusCode > 200) {
             error_log('Bugsnag Warning: Couldn\'t notify ('.$responseBody.')');
 
-            if($this->config->debug) {
+            if ($this->config->debug) {
                 error_log('Bugsnag Debug: Attempted to post to URL - "'.$url.'"');
                 error_log('Bugsnag Debug: Attempted to post payload - "'.$body.'"');
             }
@@ -175,9 +175,9 @@ class Bugsnag_Notification
         $context = stream_context_create(array(
             'http' => array(
                 'method' => 'POST',
-                'header' => Bugsnag_Notification::$CONTENT_TYPE_HEADER.'\r\n',
+                'header' => self::$CONTENT_TYPE_HEADER.'\r\n',
                 'content' => $body,
-                'timeout' => $this->config->timeout
+                'timeout' => $this->config->timeout,
             ),
             'ssl' => array(
                 'verify_peer' => false,

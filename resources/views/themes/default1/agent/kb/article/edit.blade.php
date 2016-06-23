@@ -86,8 +86,10 @@ class="active"
                 </div>
                 <script>
 CKEDITOR.replace('editor', {
-    filebrowserImageBrowseUrl: '../../laravel-filemanager?type=Images',
-    filebrowserImageUploadUrl: '../../laravel-filemanager/upload?type=Images&_token={{csrf_token()}}',
+    filebrowserImageBrowseUrl: '{{url("laravel-filemanager?type=Images")}}',
+    filebrowserImageUploadUrl: '{{url("laravel-filemanager/upload?type=Images")}}',
+    filebrowserBrowseUrl: '{{url("laravel-filemanager?type=Files")}}',
+    filebrowserUploadUrl: '{{url("laravel-filemanager/upload?type=Files")}}'
 });
                 </script>
             </div>
