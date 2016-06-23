@@ -161,14 +161,19 @@ class AuthController extends Controller
      */
     public function getLogin()
     {
-        if (Auth::user()) {
-            if (Auth::user()->role == 'admin' || Auth::user()->role == 'agent') {
-                return \Redirect::route('dashboard');
-            } elseif (Auth::user()->role == 'user') {
-                return \Redirect::route('home');
+        $directory = base_path();
+        if (file_exists($directory.DIRECTORY_SEPARATOR.'.env')) {
+            if (Auth::user()) {
+                if (Auth::user()->role == 'admin' || Auth::user()->role == 'agent') {
+                    return \Redirect::route('dashboard');
+                } elseif (Auth::user()->role == 'user') {
+                    return \Redirect::route('home');
+                }
+            } else {
+                return view('auth.login');
             }
         } else {
-            return view('auth.login');
+            return Redirect::route('licence');
         }
     }
 

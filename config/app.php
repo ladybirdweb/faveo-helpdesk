@@ -12,7 +12,7 @@ return [
       | application. If disabled, a simple generic error page is shown.
       |
      */
-    'debug' => env('APP_DEBUG'),
+    'debug' => env('APP_DEBUG', false),
     /*
       |--------------------------------------------------------------------------
       | Error Log
@@ -88,7 +88,7 @@ return [
       | will not be safe. Please do this before deploying an application!
       |
      */
-    'key'    => env('APP_KEY'),
+    'key'    => env('APP_KEY', 'F70u5RfMoiq7ptPR'),
     'cipher' => MCRYPT_RIJNDAEL_128,
     /*
       |--------------------------------------------------------------------------
@@ -111,7 +111,7 @@ return [
       |to FAVEO team when any exception/error occurs or not. True value of this variable will
       |allow application to send error reports to FAVEO team's bugsnag log.
      */
-    'bugsnag_reporting' => env('APP_BUGSNAG'),
+    'bugsnag_reporting' => env('APP_BUGSNAG', true),
     /*
       |--------------------------------------------------------------------------
       | Autoloaded Service Providers

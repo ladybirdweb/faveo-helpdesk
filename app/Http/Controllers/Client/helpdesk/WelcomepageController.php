@@ -42,10 +42,11 @@ class WelcomepageController extends Controller
 
     public function index()
     {
-        if (Config::get('database.install') == '%0%') {
+        $directory = base_path();
+        if (file_exists($directory.DIRECTORY_SEPARATOR.'.env')) {
+            return view('themes.default1.client.helpdesk.guest-user.index');
+        } else {
             return Redirect::route('licence');
         }
-
-        return view('themes.default1.client.helpdesk.guest-user.index');
     }
 }
