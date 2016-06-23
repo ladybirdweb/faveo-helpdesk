@@ -12,7 +12,6 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Artisan;
 // classes
-use Config;
 use File;
 use Hash;
 use Illuminate\Http\Request;
