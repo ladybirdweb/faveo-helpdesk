@@ -5,3 +5,4 @@ Homestead.json
 .env
 /app/Plugins/ServiceDesk/
 /app/config/
+/public/uploads

@@ -91,7 +91,7 @@ class Bugsnag_ErrorTypes
         if (array_key_exists($code, self::$ERROR_TYPES)) {
             return self::$ERROR_TYPES[$code]['name'];
         } else {
-            return "Unknown";
+            return 'Unknown';
         }
     }
 
@@ -100,14 +100,14 @@ class Bugsnag_ErrorTypes
         if (array_key_exists($code, self::$ERROR_TYPES)) {
             return self::$ERROR_TYPES[$code]['severity'];
         } else {
-            return "error";
+            return 'error';
         }
     }
 
     public static function getLevelsForSeverity($severity)
     {
         $levels = 0;
-        foreach (Bugsnag_ErrorTypes::$ERROR_TYPES as $level => $info) {
+        foreach (self::$ERROR_TYPES as $level => $info) {
             if ($info['severity'] == $severity) {
                 $levels |= $level;
             }

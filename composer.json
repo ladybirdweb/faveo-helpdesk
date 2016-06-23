@@ -21,7 +21,6 @@
         "chumper/datatable": "dev-develop",
         "chumper/zipper": "0.6.x",
         "phpmailer/phpmailer": "^5.2",
-        "bestmomo/filemanager": "1.1.*",
         "unisharp/laravel-filemanager": "^1.1",
         "tymon/jwt-auth": "0.5.*",
         "php": ">=5.5.9",

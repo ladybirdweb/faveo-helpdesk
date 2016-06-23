@@ -13,6 +13,7 @@ return [
     'menu-download'     => 'Download',
     'menu-resize'       => 'Resize',
     'menu-crop'         => 'Crop',
+    'menu-new'          => 'New',
 
     'title-page'        => 'File Manager',
     'title-panel'       => 'Laravel FileManager',

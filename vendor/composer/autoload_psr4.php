@@ -52,6 +52,5 @@ return array(
     'DaveJamesMiller\\Breadcrumbs\\' => array($vendorDir . '/davejamesmiller/laravel-breadcrumbs/src'),
     'ClassPreloader\\' => array($vendorDir . '/classpreloader/classpreloader/src'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
-    'Bestmomo\\Filemanager\\' => array($vendorDir . '/bestmomo/filemanager/src'),
     'App\\' => array($baseDir . '/app'),
 );

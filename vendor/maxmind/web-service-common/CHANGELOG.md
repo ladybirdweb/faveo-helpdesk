@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+0.2.1 (2016-06-13)
+------------------
+
+* Fix typo in code to copy cert to temp directory.
+
 0.2.0 (2016-06-10)
 ------------------
 

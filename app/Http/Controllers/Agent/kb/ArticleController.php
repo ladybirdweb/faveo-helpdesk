@@ -68,8 +68,8 @@ class ArticleController extends Controller
                       
                         /* add column name */
                         ->addColumn('name', function ($model) {
-                            $name = str_limit($model->name, 10, '...');  
-                            return $name;
+                            $name = str_limit($model->name, 20, '...');  
+                            return "<p title=$model->name>$name</p>";
                         })
                         /* add column Created */
                         ->addColumn('publish_time', function ($model) {

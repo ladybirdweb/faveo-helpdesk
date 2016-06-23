@@ -19,20 +19,20 @@ class Bugsnag_Stacktrace
             $backtrace = debug_backtrace();
         }
 
-        return self::fromBacktrace($config, $backtrace, "[generator]", 0);
+        return self::fromBacktrace($config, $backtrace, '[generator]', 0);
     }
 
     public static function fromFrame($config, $file, $line)
     {
-        $stacktrace = new Bugsnag_Stacktrace($config);
-        $stacktrace->addFrame($file, $line, "[unknown]");
+        $stacktrace = new self($config);
+        $stacktrace->addFrame($file, $line, '[unknown]');
 
         return $stacktrace;
     }
 
     public static function fromBacktrace($config, $backtrace, $topFile, $topLine)
     {
-        $stacktrace = new Bugsnag_Stacktrace($config);
+        $stacktrace = new self($config);
 
         // PHP backtrace's are misaligned, we need to shift the file/line down a frame
         foreach ($backtrace as $frame) {
@@ -49,7 +49,7 @@ class Bugsnag_Stacktrace
                 $topFile = $frame['file'];
                 $topLine = $frame['line'];
             } else {
-                $topFile = "[internal]";
+                $topFile = '[internal]';
                 $topLine = 0;
             }
         }
@@ -86,13 +86,13 @@ class Bugsnag_Stacktrace
 
         // Construct the frame
         $frame = array(
-            'lineNumber' => $line,
+            'lineNumber' => (int) $line,
             'method' => $class ? "$class::$method" : $method,
         );
 
         // Attach some lines of code for context
-        if($this->config->sendCode) {
-            $frame['code'] = $this->getCode($file, $line, Bugsnag_Stacktrace::$DEFAULT_NUM_LINES);
+        if ($this->config->sendCode) {
+            $frame['code'] = $this->getCode($file, $line, self::$DEFAULT_NUM_LINES);
         }
 
         // Check if this frame is inProject
@@ -111,7 +111,7 @@ class Bugsnag_Stacktrace
     private function getCode($path, $line, $numLines)
     {
         if (empty($path) || empty($line) || !file_exists($path)) {
-            return NULL;
+            return;
         }
 
         try {
@@ -133,13 +133,13 @@ class Bugsnag_Stacktrace
 
             $file->seek($start - 1);
             while ($file->key() < $end) {
-                $code[$file->key() + 1] = rtrim(substr($file->current(), 0, Bugsnag_Stacktrace::$MAX_LINE_LENGTH));
+                $code[$file->key() + 1] = rtrim(substr($file->current(), 0, self::$MAX_LINE_LENGTH));
                 $file->next();
             }
 
             return $code;
         } catch (RuntimeException $ex) {
-            return null;
+            return;
         }
     }
 }
