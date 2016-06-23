@@ -140,7 +140,7 @@ class MailController extends Controller
                                 $date = $date_time[1].'-'.$date_time[2].'-'.$date_time[3].' '.$date_time[4];
                                 $date = date('Y-m-d H:i:s', strtotime($date));
                                 if (isset($mail->subject)) {
-                                    $subject = $mail->subject;
+                                    $subject = utf8_decode($mail->subject);
                                 } else {
                                     $subject = 'No Subject';
                                 }
