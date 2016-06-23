@@ -1,0 +1,18 @@
+{
+    "name": "julien-c/iso3166",
+    "description": "ISO 3166-1 alpha-2 mapping",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Julien Chaumond",
+            "email": "chaumond@gmail.com"
+        }
+    ],
+    "require": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Iso3166\\": "src/"
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{!!$name!!}<br>
+<br>
+<br>
+{!!$email!!}
+<br>
+<br>
+{!!$subject!!}
+<br>
+<br>
+{!!$details!!}
+<br>
+<br>
