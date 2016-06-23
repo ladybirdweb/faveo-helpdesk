@@ -1335,7 +1335,7 @@ CREATE TABLE IF NOT EXISTS `settings_system` (
 --
 
 INSERT INTO `settings_system` (`id`, `status`, `url`, `name`, `department`, `page_size`, `log_level`, `purge_log`, `api_enable`, `api_key_mandatory`, `api_key`, `name_format`, `time_farmat`, `date_format`, `date_time_format`, `day_date_time`, `time_zone`, `content`, `version`, `created_at`, `updated_at`) VALUES
-(1, 1, '', '<b>ABC</b> SUPPORT CENTER', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 79, '', '', '2016-06-14 09:07:18', '2016-06-14 09:10:38');
+(1, 1, '', '<b>ABC</b> SUPPORT CENTER', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 79, '', '1.0.7.7', '2016-06-14 09:07:18', '2016-06-14 09:10:38');
 
 -- --------------------------------------------------------
 
