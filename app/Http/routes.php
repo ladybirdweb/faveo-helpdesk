@@ -1006,7 +1006,7 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('readmails', ['as' => 'readmails', 'uses' => 'Agent\helpdesk\MailController@readmails']);
     Route::get('notification', ['as' => 'notification', 'uses' => 'Agent\helpdesk\NotificationController@send_notification']);
-    Route::get('auto-close-tickets', ['as' => 'auto.close', 'uses' => 'Agent\helpdesk\TicketController@autoCloseTickets']);
+    Route::get('auto-close-tickets', ['as' => 'auto.close', 'uses' => 'Client\helpdesk\UnAuthController@autoCloseTickets']);
 
     /*
       |=============================================================
