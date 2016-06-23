@@ -61,6 +61,7 @@ class Handler extends ExceptionHandler
                 return false;
             });
         }
+
         return parent::report($e);
     }
 
