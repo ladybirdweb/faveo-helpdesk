@@ -245,9 +245,9 @@ class ArticleController extends Controller
             $article->publish_time = $publishTime;
             $article->save();
 
-            return redirect('article')->with('success', Lang::get('lang.article_updated_successfully'));
+            return redirect()->back()->with('success', Lang::get('lang.article_updated_successfully'));
         } catch (Exception $e) {
-            return redirect('article')->with('fails', Lang::get('lang.article_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect()->back()->with('fails', Lang::get('lang.article_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -277,12 +277,12 @@ class ArticleController extends Controller
         }
         if ($article) {
             if ($article->delete()) {//true:redirect to index page with success message
-                return Redirect::back()->with('success', Lang::get('lang.article_deleted_successfully'));
+                return redirect('article')->with('success', Lang::get('lang.article_deleted_successfully'));
             } else { //redirect to index page with fails message
-                return Redirect::back()->with('fails', Lang::get('lang.article_not_deleted'));
+                return redirect('article')->with('fails', Lang::get('lang.article_not_deleted'));
             }
         } else {
-            return Redirect::back()->with('fails', Lang::get('lang.article_can_not_deleted'));
+            return redirect('article')->with('fails', Lang::get('lang.article_can_not_deleted'));
         }
     }
 

@@ -66,7 +66,7 @@ class = "active"
                             $article = $article->where('status', '1');
                         }
                         $article = $article->where('type', '1');
-                        $article = $article->get();
+                        $article = $article->orderBy('publish_time','desc')->get();
                         ?>
                         @forelse($article as $arti)
                         <li>
