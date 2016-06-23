@@ -151,14 +151,14 @@ class = "active"
 
                 {!! Form::text('Phone',null,['class' => 'form-control']) !!}
             </div>
-            <div class="col-md-5 form-group {{ $errors->has('Phone') ? 'has-error' : '' }}">
+            <div class="col-md-5 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
 
-                {!! Form::label('Subject',Lang::get('lang.subject')) !!}
+                {!! Form::label('Subject',Lang::get('lang.subject')) !!}<span class="text-red"> *</span>
 
                 {!! Form::text('Subject',null,['class' => 'form-control']) !!}
 
             </div>
-            <div class="col-md-12 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
+            <div class="col-md-12 form-group {{ $errors->has('Details') ? 'has-error' : '' }}">
 
                 {!! Form::label('Details',Lang::get('lang.message')) !!}<span class="text-red"> *</span>
 
