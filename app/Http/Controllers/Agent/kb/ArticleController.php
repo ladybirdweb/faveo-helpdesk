@@ -64,11 +64,12 @@ class ArticleController extends Controller
     {
         $article = new Article();
         // returns chumper datatable
-        return Datatable::Collection($article->select('id','name','description','publish_time','slug')->get())
-                      
+        return Datatable::Collection($article->select('id', 'name', 'description', 'publish_time', 'slug')->get())
+
                         /* add column name */
                         ->addColumn('name', function ($model) {
-                            $name = str_limit($model->name, 20, '...');  
+                            $name = str_limit($model->name, 20, '...');
+
                             return "<p title=$model->name>$name</p>";
                         })
                         /* add column Created */
@@ -99,8 +100,8 @@ class ArticleController extends Controller
         			</div><!-- /.modal-dialog -->
     			</div>';
                         })
-                        ->searchColumns('name','description','publish_time')
-                        ->orderColumns('name','description','publish_time')
+                        ->searchColumns('name', 'description', 'publish_time')
+                        ->orderColumns('name', 'description', 'publish_time')
                         ->make();
     }
 

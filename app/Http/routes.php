@@ -1232,8 +1232,7 @@ Route::group(['middleware' => ['web']], function () {
 // $router->get('faq',['as'=>'faq' , 'uses'=>'Client\kb\UserController@Faq'] );
     /* get the cantact page to user */
     Route::get('contact', ['as' => 'contact', 'uses' => 'Client\kb\UserController@contact']);
-    Breadcrumbs::register('contact', function($breadcrumbs)
-    {
+    Breadcrumbs::register('contact', function ($breadcrumbs) {
         $breadcrumbs->parent('/');
         $breadcrumbs->push(Lang::get('lang.contact'), route('contact'));
     });

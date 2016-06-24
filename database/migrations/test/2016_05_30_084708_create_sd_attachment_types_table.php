@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateSdAttachmentTypesTable extends Migration
 {
@@ -12,7 +12,6 @@ class CreateSdAttachmentTypesTable extends Migration
      */
     public function up()
     {
-        
         Schema::create('sd_attachment_types', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
