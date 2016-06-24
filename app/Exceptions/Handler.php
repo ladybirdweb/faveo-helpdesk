@@ -23,7 +23,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
 //        'Symfony\Component\HttpKernel\Exception\HttpException',
-        Illuminate\Http\Exception\HttpResponseException::class,
+        \Illuminate\Http\Exception\HttpResponseException::class,
         ValidationException::class,
         AuthorizationException::class,
         HttpResponseException ::class,
