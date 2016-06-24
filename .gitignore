@@ -1,8 +1,12 @@
-/node_modules
+.env
 Homestead.yaml
 Homestead.json
-/nbproject/private/
-.env
-/app/Plugins/ServiceDesk/
 /app/config/
+/app/Plugins/ServiceDesk/
+/config/database.php
+/config/lfm.php
+/nbproject/private/
+/node_modules
 /public/uploads
+/public/lb-faveo/media/
+/public/photos/
