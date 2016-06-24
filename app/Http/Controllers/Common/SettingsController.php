@@ -475,7 +475,7 @@ class SettingsController extends Controller
                                     $activate = '<a href='.url('plugin/status/'.$model['path']).'>Deactivate</a>';
                                 }
 
-                                $delete = '<a href=  id=delete'.$model['path'].' data-toggle=modal data-target=#del'.$model['path']."><span style='color:red'>Delete</span></a>"
+                                $delete = '<a href="#"  id=delete'.$model['path'].' data-toggle=modal data-target=#del'.$model['path']."><span style='color:red'>Delete</span></a>"
                                         ."<div class='modal fade' id=del".$model['path'].">
                                             <div class='modal-dialog'>
                                                 <div class=modal-content>  
