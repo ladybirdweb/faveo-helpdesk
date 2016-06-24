@@ -177,8 +177,8 @@ class Handler extends ExceptionHandler
     public function render404($request, $e)
     {
         $seg = $request->segments();
-        if(in_array('api', $seg)){
-            return response()->json(['status'=>'404']);
+        if (in_array('api', $seg)) {
+            return response()->json(['status' => '404']);
         }
         if (config('app.debug') == true) {
             return parent::render($request, $e);

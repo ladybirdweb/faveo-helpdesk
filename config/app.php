@@ -34,7 +34,7 @@ return [
       |
      */
     'version' => 'Community 1.0.7.7',
-    
+
     /*
       |--------------------------------------------------------------------------
       | Application Name
@@ -44,7 +44,7 @@ return [
       |
      */
     'name' => 'Faveo helpdesk community',
-    
+
     /*
       |--------------------------------------------------------------------------
       | Application URL
@@ -180,7 +180,7 @@ return [
         'Chumper\Zipper\ZipperServiceProvider',
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        
+
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
         'Torann\GeoIP\GeoIPServiceProvider',
     ],
@@ -241,7 +241,7 @@ return [
         'JWTFactory'  => 'Tymon\JWTAuth\Facades\JWTFactory',
         'Breadcrumbs' => 'DaveJamesMiller\Breadcrumbs\Facade',
         'GeoIP'       => 'Torann\GeoIP\GeoIPFacade',
-        'Image' => Intervention\Image\Facades\Image::class,
+        'Image'       => Intervention\Image\Facades\Image::class,
     ],
     'token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaXNzIjoiaHR0cDpcL1wvbG9jYWxob3N0XC9mYXZlby1oZWxwZGVzay1naXRodWJcL3B1YmxpY1wvYXBpXC92MVwvYXV0aGVudGljYXRlIiwiaWF0IjoxNDU1NzAyNDEyLCJleHAiOjE0NTU3MDYwMTIsIm5iZiI6MTQ1NTcwMjQxMiwianRpIjoiOTdlODg1ODNjOWQyNDIzNWQ4MzI3Y2ExNzI1NDY1MDQifQ.37E7H2kRCQuz5oBRkQLKhNNpaNXyk4FiEYS9RQ7HZPY',
     'name'  => 'faveo helpdesk community',

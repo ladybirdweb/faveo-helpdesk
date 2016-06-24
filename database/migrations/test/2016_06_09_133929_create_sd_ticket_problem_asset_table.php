@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class CreateSdTicketProblemAssetTable extends Migration {
-
+class CreateSdTicketProblemAssetTable extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,7 +12,7 @@ class CreateSdTicketProblemAssetTable extends Migration {
      */
     public function up()
     {
-     Schema::create('sd_ticket_problem_asset', function (Blueprint $table) {
+        Schema::create('sd_ticket_problem_asset', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('ticket_id')->unsigned()->nullable();
             $table->foreign('ticket_id')->references('id')->on('tickets');
@@ -31,8 +31,7 @@ class CreateSdTicketProblemAssetTable extends Migration {
      */
     public function down()
     {
-                Schema::drop('sd_problem');
+        Schema::drop('sd_problem');
 //
     }
-
 }

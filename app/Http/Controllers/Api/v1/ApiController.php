@@ -108,10 +108,6 @@ class ApiController extends Controller
 
         $source = new Ticket_source();
         $this->source = $source;
-        
-        
-        
-        
     }
 
     /**
