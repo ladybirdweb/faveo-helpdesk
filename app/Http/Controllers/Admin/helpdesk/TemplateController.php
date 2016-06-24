@@ -326,8 +326,8 @@ class TemplateController extends Controller
                 $mail->SetFrom($email_details->email_address, $email_details->email_name); // sender details
                 $address = $request->to; // receiver email
                 $mail->AddAddress($address);
-                $mail->Subject = $request->subject; // subject of the email
-                $body = $request->message; // body of the email
+                $mail->Subject = utf8_decode($request->subject); // subject of the email
+                $body = utf8_decode($request->message); // body of the email
                 $mail->MsgHTML($body);
                 if (!$mail->Send()) {
                     $return = Lang::get('lang.mailer_error').': '.$mail->ErrorInfo;
@@ -355,7 +355,7 @@ class TemplateController extends Controller
                 $mail->setFrom($email_details->email_address, $email_details->email_name);
                 $mail->addAddress($request->to, '');     // Add a recipient
                 $mail->isHTML(true);                                  // Set email format to HTML
-                $mail->Subject = $request->subject;
+                $mail->Subject = utf8_decode($request->subject);
                 $mail->Body = utf8_decode($request->message);
                 if (!$mail->send()) {
                     $return = Lang::get('lang.mailer_error').': '.$mail->ErrorInfo;
