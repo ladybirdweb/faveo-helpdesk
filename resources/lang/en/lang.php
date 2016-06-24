@@ -1118,6 +1118,7 @@ return [
       |------------------------------------------------
      */
     'issue_summary'             => 'Issue Summary',
+    'contact'                   => 'Contact',
     'issue_details'             => 'Issue Details',
     'contact_informations'      => 'Contact Informations',
     'contact_details'           => 'Contact Details',

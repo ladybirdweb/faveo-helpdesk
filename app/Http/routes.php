@@ -1013,7 +1013,7 @@ Route::group(['middleware' => ['web']], function () {
       |  View all the Routes
       |=============================================================
      */
-//Route::get('/aaa', function () {
+// Route::get('/aaa', function () {
 //    $routeCollection = Route::getRoutes();
 //    echo "<table style='width:100%'>";
 //    echo '<tr>';
@@ -1031,7 +1031,7 @@ Route::group(['middleware' => ['web']], function () {
 //        echo '</tr>';
 //    }
 //    echo '</table>';
-//});
+// });
 
     /*
       |=============================================================
@@ -1232,6 +1232,11 @@ Route::group(['middleware' => ['web']], function () {
 // $router->get('faq',['as'=>'faq' , 'uses'=>'Client\kb\UserController@Faq'] );
     /* get the cantact page to user */
     Route::get('contact', ['as' => 'contact', 'uses' => 'Client\kb\UserController@contact']);
+    Breadcrumbs::register('contact', function($breadcrumbs)
+    {
+        $breadcrumbs->parent('/');
+        $breadcrumbs->push(Lang::get('lang.contact'), route('contact'));
+    });
     /* post the cantact page to controller */
     Route::post('post-contact', ['as' => 'post-contact', 'uses' => 'Client\kb\UserController@postContact']);
 //to get the value for page content

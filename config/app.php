@@ -154,7 +154,7 @@ return [
         'Illuminate\Foundation\Providers\FoundationServiceProvider',
         'Illuminate\Hashing\HashServiceProvider',
 
-'App\Plugins\ServiceDesk\ServiceProvider',
+
         'Illuminate\Pagination\PaginationServiceProvider',
         'Illuminate\Pipeline\PipelineServiceProvider',
         'Illuminate\Queue\QueueServiceProvider',
