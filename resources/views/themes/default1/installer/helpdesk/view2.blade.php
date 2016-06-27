@@ -169,7 +169,7 @@ function validate_zend_compatibility_mode(&$results) {
 function validate_extensions(&$results) {
     $ok = true;
 
-    $required_extensions = array('mcrypt', 'openssl', 'pdo');
+    $required_extensions = array('mcrypt', 'openssl', 'pdo', 'fileinfo');
 
     foreach ($required_extensions as $required_extension) {
         if (extension_loaded($required_extension)) {
