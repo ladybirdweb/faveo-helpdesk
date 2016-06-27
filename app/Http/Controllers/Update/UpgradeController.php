@@ -100,6 +100,7 @@ class UpgradeController extends Controller {
     }
 
     public function doUpdate() {
+        try{
         Artisan::call('down');
         $update = $this->dir . '/UPDATES';
         //Open The File And Do Stuff
@@ -148,10 +149,14 @@ class UpgradeController extends Controller {
             }
         }
         echo '</ul>';
-
+        Artisan::call('migrate', ['--force' => true]);
         Artisan::call('up');
 
         return true;
+        }catch(Exception $ex){
+            Artisan::call('up');
+            return redirect()->back();
+        }
     }
 
     public function copyToActualDirectory($latest_version) {
