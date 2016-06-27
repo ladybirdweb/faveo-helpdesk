@@ -49,7 +49,7 @@ class LibraryController extends Controller {
         }
     }
 
-    public static function encryptByFaveoPublicKey($plaintext) {
+    public static function encryptByFaveoPublicKey($data) {
         try {
             $path = storage_path() . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'public.key';
             //dd($path);

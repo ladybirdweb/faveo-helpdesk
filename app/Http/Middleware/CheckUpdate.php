@@ -24,12 +24,12 @@ class CheckUpdate
         if ($check == true) {
             //$this->notificationBar();
             $this->checkNewUpdate();
-            if (Utility::getFileVersion() > Utility::getDatabaseVersion()) {
-                return redirect('database-update');
-            }
-            if (Utility::getFileVersion() < Utility::getDatabaseVersion()) {
-                return redirect('file-update');
-            }
+//            if (Utility::getFileVersion() > Utility::getDatabaseVersion()) {
+//                return redirect('database-update');
+//            }
+//            if (Utility::getFileVersion() < Utility::getDatabaseVersion()) {
+//                return redirect('file-update');
+//            }
         }
 
         return $next($request);
