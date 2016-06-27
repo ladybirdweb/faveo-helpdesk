@@ -127,18 +127,21 @@ class UserController extends Controller
         if (Auth::check()) {
             if (\Auth::user()->role == 'user') {
                 $arti = $arti->where('status', '1');
+                $arti = $arti->where('publish_time', '<', $date);
             }
         } else {
             $arti = $arti->where('status', '1');
+            $arti = $arti->where('publish_time', '<', $date);
         }
         $arti = $arti->where('type', '1');
-        $arti = $arti->where('publish_time', '<', $date);
+        
         $arti = $arti->first();
 
         if ($arti) {
             return view('themes.default1.client.kb.article-list.show', compact('arti'));
         } else {
-            return redirect()->back()->with('fails', Lang::get('lang.no_records_on_publish_time'));
+            return redirect('404');
+            //return redirect()->back()->with('fails', Lang::get('lang.no_records_on_publish_time'));
         }
     }
 

@@ -21,11 +21,12 @@ class UpgradeController extends Controller
 
     public function getLatestVersion()
     {
+        try{
         $name = \Config::get('app.name');
         //serial key should be encrypted data
-        $serial_key = Utility::encryptByFaveoPublicKey('O5Y647RJF8QHLDOE');
+        $serial_key = Utility::encryptByFaveoPublicKey('QWLPV6GSDGNTPAAD');
         //order number should be encrypted data
-        $order_number = Utility::encryptByFaveoPublicKey('23540755');
+        $order_number = Utility::encryptByFaveoPublicKey('80565917');
         $url = url('/');
         //dd($url);
         $post_data = [
@@ -36,12 +37,12 @@ class UpgradeController extends Controller
             'request_type' => 'check_update',
             'url'          => $url,
         ];
-        $url = 'http://www.faveohelpdesk.com/billing/verification';
+        $url = 'http://localhost/billings/billing/public/verification';
         if (str_contains($url, ' ')) {
             $url = str_replace(' ', '%20', $url);
         }
         $curl = $this->postCurl($url, $post_data);
-        //dd($curl);
+        dd($curl);
         if (is_array($curl)) {
             if (array_key_exists('status', $curl)) {
                 if ($curl['status'] == 'success') {
@@ -51,8 +52,11 @@ class UpgradeController extends Controller
                 }
             }
         }
+        }catch(\Exception $e){
+            dd($e);
+        }
     }
-
+    
     public function downloadLatestCode()
     {
         $name = \Config::get('app.name');
@@ -205,7 +209,7 @@ class UpgradeController extends Controller
         try {
             if (Utility::getFileVersion() < Utility::getDatabaseVersion()) {
                 $latest_version = $this->getLatestVersion();
-                //dd($latest_version);
+                dd($latest_version);
                 $current_version = Utility::getFileVersion();
                 if ($latest_version != '') {
                     $_this = new self();
@@ -301,6 +305,7 @@ class UpgradeController extends Controller
 
     public function postCurl($url, $data)
     {
+        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
