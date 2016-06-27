@@ -98,14 +98,14 @@ class InstallerApiController extends Controller
                 $ENV['QUEUE_DRIVER'] = 'sync';
 
                 $config = '';
+                
                 foreach ($ENV as $key => $val) {
                     $config .= "{$key}={$val}\n";
                 }
                 // Write environment file
-                $fp = fopen(base_path().DIRECTORY_SEPARATOR.'example.env', 'w');
+                $fp = fopen(base_path().DIRECTORY_SEPARATOR.'.env', 'w');
                 fwrite($fp, $config);
                 fclose($fp);
-                rename(base_path().DIRECTORY_SEPARATOR.'example.env', base_path().DIRECTORY_SEPARATOR.'.env');
 
                 return ['response' => 'success', 'status' => '1'];
             } else {

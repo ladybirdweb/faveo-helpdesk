@@ -1366,7 +1366,7 @@ class TicketController extends Controller
             $tickets = Tickets::where('assigned_to', '=', null)->where('status', '1')->get();
         } else {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
-            $tickets = Tickets::where('assigned_to', '=', null)->where('dept_id', '=', $dept->id)->get();
+            $tickets = Tickets::where('assigned_to', '=', null)->where('status', '1')->where('dept_id', '=', $dept->id)->get();
         }
 
         return $this->getTable($tickets);
