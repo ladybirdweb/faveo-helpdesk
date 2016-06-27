@@ -52,6 +52,7 @@ class PasswordController extends Controller
      */
     public function postEmail(Request $request)
     {
+        \Event::fire('reset.password',array());
         $date = date('Y-m-d H:i:s');
         $this->validate($request, ['email' => 'required|email']);
         $user = User::where('email', '=', $request->only('email'))->first();
@@ -59,6 +60,7 @@ class PasswordController extends Controller
             $user1 = $user->email;
             //gen new code and pass
             $code = str_random(60);
+            
             $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->first();
             if (isset($password_reset_table)) {
                 $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->update(['token' => $code, 'created_at' => $date]);

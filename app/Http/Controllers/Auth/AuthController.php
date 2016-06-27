@@ -198,6 +198,7 @@ class AuthController extends Controller
         if ($result == 1) {
             return redirect()->back()->withErrors('email', 'Incorrect details')->with('error', $security->lockout_message);
         }
+        \Event::fire('auth.login.event', []); //added 5/5/2016
         //dd($request->input('email'));
         $check_active = User::where('email', '=', $request->input('email'))->orwhere('user_name', '=', $request->input('email'))->first();
         if (!$check_active) {
@@ -243,7 +244,7 @@ class AuthController extends Controller
         }
         // If auth ok, redirect to restricted area
         \Session::put('loginAttempts', $loginAttempts + 1);
-        \Event::fire('auth.login.event', []); //added 5/5/2016
+        
         if (Auth::Attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
             if (Auth::user()->role == 'user') {
                 return \Redirect::route('/');
