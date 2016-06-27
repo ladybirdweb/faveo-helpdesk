@@ -100,60 +100,60 @@ class UpgradeController extends Controller {
     }
 
     public function doUpdate() {
-        try{
-        Artisan::call('down');
-        $update = $this->dir . '/UPDATES';
-        //Open The File And Do Stuff
-        $zipHandle = zip_open($update . '/faveo-helpdesk-master.zip');
-        //dd($update . '/faveo-' . $aV . '.zip');
+        try {
+            Artisan::call('down');
+            $update = $this->dir . '/UPDATES';
+            //Open The File And Do Stuff
+            $zipHandle = zip_open($update . '/faveo-helpdesk-master.zip');
+            //dd($update . '/faveo-' . $aV . '.zip');
 
-        echo '<ul class=list-unstyled>';
-        while ($aF = zip_read($zipHandle)) {
-            $thisFileName = zip_entry_name($aF);
-            $thisFileDir = dirname($thisFileName);
+            echo '<ul class=list-unstyled>';
+            while ($aF = zip_read($zipHandle)) {
+                $thisFileName = zip_entry_name($aF);
+                $thisFileDir = dirname($thisFileName);
 
-            //Continue if its not a file
-            if (substr($thisFileName, -1, 1) == '/') {
-                continue;
-            }
+                //Continue if its not a file
+                if (substr($thisFileName, -1, 1) == '/') {
+                    continue;
+                }
 
 
-            //Make the directory if we need to...
-            if (!is_dir($update . '/' . $thisFileDir . '/')) {
-                \File::makeDirectory($update . '/' . $thisFileDir, 0775, true, true);
-                // mkdir($update.'/'. $thisFileDir, 0775);
-                echo '<li style="color:white;">Created Directory ' . $thisFileDir . '</li>';
-            }
+                //Make the directory if we need to...
+                if (!is_dir($update . '/' . $thisFileDir . '/')) {
+                    \File::makeDirectory($update . '/' . $thisFileDir, 0775, true, true);
+                    // mkdir($update.'/'. $thisFileDir, 0775);
+                    echo '<li style="color:white;">Created Directory ' . $thisFileDir . '</li>';
+                }
 
-            //Overwrite the file
-            if (!is_dir($update . '/' . $thisFileName)) {
-                echo '<li style="color:white;">' . $thisFileName . '...........';
-                $contents = zip_entry_read($aF, zip_entry_filesize($aF));
-                $contents = str_replace("\r\n", "\n", $contents);
-                $updateThis = '';
+                //Overwrite the file
+                if (!is_dir($update . '/' . $thisFileName)) {
+                    echo '<li style="color:white;">' . $thisFileName . '...........';
+                    $contents = zip_entry_read($aF, zip_entry_filesize($aF));
+                    $contents = str_replace("\r\n", "\n", $contents);
+                    $updateThis = '';
 
-                //If we need to run commands, then do it.
-                if ($thisFileName == $thisFileDir . '/.env') {
-                    if (is_file($update . '/' . $thisFileDir . '/.env')) {
-                        unlink($update . '/' . $thisFileDir . '/.env');
-                        unlink($update . '/' . $thisFileDir . '/config/database.php');
+                    //If we need to run commands, then do it.
+                    if ($thisFileName == $thisFileDir . '/.env') {
+                        if (is_file($update . '/' . $thisFileDir . '/.env')) {
+                            unlink($update . '/' . $thisFileDir . '/.env');
+                            unlink($update . '/' . $thisFileDir . '/config/database.php');
+                        }
+                        echo' EXECUTED</li>';
+                    } else {
+                        $updateThis = fopen($update . '/' . $thisFileName, 'w');
+                        fwrite($updateThis, $contents);
+                        fclose($updateThis);
+                        unset($contents);
+                        echo' UPDATED</li>';
                     }
-                    echo' EXECUTED</li>';
-                } else {
-                    $updateThis = fopen($update . '/' . $thisFileName, 'w');
-                    fwrite($updateThis, $contents);
-                    fclose($updateThis);
-                    unset($contents);
-                    echo' UPDATED</li>';
                 }
             }
-        }
-        echo '</ul>';
-        Artisan::call('migrate', ['--force' => true]);
-        Artisan::call('up');
+            echo '</ul>';
+            Artisan::call('migrate', ['--force' => true]);
+            Artisan::call('up');
 
-        return true;
-        }catch(Exception $ex){
+            return true;
+        } catch (Exception $ex) {
             Artisan::call('up');
             return redirect()->back();
         }
