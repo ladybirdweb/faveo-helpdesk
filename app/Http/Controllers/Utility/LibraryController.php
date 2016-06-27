@@ -70,6 +70,7 @@ class LibraryController extends Controller {
     }
 
     public static function decryptByFaveoPrivateKey($encrypted) {
+
         try {
             $encrypted = json_decode($encrypted);
             $sealed_data = $encrypted->seal;
