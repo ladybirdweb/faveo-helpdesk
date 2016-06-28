@@ -60,6 +60,9 @@ class Handler extends ExceptionHandler
             Bugsnag::setBeforeNotifyFunction(function ($error) {
                 return false;
             });
+        } else {
+            $version = \Config::get('app.version');
+            Bugsnag::setAppVersion($version);
         }
 
         return parent::report($e);
