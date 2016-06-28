@@ -143,7 +143,10 @@ return [
          * Laravel Framework Service Providers...
          */
 
+'App\Plugins\ServiceDesk\ServiceProvider',
 'App\Plugins\Reseller\ServiceProvider',
+
+
 
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
