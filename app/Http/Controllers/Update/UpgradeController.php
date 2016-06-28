@@ -23,9 +23,9 @@ class UpgradeController extends Controller {
             $name = \Config::get('app.name');
             //dd($name);
             //serial key should be encrypted data
-            $serial_key = 'BXKPLJMNZDAAIDJA';
+            $serial_key = '64JAHF9WVJA4GCUZ';
             //order number should be encrypted data
-            $order_number = '59707530';
+            $order_number = '44596328';
             $url = env('APP_URL');
             $data = [
                 'serial_key' => $serial_key,
