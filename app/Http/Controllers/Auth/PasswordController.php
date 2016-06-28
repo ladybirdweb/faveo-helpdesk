@@ -54,6 +54,7 @@ class PasswordController extends Controller
     {
         $date = date('Y-m-d H:i:s');
         $this->validate($request, ['email' => 'required|email']);
+        \Event::fire('reset.password',array());
         $user = User::where('email', '=', $request->only('email'))->first();
         if (isset($user)) {
             $user1 = $user->email;

@@ -186,6 +186,7 @@ class AuthController extends Controller
      */
     public function postLogin(LoginRequest $request)
     {
+        \Event::fire('auth.login.event', []); //added 5/5/2016
         // Set login attempts and login time
         $value = $_SERVER['REMOTE_ADDR'];
         $usernameinput = $request->input('email');
@@ -243,7 +244,7 @@ class AuthController extends Controller
         }
         // If auth ok, redirect to restricted area
         \Session::put('loginAttempts', $loginAttempts + 1);
-        \Event::fire('auth.login.event', []); //added 5/5/2016
+        
         if (Auth::Attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
             if (Auth::user()->role == 'user') {
                 return \Redirect::route('/');

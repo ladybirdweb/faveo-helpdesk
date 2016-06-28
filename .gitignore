@@ -3,6 +3,7 @@ Homestead.yaml
 Homestead.json
 /app/config/
 /app/Plugins/ServiceDesk/
+/app/Plugins/Reseller/
 /config/database.php
 /config/lfm.php
 /nbproject/private/
