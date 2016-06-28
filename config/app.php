@@ -143,8 +143,6 @@ return [
          * Laravel Framework Service Providers...
          */
 
-'App\Plugins\ServiceDesk\ServiceProvider',
-'App\Plugins\Reseller\ServiceProvider',
 
 
 
