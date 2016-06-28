@@ -43,7 +43,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if (!$value) {
             return \Gravatar::src($this->attributes['email']);
         } else {
-            return asset('lb-faveo/media/profilepic/'.$value);
+            return asset('uploads/profilepic/'.$value);
         }
     }
 }

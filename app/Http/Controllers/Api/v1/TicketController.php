@@ -724,7 +724,7 @@ class TicketController extends Controller
             $user = new User();
             $user = $user->where('email', $email)->first();
             if ($user->profile_pic) {
-                $url = url('lb-faveo/media/profilepic/'.$user->profile_pic);
+                $url = url('uploads/profilepic/'.$user->profile_pic);
             } else {
                 $url = \Gravatar::src($email);
             }

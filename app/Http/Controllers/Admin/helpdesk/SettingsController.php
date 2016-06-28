@@ -93,7 +93,7 @@ class SettingsController extends Controller
         $companys = $company->whereId('1')->first();
         if (Input::file('logo')) {
             $name = Input::file('logo')->getClientOriginalName();
-            $destinationPath = 'lb-faveo/media/company/';
+            $destinationPath = 'uploads/company/';
             $fileName = rand(0000, 9999).'.'.$name;
             Input::file('logo')->move($destinationPath, $fileName);
             $companys->logo = $fileName;
@@ -154,9 +154,6 @@ class SettingsController extends Controller
             $departments = $department->get();
             /* Fetch the values from Timezones table */
             $timezones = $timezone->get();
-
-            //$debug = \Config::get('app.debug');
-            //dd($value);
             /* Direct to System Settings Page */
             return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time'));
         } catch (Exception $e) {
@@ -183,9 +180,6 @@ class SettingsController extends Controller
             /* Check whether function success or not */
             $systems->fill($request->input())->save();
             /* redirect to Index page with Success Message */
-
-            // dd($datacontent);
-            //\Config::set('app.debug', $request->input('debug'));
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
@@ -220,7 +214,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Ticket in storage.
      *
      * @param type int     $id
      * @param type Ticket  $ticket
@@ -280,7 +274,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified email setting in storage.
      *
      * @param type int          $id
      * @param type Email        $email
@@ -339,7 +333,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage for cron job.
+     * Update the specified schedular in storage for cron job.
      *
      * @param type Email        $email
      * @param type EmailRequest $request
@@ -399,7 +393,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified autoresponse in storage.
      *
      * @param type Responder $responder
      * @param type Request   $request
@@ -448,7 +442,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified alert in storage.
      *
      * @param type         $id
      * @param type Alert   $alert
