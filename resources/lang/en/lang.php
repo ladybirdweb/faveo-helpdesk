@@ -28,6 +28,7 @@ return [
     'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'    => 'We are sorry, but the page you are looking for can not be found.',
     'go_back'                                                           => 'Go Back',
     'the_board_is_offline'                                              => 'The Board is Offline',
+    'error_establishing_connection_to_database'                         => 'Error establishing connection to database',                         
     /*
       |--------------------------------------
       |   Login Page
