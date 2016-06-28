@@ -40,7 +40,7 @@ class UpgradeController extends Controller {
             $post_data = [
                 'data' => $data
             ];
-            $url = 'http://localhost/billings/billing/public/verification';
+            $url = 'http://faveohelpdesk.com/billing/public/verification';
             if (str_contains($url, ' ')) {
                 $url = str_replace(' ', '%20', $url);
             }

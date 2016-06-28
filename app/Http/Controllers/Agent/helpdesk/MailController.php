@@ -168,7 +168,7 @@ class MailController extends Controller
                                         $dir_img_paths = __DIR__;
                                         $dir_img_path = explode('/code', $dir_img_paths);
 // dd($attachment->filePath);
-                                        $filepath = explode('../../../../../public', $attachment->filePath);
+                                        $filepath = explode('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'public', $attachment->filePath);
 // var_dump($attachment->filePath);
 // dd($filepath);
 // $path = $dir_img_path[0]."/code/public/".$filepath[1];

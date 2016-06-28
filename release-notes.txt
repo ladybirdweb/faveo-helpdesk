@@ -73,6 +73,12 @@ Bug Fixes
 
     To upgrade read instructions here http://ladybirdweb.com/support/show/v1075
 
+    |------------------------------------------
+    |Updating from 1.0.7.4 to 1.0.7.5
+    |------------------------------------------
+    Please read this instruction carefully before updating from 1.0.7.4 to 1.0.7.5 
+    http://ladybirdweb.com/support/show/bug-after-update-from-1074-to-1075-or-higher-version
+
 |=======================================================
 | v1.0.7.4
 |=======================================================
