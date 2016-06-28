@@ -29,6 +29,7 @@ return [
     'go_back'                                                           => 'Go Back',
     'the_board_is_offline'                                              => 'The Board is Offline',
     'error_establishing_connection_to_database'                         => 'Error establishing connection to database',                         
+    'unauthorized_access'                                               => 'Unauthorized Access',
     /*
       |--------------------------------------
       |   Login Page
@@ -1375,5 +1376,6 @@ return [
    'that_email_is not_available_in_this_system'     => 'That Email is not available in this System',
    'use_subject'                                    => 'Use Subject',
    'reopen'                                         => 'Reopen',
+   'invalid_attempt'                                => 'Invalid Attempt',
 
 ];

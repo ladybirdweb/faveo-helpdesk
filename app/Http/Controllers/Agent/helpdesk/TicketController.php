@@ -339,15 +339,16 @@ class TicketController extends Controller
     {
         if (Auth::user()->role == 'agent') {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
-
             $tickets = Tickets::where('id', '=', $id)->where('dept_id', '=', $dept->id)->first();
         } elseif (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('id', '=', $id)->first();
         } elseif (Auth::user()->role == 'user') {
             $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
             $ticket_id = \Crypt::encrypt($id);
-
             return redirect()->route('check_ticket', compact('ticket_id'));
+        }
+        if($tickets == null) {
+            return redirect()->route('inbox.ticket')->with('fails', \Lang::get('lang.invalid_attempt'));
         }
         $avg = DB::table('ticket_thread')->where('ticket_id', '=', $id)->where('reply_rating', '!=', 0)->avg('reply_rating');
         $avg_rate = explode('.', $avg);
@@ -942,8 +943,16 @@ class TicketController extends Controller
      * @return type string
      */
     public function close($id, Tickets $ticket)
-    {
-        $ticket_status = $ticket->where('id', '=', $id)->first();
+    {   
+        if(Auth::user()->role == 'user') {
+            $ticket_status = $ticket->where('id', '=', $id)->where('user_id', '=', Auth::user()->id)->first();
+        } else {
+            $ticket_status = $ticket->where('id', '=', $id)->first();
+        }
+        // checking for unautherised access attempt on other than owner ticket id
+        if($ticket_status == null) {
+            return redirect()->route('unauth');
+        }
         $ticket_status->status = 3;
         $ticket_status->closed = 1;
         $ticket_status->closed_at = date('Y-m-d H:i:s');
@@ -976,7 +985,6 @@ class TicketController extends Controller
         } catch (\Exception $e) {
             return 0;
         }
-
         return 'your ticket'.$ticket_status->ticket_number.' has been closed';
     }
 
@@ -990,7 +998,16 @@ class TicketController extends Controller
      */
     public function resolve($id, Tickets $ticket)
     {
-        $ticket_status = $ticket->where('id', '=', $id)->first();
+        if(Auth::user()->role == 'user') {
+            $ticket_status = $ticket->where('id', '=', $id)->where('user_id', '=', Auth::user()->id)->first();
+        } else {
+            $ticket_status = $ticket->where('id', '=', $id)->first();
+        }
+        // checking for unautherised access attempt on other than owner ticket id
+        if($ticket_status == null) {
+            return redirect()->route('unauth');
+        }
+//        $ticket_status = $ticket->where('id', '=', $id)->first();
         $ticket_status->status = 2;
         $ticket_status->closed = 1;
         $ticket_status->closed_at = date('Y-m-d H:i:s');
@@ -1020,7 +1037,15 @@ class TicketController extends Controller
      */
     public function open($id, Tickets $ticket)
     {
-        $ticket_status = $ticket->where('id', '=', $id)->first();
+        if(Auth::user()->role == 'user') {
+            $ticket_status = $ticket->where('id', '=', $id)->where('user_id', '=', Auth::user()->id)->first();
+        } else {
+            $ticket_status = $ticket->where('id', '=', $id)->first();
+        }
+        // checking for unautherised access attempt on other than owner ticket id
+        if($ticket_status == null) {
+            return redirect()->route('unauth');
+        }
         $ticket_status->status = 1;
         $ticket_status->reopened_at = date('Y-m-d H:i:s');
         $ticket_status->save();
@@ -1031,7 +1056,6 @@ class TicketController extends Controller
         $thread->is_internal = 1;
         $thread->body = $ticket_status_message->message.' '.Auth::user()->first_name.' '.Auth::user()->last_name;
         $thread->save();
-
         return 'your ticket'.$ticket_status->ticket_number.' has been opened';
     }
 

@@ -1054,6 +1054,14 @@ Route::group(['middleware' => ['web']], function () {
     Breadcrumbs::register('errordb', function ($breadcrumbs) {
         $breadcrumbs->push('Error establishing connection to database');
     });    
+    
+    Route::get('unauthorized', ['as' => 'unauth', function() {
+        return view('errors.unauth');
+    }]);
+    
+    Breadcrumbs::register('unauth', function ($breadcrumbs) {
+        $breadcrumbs->push('Unauthorized Access');
+    });    
 
     Route::get('board-offline', ['as' => 'board.offline', function () {
         return view('errors.offline');

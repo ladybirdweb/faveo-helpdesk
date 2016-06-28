@@ -1342,10 +1342,6 @@ if ($thread->title != "") {
                     setInterval(function(){
                     $("#alert11").hide();
                             setTimeout(function() {
-                            // var link = document.querySelector('#load-inbox');
-                            // if(link) {
-                            //     link.click();
-                            // }
                             window.location = document.referrer;
                             }, 500);
                     }, 2000);
