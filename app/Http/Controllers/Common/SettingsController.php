@@ -36,16 +36,8 @@ class SettingsController extends Controller
      */
     public function __construct()
     {
-        // $this->smtp();
         $this->middleware('auth');
         $this->middleware('roles');
-//        self::driver();
-//        self::host();
-//        self::port();
-//        self::from();
-//        self::encryption();
-//        self::username();
-//        self::password();
     }
 
     /**
@@ -130,7 +122,6 @@ class SettingsController extends Controller
         $widget->value = $request->content;
         try {
             $widget->save();
-
             return redirect()->back()->with('success', $widget->name.Lang::get('lang.saved_successfully'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -309,7 +300,6 @@ class SettingsController extends Controller
     public function getsmtp()
     {
         $settings = Smtp::where('id', '=', '1')->first();
-
         return view('themes.default1.admin.helpdesk.emails.smtp', compact('settings'));
     }
 
@@ -330,7 +320,6 @@ class SettingsController extends Controller
         $data->password = Crypt::encrypt($request->input('password'));
         try {
             $data->save();
-
             return \Redirect::route('getsmtp')->with('success', 'success');
         } catch (Exception $e) {
             return \Redirect::route('getsmtp')->with('fails', $e->errorInfo[2]);
@@ -367,7 +356,6 @@ class SettingsController extends Controller
     public function settings(Smtp $set)
     {
         $settings = $set->where('id', '1')->first();
-
         return view('themes.default1.admin.settings', compact('settings'));
     }
 
@@ -405,53 +393,6 @@ class SettingsController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
-    }
-
-    /**
-     * version_check.
-     *
-     * @return type
-     */
-    public function version_check()
-    {
-        $response_url = \URL::route('post-version-check');
-        echo "<form action='http://www.faveohelpdesk.com/billing/public/version' method='post' name='redirect'>";
-        echo "<input type='hidden' name='_token' value='csrf_token()'/>";
-        echo "<input type='hidden' name='title' value='".\Config::get('app.name')."'/>";
-        echo "<input type='hidden' name='response_url' value='".$response_url."' />";
-        echo '</form>';
-        echo "<script language='javascript'>document.redirect.submit();</script>";
-    }
-
-    /**
-     * post_version_check.
-     *
-     * @return type
-     */
-    public function post_version_check(Request $request)
-    {
-        //        dd($request);
-        $current_version = \Config::get('app.version');
-        $current_version = explode(' ', $current_version);
-        $current_version = $current_version[1];
-        $new_version = $request->value;
-        if ($current_version == $new_version) {
-            return redirect()->route('checkupdate')->with('info', ' No, new Updates');
-        } elseif ($current_version < $new_version) {
-            $version = Version_Check::where('id', '=', '1')->first();
-            $version->current_version = $current_version;
-            $version->new_version = $new_version;
-            $version->save();
-
-            return redirect()->route('checkupdate')->with('info', ' Version '.$new_version.' is Available');
-        } else {
-            return redirect()->route('checkupdate')->with('info', ' Error Checking Version');
-        }
-    }
-
-    public function getupdate()
-    {
-        return \View::make('themes.default1.admin.helpdesk.settings.checkupdate');
     }
 
     public function Plugins()

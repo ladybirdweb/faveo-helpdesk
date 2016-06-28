@@ -318,27 +318,6 @@
                                 <span>{!! Lang::get('lang.api') !!}</span>
                             </a>
                         </li>
-                        <li class="header">{!! Lang::get('lang.Updates') !!}</li>
-                        <li @yield('update')>
-                        <?php
-                        $update = App\Model\helpdesk\Utility\Version_Check::where('id', '=', 1)->first();
-                        if ($update->current_version == $update->new_version) {
-                            ?>
-                                 <a href="{!! URL::route('checkupdate') !!}" id="checkUpdate">
-                                    <span>{!! Lang::get('lang.no_new_updates') !!}!</span><br/>
-                                    <br/>
-                                    <i class="fa fa-inbox"></i> <span>{!! Lang::get('lang.check_for_updates') !!}.</span>
-                                    <img  id="gif-update" src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="width:12%; height:12%; margin-bottom:5%;margin-left:10%;display:none">
-
-                                    <small class="label pull-right bg-green"></small>
-                                </a>
-                            <?php } elseif ($update->current_version < $update->new_version) { ?>
-                                <a>
-                                    <i class="fa fa-inbox"></i> <span>Version {!! $update->new_version !!}  is Available</span>
-                                    <small class="label pull-right bg-green"></small>
-                                </a>
-                            <?php } ?>
-                        </li>
                         @endif
                         <?php \Event::fire('service.desk.admin.sidebar', array()); ?>
                     </ul>

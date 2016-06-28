@@ -319,19 +319,19 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->push(Lang::get('lang.security_settings'), route('security.index'));
         });
 
-// Templates > Upload Templates
+        // Templates > Upload Templates
         Breadcrumbs::register('security.create', function ($breadcrumbs) {
             $breadcrumbs->parent('security.index');
             $breadcrumbs->push('Upload security', route('security.create'));
         });
 
-// Templates > [Templates Name]
+        // Templates > [Templates Name]
         Breadcrumbs::register('security.show', function ($breadcrumbs, $photo) {
             $breadcrumbs->parent('security.index');
             $breadcrumbs->push($photo->title, route('security.show', $photo->id));
         });
 
-// Templates > [Templates Name] > Edit Templates
+        // Templates > [Templates Name] > Edit Templates
         Breadcrumbs::register('security.edit', function ($breadcrumbs, $photo) {
             $breadcrumbs->parent('security.show', $photo);
             $breadcrumbs->push('Edit security', route('security.edit', $photo->id));
@@ -438,13 +438,6 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('version-check', ['as' => 'version-check', 'uses' => 'Common\SettingsController@version_check']); /* Check version  */
 
         Route::post('post-version-check', ['as' => 'post-version-check', 'uses' => 'Common\SettingsController@post_version_check']); /* post Check version */
-
-        Route::get('checkUpdate', ['as' => 'checkupdate', 'uses' => 'Common\SettingsController@getupdate']); /* get Check update */
-        Breadcrumbs::register('checkupdate', function ($breadcrumbs) {
-            $breadcrumbs->parent('setting');
-            $breadcrumbs->push(Lang::get('lang.update-version'), route('checkupdate'));
-        });
-
 
         Route::get('admin', ['as' => 'setting', 'uses' => 'Admin\helpdesk\SettingsController@settings']);
         Breadcrumbs::register('setting', function ($breadcrumbs) {
@@ -1013,25 +1006,25 @@ Route::group(['middleware' => ['web']], function () {
       |  View all the Routes
       |=============================================================
      */
-// Route::get('/aaa', function () {
-//    $routeCollection = Route::getRoutes();
-//    echo "<table style='width:100%'>";
-//    echo '<tr>';
-//    echo "<td width='10%'><h4>HTTP Method</h4></td>";
-//    echo "<td width='10%'><h4>Route</h4></td>";
-//    echo "<td width='10%'><h4>Url</h4></td>";
-//    echo "<td width='80%'><h4>Corresponding Action</h4></td>";
-//    echo '</tr>';
-//    foreach ($routeCollection as $value) {
-//        echo '<tr>';
-//        echo '<td>' . $value->getMethods()[0] . '</td>';
-//        echo '<td>' . $value->getName() . '</td>';
-//        echo '<td>' . $value->getPath() . '</td>';
-//        echo '<td>' . $value->getActionName() . '</td>';
-//        echo '</tr>';
-//    }
-//    echo '</table>';
-// });
+    // Route::get('/aaa', function () {
+    //    $routeCollection = Route::getRoutes();
+    //    echo "<table style='width:100%'>";
+    //    echo '<tr>';
+    //    echo "<td width='10%'><h4>HTTP Method</h4></td>";
+    //    echo "<td width='10%'><h4>Route</h4></td>";
+    //    echo "<td width='10%'><h4>Url</h4></td>";
+    //    echo "<td width='80%'><h4>Corresponding Action</h4></td>";
+    //    echo '</tr>';
+    //    foreach ($routeCollection as $value) {
+    //        echo '<tr>';
+    //        echo '<td>' . $value->getMethods()[0] . '</td>';
+    //        echo '<td>' . $value->getName() . '</td>';
+    //        echo '<td>' . $value->getPath() . '</td>';
+    //        echo '<td>' . $value->getActionName() . '</td>';
+    //        echo '</tr>';
+    //    }
+    //    echo '</table>';
+    // });
 
     /*
       |=============================================================
@@ -1053,6 +1046,14 @@ Route::group(['middleware' => ['web']], function () {
     Breadcrumbs::register('error404', function ($breadcrumbs) {
         $breadcrumbs->push('404');
     });
+    
+    Route::get('error-in-database-connection', ['as' => 'errordb', function() {
+        return view('errors.db');
+    }]);
+    
+    Breadcrumbs::register('errordb', function ($breadcrumbs) {
+        $breadcrumbs->push('Error establishing connection to database');
+    });    
 
     Route::get('board-offline', ['as' => 'board.offline', function () {
         return view('errors.offline');
@@ -1126,7 +1127,7 @@ Route::group(['middleware' => ['web']], function () {
     });
     /* post settings */
     Route::patch('postsettings/{id}', 'Agent\kb\SettingsController@postSettings');
-//Route for administrater to access the comment
+    //Route for administrater to access the comment
 
 
     Route::get('comment', ['as' => 'comment', 'uses' => 'Agent\kb\SettingsController@comment']);
@@ -1140,11 +1141,11 @@ Route::group(['middleware' => ['web']], function () {
     /* Route for deleting comments */
     Route::delete('deleted/{id}', ['as' => 'deleted', 'uses' => 'Agent\kb\SettingsController@delete']);
     /* Route for Profile  */
-// $router->get('profile', ['as' => 'profile', 'uses' => 'Agent\kb\SettingsController@getProfile']);
+    // $router->get('profile', ['as' => 'profile', 'uses' => 'Agent\kb\SettingsController@getProfile']);
     /* Profile Update */
-// $router->patch('post-profile', ['as' => 'post-profile', 'uses' =>'Agent\kb\SettingsController@postProfile'] );
+    // $router->patch('post-profile', ['as' => 'post-profile', 'uses' =>'Agent\kb\SettingsController@postProfile'] );
     /* Profile password Update */
-// $router->patch('post-profile-password/{id}',['as' => 'post-profile-password', 'uses' => 'Agent\kb\SettingsController@postProfilepassword']);
+    // $router->patch('post-profile-password/{id}',['as' => 'post-profile-password', 'uses' => 'Agent\kb\SettingsController@postProfilepassword']);
     /* delete Logo */
     Route::get('delete-logo/{id}', ['as' => 'delete-logo', 'uses' => 'Agent\kb\SettingsController@deleteLogo']);
     /* delete Background */
@@ -1186,7 +1187,7 @@ Route::group(['middleware' => ['web']], function () {
         return view('direct');
     });
 
-// Route::get('/',['as'=>'home' , 'uses'=> 'client\kb\UserController@home'] );
+    // Route::get('/',['as'=>'home' , 'uses'=> 'client\kb\UserController@home'] );
     /* post the comment from show page */
     Route::post('postcomment/{slug}', ['as' => 'postcomment', 'uses' => 'Client\kb\UserController@postComment']);
     /* get the article list */
@@ -1194,7 +1195,7 @@ Route::group(['middleware' => ['web']], function () {
         $breadcrumbs->push('Article List', route('article-list'));
     });
     Route::get('article-list', ['as' => 'article-list', 'uses' => 'Client\kb\UserController@getArticle']);
-// /* get search values */
+    // /* get search values */
     Route::get('search', ['as' => 'search', 'uses' => 'Client\kb\UserController@search']);
     Breadcrumbs::register('search', function ($breadcrumbs) {
         $breadcrumbs->push('Knowledge-base', route('home'));
@@ -1229,7 +1230,7 @@ Route::group(['middleware' => ['web']], function () {
     /* get the home page */
     Route::get('knowledgebase', ['as' => 'home', 'uses' => 'Client\kb\UserController@home']);
     /* get the faq value to user */
-// $router->get('faq',['as'=>'faq' , 'uses'=>'Client\kb\UserController@Faq'] );
+    // $router->get('faq',['as'=>'faq' , 'uses'=>'Client\kb\UserController@Faq'] );
     /* get the cantact page to user */
     Route::get('contact', ['as' => 'contact', 'uses' => 'Client\kb\UserController@contact']);
     Breadcrumbs::register('contact', function ($breadcrumbs) {
@@ -1238,15 +1239,15 @@ Route::group(['middleware' => ['web']], function () {
     });
     /* post the cantact page to controller */
     Route::post('post-contact', ['as' => 'post-contact', 'uses' => 'Client\kb\UserController@postContact']);
-//to get the value for page content
+    //to get the value for page content
     Route::get('pages/{name}', ['as' => 'pages', 'uses' => 'Client\kb\UserController@getPage']);
     Breadcrumbs::register('pages', function ($breadcrumbs) {
         $breadcrumbs->push('Pages');
     });
-//profile
-// $router->get('client-profile',['as' => 'client-profile', 'uses' => 'Client\kb\UserController@clientProfile']);
-// Route::patch('client-profile-edit',['as' => 'client-profile-edit', 'uses' => 'Client\kb\UserController@postClientProfile']);
-// Route::patch('client-profile-password/{id}',['as' => 'client-profile-password', 'uses' => 'Client\kb\UserController@postClientProfilePassword']);
+    //profile
+    // $router->get('client-profile',['as' => 'client-profile', 'uses' => 'Client\kb\UserController@clientProfile']);
+    // Route::patch('client-profile-edit',['as' => 'client-profile-edit', 'uses' => 'Client\kb\UserController@postClientProfile']);
+    // Route::patch('client-profile-password/{id}',['as' => 'client-profile-password', 'uses' => 'Client\kb\UserController@postClientProfilePassword']);
 
     Route::get('/inbox/data', ['as' => 'api.inbox', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);
 
