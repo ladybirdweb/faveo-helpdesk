@@ -56,7 +56,7 @@ class CheckUpdate
         $not = $notify->get();
         if ($not->count() > 0) {
             $now = \Carbon\Carbon::now();
-            $yesterday = \Carbon\Carbon::now(-24);
+            $yesterday = \Carbon\Carbon::yesterday();
             $notifications = $notify->whereBetween('created_at', [$yesterday, $now])->lists('value', 'key');
             $todelete = $notify->where('created_at', '<', $yesterday)->get();
             if ($todelete->count() > 0) {
@@ -113,7 +113,7 @@ class CheckUpdate
 
             if ($n) {
                 $now = \Carbon\Carbon::now();
-                $yesterday = \Carbon\Carbon::now(-24);
+                $yesterday = \Carbon\Carbon::yesterday();;
                 $notifications = $notify->where('key', 'new-version')->whereBetween('created_at', [$yesterday, $now])->lists('value', 'key');
                 if ($notifications->count() > 0) {
                     return false;
