@@ -11,3 +11,5 @@ Homestead.json
 /public/uploads
 /public/lb-faveo/media/
 /public/photos/
+
+config/app.php
