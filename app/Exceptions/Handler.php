@@ -103,11 +103,15 @@ class Handler extends ExceptionHandler
      */
     public function render404($request, $e)
     {
+        
         $seg = $request->segments();
         if (in_array('api', $seg)) {
             return response()->json(['status' => '404']);
         }
         if (config('app.debug') == true) {
+            if($e->getStatusCode() == '404') {
+                return redirect()->route('error404', []);
+            }
             return parent::render($request, $e);
         }
         return redirect()->route('error404', []);
@@ -154,6 +158,12 @@ class Handler extends ExceptionHandler
                 } else {
                     return $this->render500($request, $e);
                 }
+//            case $e instanceof ErrorException:
+//                if($e->getMessage() == 'Breadcrumb not found with name "" ') {
+//                    return $this->render404($request, $e);
+//                } else {
+//                    return parent::render($request, $e);
+//                }
             default:
                 return $this->render500($request, $e);
         }

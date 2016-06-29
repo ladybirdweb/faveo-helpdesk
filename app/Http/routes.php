@@ -1040,8 +1040,7 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::get('404', ['as' => 'error404', function () {
-        $errors = "";
-        return view('errors.404', compact('errors'));
+        return view('errors.404');
     }]);
 
     Breadcrumbs::register('error404', function ($breadcrumbs) {
