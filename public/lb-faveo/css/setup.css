@@ -27,8 +27,6 @@ body {
 .setup-content {
     padding: 24px 24px 0;
     background: #fff;
-    overflow: hidden;
-    zoom: 1
 }
 
 .setup-content h1,
