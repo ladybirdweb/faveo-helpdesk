@@ -225,7 +225,7 @@ $memory_ok = validate_memory_limit($results);
 $extensions_ok = validate_extensions($results);
 $file_permission = checkFilePermission($results);
 ?>
-<p class="wc-setup-actions step">
+<p class="setup-actions step">
 <?php 
 foreach ($results as $result) {
     print '<span class="' . strtolower($result->status) . '">' . $result->status . '</span> &mdash; ' . $result->message . '<br/>';
@@ -244,7 +244,7 @@ if ($php_ok && $memory_ok && $extensions_ok && $file_permission ) {
 
     <form action="{{URL::route('postprerequisites')}}" method="post"  class="border-line">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <p class="wc-setup-actions step">
+        <p class="setup-actions step">
             <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue">
             <a href="{!! route('licence') !!}" class="button button-large button-next" style="float: left">Previous</a>
         </p>
@@ -258,7 +258,7 @@ if ($php_ok && $memory_ok && $extensions_ok && $file_permission ) {
             <div class="woocommerce-message woocommerce-tracker" >
                 <p id="fail">This system does not meet Faveo system requirements</p>
             </div>
-<p class="wc-setup-actions step">
+<p class="setup-actions step">
     <a href="{{URL::route('licence')}}" style="float: left"><button value="prev" class="button-primary button button-large">Previous</button></a>
     <button disabled="" class="button-primary button button-large button-next" style="float: right">Continue</button>
 </p> <?php

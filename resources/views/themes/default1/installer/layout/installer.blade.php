@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="{{asset("lb-faveo/css/load-styles.css")}}" type="text/css" media="all">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/css.css")}}" type="text/css" media="all">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/admin.css")}}" type="text/css" media="all">
-        <link rel="stylesheet" href="{{asset("lb-faveo/css/wc-setup.css")}}" type="text/css" media="all">
+        <link rel="stylesheet" href="{{asset("lb-faveo/css/setup.css")}}" type="text/css" media="all">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/activation.css")}}" type="text/css" media="all">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/style.css")}}" type="text/css" media="all">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -17,18 +17,18 @@
         <link rel="stylesheet" href="{{asset("lb-faveo/css/prism.css")}}">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/chosen.css")}}">
     </head>
-    <body class="wc-setup wp-core-ui">
-        <h1 id="wc-logo"><a href="http://www.faveohelpdesk.com">
+    <body class="setup wp-core-ui">
+        <h1 id="logo"><a href="http://www.faveohelpdesk.com">
             <img src="{{asset("lb-faveo/media/installer/faveo.png")}}" alt="faveo" width="
             250px"></a></h1>
-    <ol class="wc-setup-steps">
+    <ol class="setup-steps">
         <li class="@yield('license')">License Agreement</li>
         <li class="@yield('environment')">Environment Test</li>
         <li class="@yield('database')">Database Setup</li>
         <li class="@yield('locale')">Locale Information</li>
         <li class="@yield('ready')">Ready</li>
     </ol>
-    <div class="wc-setup-content">
+    <div class="setup-content">
         @yield('content')
     </div>
     

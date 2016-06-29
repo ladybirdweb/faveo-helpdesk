@@ -50,6 +50,7 @@ class="active"
         <?php
         $i = $id->id;
         $form_datas = App\Model\helpdesk\Form\Fields::where('forms_id', '=', $i)->get();
+//        dd($form_datas);
         foreach ($form_datas as $form_data) {
             if ($form_data->type == "select") {
                 $form_fields = explode(',', $form_data->value);
@@ -67,8 +68,7 @@ class="active"
                 }
             } elseif ($form_data->type == "textarea") {
                 $type3 = $form_data->value;
-                $v = explode(',', $type3);
-                echo '<label>' . $form_data->label . '</label></br><textarea rows="' . $v[0] . '" cols="' . $v[1] . '"></textarea></br></br>';
+                echo '<label>' . $form_data->label . '</label></br><textarea name="'.$form_data->name.'" class="form-control" style="height:15%;"></textarea></br></br>';
             } elseif ($form_data->type == "checkbox") {
                 $type4 = $form_data->value;
                 $checks = explode(',', $type4);
