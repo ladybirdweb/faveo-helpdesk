@@ -10,6 +10,7 @@ Homestead.json
 /config/lfm.php
 /nbproject/private/
 /node_modules
+/public/error_log
 /public/lb-faveo/media/
 /public/uploads
 /public/photos/
