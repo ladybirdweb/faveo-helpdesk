@@ -18,6 +18,14 @@
     @endforeach
 </div>
 @endif
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fa fa-ban"></i>
+    <b>{!! Lang::get('lang.alert') !!} !</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <li>{{Session::get('fails')}}</li>
+</div>
+@endif
 <p class="login-box-msg">{!! Lang::get('lang.enter_email_to_reset_password') !!}</p>
 <!-- form open -->
 <form role="form" method="POST" action="{{ url('/password/email') }}">

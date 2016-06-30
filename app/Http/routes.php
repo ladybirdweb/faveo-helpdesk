@@ -954,9 +954,9 @@ Route::group(['middleware' => ['web']], function () {
         $breadcrumbs->push('Category List', route('category-list'));
         $breadcrumbs->push('Category');
     });
-    Route::post('show/rating/{id}', ['as' => 'show.rating', 'uses' => 'Client\helpdesk\UnauthController@rating']); /* Get overall Ratings */
-    Route::post('show/rating2/{id}', ['as' => 'show.rating2', 'uses' => 'Client\helpdesk\UnauthController@ratingReply']); /* Get reply Ratings */
-    Route::get('show/change-status/{status}/{id}', ['as' => 'show.change.status', 'uses' => 'Client\helpdesk\UnauthController@changeStatus']); /* Get reply Ratings */
+    Route::post('show/rating/{id}', ['as' => 'show.rating', 'uses' => 'Client\helpdesk\UnAuthController@rating']); /* Get overall Ratings */
+    Route::post('show/rating2/{id}', ['as' => 'show.rating2', 'uses' => 'Client\helpdesk\UnAuthController@ratingReply']); /* Get reply Ratings */
+    Route::get('show/change-status/{status}/{id}', ['as' => 'show.change.status', 'uses' => 'Client\helpdesk\UnAuthController@changeStatus']); /* Get reply Ratings */
     /* get the home page */
     Route::get('knowledgebase', ['as' => 'home', 'uses' => 'Client\kb\UserController@home']);
     /* get the faq value to user */

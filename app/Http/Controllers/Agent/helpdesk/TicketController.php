@@ -667,11 +667,11 @@ class TicketController extends Controller
             } elseif ($is_reply == 1) {
                 $mail = 'ticket-reply-agent';
             }
-
+            $set_mails = '';
             if (Alert::first()->ticket_status == 1 || Alert::first()->ticket_admin_email == 1) {
                 // send email to admin
                 $admins = User::where('role', '=', 'admin')->get();
-                $set_mails = '';
+//                $set_mails = '';
                 foreach ($admins as $admin) {
                     $to_email = $admin->email;
                     $to_user = $admin->first_name;
@@ -686,7 +686,7 @@ class TicketController extends Controller
                     $agents = User::where('role', '=', 'agent')->get();
                     foreach ($agents as $agent) {
                         $department_data = Department::where('id', '=', $ticketdata->dept_id)->first();
-
+                        
                         if ($department_data->name == $agent->primary_dpt) {
                             $to_email = $agent->email;
                             $to_user = $agent->first_name;
@@ -1462,7 +1462,14 @@ class TicketController extends Controller
         $email = Input::get('search');
         $ticket_id = Input::get('ticket_id');
         $data = User::where('email', '=', $email)->first();
-
+        if($data == null) {
+            return '<div id="alert11" class="alert alert-warning alert-dismissable">'
+                    . '<button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'
+                    . '<i class="icon fa fa-ban"></i>'
+                    . 'This Email doesnot exist in the system'
+                    . '</div>'
+                    . '</div>';
+        }
         $ticket_collaborator = Ticket_Collaborator::where('ticket_id', '=', $ticket_id)->where('user_id', '=', $data->id)->first();
         if (!isset($ticket_collaborator)) {
             $ticket_collaborator = new Ticket_Collaborator();
@@ -2051,11 +2058,11 @@ class TicketController extends Controller
             }
         }
         $parent_ticket = Tickets::select('ticket_number')->where('id', '=', $p_id)->first();
-        $parent_thread = Ticket_thread::where('ticket_id', '=', $p_id)->first();
+        $parent_thread = Ticket_Thread::where('ticket_id', '=', $p_id)->first();
         foreach ($t_id as $value) {//to create new thread of the tickets to be merged with parent
-            $thread = Ticket_thread::where('ticket_id', '=', $value)->first();
+            $thread = Ticket_Thread::where('ticket_id', '=', $value)->first();
             $ticket = Tickets::select('ticket_number')->where('id', '=', $value)->first();
-            Ticket_thread::where('ticket_id', '=', $value)
+            Ticket_Thread::where('ticket_id', '=', $value)
                     ->update(['ticket_id' => $p_id]);
             Ticket_Form_Data::where('ticket_id', '=', $value)
                     ->update(['ticket_id' => $p_id]);
@@ -2069,11 +2076,11 @@ class TicketController extends Controller
                 $reason = Lang::get('lang.no-reason');
             }
             if (!empty(Input::get('title'))) {
-                Ticket_thread::where('ticket_id', '=', $p_id)->first()
+                Ticket_Thread::where('ticket_id', '=', $p_id)->first()
                         ->update(['title' => Input::get('title')]);
             }
 
-            $new_thread = new Ticket_thread();
+            $new_thread = new Ticket_Thread;
             $new_thread->ticket_id = $thread->ticket_id;
             $new_thread->user_id = Auth::user()->id;
             $new_thread->poster = $thread->poster;
@@ -2086,7 +2093,7 @@ class TicketController extends Controller
             $new_thread->format = $thread->format;
             $new_thread->ip_address = $thread->ip_address;
 
-            $new_parent_thread = new Ticket_thread();
+            $new_parent_thread = new Ticket_Thread;
             $new_parent_thread->ticket_id = $p_id;
             $new_parent_thread->user_id = Auth::user()->id;
             $new_parent_thread->poster = $parent_thread->poster;

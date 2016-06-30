@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Faveo HELPDESK</title>
         <link rel="shortcut icon" href="{{asset("lb-faveo/media/images/favicon.ico")}}">
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery.ui.css">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/load-styles.css")}}" type="text/css" media="all">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/css.css")}}" type="text/css" media="all">
         <link rel="stylesheet" href="{{asset("lb-faveo/css/admin.css")}}" type="text/css" media="all">
@@ -18,9 +18,8 @@
         <link rel="stylesheet" href="{{asset("lb-faveo/css/chosen.css")}}">
     </head>
     <body class="setup wp-core-ui">
-        <h1 id="logo"><a href="http://www.faveohelpdesk.com">
-            <img src="{{asset("lb-faveo/media/installer/faveo.png")}}" alt="faveo" width="
-            250px"></a></h1>
+        <center><a href="http://www.faveohelpdesk.com">
+            <img src="{{asset("lb-faveo/media/installer/faveo.png")}}" alt="faveo" width="250px"></a></center>
     <ol class="setup-steps">
         <li class="@yield('license')">License Agreement</li>
         <li class="@yield('environment')">Environment Test</li>
@@ -31,18 +30,14 @@
     <div class="setup-content">
         @yield('content')
     </div>
-    
-    
+     
     <p style="text-align: center;"> Copyright &copy; 2015 - <?php echo date('Y')?> · Ladybird Web Solution Pvt Ltd. All Rights Reserved. Powered by <a target="_blank" href="http://www.faveohelpdesk.com">Faveo </a></p>
-    
-
-
-    
+   
     <script src="{{asset("lb-faveo/js/ggpopover.js")}}"></script>
     <script type="text/javascript">
         $('[data-toggle="popover"]').ggpopover();
     </script>
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script> -->
+    
     <script src="{{asset("lb-faveo/js/chosen.jquery.js")}}" type="text/javascript"></script>
     <script src="{{asset("lb-faveo/js/prism.js")}}" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">

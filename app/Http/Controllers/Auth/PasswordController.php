@@ -72,7 +72,7 @@ class PasswordController extends Controller
 
             return redirect()->back()->with('status', Lang::get('lang.we_have_e-mailed_your_password_reset_link'));
         } else {
-            return redirect()->back()->with('errors', Lang::get("lang.we_can't_find_a_user_with_that_e-mail_address"));
+            return redirect()->back()->with('fails', Lang::get("lang.we_can't_find_a_user_with_that_e-mail_address"));
         }
     }
 }
