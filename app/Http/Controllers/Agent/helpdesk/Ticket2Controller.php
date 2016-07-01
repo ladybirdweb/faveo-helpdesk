@@ -28,7 +28,6 @@ class Ticket2Controller extends Controller
      */
     public function __construct()
     {
-        SettingsController::smtp();
         $this->middleware('auth');
     }
 

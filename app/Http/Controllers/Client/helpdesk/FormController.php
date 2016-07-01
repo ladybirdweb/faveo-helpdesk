@@ -64,9 +64,14 @@ class FormController extends Controller
         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
         if (System::first()->status == 1) {
             $topics = $topic->get();
-            $codes = $code->get();
-
-            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes'))->with('phonecode', $phonecode->phonecode);
+            $codes = $code->get();  
+//             dd($phonecode);
+            if($phonecode->phonecode){
+                $phonecode = $phonecode->phonecode;
+            } else {
+                $phonecode = "";
+            }
+            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes'))->with('phonecode', $phonecode);
         } else {
             return \Redirect::route('home');
         }

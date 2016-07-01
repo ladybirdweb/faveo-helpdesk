@@ -70,7 +70,6 @@ return array(
     'CreatePluginsTable' => $baseDir . '/database/migrations/2016_02_16_140450_create_plugins_table.php',
     'CreateRatingRefTable' => $baseDir . '/database/migrations/2016_06_02_081020_create_rating_ref_table.php',
     'CreateRatingsTable' => $baseDir . '/database/migrations/2016_06_02_080005_create_ratings_table.php',
-    'CreateSendMailTable' => $baseDir . '/database/migrations/2016_02_16_140450_create_send_mail_table.php',
     'CreateSettingsAlertNoticeTable' => $baseDir . '/database/migrations/2016_02_16_140450_create_settings_alert_notice_table.php',
     'CreateSettingsAutoResponseTable' => $baseDir . '/database/migrations/2016_02_16_140450_create_settings_auto_response_table.php',
     'CreateSettingsCompanyTable' => $baseDir . '/database/migrations/2016_02_16_140450_create_settings_company_table.php',

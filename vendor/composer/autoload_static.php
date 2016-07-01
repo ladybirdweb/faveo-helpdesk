@@ -508,7 +508,6 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'CreatePluginsTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_plugins_table.php',
         'CreateRatingRefTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_02_081020_create_rating_ref_table.php',
         'CreateRatingsTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_02_080005_create_ratings_table.php',
-        'CreateSendMailTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_send_mail_table.php',
         'CreateSettingsAlertNoticeTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_settings_alert_notice_table.php',
         'CreateSettingsAutoResponseTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_settings_auto_response_table.php',
         'CreateSettingsCompanyTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_settings_company_table.php',

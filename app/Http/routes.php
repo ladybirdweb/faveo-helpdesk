@@ -667,6 +667,9 @@ Route::group(['middleware' => ['web']], function () {
         }
     });
     Route::get('getform', ['as' => 'guest.getform', 'uses' => 'Client\helpdesk\FormController@getForm']); /* get the form for create a ticket by guest user */
+    Breadcrumbs::register('guest.getform', function ($breadcrumbs) {
+        $breadcrumbs->push(\Lang::get('lang.submit_a_ticket'), route('home'));
+    });
     Route::post('postform/{id}', 'Client\helpdesk\FormController@postForm'); /* post the AJAX form for create a ticket by guest user */
     Route::post('postedform', 'Client\helpdesk\FormController@postedForm'); /* post the form to store the value */
     Route::get('check', 'CheckController@getcheck'); //testing checkbox auto-populate
@@ -822,13 +825,13 @@ Route::group(['middleware' => ['web']], function () {
       |  Test mail Routes
       |=============================================================
      */
-    Route::get('testmail', function () {
-        $e = 'hello';
-        Config::set('mail.host', 'smtp.gmail.com');
-        \Mail::send('errors.report', ['e' => $e], function ($message) {
-            $message->to('sujitprasad4567@gmail.com', 'sujit prasad')->subject('Error');
-        });
-    });
+//    Route::get('testmail', function () {
+//        $e = 'hello';
+//        Config::set('mail.host', 'smtp.gmail.com');
+//        \Mail::send('errors.report', ['e' => $e], function ($message) {
+//            $message->to('sujitprasad4567@gmail.com', 'sujit prasad')->subject('Error');
+//        });
+//    });
     /*  For the crud of catogory  */
     Route::resource('category', 'Agent\kb\CategoryController');
     Breadcrumbs::register('category.index', function ($breadcrumbs) {

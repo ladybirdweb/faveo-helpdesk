@@ -32,7 +32,6 @@ class PasswordController extends Controller
     {
         $this->PhpMailController = $PhpMailController;
         $this->middleware('guest');
-        SettingsController::smtp();
     }
 
     /**
