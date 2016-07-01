@@ -15,6 +15,10 @@ class NotificationController extends Controller
     {
         $user = new User();
         $this->user = $user;
+        // checking authentication
+        $this->middleware('auth');
+        // checking if role is agent
+        $this->middleware('role.agent');
     }
 
     /**
