@@ -21,21 +21,6 @@ class NotificationController extends Controller
         $this->middleware('role.agent');
     }
 
-    /**
-     * get the page to list the notifications.
-     *
-     * @return response
-     */
-    public static function getNotifications()
-    {
-        $notifications = UserNotification::join('notifications', 'user_notification.notification_id', '=', 'notifications.id')
-                ->join('notification_types', 'notifications.type_id', '=', 'notification_types.id')
-                ->where('user_notification.user_id', '=', \Auth::user()->id)
-                ->paginate(10);
-
-        return $notifications;
-    }
-
     public function create($model_id, $userid_created, $type_id, $forwhome = [])
     {
         try {
@@ -93,5 +78,20 @@ class NotificationController extends Controller
         }
 
         return 1;
+    }
+    
+    /**
+     * get the page to list the notifications.
+     *
+     * @return response
+     */
+    public static function getNotifications()
+    {
+        $notifications = UserNotification::join('notifications', 'user_notification.notification_id', '=', 'notifications.id')
+                ->join('notification_types', 'notifications.type_id', '=', 'notification_types.id')
+                ->where('user_notification.user_id', '=', \Auth::user()->id)
+                ->paginate(10);
+
+        return $notifications;
     }
 }

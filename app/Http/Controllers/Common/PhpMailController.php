@@ -288,7 +288,7 @@ class PhpMailController extends Controller {
             }
         } catch (Exception $e) {
             if($e instanceof ErrorException) {
-                return "Outgoing mail failed"; 
+                return \Lang::get('lang.outgoing_email_failed');
             } 
         }
     }
@@ -418,7 +418,7 @@ class PhpMailController extends Controller {
             }
         } catch (Exception $e) {
             if($e instanceof ErrorException) {
-                return "Outgoing mail failed"; 
+                return \Lang::get('lang.outgoing_email_failed');
             } 
         }
     }

@@ -152,7 +152,6 @@ class TicketController extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '=', Auth::user()->id)->get();
         }
-
         return $this->getTable($tickets);
     }
 
@@ -2158,14 +2157,17 @@ class TicketController extends Controller
                             }
                             $threads = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first(); //
                             $count = Ticket_Thread::where('ticket_id', '=', $ticket->id)->count(); //
-                            $attachment = Ticket_attachments::where('thread_id', '=', $threads->id)->get();
-                            $attachCount = count($attachment);
+                            if($threads != null) {
+                                $attachment = Ticket_attachments::where('thread_id', '=', $threads->id)->get();
+                                $attachCount = count($attachment);
+                            } else {
+                                $attachCount = 0;
+                            }
                             if ($attachCount > 0) {
                                 $attachString = '&nbsp;<i class="fa fa-paperclip"></i>';
                             } else {
                                 $attachString = '';
                             }
-
                             return "<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".ucfirst($string)."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
                         })
                         ->addColumn('ticket_number', function ($ticket) {
@@ -2186,8 +2188,12 @@ class TicketController extends Controller
                                 }
                             }
                             $priority = DB::table('ticket_priority')->select('priority_desc', 'priority_color')->where('priority_id', '=', $ticket->priority_id)->first();
-
-                            return '<span class="btn btn-'.$priority->priority_color.' btn-xs '.$rep.'">'.ucfirst($priority->priority_desc).'</span>';
+                            if($priority != null) {
+                                $prio = '<span class="btn btn-'.$priority->priority_color.' btn-xs '.$rep.'">'.ucfirst($priority->priority_desc).'</span>';
+                            } else {
+                                $prio = '';
+                            }
+                            return $prio;
                         })
                         ->addColumn('from', function ($ticket) {
                             $from = DB::table('users')->select('user_name')->where('id', '=', $ticket->user_id)->first();

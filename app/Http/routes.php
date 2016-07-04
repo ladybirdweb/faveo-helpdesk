@@ -272,7 +272,7 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->parent('security.show', $photo);
             $breadcrumbs->push('Edit security', route('security.edit', $photo->id));
         });
-        Route::resource('security', 'Admin\helpdesk\SecurityController'); // direct to security setting page
+        Route::get('security', ['as' => 'security.index', 'uses' => 'Admin\helpdesk\SecurityController@index']); // direct to security setting page
         Route::resource('close-workflow', 'Admin\helpdesk\CloseWrokflowController'); // direct to security setting page
         Breadcrumbs::register('close-workflow.index', function ($breadcrumbs) {
             $breadcrumbs->parent('setting');

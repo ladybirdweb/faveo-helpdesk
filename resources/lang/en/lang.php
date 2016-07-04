@@ -142,6 +142,7 @@ return [
     'you_cannot_delete_system_default_email'                                               => 'You cannot delete system default Email',
     'email_deleted_sucessfully'                                                            => 'Email Deleted sucessfully',
     'email_can_not_delete'                                                                 => 'Email can not  Delete',
+    'outgoing_email_failed'                                                                => 'Outgoing email failed',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
@@ -908,6 +909,7 @@ return [
     'moved_to_trash'                                                                => 'Moved selected tickets to trash.',
     'tickets_have_been_closed'                                                      => 'Selected tickets have been closed.',
     'tickets_have_been_opened'                                                      => 'Selected tickets have been opened.',
+    'unable_to_fetch_emails'                                                        => 'Unable to fetch Emails',
 
 
 

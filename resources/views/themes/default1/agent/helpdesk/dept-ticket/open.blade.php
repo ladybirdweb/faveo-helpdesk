@@ -20,19 +20,13 @@ class="active"
 <?php
 $date_time_format = UTC::getDateTimeFormat();
 $dept = App\Model\helpdesk\Agent\Department::where('name','=',$id)->first();
-    if(Auth::user()->role == 'agent') {
-        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','=','1')->where('isanswered','=', 0)->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
-    } else {
-        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','=','1')->where('isanswered','=', 0)->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
-    }   
 ?>
 <!-- Main content -->
 <div class="box box-primary">
      <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.open') !!} </h3> <small id="title_refresh">{!! $tickets->total() !!} {!! Lang::get('lang.tickets') !!}</small>
+        <h3 class="box-title">{!! Lang::get('lang.open') !!} </h3>
         <div class="box-tools pull-right">
         <div class="has-feedback">
-
             </div>
         </div>
     </div><!-- /.box-header -->

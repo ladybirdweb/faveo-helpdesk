@@ -220,6 +220,7 @@ class DepartmentController extends Controller {
      */
     public function destroy($id, Department $department, Group_assign_department $group_assign_department, System $system, Tickets $tickets) {
         // try {
+        
         $system = $system->where('id', '=', '1')->first();
         if ($system->department == $id) {
             return redirect('departments')->with('fails', Lang::get('lang.you_cannot_delete_default_department'));

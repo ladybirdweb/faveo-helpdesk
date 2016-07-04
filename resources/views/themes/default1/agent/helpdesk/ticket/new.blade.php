@@ -132,7 +132,7 @@ class="active"
                     <div class="form-group">
                         <label>{!! Lang::get('lang.help_topic') !!}:</label>
                         <!-- helptopic -->
-                        <?php $helptopic = App\Model\helpdesk\Manage\Help_topic::all(); ?>
+                        <?php $helptopic = App\Model\helpdesk\Manage\Help_topic::where('status','=',1)->get(); ?>
                         {!! Form::select('helptopic', ['Helptopic'=>$helptopic->lists('topic','id')->toArray()],null,['class' => 'form-control select']) !!}
                     </div>
                 </div>

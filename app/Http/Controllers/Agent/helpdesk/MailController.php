@@ -52,7 +52,7 @@ class MailController extends Controller
         if ($settings_email->first()->email_fetching == 1) {
             if ($settings_email->first()->all_emails == 1) {
                 // $helptopic = $this->TicketController->default_helptopic();
-// $sla = $this->TicketController->default_sla();
+                // $sla = $this->TicketController->default_sla();
                 $email = $emails->get();
                 foreach ($email as $e_mail) {
                     if ($e_mail->fetching_status == 1) {
@@ -95,17 +95,34 @@ class MailController extends Controller
                         }
                         $imap_config = '{'.$host.':'.$port.$protocol.'}INBOX';
                         $password = Crypt::decrypt($e_mail->password);
-                        $mailbox = new ImapMailbox($imap_config, $e_mail->email_address, $password, __DIR__);
+                        try {
+                            $mailbox = new ImapMailbox($imap_config, $e_mail->email_address, $password, __DIR__);
+                        } catch (\PhpImap\Exception $e) {
+                            echo "Connection error";
+                        }
                         $mails = [];
-                        $mailsIds = $mailbox->searchMailBox('SINCE '.date('d-M-Y', strtotime('-1 day')));
+                        try {
+                            $mailsIds = $mailbox->searchMailBox('SINCE '.date('d-M-Y', strtotime('-1 day')));
+                        } catch (\PhpImap\Exception $e) {
+                            echo "Connection error";
+                        }
                         if (!$mailsIds) {
                             die('Mailbox is empty');
                         }
                         foreach ($mailsIds as $mailId) {
-                            $overview = $mailbox->get_overview($mailId);
+                            try {
+                                $overview = $mailbox->get_overview($mailId);
+                            } catch (Exception $e) {
+                                return \Lang::get('lang.unable_to_fetch_emails');
+                            }
                             $var = $overview[0]->seen ? 'read' : 'unread';
                             if ($var == 'unread') {
                                 $mail = $mailbox->getMail($mailId);
+                                try {
+                                    $mail = $mailbox->getMail($mailId);
+                                } catch (\PhpImap\Exception $e) {
+                                    echo "Connection error";
+                                }
                                 if ($settings_email->first()->email_collaborator == 1) {
                                     $collaborator = $mail->cc;
                                 } else {
