@@ -44,13 +44,11 @@ active
     </div>
     @endif
 
-
     {!! Form::open(['url'=> '/step4post']) !!}
     <table ng-controller="MainController">
         <tr>
             <td>
-                <label for="selectbox1">Database <span style="color
-                                                       : red;font-size:12px;">*</span></label>
+                <label for="selectbox1">Database <span style="color: red;font-size:12px;">*</span></label>
             </td>
             <td>
                 <div class="side-by-side clearfix moveleftthre">
@@ -68,8 +66,7 @@ active
         </tr>
         <tr>
             <td>
-                <label for="box1">Host<span style="color
-                                            : red;font-size:12px;">*</span></label>
+                <label for="box1">Host<span style="color: red;font-size:12px;">*</span></label>
             </td>
             <td>
                 <input type="text" name="host">
@@ -93,8 +90,7 @@ active
         </tr>
         <tr>
             <td>
-                <label for="box3">Database Name<span style="color
-                                                     : red;font-size:12px;">*</span></label>
+                <label for="box3">Database Name<span style="color: red;font-size:12px;">*</span></label>
             </td>
             <td>
                 <input type="text" name="databasename"> 
@@ -106,8 +102,7 @@ active
         </tr>
         <tr>
             <td>
-                <label for="box4">User Name<span style="color
-                                                 : red; font-size: 12px;">*</span></label>
+                <label for="box4">User Name<span style="color: red; font-size: 12px;">*</span></label>
             </td>
             <td>
                 <input type="text" name="username"> 
@@ -131,7 +126,7 @@ active
         </tr>
     </table>
     <br>
-    <p class="wc-setup-actions step">
+    <p class="setup-actions step">
         <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue">
         <a href="{!! route('prerequisites') !!}" class="button button-large button-next" style="float: left">Previous</a>
     </p>

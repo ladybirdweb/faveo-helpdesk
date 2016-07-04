@@ -15,7 +15,7 @@ class Tickets extends BaseModel
 //        }
     public function thread()
     {
-        return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_thread', 'ticket_id');
+        return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_Thread', 'ticket_id');
     }
 
     public function collaborator()

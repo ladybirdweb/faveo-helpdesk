@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Exceptions;
-
 // controller
 use Bugsnag;
 //use Illuminate\Validation\ValidationException;
@@ -13,7 +11,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
 class Handler extends ExceptionHandler
 {
     /**
@@ -30,7 +27,6 @@ class Handler extends ExceptionHandler
         ModelNotFoundException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
     ];
-
     /**
      * Report or log an exception.
      *
@@ -54,7 +50,6 @@ class Handler extends ExceptionHandler
         }
         return parent::report($e);
     }
-
     /**
      * Render an exception into an HTTP response.
      *
@@ -76,7 +71,6 @@ class Handler extends ExceptionHandler
                 return $this->common($request, $e);
         }
     }
-
     /**
      * Function to render 500 error page.
      *
@@ -92,7 +86,6 @@ class Handler extends ExceptionHandler
         }
         return redirect()->route('error500', []);
     }
-
     /**
      * Function to render 404 error page.
      *
@@ -103,16 +96,19 @@ class Handler extends ExceptionHandler
      */
     public function render404($request, $e)
     {
+        
         $seg = $request->segments();
         if (in_array('api', $seg)) {
             return response()->json(['status' => '404']);
         }
         if (config('app.debug') == true) {
+            if($e->getStatusCode() == '404') {
+                return redirect()->route('error404', []);
+            }
             return parent::render($request, $e);
         }
         return redirect()->route('error404', []);
     }
-
     /**
      * Function to render database connection failed
      *
@@ -132,7 +128,6 @@ class Handler extends ExceptionHandler
         }
         return redirect()->route('error404', []);
     }
-
     /**
      * Common finction to render both types of codes.
      *
@@ -154,6 +149,12 @@ class Handler extends ExceptionHandler
                 } else {
                     return $this->render500($request, $e);
                 }
+//            case $e instanceof ErrorException:
+//                if($e->getMessage() == 'Breadcrumb not found with name "" ') {
+//                    return $this->render404($request, $e);
+//                } else {
+//                    return parent::render($request, $e);
+//                }
             default:
                 return $this->render500($request, $e);
         }

@@ -205,92 +205,6 @@ class SettingsController extends Controller
         }
     }
 
-    /**
-     * Driver.
-     *
-     * @return type void
-     */
-    public static function driver()
-    {
-        $set = new Smtp();
-        $settings = Smtp::where('id', '=', '1')->first();
-        Config::set('mail.host', $settings->driver);
-    }
-
-    /**
-     * SMTP host.
-     *
-     * @return type void
-     */
-    public static function host()
-    {
-        $set = new Smtp();
-        $settings = Smtp::where('id', '=', '1')->first();
-        Config::set('mail.host', $settings->host);
-    }
-
-    /**
-     * SMTP port.
-     *
-     * @return type void
-     */
-    public static function port()
-    {
-        $set = new Smtp();
-        $settings = Smtp::where('id', '=', '1')->first();
-        Config::set('mail.port', intval($settings->port));
-    }
-
-    /**
-     * SMTP from.
-     *
-     * @return type void
-     */
-    public static function from()
-    {
-        $set = new Smtp();
-        $settings = Smtp::where('id', '=', '1')->first();
-        Config::set('mail.from', ['address' => $settings->email, 'name' => $settings->company_name]);
-    }
-
-    /**
-     * SMTP encryption.
-     *
-     * @return type void
-     */
-    public static function encryption()
-    {
-        $set = new Smtp();
-        $settings = Smtp::where('id', '=', '1')->first();
-        Config::set('mail.encryption', $settings->encryption);
-    }
-
-    /**
-     * SMTP username.
-     *
-     * @return type void
-     */
-    public static function username()
-    {
-        $set = new Smtp();
-        $settings = Smtp::where('id', '=', '1')->first();
-        Config::set('mail.username', $settings->email);
-    }
-
-    /**
-     * SMTP password.
-     *
-     * @return type void
-     */
-    public static function password()
-    {
-        $settings = Smtp::first();
-        if ($settings->password) {
-            $pass = $settings->password;
-            $password = Crypt::decrypt($pass);
-            Config::set('mail.password', $password);
-        }
-    }
 
     /**
      * get SMTP.
@@ -324,39 +238,6 @@ class SettingsController extends Controller
         } catch (Exception $e) {
             return \Redirect::route('getsmtp')->with('fails', $e->errorInfo[2]);
         }
-    }
-
-    /**
-     * SMTP.
-     *
-     * @return type void
-     */
-    public static function smtp()
-    {
-        $settings = Smtp::where('id', '=', '1')->first();
-        if ($settings->password) {
-            $password = Crypt::decrypt($settings->password);
-            Config::set('mail.driver', $settings->driver);
-            Config::set('mail.password', $password);
-            Config::set('mail.username', $settings->email);
-            Config::set('mail.encryption', $settings->encryption);
-            Config::set('mail.from', ['address' => $settings->email, 'name' => $settings->name]);
-            Config::set('mail.port', intval($settings->port));
-            Config::set('mail.host', $settings->host);
-        }
-    }
-
-    /**
-     * Settings.
-     *
-     * @param type Smtp $set
-     *
-     * @return type view\
-     */
-    public function settings(Smtp $set)
-    {
-        $settings = $set->where('id', '1')->first();
-        return view('themes.default1.admin.settings', compact('settings'));
     }
 
     /**

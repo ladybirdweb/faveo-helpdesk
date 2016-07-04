@@ -885,7 +885,6 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES
 ('2016_02_16_140450_create_organization_table', 1),
 ('2016_02_16_140450_create_password_resets_table', 1),
 ('2016_02_16_140450_create_plugins_table', 1),
-('2016_02_16_140450_create_send_mail_table', 1),
 ('2016_02_16_140450_create_settings_alert_notice_table', 1),
 ('2016_02_16_140450_create_settings_auto_response_table', 1),
 ('2016_02_16_140450_create_settings_company_table', 1),
@@ -1091,31 +1090,6 @@ CREATE TABLE IF NOT EXISTS `rating_ref` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `send_mail`
---
-
-CREATE TABLE IF NOT EXISTS `send_mail` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `driver` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `host` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `port` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `encryption` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
-
---
--- Dumping data for table `send_mail`
---
-
-INSERT INTO `send_mail` (`id`, `driver`, `host`, `port`, `encryption`, `name`, `email`, `password`) VALUES
-(1, '', '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 

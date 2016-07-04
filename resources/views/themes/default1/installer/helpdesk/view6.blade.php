@@ -33,15 +33,15 @@ active
             </div>
 
 
-        <div class="wc-setup-next-steps">
-            <div class="wc-setup-next-steps-first">
+        <div class="setup-next-steps">
+            <div class="setup-next-steps-first">
                 <h2>Next Steps</h2>
                 <ul>
                     <li class="setup-product"><a class="button button-primary button-large" href="{!! url('auth/login') !!}" style="float: none; text-align: center; font-size: 24px;    padding: 15px;     line-height: 1;">Login to Faveo</a>
                     </li>
                 </ul>
             </div>
-            <div class="wc-setup-next-steps-last">
+            <div class="setup-next-steps-last">
                 <h2>Learn More</h2>
                 <ul>
                     <li class="video-walkthrough"><a target="_blank" href="https://www.youtube.com/channel/UC-eqh-h241b1janp6sU7Iiw">Video walk through</a>

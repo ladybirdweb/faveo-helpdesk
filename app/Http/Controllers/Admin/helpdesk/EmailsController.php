@@ -498,7 +498,7 @@ class EmailsController extends Controller
             $mailbox_protocol = $fetching_encryption2;
             $host = $request->input('fetching_host');
             $port = $request->input('fetching_port');
-            $mailbox = '{'.$host.':'.$port.$mailbox_protocol.'}INBOX';
+            $mailbox = '{'.$host.':'.$port.$fetching_protocol.$mailbox_protocol.'}INBOX';
         } else {
             $mailbox_protocol = $fetching_protocol.$fetching_encryption;
             $host = $request->input('fetching_host');

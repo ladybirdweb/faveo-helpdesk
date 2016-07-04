@@ -900,7 +900,6 @@ return [
     'ticket_updated_successfully'                                                   => 'Ticket Updated Successfully',
     'you_have_successfully_replied_to_your_ticket'                                  => 'You have successfully replied to your ticket',
     'for_some_reason_your_message_was_not_posted_please_try_again_later'            => 'For some reason your message was not posted. Please try again later',
-    'you_have_successfully_replied_to_your_ticket'                                  => 'You have successfully replied to your ticket',
     'for_some_reason_your_reply_was_not_posted_please_try_again_later'              => 'For some reason your reply was not posted. Please try again later',
     'you_have_unassigned_your_ticket'                                               => 'You have Unassigned your ticket',
     'for_some_reason_your_request_failed'                                           => 'For some reason your request failed',

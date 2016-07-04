@@ -103,12 +103,13 @@ class="active"
                 {!!Form::select('outgoing_email', ['' => Lang::get('lang.system_default'), Lang::get('lang.emails')=>$emails->lists('email_name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
         </div>
-
-    </div>
-    <div class="box-footer">
         <div class="form-group">
             <input type="checkbox" name="sys_department" @if($sys_department->department == $departments->id) checked disabled @endif> {{ Lang::get('lang.make-default-department')}}
         </div>
+    </div>
+
+    <div class="box-footer">
+
         {!! Form::submit(Lang::get('lang.update'),['class'=>'form-group btn btn-primary'])!!}    
     </div>
     {!!Form::close()!!}

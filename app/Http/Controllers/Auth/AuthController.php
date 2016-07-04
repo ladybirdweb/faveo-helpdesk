@@ -53,7 +53,6 @@ class AuthController extends Controller
     public function __construct(PhpMailController $PhpMailController)
     {
         $this->PhpMailController = $PhpMailController;
-        SettingsController::smtp();
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
@@ -278,13 +277,15 @@ class AuthController extends Controller
         if ($data) {
             $attempts = $data->Attempts + 1;
             if ($attempts == $apt) {
-                $result = DB::select('UPDATE login_attempts SET Attempts='.$attempts.", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
+//                $result = DB::select('UPDATE login_attempts SET Attempts='.$attempts.", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
+                $result = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['Attempts' => $attempts, 'LastLogin' => Date('Y-m-d H:i:s')]);
             } else {
                 $result = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['Attempts' => $attempts]);
                 // $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
             }
         } else {
-            $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
+//            $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
+            $result = DB::table('login_attempts')->update(['Attempts' => 1, 'User' => $field, 'IP' => $value, 'LastLogin' => Date('Y-m-d H:i:s')]);
         }
     }
 
@@ -327,7 +328,6 @@ class AuthController extends Controller
                 return 1;
             } else {
                 $this->clearLoginAttempts($value, $field);
-
                 return 0;
             }
         }

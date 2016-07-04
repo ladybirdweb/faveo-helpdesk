@@ -47,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function composer()
     {
-        View::composer('themes.default1.update.notification', function () {
+        \View::composer('themes.default1.update.notification', function () {
             $notification = new BarNotification();
             $data = [
                 'data' => $notification->where('value','!=','')->get(),

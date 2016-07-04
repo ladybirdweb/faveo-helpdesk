@@ -13,3 +13,9 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# Restrict Access To DotFiles (like .htaccess, .env, .gitignore....)
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

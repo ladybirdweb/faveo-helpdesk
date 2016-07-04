@@ -39,9 +39,7 @@
             <input type="password" class="form-control" name="password_confirmation" placeholder="{!! Lang::get('lang.confirm_password') !!}">
             <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
         </div>
-
         <!-- Confirm password -->
-
         <div class="form-group">
             <div class="col-md-3"></div>
             <div class="col-md-3">
@@ -52,5 +50,4 @@
         </div>
     </form>
 </div>
-
 @stop

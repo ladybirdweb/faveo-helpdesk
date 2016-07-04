@@ -1637,7 +1637,7 @@ if ($thread->title != "") {
             {
             $("#refresh1").load("../thread/{{$tickets->id}}   #refresh1");
                     // $("#t4").load("../thread/{{$tickets->id}}   #t4");
-                    var message = "Lang::get('lang.you_have_successfully_replied_to_your_ticket')";
+                    var message = "{!! Lang::get('lang.you_have_successfully_replied_to_your_ticket') !!}";
                     $("#alert21").show();
                     $('#message-success2').html(message);
                     setInterval(function(){$("#alert21").hide(); }, 4000);
@@ -1684,7 +1684,7 @@ if ($thread->title != "") {
                     {
                     $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
                             // $("#t1").load("../thread/{{$tickets->id}}  #t1");
-                            var message = "{!! Lang::get('lang.you_have_successfully_replied_to_your_ticket') !!}";
+                            var message = "{{ Lang::get('lang.you_have_successfully_replied_to_your_ticket') }}";
                             $("#alert21").show();
                             $('#message-success2').html(message);
                             setInterval(function(){$("#alert21").hide(); }, 4000);

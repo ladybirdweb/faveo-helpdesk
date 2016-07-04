@@ -33,12 +33,18 @@
                 </a>
             </span>
         @endif
-        @if(App\Model\helpdesk\Settings\System::first()->status == 1)
-            <span onclick="javascript: window.location.href='{!! URL::route('form') !!}';">
-                <a href="{!! URL::route('form') !!}" class="widgetrowitem defaultwidget" style="background-image: URL('lb-faveo/media/images/submitticket.png');">
-                    <span class="widgetitemtitle">{!! Lang::get('lang.submit_a_ticket') !!}</span>
-                </a>
-            </span>
+        <?php $system = App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();            
+        ?>
+        @if($system != null) 
+            @if($system->status) 
+                @if($system->status == 1)
+                    <span onclick="javascript: window.location.href='{!! URL::route('form') !!}';">
+                        <a href="{!! URL::route('form') !!}" class="widgetrowitem defaultwidget" style="background-image: URL('lb-faveo/media/images/submitticket.png');">
+                            <span class="widgetitemtitle">{!! Lang::get('lang.submit_a_ticket') !!}</span>
+                        </a>
+                    </span>
+                @endif
+            @endif
         @endif
             <span onclick="javascript: window.location.href='{{url('mytickets')}}';">
                 <a href="{{url('mytickets')}}" class="widgetrowitem defaultwidget" style="background-image: URL('lb-faveo/media/images/news.png');">
@@ -53,7 +59,7 @@
         </div>
     </div>
 <script type="text/javascript"> $(function(){ $('.dialogerror, .dialoginfo, .dialogalert').fadeIn('slow');$("form").bind("submit", function(e){$(this).find("input:submit").attr("disabled", "disabled");});});</script>
-				<script type="text/javascript" >try {if (top.location.hostname != self.location.hostname) { throw 1; }} catch (e) { top.location.href = self.location.href; }</script>
+<script type="text/javascript" >try {if (top.location.hostname != self.location.hostname) { throw 1; }} catch (e) { top.location.href = self.location.href; }</script>
 </div>   
 
 @stop

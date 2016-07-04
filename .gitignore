@@ -1,14 +1,16 @@
+# Please try and keep this file organized by alphabetical order. Single files first, then directories.
 .env
 Homestead.yaml
 Homestead.json
 /app/config/
-/app/Plugins/ServiceDesk/
 /app/Plugins/Reseller/
+/app/Plugins/ServiceDesk/
+/config/app.php
 /config/database.php
 /config/lfm.php
 /nbproject/private/
 /node_modules
-/public/uploads
+/public/error_log
 /public/lb-faveo/media/
+/public/uploads
 /public/photos/
-/config/app.php
