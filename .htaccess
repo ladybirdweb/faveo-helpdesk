@@ -1,0 +1,6 @@
+# Restrict access to DotFiles (like .htaccess, .env, .gitignore....)
+# Do not remove if you are running Apache web server.
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
