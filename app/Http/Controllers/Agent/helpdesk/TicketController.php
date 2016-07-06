@@ -520,8 +520,8 @@ class TicketController extends Controller
         $tickets = Tickets::where('id', '=', $id)->first();
         $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
         $html = view('themes.default1.agent.helpdesk.ticket.pdf', compact('id', 'tickets', 'thread'))->render();
-
-        return PDF::load($html)->show();
+        $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+        return PDF::load($html1)->show();
     }
 
     /**

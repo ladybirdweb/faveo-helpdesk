@@ -290,7 +290,6 @@ if ($thread->title != "") {
             <div class="tab-content">
                 <div id="alert21" class="alert alert-success alert-dismissable" style="display:none;">
                     <button id="dismiss21" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <h4><i class="icon fa fa-check"></i>{!! Lang::get('lang.alert') !!}!</h4>
                     <div id="message-success2"></div>
                 </div>
                 <div id="alert22" class="alert alert-warning alert-dismissable" style="display:none;">
@@ -299,7 +298,7 @@ if ($thread->title != "") {
                 </div>
                 <div id="alert23" class="alert alert-danger alert-dismissable" style="display:none;">
                     <button id="dismiss23" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <h4><i class="icon fa fa-ban"></i>{!! Lang::get('lang.alert') !!}!</h4>
+                    <i class="icon fa fa-ban"></i><b>{!! Lang::get('lang.alert') !!} !</b>
                     <div id="message-danger2"></div>
                 </div>
                 <div class="tab-pane active" id="General">
@@ -373,7 +372,7 @@ if ($thread->title != "") {
                         <div class="form-group">
                             <div class="row">
                                 <!-- reply content -->
-                                <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
+                                <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}" id="reply_content_class">
                                     <div class="col-md-2">
                                         {!! Form::label('Reply Content', Lang::get('lang.reply_content').':') !!}<span class="text-red"> *</span>
                                     </div>
@@ -1664,7 +1663,20 @@ if ($thread->title != "") {
     });
 // Ticket Reply
             $('#form3').on('submit', function() {
-    var fd = new FormData(document.getElementById("form3"));
+            var fd = new FormData(document.getElementById("form3"));
+            var reply_content = document.getElementById('reply_content').value;
+            if(reply_content) {
+                $("#reply_content_class").removeClass('has-error');
+                $("#alert23").hide();
+            } else {
+                var message = "<li>{!! Lang::get('lang.reply_content_is_a_required_field') !!}</li>";
+                $("#reply_content_class").addClass('has-error');
+                $("#alert23").show();
+                $('#message-danger2').html(message);
+                $("#show3").hide();
+                $("#t1").show();
+                return false;
+            }
             $.ajax({
             type: "POST",
                     url: "../thread/reply/{{ $tickets->id }}",
@@ -1887,7 +1899,6 @@ if ($thread->title != "") {
                     $("#merge-succ-alert").show();
                     $('#message-merge-succ').html(message);
             }
-
             }
     })
             return false;

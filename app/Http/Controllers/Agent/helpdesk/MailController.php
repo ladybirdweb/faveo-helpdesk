@@ -157,7 +157,7 @@ class MailController extends Controller
                                 $date = $date_time[1].'-'.$date_time[2].'-'.$date_time[3].' '.$date_time[4];
                                 $date = date('Y-m-d H:i:s', strtotime($date));
                                 if (isset($mail->subject)) {
-                                    $subject = utf8_decode($mail->subject);
+                                    $subject = $mail->subject;
                                 } else {
                                     $subject = 'No Subject';
                                 }
@@ -223,7 +223,7 @@ class MailController extends Controller
                                         }
                                         unlink($path);
                                     }
-                                    $body = Encoding::fixUTF8($body);
+                                    $body = $body;
                                     $thread = Ticket_Thread::where('id', '=', $thread_id)->first();
                                     $thread->body = $this->separate_reply($body);
                                     $thread->save();

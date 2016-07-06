@@ -266,13 +266,13 @@ class PhpMailController extends Controller {
                         $mail->addAttachment($file_path, $file_name);
                     }
                 }
-
-                $mail->Subject = utf8_decode($subject);
+                $mail->CharSet = "utf8";
+                $mail->Subject = $subject;
                 if ($template == 'ticket-reply-agent') {
                     $line = '---Reply above this line--- <br/><br/>';
-                    $mail->Body = utf8_decode($line . $messagebody);
+                    $mail->Body = $line . $messagebody;
                 } else {
-                    $mail->Body = utf8_decode($messagebody);
+                    $mail->Body = $messagebody;
                 }
 
                 // $mail->AltBody = $altbody;
@@ -410,8 +410,9 @@ class PhpMailController extends Controller {
                         $mail->addAttachment($file_path, $file_name);
                     }
                 }
-                $mail->Subject = utf8_decode($subject);
-                $mail->Body = utf8_decode($content);
+                $mail->CharSet = "utf8";
+                $mail->Subject = $subject;
+                $mail->Body = $content;
                 if (!$mail->send()) {
                 } else {
                 }

@@ -910,7 +910,7 @@ return [
     'tickets_have_been_closed'                                                      => 'Selected tickets have been closed.',
     'tickets_have_been_opened'                                                      => 'Selected tickets have been opened.',
     'unable_to_fetch_emails'                                                        => 'Unable to fetch Emails',
-
+    'reply_content_is_a_required_field'                                             => 'Reply Content is a required field',
 
 
 

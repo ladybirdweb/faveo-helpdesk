@@ -167,7 +167,7 @@ $('#selectid').on('change', function() {
         data: value,
         success: function(data) {
             $('#response').html(data);
-            //location.reload();
+            var wysihtml5Editor = $('#unique-textarea').wysihtml5().data("wysihtml5").editor;
         }
     });
 });
