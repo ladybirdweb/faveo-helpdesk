@@ -1091,4 +1091,9 @@ Route::group(['middleware' => ['web']], function () {
         $api_control = new \App\Http\Controllers\Common\ApiSettings();
         $api_control->ticketDetailEvent($details);
     });
+    
+    
+    
+    Route::get('test', ['as' => 'test', 'uses' => 'Common\FileuploadController@file_upload_max_size']);
+    
 });

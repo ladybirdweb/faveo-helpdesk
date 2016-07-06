@@ -5,14 +5,15 @@ namespace App\Http\Controllers\Agent\helpdesk;
 // controllers
 use App\Http\Controllers\Common\NotificationController;
 use App\Http\Controllers\Common\PhpMailController;
+use App\Http\Controllers\Common\FileuploadController;
 use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\CreateTicketRequest;
 use App\Http\Requests\helpdesk\TicketRequest;
-use App\Model\helpdesk\Agent\Department;
 // models
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Email\Emails;
+use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Form\Fields;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
@@ -353,8 +354,11 @@ class TicketController extends Controller
         $avg_rate = explode('.', $avg);
         $avg_rating = $avg_rate[0];
         $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
-
-        return view('themes.default1.agent.helpdesk.ticket.timeline', compact('tickets'), compact('thread', 'avg_rating'));
+        $fileupload = new FileuploadController;
+        $fileupload = $fileupload->file_upload_max_size();
+        $max_size_in_bytes = $fileupload[0];
+        $max_size_in_actual = $fileupload[1];
+        return view('themes.default1.agent.helpdesk.ticket.timeline', compact('tickets', 'max_size_in_bytes', 'max_size_in_actual'), compact('thread', 'avg_rating'));
     }
 
     /**
@@ -694,6 +698,7 @@ class TicketController extends Controller
                         }
                     }
                 }
+//                Event fire for new ticket['']
             }
 
             if ($ticketdata->assigned_to) {
@@ -799,9 +804,11 @@ class TicketController extends Controller
                     $ticket_threads->is_internal = 1;
                     $ticket_threads->body = $ticket_status->message.' '.$username;
                     $ticket_threads->save();
+                    // event fire for internal notes
                 }
                 if (isset($id)) {
                     if ($this->ticketThread($subject, $body, $id, $user_id)) {
+//                        event fire for reply [$subject, $body, $id, $user_id]
                         return [$ticket_number, 1];
                     }
                 }

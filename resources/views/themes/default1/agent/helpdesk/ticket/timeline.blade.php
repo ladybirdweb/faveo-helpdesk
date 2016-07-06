@@ -18,7 +18,6 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
 ?>
 
 @section('sidebar')
-
 <li class="header">{!! Lang::get('lang.Ticket_Information') !!} </li>
 <li>
     <a href="">
@@ -302,7 +301,6 @@ if ($thread->title != "") {
                     <div id="message-danger2"></div>
                 </div>
                 <div class="tab-pane active" id="General">
-
                     <!-- ticket reply -->
                     <div id="show3" style="display:none;">
                         <div class="col-md-4">
@@ -381,9 +379,20 @@ if ($thread->title != "") {
                                             <textarea style="width:98%;height:20%;" name="reply_content" class="form-control" id="reply_content"></textarea>
                                         </div>
                                         {!! $errors->first('reply_content', '<spam class="help-block text-red">:message</spam>') !!}
-                                        <br/>
-                                        <div type="file" class="btn btn-default btn-file"><i class="fa fa-paperclip"> </i> {!! Lang::get('lang.attachment') !!}<input type="file" name="attachment[]" multiple/></div><br/>
-                                        {!! Lang::get('lang.max') !!}. 10MB
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <!-- reply content -->
+                                <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}" id="reply_content_class">
+                                    <div class="col-md-2">
+                                        <label> {!! Lang::get('lang.attachment') !!}</label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <input type="file" name="attachment[]" id="attachment" multiple/>
+                                        <div id="file_details"></div>{!! Lang::get('lang.max') !!}. {!! $max_size_in_actual !!}
                                     </div>
                                 </div>
                             </div>
@@ -1662,9 +1671,58 @@ if ($thread->title != "") {
             return false;
     });
 // Ticket Reply
+            $('#attachment').change(function() {
+                input = document.getElementById('attachment');
+                if (!input) {
+                    alert("Um, couldn't find the fileinput element.");
+                } else if (!input.files) {
+                    alert("This browser doesn't seem to support the `files` property of file inputs.");
+                } else if (!input.files[0]) {
+                    alert("Please select a file before clicking 'Load'");
+                } else {
+                    $("#file_details").html("");
+                    $("#file_details").append("<table>");
+//                    $("#file_details").append("<tr> <th> File name </th><th> File size in bytes</th> </tr>");
+                    for(i = 0; i < input.files.length; i++) {
+//                        console.log(input.files[i]);
+                        file = input.files[i];
+                        var supported_size = {!! $max_size_in_bytes !!};
+                        if(file.size < supported_size) {
+                            $("#file_details").append("<tr> <td> " + file.name + " </td><td> " + file.size + "</td> </tr>");
+                        } else {
+                            $("#file_details").append("<tr style='color:red;'> <td> " + file.name + " </td><td> " + file.size + "</td> </tr>");
+                        }
+                    }
+                    $("#file_details").append("</table>");
+                }
+            });
+            
             $('#form3').on('submit', function() {
             var fd = new FormData(document.getElementById("form3"));
             var reply_content = document.getElementById('reply_content').value;
+            if (!window.FileReader) {
+                alert("The file API isn't supported on this browser yet.");
+                return false;
+            } 
+            input = document.getElementById('attachment');
+            if (!input) {
+                alert("Um, couldn't find the fileinput element.");
+            } else if (!input.files) {
+                alert("This browser doesn't seem to support the `files` property of file inputs.");
+            } else if (!input.files[0]) {
+                alert("Please select a file before clicking 'Load'");
+            } else {
+//                alert(input.files);
+//                var i = "";
+                for(i = 0; i < input.files.length; i++) {
+                    console.log(input.files[i]);
+                }
+//                console.log(input.files);
+//                alert(input.files.length);
+//                file = input.files[0];
+//                alert("File " + file.name + " is " + file.size + " bytes in size");
+            }
+            return false;
             if(reply_content) {
                 $("#reply_content_class").removeClass('has-error');
                 $("#alert23").hide();
