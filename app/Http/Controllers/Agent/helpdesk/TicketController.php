@@ -715,7 +715,15 @@ class TicketController extends Controller
                 } catch (\Exception $e) {
                 }
             }
-
+            $data = array(
+                'ticket_number' => $ticket_number2,
+                'user_id' => $user_id,
+                'subject' => $subject,
+                'body' => $body,
+                'status'=> $status,
+                'Priority'=> $priority,
+            );
+            \Event::fire('test', array($data));
             return ['0' => $ticket_number2, '1' => true];
         }
     }

@@ -393,6 +393,7 @@ if ($thread->title != "") {
                                     <div class="col-md-10">
                                         <input type="file" name="attachment[]" id="attachment" multiple/>
                                         <div id="file_details"></div>{!! Lang::get('lang.max') !!}. {!! $max_size_in_actual !!}
+                                        <span id="total-size"></span>
                                     </div>
                                 </div>
                             </div>
@@ -1683,6 +1684,7 @@ if ($thread->title != "") {
                     $("#file_details").html("");
                     $("#file_details").append("<table>");
 //                    $("#file_details").append("<tr> <th> File name </th><th> File size in bytes</th> </tr>");
+                    var total_size = 0;
                     for(i = 0; i < input.files.length; i++) {
 //                        console.log(input.files[i]);
                         file = input.files[i];
@@ -1692,8 +1694,14 @@ if ($thread->title != "") {
                         } else {
                             $("#file_details").append("<tr style='color:red;'> <td> " + file.name + " </td><td> " + file.size + "</td> </tr>");
                         }
+                        total_size += parseInt(file.size);
                     }
                     $("#file_details").append("</table>");
+                    alert(supported_size);
+                    alert(total_size);
+                    if(supported_size < total_size) {
+                        $("#total_size").append("Your total file upload size is greater than ");
+                    }
                 }
             });
             
