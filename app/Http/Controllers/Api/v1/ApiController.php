@@ -1155,7 +1155,7 @@ class ApiController extends Controller {
             $response = $this->differenciateHelpTopic($query);
             //$select = 'users.email','users.user_name','users.first_name','users.last_name','tickets.id','ticket_number','num_sequence','user_id','priority_id','sla','max_open_ticket','captcha','status','lock_by','lock_at','source','isoverdue','reopened','isanswered','is_deleted', 'closed','is_transfer','transfer_at','reopened_at','duedate','closed_at','last_message_at','last_response_at';
             
-             $result = $response->addSelect('users.email','users.user_name','users.first_name','users.last_name','tickets.id','ticket_number','user_id','priority_id','sla','status','lock_by','lock_at','source','isoverdue','reopened','isanswered','is_deleted', 'closed','reopened_at','duedate','closed_at','last_message_at','last_response_at','tickets.created_at')->first();       
+             $result = $response->addSelect('users.email','users.user_name','users.first_name','users.last_name','tickets.id','ticket_number','user_id','priority_id','sla','status','lock_by','lock_at','source','isoverdue','reopened','isanswered','is_deleted', 'closed','reopened_at','duedate','closed_at','last_message_at','last_response_at','tickets.created_at','tickets.updated_at')->first();       
 
             return response()->json(compact('result'));
         } catch (\Exception $e) {
