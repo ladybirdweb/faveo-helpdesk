@@ -381,11 +381,8 @@ class TicketController extends Controller {
         try {
             $size = $this->size();
         } catch (Exception $ex) {
-            return $this->error($ex,$request);
+            return $ex->getMessage();
         }
-
-        //dd($request->input(ticket_ID));
-        dd($request->input('ticket_ID'), $request->input('reply_content'), $request->file('attachment'));
 
         $fileupload = new FileuploadController;
         $fileupload = $fileupload->file_upload_max_size();
@@ -393,26 +390,6 @@ class TicketController extends Controller {
         $max_size_in_actual = $fileupload[1];
 
         $attachments = $request->file('attachment');
-        if ($attachments != null) {
-            $total_size = 0;
-            foreach ($attachments as $attachment) {
-                if ($attachment != null) {
-                    $size = $attachment->getSize();
-                    if ($size > $fileupload[0]) {
-                        return 'no done';
-                    }
-                    $total_size = $total_size + $size;
-                } else {
-                    
-                }
-            }
-            return $total_size;
-            if ($total_size > $fileupload[0]) {
-                return false;
-            } else {
-                return true;
-            }
-        }
         $check_attachment = null;
         // Event fire
         $eventthread = $thread->where('ticket_id', $request->input('ticket_ID'))->first();

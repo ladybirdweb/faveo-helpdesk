@@ -1708,7 +1708,7 @@ if ($thread->title != "") {
                         total_size += parseInt(file.size);
                     }
                     if(total_size > supported_size) {
-                        $("#total-size").append("Your total file upload size is greater than "+ supported_actual_size);
+                        $("#total-size").append("<span style='color:red'>Your total file upload size is greater than "+ supported_actual_size +"</span>");
 //                        $("#replybtn").addClass('disabled');
                         $("#clear-file").show();
                     } else {
@@ -1730,22 +1730,6 @@ if ($thread->title != "") {
 
             $('#form3').on('submit', function() {
             var fd = new FormData(document.getElementById("form3"));
-            var reply_content = document.getElementById('reply_content').value;
-            if (!window.FileReader) {
-                alert("The file API isn't supported on this browser yet.");
-                return false;
-            }
-            input = document.getElementById('attachment');
-            if (!input) {
-                alert("Um, couldn't find the fileinput element.");
-            } else if (!input.files) {
-                alert("This browser doesn't seem to support the `files` property of file inputs.");
-            } else if (!input.files[0]) {
-                alert("Please select a file before clicking 'Load'");
-            } else {
-                for(i = 0; i < input.files.length; i++) {
-                }
-            }
             if(reply_content) {
                 $("#reply_content_class").removeClass('has-error');
                 $("#alert23").hide();
@@ -1772,7 +1756,11 @@ if ($thread->title != "") {
                             $("#show3").show();
                     },
                     success: function(response) {
-
+                    if(response !== 1) {
+                        if(response === "file size exceeded") {
+                            alert(response);
+                        }
+                    }
                     if (response == 1)
                     {
                     $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
