@@ -391,9 +391,14 @@ if ($thread->title != "") {
                                         <label> {!! Lang::get('lang.attachment') !!}</label>
                                     </div>
                                     <div class="col-md-10">
-                                        <input type="file" name="attachment[]" id="attachment" multiple/>
-                                        <div id="file_details"></div>{!! Lang::get('lang.max') !!}. {!! $max_size_in_actual !!}
-                                        <span id="total-size"></span>
+                                        <div id="reset-attachment">
+                                            <span class='btn btn-default btn-file'> <i class='fa fa-paperclip'></i> <span>{!! Lang::get('lang.upload') !!}</span><input type='file' name='attachment[]' id='attachment' multiple/></span>
+                                            <div id='file_details'></div><div id='total-size'></div>{!! Lang::get('lang.max') !!}. {!! $max_size_in_actual !!}
+                                            <div>
+                                                <a id='clear-file' onClick='clearAll()' style='display:none; cursor:pointer;'><i class='fa fa-close'></i>Clear all</a>
+                                            </div>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -1251,7 +1256,14 @@ if ($thread->title != "") {
 
 <!-- scripts used on page -->
 <script type="text/javascript">
-
+            function clearAll() {
+                $("#file_details").html("");
+                $("#total-size").html("");
+                $("#attachment").val('');
+                $("#clear-file").hide();
+                $("#replybtn").removeClass('disabled');
+            }
+            
             $(function () {
             $("#InternalContent").wysihtml5();
             });
@@ -1679,39 +1691,48 @@ if ($thread->title != "") {
                 } else if (!input.files) {
                     alert("This browser doesn't seem to support the `files` property of file inputs.");
                 } else if (!input.files[0]) {
-                    alert("Please select a file before clicking 'Load'");
                 } else {
                     $("#file_details").html("");
-                    $("#file_details").append("<table>");
-//                    $("#file_details").append("<tr> <th> File name </th><th> File size in bytes</th> </tr>");
                     var total_size = 0;
                     for(i = 0; i < input.files.length; i++) {
-//                        console.log(input.files[i]);
                         file = input.files[i];
-                        var supported_size = {!! $max_size_in_bytes !!};
+                        var supported_size = "{!! $max_size_in_bytes !!}";
+                        var supported_actual_size = "{!! $max_size_in_actual !!}";
                         if(file.size < supported_size) {
-                            $("#file_details").append("<tr> <td> " + file.name + " </td><td> " + file.size + "</td> </tr>");
+                            $("#file_details").append("<tr> <td> " + file.name + " </td><td> " + formatBytes(file.size) + "</td> </tr>");
                         } else {
-                            $("#file_details").append("<tr style='color:red;'> <td> " + file.name + " </td><td> " + file.size + "</td> </tr>");
+                            $("#file_details").append("<tr style='color:red;'> <td> " + file.name + " </td><td> " + formatBytes(file.size) + "</td> </tr>");
                         }
                         total_size += parseInt(file.size);
                     }
-                    $("#file_details").append("</table>");
-                    alert(supported_size);
-                    alert(total_size);
-                    if(supported_size < total_size) {
-                        $("#total_size").append("Your total file upload size is greater than ");
+                    if(total_size > supported_size) {
+                        $("#total-size").append("Your total file upload size is greater than "+ supported_actual_size);
+//                        $("#replybtn").addClass('disabled');
+                        $("#clear-file").show();
+                    } else {
+                        $("#total-size").html("");
+                        $("#replybtn").removeClass('disabled');
+                        $("#clear-file").show();
                     }
                 }
             });
             
+            function formatBytes(bytes,decimals) {
+                if(bytes == 0) return '0 Byte';
+                var k = 1000;
+                var dm = decimals + 1 || 3;
+                var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+                var i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+            }
+
             $('#form3').on('submit', function() {
             var fd = new FormData(document.getElementById("form3"));
             var reply_content = document.getElementById('reply_content').value;
             if (!window.FileReader) {
                 alert("The file API isn't supported on this browser yet.");
                 return false;
-            } 
+            }
             input = document.getElementById('attachment');
             if (!input) {
                 alert("Um, couldn't find the fileinput element.");
@@ -1730,7 +1751,7 @@ if ($thread->title != "") {
 //                file = input.files[0];
 //                alert("File " + file.name + " is " + file.size + " bytes in size");
             }
-            return false;
+//            return false;
             if(reply_content) {
                 $("#reply_content_class").removeClass('has-error');
                 $("#alert23").hide();

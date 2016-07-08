@@ -371,7 +371,32 @@ class TicketController extends Controller
      */
     public function reply(Ticket_Thread $thread, TicketRequest $request, Ticket_attachments $ta)
     {
+        $fileupload = new FileuploadController;
+        $fileupload = $fileupload->file_upload_max_size();
+        $max_size_in_bytes = $fileupload[0];
+        $max_size_in_actual = $fileupload[1];
+        
         $attachments = $request->file('attachment');
+        if ($attachments != null) {
+            $total_size = 0;
+            foreach ($attachments as $attachment) {
+                if ($attachment != null) {
+                    $size = $attachment->getSize();
+                    if($size > $fileupload[0]) {
+                        return 'no done';
+                    } 
+                    $total_size = $total_size + $size;
+                } else {
+                    
+                }
+            }
+            return $total_size;
+            if($total_size > $fileupload[0]) {
+                return false;
+            } else {
+                return true;
+            }
+        }
         $check_attachment = null;
         // Event fire
         $eventthread = $thread->where('ticket_id', $request->input('ticket_ID'))->first();
@@ -472,6 +497,7 @@ class TicketController extends Controller
         }
 
         return 1;
+        
     }
 
     /**

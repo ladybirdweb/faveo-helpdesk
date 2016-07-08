@@ -32,6 +32,7 @@ class TicketRequest extends Request
             // 'To' => 'required',
             'ticket_ID'     => 'required',
             'reply_content' => 'required',
+            'attachment.*'    => 'max:1024',
         ];
     }
 }
