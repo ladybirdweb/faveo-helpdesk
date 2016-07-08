@@ -121,15 +121,15 @@ class PhpMailController extends Controller {
                 } else {
                     $ticket_link_with_number = null;
                 }
-                // if (isset($template_variables['system_from'])) {
-                //     $system_from = $template_variables['system_from'];
-                // } else {
-                //     $system_from = null;
-                // }
+                if (isset($template_variables['system_from'])) {
+                    $system_from = $template_variables['system_from'];
+                } else {
+                    $system_from = $this->company();
+                }
                 if (isset($template_variables['system_link'])) {
                     $system_link = $template_variables['system_link'];
                 } else {
-                    $system_link = null;
+                    $system_link = url('/');
                 }
                 if (isset($template_variables['system_error'])) {
                     $system_error = $template_variables['system_error'];
@@ -167,9 +167,9 @@ class PhpMailController extends Controller {
                     $user = null;
                 }
 
-                $system_link = url('/');
+//                $system_link = url('/');
 
-                $system_from = $this->company();
+//                $system_from = $this->company();
 
                 $mail = new \PHPMailer();
 

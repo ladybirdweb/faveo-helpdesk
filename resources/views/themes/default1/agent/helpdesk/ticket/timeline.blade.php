@@ -317,7 +317,9 @@ if ($thread->title != "") {
                         </br>
                         </br>
                     </div>
-                    {!! Form::model($tickets->id, ['id'=>'form3', 'name'=>'form3' ,'method' => 'PATCH', 'enctype'=>'multipart/form-data'] )!!}
+                    <form id="form3">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
                     <div id="t1">
                         <div class="form-group">
                             <div class="row">
@@ -1741,17 +1743,9 @@ if ($thread->title != "") {
             } else if (!input.files[0]) {
                 alert("Please select a file before clicking 'Load'");
             } else {
-//                alert(input.files);
-//                var i = "";
                 for(i = 0; i < input.files.length; i++) {
-                    console.log(input.files[i]);
                 }
-//                console.log(input.files);
-//                alert(input.files.length);
-//                file = input.files[0];
-//                alert("File " + file.name + " is " + file.size + " bytes in size");
             }
-//            return false;
             if(reply_content) {
                 $("#reply_content_class").removeClass('has-error');
                 $("#alert23").hide();
@@ -1773,7 +1767,7 @@ if ($thread->title != "") {
                     processData: false, // tell jQuery not to process the data
                     contentType: false, // tell jQuery not to set contentType
                     beforeSend: function() {
-
+                        
                     $("#t1").hide();
                             $("#show3").show();
                     },
@@ -1805,6 +1799,10 @@ if ($thread->title != "") {
                     }
                     $("#show3").hide();
                             $("#t1").show();
+                    },
+                    error: function(response) {
+                        $("#show3").hide();
+                        $("#t1").show();
                     }
             })
             return false;
