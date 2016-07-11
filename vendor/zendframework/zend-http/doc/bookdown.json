@@ -1,0 +1,13 @@
+{
+    "title": "Zend\\Http",
+    "target": "html/",
+    "content": [
+        "book/zend.http.request.md",
+        "book/zend.http.response.md",
+        "book/zend.http.headers.md",
+        "book/zend.http.client.md",
+        "book/zend.http.client.adapters.md",
+        "book/zend.http.client.advanced.md",
+        "book/zend.http.client-static.md"
+    ]
+}

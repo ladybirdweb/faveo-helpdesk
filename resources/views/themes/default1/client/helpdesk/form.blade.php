@@ -98,13 +98,13 @@ class = "active"
                 <select name="helptopic" class="form-control" id="selectid">
                     <?php
                     $system_default_department = App\Model\helpdesk\Settings\System::where('id', '=', 1)->first();
-                    if ($system_default_department->department) {
+                    if (isset($system_default_department->department)) {
                         $department_relation_helptopic = App\Model\helpdesk\Manage\Help_topic::where('department', '=', $system_default_department->department)->first();
                         $default_helptopic = $department_relation_helptopic->id;
                     } else {
                         $default_helptopic = 0;
                     }
-                    ?>  
+                    ?>
                     @foreach($helptopic as $topic)
                     <option value="{!! $topic->id !!}">{!! $topic->topic !!}</option>
                     @endforeach

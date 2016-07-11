@@ -19,21 +19,21 @@
                 $system = App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
                 ?>
                 <center>
-                @if($system->url)
-                <a href="{!! $system->url !!}" rel="home">
-                    @else
-                    <a href="{{url('/')}}" rel="home" style="text-decoration:none;">
-                        @endif
-                        @if($company->use_logo == 1)
-                        <img src="{!! public_path().'/uploads/company'.'/'.$company->logo !!}" width="100px;"/>
+                    @if($system->url)
+                    <a href="{!! $system->url !!}" rel="home">
                         @else
-                        @if($system->name)
-                        {!! $system->name !!}
-                        @else
-                        <b>SUPPORT</b> CENTER
-                        @endif
-                        @endif
-                    </a>
+                        <a href="{{url('/')}}" rel="home" style="text-decoration:none;">
+                            @endif
+                            @if($company->use_logo == 1)
+                            <img src="{!! public_path().'/uploads/company'.'/'.$company->logo !!}" width="100px;"/>
+                            @else
+                            @if($system->name)
+                            {!! $system->name !!}
+                            @else
+                            <b>SUPPORT</b> CENTER
+                            @endif
+                            @endif
+                        </a>
                 </center>
             </div>
         </h2>
@@ -67,7 +67,7 @@
             <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <td>{{$help_topic->topic}}</td></tr>
         </table>
 
-        <?php $conversations = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->get(); ?>
+        <?php $conversations = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->orderBy('created_at', 'desc')->paginate(10); ?>
         @foreach($conversations as $conversation)
         <br/><hr>
         <span class="time-label">
@@ -76,7 +76,8 @@
             ?>
             <?php if ($conversation->is_internal) { ?>
                 <i class="fa fa-tag bg-purple" title="Posted by System"></i>
-            <?php } else {
+                <?php
+            } else {
                 if ($role->role == 'agent' || $role->role == 'admin') {
                     ?>
                     <i class="fa fa-mail-reply-all bg-yellow" title="Posted by Support Team"></i>
@@ -96,9 +97,10 @@
                 // header("Content-type: image/jpeg");
                 // echo "<img src='".base64_decode($attachment->file)."' style='width:128px;height:128px'/> ";
                 $body = $conversation->body;
-                $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->orderBy('id', 'DESC')->get();
+                $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->where('poster', '=', 'INLINE')->get();
+
                 foreach ($attachments as $attachment) {
-                    // $i++;
+
                     if ($attachment->type == 'pdf' || $attachment->type == 'PDF') {
                         // echo "hello";
                     } elseif ($attachment->type == 'docx' || $attachment->type == 'DOCX') {
@@ -108,35 +110,40 @@
                     } elseif ($attachment->type == 'zip' || $attachment->type == 'ZIP') {
                         // echo "hello";
                     } else {
-                        $image = @imagecreatefromstring($attachment->file);
-                        ob_start();
-                        imagejpeg($image, null, 80);
-                        $data = ob_get_contents();
-                        ob_end_clean();
-                        $var = '<img width="20px" src="data:image/jpg;base64,' . base64_encode($data) . '" />';
-                        // echo $var;
-                        // echo $attachment->name;
-                        // $body = explode($attachment->name, $body);
-                        $body = str_replace($attachment->name, "data:image/jpg;base64," . base64_encode($data), $body);
+                        try {
+                            $image = @imagecreatefromstring($attachment->file);
+                            ob_start();
+                            imagejpeg($image, null, 80);
+                            $data = ob_get_contents();
+                            ob_end_clean();
+                            $var = '<img width="20px" src="data:image/jpg;base64,' . base64_encode($data) . '" />';
+                            // echo $var;
+                            // echo $attachment->name;
+                            // $body = explode($attachment->name, $body);
+                            $body = str_replace($attachment->name, "data:image/jpg;base64," . base64_encode($data), $body);
 
-                        $string = $body;
-                        $start = "<head>";
-                        $end = "</head>";
-                        if (strpos($string, $start) == false || strpos($string, $start) == false) {
+                            $string = $body;
+                            $start = "<head>";
+                            $end = "</head>";
+                            if (strpos($string, $start) == false || strpos($string, $start) == false) {
+                                
+                            } else {
+                                $ini = strpos($string, $start);
+                                $ini += strlen($start);
+                                $len = strpos($string, $end, $ini) - $ini;
+                                $parsed = substr($string, $ini, $len);
+                                $body2 = $parsed;
+                                $body = str_replace($body2, " ", $body);
+                            }
+                        } catch (\Exception $e) {
                             
-                        } else {
-                            $ini = strpos($string, $start);
-                            $ini += strlen($start);
-                            $len = strpos($string, $end, $ini) - $ini;
-                            $parsed = substr($string, $ini, $len);
-                            $body2 = $parsed;
-                            $body = str_replace($body2, " ", $body);
                         }
                     }
                 }
                 // echo $body;
                 // $body = explode($attachment->file, $body);
                 // $body = $body[0];
+//                }
             }
             ?>
 
@@ -156,7 +163,7 @@
             }
             ?>
             <div class="timeline-item">
-                <span id="date" class="time"  style="color:#fff;"><i class="fa fa-clock-o"> </i> {{date_format($conversation->created_at, 'd/m/Y H:i:s')}}</span>
+                <!--<span id="date" class="time"  style="color:#fff;"><i class="fa fa-clock-o"> </i> {{date_format($conversation->created_at, 'd/m/Y H:i:s')}}</span>-->
 
                 <h3 class="timeline-header"  style="background-color:<?php
                 if ($conversation->is_internal) {
@@ -203,17 +210,21 @@
                         <?php
                         foreach ($attachments as $attachment) {
                             if ($attachment->poster == 'ATTACHMENT') {
-                                if ($attachment->type == 'jpg' || $attachment->type == 'JPG' || $attachment->type == 'jpeg' || $attachment->type == 'JPEG' || $attachment->type == 'png' || $attachment->type == 'PNG' || $attachment->type == 'gif' || $attachment->type == 'GIF') {
-                                    $image = @imagecreatefromstring($attachment->file);
-                                    ob_start();
-                                    imagejpeg($image, null, 80);
-                                    $data = ob_get_contents();
-                                    ob_end_clean();
-                                    $var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;max-height:150px;" src="data:image/jpg;base64,' . base64_encode($data) . '"/></a>';
-                                    echo '<li><span class="mailbox-attachment-icon has-img">' . $var . '</span></li>';
-                                } else {
-                                    $var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank">' . $attachment->name . '</a>';
-                                    echo '<li>' . $var . '</li>';
+                                try {
+                                    if ($attachment->type == 'jpg' || $attachment->type == 'JPG' || $attachment->type == 'jpeg' || $attachment->type == 'JPEG' || $attachment->type == 'png' || $attachment->type == 'PNG' || $attachment->type == 'gif' || $attachment->type == 'GIF') {
+                                        $image = @imagecreatefromstring($attachment->file);
+                                        ob_start();
+                                        imagejpeg($image, null, 80);
+                                        $data = ob_get_contents();
+                                        ob_end_clean();
+                                        $var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;max-height:150px;" src="data:image/jpg;base64,' . base64_encode($data) . '"/></a>';
+                                        echo '<li><span class="mailbox-attachment-icon has-img">' . $var . '</span></li>';
+                                    } else {
+                                        $var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank">' . $attachment->name . '</a>';
+                                        echo '<li>' . $var . '</li>';
+                                    }
+                                } catch (\Exception $e) {
+                                    
                                 }
                             }
                         }

@@ -173,55 +173,55 @@ class MailController extends Controller
                                 $team_assign = null;
                                 $ticket_status = null;
                                 $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
-// dd($result);
+
                                 if ($result[1] == true) {
                                     $ticket_table = Tickets::where('ticket_number', '=', $result[0])->first();
                                     $thread_id = Ticket_Thread::where('ticket_id', '=', $ticket_table->id)->max('id');
-// $thread_id = Ticket_Thread::whereRaw('id = (select max(`id`) from ticket_thread)')->first();
+
                                     $thread_id = $thread_id;
                                     foreach ($mail->getAttachments() as $attachment) {
                                         $support = 'support';
-// echo $_SERVER['DOCUMENT_ROOT'];
+
                                         $dir_img_paths = __DIR__;
                                         $dir_img_path = explode('/code', $dir_img_paths);
-// dd($attachment->filePath);
+
                                         $filepath = explode('..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'public', $attachment->filePath);
-// var_dump($attachment->filePath);
-// dd($filepath);
-// $path = $dir_img_path[0]."/code/public/".$filepath[1];
-                                        $path = public_path().$filepath[1];
-// dd($path);
-                                        $filesize = filesize($path);
-                                        $file_data = file_get_contents($path);
-                                        $ext = pathinfo($attachment->filePath, PATHINFO_EXTENSION);
-                                        $imageid = $attachment->id;
-                                        $string = str_replace('-', '', $attachment->name);
-                                        $filename = explode('src', $attachment->filePath);
-                                        $filename = str_replace('\\', '', $filename);
-                                        $body = str_replace('cid:'.$imageid, $filepath[1], $body);
-                                        $pos = strpos($body, $filepath[1]);
-                                        if ($pos == false) {
-                                            if ($settings_email->first()->attachment == 1) {
+
+                                        if($filepath[1]) {
+                                            $path = public_path().$filepath[1];
+   
+                                            $filesize = filesize($path);
+                                            $file_data = file_get_contents($path);
+                                            $ext = pathinfo($attachment->filePath, PATHINFO_EXTENSION);
+                                            $imageid = $attachment->id;
+                                            $string = str_replace('-', '', $attachment->name);
+                                            $filename = explode('src', $attachment->filePath);
+                                            $filename = str_replace('\\', '', $filename);
+                                            $body = str_replace('cid:'.$imageid, $filepath[1], $body);
+                                            $pos = strpos($body, $filepath[1]);
+                                            if ($pos == false) {
+                                                if ($settings_email->first()->attachment == 1) {
+                                                    $upload = new Ticket_attachments();
+                                                    $upload->file = $file_data;
+                                                    $upload->thread_id = $thread_id;
+                                                    $upload->name = $filepath[1];
+                                                    $upload->type = $ext;
+                                                    $upload->size = $filesize;
+                                                    $upload->poster = 'ATTACHMENT';
+                                                    $upload->save();
+                                                }
+                                            } else {
                                                 $upload = new Ticket_attachments();
                                                 $upload->file = $file_data;
                                                 $upload->thread_id = $thread_id;
                                                 $upload->name = $filepath[1];
                                                 $upload->type = $ext;
                                                 $upload->size = $filesize;
-                                                $upload->poster = 'ATTACHMENT';
+                                                $upload->poster = 'INLINE';
                                                 $upload->save();
                                             }
-                                        } else {
-                                            $upload = new Ticket_attachments();
-                                            $upload->file = $file_data;
-                                            $upload->thread_id = $thread_id;
-                                            $upload->name = $filepath[1];
-                                            $upload->type = $ext;
-                                            $upload->size = $filesize;
-                                            $upload->poster = 'INLINE';
-                                            $upload->save();
+                                            unlink($path);
                                         }
-                                        unlink($path);
                                     }
                                     $body = $body;
                                     $thread = Ticket_Thread::where('id', '=', $thread_id)->first();

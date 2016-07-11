@@ -1094,6 +1094,6 @@ Route::group(['middleware' => ['web']], function () {
     
     
     
-//    Route::get('test', ['as' => 'test', 'uses' => 'Common\FileuploadController@file_upload_max_size']);
+    Route::get('test', ['as' => 'test', 'uses' => 'Common\PushNotificationController@response']);
     
 });

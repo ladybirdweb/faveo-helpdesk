@@ -56,7 +56,7 @@ class FormController extends Controller {
      */
     public function getForm(Help_topic $topic, CountryCode $code) {
         if (\Config::get('database.install') == '%0%') {
-            return \Redirect::route('license');
+            return \Redirect::route('licence');
         }
         $location = GeoIP::getLocation('');
         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();

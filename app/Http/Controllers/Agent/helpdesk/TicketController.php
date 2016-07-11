@@ -378,10 +378,13 @@ class TicketController extends Controller {
      * @return type bool
      */
     public function reply(Ticket_Thread $thread, Request $request, Ticket_attachments $ta) {
-        try {
-            $size = $this->size();
-        } catch (Exception $ex) {
-            return $ex->getMessage();
+        if(is_array($request->file('attachment'))) {
+        } else {
+            try {
+                $size = $this->size();
+            } catch (Exception $ex) {
+                return $ex->getMessage();
+            }
         }
 
         $fileupload = new FileuploadController;

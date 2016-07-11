@@ -138,7 +138,7 @@ class GuestController extends Controller
     public function getForm(Help_topic $topic)
     {
         if (\Config::get('database.install') == '%0%') {
-            return \Redirect::route('license');
+            return \Redirect::route('licence');
         }
         if (System::first()->status == 1) {
             $topics = $topic->get();

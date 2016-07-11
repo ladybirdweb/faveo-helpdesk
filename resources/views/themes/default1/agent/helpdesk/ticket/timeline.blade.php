@@ -1709,7 +1709,7 @@ if ($thread->title != "") {
                     }
                     if(total_size > supported_size) {
                         $("#total-size").append("<span style='color:red'>Your total file upload size is greater than "+ supported_actual_size +"</span>");
-//                        $("#replybtn").addClass('disabled');
+                        $("#replybtn").addClass('disabled');
                         $("#clear-file").show();
                     } else {
                         $("#total-size").html("");
