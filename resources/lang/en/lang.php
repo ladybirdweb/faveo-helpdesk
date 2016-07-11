@@ -460,11 +460,16 @@ return [
       | Plugin Settings
       |--------------------------------------
      */
-    'add_plugin'    => 'Add Plugin',
-    'plugins'       => 'Plugins',
-    'upload'        => 'Upload',
-    'plugins-list'  => 'List of plugins',
-    'plugin-exists' => 'Plugin already exists',
+    'add_plugin'            => 'Add Plugin',
+    'plugins'               => 'Plugins',
+    'upload'                => 'Upload',
+    'plugins-list'          => 'List of plugins',
+    'plugin-exists'         => 'Plugin already exists',
+    'plugin-installed'      => 'Plugin installed successfully.',
+    'plugin-path-missing'   => 'Plugin File Path is not exist',
+    'no-plugin-file'        => 'Their is no ',
+    'plugin-config-missing' => 'Their is no <b>config.php or ServiceProvider.php</b>',
+    
     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]

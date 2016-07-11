@@ -408,14 +408,14 @@ class SettingsController extends Controller
                     file_put_contents($app, implode("\n", $lines));
                     $plug->create(['name' => $filename, 'path' => $filename, 'status' => 1]);
 
-                    return redirect()->back()->with('success', 'Installed SuccessFully');
+                    return redirect()->back()->with('success', Lang::get('lang.plugin-installed'));
                 } else {
                     /*
                      * delete if the plugin hasn't config.php and ServiceProvider.php
                      */
                     $this->deleteDirectory($file);
 
-                    return redirect()->back()->with('fails', 'Their is no '.$file);
+                    return redirect()->back()->with('fails', Lang::get('no-plugin-file').$file);
                 }
             } else {
                 /*
@@ -423,7 +423,7 @@ class SettingsController extends Controller
                  */
                 $this->deleteDirectory($file);
 
-                return redirect()->back()->with('fails', 'Their is no <b>config.php or ServiceProvider.php</b>  '.$file);
+                return redirect()->back()->with('fails', Lang::get('plugin-config-missing').$file);
             }
         } else {
             /*
@@ -431,7 +431,7 @@ class SettingsController extends Controller
              */
             $this->deleteDirectory($file);
 
-            return redirect()->back()->with('fails', '<b>Plugin File Path is not exist</b>  '.$file);
+            return redirect()->back()->with('fails', '<b>'.Lang::get('lang.plugin-path-missing').'</b>  '.$file);
         }
     }
 
