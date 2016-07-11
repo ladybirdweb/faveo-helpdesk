@@ -7,11 +7,7 @@
 </FilesMatch>
 
 # Restrict access to system files
-<<<<<<< HEAD
 <FilesMatch "^(composer.json|composer.lock|artisan|code_of_conduct.md|gulpfile.js|package.json|error_log|phpspec.yml|example.env)">
-=======
-<FilesMatch "^(composer.json|composer.lock|artisan|code_of_conduct.md|gulpfile.js|package.json)">
->>>>>>> eab3402a1ffefae74c73194e245db71dbd107b2b
     Order allow,deny
     Deny from all
 </FilesMatch>
