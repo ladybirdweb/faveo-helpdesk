@@ -1,0 +1,23 @@
+{
+  "name": "podio/podio-php",
+  "description": "PHP Client for Podio API",
+  "keywords": ["podio"],
+  "homepage": "http://github.com/podio/podio-php",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andreas Haugstrup Pedersen",
+      "email": "haugstrup@podio.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.0"
+  },
+  "suggest": {
+    "kdyby/curl-ca-bundle": "Improve security through providing current CA ROOT certificates bundle"
+  },
+  "autoload": {
+    "classmap": ["lib/", "models/"]
+  }
+}

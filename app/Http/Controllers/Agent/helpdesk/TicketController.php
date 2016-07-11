@@ -470,7 +470,13 @@ class TicketController extends Controller {
 
         // Event
         \Event::fire(new \App\Events\FaveoAfterReply($reply_content, $user->phone_number, $request, $tickets));
-
+        
+        $data = [
+            "ticket_id" => $request->input('ticket_ID'),
+            'u_id' => Auth::user()->first_name.' '.Auth::user()->last_name,
+            'body' => $request->input('reply_content'),
+        ];
+        \Event::fire('Reply-Ticket',array($data));
         // sending attachments via php mail function
         $message = '';
         if ($check_attachment == 1) {
@@ -742,7 +748,7 @@ class TicketController extends Controller {
                 'status' => $status,
                 'Priority' => $priority,
             );
-            \Event::fire('test', array($data));
+            \Event::fire('Create-Ticket', array($data));
             return ['0' => $ticket_number2, '1' => true];
         }
     }

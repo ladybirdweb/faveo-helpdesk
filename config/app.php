@@ -143,6 +143,8 @@ return [
          * Laravel Framework Service Providers...
          */
 
+
+			'App\Plugins\Podio\ServiceProvider',
         
 
         'Illuminate\Auth\AuthServiceProvider',

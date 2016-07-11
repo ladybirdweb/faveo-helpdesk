@@ -1,0 +1,111 @@
+#!/usr/bin/php
+<?php
+
+require_once 'config.php';
+
+require_once '../lib/Podio.php';
+require_once '../lib/PodioResponse.php';
+require_once '../lib/PodioOAuth.php';
+require_once '../lib/PodioError.php';
+require_once '../lib/PodioObject.php';
+require_once '../lib/PodioLogger.php';
+
+
+require_once '../models/PodioCollection.php'; // Included manually because other models inherit from this
+require_once '../models/PodioFieldCollection.php'; // Included manually because other models inherit from this
+
+$class_names = array();
+foreach (glob("../models/*.php") as $filename) {
+  require_once $filename;
+
+  $class_names[] = substr(basename($filename), 0, strrpos(basename($filename), '.'));
+}
+
+function instance_name_from_class_name($className) {
+  return strtolower(str_replace('Podio', '', $className));
+}
+
+function parameters_to_example_string($parameters) {
+  $list = array();
+  foreach ($parameters as $param) {
+    if ($param->isOptional() && $param->isDefaultValueAvailable() && $param->getDefaultValue() === array()) {
+      $list[] = "\${$param->name} = array()";
+    }
+    else {
+      $list[] = "\${$param->name}";
+    }
+  }
+  return join(', ', $list);
+}
+
+function build_example($className, $method) {
+  $params = parameters_to_example_string($method->getParameters());
+  if ($method->isStatic()) {
+    return "{$className}::{$method->getName()}( {$params} );";
+  }
+  else {
+    $instance_name = instance_name_from_class_name($className);
+    return "\${$instance_name}->{$method->getName()}({$params});";
+  }
+}
+
+// Global list of operations to update
+$operations = array();
+
+// Handle options
+$update_api = false;
+foreach ($_SERVER['argv'] as $arg) {
+  if ($arg == '--update-api') {
+    $update_api = true;
+  }
+  elseif (stristr($arg, '--class-name=')) {
+    $arg = explode('=', $arg);
+    $class_names = array($arg[1]);
+  }
+}
+
+foreach ($class_names as $className) {
+  $rc = new ReflectionClass($className);
+
+  foreach ($rc->getMethods() as $method) {
+    if ($method->class != $className || $method->getName() == '__construct') {
+      continue;
+    }
+
+    // Get API Operations item id from link in PHPDoc
+    $phpdoc = $method->getDocComment();
+    preg_match('/@see (.+)/', $phpdoc, $matches);
+    $link = isset($matches[1]) ? $matches[1] : '';
+    $item_id = substr($link, strrpos($link, '-')+1);
+
+    // Add data to list
+    if ($item_id && is_numeric($item_id)) {
+      $operations[$item_id][] = array(
+        'className' => $className,
+        'method' => $method->getName(),
+        'path' => 'models/'.basename($rc->getFileName()),
+        'type' => $method->isStatic() ? 'static' : 'instance',
+        'line' => (int)$method->getStartLine(),
+        'example' => build_example($className, $method),
+      );
+    }
+  }
+}
+
+print "Processed ".count($class_names)." class(es) and found ".count($operations)." documented method(s)\n";
+
+if ($update_api) {
+  print "Updating Podio App values...\n";
+
+  Podio::setup(CLIENT_ID, CLIENT_SECRET, array());
+  // Podio::$debug = true;
+
+  Podio::authenticate('app', array('app_id' => APP_ID, 'app_token' => APP_TOKEN));
+  print "You have been authenticated. Wee!\n";
+
+  foreach ($operations as $item_id => $op) {
+    $value = json_encode($op);
+    print "Updating: {$item_id}\n";
+    PodioItemField::update($item_id, FIELD_ID, array(array('value' => $value)), array('silent' => 1));
+  }
+}
