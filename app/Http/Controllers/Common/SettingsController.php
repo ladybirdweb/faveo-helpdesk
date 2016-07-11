@@ -373,6 +373,10 @@ class SettingsController extends Controller
         $filename2 = str_replace('.zip', '', $filename2);
         $filename1 = ucfirst($file->getClientOriginalName());
         $filename = str_replace('.zip', '', $filename1);
+        $dir_check = scandir($destination);
+        if (in_array($filename, $dir_check)) {
+            return redirect()->back()->with('fails', Lang::get('lang.plugin-exists'));       
+        }
         mkdir($destination.DIRECTORY_SEPARATOR.$filename);
         /*
          * extract the zip file using zipper

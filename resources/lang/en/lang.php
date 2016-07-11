@@ -464,6 +464,7 @@ return [
     'plugins'       => 'Plugins',
     'upload'        => 'Upload',
     'plugins-list'  => 'List of plugins',
+    'plugin-exists' => 'Plugin already exists',
     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]
