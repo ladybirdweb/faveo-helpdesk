@@ -29,7 +29,7 @@ active
         <h1 style="text-align: center;">Your Helpdesk is Ready!</h1>
 <div class="woocommerce-message woocommerce-tracker">
                 <p>All right, sparky! You’ve made it through the installation.</p>
-                
+
             </div>
 
 
@@ -59,7 +59,7 @@ active
         </div>
 
 
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
     <script src="{{asset("lb-faveo/js/index.js")}}"></script>
-  
+
   @stop
