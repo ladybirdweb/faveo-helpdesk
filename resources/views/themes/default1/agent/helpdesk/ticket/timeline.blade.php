@@ -235,7 +235,7 @@ if ($thread->title != "") {
                     <div class="col-md-6">
                         <?php
                         $user_phone = App\User::where('mobile', '=', $thread->user_id)->first();
-                        $TicketData = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $thread->ticket_id)->max('id');
+                        $TicketData = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $thread->ticket_id)->where('is_internal', '=', 0)->max('id');
                         $TicketDatarow = App\Model\helpdesk\Ticket\Ticket_Thread::where('id', '=', $TicketData)->where('is_internal', '=', 0)->first();
                         $LastResponse = App\User::where('id', '=', $TicketDatarow->user_id)->first();
                         if ($LastResponse->role == "user") {
