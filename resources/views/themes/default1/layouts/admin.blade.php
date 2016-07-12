@@ -25,7 +25,6 @@
         <link href="{{asset("lb-faveo/downloads/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <link rel="stylesheet" href="{{asset("lb-faveo/dist/css/editor.css")}}" type="text/css">
-        <link href="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" rel="stylesheet" type="text/css" />
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -70,7 +69,7 @@
                                         <img src="{{ Gravatar::src(Auth::user()->email) }}" class="user-image" alt="User Image">
                                     @endif
                                     <span class="hidden-xs">{!! Auth::user()->first_name." ".Auth::user()->last_name !!}</span>
-                                @endif          
+                                @endif
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
@@ -88,7 +87,7 @@
                                     @endif
                                     </li>
                                     <!-- Menu Footer-->
-                                    
+
                                     <li class="user-footer"  style="background-color:#1a2226;">
                                         <div class="pull-left">
                                             <a href="{{url('admin-profile')}}" class="btn btn-info btn-sm"><b>Profile</b></a>
@@ -164,14 +163,14 @@
                                         <li @yield('myticket')>
                                              <a href="{{url('ticket/myticket')}}">
                                                 <i class="fa fa-user"></i> <span>My Tickets</span>
-                                               
+
                                                 <small class="label pull-right bg-green">{{count($myticket) }}</small>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{url('unassigned')}}">
                                                 <i class="fa fa-th"></i> <span>Unassigned</span>
-                                                
+
                                                 <small class="label pull-right bg-green">{{count($unassigned)}}</small>
                                             </a>
                                         </li>
@@ -258,7 +257,7 @@
                                 <div class="pull-right hidden-xs">
                                     <b>Version</b> 0.1
                                 </div>
-                                <?php  
+                                <?php
                                 $company = App\Model\helpdesk\Settings\Company::where('id','=','1')->first();
                                 ?>
                                 <strong>Copyright &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}">{!! $company->company_name !!}</a>.</strong> All rights reserved. Powered by <a href="http://www.faveohelpdesk.com/" target="blank">Faveo</a>

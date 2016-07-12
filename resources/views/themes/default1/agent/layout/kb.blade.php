@@ -32,8 +32,6 @@
 
         <script type="text/javascript" src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
 
-        <link href="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" rel="stylesheet" type="text/css" />
-
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
         <script type="text/javascript" src="{{asset('lb-faveo/dist/js/nicEdit.js')}}"></script>
