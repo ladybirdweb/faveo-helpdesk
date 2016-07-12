@@ -515,7 +515,9 @@ if ($thread->title != "") {
                                         </span> <?php
                                         $data = $ConvDate[0];
                                     }
-                                    $role = App\User::where('id', '=', $conversation->user_id)->first();
+                                    if($conversation->user_id != null) {
+                                        $role = App\User::where('id', '=', $conversation->user_id)->first();
+                                    }
                                     ?>
                                 </li>
                                 <li>
@@ -523,13 +525,19 @@ if ($thread->title != "") {
                                         <i class="fa fa-tag bg-purple" title="Posted by System"></i>
                                     <?php
                                     } else {
-                                        if ($role->role == 'agent' || $role->role == 'admin') {
+                                        if($conversation->user_id != null) {
+                                            if ($role->role == 'agent' || $role->role == 'admin') {
+                                                ?>
+                                                <i class="fa fa-mail-reply-all bg-yellow" title="Posted by Support Team"></i>
+                                            <?php } elseif ($role->role == 'user') { ?>
+                                                <i class="fa fa-user bg-aqua" title="Posted by Customer"></i>
+                                            <?php } else { ?>
+                                                <i class="fa fa-mail-reply-all bg-purple" title="Posted by System"></i>
+                                                <?php
+                                            }
+                                        } else {
                                             ?>
-                                            <i class="fa fa-mail-reply-all bg-yellow" title="Posted by Support Team"></i>
-                                        <?php } elseif ($role->role == 'user') { ?>
-                                            <i class="fa fa-user bg-aqua" title="Posted by Customer"></i>
-                                        <?php } else { ?>
-                                            <i class="fa fa-mail-reply-all bg-purple" title="Posted by System"></i>
+                                            <i class="fa fa-tag bg-purple" title="Posted by System"></i>
                                             <?php
                                         }
                                     }
@@ -629,17 +637,25 @@ if ($thread->title != "") {
                                         </span>
                                         <h3 class="timeline-header">
                                             <?php
-                                            if ($role->role == "user") {
-                                                $usernam = $role->user_name;
+                                            if($conversation->user_id != null) {
+                                                if ($role->role == "user") {
+                                                    $usernam = $role->user_name;
+                                                } else {
+                                                    $usernam = $role->first_name . " " . $role->last_name;
+                                                }
                                             } else {
-                                                $usernam = $role->first_name . " " . $role->last_name;
+                                                $usernam = Lang::get('lang.system');
                                             }
                                             ?>
                                             <div class="user-block" style="margin-bottom:-5px;margin-top:-2px;">
-                                                @if($role->profile_pic != null)
-                                                <img src="{{$role->profile_pic}}"class="img-circle img-bordered-sm" alt="User Image"/>
-                                                @else
-                                                <img src="{{ Gravatar::src($role->email) }}" class="img-circle img-bordered-sm" alt="img-circle img-bordered-sm">
+                                                @if($conversation->user_id != null) 
+                                                    @if($role->profile_pic != null)
+                                                    <img src="{{$role->profile_pic}}"class="img-circle img-bordered-sm" alt="User Image"/>
+                                                    @else
+                                                    <img src="{{ Gravatar::src($role->email) }}" class="img-circle img-bordered-sm" alt="img-circle img-bordered-sm">
+                                                    @endif
+                                                @else 
+                                                    <img src="{{asset('lb-faveo/media/images/avatar_1.png')}}" class="img-circle img-bordered-sm" alt="img-circle img-bordered-sm">
                                                 @endif
                                                 <span class="username"  style="margin-bottom:4px;margin-top:2px;">
                                                     <a href='{!! url("/user/".$role->id) !!}'>{!! $usernam !!}</a>
