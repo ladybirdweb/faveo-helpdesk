@@ -144,7 +144,7 @@ return [
          */
 
 
-			'App\Plugins\Podio\ServiceProvider',
+			//
         
 
         'Illuminate\Auth\AuthServiceProvider',

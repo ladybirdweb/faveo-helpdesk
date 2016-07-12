@@ -1,9 +1,0 @@
-.DS_Store
-docs/*
-examples/config.php
-utils/config.php
-log/*
-Gemfile.lock
-.bundle
-_site
-.idea
