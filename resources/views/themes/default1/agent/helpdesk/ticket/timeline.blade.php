@@ -517,7 +517,7 @@ if ($thread->title != "") {
                                     }
                                     if($conversation->user_id != null) {
                                         $role = App\User::where('id', '=', $conversation->user_id)->first();
-                                    }
+                                    } 
                                     ?>
                                 </li>
                                 <li>
@@ -598,16 +598,18 @@ if ($thread->title != "") {
                                         $body2 = $parsed;
                                         $body = str_replace($body2, " ", $body);
                                     }
-                                    if ($conversation->is_internal) {
-                                        $color = '#A19CFF';
-                                        // echo $color; 
-                                    } else {
-                                        if ($role->role == 'agent' || $role->role == 'admin') {
-                                            $color = '#F9B03B';
-                                        } elseif ($role->role == 'user') {
-                                            $color = '#38D8FF';
+                                    if($conversation->user_id != null) {
+                                        if ($conversation->is_internal) {
+                                            $color = '#A19CFF';
+                                            // echo $color; 
                                         } else {
-                                            $color = '#605CA8';
+                                            if ($role->role == 'agent' || $role->role == 'admin') {
+                                                $color = '#F9B03B';
+                                            } elseif ($role->role == 'user') {
+                                                $color = '#38D8FF';
+                                            } else {
+                                                $color = '#605CA8';
+                                            }
                                         }
                                     }
                                     ?>
@@ -658,7 +660,11 @@ if ($thread->title != "") {
                                                     <img src="{{asset('lb-faveo/media/images/avatar_1.png')}}" class="img-circle img-bordered-sm" alt="img-circle img-bordered-sm">
                                                 @endif
                                                 <span class="username"  style="margin-bottom:4px;margin-top:2px;">
-                                                    <a href='{!! url("/user/".$role->id) !!}'>{!! $usernam !!}</a>
+                                                    @if($conversation->user_id != null) 
+                                                        <a href='{!! url("/user/".$role->id) !!}'>{!! $usernam !!}</a>
+                                                    @else
+                                                        {!! $usernam !!}
+                                                    @endif
                                                 </span>
                                                 <span class="description" style="margin-bottom:4px;margin-top:4px;"><i class="fa fa-clock-o"></i> {{UTC::usertimezone($conversation->created_at)}}</span>
 
@@ -688,7 +694,9 @@ if ($thread->title != "") {
                                         <br/><br/>
                                         <div class="timeline-footer" style="margin-bottom:-5px">
                                             @if(!$conversation->is_internal)
-                                            <?php Event::fire(new App\Events\Timeline($conversation, $role, $user)); ?>
+                                                @if($conversation->user_id != null)
+                                                    <?php Event::fire(new App\Events\Timeline($conversation, $role, $user)); ?>
+                                                @endif
                                             @endif
                                             <?php
                                             $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->get();
