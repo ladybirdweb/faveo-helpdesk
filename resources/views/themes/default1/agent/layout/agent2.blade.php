@@ -28,7 +28,7 @@
         <link href="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" rel="stylesheet" type="text/css" />
         <link type="text/css" href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet">
         <link type="text/css" href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">
-        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />        
+        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/faveo-css.css")}}">
         <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/notification-style.css")}}">
 
@@ -114,18 +114,18 @@ if ($company != null) {
                             <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
-                                    
+
                                         <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
-                                    
+
                                     <span class="hidden-xs">{{Auth::user()->first_name." ".Auth::user()->last_name}}</span>
-                                @endif          
+                                @endif
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header"  style="background-color:#343F44;">
-                                        
+
                                         <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                        
+
                                         <p>
                                             {{Auth::user()->first_name." ".Auth::user()->last_name}} - {{Auth::user()->role}}
                                             <small></small>
@@ -159,9 +159,9 @@ if ($company != null) {
                                         <div class="col-xs-3"></div>
                                         <div class="col-xs-2" style="width:50%;">
                                         <a href="{!! url('profile') !!}">
-                                        
+
                                                 <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                        
+
                                         </a>
                                         </div>
                                     </div>
@@ -366,10 +366,10 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
             <strong>{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</strong> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
                         </footer>
                     </div><!-- ./wrapper -->
-                    {{-- // <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
+                    {{-- // <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
 
                      <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}"></script>
-                    
+
                     {{-- // <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script> --}}
 
                     <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
@@ -392,10 +392,10 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                     <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
                     <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
                     <!-- Page Script -->
-                    
+
                     {{-- // <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script> --}}
                     <script type="text/javascript" src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}"></script>
-                    
+
                     <script type="text/javascript" src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"></script>
                     <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
@@ -410,7 +410,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
         </script>
         <script>
                 $(document).ready(function () {
-                    
+
                     $('.noti_User').click(function () {
                         var id = this.id;
                     var dataString = 'id=' + id;

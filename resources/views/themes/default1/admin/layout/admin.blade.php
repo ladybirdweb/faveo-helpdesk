@@ -30,10 +30,10 @@
         <link  href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css">
         <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
-        <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">    
+        <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">
         {{-- // <script src="https://code.jquery.com/jquery-2.1.4.js" type="text/javascript"></script> --}}
         <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
-        {{-- // <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
+        {{-- // <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,7 +78,7 @@
                         <ul class="nav navbar-nav navbar-left">
                             @if($replacetop==0)
                             <li @yield('settings')><a href="{!! url('dashboard') !!}">{!! Lang::get('lang.agent_panel') !!}</a></li>
-                            @else 
+                            @else
                             <?php \Event::fire('service.desk.admin.topbar', array()); ?>
                             @endif
                         </ul>
@@ -159,7 +159,7 @@
                                 <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
 
                                 <span class="hidden-xs">{!! Auth::user()->first_name." ".Auth::user()->last_name !!}</span>
-                                @endif          
+                                @endif
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
@@ -401,7 +401,7 @@ $(function () {
     $("textarea").wysihtml5();
 });
 // $(function(){
-//     $("#checkUpdate").on('click',function(){        
+//     $("#checkUpdate").on('click',function(){
 //             $.ajax({
 //                 type: "GET",
 //                 url: "{!! URL::route('version-check') !!}",

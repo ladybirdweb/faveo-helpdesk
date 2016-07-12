@@ -22,7 +22,7 @@
   <body class="login-page">
     <div class="login-box">
       <div class="login-logo">
-        <?php 
+        <?php
                 $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
         $system = App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
         ?>
@@ -51,7 +51,7 @@
     </div>
     </div>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
     <!-- iCheck -->
     <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>

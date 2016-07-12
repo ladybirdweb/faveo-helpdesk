@@ -28,13 +28,13 @@
         <link href="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" rel="stylesheet" type="text/css" />
         {{-- jquery ui css --}}
         <link type="text/css" href="{{asset("lb-faveo/downloads/jquery.ui.css")}}" rel="stylesheet">
-        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />        
+        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- <link type="text/css" href="http://code.jquery.com/ui/1.9.1/themes/redmond/jquery-ui.css" rel="stylesheet"> -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         @yield('HeadInclude')
     </head>
     <body class="skin-yellow fixed">
@@ -77,14 +77,14 @@ if ($company != null) {
                                         <img src="{{ Gravatar::src(Auth::user()->email) }}" class="user-image" alt="User Image">
                                     @endif
                                     <span class="hidden-xs">{{Auth::user()->first_name." ".Auth::user()->last_name}}</span>
-                                @endif          
+                                @endif
                                 </a>
                                 <ul class="dropdown-menu">
                                     <!-- User image -->
                                     <li class="user-header"  style="background-color:#343F44;">
                                         @if(Auth::user()->profile_pic)
                                         <img src="{{asset('lb-faveo/dist/img')}}{{'/'}}{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-                                        @else                                      
+                                        @else
                                             <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
                                         @endif
                                         <p>
@@ -175,14 +175,14 @@ if ($company != null) {
                                         <li @yield('myticket')>
                                              <a href="{{url('ticket/myticket')}}">
                                                 <i class="fa fa-user"></i> <span>My Tickets</span>
-                                               
+
                                                 <small class="label pull-right bg-green">{{count($myticket) }}</small>
                                             </a>
                                         </li>
                                         <li>
                                             <a href="{{url('unassigned')}}">
                                                 <i class="fa fa-th"></i> <span>Unassigned</span>
-                                                
+
                                                 <small class="label pull-right bg-green">{{count($unassigned)}}</small>
                                             </a>
                                         </li>
@@ -316,7 +316,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('name', '=', $agent_group)->wher
                         </footer>
                     </div><!-- ./wrapper -->
 
-                    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
                     <!-- Bootstrap 3.3.2 JS -->
                     <script src="{{asset("lb-faveo/downloads/bootstrap.min.js")}}" type="text/javascript"></script>
                     <!-- Slimscroll -->
@@ -393,7 +393,7 @@ $(function() {
                     <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
                     <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
 
-        
+
                     <script>
                         $(function () {
                         //Add text editor

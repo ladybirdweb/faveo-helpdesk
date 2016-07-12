@@ -12,7 +12,7 @@
         <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
         <!-- fullCalendar 2.2.5-->
         <link href="{{asset("lb-faveo/plugins/fullcalendar/fullcalendar.min.css")}}" rel="stylesheet" type="text/css" />
-        
+
         <link href="{{asset("lb-faveo/plugins/fullcalendar/fullcalendar.print.css")}}" rel="stylesheet" type="text/css" media='print' />
         <!-- Theme style -->
         <link href="{{asset("lb-faveo/dist/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
@@ -23,19 +23,19 @@
         <link href="{{asset("lb-faveo/plugins/iCheck/flat/blue.css")}}" rel="stylesheet" type="text/css" />
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <link rel="stylesheet" href="{{asset("lb-faveo/dist/css/tabby.css")}}" type="text/css">
-        
+
         <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
-        
+
         <link type="text/css" href="http://code.jquery.com/ui/1.9.1/themes/redmond/jquery-ui.css" rel="stylesheet">
-        
+
         <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
-        
+
         <script type="text/javascript" src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
-        
+
         <link href="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" rel="stylesheet" type="text/css" />
-        
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
         <script type="text/javascript" src="{{asset('lb-faveo/dist/js/nicEdit.js')}}"></script>
 
         @yield('HeadInclude')
@@ -74,7 +74,7 @@
                                     @else
                                         <img src="{{ Gravatar::src(Auth::user()->email) }}" class="user-image" alt="User Image">
                                     @endif
-                                @endif          
+                                @endif
                                     <span class="hidden-xs">{!! Auth::user()->firstname." ".Auth::user()->lastname !!}</span>
                                 </a>
                                 <ul class="dropdown-menu">
@@ -86,7 +86,7 @@
                                     @else
                                         <img src="{{ Gravatar::src(Auth::user()->email) }}" class="img-circle" alt="User Image">
                                     @endif
-                                @endif          
+                                @endif
                                         <p>
                                             <span class="hidden-xs">{!! Auth::user()->firstname." ".Auth::user()->lastname !!}</span>
                                         </p>
@@ -241,8 +241,8 @@
             </footer>
         </div><!-- ./wrapper -->
 
-        <!-- jQuery 2.1.3 -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <!-- jQuery 2.1.1 -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
         <!-- Bootstrap 3.3.2 JS -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
@@ -256,9 +256,9 @@
         <script src="{{asset("lb-faveo/dist/js/app.min.js")}}" type="text/javascript"></script>
         <!-- iCheck -->
         <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
-        
+
         <script type="text/javascript" src="js/jquery.maskedinput.min.js"></script>
-        
+
         <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
         <!-- Bootstrap WYSIHTML5 -->
         <script src="{{asset('lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}" type="text/javascript"></script>
