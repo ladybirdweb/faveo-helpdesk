@@ -36,7 +36,7 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-        {{-- // <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
+        {{-- // <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
         @yield('HeadInclude')
     </head>
@@ -74,8 +74,8 @@
                                 @endif
                                 <li @yield('kb')><a href="{!! url('knowledgebase') !!}">{!! Lang::get('lang.knowledge_base') !!}</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{route('category-list')}}">{!! Lang::get('lang.categories') !!}</a></li>  
-                                        <li><a href="{{route('article-list')}}">{!! Lang::get('lang.articles') !!}</a></li>  
+                                        <li><a href="{{route('category-list')}}">{!! Lang::get('lang.categories') !!}</a></li>
+                                        <li><a href="{{route('article-list')}}">{!! Lang::get('lang.articles') !!}</a></li>
                                     </ul>
                                 </li>
                                 <?php $pages = App\Model\kb\Page::where('status', '1')->where('visibility', '1')->get();
@@ -121,13 +121,13 @@
                             <ul class="nav navbar-nav navbar-login">
                                 <li <?php if ($errors->first('email') || $errors->first('password')) { ?> class="sfHover" <?php } else { ?> <?php } ?> ><a href="#"  data-toggle="collapse"  <?php
                                     if ($errors->first('email') || $errors->first('password')) {
-                                        
+
                                     } else {
                                         ?> class="collapsed" <?php } ?> data-target="#login-form">{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a></li>
                             </ul><!-- .navbar-login -->
                             @endif
                             <div id="login-form" @if(isset($errors))<?php if ($errors->first('email') || $errors->first('password')) { ?> class="login-form collapse fade clearfix in" <?php } else { ?> class="login-form collapse fade clearfix" <?php } ?>@endif >
-                                {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}  
+                                {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}
                                 @if(Session::has('errors'))
                                 @if(Session::has('check'))
                                 <?php goto b; ?>
@@ -170,19 +170,19 @@
                             </div>
                         </div>
                         {!! Form::close() !!}
-                    </div>	                        
+                    </div>
                 </div>
             </header>
             <!-- Left side column. contains the logo and sidebar -->
             <!-- Right side column. Contains the navbar and content of the page -->
-            <div class="site-hero clearfix">                            
+            <div class="site-hero clearfix">
                 {!! Breadcrumbs::render() !!}
             </div>
             <!-- Main content -->
             <div id="main" class="site-main clearfix">
                 <div class="container">
                     <div class="content-area">
-                        <div class="row">	
+                        <div class="row">
                             @if(Session::has('success'))
                             <div class="alert alert-success alert-dismissable">
                                 <i class="fa  fa-check-circle"></i>
@@ -224,7 +224,7 @@
                         </div>
                     </div>
                 </div>
-            </div>			
+            </div>
             <!-- /.content-wrapper -->
             <?php
             $footer1 = App\Model\helpdesk\Theme\Widgets::where('name', '=', 'footer1')->first();
@@ -255,7 +255,7 @@
                                 <section id="section-latest-news" class="section">
                                     <h2 class="section-title h4 clearfix">{!!$footer2->title!!}</h2>
                                     <div class="textwidget">
-                                        <p>{!! $footer2->value !!}</p>	
+                                        <p>{!! $footer2->value !!}</p>
                                     </div>
                                 </section><!-- #section-latest-news -->
                             </div>
@@ -358,8 +358,8 @@
                         </div>
                     </div>
             </footer><!-- #colophon -->
-            <!-- jQuery 2.1.3 -->
-            {{-- // <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
+            <!-- jQuery 2.1.1 -->
+            {{-- // <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
             <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
             <!-- Bootstrap 3.3.2 JS -->
             {{-- // <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script> --}}

@@ -282,7 +282,7 @@
                                                     <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
                                                     @foreach($threads as $thread)
                                                     <td class="mailbox-name"><a href="timeline.html">{{$thread->ticket_subject}}</a></td>
-                                                   
+
                                                     <td class="mailbox-Id">{{$thread->ticket_id}}</td>
                                                      @endforeach
                                                     <td class="mailbox-last-reply">client</td>
@@ -343,7 +343,7 @@
                                 <div class="box-footer no-padding">
                                     <div class="mailbox-controls">
                                         <!-- Check all button -->
-                                        <button class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></button>                    
+                                        <button class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></button>
                                         <div class="btn-group">
                                             <button class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
                                             <button class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
@@ -372,8 +372,8 @@
             </footer>
         </div><!-- ./wrapper -->
 
-        <!-- jQuery 2.1.3 -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <!-- jQuery 2.1.1 -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <!-- Bootstrap 3.3.2 JS -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
         <!-- Slimscroll -->
