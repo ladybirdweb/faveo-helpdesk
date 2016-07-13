@@ -23,10 +23,9 @@ class PageRequest extends Request
      */
     public function rules()
     {
+        $slug = $this->segment(2);
         return [
-            'name' => 'required',
-            'slug' => 'required|unique:kb_pages',
-                //'description' => 'required',
+            'name' => 'required|unique:kb_pages,slug,'.$slug
         ];
     }
 }

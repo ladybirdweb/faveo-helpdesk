@@ -84,7 +84,8 @@ class Handler extends ExceptionHandler
         if (config('app.debug') == true) {
             return parent::render($request, $e);
         }
-        return redirect()->route('error500', []);
+        return  response()->view('errors.500');
+        //return redirect()->route('error500', []);
     }
     /**
      * Function to render 404 error page.

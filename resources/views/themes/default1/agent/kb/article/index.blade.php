@@ -39,8 +39,9 @@ class="active"
         @endif
         {!! Datatable::table()
         ->addColumn(Lang::get('lang.name'),
-        Lang::get('lang.create'),
+        Lang::get('lang.publish_time'),
         Lang::get('lang.action'))       // these are the column headings to be shown
+        ->setOrder(array(1=>'desc')) 
         ->setUrl(route('api.article'))   // this is the route where data will be retrieved
         ->render() !!}
     </div>

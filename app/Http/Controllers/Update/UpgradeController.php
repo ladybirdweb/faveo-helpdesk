@@ -54,8 +54,8 @@ class UpgradeController extends Controller {
                     }
                 }
             }
-        } catch (\Exception $e) {
-            dd($e);
+        } catch (\Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
 
@@ -287,36 +287,47 @@ class UpgradeController extends Controller {
     }
 
     public function getCurl($url) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        //curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        if (curl_exec($ch) === false) {
-            echo 'Curl error: ' . curl_error($ch);
-        }
-        $data = curl_exec($ch);
-        dd($data);
-        curl_close($ch);
+        try {
+            $curl = Utility::_isCurl();
+            if (!$curl) {
+                throw new Exception("Please enable your curl function to check latest update");
+            }
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            if (curl_exec($ch) === false) {
+                echo 'Curl error: ' . curl_error($ch);
+            }
+            $data = curl_exec($ch);
+            curl_close($ch);
 
-        return $data;
+            return $data;
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
     }
 
     public function postCurl($url, $data) {
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        if (curl_exec($ch) === false) {
-            echo 'Curl error: ' . curl_error($ch);
+        try {
+            $curl = Utility::_isCurl();
+            if (!$curl) {
+                throw new Exception("Please enable your curl function to check latest update");
+            }
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            if (curl_exec($ch) === false) {
+                echo 'Curl error: ' . curl_error($ch);
+            }
+            $data = curl_exec($ch);
+            curl_close($ch);
+            $data = Utility::decryptByFaveoPrivateKey($data);
+            return json_decode($data, true);
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
         }
-        $data = curl_exec($ch);
-        curl_close($ch);
-//        echo "<pre>$data</pre>";
-//        exit();
-        $data = Utility::decryptByFaveoPrivateKey($data);
-        return json_decode($data, true);
     }
 
     public function databaseUpdate() {

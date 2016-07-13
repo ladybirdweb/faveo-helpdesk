@@ -27,7 +27,7 @@
         <link rel="stylesheet" href="{{asset("lb-faveo/css/editor.css")}}" type="text/css">
         <link type="text/css" href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet">
         <link type="text/css" href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">
-        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />        
+        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/faveo-css.css")}}">
         <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/notification-style.css")}}">
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
@@ -50,7 +50,7 @@
                 <?php
                 $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
                 if ($company != null) {
-                    
+
                 }
                 $replacetop = 0;
                 $replacetop = \Event::fire('service.desk.agent.topbar.replace', array());
@@ -80,19 +80,19 @@
                         <span class="icon-bar"></span>
                     </a>
                     <?php $notifications = App\Http\Controllers\Common\NotificationController::getNotifications();
-                    
+
                     ?>
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         @if($replacetop==0)
                         <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
-                            
+
                             <li @yield('Dashboard')><a data-target="#tabA" href="#">{!! Lang::get('lang.dashboard') !!}</a></li>
                             <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
-                            
+
                         </ul>
-                        @else 
+                        @else
                             <?php \Event::fire('service.desk.agent.topbar', array()); ?>
                             @endif
 
@@ -172,12 +172,12 @@
                                 @if(Auth::user())
                                 <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
                                 <span class="hidden-xs">{{Auth::user()->first_name." ".Auth::user()->last_name}}</span>
-                                @endif          
+                                @endif
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
-                                <li class="user-header"  style="background-color:#343F44;">     
-                                    <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />                                        
+                                <li class="user-header"  style="background-color:#343F44;">
+                                    <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
                                     <p>
                                         {{Auth::user()->first_name." ".Auth::user()->last_name}} - {{Auth::user()->role}}
                                         <small></small>
@@ -368,7 +368,7 @@
             <?php
             $agent_group = Auth::user()->assign_group;
             $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
-// dd($group); 
+// dd($group);
             ?>
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
@@ -436,7 +436,7 @@
                 <strong>{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</strong> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
             </footer>
         </div><!-- ./wrapper -->
-        {{-- // <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
+        {{-- // <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
 
         <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}"></script>
 

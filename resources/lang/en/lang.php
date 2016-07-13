@@ -654,6 +654,7 @@ return [
     'can_not_process'                       => 'Can not Process',
     'comment_published'                     => 'Comment Published',
     'comment_deleted'                       => 'Comment Deleted',
+    'publish_time'                          => 'Publish time',
     /*
       |----------------------------------------------------------------------------------------
       | Theme Pages [English(en)]

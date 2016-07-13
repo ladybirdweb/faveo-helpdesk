@@ -125,11 +125,11 @@ class PageController extends Controller
      */
     public function store(PageRequest $request)
     {
-        $sl = $request->input('slug');
+        $sl = $request->input('name');
         $slug = str_slug($sl, '-');
         $this->page->slug = $slug;
         try {
-            $this->page->fill($request->except('slug'))->save();
+            $this->page->fill($request->input())->save();
 
             return redirect('page')->with('success', Lang::get('lang.page_created_successfully'));
         } catch (Exception $e) {
@@ -163,13 +163,12 @@ class PageController extends Controller
      *
      * @return type redirect
      */
-    public function update($slug, PageUpdate $request)
+    public function update($slug, PageRequest $request)
     {
         // get pages with respect to slug
         $pages = $this->page->where('slug', $slug)->first();
-        $sl = $request->input('slug');
+        $sl = $request->input('name');
         $slug = str_slug($sl, '-');
-        $this->page->slug = $slug;
         try {
             $pages->fill($request->all())->save();
             $pages->slug = $slug;
