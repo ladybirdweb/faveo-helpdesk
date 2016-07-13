@@ -921,7 +921,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('get-articles', ['as' => 'api.article', 'uses' => 'Agent\kb\ArticleController@getData']);
     Route::get('get-categorys', ['as' => 'api.category', 'uses' => 'Agent\kb\CategoryController@getData']);
     Route::get('get-comment', ['as' => 'api.comment', 'uses' => 'Agent\kb\SettingsController@getData']);
-    Route::get('test', 'ArticleController@test');
+    
     Route::post('image', 'Agent\kb\SettingsController@image');
     Route::get('direct', function () {
         return view('direct');

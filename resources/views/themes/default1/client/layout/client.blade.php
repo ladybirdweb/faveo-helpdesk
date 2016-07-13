@@ -119,27 +119,41 @@
                             </ul>
                             @if(isset($errors))
                             <ul class="nav navbar-nav navbar-login">
-                                <li <?php if ($errors->first('email') || $errors->first('password')) { ?> class="sfHover" <?php } else { ?> <?php } ?> ><a href="#"  data-toggle="collapse"  <?php
+                                <li 
+                                <?php
+                                if (is_object($errors)) {
                                     if ($errors->first('email') || $errors->first('password')) {
-
-                                    } else {
-                                        ?> class="collapsed" <?php } ?> data-target="#login-form">{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a></li>
+                                        ?> class="sfHover" 
+                                            <?php
+                                        }
+                                    }
+                                    ?> 
+                                    ><a href="#"  data-toggle="collapse"  
+                                        <?php
+                                        if (is_object($errors)) {
+                                            if ($errors->first('email') || $errors->first('password')) {
+                                                
+                                            } else {
+                                                ?> class="collapsed" 
+                                        <?php }
+                                    } ?> 
+                                    data-target="#login-form">{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a></li>
                             </ul><!-- .navbar-login -->
                             @endif
                             <div id="login-form" @if(isset($errors))<?php if ($errors->first('email') || $errors->first('password')) { ?> class="login-form collapse fade clearfix in" <?php } else { ?> class="login-form collapse fade clearfix" <?php } ?>@endif >
-                                {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}
-                                @if(Session::has('errors'))
-                                @if(Session::has('check'))
-                                <?php goto b; ?>
-                                @endif
-                                <div class="alert alert-danger alert-dismissable">
+                                 {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}
+                                 @if(Session::has('errors'))
+                                 @if(Session::has('check'))
+<?php goto b; ?>
+                                 @endif
+                                 <div class="alert alert-danger alert-dismissable">
                                     @if(Session::has('error'))
                                     {!! Session::get('error') !!}
                                     @else
                                     {!! Lang::get('lang.required-error') !!}
                                     @endif
                                 </div>
-                                <?php b: ?>
+<?php b: ?>
                                 @endif
                                 <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('email') ? 'has-error' : '' !!} @endif">
                                     {!! Form::text('email',null,['placeholder'=>Lang::get('lang.e-mail'),'class' => 'form-control']) !!}
@@ -200,7 +214,7 @@
                             <!-- failure message -->
                             @if(Session::has('fails'))
                             @if(Session::has('check'))
-                            <?php goto a; ?>
+<?php goto a; ?>
                             @endif
                             <div class="alert alert-danger alert-dismissable">
                                 <i class="fa fa-ban"></i>
@@ -208,7 +222,7 @@
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                 {{Session::get('fails')}}
                             </div>
-                            <?php a: ?>
+<?php a: ?>
                             @endif
                             @yield('content')
                             <div id="sidebar" class="site-sidebar col-md-3">
@@ -295,7 +309,7 @@
                             <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
                         </div>
                         <div class="site-social text-right col-md-6">
-                            <?php $socials = App\Model\helpdesk\Theme\Widgets::all(); ?>
+<?php $socials = App\Model\helpdesk\Theme\Widgets::all(); ?>
                             <ul class="list-inline hidden-print">
                                 @foreach($socials as $social)
                                 @if($social->name == 'facebook')
@@ -372,9 +386,9 @@
             <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
             <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
             <script>
-$(function() {
+$(function () {
 //Enable check and uncheck all functionality
-    $(".checkbox-toggle").click(function() {
+    $(".checkbox-toggle").click(function () {
         var clicks = $(this).data('clicks');
         if (clicks) {
             //Uncheck all checkboxes
@@ -386,7 +400,7 @@ $(function() {
         $(this).data("clicks", !clicks);
     });
 //Handle starring for glyphicon and font awesome
-    $(".mailbox-star").click(function(e) {
+    $(".mailbox-star").click(function (e) {
         e.preventDefault();
 //detect type
         var $this = $(this).find("a > i");

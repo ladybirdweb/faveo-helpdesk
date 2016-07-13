@@ -218,6 +218,9 @@ class UserController extends Controller {
      */
     public function postComment($slug, Article $article, CommentRequest $request, Comment $comment) {
         $article = $article->where('slug', $slug)->first();
+        if(!$article){
+           return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed')); 
+        }
         $id = $article->id;
         $comment->article_id = $id;
         if ($comment->fill($request->input())->save()) {
@@ -229,8 +232,11 @@ class UserController extends Controller {
 
     public function getPage($name, Page $page) {
         $page = $page->where('slug', $name)->first();
-        //$this->timezone($page->created_at);
-        return view('themes.default1.client.kb.article-list.pages', compact('page'));
+        if($page){
+            return view('themes.default1.client.kb.article-list.pages', compact('page'));
+        }else{
+            return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed'));
+        }
     }
 
     public static function port() {

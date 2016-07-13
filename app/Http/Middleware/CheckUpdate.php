@@ -113,7 +113,7 @@ class CheckUpdate
 
             if ($n) {
                 $now = \Carbon\Carbon::now();
-                $yesterday = \Carbon\Carbon::yesterday();;
+                $yesterday = \Carbon\Carbon::yesterday();
                 $notifications = $notify->where('key', 'new-version')->whereBetween('created_at', [$yesterday, $now])->lists('value', 'key');
                 if ($notifications->count() > 0) {
                     return false;

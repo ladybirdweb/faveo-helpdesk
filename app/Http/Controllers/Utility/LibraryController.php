@@ -65,7 +65,7 @@ class LibraryController extends Controller {
             $result = ['seal' => $sealed_data, 'envelope' => $envelope];
             return json_encode($result);
         } catch (Exception $ex) {
-            dd($ex);
+            throw new Exception($ex->getMessage());
         }
     }
 
@@ -86,6 +86,10 @@ class LibraryController extends Controller {
         } catch (Exception $ex) {
             dd($ex);
         }
+    }
+
+    public static function _isCurl() {
+        return function_exists('curl_version');
     }
 
 }
