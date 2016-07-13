@@ -6,7 +6,6 @@ use App\Model\Common\TemplateType;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Agent\Groups;
 use App\Model\helpdesk\Agent\Teams;
-use App\Model\helpdesk\Email\Smtp;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Notification\NotificationType;
@@ -272,8 +271,6 @@ class DatabaseSeeder extends Seeder
         Ticket_source::create(['name' => 'web', 'value' => 'Web']);
         Ticket_source::create(['name' => 'email', 'value' => 'E-mail']);
         Ticket_source::create(['name' => 'agent', 'value' => 'Agent Panel']);
-        /* Mail configuration */
-        Smtp::create(['id' => '1']);
         /* Version check */
         Version_Check::create(['id' => '1']);
         /* System widgets */

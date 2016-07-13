@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html dir="rtl" lang="ar">
     <head>
         <meta charset="UTF-8" ng-app="myApp">
         <title>Faveo | HELP DESK</title>
@@ -30,7 +30,6 @@
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />        
         <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/faveo-css.css")}}">
         <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/notification-style.css")}}">
-
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
 
         <!-- Select2 -->

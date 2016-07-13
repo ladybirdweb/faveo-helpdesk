@@ -188,6 +188,7 @@ return [
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
         'Torann\GeoIP\GeoIPServiceProvider',
         LaravelFCM\FCMServiceProvider::class, 
+        Barryvdh\Debugbar\ServiceProvider::class,
     ],
     /*
       |--------------------------------------------------------------------------
@@ -249,6 +250,7 @@ return [
         'Image'       => Intervention\Image\Facades\Image::class,
         'FCM'         => LaravelFCM\Facades\FCM::class,
         'FCMGroup'    => LaravelFCM\Facades\FCMGroup::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
     'name'  => 'faveo helpdesk community',
 ];

@@ -17,7 +17,24 @@ class="active"
 @stop
 
 @section('content')
-
+        <!-- check whether success or not -->
+        {{-- Success message --}}
+        @if(Session::has('success'))
+        <div class="alert alert-success alert-dismissable">
+            <i class="fa  fa-check-circle"></i>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{Session::get('success')}}
+        </div>
+        @endif
+        {{-- failure message --}}
+        @if(Session::has('fails'))
+        <div class="alert alert-danger alert-dismissable">
+            <i class="fa fa-ban"></i>
+            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{Session::get('fails')}}
+        </div>
+        @endif
 <link type="text/css" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet">
 {{-- <script src="{{asset("lb-faveo/dist/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script> --}}
 <div class="row">
