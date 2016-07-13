@@ -77,7 +77,7 @@ class = "active"
                             $str = $arti->description;
                             $len = strlen($str);
 
-                            $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 50);
+                            $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 20);
                             ?>
                             {!! strip_tags($excerpt) !!} <br/><a class="more-link text-center" href="{{url('show/'.$arti->slug)}}" style="color: orange">{!! Lang::get('lang.read_more') !!}</a>
                         </li>

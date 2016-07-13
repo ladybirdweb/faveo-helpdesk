@@ -63,8 +63,12 @@ class ArticleController extends Controller
     public function getData()
     {
         $article = new Article();
+        $articles = $article
+                ->select('id', 'name', 'description', 'publish_time', 'slug')
+                ->orderBy('publish_time','desc')
+                ->get();
         // returns chumper datatable
-        return Datatable::Collection($article->select('id', 'name', 'description', 'publish_time', 'slug')->get())
+        return Datatable::Collection($articles)
 
                         /* add column name */
                         ->addColumn('name', function ($model) {
@@ -96,8 +100,8 @@ class ArticleController extends Controller
                     			<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">Close</button>
                     			<a href='.url("article/delete/$model->slug").'><button class="btn btn-danger">delete</button></a>
                 			</div>
-            			</div><!-- /.modal-content -->
-        			</div><!-- /.modal-dialog -->
+            			</div>
+        			</div>
     			</div>';
                         })
                         ->searchColumns('name', 'description', 'publish_time')
