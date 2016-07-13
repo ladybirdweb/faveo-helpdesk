@@ -672,7 +672,7 @@ if ($thread->title != "") {
 
                                         </h3>
                                         <div class="timeline-body" style="padding-left:30px;margin-bottom:-20px">
-                                            {!! $body !!}
+                                            {!! nl2br($body) !!}
                                         </div>
                                         @if($conversation->id == $ij->id)
         <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->id)->get(); ?>

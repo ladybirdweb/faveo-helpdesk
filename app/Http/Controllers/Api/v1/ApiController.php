@@ -1375,5 +1375,46 @@ class ApiController extends Controller {
                 return $query->select('tickets.dept_id');
         }
     }
+    /**
+     * Register a user with username and password.
+     *
+     * @param Request $request
+     *
+     * @return type json
+     */
+    public function register(Request $request)
+    {
+        try {
+            $v = \Validator::make($request->all(), [
+                        'email'    => 'required|email|unique:users',
+                        'password' => 'required|min:6',
+            ]);
+            if ($v->fails()) {
+                $error = $v->errors();
+
+                return response()->json(compact('error'));
+            }
+            $auth = $this->user;
+            $email = $request->input('email');
+            $username = $request->input('email');
+            $password = \Hash::make($request->input('password'));
+            $role = $request->input('role');
+            if($auth->role=='agent'){
+                $role = "user";
+            }
+            $user = new User();
+            $user->password = $password;
+            $user->user_name = $username;
+            $user->email = $email;
+            $user->role = $role;
+            $user->save();
+            return response()->json(compact('user'));
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+
+            return response()->json(compact('error'));
+        }
+    }
+
 
 }

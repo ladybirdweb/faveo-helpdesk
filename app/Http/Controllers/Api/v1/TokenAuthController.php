@@ -100,30 +100,30 @@ class TokenAuthController extends Controller
      *
      * @return type json
      */
-    public function register(Request $request)
-    {
-        try {
-            $v = \Validator::make($request->all(), [
-                        'email'    => 'required|email|unique:users',
-                        'password' => 'required',
-            ]);
-            if ($v->fails()) {
-                $error = $v->errors();
-
-                return response()->json(compact('error'));
-            }
-            $newuser = $request->all();
-            $password = Hash::make($request->input('password'));
-
-            $newuser['password'] = $password;
-
-            return User::create($newuser);
-        } catch (\Exception $e) {
-            $error = $e->getMessage();
-
-            return response()->json(compact('error'));
-        }
-    }
+//    public function register(Request $request)
+//    {
+//        try {
+//            $v = \Validator::make($request->all(), [
+//                        'email'    => 'required|email|unique:users',
+//                        'password' => 'required',
+//            ]);
+//            if ($v->fails()) {
+//                $error = $v->errors();
+//
+//                return response()->json(compact('error'));
+//            }
+//            $newuser = $request->all();
+//            $password = Hash::make($request->input('password'));
+//
+//            $newuser['password'] = $password;
+//
+//            return User::create($newuser);
+//        } catch (\Exception $e) {
+//            $error = $e->getMessage();
+//
+//            return response()->json(compact('error'));
+//        }
+//    }
 
     /**
      * verify the url is existing or not.
