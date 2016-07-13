@@ -3,8 +3,6 @@
     <head>
         <title>PDF</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <!-- <link href="{{asset("downloads/bootstrap.min.css")}}" rel="stylesheet" type="text/css" /> -->
-        <link href="{{asset("lb-faveo/aaaaaa/css/AdminLTE.min.css")}}" rel="stylesheet" type="text/css" />
         <style type="text/css">
             * {
                 font-family: "DejaVu Sans Mono", monospace;
@@ -71,23 +69,29 @@
         @foreach($conversations as $conversation)
         <br/><hr>
         <span class="time-label">
-            <?php
-            $role = App\User::where('id', '=', $conversation->user_id)->first();
-            ?>
-            <?php if ($conversation->is_internal) { ?>
-                <i class="fa fa-tag bg-purple" title="Posted by System"></i>
+            @if($conversation->user_id != null) 
                 <?php
-            } else {
-                if ($role->role == 'agent' || $role->role == 'admin') {
-                    ?>
-                    <i class="fa fa-mail-reply-all bg-yellow" title="Posted by Support Team"></i>
-                <?php } elseif ($role->role == 'user') { ?>
-                    <i class="fa fa-user bg-aqua" title="Posted by Customer"></i>
-                <?php } else { ?>
-                    <i class="fa fa-mail-reply-all bg-purple" title="Posted by System"></i>
+                
+                $role = App\User::where('id', '=', $conversation->user_id)->first();
+                ?>
+            
+                <?php if ($conversation->is_internal) { ?>
+                    <i class="fa fa-tag bg-purple" title="Posted by System"></i>
                     <?php
+                } else {
+                    if ($role->role == 'agent' || $role->role == 'admin') {
+                        ?>
+                        <i class="fa fa-mail-reply-all bg-yellow" title="Posted by Support Team"></i>
+                    <?php } elseif ($role->role == 'user') { ?>
+                        <i class="fa fa-user bg-aqua" title="Posted by Customer"></i>
+                    <?php } else { ?>
+                        <i class="fa fa-mail-reply-all bg-purple" title="Posted by System"></i>
+                        <?php
+                    }
                 }
-            }
+                ?>
+            @endif
+            <?php
             $attachment = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->first();
             if ($attachment == null) {
                 $body = $conversation->body;
@@ -184,12 +188,13 @@
                 ?>;
                     ">
                     <a href="#" style="text-decoration:none; color:#fff;"><?php
+                    if($conversation->user_id != null) {
                         if ($role->role == "user") {
                             echo $role->user_name;
                         } else {
                             echo $role->first_name . " " . $role->last_name;
                         }
-                        ?> </a><strong>{!! Lang::get('lang.date') !!}:</strong> {!! $thread->created_at !!}<br/></h3>
+                    } else { echo Lang::get('lang.system'); }   ?> </a><strong>{!! Lang::get('lang.date') !!}:</strong> {!! $thread->created_at !!}<br/></h3>
                 <div class="timeline-body" style="padding-left:30px;">
                     {!! $body !!}
                 </div>
