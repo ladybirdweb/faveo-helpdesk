@@ -44,7 +44,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
     @endif
 </li>
 
-<li  class="header" dir="rtl" lang="ar-AR">
+<li  class="header">
     {!! Lang::get('lang.ticket_ratings') !!}
 </li>
 <li> 
@@ -671,10 +671,8 @@ if ($thread->title != "") {
                                             </div><!-- /.user-block -->
 
                                         </h3>
-                                        <div class="timeline-body" style="padding-left:30px;margin-bottom:-20px" dir="rtl">
-                                            <div>
-                                                {!! $body !!}
-                                            </div>
+                                        <div class="timeline-body" style="padding-left:30px;margin-bottom:-20px">
+                                            {!! $body !!}
                                         </div>
                                         @if($conversation->id == $ij->id)
         <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->id)->get(); ?>

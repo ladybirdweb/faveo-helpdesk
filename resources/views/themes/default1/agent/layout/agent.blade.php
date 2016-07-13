@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html>
     <head>
         <meta charset="UTF-8" ng-app="myApp">
         <title>Faveo | HELP DESK</title>
