@@ -77,7 +77,9 @@ class="active"
                                     $stringCut = substr($string, 0, 40);
                                     $string = substr($stringCut, 0, strrpos($stringCut, ' ')) . ' ...';
                                 }
-                                $TicketData = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
+                                $TicketData = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)
+                                    ->where('user_id', '!=' , null)
+                                    ->max('id');
                                 $TicketDatarow = App\Model\helpdesk\Ticket\Ticket_Thread::where('id', '=', $TicketData)->first();
                                 $LastResponse = App\User::where('id', '=', $TicketDatarow->user_id)->first();
                                 if ($LastResponse->role == "user") {
