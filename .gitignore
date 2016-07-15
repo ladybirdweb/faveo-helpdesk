@@ -5,6 +5,7 @@ Homestead.yaml
 Homestead.json
 /app/config/
 /app/Plugins/Reseller/
+/app/Plugins/
 /app/Plugins/ServiceDesk/
 /config/app.php
 /config/database.php
