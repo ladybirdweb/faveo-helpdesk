@@ -104,20 +104,5 @@ class="active"
             </div><!-- /.box-body -->
         </div><!-- /.box -->
     </div><!--/.col (left) -->
-    <div class="col-md-6">
-        <div class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">{{Lang::get('lang.system_error_reports')}}</h3>
-            </div>
-            <!-- /.box-header -->
-            <div class="box-body">
-                <!-- System Errors (enabled by default) -->
-                <div class="form-group">
-                    {!! Form::checkbox('system_error',1) !!}
-                    {!! Form::label('system_error',Lang::get('lang.Send_app_crash_reports_to_help_Ladybird_improve_Faveo')) !!}
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 @stop

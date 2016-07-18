@@ -12,19 +12,11 @@ active
 class="active"
 @stop
 
-@section('HeadInclude')
-@stop
 <!-- header -->
 @section('PageHeader')
 <h1>{!! Lang::get('lang.create_user') !!}</h1>
 @stop
 <!-- /header -->
-<!-- breadcrumbs -->
-@section('breadcrumbs')
-<ol class="breadcrumb">
-</ol>
-@stop
-<!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
 @if(Session::has('fails'))
@@ -69,17 +61,27 @@ class="active"
             <li class="error-message-padding">{!! $errors->first('active', ':message') !!}</li>
             @endif
         </div>
-        @endif
-        <!-- Email Address : Email : Required -->
+        @endif        
         <div class="row">
-            <div class="col-xs-4 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+            <!-- First name : first name : Required -->
+            <div class="col-xs-3 form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
+                {!! Form::label('first_name',Lang::get('lang.first_name')) !!}<span class="text-red"> *</span>
+                {!! Form::text('first_name',null,['class' => 'form-control']) !!}
+            </div>
+            <!-- Last name : last name : Required -->
+            <div class="col-xs-3 form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
+                {!! Form::label('last_name',Lang::get('lang.last_name')) !!}
+                {!! Form::text('last_name',null,['class' => 'form-control']) !!}
+            </div>
+            <!-- User Name : Text : Required-->
+            <div class="col-xs-3 form-group {{ $errors->has('full_name') ? 'has-error' : '' }}">
+                {!! Form::label('full_name',Lang::get('lang.user_name')) !!}<span class="text-red"> *</span>
+                {!! Form::text('user_name',null,['class' => 'form-control']) !!}
+            </div>
+            <!-- Email Address : Email : Required -->
+            <div class="col-xs-3 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
                 {!! Form::label('email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
                 {!! Form::email('email',null,['class' => 'form-control']) !!}
-            </div>
-            <!-- Full Name : Text : Required-->
-            <div class="col-xs-4 form-group {{ $errors->has('full_name') ? 'has-error' : '' }}">
-                {!! Form::label('full_name',Lang::get('lang.full_name')) !!}<span class="text-red"> *</span>
-                {!! Form::text('full_name',null,['class' => 'form-control']) !!}
             </div>
             <!-- mobile Number : Text :  -->
             <div class="col-md-4 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">

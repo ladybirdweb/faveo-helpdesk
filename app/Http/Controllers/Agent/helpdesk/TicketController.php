@@ -321,7 +321,7 @@ class TicketController extends Controller {
     public function thread($id) {
         if (Auth::user()->role == 'agent') {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
-            $tickets = Tickets::where('id', '=', $id)->where('dept_id', '=', $dept->id)->first();
+            $tickets = Tickets::where('id', '=', $id)->where('dept_id', '=', $dept->id)->orwhere('assigned_to', '=', Auth::user()->id)->first();
         } elseif (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('id', '=', $id)->first();
         } elseif (Auth::user()->role == 'user') {
@@ -490,10 +490,10 @@ class TicketController extends Controller {
         $emails = Emails::where('department', '=', $tickets->dept_id)->first();
 
         try {
-            $this->NotificationController->create($ticket_id, Auth::user()->id, '2');
-            $this->PhpMailController->sendmail(
-                    $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
-            );
+//            $this->NotificationController->create($ticket_id, Auth::user()->id, '2');
+//            $this->PhpMailController->sendmail(
+//                    $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
+//            );
         } catch (\Exception $e) {
             return 0;
         }
@@ -549,9 +549,7 @@ class TicketController extends Controller {
         $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
         $html = view('themes.default1.agent.helpdesk.ticket.pdf', compact('id', 'tickets', 'thread'))->render();
         $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
-//        echo $html1;
         return PDF::load($html1)->show();
-                //->show();
     }
 
     /**

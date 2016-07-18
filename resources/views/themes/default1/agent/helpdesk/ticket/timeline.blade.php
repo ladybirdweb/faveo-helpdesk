@@ -7,6 +7,7 @@ class="active"
 @section('ticket-bar')
 active
 @stop
+
 @section('PageHeader')
 <h1>{{Lang::get('lang.ticket-details')}}</h1>
 @stop
@@ -491,6 +492,9 @@ if ($thread->title != "") {
                 </ul>
 
                 <div class="col-md-12" >
+                    <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/faveo-css.css")}}">
+                    <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
+                    
                     <!-- The time line -->
                     <ul class="timeline">
                         <!-- timeline time label -->
@@ -627,10 +631,10 @@ if ($thread->title != "") {
                                                         ?>
                                                         <tr>
                                                             <th><div class="ticketratingtitle" style="color:#3c8dbc;" >{!! $rating->name !!} &nbsp;</div></th>&nbsp
-                                                    <td>
+                                                    <td style="button:disabled;">
                                                         <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
-                                                            <input type="radio" class="star" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
-        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;
+                                                            <input type="radio" class="star star-rating-readonly" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;   
                                                     </td> 
                                                     </tr>
                                                     @endif
@@ -748,7 +752,7 @@ if ($thread->title != "") {
                         <ul class="pull-right" style="padding-right:25px;padding-bottom:10px;">
 <?php echo $conversations->setPath(url('/thread/' . $tickets->id))->render(); ?>
                         </ul>
-                    </ul>
+                    </ul>                
                 </div><!-- /.col -->
             </div>
         </div><!-- /.row -->
@@ -759,7 +763,7 @@ if ($thread->title != "") {
 <!-- page modals -->
 <div>
     <!-- Edit Ticket modal -->
-<?php if ($group->can_edit_ticket == 1) { ?>
+    <?php if ($group->can_edit_ticket == 1) { ?>
         <div class="modal fade" id="Edit">
             <div class="modal-dialog" style="width:60%;height:70%;">
                 <div class="modal-content">
@@ -1787,20 +1791,28 @@ if ($thread->title != "") {
                     }
                     if (response == 1)
                     {
-                    $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
-                            // $("#t1").load("../thread/{{$tickets->id}}  #t1");
-                            var message = "{{ Lang::get('lang.you_have_successfully_replied_to_your_ticket') }}";
-                            $("#alert21").show();
-                            $('#message-success2').html(message);
-                            setInterval(function(){$("#alert21").hide(); }, 4000);
-                            // var wysihtml5Editor = $('textarea').wysihtml5().data("wysihtml5").editor;
-                            $("#newtextarea").empty();
-                            var div = document.getElementById('newtextarea');
-                            div.innerHTML = div.innerHTML + '<textarea style="width:98%;height:200px;" name="reply_content" class="form-control" id="reply_content"/></textarea>';
-                            $("#newtextarea1").empty();
-                            var div1 = document.getElementById('newtextarea1');
-                            div1.innerHTML = div1.innerHTML + '<textarea style="width:98%;height:200px;" name="InternalContent" class="form-control" id="InternalContent"/></textarea>';
-                            var wysihtml5Editor = $('textarea').wysihtml5().data("wysihtml5").editor;
+                        $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
+                        var message = "{{ Lang::get('lang.you_have_successfully_replied_to_your_ticket') }}";
+                        $("#alert21").show();
+                        $('#message-success2').html(message);
+                        setInterval(function(){$("#alert21").hide(); }, 4000);
+                        $("#newtextarea").empty();
+                        var div = document.getElementById('newtextarea');
+                        div.innerHTML = div.innerHTML + '<textarea style="width:98%;height:200px;" name="reply_content" class="form-control" id="reply_content"/></textarea>';
+                        $("#newtextarea1").empty();
+                        var div1 = document.getElementById('newtextarea1');
+                        div1.innerHTML = div1.innerHTML + '<textarea style="width:98%;height:200px;" name="InternalContent" class="form-control" id="InternalContent"/></textarea>';
+                        var wysihtml5Editor = $('textarea').wysihtml5().data("wysihtml5").editor;
+                        setInterval(function(){
+                            var head= document.getElementsByTagName('head')[0];
+                            var script= document.createElement('script');
+                            script.type= 'text/javascript';
+                            script.src= '{{asset("lb-faveo/js/jquery.rating.pack.js")}}';
+                            head.appendChild(script);
+//                            $('.rating-cancel').hide();
+//                            $(".star-rating-control").attr("disabled", "disabled").off('hover');
+//                            $(".star-rating-control").addClass("disabled")
+                        }, 4000);
                     } else {
                     // alert('fail');
                     // $( "#dismis4" ).trigger( "click" );
@@ -1809,8 +1821,8 @@ if ($thread->title != "") {
                             $('#message-danger2').html(message);
                             setInterval(function(){$("#alert23").hide(); }, 4000);
                     }
-                    $("#show3").hide();
-                            $("#t1").show();
+                        $("#show3").hide();
+                        $("#t1").show();
                     },
                     error: function(response) {
                         $("#show3").hide();

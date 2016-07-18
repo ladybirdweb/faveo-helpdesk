@@ -85,19 +85,15 @@
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         @if($replacetop==0)
                         <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
-
                             <li @yield('Dashboard')><a data-target="#tabA" href="#">{!! Lang::get('lang.dashboard') !!}</a></li>
                             <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
-
                         </ul>
                         @else
                             <?php \Event::fire('service.desk.agent.topbar', array()); ?>
                             @endif
-
                         <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id', '=', Auth::user()->id)->where('is_read', '0')->get(); ?>
-
                         <ul class="nav navbar-nav navbar-right">
                             @if(Auth::user()->role == 'admin')
                             <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
@@ -155,7 +151,6 @@
                                         @endif
                                         @endif
                                         @endforeach
-
                                     </ul>
                             </li>
                             <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
@@ -163,7 +158,6 @@
                                 </div><div class="col-md-5"></div></li>
                             <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
                             </li>
-
                         </ul>
                         </li>
                         <!-- User Account: style can be found in dropdown.less -->
@@ -240,7 +234,6 @@
                     <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul id="side-bar" class="sidebar-menu">
-
                         @if($replaceside==0)
                         @yield('sidebar')
                         <li class="header">{!! Lang::get('lang.Tickets') !!}</li>

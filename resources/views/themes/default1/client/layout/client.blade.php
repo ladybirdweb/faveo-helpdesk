@@ -339,7 +339,7 @@
                                 @endif
                                 @if($social->name == "youtube")
                                 @if($social->value)
-                                <li><a href="{{$social->vlaue}}" class="btn btn-social btn-youtube"><i class="fa fa-youtube-play fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-youtube"><i class="fa fa-youtube-play fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "pinterest")
@@ -364,7 +364,7 @@
                                 @endif
                                 @if($social->name == "rss")
                                 @if($social->value)
-                                <li><a href="{{$social->rss}}" class="btn btn-social btn-rss"><i class="fa fa-rss fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-rss"><i class="fa fa-rss fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @endforeach
