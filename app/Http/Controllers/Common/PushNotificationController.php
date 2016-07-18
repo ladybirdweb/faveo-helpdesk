@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers\Common;
 
+// Controllers
 use App\Http\Controllers\Controller;
+// Requests
+use Illuminate\Http\Request;
+// Models
+use App\User;
+// classes
 use LaravelFCM\Message\PayloadNotificationBuilder;
 use LaravelFCM\Message\Topics;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
 use LaravelFCM\Response\DownstreamResponse;
-//use LaravelFCM\Message\
-//use LaravelFCM\Message\
 use FCM;
 use FCMGroup;
+
 
 /**
  * **********************************************
@@ -25,31 +30,6 @@ use FCMGroup;
 class PushNotificationController extends Controller {
 
     public function response() {
-//        $notificationBuilder = new PayloadNotificationBuilder('my title');
-//        $notificationBuilder->setBody('Hello world')
-//                ->setSound('default');
-//
-//        $notification = $notificationBuilder->build();
-//
-//        $topic = new Topics();
-//        $topic->topic('news')->andTopic(function($condition) {
-//
-//        $condition->topic('economic')->orTopic('cultural');
-//
-//        });
-//        
-//        $topicResponse = FCM::sendToTopic($topic, null, $notification, null);
-//
-//        $topicResponse->isSuccess();
-//        $topicResponse->shouldRetry();
-//        $topicResponse->error();
-
-
-
-
-
-
-
 
         $optionBuiler = new OptionsBuilder();
         $optionBuiler->setTimeToLive(60 * 20);
@@ -86,6 +66,38 @@ class PushNotificationController extends Controller {
         $downstreamResponse->tokensToRetry();
 
 // return Array (key:token, value:errror) - in production you should remove from your database the tokens
+    }
+    
+    /**
+     * function to get the fcm token from the api under a user.
+     * @param \Illuminate\Http\Request $request
+     * @return type
+     */
+    public function fcmToken(Request $request) {
+        // get the requested details 
+        $user_id = $request->input('user_id');
+        $fcm_token = $request->input('fcm_token');
+        // check for all the valid details
+        if($user_id != null && $user_id != "" && $fcm_token != null && $fcm_token != "") {
+            // search the user_id in database
+            $user = User::where('id', '=', $user_id)->first();
+            // checking if the user_id is an integer type
+            if(is_int($user_id)) {
+                if($user != null) {
+                    // success response for success case
+                    return ['response' => 'success'];
+                } else {
+                    // failure respunse for invalid user_id in the system
+                    return ['response' => 'fail', 'reason' => 'Invalid user_id'];
+                }
+            } else {
+                // failure respunse for invalid user_id type in the system
+                return ['response' => 'fail', 'reason' => 'user_id must be an integer'];
+            }
+        } else {
+            // failure respunse for invalid input credentials
+            return ['response' => 'fail', 'reason' => 'Invalid Credentials'];
+        }
     }
 
 }

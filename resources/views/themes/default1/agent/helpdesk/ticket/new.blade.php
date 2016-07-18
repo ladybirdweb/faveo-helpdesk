@@ -50,8 +50,8 @@ class="active"
             @if($errors->first('email'))
             <li class="error-message-padding">{!! $errors->first('email', ':message') !!}</li>
             @endif
-            @if($errors->first('fullname'))
-            <li class="error-message-padding">{!! $errors->first('fullname', ':message') !!}</li>
+            @if($errors->first('user_name'))
+            <li class="error-message-padding">{!! $errors->first('user_name', ':message') !!}</li>
             @endif
             @if($errors->first('phone'))
             <li class="error-message-padding">{!! $errors->first('phone', ':message') !!}</li>
@@ -82,9 +82,9 @@ class="active"
 
                 <div class="col-md-6">
                     <!-- full name -->
-                    <div class="form-group {{ $errors->has('fullname') ? 'has-error' : '' }}">
-                        {!! Form::label('fullname',Lang::get('lang.full_name')) !!} <span class="text-red"> *</span>
-                        {!! Form::text('fullname',null,['class' => 'form-control']) !!}
+                    <div class="form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
+                        {!! Form::label('user_name',Lang::get('lang.user_name')) !!} <span class="text-red"> *</span>
+                        {!! Form::text('user_name',null,['class' => 'form-control']) !!}
                     </div>
                 </div>
             </div>

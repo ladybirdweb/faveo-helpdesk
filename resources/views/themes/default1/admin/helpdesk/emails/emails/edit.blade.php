@@ -351,24 +351,32 @@ class="active"
                 var error = "Fetching Host is a required field";
                 error_list.push(error);
                 $("#fetching_host_error").addClass("has-error");
+            } else {
+                $("#fetching_host_error").removeClass("has-error");
             }
             // checking for validation of fetching port
             if (fetching_port == "") {
                 var error = "Fetching Port is a required field";
                 error_list.push(error);
                 $("#fetching_port_error").addClass("has-error");
+            } else {
+                $("#fetching_port_error").removeClass("has-error");
             }
             // checking for validation of mailbox protocol
             if (fetching_encryption == "") {
                 var error = "Fetching Encryption is a required field";
                 error_list.push(error);
                 $("#fetching_encryption_error").addClass("has-error");
+            } else {
+                $("#fetching_encryption_error").removeClass("has-error");
             }
             // checking for validation of mailbox protocol
             if (fetching_protocol == "") {
                 var error = "Fetching Protocol is a required field";
                 error_list.push(error);
                 $("#fetching_protocol_error").addClass("has-error");
+            } else {
+                $("#fetching_protocol_error").removeClass("has-error");
             }
         } else {
             // checking for validation of fetching port
@@ -378,6 +386,8 @@ class="active"
                     error_list.push(error);
                     $("#fetching_port_error").addClass("has-error");
                 }
+            } else {
+                $("#fetching_port_error").removeClass("has-error");
             }
         }
         // checking for validation of sending status
@@ -389,30 +399,42 @@ class="active"
                     var error = "Sending Host is a required field";
                     error_list.push(error);
                     $("#sending_host_error").addClass("has-error");
+                } else {
+                    $("#sending_host_error").removeClass("has-error");
                 }
                 // checking for validation of sending port
                 if (sending_port == "") {
                     var error = "Sending Port is a required field";
                     error_list.push(error);
                     $("#sending_port_error").addClass("has-error");
+                } else {
+                    $("#sending_port_error").removeClass("has-error");
                 }
                 // checking for validation of sending encryption
                 if (sending_encryption == "") {
                     var error = "Sending Encryption is a required field";
                     error_list.push(error);
                     $("#sending_encryption_error").addClass("has-error");
+                } else {
+                    $("#sending_encryption_error").removeClass("has-error");
                 }
                 // checking for validation of sending protocol
                 if (sending_protocol == "") {
                     var error = "Transfer Protocol is a required field";
                     error_list.push(error);
                     $("#sending_protocol_error").addClass("has-error");
+                } else {
+                    $("#sending_protocol_error").removeClass("has-error");
                 }
             } else if(sending_protocol == 'mail') {
                 $("#sending_host_error").val('');
                 $("#sending_port_error").val('');
                 $("#sending_encryption_error").val('');
                 $("#sending_protocol_error").val('');
+                $("#sending_host_error").removeClass("has-error");
+                $("#sending_port_error").removeClass("has-error");
+                $("#sending_encryption_error").removeClass("has-error");
+                $("#sending_protocol_error").removeClass("has-error");
             }
         } else {
             // checking for validation of fetching port
@@ -422,6 +444,11 @@ class="active"
                     error_list.push(error);
                     $("#sending_port_error").addClass("has-error");
                 }
+            } else {
+                $("#sending_host_error").removeClass("has-error");
+                $("#sending_port_error").removeClass("has-error");
+                $("#sending_encryption_error").removeClass("has-error");
+                $("#sending_protocol_error").removeClass("has-error");
             }
         }
         // executing error chatch
@@ -439,7 +466,7 @@ class="active"
                 return false;
             }
         }
-// Ajax communicating to backend for further Checking/Saving the details
+        // Ajax communicating to backend for further Checking/Saving the details
         $.ajax({
             type: "POST",
             url: "{!! route('validating.email.settings.update', $emails->id ) !!}",

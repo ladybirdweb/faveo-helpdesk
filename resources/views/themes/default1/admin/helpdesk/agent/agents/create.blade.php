@@ -202,6 +202,11 @@ class="active"
             </div>
             @endwhile 
         </div>
+        <!-- Send email to user about registration password -->
+        <br/>
+        <div class="form-group">
+            <input type="checkbox" name="send_email" checked> &nbsp;<label> {{ Lang::get('lang.send_password_via_email')}}</label>
+        </div>
     </div>
     <div class="box-footer">
         {!! Form::submit(Lang::get('lang.submit'),['class'=>'form-group btn btn-primary'])!!}

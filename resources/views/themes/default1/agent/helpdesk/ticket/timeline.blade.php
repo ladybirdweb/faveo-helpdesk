@@ -1323,12 +1323,12 @@ if ($thread->title != "") {
                             }
                     });
                     return false;
-            });
+                });
             });
             $(function() {
-            $("#tags, #tags2").autocomplete({
-            source: 'auto/<?php echo $tickets->id; ?>'
-            });
+                $("#tags, #tags2").autocomplete({
+                    source: 'auto/<?php echo $tickets->id; ?>'
+                });
             });
             jQuery(document).ready(function() {
     $("#cc_page").on('click', '.search_r', function(){

@@ -75,9 +75,14 @@ class="active"
             </div>
             <div class="col-xs-3 form-group {{ $errors->has('status') ? 'has-error' : '' }}">
                 {!! Form::label('status',Lang::get('lang.status')) !!}
-                <br/>
-                {!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}
-                {!! Form::radio('status','0',null) !!} {{Lang::get('lang.inactive')}}
+                <div class="row">
+                    <div class="col-md-4">
+                        {!! Form::radio('status','1',true) !!} {{ Lang::get('lang.active')}}
+                    </div>
+                    <div class="col-md-6">
+                        {!! Form::radio('status','0',null) !!} {{ Lang::get('lang.inactive')}}
+                    </div>
+                </div>
             </div>
             <div class="col-md-12 form-group {{ $errors->has('description') ? 'has-error' : '' }}">
                 {!! Form::label('description',Lang::get('lang.description')) !!}<span class="text-red"> *</span>
@@ -94,4 +99,18 @@ class="active"
         $("textarea").wysihtml5();
     });
 </script>
+
+<script>
+    $(function() {
+        
+        $('input[type="checkbox"]').iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        });
+        $('input[type="radio"]').iCheck({
+            radioClass: 'iradio_flat-blue'
+        });
+    
+    });        
+</script>
+
 @stop

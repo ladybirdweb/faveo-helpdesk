@@ -255,7 +255,7 @@ class TicketController extends Controller {
     public function post_newticket(CreateTicketRequest $request, CountryCode $code) {
         try {
             $email = $request->input('email');
-            $fullname = $request->input('fullname');
+            $fullname = $request->input('user_name');
             $helptopic = $request->input('helptopic');
             $sla = $request->input('sla');
             $duedate = $request->input('duedate');

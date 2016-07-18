@@ -981,7 +981,8 @@ return [
     'password_was_not_updated_incorrect_old_password'   => 'Password was not Updated. Incorrect old password',
     'the_user_has_been_removed_from_this_organization'  => 'The user has been removed from this organization',
     'user_report'                                       => 'User Report',
-
+    'send_password_via_email'                           => 'Send password via Email',
+    'user_send_mail_error_on_user_creation'             => 'Some error occurred while sending mail to the client. Please check email settings and try again',
     /*
       |------------------------------------------------
       |Organization Page

@@ -1076,6 +1076,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('ticket/customers-custom', 'Api\v1\TestController@getCustomersWith');
         Route::get('generate/token', 'Api\v1\TestController@generateToken');
         Route::get('get/user', 'Api\v1\TestController@getAuthUser');
+        
+        /*
+         * FCM token response
+         */
+        Route::post('fcmtoken', ['as' => 'fcmtoken', 'uses' => 'Common\PushNotificationController@fcmToken']);
     });
     /*
      * Update module

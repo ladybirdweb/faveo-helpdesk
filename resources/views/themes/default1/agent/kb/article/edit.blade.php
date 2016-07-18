@@ -237,6 +237,20 @@ CKEDITOR.replace('editor', {
                         </div>
                     </li>
                     </ul>
+    
+<script>
+    $(function() {
+        
+        $('input[type="checkbox"]').iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        });
+        $('input[type="radio"]').iCheck({
+            radioClass: 'iradio_flat-blue'
+        });
+    
+    });        
+</script>
+
                     @stop
                     <!-- /content -->
                     

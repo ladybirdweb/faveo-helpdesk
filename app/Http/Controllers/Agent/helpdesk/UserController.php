@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Common\PhpMailController;
 // requests
 /*  Include Sys_user Model  */
 use App\Http\Requests\helpdesk\ProfilePassword;
@@ -44,8 +45,9 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(PhpMailController $PhpMailController)
     {
+        $this->PhpMailController = $PhpMailController;
         // checking authentication
         $this->middleware('auth');
         // checking if role is agent
@@ -184,13 +186,17 @@ class UserController extends Controller
         /* insert the input request to sys_user table */
         /* Check whether function success or not */
         $user->email = $request->input('email');
-        $user->user_name = $request->input('full_name');
+        $user->first_name = $request->input('first_name');
+        $user->last_name = $request->input('last_name');
+        $user->user_name = $request->input('user_name');
         $user->mobile = $request->input('mobile');
         $user->ext = $request->input('ext');
         $user->phone_number = $request->input('phone_number');
         $user->country_code = $request->input('country_code');
         $user->active = $request->input('active');
         $user->internal_note = $request->input('internal_note');
+        $password = $this->generateRandomString();
+        $user->password = Hash::make($password);
         $user->role = 'user';
         try {
             if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
@@ -201,7 +207,24 @@ class UserController extends Controller
                     return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
                 }
             }
-            $user->save();
+            // save user credentails
+            if ($user->save() == true) {
+                // fetch user credentails to send mail
+                $name = $user->user_name;
+                $email = $user->email;
+                if($request->input('send_email')) {
+                    try {
+                        // send mail on registration
+                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
+                    } catch (Exception $e) {
+                        // returns if try fails
+                        return redirect('user')->with('warning', Lang::get('lang.user_send_mail_error_on_user_creation'));
+                    }
+                }
+                // returns for the success case
+                return redirect('user')->with('success', Lang::get('lang.User-Created-Successfully'));
+            }
+//            $user->save();
             /* redirect to Index page with Success Message */
             return redirect('user')->with('success', Lang::get('lang.User-Created-Successfully'));
         } catch (Exception $e) {
@@ -265,6 +288,7 @@ class UserController extends Controller
      */
     public function update($id, Sys_userUpdate $request)
     {
+//        dd($request);
         $user = new User();
         /* select the field where id = $id(request Id) */
         $users = $user->whereId($id)->first();
@@ -491,4 +515,29 @@ class UserController extends Controller
             return 0;
         }
     }
+    
+    
+    /**
+     * Generate a random string for password.
+     *
+     * @param type $length
+     *
+     * @return string
+     */
+    public function generateRandomString($length = 10)
+    {
+        // list of supported characters
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        // character length checked
+        $charactersLength = strlen($characters);
+        // creating an empty variable for random string
+        $randomString = '';
+        // fetching random string
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        // return random string
+        return $randomString;
+    }
+    
 }

@@ -64,6 +64,14 @@ class="active"
                     </center>
                 </div>
             </div>
+            @if($users->user_name)
+                <div class="box-footer">
+                    <b>{{Lang::get('lang.user_name')}}</b>
+                    <a class="pull-right" href="{{route('user.show', $users->id)}}">
+                        {{$users->user_name }}
+                    </a>
+                </div>
+            @endif
             <div class="box-footer">
                 <b>{{Lang::get('lang.email')}}</b>
                 <a class="pull-right" href="{{route('user.show', $users->id)}}">

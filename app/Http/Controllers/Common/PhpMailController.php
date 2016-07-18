@@ -24,7 +24,7 @@ class PhpMailController extends Controller {
      * @return Mail
      */
     public function sendmail($from, $to, $message, $template_variables) {
-        try {
+//        try {
             // dd($from);
             $from_address = $this->fetch_smtp_details($from);
             if ($from_address == null) {
@@ -286,11 +286,11 @@ class PhpMailController extends Controller {
                     // echo 'Message has been sent';
                 }
             }
-        } catch (Exception $e) {
-            if($e instanceof ErrorException) {
-                return \Lang::get('lang.outgoing_email_failed');
-            } 
-        }
+//        } catch (Exception $e) {
+//            if($e instanceof ErrorException) {
+//                return \Lang::get('lang.outgoing_email_failed');
+//            } 
+//        }
     }
 
     /**

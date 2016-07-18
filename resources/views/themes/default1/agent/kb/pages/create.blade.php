@@ -113,4 +113,17 @@ class="active"
         $("textarea").wysihtml5();
     });
 </script>
+
+<script>
+    $(function() {
+        
+        $('input[type="checkbox"]').iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        });
+        $('input[type="radio"]').iCheck({
+            radioClass: 'iradio_flat-blue'
+        });
+    
+    });        
+</script>
 @stop
