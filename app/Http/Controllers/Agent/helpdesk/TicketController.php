@@ -1016,6 +1016,13 @@ class TicketController extends Controller {
         } catch (\Exception $e) {
             return 0;
         }
+        $data = [
+            'id' => $ticket_status->ticket_number,
+            'status' => 'Closed',
+            'first_name' => Auth::user()->first_name,
+            'last_name' => Auth::user()->last_name,
+        ];
+        \Event::fire('change-status', array($data));
         return 'your ticket' . $ticket_status->ticket_number . ' has been closed';
     }
 
@@ -1053,7 +1060,13 @@ class TicketController extends Controller {
             $thread->body = $ticket_status_message->message . ' ' . Auth::user()->user_name;
         }
         $thread->save();
-
+        $data = [
+            'id' => $ticket_status->ticket_number,
+            'status' => 'Resolved',
+            'first_name' => Auth::user()->first_name,
+            'last_name' => Auth::user()->last_name,
+        ];
+        \Event::fire('change-status', array($data));
         return 'your ticket' . $ticket_status->ticket_number . ' has been resolved';
     }
 
@@ -1085,6 +1098,13 @@ class TicketController extends Controller {
         $thread->is_internal = 1;
         $thread->body = $ticket_status_message->message . ' ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
         $thread->save();
+        $data = [
+            'id' => $ticket_status->ticket_number,
+            'status' => 'Open',
+            'first_name' => Auth::user()->first_name,
+            'last_name' => Auth::user()->last_name,
+        ];
+        \Event::fire('change-status', array($data));
         return 'your ticket' . $ticket_status->ticket_number . ' has been opened';
     }
 
@@ -1108,7 +1128,13 @@ class TicketController extends Controller {
             foreach ($ticket_attachments as $ticket_attachment) {
                 $ticket_attachment->delete();
             }
-
+            $data = [
+                'id' => $ticket_delete->ticket_number,
+                'status' => 'Deleted',
+                'first_name' => Auth::user()->first_name,
+                'last_name' => Auth::user()->last_name,
+            ];
+            \Event::fire('change-status', array($data));
             return 'your ticket has been delete';
         } else {
             $ticket_delete->is_deleted = 1;
@@ -1121,7 +1147,13 @@ class TicketController extends Controller {
             $thread->is_internal = 1;
             $thread->body = $ticket_status_message->message . ' ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
             $thread->save();
-
+            $data = [
+                'id' => $ticket_delete->ticket_number,
+                'status' => 'Deleted',
+                'first_name' => Auth::user()->first_name,
+                'last_name' => Auth::user()->last_name,
+            ];
+            \Event::fire('change-status', array($data));
             return 'your ticket' . $ticket_delete->ticket_number . ' has been delete';
         }
     }
@@ -1561,11 +1593,25 @@ class TicketController extends Controller {
                 if ($value == 'Delete') {
                     $ticket->status = 5;
                     $ticket->save();
+                    $data = [
+                        'id' => $ticket->ticket_number,
+                        'status' => 'Deleted',
+                        'first_name' => Auth::user()->first_name,
+                        'last_name' => Auth::user()->last_name,
+                    ];
+                    \Event::fire('change-status', array($data));
                 } elseif ($value == 'Close') {
                     $ticket->status = 2;
                     $ticket->closed = 1;
                     $ticket->closed_at = date('Y-m-d H:i:s');
                     $ticket->save();
+                    $data = [
+                        'id' => $ticket->ticket_number,
+                        'status' => 'Closed',
+                        'first_name' => Auth::user()->first_name,
+                        'last_name' => Auth::user()->last_name,
+                    ];
+                    \Event::fire('change-status', array($data));
                 } elseif ($value == 'Open') {
                     $ticket->status = 1;
                     $ticket->reopened = 1;
@@ -1573,6 +1619,13 @@ class TicketController extends Controller {
                     $ticket->closed = 0;
                     $ticket->closed_at = null;
                     $ticket->save();
+                    $data = [
+                        'id' => $ticket->ticket_number,
+                        'status' => 'Open',
+                        'first_name' => Auth::user()->first_name,
+                        'last_name' => Auth::user()->last_name,
+                    ];
+                    \Event::fire('change-status', array($data));
                 } elseif ($value == 'Delete forever') {
                     $notification = Notification::select('id')->where('model_id', '=', $ticket->id)->get();
                     foreach ($notification as $id) {

@@ -90,19 +90,27 @@ function php_config_value_to_bytes($val) {
  * to check file permissions 
  *
  */
-function checkFilePermission(&$results) {
+function checkFilePermission(&$results)
+{
+    $path2 = base_path().DIRECTORY_SEPARATOR.'storage';
+    $f2 = substr(sprintf("%o",fileperms($path2)),-3);
     if (file_exists(base_path() . DIRECTORY_SEPARATOR . "example.env")) {
         $path1 = base_path().DIRECTORY_SEPARATOR.'example.env';
         $f1 = substr(sprintf("%o",fileperms($path1)),-3);
-        if( $f1 >= '644') {
-            $results[] = new TestResult('File permission looks fine', STATUS_OK);
-            return true;
-        } else {
-            $results[] = new TestResult('File permissions needed.<ul><b>Change file permission to "644" for following files</b><li>'.$path1.'</li></ul></br>Change the permission manually on your server or <a href="change-file-permission">click here.</a>', STATUS_ERROR);
-            return false;
-        }
+    } else {
+        $f1 = '644';
     }
-    return true;
+    if( $f1 >= '644' && $f2 >= '755') {
+        $results[] = new TestResult('File permission looks fine', STATUS_OK);
+        return true;
+    } else {
+        if(isset($path1)){
+        $results[] = new TestResult('File permissions needed.<ul><b>Change file permission for following files</b><li>'.$path1.'%nbsp: \'644\'</li><li>'.$path2.'%nbsp: \'755\'</li></ul></br>Change the permission manually on your server or <a href="change-file-permission">click here.</a>', STATUS_ERROR);
+        } else {
+            $results[] = new TestResult('File permissions needed.<ul><b>Change file permission to "755" for following files</b><li>'.$path2.'</li></ul></br>Change the permission manually on your server or <a href="change-file-permission">click here.</a>', STATUS_ERROR);
+        }
+        return false;
+    }
 }
 
 /**
