@@ -1259,7 +1259,12 @@ class TicketController extends Controller {
         $NewThread->title = $thread->title;
         $NewThread->body = $InternalContent;
         $NewThread->save();
-
+        $data = [
+            "ticket_id" => $id,
+            'u_id' => Auth::user()->first_name.' '.Auth::user()->last_name,
+            'body' => $InternalContent,
+        ];
+        \Event::fire('Reply-Ticket',array($data));
         return 1;
     }
 
