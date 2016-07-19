@@ -74,30 +74,25 @@ class PushNotificationController extends Controller {
      * @return type
      */
     public function fcmToken(Request $request) {
-        // get the requested details 
-        $user_id = $request->input('user_id');
-        $fcm_token = $request->input('fcm_token');
-        // check for all the valid details
-        if($user_id != null && $user_id != "" && $fcm_token != null && $fcm_token != "") {
-            // search the user_id in database
-            $user = User::where('id', '=', $user_id)->first();
-            // checking if the user_id is an integer type
-            if(is_int($user_id)) {
-                if($user != null) {
-                    // success response for success case
-                    return ['response' => 'success'];
-                } else {
-                    // failure respunse for invalid user_id in the system
-                    return ['response' => 'fail', 'reason' => 'Invalid user_id'];
-                }
-            } else {
-                // failure respunse for invalid user_id type in the system
-                return ['response' => 'fail', 'reason' => 'user_id must be an integer'];
-            }
-        } else {
-            // failure respunse for invalid input credentials
-            return ['response' => 'fail', 'reason' => 'Invalid Credentials'];
-        }
+        return "success 123";
+//        // get the requested details 
+//        $user_id = $request->input('user_id');
+//        $fcm_token = $request->input('fcm_token');
+//        // check for all the valid details
+//        if($user_id != null && $user_id != "" && $fcm_token != null && $fcm_token != "") {
+//            // search the user_id in database
+//            $user = User::where('id', '=', $user_id)->first();
+//            if($user != null) {
+//                // success response for success case
+//                return ['response' => 'success'];
+//            } else {
+//                // failure respunse for invalid user_id in the system
+//                return ['response' => 'fail', 'reason' => 'Invalid user_id'];
+//            }
+//        } else {
+//            // failure respunse for invalid input credentials
+//            return ['response' => 'fail', 'reason' => 'Invalid Credentials'];
+//        }
     }
 
 }
