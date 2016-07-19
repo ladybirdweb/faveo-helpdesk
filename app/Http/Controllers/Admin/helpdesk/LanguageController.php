@@ -98,7 +98,12 @@ class LanguageController extends Controller
         $values = array_slice($values, 2); // skips array element $value[0] = '.' & $value[1] = '..'
         return \Datatable::collection(new Collection($values))
                         ->addColumn('language', function ($model) {
-                            return Config::get('languages.'.$model);
+                            if ($model == Config::get('app.fallback_locale')) {
+                                return Config::get('languages.'.$model).' ('.Lang::get('lang.default').')';    
+                            } else {
+                                return Config::get('languages.'.$model);
+                            }
+                            
                         })
                         ->addColumn('id', function ($model) {
                             return $model;
@@ -227,7 +232,12 @@ class LanguageController extends Controller
      */
     public function deleteLanguage($lang)
     {
-        if ($lang !== App::getLocale()) {
+        // if ($lang == Config::get('app.fallback_locale')){
+        //     echo "ni";
+        // } else {
+        //     echo "bi";
+        // }
+        if ($lang !== App::getLocale() || $lang !== Config::get('app.fallback_locale')) {
             $deletePath = base_path('resources/lang').'/'.$lang;     //define file path to delete
             $success = File::deleteDirectory($deletePath); //remove extracted folder and it's subfolder from lang
             if ($success) {
@@ -243,6 +253,7 @@ class LanguageController extends Controller
             }
         } else {
             //sending back with error message
+            dd('hello');
             Session::flash('fails', Lang::get('lang.active-lang-error'));
 
             return redirect('languages');

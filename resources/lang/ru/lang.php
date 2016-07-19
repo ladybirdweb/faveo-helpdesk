@@ -308,6 +308,7 @@ return [
       |Language page
       |------------------------------------------------
      */
+    'default'            => 'default',
     'iso-code'           => 'ISO-CODE',
     'download'           => 'Downlaod',
     'upload_file'        => 'Загрузить файл',

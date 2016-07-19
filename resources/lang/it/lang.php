@@ -327,6 +327,7 @@ return [
       |Language page
       |------------------------------------------------
      */
+    'default'            => 'default',
     'iso-code'           => 'ISO-CODE',
     'download'           => 'Scarica',
     'upload_file'        => 'Carica un File',

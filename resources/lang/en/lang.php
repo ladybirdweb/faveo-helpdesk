@@ -432,6 +432,7 @@ return [
       | Language page
       |------------------------------------------------
      */
+    'default'                    => 'default', 
     'language-settings'          => 'Language Settings',
     'iso-code'                   => 'ISO-CODE',
     'download'                   => 'Downlaod',
