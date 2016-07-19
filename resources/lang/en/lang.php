@@ -284,6 +284,8 @@ return [
     'select_a_date_time_format'                                  => 'Select a date Time Format',
     'Ticket-has-been-created-successfully-your-ticket-number-is' => 'Ticket has been created successfully, your ticket number is',
     'Please-save-this-for-future-reference'                      => 'Please save this for future reference',
+    'rtl'                                                        => 'RTL (Right to left)',
+    'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   =>  'The RTL support is only applicable to the outgoing mails',
     /*
       |--------------------------------------
       |   Email Settings Page

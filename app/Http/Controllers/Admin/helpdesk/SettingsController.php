@@ -30,6 +30,7 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Workflow\WorkflowClose;
+use App\Model\helpdesk\Settings\CommonSettings;
 use DateTime;
 // classes
 use DB;
@@ -173,12 +174,18 @@ class SettingsController extends Controller
     public function postsystem($id, System $system, SystemRequest $request)
     {
         try {
-            // dd($request);
             /* fetch the values of system request  */
             $systems = $system->whereId('1')->first();
             /* fill the values to coompany table */
             /* Check whether function success or not */
             $systems->fill($request->input())->save();
+            $rtl = CommonSettings::where('option_name', '=', 'enable_rtl')->first();
+            if($request->enable_rtl != null) {
+                $rtl->option_value = 1;
+            } else {
+                $rtl->option_value = 0;
+            }
+            $rtl->save();
             /* redirect to Index page with Success Message */
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {

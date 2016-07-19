@@ -8,6 +8,7 @@ use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\User;
 use Auth;
 
@@ -270,11 +271,17 @@ class PhpMailController extends Controller {
                 $mail->Subject = $subject;
                 if ($template == 'ticket-reply-agent') {
                     $line = '---Reply above this line--- <br/><br/>';
-                    $mail->Body = $line . $messagebody;
+                    $body = $line . $messagebody;
                 } else {
-                    $mail->Body = $messagebody;
+                    $body = $messagebody;
                 }
-
+                $rtl = CommonSettings::where('option_name', '=', 'enable_rtl')->first();
+                if($rtl->option_value == 1) {
+                    $mail->ContentType = 'text/html';
+                    $body = '<html dir="rtl" xml:lang="ar" lang="ar"><head></head><body dir="rtl">' . $body . '</body></html>';
+                } else {
+                }
+                $mail->Body = $body;
                 // $mail->AltBody = $altbody;
 
                 if (!$mail->send()) {

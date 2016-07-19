@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class VersionAfter1078Table extends Migration
+class Version1079 extends Migration
 {
     /**
      * Run the migrations.
@@ -18,7 +18,9 @@ class VersionAfter1078Table extends Migration
         $settings_system = DB::table('settings_system')->where('id', '=', '1')->first();
         if($settings_system != null) {
             DB::table('settings_system')->insert(['version' => $current_version]);
+            DB::table('common_settings')->insert(['option_name' => 'enable_rtl', 'option_value' => '']);            
         }
+        
     }
-
+    
 }
