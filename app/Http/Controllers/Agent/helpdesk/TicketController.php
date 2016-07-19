@@ -254,6 +254,7 @@ class TicketController extends Controller {
      */
     public function post_newticket(CreateTicketRequest $request, CountryCode $code) {
         try {
+//            dd($request);
             $email = $request->input('email');
             $fullname = $request->input('user_name');
             $helptopic = $request->input('helptopic');
@@ -636,6 +637,7 @@ class TicketController extends Controller {
             $user->password = Hash::make($password);
             $user->phone_number = $phone;
             $user->country_code = $phonecode;
+            $user->mobile = $mobile_number;
             $user->role = 'user';
             $user->active = '1';
             // mail user his/her password

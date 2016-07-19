@@ -78,13 +78,8 @@ class UserController extends Controller
      */
     public function user_list()
     {
-        $auth_role = \Auth::user()->role;
-        $users =  new User();
-        if($auth_role=="agent"){
-            $users = $user->where('role',"=","user");
-        }
         // displaying list of users with chumper datatables
-        return \Datatable::collection($users->get())
+        return \Datatable::collection(User::where('role',"=","user")->get())
                         /* searchable column username and email */
                         ->searchColumns('user_name', 'email', 'phone')
                         /* order column username and email */

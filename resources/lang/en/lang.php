@@ -983,6 +983,7 @@ return [
     'user_report'                                       => 'User Report',
     'send_password_via_email'                           => 'Send password via Email',
     'user_send_mail_error_on_user_creation'             => 'Some error occurred while sending mail to the client. Please check email settings and try again',
+    'country_code'                                      => 'Country code',
     /*
       |------------------------------------------------
       |Organization Page
