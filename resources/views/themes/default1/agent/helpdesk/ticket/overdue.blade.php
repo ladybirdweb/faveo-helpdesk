@@ -75,6 +75,7 @@ if ($i == 0) {
             <input type="submit" class="submit btn btn-default text-yellow btn-sm" id="close" name="submit" value="{!! Lang::get('lang.close') !!}">
             <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
         <!--</div>-->
+        <p><p/>
         <div class="mailbox-messages" id="refresh">
             <!--datatable-->
             {!! Datatable::table()
