@@ -427,13 +427,7 @@ class TicketController extends Controller {
             $thread2->save();
         }
         if ($tickets->status > 1) {
-            $tickets->status = '1';
-            $tickets->closed_at = '0';
-            $tickets->closed = null;
-            $tickets->reopened_at = date('Y-m-d H:i:s');
-            $tickets->reopened = 1;
-            $tickets->isanswered = '1';
-            $tickets->save();
+            $this->open($ticket_id, new  Tickets);
         }
         $thread->save();
 
@@ -836,6 +830,15 @@ class TicketController extends Controller {
                     $ticket_threads->body = $ticket_status->message . ' ' . $username;
                     $ticket_threads->save();
                     // event fire for internal notes
+
+                    //event to change status
+                    $data = [
+                        'id' => $ticket_number,
+                        'status' => 'Open',
+                        'first_name' => $username,
+                        'last_name' => '',
+                    ];
+                    \Event::fire('change-status', array($data));
                 }
                 if (isset($id)) {
                     if ($this->ticketThread($subject, $body, $id, $user_id)) {
@@ -1077,7 +1080,6 @@ class TicketController extends Controller {
      *
      * @param type         $id
      * @param type Tickets $ticket
-     *
      * @return type
      */
     public function open($id, Tickets $ticket) {
