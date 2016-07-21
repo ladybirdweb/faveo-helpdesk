@@ -11,7 +11,7 @@ $closed  =  DB::table('tickets')->where('dept_id','=',$dept_id)->where('closed_a
 
 $inprogress = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept_id)->where('status', '=', 1)->count();
 
-$overdues = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept_id)->where('status', '=', 1)->get();
+$overdues = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept_id)->where('status', '=', 1)->where('isanswered', '=', 0)->get();
 
 $i = 0;
 	foreach ($overdues as $overdue) {

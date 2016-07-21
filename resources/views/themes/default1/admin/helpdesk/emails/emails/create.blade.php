@@ -442,7 +442,6 @@ class="active"
             beforeSend: function() {
                 $('#alert').empty();
                 $("#click").trigger("click");
-
             },
             success: function(response) {
                 if (response == 1) {

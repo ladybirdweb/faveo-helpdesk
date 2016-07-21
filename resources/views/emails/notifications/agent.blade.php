@@ -11,7 +11,7 @@ $dept = App\Model\helpdesk\Agent\Department::where('id','=',$user->primary_dpt)-
    $created  =  DB::table('tickets')->select('created_at')->where('dept_id','=',$dept->id)->where('created_at','LIKE','%'.$day1.'%')->count();
    $closed  =  DB::table('tickets')->where('dept_id','=',$dept->id)->where('closed_at','LIKE','%'.$day1.'%')->count();
    $inprogress = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept->id)->where('status', '=', 1)->count();
-   $overdues = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept->id)->where('status', '=', 1)->get();
+   $overdues = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept->id)->where('isanswered', '=', 0)->where('status', '=', 1)->get();
    $i = 0;
    foreach ($overdues as $overdue) {
       $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('id','=',$overdue->sla)->first();

@@ -314,57 +314,57 @@
                                 @foreach($socials as $social)
                                 @if($social->name == 'facebook')
                                 @if($social->value)
-                                <li><a href="{!! $social->value !!}" class="btn btn-social btn-facebook"><i class="fa fa-facebook fa-fw"></i></a></li>
+                                <li><a href="{!! $social->value !!}" class="btn btn-social btn-facebook" target="_blank"><i class="fa fa-facebook fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "twitter")
                                 @if($social->value)
-                                <li><a href="{{ $social->value }}" class="btn btn-social btn-twitter"><i class="fa fa-twitter fa-fw"></i></a></li>
+                                <li><a href="{{ $social->value }}" class="btn btn-social btn-twitter" target="_blank"><i class="fa fa-twitter fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "google")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-google-plus"><i class="fa fa-google-plus fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-google-plus" target="_blank"><i class="fa fa-google-plus fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "linkedin")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-linkedin"><i class="fa fa-linkedin fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-linkedin" target="_blank"><i class="fa fa-linkedin fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "vimeo")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-vimeo"><i class="fa fa-vimeo-square fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-vimeo" target="_blank"><i class="fa fa-vimeo-square fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "youtube")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-youtube"><i class="fa fa-youtube-play fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-youtube" target="_blank"><i class="fa fa-youtube-play fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "pinterest")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-pinterest"><i class="fa fa-pinterest fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-pinterest" target="_blank"><i class="fa fa-pinterest fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "dribbble")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-dribbble"><i class="fa fa-dribbble fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-dribbble" target="_blank"><i class="fa fa-dribbble fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "flickr")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-flickr"><i class="fa fa-flickr fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-flickr" target="_blank"><i class="fa fa-flickr fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "instagram")
                                 @if($social->value)
-                                <li><a href="{{$social->value }}" class="btn btn-social btn-instagram"><i class="fa fa-instagram fa-fw"></i></a></li>
+                                <li><a href="{{$social->value }}" class="btn btn-social btn-instagram" target="_blank"><i class="fa fa-instagram fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @if($social->name == "rss")
                                 @if($social->value)
-                                <li><a href="{{$social->value}}" class="btn btn-social btn-rss"><i class="fa fa-rss fa-fw"></i></a></li>
+                                <li><a href="{{$social->value}}" class="btn btn-social btn-rss" target="_blank"><i class="fa fa-rss fa-fw"></i></a></li>
                                 @endif
                                 @endif
                                 @endforeach

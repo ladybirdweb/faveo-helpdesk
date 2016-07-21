@@ -666,10 +666,7 @@ Route::group(['middleware' => ['web']], function () {
             ];
         }
     });
-    Route::get('getform', ['as' => 'guest.getform', 'uses' => 'Client\helpdesk\FormController@getForm']); /* get the form for create a ticket by guest user */
-    Breadcrumbs::register('guest.getform', function ($breadcrumbs) {
-        $breadcrumbs->push(\Lang::get('lang.submit_a_ticket'), route('home'));
-    });
+    
     Route::post('postform/{id}', 'Client\helpdesk\FormController@postForm'); /* post the AJAX form for create a ticket by guest user */
     Route::post('postedform', 'Client\helpdesk\FormController@postedForm'); /* post the form to store the value */
     Route::get('check', 'CheckController@getcheck'); //testing checkbox auto-populate
@@ -736,8 +733,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('/step1post', ['as' => 'postlicence', 'uses' => 'Installer\helpdesk\InstallController@licencecheck']);
     Route::get('/step2', ['as' => 'prerequisites', 'uses' => 'Installer\helpdesk\InstallController@prerequisites']);
     Route::post('/step2post', ['as' => 'postprerequisites', 'uses' => 'Installer\helpdesk\InstallController@prerequisitescheck']);
-// Route::get('/step3', ['as' => 'localization', 'uses' => 'Installer\helpdesk\InstallController@localization']);
-// Route::post('/step3post', ['as' => 'postlocalization', 'uses' => 'Installer\helpdesk\InstallController@localizationcheck']);
+    // Route::get('/step3', ['as' => 'localization', 'uses' => 'Installer\helpdesk\InstallController@localization']);
+    // Route::post('/step3post', ['as' => 'postlocalization', 'uses' => 'Installer\helpdesk\InstallController@localizationcheck']);
     Route::get('/step3', ['as' => 'configuration', 'uses' => 'Installer\helpdesk\InstallController@configuration']);
     Route::post('/step4post', ['as' => 'postconfiguration', 'uses' => 'Installer\helpdesk\InstallController@configurationcheck']);
     Route::get('/step4', ['as' => 'database', 'uses' => 'Installer\helpdesk\InstallController@database']);
@@ -762,25 +759,25 @@ Route::group(['middleware' => ['web']], function () {
       |  View all the Routes
       |=============================================================
      */
-    // Route::get('/aaa', function () {
-    //    $routeCollection = Route::getRoutes();
-    //    echo "<table style='width:100%'>";
-    //    echo '<tr>';
-    //    echo "<td width='10%'><h4>HTTP Method</h4></td>";
-    //    echo "<td width='10%'><h4>Route</h4></td>";
-    //    echo "<td width='10%'><h4>Url</h4></td>";
-    //    echo "<td width='80%'><h4>Corresponding Action</h4></td>";
-    //    echo '</tr>';
-    //    foreach ($routeCollection as $value) {
-    //        echo '<tr>';
-    //        echo '<td>' . $value->getMethods()[0] . '</td>';
-    //        echo '<td>' . $value->getName() . '</td>';
-    //        echo '<td>' . $value->getPath() . '</td>';
-    //        echo '<td>' . $value->getActionName() . '</td>';
-    //        echo '</tr>';
-    //    }
-    //    echo '</table>';
-    // });
+    Route::get('/aaa', function () {
+        $routeCollection = Route::getRoutes();
+        echo "<table style='width:100%'>";
+        echo '<tr>';
+        echo "<td width='10%'><h4>HTTP Method</h4></td>";
+        echo "<td width='10%'><h4>Route</h4></td>";
+        echo "<td width='10%'><h4>Url</h4></td>";
+        echo "<td width='80%'><h4>Corresponding Action</h4></td>";
+        echo '</tr>';
+        foreach ($routeCollection as $value) {
+            echo '<tr>';
+            echo '<td>' . $value->getMethods()[0] . '</td>';
+            echo '<td>' . $value->getName() . '</td>';
+            echo '<td>' . $value->getPath() . '</td>';
+            echo '<td>' . $value->getActionName() . '</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+    });
     /*
       |=============================================================
       |  Error Routes

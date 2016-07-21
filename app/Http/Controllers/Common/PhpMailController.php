@@ -281,7 +281,7 @@ class PhpMailController extends Controller {
                     $body = '<html dir="rtl" xml:lang="ar" lang="ar"><head></head><body dir="rtl">' . $body . '</body></html>';
                 } else {
                 }
-                $mail->Body = $body;
+                $mail->Body = nl2br($body);
                 // $mail->AltBody = $altbody;
 
                 if (!$mail->send()) {

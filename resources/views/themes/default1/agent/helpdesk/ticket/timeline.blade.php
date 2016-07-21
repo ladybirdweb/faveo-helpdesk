@@ -444,7 +444,7 @@ if ($thread->title != "") {
                             <div class="form-group">
                                 <div class="row">
                                     <!-- internal note -->
-                                    <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
+                                    <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}" id="internal_content_class">
                                         <div class="col-md-2">
                                             <label>{!! Lang::get('lang.internal_note') !!}:<span class="text-red"> *</span></label>
                                         </div>
@@ -1077,6 +1077,7 @@ if ($thread->title != "") {
                         <div class="tab-pane active" id="ahah">
                             <div class="modal-body" id="def">
                                 <div class="callout callout-info" id="hide1234" ><i class="icon fa fa-info"> </i>&nbsp;&nbsp;&nbsp; {!! Lang::get('lang.search_existing_users_or_add_new_users') !!}</div>
+                                <div id="here"></div>
                                 <div id="show7" style="display:none;">
                                     <div class="row col-md-12">
                                         <div class="col-xs-5">
@@ -1088,7 +1089,7 @@ if ($thread->title != "") {
                                         </div>
                                     </div>
                                 </div>
-                                <div id="here"></div>
+                                
                                 {!! Form::model($tickets->id, ['id'=>'search-user','method' => 'PATCH'] )!!}    
                                 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
                                 <input type="text" class="form-control" name="search" id="tags" placeholder="{!! Lang::get('lang.search_by_email') !!}">
@@ -1673,6 +1674,19 @@ if ($thread->title != "") {
     });
             // Internal Note
             $('#form2').on('submit', function() {
+                var internal_content = document.getElementById('InternalContent').value;
+                if(internal_content) {
+                    $("#internal_content_class").removeClass('has-error');
+                    $("#alert23").hide();
+                } else {
+                    var message = "<li>{!! Lang::get('lang.internal_content_is_a_required_field') !!}</li>";
+                    $("#internal_content_class").addClass('has-error');
+                    $("#alert23").show();
+                    $('#message-danger2').html(message);
+                    $("#show3").hide();
+                    $("#t1").show();
+                    return false;
+                }
     $.ajax({
     type: "POST",
             url: "../internal/note/{{ $tickets->id }}",
@@ -1699,6 +1713,16 @@ if ($thread->title != "") {
                     var div1 = document.getElementById('newtextarea1');
                     div1.innerHTML = div1.innerHTML + '<textarea style="width:98%;height:200px;" name="InternalContent" class="form-control" id="InternalContent"/></textarea>';
                     var wysihtml5Editor = $('textarea').wysihtml5().data("wysihtml5").editor;
+                    setInterval(function(){
+                            var head= document.getElementsByTagName('head')[0];
+                            var script= document.createElement('script');
+                            script.type= 'text/javascript';
+                            script.src= '{{asset("lb-faveo/js/jquery.rating.pack.js")}}';
+                            head.appendChild(script);
+//                            $('.rating-cancel').hide();
+//                            $(".star-rating-control").attr("disabled", "disabled").off('hover');
+//                            $(".star-rating-control").addClass("disabled")
+                        }, 4000);
             } else {
             // alert('fail');
             var message = "{!! Lang::get('lang.for_some_reason_your_message_was_not_posted_please_try_again_later') !!}";
@@ -1758,6 +1782,7 @@ if ($thread->title != "") {
 
             $('#form3').on('submit', function() {
             var fd = new FormData(document.getElementById("form3"));
+            var reply_content = document.getElementById('reply_content').value;
             if(reply_content) {
                 $("#reply_content_class").removeClass('has-error');
                 $("#alert23").hide();
@@ -1869,8 +1894,9 @@ if ($thread->title != "") {
             dataType: "html",
             data: $(this).serialize(),
             beforeSend: function() {
-            $('#show7').show();
-                    $('#hide1234').hide();
+                $('#here').html("");
+                $('#show7').show();
+                $('#hide1234').hide();
             },
             success: function(response) {
             $('#show7').hide();
@@ -1883,7 +1909,7 @@ if ($thread->title != "") {
                     // if(link) {
                     //     link.click();
                     // }
-                    $('#cc-close').trigger('click');
+//                    $('#cc-close').trigger('click');
                     }, 500);
             }
     })

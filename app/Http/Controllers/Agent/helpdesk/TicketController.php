@@ -141,7 +141,6 @@ class TicketController extends Controller {
         if (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '=', Auth::user()->id)->get();
         } else {
-            $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '=', Auth::user()->id)->get();
         }
         return $this->getTable($tickets);
@@ -322,7 +321,16 @@ class TicketController extends Controller {
     public function thread($id) {
         if (Auth::user()->role == 'agent') {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
-            $tickets = Tickets::where('id', '=', $id)->where('dept_id', '=', $dept->id)->orwhere('assigned_to', '=', Auth::user()->id)->first();
+            $tickets = Tickets::where('id', '=', $id)->first();
+            if($tickets->dept_id == $dept->id) {
+                $tickets = $tickets;
+            } elseif($tickets->assigned_to == Auth::user()->id) {
+                $tickets = $tickets;
+            } else {
+                $tickets = null;
+            }
+//            $tickets = $tickets->where('dept_id', '=', $dept->id)->orWhere('assigned_to', Auth::user()->id)->first();
+//            dd($tickets);
         } elseif (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('id', '=', $id)->first();
         } elseif (Auth::user()->role == 'user') {
@@ -485,10 +493,10 @@ class TicketController extends Controller {
         $emails = Emails::where('department', '=', $tickets->dept_id)->first();
 
         try {
-//            $this->NotificationController->create($ticket_id, Auth::user()->id, '2');
-//            $this->PhpMailController->sendmail(
-//                    $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
-//            );
+            $this->NotificationController->create($ticket_id, Auth::user()->id, '2');
+            $this->PhpMailController->sendmail(
+                    $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
+            );
         } catch (\Exception $e) {
             return 0;
         }
@@ -1717,7 +1725,6 @@ class TicketController extends Controller {
         $tz = $timezone->name;
         date_default_timezone_set($tz);
         $offset = date('Z', strtotime($utc));
-
         return $offset;
     }
 
@@ -1728,7 +1735,6 @@ class TicketController extends Controller {
      */
     public static function getDateTimeFormat() {
         $set = System::select('date_time_format')->whereId('1')->first();
-
         return $set->date_time_format;
     }
 
