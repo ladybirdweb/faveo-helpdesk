@@ -286,7 +286,7 @@ return [
     'Please-save-this-for-future-reference'                      => 'Please save this for future reference',
     'rtl'                                                        => 'RTL (Right to left)',
     'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   =>  'The RTL support is only applicable to the outgoing mails',
-    'user_set_ticket_status'                                     => 'Allow user to set ticket status',
+    'user_set_ticket_status'                                     => 'Allow users to set ticket status',
     /*
       |--------------------------------------
       |   Email Settings Page
