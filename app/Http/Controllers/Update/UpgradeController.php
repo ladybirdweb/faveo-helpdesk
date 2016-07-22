@@ -102,8 +102,19 @@ class UpgradeController extends Controller {
     public function doUpdate() {
         try {
             $memory_limit = ini_get('memory_limit');
-            dd($memory_limit);
-            Artisan::call('down');
+            if($memory_limit<256){
+                echo '<ul class=list-unstyled>';
+                echo "<li style='color:red;'>Sorry we can not process your request because of limited memory! You have only  $memory_limit. For this you need atleast 256 MB</li>";
+                echo '</ul>';
+                return 0;
+            }
+            if (!extension_loaded('zip')){
+                echo '<ul class=list-unstyled>';
+                echo "<li style='color:red;'>Sorry we can not process your request because you don't have ZIP extension contact your system admin</li>";
+                echo '</ul>';
+                return 0;
+            }
+            //Artisan::call('down');
             $update = $this->dir . '/UPDATES';
             //Open The File And Do Stuff
             $zipHandle = zip_open($update . '/faveo-helpdesk-master.zip');
@@ -152,12 +163,12 @@ class UpgradeController extends Controller {
             }
             echo '</ul>';
             Artisan::call('migrate', ['--force' => true]);
-            Artisan::call('up');
+           // Artisan::call('up');
 
             return true;
         } catch (Exception $ex) {
-            Artisan::call('up');
-            return redirect()->back();
+
+            return redirect('file-upgrade')->with('fails',$ex->getMessage());
         }
     }
 

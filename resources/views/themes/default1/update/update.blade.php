@@ -69,7 +69,7 @@
                             <?php
                         }
 
-                        if ($updated == true) {
+                        if ($updated === true) {
                             $controller->copyToActualDirectory($latest_version);
                         } elseif ($found != true) {
                             echo '<p>&raquo; No update is available.</p>';
