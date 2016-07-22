@@ -188,6 +188,14 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->push(Lang::get('lang.edit'), url('sla/{sla}/edit'));
         });
         Route::resource('forms', 'Admin\helpdesk\FormController');
+        Route::post('forms/field/{fieldid}/child',[
+            'as'=>'forms.field.child',
+            'uses'=>'Admin\helpdesk\FormController@addChild',
+            ]);
+        Route::get('forms/render/child',[
+            'as'=>'forms.field.child',
+            'uses'=>'Admin\helpdesk\FormController@renderChild',
+            ]);
         Breadcrumbs::register('forms.index', function ($breadcrumbs) {
             $breadcrumbs->parent('setting');
             $breadcrumbs->push(Lang::get('lang.forms'), route('forms.index'));
@@ -674,6 +682,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('postedform', 'Client\helpdesk\FormController@postedForm'); /* post the form to store the value */
     Route::get('check', 'CheckController@getcheck'); //testing checkbox auto-populate
     Route::post('postcheck/{id}', 'CheckController@postcheck');
+    Route::get('get-helptopic-form', 'Client\helpdesk\FormController@getCustomForm');
     Breadcrumbs::register('home', function ($breadcrumbs) {
         $breadcrumbs->push('Home', route('home'));
     });

@@ -138,10 +138,12 @@ class = "active"
                 {!! Form::label('Details',Lang::get('lang.message')) !!}<span class="text-red"> *</span>
                 {!! Form::textarea('Details',null,['class' => 'form-control']) !!}
             </div>
+            <div id="response" class="col-md-12 form-group"></div>
             <div class="col-md-12 form-group">
                 <div class="btn btn-default btn-file"><i class="fa fa-paperclip"> </i> {!! Lang::get('lang.attachment') !!}<input type="file" name="attachment[]" multiple/></div><br/>
                 {!! Lang::get('lang.max') !!}. 10MB
             </div>
+            
             {{-- Event fire --}}
             <?php Event::fire(new App\Events\ClientTicketForm()); ?>
             <div class="col-md-12" id="response"> </div>
@@ -159,17 +161,27 @@ class = "active"
 |====================================================
 -->
 <script type="text/javascript">
-$('#selectid').on('change', function() {
-    var value = $('#selectid').val();
-    $.ajax({
-        url: "postform/" + value,
-        type: "post",
-        data: value,
-        success: function(data) {
-            $('#response').html(data);
-            var wysihtml5Editor = $('#unique-textarea').wysihtml5().data("wysihtml5").editor;
-        }
-    });
+$(document).ready(function(){
+   var helpTopic = $("#selectid").val();
+   send(helpTopic);
+   $("#selectid").on("change",function(){
+       helpTopic = $("#selectid").val();
+       send(helpTopic);
+   });
+   function send(helpTopic){
+       $.ajax({
+           url:"{{url('/get-helptopic-form')}}",
+           data:{'helptopic':helpTopic},
+           type:"GET",
+           dataType:"html",
+           success:function(response){
+               $("#response").html(response);
+           },
+           error:function(response){
+              $("#response").html(response); 
+           }
+       });
+   }
 });
 
 $(function() {

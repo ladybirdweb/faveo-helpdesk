@@ -33,7 +33,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.0.7.9',
+    'version' => 'Community 1.0.7.7',
 
     /*
       |--------------------------------------------------------------------------
@@ -157,7 +157,7 @@ return [
         'Illuminate\Filesystem\FilesystemServiceProvider',
         'Illuminate\Foundation\Providers\FoundationServiceProvider',
         'Illuminate\Hashing\HashServiceProvider',
-
+        Illuminate\Mail\MailServiceProvider::class,
 
         'Illuminate\Pagination\PaginationServiceProvider',
         'Illuminate\Pipeline\PipelineServiceProvider',

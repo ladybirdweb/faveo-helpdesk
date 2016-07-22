@@ -136,6 +136,7 @@ class FormController extends Controller {
      * @param type User    $user
      */
     public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code) {
+        dd($request);
         $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token');
 
         $name = $request->input('Name');
@@ -183,7 +184,7 @@ class FormController extends Controller {
             }
         }
         $result = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response);
-        
+
         if ($result[1] == 1) {
             $ticketId = Tickets::where('ticket_number', '=', $result[0])->first();
             $thread = Ticket_Thread::where('ticket_id', '=', $ticketId->id)->first();
@@ -274,6 +275,24 @@ class FormController extends Controller {
 //        } else {
 //            return \Redirect::back()->with('fails1', Lang::get('lang.please_fill_some_data'));
 //        }
+    }
+
+    public function getCustomForm(Request $request) {
+        $html = "";
+        $helptopic_id = $request->input('helptopic');
+        $helptopics = new Help_topic();
+        $helptopic = $helptopics->find($helptopic_id);
+        if (!$helptopic) {
+            throw new Exception("We can not find your request");
+        }
+        $custom_form = $helptopic->custom_form;
+        if ($custom_form) {
+            $fields = new Fields();
+            $forms = new \App\Model\helpdesk\Form\Forms();
+            $form_controller = new \App\Http\Controllers\Admin\helpdesk\FormController($fields, $forms);
+            $html = $form_controller->renderForm($custom_form);
+        }
+        return $html;
     }
 
 }

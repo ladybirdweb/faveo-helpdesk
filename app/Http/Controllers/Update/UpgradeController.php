@@ -61,18 +61,18 @@ class UpgradeController extends Controller {
 
     public function downloadLatestCode() {
         $name = \Config::get('app.name');
-        $url = 'http://www.faveohelpdesk.com/billing/download-url';
-        if (str_contains($url, ' ')) {
-            $url = str_replace(' ', '%20', $url);
+        $durl = 'http://www.faveohelpdesk.com/billing/public/download-url';
+        if (str_contains($durl, ' ')) {
+            $durl = str_replace(' ', '%20', $durl);
         }
         $data = [
             'name' => $name,
         ];
-        $download = $this->postCurl($url, $data);
+        $download = $this->postDownloadCurl($durl, $data);
 
-        $url = $download['zipball_url'];
+        $download_url = $download['zipball_url'];
 
-        return $url;
+        return $download_url;
     }
 
     public function saveLatestCodeAtTemp($download_url) {
@@ -302,6 +302,27 @@ class UpgradeController extends Controller {
             curl_close($ch);
 
             return $data;
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
+    }
+     public function postDownloadCurl($url, $data) {
+        try {
+            $curl = Utility::_isCurl();
+            if (!$curl) {
+                throw new Exception("Please enable your curl function to check latest update");
+            }
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_URL, $url);
+            if (curl_exec($ch) === false) {
+                echo 'Curl error: ' . curl_error($ch);
+            }
+            $data = curl_exec($ch);
+            curl_close($ch);
+            return json_decode($data, true);
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }

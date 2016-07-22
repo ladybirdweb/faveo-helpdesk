@@ -490,10 +490,10 @@ class TicketController extends Controller {
         $emails = Emails::where('department', '=', $tickets->dept_id)->first();
 
         try {
-//            $this->NotificationController->create($ticket_id, Auth::user()->id, '2');
-//            $this->PhpMailController->sendmail(
-//                    $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
-//            );
+            $this->NotificationController->create($ticket_id, Auth::user()->id, '2');
+            $this->PhpMailController->sendmail(
+                    $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email, 'cc' => $collaborators], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'body' => $request->input('reply_content'), 'scenario' => 'ticket-reply', 'attachments' => $attachment_files], $template_variables = ['ticket_number' => $ticket_number, 'user' => $username, 'agent_sign' => $agentsign]
+            );
         } catch (\Exception $e) {
             return 0;
         }

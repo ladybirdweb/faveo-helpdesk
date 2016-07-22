@@ -132,8 +132,8 @@ class="active"
                     <div class="form-group">
                         <label>{!! Lang::get('lang.help_topic') !!}:</label>
                         <!-- helptopic -->
-                        <?php $helptopic = App\Model\helpdesk\Manage\Help_topic::where('status','=',1)->get(); ?>
-                        {!! Form::select('helptopic', ['Helptopic'=>$helptopic->lists('topic','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        <?php $helptopic = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->get(); ?>
+                        {!! Form::select('helptopic', ['Helptopic'=>$helptopic->lists('topic','id')->toArray()],null,['class' => 'form-control select','id'=>'selectid']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -159,6 +159,7 @@ class="active"
                         {!! Form::select('assignto', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')->toArray()],null,['class' => 'form-control select']) !!}
                     </div>
                 </div>
+                <div id="response" class="col-md-6 form-group"></div>
             </div>
         </div>
     </div>
@@ -201,8 +202,10 @@ class="active"
                         <?php $Priority = App\Model\helpdesk\Ticket\Ticket_Priority::all(); ?>
                         {!! Form::select('priority', ['Priority'=>$Priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control select']) !!}
                     </div>
+                    
                 </div>
             </div>
+             
         </div>
     </div>
     <div class="box-footer">
@@ -217,12 +220,34 @@ class="active"
 </div><!-- /. box -->
 {!! Form::close() !!}
 <script type="text/javascript">
-    $(function() {
+    $(document).ready(function () {
+        var helpTopic = $("#selectid").val();
+        send(helpTopic);
+        $("#selectid").on("change", function () {
+            helpTopic = $("#selectid").val();
+            send(helpTopic);
+        });
+        function send(helpTopic) {
+            $.ajax({
+                url: "{{url('/get-helptopic-form')}}",
+                data: {'helptopic': helpTopic},
+                type: "GET",
+                dataType: "html",
+                success: function (response) {
+                    $("#response").html(response);
+                },
+                error: function (response) {
+                    $("#response").html(response);
+                }
+            });
+        }
+    });
+    $(function () {
         $("textarea").wysihtml5();
     });
 
-    $(document).ready(function() {
-        $('#form').submit(function() {
+    $(document).ready(function () {
+        $('#form').submit(function () {
             var duedate = document.getElementById('datemask').value;
             if (duedate) {
                 var pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
@@ -239,7 +264,7 @@ class="active"
         });
     });
 
-    $(function() {
+    $(function () {
         $('#datemask').datepicker({changeMonth: true, changeYear: true}).mask('99/99/9999');
     });
 </script>
