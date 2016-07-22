@@ -126,12 +126,30 @@ class="active"
                     <span style="color:red;">{!! Lang::get('lang.inactive') !!}</span>
                     @endif
                 </a>
-            </div>
+            </div>            
+            @if($users->country_code)
+                <div class="box-footer">
+                    <b>{{Lang::get('lang.country_code')}}</b>
+                    <a class="pull-right"> {{$users->country_code}}</a>
+                </div>
+            @endif
+            @if($users->ext)
+                <div class="box-footer">
+                    <b>{{Lang::get('lang.ext')}}</b>
+                    <a class="pull-right"> {{$users->ext}}</a>
+                </div>
+            @endif
+            @if($users->mobile)
+                <div class="box-footer">
+                    <b>{{Lang::get('lang.mobile')}}</b>
+                    <a class="pull-right"> {{$users->mobile}}</a>
+                </div>
+            @endif
             @if($users->phone_number)
-            <div class="box-footer">
-                <b>{{Lang::get('lang.phone')}}</b>
-                <a class="pull-right">{{$users->phone_number}}</a>
-            </div>
+                <div class="box-footer">
+                    <b>{{Lang::get('lang.phone')}}</b>
+                    <a class="pull-right"> {{$users->phone_number}}</a>
+                </div>
             @endif
             @if($users->internal_note)
             <div class="box-footer">

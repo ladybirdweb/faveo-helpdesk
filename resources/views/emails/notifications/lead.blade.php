@@ -13,7 +13,7 @@ foreach ($depts as $dept) {
 
 	$inprogress = App\Model\helpdesk\Ticket\Tickets::where('dept_id', $dept->id)->where('team_id', $team_id)->where('status', '=', 1)->count();
 
-	$overdues = App\Model\helpdesk\Ticket\Tickets::where('dept_id', $dept->id)->where('team_id', $team_id)->where('status', '=', 1)->get();
+	$overdues = App\Model\helpdesk\Ticket\Tickets::where('dept_id', $dept->id)->where('team_id', $team_id)->where('isanswered', '=', 0)->where('status', '=', 1)->get();
 
 	$i = 0;
 	foreach ($overdues as $overdue) {

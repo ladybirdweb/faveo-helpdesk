@@ -63,7 +63,6 @@ class FormController extends Controller {
         if (System::first()->status == 1) {
             $topics = $topic->get();
             $codes = $code->get();
-//             dd($phonecode);
             if ($phonecode->phonecode) {
                 $phonecode = $phonecode->phonecode;
             } else {
@@ -145,12 +144,16 @@ class FormController extends Controller {
         $subject = $request->input('Subject');
         $details = $request->input('Details');
         $phonecode = $request->input('Code');
-        $System = System::where('id', '=', 1)->first();
-        $departments = Department::where('id', '=', $System->department)->first();
-        $department = $departments->id;
         $mobile_number = $request->input('Mobile');
         $status = $ticket_settings->first()->status;
         $helptopic = $request->input('helptopic');
+        $helpTopicObj = Help_topic::where('id','=', $helptopic);
+        if($helpTopicObj->exists() && ($helpTopicObj->value('status')==1)){
+            $department = $helpTopicObj->value('department');
+        }else{
+            $defaultHelpTopicID = Ticket::where('id', '=', '1')->first()->help_topic; 
+            $department = Help_topic::where('id','=', $defaultHelpTopicID)->value('department');
+        }
         $sla = $ticket_settings->first()->sla;
         $priority = $ticket_settings->first()->priority;
         $source = $ticket_source->where('name', '=', 'web')->first()->id;
@@ -203,7 +206,7 @@ class FormController extends Controller {
             // dd($result);
             return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is') . ' ' . $result[0] . '. ' . Lang::get('lang.Please-save-this-for-future-reference'));
         }
-        dd($result);
+//        dd($result);
     }
 
     /**
@@ -251,30 +254,6 @@ class FormController extends Controller {
         } catch (Exception $e) {
             return \Redirect::back()->with('fails1', $e->getMessage());
         }
-//
-//        $comment = $request->input('comment');
-//        if ($comment != null) {
-//            $tickets = Tickets::where('id', '=', $id)->first();
-//            $threads = new Ticket_Thread();
-//            $tickets->closed_at = null;
-//            $tickets->closed = 0;
-//            $tickets->reopened_at = date('Y-m-d H:i:s');
-//            $tickets->reopened = 1;
-//            $threads->user_id = $tickets->user_id;
-//            $threads->ticket_id = $tickets->id;
-//            $threads->poster = 'client';
-//            $threads->body = $comment;
-//            try {
-//                $threads->save();
-//                $tickets->save();
-//
-//                return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
-//            } catch (Exception $e) {
-//                return \Redirect::back()->with('fails1', $e->getMessage());
-//            }
-//        } else {
-//            return \Redirect::back()->with('fails1', Lang::get('lang.please_fill_some_data'));
-//        }
     }
 
     public function getCustomForm(Request $request) {

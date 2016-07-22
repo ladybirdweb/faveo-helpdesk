@@ -141,7 +141,6 @@ class TicketController extends Controller {
         if (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '=', Auth::user()->id)->get();
         } else {
-            $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('assigned_to', '=', Auth::user()->id)->get();
         }
         return $this->getTable($tickets);
@@ -254,6 +253,7 @@ class TicketController extends Controller {
      */
     public function post_newticket(CreateTicketRequest $request, CountryCode $code) {
         try {
+//            dd($request);
             $email = $request->input('email');
             $fullname = $request->input('user_name');
             $helptopic = $request->input('helptopic');
@@ -321,7 +321,16 @@ class TicketController extends Controller {
     public function thread($id) {
         if (Auth::user()->role == 'agent') {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
-            $tickets = Tickets::where('id', '=', $id)->where('dept_id', '=', $dept->id)->orwhere('assigned_to', '=', Auth::user()->id)->first();
+            $tickets = Tickets::where('id', '=', $id)->first();
+            if($tickets->dept_id == $dept->id) {
+                $tickets = $tickets;
+            } elseif($tickets->assigned_to == Auth::user()->id) {
+                $tickets = $tickets;
+            } else {
+                $tickets = null;
+            }
+//            $tickets = $tickets->where('dept_id', '=', $dept->id)->orWhere('assigned_to', Auth::user()->id)->first();
+//            dd($tickets);
         } elseif (Auth::user()->role == 'admin') {
             $tickets = Tickets::where('id', '=', $id)->first();
         } elseif (Auth::user()->role == 'user') {
@@ -426,13 +435,7 @@ class TicketController extends Controller {
             $thread2->save();
         }
         if ($tickets->status > 1) {
-            $tickets->status = '1';
-            $tickets->closed_at = '0';
-            $tickets->closed = null;
-            $tickets->reopened_at = date('Y-m-d H:i:s');
-            $tickets->reopened = 1;
-            $tickets->isanswered = '1';
-            $tickets->save();
+            $this->open($ticket_id, new  Tickets);
         }
         $thread->save();
 
@@ -636,6 +639,7 @@ class TicketController extends Controller {
             $user->password = Hash::make($password);
             $user->phone_number = $phone;
             $user->country_code = $phonecode;
+            $user->mobile = $mobile_number;
             $user->role = 'user';
             $user->active = '1';
             // mail user his/her password
@@ -834,6 +838,15 @@ class TicketController extends Controller {
                     $ticket_threads->body = $ticket_status->message . ' ' . $username;
                     $ticket_threads->save();
                     // event fire for internal notes
+
+                    //event to change status
+                    $data = [
+                        'id' => $ticket_number,
+                        'status' => 'Open',
+                        'first_name' => $username,
+                        'last_name' => '',
+                    ];
+                    \Event::fire('change-status', array($data));
                 }
                 if (isset($id)) {
                     if ($this->ticketThread($subject, $body, $id, $user_id)) {
@@ -1075,7 +1088,6 @@ class TicketController extends Controller {
      *
      * @param type         $id
      * @param type Tickets $ticket
-     *
      * @return type
      */
     public function open($id, Tickets $ticket) {
@@ -1713,7 +1725,6 @@ class TicketController extends Controller {
         $tz = $timezone->name;
         date_default_timezone_set($tz);
         $offset = date('Z', strtotime($utc));
-
         return $offset;
     }
 
@@ -1724,7 +1735,6 @@ class TicketController extends Controller {
      */
     public static function getDateTimeFormat() {
         $set = System::select('date_time_format')->whereId('1')->first();
-
         return $set->date_time_format;
     }
 

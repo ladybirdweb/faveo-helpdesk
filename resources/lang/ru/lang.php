@@ -308,6 +308,7 @@ return [
       |Language page
       |------------------------------------------------
      */
+    'default'            => 'default',
     'iso-code'           => 'ISO-CODE',
     'download'           => 'Downlaod',
     'upload_file'        => 'Загрузить файл',
@@ -329,6 +330,7 @@ return [
     'lang-doesnot-exist' => 'Языковой пакет не существует.',
     'active-lang-error'  => 'Языковой пакет не может быть удален, когда он активен.',
     'language-error'     => 'Языковой пакет не найден в указанной дериктории.',
+    'lang-fallback-lang' => 'Cannot delete system\'s defualt fallback language',
     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]

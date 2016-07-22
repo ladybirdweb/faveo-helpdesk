@@ -2008,6 +2008,7 @@ class DatabaseSeeder extends Seeder
          * All the common settings will be listed here
          */
         CommonSettings::create(['id' => '1', 'option_name' => 'ticket_token_time_duration', 'option_value' => '1']);
+        CommonSettings::create(['id' => '2', 'option_name' => 'enable_rtl', 'option_value' => '']);
 
         /*
          * Ratings

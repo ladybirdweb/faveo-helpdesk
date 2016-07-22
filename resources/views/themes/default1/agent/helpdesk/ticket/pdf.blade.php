@@ -9,7 +9,14 @@
             }
         </style>
     </head>
-    <body>
+    <?php 
+    $rtl = App\Model\helpdesk\Settings\CommonSettings::where('option_name', '=', 'enable_rtl')->first();
+                if($rtl->option_value == 1) {
+                    echo '<body style="direction: rtl; text-align: right;">';
+                } else {
+                    echo '<body>';
+                }
+    ?>
         <h2>
             <div id="logo" class="site-logo text-center" style="font-size: 30px;">
                 <?php

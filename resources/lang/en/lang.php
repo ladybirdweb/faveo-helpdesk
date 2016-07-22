@@ -284,6 +284,8 @@ return [
     'select_a_date_time_format'                                  => 'Select a date Time Format',
     'Ticket-has-been-created-successfully-your-ticket-number-is' => 'Ticket has been created successfully, your ticket number is',
     'Please-save-this-for-future-reference'                      => 'Please save this for future reference',
+    'rtl'                                                        => 'RTL (Right to left)',
+    'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   =>  'The RTL support is only applicable to the outgoing mails',
     /*
       |--------------------------------------
       |   Email Settings Page
@@ -432,6 +434,7 @@ return [
       | Language page
       |------------------------------------------------
      */
+    'default'                    => 'default', 
     'language-settings'          => 'Language Settings',
     'iso-code'                   => 'ISO-CODE',
     'download'                   => 'Downlaod',
@@ -454,6 +457,7 @@ return [
     'lang-doesnot-exist'         => 'Language package does not exist.',
     'active-lang-error'          => 'Language package can not be deleted when it is active.',
     'language-error'             => 'Language package not found in your lang directroy.',
+    'lang-fallback-lang'         => 'Cannot delete system\'s defualt fallback language', 
 
     /*
       |--------------------------------------
@@ -918,6 +922,7 @@ return [
     'tickets_have_been_opened'                                                      => 'Selected tickets have been opened.',
     'unable_to_fetch_emails'                                                        => 'Unable to fetch Emails',
     'reply_content_is_a_required_field'                                             => 'Reply Content is a required field',
+    'internal_content_is_a_required_field'                                          => 'Internal Content is a required field',
 
 
 
@@ -983,6 +988,7 @@ return [
     'user_report'                                       => 'User Report',
     'send_password_via_email'                           => 'Send password via Email',
     'user_send_mail_error_on_user_creation'             => 'Some error occurred while sending mail to the client. Please check email settings and try again',
+    'country_code'                                      => 'Country code',
     /*
       |------------------------------------------------
       |Organization Page
