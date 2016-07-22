@@ -102,13 +102,13 @@ class UpgradeController extends Controller {
     public function doUpdate() {
         try {
             $memory_limit = ini_get('memory_limit');
-            if($memory_limit<256){
+            if ($memory_limit < 256) {
                 echo '<ul class=list-unstyled>';
                 echo "<li style='color:red;'>Sorry we can not process your request because of limited memory! You have only  $memory_limit. For this you need atleast 256 MB</li>";
                 echo '</ul>';
                 return 0;
             }
-            if (!extension_loaded('zip')){
+            if (!extension_loaded('zip')) {
                 echo '<ul class=list-unstyled>';
                 echo "<li style='color:red;'>Sorry we can not process your request because you don't have ZIP extension contact your system admin</li>";
                 echo '</ul>';
@@ -163,12 +163,11 @@ class UpgradeController extends Controller {
             }
             echo '</ul>';
             Artisan::call('migrate', ['--force' => true]);
-           // Artisan::call('up');
-
             return true;
         } catch (Exception $ex) {
-
-            return redirect('file-upgrade')->with('fails',$ex->getMessage());
+            echo '<ul class=list-unstyled>';
+            echo "<li style='color:red;'>" . $ex->getMessage() . "</li>";
+            echo '</ul>';
         }
     }
 
@@ -319,7 +318,8 @@ class UpgradeController extends Controller {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
-     public function postDownloadCurl($url, $data) {
+
+    public function postDownloadCurl($url, $data) {
         try {
             $curl = Utility::_isCurl();
             if (!$curl) {
