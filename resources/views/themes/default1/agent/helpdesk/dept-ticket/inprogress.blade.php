@@ -21,17 +21,17 @@ class="active"
 <?php
 $date_time_format = UTC::getDateTimeFormat();
 $dept = App\Model\helpdesk\Agent\Department::where('name', '=', $id)->first();
-if (Auth::user()->role == 'agent') {
-        
-    $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', '1')->where('assigned_to', '>', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->paginate(20);
+if (Auth::user()->role == 'agent') {    
+    $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', '1')->where('assigned_to', '>', 0)
+            ->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->count();
 } else {
-        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', '1')->where('assigned_to', '>', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->paginate(20);
+    $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', '1')->where('assigned_to', '>', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->count();
 }
 ?>
 <!-- Main content -->
 <div class="box box-primary">
      <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.inprogress') !!} </h3> <small id="title_refresh">{!! $tickets->total() !!} {!! Lang::get('lang.tickets') !!}</small>
+        <h3 class="box-title">{!! $dept->name !!} / {!! Lang::get('lang.assigned') !!} </h3> <small id="title_refresh">{!! $tickets !!} {!! Lang::get('lang.tickets') !!}</small>
         <div class="box-tools pull-right">
         <div class="has-feedback">
 

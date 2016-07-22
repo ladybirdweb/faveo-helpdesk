@@ -12,31 +12,31 @@
         ?>
         <title> @yield('title') {!! strip_tags($title_name) !!} </title>
         <!-- faveo favicon -->
-        <link rel="shortcut icon" href="{{asset("lb-faveo/media/images/favicon.ico")}}">
+        <link href="{{asset("lb-faveo/media/images/favicon.ico")}}"  rel="shortcut icon" >
+        
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- Bootstrap 3.3.2 -->
-        {{-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" /> --}}
         <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
+        <!-- Admin LTE CSS -->
         <link href="{{asset("lb-faveo/css/AdminLTEsemi.css")}}" rel="stylesheet" type="text/css" />
         <!-- Font Awesome Icons -->
-        {{-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> --}}
         <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Ionicons -->
-        {{-- <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" /> --}}
         <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- fullCalendar 2.2.5-->
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
+        
         <link href="{{asset("lb-faveo/css/app.css")}}" rel="stylesheet" type="text/css" />
+        
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
 
-        {{-- // <script src="ckeditor/ckeditor.js"></script> --}}
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-        {{-- // <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
+
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
         @yield('HeadInclude')
     </head>
@@ -373,18 +373,22 @@
                     </div>
             </footer><!-- #colophon -->
             <!-- jQuery 2.1.1 -->
-            {{-- // <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
             <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
             <!-- Bootstrap 3.3.2 JS -->
-            {{-- // <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script> --}}
             <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
             <!-- Slimscroll -->
             <script src="{{asset("lb-faveo/js/superfish.js")}}" type="text/javascript"></script>
+            
             <script src="{{asset("lb-faveo/js/mobilemenu.js")}}" type="text/javascript"></script>
+            
             <script src="{{asset("lb-faveo/js/know.js")}}" type="text/javascript"></script>
+            
             <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
+            
             <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
+            
             <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
+            
             <script>
 $(function () {
 //Enable check and uncheck all functionality

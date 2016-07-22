@@ -522,56 +522,57 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/ticket/inbox', ['as' => 'inbox.ticket', 'uses' => 'Agent\helpdesk\TicketController@inbox_ticket_list']); /*  Get Inbox Ticket */
         Breadcrumbs::register('inbox.ticket', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.inbox'), route('inbox.ticket'));
+            $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.inbox'), route('inbox.ticket'));
         });
         Route::get('/ticket/get-inbox', ['as' => 'get.inbox.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);  /* Get tickets in datatable */
         Route::get('/ticket/open', ['as' => 'open.ticket', 'uses' => 'Agent\helpdesk\TicketController@open_ticket_list']); /*  Get Open Ticket */
         Breadcrumbs::register('open.ticket', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.open-tickets'), route('open.ticket'));
+            $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
         });
         Route::get('/ticket/get-open', ['as' => 'get.open.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_open']);  /* Get tickets in datatable */
         Route::get('/ticket/answered', ['as' => 'answered.ticket', 'uses' => 'Agent\helpdesk\TicketController@answered_ticket_list']); /*  Get Answered Ticket */
         Breadcrumbs::register('answered.ticket', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.answered_tickets'), route('answered.ticket'));
+            $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.answered'), route('answered.ticket'));
         });
         Route::get('/ticket/get-answered', ['as' => 'get.answered.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_answered']);  /* Get tickets in datatable */
         Route::get('/ticket/myticket', ['as' => 'myticket.ticket', 'uses' => 'Agent\helpdesk\TicketController@myticket_ticket_list']); /*  Get Tickets Assigned to logged user */
         Breadcrumbs::register('myticket.ticket', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.my_tickets'), route('myticket.ticket'));
+            $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.my_tickets'), route('myticket.ticket'));
         });
         Route::get('/ticket/get-myticket', ['as' => 'get.myticket.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_myticket']);  /* Get tickets in datatable */
         Route::get('/ticket/overdue', ['as' => 'overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@overdue_ticket_list']); /*  Get Overdue Ticket */
         Breadcrumbs::register('overdue.ticket', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.overdue-tickets'), route('overdue.ticket'));
+            $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.overdue'), route('overdue.ticket'));
         });
         Route::get('/ticket/get-overdue', ['as' => 'get.overdue.ticket', 'uses' => 'Agent\helpdesk\TicketController@getOverdueTickets']); /*  Get Overdue Ticket */
         Route::get('/ticket/closed', ['as' => 'closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@closed_ticket_list']); /*  Get Closed Ticket */
         Breadcrumbs::register('closed.ticket', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.closed_tickets'), route('closed.ticket'));
+            $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.closed'), route('closed.ticket'));
         });
         Route::get('/ticket/get-closed', ['as' => 'get.closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_closed']);  /* Get tickets in datatable */
         Route::get('/ticket/assigned', ['as' => 'assigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@assigned_ticket_list']); /*  Get Assigned Ticket */
         Breadcrumbs::register('assigned.ticket', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.assigned_tickets'), route('assigned.ticket'));
+            $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.assigned'), route('assigned.ticket'));
         });
         Route::get('/ticket/get-assigned', ['as' => 'get.assigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_assigned']);  /* Get tickets in datatable */
         Route::get('/newticket', ['as' => 'newticket', 'uses' => 'Agent\helpdesk\TicketController@newticket']); /*  Get Create New Ticket */
         Breadcrumbs::register('newticket', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.create_ticket'), route('newticket'));
+            
+            $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.create'), route('newticket'));
         });
         Route::post('/newticket/post', ['as' => 'post.newticket', 'uses' => 'Agent\helpdesk\TicketController@post_newticket']); /*  Post Create New Ticket */
         Route::get('/thread/{id}', ['as' => 'ticket.thread', 'uses' => 'Agent\helpdesk\TicketController@thread']); /*  Get Thread by ID */
         Breadcrumbs::register('ticket.thread', function ($breadcrumbs, $id) {
             $breadcrumbs->parent('dashboard');
             $ticket_number = App\Model\helpdesk\Ticket\Tickets::where('id', '=', $id)->first();
-            $breadcrumbs->push($ticket_number->ticket_number, url('/thread/{id}'));
+            $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . $ticket_number->ticket_number, url('/thread/{id}'));
         });
         Route::post('/thread/reply/{id}', ['as' => 'ticket.reply', 'uses' => 'Agent\helpdesk\TicketController@reply']); /*  Patch Thread Reply */
         Route::patch('/internal/note/{id}', ['as' => 'Internal.note', 'uses' => 'Agent\helpdesk\TicketController@InternalNote']); /*  Patch Internal Note */
@@ -588,13 +589,13 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('trash', ['as' => 'get-trash', 'uses' => 'Agent\helpdesk\TicketController@trash']); /* To show Deleted Tickets */
         Breadcrumbs::register('get-trash', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.trash'), route('get-trash'));
+            $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.trash'), route('get-trash'));
         });
         Route::get('/ticket/trash', ['as' => 'get.trash.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_trash']);  /* Get tickets in datatable */
         Route::get('unassigned', ['as' => 'unassigned', 'uses' => 'Agent\helpdesk\TicketController@unassigned']); /* To show Unassigned Tickets */
         Breadcrumbs::register('unassigned', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.unassigned-tickets'), route('unassigned'));
+            $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.unassigned'), route('unassigned'));
         });
         Route::get('/ticket/unassigned', ['as' => 'get.unassigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_unassigned']);  /* Get tickets in datatable */
         Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'Agent\helpdesk\DashboardController@index']); /* To show dashboard pages */
@@ -618,19 +619,19 @@ Route::group(['middleware' => ['web']], function () {
         Route::patch('/head-org/{id}', 'Agent\helpdesk\OrganizationController@Head_Org');
         // Department ticket
         Route::get('/{dept}/open', ['as' => 'dept.open.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptopen']); // Open
-        Breadcrumbs::register('dept.open.ticket', function ($breadcrumbs) {
+        Breadcrumbs::register('dept.open.ticket', function ($breadcrumbs, $dept) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.open_tickets'), url('/{dept}/open'));
+            $breadcrumbs->push(Lang::get('lang.department') . '&nbsp; > &nbsp;' . $dept . '&nbsp; > &nbsp;' . Lang::get('lang.open_tickets'), url('/{dept}/open'));
         });
-        Route::get('/{dept}/inprogress', ['as' => 'dept.inprogress.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptinprogress']); // Inprogress
-        Breadcrumbs::register('dept.inprogress.ticket', function ($breadcrumbs) {
+        Route::get('/{dept}/assigned', ['as' => 'dept.inprogress.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptinprogress']); // Inprogress
+        Breadcrumbs::register('dept.inprogress.ticket', function ($breadcrumbs, $dept) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.inprogress_tickets'), url('/{dept}/inprogress'));
+            $breadcrumbs->push(Lang::get('lang.department') . '&nbsp; > &nbsp;' . $dept . '&nbsp; > &nbsp;' . Lang::get('lang.assigned_tickets'), url('/{dept}/inprogress'));
         });
         Route::get('/{dept}/closed', ['as' => 'dept.closed.ticket', 'uses' => 'Agent\helpdesk\TicketController@deptclose']); // Closed
-        Breadcrumbs::register('dept.closed.ticket', function ($breadcrumbs) {
+        Breadcrumbs::register('dept.closed.ticket', function ($breadcrumbs, $dept) {
             $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.closed_tickets'), url('/{dept}/closed'));
+            $breadcrumbs->push(Lang::get('lang.department') . '&nbsp; > &nbsp;' . $dept . '&nbsp; > &nbsp;' . Lang::get('lang.closed_tickets'), url('/{dept}/closed'));
         });
         Route::post('rating/{id}', ['as' => 'ticket.rating', 'uses' => 'Agent\helpdesk\TicketController@rating']); /* Get overall Ratings */
         Route::post('rating2/{id}', ['as' => 'ticket.rating2', 'uses' => 'Agent\helpdesk\TicketController@ratingReply']); /* Get reply Ratings */

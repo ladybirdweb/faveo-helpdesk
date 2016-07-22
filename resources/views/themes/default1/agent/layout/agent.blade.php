@@ -6,39 +6,45 @@
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <meta name="_token" content="{!! csrf_token() !!}"/>
         <!-- faveo favicon -->
-        <link rel="shortcut icon" href="{{asset("lb-faveo/media/images/favicon.ico")}}">
+        <link href="{{asset("lb-faveo/media/images/favicon.ico")}}" rel="shortcut icon">
         <!-- Bootstrap 3.3.2 -->
         <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Font Awesome Icons -->
         <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Ionicons -->
-        <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet">
+        <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet"  type="text/css" />
         <!-- Theme style -->
         <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
-        <!-- AdminLTE Skins. Choose a skin from the css/skins
-             folder instead of downloading all of them to reduce the load. -->
+        <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
         <link href="{{asset("lb-faveo/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- iCheck -->
         <link href="{{asset("lb-faveo/plugins/iCheck/flat/blue.css")}}" rel="stylesheet" type="text/css" />
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <link rel="stylesheet" href="{{asset("lb-faveo/css/tabby.css")}}" type="text/css">
-        <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
+        <link href="{{asset("lb-faveo/css/tabby.css")}}" rel="stylesheet" type="text/css"/>
+        
+        <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css"/>
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <link rel="stylesheet" href="{{asset("lb-faveo/css/editor.css")}}" type="text/css">
-        <link type="text/css" href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet">
-        <link type="text/css" href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">
-        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/faveo-css.css")}}">
-        <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/notification-style.css")}}">
-        <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css"/>
 
+        <link href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet" rel="stylesheet"/>
+        
+        <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet"  type="text/css"/>
+        
+        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css"/>
+
+        <link href="{{asset("lb-faveo/css/faveo-css.css")}}" rel="stylesheet" type="text/css" />
+        
+        <link href="{{asset("lb-faveo/css/notification-style.css")}}" rel="stylesheet" type="text/css" >
+        
+        <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
         <!-- Select2 -->
-        <link rel="stylesheet" href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}">
+        <link href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}" rel="stylesheet" type="text/css" />
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
         <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
+        
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
@@ -318,13 +324,7 @@
                             $underprocess = count($underprocess);
                             $closed = App\Model\helpdesk\Ticket\Tickets::where('status', '=', '2')->where('dept_id', '=', $dept->id)->get();
                             $closed = count($closed);
-                            // $underprocess = 0;
-                            // foreach ($inbox as $ticket4) {
-                            //  if ($ticket4->assigned_to == null) {
-                            //  } else {
-                            //      $underprocess++;
-                            //  }
-                            // }
+
                             if (Auth::user()->role == 'admin') {
                                 ?>
                                 <li class="treeview">
@@ -333,7 +333,7 @@
                                     </a>
                                     <ul class="treeview-menu">
                                         <li><a href="{!! url::route('dept.open.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.open') !!}<small class="label pull-right bg-green">{!! $open !!}</small></a></li>
-                                        <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.inprogress') !!}<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
+                                        <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.assigned') !!}<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
                                         <li><a href="{!! url::route('dept.closed.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.closed') !!}<small class="label pull-right bg-green">{!! $closed !!}</small></a></li>
                                     </ul>
                                 </li>
@@ -344,7 +344,7 @@
                                     </a>
                                     <ul class="treeview-menu">
                                         <li><a href="{!! url::route('dept.open.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.open') !!}<small class="label pull-right bg-green">{!! $open !!}</small></a></li>
-                                        <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.inprogress') !!}<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
+                                        <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.assigned') !!}<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
                                         <li><a href="{!! url::route('dept.closed.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.closed') !!}<small class="label pull-right bg-green">{!! $closed !!}</small></a></li>
                                     </ul>
                                 </li>
@@ -427,41 +427,38 @@
                 <strong>{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</strong> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
             </footer>
         </div><!-- ./wrapper -->
-        {{-- // <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
 
-        <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}"></script>
+    <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}" type="text/javascript"></script>
+    
+    <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
+    <!-- Bootstrap 3.3.2 JS -->
+    <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
+    <!-- Slimscroll -->
+    <script src="{{asset("lb-faveo/plugins/slimScroll/jquery.slimscroll.min.js")}}" type="text/javascript"></script>
+    <!-- FastClick -->
+    <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}"  type="text/javascript"></script>
+    <!-- AdminLTE App -->
+    <script src="{{asset("lb-faveo/js/app.min.js")}}" type="text/javascript"></script>
 
-        {{-- // <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script> --}}
-
-        <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
-        <!-- Bootstrap 3.3.2 JS -->
-        <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
-        <!-- Slimscroll -->
-        <script src="{{asset("lb-faveo/plugins/slimScroll/jquery.slimscroll.min.js")}}" type="text/javascript"></script>
-        <!-- FastClick -->
-        <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}"></script>
-        <!-- AdminLTE App -->
-        <script src="{{asset("lb-faveo/js/app.min.js")}}" type="text/javascript"></script>
-        <!-- AdminLTE for demo purposes -->
-        {{-- // <script src="{{asset("dist/js/demo.js")}}" type="text/javascript"></script> --}}
     <!-- iCheck -->
     <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
-    {{-- maskinput --}}
-    {{-- // <script src="js/jquery.maskedinput.min.js" type="text/javascript"></script> --}}
-    {{-- jquery ui --}}
+    <!-- jquery ui -->
     <script src="{{asset("lb-faveo/js/jquery.ui.js")}}" type="text/javascript"></script>
+    
     <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
+    
     <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
     <!-- Page Script -->
+    <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}" type="text/javascript" ></script>
 
-    {{-- // <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script> --}}
-    <script type="text/javascript" src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}"></script>
+    <script type="text/javascript" src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
 
-    <script type="text/javascript" src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"></script>
     <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
-    <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" ></script>
-    <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" ></script>
+    <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" type="text/javascript"></script>
+
+    <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" type="text/javascript"></script>
+
     <script>
                 function myFunction() {
 
@@ -482,7 +479,7 @@
                         cache: false,
                         success: function (html)
                         {
-//$(".city").html(html);
+
                         }
                 });
         });
@@ -513,12 +510,6 @@
         });</script>
     <script>
                 $(function() {
-                // Enable iCheck plugin for checkboxes
-                // iCheck for checkbox and radio inputs
-                // $('input[type="checkbox"]').iCheck({
-                // checkboxClass: 'icheckbox_flat-blue',
-                // radioClass: 'iradio_flat-blue'
-                // });
                 // Enable check and uncheck all functionality
                 $(".checkbox-toggle").click(function() {
                 var clicks = $(this).data('clicks');
@@ -548,26 +539,15 @@
                         $this.toggleClass("fa-star-o");
                 }
                 });
-                });</script>
-    <script type="text/javascript">
-                //     $(document).ready(function() {
-                //         $("#content").Editor();
-                //     });
-                // </script>
-   <!-- // <script src="../plugins/jQuery/jQuery-2.1.3.min.js"></script> -->
-    <script src="{{asset("lb-faveo/js/tabby.js")}}"></script>
-     <!-- // <script src="{{asset("dist/js/editor.js")}}"></script> -->
-    <!-- CK Editor -->
-    <!-- // <script src="{{asset("//cdn.ckeditor.com/4.4.3/standard/ckeditor.js")}}"></script> -->
-    {{-- // <script src="{{asset("lb-faveo/downloads/CKEditor.js")}}"></script> --}}
-<script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
-<script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
-<script>
-            // $(function () {
-            // //Add text editor
-            // $("textarea").wysihtml5();
-            // });
+                });
 </script>
+
+<script src="{{asset("lb-faveo/js/tabby.js")}}" type="text/javascript"></script>
+
+<script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
+
+<script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
+
 <script type="text/javascript">
             $.ajaxSetup({
             headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
