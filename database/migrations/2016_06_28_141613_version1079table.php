@@ -18,7 +18,11 @@ class Version1079 extends Migration
         $settings_system = DB::table('settings_system')->where('id', '=', '1')->first();
         if($settings_system != null) {
             DB::table('settings_system')->insert(['version' => $current_version]);
-            DB::table('common_settings')->insert(['option_name' => 'enable_rtl', 'option_value' => '']);            
+            DB::table('common_settings')
+                ->insert(
+                ['option_name' => 'enable_rtl', 'option_value' => ''],
+                ['option_name' => 'user_set_ticket_status', 'status' => 1]
+                );            
         }
         
     }
