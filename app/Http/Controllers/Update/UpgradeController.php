@@ -172,23 +172,31 @@ class UpgradeController extends Controller {
     }
 
     public function copyToActualDirectory($latest_version) {
-        $directory = "$this->dir/UPDATES";
-        $destination = $this->dir;
+        try {
+            echo '<ul class=list-unstyled>';
+            $directory = "$this->dir/UPDATES";
+            $destination = $this->dir;
 //        $destination = "/Applications/AMPPS/www/test/new";
-        $directories = \File::directories($directory);
+            $directories = \File::directories($directory);
 
 //        echo "current directory => $directory <br>";
 //        echo "Destination Directory => $destination <br>";
-        foreach ($directories as $source) {
-            $success = \File::copyDirectory($source, $destination);
-            echo '<p class="success">&raquo; </p>';
+            foreach ($directories as $source) {
+                $success = \File::copyDirectory($source, $destination);
+                echo '<p class="success">&raquo; </p>';
+            }
+
+            \File::deleteDirectory($directory);
+
+            $this->deleteBarNotification('new-version');
+
+            echo "<li style='color:red;'>&raquo; Faveo Updated to v" . Utility::getFileVersion() . "</li>";
+            echo '</ul>';
+        } catch (Exception $ex) {
+            echo '<ul class=list-unstyled>';
+            echo "<li style='color:red;'>" . $ex->getMessage() . "</li>";
+            echo '</ul>';
         }
-
-        \File::deleteDirectory($directory);
-
-        $this->deleteBarNotification('new-version');
-
-        echo '<p class="success">&raquo; Faveo Updated to v' . Utility::getFileVersion() . '</p>';
     }
 
     public function deleteBarNotification($key) {
