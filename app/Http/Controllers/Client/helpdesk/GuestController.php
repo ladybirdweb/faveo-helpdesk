@@ -16,6 +16,7 @@ use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Utility\CountryCode;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\User;
 use Auth;
 // classes
@@ -316,11 +317,13 @@ class GuestController extends Controller
      *
      * @return type
      */
-    public function get_ticket_email($id)
+    public function get_ticket_email($id, CommonSettings $common_settings)
     {
         $id1 = \Crypt::decrypt($id);
-
-        return view('themes.default1.client.helpdesk.ckeckticket', compact('id'));
+        $common_setting = $common_settings->select('status')
+                ->where('option_name', '=', 'user_set_ticket_status')
+                ->first();
+        return view('themes.default1.client.helpdesk.ckeckticket', compact('id', 'common_setting'));
     }
 
     /**

@@ -694,12 +694,13 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('create-ticket', ['as' => 'form', 'uses' => 'Client\helpdesk\FormController@getForm']); //getform
     Route::get('mytickets/{id}', ['as' => 'ticketinfo', 'uses' => 'Client\helpdesk\GuestController@singleThread']); //detail ticket information
     Route::post('checkmyticket', 'Client\helpdesk\UnAuthController@PostCheckTicket'); //ticket ckeck
+    
+    Route::get('check_ticket/{id}', ['as' => 'check_ticket', 'uses' => 'Client\helpdesk\GuestController@get_ticket_email']); //detail ticket information
     Breadcrumbs::register('check_ticket', function ($breadcrumbs, $id) {
         $page = \App\Model\helpdesk\Ticket\Tickets::whereId(1)->first();
-        $breadcrumbs->parent('dashboard');
+        $breadcrumbs->parent('ticket2');
         $breadcrumbs->push('Check Ticket');
     });
-    Route::get('check_ticket/{id}', ['as' => 'check_ticket', 'uses' => 'Client\helpdesk\GuestController@get_ticket_email']); //detail ticket information
 // show ticket via have a ticket
     Route::get('show-ticket/{id}/{code}', ['as' => 'show.ticket', 'uses' => 'Client\helpdesk\UnAuthController@showTicketCode']); //detail ticket information
     Breadcrumbs::register('show.ticket', function ($breadcrumbs) {

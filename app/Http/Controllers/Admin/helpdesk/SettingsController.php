@@ -146,7 +146,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time)
+    public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time, CommonSettings $common_settings)
     {
         try {
             /* fetch the values of system from system table */
@@ -155,8 +155,11 @@ class SettingsController extends Controller
             $departments = $department->get();
             /* Fetch the values from Timezones table */
             $timezones = $timezone->get();
+            /* Fetch status value of common settings */
+            $common_setting = $common_settings->select('status')->where('option_name', '=', 'user_set_ticket_status')->first();
+            // /dd($common_setting);
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time'));
+            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -174,6 +177,7 @@ class SettingsController extends Controller
     public function postsystem($id, System $system, SystemRequest $request)
     {
         try {
+            //dd($request->user_set_ticket_status);
             /* fetch the values of system request  */
             $systems = $system->whereId('1')->first();
             /* fill the values to coompany table */
@@ -186,6 +190,12 @@ class SettingsController extends Controller
                 $rtl->option_value = 0;
             }
             $rtl->save();
+
+            $usts = CommonSettings::where('option_name', '=', 'user_set_ticket_status')->first();
+            if ($usts->status != $request->user_set_ticket_status){
+                $usts->status = $request->user_set_ticket_status;
+                $usts->save();
+            }
             /* redirect to Index page with Success Message */
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {

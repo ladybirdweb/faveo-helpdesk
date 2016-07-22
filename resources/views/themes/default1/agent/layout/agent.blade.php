@@ -85,7 +85,7 @@
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         @if($replacetop==0)
                         <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
-                            <li @yield('Dashboard')><a data-target="#tabA" href="#">{!! Lang::get('lang.dashboard') !!}</a></li>
+                            <li @yield('Dashboard')><a data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard();">{!! Lang::get('lang.dashboard') !!}</a></li>
                             <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
@@ -249,7 +249,7 @@
                             $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
                             $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
                             $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
-                            $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
+                            $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id', '=', Auth::user())->get();
                         }
                         if (Auth::user()->role == 'agent') {
                             $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
@@ -372,8 +372,6 @@
                             @if($replacetop==0)
                             <div class="tabs-pane @yield('dashboard-bar')"  id="tabA">
                                 <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('dashboard') ><a href="{{url('dashboard')}}">{!! Lang::get('lang.dashboard') !!}</a></li>
-                                    <li id="bar" @yield('profile') ><a href="{{url('profile')}}">{!! Lang::get('lang.profile') !!}</a></li>
                                 </ul>
                             </div>
                             <div class="tabs-pane @yield('user-bar')" id="tabB">
@@ -574,6 +572,11 @@
             $.ajaxSetup({
             headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
             });
+</script>
+<script type="text/javascript">
+    function clickDashboard() {
+        window.location = "{{URL::route('dashboard')}}";
+    }
 </script>
 @yield('FooterInclude')
 </body>

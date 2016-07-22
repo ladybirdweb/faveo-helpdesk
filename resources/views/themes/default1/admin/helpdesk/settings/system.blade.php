@@ -109,7 +109,7 @@ class="active"
                 </div>
             </div>
            
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     {!! Form::label('status',Lang::get('lang.status')) !!}
                     <div class="row">
@@ -122,7 +122,21 @@ class="active"
                     </div>
                 </div>
             </div>
-            
+            <div class="col-md-3">
+                <div class="form-group">
+                    {!! Form::label('user_set_ticket_status',Lang::get('lang.user_set_ticket_status')) !!}
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <input type="radio" name="user_set_ticket_status" value="0" @if($common_setting->status == '0')checked="true" @endif>{{Lang::get('lang.no')}}
+                        </div>
+                        <div class="col-xs-6">
+                            <input type="radio" name="user_set_ticket_status" value="1" @if($common_setting->status == '1')checked="true" @endif>{{Lang::get('lang.yes')}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">    
             <div class="col-md-5">
                 <div class="form-group">
                     {!! Form::label('status',Lang::get('lang.rtl')) !!}
