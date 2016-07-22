@@ -100,7 +100,6 @@ class UpgradeController extends Controller {
     }
 
     public function doUpdate() {
-        ini_set('memory_limit', '-1');
         try {
             Artisan::call('down');
             $update = $this->dir . '/UPDATES';

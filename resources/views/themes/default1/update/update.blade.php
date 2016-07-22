@@ -1,5 +1,8 @@
 @extends('themes.default1.admin.layout.admin')
 @section('content')
+<?php
+        ini_set('memory_limit', '-1');
+?>
 <div class="box box-primary">
     <div class="row">
         <div class="col-md-12">
