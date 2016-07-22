@@ -162,7 +162,7 @@ class UpgradeController extends Controller {
                 }
             }
             echo '</ul>';
-            Artisan::call('migrate', ['--force' => true]);
+            //Artisan::call('migrate', ['--force' => true]);
             return true;
         } catch (Exception $ex) {
             echo '<ul class=list-unstyled>';
@@ -183,20 +183,21 @@ class UpgradeController extends Controller {
 //        echo "Destination Directory => $destination <br>";
             foreach ($directories as $source) {
                 $success = \File::copyDirectory($source, $destination);
-                echo '<p class="success">&raquo; </p>';
+                echo '<li class="success">&raquo; </li>';
             }
 
             \File::deleteDirectory($directory);
 
             $this->deleteBarNotification('new-version');
 
-            echo "<li style='color:red;'>&raquo; Faveo Updated to v" . Utility::getFileVersion() . "</li>";
+            echo "<li style='color:green;'>&raquo; Faveo Updated to v" . Utility::getFileVersion() . "</li>";
             echo '</ul>';
         } catch (Exception $ex) {
             echo '<ul class=list-unstyled>';
             echo "<li style='color:red;'>" . $ex->getMessage() . "</li>";
             echo '</ul>';
         }
+        exit();
     }
 
     public function deleteBarNotification($key) {

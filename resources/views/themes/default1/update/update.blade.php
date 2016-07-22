@@ -68,6 +68,7 @@
                                                 $controller->copyToActualDirectory($latest_version);
                                             } elseif ($found != true) {
                                                 echo '<p>&raquo; No update is available.</p>';
+                                                exit();
                                             }
                                             ?>
                                         </div>
@@ -75,8 +76,10 @@
                             </div>
                             <?php
                         }
-                    } else
+                    } else{
                         echo '<p>Could not find latest realeases.</p>';
+                    }
+                    
                     ?>
 
                 </div>
@@ -92,3 +95,5 @@
     </script>
 
     @stop
+    
+   
