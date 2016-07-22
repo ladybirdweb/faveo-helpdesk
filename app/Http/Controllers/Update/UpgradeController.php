@@ -101,6 +101,8 @@ class UpgradeController extends Controller {
 
     public function doUpdate() {
         try {
+            $memory_limit = ini_get('memory_limit');
+            dd($memory_limit);
             Artisan::call('down');
             $update = $this->dir . '/UPDATES';
             //Open The File And Do Stuff
