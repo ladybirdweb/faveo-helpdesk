@@ -16,9 +16,11 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
             </div> 
             <div class="col-md-3">
                 <div class="pull-right">
+
                     <!-- <button type="button" class="btn btn-default"><i class="fa fa-edit" style="color:green;"> </i> Edit</button> -->                            
                     {{-- <button type="button" class="btn btn-default"><i class="fa fa-print" style="color:blue;"> </i> {!! link_to_route('ticket.print','Print',[$tickets->id]) !!}</button> --}}
                     <!-- </div> -->
+                    @if( $common_setting->status == '1')
                     <div class="btn-group"> 
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-exchange" style="color:teal;"> </i> 
                             {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
@@ -30,7 +32,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                             <li><a href="#" id="close"><i class="fa fa-check" style="color:#15F109;"> </i>{!! Lang::get('lang.close') !!}</a></li>
                             <li><a href="#" id="resolved"><i class="fa fa-check-circle " style="color:#0EF1BE;"> </i> {!! Lang::get('lang.resolved') !!}</a></li>
                         </ul>
-                    </div>
+                    </div>@endif
                     {!! Form::close() !!}
                 </div>
             </div>
