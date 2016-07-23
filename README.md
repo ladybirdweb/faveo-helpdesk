@@ -17,7 +17,7 @@ Faveo is designed & developed by <a href="http://www.ladybirdweb.com/" target="_
 </ul>
 
 
-<h3><a id="user-content-faveo-user-manual" href="https://github.com/ladybirdweb/faveo-helpdesk#faveo-user-manual" aria-hidden="true"></a>Faveo Documenation</h3>
+<h3><a id="user-content-faveo-user-manual" href="https://github.com/ladybirdweb/faveo-helpdesk#faveo-user-manual" aria-hidden="true"></a>Faveo Documentation</h3>
 <ul>
 <li> <a href="http://www.ladybirdweb.com/support/knowledgebase" target="_blank">Faveo user Manual</a></li>
 <li><a href="https://docs.google.com/document/d/1TEUVyFSzlNRIQGHVK88rzBtYbhyk2FNb3TeekjfsXQA/" target="_blank">Faveo API Documentation</a></li>
