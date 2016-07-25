@@ -8,7 +8,6 @@ use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
-use App\Model\helpdesk\Settings\CommonSettings;
 use App\User;
 use Auth;
 use Mail;

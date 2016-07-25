@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         'App\Console\Commands\Inspire',
+        'App\Console\Commands\SendReport',
     ];
 
     /**
@@ -25,12 +26,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('inspire')
-                 ->hourly();
-
-        $schedule->call(function () {
-            $user = new User();
-            $user->save();
-        })->everyFiveMinutes();
+        $schedule->command('report:send')->everyMinute()->withoutOverlapping();
     }
 }
