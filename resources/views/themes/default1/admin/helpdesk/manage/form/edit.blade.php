@@ -28,7 +28,6 @@ class="active"
                 $form = App\Http\Controllers\Admin\helpdesk\FormController::getForm($field);
                 ?>
                 <div class="col-md-10">
-                {!! Form::label($field->label,$field->label) !!}
                 {!! $form !!}
                 </div>
                 <div class="col-md-2">
