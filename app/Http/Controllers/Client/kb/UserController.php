@@ -107,7 +107,7 @@ class UserController extends Controller {
         $date = \Carbon\Carbon::now()->toDateTimeString();
         $arti = $article->where('slug', $slug);
         
-        if (\Auth::user()->role == 'user' || !Auth::check()) {
+        if (!Auth::check()|| \Auth::user()->role == 'user') {
             $arti = $arti->where('status', '1');
             $arti = $arti->where('publish_time', '<', $date);
         }
