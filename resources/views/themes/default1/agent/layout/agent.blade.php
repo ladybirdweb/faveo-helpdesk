@@ -103,6 +103,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             @if(Auth::user()->role == 'admin')
                             <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
+                            @include('themes.default1.update.notification')
                             @endif
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown notifications-menu" id="myDropdown">
