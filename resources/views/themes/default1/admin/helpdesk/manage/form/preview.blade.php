@@ -43,44 +43,40 @@ class="active"
 <!-- -->    
 <div class="box">
     <div class="box-header">
-        <?php $id = App\Model\helpdesk\Form\Forms::where('id', $id)->first(); ?>
-        <h3 class="box-title">{!! Lang::get('lang.form_name') !!} : {!! $id->formname !!}</h3>
+        <h3 class="box-title">{!! Lang::get('lang.form_name') !!} : {!! $form->formname !!}</h3>
     </div>
     <div class="box-body">
+        @foreach($fields as $field)
         <?php
-        $i = $id->id;
-        $form_datas = App\Model\helpdesk\Form\Fields::where('forms_id', '=', $i)->get();
-//        dd($form_datas);
-        foreach ($form_datas as $form_data) {
-            if ($form_data->type == "select") {
-                $form_fields = explode(',', $form_data->value);
-                $var = "";
-                foreach ($form_fields as $form_field) {
-                    $var .= '<option value="' . $form_field . '">' . $form_field . '</option>';
-                }
-                echo '<label>' . ucfirst($form_data->label) . '</label><select class="form-control" name="' . $form_data->name . '">' . $var . '</select>';
-            } elseif ($form_data->type == "radio") {
-                $type2 = $form_data->value;
-                $vals = explode(',', $type2);
-                echo '<br/><label>' . ucfirst($form_data->label) . '</label><br/>';
-                foreach ($vals as $val) {
-                    echo '<input type="' . $form_data->type . '" name="' . $form_data->name . '"> ' . $val . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-                }
-            } elseif ($form_data->type == "textarea") {
-                $type3 = $form_data->value;
-                echo '<label>' . $form_data->label . '</label></br><textarea name="'.$form_data->name.'" class="form-control" style="height:15%;"></textarea>';
-            } elseif ($form_data->type == "checkbox") {
-                $type4 = $form_data->value;
-                $checks = explode(',', $type4);
-                echo '<br/><br/><label>' . ucfirst($form_data->label) . '</label><br/>';
-                foreach ($checks as $check) {
-                    echo '<input type="' . $form_data->type . '" name="' . $form_data->name . '">&nbsp&nbsp' . $check;
-                }
-            } else {
-                echo '<label>' . ucfirst($form_data->label) . '</label><input type="' . $form_data->type . '" class="form-control"   name="' . $form_data->name . '" />';
+        $form = App\Http\Controllers\Admin\helpdesk\FormController::getForm($field);
+        ?>
+
+        {!! $form !!}
+          
+<!--        <script>
+            $("[name='{{$field->name}}']").on('change', function () {
+                var valueid = $("[name='{{$field->name}}']").val();
+                alert(valueid);
+                send(valueid);
+            });
+            function send(valueid) {
+                $.ajax({
+                    url: "{{url('forms/render/child/'.$field->id)}}",
+                    dataType: "html",
+                    data: {'valueid': valueid},
+                    success: function (response) {
+                        $("#{{$field->name}}").html(response);
+                    },
+                    error: function (response) {
+                        $("#{{$field->name}}").html(response);
+                    }
+                });
             }
-        }
-        ?>             
+        </script>-->
+        @endforeach         
     </div>
 </div>
+@stop
+@section('FooterInclude')
+
 @stop
