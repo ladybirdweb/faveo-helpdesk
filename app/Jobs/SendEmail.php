@@ -35,6 +35,7 @@ class SendEmail extends Job implements ShouldQueue
      */
     public function handle(PhpMailController $PhpMailController)
     {
-        return $PhpMailController->sendEmail($this->from, $this->to, $this->message);
+        $p = $PhpMailController->sendEmail($this->from, $this->to, $this->message);
+        return $p;
     }
 }

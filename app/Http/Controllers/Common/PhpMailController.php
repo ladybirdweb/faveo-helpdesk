@@ -163,7 +163,7 @@ class PhpMailController extends Controller {
             }
 
             $this->setMailConfig($from_address);
-
+            
             $recipants = $this->checkElement('email', $to);
             $recipantname = $this->checkElement('name', $to);
             $cc = $this->checkElement('cc', $to);
@@ -219,7 +219,7 @@ class PhpMailController extends Controller {
 
     public function laravelMail($to, $toname, $subject, $data, $cc, $attach) {
         try {
-            $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach) {
+            $mail = Mail::queue('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach) {
 
                         $m->to($to, $toname)->subject($subject);
 

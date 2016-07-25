@@ -32,17 +32,23 @@ class NotificationController extends Controller {
      *  This function is for sending daily report/notification about the system.
      * */
     public function send_notification() {
+        //dd('sdckjdsc');
         //fetching email settings
         $email = Email::where('id', '=', '1')->first();
+        //dd('yes');
         $send = 0;
+        $date = [0];
+       // dd($date);
         // checking if the daily notification is enabled or not
         if ($email->notification_cron == 1) {
             // checking if current date is equal to the last entered daily notification log
             $notification = Log_notification::where('log', '=', 'NOT-1')->orderBy('id', 'DESC')->first();
-            $date = explode(' ', $notification->created_at);
+            if($notification){
+                $date = explode(' ', $notification->created_at);
+            }
             if (date('Y-m-d') !== $date[0]) {
                 // creating a daily notification log
-                Log_notification::create(['log' => 'NOT-1']);
+               
                 $company = $this->company();
                 // Send notification details to admin
                 $send += $this->send_notification_to_admin($company);
@@ -53,6 +59,7 @@ class NotificationController extends Controller {
                 // Send notification details to all the agents
                 $send += $this->send_notification_to_agent($company);
             }
+             Log_notification::create(['log' => 'NOT-1']);
         }
         return $send;
     }

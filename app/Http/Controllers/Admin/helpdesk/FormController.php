@@ -332,7 +332,6 @@ class FormController extends Controller {
         $fieldid = $request->input('fieldid');
         $field_values = new \App\Model\helpdesk\Form\FieldValue();
         $field_value = $field_values->where('field_id', $fieldid)->where('field_value', $value)->first();
-        //dd($field_value);
         $child = "";
         if ($field_value) {
             $child = $field_value->child_id;

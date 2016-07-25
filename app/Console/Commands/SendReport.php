@@ -45,7 +45,6 @@ class SendReport extends Command {
     public function handle() {
         try {
             $report = $this->report->send_notification();
-           // dd($report);
             if ($report !== 0) {
                 \Log::info("Report has send");
                 $this->info("Report has send");
@@ -53,7 +52,7 @@ class SendReport extends Command {
                $this->info("Nothing to send"); 
             }
         } catch (Exception $ex) {
-            dd($ex);
+            //dd($ex);
             $this->error($ex->getMessage());
         }
     }
