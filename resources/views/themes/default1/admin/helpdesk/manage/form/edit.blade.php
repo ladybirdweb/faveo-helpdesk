@@ -32,7 +32,7 @@ class="active"
                 {!! $form !!}
                 </div>
                 <div class="col-md-2">
-                    <a href="#" class="btn btn-primary">Add Child</a>
+                    @include('themes.default1.admin.helpdesk.manage.form.childpopup')
                 </div>
                 @endforeach
 
