@@ -59,7 +59,7 @@ class="active"
                     <td>{!! $form->formname !!}</td>
                     <td>
                         <div class="btn-group">
-                            {!! link_to_route('forms.edit', Lang::get('lang.view_this_form') ,[$form->id],['id'=>'View','class'=>'btn btn-primary btn-sm']) !!}
+                            {!! link_to_route('forms.edit', Lang::get('lang.edit') ,[$form->id],['id'=>'View','class'=>'btn btn-primary btn-sm']) !!}
                         </div>
                         <div class="btn-group">
                             {!! link_to_route('forms.show', Lang::get('lang.view_this_form') ,[$form->id],['id'=>'View','class'=>'btn btn-primary btn-sm']) !!}
