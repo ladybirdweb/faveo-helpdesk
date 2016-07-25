@@ -219,7 +219,7 @@ class PhpMailController extends Controller {
 
     public function laravelMail($to, $toname, $subject, $data, $cc, $attach) {
         try {
-            $mail = Mail::queue('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach) {
+            $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach) {
 
                         $m->to($to, $toname)->subject($subject);
 

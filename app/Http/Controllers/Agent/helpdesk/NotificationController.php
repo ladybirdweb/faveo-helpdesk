@@ -90,8 +90,8 @@ class NotificationController extends Controller {
                 'scenario' => null,
                 'body' => $contents
             ];
-            return $this->dispatch((new \App\Jobs\SendEmail($from, $to, $message)));
-            //$this->PhpMailController->sendEmail($from,$to,$message);
+//            return $this->dispatch((new \App\Jobs\SendEmail($from, $to, $message)));
+            return $this->PhpMailController->sendEmail($from,$to,$message);
         }
     }
 
