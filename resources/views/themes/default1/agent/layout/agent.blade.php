@@ -461,12 +461,6 @@
     <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" type="text/javascript"></script>
 
     <script>
-                function myFunction() {
-
-                document.getElementById("count").innerHTML = "0";
-                }
-    </script>
-    <script>
         $(document).ready(function () {
 
         $('.noti_User').click(function () {

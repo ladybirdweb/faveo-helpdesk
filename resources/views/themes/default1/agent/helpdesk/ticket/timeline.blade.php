@@ -619,6 +619,9 @@ if ($thread->title != "") {
                                     ?>
                                     <div class="timeline-item">
                                         <span style="color:#fff;"><div class="pull-right">   <table><tbody>
+                                            @if($role)
+                                                @if($role->role != null)
+                                                    @if($role->role != 'user' && $conversation->is_internal != 1)
                                                         @foreach($ratings as $rating) 
                                                         @if($rating->rating_area == 'Comment Area')
                                                         <?php
@@ -631,14 +634,17 @@ if ($thread->title != "") {
                                                         ?>
                                                         <tr>
                                                             <th><div class="ticketratingtitle" style="color:#3c8dbc;" >{!! $rating->name !!} &nbsp;</div></th>&nbsp
-                                                    <td style="button:disabled;">
+                                                        <td style="button:disabled;">
                                                         <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
                                                             <input type="radio" class="star star-rating-readonly" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
-        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;   
-                                                    </td> 
-                                                    </tr>
+                                                        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;   
+                                                        </td> 
+                                                        </tr>
+                                                        @endif
+                                                        @endforeach
                                                     @endif
-                                                    @endforeach
+                                                @endif
+                                            @endif
                                                     </tbody></table></div>  
                                         </span>
                                         <h3 class="timeline-header">
