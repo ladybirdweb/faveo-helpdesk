@@ -11,37 +11,6 @@ active
 
 
 @section('content')
-
-<?php  //dd(ini_get('disable_functions')); ?> 
-
-
-<?php
-// $sets = explode(",", ini_get('disable_functions'));
-// $required_functions = ['escapeshellarg'];
-// foreach ($sets as $key) {
-//     $key = trim($key);
-//     foreach ($required_functions as $value) {
-//         if($key == $value) {
-//             if (strpos(ini_get('disable_functions'), $key) !== false) {
-//                 dd("found");
-//             } else {
-//                 dd("not - found");
-//             }
-//         }
-//     }
-// }
-// dd($sets);
-
-// // foreach ( as $key => $value) {
-// //     # code...
-// // }
-// if (strpos($to_check, $statement) !== false) {
-//             return true;
-//         } else {
-//             return false;
-//         }
-?>
-
  <div id="form-content">
 <center><h1>Environment Test</h1></center>
          @if (Session::has('fail_to_change'))
@@ -253,30 +222,6 @@ function validate_extensions(&$results) {
     return $ok;
 } // validate_extensions
 
-/**
- * function to check if there are laravel required functions are disabled
- */
-function checkDisabledFunctions(&$results) {
-    $ok = true;
-    $sets = explode(",", ini_get('disable_functions'));
-    $required_functions = ['escapeshellarg'];
-    // dd($required_functions,$sets);
-    foreach ($sets as $key) {
-        $key = trim($key);
-        foreach ($required_functions as $value) {
-            if($key == $value) {
-                if (strpos(ini_get('disable_functions'), $key) !== false) {
-                    $results[] = new TestResult("Function '$value' is required in order to run Faveo Helpdesk. Please check php.ini to enable this function or contact your server administrator", STATUS_ERROR);
-                    $ok = false;
-                } else {
-                    $results[] = new TestResult("All required functions found", STATUS_OK);
-                }
-            }
-        }
-    }
-    return $ok;
-}
-
 // ---------------------------------------------------
 //  Do the magic
 // ---------------------------------------------------
@@ -287,7 +232,6 @@ $php_ok = validate_php($results);
 $memory_ok = validate_memory_limit($results);
 $extensions_ok = validate_extensions($results);
 $file_permission = checkFilePermission($results);
-$required_functions = checkDisabledFunctions($results);
 ?>
 <p class="setup-actions step">
 <?php 
@@ -297,7 +241,7 @@ foreach ($results as $result) {
 ?>
 </p>
 <?php
-if ($php_ok && $memory_ok && $extensions_ok && $file_permission && $required_functions) {
+if ($php_ok && $memory_ok && $extensions_ok && $file_permission ) {
     ?>
 </div>  
 
