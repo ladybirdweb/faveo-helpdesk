@@ -49,10 +49,10 @@ class AppServiceProvider extends ServiceProvider
     {
         \View::composer('themes.default1.update.notification', function () {
             $notification = new BarNotification();
-            $data = [
-                'data' => $notification->where('value','!=','')->get(),
+            $not = [
+                'notification' => $notification->where('value','!=','')->get(),
             ];
-            view()->share($data);
+            view()->share($not);
         });
     }
 }
