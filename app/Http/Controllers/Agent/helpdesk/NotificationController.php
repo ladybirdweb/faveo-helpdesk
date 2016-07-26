@@ -46,7 +46,7 @@ class NotificationController extends Controller {
             if($notification){
                 $date = explode(' ', $notification->created_at);
             }
-            if (date('Y-m-d') !== $date[0]) {
+           // if (date('Y-m-d') !== $date[0]) {
                 // creating a daily notification log
                
                 $company = $this->company();
@@ -58,7 +58,7 @@ class NotificationController extends Controller {
                 $send += $this->send_notification_to_manager($company);
                 // Send notification details to all the agents
                 $send += $this->send_notification_to_agent($company);
-            }
+            //}
              Log_notification::create(['log' => 'NOT-1']);
         }
         return $send;
@@ -90,8 +90,8 @@ class NotificationController extends Controller {
                 'scenario' => null,
                 'body' => $contents
             ];
-//            return $this->dispatch((new \App\Jobs\SendEmail($from, $to, $message)));
-            return $this->PhpMailController->sendEmail($from,$to,$message);
+            return $this->dispatch((new \App\Jobs\SendEmail($from, $to, $message)));
+            //return $this->PhpMailController->sendEmail($from,$to,$message);
         }
     }
 

@@ -218,6 +218,7 @@ class PhpMailController extends Controller {
 
 
     public function laravelMail($to, $toname, $subject, $data, $cc, $attach) {
+        
         try {
             $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach) {
 

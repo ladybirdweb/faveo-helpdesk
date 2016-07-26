@@ -16,3 +16,6 @@ Homestead.json
 /public/lb-faveo/media/
 /public/uploads
 /public/photos/
+/app/FaveoJob
+
+config/app.php
