@@ -58,7 +58,7 @@ class="active"
                             <b>{!! Lang::get('lang.internal_notes') !!}</b>  
                             <br/> <center>{!! $orgs->internal_notes !!}</center></a></li>@endif
                 </ul>
-                <button data-toggle="modal" data-target="#assign_head" id="button_select" class="btn btn-primary btn-flat btn-block">{!! Lang::get('lang.select_department_manager') !!}</button>
+                <button data-toggle="modal" data-target="#assign_head" id="button_select" class="btn btn-primary btn-flat btn-block">{!! Lang::get('lang.select_organization_manager') !!}</button>
             </div>
         </div>
         <div id="refresh1"> 

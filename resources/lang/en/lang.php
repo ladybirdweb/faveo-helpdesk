@@ -1007,6 +1007,7 @@ return [
     'organization_profile'                 => 'Organization Profile',
     'organization-s_head'                  => "Organization's Head",
     'select_department_manager'            => 'Select Department Manager',
+    'select_organization_manager'          => "Select Organization Manager",
     'users_of'                             => 'Users of',
     'organization_created_successfully'    => 'Organization  Created Successfully',
     'organization_can_not_create'          => 'Organization can not Create',
