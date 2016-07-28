@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
  *
  * @package LaravelFCM\Response
  */
-class GroupResponse extends BaseResponse {
+class GroupResponse extends BaseResponse implements GroupResponseContract{
 
 	const FAILED_REGISTRATION_IDS = "failed_registration_ids";
 

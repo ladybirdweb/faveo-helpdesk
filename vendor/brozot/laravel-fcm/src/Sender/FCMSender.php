@@ -39,17 +39,14 @@ class FCMSender extends BaseSender {
 	{
 		$response = null;
 
-		if (is_array($to)) {
+
+		if (is_array($to) && !empty($to)) {
+
 			$partialTokens = array_chunk($to, self::MAX_TOKEN_PER_REQUEST, false);
 			foreach ($partialTokens as $tokens) {
 				$request = new Request($tokens, $options, $notification, $data);
-				
-				try {
-					$responseGuzzle = $this->client->post($this->url, $request->build());
-				}
-				catch (ClientException $e) {
-					$responseGuzzle = $e->getResponse();
-				}
+
+				$responseGuzzle = $this->post($request);
 
 				$responsePartial = new DownstreamResponse($responseGuzzle, $tokens);
 				if (!$response) {
@@ -62,8 +59,9 @@ class FCMSender extends BaseSender {
 		}
 		else {
 			$request = new Request($to, $options, $notification, $data);
-			$response = $this->client->post($this->url, $request->build());
-			$response = new DownstreamResponse($response, $to);
+			$responseGuzzle = $this->post($request);
+
+			$response = new DownstreamResponse($responseGuzzle, $to);
 		}
 
 		return $response;
@@ -83,14 +81,9 @@ class FCMSender extends BaseSender {
 	{
 		$request = new Request($notificationKey, $options, $notification, $data);
 
-		try {
-			$response = $this->client->post($this->url, $request->build());
-		}
-		catch (ClientException $e) {
-			$response = $e->getResponse();
-		}
+		$responseGuzzle = $this->post($request);
 
-		return new GroupResponse($response, $notificationKey);
+		return new GroupResponse($responseGuzzle, $notificationKey);
 	}
 
 	/**
@@ -107,15 +100,10 @@ class FCMSender extends BaseSender {
 	{
 
 		$request = new Request(null, $options, $notification, $data, $topics);
-		try {
-			$response = $this->client->post($this->url, $request->build());
-		}
-		catch (ClientException $e) {
-			$response = $e->getResponse();
-		}
 
+		$responseGuzzle = $this->post($request);
 
-		return new TopicResponse($response, $topics);
+		return new TopicResponse($responseGuzzle, $topics);
 	}
 
 
@@ -127,5 +115,24 @@ class FCMSender extends BaseSender {
 	protected function getUrl()
 	{
 		return $this->config[ 'server_send_url' ];
+	}
+
+	/**
+	 * @internal
+	 *
+	 * @param $request
+	 *
+	 * @return null|\Psr\Http\Message\ResponseInterface
+	 */
+	private function post($request)
+	{
+		try {
+			$responseGuzzle = $this->client->post($this->url, $request->build());
+		}
+		catch (ClientException $e) {
+			$responseGuzzle = $e->getResponse();
+		}
+
+		return $responseGuzzle;
 	}
 }

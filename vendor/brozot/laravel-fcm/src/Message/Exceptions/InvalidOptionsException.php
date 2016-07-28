@@ -1,7 +1,6 @@
 <?php namespace LaravelFCM\Message\Exceptions;
 
 use Exception;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 /**
  * Class InvalidOptionsException

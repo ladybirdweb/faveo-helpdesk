@@ -10,6 +10,13 @@ class Bugsnag_Client
     private $config;
 
     /**
+     * The diagnostics instance.
+     *
+     * @var Bugsnag_Diagnostics
+     */
+    private $diagnostics;
+
+    /**
      * The notification instance.
      *
      * @var Bugsnag_Notification|null
@@ -17,7 +24,7 @@ class Bugsnag_Client
     private $notification;
 
     /**
-     * Initialize Bugsnag.
+     * Create a new client instance.
      *
      * @param string $apiKey your Bugsnag API key
      *
@@ -89,7 +96,7 @@ class Bugsnag_Client
     /**
      * Set which release stages should be allowed to notify Bugsnag.
      *
-     * Eg array("production", "development").
+     * Eg array('production', 'development').
      *
      * @param array $notifyReleaseStages array of release stages to notify for
      *
@@ -212,7 +219,7 @@ class Bugsnag_Client
     /**
      * Set the strings to filter out from metaData arrays before sending then.
      *
-     * Eg. array("password", "credit_card").
+     * Eg. array('password', 'credit_card').
      *
      * @param array $filters an array of metaData filters
      *
@@ -301,9 +308,9 @@ class Bugsnag_Client
      *
      * @param array $metaData an array of arrays of custom data. Eg:
      *        array(
-     *            "user" => array(
-     *                "name" => "James",
-     *                "email" => "james@example.com"
+     *            'user' => array(
+     *                'name' => 'James',
+     *                'email' => 'james@example.com'
      *            )
      *        )
      * @param bool $merge optionally merge the meta data
@@ -326,10 +333,10 @@ class Bugsnag_Client
      *
      * @param array $proxySettings an array with proxy settings. Eg:
      *        array(
-     *            'host'     => "bugsnag.com",
+     *            'host'     => 'bugsnag.com',
      *            'port'     => 42,
-     *            'user'     => "username"
-     *            'password' => "password123"
+     *            'user'     => 'username'
+     *            'password' => 'password123'
      *        )
      *
      * @return $this
@@ -367,12 +374,12 @@ class Bugsnag_Client
      * // Adding meta-data example
      * function before_bugsnag_notify($error) {
      *     $error->addMetaData(array(
-     *         "user" => array(
-     *             "name" => "James"
+     *         'user' => array(
+     *             'name' => 'James'
      *         )
      *     ));
      * }
-     * $bugsnag->setBeforeNotifyFunction("before_bugsnag_notify");
+     * $bugsnag->setBeforeNotifyFunction('before_bugsnag_notify');
      *
      * @param callable $beforeNotifyFunction
      *
@@ -589,11 +596,6 @@ class Bugsnag_Client
      *
      * Called when the PHP process has finished running. Should only be called
      * internally by PHP's register_shutdown_function.
-     *
-     * @param int    $errno   the level of the error raised
-     * @param string $errstr  the error message
-     * @param string $errfile the filename that the error was raised in
-     * @param int    $errline the line number the error was raised at
      *
      * @return void
      */

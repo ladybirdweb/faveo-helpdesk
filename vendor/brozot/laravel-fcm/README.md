@@ -5,53 +5,50 @@
 
 ## Introduction
 
-Laravel-FCM is an easy to use package working with both Laravel and Lumen for sending push notification with [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/). (FCM). 
+Laravel-FCM is an easy to use package working with both Laravel and Lumen for sending push notification with [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/) (FCM). 
 
-It currently supports : 
+It currently **only supports HTTP protocol** for :
 
-**Http protocol**
-
-- Sending a downstream message to one or multiple devices
-- Manage groups and sending message to a group
-- Sending topics message
+- sending a downstream message to one or multiple devices
+- managing groups and sending message to a group
+- sending topics messages
 
 > Note: The XMPP protocol is not currently supported.
 
+
 ## Installation
 
-To get the latest version of Laravel-FCM on your project, require it from "composer".
+To get the latest version of Laravel-FCM on your project, require it from "composer":
 
-```
-$ composer require brozot/laravel-fcm
-```
 
-or you can add it directly in your composer.json file:
+	$ composer require brozot/laravel-fcm
 
-```
-{
-    "require": {
-        "brozot/laravel-fcm": "^1.0.0"
-    }
-}
-```
+
+Or you can add it directly in your composer.json file:
+
+
+	{
+    	"require": {
+        	"brozot/laravel-fcm": "^1.0.0"
+    	}
+	}
+
 
 ### Laravel
 
-Register the provider directly in your app configuration file config/app.php ```config/app.php```
+Register the provider directly in your app configuration file config/app.php `config/app.php`:
 
-```
+```php
 'providers' => [
-	...
+	// ...
 	
 	LaravelFCM\FCMServiceProvider::class 
 ]
 ```
 
-Add the facades in the same file.
+Add the facade aliases in the same file:
 
-You need to add the facade **"FCMGroup"**, only if you want managing groups message in your application.
-
-```
+```php
 'aliases' => [
 	...
 	'FCM'      => LaravelFCM\Facades\FCM::class,
@@ -59,11 +56,13 @@ You need to add the facade **"FCMGroup"**, only if you want managing groups mess
 ]
 ```
 
-Publish the fcm config file with the following command:
+> Note: The `FCMGroup` facade is needed only if you want to manage groups messages in your application.
 
-```
-$ php artisan vendor:publish
-```
+Publish the package config file using the following command:
+
+
+	$ php artisan vendor:publish
+
 
 ### Lumen
 
@@ -71,13 +70,13 @@ Register the provider in your boostrap app file ```boostrap/app.php```
 
 Add the following line in the "Register Service Providers"  section at the bottom of the file. 
 
-```
+```php
 $app->register(LaravelFCM\FCMServiceProvider::class);
 ```
 
 For facades, add the following lines in the section "Create The Application" . FCMGroup facade is only necessary if you want to use groups message in your application.
 
-```
+```php
 class_alias(\LaravelFCM\Facades\FCM::class, 'FCM');
 class_alias(\LaravelFCM\Facades\FCMGroup::class, 'FCMGroup');
 ```
@@ -85,39 +84,46 @@ class_alias(\LaravelFCM\Facades\FCMGroup::class, 'FCMGroup');
 Copy the config file ```fcm.php``` manually from the directory ```/vendor/brozot/laravel-fcm/config``` to the directory ```/config ``` (you may need to create this directory).
 
 
-### Configure package 
+### Package Configuration
 
-In your ```.env``` file add the server key and the secret key for Firebase cloud messaging.
+In your `.env` file, add the server key and the secret key for the Firebase Cloud Messaging:
 
-example :
-```
+```php
 FCM_SERVER_KEY=my_secret_server_key
 FCM_SENDER_ID=my_secret_sender_id
 ```
 
 To get these keys, you must create a new application on the [firebase cloud messaging console](https://console.firebase.google.com/).
 
-After the creation of your application on firebase, you can find keys in: ```project settings -> cloud messaging```.
-
-## Basic usage
-
-Sending message :
-
-With Laravel-FCM, you can send two types of messages:
-
-- Notification messages, sometimes thought of as "display messages."
-- Data messages, which are handled by the client app.
-
-you can find more information with the [official documentation](https://firebase.google.com/docs/cloud-messaging/concept-options) 
+After the creation of your application on Firebase, you can find keys in `project settings -> cloud messaging`.
 
 
-### Downstream Message
+## Basic Usage
 
-Downstream message is a notification message, a data message or both that you send to a target device or to multiple targets devices using it (them) registration_Ids.
+Two types of messages can be sent using Laravel-FCM:
 
-**Send a downstream message to a device**
+- Notification messages, sometimes thought of as "display messages"
+- Data messages, which are handled by the client app
 
+More information is available in the [official documentation](https://firebase.google.com/docs/cloud-messaging/concept-options).
+
+
+### Downstream Messages
+
+A downstream message is a notification message, a data message, or both, that you send to a target device or to multiple target devices using its registration_Ids.
+
+The following use statements are required for the examples below:
+
+```php
+use LaravelFCM\Message\OptionsBuilder;
+use LaravelFCM\Message\PayloadDataBuilder;
+use LaravelFCM\Message\PayloadNotificationBuilder;
+use FCM;
 ```
+
+#### Sending a Downstream Message to a Device
+
+```php
 $optionBuiler = new OptionsBuilder();
 $optionBuiler->setTimeToLive(60*20);
 
@@ -138,27 +144,25 @@ $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
 
 $downstreamResponse = new DownstreamResponse($response, $tokens);
 
-$downstreamResponse->numberSuccess());
-$downstreamResponse->numberFailure());
-$downstreamResponse->numberModification());
+$downstreamResponse->numberSuccess();
+$downstreamResponse->numberFailure();
+$downstreamResponse->numberModification();
 
 //return Array - you must remove all this tokens in your database
-$downstreamResponse->tokensToDelete()); 
+$downstreamResponse->tokensToDelete(); 
 
 //return Array (key : oldToken, value : new token - you must change the token in your database )
-$downstreamResponse->tokensToModify()); 
+$downstreamResponse->tokensToModify(); 
 
 //return Array - you should try to resend the message to the tokens in the array
 $downstreamResponse->tokensToRetry();
 
 // return Array (key:token, value:errror) - in production you should remove from your database the tokens
-
-
 ```
 
-**Send a downstream message to multiple devices**
+#### Sending a Downstream Message to Multiple Devices
 
-```
+```php
 $optionBuiler = new OptionsBuilder();
 $optionBuiler->setTimeToLive(60*20);
 
@@ -178,33 +182,32 @@ $tokens = MYDATABASE::pluck('fcm_token')->toArray();
 
 $downstreamResponse = FCM::sendTo($tokens, $option, $notification);
 
-$downstreamResponse->numberSuccess());
-$downstreamResponse->numberFailure()); 
-$downstreamResponse->numberModification());
+$downstreamResponse->numberSuccess();
+$downstreamResponse->numberFailure(); 
+$downstreamResponse->numberModification();
 
 //return Array - you must remove all this tokens in your database
-$downstreamResponse->tokensToDelete()); 
+$downstreamResponse->tokensToDelete(); 
 
 //return Array (key : oldToken, value : new token - you must change the token in your database )
-$downstreamResponse->tokensToModify()); 
+$downstreamResponse->tokensToModify(); 
 
 //return Array - you should try to resend the message to the tokens in the array
 $downstreamResponse->tokensToRetry();
 
 // return Array (key:token, value:errror) - in production you should remove from your database the tokens present in this array 
 $downstreamResponse->tokensWithError(); 
-
 ```
 
-### Topics Message
+### Topics Messages
 
-Topics message is a notification message, data message or both, that you send to all the devices registered to this topic.
+A topics message is a notification message, data message, or both, that you send to all the devices registered to this topic.
 
->Topics names must be managed by your app and known by your server. The Laravel-FCM package or fcm doesn't provide an easy way to do that.
+> Note: Topic names must be managed by your app and known by your server. The Laravel-FCM package or fcm doesn't provide an easy way to do that.
 
-**Send a message to topic "news"**
+#### Sending a Message to a Topic
 
-```
+```php
 $notificationBuilder = new PayloadNotificationBuilder('my title');
 $notificationBuilder->setBody('Hello world')
 				    ->setSound('default');
@@ -219,10 +222,9 @@ $topicResponse = FCM::sendToTopic($topic, null, $notification, null)
 $topicResponse->isSuccess();
 $topicResponse->shouldRetry();
 $topicResponse->error());
-
 ```
 
-**Send a message to topic "news" and ("economic" or "cultural")**
+#### Sending a Message to Multiple Topics
 
 It sends notification to devices registered at the following topics:
 
@@ -231,7 +233,7 @@ It sends notification to devices registered at the following topics:
 
 > Note : Conditions for topics support two operators per expression
 
-```
+```php
 $notificationBuilder = new PayloadNotificationBuilder('my title');
 $notificationBuilder->setBody('Hello world')
 				    ->setSound('default');
@@ -253,11 +255,11 @@ $topicResponse->error());
 
 ```
 
-### Group message
+### Group Messages
 
-**Send a notification to a group**
+#### Sending a Notification to a Group
 
-```
+```php
 $notificationKey = ['a_notification_key'];
 
 
@@ -273,78 +275,71 @@ $groupResponse = FCM::sendToGroup($notificationKey, null, $notification, null);
 $groupResponse->numberSuccess();
 $groupResponse->numberFailure();
 $groupResponse->tokensFailed();
-
-
 ```
 
-**Create a group**
 
-```
+#### Creating a Group
+
+```php
 $tokens = ['a_registration_id_at_add_to_group'];
 $groupName = "a_group";
 $notificationKey
 
 // Save notification key in your database you must use it to send messages or for managing this group
 $notification_key = FCMGroup::createGroup($groupName, $tokens);
-
-
 ```
 
-**Add devices in a group**
+#### Adding Devices to a Group
 
-```
+```php
 $tokens = ['a_registration_id_at_add_to_the_new_group'];
 $groupName = "a_group";
 $notificationKey = "notification_key_received_when_group_was_created";
 
 $key = FCMGroup::addToGroup($groupName, $notificationKey, $tokens);
-
-
 ```
 
-**Delete devices in a group**
+#### Deleting Devices from a Group
+
 > Note if all devices are removed from the group, the group is automatically removed in "fcm".
 
-```
+```php
 $tokens = ['a_registration_id_at_remove_from_the_group'];
 $groupName = "a_group";
 $notificationKey = "notification_key_received_when_group_was_created";
 
 $key = FCMGroup::removeFromGroup($groupName, $notificationKey, $tokens);
-
 ```
+
 
 ## Options
 
-Laravel-FCM support options based on the options of Firebase cloud messaging. These options can help you to define the specificity of your notification.
+Laravel-FCM supports options based on the options of Firebase Cloud Messaging. These options can help you to define the specificity of your notification.
 
-Construct an option
+You can construct an option as follows:
 
-```
-// example
+```php
 $optionsBuilder = new OptionsBuilder();
+
 $optionsBuilder->setTimeToLive(42*60)
                 ->setCollapseKey('a_collapse_key');
 
 $options = $optionsBuilder->build();
 ```
 
-## Notification message
+## Notification Messages
 
 Notification payload is used to send a notification, the behaviour is defined by the App State and the OS of the receptor device.
-
-**About notification message**
 
 **Notification messages are delivered to the notification tray when the app is in the background.** For apps in the foreground, messages are handled by these callbacks:
 
 - didReceiveRemoteNotification: on iOS
 - onMessageReceived() on Android. The notification key in the data bundle contains the notification.
 
-[official documentation](https://firebase.google.com/docs/cloud-messaging/concept-options#notifications)
+See the [official documentation](https://firebase.google.com/docs/cloud-messaging/concept-options#notifications).
 
-**How construct a notification**
 
-```
+```php
 $notificationBuilder = new PayloadNotificationBuilder();
 $notificationBuilder->setTitle('title')
             		->setBody('body')
@@ -354,20 +349,17 @@ $notificationBuilder->setTitle('title')
 $notification = $notificationBuilder->build();
 ```
 
-## Data message
-
-**About data message**
+## Data Messages
 
 Set the data key with your custom key-value pairs to send a data payload to the client app. Data messages can have a 4KB maximum payload.
 
 - **iOS**, FCM stores the message and delivers it **only when the app is in the foreground** and has established a FCM connection.
 - **Android**, a client app receives a data message in onMessageReceived() and can handle the key-value pairs accordingly.
 
-[official documentation](https://firebase.google.com/docs/cloud-messaging/concept-options#data_messages)
+See the [official documentation](https://firebase.google.com/docs/cloud-messaging/concept-options#data_messages).
 
-**How construct a data**
 
-```
+```php
 $dataBuilder = new PayloadDataBuilder();
 $dataBuilder->addData([
 	'data_1' => 'first_data'
@@ -376,26 +368,25 @@ $dataBuilder->addData([
 $data = $dataBuilder->build();
 ```
 
-## Notification & Data
+## Notification & Data Messages
 
-**About both messages**
-
-App behavior when receiving messages that include both notification and data payloads depends on whether the app is in the background or the foreground—essentially, whether or not it is active at the time of receipt. ([source](https://firebase.google.com/docs/cloud-messaging/concept-options#messages-with-both-notification-and-data-payloads))
+App behavior when receiving messages that include both notification and data payloads depends on whether the app is in the background or the foreground—essentially, whether or not it is active at the time of receipt ([source](https://firebase.google.com/docs/cloud-messaging/concept-options#messages-with-both-notification-and-data-payloads)).
 
 - **Background**, apps receive notification payload in the notification tray, and only handle the data payload when the user taps on the notification.
 - **Foreground**, your app receives a message object with both payloads available.
+
 
 ## Topics
 
 For topics message, Laravel-FCM offers an easy to use api which abstract firebase conditions. To make the condition given for example in the firebase official documentation it must be done with Laravel-FCM like below:
 
-*official documentation condition*
+**Official documentation condition**
 
 ```
 'TopicA' in topics && ('TopicB' in topics || 'TopicC' in topics)
 ```
 
-```
+```php
 $topics = new Topics();
 
 $topics->topic('TopicA')
@@ -405,15 +396,41 @@ $topics->topic('TopicA')
 ```
 
 
+## Testing
 
+For integration testing, you can mock the responses with mockery and Mocks provided by the package.
 
-## API
+There are 3 kinds of "MockResponse" given by the package:
 
-You can find more documentation about the api with the following link: [Api reference](./doc/Readme.md)
+- MockDownstreamResponse
+- MockGroupResponse
+- MockTopicResponse
+
+You can mock the FCM call as in the following example:
+
+```php
+$numberSucess = 2;
+$mockResponse = new \LaravelFCM\Mocks\MockDownstreamResponse(numberSucess);
+
+$mockResponse->addTokenToDelete('token_to_delete');
+$mockResponse->addTokenToModify('token_to_modify', 'token_modified');
+$mockResponse->setMissingToken(true);
+
+$sender = Mockery::mock(\LaravelFCM\Sender\FCMSender::class);
+$sender->shouldReceive('sendTo')->once()->andReturn($mockResponse);
+
+$this->app->singleton('fcm.sender', function($app) use($sender) {
+	return $sender;
+});
+```
+
+## API Documentation
+
+You can find more documentation about the API in the [API reference](./doc/Readme.md).
 
 
 ## Licence
 
-MIT
+This library is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
 
-Some of this documentation is coming from the official documentation. You can find it completly on the firebase cloud messagin website.
+Some of this documentation is coming from the official documentation. You can find it completely on the [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/) Website.

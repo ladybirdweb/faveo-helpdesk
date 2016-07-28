@@ -32,7 +32,7 @@ class NotificationController extends Controller {
      *  This function is for sending daily report/notification about the system.
      * */
     public function send_notification() {
-        //dd('sdckjdsc');
+//        dd('sdckjdsc');
         //fetching email settings
         $email = Email::where('id', '=', '1')->first();
         //dd('yes');
@@ -90,7 +90,9 @@ class NotificationController extends Controller {
                 'scenario' => null,
                 'body' => $contents
             ];
-            return $this->dispatch((new \App\Jobs\SendEmail($from, $to, $message)));
+            $job = new \App\Jobs\SendEmail($from, $to, $message);
+            $dispatch = $this->dispatch($job);
+            return $dispatch;
             //return $this->PhpMailController->sendEmail($from,$to,$message);
         }
     }

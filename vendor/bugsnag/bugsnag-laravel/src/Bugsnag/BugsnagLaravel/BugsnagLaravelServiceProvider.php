@@ -1,4 +1,6 @@
-<?php namespace Bugsnag\BugsnagLaravel;
+<?php
+
+namespace Bugsnag\BugsnagLaravel;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -18,11 +20,9 @@ class BugsnagLaravelServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         $app = $this->app;
 
         if (version_compare($app::VERSION, '5.0') < 0) {
-
             $this->package('bugsnag/bugsnag-laravel', 'bugsnag');
 
             // Register for exception handling
@@ -30,16 +30,16 @@ class BugsnagLaravelServiceProvider extends ServiceProvider
                 if ('Symfony\Component\Debug\Exception\FatalErrorException'
                     !== get_class($exception)
                 ) {
-                    $app['bugsnag']->notifyException($exception, null, "error");
+                    $app['bugsnag']->notifyException($exception, null, 'error');
                 }
             });
 
             // Register for fatal error handling
             $app->fatal(function ($exception) use ($app) {
-                $app['bugsnag']->notifyException($exception, null, "error");
+                $app['bugsnag']->notifyException($exception, null, 'error');
             });
         } else {
-          $this->publishes(array(
+            $this->publishes(array(
               __DIR__.'/config.php' => config_path('bugsnag.php'),
           ), 'config');
         }
@@ -65,9 +65,9 @@ class BugsnagLaravelServiceProvider extends ServiceProvider
             $client->setBatchSending(false);
             $client->setReleaseStage($app->environment());
             $client->setNotifier(array(
-                'name'    => 'Bugsnag Laravel',
-                'version' => '1.6.4',
-                'url'     => 'https://github.com/bugsnag/bugsnag-laravel'
+                'name' => 'Bugsnag Laravel',
+                'version' => '1.7.0',
+                'url' => 'https://github.com/bugsnag/bugsnag-laravel',
             ));
 
             if (isset($config['notify_release_stages']) && is_array($config['notify_release_stages'])) {
@@ -110,6 +110,6 @@ class BugsnagLaravelServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array("bugsnag");
+        return array('bugsnag');
     }
 }

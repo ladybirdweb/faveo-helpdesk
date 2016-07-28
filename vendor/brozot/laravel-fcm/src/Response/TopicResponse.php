@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
  *
  * @package LaravelFCM\Response
  */
-class TopicResponse extends BaseResponse {
+class TopicResponse extends BaseResponse implements TopicResponseContract{
 
 	const LIMIT_RATE_TOPICS_EXCEEDED = "TopicsMessageRateExceeded";
 

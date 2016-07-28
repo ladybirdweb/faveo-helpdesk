@@ -1,6 +1,5 @@
 <?php namespace LaravelFCM\Message;
 
-use Exception;
 use LaravelFCM\Message\Exceptions\InvalidOptionsException;
 use ReflectionClass;
 

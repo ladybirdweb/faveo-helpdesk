@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Bus\SelfHandling;
 use App\Http\Controllers\Common\PhpMailController;
 
-class SendEmail extends Job implements SelfHandling, ShouldQueue
+class SendEmail extends Job implements ShouldQueue,SelfHandling
 {
     use InteractsWithQueue, SerializesModels;
     
@@ -17,16 +17,18 @@ class SendEmail extends Job implements SelfHandling, ShouldQueue
     protected $from;
     protected $to;
     protected $message;
+    protected $template;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($from, $to, $message)
+    public function __construct($from, $to, $message,$template_variables='')
     {
         $this->from = $from;
         $this->to = $to;
         $this->message = $message;
+        $this->template = $template_variables;
     }
 
     /**
@@ -36,7 +38,7 @@ class SendEmail extends Job implements SelfHandling, ShouldQueue
      */
     public function handle(PhpMailController $PhpMailController)
     {
-        $p = $PhpMailController->sendEmail($this->from, $this->to, $this->message);
+        $p = $PhpMailController->sendEmail($this->from, $this->to, $this->message,$this->template);
         return $p;
     }
 }

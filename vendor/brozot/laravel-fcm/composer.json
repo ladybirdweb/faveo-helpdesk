@@ -24,7 +24,8 @@
     },
     "autoload": {
         "psr-4": {
-            "LaravelFCM\\": "src/"
+            "LaravelFCM\\": "src/",
+            "LaravelFCM\\Mocks\\": "tests/mocks"
         }
     },
     "autoload-dev": {

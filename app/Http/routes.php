@@ -1109,4 +1109,15 @@ Route::group(['middleware' => ['web']], function () {
     
     Route::get('test', ['as' => 'test', 'uses' => 'Common\PushNotificationController@response']);
     
-});
+    Route::get('mail/config/service',['as'=>'mail.config.service','uses'=>'Job\MailController@serviceForm']);
+    /**
+     * Queue
+     */
+    Route::get('queue',['as'=>'queue','uses'=>'Job\QueueController@index']);
+    Route::get('form/queue',['as'=>'queue.form','uses'=>'Job\QueueController@getForm']);
+    Route::get('queue/{id}',['as'=>'queue.edit','uses'=>'Job\QueueController@edit']);
+    Route::post('queue/{id}',['as'=>'queue.update','uses'=>'Job\QueueController@update']);
+    Route::get('queue/{id}/activate',['as'=>'queue.activate','uses'=>'Job\QueueController@activate']);
+    
+    
+    });

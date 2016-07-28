@@ -9,7 +9,7 @@ Class DownstreamResponse
 * Class name: DownstreamResponse
 * Namespace: LaravelFCM\Response
 * Parent class: [LaravelFCM\Response\BaseResponse](LaravelFCM-Response-BaseResponse.md)
-
+* This class implements: [LaravelFCM\Response\DownstreamResponseContract](LaravelFCM-Response-DownstreamResponseContract.md)
 
 
 Constants
@@ -171,13 +171,14 @@ parse the response
 
 ### merge
 
-    mixed LaravelFCM\Response\DownstreamResponse::merge(\LaravelFCM\Response\DownstreamResponse $response)
+    mixed LaravelFCM\Response\DownstreamResponseContract::merge(\LaravelFCM\Response\DownstreamResponse $response)
 
 Merge two response
 
 
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\DownstreamResponseContract](LaravelFCM-Response-DownstreamResponseContract.md)
 
 
 #### Arguments
@@ -187,59 +188,63 @@ Merge two response
 
 ### numberSuccess
 
-    integer LaravelFCM\Response\DownstreamResponse::numberSuccess()
+    integer LaravelFCM\Response\DownstreamResponseContract::numberSuccess()
 
 Get the number of device reached with success
 
 
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\DownstreamResponseContract](LaravelFCM-Response-DownstreamResponseContract.md)
 
 
 
 
 ### numberFailure
 
-    integer LaravelFCM\Response\DownstreamResponse::numberFailure()
+    integer LaravelFCM\Response\DownstreamResponseContract::numberFailure()
 
 Get the number of device which thrown an error
 
 
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\DownstreamResponseContract](LaravelFCM-Response-DownstreamResponseContract.md)
 
 
 
 
 ### numberModification
 
-    integer LaravelFCM\Response\DownstreamResponse::numberModification()
+    integer LaravelFCM\Response\DownstreamResponseContract::numberModification()
 
 Get the number of device that you need to modify their token
 
 
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\DownstreamResponseContract](LaravelFCM-Response-DownstreamResponseContract.md)
 
 
 
 
 ### tokensToDelete
 
-    array LaravelFCM\Response\DownstreamResponse::tokensToDelete()
+    array LaravelFCM\Response\DownstreamResponseContract::tokensToDelete()
 
 get token to delete
 
 remove all tokens returned by this method in your database
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\DownstreamResponseContract](LaravelFCM-Response-DownstreamResponseContract.md)
 
 
 
 
 ### tokensToModify
 
-    array LaravelFCM\Response\DownstreamResponse::tokensToModify()
+    array LaravelFCM\Response\DownstreamResponseContract::tokensToModify()
 
 get token to modify
 
@@ -249,26 +254,28 @@ value: new token
 find the old token in your database and replace it with the new one
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\DownstreamResponseContract](LaravelFCM-Response-DownstreamResponseContract.md)
 
 
 
 
 ### tokensToRetry
 
-    array LaravelFCM\Response\DownstreamResponse::tokensToRetry()
+    array LaravelFCM\Response\DownstreamResponseContract::tokensToRetry()
 
 Get tokens that you should resend using exponential backoof
 
 
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\DownstreamResponseContract](LaravelFCM-Response-DownstreamResponseContract.md)
 
 
 
 
 ### tokensWithError
 
-    array LaravelFCM\Response\DownstreamResponse::tokensWithError()
+    array LaravelFCM\Response\DownstreamResponseContract::tokensWithError()
 
 Get tokens that thrown an error
 
@@ -278,13 +285,14 @@ value : error
 In production, remove these tokens from you database
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\DownstreamResponseContract](LaravelFCM-Response-DownstreamResponseContract.md)
 
 
 
 
 ### hasMissingToken
 
-    boolean LaravelFCM\Response\DownstreamResponse::hasMissingToken()
+    boolean LaravelFCM\Response\DownstreamResponseContract::hasMissingToken()
 
 check if missing tokens was given to the request
 If true, remove all the empty token in your database
@@ -292,6 +300,7 @@ If true, remove all the empty token in your database
 
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\DownstreamResponseContract](LaravelFCM-Response-DownstreamResponseContract.md)
 
 
 

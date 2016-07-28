@@ -32,6 +32,7 @@ class SendReport extends Command {
      */
     public function __construct() {
         $mail = new PhpMailController();
+        $mail->setQueue();
         $report = new NotificationController($mail);
         $this->report = $report;
         parent::__construct();
