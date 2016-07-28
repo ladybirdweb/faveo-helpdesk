@@ -33,6 +33,7 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\helpdesk\Workflow\WorkflowClose;
 use App\Model\kb\Settings;
+use App\Model\helpdesk\Utility\Limit_Login;
 // Knowledge base
 use Illuminate\Database\Seeder;
 
@@ -1975,7 +1976,7 @@ class DatabaseSeeder extends Seeder
 
 
         Security::create(['id' => '1', 'lockout_message' => 'You have been locked out of application due to too many failed login attempts.', 'backlist_offender' => '0', 'backlist_threshold' => '15', 'lockout_period' => '15', 'days_to_keep_logs' => '0']);
-
+        Limit_Login::create(['id' => '1']);
 
         TemplateSet::create(['id' => '1', 'name' => 'default', 'active' => '1']);
 
