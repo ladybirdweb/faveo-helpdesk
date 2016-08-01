@@ -20,7 +20,7 @@ use App\Model\helpdesk\Utility\MailboxProtocol;
 use Crypt;
 use File;
 use ForceUTF8\Encoding;
-use PhpImap\Mailbox as ImapMailbox;
+use App\Http\Controllers\Agent\helpdesk\ImapMail as ImapMailbox;
 
 /**
  * MailController.

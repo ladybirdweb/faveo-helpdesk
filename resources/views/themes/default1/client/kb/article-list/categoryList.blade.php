@@ -35,6 +35,7 @@ class = "active"
                         $article = App\Model\kb\Article::where('id', $id)->get();
                         $article = $article->where('status', 1);
                         $article = $article->where('type', 1);
+                        $article = $article->orderBy('publish_time','desc');
                         //dd($article);
                         ?>
                         @foreach($article as $arti)

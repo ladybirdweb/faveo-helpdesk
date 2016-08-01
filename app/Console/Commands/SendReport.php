@@ -46,6 +46,8 @@ class SendReport extends Command {
     public function handle() {
         try {
             $report = $this->report->send_notification();
+            \Log::useDailyFiles(storage_path()."/logs/info/send-report.log");
+        
             if ($report !== 0) {
                 \Log::info("Report has send");
                 $this->info("Report has send");

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
-use App\Http\Controllers\Common\NotificationController;
+use App\Http\Controllers\Common\NotificationController as Notify;
 use App\Http\Controllers\Common\PhpMailController;
 use App\Http\Controllers\Common\FileuploadController;
 use App\Http\Controllers\Controller;
@@ -62,7 +62,7 @@ class TicketController extends Controller {
      *
      * @return type response
      */
-    public function __construct(PhpMailController $PhpMailController, NotificationController $NotificationController) {
+    public function __construct(PhpMailController $PhpMailController, Notify $NotificationController) {
         $this->PhpMailController = $PhpMailController;
         $this->NotificationController = $NotificationController;
         $this->middleware('auth');

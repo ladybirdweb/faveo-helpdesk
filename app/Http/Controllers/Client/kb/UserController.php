@@ -38,11 +38,13 @@ class UserController extends Controller {
     public function getArticle(Article $article, Category $category, Settings $settings) {
         $setting = $settings->first();
         $pagination = $setting->pagination;
-        if (\Auth::user()->role == 'user' || !Auth::check()) {
+        if (!Auth::check() || \Auth::user()->role == 'user') {
             $article = $article->where('status', '1');
         }
         $article = $article->where('type', '1');
+        $article = $article->orderBy('publish_time','desc');
         $article = $article->paginate($pagination);
+        
         $article->setPath('article-list');
         $categorys = $category->get();
         return view('themes.default1.client.kb.article-list.articles', compact('time', 'categorys', 'article'));

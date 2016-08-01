@@ -1,33 +1,3 @@
-@extends('themes.default1.admin.layout.admin')
-
-@section('Settings')
-active
-@stop
-
-@section('settings-bar')
-active
-@stop
-
-@section('cron')
-class="active"
-@stop
-
-@section('HeadInclude')
-@stop
-<!-- header -->
-@section('PageHeader')
-<h1>{{ Lang::get('lang.settings') }}</h1>
-@stop
-<!-- /header -->
-<!-- breadcrumbs -->
-@section('breadcrumbs')
-<ol class="breadcrumb">
-</ol>
-@stop
-<!-- /breadcrumbs -->
-<!-- content -->
-@section('content')
-<!-- open a form -->
 {!! Form::model($emails,['url' => 'post-scheduler', 'method' => 'PATCH']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
@@ -35,6 +5,22 @@ class="active"
     </div>
 
     <div class="box-body table-responsive"style="overflow:hidden;">
+        @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+        @if($warn!=="")
+        <div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {!!$warn!!}
+        </div>
+        @endif
         <!-- check whether success or not -->
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
@@ -140,4 +126,3 @@ class="active"
         document.getElementById("p3").innerHTML = path3;
     })
 </script>
-@stop
