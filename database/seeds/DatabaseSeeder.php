@@ -33,7 +33,6 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\helpdesk\Workflow\WorkflowClose;
 use App\Model\kb\Settings;
-use App\Model\helpdesk\Utility\Limit_Login;
 // Knowledge base
 use Illuminate\Database\Seeder;
 
@@ -209,6 +208,7 @@ class DatabaseSeeder extends Seeder
         Ticket_status::create(['name' => 'Closed', 'state' => 'closed', 'mode' => '3', 'message' => 'Ticket have been Closed by', 'flags' => '0', 'sort' => '3', 'properties' => 'Closed tickets. Tickets will still be accessible on client and staff panels.']);
         Ticket_status::create(['name' => 'Archived', 'state' => 'archived', 'mode' => '3', 'message' => 'Ticket have been Archived by', 'flags' => '0', 'sort' => '4', 'properties' => 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.']);
         Ticket_status::create(['name' => 'Deleted', 'state' => 'deleted', 'mode' => '3', 'message' => 'Ticket have been Deleted by', 'flags' => '0', 'sort' => '5', 'properties' => 'Tickets queued for deletion. Not accessible on ticket queues.']);
+        Ticket_status::create(['name' => 'Unverified', 'state' => 'unverified', 'mode' => '3', 'message' => 'User account verification required.', 'flags' => '0', 'sort' => '6', 'properties' => 'Ticket will be open after user verifies his/her account.']);
         /* Ticket priority */
         Ticket_priority::create(['priority' => 'Low', 'priority_desc' => 'Low', 'priority_color' => 'info', 'priority_urgency' => '4', 'ispublic' => '1']);
         Ticket_priority::create(['priority' => 'Normal', 'priority_desc' => 'Normal', 'priority_color' => 'info', 'priority_urgency' => '3', 'ispublic' => '1']);
@@ -1976,7 +1976,7 @@ class DatabaseSeeder extends Seeder
 
 
         Security::create(['id' => '1', 'lockout_message' => 'You have been locked out of application due to too many failed login attempts.', 'backlist_offender' => '0', 'backlist_threshold' => '15', 'lockout_period' => '15', 'days_to_keep_logs' => '0']);
-        Limit_Login::create(['id' => '1']);
+
 
         TemplateSet::create(['id' => '1', 'name' => 'default', 'active' => '1']);
 
@@ -2011,6 +2011,7 @@ class DatabaseSeeder extends Seeder
         CommonSettings::create(['id' => '1', 'option_name' => 'ticket_token_time_duration', 'option_value' => '1']);
         CommonSettings::create(['id' => '2', 'option_name' => 'enable_rtl', 'option_value' => '']);
         CommonSettings::create(['id' => '3', 'option_name' => 'user_set_ticket_status', 'status' => 1]);
+        CommonSettings::create(['id' => '4', 'option_name' => 'send_otp', 'status' => 0]);
 
         /*
          * Ratings

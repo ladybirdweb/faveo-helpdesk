@@ -30,6 +30,11 @@ return [
     'the_board_is_offline'                                              => 'The Board is Offline',
     'error_establishing_connection_to_database'                         => 'Error establishing connection to database',                         
     'unauthorized_access'                                               => 'Unauthorized Access',
+    'otp-not-matched'                                                   => 'Oops! The OTP code you entered didn\'t match with the one we\'d sent to your number.',
+    'otp-invalid'                                                       => 'OTP code must be a 6 digit number.',
+    'otp-input-title'                                                   => 'Enter 6 digits OTP code.',
+    'otp-expired'                                                       => 'Your OTP has been expired.<br/> Click on "Resend OTP" to recieve a new OTP code on your mobile.',
+    'resend-otp-title'                                                  => 'Click here to resend OTP',
     /*
       |--------------------------------------
       |   Login Page
@@ -49,6 +54,13 @@ return [
     'e-mail'                                => 'E-mail',
     'reg_new_member'                        => 'Register a new membership',
     'this_account_is_currently_inactive'    => 'This account is currently Inactive!',
+    'not-registered'                        => 'Email/username is not registered',
+    'verify'                                => 'Verify',
+    'enter-otp'                             => 'Enter OTP',
+    'did-not-recive-code'                   => 'Didn\'t recieve code?',
+    'resend_otp'                            => 'Resend OTP',
+    'verify-screen-msg'                     => 'Your account is currently inactive.<br/>To activate your account, please enter the OTP we\'ve sent on',
+    'otp-sent'                              => 'We\'ve sent an OTP code on your number.', 
     /*
       |--------------------------------------
       |   Register Page
@@ -287,6 +299,10 @@ return [
     'rtl'                                                        => 'RTL (Right to left)',
     'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   =>  'The RTL support is only applicable to the outgoing mails',
     'user_set_ticket_status'                                     => 'Allow users to set ticket status',
+    'send_otp_for_account_verfication'                           => 'Send OTP to users',
+    'otp_usage_info'                                             => 'We\'ll send an email with verification link and an sms with OTP code to the users. [OTP will be sent using Faveo msg91 plugin]' ,
+    'send_otp_title_message'                                     => 'Send OTP for user account verification, reset password and mobile number verification',
+    'allow_unverified_users_to_create_ticket'                    => 'Allow unverified users to create tickets',
     /*
       |--------------------------------------
       |   Email Settings Page
@@ -1398,6 +1414,18 @@ return [
     *Latest update 27-07-2016
     *-----------------------------------------------------------------------------------
     */
-    'queue'=>'Queue',
-    'queues'=>'Queues',
+   'queue'=>'Queue',
+   'queues'=>'Queues',
+
+   /**-------------------------------------------------------------------------------------------------
+    * OTP  messages body to send to user while registering, resetting passwords
+    *--------------------------------------------------------------------------------------------------
+    */
+   "hello"                   =>"Hello",
+   "reset-link-msg"          => ",\r\nHere is the link to reset your password.\r\n",
+   "otp-for-your"            => ",\r\nOTP for your",
+   "account-verification-is" => "account verification is",
+   "extra-text"              => ".\r\nYou can login to verify your account via OTP or just click on the link we've sent to your email address.",
+   "otp-not-sent"            => "We faced some problem in sending OTP please try after some time.",
+
 ];

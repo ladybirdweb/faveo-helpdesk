@@ -15,9 +15,9 @@ class Kernel extends ConsoleKernel {
      */
     protected $commands = [
         'App\Console\Commands\Inspire',
-        'App\Console\Commands\SendReport',
-        'App\Console\Commands\CloseWork',
-        'App\Console\Commands\TicketFetch',
+        // 'App\Console\Commands\SendReport',
+        // 'App\Console\Commands\CloseWork',
+        // 'App\Console\Commands\TicketFetch',
     ];
 
     /**
@@ -28,10 +28,10 @@ class Kernel extends ConsoleKernel {
      * @return void
      */
     protected function schedule(Schedule $schedule) {
-        $schedule->command('queue:listen', ['--tries' => 1])->everyMinute()->withoutOverlapping();
-        $this->execute($schedule, 'fetching');
-        $this->execute($schedule, 'notification');
-        $this->execute($schedule, 'work');
+        //$schedule->command('queue:listen', ['--tries' => 1])->everyMinute()->withoutOverlapping();
+       // $this->execute($schedule, 'fetching');
+        //$this->execute($schedule, 'notification');
+        //$this->execute($schedule, 'work');
     }
 
     public function execute($schedule,$task) {

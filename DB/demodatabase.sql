@@ -114,7 +114,8 @@ CREATE TABLE IF NOT EXISTS `common_settings` (
 INSERT INTO `common_settings` (`id`, `option_name`, `option_value`, `status`, `optional_field`, `created_at`, `updated_at`) VALUES
 (1, 'ticket_token_time_duration', '1', '', '', '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
 (2, 'enable_rtl', '', '', '', '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
-(3, 'user_set_ticket_status', '',1,'','2016-06-14 09:07:17','2016-06-14 09:07:17');
+(3, 'user_set_ticket_status', '',1,'','2016-06-14 09:07:17','2016-06-14 09:07:17'),
+(4, 'send_otp', '',0,'','2016-06-14 09:07:17','2016-06-14 09:07:17');
 
 -- --------------------------------------------------------
 
@@ -1726,7 +1727,9 @@ INSERT INTO `ticket_status` (`id`, `name`, `state`, `mode`, `message`, `flags`, 
 (2, 'Resolved', 'closed', 1, 'Ticket have been Resolved by', 0, 2, 0, '', 'Resolved tickets.', '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
 (3, 'Closed', 'closed', 3, 'Ticket have been Closed by', 0, 3, 0, '', 'Closed tickets. Tickets will still be accessible on client and staff panels.', '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
 (4, 'Archived', 'archived', 3, 'Ticket have been Archived by', 0, 4, 0, '', 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.', '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
-(5, 'Deleted', 'deleted', 3, 'Ticket have been Deleted by', 0, 5, 0, '', 'Tickets queued for deletion. Not accessible on ticket queues.', '2016-06-14 09:07:04', '2016-06-14 09:07:04');
+(5, 'Deleted', 'deleted', 3, 'Ticket have been Deleted by', 0, 5, 0, '', 'Tickets queued for deletion. Not accessible on ticket queues.', '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
+(6, 'Unverified', 'unverified', 3, 'User account verification required.', 0, 6, 0, '', 'Ticket will be open after user verifies his/her account.', '2016-06-14 09:07:04', '2016-06-14 09:07:04');
+
 
 -- --------------------------------------------------------
 
