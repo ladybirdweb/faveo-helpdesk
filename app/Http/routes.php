@@ -1,4 +1,5 @@
 <?php
+
 /*
   |--------------------------------------------------------------------------
   | Application Routes
@@ -12,7 +13,7 @@
 Route::group(['middleware' => ['web']], function () {
     Route::group(['middleware' => 'update', 'middleware' => 'install'], function () {
         Route::controllers([
-            'auth'     => 'Auth\AuthController',
+            'auth' => 'Auth\AuthController',
             'password' => 'Auth\PasswordController',
         ]);
     });
@@ -188,14 +189,14 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->push(Lang::get('lang.edit'), url('sla/{sla}/edit'));
         });
         Route::resource('forms', 'Admin\helpdesk\FormController');
-        Route::post('forms/field/{fieldid}/child',[
-            'as'=>'forms.field.child',
-            'uses'=>'Admin\helpdesk\FormController@addChild',
-            ]);
-        Route::get('forms/render/child',[
-            'as'=>'forms.field.child',
-            'uses'=>'Admin\helpdesk\FormController@renderChild',
-            ]);
+        Route::post('forms/field/{fieldid}/child', [
+            'as' => 'forms.field.child',
+            'uses' => 'Admin\helpdesk\FormController@addChild',
+        ]);
+        Route::get('forms/render/child', [
+            'as' => 'forms.field.child',
+            'uses' => 'Admin\helpdesk\FormController@renderChild',
+        ]);
         Breadcrumbs::register('forms.index', function ($breadcrumbs) {
             $breadcrumbs->parent('setting');
             $breadcrumbs->push(Lang::get('lang.forms'), route('forms.index'));
@@ -422,10 +423,10 @@ Route::group(['middleware' => ['web']], function () {
         });
         //route for submit error and debugging setting form page
         Route::post('post-settings', ['as' => 'post.error.debug.settings',
-            'uses'                         => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings', ]);
+            'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings',]);
         //route to error logs table page
         Route::get('show-error-logs', [
-            'as'   => 'error.logs',
+            'as' => 'error.logs',
             'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs',
         ]);
     });
@@ -564,7 +565,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/newticket', ['as' => 'newticket', 'uses' => 'Agent\helpdesk\TicketController@newticket']); /*  Get Create New Ticket */
         Breadcrumbs::register('newticket', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
-            
+
             $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.create'), route('newticket'));
         });
         Route::post('/newticket/post', ['as' => 'post.newticket', 'uses' => 'Agent\helpdesk\TicketController@post_newticket']); /*  Post Create New Ticket */
@@ -668,14 +669,14 @@ Route::group(['middleware' => ['web']], function () {
 //    });
     Route::any('getdata', function () {
         $term = Illuminate\Support\Str::lower(Input::get('term'));
-        $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
+        $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term . '%')->groupBy('ticket_number')->take(10)->get();
         foreach ($data as $v) {
             return [
                 'value' => $v->ticket_number,
             ];
         }
     });
-    
+
     Route::post('postform/{id}', 'Client\helpdesk\FormController@postForm'); /* post the AJAX form for create a ticket by guest user */
     Route::post('postedform', 'Client\helpdesk\FormController@postedForm'); /* post the form to store the value */
     Route::get('check', 'CheckController@getcheck'); //testing checkbox auto-populate
@@ -695,7 +696,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('create-ticket', ['as' => 'form', 'uses' => 'Client\helpdesk\FormController@getForm']); //getform
     Route::get('mytickets/{id}', ['as' => 'ticketinfo', 'uses' => 'Client\helpdesk\GuestController@singleThread']); //detail ticket information
     Route::post('checkmyticket', 'Client\helpdesk\UnAuthController@PostCheckTicket'); //ticket ckeck
-    
+
     Route::get('check_ticket/{id}', ['as' => 'check_ticket', 'uses' => 'Client\helpdesk\GuestController@get_ticket_email']); //detail ticket information
     Breadcrumbs::register('check_ticket', function ($breadcrumbs, $id) {
         $page = \App\Model\helpdesk\Ticket\Tickets::whereId(1)->first();
@@ -795,36 +796,36 @@ Route::group(['middleware' => ['web']], function () {
       |=============================================================
      */
     Route::get('500', ['as' => 'error500', function () {
-        return view('errors.500');
-    }]);
+            return view('errors.500');
+        }]);
     Breadcrumbs::register('error500', function ($breadcrumbs) {
         $breadcrumbs->push('500');
     });
     Route::get('404', ['as' => 'error404', function () {
-        return view('errors.404');
-    }]);
+            return view('errors.404');
+        }]);
     Breadcrumbs::register('error404', function ($breadcrumbs) {
         $breadcrumbs->push('404');
     });
-    
+
     Route::get('error-in-database-connection', ['as' => 'errordb', function() {
-        return view('errors.db');
-    }]);
-    
+            return view('errors.db');
+        }]);
+
     Breadcrumbs::register('errordb', function ($breadcrumbs) {
         $breadcrumbs->push('Error establishing connection to database');
-    });    
-    
+    });
+
     Route::get('unauthorized', ['as' => 'unauth', function() {
-        return view('errors.unauth');
-    }]);
-    
+            return view('errors.unauth');
+        }]);
+
     Breadcrumbs::register('unauth', function ($breadcrumbs) {
         $breadcrumbs->push('Unauthorized Access');
-    });    
+    });
     Route::get('board-offline', ['as' => 'board.offline', function () {
-        return view('errors.offline');
-    }]);
+            return view('errors.offline');
+        }]);
     Breadcrumbs::register('board.offline', function ($breadcrumbs) {
         $breadcrumbs->push('Board Offline');
     });
@@ -929,7 +930,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('get-articles', ['as' => 'api.article', 'uses' => 'Agent\kb\ArticleController@getData']);
     Route::get('get-categorys', ['as' => 'api.category', 'uses' => 'Agent\kb\CategoryController@getData']);
     Route::get('get-comment', ['as' => 'api.comment', 'uses' => 'Agent\kb\SettingsController@getData']);
-    
+
     Route::post('image', 'Agent\kb\SettingsController@image');
     Route::get('direct', function () {
         return view('direct');
@@ -1084,7 +1085,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('ticket/customers-custom', 'Api\v1\TestController@getCustomersWith');
         Route::get('generate/token', 'Api\v1\TestController@generateToken');
         Route::get('get/user', 'Api\v1\TestController@getAuthUser');
-        
+
         /*
          * FCM token response
          */
@@ -1104,20 +1105,27 @@ Route::group(['middleware' => ['web']], function () {
         $api_control = new \App\Http\Controllers\Common\ApiSettings();
         $api_control->ticketDetailEvent($details);
     });
-    
-    
-    
+
+
+
     Route::get('test', ['as' => 'test', 'uses' => 'Common\PushNotificationController@response']);
-    
-    Route::get('mail/config/service',['as'=>'mail.config.service','uses'=>'Job\MailController@serviceForm']);
+
+    Route::get('mail/config/service', ['as' => 'mail.config.service', 'uses' => 'Job\MailController@serviceForm']);
     /**
      * Queue
      */
-    Route::get('queue',['as'=>'queue','uses'=>'Job\QueueController@index']);
-    Route::get('form/queue',['as'=>'queue.form','uses'=>'Job\QueueController@getForm']);
-    Route::get('queue/{id}',['as'=>'queue.edit','uses'=>'Job\QueueController@edit']);
-    Route::post('queue/{id}',['as'=>'queue.update','uses'=>'Job\QueueController@update']);
-    Route::get('queue/{id}/activate',['as'=>'queue.activate','uses'=>'Job\QueueController@activate']);
-    
-    
+    Breadcrumbs::register('queue', function ($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.queues'), route('queue'));
     });
+    Route::get('queue', ['as' => 'queue', 'uses' => 'Job\QueueController@index']);
+    Route::get('form/queue', ['as' => 'queue.form', 'uses' => 'Job\QueueController@getForm']);
+    Breadcrumbs::register('queue.edit', function ($breadcrumbs) {
+        $id = \Input::segment(2);
+        $breadcrumbs->parent('queue');
+        $breadcrumbs->push(Lang::get('lang.edit'), route('queue.edit',$id));
+    });
+    Route::get('queue/{id}', ['as' => 'queue.edit', 'uses' => 'Job\QueueController@edit']);
+    Route::post('queue/{id}', ['as' => 'queue.update', 'uses' => 'Job\QueueController@update']);
+    Route::get('queue/{id}/activate', ['as' => 'queue.activate', 'uses' => 'Job\QueueController@activate']);
+});
