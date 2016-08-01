@@ -43,52 +43,61 @@ class="active"
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('first_name'))
-                <li class="error-message-padding">{!! $errors->first('first_name', ':message') !!}</li>
+            <li class="error-message-padding">{!! $errors->first('first_name', ':message') !!}</li>
             @endif
             @if($errors->first('last_name'))
-                <li class="error-message-padding">{!! $errors->first('last_name', ':message') !!}</li>
+            <li class="error-message-padding">{!! $errors->first('last_name', ':message') !!}</li>
             @endif
             @if($errors->first('user_name'))
-                <li class="error-message-padding">{!! $errors->first('user_name', ':message') !!}</li>
+            <li class="error-message-padding">{!! $errors->first('user_name', ':message') !!}</li>
             @endif
             @if($errors->first('email'))
-                <li class="error-message-padding">{!! $errors->first('email', ':message') !!}</li>
+            <li class="error-message-padding">{!! $errors->first('email', ':message') !!}</li>
             @endif
             @if($errors->first('mobile'))
-                <li class="error-message-padding">{!! $errors->first('mobile', ':message') !!}</li>
+            <li class="error-message-padding">{!! $errors->first('mobile', ':message') !!}</li>
             @endif
             @if($errors->first('ext'))
-                <li class="error-message-padding">{!! $errors->first('ext', ':message') !!}</li>
+            <li class="error-message-padding">{!! $errors->first('ext', ':message') !!}</li>
             @endif
             @if($errors->first('phone_number'))
-                <li class="error-message-padding">{!! $errors->first('phone_number', ':message') !!}</li>
+            <li class="error-message-padding">{!! $errors->first('phone_number', ':message') !!}</li>
             @endif
             @if($errors->first('active'))
-                <li class="error-message-padding">{!! $errors->first('active', ':message') !!}</li>
+            <li class="error-message-padding">{!! $errors->first('active', ':message') !!}</li>
             @endif
         </div>
         @endif        
         <div class="row">
             <!-- First name : first name : Required -->
-            <div class="col-xs-3 form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
+            <div class="col-xs-4 form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
                 {!! Form::label('first_name',Lang::get('lang.first_name')) !!}<span class="text-red"> *</span>
                 {!! Form::text('first_name',null,['class' => 'form-control']) !!}
             </div>
             <!-- Last name : last name : Required -->
-            <div class="col-xs-3 form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
+            <div class="col-xs-4 form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
                 {!! Form::label('last_name',Lang::get('lang.last_name')) !!}
                 {!! Form::text('last_name',null,['class' => 'form-control']) !!}
             </div>
             <!-- User Name : Text : Required-->
-            <div class="col-xs-3 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
+            <div class="col-xs-4 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
                 {!! Form::label('user_name',Lang::get('lang.user_name')) !!}<span class="text-red"> *</span>
                 {!! Form::text('user_name',null,['class' => 'form-control']) !!}
             </div>
+        </div>
+        <div class="row">
             <!-- Email Address : Email : Required -->
-            <div class="col-xs-3 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+            <div class="col-xs-6 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
                 {!! Form::label('email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
                 {!! Form::email('email',null,['class' => 'form-control']) !!}
             </div>
+            <div class="col-xs-6 form-group {{ $errors->has('organization') ? 'has-error' : '' }}">
+                {!! Form::label('organization',Lang::get('lang.organization')) !!}
+                {!! Form::email('organization',null,['class' => 'form-control','id'=>'org']) !!}
+                {!! Form::hidden('org_id',null,['id'=>'field_id']) !!}
+            </div>
+        </div>
+        <div class="row">
             <div class="col-xs-1 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
                 {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
                 {!! $errors->first('country_code', '<spam class="help-block">:message</spam>') !!}
@@ -134,16 +143,43 @@ class="active"
     </div>
 </div>
 <script>
-    $(function() {
+    $(function () {
         $("textarea").wysihtml5();
-        
+
         $('input[type="checkbox"]').iCheck({
             checkboxClass: 'icheckbox_flat-blue'
         });
         $('input[type="radio"]').iCheck({
             radioClass: 'iradio_flat-blue'
         });
-    
-    });        
+
+    });
 </script>
+@stop
+@section('FooterInclude')
+<script>
+    $('#org').autocomplete({
+        minLength: 1,
+        source: function (request, response) {
+            $.getJSON("{{url('get-organization')}}", {
+                term: request.term
+            }, function (data) {
+                var array = data.error ? [] : $.map(data, function (m) {
+                    return {
+                        label: m.label,
+                        value: m.value
+                    };
+                });
+                response(array);
+            });
+        },
+        select: function (event, ui) {
+            $("#org").val(ui.item.label); // display the selected text
+            $("#field_id").val(ui.item.value); // save selected id to hidden input
+            return false;
+        }
+    });
+
+</script>
+
 @stop

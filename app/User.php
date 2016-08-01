@@ -8,8 +8,8 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract
-{
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
+
     use Authenticatable,
         CanResetPassword;
 
@@ -28,7 +28,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $fillable = ['user_name', 'email', 'password', 'active', 'first_name', 'last_name', 'ban', 'ext', 'mobile', 'profile_pic',
         'phone_number', 'company', 'agent_sign', 'account_type', 'account_status',
         'assign_group', 'primary_dpt', 'agent_tzone', 'daylight_save', 'limit_access',
-        'directory_listing', 'vacation_mode', 'role', 'internal_note', 'country_code', ];
+        'directory_listing', 'vacation_mode', 'role', 'internal_note', 'country_code'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -37,13 +37,49 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $hidden = ['password', 'remember_token'];
 
-    public function getProfilePicAttribute($value)
-    {
+    public function getProfilePicAttribute($value) {
         //$n =1;
         if (!$value) {
             return \Gravatar::src($this->attributes['email']);
         } else {
-            return asset('uploads/profilepic/'.$value);
+            return asset('uploads/profilepic/' . $value);
         }
     }
+
+    public function getOrganizationRelation() {
+        $related = "App\Model\helpdesk\Agent_panel\User_org";
+        $user_relation = $this->hasMany($related, 'user_id');
+        $relation = $user_relation->first();
+        if ($relation) {
+            $org_id = $relation->org_id;
+            $orgs = new \App\Model\helpdesk\Agent_panel\Organization();
+            $org = $orgs->where('id', $org_id);
+            return $org;
+        }
+    }
+
+    public function getOrganization() {
+        $name = "";
+        if ($this->getOrganizationRelation()) {
+            $org = $this->getOrganizationRelation()->first();
+            if ($org) {
+                $name = $org->name;
+            }
+        }
+        return $name;
+    }
+
+    public function getOrgWithLink() {
+        $name = "";
+        $org = $this->getOrganization();
+        if ($org !== "") {
+            $orgs = $this->getOrganizationRelation()->first();
+            if ($orgs) {
+                $id = $orgs->id;
+                $name = "<a href=" . url('organizations/' . $id) . ">" . ucfirst($org) . "</a>";
+            }
+        }
+        return $name;
+    }
+
 }

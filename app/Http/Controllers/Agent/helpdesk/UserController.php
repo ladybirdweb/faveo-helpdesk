@@ -204,6 +204,8 @@ class UserController extends Controller
             }
             // save user credentails
             if ($user->save() == true) {
+                $orgid = $request->input('org_id');
+                $this->storeUserOrgRelation($user->id, $orgid);
                 // fetch user credentails to send mail
                 $name = $user->user_name;
                 $email = $user->email;
@@ -302,6 +304,8 @@ class UserController extends Controller
             }
             // dd($request->input());
             $users->fill($request->input())->save();
+            $orgid = $request->input('org_id');
+            $this->storeUserOrgRelation($users->id, $orgid);
             /* redirect to Index page with Success Message */
             return redirect('user')->with('success', Lang::get('lang.User-profile-Updated-Successfully'));
         } catch (Exception $e) {
@@ -533,6 +537,18 @@ class UserController extends Controller
         }
         // return random string
         return $randomString;
+    }
+    
+    public function storeUserOrgRelation($userid,$orgid){
+        $org_relations = new User_org();
+        $org_relation = $org_relations->where('user_id',$userid)->first();
+        if($org_relation){
+            $org_relation->delete();
+        }
+        $org_relations->create([
+            'user_id'=>$userid,
+            'org_id'=>$orgid,
+        ]);
     }
     
 }

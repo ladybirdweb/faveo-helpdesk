@@ -466,6 +466,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('user-list', ['as' => 'user.list', 'uses' => 'Agent\helpdesk\UserController@user_list']);
         // Route::get('user/delete/{id}', ['as' => 'user.delete' , 'uses' => 'Agent\helpdesk\UserController@destroy']);
         Route::resource('organizations', 'Agent\helpdesk\OrganizationController'); /* organization router used to deal CRUD function of organization */
+        Route::get('get-organization',['as'=>'org.get.ajax','uses'=>'Agent\helpdesk\OrganizationController@getOrgAjax']);
         Breadcrumbs::register('organizations.index', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
             $breadcrumbs->push(Lang::get('lang.organizations'), route('organizations.index'));

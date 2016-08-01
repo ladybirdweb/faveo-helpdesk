@@ -263,6 +263,7 @@ if ($thread->title != "") {
                                 <tr><td><b>{!! Lang::get('lang.source') !!}:</b></td>         <td>{{$ticket_source}}</td></tr>
                                 <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first(); ?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
                                 <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{$username}}</td></tr>
+                                <tr><td><b>{!! Lang::get('lang.organization') !!}:</b></td>   <td>{!!$LastResponse->getOrgWithLink()!!}</td></tr>
                                 <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
                             </div>
                         </table>

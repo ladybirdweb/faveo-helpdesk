@@ -17,6 +17,7 @@ use App\User;
 // classes
 use Exception;
 use Lang;
+use Illuminate\Http\Request;
 
 /**
  * OrganizationController
@@ -328,4 +329,15 @@ class OrganizationController extends Controller
 
         return '['.$last.']';
     }
+    
+    public function getOrgAjax(Request $request){
+        $org = new Organization();
+        $q = $request->input('term');
+        $orgs = $org->where('name','LIKE','%'.$q.'%')
+                ->select('name as label','id as value')
+                ->get()
+                ->toJson();
+        return $orgs;
+    }
+    
 }
