@@ -60,6 +60,9 @@ class="active"
             @if($errors->first('phone_number'))
             <li class="error-message-padding">{!! $errors->first('phone_number', ':message') !!}</li>
             @endif
+            @if($errors->first('country_code'))
+            <li class="error-message-padding">{!! $errors->first('country_code', ':message') !!}</li>
+            @endif
             @if($errors->first('mobile'))
             <li class="error-message-padding">{!! $errors->first('mobile', ':message') !!}</li>
             @endif
@@ -120,7 +123,7 @@ class="active"
                 {!! Form::text('ext',null,['class' => 'form-control']) !!}
             </div>
             <!--country code-->
-            <div class="col-xs-1 form-group {{ Session::has('country_code') ? 'has-error' : '' }}">
+            <div class="col-xs-1 form-group {{  $errors->has('country_code') ? 'has-error' : '' }}">
 
                 {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
                 {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
