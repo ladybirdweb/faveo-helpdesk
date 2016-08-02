@@ -302,7 +302,12 @@ class TicketController extends Controller {
             }
             //create user
             if ($this->create_user($email, $fullname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response, $status)) {
-                return Redirect('newticket')->with('success', Lang::get('lang.Ticket-created-successfully'));
+                $status = $this->checkUserVerificationStatus();
+                if($status == 1) {
+                    return Redirect('newticket')->with('success', Lang::get('lang.Ticket-created-successfully'));
+                } else {
+                    return Redirect('newticket')->with('success', Lang::get('lang.Ticket-created-successfully2'));
+                }
             } else {
                 return Redirect('newticket')->with('fails', 'fails');
             }
@@ -649,13 +654,15 @@ class TicketController extends Controller {
             \Event::fire(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
             if ($user->save()) {
                 $user_id = $user->id;
-                                $value = [
-                    "full_name" => $username,
-                    "email"     => $emailadd,
-                    "code"      => $phonecode,
-                    "mobile"   => $mobile_number,
-                ];
-                \Event::fire(new \App\Events\LoginEvent($value));
+                if ($user_status == 0) {
+                    $value = [
+                        "full_name" => $username,
+                        "email"     => $emailadd,
+                        "code"      => $phonecode,
+                        "mobile"    => $mobile_number,
+                    ];
+                    \Event::fire(new \App\Events\LoginEvent($value));
+                }
                 // Event fire
                 \Event::fire(new \App\Events\ReadMailEvent($user_id, $password));
                 try {

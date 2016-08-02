@@ -286,6 +286,7 @@ return [
     'day_date_time'                                              => 'Day,Date And Time Format',
     'timezone'                                                   => 'Default Time Zone',
     'Ticket-created-successfully'                                => 'Ticket created successfully!',
+    'Ticket-created-successfully2'                               => 'Ticket has been created but not verified. It will be shown in inbox once user verifies his account.',
     'system_updated_successfully'                                => 'System Updated Successfully',
     'system_can_not_updated'                                     => 'System can not Updated',
     'ticket_updated_successfully'                                => 'Ticket Updated Successfully',
