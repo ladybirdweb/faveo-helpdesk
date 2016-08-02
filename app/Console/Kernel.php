@@ -15,9 +15,9 @@ class Kernel extends ConsoleKernel {
      */
     protected $commands = [
         'App\Console\Commands\Inspire',
-        // 'App\Console\Commands\SendReport',
-        // 'App\Console\Commands\CloseWork',
-        // 'App\Console\Commands\TicketFetch',
+        'App\Console\Commands\SendReport',
+        'App\Console\Commands\CloseWork',
+        'App\Console\Commands\TicketFetch',
     ];
 
     /**
@@ -28,33 +28,34 @@ class Kernel extends ConsoleKernel {
      * @return void
      */
     protected function schedule(Schedule $schedule) {
-        //$schedule->command('queue:listen', ['--tries' => 1])->everyMinute()->withoutOverlapping();
-       // $this->execute($schedule, 'fetching');
-        //$this->execute($schedule, 'notification');
-        //$this->execute($schedule, 'work');
+        if (env('DB_INSTALL') === 1) {
+            $schedule->command('queue:listen', ['--tries' => 1])->everyMinute()->withoutOverlapping();
+            $this->execute($schedule, 'fetching');
+            $this->execute($schedule, 'notification');
+            $this->execute($schedule, 'work');
+        }
     }
 
-    public function execute($schedule,$task) {
+    public function execute($schedule, $task) {
         $condition = new Condition();
         $command = $condition->getConditionValue($task);
-        switch ($task){
+        switch ($task) {
             case "fetching":
-                $this->getCondition($schedule->command('ticket:fetch'),$command);
+                $this->getCondition($schedule->command('ticket:fetch'), $command);
                 break;
             case "notification":
-                $this->getCondition($schedule->command('report:send'),$command);
+                $this->getCondition($schedule->command('report:send'), $command);
                 break;
             case "work":
-                $this->getCondition($schedule->command('ticket:close'),$command);
+                $this->getCondition($schedule->command('ticket:close'), $command);
                 break;
         }
-        
     }
-    
-    public function getCondition($schedule,$command){
+
+    public function getCondition($schedule, $command) {
         $condition = $command['condition'];
         $at = $command['at'];
-        switch ($condition){
+        switch ($condition) {
             case "everyMinute":
                 $schedule->everyMinute()->withoutOverlapping();
                 break;
@@ -74,7 +75,7 @@ class Kernel extends ConsoleKernel {
                 $schedule->daily()->withoutOverlapping();
                 break;
             case "dailyAt":
-                $this->getConditionWithOption($schedule,$condition,$at);
+                $this->getConditionWithOption($schedule, $condition, $at);
                 break;
             case "weekly":
                 $schedule->weekly()->withoutOverlapping();
@@ -87,9 +88,9 @@ class Kernel extends ConsoleKernel {
                 break;
         }
     }
-    
-    public function getConditionWithOption($schedule,$command,$at){
-        switch ($command){
+
+    public function getConditionWithOption($schedule, $command, $at) {
+        switch ($command) {
             case "dailyAt":
                 $schedule->dailyAt($at)->withoutOverlapping();
                 break;
