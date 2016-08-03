@@ -8,6 +8,6 @@ class CommonSettings extends BaseModel
 {
     protected $table = 'common_settings';
     protected $fillable = [
-        'optional', 'key', 'value', 'created_at', 'updated_at',
+        'status', 'option_name', 'option_value', 'optional_field', 'created_at', 'updated_at',
     ];
 }

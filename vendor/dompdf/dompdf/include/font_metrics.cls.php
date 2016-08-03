@@ -356,14 +356,19 @@ class Font_Metrics {
       $font = Font::load($local_temp_file);
       
       if (!$font) {
+       
         unlink($local_temp_file);
+       
         return false;
       }
       
       $font->parse();
       $font->saveAdobeFontMetrics("$cache_entry.ufm");
-      
-      unlink($local_temp_file);
+      if (!$local_temp_file) {
+        unlink($local_temp_file);
+        return false;
+      }
+//      unlink($local_temp_file);
       
       if ( !file_exists("$cache_entry.ufm") ) {
         return false;

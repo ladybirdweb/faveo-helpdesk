@@ -33,6 +33,7 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\helpdesk\Workflow\WorkflowClose;
 use App\Model\kb\Settings;
+use App\Model\helpdesk\Utility\Limit_Login;
 // Knowledge base
 use Illuminate\Database\Seeder;
 
@@ -2018,5 +2019,8 @@ class DatabaseSeeder extends Seeder
          */
         Rating::create(['id' => '1', 'name' => 'OverAll Satisfaction', 'display_order' => '1', 'allow_modification' => '1', 'rating_scale' => '5', 'rating_area' => 'Helpdesk Area']);
         Rating::create(['id' => '2', 'name' => 'Reply Rating', 'display_order' => '1', 'allow_modification' => '1', 'rating_scale' => '5', 'rating_area' => 'Comment Area']);
+
+
+        Limit_Login::create(['id' => '1']);
     }
 }

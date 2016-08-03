@@ -656,6 +656,18 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/get-closed-tickets/{id}', ['as' => 'get.dept.close', 'uses' => 'Agent\helpdesk\Ticket2Controller@getCloseTickets']);
         //in progress ticket of department
         Route::get('/get-under-process-tickets/{id}', ['as' => 'get.dept.inprocess', 'uses' => 'Agent\helpdesk\Ticket2Controller@getInProcessTickets']);
+        
+        // route for graphical reporting
+        Route::get('report', ['as' => 'report.index', 'uses' => 'Agent\helpdesk\ReportController@index']); /* To show dashboard pages */
+        Breadcrumbs::register('report.index', function ($breadcrumbs) {
+            $breadcrumbs->parent('dashboard');
+            $breadcrumbs->push(Lang::get('lang.dashboard'), route('dashboard'));
+        });
+        // default route to get the data for the first time
+        Route::get('help-topic-report', 'Agent\helpdesk\ReportController@chartdataHelptopic');
+        // route to get the data on change
+        Route::post('help-topic-report/{date1}/{date2}/{id}', ['as' => 'report.helptopic', 'uses' => 'Agent\helpdesk\ReportController@chartdataHelptopic']); /* To show dashboard pages */
+        Route::post('help-topic-pdf',['as' => 'help.topic.pdf', 'uses' => 'Agent\helpdesk\ReportController@helptopicPdf']);
     });
     /*
       |------------------------------------------------------------------
@@ -996,8 +1008,8 @@ Route::group(['middleware' => ['web']], function () {
     // Route::patch('client-profile-edit',['as' => 'client-profile-edit', 'uses' => 'Client\kb\UserController@postClientProfile']);
     // Route::patch('client-profile-password/{id}',['as' => 'client-profile-password', 'uses' => 'Client\kb\UserController@postClientProfilePassword']);
     Route::get('/inbox/data', ['as' => 'api.inbox', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);
-    Route::get('/report', 'HomeController@getreport');
-    Route::get('/reportdata', 'HomeController@pushdata');
+//    Route::get('/report', 'HomeController@getreport');
+//    Route::get('/reportdata', 'HomeController@pushdata');
     /*
      * ================================================================================================
      * @version v1

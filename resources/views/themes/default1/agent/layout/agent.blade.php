@@ -95,6 +95,7 @@
                             <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
+                            <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
                         </ul>
                         @else
                             <?php \Event::fire('service.desk.agent.topbar', array()); ?>
@@ -554,6 +555,14 @@
             window.open('{{URL::route("dashboard")}}', '_blank');
         } else {
             window.location = "{{URL::route('dashboard')}}";
+        }
+    }
+    
+    function clickReport(e) {
+        if (e.ctrlKey === true) {
+            window.open('{{URL::route("report.index")}}', '_blank');
+        } else {
+            window.location = "{{URL::route('report.index')}}";
         }
     }
 </script>
