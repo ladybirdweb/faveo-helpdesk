@@ -63,23 +63,18 @@ class ArticleController extends Controller
     public function getData()
     {
         $article = new Article();
+        $articles = $article
+                ->select('id', 'name', 'description', 'publish_time', 'slug')
+                ->orderBy('publish_time','desc')
+                ->get();
         // returns chumper datatable
-        return Datatable::query($article)
-                        /* searcable column name */
-                        ->searchColumns('name')
-                        /* order column name and description */
-                        ->orderColumns('name', 'description')
+        return Datatable::Collection($articles)
+
                         /* add column name */
                         ->addColumn('name', function ($model) {
-                            $string = strip_tags($model->name);
-                            if (strlen($string) > 40) {
-                                // truncate string
-                                $stringCut = substr($string, 0, 40);
-                            } else {
-                                $stringCut = $model->name;
-                            }
+                            $name = str_limit($model->name, 20, '...');
 
-                            return $stringCut.'...';
+                            return "<p title=$model->name>$name</p>";
                         })
                         /* add column Created */
                         ->addColumn('publish_time', function ($model) {
@@ -90,7 +85,7 @@ class ArticleController extends Controller
                         /* add column action */
                         ->addColumn('Actions', function ($model) {
                             /* here are all the action buttons and modal popup to delete articles with confirmations */
-                            return '<span  data-toggle="modal" data-target="#deletearticle'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.\Lang::get('lang.delete').' </button></span>&nbsp;<a href=article/'.$model->id.'/edit class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href=show/'.$model->slug.' class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
+                            return '<span  data-toggle="modal" data-target="#deletearticle'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.\Lang::get('lang.delete').' </button></span>&nbsp;<a href='.url("article/$model->id/edit").' class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href='.url("show/$model->slug").' class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
 				<div class="modal fade" id="deletearticle'.$model->id.'">
         			<div class="modal-dialog">
             			<div class="modal-content">
@@ -103,12 +98,14 @@ class ArticleController extends Controller
                 			</div>
                 			<div class="modal-footer">
                     			<button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">Close</button>
-                    			<a href="article/delete/'.$model->slug.'"><button class="btn btn-danger">delete</button></a>
+                    			<a href='.url("article/delete/$model->slug").'><button class="btn btn-danger">delete</button></a>
                 			</div>
-            			</div><!-- /.modal-content -->
-        			</div><!-- /.modal-dialog -->
+            			</div>
+        			</div>
     			</div>';
                         })
+                        ->searchColumns('name', 'description', 'publish_time')
+                        ->orderColumns('name', 'description', 'publish_time')
                         ->make();
     }
 
@@ -253,9 +250,9 @@ class ArticleController extends Controller
             $article->publish_time = $publishTime;
             $article->save();
 
-            return redirect('article')->with('success', Lang::get('lang.article_updated_successfully'));
+            return redirect()->back()->with('success', Lang::get('lang.article_updated_successfully'));
         } catch (Exception $e) {
-            return redirect('article')->with('fails', Lang::get('lang.article_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect()->back()->with('fails', Lang::get('lang.article_not_updated').'<li>'.$e->getMessage().'</li>');
         }
     }
 
@@ -285,12 +282,12 @@ class ArticleController extends Controller
         }
         if ($article) {
             if ($article->delete()) {//true:redirect to index page with success message
-                return Redirect::back()->with('success', Lang::get('lang.article_deleted_successfully'));
+                return redirect('article')->with('success', Lang::get('lang.article_deleted_successfully'));
             } else { //redirect to index page with fails message
-                return Redirect::back()->with('fails', Lang::get('lang.article_not_deleted'));
+                return redirect('article')->with('fails', Lang::get('lang.article_not_deleted'));
             }
         } else {
-            return Redirect::back()->with('fails', Lang::get('lang.article_can_not_deleted'));
+            return redirect('article')->with('fails', Lang::get('lang.article_can_not_deleted'));
         }
     }
 

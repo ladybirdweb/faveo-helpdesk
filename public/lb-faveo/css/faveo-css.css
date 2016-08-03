@@ -54,4 +54,8 @@ span.stars2 span {
 .image:hover:after, .image:hover:before {
     opacity:1;
 }
+
+.star-rating-live  {
+    button: disabled;
+}
         

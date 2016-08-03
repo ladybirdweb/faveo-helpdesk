@@ -33,7 +33,8 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.0.7.8',
+    'version' => 'Community 1.0.7.9',
+
     /*
       |--------------------------------------------------------------------------
       | Application Name
@@ -43,6 +44,7 @@ return [
       |
      */
     'name' => 'Faveo helpdesk community',
+
     /*
       |--------------------------------------------------------------------------
       | Application URL
@@ -135,12 +137,16 @@ return [
 
         'Illuminate\Broadcasting\BroadcastServiceProvider',
         'DaveJamesMiller\Breadcrumbs\ServiceProvider',
-        /*
-         */
+        
 
         /*
          * Laravel Framework Service Providers...
          */
+
+
+			//
+        
+
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
         'Illuminate\Cache\CacheServiceProvider',
@@ -151,7 +157,8 @@ return [
         'Illuminate\Filesystem\FilesystemServiceProvider',
         'Illuminate\Foundation\Providers\FoundationServiceProvider',
         'Illuminate\Hashing\HashServiceProvider',
-        'Illuminate\Mail\MailServiceProvider',
+        Illuminate\Mail\MailServiceProvider::class,
+
         'Illuminate\Pagination\PaginationServiceProvider',
         'Illuminate\Pipeline\PipelineServiceProvider',
         'Illuminate\Queue\QueueServiceProvider',
@@ -175,11 +182,13 @@ return [
         'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
         'Chumper\Datatable\DatatableServiceProvider',
         'Chumper\Zipper\ZipperServiceProvider',
-        'Bestmomo\Filemanager\FilemanagerServiceProvider',
-        'Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider',
-        'Intervention\Image\ImageServiceProvider',
+        Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
         'Torann\GeoIP\GeoIPServiceProvider',
+        LaravelFCM\FCMServiceProvider::class, 
+        Barryvdh\Debugbar\ServiceProvider::class,
     ],
     /*
       |--------------------------------------------------------------------------
@@ -234,12 +243,14 @@ return [
         'SMTPS'       => 'App\Http\Controllers\HomeController',
         'Datatable'   => 'Chumper\Datatable\Facades\DatatableFacade',
         'Zipper'      => 'Chumper\Zipper\Zipper',
-        'Image'       => 'Intervention\Image\Facades\Image',
         'JWTAuth'     => 'Tymon\JWTAuth\Facades\JWTAuth',
         'JWTFactory'  => 'Tymon\JWTAuth\Facades\JWTFactory',
         'Breadcrumbs' => 'DaveJamesMiller\Breadcrumbs\Facade',
         'GeoIP'       => 'Torann\GeoIP\GeoIPFacade',
+        'Image'       => Intervention\Image\Facades\Image::class,
+        'FCM'         => LaravelFCM\Facades\FCM::class,
+        'FCMGroup'    => LaravelFCM\Facades\FCMGroup::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
-    'token' => 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaXNzIjoiaHR0cDpcL1wvbG9jYWxob3N0XC9mYXZlby1oZWxwZGVzay1naXRodWJcL3B1YmxpY1wvYXBpXC92MVwvYXV0aGVudGljYXRlIiwiaWF0IjoxNDU1NzAyNDEyLCJleHAiOjE0NTU3MDYwMTIsIm5iZiI6MTQ1NTcwMjQxMiwianRpIjoiOTdlODg1ODNjOWQyNDIzNWQ4MzI3Y2ExNzI1NDY1MDQifQ.37E7H2kRCQuz5oBRkQLKhNNpaNXyk4FiEYS9RQ7HZPY',
     'name'  => 'faveo helpdesk community',
 ];

@@ -21,16 +21,15 @@ class="active"
 $date_time_format = UTC::getDateTimeFormat();
 $dept = App\Model\helpdesk\Agent\Department::where('name','=',$id)->first();
     if(Auth::user()->role == 'agent') {
-        
-        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','=','2')->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
+        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','=','2')->where('status','=','3')->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
     } else {
-        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','=','2')->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
+        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status','=','2')->where('status','=','3')->where('dept_id','=',$dept->id)->orderBy('id', 'DESC')->paginate(20);
     }   
 ?>
 <!-- Main content -->
 <div class="box box-primary">
      <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.open') !!} </h3> <small id="title_refresh">{!! $tickets->total() !!} {!! Lang::get('lang.tickets') !!}</small>
+        <h3 class="box-title">{!! $dept->name !!} / {!! Lang::get('lang.closed') !!} </h3> <small id="title_refresh">{!! $tickets->total() !!} {!! Lang::get('lang.tickets') !!}</small>
         <div class="box-tools pull-right">
         <div class="has-feedback">
 
@@ -63,6 +62,7 @@ $dept = App\Model\helpdesk\Agent\Department::where('name','=',$id)->first();
             <input type="submit" class="submit btn btn-default text-blue btn-sm" id="close" name="submit" value="{!! Lang::get('lang.open') !!}">
             <!-- <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
  -->        </div>
+        <p><p/>
         <div class="mailbox-messages" id="refresh">
         <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! Lang::get('lang.loading') !!}...</b></p>
         <!-- table -->
@@ -76,37 +76,7 @@ $dept = App\Model\helpdesk\Agent\Department::where('name','=',$id)->first();
                     Lang::get('lang.assigned_to'),
                     Lang::get('lang.last_activity'))
                 ->setUrl(route('get.dept.close', $dept->id))
-                ->setOptions('aoColumnDefs',array(
-        array(
-            'render' => "function ( data, type, row ) {
-                    var t = row[6].split(/[- :,/ :,. /]/);
-                    var d = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
-                    <!--  -->
-                    var dtf= '$date_time_format';
-                    if(dtf==1) {
-                        dtf = 'D/MMM/YYYY hh:mm:ss A';
-                    } else if(dtf==2) {
-                        dtf = 'D MMM, YYYY hh:mm:ss A';
-                    } else if(dtf==3) {
-                        dtf = 'D-MMM-YYYY hh:mm:ss A';
-                    } else if(dtf==4) {
-                        dtf = 'MMM/D/YYYY hh:mm:ss A';
-                    } else if(dtf==5) {
-                        dtf = 'MMM D, YYYY hh:mm:ss A';
-                    } else if(dtf==6) {
-                        dtf = 'MMM-D-YYYY hh:mm:ss A';
-                    } else if(dtf==7) {
-                        dtf = 'YYYY/MMM/D hh:mm:ss A';
-                    } else if(dtf==8) {
-                        dtf = 'YYYY, MMM D hh:mm:ss A';
-                    } else if(dtf==9) {
-                        dtf = 'YYYY-MMM-D hh:mm:ss A';
-                    }
-                    return  moment(d).format(dtf);
-                    <!-- //return d; -->
-                }", 
-            'aTargets' => array(6))
-        ))
+                
                 ->setOrder(array(6=>'desc'))  
                 ->setClass('table table-hover table-bordered table-striped')
                 ->setCallbacks("fnRowCallback",'function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {

@@ -31,7 +31,7 @@ class Bugsnag_Diagnostics
     public function getDeviceData()
     {
         return array(
-            'hostname' => $this->config->get('hostname', php_uname('n')),
+            'hostname' => $this->config->get('hostname', gethostname()),
         );
     }
 

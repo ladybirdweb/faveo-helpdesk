@@ -54,7 +54,7 @@ class CloseWrokflowController extends Controller
             $security = new WorkflowClose();
             $securitys = $security->whereId($id)->first();
             $securitys->days = $request->input('days');
-            // $securitys->condition = $request->input('condition');
+//            $securitys->condition = $request->input('condition');
             $securitys->send_email = $request->input('send_email');
             $securitys->status = $request->input('status');
             $securitys->save();

@@ -1,4 +1,14 @@
 |=======================================================
+| v1.0.7.9 R.C.
+|=======================================================
+
+R.C.
+
+    This is a release candidate. We havent made any official release yet. 
+    This candidate version needs to be tested further.
+    Wait till the official release.
+
+|=======================================================
 | v1.0.7.7
 |=======================================================
 

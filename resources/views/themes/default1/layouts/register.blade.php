@@ -23,12 +23,12 @@
       <div class="login-logo">
         <a href="../../index2.html"><b>Faveo</b> HELP DESK</a>
       </div><!-- /.login-logo -->
-      
+
        @yield('body')
-       
+
     </div><!-- /.login-box -->
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
     <!-- iCheck -->
     <script src="{{asset("plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>

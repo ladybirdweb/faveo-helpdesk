@@ -91,7 +91,7 @@ if (DB_HOST && DB_USER && DB_NAME) {
     //  Validators
     // ---------------------------------------------------
 // dd($results);
-    ?><p class="wc-setup-actions step"><?php
+    ?><p class="setup-actions step"><?php
     foreach ($results as $result) {
         print '<br><span class="' . strtolower($result->status) . '">' . $result->status . '</span> &mdash; ' . $result->message . '';
     } // foreach
@@ -150,7 +150,7 @@ if (DB_HOST && DB_USER && DB_NAME) {
     </div>
 
     <div style="border-bottom: 1px solid #eee;">
-        <p class="wc-setup-actions step">
+        <p class="setup-actions step">
             <a href="{{ URL::route('account') }}" class="pull-right" id="next" style="text-color:black"><input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue"> </a>
             <a href="{{ URL::route('configuration') }}" class="button button-large button-next" style="float: left">Previous</a>
         </p>
@@ -205,7 +205,7 @@ $(document).ready(function () {
 
 
             <div  style="border-bottom: 1px solid #eee;">
-                <p class="wc-setup-actions step">
+                <p class="setup-actions step">
                     <input type="submit" id="submitme" class="button-danger button button-large button-next" style="background-color: #d43f3a;color:#fff;" value="continue" disabled>
                     <a href="{{URL::route('configuration')}}" class="button button-large button-next" style="float: left;">Previous</a>
                 </p>
@@ -214,7 +214,7 @@ $(document).ready(function () {
       <?php } // if ?>
     <div id="legend">
         {{-- <ul> --}}
-        <p class="wc-setup-actions step">
+        <p class="setup-actions step">
             <span class="ok">Ok</span> &mdash; All Ok <br/>
             <span class="warning">Warning</span> &mdash; Not a deal breaker, but it's recommended to have this installed for some features to work<br/>
             <span class="error">Error</span> &mdash; Faveo HELPDESK require this feature and can't work without it<br/>

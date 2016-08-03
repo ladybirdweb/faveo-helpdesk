@@ -54,11 +54,7 @@ class="active"
 
                             {!! Form::text('name',null,['class' => 'form-control']) !!}
                         </div>
-                        <div class="col-md-6 form-group {{ $errors->has('slug') ? 'has-error' : '' }}">
-                            {!! Form::label('slug',Lang::get('lang.slug')) !!}<span class="text-red"> *</span>
-
-                            {!! Form::text('slug',null,['class' => 'form-control']) !!}
-                        </div>
+                        
                     </div>
                     <div class="form-group {{ $errors->has('description') ? 'has-error' : '' }}">
                         {!! Form::label('description',Lang::get('lang.description')) !!}
@@ -116,5 +112,18 @@ class="active"
     $(function() {
         $("textarea").wysihtml5();
     });
+</script>
+
+<script>
+    $(function() {
+        
+        $('input[type="checkbox"]').iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        });
+        $('input[type="radio"]').iCheck({
+            radioClass: 'iradio_flat-blue'
+        });
+    
+    });        
 </script>
 @stop

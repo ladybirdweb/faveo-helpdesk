@@ -82,10 +82,10 @@ class="active"
                     <div class='col-xs-4'><label>{!! Lang::get('lang.group') !!}:</label></div> <div class='col-xs-7'> {{ $grp }}</div>
                 </div>
                 <div class="form-group  row">
-                    <div class='col-xs-4'><label>{!! Lang::get('lang.company') !!}:</label></div> <div class='col-xs-7'> {{ $user->role }}</div>
+                    <div class='col-xs-4'><label>{!! Lang::get('lang.company') !!}:</label></div> <div class='col-xs-7'> {{ $user->company }}</div>
                 </div>
                 <div class="form-group  row">
-                    <div class='col-xs-4'><label>{!! Lang::get('lang.role') !!}:</label></div> <div class='col-xs-7'> {{ $user->company }}</div>
+                    <div class='col-xs-4'><label>{!! Lang::get('lang.role') !!}:</label></div> <div class='col-xs-7'>  {{ $user->role }}</div>
                 </div>
             </div>
         </div>

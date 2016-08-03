@@ -279,7 +279,7 @@ class UnAuthController extends Controller
         return Lang::get('lang.your_ticket_has_been').' '.$ticket_status->state;
     }
 
-       //Auto-close tickets
+    //Auto-close tickets
     public function autoCloseTickets()
     {
         $workflow = \App\Model\helpdesk\Workflow\WorkflowClose::whereId(1)->first();

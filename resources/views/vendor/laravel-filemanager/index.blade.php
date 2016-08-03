@@ -16,7 +16,7 @@
     <div class="row fill">
         <div class="panel panel-primary fill">
             <div class="panel-heading">
-                <h3 class="panel-title">{{ Lang::get('laravel-filemanager::lfm.title-panel') }}</h3>
+                <h3 class="panel-title">Faveo File Manager</h3>
             </div>
             <div class="panel-body fill">
                 <div class="row fill">
@@ -39,13 +39,13 @@
                                     <div class="collapse navbar-collapse">
                                         <ul class="nav navbar-nav" id="nav-buttons">
                                             <li>
-                                                <a href="#!" id="upload" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-upload"></i> {{ Lang::get('laravel-filemanager::lfm.nav-upload') }}</a>
+                                                <a href="#!" id="upload" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-upload"></i> Upload</a>
                                             </li>
                                             <li>
-                                                <a href="#!" class="thumbnail-display" id="thumbnail-display"><i class="fa fa-picture-o"></i> {{ Lang::get('laravel-filemanager::lfm.nav-thumbnails') }}</a>
+                                                <a href="#!" class="thumbnail-display" id="thumbnail-display"><i class="fa fa-picture-o"></i> Thumbnails</a>
                                             </li>
                                             <li>
-                                                <a href="#!" class="list-display" id="list-display"><i class="fa fa-list"></i> {{ Lang::get('laravel-filemanager::lfm.nav-list') }}</a>
+                                                <a href="#!" class="list-display" id="list-display"><i class="fa fa-list"></i> List</a>
                                             </li>
                                         </ul>
                                     </div>

@@ -334,7 +334,7 @@ active
             <input id="dummy-data" class="input-checkbox" type="checkbox" name="dummy-data">
             <label for="dummy-data" style="color:#3AA7D9">Install dummy data</label>
             <br><br>
-            <p class="wc-setup-actions step">
+            <p class="setup-actions step">
                 <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Install">
                 <a href="{{url('step4')}}" class="button button-large button-next" style="float: left">Previous</a>
             </p>

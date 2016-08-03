@@ -6,53 +6,59 @@
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <meta name="_token" content="{!! csrf_token() !!}"/>
         <!-- faveo favicon -->
-        <link rel="shortcut icon" href="{{asset("lb-faveo/media/images/favicon.ico")}}">
+        <link href="{{asset("lb-faveo/media/images/favicon.ico")}}" rel="shortcut icon">
         <!-- Bootstrap 3.3.2 -->
         <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Font Awesome Icons -->
         <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Ionicons -->
-        <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet">
+        <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet"  type="text/css" />
         <!-- Theme style -->
         <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
-        <!-- AdminLTE Skins. Choose a skin from the css/skins
-             folder instead of downloading all of them to reduce the load. -->
+        <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
         <link href="{{asset("lb-faveo/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- iCheck -->
         <link href="{{asset("lb-faveo/plugins/iCheck/flat/blue.css")}}" rel="stylesheet" type="text/css" />
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <link rel="stylesheet" href="{{asset("lb-faveo/css/tabby.css")}}" type="text/css">
-        <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
+        <link href="{{asset("lb-faveo/css/tabby.css")}}" rel="stylesheet" type="text/css"/>
+        
+        <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css"/>
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <link rel="stylesheet" href="{{asset("lb-faveo/css/editor.css")}}" type="text/css">
-        <link href="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" rel="stylesheet" type="text/css" />
-        <link type="text/css" href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet">
-        <link type="text/css" href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">
-        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />        
-        <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/faveo-css.css")}}">
-        <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/notification-style.css")}}">
+        <link href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css"/>
 
+        <link href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet" rel="stylesheet"/>
+        
+        <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet"  type="text/css"/>
+        
+        <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css"/>
+
+        <link href="{{asset("lb-faveo/css/faveo-css.css")}}" rel="stylesheet" type="text/css" />
+        
+        <link href="{{asset("lb-faveo/css/notification-style.css")}}" rel="stylesheet" type="text/css" >
+        
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
-
         <!-- Select2 -->
-        <link rel="stylesheet" href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}">
+        <link href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}" rel="stylesheet" type="text/css" />
+        <!-- autocomplete -->
+        <link href="{{asset("lb-faveo/css/autocomplete.css")}}" rel="stylesheet" type="text/css" />
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
         <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
+        
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
     </head>
-    <body class="skin-yellow skin-green fixed">
+    <body class="skin-blue fixed">
         <div class="wrapper">
             <header class="main-header">
                 <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png')}}" width="100px;"></a>
                 <?php
                 $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
                 if ($company != null) {
-                    
+
                 }
                 $replacetop = 0;
                 $replacetop = \Event::fire('service.desk.agent.topbar.replace', array());
@@ -73,7 +79,7 @@
                 ?>
 
                 <!-- Header Navbar: style can be found in header.less -->
-                <nav class="navbar navbar-static-top" role="navigation">
+                <nav class="navbar navbar-static-top">
                     <!-- Sidebar toggle button-->
                     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                         <span class="sr-only">Toggle navigation</span>
@@ -82,24 +88,24 @@
                         <span class="icon-bar"></span>
                     </a>
                     <?php $notifications = App\Http\Controllers\Common\NotificationController::getNotifications();
+
                     ?>
                     <div class="collapse navbar-collapse" id="navbar-collapse">
+                        @if($replacetop==0)
                         <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
-                            @if($replacetop==0)
-                            <li @yield('Dashboard')><a data-target="#tabA" href="#">{!! Lang::get('lang.dashboard') !!}</a></li>
+                            <li @yield('Dashboard')><a data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard();">{!! Lang::get('lang.dashboard') !!}</a></li>
                             <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
-                            @else 
+                        </ul>
+                        @else
                             <?php \Event::fire('service.desk.agent.topbar', array()); ?>
                             @endif
-                        </ul>
-
                         <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id', '=', Auth::user()->id)->where('is_read', '0')->get(); ?>
-
                         <ul class="nav navbar-nav navbar-right">
                             @if(Auth::user()->role == 'admin')
                             <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
+                            @include('themes.default1.update.notification')
                             @endif
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown notifications-menu" id="myDropdown">
@@ -154,7 +160,6 @@
                                         @endif
                                         @endif
                                         @endforeach
-
                                     </ul>
                             </li>
                             <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
@@ -162,7 +167,6 @@
                                 </div><div class="col-md-5"></div></li>
                             <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
                             </li>
-
                         </ul>
                         </li>
                         <!-- User Account: style can be found in dropdown.less -->
@@ -171,12 +175,12 @@
                                 @if(Auth::user())
                                 <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
                                 <span class="hidden-xs">{{Auth::user()->first_name." ".Auth::user()->last_name}}</span>
-                                @endif          
+                                @endif
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
-                                <li class="user-header"  style="background-color:#343F44;">     
-                                    <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />                                        
+                                <li class="user-header"  style="background-color:#343F44;">
+                                    <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
                                     <p>
                                         {{Auth::user()->first_name." ".Auth::user()->last_name}} - {{Auth::user()->role}}
                                         <small></small>
@@ -239,7 +243,6 @@
                     <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul id="side-bar" class="sidebar-menu">
-
                         @if($replaceside==0)
                         @yield('sidebar')
                         <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
@@ -255,7 +258,7 @@
                             $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
                             $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
                             $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
-                            $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id', '=', Auth::user())->get();
+                            $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
                         }
                         if (Auth::user()->role == 'agent') {
                             $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
@@ -324,13 +327,7 @@
                             $underprocess = count($underprocess);
                             $closed = App\Model\helpdesk\Ticket\Tickets::where('status', '=', '2')->where('dept_id', '=', $dept->id)->get();
                             $closed = count($closed);
-                            // $underprocess = 0;
-                            // foreach ($inbox as $ticket4) {
-                            //  if ($ticket4->assigned_to == null) {
-                            //  } else {
-                            //      $underprocess++;
-                            //  }
-                            // }
+
                             if (Auth::user()->role == 'admin') {
                                 ?>
                                 <li class="treeview">
@@ -339,7 +336,7 @@
                                     </a>
                                     <ul class="treeview-menu">
                                         <li><a href="{!! url::route('dept.open.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.open') !!}<small class="label pull-right bg-green">{!! $open !!}</small></a></li>
-                                        <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.inprogress') !!}<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
+                                        <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.assigned') !!}<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
                                         <li><a href="{!! url::route('dept.closed.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.closed') !!}<small class="label pull-right bg-green">{!! $closed !!}</small></a></li>
                                     </ul>
                                 </li>
@@ -350,7 +347,7 @@
                                     </a>
                                     <ul class="treeview-menu">
                                         <li><a href="{!! url::route('dept.open.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.open') !!}<small class="label pull-right bg-green">{!! $open !!}</small></a></li>
-                                        <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.inprogress') !!}<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
+                                        <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.assigned') !!}<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
                                         <li><a href="{!! url::route('dept.closed.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.closed') !!}<small class="label pull-right bg-green">{!! $closed !!}</small></a></li>
                                     </ul>
                                 </li>
@@ -367,7 +364,7 @@
             <?php
             $agent_group = Auth::user()->assign_group;
             $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
-// dd($group); 
+// dd($group);
             ?>
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
@@ -378,8 +375,6 @@
                             @if($replacetop==0)
                             <div class="tabs-pane @yield('dashboard-bar')"  id="tabA">
                                 <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('dashboard') ><a href="{{url('dashboard')}}">{!! Lang::get('lang.dashboard') !!}</a></li>
-                                    <li id="bar" @yield('profile') ><a href="{{url('profile')}}">{!! Lang::get('lang.profile') !!}</a></li>
                                 </ul>
                             </div>
                             <div class="tabs-pane @yield('user-bar')" id="tabB">
@@ -405,7 +400,9 @@
                             <div class="tabs-pane @yield('tools-bar')" id="tabD">
                                 <ul class="nav navbar-nav">
                                     <li id="bar" @yield('tools')><a href="{{ url('/canned/list')}}" >{!! Lang::get('lang.canned_response') !!}</a></li>
+                                    @if(Auth::user()->role == 'admin')
                                     <li id="bar" @yield('kb')><a href="{{ url('/comment')}}" >{!! Lang::get('lang.knowledge_base') !!}</a></li>
+                                    @endif
                                 </ul>
                             </div>
                             @endif
@@ -435,47 +432,38 @@
                 <strong>{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</strong> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
             </footer>
         </div><!-- ./wrapper -->
-        {{-- // <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
 
-        <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}"></script>
+    <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}" type="text/javascript"></script>
+    
+    <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
+    <!-- Bootstrap 3.3.2 JS -->
+    <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
+    <!-- Slimscroll -->
+    <script src="{{asset("lb-faveo/plugins/slimScroll/jquery.slimscroll.min.js")}}" type="text/javascript"></script>
+    <!-- FastClick -->
+    <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}"  type="text/javascript"></script>
+    <!-- AdminLTE App -->
+    <script src="{{asset("lb-faveo/js/app.min.js")}}" type="text/javascript"></script>
 
-        {{-- // <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script> --}}
-
-        <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
-        <!-- Bootstrap 3.3.2 JS -->
-        <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
-        <!-- Slimscroll -->
-        <script src="{{asset("lb-faveo/plugins/slimScroll/jquery.slimscroll.min.js")}}" type="text/javascript"></script>
-        <!-- FastClick -->
-        <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}"></script>
-        <!-- AdminLTE App -->
-        <script src="{{asset("lb-faveo/js/app.min.js")}}" type="text/javascript"></script>
-        <!-- AdminLTE for demo purposes -->
-        {{-- // <script src="{{asset("dist/js/demo.js")}}" type="text/javascript"></script> --}}
     <!-- iCheck -->
     <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
-    {{-- maskinput --}}
-    {{-- // <script src="js/jquery.maskedinput.min.js" type="text/javascript"></script> --}}
-    {{-- jquery ui --}}
+    <!-- jquery ui -->
     <script src="{{asset("lb-faveo/js/jquery.ui.js")}}" type="text/javascript"></script>
+    
     <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
+    
     <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
     <!-- Page Script -->
+    <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}" type="text/javascript" ></script>
 
-    {{-- // <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script> --}}
-    <script type="text/javascript" src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}"></script>
+    <script type="text/javascript" src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
 
-    <script type="text/javascript" src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"></script>
     <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
-    <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" ></script>
-    <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" ></script>
-    <script>
-                function myFunction() {
+    <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" type="text/javascript"></script>
 
-                document.getElementById("count").innerHTML = "0";
-                }
-    </script>
+    <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" type="text/javascript"></script>
+
     <script>
         $(document).ready(function () {
 
@@ -490,7 +478,7 @@
                         cache: false,
                         success: function (html)
                         {
-//$(".city").html(html);
+
                         }
                 });
         });
@@ -521,12 +509,6 @@
         });</script>
     <script>
                 $(function() {
-                // Enable iCheck plugin for checkboxes
-                // iCheck for checkbox and radio inputs
-                // $('input[type="checkbox"]').iCheck({
-                // checkboxClass: 'icheckbox_flat-blue',
-                // radioClass: 'iradio_flat-blue'
-                // });
                 // Enable check and uncheck all functionality
                 $(".checkbox-toggle").click(function() {
                 var clicks = $(this).data('clicks');
@@ -556,30 +538,24 @@
                         $this.toggleClass("fa-star-o");
                 }
                 });
-                });</script>
-    <script type="text/javascript">
-                //     $(document).ready(function() {
-                //         $("#content").Editor();
-                //     });
-                // </script>
-   <!-- // <script src="../plugins/jQuery/jQuery-2.1.3.min.js"></script> -->
-    <script src="{{asset("lb-faveo/js/tabby.js")}}"></script>
-     <!-- // <script src="{{asset("dist/js/editor.js")}}"></script> -->
-    <!-- CK Editor -->
-    <!-- // <script src="{{asset("//cdn.ckeditor.com/4.4.3/standard/ckeditor.js")}}"></script> -->
-    {{-- // <script src="{{asset("lb-faveo/downloads/CKEditor.js")}}"></script> --}}
-<script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
-<script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
-<script>
-            // $(function () {
-            // //Add text editor
-            // $("textarea").wysihtml5();
-            // });
+                });
 </script>
+
+<script src="{{asset("lb-faveo/js/tabby.js")}}" type="text/javascript"></script>
+
+<script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
+
+<script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
+
 <script type="text/javascript">
             $.ajaxSetup({
             headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
             });
+</script>
+<script type="text/javascript">
+    function clickDashboard() {
+        window.location = "{{URL::route('dashboard')}}";
+    }
 </script>
 @yield('FooterInclude')
 </body>

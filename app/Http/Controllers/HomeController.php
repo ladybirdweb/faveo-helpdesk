@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\helpdesk\Ticket\Tickets;
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
@@ -36,13 +37,6 @@ class HomeController extends Controller
     {
         // ksjdckjdsnc
         return view('themes/default1/admin/dashboard');
-    }
-
-    public function getsmtp()
-    {
-        $smtp = \App\Model\helpdesk\Email\Smtp::where('id', '=', '1')->first();
-
-        return $smtp->host;
     }
 
     public function getdata()

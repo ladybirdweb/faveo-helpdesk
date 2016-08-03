@@ -1,0 +1,8 @@
+disabled:
+  - align_double_arrow
+  - phpdoc_align
+  - short_array_syntax
+
+enabled:
+  - long_array_syntax
+  - unalign_double_arrow

@@ -341,6 +341,7 @@ return [
       |Language page
       |------------------------------------------------
      */
+    'default'            => 'default',
     'iso-code'           => 'ISO-CODE',
     'download'           => 'Downlaod',
     'upload_file'        => 'Upload File',
@@ -362,6 +363,7 @@ return [
     'lang-doesnot-exist' => 'Language package does not exist.',
     'active-lang-error'  => 'Language package can not be deleted when it is active.',
     'language-error'     => 'Language package not found in your lang directroy.',
+    'lang-fallback-lang' => 'Cannot delete system\'s defualt fallback language',
     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]

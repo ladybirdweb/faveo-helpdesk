@@ -7,10 +7,9 @@ use Config;
 use Exception;
 use Schema;
 
-class LibraryController extends Controller
-{
-    public static function getFileVersion()
-    {
+class LibraryController extends Controller {
+
+    public static function getFileVersion() {
         try {
             $app = Config::get('app.version');
             if ($app) {
@@ -23,8 +22,7 @@ class LibraryController extends Controller
         }
     }
 
-    public static function getDatabaseVersion()
-    {
+    public static function getDatabaseVersion() {
         try {
             $database = self::isDatabaseSetup();
             if ($database == true) {
@@ -41,8 +39,7 @@ class LibraryController extends Controller
         }
     }
 
-    public static function isDatabaseSetup()
-    {
+    public static function isDatabaseSetup() {
         try {
             if (Schema::hasTable('settings_system')) {
                 return true;
@@ -52,78 +49,47 @@ class LibraryController extends Controller
         }
     }
 
-    public static function encryptByFaveoPublicKey($plaintext)
-    {
+    public static function encryptByFaveoPublicKey($data) {
         try {
-            // Compress the data to be sent
-            $plaintext = gzcompress($plaintext);
-
-            // Get the public Key of the recipient
-            $path = storage_path('app'.DIRECTORY_SEPARATOR.'faveo-public.key');
-            $key_content = file_get_contents($path);
-
+            $path = storage_path() . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'public.key';
             //dd($path);
-            $publicKey = openssl_pkey_get_public($key_content);
-            //dd($publicKey);
-            $a_key = openssl_pkey_get_details($publicKey);
-
-            // Encrypt the data in small chunks and then combine and send it.
-            $chunkSize = ceil($a_key['bits'] / 8) - 11;
-            $output = '';
-
-            while ($plaintext) {
-                $chunk = substr($plaintext, 0, $chunkSize);
-                $plaintext = substr($plaintext, $chunkSize);
-                $encrypted = '';
-                if (!openssl_public_encrypt($chunk, $encrypted, $publicKey)) {
-                    throw new Exception('Failed to encrypt data');
-                }
-                $output .= $encrypted;
-            }
-            openssl_free_key($publicKey);
-
-            // This is the final encrypted data to be sent to the recipient
-            $encrypted = $output;
-
-            return $encrypted;
-        } catch (Exception $ex) {
-            dd($ex);
-        }
-    }
-
-    public static function decryptByFaveoPrivateKey($encrypted)
-    {
-        try {
-            //$encrypted = p¥Ùn¿olÓ¥9)OÞÝ¸Ôvh§=Ìtt1rkC‰É§%YœfÐS\BâkHW€mùÌØg¹+VŠ¥²?áÙ{/<¶¡£e¡ˆr°(V)Öíàr„Ž]K9¤ÿÖ¡Åmž”üÈoò×´î¢“µºŽ06¼e€rœ['4çhH¾ö:¨œ–S„œ¦,|¤ÇqÂrÈŸd+ml‡ uötÏ†ûóŽ&›áyÙ(ÆŒÁ$‘¥±Zj*îàÒöL‘ˆD†aÉö_§è¶°·V„Þú]%ÅR*B=žéršæñ*i+á­±èç|c¹ÑßŸ­F$;
-            // Get the private Key
-            $path = storage_path('app'.DIRECTORY_SEPARATOR.'faveo-private.key');
             $key_content = file_get_contents($path);
-            if (!$privateKey = openssl_pkey_get_private($key_content)) {
-                die('Private Key failed');
-            }
-            $a_key = openssl_pkey_get_details($privateKey);
+            $public_key = openssl_get_publickey($key_content);
 
-            // Decrypt the data in the small chunks
-            $chunkSize = ceil($a_key['bits'] / 8);
-            $output = '';
+            $encrypted = $e = NULL;
+            openssl_seal($data, $encrypted, $e, array($public_key));
 
-            while ($encrypted) {
-                $chunk = substr($encrypted, 0, $chunkSize);
-                $encrypted = substr($encrypted, $chunkSize);
-                $decrypted = '';
-                if (!openssl_private_decrypt($chunk, $decrypted, $privateKey)) {
-                    die('Failed to decrypt data');
-                }
-                $output .= $decrypted;
-            }
-            openssl_free_key($privateKey);
+            $sealed_data = base64_encode($encrypted);
+            $envelope = base64_encode($e[0]);
 
-            // Uncompress the unencrypted data.
-            $output = gzuncompress($output);
-
-            echo '<br /><br /> Unencrypted Data: '.$output;
+            $result = ['seal' => $sealed_data, 'envelope' => $envelope];
+            return json_encode($result);
         } catch (Exception $ex) {
-            dd($ex);
+            throw new Exception($ex->getMessage());
         }
     }
+
+    public static function decryptByFaveoPrivateKey($encrypted) {
+
+        try {
+            $encrypted = json_decode($encrypted);
+            $sealed_data = $encrypted->seal;
+            $envelope = $encrypted->envelope;
+            $input = base64_decode($sealed_data);
+            $einput = base64_decode($envelope);
+            $path = storage_path('app' . DIRECTORY_SEPARATOR . 'private.key');
+            $key_content = file_get_contents($path);
+            $private_key = openssl_get_privatekey($key_content);
+            $plaintext = NULL;
+            openssl_open($input, $plaintext, $einput, $private_key);
+            return $plaintext;
+        } catch (Exception $ex) {
+            // dd($ex);
+        }
+    }
+
+    public static function _isCurl() {
+        return function_exists('curl_version');
+    }
+
 }

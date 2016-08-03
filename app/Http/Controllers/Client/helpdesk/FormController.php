@@ -33,16 +33,15 @@ use Redirect;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class FormController extends Controller
-{
+class FormController extends Controller {
+
     /**
      * Create a new controller instance.
      * Constructor to check.
      *
      * @return void
      */
-    public function __construct(TicketWorkflowController $TicketWorkflowController)
-    {
+    public function __construct(TicketWorkflowController $TicketWorkflowController) {
         $this->middleware('board');
         // creating a TicketController instance
         $this->TicketWorkflowController = $TicketWorkflowController;
@@ -55,18 +54,21 @@ class FormController extends Controller
      *
      * @return type
      */
-    public function getForm(Help_topic $topic, CountryCode $code)
-    {
+    public function getForm(Help_topic $topic, CountryCode $code) {
         if (\Config::get('database.install') == '%0%') {
-            return \Redirect::route('license');
+            return \Redirect::route('licence');
         }
         $location = GeoIP::getLocation('');
         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
         if (System::first()->status == 1) {
             $topics = $topic->get();
             $codes = $code->get();
-
-            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes'))->with('phonecode', $phonecode->phonecode);
+            if ($phonecode->phonecode) {
+                $phonecode = $phonecode->phonecode;
+            } else {
+                $phonecode = "";
+            }
+            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes'))->with('phonecode', $phonecode);
         } else {
             return \Redirect::route('home');
         }
@@ -80,46 +82,46 @@ class FormController extends Controller
      *
      * @return type string
      */
-    public function postForm($id, Help_topic $topic)
-    {
+    public function postForm($id, Help_topic $topic) {
         if ($id != 0) {
             $helptopic = $topic->where('id', '=', $id)->first();
             $custom_form = $helptopic->custom_form;
             $values = Fields::where('forms_id', '=', $custom_form)->get();
             if (!$values) {
+                
             }
             if ($values) {
-                foreach ($values as $value) {
-                    if ($value->type == 'select') {
-                        $data = $value->value;
-                        $value = explode(',', $data);
-                        echo '<select class="form-control">';
-                        foreach ($value as $option) {
-                            echo '<option>'.$option.'</option>';
+                foreach ($values as $form_data) {
+                    if ($form_data->type == "select") {
+                        $form_fields = explode(',', $form_data->value);
+                        $var = "";
+                        foreach ($form_fields as $form_field) {
+                            $var .= '<option value="' . $form_field . '">' . $form_field . '</option>';
                         }
-                        echo '</select></br>';
-                    } elseif ($value->type == 'radio') {
-                        $type2 = $value->value;
-                        $val = explode(',', $type2);
-                        echo '<label class="radio-inline">'.$value->label.'</label>&nbsp&nbsp&nbsp<input type="'.$value->type.'" name="'.$value->name.'">&nbsp;&nbsp;'.$val[0].'
-                        &nbsp&nbsp&nbsp<input type="'.$value->type.'" name="'.$value->name.'">&nbsp;&nbsp;'.$val[1].'</br>';
-                    } elseif ($value->type == 'textarea') {
-                        $type3 = $value->value;
-                        $v = explode(',', $type3);
-                        //dd($v);
-                        if (array_key_exists(1, $v)) {
-                            echo '<label>'.$value->label.'</label></br><textarea class=form-control rows="'.$v[0].'" cols="'.$v[1].'"></textarea></br>';
-                        } else {
-                            echo '<label>'.$value->label.'</label></br><textarea class=form-control rows="10" cols="60"></textarea></br>';
+                        echo '<br/><label>' . ucfirst($form_data->label) . '</label><select class="form-control" name="' . $form_data->name . '">' . $var . '</select>';
+                    } elseif ($form_data->type == "radio") {
+                        $type2 = $form_data->value;
+                        $vals = explode(',', $type2);
+                        echo '<br/><label>' . ucfirst($form_data->label) . '</label><br/>';
+                        foreach ($vals as $val) {
+                            echo '<input type="' . $form_data->type . '" name="' . $form_data->name . '"> ' . $val . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                         }
-                    } elseif ($value->type == 'checkbox') {
-                        $type4 = $value->value;
-                        $check = explode(',', $type4);
-                        echo '<label class="radio-inline">'.$value->label.'&nbsp&nbsp&nbsp<input type="'.$value->type.'" name="'.$value->name.'">&nbsp&nbsp'.$check[0].'</label><label class="radio-inline"><input type="'.$value->type.'" name="'.$value->name.'">&nbsp&nbsp'.$check[1].'</label></br>';
+                        echo "<br/>";
+                    } elseif ($form_data->type == "textarea") {
+                        $type3 = $form_data->value;
+                        echo '<br/><label>' . $form_data->label . '</label></br><textarea id="unique-textarea" name="' . $form_data->name . '" class="form-control" style="height:15%;"></textarea>';
+                    } elseif ($form_data->type == "checkbox") {
+                        $type4 = $form_data->value;
+                        $checks = explode(',', $type4);
+                        echo '<br/><label>' . ucfirst($form_data->label) . '</label><br/>';
+                        foreach ($checks as $check) {
+                            echo '<input type="' . $form_data->type . '" name="' . $form_data->name . '">&nbsp&nbsp' . $check;
+                        }
                     } else {
-                        echo '<label>'.$value->label.'</label><input type="'.$value->type.'" class="form-control"   name="'.$value->name.'" /></br>';
+                        echo '<br/><label>' . ucfirst($form_data->label) . '</label><input type="' . $form_data->type . '" class="form-control"   name="' . $form_data->name . '" />';
                     }
                 }
+                echo '<br/><br/>';
             }
         } else {
             return;
@@ -132,8 +134,7 @@ class FormController extends Controller
      * @param type Request $request
      * @param type User    $user
      */
-    public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code)
-    {
+    public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code) {
         $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token');
 
         $name = $request->input('Name');
@@ -142,12 +143,16 @@ class FormController extends Controller
         $subject = $request->input('Subject');
         $details = $request->input('Details');
         $phonecode = $request->input('Code');
-        $System = System::where('id', '=', 1)->first();
-        $departments = Department::where('id', '=', $System->department)->first();
-        $department = $departments->id;
         $mobile_number = $request->input('Mobile');
         $status = $ticket_settings->first()->status;
-        $helptopic = $ticket_settings->first()->help_topic;
+        $helptopic = $request->input('helptopic');
+        $helpTopicObj = Help_topic::where('id','=', $helptopic);
+        if($helpTopicObj->exists() && ($helpTopicObj->value('status')==1)){
+            $department = $helpTopicObj->value('department');
+        }else{
+            $defaultHelpTopicID = Ticket::where('id', '=', '1')->first()->help_topic; 
+            $department = Help_topic::where('id','=', $defaultHelpTopicID)->value('department');
+        }
         $sla = $ticket_settings->first()->sla;
         $priority = $ticket_settings->first()->priority;
         $source = $ticket_source->where('name', '=', 'web')->first()->id;
@@ -161,8 +166,8 @@ class FormController extends Controller
             $geoipcode = $code->where('iso', '=', $location['isoCode'])->first();
             if ($phonecode == null) {
                 $data = [
-                    'fails'              => Lang::get('lang.country-code-required-error'),
-                    'phonecode'          => $geoipcode->phonecode,
+                    'fails' => Lang::get('lang.country-code-required-error'),
+                    'phonecode' => $geoipcode->phonecode,
                     'country_code_error' => 1,
                 ];
 
@@ -171,8 +176,8 @@ class FormController extends Controller
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $phonecode)->get();
                 if (!count($code)) {
                     $data = [
-                        'fails'              => Lang::get('lang.incorrect-country-code-error'),
-                        'phonecode'          => $geoipcode->phonecode,
+                        'fails' => Lang::get('lang.incorrect-country-code-error'),
+                        'phonecode' => $geoipcode->phonecode,
                         'country_code_error' => 1,
                     ];
 
@@ -197,9 +202,10 @@ class FormController extends Controller
                     }
                 }
             }
-
-            return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is').' '.$result[0].'. '.Lang::get('lang.Please-save-this-for-future-reference'));
+            // dd($result);
+            return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is') . ' ' . $result[0] . '. ' . Lang::get('lang.Please-save-this-for-future-reference'));
         }
+//        dd($result);
     }
 
     /**
@@ -209,14 +215,13 @@ class FormController extends Controller
      *
      * @return type view
      */
-    public function post_ticket_reply($id, Request $request)
-    {
+    public function post_ticket_reply($id, Request $request) {
         try {
             if ($comment != null) {
                 $tickets = Tickets::where('id', '=', $id)->first();
                 $thread = Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
 
-                $subject = $thread->title.'[#'.$tickets->ticket_number.']';
+                $subject = $thread->title . '[#' . $tickets->ticket_number . ']';
                 $body = $request->input('comment');
 
                 $user_cred = User::where('id', '=', $tickets->user_id)->first();
@@ -248,29 +253,24 @@ class FormController extends Controller
         } catch (Exception $e) {
             return \Redirect::back()->with('fails1', $e->getMessage());
         }
-//
-//        $comment = $request->input('comment');
-//        if ($comment != null) {
-//            $tickets = Tickets::where('id', '=', $id)->first();
-//            $threads = new Ticket_Thread();
-//            $tickets->closed_at = null;
-//            $tickets->closed = 0;
-//            $tickets->reopened_at = date('Y-m-d H:i:s');
-//            $tickets->reopened = 1;
-//            $threads->user_id = $tickets->user_id;
-//            $threads->ticket_id = $tickets->id;
-//            $threads->poster = 'client';
-//            $threads->body = $comment;
-//            try {
-//                $threads->save();
-//                $tickets->save();
-//
-//                return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
-//            } catch (Exception $e) {
-//                return \Redirect::back()->with('fails1', $e->getMessage());
-//            }
-//        } else {
-//            return \Redirect::back()->with('fails1', Lang::get('lang.please_fill_some_data'));
-//        }
     }
+
+    public function getCustomForm(Request $request) {
+        $html = "";
+        $helptopic_id = $request->input('helptopic');
+        $helptopics = new Help_topic();
+        $helptopic = $helptopics->find($helptopic_id);
+        if (!$helptopic) {
+            throw new Exception("We can not find your request");
+        }
+        $custom_form = $helptopic->custom_form;
+        if ($custom_form) {
+            $fields = new Fields();
+            $forms = new \App\Model\helpdesk\Form\Forms();
+            $form_controller = new \App\Http\Controllers\Admin\helpdesk\FormController($fields, $forms);
+            $html = $form_controller->renderForm($custom_form);
+        }
+        return $html;
+    }
+
 }

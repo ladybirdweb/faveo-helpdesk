@@ -98,7 +98,12 @@ class LanguageController extends Controller
         $values = array_slice($values, 2); // skips array element $value[0] = '.' & $value[1] = '..'
         return \Datatable::collection(new Collection($values))
                         ->addColumn('language', function ($model) {
-                            return Config::get('languages.'.$model);
+                            if ($model == Config::get('app.fallback_locale')) {
+                                return Config::get('languages.'.$model).' ('.Lang::get('lang.default').')';    
+                            } else {
+                                return Config::get('languages.'.$model);
+                            }
+                            
                         })
                         ->addColumn('id', function ($model) {
                             return $model;
@@ -228,24 +233,29 @@ class LanguageController extends Controller
     public function deleteLanguage($lang)
     {
         if ($lang !== App::getLocale()) {
-            $deletePath = base_path('resources/lang').'/'.$lang;     //define file path to delete
-            $success = File::deleteDirectory($deletePath); //remove extracted folder and it's subfolder from lang
-            if ($success) {
-                //sending back with success message
-                Session::flash('success', Lang::get('lang.delete-success'));
-
-                return Redirect::back();
+            if ($lang !== Config::get('app.fallback_locale')) {
+                $deletePath = base_path('resources/lang').'/'.$lang;     //define file path to delete
+                $success = File::deleteDirectory($deletePath); //remove extracted folder and it's subfolder from lang
+                if ($success) {
+                    //sending back with success message
+                    Session::flash('success', Lang::get('lang.delete-success'));
+    
+                    return Redirect::back();
+                } else {
+                    //sending back with error message
+                    Session::flash('fails', Lang::get('lang.lang-doesnot-exist'));
+    
+                    return Redirect::back();
+                }
             } else {
-                //sending back with error message
-                Session::flash('fails', Lang::get('lang.lang-doesnot-exist'));
-
-                return Redirect::back();
+                Session::flash('fails', Lang::get('lang.lang-fallback-lang'));
+                return redirect('languages');
             }
         } else {
-            //sending back with error message
             Session::flash('fails', Lang::get('lang.active-lang-error'));
 
             return redirect('languages');
         }
     }
+    
 }

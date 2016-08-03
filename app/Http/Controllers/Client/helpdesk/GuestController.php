@@ -16,6 +16,7 @@ use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Utility\CountryCode;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\User;
 use Auth;
 // classes
@@ -76,18 +77,18 @@ class GuestController extends Controller
         if ($user->profile_pic == 'avatar5.png' || $user->profile_pic == 'avatar2.png') {
             if ($request->input('gender') == 1) {
                 $name = 'avatar5.png';
-                $destinationPath = 'lb-faveo/media/profilepic';
+                $destinationPath = 'uploads/profilepic';
                 $user->profile_pic = $name;
             } elseif ($request->input('gender') == 0) {
                 $name = 'avatar2.png';
-                $destinationPath = 'lb-faveo/media/profilepic';
+                $destinationPath = 'uploads/profilepic';
                 $user->profile_pic = $name;
             }
         }
         if (Input::file('profile_pic')) {
             //$extension = Input::file('profile_pic')->getClientOriginalExtension();
             $name = Input::file('profile_pic')->getClientOriginalName();
-            $destinationPath = 'lb-faveo/media/profilepic';
+            $destinationPath = 'uploads/profilepic';
             $fileName = rand(0000, 9999).'.'.$name;
             //echo $fileName;
             Input::file('profile_pic')->move($destinationPath, $fileName);
@@ -138,7 +139,7 @@ class GuestController extends Controller
     public function getForm(Help_topic $topic)
     {
         if (\Config::get('database.install') == '%0%') {
-            return \Redirect::route('license');
+            return \Redirect::route('licence');
         }
         if (System::first()->status == 1) {
             $topics = $topic->get();
@@ -316,11 +317,13 @@ class GuestController extends Controller
      *
      * @return type
      */
-    public function get_ticket_email($id)
+    public function get_ticket_email($id, CommonSettings $common_settings)
     {
         $id1 = \Crypt::decrypt($id);
-
-        return view('themes.default1.client.helpdesk.ckeckticket', compact('id'));
+        $common_setting = $common_settings->select('status')
+                ->where('option_name', '=', 'user_set_ticket_status')
+                ->first();
+        return view('themes.default1.client.helpdesk.ckeckticket', compact('id', 'common_setting'));
     }
 
     /**

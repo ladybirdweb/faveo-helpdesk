@@ -29,10 +29,9 @@ class Sys_userRequest extends Request
     public function rules()
     {
         return [
-
-            'email'     => 'required|unique:users,email',
-            'full_name' => 'required',
-                // 'phone' => 'size:10',
+            'first_name'    =>  'required',
+            'user_name'     =>  'required|min:3|unique:users,user_name',
+            'email'         =>  'required|unique:users,email',
         ];
     }
 }

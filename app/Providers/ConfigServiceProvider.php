@@ -18,7 +18,10 @@ class ConfigServiceProvider extends ServiceProvider
     public function register()
     {
         config([
-                'lfm.images_url' => url('photos').'/',
+                'lfm.images_url' => url('uploads').'/',
+                'lfm.images_dir' => 'public/uploads/',
+                'lfm.files_url'  => url('files').'/',
+                'lfm.files_dir'  => '/files/',
         ]);
     }
 }

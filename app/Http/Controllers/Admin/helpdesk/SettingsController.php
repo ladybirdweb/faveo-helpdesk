@@ -30,6 +30,7 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Workflow\WorkflowClose;
+use App\Model\helpdesk\Settings\CommonSettings;
 use DateTime;
 // classes
 use DB;
@@ -93,7 +94,7 @@ class SettingsController extends Controller
         $companys = $company->whereId('1')->first();
         if (Input::file('logo')) {
             $name = Input::file('logo')->getClientOriginalName();
-            $destinationPath = 'lb-faveo/media/company/';
+            $destinationPath = 'uploads/company/';
             $fileName = rand(0000, 9999).'.'.$name;
             Input::file('logo')->move($destinationPath, $fileName);
             $companys->logo = $fileName;
@@ -145,7 +146,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time)
+    public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time, CommonSettings $common_settings)
     {
         try {
             /* fetch the values of system from system table */
@@ -154,11 +155,11 @@ class SettingsController extends Controller
             $departments = $department->get();
             /* Fetch the values from Timezones table */
             $timezones = $timezone->get();
-
-            //$debug = \Config::get('app.debug');
-            //dd($value);
+            /* Fetch status value of common settings */
+            $common_setting = $common_settings->select('status')->where('option_name', '=', 'user_set_ticket_status')->first();
+            // /dd($common_setting);
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time'));
+            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -176,16 +177,26 @@ class SettingsController extends Controller
     public function postsystem($id, System $system, SystemRequest $request)
     {
         try {
-            // dd($request);
+            //dd($request->user_set_ticket_status);
             /* fetch the values of system request  */
             $systems = $system->whereId('1')->first();
             /* fill the values to coompany table */
             /* Check whether function success or not */
             $systems->fill($request->input())->save();
-            /* redirect to Index page with Success Message */
+            $rtl = CommonSettings::where('option_name', '=', 'enable_rtl')->first();
+            if($request->enable_rtl != null) {
+                $rtl->option_value = 1;
+            } else {
+                $rtl->option_value = 0;
+            }
+            $rtl->save();
 
-            // dd($datacontent);
-            //\Config::set('app.debug', $request->input('debug'));
+            $usts = CommonSettings::where('option_name', '=', 'user_set_ticket_status')->first();
+            if ($usts->status != $request->user_set_ticket_status){
+                $usts->status = $request->user_set_ticket_status;
+                $usts->save();
+            }
+            /* redirect to Index page with Success Message */
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
@@ -220,7 +231,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified Ticket in storage.
      *
      * @param type int     $id
      * @param type Ticket  $ticket
@@ -280,7 +291,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified email setting in storage.
      *
      * @param type int          $id
      * @param type Email        $email
@@ -339,7 +350,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage for cron job.
+     * Update the specified schedular in storage for cron job.
      *
      * @param type Email        $email
      * @param type EmailRequest $request
@@ -399,7 +410,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified autoresponse in storage.
      *
      * @param type Responder $responder
      * @param type Request   $request
@@ -448,7 +459,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified alert in storage.
      *
      * @param type         $id
      * @param type Alert   $alert

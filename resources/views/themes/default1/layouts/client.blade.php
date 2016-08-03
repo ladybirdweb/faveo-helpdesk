@@ -29,7 +29,7 @@
             <header id="masthead" class="site-header" role="banner">
                 <div class="container">
                 <div id="logo" class="site-logo text-center" style="font-size: 30px;">
-                <?php 
+                <?php
                 $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
 				$system = App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
 				?>
@@ -82,7 +82,7 @@
 							<li><a href="#" class="collapsed" data-toggle="collapse" data-target="#login-form">Login <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a></li>
 						</ul><!-- .navbar-login -->
 						<div id="login-form" class="login-form collapse fade clearfix">
-            {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}  
+            {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}
 
 			<div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
 				{!! Form::text('email',null,['placeholder'=>'Email','class' => 'form-control']) !!}
@@ -133,7 +133,7 @@
 			<li>{!! $errors->first('password', '<spam class="help-block ">:message</spam>') !!}</li>
 	    </div>
 	@endif
-    
+
                             </div>
                 </div>
                             </header>
@@ -144,7 +144,7 @@
         <div id="main" class="site-main clearfix">
 			<div class="container">
 				<div class="content-area">
-					<div class="row">			
+					<div class="row">
                                    @yield('content')
                         <div id="sidebar" class="site-sidebar col-md-3">
 							<div class="widget-area">
@@ -159,10 +159,10 @@
                     </div>
                 </div>
        		</div>
-		</div>			
+		</div>
 <!-- /.content-wrapper -->
-<?php 
-$footer = App\Model\helpdesk\Theme\Footer::whereId('1')->first();                            
+<?php
+$footer = App\Model\helpdesk\Theme\Footer::whereId('1')->first();
 $footer2 = App\Model\helpdesk\Theme\Footer2::whereId('1')->first();
 $footer3 = App\Model\helpdesk\Theme\Footer3::whereId('1')->first();
 $footer4 = App\Model\helpdesk\Theme\Footer4::whereId('1')->first();
@@ -190,7 +190,7 @@ $footer4 = App\Model\helpdesk\Theme\Footer4::whereId('1')->first();
 							<section id="section-latest-news" class="section">
 								<h2 class="section-title h4 clearfix">{!!$footer2->title!!}</h2>
 								<div class="textwidget">
-									<p>{!!$footer2->footer!!}</p>	
+									<p>{!!$footer2->footer!!}</p>
 								</div>
 							</section><!-- #section-latest-news -->
 						</div>
@@ -231,8 +231,8 @@ $footer4 = App\Model\helpdesk\Theme\Footer4::whereId('1')->first();
                         </div>
 					</div>
 		</footer><!-- #colophon -->
-                    <!-- jQuery 2.1.3 -->
-                    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                    <!-- jQuery 2.1.1 -->
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
                     <!-- Bootstrap 3.3.2 JS -->
                     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
                     <!-- Slimscroll -->

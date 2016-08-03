@@ -127,7 +127,7 @@ class="active"
                 {!! Form::close() !!}
             </div>
             <div class="box-footer">
-                {!! Form::submit(Lang::get('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
+                {!! Form::submit(Lang::get('lang.update'),['class'=>'form-group btn btn-primary'])!!}
             </div>
         </div>
     </div>
@@ -178,7 +178,7 @@ class="active"
                 </div>
             </div>
             <div class="box-footer">
-                {!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary'])!!}
+                {!! Form::submit(Lang::get('lang.update'),['class'=>'form-group btn btn-primary'])!!}
             </div>
         </div>
     </div>

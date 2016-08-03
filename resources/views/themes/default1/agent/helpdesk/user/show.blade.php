@@ -64,6 +64,14 @@ class="active"
                     </center>
                 </div>
             </div>
+            @if($users->user_name)
+                <div class="box-footer">
+                    <b>{{Lang::get('lang.user_name')}}</b>
+                    <a class="pull-right" href="{{route('user.show', $users->id)}}">
+                        {{$users->user_name }}
+                    </a>
+                </div>
+            @endif
             <div class="box-footer">
                 <b>{{Lang::get('lang.email')}}</b>
                 <a class="pull-right" href="{{route('user.show', $users->id)}}">
@@ -118,12 +126,30 @@ class="active"
                     <span style="color:red;">{!! Lang::get('lang.inactive') !!}</span>
                     @endif
                 </a>
-            </div>
+            </div>            
+            @if($users->country_code)
+                <div class="box-footer">
+                    <b>{{Lang::get('lang.country_code')}}</b>
+                    <a class="pull-right"> {{$users->country_code}}</a>
+                </div>
+            @endif
+            @if($users->ext)
+                <div class="box-footer">
+                    <b>{{Lang::get('lang.ext')}}</b>
+                    <a class="pull-right"> {{$users->ext}}</a>
+                </div>
+            @endif
+            @if($users->mobile)
+                <div class="box-footer">
+                    <b>{{Lang::get('lang.mobile')}}</b>
+                    <a class="pull-right"> {{$users->mobile}}</a>
+                </div>
+            @endif
             @if($users->phone_number)
-            <div class="box-footer">
-                <b>{{Lang::get('lang.phone')}}</b>
-                <a class="pull-right">{{$users->phone_number}}</a>
-            </div>
+                <div class="box-footer">
+                    <b>{{Lang::get('lang.phone')}}</b>
+                    <a class="pull-right"> {{$users->phone_number}}</a>
+                </div>
             @endif
             @if($users->internal_note)
             <div class="box-footer">
@@ -252,7 +278,7 @@ class="active"
                                                     @if($attach > 0)&nbsp;<i class="fa fa-paperclip"></i>@endif</td>
                                                 <td class="mailbox-Id"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">#{!! $ticket->ticket_number !!}</a></td>
                                                 <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first(); ?>
-                                                <td class="mailbox-priority"><spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam></td>
+                                                <td class="mailbox-priority">@if($priority != null)<spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam>@endif</td>
                                         <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
                                         <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
                                         <td>{!! $assigned !!}</td>
@@ -370,7 +396,7 @@ class="active"
                                                     @if($attach > 0)&nbsp;<i class="fa fa-paperclip"></i>@endif</td>
                                                 <td class="mailbox-Id"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">#{!! $ticket->ticket_number !!}</a></td>
                                                 <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first(); ?>
-                                                <td class="mailbox-priority"><spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam></td>
+                                                <td class="mailbox-priority">@if($priority != null)<spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam>@endif</td>
                                         <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
                                         <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
                                         <td>{!! $assigned !!}</td>
@@ -492,7 +518,7 @@ class="active"
                                                     @if($attach > 0)&nbsp;<i class="fa fa-paperclip"></i>@endif</td>
                                                 <td class="mailbox-Id"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">#{!! $ticket->ticket_number !!}</a></td>
                                                 <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first(); ?>
-                                                <td class="mailbox-priority"><spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam></td>
+                                                <td class="mailbox-priority">@if($priority != null)<spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam>@endif</td>
                                         <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
                                         <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
                                         <td>{!! $assigned !!}</td>

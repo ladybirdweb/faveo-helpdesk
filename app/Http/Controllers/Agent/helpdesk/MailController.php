@@ -27,16 +27,15 @@ use PhpImap\Mailbox as ImapMailbox;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class MailController extends Controller
-{
+class MailController extends Controller {
+
     /**
      * constructor
      * Create a new controller instance.
      *
      * @param type TicketController $TicketController
      */
-    public function __construct(TicketWorkflowController $TicketWorkflowController)
-    {
+    public function __construct(TicketWorkflowController $TicketWorkflowController) {
         $this->middleware('board');
         $this->TicketWorkflowController = $TicketWorkflowController;
     }
@@ -46,13 +45,12 @@ class MailController extends Controller
      *
      * @return type
      */
-    public function readmails(Emails $emails, Email $settings_email, System $system, Ticket $ticket)
-    {
+    public function readmails(Emails $emails, Email $settings_email, System $system, Ticket $ticket) {
         // $path_url = $system->first()->url;
         if ($settings_email->first()->email_fetching == 1) {
             if ($settings_email->first()->all_emails == 1) {
                 // $helptopic = $this->TicketController->default_helptopic();
-// $sla = $this->TicketController->default_sla();
+                // $sla = $this->TicketController->default_sla();
                 $email = $emails->get();
                 foreach ($email as $e_mail) {
                     if ($e_mail->fetching_status == 1) {
@@ -82,7 +80,7 @@ class MailController extends Controller
                             $protocol = $fetching_encryption2;
                         } else {
                             if ($e_mail->fetching_protocol) {
-                                $fetching_protocol = '/'.$e_mail->fetching_protocol;
+                                $fetching_protocol = '/' . $e_mail->fetching_protocol;
                             } else {
                                 $fetching_protocol = '';
                             }
@@ -91,21 +89,38 @@ class MailController extends Controller
                             } else {
                                 $fetching_encryption = '';
                             }
-                            $protocol = $fetching_protocol.$fetching_encryption;
+                            $protocol = $fetching_protocol . $fetching_encryption;
                         }
-                        $imap_config = '{'.$host.':'.$port.$protocol.'}INBOX';
+                        $imap_config = '{' . $host . ':' . $port . $protocol . '}INBOX';
                         $password = Crypt::decrypt($e_mail->password);
-                        $mailbox = new ImapMailbox($imap_config, $e_mail->email_address, $password, __DIR__);
+                        try {
+                            $mailbox = new ImapMailbox($imap_config, $e_mail->email_address, $password, __DIR__);
+                        } catch (\PhpImap\Exception $e) {
+                            echo "Connection error";
+                        }
                         $mails = [];
-                        $mailsIds = $mailbox->searchMailBox('SINCE '.date('d-M-Y', strtotime('-1 day')));
+                        try {
+                            $mailsIds = $mailbox->searchMailBox('SINCE ' . date('d-M-Y', strtotime('-1 day')));
+                        } catch (\PhpImap\Exception $e) {
+                            echo "Connection error";
+                        }
                         if (!$mailsIds) {
                             die('Mailbox is empty');
                         }
                         foreach ($mailsIds as $mailId) {
-                            $overview = $mailbox->get_overview($mailId);
+                            try {
+                                $overview = $mailbox->get_overview($mailId);
+                            } catch (Exception $e) {
+                                return \Lang::get('lang.unable_to_fetch_emails');
+                            }
                             $var = $overview[0]->seen ? 'read' : 'unread';
                             if ($var == 'unread') {
                                 $mail = $mailbox->getMail($mailId);
+                                try {
+                                    $mail = $mailbox->getMail($mailId);
+                                } catch (\PhpImap\Exception $e) {
+                                    echo "Connection error";
+                                }
                                 if ($settings_email->first()->email_collaborator == 1) {
                                     $collaborator = $mail->cc;
                                 } else {
@@ -121,14 +136,24 @@ class MailController extends Controller
                                 }
                                 if ($body == null) {
                                     $attach = $mail->getAttachments();
-                                    $path = $attach['html-body']->filePath;
-                                    if ($path == null) {
-                                        $path = $attach['text-body']->filePath;
+                                    if (is_array($attach)) {
+                                        if (key_exists('html-body', $attach)) {
+                                            $path = $attach['html-body']->filePath;
+                                        }
+                                        if ($path == null) {
+                                            if (key_exists('text-body', $attach)) {
+                                                $path = $attach['text-body']->filePath;
+                                            }
+                                        }
+                                        if ($path) {
+                                            $body = file_get_contents($path);
+                                        }
+                                        if ($body) {
+                                            $body = self::trimTableTag($body);
+                                        } else {
+                                            $body = "";
+                                        }
                                     }
-
-                                    $body = file_get_contents($path);
-                                    //dd($body);
-                                    $body = self::trimTableTag($body);
                                 }
 //                                if ($body == null) {
 //                                    $body = $mailbox->backup_getmail($mailId);
@@ -137,10 +162,10 @@ class MailController extends Controller
                                 $date = $mail->date;
                                 $datetime = $overview[0]->date;
                                 $date_time = explode(' ', $datetime);
-                                $date = $date_time[1].'-'.$date_time[2].'-'.$date_time[3].' '.$date_time[4];
+                                $date = $date_time[1] . '-' . $date_time[2] . '-' . $date_time[3] . ' ' . $date_time[4];
                                 $date = date('Y-m-d H:i:s', strtotime($date));
                                 if (isset($mail->subject)) {
-                                    $subject = utf8_decode($mail->subject);
+                                    $subject = $mail->subject;
                                 } else {
                                     $subject = 'No Subject';
                                 }
@@ -156,57 +181,57 @@ class MailController extends Controller
                                 $team_assign = null;
                                 $ticket_status = null;
                                 $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
-// dd($result);
+
                                 if ($result[1] == true) {
                                     $ticket_table = Tickets::where('ticket_number', '=', $result[0])->first();
                                     $thread_id = Ticket_Thread::where('ticket_id', '=', $ticket_table->id)->max('id');
-// $thread_id = Ticket_Thread::whereRaw('id = (select max(`id`) from ticket_thread)')->first();
+
                                     $thread_id = $thread_id;
                                     foreach ($mail->getAttachments() as $attachment) {
                                         $support = 'support';
-// echo $_SERVER['DOCUMENT_ROOT'];
+
                                         $dir_img_paths = __DIR__;
                                         $dir_img_path = explode('/code', $dir_img_paths);
-// dd($attachment->filePath);
-                                        $filepath = explode('../../../../../public', $attachment->filePath);
-// var_dump($attachment->filePath);
-// dd($filepath);
-// $path = $dir_img_path[0]."/code/public/".$filepath[1];
-                                        $path = public_path().$filepath[1];
-// dd($path);
-                                        $filesize = filesize($path);
-                                        $file_data = file_get_contents($path);
-                                        $ext = pathinfo($attachment->filePath, PATHINFO_EXTENSION);
-                                        $imageid = $attachment->id;
-                                        $string = str_replace('-', '', $attachment->name);
-                                        $filename = explode('src', $attachment->filePath);
-                                        $filename = str_replace('\\', '', $filename);
-                                        $body = str_replace('cid:'.$imageid, $filepath[1], $body);
-                                        $pos = strpos($body, $filepath[1]);
-                                        if ($pos == false) {
-                                            if ($settings_email->first()->attachment == 1) {
+
+                                        $filepath = explode('..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'public', $attachment->filePath);
+
+                                        if ($filepath[1]) {
+                                            $path = public_path() . $filepath[1];
+
+                                            $filesize = filesize($path);
+                                            $file_data = file_get_contents($path);
+                                            $ext = pathinfo($attachment->filePath, PATHINFO_EXTENSION);
+                                            $imageid = $attachment->id;
+                                            $string = str_replace('-', '', $attachment->name);
+                                            $filename = explode('src', $attachment->filePath);
+                                            $filename = str_replace('\\', '', $filename);
+                                            $body = str_replace('cid:' . $imageid, $filepath[1], $body);
+                                            $pos = strpos($body, $filepath[1]);
+                                            if ($pos == false) {
+                                                if ($settings_email->first()->attachment == 1) {
+                                                    $upload = new Ticket_attachments();
+                                                    $upload->file = $file_data;
+                                                    $upload->thread_id = $thread_id;
+                                                    $upload->name = $filepath[1];
+                                                    $upload->type = $ext;
+                                                    $upload->size = $filesize;
+                                                    $upload->poster = 'ATTACHMENT';
+                                                    $upload->save();
+                                                }
+                                            } else {
                                                 $upload = new Ticket_attachments();
                                                 $upload->file = $file_data;
                                                 $upload->thread_id = $thread_id;
                                                 $upload->name = $filepath[1];
                                                 $upload->type = $ext;
                                                 $upload->size = $filesize;
-                                                $upload->poster = 'ATTACHMENT';
+                                                $upload->poster = 'INLINE';
                                                 $upload->save();
                                             }
-                                        } else {
-                                            $upload = new Ticket_attachments();
-                                            $upload->file = $file_data;
-                                            $upload->thread_id = $thread_id;
-                                            $upload->name = $filepath[1];
-                                            $upload->type = $ext;
-                                            $upload->size = $filesize;
-                                            $upload->poster = 'INLINE';
-                                            $upload->save();
+                                            unlink($path);
                                         }
-                                        unlink($path);
                                     }
-                                    $body = Encoding::fixUTF8($body);
+                                    $body = $body;
                                     $thread = Ticket_Thread::where('id', '=', $thread_id)->first();
                                     $thread->body = $this->separate_reply($body);
                                     $thread->save();
@@ -226,8 +251,7 @@ class MailController extends Controller
      *
      * @return type string
      */
-    public function separate_reply($body)
-    {
+    public function separate_reply($body) {
         $body2 = explode('---Reply above this line---', $body);
         $body3 = $body2[0];
 
@@ -241,8 +265,7 @@ class MailController extends Controller
      *
      * @return type string
      */
-    public function decode_imap_text($str)
-    {
+    public function decode_imap_text($str) {
         $result = '';
         $decode_header = imap_mime_header_decode($str);
         foreach ($decode_header as $obj) {
@@ -257,8 +280,7 @@ class MailController extends Controller
      *
      * @return type
      */
-    public function fetch_attachments()
-    {
+    public function fetch_attachments() {
         $uploads = Upload::all();
         foreach ($uploads as $attachment) {
             $image = @imagecreatefromstring($attachment->file);
@@ -266,8 +288,8 @@ class MailController extends Controller
             imagejpeg($image, null, 80);
             $data = ob_get_contents();
             ob_end_clean();
-            $var = '<a href="" target="_blank"><img src="data:image/jpg;base64,'.base64_encode($data).'"/></a>';
-            echo '<br/><span class="mailbox-attachment-icon has-img">'.$var.'</span>';
+            $var = '<a href="" target="_blank"><img src="data:image/jpg;base64,' . base64_encode($data) . '"/></a>';
+            echo '<br/><span class="mailbox-attachment-icon has-img">' . $var . '</span>';
         }
     }
 
@@ -278,19 +300,17 @@ class MailController extends Controller
      *
      * @return type file
      */
-    public function get_data($id)
-    {
+    public function get_data($id) {
         $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('id', '=', $id)->get();
         foreach ($attachments as $attachment) {
-            header('Content-type: application/'.$attachment->type.'');
-            header('Content-Disposition: inline; filename='.$attachment->name.'');
+            header('Content-type: application/' . $attachment->type . '');
+            header('Content-Disposition: inline; filename=' . $attachment->name . '');
             header('Content-Transfer-Encoding: binary');
             echo $attachment->file;
         }
     }
 
-    public static function trimTableTag($html)
-    {
+    public static function trimTableTag($html) {
         if (strpos('<table>', $html) != false) {
             $first_pos = strpos($html, '<table');
             $fist_string = substr_replace($html, '', 0, $first_pos);
@@ -306,15 +326,13 @@ class MailController extends Controller
         return $html;
     }
 
-    public static function trim3D($html)
-    {
+    public static function trim3D($html) {
         $body = str_replace('=3D', '', $html);
 
         return $body;
     }
 
-    public static function trimInjections($html, $tags = ['<script>', '</script>', '<style>', '</style>', '<?php', '?>'])
-    {
+    public static function trimInjections($html, $tags = ['<script>', '</script>', '<style>', '</style>', '<?php', '?>']) {
         $replace = [];
         foreach ($tags as $key => $tag) {
             $replace[$key] = htmlspecialchars($tag);
@@ -323,4 +341,5 @@ class MailController extends Controller
 
         return $body;
     }
+
 }

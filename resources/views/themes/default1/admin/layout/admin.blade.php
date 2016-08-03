@@ -5,35 +5,33 @@
         <title>Faveo | HELP DESK</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- faveo favicon -->
-        <link rel="shortcut icon" href="{{asset("lb-faveo/media/images/favicon.ico")}}">
+        <link href="{{asset("lb-faveo/media/images/favicon.ico")}}" rel="shortcut icon"> 
         <!-- Bootstrap 3.3.2 -->
         <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Font Awesome Icons -->
-        {{-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" /> --}}
         <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Ionicons -->
-        {{-- <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"> --}}
-        <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet">
-        <!-- fullCalendar 2.2.5-->
+        <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet" type="text/css" >
         <!-- Theme style -->
         <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
-        <!-- AdminLTE Skins. Choose a skin from the css/skins
-             folder instead of downloading all of them to reduce the load. -->
+        <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
         <link href="{{asset("lb-faveo/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- iCheck -->
         <link href="{{asset("lb-faveo/plugins/iCheck/flat/blue.css")}}" rel="stylesheet" type="text/css" />
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <link href="{{asset("lb-faveo/css/tabby.css")}}" type="text/css" rel="stylesheet">
+        <!-- This controlls the top tabs -->
+        <link href="{{asset("lb-faveo/css/tabby.css")}}" rel="stylesheet" type="text/css" >
+        <!-- In app notification style -->
         <link href="{{asset('css/notification-style.css')}}" rel="stylesheet" type="text/css">
+        
         <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        
         <link  href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css">
         <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
-        <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet">    
-        {{-- // <script src="https://code.jquery.com/jquery-2.1.4.js" type="text/javascript"></script> --}}
+        <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet" type="text/css" >
+        
         <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
-        {{-- // <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> --}}
+        
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,7 +76,7 @@
                         <ul class="nav navbar-nav navbar-left">
                             @if($replacetop==0)
                             <li @yield('settings')><a href="{!! url('dashboard') !!}">{!! Lang::get('lang.agent_panel') !!}</a></li>
-                            @else 
+                            @else
                             <?php \Event::fire('service.desk.admin.topbar', array()); ?>
                             @endif
                         </ul>
@@ -88,6 +86,7 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
+                            @include('themes.default1.update.notification')
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown notifications-menu" id="myDropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
@@ -159,7 +158,7 @@
                                 <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
 
                                 <span class="hidden-xs">{!! Auth::user()->first_name." ".Auth::user()->last_name !!}</span>
-                                @endif          
+                                @endif
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
@@ -317,27 +316,6 @@
                                 <span>{!! Lang::get('lang.api') !!}</span>
                             </a>
                         </li>
-                        <li class="header">{!! Lang::get('lang.Updates') !!}</li>
-                        <li @yield('update')>
-                        <?php
-                        $update = App\Model\helpdesk\Utility\Version_Check::where('id', '=', 1)->first();
-                        if ($update->current_version == $update->new_version) {
-                            ?>
-                                 <a href="{!! URL::route('checkupdate') !!}" id="checkUpdate">
-                                    <span>{!! Lang::get('lang.no_new_updates') !!}!</span><br/>
-                                    <br/>
-                                    <i class="fa fa-inbox"></i> <span>{!! Lang::get('lang.check_for_updates') !!}.</span>
-                                    <img  id="gif-update" src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="width:12%; height:12%; margin-bottom:5%;margin-left:10%;display:none">
-
-                                    <small class="label pull-right bg-green"></small>
-                                </a>
-                            <?php } elseif ($update->current_version < $update->new_version) { ?>
-                                <a>
-                                    <i class="fa fa-inbox"></i> <span>Version {!! $update->new_version !!}  is Available</span>
-                                    <small class="label pull-right bg-green"></small>
-                                </a>
-                            <?php } ?>
-                        </li>
                         @endif
                         <?php \Event::fire('service.desk.admin.sidebar', array()); ?>
                     </ul>
@@ -359,7 +337,7 @@
 
                 <!-- Main content -->
                 <section class="content">
-                    @include('themes.default1.update.notification')
+
                     @yield('content')
                 </section><!-- /.content -->
                 <!-- /.content-wrapper -->
@@ -375,33 +353,34 @@
             </footer>
         </div><!-- ./wrapper -->
         <!-- jQuery 2.1.3 -->
-        <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}"></script>
+        <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}" type="text/javascript"></script>
         <!-- Bootstrap 3.3.2 JS -->
         <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
         <!-- Slimscroll -->
         <script src="{{asset("lb-faveo/plugins/slimScroll/jquery.slimscroll.min.js")}}" type="text/javascript"></script>
         <!-- FastClick -->
-        <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}"></script>
+        <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}" type="text/javascript"></script>
         <!-- AdminLTE App -->
         <script src="{{asset("lb-faveo/js/app.min.js")}}" type="text/javascript"></script>
-        <!-- AdminLTE for demo purposes -->
-        {{-- // <script src="{{asset("dist/js/demo.js")}}" type="text/javascript"></script> --}}
-    <!-- iCheck -->
-    <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
-    <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
-    <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
-    <!-- Page Script -->
-    <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
-    {{-- // <script type="text/javascript" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script> --}}
-    <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}"  type="text/javascript"></script>
-    <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
-    <script>
+        <!-- iCheck -->
+        <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
+        
+        <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
+        
+        <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
+        <!-- Page Script -->
+        <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
+
+        <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}"  type="text/javascript"></script>
+        
+        <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
+<script>
 $(function () {
 //Add text editor
     $("textarea").wysihtml5();
 });
 // $(function(){
-//     $("#checkUpdate").on('click',function(){        
+//     $("#checkUpdate").on('click',function(){
 //             $.ajax({
 //                 type: "GET",
 //                 url: "{!! URL::route('version-check') !!}",
@@ -479,11 +458,9 @@ $(function () {
                         }
                     });
         });</script>
- <!-- // <script src="../plugins/jQuery/jQuery-2.1.3.min.js"></script> -->
+    
     <script src="{{asset("lb-faveo/js/tabby.js")}}"></script>
-     <!-- // <script src="{{asset("dist/js/editor.js")}}"></script> -->
     <!-- CK Editor -->
-    <!-- // <script src="{{asset("//cdn.ckeditor.com/4.4.3/standard/ckeditor.js")}}"></script> -->
     <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
 
     @yield('FooterInclude')

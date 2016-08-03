@@ -23,7 +23,8 @@ class BaseModel extends Model
             File::makeDirectory($path, $mode = 0777, true, true);
         }
         $config = \HTMLPurifier_Config::createDefault();
-        //dd($config);
+        $config->set('HTML.Trusted', true);
+        $config->set('Filter.YouTube', true);
         $purifier = new \HTMLPurifier($config);
         if ($value != strip_tags($value)) {
             $value = $purifier->purify($value);

@@ -47,12 +47,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function composer()
     {
-        View::composer('themes.default1.update.notification', function () {
+        \View::composer('themes.default1.update.notification', function () {
             $notification = new BarNotification();
-            $data = [
-                'data' => $notification->get(),
+            $not = [
+                'notification' => $notification->where('value','!=','')->get(),
             ];
-            view()->share($data);
+            view()->share($not);
         });
     }
 }

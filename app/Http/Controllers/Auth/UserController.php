@@ -327,18 +327,18 @@ class UserController extends Controller
         if ($user->profile_pic == 'avatar5.png' || $user->profile_pic == 'avatar2.png') {
             if ($request->input('gender') == 1) {
                 $name = 'avatar5.png';
-                $destinationPath = 'lb-faveo/profilepic';
+                $destinationPath = 'uploads/profilepic';
                 $user->profile_pic = $name;
             } elseif ($request->input('gender') == 0) {
                 $name = 'avatar2.png';
-                $destinationPath = 'lb-faveo/profilepic';
+                $destinationPath = 'uploads/profilepic';
                 $user->profile_pic = $name;
             }
         }
         if (Input::file('profile_pic')) {
             //$extension = Input::file('profile_pic')->getClientOriginalExtension();
             $name = Input::file('profile_pic')->getClientOriginalName();
-            $destinationPath = 'lb-faveo/profilepic';
+            $destinationPath = 'uploads/profilepic';
             $fileName = rand(0000, 9999).'.'.$name;
             //echo $fileName;
             Input::file('profile_pic')->move($destinationPath, $fileName);

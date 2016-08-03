@@ -53,7 +53,6 @@ class AuthController extends Controller
     public function __construct(PhpMailController $PhpMailController)
     {
         $this->PhpMailController = $PhpMailController;
-        SettingsController::smtp();
         $this->middleware('guest', ['except' => 'getLogout']);
     }
 
@@ -186,6 +185,7 @@ class AuthController extends Controller
      */
     public function postLogin(LoginRequest $request)
     {
+        \Event::fire('auth.login.event', []); //added 5/5/2016
         // Set login attempts and login time
         $value = $_SERVER['REMOTE_ADDR'];
         $usernameinput = $request->input('email');
@@ -227,10 +227,10 @@ class AuthController extends Controller
             $password = $request->input('password');
             $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
             // If attempts > 3 and time < 10 minutes
-//            if ($loginAttempts > $security->backlist_threshold && (time() - $loginAttemptTime <= ($security->lockout_period * 60))) {
+           if ($loginAttempts > $security->backlist_threshold && (time() - $loginAttemptTime <= ($security->lockout_period * 60))) {
 //
-//                return redirect()->back()->withErrors('email', 'incorrect email')->with('error', $security->lockout_message);
-//            }
+               return redirect()->back()->withErrors('email', 'incorrect email')->with('error', $security->lockout_message);
+           }
             // If time > 10 minutes, reset attempts counter and time in session
             if (time() - $loginAttemptTime > ($security->lockout_period * 60)) {
                 \Session::put('loginAttempts', 1);
@@ -243,7 +243,7 @@ class AuthController extends Controller
         }
         // If auth ok, redirect to restricted area
         \Session::put('loginAttempts', $loginAttempts + 1);
-        \Event::fire('auth.login.event', []); //added 5/5/2016
+        
         if (Auth::Attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
             if (Auth::user()->role == 'user') {
                 return \Redirect::route('/');
@@ -277,13 +277,15 @@ class AuthController extends Controller
         if ($data) {
             $attempts = $data->Attempts + 1;
             if ($attempts == $apt) {
-                $result = DB::select('UPDATE login_attempts SET Attempts='.$attempts.", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
+//                $result = DB::select('UPDATE login_attempts SET Attempts='.$attempts.", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
+                $result = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['Attempts' => $attempts, 'LastLogin' => Date('Y-m-d H:i:s')]);
             } else {
                 $result = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['Attempts' => $attempts]);
                 // $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
             }
         } else {
-            $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
+//            $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
+            $result = DB::table('login_attempts')->update(['Attempts' => 1, 'User' => $field, 'IP' => $value, 'LastLogin' => Date('Y-m-d H:i:s')]);
         }
     }
 
@@ -326,7 +328,6 @@ class AuthController extends Controller
                 return 1;
             } else {
                 $this->clearLoginAttempts($value, $field);
-
                 return 0;
             }
         }

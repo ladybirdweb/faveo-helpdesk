@@ -420,7 +420,7 @@ class Client
         if (substr($cert, 0, 7) == 'phar://') {
             $tempDir = sys_get_temp_dir();
             $newCert = tempnam($tempDir, 'geoip2-');
-            if ($newCart === false) {
+            if ($newCert === false) {
                 throw new \RuntimeException(
                     "Unable to create temporary file in $tempDir"
                 );

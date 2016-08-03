@@ -63,24 +63,19 @@ active
 
                 {!! Form::text('name',null,['class' => 'form-control']) !!}
             </div>
-            <div class="col-xs-3 form-group {{ $errors->has('slug') ? 'has-error' : '' }}">
-                {!! Form::label('slug',Lang::get('lang.slug')) !!}<span class="text-red"> *</span>
-
-                {!! Form::text('slug',null,['class' => 'form-control']) !!}
-            </div>
             <div class="col-xs-3 form-group {{ $errors->has('parent') ? 'has-error' : '' }}">
                 {!! Form::label('parent',Lang::get('lang.parent')) !!}
 
-                {!!Form::select('parent',[''=>'Select a Group','Categorys'=>$category->lists('name','name')->toArray()],null,['class' => 'form-control select']) !!}
+                {!!Form::select('parent',[''=>'Select a Group','Categorys'=>$categories],null,['class' => 'form-control select']) !!}
             </div>
             <div class="col-xs-3 form-group {{ $errors->has('status') ? 'has-error' : '' }}">
                 {!! Form::label('status',Lang::get('lang.status')) !!}
 
                 <div class="row">
-                    <div class="col-xs-3">
+                    <div class="col-xs-4">
                         {!! Form::radio('status','1',true) !!} {{Lang::get('lang.active')}}
                     </div>
-                    <div class="col-xs-3">
+                    <div class="col-xs-6">
                         {!! Form::radio('status','0',null) !!} {{Lang::get('lang.inactive')}}
                     </div>
                 </div>
@@ -101,4 +96,18 @@ active
         $("textarea").wysihtml5();
     });
 </script>
+
+<script>
+    $(function() {
+        
+        $('input[type="checkbox"]').iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        });
+        $('input[type="radio"]').iCheck({
+            radioClass: 'iradio_flat-blue'
+        });
+    
+    });        
+</script>
+
 @stop

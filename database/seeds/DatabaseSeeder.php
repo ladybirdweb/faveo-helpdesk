@@ -6,7 +6,6 @@ use App\Model\Common\TemplateType;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Agent\Groups;
 use App\Model\helpdesk\Agent\Teams;
-use App\Model\helpdesk\Email\Smtp;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Notification\NotificationType;
@@ -34,6 +33,8 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\helpdesk\Workflow\WorkflowClose;
 use App\Model\kb\Settings;
+use App\Model\helpdesk\Utility\Limit_Login;
+use App\Model\Update\BarNotification;
 // Knowledge base
 use Illuminate\Database\Seeder;
 
@@ -46,7 +47,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-
+        BarNotification::create(['id' => '1']);
         /* Date time format */
         $date_time_formats = [
             'd/m/Y H:i:s',
@@ -272,8 +273,6 @@ class DatabaseSeeder extends Seeder
         Ticket_source::create(['name' => 'web', 'value' => 'Web']);
         Ticket_source::create(['name' => 'email', 'value' => 'E-mail']);
         Ticket_source::create(['name' => 'agent', 'value' => 'Agent Panel']);
-        /* Mail configuration */
-        Smtp::create(['id' => '1']);
         /* Version check */
         Version_Check::create(['id' => '1']);
         /* System widgets */
@@ -1978,7 +1977,7 @@ class DatabaseSeeder extends Seeder
 
 
         Security::create(['id' => '1', 'lockout_message' => 'You have been locked out of application due to too many failed login attempts.', 'backlist_offender' => '0', 'backlist_threshold' => '15', 'lockout_period' => '15', 'days_to_keep_logs' => '0']);
-
+        Limit_Login::create(['id'=>'1']);
 
         TemplateSet::create(['id' => '1', 'name' => 'default', 'active' => '1']);
 
@@ -1994,23 +1993,24 @@ class DatabaseSeeder extends Seeder
         TemplateType::create(['id' => '10', 'name' => 'ticket-reply-agent']);
         TemplateType::create(['id' => '11', 'name' => 'registration']);
 
-        Template::create(['id' => '1', 'variable' => '0', 'name' => 'This template is for sending notice to agent when ticket is assigned to them', 'type' => '1', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br><br>Ticket No: {!!$ticket_number!!}<br>Has been assigned to you by {!!$ticket_assigner!!}&nbsp;<br><br>Thank You<br>Kind Regards,<br>{!!$system_from!!}</div>', 'set_id' => '1']);
-        Template::create(['id' => '2', 'variable' => '1', 'name' => 'This template is for sending notice to client with ticket link to check ticket without logging in to system', 'type' => '2', 'subject' => 'Check your Ticket', 'message' => '<div>Hello {!!$user!!},<br><br>Click the link below to view your Requested ticket<br>{!!$ticket_link_with_number!!}<br><br>Kind Regards,<br>{!!$system_from!!} </div>', 'set_id' => '1']);
-        Template::create(['id' => '3', 'variable' => '0', 'name' => 'This template is for sending notice to client when ticket status is changed to close', 'type' => '3', 'message' => '<div>Hello,<br><br>This message is regarding your ticket ID {!!$ticket_number!!}. We are changing the status of this ticket to "Closed" as the issue appears to be resolved.<br><br>Thank you<br>Kind regards,<br> {!!$system_from!!} <br><br></div>', 'set_id' => '1']);
-        Template::create(['id' => '4', 'variable' => '0', 'name' => 'This template is for sending notice to client on successful ticket creation', 'type' => '4', 'message' => '<div><span>Hello {!!$user!!}<br><br></span><span>Thank you for contacting us. This is an automated response confirming the receipt of your ticket. Our team will get back to you as soon as possible. When replying, please make sure that the ticket ID is kept in the subject so that we can track your replies.<br><br></span><span>Ticket ID: {!!$ticket_number!!}&nbsp;<br></span><span>{!!$department_sign!!}<br></span>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', 'set_id' => '1']);
-        Template::create(['id' => '5', 'variable' => '0', 'name' => 'This template is for sending notice to agent on new ticket creation', 'type' => '5', 'message' => '<div>Hello {!!$ticket_agent_name!!}, &nbsp; &nbsp; &nbsp;&nbsp;<br><br>New ticket {!!$ticket_number!!} created&nbsp;<br>From<br>Name :- {!!$ticket_client_name!!} &nbsp; &nbsp;<br>E-mail :- {!!$ticket_client_email!!} &nbsp;&nbsp;<br><br>{!!$content!!} &nbsp;&nbsp;&nbsp;&nbsp;<br><br>Kind Regards,<br>{!!$system_from!!}</div><br>', 'set_id' => '1']);
-        Template::create(['id' => '6', 'variable' => '0', 'name' => 'This template is for sending notice to client on new ticket created by agent in name of client', 'type' => '6', 'message' => '<div>{!!$content!!}<br><br>{!!$agent_sign!!}<br><br>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', 'set_id' => '1']);
-        Template::create(['id' => '7', 'variable' => '1', 'name' => 'This template is for sending notice to client on new registration during new ticket creation for un registered clients', 'type' => '7', 'subject' => 'Registration Confirmation', 'message' => '<span><p>Hello {!!$user!!} ,&nbsp;</p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Password: {!!$user_password!!}</p><p>You can visit the helpdesk to browse articles and contact us at any time: {!!$system_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!}&nbsp;</p></span>', 'set_id' => '1']);
-        Template::create(['id' => '8', 'variable' => '1', 'name' => 'This template is for sending notice to any user about reset password option', 'type' => '8', 'subject' => 'Reset your Password', 'message' => 'Hello {!!$user!!}<br/><br/>You asked to reset your password. To do so, please click this link:<br/><br/>{!!$password_reset_link!!}</a><br/><br/><br/>This will let you change your password to something new. If you did not ask for this, do not worry, we will keep your password safe.<br/><br/>Thank You.<br/><br/>Kind Regards,<br/><br/> {!!$system_from!!}', 'set_id' => '1']);
-        Template::create(['id' => '9', 'variable' => '0', 'name' => 'This template is for sending notice to client when a reply made to his/her ticket', 'type' => '9', 'message' => '<span><div><span><p>{!!$content!!} &nbsp;&nbsp;<br></p><p>{!!$agent_sign!!}&nbsp;</p><p>Ticket Details</p><p>Ticket ID: {!!$ticket_number!!} &nbsp;&nbsp;&nbsp;&nbsp;</p><div><br></div></span><br></div><div><br></div></span>', 'set_id' => '1']);
-        Template::create(['id' => '10', 'variable' => '0', 'name' => 'This template is for sending notice to agent when ticket reply is made by client on a ticket', 'type' => '10', 'message' => '<div>Hello {!!$ticket_agent_name!!},<b><br></b>A reply been made to ticket {!!$ticket_number!!}<b><br></b>From<br>Name: {!!$ticket_client_name!!}<br>E-mail: {!!$ticket_client_email!!}<b><br></b>{!!$content!!}<b><br></b>Kind Regards,<br>{!!$system_from!!}</div>', 'set_id' => '1']);
-        Template::create(['id' => '11', 'variable' => '1', 'name' => 'This template is for sending notice to client about registration confirmation link', 'type' => '11', 'subject' => 'Verify your email address', 'message' => '<span><p>Hello {!!$user!!} ,&nbsp;</p><p>This email is confirmation that you are now registered at our helpdesk.</p><p>Registered Email: {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p>{!!$system_from!!}&nbsp;</p></span>', 'set_id' => '1']);
-
+        Template::create(['id' => '1', 'variable' => '0', 'name' => 'This template is for sending notice to agent when ticket is assigned to them', 'type' => '1', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br/><br/><b>Ticket No:</b> {!!$ticket_number!!}<br/>Has been assigned to you by {!!$ticket_assigner!!} <br/><br/>Thank You<br/>Kind Regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '2', 'variable' => '1', 'name' => 'This template is for sending notice to client with ticket link to check ticket without logging in to system', 'type' => '2', 'subject' => 'Check your Ticket', 'message' => '<div>Hello {!!$user!!},<br/><br/>Click the link below to view your requested ticket<br/> {!!$ticket_link_with_number!!}<br/><br/>Kind Regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '3', 'variable' => '0', 'name' => 'This template is for sending notice to client when ticket status is changed to close', 'type' => '3', 'message' => '<div>Hello,<br/><br/>This message is regarding your ticket ID {!!$ticket_number!!}. We are changing the status of this ticket to "Closed" as the issue appears to be resolved.<br/><br/>Thank you<br/>Kind regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '4', 'variable' => '0', 'name' => 'This template is for sending notice to client on successful ticket creation', 'type' => '4', 'message' => '<div><span>Hello {!!$user!!}<br/><br/></span><span>Thank you for contacting us. This is an automated response confirming the receipt of your ticket. Our team will get back to you as soon as possible. When replying, please make sure that the ticket ID is kept in the subject so that we can track your replies.<br/><br/></span><span><b>Ticket ID:</b> {!!$ticket_number!!} <br/><br/></span><span> {!!$department_sign!!}<br/></span>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '5', 'variable' => '0', 'name' => 'This template is for sending notice to agent on new ticket creation', 'type' => '5', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br/><br/>New ticket {!!$ticket_number!!}created <br/><br/><b>From</b><br/><b>Name:</b> {!!$ticket_client_name!!}   <br/><b>E-mail:</b> {!!$ticket_client_email!!}<br/><br/> {!!$content!!}<br/><br/>Kind Regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '6', 'variable' => '0', 'name' => 'This template is for sending notice to client on new ticket created by agent in name of client', 'type' => '6', 'message' => '<div> {!!$content!!}<br><br> {!!$agent_sign!!}<br><br>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '7', 'variable' => '1', 'name' => 'This template is for sending notice to client on new registration during new ticket creation for un registered clients', 'type' => '7', 'subject' => 'Registration Confirmation', 'message' => '<p>Hello {!!$user!!}, </p><p>This email is confirmation that you are now registered at our helpdesk.</p><p><b>Registered Email:</b> {!!$email_address!!}</p><p><b>Password:</b> {!!$user_password!!}</p><p>You can visit the helpdesk to browse articles and contact us at any time: {!!$system_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p> {!!$system_from!!} </p>', 'set_id' => '1']);
+        Template::create(['id' => '8', 'variable' => '1', 'name' => 'This template is for sending notice to any user about reset password option', 'type' => '8', 'subject' => 'Reset your Password', 'message' => "Hello {!!$user!!},<br/><br/>You asked to reset your password. To do so, please click this link:<br/><br/> {!!$password_reset_link!!}<br/><br/>This will let you change your password to something new. If you didn't ask for this, don't worry, we'll keep your password safe.<br/><br/>Thank You.<br/><br/>Kind Regards,<br/> {!!$system_from!!}", 'set_id' => '1']);
+        Template::create(['id' => '9', 'variable' => '0', 'name' => 'This template is for sending notice to client when a reply made to his/her ticket', 'type' => '9', 'message' => '<span></span><div><span></span><p> {!!$content!!}<br/></p><p> {!!$agent_sign!!} </p><p><b>Ticket Details</b></p><p><b>Ticket ID:</b> {!!$ticket_number!!}</p></div>', 'set_id' => '1']);
+        Template::create(['id' => '10', 'variable' => '0', 'name' => 'This template is for sending notice to agent when ticket reply is made by client on a ticket', 'type' => '10', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br/><b><br/></b>A reply been made to ticket {!!$ticket_number!!}<br/><b><br/></b><b>From<br/></b><b>Name: </b>{!!$ticket_client_name!!}<br/><b>E-mail: </b>{!!$ticket_client_email!!}<br/><b><br/></b> {!!$content!!}<br/><b><br/></b>Kind Regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '11', 'variable' => '1', 'name' => 'This template is for sending notice to client about registration confirmation link', 'type' => '11', 'subject' => 'Verify your email address', 'message' => '<p>Hello {!!$user!!}, </p><p>This email is confirmation that you are now registered at our helpdesk.</p><p><b>Registered Email:</b> {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p> {!!$system_from!!} </p>', 'set_id' => '1']);
 
         /*
          * All the common settings will be listed here
          */
         CommonSettings::create(['id' => '1', 'option_name' => 'ticket_token_time_duration', 'option_value' => '1']);
+        CommonSettings::create(['id' => '2', 'option_name' => 'enable_rtl', 'option_value' => '']);
+        CommonSettings::create(['id' => '3', 'option_name' => 'user_set_ticket_status', 'status' => 1]);
 
         /*
          * Ratings

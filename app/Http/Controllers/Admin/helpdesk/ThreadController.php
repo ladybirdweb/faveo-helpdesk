@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Admin\helpdesk;
 use App\Http\Controllers\Controller;
 // models
 use App\Model\helpdesk\Priority;
-use App\Model\helpdesk\Ticket_thread;
+use App\Model\helpdesk\Ticket_Thread;
 // classes
 use Exception;
 
@@ -25,7 +25,7 @@ class ThreadController extends Controller
      *
      * @return type Response
      */
-    public function getTickets(Ticket_thread $thread, Priority $priority)
+    public function getTickets(Ticket_Thread $thread, Priority $priority)
     {
         try {
             /* get the values of Ticket_thread from Ticket_thread Table  */

@@ -95,7 +95,7 @@ class="active"
                 <div class="form-group {{ $errors->has('time_zone') ? 'has-error' : '' }}">
                     {!! Form::label('time_zone',Lang::get('lang.timezone')) !!}
                     {!! $errors->first('time_zone', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('time_zone',[''=>Lang::get('lang.select_a_time_zone'),'Time Zones'=>$timezones->lists('name','id')->toArray()],null,['class'=>'form-control']) !!}
+                    {!!Form::select('time_zone',['Time Zones'=>$timezones->lists('name','id')->toArray()],null,['class'=>'form-control']) !!}
                 </div>
             </div>
         </div>
@@ -105,15 +105,15 @@ class="active"
                 <div class="form-group {{ $errors->has('date_time_format') ? 'has-error' : '' }}">
                     {!! Form::label('date_time_format',Lang::get('lang.date_time')) !!}
                     {!! $errors->first('date_time_format', '<spam class="help-block">:message</spam>') !!}
-                    {!! Form::select('date_time_format',[''=>Lang::get('lang.select_a_date_time_format'),'Date Time Formats'=>$date_time->lists('format','id')->toArray()],null,['class' => 'form-control']) !!}
+                    {!! Form::select('date_time_format',['Date Time Formats'=>$date_time->lists('format','id')->toArray()],null,['class' => 'form-control']) !!}
                 </div>
             </div>
            
-             <div class="col-md-4">
+            <div class="col-md-4">
                 <div class="form-group">
                     {!! Form::label('status',Lang::get('lang.status')) !!}
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-xs-5">
                             {!! Form::radio('status','1',true) !!} {{Lang::get('lang.online')}}
                         </div>
                         <div class="col-xs-6">
@@ -122,14 +122,37 @@ class="active"
                     </div>
                 </div>
             </div>
-            <!-- Default Department:	Dropdown From  Department table: required  -->
-            <!-- <div class="col-md-4">
-                <div class="form-group {{ $errors->has('department') ? 'has-error' : '' }}">
-                    {!! Form::label('department',Lang::get('lang.default_department')) !!}
-                    {!! $errors->first('department', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('department', [''=>Lang::get('lang.select_a_department'),'Department'=>$departments->lists('name','id')->toArray()],null,['class'=>'form-control']) !!}
+            <div class="col-md-3">
+                <div class="form-group">
+                    {!! Form::label('user_set_ticket_status',Lang::get('lang.user_set_ticket_status')) !!}
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <input type="radio" name="user_set_ticket_status" value="0" @if($common_setting->status == '0')checked="true" @endif>{{Lang::get('lang.no')}}
+                        </div>
+                        <div class="col-xs-6">
+                            <input type="radio" name="user_set_ticket_status" value="1" @if($common_setting->status == '1')checked="true" @endif>{{Lang::get('lang.yes')}}
+                        </div>
+                    </div>
                 </div>
-            </div> -->
+            </div>
+        </div>
+        <div class="row">    
+            <div class="col-md-5">
+                <div class="form-group">
+                    {!! Form::label('status',Lang::get('lang.rtl')) !!}
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <?php
+                            $rtl = App\Model\helpdesk\Settings\CommonSettings::where('option_name', '=', 'enable_rtl')->first();
+                            ?>
+                            <input type="checkbox" name="enable_rtl" @if($rtl->option_value == 1) checked @endif> {{Lang::get('lang.enable')}}
+                        </div>
+                        <div class="col-xs-12">
+                            <code>{!! Lang::get('lang.the_rtl_support_is_only_applicable_to_the_outgoing_mails') !!}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
         </div>
     </div>

@@ -31,7 +31,7 @@ class CreateTicketRequest extends Request
         return [
 
             'email'     => 'required|email|max:60',
-            'fullname'  => 'required|min:3|max:40',
+            'user_name'  => 'required|min:3|max:40',
             'helptopic' => 'required',
             // 'dept' => 'required',
             'sla'      => 'required',

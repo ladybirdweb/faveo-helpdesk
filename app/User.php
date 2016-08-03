@@ -28,7 +28,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $fillable = ['user_name', 'email', 'password', 'active', 'first_name', 'last_name', 'ban', 'ext', 'mobile', 'profile_pic',
         'phone_number', 'company', 'agent_sign', 'account_type', 'account_status',
         'assign_group', 'primary_dpt', 'agent_tzone', 'daylight_save', 'limit_access',
-        'directory_listing', 'vacation_mode', 'role', 'internal_note', 'country_code', ];
+        'directory_listing', 'vacation_mode', 'role', 'internal_note', 'country_code','fcm_token' ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -43,7 +43,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if (!$value) {
             return \Gravatar::src($this->attributes['email']);
         } else {
-            return asset('lb-faveo/media/profilepic/'.$value);
+            return asset('uploads/profilepic/'.$value);
         }
     }
 }

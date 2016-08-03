@@ -1,7 +1,18 @@
-/node_modules
+# Please try and keep this file organized by alphabetical order. Single files first, then directories.
+.env
+example.env
 Homestead.yaml
 Homestead.json
-/nbproject/private/
-.env
-/app/Plugins/ServiceDesk/
 /app/config/
+/app/Plugins/Reseller/
+/app/Plugins/
+/app/Plugins/ServiceDesk/
+/config/app.php
+/config/database.php
+/config/lfm.php
+/nbproject/private/
+/node_modules
+/public/error_log
+/public/lb-faveo/media/
+/public/uploads
+/public/photos/

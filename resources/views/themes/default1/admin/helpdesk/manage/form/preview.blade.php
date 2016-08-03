@@ -50,6 +50,7 @@ class="active"
         <?php
         $i = $id->id;
         $form_datas = App\Model\helpdesk\Form\Fields::where('forms_id', '=', $i)->get();
+//        dd($form_datas);
         foreach ($form_datas as $form_data) {
             if ($form_data->type == "select") {
                 $form_fields = explode(',', $form_data->value);
@@ -63,21 +64,20 @@ class="active"
                 $vals = explode(',', $type2);
                 echo '<br/><label>' . ucfirst($form_data->label) . '</label><br/>';
                 foreach ($vals as $val) {
-                    echo '<input type="' . $form_data->type . '" name="' . $form_data->name . '"> ' . $form_data->name . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                    echo '<input type="' . $form_data->type . '" name="' . $form_data->name . '"> ' . $val . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 }
             } elseif ($form_data->type == "textarea") {
                 $type3 = $form_data->value;
-                $v = explode(',', $type3);
-                echo '<label>' . $form_data->label . '</label></br><textarea rows="' . $v[0] . '" cols="' . $v[1] . '"></textarea></br></br>';
+                echo '<label>' . $form_data->label . '</label></br><textarea name="'.$form_data->name.'" class="form-control" style="height:15%;"></textarea>';
             } elseif ($form_data->type == "checkbox") {
                 $type4 = $form_data->value;
                 $checks = explode(',', $type4);
-                echo '<label>' . ucfirst($form_data->label) . '</label><br/>';
+                echo '<br/><br/><label>' . ucfirst($form_data->label) . '</label><br/>';
                 foreach ($checks as $check) {
                     echo '<input type="' . $form_data->type . '" name="' . $form_data->name . '">&nbsp&nbsp' . $check;
                 }
             } else {
-                echo '<label>' . ucfirst($form_data->label) . '</label><input type="' . $form_data->type . '" class="form-control"   name="' . $form_data->name . '" /></br></br>';
+                echo '<label>' . ucfirst($form_data->label) . '</label><input type="' . $form_data->type . '" class="form-control"   name="' . $form_data->name . '" />';
             }
         }
         ?>             

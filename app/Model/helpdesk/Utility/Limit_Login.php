@@ -6,6 +6,6 @@ use App\BaseModel;
 
 class Limit_Login extends BaseModel
 {
-    protected $table = 'limit_login';
-    protected $fillable = ['email', 'ip_address', 'duration', 'attempt_time', 'created_at', 'updated_at'];
+    protected $table = 'login_attempts';
+    protected $fillable = ['User', 'IP', 'Attempts', 'LastLogin', 'created_at', 'updated_at'];
 }

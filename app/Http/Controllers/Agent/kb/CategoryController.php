@@ -77,14 +77,7 @@ class CategoryController extends Controller
                         /* add column name */
                         ->addColumn('name', function ($model) {
                             $string = strip_tags($model->name);
-                            if (strlen($string) > 40) {
-                                // truncate string
-                                $stringCut = substr($string, 0, 40);
-                            } else {
-                                $stringCut = $model->name;
-                            }
-
-                            return $stringCut.'...';
+                            return str_limit($string, 20);
                         })
                         /* add column Created */
                         ->addColumn('Created', function ($model) {
@@ -127,7 +120,7 @@ class CategoryController extends Controller
     public function create(Category $category)
     {
         /* Get the all attributes in the category model */
-        $category = $category->get();
+        $category = $category->lists('name','id')->toArray();
         /* get the view page to create new category with all attributes
           of category model */
         try {
@@ -148,13 +141,12 @@ class CategoryController extends Controller
     public function store(Category $category, CategoryRequest $request)
     {
         /* Get the whole request from the form and insert into table via model */
-        $sl = $request->input('slug');
+        $sl = $request->input('name');
         $slug = str_slug($sl, '-');
         $category->slug = $slug;
         // send success message to index page
         try {
-            $category->fill($request->except('slug'))->save();
-
+            $category->fill($request->input())->save();
             return Redirect::back()->with('success', Lang::get('lang.category_inserted_successfully'));
         } catch (Exception $e) {
             return Redirect::back()->with('fails', Lang::get('lang.category_not_inserted').'<li>'.$e->getMessage().'</li>');
@@ -169,15 +161,13 @@ class CategoryController extends Controller
      *
      * @return type view
      */
-    public function edit($slug)
+    public function edit($id)
     {
-        // fetch the category
-        $cid = Category::where('id', $slug)->first();
-        $id = $cid->id;
         /* get the atributes of the category model whose id == $id */
         $category = Category::whereId($id)->first();
+        $categories = Category::lists('name','id')->toArray();
         /* get the Edit page the selected category via id */
-        return view('themes.default1.agent.kb.category.edit', compact('category'));
+        return view('themes.default1.agent.kb.category.edit', compact('category','categories'));
     }
 
     /**
@@ -189,22 +179,18 @@ class CategoryController extends Controller
      *
      * @return type redirect
      */
-    public function update($slug, CategoryUpdate $request)
+    public function update($id, CategoryRequest $request)
     {
 
         /* Edit the selected category via id */
-        $category = Category::where('id', $slug)->first();
-        $sl = $request->input('slug');
+        $category = Category::where('id', $id)->first();
+        $sl = $request->input('name');
         $slug = str_slug($sl, '-');
-        // dd($slug);
-        $category->slug = $slug;
         /* update the values at the table via model according with the request */
         //redirct to index page with success message
         try {
-            $category->fill($request->all())->save();
             $category->slug = $slug;
-            $category->save();
-
+            $category->fill($request->input())->save();
             return redirect('category')->with('success', Lang::get('lang.category_updated_successfully'));
         } catch (Exception $e) {
             //redirect to index with fails message

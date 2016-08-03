@@ -11,6 +11,37 @@ active
 
 
 @section('content')
+
+<?php  //dd(ini_get('disable_functions')); ?> 
+
+
+<?php
+// $sets = explode(",", ini_get('disable_functions'));
+// $required_functions = ['escapeshellarg'];
+// foreach ($sets as $key) {
+//     $key = trim($key);
+//     foreach ($required_functions as $value) {
+//         if($key == $value) {
+//             if (strpos(ini_get('disable_functions'), $key) !== false) {
+//                 dd("found");
+//             } else {
+//                 dd("not - found");
+//             }
+//         }
+//     }
+// }
+// dd($sets);
+
+// // foreach ( as $key => $value) {
+// //     # code...
+// // }
+// if (strpos($to_check, $statement) !== false) {
+//             return true;
+//         } else {
+//             return false;
+//         }
+?>
+
  <div id="form-content">
 <center><h1>Environment Test</h1></center>
          @if (Session::has('fail_to_change'))
@@ -90,19 +121,27 @@ function php_config_value_to_bytes($val) {
  * to check file permissions 
  *
  */
-function checkFilePermission(&$results) {
+function checkFilePermission(&$results)
+{
+    $path2 = base_path().DIRECTORY_SEPARATOR.'storage';
+    $f2 = substr(sprintf("%o",fileperms($path2)),-3);
     if (file_exists(base_path() . DIRECTORY_SEPARATOR . "example.env")) {
         $path1 = base_path().DIRECTORY_SEPARATOR.'example.env';
         $f1 = substr(sprintf("%o",fileperms($path1)),-3);
-        if( $f1 >= '644') {
-            $results[] = new TestResult('File permission looks fine', STATUS_OK);
-            return true;
-        } else {
-            $results[] = new TestResult('File permissions needed.<ul><b>Change file permission to "644" for following files</b><li>'.$path1.'</li></ul></br>Change the permission manually on your server or <a href="change-file-permission">click here.</a>', STATUS_ERROR);
-            return false;
-        }
+    } else {
+        $f1 = '644';
     }
-    return true;
+    if( $f1 >= '644' && $f2 >= '755') {
+        $results[] = new TestResult('File permission looks fine', STATUS_OK);
+        return true;
+    } else {
+        if(isset($path1)){
+        $results[] = new TestResult('File permissions needed.<ul><b>Change file permission for following files</b><li>'.$path1.'%nbsp: \'644\'</li><li>'.$path2.'%nbsp: \'755\'</li></ul></br>Change the permission manually on your server or <a href="change-file-permission">click here.</a>', STATUS_ERROR);
+        } else {
+            $results[] = new TestResult('File permissions needed.<ul><b>Change file permission to "755" for following files</b><li>'.$path2.'</li></ul></br>Change the permission manually on your server or <a href="change-file-permission">click here.</a>', STATUS_ERROR);
+        }
+        return false;
+    }
 }
 
 /**
@@ -169,7 +208,7 @@ function validate_zend_compatibility_mode(&$results) {
 function validate_extensions(&$results) {
     $ok = true;
 
-    $required_extensions = array('mcrypt', 'openssl', 'pdo');
+    $required_extensions = array('mcrypt', 'openssl', 'pdo', 'fileinfo', 'curl', 'zip');
 
     foreach ($required_extensions as $required_extension) {
         if (extension_loaded($required_extension)) {
@@ -196,7 +235,7 @@ function validate_extensions(&$results) {
 
         // 'gd' => 'GD is used for image manipulation. Without it, system is not able to create thumbnails for files or manage avatars, logos and project icons. Please refer to <a href="http://www.php.net/manual/en/image.installation.php">this</a> page for installation instructions',
         // 'mbstring' => 'MultiByte String is used for work with Unicode. Without it, system may not split words and string properly and you can have weird question mark characters in Recent Activities for example. Please refer to <a href="http://www.php.net/manual/en/mbstring.installation.php">this</a> page for installation instructions',
-        'curl' => 'cURL is used to support various network tasks. Please refer to <a href="http://www.php.net/manual/en/curl.installation.php">this</a> page for installation instructions',
+        // 'curl' => 'cURL is used to support various network tasks. Please refer to <a href="http://www.php.net/manual/en/curl.installation.php">this</a> page for installation instructions',
         // 'iconv' => 'Iconv is used for character set conversion. Without it, system is a bit slower when converting different character set. Please refer to <a href="http://www.php.net/manual/en/iconv.installation.php">this</a> page for installation instructions',
         // 'imap' => 'IMAP is used to connect to POP3 and IMAP servers. Without it, Incoming Mail module will not work. Please refer to <a href="http://www.php.net/manual/en/imap.installation.php">this</a> page for installation instructions',
         // 'zlib' => 'ZLIB is used to read and write gzip (.gz) compressed files',
@@ -214,6 +253,30 @@ function validate_extensions(&$results) {
     return $ok;
 } // validate_extensions
 
+/**
+ * function to check if there are laravel required functions are disabled
+ */
+function checkDisabledFunctions(&$results) {
+    $ok = true;
+    $sets = explode(",", ini_get('disable_functions'));
+    $required_functions = ['escapeshellarg'];
+    // dd($required_functions,$sets);
+    foreach ($sets as $key) {
+        $key = trim($key);
+        foreach ($required_functions as $value) {
+            if($key == $value) {
+                if (strpos(ini_get('disable_functions'), $key) !== false) {
+                    $results[] = new TestResult("Function '$value' is required in order to run Faveo Helpdesk. Please check php.ini to enable this function or contact your server administrator", STATUS_ERROR);
+                    $ok = false;
+                } else {
+                    $results[] = new TestResult("All required functions found", STATUS_OK);
+                }
+            }
+        }
+    }
+    return $ok;
+}
+
 // ---------------------------------------------------
 //  Do the magic
 // ---------------------------------------------------
@@ -224,8 +287,9 @@ $php_ok = validate_php($results);
 $memory_ok = validate_memory_limit($results);
 $extensions_ok = validate_extensions($results);
 $file_permission = checkFilePermission($results);
+$required_functions = checkDisabledFunctions($results);
 ?>
-<p class="wc-setup-actions step">
+<p class="setup-actions step">
 <?php 
 foreach ($results as $result) {
     print '<span class="' . strtolower($result->status) . '">' . $result->status . '</span> &mdash; ' . $result->message . '<br/>';
@@ -233,7 +297,7 @@ foreach ($results as $result) {
 ?>
 </p>
 <?php
-if ($php_ok && $memory_ok && $extensions_ok && $file_permission ) {
+if ($php_ok && $memory_ok && $extensions_ok && $file_permission && $required_functions) {
     ?>
 </div>  
 
@@ -244,7 +308,7 @@ if ($php_ok && $memory_ok && $extensions_ok && $file_permission ) {
 
     <form action="{{URL::route('postprerequisites')}}" method="post"  class="border-line">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <p class="wc-setup-actions step">
+        <p class="setup-actions step">
             <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue">
             <a href="{!! route('licence') !!}" class="button button-large button-next" style="float: left">Previous</a>
         </p>
@@ -258,7 +322,7 @@ if ($php_ok && $memory_ok && $extensions_ok && $file_permission ) {
             <div class="woocommerce-message woocommerce-tracker" >
                 <p id="fail">This system does not meet Faveo system requirements</p>
             </div>
-<p class="wc-setup-actions step">
+<p class="setup-actions step">
     <a href="{{URL::route('licence')}}" style="float: left"><button value="prev" class="button-primary button button-large">Previous</button></a>
     <button disabled="" class="button-primary button button-large button-next" style="float: right">Continue</button>
 </p> <?php

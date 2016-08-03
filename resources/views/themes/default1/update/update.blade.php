@@ -62,20 +62,24 @@
 
                                         </div>
                                         <div class="box-body"  style="background-color: black; height: 410px; overflow: scroll;" id="data">
-                                            <?php $updated = $controller->doUpdate(); ?>
+                                            <?php
+                                            $updated = $controller->doUpdate();
+                                            if ($updated === true) {
+                                                $controller->copyToActualDirectory($latest_version);
+                                            } elseif ($found != true) {
+                                                echo '<p>&raquo; No update is available.</p>';
+                                                exit();
+                                            }
+                                            ?>
                                         </div>
                                 </div>
                             </div>
                             <?php
                         }
-
-                        if ($updated == true) {
-                            $controller->copyToActualDirectory($latest_version);
-                        } elseif ($found != true) {
-                            echo '<p>&raquo; No update is available.</p>';
-                        }
-                    } else
+                    } else{
                         echo '<p>Could not find latest realeases.</p>';
+                    }
+                    
                     ?>
 
                 </div>
@@ -91,3 +95,5 @@
     </script>
 
     @stop
+    
+   

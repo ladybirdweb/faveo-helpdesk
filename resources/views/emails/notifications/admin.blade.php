@@ -10,7 +10,7 @@ foreach ($depts as $dept) {
 	$created  =  DB::table('tickets')->select('created_at')->where('dept_id','=',$dept->id)->where('created_at','LIKE','%'.$day1.'%')->count();
 	$closed  =  DB::table('tickets')->where('dept_id','=',$dept->id)->where('closed_at','LIKE','%'.$day1.'%')->count();
 	$inprogress = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept->id)->where('status', '=', 1)->count();
-	$overdues = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept->id)->where('status', '=', 1)->get();
+	$overdues = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept->id)->where('isanswered', '=', 0)->where('status', '=', 1)->get();
 	$i = 0;
 	foreach ($overdues as $overdue) {
 		$sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('id','=',$overdue->sla)->first();
@@ -72,20 +72,20 @@ foreach ($depts as $dept) {
        
 @foreach ($depts as $dept) 
    <?php 
-   // echo $dept->name;
-   $created  =  DB::table('tickets')->select('created_at')->where('dept_id','=',$dept->id)->where('created_at','LIKE','%'.$day1.'%')->count();
-   $closed  =  DB::table('tickets')->where('dept_id','=',$dept->id)->where('closed_at','LIKE','%'.$day1.'%')->count();
-   $inprogress = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept->id)->where('status', '=', 1)->count();
-   $overdues = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept->id)->where('status', '=', 1)->get();
-   $i = 0;
-   foreach ($overdues as $overdue) {
-      $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('id','=',$overdue->sla)->first();
-      $ovdate = $overdue->created_at;
-      $new_date = date_add($ovdate, date_interval_create_from_date_string($sla_plan->grace_period)).'<br/><br/>';
-      if(date('Y-m-d H:i:s') > $new_date){
-         $i++;
-      }
-   }
+    // echo $dept->name;
+    $created  =  DB::table('tickets')->select('created_at')->where('dept_id','=',$dept->id)->where('created_at','LIKE','%'.$day1.'%')->count();
+    $closed  =  DB::table('tickets')->where('dept_id','=',$dept->id)->where('closed_at','LIKE','%'.$day1.'%')->count();
+    $inprogress = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept->id)->where('status', '=', 1)->count();
+    $overdues = App\Model\helpdesk\Ticket\Tickets::where('dept_id','=',$dept->id)->where('isanswered', '=', 0)->where('status', '=', 1)->get();
+    $i = 0;
+    foreach ($overdues as $overdue) {
+       $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('id','=',$overdue->sla)->first();
+       $ovdate = $overdue->created_at;
+       $new_date = date_add($ovdate, date_interval_create_from_date_string($sla_plan->grace_period)).'<br/><br/>';
+       if(date('Y-m-d H:i:s') > $new_date){
+          $i++;
+       }
+    }
    // echo "created=".$created."<br/>";
    // echo "closed=".$closed."<br/>";
    // echo "inprogress=".$inprogress."<br/>";

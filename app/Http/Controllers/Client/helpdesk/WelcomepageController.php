@@ -19,7 +19,7 @@ class WelcomepageController extends Controller
 {
     public function __construct()
     {
-        //        $this->middleware('board');
+        // $this->middleware('board');
     }
 
     /**

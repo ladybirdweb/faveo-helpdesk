@@ -28,6 +28,8 @@ return [
     'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'    => 'We are sorry, but the page you are looking for can not be found.',
     'go_back'                                                           => 'Go Back',
     'the_board_is_offline'                                              => 'The Board is Offline',
+    'error_establishing_connection_to_database'                         => 'Error establishing connection to database',                         
+    'unauthorized_access'                                               => 'Unauthorized Access',
     /*
       |--------------------------------------
       |   Login Page
@@ -140,6 +142,7 @@ return [
     'you_cannot_delete_system_default_email'                                               => 'You cannot delete system default Email',
     'email_deleted_sucessfully'                                                            => 'Email Deleted sucessfully',
     'email_can_not_delete'                                                                 => 'Email can not  Delete',
+    'outgoing_email_failed'                                                                => 'Outgoing email failed',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
@@ -281,6 +284,9 @@ return [
     'select_a_date_time_format'                                  => 'Select a date Time Format',
     'Ticket-has-been-created-successfully-your-ticket-number-is' => 'Ticket has been created successfully, your ticket number is',
     'Please-save-this-for-future-reference'                      => 'Please save this for future reference',
+    'rtl'                                                        => 'RTL (Right to left)',
+    'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   =>  'The RTL support is only applicable to the outgoing mails',
+    'user_set_ticket_status'                                     => 'Allow users to set ticket status',
     /*
       |--------------------------------------
       |   Email Settings Page
@@ -429,6 +435,7 @@ return [
       | Language page
       |------------------------------------------------
      */
+    'default'                    => 'default', 
     'language-settings'          => 'Language Settings',
     'iso-code'                   => 'ISO-CODE',
     'download'                   => 'Downlaod',
@@ -451,16 +458,23 @@ return [
     'lang-doesnot-exist'         => 'Language package does not exist.',
     'active-lang-error'          => 'Language package can not be deleted when it is active.',
     'language-error'             => 'Language package not found in your lang directroy.',
+    'lang-fallback-lang'         => 'Cannot delete system\'s defualt fallback language', 
 
     /*
       |--------------------------------------
       | Plugin Settings
       |--------------------------------------
      */
-    'add_plugin'    => 'Add Plugin',
-    'plugins'       => 'Plugins',
-    'upload'        => 'Upload',
-    'plugins-list'  => 'List of plugins',
+    'add_plugin'            => 'Add Plugin',
+    'plugins'               => 'Plugins',
+    'upload'                => 'Upload',
+    'plugins-list'          => 'List of plugins',
+    'plugin-exists'         => 'Plugin already exists',
+    'plugin-installed'      => 'Plugin installed successfully.',
+    'plugin-path-missing'   => 'Plugin File Path is not exist',
+    'no-plugin-file'        => 'Their is no ',
+    'plugin-config-missing' => 'Their is no <b>config.php or ServiceProvider.php</b>',
+    
     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]
@@ -645,6 +659,7 @@ return [
     'can_not_process'                       => 'Can not Process',
     'comment_published'                     => 'Comment Published',
     'comment_deleted'                       => 'Comment Deleted',
+    'publish_time'                          => 'Publish time',
     /*
       |----------------------------------------------------------------------------------------
       | Theme Pages [English(en)]
@@ -898,7 +913,6 @@ return [
     'ticket_updated_successfully'                                                   => 'Ticket Updated Successfully',
     'you_have_successfully_replied_to_your_ticket'                                  => 'You have successfully replied to your ticket',
     'for_some_reason_your_message_was_not_posted_please_try_again_later'            => 'For some reason your message was not posted. Please try again later',
-    'you_have_successfully_replied_to_your_ticket'                                  => 'You have successfully replied to your ticket',
     'for_some_reason_your_reply_was_not_posted_please_try_again_later'              => 'For some reason your reply was not posted. Please try again later',
     'you_have_unassigned_your_ticket'                                               => 'You have Unassigned your ticket',
     'for_some_reason_your_request_failed'                                           => 'For some reason your request failed',
@@ -907,7 +921,9 @@ return [
     'moved_to_trash'                                                                => 'Moved selected tickets to trash.',
     'tickets_have_been_closed'                                                      => 'Selected tickets have been closed.',
     'tickets_have_been_opened'                                                      => 'Selected tickets have been opened.',
-
+    'unable_to_fetch_emails'                                                        => 'Unable to fetch Emails',
+    'reply_content_is_a_required_field'                                             => 'Reply Content is a required field',
+    'internal_content_is_a_required_field'                                          => 'Internal Content is a required field',
 
 
 
@@ -971,7 +987,9 @@ return [
     'password_was_not_updated_incorrect_old_password'   => 'Password was not Updated. Incorrect old password',
     'the_user_has_been_removed_from_this_organization'  => 'The user has been removed from this organization',
     'user_report'                                       => 'User Report',
-
+    'send_password_via_email'                           => 'Send password via Email',
+    'user_send_mail_error_on_user_creation'             => 'Some error occurred while sending mail to the client. Please check email settings and try again',
+    'country_code'                                      => 'Country code',
     /*
       |------------------------------------------------
       |Organization Page
@@ -989,6 +1007,7 @@ return [
     'organization_profile'                 => 'Organization Profile',
     'organization-s_head'                  => "Organization's Head",
     'select_department_manager'            => 'Select Department Manager',
+    'select_organization_manager'          => "Select Organization Manager",
     'users_of'                             => 'Users of',
     'organization_created_successfully'    => 'Organization  Created Successfully',
     'organization_can_not_create'          => 'Organization can not Create',
@@ -1118,6 +1137,7 @@ return [
       |------------------------------------------------
      */
     'issue_summary'             => 'Issue Summary',
+    'contact'                   => 'Contact',
     'issue_details'             => 'Issue Details',
     'contact_informations'      => 'Contact Informations',
     'contact_details'           => 'Contact Details',
@@ -1373,5 +1393,6 @@ return [
    'that_email_is not_available_in_this_system'     => 'That Email is not available in this System',
    'use_subject'                                    => 'Use Subject',
    'reopen'                                         => 'Reopen',
+   'invalid_attempt'                                => 'Invalid Attempt',
 
 ];

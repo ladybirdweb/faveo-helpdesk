@@ -8,7 +8,7 @@ class Ticket_Thread extends BaseModel
 {
     protected $table = 'ticket_thread';
     protected $fillable = [
-        'id', 'pid', 'ticket_id', 'staff_id', 'user_id', 'thread_type', 'poster', 'source', 'is_internal', 'title', 'body', 'format', 'ip_address', 'created_at', 'updated_at',
+        'id', 'ticket_id', 'staff_id', 'user_id', 'thread_type', 'poster', 'source', 'is_internal', 'title', 'body', 'format', 'ip_address', 'created_at', 'updated_at',
     ];
 
     public function attach()

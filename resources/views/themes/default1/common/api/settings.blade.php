@@ -88,7 +88,7 @@ class="active"
                             <!-- {!! Form::radio('api_key_mandatory','1',true) !!} {{Lang::get('lang.enable')}} -->
                         </div>
                         <div class="col-xs-5">
-                             <input type="radio" name="api_key_mandatory" value="0" @if($systems->api_key_mandatory == 0) checked @endif>&nbsp;{{Lang::get('lang.enable')}}
+                             <input type="radio" name="api_key_mandatory" value="0" @if($systems->api_key_mandatory == 0) checked @endif>&nbsp;{{Lang::get('lang.disable')}}
                             <!-- {!! Form::radio('api_key_mandatory','0') !!} {{Lang::get('lang.disable')}} -->
                         </div>
                     </div>

@@ -64,10 +64,10 @@ class SecurityController extends Controller
      *
      * @return Response
      */
-    public function show($id)
-    {
-        return view('themes.default1.admin.helpdesk.setting.security.preview', compact('id'));
-    }
+//    public function show($id)
+//    {
+//        return view('themes.default1.admin.helpdesk.setting.security.preview', compact('id'));
+//    }
 
     /**
      * Update security details.

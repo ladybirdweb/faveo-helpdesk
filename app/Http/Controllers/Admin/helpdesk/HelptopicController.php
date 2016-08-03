@@ -40,7 +40,7 @@ class HelptopicController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the helptopic.
      *
      * @param type Help_topic $topic
      *
@@ -58,7 +58,7 @@ class HelptopicController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new helptopic.
      *
      * @param type Priority   $priority
      * @param type Department $department
@@ -96,7 +96,7 @@ class HelptopicController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created helptpoic in storage.
      *
      * @param type Help_topic       $topic
      * @param type HelptopicRequest $request
@@ -128,7 +128,7 @@ class HelptopicController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified helptopic.
      *
      * @param type            $id
      * @param type Priority   $priority
@@ -160,7 +160,7 @@ class HelptopicController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified helptopic in storage.
      *
      * @param type                 $id
      * @param type Help_topic      $topic
@@ -201,7 +201,7 @@ class HelptopicController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified helptopic from storage.
      *
      * @param type int        $id
      * @param type Help_topic $topic

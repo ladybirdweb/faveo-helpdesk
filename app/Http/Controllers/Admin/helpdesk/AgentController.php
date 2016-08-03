@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin\helpdesk;
 
 // controller
-use App\Http\Controllers\Common\PhpMailController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Common\PhpMailController;
 // request
 use App\Http\Requests\helpdesk\AgentRequest;
 use App\Http\Requests\helpdesk\AgentUpdate;
@@ -139,12 +139,14 @@ class AgentController extends Controller
             // fetch user credentails to send mail
             $name = $user->user_name;
             $email = $user->email;
-            try {
-                // send mail on registration
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
-            } catch (Exception $e) {
-                // returns if try fails
-                return redirect('agents')->with('warning', Lang::get('lang.agent_send_mail_error_on_agent_creation'));
+            if($request->input('send_email')) {
+                try {
+                    // send mail on registration
+                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
+                } catch (Exception $e) {
+                    // returns if try fails
+                    return redirect('agents')->with('warning', Lang::get('lang.agent_send_mail_error_on_agent_creation'));
+                }
             }
             // returns for the success case
             return redirect('agents')->with('success', Lang::get('lang.agent_creation_success'));

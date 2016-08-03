@@ -118,7 +118,7 @@ class="active"
                 <?php $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first(); ?>
                 @if($companys->logo != null)
                 <div class="col-md-2 image" data-content="{{Lang::get('lang.click-delete')}}">
-                    <img src="{{asset('lb-faveo/media/company')}}{{'/'}}{{$company->logo}}" alt="User Image" id="company-logo" width="100px" style="border:1px solid #DCD1D1" />
+                    <img src="{{asset('uploads/company')}}{{'/'}}{{$company->logo}}" alt="User Image" id="company-logo" width="100px" style="border:1px solid #DCD1D1" />
                 </div>
                 @endif
             </div>
@@ -164,7 +164,7 @@ class="active"
             var src = $('#company-logo').attr('src').split('/');
             var file = src[src.length - 1];
 
-            var path = "lb-faveo/media/company/" + file;
+            var path = "uploads/company/" + file;
             // alert(path); 
             $.ajax({
                 type: "GET",

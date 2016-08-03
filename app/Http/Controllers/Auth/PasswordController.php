@@ -32,7 +32,6 @@ class PasswordController extends Controller
     {
         $this->PhpMailController = $PhpMailController;
         $this->middleware('guest');
-        SettingsController::smtp();
     }
 
     /**
@@ -54,6 +53,7 @@ class PasswordController extends Controller
     {
         $date = date('Y-m-d H:i:s');
         $this->validate($request, ['email' => 'required|email']);
+        \Event::fire('reset.password',array());
         $user = User::where('email', '=', $request->only('email'))->first();
         if (isset($user)) {
             $user1 = $user->email;
@@ -71,7 +71,7 @@ class PasswordController extends Controller
 
             return redirect()->back()->with('status', Lang::get('lang.we_have_e-mailed_your_password_reset_link'));
         } else {
-            return redirect()->back()->with('errors', Lang::get("lang.we_can't_find_a_user_with_that_e-mail_address"));
+            return redirect()->back()->with('fails', Lang::get("lang.we_can't_find_a_user_with_that_e-mail_address"));
         }
     }
 }
