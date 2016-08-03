@@ -13,6 +13,7 @@ use App\Model\helpdesk\Form\Fields;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
@@ -58,20 +59,24 @@ class FormController extends Controller {
         if (\Config::get('database.install') == '%0%') {
             return \Redirect::route('licence');
         }
-        $location = GeoIP::getLocation('');
-        $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
-        if (System::first()->status == 1) {
-            $topics = $topic->get();
-            $codes = $code->get();
-            if ($phonecode->phonecode) {
-                $phonecode = $phonecode->phonecode;
-            } else {
-                $phonecode = "";
-            }
-            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes'))->with('phonecode', $phonecode);
-        } else {
-            return \Redirect::route('home');
+        $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
+        if (!\Auth::check() && ($settings->status == 1 || $settings->status == '1')) {
+            return redirect('auth/login')->with(['login_require'=> 'Please login to your account for submitting a ticket', 'referer' => 'form']);
         }
+            $location = GeoIP::getLocation('');
+            $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+            if (System::first()->status == 1) {
+                $topics = $topic->get();
+                $codes = $code->get();
+                if ($phonecode->phonecode) {
+                    $phonecode = $phonecode->phonecode;
+                } else {
+                    $phonecode = "";
+                }
+                return view('themes.default1.client.helpdesk.form', compact('topics', 'codes'))->with('phonecode', $phonecode);
+            } else {
+                return \Redirect::route('home');
+            }
     }
 
     /**
@@ -135,6 +140,7 @@ class FormController extends Controller {
      * @param type User    $user
      */
     public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code) {
+        // dd($request);
         $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token');
 
         $name = $request->input('Name');

@@ -1,7 +1,13 @@
 @extends('themes.default1.layouts.login')
 
 @section('body')
-<h4 class="login-box-msg">{!! Lang::get('lang.Login_to_start_your_session') !!}</h4>
+<h4 class="login-box-msg">
+    @if (Session::has('login_require'))
+        {!! Session::get('login_require') !!}
+    @else
+        {!! Lang::get('lang.Login_to_start_your_session') !!}
+    @endif
+</h4>
 @if(Session::has('status'))
 <div class="alert alert-success alert-dismissable">
     <i class="fa  fa-check-circle"> </i>
@@ -45,6 +51,11 @@
     <!-- {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!} -->
     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
 </div>
+@if (Session::has('referer'))
+    <input type='hidden' name="referer" value="{!! Session::get('referer') !!}">
+@elseif(Session::has('errors'))
+    <input type='hidden' name="referer" value="form">
+@endif
 <div class="row">
     <div class="col-xs-8">
         <div class="checkbox icheck">

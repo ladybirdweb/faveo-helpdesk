@@ -19,6 +19,10 @@ Route::group(['middleware' => ['web']], function () {
     });
     Route::get('account/activate/{token}', ['as' => 'account.activate', 'uses' => 'Auth\AuthController@accountActivate']);
     Route::get('getmail/{token}', 'Auth\AuthController@getMail');
+    Route::get('verify-otp', ['as' => 'otp-verification', 'uses' => 'Auth\AuthController@getVerifyOTP']);
+    Route::post('verify-otp', ['as' => 'otp-verification', 'uses' => 'Auth\AuthController@verifyOTP']);
+    Route::post('resend/opt', ['as' => 'resend-otp', 'uses' =>  'Auth\AuthController@resendOTP']);
+
     /*
       |-------------------------------------------------------------------------------
       | Admin Routes

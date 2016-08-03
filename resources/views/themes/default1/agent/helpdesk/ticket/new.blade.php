@@ -62,6 +62,12 @@ class="active"
             @if($errors->first('body'))
             <li class="error-message-padding">{!! $errors->first('body', ':message') !!}</li>
             @endif
+            @if($errors->first('code'))
+            <li class="error-message-padding">{!! $errors->first('code', ':message') !!}</li>
+            @endif
+            @if($errors->first('mobile'))
+            <li class="error-message-padding">{!! $errors->first('mobile', ':message') !!}</li>
+            @endif
         </div>
         @endif
     </div><!-- /.box-header -->
@@ -90,16 +96,16 @@ class="active"
             </div>
             <div class="row">
                 <div class="col-md-1 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
-
+                    <div class="form-group {{ $errors->has('code') ? 'has-error' : '' }}">
                     {!! Form::label('code',Lang::get('lang.country-code')) !!}
                     {!! Form::text('code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
+                    </div>
                 </div>
                 <div class="col-md-5">
                     <!-- phone -->
                     <div class="form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
                         <label>{!! Lang::get('lang.mobile_number') !!}:</label>
                         {!! Form::input('number','mobile',null,['class' => 'form-control']) !!}
-                        {!! $errors->first('mobile', '<spam class="help-block text-red">:message</spam>') !!}
                     </div>
                 </div>
                 <div class="col-md-5">
@@ -213,7 +219,7 @@ class="active"
             <div class="col-md-1">
             </div>
             <div class="col-md-3">
-                <input type="submit" value="{!! Lang::get('lang.create_ticket') !!}" class="btn btn-primary">
+                <input type="submit" value="{!! Lang::get('lang.create_ticket') !!}" class="btn btn-primary" onclick="this.disabled=true;this.value='Sending, please wait...';this.form.submit();">
             </div>
         </div>
     </div>

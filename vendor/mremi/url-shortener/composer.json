@@ -1,0 +1,21 @@
+{
+    "name": "mremi/url-shortener",
+    "type": "library",
+    "description": "A PHP5 library using API to shorten/expand URL",
+    "keywords": ["url", "shortener", "api"],
+    "homepage": "https://github.com/mremi/UrlShortener",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rémi Marseille",
+            "email": "marseille.remi@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "guzzle/guzzle": "~3.7"
+    },
+    "autoload": {
+        "psr-0": { "Mremi\\UrlShortener": "src" }
+    }
+}

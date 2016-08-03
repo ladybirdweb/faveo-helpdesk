@@ -91,7 +91,7 @@
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         @if($replacetop==0)
                         <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
-                            <li @yield('Dashboard')><a data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard();">{!! Lang::get('lang.dashboard') !!}</a></li>
+                            <li @yield('Dashboard')><a id="dash" data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);">{!! Lang::get('lang.dashboard') !!}</a></li>
                             <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
@@ -549,8 +549,12 @@
             });
 </script>
 <script type="text/javascript">
-    function clickDashboard() {
-        window.location = "{{URL::route('dashboard')}}";
+    function clickDashboard(e) {
+        if (event.ctrlKey) {
+            window.open('{{URL::route("dashboard")}}', '_blank');
+        } else {
+            window.location = "{{URL::route('dashboard')}}";            
+        }
     }
 </script>
 @yield('FooterInclude')

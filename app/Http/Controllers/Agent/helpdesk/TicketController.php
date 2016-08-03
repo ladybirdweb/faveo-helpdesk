@@ -34,6 +34,7 @@ use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Utility\CountryCode;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\User;
 use Auth;
 use DB;
@@ -301,7 +302,12 @@ class TicketController extends Controller {
             }
             //create user
             if ($this->create_user($email, $fullname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response, $status)) {
-                return Redirect('newticket')->with('success', Lang::get('lang.Ticket-created-successfully'));
+                $status = $this->checkUserVerificationStatus();
+                if($status == 1) {
+                    return Redirect('newticket')->with('success', Lang::get('lang.Ticket-created-successfully'));
+                } else {
+                    return Redirect('newticket')->with('success', Lang::get('lang.Ticket-created-successfully2'));
+                }
             } else {
                 return Redirect('newticket')->with('fails', 'fails');
             }
@@ -670,6 +676,7 @@ class TicketController extends Controller {
             if ($username == null) {
                 $username = $emailadd;
             }
+            $user_status = $this->checkUserVerificationStatus();
             $user->user_name = $username;
             $user->email = $emailadd;
             $user->password = Hash::make($password);
@@ -677,17 +684,33 @@ class TicketController extends Controller {
             $user->country_code = $phonecode;
             $user->mobile = $mobile_number;
             $user->role = 'user';
-            $user->active = '1';
+            $user->active = $user_status;
+            $token = str_random(60);
+            $user->remember_token = $token;
             // mail user his/her password
             \Event::fire(new \App\Events\ClientTicketFormPost($from_data, $emailadd, $source));
             if ($user->save()) {
                 $user_id = $user->id;
+                if ($user_status == 0) {
+                    $value = [
+                        "full_name" => $username,
+                        "email"     => $emailadd,
+                        "code"      => $phonecode,
+                        "mobile"    => $mobile_number,
+                    ];
+                    \Event::fire(new \App\Events\LoginEvent($value));
+                }
                 // Event fire
                 \Event::fire(new \App\Events\ReadMailEvent($user_id, $password));
                 try {
                     if ($auto_response == 0) {
                         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'user_password' => $password]);
+                        if ($user_status == 0) {
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'password_reset_link' => url('account/activate/'.$token)]);
+                        }
+
                     }
+
                 } catch (\Exception $e) {
                     
                 }
@@ -919,6 +942,9 @@ class TicketController extends Controller {
         if ($max_number) {
             $ticket_number = $max_number->ticket_number;
         }
+
+        $user_status = User::select('active')->where('id', '=', $user_id)->first();
+        // dd($user_status->active);
         $ticket = new Tickets();
         $ticket->ticket_number = $this->ticketNumber($ticket_number);
         $ticket->user_id = $user_id;
@@ -929,10 +955,16 @@ class TicketController extends Controller {
 
         $ticket->priority_id = $priority;
         $ticket->source = $source;
-        if ($status == null) {
-            $ticket->status = 1;
+        $ticket_status = $this->checkUserVerificationStatus();
+        //dd($ticket_status);
+        if ($ticket_status == 1 && $user_status->active == 1) {
+            if ($status == null) {
+                $ticket->status = 1;
+            } else {
+                $ticket->status = $status;
+            }
         } else {
-            $ticket->status = $status;
+            $ticket->status = 6;
         }
         $ticket->save();
 
@@ -2366,5 +2398,24 @@ class TicketController extends Controller {
             
         }
     }
+
+    /**
+     *@category function to chech if user verifcaition required for creating tickets or not
+     *@param null
+     *@return int 0/1
+     */
+    public function checkUserVerificationStatus()
+    {
+        $status = CommonSettings::select('status')
+            ->where('option_name', '=', 'send_otp')
+            ->first();
+        if ($status->status == 0 || $status->status == "0")
+        {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
 
 }

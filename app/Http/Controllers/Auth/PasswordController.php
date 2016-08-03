@@ -67,8 +67,15 @@ class PasswordController extends Controller
             } else {
                 $create_password_reset = \DB::table('password_resets')->insert(['email' => $user->email, 'token' => $code, 'created_at' => $date]);
             }
-            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user->user_name, 'email' => $user->email], $message = ['subject' => 'Your Password Reset Link', 'scenario' => 'reset-password'], $template_variables = ['user' => $user->user_name, 'email_address' => $user->email, 'password_reset_link' => url('password/reset/'.$code)]);
-
+            //$this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user->user_name, 'email' => $user->email], $message = ['subject' => 'Your Password Reset Link', 'scenario' => 'reset-password'], $template_variables = ['user' => $user->user_name, 'email_address' => $user->email, 'password_reset_link' => url('password/reset/'.$code)]);
+            if ($user->mobile != '' && $user->mobile != null) {
+                $value = [
+                'url'    => url('password/reset/'.$code),
+                'name'   => $user->user_name,
+                'mobile' => $user->mobile,
+                'code'   => $user->country_code];
+                \Event::fire('reset.password2',array($value));
+            }
             return redirect()->back()->with('status', Lang::get('lang.we_have_e-mailed_your_password_reset_link'));
         } else {
             return redirect()->back()->with('fails', Lang::get("lang.we_can't_find_a_user_with_that_e-mail_address"));

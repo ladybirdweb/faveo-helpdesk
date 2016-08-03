@@ -219,6 +219,10 @@ class UserController extends Controller
                     }
                 }
                 // returns for the success case
+                // returns for the success case
+                if ($request->input('active') == '0' || $request->input('active') == 0) {
+                    \Event::fire(new \App\Events\LoginEvent($request));
+                }
                 return redirect('user')->with('success', Lang::get('lang.User-Created-Successfully'));
             }
 //            $user->save();
