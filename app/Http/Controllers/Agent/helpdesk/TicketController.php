@@ -909,7 +909,8 @@ class TicketController extends Controller {
                 $ticket_number = $max_number->ticket_number;
             }
         }
-
+        $user_status = User::select('active')->where('id', '=', $user_id)->first();
+        // dd($user_status->active);
         $ticket = new Tickets();
         $ticket->ticket_number = $this->ticketNumber($ticket_number);
         $ticket->user_id = $user_id;
@@ -922,14 +923,14 @@ class TicketController extends Controller {
         $ticket->source = $source;
         $ticket_status = $this->checkUserVerificationStatus();
         //dd($ticket_status);
-        if ($ticket_status == 1) {
+        if ($ticket_status == 1 && $user_status->active == 1) {
             if ($status == null) {
                 $ticket->status = 1;
             } else {
                 $ticket->status = $status;
             }
         } else {
-                $ticket->status = 6;
+            $ticket->status = 6;
         }
         $ticket->save();
 
