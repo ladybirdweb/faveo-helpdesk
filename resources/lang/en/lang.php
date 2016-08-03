@@ -1427,5 +1427,12 @@ return [
    "account-verification-is" => "account verification is",
    "extra-text"              => ".\r\nYou can login to verify your account via OTP or just click on the link we've sent to your email address.",
    "otp-not-sent"            => "We faced some problem in sending OTP please try after some time.",
-
+   
+    /**-------------------------------------------------------------------------------------------
+     * Ticket number settings 03-08-2016
+     * ------------------------------------------------------------------------------------------
+     */
+    "format"=>'Format',
+    "ticket-number-format"=>'This setting is used to generate ticket numbers. Use hash signs (`#`) where digits are to be placed & dollar sign(‘$’) where characters are to be placed . Any other text in the number format will be preserved. ',
+    "ticket-number-type"=>'Choose a sequence from which to derive new ticket numbers. The system has a incrementing sequence and a random sequence by default',
 ];

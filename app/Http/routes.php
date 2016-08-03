@@ -1129,4 +1129,5 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('queue/{id}', ['as' => 'queue.edit', 'uses' => 'Job\QueueController@edit']);
     Route::post('queue/{id}', ['as' => 'queue.update', 'uses' => 'Job\QueueController@update']);
     Route::get('queue/{id}/activate', ['as' => 'queue.activate', 'uses' => 'Job\QueueController@activate']);
+    Route::get('get-ticket-number',['as'=>'get.ticket.number','uses'=>'Admin\helpdesk\SettingsController@getTicketNumber']);
 });

@@ -321,9 +321,9 @@ class TicketController extends Controller {
         if (Auth::user()->role == 'agent') {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('id', '=', $id)->first();
-            if($tickets->dept_id == $dept->id) {
+            if ($tickets->dept_id == $dept->id) {
                 $tickets = $tickets;
-            } elseif($tickets->assigned_to == Auth::user()->id) {
+            } elseif ($tickets->assigned_to == Auth::user()->id) {
                 $tickets = $tickets;
             } else {
                 $tickets = null;
@@ -365,14 +365,14 @@ class TicketController extends Controller {
         return $size;
     }
 
-    public function error($e,$request) {
+    public function error($e, $request) {
         if ($request->ajax() || $request->wantsJson()) {
 
             $error = $e->getMessage();
             if (is_object($error)) {
                 $error = $error->toArray();
             }
-             return response()->json(compact('error'));
+            return response()->json(compact('error'));
             //return $message;
         }
     }
@@ -386,7 +386,8 @@ class TicketController extends Controller {
      * @return type bool
      */
     public function reply(Ticket_Thread $thread, Request $request, Ticket_attachments $ta) {
-        if(is_array($request->file('attachment'))) {
+        if (is_array($request->file('attachment'))) {
+            
         } else {
             try {
                 $size = $this->size();
@@ -434,7 +435,7 @@ class TicketController extends Controller {
             $thread2->save();
         }
         if ($tickets->status > 1) {
-            $this->open($ticket_id, new  Tickets);
+            $this->open($ticket_id, new Tickets);
         }
         $thread->save();
 
@@ -472,13 +473,13 @@ class TicketController extends Controller {
 
         // Event
         \Event::fire(new \App\Events\FaveoAfterReply($reply_content, $user->phone_number, $request, $tickets));
-        
+
         $data = [
             "ticket_id" => $request->input('ticket_ID'),
-            'u_id' => Auth::user()->first_name.' '.Auth::user()->last_name,
+            'u_id' => Auth::user()->first_name . ' ' . Auth::user()->last_name,
             'body' => $request->input('reply_content'),
         ];
-        \Event::fire('Reply-Ticket',array($data));
+        \Event::fire('Reply-Ticket', array($data));
         // sending attachments via php mail function
         $message = '';
         if ($check_attachment == 1) {
@@ -561,7 +562,7 @@ class TicketController extends Controller {
      *
      * @return type integer
      */
-    public function ticketNumber($ticket_number) {
+    public function ticketNumberold($ticket_number) {
         $number = $ticket_number;
         $number = explode('-', $number);
         $number1 = $number[0];
@@ -584,6 +585,42 @@ class TicketController extends Controller {
         $array = [$number1, $number2, $number3];
         $number = implode('-', $array);
 
+        return $number;
+    }
+
+    public function ticketNumber($ticket_number) {
+        $ticket_settings = new \App\Model\helpdesk\Settings\Ticket();
+        $setting = $ticket_settings->find(1);
+        $format = $setting->num_format;
+        $type = $setting->num_sequence;
+        $number = $this->getNumber($ticket_number, $type, $format);
+
+
+        return $number;
+    }
+
+    public function getNumber($ticket_number, $type, $format, $check = true) {
+        $force = false;
+        if ($check === false) {
+            $force = true;
+        }
+        $controller = new \App\Http\Controllers\Admin\helpdesk\SettingsController();
+        if ($ticket_number) {
+
+            $number = $controller->nthTicketNumber($ticket_number, $type, $format, $force);
+        } else {
+            $number = $controller->switchNumber($format, $type);
+        }
+        $number = $this->generateTicketIfExist($number, $type, $format);
+        return $number;
+    }
+
+    public function generateTicketIfExist($number, $type, $format) {
+        $tickets = new Tickets();
+        $ticket = $tickets->where('ticket_number', $number)->first();
+        if ($ticket) {
+            $number = $this->getNumber($number, $type, $format, false);
+        }
         return $number;
     }
 
@@ -837,7 +874,6 @@ class TicketController extends Controller {
                     $ticket_threads->body = $ticket_status->message . ' ' . $username;
                     $ticket_threads->save();
                     // event fire for internal notes
-
                     //event to change status
                     $data = [
                         'id' => $ticket_number,
@@ -878,15 +914,11 @@ class TicketController extends Controller {
      * @return type string
      */
     public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status) {
+        $ticket_number = "";
         $max_number = Tickets::whereRaw('id = (select max(`id`) from tickets)')->first();
-        if ($max_number == null) {
-            $ticket_number = 'AAAA-9999-9999999';
-        } else {
-            foreach ($max_number as $number) {
-                $ticket_number = $max_number->ticket_number;
-            }
+        if ($max_number) {
+            $ticket_number = $max_number->ticket_number;
         }
-
         $ticket = new Tickets();
         $ticket->ticket_number = $this->ticketNumber($ticket_number);
         $ticket->user_id = $user_id;
@@ -1272,10 +1304,10 @@ class TicketController extends Controller {
         $NewThread->save();
         $data = [
             "ticket_id" => $id,
-            'u_id' => Auth::user()->first_name.' '.Auth::user()->last_name,
+            'u_id' => Auth::user()->first_name . ' ' . Auth::user()->last_name,
             'body' => $InternalContent,
         ];
-        \Event::fire('Reply-Ticket',array($data));
+        \Event::fire('Reply-Ticket', array($data));
         return 1;
     }
 
