@@ -17,8 +17,14 @@ Faveo is designed & developed by <a href="http://www.ladybirdweb.com/" target="_
 </ul>
 
 
-<h3><a id="user-content-faveo-user-manual" href="https://github.com/ladybirdweb/faveo-helpdesk#faveo-user-manual" aria-hidden="true"></a>Faveo User Manual</h3>
-<p>Check out Faveo Knowledge Base <a href="http://www.ladybirdweb.com/support/knowledgebase" target="_blank">here</a></p>
+<h3><a id="user-content-faveo-user-manual" href="https://github.com/ladybirdweb/faveo-helpdesk#faveo-user-manual" aria-hidden="true"></a>Faveo Documentation</h3>
+<ul>
+<li> <a href="http://www.ladybirdweb.com/support/knowledgebase" target="_blank">Faveo user Manual</a></li>
+<li><a href="https://docs.google.com/document/d/1TEUVyFSzlNRIQGHVK88rzBtYbhyk2FNb3TeekjfsXQA/" target="_blank">Faveo API Documentation</a></li>
+<li> <a href="https://docs.google.com/document/d/1pXpsQKcTyX5x6H4xA8unYxd5Duw2k94xt7wevTdoF_E/" target="_blank">Faveo Event List</a></li>
+<li> <a href="https://docs.google.com/document/d/1PGcpB19Vr42rM_DrCzC3snujzEL8N9Ocy0yewfPNWqU/" target="_blank">Faveo Plugin creation guide</a></li>
+</ul>
+
 <h3><a id="user-content-requirements" href="https://github.com/ladybirdweb/faveo-helpdesk#requirements" aria-hidden="true"></a>Requirements</h3>
 <p>To run Faveo your host just needs a couple of things:</p>
 <ul>

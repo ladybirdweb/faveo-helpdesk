@@ -24,6 +24,7 @@
         
         <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css"/>
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+
         <link href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css"/>
 
         <link href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet" rel="stylesheet"/>
@@ -97,6 +98,7 @@
                             <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
+
                         </ul>
                         @else
                             <?php \Event::fire('service.desk.agent.topbar', array()); ?>
@@ -433,6 +435,7 @@
             </footer>
         </div><!-- ./wrapper -->
 
+
     <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}" type="text/javascript"></script>
     
     <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
@@ -444,7 +447,6 @@
     <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}"  type="text/javascript"></script>
     <!-- AdminLTE App -->
     <script src="{{asset("lb-faveo/js/app.min.js")}}" type="text/javascript"></script>
-
     <!-- iCheck -->
     <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
     <!-- jquery ui -->

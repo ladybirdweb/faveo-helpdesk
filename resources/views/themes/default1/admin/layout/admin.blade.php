@@ -21,17 +21,16 @@
         <!-- This controlls the top tabs -->
         <link href="{{asset("lb-faveo/css/tabby.css")}}" rel="stylesheet" type="text/css" >
         <!-- In app notification style -->
-        <link href="{{asset('css/notification-style.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{asset("css/notification-style.css")}}" rel="stylesheet" type="text/css">
         
         <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
         
         <link  href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css">
-        <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
+
         <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet" type="text/css" >
         
         <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
-        
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
