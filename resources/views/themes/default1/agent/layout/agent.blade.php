@@ -550,10 +550,10 @@
 </script>
 <script type="text/javascript">
     function clickDashboard(e) {
-        if (event.ctrlKey) {
+        if (e.ctrlKey === true) {
             window.open('{{URL::route("dashboard")}}', '_blank');
         } else {
-            window.location = "{{URL::route('dashboard')}}";            
+            window.location = "{{URL::route('dashboard')}}";
         }
     }
 </script>
