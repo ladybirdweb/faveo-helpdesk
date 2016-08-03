@@ -88,28 +88,7 @@ class = "active"
             <h4>{!! Lang::get('lang.ticket') !!} </h4>
         </div>
         <div class="row col-md-12">
-            <div class="col-md-12 form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
-                {!! Form::label('help_topic', Lang::get('lang.choose_a_help_topic')) !!} 
-                {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
-                <?php
-                $forms = App\Model\helpdesk\Form\Forms::get();
-                $helptopic = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->get();
-                ?>                  
-                <select name="helptopic" class="form-control" id="selectid">
-                    <?php
-                    $system_default_department = App\Model\helpdesk\Settings\System::where('id', '=', 1)->first();
-                    if (isset($system_default_department->department)) {
-                        $department_relation_helptopic = App\Model\helpdesk\Manage\Help_topic::where('department', '=', $system_default_department->department)->first();
-                        $default_helptopic = $department_relation_helptopic->id;
-                    } else {
-                        $default_helptopic = 0;
-                    }
-                    ?>
-                    @foreach($helptopic as $topic)
-                    <option value="{!! $topic->id !!}">{!! $topic->topic !!}</option>
-                    @endforeach
-                </select>
-            </div>
+            
             
                 @if(Auth::user())
                     
@@ -154,6 +133,28 @@ class = "active"
                 {!! Form::text('Phone',null,['class' => 'form-control']) !!}
             </div>
               @endif
+            <div class="col-md-12 form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
+                {!! Form::label('help_topic', Lang::get('lang.choose_a_help_topic')) !!} 
+                {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
+                <?php
+                $forms = App\Model\helpdesk\Form\Forms::get();
+                $helptopic = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->get();
+                ?>                  
+                <select name="helptopic" class="form-control" id="selectid">
+                    <?php
+                    $system_default_department = App\Model\helpdesk\Settings\System::where('id', '=', 1)->first();
+                    if (isset($system_default_department->department)) {
+                        $department_relation_helptopic = App\Model\helpdesk\Manage\Help_topic::where('department', '=', $system_default_department->department)->first();
+                        $default_helptopic = $department_relation_helptopic->id;
+                    } else {
+                        $default_helptopic = 0;
+                    }
+                    ?>
+                    @foreach($helptopic as $topic)
+                    <option value="{!! $topic->id !!}">{!! $topic->topic !!}</option>
+                    @endforeach
+                </select>
+            </div>
             <div class="col-md-12 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
                 {!! Form::label('Subject',Lang::get('lang.subject')) !!}<span class="text-red"> *</span>
                 {!! Form::text('Subject',null,['class' => 'form-control']) !!}
