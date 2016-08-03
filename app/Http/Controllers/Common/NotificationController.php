@@ -8,6 +8,8 @@ use App\Model\helpdesk\Notification\UserNotification;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\User;
 
+use App\Model\helpdesk\Notification\NotificationType;
+
 class NotificationController extends Controller {
     /**
      ********************************************* 
@@ -28,6 +30,7 @@ class NotificationController extends Controller {
     * Constructor
     */
     public function __construct() {
+        
         $user = new User();
         $this->user = $user;
         // checking authentication
@@ -45,15 +48,18 @@ class NotificationController extends Controller {
      */
     public function create($model_id, $userid_created, $type_id, $forwhome = []) {
         try {
-//            dd($model_id);
             if (empty($forwhome)) {
                 $ticket = Tickets::where('id', '=', $model_id)->first();
-                $forwhome = $this->user->where('role', '!=', 'user')->where('primary_dpt', '=', $ticket->dept_id)->get();
+                $forwhome = $this->user->where('role', '=', 'agent')->where('primary_dpt', '=', $ticket->dept_id)->get();
+                $forwhome2 = $this->user->where('role', '=', 'admin')->get();
+                $forwhome = $forwhome->merge($forwhome2);
             }
-            //system notification
+            // system notification
             $notify = Notification::create(['model_id' => $model_id, 'userid_created' => $userid_created, 'type_id' => $type_id]);
             foreach ($forwhome as $agent) {
+                $type_message = NotificationType::where('id', '=', $type_id)->first();
                 UserNotification::create(['notification_id' => $notify->id, 'user_id' => $agent['id'], 'is_read' => 0]);
+                // $this->PushNotificationController->response($agent->fcm_token, $type_message->message . $model_id, $model_id);
             }
         } catch (\Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());

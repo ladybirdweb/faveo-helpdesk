@@ -78,19 +78,28 @@ class="active"
 
         <div class="form-group">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <!-- email -->
                     <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
                         {!! Form::label('email',Lang::get('lang.email')) !!} <span class="text-red"> *</span>
-                        {!! Form::text('email',null,['class' => 'form-control']) !!}
+                        {!! Form::text('email',null,['class' => 'form-control', 'id' => 'email']) !!}
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <!-- email -->
+                    <div class="form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
+                        {!! Form::label('email',Lang::get('lang.first_name')) !!} <span class="text-red"> *</span>
+                       <!--  {!! Form::text('email',null,['class' => 'form-control'],['id' => 'email']) !!} -->
+                       <input type="text" name="first_name" id="first_name" class="form-control">
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <!-- full name -->
-                    <div class="form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
-                        {!! Form::label('user_name',Lang::get('lang.user_name')) !!} <span class="text-red"> *</span>
-                        {!! Form::text('user_name',null,['class' => 'form-control']) !!}
+                    <div class="form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
+                        {!! Form::label('fullname',Lang::get('lang.last_name')) !!} <span class="text-red"></span>
+                        <input type="text" name="last_name" id="last_name" class="form-control">
                     </div>
                 </div>
             </div>
@@ -98,21 +107,21 @@ class="active"
                 <div class="col-md-1 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
                     <div class="form-group {{ $errors->has('code') ? 'has-error' : '' }}">
                     {!! Form::label('code',Lang::get('lang.country-code')) !!}
-                    {!! Form::text('code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
+                    {!! Form::text('code',null,['class' => 'form-control', 'id' => 'country_code', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
                     </div>
                 </div>
                 <div class="col-md-5">
                     <!-- phone -->
                     <div class="form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
                         <label>{!! Lang::get('lang.mobile_number') !!}:</label>
-                        {!! Form::input('number','mobile',null,['class' => 'form-control']) !!}
+                        {!! Form::input('number','mobile',null,['class' => 'form-control', 'id' => 'mobile']) !!}
                     </div>
                 </div>
                 <div class="col-md-5">
                     <!-- phone -->
                     <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
                         <label>{!! Lang::get('lang.phone') !!}:</label>
-                        {!! Form::input('number','phone',null,['class' => 'form-control']) !!}
+                        {!! Form::input('number','phone',null,['class' => 'form-control', 'id' => 'phone_number']) !!}
                         {!! $errors->first('phone', '<spam class="help-block text-red">:message</spam>') !!}
                     </div>
                 </div>
@@ -269,6 +278,31 @@ class="active"
             }
         });
     });
+                $(document).ready(function(){                   
+                    $("#email").autocomplete({
+                        source:"{!!URL::route('post.newticket.autofill')!!}",
+                        minLength:1,
+                        select:function(evt, ui) {
+                            // this.form.phone_number.value = ui.item.phone_number;
+                            // this.form.user_name.value = ui.item.user_name;
+                            if(ui.item.first_name) {
+                                this.form.first_name.value = ui.item.first_name;
+                            }
+                            if(ui.item.last_name) {
+                                this.form.last_name.value = ui.item.last_name;
+                            }
+                            if(ui.item.country_code) {
+                                this.form.country_code.value = ui.item.country_code;
+                            }
+                            if(ui.item.phone_number) {
+                                this.form.phone_number.value = ui.item.phone_number;
+                            }
+                            if(ui.item.mobile) {
+                                this.form.mobile.value = ui.item.mobile;
+                            }
+                        }
+                    });
+                });
 
     $(function () {
         $('#datemask').datepicker({changeMonth: true, changeYear: true}).mask('99/99/9999');

@@ -573,6 +573,8 @@ Route::group(['middleware' => ['web']], function () {
 
             $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.create'), route('newticket'));
         });
+        Route::get('/newticket/autofill', ['as' => 'post.newticket.autofill', 'uses' => 'Agent\helpdesk\TicketController@autofill']);
+        
         Route::post('/newticket/post', ['as' => 'post.newticket', 'uses' => 'Agent\helpdesk\TicketController@post_newticket']); /*  Post Create New Ticket */
         Route::get('/thread/{id}', ['as' => 'ticket.thread', 'uses' => 'Agent\helpdesk\TicketController@thread']); /*  Get Thread by ID */
         Breadcrumbs::register('ticket.thread', function ($breadcrumbs, $id) {

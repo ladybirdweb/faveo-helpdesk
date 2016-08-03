@@ -2417,5 +2417,11 @@ class TicketController extends Controller {
         }
     }
 
-
+    /**
+     * This function is used for auto filling in new ticket
+     * @return type view
+     */
+    public function autofill() {
+        return view('themes.default1.agent.helpdesk.ticket.getautocomplete');
+    }
 }
