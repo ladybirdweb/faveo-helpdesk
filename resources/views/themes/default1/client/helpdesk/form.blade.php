@@ -110,14 +110,37 @@ class = "active"
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-12 form-group {{ $errors->has('Name') ? 'has-error' : '' }}">
-                {!! Form::label('Name',Lang::get('lang.name')) !!}<span class="text-red"> *</span>
-                {!! Form::text('Name',null,['class' => 'form-control']) !!}
-            </div>
-            <div class="col-md-12 form-group {{ $errors->has('Email') ? 'has-error' : '' }}">
-                {!! Form::label('Email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
-                {!! Form::text('Email',null,['class' => 'form-control']) !!}
-            </div>
+            
+                @if(Auth::user())
+                    
+                        {!! Form::hidden('Name',Auth::user()->user_name,['class' => 'form-control']) !!}
+                    
+                @else
+                    <div class="col-md-12 form-group {{ $errors->has('Name') ? 'has-error' : '' }}">
+                        {!! Form::label('Name',Lang::get('lang.name')) !!}<span class="text-red"> *</span>
+                        {!! Form::text('Name',null,['class' => 'form-control']) !!}
+                    </div>
+                @endif
+            
+            
+
+                @if(Auth::user())
+                    
+                        {!! Form::hidden('Email',Auth::user()->email,['class' => 'form-control']) !!}
+                    
+                @else
+                    <div class="col-md-12 form-group {{ $errors->has('Email') ? 'has-error' : '' }}">
+                        {!! Form::label('Email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
+                        {!! Form::text('Email',null,['class' => 'form-control']) !!}
+                    </div>
+                @endif
+
+
+
+                
+            
+                @if(!Auth::user())
+                    
             <div class="col-md-2 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
                 {!! Form::label('Code',Lang::get('lang.country-code')) !!}
                 {!! Form::text('Code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
@@ -130,7 +153,8 @@ class = "active"
                 {!! Form::label('Phone',Lang::get('lang.phone')) !!}
                 {!! Form::text('Phone',null,['class' => 'form-control']) !!}
             </div>
-            <div class="col-md-5 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
+              @endif
+            <div class="col-md-12 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
                 {!! Form::label('Subject',Lang::get('lang.subject')) !!}<span class="text-red"> *</span>
                 {!! Form::text('Subject',null,['class' => 'form-control']) !!}
             </div>
@@ -138,12 +162,10 @@ class = "active"
                 {!! Form::label('Details',Lang::get('lang.message')) !!}<span class="text-red"> *</span>
                 {!! Form::textarea('Details',null,['class' => 'form-control']) !!}
             </div>
-            <div id="response" class="col-md-12 form-group"></div>
             <div class="col-md-12 form-group">
                 <div class="btn btn-default btn-file"><i class="fa fa-paperclip"> </i> {!! Lang::get('lang.attachment') !!}<input type="file" name="attachment[]" multiple/></div><br/>
                 {!! Lang::get('lang.max') !!}. 10MB
             </div>
-            
             {{-- Event fire --}}
             <?php Event::fire(new App\Events\ClientTicketForm()); ?>
             <div class="col-md-12" id="response"> </div>
@@ -161,27 +183,17 @@ class = "active"
 |====================================================
 -->
 <script type="text/javascript">
-$(document).ready(function(){
-   var helpTopic = $("#selectid").val();
-   send(helpTopic);
-   $("#selectid").on("change",function(){
-       helpTopic = $("#selectid").val();
-       send(helpTopic);
-   });
-   function send(helpTopic){
-       $.ajax({
-           url:"{{url('/get-helptopic-form')}}",
-           data:{'helptopic':helpTopic},
-           type:"GET",
-           dataType:"html",
-           success:function(response){
-               $("#response").html(response);
-           },
-           error:function(response){
-              $("#response").html(response); 
-           }
-       });
-   }
+$('#selectid').on('change', function() {
+    var value = $('#selectid').val();
+    $.ajax({
+        url: "postform/" + value,
+        type: "post",
+        data: value,
+        success: function(data) {
+            $('#response').html(data);
+            var wysihtml5Editor = $('#unique-textarea').wysihtml5().data("wysihtml5").editor;
+        }
+    });
 });
 
 $(function() {
