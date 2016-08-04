@@ -630,10 +630,8 @@ class TicketController extends Controller {
             $password = $this->generateRandomString();
             // create user
             $user = new User();
-            if ($username == null) {
-                $username = $emailadd;
-            }
-            $user->user_name = $username;
+            $user->first_name = $username;
+            $user->user_name = $emailadd;
             $user->email = $emailadd;
             $user->password = Hash::make($password);
             $user->phone_number = $phone;
@@ -649,14 +647,14 @@ class TicketController extends Controller {
                 \Event::fire(new \App\Events\ReadMailEvent($user_id, $password));
                 try {
                     if ($auto_response == 0) {
-                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'user_password' => $password]);
+                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user->first_name, 'email' => $emailadd], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $user->first_name, 'email_address' => $emailadd, 'user_password' => $password]);
                     }
                 } catch (\Exception $e) {
                     
                 }
             }
         } else {
-            $username = $checkemail->user_name;
+            $username = $checkemail->first_name;
             $user_id = $checkemail->id;
         }
         $ticket_number = $this->check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $status);
@@ -688,7 +686,7 @@ class TicketController extends Controller {
                     $body2 = null;
                     try {
                         if ($auto_response == 0) {
-                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'], $template_variables = ['user' => $username, 'ticket_number' => $ticket_number2, 'department_sign' => '']);
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'], $template_variables = ['user' => $user->first_name, 'ticket_number' => $ticket_number2, 'department_sign' => '']);
                         }
                     } catch (\Exception $e) {
                         
@@ -701,11 +699,11 @@ class TicketController extends Controller {
             if (Alert::first()->ticket_status == 1 || Alert::first()->ticket_admin_email == 1) {
                 // send email to admin
                 $admins = User::where('role', '=', 'admin')->get();
-//                $set_mails = '';
+                // $set_mails = '';
                 foreach ($admins as $admin) {
                     $to_email = $admin->email;
                     $to_user = $admin->first_name;
-                    $to_user_name = $admin->first_name . ' ' . $admin->last_name;
+                    $to_user_name = $admin->first_name;
                     $set_mails[] = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
                 }
             }
@@ -720,7 +718,7 @@ class TicketController extends Controller {
                         if ($department_data->name == $agent->primary_dpt) {
                             $to_email = $agent->email;
                             $to_user = $agent->first_name;
-                            $to_user_name = $agent->first_name . ' ' . $agent->last_name;
+                            $to_user_name = $agent->first_name;
                             $set_mails[] = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
                         }
                     }
@@ -732,7 +730,7 @@ class TicketController extends Controller {
                 $assigned_to = User::where('id', '=', $ticketdata->assigned_to)->first();
                 $to_email = $assigned_to->email;
                 $to_user = $assigned_to->first_name;
-                $to_user_name = $assigned_to->first_name . ' ' . $assigned_to->last_name;
+                $to_user_name = $assigned_to->first_name;
                 $set_mails[] = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
             }
             $emails_to_be_sent = array_unique($set_mails, SORT_REGULAR);
@@ -1360,7 +1358,8 @@ class TicketController extends Controller {
                 $email = $email;
                 if ($this->checkEmail($email) == false) {
                     $create_user = new User();
-                    $create_user->user_name = $name;
+                    $create_user->first_name = $name;
+                    $create_user->user_name = $email;
                     $create_user->email = $email;
                     $create_user->active = 1;
                     $create_user->role = 'user';
@@ -1562,7 +1561,8 @@ class TicketController extends Controller {
         } else {
             $company = $this->company();
             $user = new User();
-            $user->user_name = $name;
+            $user->first_name = $name;
+            $user->user_name = $email;
             $user->email = $email;
             $password = $this->generateRandomString();
             $user->password = \Hash::make($password);
@@ -2025,7 +2025,8 @@ class TicketController extends Controller {
         } else {
             $company = $this->company();
             $user = new User();
-            $user->user_name = $name;
+            $user->first_name = $name;
+            $user->user_name = $email;
             $user->email = $email;
             $password = $this->generateRandomString();
             $user->password = \Hash::make($password);

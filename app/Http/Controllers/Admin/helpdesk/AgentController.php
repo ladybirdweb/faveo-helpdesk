@@ -137,7 +137,7 @@ class AgentController extends Controller
         // save user credentails
         if ($user->save() == true) {
             // fetch user credentails to send mail
-            $name = $user->user_name;
+            $name = $user->first_name;
             $email = $user->email;
             if($request->input('send_email')) {
                 try {
