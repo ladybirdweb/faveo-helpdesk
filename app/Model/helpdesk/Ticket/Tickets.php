@@ -27,6 +27,12 @@ class Tickets extends BaseModel
     {
         return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_Form_Data', 'ticket_id');
     }
+    
+    public function extraFields(){
+        $id = $this->attributes['id'];
+        $ticket_form_datas = \App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $id)->get();
+        return $ticket_form_datas;
+    }
 
     public function delete()
     {

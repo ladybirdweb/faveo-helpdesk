@@ -303,7 +303,7 @@ class TicketController extends Controller {
             //create user
             if ($this->create_user($email, $fullname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response, $status)) {
                 $status = $this->checkUserVerificationStatus();
-                if($status == 1) {
+                if ($status == 1) {
                     return Redirect('newticket')->with('success', Lang::get('lang.Ticket-created-successfully'));
                 } else {
                     return Redirect('newticket')->with('success', Lang::get('lang.Ticket-created-successfully2'));
@@ -694,9 +694,9 @@ class TicketController extends Controller {
                 if ($user_status == 0) {
                     $value = [
                         "full_name" => $username,
-                        "email"     => $emailadd,
-                        "code"      => $phonecode,
-                        "mobile"    => $mobile_number,
+                        "email" => $emailadd,
+                        "code" => $phonecode,
+                        "mobile" => $mobile_number,
                     ];
                     \Event::fire(new \App\Events\LoginEvent($value));
                 }
@@ -706,11 +706,9 @@ class TicketController extends Controller {
                     if ($auto_response == 0) {
                         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'user_password' => $password]);
                         if ($user_status == 0) {
-                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'password_reset_link' => url('account/activate/'.$token)]);
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $username, 'email_address' => $emailadd, 'password_reset_link' => url('account/activate/' . $token)]);
                         }
-
                     }
-
                 } catch (\Exception $e) {
                     
                 }
@@ -2400,17 +2398,15 @@ class TicketController extends Controller {
     }
 
     /**
-     *@category function to chech if user verifcaition required for creating tickets or not
-     *@param null
-     *@return int 0/1
+     * @category function to chech if user verifcaition required for creating tickets or not
+     * @param null
+     * @return int 0/1
      */
-    public function checkUserVerificationStatus()
-    {
+    public function checkUserVerificationStatus() {
         $status = CommonSettings::select('status')
-            ->where('option_name', '=', 'send_otp')
-            ->first();
-        if ($status->status == 0 || $status->status == "0")
-        {
+                ->where('option_name', '=', 'send_otp')
+                ->first();
+        if ($status->status == 0 || $status->status == "0") {
             return 1;
         } else {
             return 0;
@@ -2424,4 +2420,27 @@ class TicketController extends Controller {
     public function autofill() {
         return view('themes.default1.agent.helpdesk.ticket.getautocomplete');
     }
+
+    public function pdfThread($threadid) {
+        try {
+            $threads = new Ticket_Thread();
+            $thread = $threads->leftJoin('tickets', 'ticket_thread.ticket_id', '=', 'tickets.id')
+                    ->leftJoin('users', 'ticket_thread.user_id', '=', 'users.id')
+                    ->where('ticket_thread.id', $threadid)
+                    ->first();
+            //dd($thread);
+            if (!$thread) {
+                throw new Exception('Sorry we can not find your request');
+            }
+            $company = \App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
+            $system = \App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
+            $ticket = Tickets::where('id',$thread->ticket_id)->first();
+            $html = view('themes.default1.agent.helpdesk.ticket.thread-pdf', compact('thread','system','company','ticket'))->render();
+            $html1 = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+            return PDF::load($html1)->show();
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
+    }
+
 }

@@ -142,7 +142,7 @@ return [
 
        
        
-    //'App\Plugins\ServiceDesk\ServiceProvider',
+    'App\Plugins\ServiceDesk\ServiceProvider',
         
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',

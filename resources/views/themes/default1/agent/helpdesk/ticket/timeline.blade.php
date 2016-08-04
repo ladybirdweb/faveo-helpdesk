@@ -650,6 +650,7 @@ if ($thread->title != "") {
                                         </span>
                                         <h3 class="timeline-header">
                                             <?php
+                                            
                                             if($conversation->user_id != null) {
                                                 if ($role->role == "user") {
                                                     $usernam = $role->user_name;
@@ -660,6 +661,7 @@ if ($thread->title != "") {
                                                 $usernam = Lang::get('lang.system');
                                             }
                                             ?>
+                                            
                                             <div class="user-block" style="margin-bottom:-5px;margin-top:-2px;">
                                                 @if($conversation->user_id != null) 
                                                     @if($role->profile_pic != null)
@@ -678,9 +680,11 @@ if ($thread->title != "") {
                                                     @endif
                                                 </span>
                                                 <span class="description" style="margin-bottom:4px;margin-top:4px;"><i class="fa fa-clock-o"></i> {{UTC::usertimezone($conversation->created_at)}}</span>
-
+                                                @if($conversation->id == $ij->id)
+                                                <a href="{{url('genereate-pdf/'.$conversation->id)}}" class= "pull-right fa fa-newspaper-o" title="generate pdf of this thread"></a>
+                                                @endif
                                             </div><!-- /.user-block -->
-
+                                           
                                         </h3>
                                         <div class="timeline-body" style="padding-left:30px;margin-bottom:-20px">
                                             {!! nl2br($body) !!}
