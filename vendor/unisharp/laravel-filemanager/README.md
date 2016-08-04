@@ -10,7 +10,7 @@ PR is welcome!
 
  * The project was forked from [tsawler/laravel-filemanager](http://packalyst.com/packages/package/tsawler/laravel-filemanager)
  * Customizable routes and middlewares
- * Supported locales : en, fr, pt-BR, tr, zh-CN, zh-TW
+ * Supported locales : en, fr, bg, tr, fa, es, pt-BR, tr, zh-CN, zh-TW
  * Supports public and private folders for multi users
  * Supports multi-level folders
  * Supports using independently(see integration doc)
@@ -21,27 +21,24 @@ PR is welcome!
   1. [Intergration](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/integration.md)
   1. [Config](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/config.md)
   1. [Customization](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/customization.md)
-
-## Upgrade guide
-  * `composer update unisharp/laravel-filemanager`
-  * `php artisan vendor:publish --tag=lfm_view --force`
-  * `php artisan vendor:publish --tag=lfm_config --force`(remember to keep your previous settings in `config/lfm.php`)
+  1. [Events](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/events.md)
+  1. [Upgrade](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/upgrade.md)
 
 ## Screenshots
   * Independent usage example :
 
-![Independent usage example](http://unisharp.github.io/images/lfm01.png)
+![Independent usage example](https://raw.githubusercontent.com/UniSharp/laravel-filemanager/gh_pages/images/lfm01.png)
 
   * List view :
 
-![FileManager screenshot 1](http://unisharp.com/img/filemanager1.png)
+![FileManager screenshot 1](https://raw.githubusercontent.com/UniSharp/laravel-filemanager/gh_pages/images/lfm02.png)
 
   * Grid view :
 
-![FileManager screenshot 2](http://unisharp.com/img/filemanager2.png)
+![FileManager screenshot 2](https://raw.githubusercontent.com/UniSharp/laravel-filemanager/gh_pages/images/lfm03.png)
 
 ## Credits
- * All contibutors from GitHub. (issues / PR)
+ * [All contibutors](https://github.com/UniSharp/laravel-filemanager/graphs/contributors) from GitHub. (issues / PR)
  * Special thanks to
    * [@taswler](https://github.com/tsawler) the original author.
    * [@olivervogel](https://github.com/olivervogel) for the awesome [image library](https://github.com/Intervention/image)
@@ -51,4 +48,5 @@ PR is welcome!
    * [@Nikita240](https://github.com/Nikita240) fixing controller extending errors.
    * [@amin101](https://github.com/amin101) guide for independent use and fixes for url/directory error on Windows
    * [@nasirkhan](https://github.com/nasirkhan) bug fixes and alphanumeric filename check
+   * [@petyots](https://github.com/petyots) Bulgarian translation
    * All [@UniSharp](https://github.com/UniSharp) members

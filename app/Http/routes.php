@@ -451,6 +451,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('user-agen1', 'Agent\helpdesk\DashboardController@userChartData');
         Route::post('user-chart-range', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
         Route::resource('user', 'Agent\helpdesk\UserController'); /* User router is used to control the CRUD of user */
+        Route::get('user-export', ['as'=>'user.export','uses'=>'Agent\helpdesk\UserController@getExportUser']); /* User router is used to control the CRUD of user */
+        Route::post('user-export', ['as'=>'user.export.post','uses'=>'Agent\helpdesk\UserController@exportUser']); /* User router is used to control the CRUD of user */
+        
         Breadcrumbs::register('user.index', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
             $breadcrumbs->push(Lang::get('lang.user_directory'), route('user.index'));

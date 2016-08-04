@@ -27,6 +27,7 @@ use Hash;
 use Input;
 use Lang;
 use Redirect;
+use Illuminate\Http\Request;
 
 /**
  * UserController
@@ -34,8 +35,8 @@ use Redirect;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class UserController extends Controller
-{
+class UserController extends Controller {
+
     /**
      * Create a new controller instance.
      * constructor to check
@@ -45,8 +46,7 @@ class UserController extends Controller
      *
      * @return void
      */
-    public function __construct(PhpMailController $PhpMailController)
-    {
+    public function __construct(PhpMailController $PhpMailController) {
         $this->PhpMailController = $PhpMailController;
         // checking authentication
         $this->middleware('auth');
@@ -61,8 +61,7 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function index()
-    {
+    public function index() {
         try {
             /* get all values in Sys_user */
             return view('themes.default1.agent.helpdesk.user.index');
@@ -76,10 +75,9 @@ class UserController extends Controller
      *
      * @return datatable
      */
-    public function user_list()
-    {
+    public function user_list() {
         // displaying list of users with chumper datatables
-        return \Datatable::collection(User::where('role',"=","user")->get())
+        return \Datatable::collection(User::where('role', "=", "user")->get())
                         /* searchable column username and email */
                         ->searchColumns('user_name', 'email', 'phone')
                         /* order column username and email */
@@ -98,7 +96,7 @@ class UserController extends Controller
                         })
                         /* column email */
                         ->addColumn('email', function ($model) {
-                            $email = "<a href='".route('user.show', $model->id)."'>".$model->email.'</a>';
+                            $email = "<a href='" . route('user.show', $model->id) . "'>" . $model->email . '</a>';
 
                             return $email;
                         })
@@ -106,13 +104,13 @@ class UserController extends Controller
                         ->addColumn('phone', function ($model) {
                             $phone = '';
                             if ($model->phone_number) {
-                                $phone = $model->ext.' '.$model->phone_number;
+                                $phone = $model->ext . ' ' . $model->phone_number;
                             }
                             $mobile = '';
                             if ($model->mobile) {
                                 $mobile = $model->mobile;
                             }
-                            $phone = $phone.'&nbsp;&nbsp;&nbsp;'.$mobile;
+                            $phone = $phone . '&nbsp;&nbsp;&nbsp;' . $mobile;
 
                             return $phone;
                         })
@@ -146,7 +144,7 @@ class UserController extends Controller
                         })
                         /* column actions */
                         ->addColumn('Actions', function ($model) {
-                            return '<a href="'.route('user.edit', $model->id).'" class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp; <a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>';
+                            return '<a href="' . route('user.edit', $model->id) . '" class="btn btn-warning btn-xs">' . \Lang::get('lang.edit') . '</a>&nbsp; <a href="' . route('user.show', $model->id) . '" class="btn btn-primary btn-xs">' . \Lang::get('lang.view') . '</a>';
                         })
                         ->make();
     }
@@ -156,8 +154,7 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function create(CountryCode $code)
-    {
+    public function create(CountryCode $code) {
         try {
             $location = GeoIP::getLocation('');
             $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
@@ -176,8 +173,7 @@ class UserController extends Controller
      *
      * @return type redirect
      */
-    public function store(User $user, Sys_userRequest $request)
-    {
+    public function store(User $user, Sys_userRequest $request) {
         /* insert the input request to sys_user table */
         /* Check whether function success or not */
         $user->email = $request->input('email');
@@ -209,7 +205,7 @@ class UserController extends Controller
                 // fetch user credentails to send mail
                 $name = $user->user_name;
                 $email = $user->email;
-                if($request->input('send_email')) {
+                if ($request->input('send_email')) {
                     try {
                         // send mail on registration
                         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
@@ -242,8 +238,7 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function show($id)
-    {
+    public function show($id) {
         try {
             $user = new User();
             /* select the field where id = $id(request Id) */
@@ -263,8 +258,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function edit($id, CountryCode $code)
-    {
+    public function edit($id, CountryCode $code) {
         try {
             $user = new User();
             /* select the field where id = $id(request Id) */
@@ -287,8 +281,7 @@ class UserController extends Controller
      *
      * @return type Response
      */
-    public function update($id, Sys_userUpdate $request)
-    {
+    public function update($id, Sys_userUpdate $request) {
 //        dd($request);
         $user = new User();
         /* select the field where id = $id(request Id) */
@@ -323,8 +316,7 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function getProfile()
-    {
+    public function getProfile() {
         $user = Auth::user();
         try {
             return view('themes.default1.agent.helpdesk.user.profile', compact('user'));
@@ -338,8 +330,7 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function getProfileedit(CountryCode $code)
-    {
+    public function getProfileedit(CountryCode $code) {
         $user = Auth::user();
         $location = GeoIP::getLocation('');
         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
@@ -358,8 +349,7 @@ class UserController extends Controller
      *
      * @return type Redirect
      */
-    public function postProfileedit(ProfileRequest $request)
-    {
+    public function postProfileedit(ProfileRequest $request) {
         // geet authenticated user details
         $user = Auth::user();
         $user->gender = $request->input('gender');
@@ -383,7 +373,7 @@ class UserController extends Controller
             // fetching upload destination path
             $destinationPath = 'uploads/profilepic';
             // adding a random value to profile picture filename
-            $fileName = rand(0000, 9999).'.'.$name;
+            $fileName = rand(0000, 9999) . '.' . $name;
             // moving the picture to a destination folder
             Input::file('profile_pic')->move($destinationPath, $fileName);
             // saving filename to database
@@ -419,8 +409,7 @@ class UserController extends Controller
      *
      * @return type Redirect
      */
-    public function postProfilePassword($id, ProfilePassword $request)
-    {
+    public function postProfilePassword($id, ProfilePassword $request) {
         // get authenticated user
         $user = Auth::user();
         // checking if the old password matches the new password
@@ -445,8 +434,7 @@ class UserController extends Controller
      *
      * @return type boolean
      */
-    public function UserAssignOrg($id)
-    {
+    public function UserAssignOrg($id) {
         $org = Input::get('org');
         $user_org = new User_org();
         $user_org->org_id = $org;
@@ -456,8 +444,7 @@ class UserController extends Controller
         return 1;
     }
 
-    public function orgAssignUser($id)
-    {
+    public function orgAssignUser($id) {
         $org = Input::get('org');
         $user_org = new User_org();
         $user_org->org_id = $id;
@@ -467,8 +454,7 @@ class UserController extends Controller
         return 1;
     }
 
-    public function removeUserOrg($id)
-    {
+    public function removeUserOrg($id) {
         $user_org = User_org::where('org_id', '=', $id)->first();
         $user_org->delete();
 
@@ -482,8 +468,7 @@ class UserController extends Controller
      *
      * @return type
      */
-    public function User_Create_Org($id)
-    {
+    public function User_Create_Org($id) {
         // checking if the entered value for website is available in database
         if (Input::get('website') != null) {
             // checking website
@@ -518,8 +503,7 @@ class UserController extends Controller
             return 0;
         }
     }
-    
-    
+
     /**
      * Generate a random string for password.
      *
@@ -527,8 +511,7 @@ class UserController extends Controller
      *
      * @return string
      */
-    public function generateRandomString($length = 10)
-    {
+    public function generateRandomString($length = 10) {
         // list of supported characters
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         // character length checked
@@ -542,17 +525,61 @@ class UserController extends Controller
         // return random string
         return $randomString;
     }
-    
-    public function storeUserOrgRelation($userid,$orgid){
+
+    public function storeUserOrgRelation($userid, $orgid) {
         $org_relations = new User_org();
-        $org_relation = $org_relations->where('user_id',$userid)->first();
-        if($org_relation){
+        $org_relation = $org_relations->where('user_id', $userid)->first();
+        if ($org_relation) {
             $org_relation->delete();
         }
         $org_relations->create([
-            'user_id'=>$userid,
-            'org_id'=>$orgid,
+            'user_id' => $userid,
+            'org_id' => $orgid,
         ]);
     }
-    
+
+    public function getExportUser() {
+        try {
+            return view('themes.default1.agent.helpdesk.user.export');
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
+    }
+
+    public function exportUser(Request $request) {
+        try {
+            $date = $request->input('date');
+            $date = str_replace(' ', '', $date);
+            $date_array = explode(':', $date);
+            $first = $date_array[0] . " 00:00:00";
+            $second = $date_array[1] . " 23:59:59";
+            $first_date = $this->convertDate($first);
+            $second_date = $this->convertDate($second);
+            $users = $this->getUsers($first_date, $second_date);
+            $excel_controller = new \App\Http\Controllers\Common\ExcelController();
+            $filename = "users" . $date;
+            $excel_controller->export($filename, $users);
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
+    }
+
+    public function convertDate($date) {
+        $converted_date = date('Y-m-d H:i:s', strtotime($date));
+        return $converted_date;
+    }
+
+    public function getUsers($first, $last) {
+        $user = new User();
+        $users = $user->leftJoin('user_assign_organization', 'users.id', '=', 'user_assign_organization.user_id')
+                ->leftJoin('organization', 'user_assign_organization.org_id', '=', 'organization.id')
+                ->whereBetween('users.created_at', [$first, $last])
+                ->where('role', 'user')
+                ->where('active', 1)
+                ->select('users.user_name as Username', 'users.email as Email', 'users.first_name as Fisrtname', 'users.last_name as Lastname', 'organization.name as Organization')
+                ->get()
+                ->toArray();
+        return $users;
+    }
+
 }

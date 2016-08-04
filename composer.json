@@ -31,7 +31,9 @@
         "barryvdh/laravel-debugbar": "^2.2",
         "aws/aws-sdk-php": "~3.0",
         "predis/predis": "~1.0",
-        "mremi/url-shortener": "^1.0"
+        "mremi/url-shortener": "^1.0",
+        "maatwebsite/excel": "~2.1.0",
+        "laravelcollective/bus": "^5.2"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",

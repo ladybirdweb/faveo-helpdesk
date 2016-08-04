@@ -83,7 +83,7 @@ class FormController extends Controller {
     public function create() {
         try {
             return view('themes.default1.admin.helpdesk.manage.form.form');
-        } catch (Exception $ex) {
+        } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
@@ -229,6 +229,8 @@ class FormController extends Controller {
                 return "radio";
             case "checkbox":
                 return "checkbox";
+            case "hidden":
+                return "hidden";
         }
     }
 
@@ -246,6 +248,8 @@ class FormController extends Controller {
             case "radio":
                 return "";
             case "checkbox":
+                return "";
+            case "hidden":
                 return "";
         }
     }
@@ -277,6 +281,8 @@ class FormController extends Controller {
 
             case "checkbox":
                 return self::checkboxForm($field_type, $field, $required,$required_class);
+            case "hidden":
+                return  Form::$field_type($field->name, NULL, ['id' => $field->id]);
         }
     }
 

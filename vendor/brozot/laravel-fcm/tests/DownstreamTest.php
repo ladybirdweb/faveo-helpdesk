@@ -23,13 +23,10 @@ class ResponseTest extends FCMTestCase {
 
 		$client = Mockery::mock(Client::class);
 		$client->shouldReceive('post')->once()->andReturn($response);
-		$this->app->singleton('fcm.client', function($app) use($client) {
-			return $client;
-		});
 
 		$tokens = 'uniqueToken';
 
-		$fcm = new FCMSender();
+		$fcm = new FCMSender($client, 'http://test.test');
 		$fcm->sendTo($tokens);
 	}
 
@@ -56,16 +53,13 @@ class ResponseTest extends FCMTestCase {
 
 		$client = Mockery::mock(Client::class);
 		$client->shouldReceive('post')->times(10)->andReturn($response);
-		$this->app->singleton('fcm.client', function($app) use($client) {
-			return $client;
-		});
 
 		$tokens = [];
 		for ($i=0 ; $i<10000 ; $i++) {
 			$tokens[$i] = 'token_'.$i;
 		}
 
-		$fcm = new FCMSender();
+		$fcm = new FCMSender($client, 'http://test.test');
 		$fcm->sendTo($tokens);
 	}
 
@@ -91,11 +85,8 @@ class ResponseTest extends FCMTestCase {
 
 		$client = Mockery::mock(Client::class);
 		$client->shouldReceive('post')->once()->andReturn($response);
-		$this->app->singleton('fcm.client', function($app) use($client) {
-			return $client;
-		});
 
-		$fcm = new FCMSender();
+		$fcm = new FCMSender($client, 'http://test.test');
 		$this->setExpectedException(\LaravelFCM\Response\Exceptions\InvalidRequestException::class);
 		$fcm->sendTo([]);
 	}

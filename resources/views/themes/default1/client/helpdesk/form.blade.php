@@ -184,17 +184,27 @@ class = "active"
 |====================================================
 -->
 <script type="text/javascript">
-$('#selectid').on('change', function() {
-    var value = $('#selectid').val();
-    $.ajax({
-        url: "postform/" + value,
-        type: "post",
-        data: value,
-        success: function(data) {
-            $('#response').html(data);
-            var wysihtml5Editor = $('#unique-textarea').wysihtml5().data("wysihtml5").editor;
-        }
-    });
+$(document).ready(function(){
+   var helpTopic = $("#selectid").val();
+   send(helpTopic);
+   $("#selectid").on("change",function(){
+       helpTopic = $("#selectid").val();
+       send(helpTopic);
+   });
+   function send(helpTopic){
+       $.ajax({
+           url:"{{url('/get-helptopic-form')}}",
+           data:{'helptopic':helpTopic},
+           type:"GET",
+           dataType:"html",
+           success:function(response){
+               $("#response").html(response);
+           },
+           error:function(response){
+              $("#response").html(response); 
+           }
+       });
+   }
 });
 
 $(function() {

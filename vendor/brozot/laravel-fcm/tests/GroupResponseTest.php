@@ -9,7 +9,6 @@ class GroupResponseTest extends FCMTestCase {
 	 */
 	public function it_construct_a_response_with_successes()
 	{
-
 		$notificationKey = "notificationKey";
 
 		$response = new \GuzzleHttp\Psr7\Response(200, [], '{
@@ -29,7 +28,6 @@ class GroupResponseTest extends FCMTestCase {
 	 */
 	public function it_construct_a_response_with_failures()
 	{
-
 		$notificationKey = "notificationKey";
 
 		$response = new \GuzzleHttp\Psr7\Response(200, [], '{
@@ -55,7 +53,6 @@ class GroupResponseTest extends FCMTestCase {
 	 */
 	public function it_construct_a_response_with_partials_failures()
 	{
-
 		$notificationKey = "notificationKey";
 
 		$response = new \GuzzleHttp\Psr7\Response(200, [], '{

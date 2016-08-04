@@ -13,7 +13,6 @@ return [
     'menu-download'     => 'Download',
     'menu-resize'       => 'Resize',
     'menu-crop'         => 'Crop',
-    'menu-new'          => 'New',
 
     'title-page'        => 'File Manager',
     'title-panel'       => 'Laravel FileManager',
@@ -34,6 +33,7 @@ return [
     'message-delete'    => 'Are you sure you want to delete this item?',
     'message-name'      => 'Folder name:',
     'message-rename'    => 'Rename to:',
+    'message-extension_not_found' => 'Please install gd or imagick extension to crop, resize, and make thumbnails of images.',
 
     'error-rename'      => 'File name already in use!',
     'error-file-empty'  => 'You must choose a file!',
@@ -44,6 +44,8 @@ return [
     'error-mime'        => 'Unexpected MimeType: ',
     'error-instance'    => 'The uploaded file should be an instance of UploadedFile',
     'error-invalid'     => 'Invalid upload request',
+    'error-other'       => 'An error has occured: ',
+    'error-too-large'   => 'Request entity too large!',
 
     'btn-upload'        => 'Upload File',
     'btn-uploading'     => 'Uploading...',

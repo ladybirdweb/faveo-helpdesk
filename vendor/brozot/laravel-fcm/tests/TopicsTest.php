@@ -17,7 +17,6 @@ class TopicsTest extends FCMTestCase {
 
 		$this->setExpectedException(NoTopicProvidedException::class);
 		$topics->build();
-
 	}
 
 	/**
@@ -32,7 +31,6 @@ class TopicsTest extends FCMTestCase {
 		$topics->topic('myTopic');
 
 		$this->assertEquals($target, $topics->build());
-
 	}
 
 	/**
@@ -115,12 +113,8 @@ class TopicsTest extends FCMTestCase {
 
 		$client = Mockery::mock(Client::class);
 		$client->shouldReceive('post')->once()->andReturn($response);
-		$this->app->singleton('fcm.client', function($app) use($client) {
-			return $client;
-		});
 
-
-		$fcm = new FCMSender();
+		$fcm = new FCMSender($client, 'http://test.test');
 
 		$topics = new Topics();
 		$topics->topic('test');
@@ -141,12 +135,8 @@ class TopicsTest extends FCMTestCase {
 
 		$client = Mockery::mock(Client::class);
 		$client->shouldReceive('post')->once()->andReturn($response);
-		$this->app->singleton('fcm.client', function($app) use($client) {
-			return $client;
-		});
 
-
-		$fcm = new FCMSender();
+		$fcm = new FCMSender($client, 'http://test.test');
 
 		$topics = new Topics();
 		$topics->topic('test');

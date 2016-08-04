@@ -1,7 +1,7 @@
 <?php namespace LaravelFCM\Response;
 
-use LaravelFCM\Message\Topics;
 use Monolog\Logger;
+use LaravelFCM\Message\Topics;
 use Monolog\Handler\StreamHandler;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 

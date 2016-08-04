@@ -1,23 +1,21 @@
 <?php namespace LaravelFCM\Sender;
 
-use GuzzleHttp\Exception\ClientException;
-use LaravelFCM\FCMRequest;
-use LaravelFCM\Message\Options;
-use LaravelFCM\Message\PayloadData;
-use LaravelFCM\Message\PayloadNotification;
-use \GuzzleHttp\Psr7\Response as GuzzleResponse;
 use LaravelFCM\Message\Topics;
 use LaravelFCM\Request\Request;
-use LaravelFCM\Response\DownstreamResponse;
+use LaravelFCM\Message\Options;
+use LaravelFCM\Message\PayloadData;
 use LaravelFCM\Response\GroupResponse;
 use LaravelFCM\Response\TopicResponse;
+use GuzzleHttp\Exception\ClientException;
+use LaravelFCM\Response\DownstreamResponse;
+use LaravelFCM\Message\PayloadNotification;
 
 /**
  * Class FCMSender
  *
  * @package LaravelFCM\Sender
  */
-class FCMSender extends BaseSender {
+class FCMSender extends HTTPSender {
 
 	const MAX_TOKEN_PER_REQUEST = 1000;
 
@@ -38,7 +36,6 @@ class FCMSender extends BaseSender {
 	public function sendTo($to, Options $options = null, PayloadNotification $notification = null, PayloadData $data = null)
 	{
 		$response = null;
-
 
 		if (is_array($to) && !empty($to)) {
 
@@ -98,23 +95,11 @@ class FCMSender extends BaseSender {
 	 */
 	public function sendToTopic(Topics $topics, Options $options = null, PayloadNotification $notification = null, PayloadData $data = null)
 	{
-
 		$request = new Request(null, $options, $notification, $data, $topics);
 
 		$responseGuzzle = $this->post($request);
 
 		return new TopicResponse($responseGuzzle, $topics);
-	}
-
-
-	/**
-	 * get the url
-	 *
-	 * @return string
-	 */
-	protected function getUrl()
-	{
-		return $this->config[ 'server_send_url' ];
 	}
 
 	/**

@@ -142,7 +142,6 @@ return [
 
        
        
-
     //'App\Plugins\ServiceDesk\ServiceProvider',
         
         'Illuminate\Auth\AuthServiceProvider',
@@ -185,6 +184,8 @@ return [
         'Torann\GeoIP\GeoIPServiceProvider',
         LaravelFCM\FCMServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Collective\Bus\BusServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
     /*
       |--------------------------------------------------------------------------
@@ -247,6 +248,7 @@ return [
         'FCM' => LaravelFCM\Facades\FCM::class,
         'FCMGroup' => LaravelFCM\Facades\FCMGroup::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
     'name' => 'faveo helpdesk community',
 ];

@@ -15,6 +15,7 @@ storage/debugbar
 doc/generated/*
 generatedoc.sh
 phpdoc.xml
+build/*
 
 # Editors
 .sublime-workspace

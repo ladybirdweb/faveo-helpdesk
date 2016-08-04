@@ -4,6 +4,8 @@
   1. [Intergration](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/integration.md)
   1. [Config](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/config.md)
   1. [Customization](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/customization.md)
+  1. [Events](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/events.md)
+  1. [Upgrade](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/upgrade.md)
 
 ## Requirements
 
@@ -38,6 +40,9 @@
     ```php
         'Image' => Intervention\Image\Facades\Image::class,
     ```
+
+    Code above is for Laravel 5.1.
+    In Laravel 5.0 should leave only quoted class names.
 
 1. Publish the package's config and assets :
 
