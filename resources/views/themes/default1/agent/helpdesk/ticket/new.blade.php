@@ -53,8 +53,8 @@ class="active"
             @if($errors->first('email'))
             <li class="error-message-padding">{!! $errors->first('email', ':message') !!}</li>
             @endif
-            @if($errors->first('fullname'))
-            <li class="error-message-padding">{!! $errors->first('fullname', ':message') !!}</li>
+            @if($errors->first('first_name'))
+            <li class="error-message-padding">{!! $errors->first('first_name', ':message') !!}</li>
             @endif
             @if($errors->first('phone'))
             <li class="error-message-padding">{!! $errors->first('phone', ':message') !!}</li>
@@ -64,6 +64,12 @@ class="active"
             @endif
             @if($errors->first('body'))
             <li class="error-message-padding">{!! $errors->first('body', ':message') !!}</li>
+            @endif
+            @if($errors->first('code'))
+            <li class="error-message-padding">{!! $errors->first('code', ':message') !!}</li>
+            @endif
+            @if($errors->first('mobile'))
+            <li class="error-message-padding">{!! $errors->first('mobile', ':message') !!}</li>
             @endif
         </div>
         @endif
@@ -119,8 +125,7 @@ class="active"
                     <!-- phone -->
                     <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
                         <label>{!! Lang::get('lang.phone') !!}:</label>
-                         <input type="text" name="phone_number" id="phone_number" class="form-control">
-                       <!--  {!! Form::input('number','phone',null,['class' => 'form-control']) !!} -->
+                        {!! Form::input('number','phone',null,['class' => 'form-control', 'id' => 'phone_number']) !!}
                         {!! $errors->first('phone', '<spam class="help-block text-red">:message</spam>') !!}
                     </div>
                 </div>
@@ -224,7 +229,7 @@ class="active"
             <div class="col-md-1">
             </div>
             <div class="col-md-3">
-                <input type="submit" value="{!! Lang::get('lang.create_ticket') !!}" class="btn btn-primary">
+                <input type="submit" value="{!! Lang::get('lang.create_ticket') !!}" class="btn btn-primary" onclick="this.disabled=true;this.value='Sending, please wait...';this.form.submit();">
             </div>
         </div>
     </div>
@@ -279,7 +284,3 @@ class="active"
         </script>
 
 @stop
-
-
-
-

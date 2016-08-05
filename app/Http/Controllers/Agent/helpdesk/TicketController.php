@@ -252,9 +252,8 @@ class TicketController extends Controller {
      */
     public function post_newticket(CreateTicketRequest $request, CountryCode $code) {
         try {
-//            dd($request);
             $email = $request->input('email');
-            $fullname = $request->input('user_name');
+            $fullname = $request->input('first_name') . '%$%' . $request->input('last_name');
             $helptopic = $request->input('helptopic');
             $sla = $request->input('sla');
             $duedate = $request->input('duedate');
@@ -630,7 +629,13 @@ class TicketController extends Controller {
             $password = $this->generateRandomString();
             // create user
             $user = new User();
-            $user->first_name = $username;
+            $user_name_123 = explode('%$%', $username);
+            $user_first_name = $user_name_123[0];
+            if(isset($user_name_123[1])) {
+                $user_last_name = $user_name_123[1];
+                $user->last_name = $user_last_name;
+            }
+            $user->first_name = $user_first_name;
             $user->user_name = $emailadd;
             $user->email = $emailadd;
             $user->password = Hash::make($password);
