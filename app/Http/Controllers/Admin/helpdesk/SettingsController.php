@@ -19,6 +19,7 @@ use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Notification\UserNotification;
 use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Settings\Alert;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Settings\Responder;
@@ -30,7 +31,6 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Workflow\WorkflowClose;
-use App\Model\helpdesk\Settings\CommonSettings;
 use DateTime;
 // classes
 use DB;
@@ -184,7 +184,7 @@ class SettingsController extends Controller
             /* Check whether function success or not */
             $systems->fill($request->input())->save();
             $rtl = CommonSettings::where('option_name', '=', 'enable_rtl')->first();
-            if($request->enable_rtl != null) {
+            if ($request->enable_rtl != null) {
                 $rtl->option_value = 1;
             } else {
                 $rtl->option_value = 0;
@@ -192,7 +192,7 @@ class SettingsController extends Controller
             $rtl->save();
 
             $usts = CommonSettings::where('option_name', '=', 'user_set_ticket_status')->first();
-            if ($usts->status != $request->user_set_ticket_status){
+            if ($usts->status != $request->user_set_ticket_status) {
                 $usts->status = $request->user_set_ticket_status;
                 $usts->save();
             }

@@ -137,15 +137,15 @@ return [
 
         'Illuminate\Broadcasting\BroadcastServiceProvider',
         'DaveJamesMiller\Breadcrumbs\ServiceProvider',
-        
+
 
         /*
          * Laravel Framework Service Providers...
          */
 
 
-			//
-        
+            //
+
 
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
@@ -187,7 +187,7 @@ return [
 
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
         'Torann\GeoIP\GeoIPServiceProvider',
-        LaravelFCM\FCMServiceProvider::class, 
+        LaravelFCM\FCMServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
     ],
     /*
@@ -250,7 +250,7 @@ return [
         'Image'       => Intervention\Image\Facades\Image::class,
         'FCM'         => LaravelFCM\Facades\FCM::class,
         'FCMGroup'    => LaravelFCM\Facades\FCMGroup::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Debugbar'    => Barryvdh\Debugbar\Facade::class,
     ],
     'name'  => 'faveo helpdesk community',
 ];

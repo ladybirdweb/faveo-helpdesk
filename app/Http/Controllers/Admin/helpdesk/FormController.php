@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers\Admin\helpdesk;
+
 // Controller
 use App\Http\Controllers\Controller;
 // Model
@@ -12,6 +14,7 @@ use Illuminate\Http\Request;
 use Input;
 use Lang;
 use Redirect;
+
 /**
  * FormController
  * This controller is used to CRUD Custom Forms.
@@ -22,12 +25,14 @@ class FormController extends Controller
 {
     private $fields;
     private $forms;
+
     public function __construct(Fields $fields, Forms $forms)
     {
         $this->fields = $fields;
         $this->forms = $forms;
         $this->middleware('auth');
     }
+
     /**
      * home.
      *
@@ -37,6 +42,7 @@ class FormController extends Controller
     {
         return view('forms.home');
     }
+
     /**
      * list of forms.
      *
@@ -52,6 +58,7 @@ class FormController extends Controller
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
+
     /**
      * create a new form.
      *
@@ -65,6 +72,7 @@ class FormController extends Controller
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
+
     /**
      * Show a new form.
      *
@@ -80,6 +88,7 @@ class FormController extends Controller
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
+
     /**
      * Store a new form.
      *
@@ -115,8 +124,10 @@ class FormController extends Controller
             }
         }
         Fields::insert($fields);
+
         return Redirect::back()->with('success', Lang::get('lang.successfully_created_form'));
     }
+
     /**
      * Delete Form.
      *
@@ -140,6 +151,7 @@ class FormController extends Controller
         }
         $forms = $forms->where('id', $id)->first();
         $forms->delete();
+
         return redirect()->back()->with('success', Lang::get('lang.form_deleted_successfully'));
     }
 }

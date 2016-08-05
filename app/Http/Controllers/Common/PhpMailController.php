@@ -6,16 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Model\Common\TemplateType;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
-use App\Model\helpdesk\Settings\CommonSettings;
 use App\User;
 use Auth;
 
-class PhpMailController extends Controller {
-
-    public function fetch_smtp_details($id) {
+class PhpMailController extends Controller
+{
+    public function fetch_smtp_details($id)
+    {
         $emails = Emails::where('id', '=', $id)->first();
+
         return $emails;
     }
 
@@ -24,42 +26,43 @@ class PhpMailController extends Controller {
      *
      * @return Mail
      */
-    public function sendmail($from, $to, $message, $template_variables) {
-//        try {
+    public function sendmail($from, $to, $message, $template_variables)
+    {
+        //        try {
             // dd($from);
             $from_address = $this->fetch_smtp_details($from);
-            if ($from_address == null) {
-                return $from_address;
-            } else {
-                // dd($from_address);
+        if ($from_address == null) {
+            return $from_address;
+        } else {
+            // dd($from_address);
                 $username = $from_address->email_address;
-                $fromname = $from_address->email_name;
-                $password = \Crypt::decrypt($from_address->password);
-                $smtpsecure = $from_address->sending_encryption;
-                $host = $from_address->sending_host;
-                $port = $from_address->sending_port;
-                $protocol = $from_address->sending_protocol;
+            $fromname = $from_address->email_name;
+            $password = \Crypt::decrypt($from_address->password);
+            $smtpsecure = $from_address->sending_encryption;
+            $host = $from_address->sending_host;
+            $port = $from_address->sending_port;
+            $protocol = $from_address->sending_protocol;
 
-                if (isset($to['email'])) {
-                    $recipants = $to['email'];
-                } else {
-                    $recipants = null;
-                }
-                if (isset($to['name'])) {
-                    $recipantname = $to['name'];
-                } else {
-                    $recipantname = null;
-                }
-                if (isset($to['cc'])) {
-                    $cc = $to['cc'];
-                } else {
-                    $cc = null;
-                }
-                if (isset($to['bc'])) {
-                    $bc = $to['bc'];
-                } else {
-                    $bc = null;
-                }
+            if (isset($to['email'])) {
+                $recipants = $to['email'];
+            } else {
+                $recipants = null;
+            }
+            if (isset($to['name'])) {
+                $recipantname = $to['name'];
+            } else {
+                $recipantname = null;
+            }
+            if (isset($to['cc'])) {
+                $cc = $to['cc'];
+            } else {
+                $cc = null;
+            }
+            if (isset($to['bc'])) {
+                $bc = $to['bc'];
+            } else {
+                $bc = null;
+            }
     //            if (isset($message['subject'])) {
     //                $subject = $message['subject'];
     //            } else {
@@ -70,16 +73,16 @@ class PhpMailController extends Controller {
                 } else {
                     $content = null;
                 }
-                if (isset($message['scenario'])) {
-                    $template = $message['scenario'];
-                } else {
-                    $template = null;
-                }
-                if (isset($message['attachments'])) {
-                    $attachment = $message['attachments'];
-                } else {
-                    $attachment = null;
-                }
+            if (isset($message['scenario'])) {
+                $template = $message['scenario'];
+            } else {
+                $template = null;
+            }
+            if (isset($message['attachments'])) {
+                $attachment = $message['attachments'];
+            } else {
+                $attachment = null;
+            }
 
                 // template variables
                 if (Auth::user()) {
@@ -87,86 +90,86 @@ class PhpMailController extends Controller {
                 } else {
                     $agent = null;
                 }
-                if (isset($template_variables['ticket_agent_name'])) {
-                    $ticket_agent_name = $template_variables['ticket_agent_name'];
-                } else {
-                    $ticket_agent_name = null;
-                }
-                if (isset($template_variables['ticket_number'])) {
-                    $ticket_number = $template_variables['ticket_number'];
-                } else {
-                    $ticket_number = null;
-                }
-                if (isset($template_variables['ticket_client_name'])) {
-                    $ticket_client_name = $template_variables['ticket_client_name'];
-                } else {
-                    $ticket_client_name = null;
-                }
-                if (isset($template_variables['ticket_client_email'])) {
-                    $ticket_client_email = $template_variables['ticket_client_email'];
-                } else {
-                    $ticket_client_email = null;
-                }
-                if (isset($template_variables['ticket_body'])) {
-                    $ticket_body = $template_variables['ticket_body'];
-                } else {
-                    $ticket_body = null;
-                }
-                if (isset($template_variables['ticket_assigner'])) {
-                    $ticket_assigner = $template_variables['ticket_assigner'];
-                } else {
-                    $ticket_assigner = null;
-                }
-                if (isset($template_variables['ticket_link_with_number'])) {
-                    $ticket_link_with_number = $template_variables['ticket_link_with_number'];
-                } else {
-                    $ticket_link_with_number = null;
-                }
-                if (isset($template_variables['system_from'])) {
-                    $system_from = $template_variables['system_from'];
-                } else {
-                    $system_from = $this->company();
-                }
-                if (isset($template_variables['system_link'])) {
-                    $system_link = $template_variables['system_link'];
-                } else {
-                    $system_link = url('/');
-                }
-                if (isset($template_variables['system_error'])) {
-                    $system_error = $template_variables['system_error'];
-                } else {
-                    $system_error = null;
-                }
-                if (isset($template_variables['agent_sign'])) {
-                    $agent_sign = $template_variables['agent_sign'];
-                } else {
-                    $agent_sign = null;
-                }
-                if (isset($template_variables['department_sign'])) {
-                    $department_sign = $template_variables['department_sign'];
-                } else {
-                    $department_sign = null;
-                }
-                if (isset($template_variables['password_reset_link'])) {
-                    $password_reset_link = $template_variables['password_reset_link'];
-                } else {
-                    $password_reset_link = null;
-                }
-                if (isset($template_variables['user_password'])) {
-                    $user_password = $template_variables['user_password'];
-                } else {
-                    $user_password = null;
-                }
-                if (isset($template_variables['email_address'])) {
-                    $email_address = $template_variables['email_address'];
-                } else {
-                    $email_address = null;
-                }
-                if (isset($template_variables['user'])) {
-                    $user = $template_variables['user'];
-                } else {
-                    $user = null;
-                }
+            if (isset($template_variables['ticket_agent_name'])) {
+                $ticket_agent_name = $template_variables['ticket_agent_name'];
+            } else {
+                $ticket_agent_name = null;
+            }
+            if (isset($template_variables['ticket_number'])) {
+                $ticket_number = $template_variables['ticket_number'];
+            } else {
+                $ticket_number = null;
+            }
+            if (isset($template_variables['ticket_client_name'])) {
+                $ticket_client_name = $template_variables['ticket_client_name'];
+            } else {
+                $ticket_client_name = null;
+            }
+            if (isset($template_variables['ticket_client_email'])) {
+                $ticket_client_email = $template_variables['ticket_client_email'];
+            } else {
+                $ticket_client_email = null;
+            }
+            if (isset($template_variables['ticket_body'])) {
+                $ticket_body = $template_variables['ticket_body'];
+            } else {
+                $ticket_body = null;
+            }
+            if (isset($template_variables['ticket_assigner'])) {
+                $ticket_assigner = $template_variables['ticket_assigner'];
+            } else {
+                $ticket_assigner = null;
+            }
+            if (isset($template_variables['ticket_link_with_number'])) {
+                $ticket_link_with_number = $template_variables['ticket_link_with_number'];
+            } else {
+                $ticket_link_with_number = null;
+            }
+            if (isset($template_variables['system_from'])) {
+                $system_from = $template_variables['system_from'];
+            } else {
+                $system_from = $this->company();
+            }
+            if (isset($template_variables['system_link'])) {
+                $system_link = $template_variables['system_link'];
+            } else {
+                $system_link = url('/');
+            }
+            if (isset($template_variables['system_error'])) {
+                $system_error = $template_variables['system_error'];
+            } else {
+                $system_error = null;
+            }
+            if (isset($template_variables['agent_sign'])) {
+                $agent_sign = $template_variables['agent_sign'];
+            } else {
+                $agent_sign = null;
+            }
+            if (isset($template_variables['department_sign'])) {
+                $department_sign = $template_variables['department_sign'];
+            } else {
+                $department_sign = null;
+            }
+            if (isset($template_variables['password_reset_link'])) {
+                $password_reset_link = $template_variables['password_reset_link'];
+            } else {
+                $password_reset_link = null;
+            }
+            if (isset($template_variables['user_password'])) {
+                $user_password = $template_variables['user_password'];
+            } else {
+                $user_password = null;
+            }
+            if (isset($template_variables['email_address'])) {
+                $email_address = $template_variables['email_address'];
+            } else {
+                $email_address = null;
+            }
+            if (isset($template_variables['user'])) {
+                $user = $template_variables['user'];
+            } else {
+                $user = null;
+            }
 
 //                $system_link = url('/');
 
@@ -174,9 +177,9 @@ class PhpMailController extends Controller {
 
                 $mail = new \PHPMailer();
 
-                $status = \DB::table('settings_email')->first();
+            $status = \DB::table('settings_email')->first();
 
-                $path2 = \Config::get('view.paths');
+            $path2 = \Config::get('view.paths');
 
     //            $directory = $path2[0].DIRECTORY_SEPARATOR.'emails'.DIRECTORY_SEPARATOR.$status->template.DIRECTORY_SEPARATOR;
     //
@@ -186,31 +189,31 @@ class PhpMailController extends Controller {
 
                 $template = TemplateType::where('name', '=', $template)->first();
 
-                $set = \App\Model\Common\TemplateSet::where('name', '=', $status->template)->first();
+            $set = \App\Model\Common\TemplateSet::where('name', '=', $status->template)->first();
 
-                if (isset($set['id'])) {
-                    $template_data = \App\Model\Common\Template::where('set_id', '=', $set->id)->where('type', '=', $template->id)->first();
-                    $contents = $template_data->message;
-                    if ($template_data->variable == 1) {
-                        if ($template_data->subject) {
-                            $subject = $template_data->subject;
-                            if ($ticket_number != null) {
-                                $subject = $subject . ' [#' . $ticket_number . ']';
-                            }
-                        } else {
-                            $subject = $message['subject'];
+            if (isset($set['id'])) {
+                $template_data = \App\Model\Common\Template::where('set_id', '=', $set->id)->where('type', '=', $template->id)->first();
+                $contents = $template_data->message;
+                if ($template_data->variable == 1) {
+                    if ($template_data->subject) {
+                        $subject = $template_data->subject;
+                        if ($ticket_number != null) {
+                            $subject = $subject.' [#'.$ticket_number.']';
                         }
                     } else {
                         $subject = $message['subject'];
                     }
                 } else {
-                    $contents = null;
-                    $subject = null;
+                    $subject = $message['subject'];
                 }
+            } else {
+                $contents = null;
+                $subject = null;
+            }
 
-                $variables = ['{!!$user!!}', '{!!$agent!!}', '{!!$ticket_number!!}', '{!!$content!!}', '{!!$from!!}', '{!!$ticket_agent_name!!}', '{!!$ticket_client_name!!}', '{!!$ticket_client_email!!}', '{!!$ticket_body!!}', '{!!$ticket_assigner!!}', '{!!$ticket_link_with_number!!}', '{!!$system_error!!}', '{!!$agent_sign!!}', '{!!$department_sign!!}', '{!!$password_reset_link!!}', '{!!$email_address!!}', '{!!$user_password!!}', '{!!$system_from!!}', '{!!$system_link!!}'];
+            $variables = ['{!!$user!!}', '{!!$agent!!}', '{!!$ticket_number!!}', '{!!$content!!}', '{!!$from!!}', '{!!$ticket_agent_name!!}', '{!!$ticket_client_name!!}', '{!!$ticket_client_email!!}', '{!!$ticket_body!!}', '{!!$ticket_assigner!!}', '{!!$ticket_link_with_number!!}', '{!!$system_error!!}', '{!!$agent_sign!!}', '{!!$department_sign!!}', '{!!$password_reset_link!!}', '{!!$email_address!!}', '{!!$user_password!!}', '{!!$system_from!!}', '{!!$system_link!!}'];
 
-                $data = [$user, $agent, $ticket_number, $content, $from, $ticket_agent_name, $ticket_client_name, $ticket_client_email, $ticket_body, $ticket_assigner, $ticket_link_with_number, $system_error, $agent_sign, $department_sign, $password_reset_link, $email_address, $user_password, $system_from, $system_link];
+            $data = [$user, $agent, $ticket_number, $content, $from, $ticket_agent_name, $ticket_client_name, $ticket_client_email, $ticket_body, $ticket_assigner, $ticket_link_with_number, $system_error, $agent_sign, $department_sign, $password_reset_link, $email_address, $user_password, $system_from, $system_link];
 
                 // dd($variables,$data,$contents);
                 // $messagebody = str_replace($variables, $data, $contents);
@@ -241,7 +244,7 @@ class PhpMailController extends Controller {
                         $mail->setFrom($username, $fromname);
                     }
                 }
-                $mail->addAddress($recipants);         // Add a recipient
+            $mail->addAddress($recipants);         // Add a recipient
                 $mail->isHTML(true);                   // Set email format to HTML
                 if ($cc != null) {
                     foreach ($cc as $collaborator) {
@@ -253,37 +256,37 @@ class PhpMailController extends Controller {
                     }
                 }
 
-                if ($attachment != null) {
-                    $size = count($message['attachments']);
-                    $attach = $message['attachments'];
-                    for ($i = 0; $i < $size; $i++) {
-                        $file_path = $attach[$i]->getRealPath();
-                        $file_name = $attach[$i]->getClientOriginalName();
-                        $mail->addAttachment($file_path, $file_name);
-                    }
-                }
-                $mail->CharSet = "utf8";
-                $mail->Subject = $subject;
-                if ($template == 'ticket-reply-agent') {
-                    $line = '---Reply above this line--- <br/><br/>';
-                    $body = $line . $messagebody;
-                } else {
-                    $body = $messagebody;
-                }
-                $rtl = CommonSettings::where('option_name', '=', 'enable_rtl')->first();
-                if($rtl->option_value == 1) {
-                    $mail->ContentType = 'text/html';
-                    $body = '<html dir="rtl" xml:lang="ar" lang="ar"><head></head><body dir="rtl">' . $body . '</body></html>';
-                } else {
-                }
-                $mail->Body = nl2br($body);
-
-                if (!$mail->send()) {
-                    return;
-                } else {
-                    return 1;
+            if ($attachment != null) {
+                $size = count($message['attachments']);
+                $attach = $message['attachments'];
+                for ($i = 0; $i < $size; $i++) {
+                    $file_path = $attach[$i]->getRealPath();
+                    $file_name = $attach[$i]->getClientOriginalName();
+                    $mail->addAttachment($file_path, $file_name);
                 }
             }
+            $mail->CharSet = 'utf8';
+            $mail->Subject = $subject;
+            if ($template == 'ticket-reply-agent') {
+                $line = '---Reply above this line--- <br/><br/>';
+                $body = $line.$messagebody;
+            } else {
+                $body = $messagebody;
+            }
+            $rtl = CommonSettings::where('option_name', '=', 'enable_rtl')->first();
+            if ($rtl->option_value == 1) {
+                $mail->ContentType = 'text/html';
+                $body = '<html dir="rtl" xml:lang="ar" lang="ar"><head></head><body dir="rtl">'.$body.'</body></html>';
+            } else {
+            }
+            $mail->Body = nl2br($body);
+
+            if (!$mail->send()) {
+                return;
+            } else {
+                return 1;
+            }
+        }
     }
 
     /**
@@ -291,7 +294,8 @@ class PhpMailController extends Controller {
      *
      * @return MailNotification
      */
-    public function sendEmail($from, $to, $message) {
+    public function sendEmail($from, $to, $message)
+    {
         try {
             $from_address = $this->fetch_smtp_details($from);
             if ($from_address == null) {
@@ -403,7 +407,7 @@ class PhpMailController extends Controller {
                         $mail->addAttachment($file_path, $file_name);
                     }
                 }
-                $mail->CharSet = "utf8";
+                $mail->CharSet = 'utf8';
                 $mail->Subject = $subject;
                 $mail->Body = $content;
                 if (!$mail->send()) {
@@ -411,9 +415,9 @@ class PhpMailController extends Controller {
                 }
             }
         } catch (Exception $e) {
-            if($e instanceof ErrorException) {
+            if ($e instanceof ErrorException) {
                 return \Lang::get('lang.outgoing_email_failed');
-            } 
+            }
         }
     }
 
@@ -422,7 +426,8 @@ class PhpMailController extends Controller {
      *
      * @return type
      */
-    public function company() {
+    public function company()
+    {
         $company = Company::Where('id', '=', '1')->first();
         if ($company->company_name == null) {
             $company = 'Support Center';
@@ -441,7 +446,8 @@ class PhpMailController extends Controller {
      *
      * @return type integer
      */
-    public function mailfrom($reg, $dept_id) {
+    public function mailfrom($reg, $dept_id)
+    {
         $email = Email::where('id', '=', '1')->first();
         if ($reg == 1) {
             return $email->sys_email;
@@ -454,5 +460,4 @@ class PhpMailController extends Controller {
             }
         }
     }
-
 }

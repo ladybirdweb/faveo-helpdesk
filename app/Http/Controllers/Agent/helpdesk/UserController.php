@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\Common\PhpMailController;
+use App\Http\Controllers\Controller;
 // requests
 /*  Include Sys_user Model  */
 use App\Http\Requests\helpdesk\ProfilePassword;
@@ -79,7 +79,7 @@ class UserController extends Controller
     public function user_list()
     {
         // displaying list of users with chumper datatables
-        return \Datatable::collection(User::where('role',"=","user")->get())
+        return \Datatable::collection(User::where('role', '=', 'user')->get())
                         /* searchable column username and email */
                         ->searchColumns('user_name', 'email', 'phone')
                         /* order column username and email */
@@ -207,7 +207,7 @@ class UserController extends Controller
                 // fetch user credentails to send mail
                 $name = $user->first_name;
                 $email = $user->email;
-                if($request->input('send_email')) {
+                if ($request->input('send_email')) {
                     try {
                         // send mail on registration
                         $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
@@ -283,7 +283,7 @@ class UserController extends Controller
      */
     public function update($id, Sys_userUpdate $request)
     {
-//        dd($request);
+        //        dd($request);
         $user = new User();
         /* select the field where id = $id(request Id) */
         $users = $user->whereId($id)->first();
@@ -510,8 +510,7 @@ class UserController extends Controller
             return 0;
         }
     }
-    
-    
+
     /**
      * Generate a random string for password.
      *
@@ -534,5 +533,4 @@ class UserController extends Controller
         // return random string
         return $randomString;
     }
-    
 }

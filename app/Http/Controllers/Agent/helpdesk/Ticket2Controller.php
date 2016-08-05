@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // controllers
-use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Controller;
 // requests
 // models
@@ -51,8 +50,10 @@ class Ticket2Controller extends Controller
     }
 
     /**
-     * this function returns the list of open tickets of a particular department
+     * this function returns the list of open tickets of a particular department.
+     *
      * @param type $id
+     *
      * @return type
      */
     public function getOpenTickets($id)
@@ -63,6 +64,7 @@ class Ticket2Controller extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->get();
         }
+
         return Ttable::getTable($tickets);
     }
 
@@ -84,10 +86,12 @@ class Ticket2Controller extends Controller
             return view('themes.default1.agent.helpdesk.dept-ticket.closed', compact('id'));
         }
     }
-    
+
     /**
-     * this function returns the list of close tickets of a particular department
+     * this function returns the list of close tickets of a particular department.
+     *
      * @param type $id
+     *
      * @return type
      */
     public function getCloseTickets($id)
@@ -98,12 +102,15 @@ class Ticket2Controller extends Controller
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
             $tickets = Tickets::where('status', '=', '2')->where('status', '=', '3')->where('dept_id', '=', $dept->id)->get();
         }
+
         return Ttable::getTable($tickets);
     }
 
     /**
-     * this function returns the list of close tickets of a particular department
+     * this function returns the list of close tickets of a particular department.
+     *
      * @param type $id
+     *
      * @return type
      */
     public function deptinprogress($id)
@@ -136,5 +143,4 @@ class Ticket2Controller extends Controller
 
         return Ttable::getTable($tickets);
     }
-    
 }

@@ -11,12 +11,12 @@ use App\Http\Requests\helpdesk\ProfileRequest;
 use App\Http\Requests\helpdesk\TicketRequest;
 use App\Model\helpdesk\Manage\Help_topic;
 // models
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Utility\CountryCode;
-use App\Model\helpdesk\Settings\CommonSettings;
 use App\User;
 use Auth;
 // classes
@@ -323,6 +323,7 @@ class GuestController extends Controller
         $common_setting = $common_settings->select('status')
                 ->where('option_name', '=', 'user_set_ticket_status')
                 ->first();
+
         return view('themes.default1.client.helpdesk.ckeckticket', compact('id', 'common_setting'));
     }
 
