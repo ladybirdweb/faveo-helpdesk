@@ -1162,6 +1162,7 @@ Route::group(['middleware' => ['web']], function () {
      * Url Settings
      */
     Route::get('url/settings',['as'=>'url.settings','uses'=>'Admin\helpdesk\UrlSettingController@settings']);
-
+    Route::patch('url/settings',['as'=>'url.settings.post','uses'=>'Admin\helpdesk\UrlSettingController@postSettings']);
+    
     
     });
