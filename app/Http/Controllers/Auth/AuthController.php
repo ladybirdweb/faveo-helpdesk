@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 // controllers
 use App\Http\Controllers\Common\PhpMailController;
-use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\LoginRequest;
@@ -229,7 +228,7 @@ class AuthController extends Controller
             $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
             // If attempts > 3 and time < 10 minutes
            if ($loginAttempts > $security->backlist_threshold && (time() - $loginAttemptTime <= ($security->lockout_period * 60))) {
-//
+               //
                return redirect()->back()->withErrors('email', 'incorrect email')->with('error', $security->lockout_message);
            }
             // If time > 10 minutes, reset attempts counter and time in session
@@ -244,7 +243,7 @@ class AuthController extends Controller
         }
         // If auth ok, redirect to restricted area
         \Session::put('loginAttempts', $loginAttempts + 1);
-        
+
         if (Auth::Attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
             if (Auth::user()->role == 'user') {
                 return \Redirect::route('/');
@@ -278,15 +277,15 @@ class AuthController extends Controller
         if ($data) {
             $attempts = $data->Attempts + 1;
             if ($attempts == $apt) {
-//                $result = DB::select('UPDATE login_attempts SET Attempts='.$attempts.", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
-                $result = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['Attempts' => $attempts, 'LastLogin' => Date('Y-m-d H:i:s')]);
+                //                $result = DB::select('UPDATE login_attempts SET Attempts='.$attempts.", LastLogin=NOW() WHERE IP = '$value' OR User = '$field'");
+                $result = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['Attempts' => $attempts, 'LastLogin' => date('Y-m-d H:i:s')]);
             } else {
                 $result = DB::table('login_attempts')->where('IP', '=', $value)->orWhere('User', '=', $field)->update(['Attempts' => $attempts]);
                 // $result = DB::select("UPDATE login_attempts SET Attempts=".$attempts." WHERE IP = '$value' OR User = '$field'");
             }
         } else {
-//            $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
-            $result = DB::table('login_attempts')->update(['Attempts' => 1, 'User' => $field, 'IP' => $value, 'LastLogin' => Date('Y-m-d H:i:s')]);
+            //            $result = DB::select("INSERT INTO login_attempts (Attempts,User,IP,LastLogin) values (1,'$field','$value', NOW())");
+            $result = DB::table('login_attempts')->update(['Attempts' => 1, 'User' => $field, 'IP' => $value, 'LastLogin' => date('Y-m-d H:i:s')]);
         }
     }
 
@@ -329,6 +328,7 @@ class AuthController extends Controller
                 return 1;
             } else {
                 $this->clearLoginAttempts($value, $field);
+
                 return 0;
             }
         }

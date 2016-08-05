@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 // controllers
 use App\Http\Controllers\Common\PhpMailController;
-use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Controller;
 // request
 use App\User;
@@ -53,7 +52,7 @@ class PasswordController extends Controller
     {
         $date = date('Y-m-d H:i:s');
         $this->validate($request, ['email' => 'required|email']);
-        \Event::fire('reset.password',array());
+        \Event::fire('reset.password', []);
         $user = User::where('email', '=', $request->only('email'))->first();
         if (isset($user)) {
             $user1 = $user->email;

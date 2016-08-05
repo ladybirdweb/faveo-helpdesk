@@ -28,7 +28,7 @@ return [
     'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'    => 'We are sorry, but the page you are looking for can not be found.',
     'go_back'                                                           => 'Go Back',
     'the_board_is_offline'                                              => 'The Board is Offline',
-    'error_establishing_connection_to_database'                         => 'Error establishing connection to database',                         
+    'error_establishing_connection_to_database'                         => 'Error establishing connection to database',
     'unauthorized_access'                                               => 'Unauthorized Access',
     /*
       |--------------------------------------
@@ -285,7 +285,7 @@ return [
     'Ticket-has-been-created-successfully-your-ticket-number-is' => 'Ticket has been created successfully, your ticket number is',
     'Please-save-this-for-future-reference'                      => 'Please save this for future reference',
     'rtl'                                                        => 'RTL (Right to left)',
-    'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   =>  'The RTL support is only applicable to the outgoing mails',
+    'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   => 'The RTL support is only applicable to the outgoing mails',
     'user_set_ticket_status'                                     => 'Allow users to set ticket status',
     /*
       |--------------------------------------
@@ -435,7 +435,7 @@ return [
       | Language page
       |------------------------------------------------
      */
-    'default'                    => 'default', 
+    'default'                    => 'default',
     'language-settings'          => 'Language Settings',
     'iso-code'                   => 'ISO-CODE',
     'download'                   => 'Downlaod',
@@ -458,7 +458,7 @@ return [
     'lang-doesnot-exist'         => 'Language package does not exist.',
     'active-lang-error'          => 'Language package can not be deleted when it is active.',
     'language-error'             => 'Language package not found in your lang directroy.',
-    'lang-fallback-lang'         => 'Cannot delete system\'s defualt fallback language', 
+    'lang-fallback-lang'         => 'Cannot delete system\'s defualt fallback language',
 
     /*
       |--------------------------------------
@@ -474,7 +474,7 @@ return [
     'plugin-path-missing'   => 'Plugin File Path is not exist',
     'no-plugin-file'        => 'Their is no ',
     'plugin-config-missing' => 'Their is no <b>config.php or ServiceProvider.php</b>',
-    
+
     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]
@@ -1007,7 +1007,7 @@ return [
     'organization_profile'                 => 'Organization Profile',
     'organization-s_head'                  => "Organization's Head",
     'select_department_manager'            => 'Select Department Manager',
-    'select_organization_manager'          => "Select Organization Manager",
+    'select_organization_manager'          => 'Select Organization Manager',
     'users_of'                             => 'Users of',
     'organization_created_successfully'    => 'Organization  Created Successfully',
     'organization_can_not_create'          => 'Organization can not Create',

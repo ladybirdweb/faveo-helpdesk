@@ -2,20 +2,20 @@
 
 namespace App\Jobs;
 
-use App\Jobs\Job;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Http\Controllers\Common\PhpMailController;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 class SendEmail extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
-    
-    
+
+
     protected $from;
     protected $to;
     protected $message;
+
     /**
      * Create a new job instance.
      *

@@ -22,16 +22,18 @@ use View;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class NotificationController extends Controller {
-
-    public function __construct(PhpMailController $PhpMailController) {
+class NotificationController extends Controller
+{
+    public function __construct(PhpMailController $PhpMailController)
+    {
         $this->PhpMailController = $PhpMailController;
     }
 
     /**
      *  This function is for sending daily report/notification about the system.
      * */
-    public function send_notification() {
+    public function send_notification()
+    {
         //fetching email settings
         $email = Email::where('id', '=', '1')->first();
         // checking if the daily notification is enabled or not
@@ -40,7 +42,6 @@ class NotificationController extends Controller {
             $notification = Log_notification::where('log', '=', 'NOT-1')->orderBy('id', 'DESC')->first();
             $date = explode(' ', $notification->created_at);
             if (date('Y-m-d') == $date[0]) {
-                
             } else {
                 // creating a daily notification log
                 Log_notification::create(['log' => 'NOT-1']);
@@ -64,24 +65,25 @@ class NotificationController extends Controller {
      *
      *  @return mail
      * */
-    public function send_notification_to_admin($company) {
+    public function send_notification_to_admin($company)
+    {
         // get all admin users
         $users = User::where('role', '=', 'admin')->get();
         foreach ($users as $user) {
             // Send notification details to admin
             $email = $user->email;
-            $user_name = $user->first_name . ' ' . $user->last_name;
+            $user_name = $user->first_name.' '.$user->last_name;
             $view = View::make('emails.notifications.admin', ['company' => $company, 'name' => $user_name]);
             $contents = $view->render();
             $from = $this->PhpMailController->mailfrom('1', '0');
             $to = [
-                'name' => $user_name,
-                'email' => $email
+                'name'  => $user_name,
+                'email' => $email,
                     ];
             $message = [
-                'subject' => 'Daily Report',
+                'subject'  => 'Daily Report',
                 'scenario' => null,
-                'body' => $contents
+                'body'     => $contents,
                     ];
             $this->dispatch((new \App\Jobs\SendEmail($from, $to, $message))->onQueue('emails'));
             //$this->PhpMailController->sendEmail($from,$to,$message);
@@ -93,7 +95,8 @@ class NotificationController extends Controller {
      *
      *  @return mail
      * */
-    public function send_notification_to_manager($company) {
+    public function send_notification_to_manager($company)
+    {
         // get all department managers
         $depts = Department::all();
         foreach ($depts as $dept) {
@@ -103,7 +106,7 @@ class NotificationController extends Controller {
                 foreach ($users as $user) {
                     // Send notification details to manager of a department
                     $email = $user->email;
-                    $user_name = $user->first_name . ' ' . $user->last_name;
+                    $user_name = $user->first_name.' '.$user->last_name;
                     $view = View::make('emails.notifications.manager', ['company' => $company, 'name' => $user_name]);
                     $contents = $view->render();
                     $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
@@ -117,7 +120,8 @@ class NotificationController extends Controller {
      *
      *  @return mail
      * */
-    public function send_notification_to_team_lead($company) {
+    public function send_notification_to_team_lead($company)
+    {
         // get all Team leads
         $teams = Teams::all();
         foreach ($teams as $team) {
@@ -127,7 +131,7 @@ class NotificationController extends Controller {
                 foreach ($users as $user) {
                     // Send notification details to team lead
                     $email = $user->email;
-                    $user_name = $user->first_name . ' ' . $user->last_name;
+                    $user_name = $user->first_name.' '.$user->last_name;
                     $view = View::make('emails.notifications.lead', ['company' => $company, 'name' => $user_name, 'team_id' => $team->id]);
                     $contents = $view->render();
                     $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
@@ -141,13 +145,14 @@ class NotificationController extends Controller {
      *
      *  @return mail
      * */
-    public function send_notification_to_agent($company) {
+    public function send_notification_to_agent($company)
+    {
         // get all agents users
         $users = User::where('role', '=', 'agent')->get();
         foreach ($users as $user) {
             // Send notification details to all the agents
             $email = $user->email;
-            $user_name = $user->first_name . ' ' . $user->last_name;
+            $user_name = $user->first_name.' '.$user->last_name;
             $view = View::make('emails.notifications.agent', ['company' => $company, 'name' => $user_name, 'user_id' => $user->id]);
             $contents = $view->render();
             $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
@@ -159,7 +164,8 @@ class NotificationController extends Controller {
      *
      * @return type variable
      */
-    public function company() {
+    public function company()
+    {
         // fetching comapny model
         $company = Company::Where('id', '=', '1')->first();
         // fetching company name
@@ -171,5 +177,4 @@ class NotificationController extends Controller {
 
         return $company;
     }
-
 }

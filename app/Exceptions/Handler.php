@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Exceptions;
+
 // controller
 use Bugsnag;
 //use Illuminate\Validation\ValidationException;
@@ -11,6 +13,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -27,6 +30,7 @@ class Handler extends ExceptionHandler
         ModelNotFoundException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
     ];
+
     /**
      * Report or log an exception.
      *
@@ -48,8 +52,10 @@ class Handler extends ExceptionHandler
             $version = \Config::get('app.version');
             Bugsnag::setAppVersion($version);
         }
+
         return parent::report($e);
     }
+
     /**
      * Render an exception into an HTTP response.
      *
@@ -71,6 +77,7 @@ class Handler extends ExceptionHandler
                 return $this->common($request, $e);
         }
     }
+
     /**
      * Function to render 500 error page.
      *
@@ -84,9 +91,11 @@ class Handler extends ExceptionHandler
         if (config('app.debug') == true) {
             return parent::render($request, $e);
         }
+
         return  response()->view('errors.500');
         //return redirect()->route('error500', []);
     }
+
     /**
      * Function to render 404 error page.
      *
@@ -97,21 +106,23 @@ class Handler extends ExceptionHandler
      */
     public function render404($request, $e)
     {
-        
         $seg = $request->segments();
         if (in_array('api', $seg)) {
             return response()->json(['status' => '404']);
         }
         if (config('app.debug') == true) {
-            if($e->getStatusCode() == '404') {
+            if ($e->getStatusCode() == '404') {
                 return redirect()->route('error404', []);
             }
+
             return parent::render($request, $e);
         }
+
         return redirect()->route('error404', []);
     }
+
     /**
-     * Function to render database connection failed
+     * Function to render database connection failed.
      *
      * @param type $request
      * @param type $e
@@ -127,8 +138,10 @@ class Handler extends ExceptionHandler
         if (config('app.debug') == true) {
             return parent::render($request, $e);
         }
+
         return redirect()->route('error404', []);
     }
+
     /**
      * Common finction to render both types of codes.
      *
@@ -145,7 +158,7 @@ class Handler extends ExceptionHandler
             case $e instanceof NotFoundHttpException:
                 return $this->render404($request, $e);
             case $e instanceof PDOException:
-                if(strpos('1045', $e->getMessage()) == true) {
+                if (strpos('1045', $e->getMessage()) == true) {
                     return $this->renderDB($request, $e);
                 } else {
                     return $this->render500($request, $e);
@@ -159,6 +172,7 @@ class Handler extends ExceptionHandler
             default:
                 return $this->render500($request, $e);
         }
+
         return parent::render($request, $e);
     }
 }

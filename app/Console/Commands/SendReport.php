@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Http\Controllers\Agent\helpdesk\NotificationController;
 use App\Http\Controllers\Common\PhpMailController;
 use Exception;
+use Illuminate\Console\Command;
 
-class SendReport extends Command {
-
+class SendReport extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -30,7 +30,8 @@ class SendReport extends Command {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $mail = new PhpMailController();
         $report = new NotificationController($mail);
         $this->report = $report;
@@ -42,15 +43,15 @@ class SendReport extends Command {
      *
      * @return mixed
      */
-    public function handle() {
+    public function handle()
+    {
         try {
             $this->report->send_notification();
-            \Log::info("Report has send");
-            $this->info("Report has send");
+            \Log::info('Report has send');
+            $this->info('Report has send');
         } catch (Exception $ex) {
             dd($ex);
             $this->error($ex->getMessage());
         }
     }
-
 }
