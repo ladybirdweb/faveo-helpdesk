@@ -253,7 +253,20 @@
                     </div>
                 </div>
                 <!--/.col-md-2-->
-
+                <!--/.col-md-2-->
+                <div class="col-md-2 col-sm-6">
+                    <div class="settingiconblue">
+                        <div class="settingdivblue">
+                            <a href="{{url('url/settings')}}">
+                                <span class="fa-stack fa-2x">
+                                    <i class="fa fa-server fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <p class="box-title" >Url</p>
+                    </div>
+                </div>
+                <!--/.col-md-2-->
             </div>
         </div>
         <!-- /.row -->

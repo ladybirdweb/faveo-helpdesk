@@ -3,10 +3,10 @@
     <head>
         <title>PDF</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        
+
     </head>
     <body>
-         <h2>
+        <h2>
             <div id="logo" class="site-logo text-center" style="font-size: 30px;">
                 <center>
                     @if($system->url)
@@ -39,16 +39,26 @@
 
         </table>
         <hr>
-        <table class="table" style="border: 1px solid black;border-collapse: collapse; width: 100%">
-            @if($ticket->extraFields()->count()>0)
-            @foreach($ticket->extraFields() as $ticket_form_data)
-            <tr style="border: 1px solid black;border-collapse: collapse;">
-                <td style="border: 1px solid black;border-collapse: collapse; padding: 14px;">&nbsp;&nbsp;<b>{!! $ticket_form_data->title !!}</b></td>
-                <td style="border: 1px solid black; width: 100%;border-collapse: collapse;padding: 14px;">{!! $ticket_form_data->content !!}</td>
-            </tr>
-            
-            @endforeach
-            @endif
-        </table>
+        <div>
+            <table class="table" style="border: 1px solid black;border-collapse: collapse; width: 100%">
+                @if($ticket->extraFields()->count()>0)
+                @foreach($ticket->extraFields() as $ticket_form_data)
+                <tr style="border: 1px solid black;border-collapse: collapse;">
+                    <td style="border: 1px solid black;border-collapse: collapse; padding: 14px;">&nbsp;&nbsp;<b>{!! $ticket_form_data->title !!}</b></td>
+                    <td style="border: 1px solid black; width: 100%;border-collapse: collapse;padding: 14px;">{!! $ticket_form_data->content !!}</td>
+                </tr>
+
+                @endforeach
+                @endif
+            </table>
+        </div>
+        <hr>
+        <div>
+            <h3>Issue</h3>
+        </div>
+        <div>
+            {!! $thread->body !!}
+        </div>
+        <hr>
     </body>
 </html>

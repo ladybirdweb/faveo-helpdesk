@@ -193,6 +193,7 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->push(Lang::get('lang.edit'), url('sla/{sla}/edit'));
         });
         Route::resource('forms', 'Admin\helpdesk\FormController');
+        Route::get('forms/add-child/{formid}',['as'=>'forms.add.child','uses'=>'Admin\helpdesk\FormController@addChildForm']);
         Route::post('forms/field/{fieldid}/child', [
             'as' => 'forms.field.child',
             'uses' => 'Admin\helpdesk\FormController@addChild',
@@ -216,6 +217,10 @@ Route::group(['middleware' => ['web']], function () {
         Breadcrumbs::register('forms.show', function ($breadcrumbs) {
             $breadcrumbs->parent('forms.index');
             $breadcrumbs->push(Lang::get('lang.view'), url('forms/{forms}'));
+        });
+        Breadcrumbs::register('forms.add.child', function ($breadcrumbs) {
+            $breadcrumbs->parent('forms.index');
+            $breadcrumbs->push('Add Child', url('forms/add-child/{forms}'));
         });
         Route::get('delete-forms/{id}', ['as' => 'forms.delete', 'uses' => 'Admin\helpdesk\FormController@delete']);
         //$router->model('id','getcompany');
@@ -1152,4 +1157,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('queue/{id}/activate', ['as' => 'queue.activate', 'uses' => 'Job\QueueController@activate']);
     Route::get('get-ticket-number',['as'=>'get.ticket.number','uses'=>'Admin\helpdesk\SettingsController@getTicketNumber']);
     Route::get('genereate-pdf/{threadid}',['as'=>'thread.pdf','uses'=>'Agent\helpdesk\TicketController@pdfThread']);
-});
+    
+    /**
+     * Url Settings
+     */
+    Route::get('url/settings',['as'=>'url.settings','uses'=>'Admin\helpdesk\UrlSettingController@settings']);
+
+    
+    });

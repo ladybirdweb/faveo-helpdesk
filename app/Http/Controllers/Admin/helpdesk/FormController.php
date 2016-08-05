@@ -28,7 +28,6 @@ class FormController extends Controller {
     private $fields;
     private $forms;
 
-
     public function __construct(Fields $fields, Forms $forms) {
         $this->fields = $fields;
         $this->forms = $forms;
@@ -48,7 +47,6 @@ class FormController extends Controller {
         ]);
     }
 
-
     /**
      * home.
      *
@@ -57,7 +55,6 @@ class FormController extends Controller {
     public function home() {
         return view('forms.home');
     }
-
 
     /**
      * list of forms.
@@ -74,7 +71,6 @@ class FormController extends Controller {
         }
     }
 
-
     /**
      * create a new form.
      *
@@ -87,7 +83,6 @@ class FormController extends Controller {
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
-
 
     /**
      * Show a new form.
@@ -111,47 +106,52 @@ class FormController extends Controller {
         }
     }
 
-
     /**
      * Store a new form.
      *
      * @return Response
      */
-    public function store(Forms $forms) {
-        if (!Input::get('formname')) {
-            return Redirect::back()->with('fails', Lang::get('lang.please_fill_form_name'));
-        }
-        $required = Input::get('required');
-        $count = count($required);
-        $require = [];
-        for ($i = 2; $i < $count + 2; $i++) {
-            for ($j = 0; $j < 1; $j++) {
-                array_push($require, $required[$i][$j]);
+    public function store(Request $request) {
+        $this->validate($request, [
+            'formname'=>'required|unique:custom_forms,formname',
+            'label.*'=>'required',
+            'name.*'=>'required',
+            'type.*'=>'required',
+        ]);
+        try {
+            $forms = new Forms();
+            $required = Input::get('required');
+            $count = count($required);
+            $require = [];
+            for ($i = 2; $i < $count + 2; $i++) {
+                for ($j = 0; $j < 1; $j++) {
+                    array_push($require, $required[$i][$j]);
+                }
             }
-        }
-        $forms->formname = Input::get('formname');
-        $forms->save();
-        $count = count(Input::get('name'));
-        $fields = [];
-        for ($i = 0; $i <= $count; $i++) {
-            if (!empty(Input::get('name')[$i])) {
-                $field = Fields::create([
-                            'forms_id' => $forms->id,
-                            'label' => Input::get('label')[$i],
-                            'name' => Input::get('name')[$i],
-                            'type' => Input::get('type')[$i],
-                            'required' => $require[$i],
-                ]);
-                $field_id = $field->id;
-                $this->createValues($field_id, Input::get('value')[$i]);
+            $forms->formname = Input::get('formname');
+            $forms->save();
+            $count = count(Input::get('name'));
+            $fields = [];
+            for ($i = 0; $i <= $count; $i++) {
+                if (!empty(Input::get('name')[$i])) {
+                    $field = Fields::create([
+                                'forms_id' => $forms->id,
+                                'label' => Input::get('label')[$i],
+                                'name' => Input::get('name')[$i],
+                                'type' => Input::get('type')[$i],
+                                'required' => $require[$i],
+                    ]);
+                    $field_id = $field->id;
+                    $this->createValues($field_id, Input::get('value')[$i]);
+                }
             }
+
+            return Redirect::back()->with('success', Lang::get('lang.successfully_created_form'));
+        } catch (Exception $ex) {
+
+            return redirect()->back()->with('fails', $ex->getMessage());
         }
-
-
-
-        return Redirect::back()->with('success', Lang::get('lang.successfully_created_form'));
     }
-
 
     /**
      * Delete Form.
@@ -179,7 +179,6 @@ class FormController extends Controller {
         return redirect()->back()->with('success', Lang::get('lang.form_deleted_successfully'));
     }
 
-
     public function edit($id) {
         try {
             $forms = new Forms();
@@ -198,6 +197,68 @@ class FormController extends Controller {
         }
     }
 
+    public function addChildForm($id) {
+        try {
+            $forms = new Forms();
+            $form = $forms->find($id);
+            $select_forms = $forms->where('id', '!=', $id)->lists('formname', 'id')->toArray();
+            //dd($form);
+            if ($form) {
+                $fields = $form->fields();
+                //dd($fields);
+                return view('themes.default1.admin.helpdesk.manage.form.add-child', compact('form', 'fields', 'select_forms'));
+            }
+            throw new Exception("Sorry we can't find your request");
+        } catch (Exception $ex) {
+
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
+    }
+
+    public function update($id, Request $request) {
+        $this->validate($request, [
+            'formname'=>'required|unique:custom_forms,formname,'.$id,
+            'label.*'=>'required',
+            'name.*'=>'required',
+            'type.*'=>'required',
+        ]);
+        try {
+            if (!$request->input('formname')) {
+                throw new Exception(Lang::get('lang.please_fill_form_name'));
+            }
+            $form = new Forms();
+            $forms = $form->find($id);
+            if (!$forms) {
+                throw new Exception("Sorry we can not find your request");
+            }
+            $forms->formname = Input::get('formname');
+            $forms->save();
+            $count = count(Input::get('name'));
+            $field = new Fields();
+            $fields = $field->where('forms_id', $forms->id)->get();
+            if ($fields->count($fields) > 0) {
+                foreach ($fields as $fi) {
+                    $fi->delete();
+                }
+            }
+            //dd(Input::get('label'),Input::get('name'),Input::get('type'),Input::get('required'));
+            for ($i = 0; $i < $count; $i++) {
+                $field = $field->create([
+                    'forms_id' => $forms->id,
+                    'label' => Input::get('label')[$i],
+                    'name' => Input::get('name')[$i],
+                    'type' => Input::get('type')[$i],
+                    'required' => Input::get('required')[$i],
+                ]);
+                $field_id = $field->id;
+                $this->createValues($field_id, Input::get('value')[$i]);
+            }
+            return redirect()->back()->with('success', 'updated');
+        } catch (Exception $ex) {
+            dd($ex);
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
+    }
 
     public function renderForm($formid) {
         $html = "";
@@ -209,9 +270,8 @@ class FormController extends Controller {
                 $html .= self::getForm($field);
             }
         }
-        return self::requiredStyle().$html;
+        return self::requiredStyle() . $html;
     }
-
 
     public static function getType($type) {
         switch ($type) {
@@ -231,9 +291,10 @@ class FormController extends Controller {
                 return "checkbox";
             case "hidden":
                 return "hidden";
+            case "password":
+                return "password";
         }
     }
-
 
     public static function getAttribute($type) {
         switch ($type) {
@@ -251,9 +312,10 @@ class FormController extends Controller {
                 return "";
             case "hidden":
                 return "";
+            case "password":
+                return "['class'=>'form-control']";
         }
     }
-
 
     public static function getForm($field) {
         $required = false;
@@ -265,27 +327,29 @@ class FormController extends Controller {
         $field_type = self::getType($type);
         switch ($field_type) {
             case "select":
-                return self::selectForm($field_type, $field, $required,$required_class);
+                return self::selectForm($field_type, $field, $required, $required_class);
             case "text":
-                return Form::label($field->label, $field->label,['class'=>$required_class]) .
+                return Form::label($field->label, $field->label, ['class' => $required_class]) .
                         Form::$field_type($field->name, NULL, ['class' => "form-control $field->id", 'id' => $field->id, 'required' => $required]);
             case "email":
-                return Form::label($field->label, $field->label,['class'=>$required_class]) .
+                return Form::label($field->label, $field->label, ['class' => $required_class]) .
                         Form::$field_type($field->name, NULL, ['class' => "form-control $field->id", 'id' => $field->id, 'required' => $required]);
+            case "password":
+                return Form::label($field->label, $field->label, ['class' => $required_class]) .
+                        Form::$field_type($field->name, ['class' => "form-control $field->id", 'id' => $field->id, 'required' => $required]);
 
             case "textarea":
-                return Form::label($field->label, $field->label,['class'=>$required_class]) .
+                return Form::label($field->label, $field->label, ['class' => $required_class]) .
                         Form::$field_type($field->name, NULL, ['class' => "form-control $field->id", 'id' => $field->id, 'required' => $required]);
             case "radio":
-                return self::radioForm($field_type, $field, $required,$required_class);
+                return self::radioForm($field_type, $field, $required, $required_class);
 
             case "checkbox":
-                return self::checkboxForm($field_type, $field, $required,$required_class);
+                return self::checkboxForm($field_type, $field, $required, $required_class);
             case "hidden":
-                return  Form::$field_type($field->name, NULL, ['id' => $field->id]);
+                return Form::$field_type($field->name, NULL, ['id' => $field->id]);
         }
     }
-
 
     public function createValues($fieldid, $values, $childid = NULL, $key = "") {
         if ($values) {
@@ -310,7 +374,6 @@ class FormController extends Controller {
         }
     }
 
-
     public function addChild($fieldid, Request $request) {
         $ids = $request->except('_token');
         try {
@@ -331,7 +394,6 @@ class FormController extends Controller {
         }
     }
 
-
     public function renderChild(Request $request) {
         $render = "";
         $value = $request->input('valueid');
@@ -348,7 +410,6 @@ class FormController extends Controller {
 
         return $render;
     }
-
 
     public static function jqueryScript($value, $fieldid, $fieldname, $type = "") {
         if ($type == "select") {
@@ -379,7 +440,6 @@ class FormController extends Controller {
         </script>';
     }
 
-
     public static function jqueryCheckboxScript($value, $fieldid, $fieldname) {
         $fields = new Fields();
         $field = $fields->find($fieldid);
@@ -406,7 +466,6 @@ class FormController extends Controller {
         </script>';
         }
     }
-
 
     public static function jquerySelectScript($fieldid) {
         $fields = new Fields();
@@ -441,18 +500,16 @@ class FormController extends Controller {
         }
     }
 
-
-    public static function selectForm($field_type, $field, $required,$required_class) {
+    public static function selectForm($field_type, $field, $required, $required_class) {
         $script = self::jqueryScript($field_value = "", $field->id, $field->name, $field_type);
-        $form_hidden = Form::hidden('fieldid[]', $field->id, ['id' => "hidden" . $field->id]) . Form::label($field->label, $field->label,['class'=>$required_class]);
+        $form_hidden = Form::hidden('fieldid[]', $field->id, ['id' => "hidden" . $field->id]) . Form::label($field->label, $field->label, ['class' => $required_class]);
         $select = Form::$field_type($field->name, ['' => 'Select', 'Selects' => $field->values()->lists('field_value', 'field_value')->toArray()], null, ['class' => "form-control $field->id", 'id' => $field->id, 'required' => $required]) . "</br>";
         $html = $script . $form_hidden . $select;
         $response_div = "<div id=" . $field->name . "></div>";
         return $html . $response_div;
     }
 
-
-    public static function radioForm($field_type, $field, $required,$required_class) {
+    public static function radioForm($field_type, $field, $required, $required_class) {
         $radio = "";
         $html = "";
         $values = $field->values()->lists('field_value')->toArray();
@@ -463,13 +520,12 @@ class FormController extends Controller {
                 $radio .= "<div>" . Form::hidden('fieldid[]', $field->id, ['id' => $field->id . str_slug($field_value)]);
                 $radio .= Form::$field_type($field->name, $field_value, NULL, ['class' => "$field->id", 'id' => str_slug($field_value), 'required' => $required]) . $script . "<span>   " . $field_value . "</span></div>";
             }
-            $html = Form::label($field->label, $field->label,['class'=>$required_class]) . "</br>" . $radio . "<div id=" . $field->name . "></br></div>";
+            $html = Form::label($field->label, $field->label, ['class' => $required_class]) . "</br>" . $radio . "<div id=" . $field->name . "></br></div>";
         }
         return $html;
     }
 
-
-    public static function checkboxForm($field_type, $field, $required,$required_class) {
+    public static function checkboxForm($field_type, $field, $required, $required_class) {
         $checkbox = "";
         $html = "";
         $values = $field->values()->lists('field_value')->toArray();
@@ -482,15 +538,14 @@ class FormController extends Controller {
                 //$checkbox .="</br>";
                 $checkbox .="<div id=" . $field_value . "></div>" . $script;
             }
-            $html = Form::label($field->label, $field->label,['class'=>$required_class]) . "</br>" . $checkbox;
+            $html = Form::label($field->label, $field->label, ['class' => $required_class]) . "</br>" . $checkbox;
         }
         return $html;
     }
 
-
     public static function requiredStyle() {
-        
-            $style = "<style>
+
+        $style = "<style>
                 .required:after {
                                         color: #e32 !important;
                                         content: ' * ' !important;
@@ -499,14 +554,13 @@ class FormController extends Controller {
                     </style>";
         return $style;
     }
-    
-    public static function requiredClass($required){
+
+    public static function requiredClass($required) {
         $class = "";
-        if($required==='1'){
-           $class = "required"; 
+        if ($required === '1') {
+            $class = "required";
         }
         return $class;
     }
-
 
 }

@@ -65,6 +65,9 @@ class="active"
                             {!! link_to_route('forms.show', Lang::get('lang.view_this_form') ,[$form->id],['id'=>'View','class'=>'btn btn-primary btn-sm']) !!}
                         </div>
                         <div class="btn-group">
+                            {!! link_to_route('forms.add.child', 'Add Child' ,[$form->id],['id'=>'add-child','class'=>'btn btn-primary btn-sm']) !!}
+                        </div>
+                        <div class="btn-group">
                             <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$form->id}}delete">{!! Lang::get('lang.delete_from') !!}</button>
                         </div>
                         <div class="modal fade" id="{{$form->id}}delete">

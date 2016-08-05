@@ -13,7 +13,7 @@
                     @forelse($field->values()->get() as $value)
                     <div class="col-md-12">
                         <b>{{$value->field_value}}</b>
-                         {!! Form::select($value->id,[''=>'Select','Forms'=>$select_forms],null,['class'=>'form-control']) !!}
+                         {!! Form::select($value->id,[''=>'Select','Forms'=>$select_forms],$value->childId(),['class'=>'form-control']) !!}
                     </div>
                     @empty 
                     <div class="col-md-12">
