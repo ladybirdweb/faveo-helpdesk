@@ -238,6 +238,9 @@ class="active"
     $(function() {
         $("textarea").wysihtml5();
     });
+</script>
+@if($verify == 1 || $verify == '1')
+    <script type="text/javascript">
     $('#agent-profile').on('submit', function(e){
         var old_mobile = "<?php echo $user->mobile;?>";
         var email = "<?php echo $user->email;?>";
@@ -316,5 +319,6 @@ class="active"
     $('.closemodal').on('click', function(){
         $('#last-modal').css('display', 'none');
     });
-</script>
+    </script>
+@endif
 @stop

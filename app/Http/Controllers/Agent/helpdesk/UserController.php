@@ -19,6 +19,7 @@ use App\Http\Requests\helpdesk\OtpVerifyRequest;
 // models
 use App\Model\helpdesk\Agent_panel\Organization;
 use App\Model\helpdesk\Agent_panel\User_org;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Utility\CountryCode;
 use App\Model\helpdesk\Utility\Otp;
 
@@ -339,8 +340,12 @@ class UserController extends Controller {
         $user = Auth::user();
         $location = GeoIP::getLocation('');
         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+        $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
+        $status = $settings->status;
         try {
-            return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'))->with('phonecode', $phonecode->phonecode);
+            return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'))
+            ->with(['phonecode' => $phonecode->phonecode,
+                    'verify' => $status]);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -590,8 +595,12 @@ class UserController extends Controller {
     public function resendOTP(OtpVerifyRequest $request)
     {
         // dd($request->input());
-        \Event::fire(new \App\Events\LoginEvent($request));
-        return 1;
+        if (!\Schema::hasTable('user_verfication')) {
+            \Event::fire(new \App\Events\LoginEvent($request));
+            return 1;
+        } else {
+            return "Plugin has not been setup successfully.";
+        }
     }
 
     public function verifyOTP()
