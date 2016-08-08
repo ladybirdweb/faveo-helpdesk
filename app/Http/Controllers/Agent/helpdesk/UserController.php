@@ -14,10 +14,14 @@ use App\Http\Requests\helpdesk\ProfileRequest;
 use App\Http\Requests\helpdesk\Sys_userRequest;
 /*  include guest_note model */
 use App\Http\Requests\helpdesk\Sys_userUpdate;
+use App\Http\Requests\helpdesk\OtpVerifyRequest;
+
 // models
 use App\Model\helpdesk\Agent_panel\Organization;
 use App\Model\helpdesk\Agent_panel\User_org;
 use App\Model\helpdesk\Utility\CountryCode;
+use App\Model\helpdesk\Utility\Otp;
+
 use App\User;
 // classes
 use Auth;
@@ -28,6 +32,7 @@ use Input;
 use Lang;
 use Redirect;
 use Illuminate\Http\Request;
+use DateTime;
 
 /**
  * UserController
@@ -582,4 +587,46 @@ class UserController extends Controller {
         return $users;
     }
 
+    public function resendOTP(OtpVerifyRequest $request)
+    {
+        // dd($request->input());
+        \Event::fire(new \App\Events\LoginEvent($request));
+        return 1;
+    }
+
+    public function verifyOTP()
+    {
+        // dd(Input::all());
+        // $user = User::select('id', 'mobile', 'user_name')->where('email', '=', $request->input('email'))->first();
+        $otp_length = strlen(Input::get('otp'));
+        if(($otp_length == 6 && !preg_match("/[a-z]/i", Input::get('otp'))) ) {
+            $otp2 = Hash::make(Input::get('otp'));
+            $otp = Otp::select('otp', 'updated_at')->where('user_id', '=', Input::get('u_id'))
+                                ->first();
+            $date1 = date_format($otp->updated_at, "Y-m-d h:i:sa");
+            $date2 = date("Y-m-d h:i:sa");
+            $time1 = new DateTime($date2);
+            $time2 = new DateTime($date1);
+            $interval = $time1->diff($time2);
+            if($interval->i >10 || $interval->h >0){
+                $message = Lang::get('lang.otp-expired');
+                return $message;
+            } else {
+                if (Hash::check(Input::get('otp'), $otp->otp)){
+                    Otp::where('user_id', '=', Input::get('u_id'))
+                        ->update(['otp' => '']);
+                    // User::where('id', '=', $user->id)
+                    //     ->update(['active' => 1]);
+                    // $this->openTicketAfterVerification($user->id);
+                    return 1;
+                } else {
+                    $message = Lang::get('lang.otp-not-matched');
+                    return $message;
+                }
+            }
+        } else {
+            $message = Lang::get('lang.otp-invalid');
+            return $message;
+        }
+    }
 }

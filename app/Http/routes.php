@@ -510,6 +510,10 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->parent('profile');
             $breadcrumbs->push(Lang::get('lang.edit'), url('profile-edit'));
         });
+
+        Route::post('verify-number', ['as' => 'agent-verify-number', 'uses' => 'Agent\helpdesk\UserController@resendOTP']);
+        Route::post('verify-number2', ['as' => 'post-agent-verify-number', 'uses' => 'Agent\helpdesk\UserController@verifyOTP']);
+
         Route::patch('agent-profile', ['as' => 'agent-profile', 'uses' => 'Agent\helpdesk\UserController@postProfileedit']); /* User Profile Post */
         Route::patch('agent-profile-password/{id}', 'Agent\helpdesk\UserController@postProfilePassword'); /*  Profile Password Post */
         Route::get('canned/list', ['as' => 'canned.list', 'uses' => 'Agent\helpdesk\CannedController@index']); /* Canned list */

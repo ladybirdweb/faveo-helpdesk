@@ -60,7 +60,10 @@ return [
     'did-not-recive-code'                   => 'Didn\'t recieve code?',
     'resend_otp'                            => 'Resend OTP',
     'verify-screen-msg'                     => 'Your account is currently inactive.<br/>To activate your account, please enter the OTP we\'ve sent on',
-    'otp-sent'                              => 'We\'ve sent an OTP code on your number.', 
+    'otp-sent'                              => 'We\'ve sent an OTP code on your number.',
+    'verify-number'                         => 'Verify number',
+    'get-verify-message'                    => 'Enter the OTP code we\'ve sent to your new number.',
+    'number-verification-sussessfull'       => 'Your number has been verified successfully, please wait we are updating your profile.',
     /*
       |--------------------------------------
       |   Register Page
