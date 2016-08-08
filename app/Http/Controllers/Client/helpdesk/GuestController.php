@@ -288,7 +288,7 @@ class GuestController extends Controller
             $userId = $ticket->user_id;
             $user = User::where('id', '=', $userId)->first();
             if ($user->role == 'user') {
-                $username = $user->user_name;
+                $username = $user->first_name;
             } else {
                 $username = $user->first_name.' '.$user->last_name;
             }

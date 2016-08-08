@@ -51,44 +51,44 @@ class="active"
 <!-- /breadcrumbs -->
 <!-- content -->
 @section('content')
-@if(Session::has('success'))
-<div class="alert alert-success alert-dismissable">
-    <i class="fa fa-ban"></i>
-    <b>Alert!</b> Success.
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    {{Session::get('success')}}
-</div>
-@endif
-<!-- fail message -->
-@if(Session::has('fails'))
-<div class="alert alert-danger alert-dismissable">
-    <i class="fa fa-ban"></i>
-    <b>Alert!</b> Failed.
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    {{Session::get('fails')}}
-</div>
-@endif
-<div id="alert21" class="alert alert-success alert-dismissable" style="display:none;">
-    <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">�</button>
-    <h4><i class="icon fa fa-check"></i>Alert!</h4>
-    <div id="message-success2"></div>
-</div>
-<div class="box">
-    <div class="box-header">
-        <h3 class="box-title">{!! Lang::get('lang.view_all_notifications')!!}</h3>
+    @if(Session::has('success'))
+    <div class="alert alert-success alert-dismissable">
+        <i class="fa fa-ban"></i>
+        <b>Alert!</b> Success.
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{Session::get('success')}}
     </div>
-    <!-- /.box-header -->
-    <div class="row">
-        <!-- Left col -->
-        <section class="col-lg-12">
-            <!-- Custom tabs (Charts with tabs)-->
+    @endif
+    <!-- fail message -->
+    @if(Session::has('fails'))
+    <div class="alert alert-danger alert-dismissable">
+        <i class="fa fa-ban"></i>
+        <b>Alert!</b> Failed.
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{Session::get('fails')}}
+    </div>
+    @endif
+    <div id="alert21" class="alert alert-success alert-dismissable" style="display:none;">
+        <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">�</button>
+        <h4><i class="icon fa fa-check"></i>Alert!</h4>
+        <div id="message-success2"></div>
+    </div>
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">{!! Lang::get('lang.view_all_notifications')!!}</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="row">
+                    <!-- Left col -->
+                    <section class="col-lg-12">
+                        <!-- Custom tabs (Charts with tabs)-->
 
 
 
 
-            <!-- TO DO List -->
-            <div class="box box-default">
-                <!--
+                        <!-- TO DO List -->
+                        <div class="box box-default">
+                            <!--
 <div class="box-header">
 <i class="ion ion-clipboard"></i>
 <h3 class="box-title">Task</h3>
@@ -107,103 +107,104 @@ class="active"
 </ul>
 </div>
 </div>
-                -->
+                            -->
+                            
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <ul class="todo-list">
+                                <?php $notifications123 = $notifications; ?>
+                                    @if(count($notifications123))
+                           
+                                    @foreach($notifications123 as $notification123)
+                                    <?php $user = App\User::whereId($notification123->user_id)->first(); ?>
+                                    @if($notification123->type == 'registration')
+                                    @if($notification123->is_read == 1)
+                                    <li class="task">
+                                        <!-- drag handle -->
 
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <ul class="todo-list">
-                        @if(count($notifications))
+                                        <!-- checkbox -->
+                                        <input type="checkbox" value="" name="cc" class="noti_User clickfun" id="{{$notification123 -> notification_id}}">
+                                        <label for='cl'  data-toggle="tooltip"  data-placement="top" title="Mark Read"><span></span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle" style="width:25px;height: 25px" alt="User Image" />
+                                            <!-- todo text -->
+                                            <h6 class="textcontent marginzero"><a href="{!! route('user.show', $notification123->notification_id) !!}" id="{{$notification123 -> notification_id}}" class='noti_User'>{!! $notification123->message !!}</a></h6>
+                                            <small class="label label-danger"><i class="fa fa-clock-o"></i> {{ $notification123 -> created_at }}</small></label> <!-- Emphasis label -->
 
-                        @foreach($notifications as $notification)
-                        <?php $user = App\User::whereId($notification->user_id)->first(); ?>
-                        @if($notification->type == 'registration')
-                        @if($notification->is_read == 1)
-                        <li class="task">
-                            <!-- drag handle -->
+                                        <!-- General tools such as edit or delete-->
+                                        <div class="tools">
+                                            <a href="{!! route('user.show', $notification123->notification_id) !!}"  data-toggle="tooltip"  data-placement="top" title="View" id="{{$notification123-> notification_id}}" class='noti_User'><i class="fa fa-eye"></i></a>
+                                            <a href="#" id='{{ $notification123->notification_id }}' data-toggle="tooltip"  data-placement="top" title="Delete" class='notification-delete clickfun'><i class="fa fa-trash-o"></i></a>
+                                        </div>
+                                    </li>
+                                    @else
+                                    <li>
+                                        <!-- drag handle -->
 
-                            <!-- checkbox -->
-                            <input type="checkbox" value="" name="cc" class="noti_User clickfun" id="{{$notification -> notification_id}}">
-                            <label for='cl'  data-toggle="tooltip"  data-placement="top" title="Mark Read"><span></span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle" style="width:25px;height: 25px" alt="User Image" />
-                                <!-- todo text -->
-                                <h6 class="textcontent marginzero"><a href="{!! route('user.show', $notification->notification_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>{!! $notification->message !!}</a></h6>
-                                <small class="label label-danger"><i class="fa fa-clock-o"></i> {{ $notification -> created_at }}</small></label> <!-- Emphasis label -->
+                                        <!-- checkbox -->
+                                        <input type="checkbox" value="" name="cc" class="noti_User clickfun" id="{{$notification123-> notification_id}}">
+                                        <label for='cl'  data-toggle="tooltip"  data-placement="top" title="Mark Read"><span></span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:25px;height: 25px"  alt="User Image" />
+                                            <!-- todo text -->
+                                            <h6 class="textcontent marginzero"><a href="{!! route('user.show', $notification123->notification_id) !!}" id="{{$notification123-> notification_id}}" class='noti_User'>{!! $notification123->message !!}</a></h6>
+                                            <small class="label label-danger"><i class="fa fa-clock-o"></i> {{ $notification123-> created_at }}</small></label> <!-- Emphasis label -->
 
-                            <!-- General tools such as edit or delete-->
-                            <div class="tools">
-                                <a href="{!! route('user.show', $notification->notification_id) !!}"  data-toggle="tooltip"  data-placement="top" title="View" id="{{$notification -> notification_id}}" class='noti_User'><i class="fa fa-eye"></i></a>
-                                <a href="#" id='{{ $notification->notification_id }}' data-toggle="tooltip"  data-placement="top" title="Delete" class='notification-delete clickfun'><i class="fa fa-trash-o"></i></a>
+                                        <!-- General tools such as edit or delete-->
+                                        <div class="tools">
+                                            <a href="{!! route('user.show', $notification123->notification_id) !!}"  data-toggle="tooltip"  data-placement="top" title="View" id="{{$notification123-> notification_id}}" class='noti_User'><i class="fa fa-eye"></i></a>
+                                            <a href="#" id='{{ $notification123->notification_id }}' data-toggle="tooltip"  data-placement="top" title="Delete" class='notification-delete clickfun'><i class="fa fa-trash-o"></i></a>
+                                        </div>
+                                    </li>
+                                    @endif
+                                    @else
+                                           @if($notification123->is_read == 1)
+                                    <li class="task">
+<?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification123-> model_id)->first(); ?>
+                                        <input type="checkbox" value="" name="cc"  data-toggle="tooltip"  data-placement="top" title="Mark Read" class="noti_User clickfun" id="{{$notification123-> notification_id}}">
+                                        <label for='cl'><span></span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:25px;height: 25px" alt="User Image" />
+                                            <h6 class="textcontent marginzero"><a href="{!! route('ticket.thread', $notification123->model_id) !!}" id='{{ $notification123->notification_id }}' class='noti_User'>{!! $notification123->message !!} with id "{!!$ticket_number->ticket_number!!}"</a></h6>
+                                            <small class="label label-info"><i class="fa fa-clock-o"></i> {{ $notification123-> created_at }}</small>
+                                        </label><div class="tools">
+                                            <a href="{!! route('ticket.thread', $notification123->model_id) !!}" id='{{ $notification123->notification_id }}'  data-toggle="tooltip"  data-placement="top" title="View" class='noti_User'><i class="fa fa-eye"></i></a>
+                                            <a href="#" id='{{ $notification123->notification_id }}' data-toggle="tooltip"  data-placement="top" title="Delete" class='notification-delete clickfun'><i class="fa fa-trash-o"></i></a>
+                                        </div>
+                                    </li>
+                                    @else
+                                                                        <li>
+<?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification123 -> model_id)->first(); ?>
+                                        <input type="checkbox" value="" name="cc"  data-toggle="tooltip"  data-placement="top" title="Mark Read" class="noti_User clickfun" id="{{$notification123-> notification_id}}">
+                                        <label for='cl'><span></span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:25px;height: 25px"  alt="User Image" />
+                                            <h6 class="textcontent marginzero"><a href="{!! route('ticket.thread', $notification123->model_id) !!}" id='{{ $notification123->notification_id }}' class='noti_User'>{!! $notification123->message !!} with id "{!!$ticket_number->ticket_number!!}"</a></h6>
+                                            <small class="label label-info"><i class="fa fa-clock-o"></i> {{ $notification123-> created_at }}</small>
+                                        </label><div class="tools">
+                                            <a href="{!! route('ticket.thread', $notification123->model_id) !!}" id='{{ $notification123->notification_id }}'  data-toggle="tooltip"  data-placement="top" title="View" class='noti_User'><i class="fa fa-eye"></i></a>
+                                            <a href="#" id='{{ $notification123->notification_id }}' data-toggle="tooltip"  data-placement="top" title="Delete" class='notification-delete clickfun'><i class="fa fa-trash-o"></i></a>
+                                        </div>
+                                    </li>
+                                    @endif
+                                    @endif
+                                    @endforeach
+
+                                    @else
+                                    <li>
+
+                                        <h6 class="textcontent marginzero">{!! Lang::get('lang.no_notification_available') !!}</h6>
+                                        <small class="label label-warning" ><i class="fa fa-bell-slash-o"></i></small>
+
+                                    </li>
+                                    @endif
+{!!$notifications123->render()!!}
+                                </ul>
                             </div>
-                        </li>
-                        @else
-                        <li>
-                            <!-- drag handle -->
 
-                            <!-- checkbox -->
-                            <input type="checkbox" value="" name="cc" class="noti_User clickfun" id="{{$notification -> notification_id}}">
-                            <label for='cl'  data-toggle="tooltip"  data-placement="top" title="Mark Read"><span></span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:25px;height: 25px"  alt="User Image" />
-                                <!-- todo text -->
-                                <h6 class="textcontent marginzero"><a href="{!! route('user.show', $notification->notification_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>{!! $notification->message !!}</a></h6>
-                                <small class="label label-danger"><i class="fa fa-clock-o"></i> {{ $notification -> created_at }}</small></label> <!-- Emphasis label -->
+                        </div>
+                        <!-- /.box -->
 
-                            <!-- General tools such as edit or delete-->
-                            <div class="tools">
-                                <a href="{!! route('user.show', $notification->notification_id) !!}"  data-toggle="tooltip"  data-placement="top" title="View" id="{{$notification -> notification_id}}" class='noti_User'><i class="fa fa-eye"></i></a>
-                                <a href="#" id='{{ $notification->notification_id }}' data-toggle="tooltip"  data-placement="top" title="Delete" class='notification-delete clickfun'><i class="fa fa-trash-o"></i></a>
-                            </div>
-                        </li>
-                        @endif
-                        @else
-                        @if($notification->is_read == 1)
-                        <li class="task">
-                            <?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification->model_id)->first(); ?>
-                            <input type="checkbox" value="" name="cc"  data-toggle="tooltip"  data-placement="top" title="Mark Read" class="noti_User clickfun" id="{{$notification -> notification_id}}">
-                            <label for='cl'><span></span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:25px;height: 25px" alt="User Image" />
-                                <h6 class="textcontent marginzero"><a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id }}' class='noti_User'>{!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"</a></h6>
-                                <small class="label label-info"><i class="fa fa-clock-o"></i> {{ $notification -> created_at }}</small>
-                            </label><div class="tools">
-                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id }}'  data-toggle="tooltip"  data-placement="top" title="View" class='noti_User'><i class="fa fa-eye"></i></a>
-                                <a href="#" id='{{ $notification->notification_id }}' data-toggle="tooltip"  data-placement="top" title="Delete" class='notification-delete clickfun'><i class="fa fa-trash-o"></i></a>
-                            </div>
-                        </li>
-                        @else
-                        <li>
-                            <?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification->model_id)->first(); ?>
-                            <input type="checkbox" value="" name="cc"  data-toggle="tooltip"  data-placement="top" title="Mark Read" class="noti_User clickfun" id="{{$notification -> notification_id}}">
-                            <label for='cl'><span></span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:25px;height: 25px"  alt="User Image" />
-                                <h6 class="textcontent marginzero"><a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id }}' class='noti_User'>{!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"</a></h6>
-                                <small class="label label-info"><i class="fa fa-clock-o"></i> {{ $notification -> created_at }}</small>
-                            </label><div class="tools">
-                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id }}'  data-toggle="tooltip"  data-placement="top" title="View" class='noti_User'><i class="fa fa-eye"></i></a>
-                                <a href="#" id='{{ $notification->notification_id }}' data-toggle="tooltip"  data-placement="top" title="Delete" class='notification-delete clickfun'><i class="fa fa-trash-o"></i></a>
-                            </div>
-                        </li>
-                        @endif
-                        @endif
-                        @endforeach
 
-                        @else
-                        <li>
-
-                            <h6 class="textcontent marginzero">{!! Lang::get('lang.no_notification_available') !!}</h6>
-                            <small class="label label-warning" ><i class="fa fa-bell-slash-o"></i></small>
-
-                        </li>
-                        @endif
-                        {!!$notifications->render()!!}
-                    </ul>
+                    </section>
                 </div>
 
+                <!-- /.box-body -->
             </div>
             <!-- /.box -->
-
-
-        </section>
-    </div>
-
-    <!-- /.box-body -->
-</div>
-<!-- /.box -->
-
+        
 <script>
     $(document).ready(function() {
         $(".clickfun").click(function() {
