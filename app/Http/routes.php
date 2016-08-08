@@ -16,12 +16,14 @@ Route::group(['middleware' => ['web']], function () {
             'auth' => 'Auth\AuthController',
             'password' => 'Auth\PasswordController',
         ]);
+        Route::get('social/login/redirect/{provider}', ['uses' => 'Auth\AuthController@redirectToProvider', 'as' => 'social.login']);
+        Route::get('social/login/{provider}', ['as'=>'social.login.callback','uses'=>'Auth\AuthController@handleProviderCallback']);
     });
     Route::get('account/activate/{token}', ['as' => 'account.activate', 'uses' => 'Auth\AuthController@accountActivate']);
     Route::get('getmail/{token}', 'Auth\AuthController@getMail');
     Route::get('verify-otp', ['as' => 'otp-verification', 'uses' => 'Auth\AuthController@getVerifyOTP']);
     Route::post('verify-otp', ['as' => 'otp-verification', 'uses' => 'Auth\AuthController@verifyOTP']);
-    Route::post('resend/opt', ['as' => 'resend-otp', 'uses' =>  'Auth\AuthController@resendOTP']);
+    Route::post('resend/opt', ['as' => 'resend-otp', 'uses' => 'Auth\AuthController@resendOTP']);
 
     /*
       |-------------------------------------------------------------------------------
@@ -193,7 +195,7 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->push(Lang::get('lang.edit'), url('sla/{sla}/edit'));
         });
         Route::resource('forms', 'Admin\helpdesk\FormController');
-        Route::get('forms/add-child/{formid}',['as'=>'forms.add.child','uses'=>'Admin\helpdesk\FormController@addChildForm']);
+        Route::get('forms/add-child/{formid}', ['as' => 'forms.add.child', 'uses' => 'Admin\helpdesk\FormController@addChildForm']);
         Route::post('forms/field/{fieldid}/child', [
             'as' => 'forms.field.child',
             'uses' => 'Admin\helpdesk\FormController@addChild',
@@ -456,9 +458,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('user-agen1', 'Agent\helpdesk\DashboardController@userChartData');
         Route::post('user-chart-range', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
         Route::resource('user', 'Agent\helpdesk\UserController'); /* User router is used to control the CRUD of user */
-        Route::get('user-export', ['as'=>'user.export','uses'=>'Agent\helpdesk\UserController@getExportUser']); /* User router is used to control the CRUD of user */
-        Route::post('user-export', ['as'=>'user.export.post','uses'=>'Agent\helpdesk\UserController@exportUser']); /* User router is used to control the CRUD of user */
-        
+        Route::get('user-export', ['as' => 'user.export', 'uses' => 'Agent\helpdesk\UserController@getExportUser']); /* User router is used to control the CRUD of user */
+        Route::post('user-export', ['as' => 'user.export.post', 'uses' => 'Agent\helpdesk\UserController@exportUser']); /* User router is used to control the CRUD of user */
+
         Breadcrumbs::register('user.index', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
             $breadcrumbs->push(Lang::get('lang.user_directory'), route('user.index'));
@@ -478,7 +480,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('user-list', ['as' => 'user.list', 'uses' => 'Agent\helpdesk\UserController@user_list']);
         // Route::get('user/delete/{id}', ['as' => 'user.delete' , 'uses' => 'Agent\helpdesk\UserController@destroy']);
         Route::resource('organizations', 'Agent\helpdesk\OrganizationController'); /* organization router used to deal CRUD function of organization */
-        Route::get('get-organization',['as'=>'org.get.ajax','uses'=>'Agent\helpdesk\OrganizationController@getOrgAjax']);
+        Route::get('get-organization', ['as' => 'org.get.ajax', 'uses' => 'Agent\helpdesk\OrganizationController@getOrgAjax']);
         Breadcrumbs::register('organizations.index', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
             $breadcrumbs->push(Lang::get('lang.organizations'), route('organizations.index'));
@@ -586,7 +588,7 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.create'), route('newticket'));
         });
         Route::get('/newticket/autofill', ['as' => 'post.newticket.autofill', 'uses' => 'Agent\helpdesk\TicketController@autofill']);
-        
+
         Route::post('/newticket/post', ['as' => 'post.newticket', 'uses' => 'Agent\helpdesk\TicketController@post_newticket']); /*  Post Create New Ticket */
         Route::get('/thread/{id}', ['as' => 'ticket.thread', 'uses' => 'Agent\helpdesk\TicketController@thread']); /*  Get Thread by ID */
         Breadcrumbs::register('ticket.thread', function ($breadcrumbs, $id) {
@@ -670,7 +672,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/get-closed-tickets/{id}', ['as' => 'get.dept.close', 'uses' => 'Agent\helpdesk\Ticket2Controller@getCloseTickets']);
         //in progress ticket of department
         Route::get('/get-under-process-tickets/{id}', ['as' => 'get.dept.inprocess', 'uses' => 'Agent\helpdesk\Ticket2Controller@getInProcessTickets']);
-        
+
         // route for graphical reporting
         Route::get('report', ['as' => 'report.index', 'uses' => 'Agent\helpdesk\ReportController@index']); /* To show dashboard pages */
         Breadcrumbs::register('report.index', function ($breadcrumbs) {
@@ -681,7 +683,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('help-topic-report', 'Agent\helpdesk\ReportController@chartdataHelptopic');
         // route to get the data on change
         Route::post('help-topic-report/{date1}/{date2}/{id}', ['as' => 'report.helptopic', 'uses' => 'Agent\helpdesk\ReportController@chartdataHelptopic']); /* To show dashboard pages */
-        Route::post('help-topic-pdf',['as' => 'help.topic.pdf', 'uses' => 'Agent\helpdesk\ReportController@helptopicPdf']);
+        Route::post('help-topic-pdf', ['as' => 'help.topic.pdf', 'uses' => 'Agent\helpdesk\ReportController@helptopicPdf']);
     });
     /*
       |------------------------------------------------------------------
@@ -1154,19 +1156,17 @@ Route::group(['middleware' => ['web']], function () {
     Breadcrumbs::register('queue.edit', function ($breadcrumbs) {
         $id = \Input::segment(2);
         $breadcrumbs->parent('queue');
-        $breadcrumbs->push(Lang::get('lang.edit'), route('queue.edit',$id));
+        $breadcrumbs->push(Lang::get('lang.edit'), route('queue.edit', $id));
     });
     Route::get('queue/{id}', ['as' => 'queue.edit', 'uses' => 'Job\QueueController@edit']);
     Route::post('queue/{id}', ['as' => 'queue.update', 'uses' => 'Job\QueueController@update']);
     Route::get('queue/{id}/activate', ['as' => 'queue.activate', 'uses' => 'Job\QueueController@activate']);
-    Route::get('get-ticket-number',['as'=>'get.ticket.number','uses'=>'Admin\helpdesk\SettingsController@getTicketNumber']);
-    Route::get('genereate-pdf/{threadid}',['as'=>'thread.pdf','uses'=>'Agent\helpdesk\TicketController@pdfThread']);
-    
+    Route::get('get-ticket-number', ['as' => 'get.ticket.number', 'uses' => 'Admin\helpdesk\SettingsController@getTicketNumber']);
+    Route::get('genereate-pdf/{threadid}', ['as' => 'thread.pdf', 'uses' => 'Agent\helpdesk\TicketController@pdfThread']);
+
     /**
      * Url Settings
      */
-    Route::get('url/settings',['as'=>'url.settings','uses'=>'Admin\helpdesk\UrlSettingController@settings']);
-    Route::patch('url/settings',['as'=>'url.settings.post','uses'=>'Admin\helpdesk\UrlSettingController@postSettings']);
-    
-    
-    });
+    Route::get('url/settings', ['as' => 'url.settings', 'uses' => 'Admin\helpdesk\UrlSettingController@settings']);
+    Route::patch('url/settings', ['as' => 'url.settings.post', 'uses' => 'Admin\helpdesk\UrlSettingController@postSettings']);
+});

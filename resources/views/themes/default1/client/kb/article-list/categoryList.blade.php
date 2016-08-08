@@ -32,13 +32,16 @@ class = "active"
                     <?php foreach ($article_id as $id) {
                         ?>
                         <?php
-                        $article = App\Model\kb\Article::where('id', $id)->get();
-                        $article = $article->where('status', 1);
-                        $article = $article->where('type', 1);
-                        $article = $article->orderBy('publish_time','desc');
+                        $article = App\Model\kb\Article::where('id', $id);
+                        if (!Auth::user() || Auth::user()->role == 'user') {
+                            $article = $article->where('status', 1);
+                            $article = $article->where('type', 1);
+                        }
+                        $article = $article->orderBy('publish_time', 'desc');
+                        $article = $article->get();
                         //dd($article);
                         ?>
-                        @foreach($article as $arti)
+                        @forelse($article as $arti)
                         <li class="article-entry image" style="margin-left: 50px;">
                             <h4><a href="{{url('show/'.$arti->slug)}}">{{$arti->name}}</a></h4>
                             <span class="article-meta">{{$arti->created_at->format('l, d-m-Y')}}
@@ -46,7 +49,9 @@ class = "active"
                                 <?php $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 55) ?>
                                 <p>{!!$excerpt!!} <a class="readmore-link" href="{{url('show/'.$arti->slug)}}">{!! Lang::get('lang.read_more') !!}</a></p>
                         </li>
-                        @endforeach
+                        @empty 
+                        <li>No articles available</li>
+                        @endforelse
                     <?php }
                     ?>
                 </ul>

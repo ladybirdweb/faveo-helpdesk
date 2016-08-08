@@ -13,7 +13,7 @@
         <title> @yield('title') {!! strip_tags($title_name) !!} </title>
         <!-- faveo favicon -->
         <link href="{{asset("lb-faveo/media/images/favicon.ico")}}"  rel="shortcut icon" >
-        
+
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- Bootstrap 3.3.2 -->
         <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
@@ -27,9 +27,9 @@
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
-        
+
         <link href="{{asset("lb-faveo/css/app.css")}}" rel="stylesheet" type="text/css" />
-        
+
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
 
         <!--[if lt IE 9]>
@@ -136,7 +136,8 @@
                                             } else {
                                                 ?> class="collapsed" 
                                         <?php }
-                                    } ?> 
+                                    }
+                                    ?> 
                                     data-target="#login-form">{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a></li>
                             </ul><!-- .navbar-login -->
                             @endif
@@ -169,6 +170,16 @@
                                 </ul>
                                 <button type="submit" class="btn btn-custom pull-right">{!! Lang::get('lang.login') !!}</button>
                                 {!! Form::close() !!}
+                                <div class="row">
+                                    <div class="col-md-6 col-md-offset-3">
+                                        <a class="btn btn-github" href="{{ route('social.login', ['github']) }}"><span class="fa fa-github"> Github</span></a>
+                                        <a class="btn btn-facebook" href="{{ route('social.login', ['facebook']) }}"><span class="fa fa-facebook"> Facebook</span></a>
+                                        <a class="btn btn-google-plus" href="{{ route('social.login', ['google']) }}"><span class="fa fa-google-plus"> Google</span></a>
+                                        <a class="btn btn-twitter" href="{{ route('social.login', ['twitter']) }}"><span class="fa fa-twitter"> Twitter</span></a>
+                                        <a class="btn btn-linkedin" href="{{ route('social.login', ['linkedin']) }}"><span class="fa fa-linkedin"> Linkedin</span></a>
+                                        <a class="btn btn-bitbucket" href="{{ route('social.login', ['bitbucket']) }}"><span class="fa fa-bitbucket"> Bitbucket</span></a>
+                                    </div>
+                                </div>
                             </div><!-- #login-form -->
                             @endif
                         </nav><!-- #site-navigation -->
@@ -378,17 +389,17 @@
             <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
             <!-- Slimscroll -->
             <script src="{{asset("lb-faveo/js/superfish.js")}}" type="text/javascript"></script>
-            
+
             <script src="{{asset("lb-faveo/js/mobilemenu.js")}}" type="text/javascript"></script>
-            
+
             <script src="{{asset("lb-faveo/js/know.js")}}" type="text/javascript"></script>
-            
+
             <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
-            
+
             <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
-            
+
             <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
-            
+
             <script>
 $(function () {
 //Enable check and uncheck all functionality

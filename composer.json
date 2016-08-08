@@ -33,7 +33,8 @@
         "predis/predis": "~1.0",
         "mremi/url-shortener": "^1.0",
         "maatwebsite/excel": "~2.1.0",
-        "laravelcollective/bus": "^5.2"
+        "laravelcollective/bus": "^5.2",
+        "laravel/socialite": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
