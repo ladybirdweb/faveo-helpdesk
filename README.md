@@ -1,5 +1,5 @@
 <h3>About Faveo</h3>  
-<br><img src="https://travis-ci.org/mverma16/faveo-helpdesk.svg?branch=master">&nbsp;<img src="https://img.shields.io/badge/License-OSL-blue.svg">&nbsp;<a href="https://gitter.im/ladybirdweb/faveo-helpdesk" target="_blank"><img src="https://badges.gitter.im/ladybirdweb/faveo-helpdesk.svg"></a>&nbsp;<a href="https://styleci.io/repos/52062487"><img src="https://styleci.io/repos/52062487/shield" alt="StyleCI" height="19px"></a>&nbsp;<a href="http://squizlabs.github.io/PHP_CodeSniffer/analysis/ladybirdweb/faveo-helpdesk/index.html" target="_blank"><img src="http://squizlabs.github.io/PHP_CodeSniffer/analysis/ladybirdweb/faveo-helpdesk/grade.svg" height="20px"></a>&nbsp;<a href="https://scrutinizer-ci.com/g/ladybirdweb/faveo-helpdesk/?branch=master" target="_blank"><img src="https://scrutinizer-ci.com/g/mverma16/faveo-helpdesk/badges/quality-score.png?b=master" height="20px"></a></br>
+<br><img src="https://travis-ci.org/ladybirdweb/faveo-helpdesk.svg?branch=master">&nbsp;<img src="https://img.shields.io/badge/License-OSL-blue.svg">&nbsp;<a href="https://gitter.im/ladybirdweb/faveo-helpdesk" target="_blank"><img src="https://badges.gitter.im/ladybirdweb/faveo-helpdesk.svg"></a>&nbsp;<a href="https://styleci.io/repos/34716238"><img src="https://styleci.io/repos/34716238/shield" alt="StyleCI" height="19px"></a>&nbsp;<a href="http://squizlabs.github.io/PHP_CodeSniffer/analysis/ladybirdweb/faveo-helpdesk/index.html" target="_blank"><img src="http://squizlabs.github.io/PHP_CodeSniffer/analysis/ladybirdweb/faveo-helpdesk/grade.svg" height="20px"></a>&nbsp;<a href="https://scrutinizer-ci.com/g/ladybirdweb/faveo-helpdesk/?branch=master" target="_blank"><img src="https://scrutinizer-ci.com/g/mverma16/faveo-helpdesk/badges/quality-score.png?b=master" height="20px"></a></br>
 <p>Headquartered in Bangalore, Faveo HELPDESK provides Businesses with an automated Helpdesk system to manage customer support. 
 <br/><br/>
 The word Faveo comes from Latin which means to be favourable. Which truly highlights vision and the scope as well as the functionality of the product that Faveo is. It is specifically designed to cater the needs of startups and SME’s empowering them with state of art, ticket based support system. In today’s competitive startup scenario customer retention is one of the major challenges. Handling client query diligently is all the difference between retaining or losing a long lasting relationship. The company is driven with passion of providing tools for managing consumer queries for strategic insights and helping companies take those decisive decisions.
@@ -17,14 +17,20 @@ Faveo is designed & developed by <a href="http://www.ladybirdweb.com/" target="_
 </ul>
 
 
-<h3><a id="user-content-faveo-user-manual" href="https://github.com/ladybirdweb/faveo-helpdesk#faveo-user-manual" aria-hidden="true"></a>Faveo User Manual</h3>
-<p>Check out Faveo Knowledge Base <a href="http://www.ladybirdweb.com/support/knowledgebase" target="_blank">here</a></p>
+<h3><a id="user-content-faveo-user-manual" href="https://github.com/ladybirdweb/faveo-helpdesk#faveo-user-manual" aria-hidden="true"></a>Faveo Documentation</h3>
+<ul>
+<li> <a href="http://www.ladybirdweb.com/support/knowledgebase" target="_blank">Faveo user Manual</a></li>
+<li><a href="https://docs.google.com/document/d/1TEUVyFSzlNRIQGHVK88rzBtYbhyk2FNb3TeekjfsXQA/" target="_blank">Faveo API Documentation</a></li>
+<li> <a href="https://docs.google.com/document/d/1pXpsQKcTyX5x6H4xA8unYxd5Duw2k94xt7wevTdoF_E/" target="_blank">Faveo Event List</a></li>
+<li> <a href="https://docs.google.com/document/d/1PGcpB19Vr42rM_DrCzC3snujzEL8N9Ocy0yewfPNWqU/" target="_blank">Faveo Plugin creation guide</a></li>
+</ul>
+
 <h3><a id="user-content-requirements" href="https://github.com/ladybirdweb/faveo-helpdesk#requirements" aria-hidden="true"></a>Requirements</h3>
 <p>To run Faveo your host just needs a couple of things:</p>
 <ul>
 <li> Web Server: Apache or IIS or Nginx</li>
 <li> PHP Version: 5.5+</li>
-<li> PHP Extensions: Mcrypt, OpenSSL, Mbstring, Imap, Tokenizer, Fileinfo</li>
+<li> PHP Extensions: Mcrypt, OpenSSL, Mbstring, Imap, Tokenizer</li>
 <li> Database: MySQL(5.0+) or Postgres or SQLite or SQL Server</li>
 <li> Web Server Extension: Pretty URLs or Search Engine Friendly URL's have to be enabled in your web server configuration</li>
 </ul>

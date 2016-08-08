@@ -1402,12 +1402,9 @@ if ($thread->title != "") {
                     var message = "{!! Lang::get('lang.your_ticket_have_been_closed') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
-                    setInterval(function(){
-                    $("#alert11").hide();
-                            setTimeout(function() {
-                            window.location = document.referrer;
-                            }, 500);
-                    }, 2000);
+                    setTimeout(function() {
+                        window.location = document.referrer;
+                    }, 500);
             }
     })
             return false;

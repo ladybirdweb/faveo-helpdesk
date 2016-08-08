@@ -208,7 +208,7 @@ class UserController extends Controller {
                 $orgid = $request->input('org_id');
                 $this->storeUserOrgRelation($user->id, $orgid);
                 // fetch user credentails to send mail
-                $name = $user->user_name;
+                $name = $user->first_name;
                 $email = $user->email;
                 if ($request->input('send_email')) {
                     try {

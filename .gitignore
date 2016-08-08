@@ -3,11 +3,8 @@
 example.env
 Homestead.yaml
 Homestead.json
-/app/config/
 /app/Plugins/Reseller/
 /app/Plugins/ServiceDesk/
-/config/app.php
-/config/database.php
 /config/lfm.php
 /nbproject/private/
 /node_modules
