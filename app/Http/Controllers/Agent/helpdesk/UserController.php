@@ -158,8 +158,8 @@ class UserController extends Controller {
         try {
             $location = GeoIP::getLocation('');
             $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
-
-            return view('themes.default1.agent.helpdesk.user.create')->with('phonecode', $phonecode->phonecode);
+            $org = Organization::lists('name','id')->toArray();
+            return view('themes.default1.agent.helpdesk.user.create',  compact('org'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->errorInfo[2]);
         }
@@ -265,8 +265,8 @@ class UserController extends Controller {
             $users = $user->whereId($id)->first();
             $location = GeoIP::getLocation('');
             $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
-
-            return view('themes.default1.agent.helpdesk.user.edit', compact('users'))->with('phonecode', $phonecode->phonecode);
+            $org = Organization::lists('name','id')->toArray();
+            return view('themes.default1.agent.helpdesk.user.edit', compact('users','org'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }

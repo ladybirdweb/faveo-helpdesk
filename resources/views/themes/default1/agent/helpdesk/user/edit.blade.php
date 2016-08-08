@@ -95,8 +95,8 @@ class="active"
             </div>
             <div class="col-xs-6 form-group {{ $errors->has('organization') ? 'has-error' : '' }}">
                 {!! Form::label('organization',Lang::get('lang.organization')) !!}
-                {!! Form::text('organization',$users->getOrganization(),['class' => 'form-control','id'=>'org']) !!}
-                {!! Form::hidden('org_id',null,['id'=>'field_id']) !!}
+                {!! Form::select('org_id',[''=>'Select','Organization'=>$org],null,['class' => 'form-control','id'=>'org']) !!}
+                
             </div>
         </div>
         <div class="row">     
@@ -166,7 +166,7 @@ class="active"
 </script>
 @stop
 @section('FooterInclude')
-<script>
+<!--<script>
     $('#org').autocomplete({
         minLength: 1,
         source: function (request, response) {
@@ -189,6 +189,6 @@ class="active"
         }
     });
 
-</script>
+</script>-->
 
 @stop

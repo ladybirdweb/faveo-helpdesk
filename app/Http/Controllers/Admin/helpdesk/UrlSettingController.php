@@ -28,6 +28,7 @@ class UrlSettingController extends Controller {
             $sting_ssl = $this->ssl($ssl);
             $string = $string_www.$sting_ssl;
             $this->writeHtaccess($string);
+            return redirect()->back()->with('success','updated');
         } catch (Exception $ex) {
             dd($ex);
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -85,7 +86,6 @@ RewriteRule ^(.*)$ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n";
         $content = file_get_contents($file);
         file_put_contents($file, $content . "#custom\n".$string);
         $new_content = file_get_contents($file);
-        dd($new_content);
     }
     
     public function deleteCustom(){
@@ -95,7 +95,6 @@ RewriteRule ^(.*)$ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n";
         if($custom_pos){
             $content = substr_replace($content, '',$custom_pos);
         }
-        //dd($trim);
         file_put_contents($file,$content);
     }
 
