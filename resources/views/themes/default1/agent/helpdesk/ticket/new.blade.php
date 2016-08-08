@@ -50,8 +50,8 @@ class="active"
             @if($errors->first('email'))
             <li class="error-message-padding">{!! $errors->first('email', ':message') !!}</li>
             @endif
-            @if($errors->first('user_name'))
-            <li class="error-message-padding">{!! $errors->first('user_name', ':message') !!}</li>
+            @if($errors->first('first_name'))
+            <li class="error-message-padding">{!! $errors->first('first_name', ':message') !!}</li>
             @endif
             @if($errors->first('phone'))
             <li class="error-message-padding">{!! $errors->first('phone', ':message') !!}</li>

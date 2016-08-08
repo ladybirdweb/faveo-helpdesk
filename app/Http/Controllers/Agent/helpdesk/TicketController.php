@@ -255,7 +255,7 @@ class TicketController extends Controller {
         try {
 //            dd($request);
             $email = $request->input('email');
-            $fullname = $request->input('user_name');
+            $fullname = $request->input('first_name');
             $helptopic = $request->input('helptopic');
             $sla = $request->input('sla');
             $duedate = $request->input('duedate');

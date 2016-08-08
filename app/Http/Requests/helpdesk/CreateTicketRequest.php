@@ -33,9 +33,7 @@ class CreateTicketRequest extends Request
         if ($check != 0) {
             return $check;
         }
-
         return [
-
             'email'     => 'required|email|max:60',
             'first_name'  => 'required|min:3|max:40',
             'helptopic' => 'required',
