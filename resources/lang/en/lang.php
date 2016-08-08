@@ -69,24 +69,25 @@ return [
       |   Register Page
       |--------------------------------------
      */
-    'registration'                                                => 'Registration',
-    'full_name'                                                   => 'Full name',
-    'firstname'                                                   => 'First Name',
-    'lastname'                                                    => 'Last Name',
-    'profilepicture'                                              => 'Profile Picture',
-    'oldpassword'                                                 => 'Old Password',
-    'newpassword'                                                 => 'New Password',
-    'retype_password'                                             => 'Retype Password',
-    'i_agree_to_the'                                              => 'I agree to the',
-    'terms'                                                       => 'terms',
-    'register'                                                    => 'Register',
-    'i_already_have_a_membership'                                 => 'I already have a membership',
-    'see-profile1'                                                => 'Click here to see ',
-    'see-profile2'                                                => 's profile',
-    'activate_your_account_click_on_Link_that_send_to_your_mail'  => 'Activate Your Account ! Click on Link that send to your mail',
-    'this_field_do_not_match_our_records'                         => 'This Field do not match our records.',
-    'we_have_e-mailed_your_password_reset_link'                   => 'We have e-mailed your password reset link!',
-    "we_can't_find_a_user_with_that_e-mail_address"               => "We can't find a user with that e-mail address.",
+    'registration'                                                         => 'Registration',
+    'full_name'                                                            => 'Full name',
+    'firstname'                                                            => 'First Name',
+    'lastname'                                                             => 'Last Name',
+    'profilepicture'                                                       => 'Profile Picture',
+    'oldpassword'                                                          => 'Old Password',
+    'newpassword'                                                          => 'New Password',
+    'retype_password'                                                      => 'Retype Password',
+    'i_agree_to_the'                                                       => 'I agree to the',
+    'terms'                                                                => 'terms',
+    'register'                                                             => 'Register',
+    'i_already_have_a_membership'                                          => 'I already have a membership',
+    'see-profile1'                                                         => 'Click here to see ',
+    'see-profile2'                                                         => 's profile',
+    'activate_your_account_click_on_Link_that_send_to_your_mail'           => 'Activate Your Account ! Click on Link that we\'ve sent to your mail',
+    'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble' => 'Activate Your Account ! Click on Link that we\'ve sent to your mail or login to your account and enter the OTP code we\'ve sent on your mobile number',
+    'this_field_do_not_match_our_records'                                  => 'This Field do not match our records.',
+    'we_have_e-mailed_your_password_reset_link'                            => 'We have e-mailed your password reset link!',
+    "we_can't_find_a_user_with_that_e-mail_address"                        => "We can't find a user with that e-mail address.",
 
 
     /*
@@ -1439,4 +1440,15 @@ return [
     "format"=>'Format',
     "ticket-number-format"=>'This setting is used to generate ticket numbers. Use hash signs (`#`) where digits are to be placed & dollar sign(‘$’) where characters are to be placed . Any other text in the number format will be preserved. ',
     "ticket-number-type"=>'Choose a sequence from which to derive new ticket numbers. The system has a incrementing sequence and a random sequence by default',
+    
+    /**----------------------------------------------------------------------------------------------------
+     * Social media integration
+     * ---------------------------------------------------------------------------------------------------------
+     */
+    
+    "client_id"=>"Client id",
+    "client_secret"=>"Client Secret",
+    "redirect"=>"Redirect Url",
+    "details"=>'Details',
+    "social-media"=>"Social Media",
 ];

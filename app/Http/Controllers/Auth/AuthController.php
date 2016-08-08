@@ -26,6 +26,7 @@ use Mail;
 use DateTime;
 use input;
 use Socialite;
+use App\Http\Controllers\Admin\helpdesk\SocialMediaController;
 
 /**
  * ---------------------------------------------------
@@ -49,6 +50,7 @@ class AuthController extends Controller {
     /* Direct After Logout */
     protected $redirectAfterLogout = '/';
     protected $loginPath = '/auth/login';
+    protected $social;
 
     /**
      * Create a new authentication controller instance.
@@ -58,8 +60,9 @@ class AuthController extends Controller {
      *
      * @return void
      */
-    public function __construct(PhpMailController $PhpMailController) {
+    public function __construct(PhpMailController $PhpMailController, SocialMediaController $social) {
         $this->PhpMailController = $PhpMailController;
+        $social->configService();
         $this->middleware('guest', ['except' => ['getLogout', 'verifyOTP']]);
     }
 
@@ -68,20 +71,27 @@ class AuthController extends Controller {
     }
 
     public function handleProviderCallback($provider) {
-        //notice we are not doing any validation, you should do it
+        try {
+            //notice we are not doing any validation, you should do it
 
-        $user = Socialite::driver($provider)->user();
+            $user = Socialite::driver($provider)->user();
+            if ($user) {
+                // stroing data to our use table and logging them in
+                $data = [
+                    'first_name' => $user->getName(),
+                    'email' => $user->getEmail(),
+                    'user_name' => $user->getEmail(),
+                    'role' => 'user',
+                    'active' => 1,
+                ];
 
-        // stroing data to our use table and logging them in
-        $data = [
-            'name' => $user->getName(),
-            'email' => $user->getEmail()
-        ];
-
-        Auth::login(User::firstOrCreate($data));
-
-        //after login redirecting to home page
-        return redirect($this->redirectPath());
+                Auth::login(User::firstOrCreate($data));
+            }
+            //after login redirecting to home page
+            return redirect('/');
+        } catch (\Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
     }
 
     /**
@@ -129,6 +139,7 @@ class AuthController extends Controller {
         $code = str_random(60);
         $user->remember_token = $code;
         $user->save();
+        $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $message12 = '';
         $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/' . $code)]);
         if ($var == null) {
@@ -136,7 +147,11 @@ class AuthController extends Controller {
 
             return redirect('home')->with('warning', $message12);
         } else {
-            $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
+            if ($settings->status == 1 || $settings->status == '1') {
+                $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_and_moble');
+            } else {
+                $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
+            }
         }
 
         // Event for login
@@ -463,5 +478,7 @@ class AuthController extends Controller {
                     ->update(["updated_at" => date('Y-m-d H:i:s')]);
         }
     }
+
+    
 
 }

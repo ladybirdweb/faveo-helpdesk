@@ -533,6 +533,19 @@
                         <p class="box-title" >{!! Lang::get('lang.social') !!}</p>
                     </div>
                 </div>
+                
+                <div class="col-md-2 col-sm-6">
+                    <div class="settingiconblue">
+                        <div class="settingdivblue">
+                            <a href="{{ url('social/media') }}">
+                                <span class="fa-stack fa-2x">
+                                    <i class="fa fa-medium fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <p class="box-title" >Social media integration</p>
+                    </div>
+                </div>
                 <!--/.col-md-2-->                                        
             </div>
         </div>

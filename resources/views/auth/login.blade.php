@@ -73,4 +73,6 @@
 <a href="{{url('password/email')}}">{!! Lang::get("lang.iforgot") !!}</a><br>
 <a href="{{url('auth/register')}}" class="text-center">{!! Lang::get("lang.register") !!}</a>
 <!-- /.login-page -->
+
+@include('themes.default1.client.layout.social-login')
 @stop

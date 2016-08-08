@@ -17,6 +17,9 @@ use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Utility\CountryCode;
 use App\Model\helpdesk\Settings\CommonSettings;
+use App\Http\Requests\helpdesk\OtpVerifyRequest;
+
+use App\Model\helpdesk\Utility\Otp;
 use App\User;
 use Auth;
 // classes
@@ -26,6 +29,7 @@ use Hash;
 use Illuminate\Http\Request;
 use Input;
 use Lang;
+use DateTime;
 
 /**
  * GuestController.
@@ -52,14 +56,17 @@ class GuestController extends Controller
       *
       * @return type Response
       */
-     public function getProfile(CountryCode $code)
-     {
-         $user = Auth::user();
-         $location = GeoIP::getLocation('');
-         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
-
-         return view('themes.default1.client.helpdesk.profile', compact('user'))->with('phonecode', $phonecode->phonecode);
-     }
+    public function getProfile(CountryCode $code)
+    {
+        $user = Auth::user();
+        $location = GeoIP::getLocation('');
+        $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+        $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
+        $status = $settings->status;
+        return view('themes.default1.client.helpdesk.profile', compact('user'))
+            ->with(['phonecode' => $phonecode->phonecode,
+                    'verify' => $status]);
+    }
 
     /**
      * Save profile data.
@@ -352,5 +359,52 @@ class GuestController extends Controller
         }
 
         return $company;
+    }
+
+    public function resendOTP(OtpVerifyRequest $request)
+    {
+        // dd($request->input());
+        if (!\Schema::hasTable('user_verfication')) {
+            \Event::fire(new \App\Events\LoginEvent($request));
+            return 1;
+        } else {
+            return "Plugin has not been setup successfully.";
+        }
+    }
+
+    public function verifyOTP()
+    {
+        // dd(Input::all());
+        // $user = User::select('id', 'mobile', 'user_name')->where('email', '=', $request->input('email'))->first();
+        $otp_length = strlen(Input::get('otp'));
+        if(($otp_length == 6 && !preg_match("/[a-z]/i", Input::get('otp'))) ) {
+            $otp2 = Hash::make(Input::get('otp'));
+            $otp = Otp::select('otp', 'updated_at')->where('user_id', '=', Input::get('u_id'))
+                                ->first();
+            $date1 = date_format($otp->updated_at, "Y-m-d h:i:sa");
+            $date2 = date("Y-m-d h:i:sa");
+            $time1 = new DateTime($date2);
+            $time2 = new DateTime($date1);
+            $interval = $time1->diff($time2);
+            if($interval->i >10 || $interval->h >0){
+                $message = Lang::get('lang.otp-expired');
+                return $message;
+            } else {
+                if (Hash::check(Input::get('otp'), $otp->otp)){
+                    Otp::where('user_id', '=', Input::get('u_id'))
+                        ->update(['otp' => '']);
+                    // User::where('id', '=', $user->id)
+                    //     ->update(['active' => 1]);
+                    // $this->openTicketAfterVerification($user->id);
+                    return 1;
+                } else {
+                    $message = Lang::get('lang.otp-not-matched');
+                    return $message;
+                }
+            }
+        } else {
+            $message = Lang::get('lang.otp-invalid');
+            return $message;
+        }
     }
 }
