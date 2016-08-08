@@ -484,10 +484,10 @@ class TicketController extends Controller
         $user_id = $tickets->user_id;
         $user = User::where('id', '=', $user_id)->first();
         $email = $user->email;
-        $user_name = $user->user_name;
+        $user_name = $user->first_name;
         $ticket_number = $tickets->ticket_number;
         $company = $this->company();
-        $username = $ticket_user->user_name;
+        $username = $ticket_user->first_name;
         if (!empty(Auth::user()->agent_sign)) {
             $agentsign = Auth::user()->agent_sign;
         } else {

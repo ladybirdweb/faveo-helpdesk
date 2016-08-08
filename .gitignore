@@ -1,6 +1,5 @@
 # Please try and keep this file organized by alphabetical order. Single files first, then directories.
 .env
-example.env
 Homestead.yaml
 Homestead.json
 /app/Plugins/Reseller/
