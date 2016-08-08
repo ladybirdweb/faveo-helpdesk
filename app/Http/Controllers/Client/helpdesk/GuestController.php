@@ -319,7 +319,6 @@ class GuestController extends Controller
      */
     public function get_ticket_email($id, CommonSettings $common_settings)
     {
-        $id1 = \Crypt::decrypt($id);
         $common_setting = $common_settings->select('status')
                 ->where('option_name', '=', 'user_set_ticket_status')
                 ->first();
