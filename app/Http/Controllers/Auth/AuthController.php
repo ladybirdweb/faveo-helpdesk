@@ -129,6 +129,7 @@ class AuthController extends Controller {
         $code = str_random(60);
         $user->remember_token = $code;
         $user->save();
+        $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $message12 = '';
         $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/' . $code)]);
         if ($var == null) {
@@ -136,7 +137,11 @@ class AuthController extends Controller {
 
             return redirect('home')->with('warning', $message12);
         } else {
-            $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
+            if ($settings->status == 1 || $settings->status == '1') {
+                $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_and_moble');
+            } else {
+                $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
+            }
         }
 
         // Event for login

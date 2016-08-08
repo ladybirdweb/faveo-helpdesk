@@ -756,6 +756,14 @@ Route::group(['middleware' => ['web']], function () {
         Route::patch('client-profile-edit', 'Client\helpdesk\GuestController@postProfile'); /* User Profile Post */
         Route::patch('client-profile-password', 'Client\helpdesk\GuestController@postProfilePassword'); /*  Profile Password Post */
         Route::post('post/reply/{id}', ['as' => 'client.reply', 'uses' => 'Client\helpdesk\ClientTicketController@reply']);
+        Route::post('verify-client-number', ['as' => 'client-verify-number', 'uses' => 'Client\helpdesk\GuestController@resendOTP']);
+        Breadcrumbs::register('client-verify-number', function ($breadcrumbs) {
+            $breadcrumbs->push('Profile', route('client-verify-number'));
+        });
+        Route::post('verify-client-number2', ['as' => 'post-client-verify-number', 'uses' => 'Client\helpdesk\GuestController@verifyOTP']);
+        Breadcrumbs::register('post-client-verify-number', function ($breadcrumbs) {
+            $breadcrumbs->push('My Profile', route('post-client-verify-number'));
+        });
     });
 //====================================================================================
     Route::get('checkticket', 'Client\helpdesk\ClientTicketController@getCheckTicket'); /* Check your Ticket */
