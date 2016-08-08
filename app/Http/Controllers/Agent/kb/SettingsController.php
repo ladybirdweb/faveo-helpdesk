@@ -138,19 +138,18 @@ class SettingsController extends Controller
     public function getData()
     {
         return \Datatable::collection(Comment::All())
-                        ->searchColumns('name', 'email', 'comment', 'created')
-                        ->orderColumns('name')
-                        ->addColumn('name', function ($model) {
-                            return $model->name;
+                        ->searchColumns('details', 'comment', 'created')
+                        ->orderColumns('details')
+                        ->addColumn('details', function ($model) {
+                            $name = "<p>$model->name</p><br>";
+                            $email = "<p>$model->email</p><br>";
+                            $website = "<p>$model->website</p><br>";
+                            return $name.$email.$website;
                         })
-                        ->addColumn('email', function ($model) {
-                            return $model->email;
-                        })
-                        ->addColumn('website', function ($model) {
-                            return $model->website;
-                        })
+                        
                         ->addColumn('comment', function ($model) {
-                            return $model->comment;
+                            $created =  TicketController::usertimezone(date($model->created_at));
+                            return $model->comment."<p>$created</p>";
                         })
                         ->addColumn('status', function ($model) {
                             $status = $model->status;
@@ -160,11 +159,9 @@ class SettingsController extends Controller
                                 return '<p style="color:red"">'.\Lang::get('lang.not_published');
                             }
                         })
-                        ->addColumn('Created', function ($model) {
-                            return TicketController::usertimezone(date($model->created_at));
-                        })
+                        
                         ->addColumn('Actions', function ($model) {
-                            return '<a href=comment/delete/'.$model->id.' class="btn btn-danger btn-xs">'.\Lang::get('lang.delete').'</a>&nbsp;<a href=published/'.$model->id.' class="btn btn-warning btn-xs">'.\Lang::get('lang.publish').'</a>';
+                            return '<div class="row"><div class="col-md-12"><a href=comment/delete/'.$model->id.' class="btn btn-danger btn-xs">'.\Lang::get('lang.delete').'</a></div><div class="col-md-12"><a href=published/'.$model->id.' class="btn btn-warning btn-xs">'.\Lang::get('lang.publish').'</a></div></div>';
                         })
                         ->make();
     }

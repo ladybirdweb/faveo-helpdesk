@@ -34,12 +34,9 @@ class="active"
         <div class="row">
             <div class="col-sm-12">
                 {!! Datatable::table()
-                ->addColumn(Lang::get('lang.name'), 
-                Lang::get('lang.email'), 
-                Lang::get('lang.website'),
+                ->addColumn(Lang::get('lang.details'), 
                 Lang::get('lang.comment'),
                 Lang::get('lang.status'),
-                Lang::get('lang.created'),
                 Lang::get('lang.action'))       // these are the column headings to be shown
                 ->setUrl(route('api.comment'))   // this is the route where data will be retrieved
                 ->render() !!}

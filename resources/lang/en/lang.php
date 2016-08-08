@@ -1440,4 +1440,15 @@ return [
     "format"=>'Format',
     "ticket-number-format"=>'This setting is used to generate ticket numbers. Use hash signs (`#`) where digits are to be placed & dollar sign(‘$’) where characters are to be placed . Any other text in the number format will be preserved. ',
     "ticket-number-type"=>'Choose a sequence from which to derive new ticket numbers. The system has a incrementing sequence and a random sequence by default',
+    
+    /**----------------------------------------------------------------------------------------------------
+     * Social media integration
+     * ---------------------------------------------------------------------------------------------------------
+     */
+    
+    "client_id"=>"Client id",
+    "client_secret"=>"Client Secret",
+    "redirect"=>"Redirect Url",
+    "details"=>'Details',
+    "social-media"=>"Social Media",
 ];

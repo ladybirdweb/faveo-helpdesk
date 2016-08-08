@@ -135,49 +135,49 @@
                                                 
                                             } else {
                                                 ?> class="collapsed" 
-                                        <?php }
+                                            <?php
+                                        }
                                     }
                                     ?> 
                                     data-target="#login-form">{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a></li>
                             </ul><!-- .navbar-login -->
                             @endif
                             <div id="login-form" @if(isset($errors))<?php if ($errors->first('email') || $errors->first('password')) { ?> class="login-form collapse fade clearfix in" <?php } else { ?> class="login-form collapse fade clearfix" <?php } ?>@endif >
-                                 {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}
-                                 @if(Session::has('errors'))
-                                 @if(Session::has('check'))
-<?php goto b; ?>
-                                 @endif
-                                 <div class="alert alert-danger alert-dismissable">
-                                    @if(Session::has('error'))
-                                    {!! Session::get('error') !!}
-                                    @else
-                                    {!! Lang::get('lang.required-error') !!}
-                                    @endif
+                                 <div class="row">
+                                    <div class="col-md-12">
+                                        {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}
+                                        @if(Session::has('errors'))
+                                        @if(Session::has('check'))
+                                        <?php goto b; ?>
+                                        @endif
+                                        <div class="alert alert-danger alert-dismissable">
+                                            @if(Session::has('error'))
+                                            {!! Session::get('error') !!}
+                                            @else
+                                            {!! Lang::get('lang.required-error') !!}
+                                            @endif
+                                        </div>
+                                        <?php b: ?>
+                                        @endif
+                                        <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('email') ? 'has-error' : '' !!} @endif">
+                                            {!! Form::text('email',null,['placeholder'=>Lang::get('lang.e-mail'),'class' => 'form-control']) !!}
+                                            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                                        </div>
+                                        <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('password') ? 'has-error' : '' !!} @endif">
+                                            {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}
+                                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                                        </div>
+                                        <ul class="list-unstyled pull-left">
+                                            <li><a href="{{url('password/email')}}">{!! Lang::get('lang.forgot_password') !!}</a><br></li>
+                                            <li><a href="{{url('auth/register')}}">{!! Lang::get('lang.create_account') !!}</a></li>
+                                        </ul>
+                                        <button type="submit" class="btn btn-custom pull-right">{!! Lang::get('lang.login') !!}</button>
+                                        {!! Form::close() !!}
+                                    </div>
                                 </div>
-<?php b: ?>
-                                @endif
-                                <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('email') ? 'has-error' : '' !!} @endif">
-                                    {!! Form::text('email',null,['placeholder'=>Lang::get('lang.e-mail'),'class' => 'form-control']) !!}
-                                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                                </div>
-                                <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('password') ? 'has-error' : '' !!} @endif">
-                                    {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}
-                                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                                </div>
-                                <ul class="list-unstyled pull-left">
-                                    <li><a href="{{url('password/email')}}">{!! Lang::get('lang.forgot_password') !!}</a><br></li>
-                                    <li><a href="{{url('auth/register')}}">{!! Lang::get('lang.create_account') !!}</a></li>
-                                </ul>
-                                <button type="submit" class="btn btn-custom pull-right">{!! Lang::get('lang.login') !!}</button>
-                                {!! Form::close() !!}
                                 <div class="row">
-                                    <div class="col-md-6 col-md-offset-3">
-                                        <a class="btn btn-github" href="{{ route('social.login', ['github']) }}"><span class="fa fa-github"> Github</span></a>
-                                        <a class="btn btn-facebook" href="{{ route('social.login', ['facebook']) }}"><span class="fa fa-facebook"> Facebook</span></a>
-                                        <a class="btn btn-google-plus" href="{{ route('social.login', ['google']) }}"><span class="fa fa-google-plus"> Google</span></a>
-                                        <a class="btn btn-twitter" href="{{ route('social.login', ['twitter']) }}"><span class="fa fa-twitter"> Twitter</span></a>
-                                        <a class="btn btn-linkedin" href="{{ route('social.login', ['linkedin']) }}"><span class="fa fa-linkedin"> Linkedin</span></a>
-                                        <a class="btn btn-bitbucket" href="{{ route('social.login', ['bitbucket']) }}"><span class="fa fa-bitbucket"> Bitbucket</span></a>
+                                    <div class="col-md-12">
+                                        @include('themes.default1.client.layout.social-login')
                                     </div>
                                 </div>
                             </div><!-- #login-form -->
@@ -225,7 +225,7 @@
                             <!-- failure message -->
                             @if(Session::has('fails'))
                             @if(Session::has('check'))
-<?php goto a; ?>
+                            <?php goto a; ?>
                             @endif
                             <div class="alert alert-danger alert-dismissable">
                                 <i class="fa fa-ban"></i>
@@ -233,7 +233,7 @@
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                 {{Session::get('fails')}}
                             </div>
-<?php a: ?>
+                            <?php a: ?>
                             @endif
                             @yield('content')
                             <div id="sidebar" class="site-sidebar col-md-3">
@@ -320,7 +320,7 @@
                             <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
                         </div>
                         <div class="site-social text-right col-md-6">
-<?php $socials = App\Model\helpdesk\Theme\Widgets::all(); ?>
+                            <?php $socials = App\Model\helpdesk\Theme\Widgets::all(); ?>
                             <ul class="list-inline hidden-print">
                                 @foreach($socials as $social)
                                 @if($social->name == 'facebook')

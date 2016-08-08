@@ -1177,4 +1177,20 @@ Route::group(['middleware' => ['web']], function () {
      */
     Route::get('url/settings', ['as' => 'url.settings', 'uses' => 'Admin\helpdesk\UrlSettingController@settings']);
     Route::patch('url/settings', ['as' => 'url.settings.post', 'uses' => 'Admin\helpdesk\UrlSettingController@postSettings']);
+    
+    /**
+     * Social media settings
+     */
+    Breadcrumbs::register('social', function ($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.social-media'), route('social'));
+    });
+    Breadcrumbs::register('social.media', function ($breadcrumbs) {
+         $id = \Input::segment(2);
+        $breadcrumbs->parent('social');
+        $breadcrumbs->push(Lang::get('lang.settings'), route('social.media',$id));
+    });
+    Route::get('social/media',['as'=>'social','uses'=>'Admin\helpdesk\SocialMediaController@index']);
+    Route::get('social/media/{provider}',['as'=>'social.media','uses'=>'Admin\helpdesk\SocialMediaController@settings']);
+    Route::post('social/media/{provider}',['as'=>'social.media.post','uses'=>'Admin\helpdesk\SocialMediaController@postSettings']);
 });
