@@ -1451,4 +1451,27 @@ return [
     "redirect"=>"Redirect Url",
     "details"=>'Details',
     "social-media"=>"Social Media",
+    
+    /**----------------------------------------------------------------------------------------------
+     * Report
+     * ----------------------------------------------------------------------------------------------
+     */
+    
+    'report' => 'Report',
+    'Report' => 'REPORT',
+    'start_date' => 'Start Date',
+    'end_date'   => 'End Date',
+    'select'    =>  'Select',
+    'generate'  =>  'Generate',
+    'day'       =>  'Day',
+    'week'      =>  'Week',
+    'month'     =>  'Month',
+    'Currnet_In_Progress'   =>  'CURRENT IN PROGRESS',
+    'Total_Created'     => 'TOTAL CREATED',
+    'Total_Reopened'    =>  'TOTAL REOPENED',
+    'Total_Closed'      =>  'TOTAL CLOSED',
+    'tabular'           =>  'Tabular',
+    
+    
+    
 ];

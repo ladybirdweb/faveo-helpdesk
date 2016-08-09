@@ -141,7 +141,7 @@ class="active"
             <div  class="form-group">
                 <div class="row">
                     <div class='col-sm-2'>
-                        {!! Form::label('date', 'Date:',['class' => 'lead']) !!}
+                        {!! Form::label('date', 'Start Date:',['class' => 'lead']) !!}
                         {!! Form::text('start_date',null,['class'=>'form-control','id'=>'datepicker4'])!!}
                     </div>
                     <?php

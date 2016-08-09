@@ -95,7 +95,9 @@
                             <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
-                            <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
+                            @if(Auth::user()->role == 'admin')
+                                <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
+                            @endif
                         </ul>
                         @else
                             <?php \Event::fire('service.desk.agent.topbar', array()); ?>
@@ -212,9 +214,7 @@
                             <div class="col-xs-3"></div>
                             <div class="col-xs-2" style="width:50%;">
                                 <a href="{!! url('profile') !!}">
-
                                     <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-
                                 </a>
                             </div>
                         </div>
@@ -289,23 +289,24 @@
                         }
                         ?>
                         <li @yield('inbox')>
-                             <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
-                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green"><?php echo count($tickets); ?></small>                                            </a>
+                            <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
+                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green"><?php echo count($tickets); ?></small>                                            
+                            </a>
                         </li>
                         <li @yield('myticket')>
-                             <a href="{{url('ticket/myticket')}}" id="load-myticket">
+                            <a href="{{url('ticket/myticket')}}" id="load-myticket">
                                 <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!} </span>
                                 <small class="label pull-right bg-green">{{count($myticket)}}</small>
                             </a>
                         </li>
                         <li @yield('unassigned')>
-                             <a href="{{url('unassigned')}}" id="load-unassigned">
+                            <a href="{{url('unassigned')}}" id="load-unassigned">
                                 <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
                                 <small class="label pull-right bg-green">{{count($unassigned)}}</small>
                             </a>
                         </li>
                         <li @yield('overdue')>
-                             <a href="{{url('ticket/overdue')}}" id="load-unassigned">
+                            <a href="{{url('ticket/overdue')}}" id="load-unassigned">
                                 <i class="fa fa-calendar-times-o"></i> <span>{!! Lang::get('lang.overdue') !!}</span>
                                 <small class="label pull-right bg-green">{{$overdue_ticket}}</small>
                             </a>
@@ -353,7 +354,6 @@
                             <?php }
                         }
                         ?>
-
                         @endif
 <?php \Event::fire('service.desk.agent.sidebar', array()); ?>
                     </ul>
@@ -363,7 +363,6 @@
             <?php
             $agent_group = Auth::user()->assign_group;
             $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
-// dd($group);
             ?>
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
@@ -402,20 +401,20 @@
                                     <li id="bar" @yield('kb')><a href="{{ url('/comment')}}" >{!! Lang::get('lang.knowledge_base') !!}</a></li>
                                 </ul>
                             </div>
+                            @if(Auth::user()->role == 'admin')
+                                <div class="tabs-pane @yield('report-bar')" id="tabD">
+                                    <ul class="nav navbar-nav">
+                                    </ul>
+                                </div>
+                            @endif
                             @endif
 <?php \Event::fire('service.desk.agent.topsubbar', array()); ?>
                         </div>
                     </div>
                 </div>
                 <section class="content-header">
-                    <!--<div class="row">-->
-                    <!--<div class="col-md-6">-->
                     @yield('PageHeader')
-                    <!--</div>-->
-                    <!--<div class="pull-right">-->
                     {!! Breadcrumbs::renderIfExists() !!}
-                    <!--</div>-->
-                    <!--</div>-->
                 </section>
                 <!-- Main content -->
                 <section class="content">
@@ -475,7 +474,6 @@
                         cache: false,
                         success: function (html)
                         {
-
                         }
                 });
         });
