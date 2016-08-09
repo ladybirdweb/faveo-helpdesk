@@ -960,14 +960,23 @@ class TicketController extends Controller {
         $ticket->source = $source;
         $ticket_status = $this->checkUserVerificationStatus();
         //dd($ticket_status);
-        if ($ticket_status == 1 && $user_status->active == 1) {
+        if ($ticket_status == 0) {
+            //check if user active then allow ticket creation else create unverified ticket
+            if ($user_status->active == 1) {
+                if ($status == null) {
+                    $ticket->status = 1;
+                } else {
+                    $ticket->status = $status;
+                }
+            } else {
+                $ticket->status = 6;
+            }
+        } else {
             if ($status == null) {
                 $ticket->status = 1;
             } else {
                 $ticket->status = $status;
             }
-        } else {
-            $ticket->status = 6;
         }
         $ticket->save();
 
