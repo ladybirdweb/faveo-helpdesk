@@ -1190,7 +1190,7 @@ Route::group(['middleware' => ['web']], function () {
         $breadcrumbs->parent('social');
         $breadcrumbs->push(Lang::get('lang.settings'), route('social.media',$id));
     });
-    Route::get('social/media',['as'=>'social','uses'=>'Admin\helpdesk\SocialMediaController@index']);
-    Route::get('social/media/{provider}',['as'=>'social.media','uses'=>'Admin\helpdesk\SocialMediaController@settings']);
-    Route::post('social/media/{provider}',['as'=>'social.media.post','uses'=>'Admin\helpdesk\SocialMediaController@postSettings']);
+    Route::get('social/media',['as'=>'social','uses'=>'Admin\helpdesk\SocialMedia\SocialMediaController@index']);
+    Route::get('social/media/{provider}',['as'=>'social.media','uses'=>'Admin\helpdesk\SocialMedia\SocialMediaController@settings']);
+    Route::post('social/media/{provider}',['as'=>'social.media.post','uses'=>'Admin\helpdesk\SocialMedia\SocialMediaController@postSettings']);
 });

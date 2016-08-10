@@ -80,7 +80,6 @@ abstract class Server
         $uri = $this->urlTemporaryCredentials();
 
         $client = $this->createHttpClient();
-
         $header = $this->temporaryCredentialsProtocolHeader($uri);
         $authorizationHeader = array('Authorization' => $header);
         $headers = $this->buildHttpClientHeaders($authorizationHeader);

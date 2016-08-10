@@ -26,7 +26,7 @@ use Mail;
 use DateTime;
 use input;
 use Socialite;
-use App\Http\Controllers\Admin\helpdesk\SocialMediaController;
+use App\Http\Controllers\Admin\helpdesk\SocialMedia\SocialMediaController;
 
 /**
  * ---------------------------------------------------
