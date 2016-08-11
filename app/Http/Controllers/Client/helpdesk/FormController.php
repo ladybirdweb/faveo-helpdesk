@@ -140,7 +140,7 @@ class FormController extends Controller {
      * @param type User    $user
      */
     public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code) {
-        // dd($request);
+                dd($request->all());
         $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token');
 
         $name = $request->input('Name');
@@ -222,6 +222,7 @@ class FormController extends Controller {
      * @return type view
      */
     public function post_ticket_reply($id, Request $request) {
+
         try {
             if ($comment != null) {
                 $tickets = Tickets::where('id', '=', $id)->first();

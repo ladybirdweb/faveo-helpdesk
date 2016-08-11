@@ -120,14 +120,15 @@ class FormController extends Controller {
         ]);
         try {
             $forms = new Forms();
-            $required = Input::get('required');
-            $count = count($required);
-            $require = [];
-            for ($i = 2; $i < $count + 2; $i++) {
-                for ($j = 0; $j < 1; $j++) {
-                    array_push($require, $required[$i][$j]);
-                }
-            }
+            $require = Input::get('required');
+            //dd($require);
+//            $count = count($required);
+//            $require = [];
+//            for ($i = 2; $i < $count + 2; $i++) {
+//                for ($j = 0; $j < 1; $j++) {
+//                    array_push($require, $required[$i][$j]);
+//                }
+//            }
             $forms->formname = Input::get('formname');
             $forms->save();
             $count = count(Input::get('name'));
@@ -148,7 +149,7 @@ class FormController extends Controller {
 
             return Redirect::back()->with('success', Lang::get('lang.successfully_created_form'));
         } catch (Exception $ex) {
-
+            dd($ex);
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }

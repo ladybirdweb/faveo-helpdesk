@@ -339,8 +339,30 @@ class SettingsController extends Controller {
         $emails1 = $email1->get();
 
         $workflow = $workflow->whereId('1')->first();
+        $cron_path = base_path('artisan');
+        $command = ":- <pre>***** php $cron_path schedule:run >> /dev/null 2>&1</pre>";
+        $shared = ":- <pre>/usr/bin/php-cli -q  $cron_path schedule:run >> /dev/null 2>&1</pre>";
+        $warn = "";
+        $condition = new \App\Model\MailJob\Condition();
+        $job = $condition->checkActiveJob();
+        $commands = [
+            '' => 'Select',
+            'everyMinute' => 'Every Minute',
+            'everyFiveMinutes' => 'Every Five Minute',
+            'everyTenMinutes' => 'Every Ten Minute',
+            'everyThirtyMinutes' => 'Every Thirty Minute',
+            'hourly' => 'Every Hour',
+            'daily' => 'Every Day',
+            'dailyAt' => 'Daily at',
+            'weekly' => 'Every Week',
+            'monthly' => 'Monthly',
+            'yearly' => 'Yearly',
+        ];
+        if (ini_get('register_argc_argv') == "") {
+            //$warn = "Please make 'register_argc_argv' flag as on. Or you can set all your job url in cron";
+        }
 
-        return view('themes.default1.admin.helpdesk.settings.crone', compact('emails', 'templates', 'emails1', 'workflow'));
+        return view('themes.default1.admin.helpdesk.settings.cron.cron', compact('emails', 'templates', 'emails1', 'workflow', 'warn', 'command', 'commands','condition','shared'));
         // } catch {
         // }
     }
@@ -353,8 +375,7 @@ class SettingsController extends Controller {
      *
      * @return type Response
      */
-    public function postSchedular(Email $email, Template $template, Emails $email1, Request $request, WorkflowClose $workflow) {
-        // dd($request);
+    public function postSchedular(Email $email, Template $template, Emails $email1, TaskRequest $request, WorkflowClose $workflow) {
         try {
             /* fetch the values of email request  */
             $emails = $email->whereId('1')->first();
@@ -371,12 +392,13 @@ class SettingsController extends Controller {
             $emails->save();
             //workflow
             $work = $workflow->whereId('1')->first();
-            if ($request->condition == 'on') {
+            if ($request->condition) {
                 $work->condition = 1;
             } else {
                 $work->condition = 0;
             }
             $work->save();
+            $this->saveConditions();
             /* redirect to Index page with Success Message */
             return redirect('job-scheduler')->with('success', Lang::get('lang.job-scheduler-success'));
         } catch (Exception $e) {
@@ -805,6 +827,47 @@ class SettingsController extends Controller {
         Rating::whereId($slug)->delete();
 
         return redirect()->back()->with('success', Lang::get('lang.rating_deleted_successfully'));
+    }
+    public function saveConditions() {
+        if (\Input::get('fetching-commands') && \Input::get('notification-commands')) {
+            $fetching_commands = \Input::get('fetching-commands');
+            $fetching_dailyAt = \Input::get('fetching-dailyAt');
+            $notification_commands = \Input::get('notification-commands');
+            $notification_dailyAt = \Input::get('notification-dailyAt');
+            $work_commands = \Input::get('work-commands');
+            $workflow_dailyAt = \Input::get('workflow-dailyAt');
+            $fetching_command = $this->getCommand($fetching_commands, $fetching_dailyAt);
+            $notification_command = $this->getCommand($notification_commands, $notification_dailyAt);
+            $work_command = $this->getCommand($work_commands, $workflow_dailyAt);
+            $jobs  = ['fetching'=>$fetching_command,'notification'=>$notification_command,'work'=>$work_command];
+            $this->storeCommand($jobs);
+        }
+    }
+
+    public function getCommand($command, $daily_at) {
+        if ($command == 'dailyAt') {
+            $command = "dailyAt,$daily_at";
+        }
+        return $command;
+    }
+    
+    public function storeCommand($array=[]){
+        $command = new \App\Model\MailJob\Condition();
+        $commands = $command->get();
+        if($commands->count()>0){
+            foreach($commands as $condition){
+                $condition->delete();
+            }
+        }
+        if(count($array)>0){
+            foreach($array as $key=>$save){
+                $command->create([
+                    'job'=>$key,
+                    'value'=>$save,
+                ]);
+            }
+        }
+        
     }
 
     public function getTicketNumber(Request $request) {

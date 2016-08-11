@@ -39,9 +39,10 @@
 
         </table>
         <hr>
+        @if($ticket->extraFields()->count()>0)
         <div>
             <table class="table" style="border: 1px solid black;border-collapse: collapse; width: 100%">
-                @if($ticket->extraFields()->count()>0)
+                
                 @foreach($ticket->extraFields() as $ticket_form_data)
                 <tr style="border: 1px solid black;border-collapse: collapse;">
                     <td style="border: 1px solid black;border-collapse: collapse; padding: 14px;">&nbsp;&nbsp;<b>{!! $ticket_form_data->title !!}</b></td>
@@ -49,10 +50,11 @@
                 </tr>
 
                 @endforeach
-                @endif
+                
             </table>
         </div>
         <hr>
+        @endif
         <div>
             <h3>Issue</h3>
         </div>
