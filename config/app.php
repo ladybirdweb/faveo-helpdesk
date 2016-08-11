@@ -144,9 +144,8 @@ return [
    
 
 
-			'App\Plugins\Social\ServiceProvider',
+			
 
-			//
 
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
