@@ -960,23 +960,28 @@ class TicketController extends Controller {
         $ticket->source = $source;
         $ticket_status = $this->checkUserVerificationStatus();
         //dd($ticket_status);
-        if ($ticket_status == 0) {
-            //check if user active then allow ticket creation else create unverified ticket
-            if ($user_status->active == 1) {
-                if ($status == null) {
-                    $ticket->status = 1;
-                } else {
-                    $ticket->status = $status;
-                }
-            } else {
-                $ticket->status = 6;
-            }
+        // if ($ticket_status == 0) {
+        //     //check if user active then allow ticket creation else create unverified ticket
+        //     if ($user_status->active == 1) {
+        //         if ($status == null) {
+        //             $ticket->status = 1;
+        //         } else {
+        //             $ticket->status = $status;
+        //         }
+        //     } else {
+        //         $ticket->status = 6;
+        //     }
+        // } else {
+        //     if ($status == null) {
+        //         $ticket->status = 1;
+        //     } else {
+        //         $ticket->status = $status;
+        //     }
+        // }
+        if ($status == null) {
+            $ticket->status = 1;
         } else {
-            if ($status == null) {
-                $ticket->status = 1;
-            } else {
-                $ticket->status = $status;
-            }
+            $ticket->status = $status;
         }
         $ticket->save();
 
@@ -2279,7 +2284,7 @@ class TicketController extends Controller {
                                 $string = $subject->title;
                                 if (strlen($string) > 20) {
                                     $stringCut = substr($string, 0, 30);
-                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')) . ' ...';
+                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')).' ...';
                                 }
                             } else {
                                 $string = '(no subject)';
@@ -2305,7 +2310,14 @@ class TicketController extends Controller {
                             } else {
                                 $attachString = '';
                             }
-                            return "<a href='" . route('ticket.thread', [$ticket->id]) . "' title='" . $subject->title . "'>" . ucfirst($string) . "&nbsp;<span style='color:green'>(" . $count . ")<i class='fa fa-comment'></i></span></a>" . $collabString . $attachString;
+                            $user = \DB::table('users')->select('active', 'id', 'email')->where('id', '=', $ticket->user_id)->first();
+                            $active = $user->active;
+                            if ($active == 0 || $active == '0') {
+                                $unverified = "<span style='color:red'><i class='fa fa-exclamation-triangle' title = '".Lang::get('lang.user-not-verfied')."'></i></span>&nbsp;";
+                            } else {
+                                $unverified = "";
+                            }
+                            return $unverified."<a href='".route('ticket.thread', [$ticket->id])."' title='".$subject->title."'>".ucfirst($string)."&nbsp;<span style='color:green'>(".$count.")<i class='fa fa-comment'></i></span></a>".$collabString.$attachString;
                         })
                         ->addColumn('ticket_number', function ($ticket) {
                             return "<a href='" . route('ticket.thread', [$ticket->id]) . "' title='" . $ticket->ticket_number . "'>#" . $ticket->ticket_number . '</a>';
