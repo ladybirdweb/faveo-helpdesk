@@ -316,4 +316,31 @@ class UnAuthController extends Controller
         } else {
         }
     }
+
+    /**
+     *@category function to change system's language
+     *@param string $lang //desired language's iso code 
+     *@return response
+     *
+     */
+    public static function changeLanguage($lang)
+    {
+        //if(Cache::has('language'))
+        //{
+        //  return Cache::get('language');
+        //} else return 'false';
+        // Cache::put('language',$)
+        $path = base_path('resources/lang');  // Path to check available language packages
+        if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
+            // dd(array_key_exists($lang, Config::get('languages')));
+            // app()->setLocale($lang);
+
+            \Cache::forever('language', $lang);
+            // dd(Cache::get('language'));
+            // dd()
+        } else {
+            return false;
+        } 
+        return true;
+    }
 }
