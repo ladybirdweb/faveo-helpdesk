@@ -88,6 +88,51 @@ class = "active"
             <h4>{!! Lang::get('lang.ticket') !!} </h4>
         </div>
         <div class="row col-md-12">
+
+
+            @if(Auth::user())
+
+            {!! Form::hidden('Name',Auth::user()->user_name,['class' => 'form-control']) !!}
+
+            @else
+            <div class="col-md-12 form-group {{ $errors->has('Name') ? 'has-error' : '' }}">
+                {!! Form::label('Name',Lang::get('lang.name')) !!}<span class="text-red"> *</span>
+                {!! Form::text('Name',null,['class' => 'form-control']) !!}
+            </div>
+            @endif
+
+
+
+            @if(Auth::user())
+
+            {!! Form::hidden('Email',Auth::user()->email,['class' => 'form-control']) !!}
+
+            @else
+            <div class="col-md-12 form-group {{ $errors->has('Email') ? 'has-error' : '' }}">
+                {!! Form::label('Email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
+                {!! Form::text('Email',null,['class' => 'form-control']) !!}
+            </div>
+            @endif
+
+
+
+
+
+            @if(!Auth::user())
+
+            <div class="col-md-2 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
+                {!! Form::label('Code',Lang::get('lang.country-code')) !!}
+                {!! Form::text('Code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
+            </div>
+            <div class="col-md-5 form-group {{ $errors->has('Phone') ? 'has-error' : '' }}">
+                {!! Form::label('Mobile',Lang::get('lang.mobile_number')) !!}
+                {!! Form::text('Mobile',null,['class' => 'form-control']) !!}
+            </div>
+            <div class="col-md-5 form-group {{ $errors->has('Phone') ? 'has-error' : '' }}">
+                {!! Form::label('Phone',Lang::get('lang.phone')) !!}
+                {!! Form::text('Phone',null,['class' => 'form-control']) !!}
+            </div>
+            @endif
             <div class="col-md-12 form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
                 {!! Form::label('help_topic', Lang::get('lang.choose_a_help_topic')) !!} 
                 {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
@@ -110,50 +155,6 @@ class = "active"
                     @endforeach
                 </select>
             </div>
-            
-                @if(Auth::user())
-                    
-                        {!! Form::hidden('Name',Auth::user()->user_name,['class' => 'form-control']) !!}
-                    
-                @else
-                    <div class="col-md-12 form-group {{ $errors->has('Name') ? 'has-error' : '' }}">
-                        {!! Form::label('Name',Lang::get('lang.name')) !!}<span class="text-red"> *</span>
-                        {!! Form::text('Name',null,['class' => 'form-control']) !!}
-                    </div>
-                @endif
-            
-            
-
-                @if(Auth::user())
-                    
-                        {!! Form::hidden('Email',Auth::user()->email,['class' => 'form-control']) !!}
-                    
-                @else
-                    <div class="col-md-12 form-group {{ $errors->has('Email') ? 'has-error' : '' }}">
-                        {!! Form::label('Email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
-                        {!! Form::text('Email',null,['class' => 'form-control']) !!}
-                    </div>
-                @endif
-
-
-
-                
-            
-                @if(!Auth::user())
-                    
-            <div class="col-md-2 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
-                {!! Form::label('Code',Lang::get('lang.country-code')) !!}
-                {!! Form::text('Code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
-            </div>
-            <div class="col-md-5 form-group {{ $errors->has('Phone') ? 'has-error' : '' }}">
-                {!! Form::label('Mobile',Lang::get('lang.mobile_number')) !!}
-                {!! Form::text('Mobile',null,['class' => 'form-control']) !!}
-            </div>
-            <div class="col-md-5 form-group {{ $errors->has('Phone') ? 'has-error' : '' }}">
-                {!! Form::label('Phone',Lang::get('lang.phone')) !!}
-                {!! Form::text('Phone',null,['class' => 'form-control']) !!}
-            </div>
-              @endif
             <div class="col-md-12 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
                 {!! Form::label('Subject',Lang::get('lang.subject')) !!}<span class="text-red"> *</span>
                 {!! Form::text('Subject',null,['class' => 'form-control']) !!}
@@ -163,14 +164,18 @@ class = "active"
                 {!! Form::textarea('Details',null,['class' => 'form-control']) !!}
             </div>
             <div class="col-md-12 form-group">
-                <div class="btn btn-default btn-file"><i class="fa fa-paperclip"> </i> {!! Lang::get('lang.attachment') !!}<input type="file" name="attachment[]" multiple/></div><br/>
-                {!! Lang::get('lang.max') !!}. 10MB
+                <div class="btn btn-default btn-file"><i class="fa fa-paperclip"> </i> {!! Lang::get('lang.attachment') !!}<input type="file" name="attachment[]" id="attachment" multiple/></div><br/>
+                <div id='file_details'></div><div id='total-size'></div>
+                {!! Lang::get('lang.max') !!}. {!! $max_size_in_actual !!}
+                <div>
+                    <a id='clear-file' onClick='clearAll()' style='display:none; cursor:pointer;'><i class='fa fa-close'></i>Clear all</a>
+                </div>
             </div>
             {{-- Event fire --}}
             <?php Event::fire(new App\Events\ClientTicketForm()); ?>
             <div class="col-md-12" id="response"> </div>
             <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
-            <div class="col-md-12 form-group">{!! Form::submit(Lang::get('lang.Send'),['class'=>'form-group btn btn-info pull-left', 'onclick' => 'this.disabled=true;this.value="Sending, please wait...";this.form.submit();'])!!}</div></div>
+            <div class="col-md-12 form-group">{!! Form::submit(Lang::get('lang.Send'),['id' => 'submitbtn' ,'class'=>'form-group btn btn-info pull-left', 'onclick' => 'this.disabled=true;this.value="Sending, please wait...";this.form.submit();'])!!}</div>
         </div>
         <div class="col-md-12" id="response"> </div>
         <div id="ss" class="xs-md-6 form-group {{ $errors->has('') ? 'has-error' : '' }}"> </div>
@@ -183,22 +188,87 @@ class = "active"
 |====================================================
 -->
 <script type="text/javascript">
-$('#selectid').on('change', function() {
-    var value = $('#selectid').val();
-    $.ajax({
-        url: "postform/" + value,
-        type: "post",
-        data: value,
-        success: function(data) {
-            $('#response').html(data);
-            var wysihtml5Editor = $('#unique-textarea').wysihtml5().data("wysihtml5").editor;
+    function clearAll() {
+        $("#file_details").html("");
+        $("#total-size").html("");
+        $("#attachment").val('');
+        $("#clear-file").hide();
+        $("#submitbtn").removeClass('disabled');
+    }
+
+
+    $(document).ready(function() {
+        var helpTopic = $("#selectid").val();
+        send(helpTopic);
+        $("#selectid").on("change", function() {
+            helpTopic = $("#selectid").val();
+            send(helpTopic);
+        });
+        function send(helpTopic) {
+            $.ajax({
+                url: "{{url('/get-helptopic-form')}}",
+                data: {'helptopic': helpTopic},
+                type: "GET",
+                dataType: "html",
+                success: function(response) {
+                    $("#response").html(response);
+                },
+                error: function(response) {
+                    $("#response").html(response);
+                }
+            });
         }
     });
-});
 
-$(function() {
+    $(function() {
 //Add text editor
-    $("textarea").wysihtml5();
-});
+        $("textarea").wysihtml5();
+    });
+
+
+    // Ticket attachment
+    $('#attachment').change(function() {
+        input = document.getElementById('attachment');
+        if (!input) {
+            alert("Um, couldn't find the fileinput element.");
+        } else if (!input.files) {
+            alert("This browser doesn't seem to support the `files` property of file inputs.");
+        } else if (!input.files[0]) {
+        } else {
+            $("#file_details").html("");
+            var total_size = 0;
+            for (i = 0; i < input.files.length; i++) {
+                file = input.files[i];
+                var supported_size = "{!! $max_size_in_bytes !!}";
+                var supported_actual_size = "{!! $max_size_in_actual !!}";
+                if (file.size < supported_size) {
+                    $("#file_details").append("<tr> <td> " + file.name + " </td><td> " + formatBytes(file.size) + "</td> </tr>");
+                } else {
+                    $("#file_details").append("<tr style='color:red;'> <td> " + file.name + " </td><td> " + formatBytes(file.size) + "</td> </tr>");
+                }
+                total_size += parseInt(file.size);
+            }
+            if (total_size > supported_size) {
+                $("#total-size").append("<span style='color:red'>Your total file upload size is greater than " + supported_actual_size + "</span>");
+                $("#submitbtn").addClass('disabled');
+                $("#clear-file").show();
+            } else {
+                $("#total-size").html("");
+                $("#submitbtn").removeClass('disabled');
+                $("#clear-file").show();
+            }
+        }
+    });
+
+    function formatBytes(bytes, decimals) {
+        if (bytes == 0)
+            return '0 Byte';
+        var k = 1000;
+        var dm = decimals + 1 || 3;
+        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        var i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
 </script>
 @stop

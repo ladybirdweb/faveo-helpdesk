@@ -75,7 +75,6 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
     if ($rating_value == null) {
         $avg_rating = '0';
     } else {
-
         $avg_rate = explode('.', $rating_value);
         $avg_rating = $avg_rate[0];
     }
@@ -109,7 +108,6 @@ if ($thread->title != "") {
             <!-- <button type="button" class="btn btn-default"><i class="fa fa-edit" style="color:green;"> </i> Edit</button> -->
             <?php
             Event::fire(new \App\Events\TicketBoxHeader($user->id));
-
             if ($group->can_edit_ticket == 1) {
                 ?>
                 <button type="button" class="btn btn-default" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><i class="fa fa-edit" style="color:green;"> </i> {!! Lang::get('lang.edit') !!}</button>
@@ -444,7 +442,7 @@ if ($thread->title != "") {
                             <div class="form-group">
                                 <div class="row">
                                     <!-- internal note -->
-                                    <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}" id="internal_content_class">
+                                    <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                         <div class="col-md-2">
                                             <label>{!! Lang::get('lang.internal_note') !!}:<span class="text-red"> *</span></label>
                                         </div>
@@ -491,7 +489,7 @@ if ($thread->title != "") {
                     <?php echo $conversations->setPath(url('/thread/' . $tickets->id))->render(); ?>
                 </ul>
 
-                <div class="col-md-12" >
+                <div class="col-md-12">
                     <link rel="stylesheet" type="text/css" href="{{asset("lb-faveo/css/faveo-css.css")}}">
                     <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
                     
@@ -507,7 +505,6 @@ if ($thread->title != "") {
                                     <?php
                                     $ConvDate1 = $conversation->created_at;
                                     $ConvDate = explode(' ', $ConvDate1);
-
                                     $date = $ConvDate[0];
                                     $time = $ConvDate[1];
                                     $time = substr($time, 0, -3);
@@ -521,7 +518,7 @@ if ($thread->title != "") {
                                     }
                                     if($conversation->user_id != null) {
                                         $role = App\User::where('id', '=', $conversation->user_id)->first();
-                                    } 
+                                    }
                                     ?>
                                 </li>
                                 <li>
@@ -555,36 +552,40 @@ if ($thread->title != "") {
                                         // echo "<img src='".base64_decode($attachment->file)."' style='width:128px;height:128px'/> ";
                                         $body = $conversation->body;
                                         $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->orderBy('id', 'DESC')->get();
-                                        // $i = 0;
-                                        foreach ($attachments as $attachment) {
-                                            // $i++;
-                                            if ($attachment->type == 'jpg' || $attachment->type == 'png') {
-                                                $image = @imagecreatefromstring($attachment->file);
-                                                ob_start();
-                                                imagejpeg($image, null, 80);
-                                                $data = ob_get_contents();
-                                                ob_end_clean();
-                                                $var = '<img style="max-width:200px;max-height:200px;" src="data:image/' . $attachment->type . ';base64,' . base64_encode($data) . '" />';
-                                                // echo $var;
-                                                // echo $attachment->name;
-                                                // $body = explode($attachment->name, $body);
-                                                $body = str_replace($attachment->name, "data:image/" . $attachment->type . ";base64," . base64_encode($data), $body);
 
-                                                $string = $body;
-                                                $start = "<head>";
-                                                $end = "</head>";
-                                                if (strpos($string, $start) == false || strpos($string, $start) == false) {
+                                        foreach ($attachments as $attachment) {
+                                                if ($attachment->type == 'jpg' || $attachment->type == 'png' || $attachment->type == 'PNG' || $attachment->type == 'JPG' || $attachment->type == 'jpeg' || $attachment->type == 'JPEG' || $attachment->type == 'gif' || $attachment->type == 'GIF') {
+                                                    if($attachment->size > 0) {
+                                                        $image = @imagecreatefromstring($attachment->file);
+                                                        if($image == false) {
+                                                        } else {
+                                                        ob_start();
+                                                        imagejpeg($image, null, 80);
+                                                        $data = ob_get_contents();
+                                                        ob_end_clean();
+                                                        $var = '<img style="max-width:200px;max-height:200px;" src="data:image/' . $attachment->type . ';base64,' . base64_encode($data) . '" />';
+                                                        // echo $var;
+                                                        // echo $attachment->name;
+                                                        // $body = explode($attachment->name, $body);
+                                                        $body = str_replace($attachment->name, "data:image/" . $attachment->type . ";base64," . base64_encode($data), $body);
+                                                        $string = $body;
+                                                        $start = "<head>";
+                                                        $end = "</head>";
+                                                            if (strpos($string, $start) == false || strpos($string, $start) == false) {
+
+                                                            } else {
+                                                                $ini = strpos($string, $start);
+                                                                $ini += strlen($start);
+                                                                $len = strpos($string, $end, $ini) - $ini;
+                                                                $parsed = substr($string, $ini, $len);
+                                                                $body2 = $parsed;
+                                                                $body = str_replace($body2, " ", $body);
+                                                            }
+                                                        }
                                                     
+                                                    }
                                                 } else {
-                                                    $ini = strpos($string, $start);
-                                                    $ini += strlen($start);
-                                                    $len = strpos($string, $end, $ini) - $ini;
-                                                    $parsed = substr($string, $ini, $len);
-                                                    $body2 = $parsed;
-                                                    $body = str_replace($body2, " ", $body);
                                                 }
-                                            } else {
-                                            }
                                         }
                                         // echo $body;
                                         // $body = explode($attachment->file, $body);
@@ -619,9 +620,6 @@ if ($thread->title != "") {
                                     ?>
                                     <div class="timeline-item">
                                         <span style="color:#fff;"><div class="pull-right">   <table><tbody>
-                                                @if($role)
-                                                    @if($role->role != null)
-                                                        @if($role->role != 'user' && $conversation->is_internal != 1)
                                                         @foreach($ratings as $rating) 
                                                         @if($rating->rating_area == 'Comment Area')
                                                         <?php
@@ -634,17 +632,14 @@ if ($thread->title != "") {
                                                         ?>
                                                         <tr>
                                                             <th><div class="ticketratingtitle" style="color:#3c8dbc;" >{!! $rating->name !!} &nbsp;</div></th>&nbsp
-                                                        <td style="button:disabled;">
+                                                    <td style="button:disabled;">
                                                         <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
                                                             <input type="radio" class="star star-rating-readonly" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
-                                                        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;   
-                                                        </td> 
-                                                        </tr>
-                                                        @endif
-                                                        @endforeach
+        <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;   
+                                                    </td> 
+                                                    </tr>
                                                     @endif
-                                                @endif
-                                            @endif
+                                                    @endforeach
                                                     </tbody></table></div>  
                                         </span>
                                         <h3 class="timeline-header">
@@ -723,24 +718,32 @@ if ($thread->title != "") {
                                             <ul class='mailbox-attachments clearfix'>
                                                 <?php
                                                 foreach ($attachments as $attachment) {
-                                                    $size = $attachment->size;
-                                                    $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
-                                                    $power = $size > 0 ? floor(log($size, 1024)) : 0;
-                                                    $value = number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
-                                                    if ($attachment->poster == 'ATTACHMENT') {
-                                                        if ($attachment->type == 'jpg' || $attachment->type == 'JPG' || $attachment->type == 'jpeg' || $attachment->type == 'JPEG' || $attachment->type == 'png' || $attachment->type == 'PNG' || $attachment->type == 'gif' || $attachment->type == 'GIF') {
-                                                            $image = @imagecreatefromstring($attachment->file);
-                                                            ob_start();
-                                                            imagejpeg($image, null, 80);
-                                                            $data = ob_get_contents();
-                                                            ob_end_clean();
-                                                            $var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;height:133px;" src="data:image/jpg;base64,' . base64_encode($data) . '"/></a>';
-                                                            echo '<li style="background-color:#f4f4f4;"><span class="mailbox-attachment-icon has-img">' . $var . '</span><div class="mailbox-attachment-info"><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></div></li>';
-                                                        } else {
-                                                            $var = '<a style="max-width:200px;height:133px;color:#666;" href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff;">' . strtoupper($attachment->type) . '</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></span></div></a>';
-                                                            echo '<li style="background-color:#f4f4f4;">' . $var . '</li>';
+
+                                                        $size = $attachment->size;
+                                                        $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+                                                        $power = $size > 0 ? floor(log($size, 1024)) : 0;
+                                                        $value = number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
+                                                        if ($attachment->poster == 'ATTACHMENT') {
+                                                            if ($attachment->type == 'jpg' || $attachment->type == 'JPG' || $attachment->type == 'jpeg' || $attachment->type == 'JPEG' || $attachment->type == 'png' || $attachment->type == 'PNG' || $attachment->type == 'gif' || $attachment->type == 'GIF') {
+                                                                $image = @imagecreatefromstring($attachment->file);
+                                                                
+                                                                if($image == false) {
+                                                                    $var = '<a style="max-width:200px;height:133px;color:#666;" href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff;">' . strtoupper($attachment->type) . '</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></span></div></a>';
+                                                                    echo '<li style="background-color:#f4f4f4;">' . $var . '</li>';
+                                                                } else {
+                                                                    ob_start();
+                                                                    imagejpeg($image, null, 80);
+                                                                    $data = ob_get_contents();
+                                                                    ob_end_clean();
+                                                                    $var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;height:133px;" src="data:image/jpg;base64,' . base64_encode($data) . '"/></a>';
+                                                                    echo '<li style="background-color:#f4f4f4;"><span class="mailbox-attachment-icon has-img">' . $var . '</span><div class="mailbox-attachment-info"><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></div></li>';
+                                                                }
+                                                            } else {
+                                                                $var = '<a style="max-width:200px;height:133px;color:#666;" href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff;">' . strtoupper($attachment->type) . '</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></span></div></a>';
+                                                                echo '<li style="background-color:#f4f4f4;">' . $var . '</li>';
+                                                            }
                                                         }
-                                                    }
+
                                                 }
                                                 ?>
                                             </ul>
@@ -1083,7 +1086,6 @@ if ($thread->title != "") {
                         <div class="tab-pane active" id="ahah">
                             <div class="modal-body" id="def">
                                 <div class="callout callout-info" id="hide1234" ><i class="icon fa fa-info"> </i>&nbsp;&nbsp;&nbsp; {!! Lang::get('lang.search_existing_users_or_add_new_users') !!}</div>
-                                <div id="here"></div>
                                 <div id="show7" style="display:none;">
                                     <div class="row col-md-12">
                                         <div class="col-xs-5">
@@ -1095,7 +1097,7 @@ if ($thread->title != "") {
                                         </div>
                                     </div>
                                 </div>
-                                
+                                <div id="here"></div>
                                 {!! Form::model($tickets->id, ['id'=>'search-user','method' => 'PATCH'] )!!}    
                                 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
                                 <input type="text" class="form-control" name="search" id="tags" placeholder="{!! Lang::get('lang.search_by_email') !!}">
@@ -1309,7 +1311,6 @@ if ($thread->title != "") {
             // $('#cand').wysihtml5();
             var wysihtml5Editor = $('#reply_content').wysihtml5().data("wysihtml5").editor;
                     $('#select').on('change', function (e) {
-
             //alert('hello2');
             var $_token = $('#token').val();
                     var data = $('#select').val();
@@ -1323,7 +1324,6 @@ if ($thread->title != "") {
                             dataType    :   'json',
                             data        :   ({data}),
                             success : function(response) {
-
                             // alert(response);
                             wysihtml5Editor.setValue(response, true);
                                     console.log(wysihtml5Editor.getValue());
@@ -1348,7 +1348,6 @@ if ($thread->title != "") {
                             $("#loader").show();
                     },
                     success: function (response) {
-
                     $("#refresh").load("../thread/{{$tickets->id}}  #refresh");
                             $("#refresh").show();
                             $("#loader").hide();
@@ -1362,7 +1361,6 @@ if ($thread->title != "") {
     });
     });
             $(document).ready(function () {
-
     //Initialize Select2 Elements
     $(".select2").select2();
             setInterval(function(){
@@ -1397,9 +1395,12 @@ if ($thread->title != "") {
                     var message = "{!! Lang::get('lang.your_ticket_have_been_closed') !!}";
                     $("#alert11").show();
                     $('#message-success1').html(message);
-                    setTimeout(function() {
-                        window.location = document.referrer;
-                    }, 500);
+                    setInterval(function(){
+                    $("#alert11").hide();
+                            setTimeout(function() {
+                            window.location = document.referrer;
+                            }, 500);
+                    }, 2000);
             }
     })
             return false;
@@ -1508,13 +1509,11 @@ if ($thread->title != "") {
             //     $('#t1').hide();
             //     $('#t2').show();
             // });
-
             // comment a ticket
             // $('#aa').click(function() {
             //     $('#t1').show();
             //     $('#t2').hide();
             // });
-
 // Edit a ticket
             $('#form').on('submit', function() {
     $.ajax({
@@ -1575,7 +1574,6 @@ if ($thread->title != "") {
             // var message = "Success";
             // $('#message-success1').html(message);
             // setInterval(function(){$("#alert11").hide(); },4000);   
-
             var message = "Success!";
                     $("#alert11").show();
                     $('#message-success1').html(message);
@@ -1677,19 +1675,6 @@ if ($thread->title != "") {
     });
             // Internal Note
             $('#form2').on('submit', function() {
-                var internal_content = document.getElementById('InternalContent').value;
-                if(internal_content) {
-                    $("#internal_content_class").removeClass('has-error');
-                    $("#alert23").hide();
-                } else {
-                    var message = "<li>{!! Lang::get('lang.internal_content_is_a_required_field') !!}</li>";
-                    $("#internal_content_class").addClass('has-error');
-                    $("#alert23").show();
-                    $('#message-danger2').html(message);
-                    $("#show3").hide();
-                    $("#t1").show();
-                    return false;
-                }
     $.ajax({
     type: "POST",
             url: "../internal/note/{{ $tickets->id }}",
@@ -1700,7 +1685,6 @@ if ($thread->title != "") {
                     $("#show5").show();
             },
             success: function(response) {
-
             if (response == 1)
             {
             $("#refresh1").load("../thread/{{$tickets->id}}   #refresh1");
@@ -1716,16 +1700,6 @@ if ($thread->title != "") {
                     var div1 = document.getElementById('newtextarea1');
                     div1.innerHTML = div1.innerHTML + '<textarea style="width:98%;height:200px;" name="InternalContent" class="form-control" id="InternalContent"/></textarea>';
                     var wysihtml5Editor = $('textarea').wysihtml5().data("wysihtml5").editor;
-                    setInterval(function(){
-                            var head= document.getElementsByTagName('head')[0];
-                            var script= document.createElement('script');
-                            script.type= 'text/javascript';
-                            script.src= '{{asset("lb-faveo/js/jquery.rating.pack.js")}}';
-                            head.appendChild(script);
-//                            $('.rating-cancel').hide();
-//                            $(".star-rating-control").attr("disabled", "disabled").off('hover');
-//                            $(".star-rating-control").addClass("disabled")
-                        }, 4000);
             } else {
             // alert('fail');
             var message = "{!! Lang::get('lang.for_some_reason_your_message_was_not_posted_please_try_again_later') !!}";
@@ -1782,10 +1756,10 @@ if ($thread->title != "") {
                 var i = Math.floor(Math.log(bytes) / Math.log(k));
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
             }
-
             $('#form3').on('submit', function() {
             var fd = new FormData(document.getElementById("form3"));
-            var reply_content = document.getElementById('reply_content').value;
+            var reply_content = document.getElementById("reply_content").value;
+
             if(reply_content) {
                 $("#reply_content_class").removeClass('has-error');
                 $("#alert23").hide();
@@ -1841,9 +1815,9 @@ if ($thread->title != "") {
 //                            $(".star-rating-control").attr("disabled", "disabled").off('hover');
 //                            $(".star-rating-control").addClass("disabled")
                         }, 4000);
+                        $( "#clear-file" ).trigger( "click" );
                     } else {
                     // alert('fail');
-                    // $( "#dismis4" ).trigger( "click" );
                     var message = "{!! Lang::get('lang.for_some_reason_your_reply_was_not_posted_please_try_again_later') !!}";
                             $("#alert23").show();
                             $('#message-danger2').html(message);
@@ -1865,7 +1839,6 @@ if ($thread->title != "") {
     type: "GET",
             url: "../ticket/surrender/{{ $tickets->id }}",
             success: function(response) {
-
             if (response == 1)
             {
             // alert('ticket has been un assigned');
@@ -1897,9 +1870,8 @@ if ($thread->title != "") {
             dataType: "html",
             data: $(this).serialize(),
             beforeSend: function() {
-                $('#here').html("");
-                $('#show7').show();
-                $('#hide1234').hide();
+            $('#show7').show();
+                    $('#hide1234').hide();
             },
             success: function(response) {
             $('#show7').hide();
@@ -1912,7 +1884,7 @@ if ($thread->title != "") {
                     // if(link) {
                     //     link.click();
                     // }
-//                    $('#cc-close').trigger('click');
+                    $('#cc-close').trigger('click');
                     }, 500);
             }
     })
@@ -1979,7 +1951,6 @@ if ($thread->title != "") {
                             type: 'GET',
                             data: $(this).serialize(),
                             success: function(data) {
-
                             $('#select-merge-tickts').html(data);
                             }
                     // return false;
@@ -2057,15 +2028,12 @@ if ($thread->title != "") {
                             $("#recepients").load("../thread/{{$tickets->id}}   #recepients");
                             };
                                     // $('#here2').html(response);
-
                                     // $("#surrender22").load("../thread/{{$tickets->id}}   #surrender22");
                             }
                     })
                     return false;
             }
-
     $(document).ready(function() {
-
     var Vardata = "";
             var count = 0;
             $(".select2").on('select2:select', function(){
@@ -2101,7 +2069,6 @@ echo $ticket_data->title;
                     }
             });
         }
-
     }
         var locktime = '<?php echo $var->collision_avoid; ?>' * 60 * 1000;
         var ltf = '<?php echo $var->lock_ticket_frequency;?>';
@@ -2129,7 +2096,6 @@ echo $ticket_data->title;
                             break;
                         }
                     }
-
                     $(this).data("prevType", e.type);
                 });
             }
@@ -2180,9 +2146,7 @@ echo $ticket_data->title;
                     }
             })
             }
-
     $(function() {
-
     $('h5').html('<span class="stars">' + parseFloat($('input[name=amount]').val()) + '</span>');
             $('span.stars').stars();
             $('h4').html('<span class="stars2">' + parseFloat($('input[name=amt]').val()) + '</span>');

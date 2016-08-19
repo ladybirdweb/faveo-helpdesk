@@ -2,9 +2,10 @@
 
 namespace App\Model\helpdesk\Ticket;
 
-use App\BaseModel;
+//use App\BaseModel;
+use Illuminate\Database\Eloquent\Model;
 
-class Ticket_Thread extends BaseModel
+class Ticket_Thread extends Model
 {
     protected $table = 'ticket_thread';
     protected $fillable = [

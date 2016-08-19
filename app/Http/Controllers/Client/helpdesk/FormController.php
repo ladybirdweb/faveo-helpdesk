@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client\helpdesk;
 // controllers
 use App\Http\Controllers\Agent\helpdesk\TicketWorkflowController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Common\FileuploadController;
 // requests
 use App\Http\Requests\helpdesk\ClientRequest;
 use App\Model\helpdesk\Agent\Department;
@@ -70,8 +71,11 @@ class FormController extends Controller
             } else {
                 $phonecode = '';
             }
-
-            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes'))->with('phonecode', $phonecode);
+            $fileupload = new FileuploadController();
+            $fileupload = $fileupload->file_upload_max_size();
+            $max_size_in_bytes = $fileupload[0];
+            $max_size_in_actual = $fileupload[1];
+            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes', 'max_size_in_bytes', 'max_size_in_actual'))->with('phonecode', $phonecode);
         } else {
             return \Redirect::route('home');
         }
@@ -189,7 +193,13 @@ class FormController extends Controller
                 }
             }
         }
-        $result = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response);
+        // this param is used for inline attachments via email
+        if(empty($attachments)) {
+            $inline_attachment = $attachments;
+        } else {
+            $inline_attachment = null;
+        }
+        $result = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response, $inline_attachment);
 
         if ($result[1] == 1) {
             $ticketId = Tickets::where('ticket_number', '=', $result[0])->first();

@@ -146,7 +146,7 @@ class Mailbox {
 	 * @return array mailsIds (or empty array)
 	 */
 	public function searchMailbox($criteria = 'ALL') {
-		$mailsIds = imap_search($this->getImapStream(), 'ALL', SE_UID, $this->serverEncoding);
+		$mailsIds = imap_search($this->getImapStream(), $criteria, SE_UID, $this->serverEncoding);
 		return $mailsIds ? $mailsIds : array();
 	}
 	/**

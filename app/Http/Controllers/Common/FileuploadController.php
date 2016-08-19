@@ -9,9 +9,9 @@ class FileuploadController extends Controller
     public function __construct()
     {
         // checking authentication
-        $this->middleware('auth');
+        // $this->middleware('auth');
         // checking if role is agent
-        $this->middleware('role.agent');
+        // $this->middleware('role.agent');
     }
 
     // Returns a file size limit in bytes based on the PHP upload_max_filesize
