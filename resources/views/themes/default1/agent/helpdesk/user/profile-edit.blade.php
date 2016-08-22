@@ -158,21 +158,21 @@ class="active"
                 <!-- old password -->
                 <div class="form-group has-feedback {{ $errors->has('old_password') ? 'has-error' : '' }}">
                     {!! Form::label('old_password',Lang::get('lang.old_password')) !!} <span class="text-red"> *</span>
-                    {!! Form::password('old_password',['placeholder'=>Lang::get('lang.old_password'),'class' => 'form-control']) !!}
+                    {!! Form::password('old_password',['class' => 'form-control']) !!}
                     {!! $errors->first('old_password', '<spam class="help-block">:message</spam>') !!}
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
                 <!-- new password -->
                 <div class="form-group has-feedback {{ $errors->has('new_password') ? 'has-error' : '' }}">
                     {!! Form::label('new_password',Lang::get('lang.new_password')) !!} <span class="text-red"> *</span>
-                    {!! Form::password('new_password',['placeholder'=>Lang::get('lang.new_password'),'class' => 'form-control']) !!}
+                    {!! Form::password('new_password',['class' => 'form-control']) !!}
                     {!! $errors->first('new_password', '<spam class="help-block">:message</spam>') !!}
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
                 <!-- confirm password -->
                 <div class="form-group has-feedback {{ $errors->has('confirm_password') ? 'has-error' : '' }}">
                     {!! Form::label('confirm_password',Lang::get('lang.confirm_password')) !!} <span class="text-red"> *</span>
-                    {!! Form::password('confirm_password',['placeholder'=>Lang::get('lang.confirm_password'),'class' => 'form-control']) !!}
+                    {!! Form::password('confirm_password',['class' => 'form-control']) !!}
                     {!! $errors->first('confirm_password', '<spam class="help-block">:message</spam>') !!}
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
