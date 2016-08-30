@@ -208,8 +208,7 @@ class PhpMailController extends Controller {
     }
 
     public function laravelMail($to, $toname, $subject, $data, $cc, $attach) {
-        
-        try {
+
             $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach) {
 
                         $m->to($to, $toname)->subject($subject);
@@ -240,11 +239,7 @@ class PhpMailController extends Controller {
                 $mail = 1;
             }
             return $mail;
-        } catch (\Exception $e) {
-
-            \Log::info($e->getMessage());
-            return 0;
-        }
+        
     }
 
     public function setQueue() {
@@ -264,13 +259,12 @@ class PhpMailController extends Controller {
         }
         $this->setQueueConfig($short, $field);
     }
-    
-    public function setQueueConfig($short,$field){
-        \Config::set('queue.default',$short);
-        foreach($field as $key=>$value){
-           \Config::set("queue.connections.$short.$key",$value); 
+
+    public function setQueueConfig($short, $field) {
+        \Config::set('queue.default', $short);
+        foreach ($field as $key => $value) {
+            \Config::set("queue.connections.$short.$key", $value);
         }
-        
     }
 
 }

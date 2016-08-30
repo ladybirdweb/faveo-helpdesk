@@ -33,6 +33,22 @@ class Tickets extends BaseModel
         $ticket_form_datas = \App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $id)->get();
         return $ticket_form_datas;
     }
+    
+    public function source(){
+        $source_id = $this->attributes['source'];
+        $sources = new Ticket_source();
+        $source = $sources->find($source_id);
+        return $source;
+    }
+    
+    public function sourceCss(){
+        $css = "fa fa-comment";
+        $source = $this->source();
+        if($source){
+            $css = $source->css_class;
+        }
+        return $css; 
+    }
 
     public function delete()
     {

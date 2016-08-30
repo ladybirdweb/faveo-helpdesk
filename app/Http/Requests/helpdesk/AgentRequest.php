@@ -34,7 +34,7 @@ class AgentRequest extends Request
             return $check;
         }
         return [
-            'user_name'  => 'required|unique:users|max:30',
+            //'user_name'  => 'required|unique:users|max:30',
             'first_name' => 'required|max:30',
             'last_name'  => 'required|max:30',
             'email'      => 'required|unique:users',
@@ -60,7 +60,7 @@ class AgentRequest extends Request
         $settings = $settings->select('status')->where('option_name', '=', 'send_otp')->first();
         if ($settings->status == '1' || $settings->status == 1) {
             return [
-                'user_name'           => 'required|unique:users|max:30',
+                //'user_name'           => 'required|unique:users|max:30',
                 'first_name'          => 'required|max:30',
                 'last_name'           => 'required|max:30',
                 'email'               => 'required|unique:users',

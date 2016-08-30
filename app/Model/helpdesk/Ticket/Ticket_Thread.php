@@ -2,9 +2,11 @@
 
 namespace App\Model\helpdesk\Ticket;
 
-use App\BaseModel;
+//use App\BaseModel;
+use Illuminate\Database\Eloquent\Model;
+use File;
 
-class Ticket_Thread extends BaseModel
+class Ticket_Thread extends Model
 {
     protected $table = 'ticket_thread';
     protected $fillable = [
@@ -29,5 +31,29 @@ class Ticket_Thread extends BaseModel
      public function getTitleAttribute($value)
      {
          return str_replace('"', "'", $value);
+     }
+     
+     public function thread($content){
+//         $porufi = $this->purify($content);
+//         dd($content,$porufi);
+         return $content;
+//         return $this->purify($content);
+     }
+     
+     public function purify($value){
+        require_once base_path('vendor'.DIRECTORY_SEPARATOR.'htmlpurifier'.DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'HTMLPurifier.auto.php');
+        $path = base_path('vendor'.DIRECTORY_SEPARATOR.'htmlpurifier'.DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'HTMLPurifier'.DIRECTORY_SEPARATOR.'DefinitionCache'.DIRECTORY_SEPARATOR.'Serializer');
+        if (!File::exists($path)) {
+            File::makeDirectory($path, $mode = 0777, true, true);
+        }
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('HTML.Trusted', true);
+        $config->set('Filter.YouTube', true);
+        //$config->set('HTML.Allowed', 'br,img[src],b,a,div,table');
+        $purifier = new \HTMLPurifier($config);
+        if ($value != strip_tags($value)) {
+            $value = $purifier->purify($value);
+        }
+        return $value;
      }
 }

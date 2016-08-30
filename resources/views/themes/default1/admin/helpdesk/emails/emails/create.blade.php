@@ -252,7 +252,7 @@ class="active"
                 $("#click").trigger("click");
             },
             success: function (json) {
-                console.log(json.result);
+                console.log(json);
                 $("#close").trigger("click");
                 var res = "";
                 $.each(json.result, function (idx, topic) {
@@ -268,6 +268,7 @@ class="active"
                 $('html, body').animate({scrollTop: $("#form").offset().top}, 500);
             },
             error: function (json) {
+                console.log(json);
                 $("#close").trigger("click");
                 var res = "";
                 $.each(json.responseJSON, function (idx, topic) {

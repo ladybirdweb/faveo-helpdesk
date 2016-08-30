@@ -549,12 +549,14 @@ if ($thread->title != "") {
                                     $attachment = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->first();
                                     if ($attachment == null) {
                                         $body = $conversation->body;
+                                        $body = $conversation->thread($body);
                                     } else {
                                         // dd($attachment->file);
                                         // print $attachment->file;
                                         // header("Content-type: image/jpeg");
                                         // echo "<img src='".base64_decode($attachment->file)."' style='width:128px;height:128px'/> ";
                                         $body = $conversation->body;
+                                        $body = $conversation->thread($body);
                                         $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->orderBy('id', 'DESC')->get();
                                         // $i = 0;
                                         foreach ($attachments as $attachment) {
@@ -664,11 +666,7 @@ if ($thread->title != "") {
                                             
                                             <div class="user-block" style="margin-bottom:-5px;margin-top:-2px;">
                                                 @if($conversation->user_id != null) 
-                                                    @if($role->profile_pic != null)
                                                     <img src="{{$role->profile_pic}}"class="img-circle img-bordered-sm" alt="User Image"/>
-                                                    @else
-                                                    <img src="{{ Gravatar::src($role->email) }}" class="img-circle img-bordered-sm" alt="img-circle img-bordered-sm">
-                                                    @endif
                                                 @else 
                                                     <img src="{{asset('lb-faveo/media/images/avatar_1.png')}}" class="img-circle img-bordered-sm" alt="img-circle img-bordered-sm">
                                                 @endif
@@ -687,7 +685,7 @@ if ($thread->title != "") {
                                            
                                         </h3>
                                         <div class="timeline-body" style="padding-left:30px;margin-bottom:-20px">
-                                            {!! nl2br($body) !!}
+                                            {!! $body !!}
                                         </div>
                                         @if($conversation->id == $ij->id)
         <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->id)->get(); ?>

@@ -172,10 +172,12 @@ class="active"
                 <div class="box-footer">
                     {!! Form::submit(Lang::get('lang.update'),['class'=>'btn btn-primary'])!!}
                 </div>
+                @include('themes.default1.client.helpdesk.social-sync.sync')
             </div>
         </div>
     </div>
     {!! Form::close() !!}
+    
 </div>
 <!-- Modal for last step of setting -->
 <div class="modal fade in" id="last-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none; padding-right: 15px;background-color: rgba(0, 0, 0, 0.7);">

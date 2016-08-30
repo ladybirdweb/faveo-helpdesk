@@ -22,7 +22,7 @@ class CreateQueueServicesTable extends Migration
         });
         
         $queue = new QueueService();
-        $services = ['database'=>'Local Database','beanstalkd'=>'Beanstalkd','sqs'=>'SQS','iron'=>'Iron','redis'=>'Redis'];
+        $services = ['sync'=>'Sync','database'=>'Local Database','beanstalkd'=>'Beanstalkd','sqs'=>'SQS','iron'=>'Iron','redis'=>'Redis'];
         $status = 0;
         foreach($services as $key=>$value){
             if($key=='database'){

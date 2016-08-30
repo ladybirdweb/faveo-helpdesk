@@ -321,6 +321,12 @@
                                 <span>{!! Lang::get('lang.api') !!}</span>
                             </a>
                         </li>
+                        <li class="treeview @yield('Log')">
+                            <a href="{{ url('logs') }}">
+                                <i class="fa fa-lock"></i>
+                                <span>Logs</span>
+                            </a>
+                        </li>
                         @endif
                         <?php \Event::fire('service.desk.admin.sidebar', array()); ?>
                     </ul>

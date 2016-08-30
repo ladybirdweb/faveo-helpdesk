@@ -11,13 +11,15 @@
   |
  */
 Route::group(['middleware' => ['web']], function () {
+    
     Route::group(['middleware' => 'update', 'middleware' => 'install'], function () {
         Route::controllers([
             'auth' => 'Auth\AuthController',
             'password' => 'Auth\PasswordController',
         ]);
-        Route::get('social/login/redirect/{provider}', ['uses' => 'Auth\AuthController@redirectToProvider', 'as' => 'social.login']);
+        Route::get('social/login/redirect/{provider}/{redirect?}', ['uses' => 'Auth\AuthController@redirectToProvider', 'as' => 'social.login']);
         Route::get('social/login/{provider}', ['as'=>'social.login.callback','uses'=>'Auth\AuthController@handleProviderCallback']);
+        Route::get('social-sync', ['as'=>'social.sync','uses'=>'Client\helpdesk\GuestController@sync']);
     });
     Route::get('account/activate/{token}', ['as' => 'account.activate', 'uses' => 'Auth\AuthController@accountActivate']);
     Route::get('getmail/{token}', 'Auth\AuthController@getMail');
@@ -1175,6 +1177,10 @@ Route::group(['middleware' => ['web']], function () {
     /**
      * Url Settings
      */
+    Breadcrumbs::register('url', function ($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push('URL', route('url.settings'));
+    });
     Route::get('url/settings', ['as' => 'url.settings', 'uses' => 'Admin\helpdesk\UrlSettingController@settings']);
     Route::patch('url/settings', ['as' => 'url.settings.post', 'uses' => 'Admin\helpdesk\UrlSettingController@postSettings']);
     
@@ -1193,4 +1199,5 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('social/media',['as'=>'social','uses'=>'Admin\helpdesk\SocialMedia\SocialMediaController@index']);
     Route::get('social/media/{provider}',['as'=>'social.media','uses'=>'Admin\helpdesk\SocialMedia\SocialMediaController@settings']);
     Route::post('social/media/{provider}',['as'=>'social.media.post','uses'=>'Admin\helpdesk\SocialMedia\SocialMediaController@postSettings']);
+    
 });

@@ -39,6 +39,7 @@ use File;
 use Illuminate\Http\Request;
 use Input;
 use Lang;
+use App\Http\Requests\helpdesk\Job\TaskRequest;
 
 /**
  * SettingsController.

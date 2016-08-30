@@ -140,14 +140,6 @@ return [
          */
 
 
-       
-   
-
-
-			'App\Plugins\Social\ServiceProvider',
-
-			//
-
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
         'Illuminate\Cache\CacheServiceProvider',
@@ -190,7 +182,11 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         Collective\Bus\BusServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Laravel\Socialite\SocialiteServiceProvider::class
+        Laravel\Socialite\SocialiteServiceProvider::class,
+        App\FaveoLog\LaravelLogViewerServiceProvider::class,
+        
+//
+
     ],
     /*
       |--------------------------------------------------------------------------

@@ -165,8 +165,10 @@ class Mailbox {
 	 * @return array mailsIds (or empty array)
 	 */
 	public function searchMailbox($criteria = 'ALL') {
+            //dd($this->getImapStream());
 		$mailsIds = imap_search($this->getImapStream(), $criteria, SE_UID, $this->serverEncoding);
-		return $mailsIds ? $mailsIds : array();
+		//dd($mailsIds);
+                return $mailsIds ? $mailsIds : array();
 	}
 
 	/**

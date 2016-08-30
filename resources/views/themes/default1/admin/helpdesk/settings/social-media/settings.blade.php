@@ -43,7 +43,15 @@ class="active"
             </ul>
         </div>
         @endif
+        
         <!-- check whether success or not -->
+        @if(Session::has('warn'))
+        <div class="alert alert-warning alert-dismissable">
+            <i class="fa  fa-check-circle"></i>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {!!Session::get('warn')!!}
+        </div>
+        @endif
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
             <i class="fa  fa-check-circle"></i>

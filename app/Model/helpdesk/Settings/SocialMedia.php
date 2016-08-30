@@ -13,17 +13,22 @@ class SocialMedia extends Model {
         'value',
     ];
 
-    public function getvalueByKey($provider, $key) {
-        $value = "";
-        if ($key === 'redirect') {
-            $value = url('social/login/' . $provider);
+    public function getvalueByKey($provider, $key="",$login=true) {
+        
+        $social = "";
+        if ($key == 'redirect'&& $login==true) {
+            $social = url('social/login/' . $provider);
         }
-        $social = $this->where('provider', $provider)->where('key', $key)->first();
-        if ($social) {
-            $value = $social->value;
+        if($key!=="" && $key !== 'redirect'){
+            $social = $this->where('provider', $provider)->where('key', $key)->first();
+        }elseif($key !== 'redirect'){
+            $social = $this->where('provider', $provider)->lists('value','key')->toArray();
         }
-
-        return $value;
+        if (is_object($social)) {
+            $social = $social->value;
+        }
+        
+        return $social;
     }
 
     public function checkActive($provider) {

@@ -20,15 +20,13 @@ class CloseWork extends Command {
      * @var string
      */
     protected $description = 'Ticket will close according to workflow';
-    protected $controller;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(UnAuthController $controller) {
-        $this->controller = $controller;
+    public function __construct() {
         parent::__construct();
     }
 
@@ -38,10 +36,11 @@ class CloseWork extends Command {
      * @return mixed
      */
     public function handle() {
-        if (env('DB_INSTALL') === 1) {
-            $this->controller->autoCloseTickets();
-            \Log::useDailyFiles(storage_path() . "/logs/info/ticket-close.log");
-            \Log::info('Close ticket workflow executed');
+        if (env('DB_INSTALL') == 1) {
+            $controller = new UnAuthController();
+            $controller->autoCloseTickets();
+            loging('ticket-close-workflow', 'Close ticket workflow executed','info');
+            //\Log::info('Close ticket workflow executed');
             $this->info('Close ticket workflow executed');
         }
     }

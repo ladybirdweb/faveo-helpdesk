@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin\helpdesk;
 
 // controllers
 use App\Http\Controllers\Controller;
-// request
-use App\Http\Requests\helpdesk\EmailsEditRequest;
 use App\Http\Requests\helpdesk\EmailsRequest;
 use App\Model\helpdesk\Agent\Department;
 // model
@@ -17,9 +15,9 @@ use App\Model\helpdesk\Utility\MailboxProtocol;
 use Crypt;
 // classes
 use Exception;
-use Illuminate\Http\Request;
 use Lang;
 use App\Http\Requests\helpdesk\Mail\MailRequest;
+use Log;
 
 /**
  * ======================================
@@ -98,39 +96,144 @@ class EmailsController extends Controller {
      *
      * @return int
      */
-    public function validatingEmailSettings(MailRequest $request,$id="") {
-        $service_request = $request->except('sending_status','_token', 'email_address', 'email_name', 'password', 'department', 'priority', 'help_topic', 'fetching_protocol', 'fetching_host', 'fetching_port', 'fetching_encryption', 'imap_authentication', 'sending_protocol', 'sending_host', 'sending_port', 'sending_encryption', 'smtp_authentication', 'internal_notes', '_wysihtml5_mode','code');
-        $service = $request->input('sending_protocol');
-        $send = 0;
-        $imap_check[0]=0;
-        if ($request->input('imap_validate') == 'on') {
-            $validate = '/validate-cert';
-        } elseif (!$request->input('imap_validate')) {
+    public function validatingEmailSettings(MailRequest $request, $id = "") {
+        try {
+            $service_request = $request->except('sending_status', '_token', 'email_address', 'email_name', 'password', 'department', 'priority', 'help_topic', 'fetching_protocol', 'fetching_host', 'fetching_port', 'fetching_encryption', 'imap_authentication', 'sending_protocol', 'sending_host', 'sending_port', 'sending_encryption', 'smtp_authentication', 'internal_notes', '_wysihtml5_mode', 'code');
+            $service = $request->input('sending_protocol');
             $validate = '/novalidate-cert';
+            $fetch = 1;
+            $send = 1;
+            if ($request->input('imap_validate') == 'on') {
+                $validate = '/validate-cert';
+            }
+            
+            if ($request->input('fetching_status') == 'on') {
+                $fetch = $this->getImapStream($request, $validate);
+            }
+            //dd($fetch);
+            if ($request->input('sending_status') == 'on') {
+                $this->emailService($service, $service_request);
+                $send = $this->sendDiagnoEmail($request);
+            }
+            //dd($send);
+            if ($send == 1 && $fetch == 1) {
+                $this->store($request, $service_request, $id);
+                return $this->jsonResponse('success', Lang::get('lang.success'));
+            }
+            //dd($send,$fetch);
+            return $this->validateEmailError($send, $fetch);
+            //dd($send,$fetch);
+            
+        } catch (Exception $ex) {
+            dd($ex);
+            $message = $ex->getMessage();
+            if(imap_last_error()){
+                $message = imap_last_error();
+            }
+            //dd($message);
+            //dd($ex->getMessage());
+            loging('mail-config', $message);
+            //Log::error($ex->getMessage());
+            return $this->jsonResponse('fails', $message);
+        }
+    }
+    
+    public function validateEmailError($out,$in){
+        if ($out !== 1) {
+            return $this->jsonResponse('fails', Lang::get('lang.outgoing_email_connection_failed'));
+        }
+        if ($in !== 1) {
+            return $this->jsonResponse('fails', Lang::get('lang.incoming_email_connection_failed_please_check_email_credentials_or_imap_settings'));
+        }
+        
+    }
+
+    public function jsonResponse($type, $message) {
+        if ($type == 'fails') {
+            $result = ['fails' => $message];
+        }
+        if ($type == 'success') {
+            $result = ['success' => $message];
+        }
+        return response()->json(compact('result'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param type Emails        $email
+     * @param type EmailsRequest $request
+     *
+     * @return type Redirect
+     */
+    public function store($request, $service_request = [], $id = "") {
+        $email = new Emails();
+        if ($id !== "") {
+            $email = $email->find($id);
+        }
+
+        $email->email_address = $request->email_address;
+
+        $email->email_name = $request->email_name;
+        $email->fetching_host = $request->fetching_host;
+        $email->fetching_port = $request->fetching_port;
+        $email->fetching_protocol = $request->fetching_protocol;
+        $email->sending_host = $request->sending_host;
+        $email->sending_port = $request->sending_port;
+        $email->sending_protocol = $this->getDriver($request->sending_protocol);
+        $email->sending_encryption = $request->sending_encryption;
+
+        if ($request->smtp_validate == 'on') {
+            $email->smtp_validate = $request->smtp_validate;
+        }
+
+        if ($request->input('password')) {
+            $email->password = Crypt::encrypt($request->input('password'));
         }
         if ($request->input('fetching_status') == 'on') {
-            $imap_check = $this->getImapStream($request, $validate);
-            if ($imap_check[0] == 0) {
-                $response =  Lang::get('lang.incoming_email_connection_failed_please_check_email_credentials_or_imap_settings');
-            }
+            $email->fetching_status = 1;
         } else {
-            $imap_check[0]=1;
+            $email->fetching_status = 0;
         }
         if ($request->input('sending_status') == 'on') {
-            $this->emailService($service, $service_request);
-            $send = $this->sendDiagnoEmail($request);
-            if($send===0){
-                $response =  Lang::get('lang.outgoing_email_connection_failed');
-            }
-        }else{
-           $send = 1; 
+            $email->sending_status = 1;
+        } else {
+            $email->sending_status = 0;
         }
-        if($send===1 && $imap_check[0]===1){
-            $this->store($request, $imap_check,$service_request,$id);
+        if ($request->input('auto_response') == 'on') {
+            $email->auto_response = 1;
+        } else {
+            $email->auto_response = 0;
         }
-        
-        return $this->jsonResponse($send,$imap_check);
-        
+        $email->fetching_encryption = '/'.$request->input('fetching_encryption');
+        if(!$request->input('imap_validate')){
+            
+            $email->fetching_encryption = '/'.$request->input('fetching_encryption').'/novalidate-cert';
+        }
+
+
+        // fetching department value
+        $email->department = $this->departmentValue($request->input('department'));
+        // fetching priority value
+        $email->priority = $this->priorityValue($request->input('priority'));
+        // fetching helptopic value
+        $email->help_topic = $this->helpTopicValue($request->input('help_topic'));
+        // inserting the encrypted value of password
+        $email->password = Crypt::encrypt($request->input('password'));
+        $email->save(); // run save
+        if ($id === "") {
+            // Creating a default system email as the first email is inserted to the system
+            $email_settings = Email::where('id', '=', '1')->first();
+            $email_settings->sys_email = $email->id;
+            $email_settings->save();
+        } else {
+            $this->update($id, $request);
+        }
+        if (count($service_request) > 0) {
+            $this->saveMailService($email->id, $service_request, $this->getDriver($request->sending_protocol));
+        }
+        $this->readMails($email);
+        return 1;
     }
 
     public function sendDiagnoEmail($request) {
@@ -142,12 +245,12 @@ class EmailsController extends Controller {
         $host = $request->input('sending_host');
         $port = $request->input('sending_port');
         $enc = $request->input('sending_encryption');
-        $service_request = $request->except('sending_status','_token', 'email_address', 'email_name', 'password', 'department', 'priority', 'help_topic', 'fetching_protocol', 'fetching_host', 'fetching_port', 'fetching_encryption', 'imap_authentication', 'sending_protocol', 'sending_host', 'sending_port', 'sending_encryption', 'smtp_authentication', 'internal_notes', '_wysihtml5_mode');
-        
+        $service_request = $request->except('sending_status', '_token', 'email_address', 'email_name', 'password', 'department', 'priority', 'help_topic', 'fetching_protocol', 'fetching_host', 'fetching_port', 'fetching_encryption', 'imap_authentication', 'sending_protocol', 'sending_host', 'sending_port', 'sending_encryption', 'smtp_authentication', 'internal_notes', '_wysihtml5_mode');
+
         $this->emailService($driver, $service_request);
         $this->setMailConfig($driver, $username, $name, $password, $enc, $host, $port);
         $controller = new \App\Http\Controllers\Common\PhpMailController();
-        $to = "vijay.sebastian@ladybirdweb.com";
+        $to = "example@ladybirdweb.com";
         $toname = "test";
         $subject = "test";
         $data = "test";
@@ -188,87 +291,6 @@ class EmailsController extends Controller {
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param type Emails        $email
-     * @param type EmailsRequest $request
-     *
-     * @return type Redirect
-     */
-    public function store($request, $imap_check,$service_request=[],$id="") {
-        $email = new Emails();
-        if($id!==""){
-            $email = $email->find($id);
-        }
-        try {
-            $email->email_address = $request->email_address;
-            
-            $email->email_name = $request->email_name;
-            $email->fetching_host = $request->fetching_host;
-            $email->fetching_port = $request->fetching_port;
-            $email->fetching_protocol = $request->fetching_protocol;
-            $email->sending_host = $request->sending_host;
-            $email->sending_port = $request->sending_port;
-            $email->sending_protocol = $this->getDriver($request->sending_protocol);
-            $email->sending_encryption = $request->sending_encryption;
-            
-            if ($request->smtp_validate == 'on') {
-                $email->smtp_validate = $request->smtp_validate;
-            }
-            
-            if ($request->input('password')) {
-                $email->password = Crypt::encrypt($request->input('password'));
-            }
-            if ($request->input('fetching_status') == 'on') {
-                $email->fetching_status = 1;
-            } else {
-                $email->fetching_status = 0;
-            }
-            if ($request->input('sending_status') == 'on') {
-                $email->sending_status = 1;
-            } else {
-                $email->sending_status = 0;
-            }
-            if ($request->input('auto_response') == 'on') {
-                $email->auto_response = 1;
-            } else {
-                $email->auto_response = 0;
-            }
-            //dd($email);
-            if ($imap_check !== null) {
-                $email->fetching_encryption = $imap_check[0];
-            } else {
-                $email->fetching_encryption = $request->input('fetching_encryption');
-            }
-            
-            // fetching department value
-            $email->department = $this->departmentValue($request->input('department'));
-            // fetching priority value
-            $email->priority = $this->priorityValue($request->input('priority'));
-            // fetching helptopic value
-            $email->help_topic = $this->helpTopicValue($request->input('help_topic'));
-            // inserting the encrypted value of password
-            $email->password = Crypt::encrypt($request->input('password'));
-            $email->save(); // run save
-            if($id===""){
-            // Creating a default system email as the first email is inserted to the system
-            $email_settings = Email::where('id', '=', '1')->first();
-            $email_settings->sys_email = $email->id;
-            $email_settings->save();
-            }else{
-                $this->update($id, $request);
-            }
-            if(count($service_request)>0){
-                $this->saveMailService($email->id,$service_request,$this->getDriver($request->sending_protocol));
-            }
-            return 1;
-
-        } catch (Exception $e) {
-            return 0;
-        }
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param type int             $id
@@ -296,12 +318,12 @@ class EmailsController extends Controller {
             $priority = $ticket_priority->get();
             // get all the mailbox protocols
             $mailbox_protocols = $mailbox_protocol->get();
-            
+
             $service = new \App\Model\MailJob\MailService();
             $services = $service->lists('name', 'id')->toArray();
-            
+
             // return if the execution is succeeded
-            return view('themes.default1.admin.helpdesk.emails.emails.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails', 'sys_email','services'))->with('count', $count);
+            return view('themes.default1.admin.helpdesk.emails.emails.edit', compact('mailbox_protocols', 'priority', 'departments', 'helps', 'emails', 'sys_email', 'services'))->with('count', $count);
         } catch (Exception $e) {
             // return if try fails
             return redirect()->back()->with('fails', $e->getMessage());
@@ -316,8 +338,18 @@ class EmailsController extends Controller {
      * @return int
      */
     public function validatingEmailSettingsUpdate($id, MailRequest $request) {
-        
-        return $this->validatingEmailSettings($request,$id);
+        try{
+        return $this->validatingEmailSettings($request, $id);
+        }  catch (Exception $ex){
+            $message = $ex->getMessage();
+            if(imap_last_error()){
+                $message = imap_last_error();
+            }
+            //dd($ex->getMessage());
+            loging('mail-config', $message);
+            //Log::error($ex->getMessage());
+            return $this->jsonResponse('fails', $message);
+        }
     }
 
     /**
@@ -331,7 +363,7 @@ class EmailsController extends Controller {
      */
     public function update($id, $request) {
         try {
-   
+
             if ($request->sys_email == 'on') {
                 $system = \DB::table('settings_email')
                         ->where('id', '=', 1)
@@ -406,21 +438,12 @@ class EmailsController extends Controller {
             $host = $request->input('fetching_host');
             $port = $request->input('fetching_port');
             $mailbox = '{' . $host . ':' . $port . $mailbox_protocol . $validate . '}INBOX';
+            //dd($mailbox);
             $mailbox_protocol = $fetching_encryption . $validate;
         }
-        try {
-            $imap_stream = imap_open($mailbox, $username, $password);
-        } catch (\Exception $ex) {
-            return $ex->getMessage();
-        }
-        $imap_stream = imap_open($mailbox, $username, $password);
-        if ($imap_stream) {
-            $return = [0 => 1, 1 => $mailbox_protocol];
-        } else {
-            $return = [0 => 0];
-        }
-
-        return $return;
+        //dd($mailbox, $username, $password);
+        imap_open($mailbox, $username, $password);
+        return 1;
     }
 
     /**
@@ -560,37 +583,36 @@ class EmailsController extends Controller {
             }
         }
     }
-    
-    public function jsonResponse($out,$in){
-        if($out!==1){
-           $result =  ['fails'=>Lang::get('lang.outgoing_email_connection_failed')]; 
-        }
-        if($in[0]!==1){
-            $result =  ['fails'=>Lang::get('lang.incoming_email_connection_failed_please_check_email_credentials_or_imap_settings')];
-        }
-        if($out===1 && $in[0]===1){
-            $result = ['success'=>Lang::get('lang.success')];
-        }
-        
-        return response()->json(compact('result'));
-    }
-    
-    public function saveMailService($emailid,$request,$driver){
+
+    public function saveMailService($emailid, $request, $driver) {
         $mail_service = new \App\Model\MailJob\FaveoMail();
-        $mails = $mail_service->where('email_id',$emailid)->get();
-        if(count($request)>0){
-            foreach($mails as $mail){
+        $mails = $mail_service->where('email_id', $emailid)->get();
+        if (count($request) > 0) {
+            foreach ($mails as $mail) {
                 $mail->delete();
             }
-            foreach($request as $key=>$value){
+            foreach ($request as $key => $value) {
                 $mail_service->create([
-                    'drive'=>$driver,
-                    'key'=>$key,
-                    'value'=>$value,
-                    'email_id'=>$emailid,
+                    'drive' => $driver,
+                    'key' => $key,
+                    'value' => $value,
+                    'email_id' => $emailid,
                 ]);
             }
         }
+    }
+    
+    public function readMails($email){
+        $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
+        $NotificationController = new \App\Http\Controllers\Common\NotificationController();
+        $TicketController = new \App\Http\Controllers\Agent\helpdesk\TicketController($PhpMailController, $NotificationController);
+        $TicketWorkflowController = new \App\Http\Controllers\Agent\helpdesk\TicketWorkflowController($TicketController);
+        $controller = new \App\Http\Controllers\Agent\helpdesk\MailController($TicketWorkflowController);
+        $emails = new Emails();
+        $settings_email = new Email();
+        $system = new \App\Model\helpdesk\Settings\System();
+        $ticket = new \App\Model\helpdesk\Settings\Ticket();
+        $controller->fetchEmail($email);
     }
 
 }

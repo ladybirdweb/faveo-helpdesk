@@ -14,10 +14,10 @@ class Kernel extends ConsoleKernel {
      * @var array
      */
     protected $commands = [
-//        'App\Console\Commands\Inspire',
-//        'App\Console\Commands\SendReport',
-//        'App\Console\Commands\CloseWork',
-//        'App\Console\Commands\TicketFetch',
+        'App\Console\Commands\Inspire',
+        'App\Console\Commands\SendReport',
+        'App\Console\Commands\CloseWork',
+        'App\Console\Commands\TicketFetch',
     ];
 
     /**
@@ -28,11 +28,12 @@ class Kernel extends ConsoleKernel {
      * @return void
      */
     protected function schedule(Schedule $schedule) {
-        if (env('DB_INSTALL') === 1) {
-//            $schedule->command('queue:listen', ['--tries' => 1])->everyMinute()->withoutOverlapping();
-//            $this->execute($schedule, 'fetching');
-//            $this->execute($schedule, 'notification');
-//            $this->execute($schedule, 'work');
+        if (env('DB_INSTALL') == 1) {
+            $schedule->command('queue:listen', ['--tries' => 1])->everyMinute()->withoutOverlapping();
+            $this->execute($schedule, 'fetching');
+            $this->execute($schedule, 'notification');
+            $this->execute($schedule, 'work');
+            loging('cron', 'executed successfully','info');
         }
     }
 

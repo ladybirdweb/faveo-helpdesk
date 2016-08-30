@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->boolean('gender');
-            $table->string('email')->unique();
+            $table->string('email')->nullable();
             $table->boolean('ban');
             $table->string('password', 60);
             $table->integer('active');

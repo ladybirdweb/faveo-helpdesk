@@ -38,12 +38,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $hidden = ['password', 'remember_token'];
 
     public function getProfilePicAttribute($value) {
-        //$n =1;
-        if (!$value) {
-            return \Gravatar::src($this->attributes['email']);
-        } else {
-            return asset('uploads/profilepic/' . $value);
+        $info = $this->getExtraInfo();
+        $pic = NULL;
+        if (count($info) > 0) {
+            $pic = $this->checkArray('avatar', $info);
         }
+        if (!$pic) {
+            $pic = \Gravatar::src($this->attributes['email']);
+        } if (!$pic) {
+            $pic = asset('uploads/profilepic/' . $value);
+        }
+        return $pic;
     }
 
     public function getOrganizationRelation() {
@@ -81,5 +86,43 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
         return $name;
     }
+
+    public function getEmailAttribute($value) {
+        if (!$value) {
+            $value = "Not Avalable";
+        }
+        return $value;
+    }
+
+    public function getExtraInfo($id = "") {
+        if ($id === "") {
+            $id = $this->attributes['id'];
+        }
+        $info = new UserAdditionalInfo();
+        $infos = $info->where('owner', $id)->lists('value', 'key')->toArray();
+        return $infos;
+    }
+
+    public function checkArray($key, $array) {
+        $value = "";
+        if (is_array($array)) {
+            if (array_key_exists($key, $array)) {
+                $value = $array[$key];
+            }
+        }
+        return $value;
+    }
+
+    public function twitterLink() {
+        $html = "";
+        $info = $this->getExtraInfo();
+        $username = $this->checkArray('username', $info);
+        if ($username !== "") {
+            $html = "<a href='https://twitter.com/" . $username . "' target='_blank'><i class='fa fa-twitter'> </i> Twitter</a>";
+        }
+        return $html;
+    }
+
+    
 
 }

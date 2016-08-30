@@ -20,6 +20,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('Illuminate\Contracts\Auth\Registrar');
+        require_once __DIR__ . '/../Http/helpers.php';
     }
 
     public function boot()

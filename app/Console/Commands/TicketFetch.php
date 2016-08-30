@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Http\Controllers\Agent\helpdesk\MailController;
+use Event;
+use App\Http\Controllers\Agent\helpdesk\TicketWorkflowController;
 
 class TicketFetch extends Command {
 
@@ -20,15 +22,13 @@ class TicketFetch extends Command {
      * @var string
      */
     protected $description = 'Fetching the tickets from service provider';
-    protected $controller;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(MailController $controller) {
-        $this->controller = $controller;
+    public function __construct() {
         parent::__construct();
     }
 
@@ -38,16 +38,28 @@ class TicketFetch extends Command {
      * @return mixed
      */
     public function handle() {
-        if (env('DB_INSTALL') === 1) {
+        if (env('DB_INSTALL') == 1) {
+
+            $controller = $this->mailController();
             $emails = new \App\Model\helpdesk\Email\Emails();
             $settings_email = new \App\Model\helpdesk\Settings\Email();
             $system = new \App\Model\helpdesk\Settings\System();
             $ticket = new \App\Model\helpdesk\Settings\Ticket();
-            $this->controller->readmails($emails, $settings_email, $system, $ticket);
-            \Log::useDailyFiles(storage_path() . "/logs/info/ticket-fetch.log");
-            \Log::info('Ticket has read');
+            $controller->readmails($emails, $settings_email, $system, $ticket);
+            Event::fire('ticket.fetch', ['event' => '']);
+            loging('fetching-ticket', 'Ticket has read','info');
+            //\Log::info('Ticket has read');
             $this->info('Ticket has read');
         }
+    }
+
+    public function mailController() {
+        $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
+        $NotificationController = new \App\Http\Controllers\Common\NotificationController();
+        $ticket = new \App\Http\Controllers\Agent\helpdesk\TicketController($PhpMailController, $NotificationController);
+        $work = new TicketWorkflowController($ticket);
+        $controller = new MailController($work);
+        return $controller;
     }
 
 }

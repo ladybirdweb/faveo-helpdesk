@@ -22,9 +22,8 @@ use DB;
 use Hash;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Lang;
-use Mail;
 use DateTime;
-use input;
+use Input;
 use Socialite;
 use App\Http\Controllers\Admin\helpdesk\SocialMedia\SocialMediaController;
 
@@ -63,29 +62,52 @@ class AuthController extends Controller {
     public function __construct(PhpMailController $PhpMailController, SocialMediaController $social) {
         $this->PhpMailController = $PhpMailController;
         $social->configService();
-        $this->middleware('guest', ['except' => ['getLogout', 'verifyOTP']]);
+        $this->middleware('guest', ['except' => ['getLogout', 'verifyOTP', 'redirectToProvider']]);
     }
 
-    public function redirectToProvider($provider) {
-        return Socialite::driver($provider)->redirect();
+    public function redirectToProvider($provider, $redirect = '') {
+
+        if ($redirect !== '') {
+            $this->setSession($provider, $redirect);
+        }
+        //dd(\Config::get('services'));
+        $s = Socialite::driver($provider)->redirect();
+        //dd('dscd');
+        return $s;
     }
 
     public function handleProviderCallback($provider) {
         try {
             //notice we are not doing any validation, you should do it
+            $this->changeRedirect();
 
             $user = Socialite::driver($provider)->user();
             if ($user) {
                 // stroing data to our use table and logging them in
+                $username = $user->getEmail();
+                $first_name = $user->getName();
+                if ($user->nickname) {
+                    $username = $user->nickname;
+                }
+                if(!$first_name){
+                    $first_name = $username;
+                }
                 $data = [
-                    'first_name' => $user->getName(),
+                    'first_name' => $first_name,
                     'email' => $user->getEmail(),
-                    'user_name' => $user->getEmail(),
+                    'user_name' => $username,
                     'role' => 'user',
                     'active' => 1,
                 ];
-
-                Auth::login(User::firstOrCreate($data));
+                $user = User::where('email',$data['email'])->first();
+                if(!$user){
+                    $user = User::where('user_name',$data['user_name'])->first();
+                }
+                if(!$user){
+                    $user =  User::firstOrCreate($data);
+                }
+                Auth::login($user);
+                
             }
             //after login redirecting to home page
             return redirect('/');
@@ -479,6 +501,17 @@ class AuthController extends Controller {
         }
     }
 
-    
+    public function changeRedirect() {
+        $provider = \Session::get('provider');
+        $url = \Session::get($provider . 'redirect');
+        \Config::set("services.$provider.redirect", $url);
+    }
+
+    public function setSession($provider, $redirect) {
+        $url = url($redirect);
+        \Session::set('provider', $provider);
+        \Session::set($provider . 'redirect', $url);
+        $this->changeRedirect();
+    }
 
 }

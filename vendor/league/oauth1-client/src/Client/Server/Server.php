@@ -152,6 +152,7 @@ abstract class Server
         }
 
         $uri = $this->urlTokenCredentials();
+       // dd($uri);
         $bodyParameters = array('oauth_verifier' => $verifier);
 
         $client = $this->createHttpClient();

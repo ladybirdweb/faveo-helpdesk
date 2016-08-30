@@ -158,6 +158,11 @@ class="active"
                 {!! $users->internal_note !!}
             </div>
             @endif
+            @if($users->twitterLink()!=="")
+            <div class="box-footer">
+               {!! $users->twitterLink() !!}
+            </div>
+            @endif
         </div>
     </div>
     <div class="col-md-9">
@@ -273,7 +278,7 @@ class="active"
                                                     $assigned = $assigned_to->first_name . " " . $assigned_to->last_name;
                                                 }
                                                 ?>
-                                                <td class="mailbox-name"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">{{$string}}   </a> ({!! $count!!}) <i class="fa fa-comment"></i>
+                                                <td class="mailbox-name"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">{{$string}}   </a> ({!! $count!!}) <i class="{{$ticket->sourceCss()}}"></i>
                                                     @if($collab > 0)&nbsp;<i class="fa fa-users"></i>@endif 
                                                     @if($attach > 0)&nbsp;<i class="fa fa-paperclip"></i>@endif</td>
                                                 <td class="mailbox-Id"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">#{!! $ticket->ticket_number !!}</a></td>

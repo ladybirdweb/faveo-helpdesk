@@ -21,6 +21,7 @@ class="active"
 <!-- /header -->
 <!-- breadcrumbs -->
 @section('breadcrumbs')
+
 <ol class="breadcrumb">
 
 </ol>
@@ -68,10 +69,10 @@ class="active"
                 {!! Form::label('www','WWW/non-WWW') !!}
                 </div>
                 <div class="col-md-4 ">
-                    <p> {!! Form::radio('www','yes',['class'=>'option']) !!} WWW</p>
+                    <p> {!! Form::radio('www','yes',$www['www'],['class'=>'option']) !!} WWW</p>
                 </div>
                 <div class="col-md-4">
-                    <p> {!! Form::radio('www','no',['class'=>'option']) !!} Non WWW</p>
+                    <p> {!! Form::radio('www','no',$www['nonwww'],['class'=>'option']) !!} Non WWW</p>
                 </div>
             </div>
  
@@ -81,10 +82,10 @@ class="active"
                 {!! Form::label('option','SSl') !!}
                 </div>
                 <div class="col-md-4">
-                    <p> {!! Form::radio('ssl','yes',['class'=>'option']) !!} HTTPS</p>
+                    <p> {!! Form::radio('ssl','yes',$https['https'],['class'=>'option']) !!} HTTPS</p>
                 </div>
                 <div class="col-md-4">
-                    <p> {!! Form::radio('ssl','no',['class'=>'option']) !!} HTTP</p>
+                    <p> {!! Form::radio('ssl','no',$https['http'],['class'=>'option']) !!} HTTP</p>
                 </div>
             </div>
         </div>
