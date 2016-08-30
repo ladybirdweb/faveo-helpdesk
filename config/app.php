@@ -185,7 +185,6 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         App\FaveoLog\LaravelLogViewerServiceProvider::class,
         
-//
 
     ],
     /*
@@ -250,7 +249,8 @@ return [
         'FCMGroup' => LaravelFCM\Facades\FCMGroup::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-         'Socialite' => Laravel\Socialite\Facades\Socialite::class
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'UnAuth' => 'App\Http\Controllers\Client\helpdesk\UnAuthController',
+
     ],
-    'name' => 'faveo helpdesk community',
 ];

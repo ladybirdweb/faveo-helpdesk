@@ -25,6 +25,7 @@ use Input;
 use Redirect;
 use Session;
 use View;
+use UnAuth;
 
 /**
  * |=======================================================================
@@ -300,7 +301,10 @@ class InstallController extends Controller
         $timezone = $request->input('timezone');
         $date = $request->input('date');
         $datetime = $request->input('datetime');
-
+        $changed = UnAuth::changeLanguage($language);
+        if (!$changed) {
+            return \Redirect::back()->with('fails', 'Invalid language');
+        }
         // checking requested timezone for the admin and system
         $timezones = Timezones::where('name', '=', $timezone)->first();
         if ($timezones == null) {
@@ -370,11 +374,12 @@ class InstallController extends Controller
             $datacontent2 = File::get($app_url);
             $datacontent2 = str_replace('http://localhost', $link, $datacontent2);
             File::put($app_url, $datacontent2);
+            $language = Cache::get('language');
             try {
                 Cache::flush();
 
                 Artisan::call('key:generate');
-
+                \Cache::forever('language', $language);
                 return View::make('themes/default1/installer/helpdesk/view6');
             } catch (Exception $e) {
                 return Redirect::route('account')->with('fails', $e->getMessage());
