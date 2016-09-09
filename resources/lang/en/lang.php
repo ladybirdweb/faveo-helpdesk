@@ -28,7 +28,7 @@ return [
     'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'    => 'We are sorry, but the page you are looking for can not be found.',
     'go_back'                                                           => 'Go Back',
     'the_board_is_offline'                                              => 'The Board is Offline',
-    'error_establishing_connection_to_database'                         => 'Error establishing connection to database',                         
+    'error_establishing_connection_to_database'                         => 'Error establishing connection to database',
     'unauthorized_access'                                               => 'Unauthorized Access',
     'otp-not-matched'                                                   => 'Oops! The OTP code you entered didn\'t match with the one we\'d sent to your number.',
     'otp-invalid'                                                       => 'OTP code must be a 6 digit number.',
@@ -302,10 +302,10 @@ return [
     'Ticket-has-been-created-successfully-your-ticket-number-is' => 'Ticket has been created successfully, your ticket number is',
     'Please-save-this-for-future-reference'                      => 'Please save this for future reference',
     'rtl'                                                        => 'RTL (Right to left)',
-    'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   =>  'The RTL support is only applicable to the outgoing mails',
+    'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   => 'The RTL support is only applicable to the outgoing mails',
     'user_set_ticket_status'                                     => 'Allow users to set ticket status',
     'send_otp_for_account_verfication'                           => 'Send OTP to users',
-    'otp_usage_info'                                             => 'We\'ll send an email with verification link and an sms with OTP code to the users. [OTP will be sent using Faveo msg91 plugin]' ,
+    'otp_usage_info'                                             => 'We\'ll send an email with verification link and an sms with OTP code to the users. [OTP will be sent using Faveo msg91 plugin]',
     'send_otp_title_message'                                     => 'Send OTP for user account verification, reset password and mobile number verification',
     'allow_unverified_users_to_create_ticket'                    => 'Allow unverified users to create tickets',
     /*
@@ -456,7 +456,7 @@ return [
       | Language page
       |------------------------------------------------
      */
-    'default'                    => 'default', 
+    'default'                    => 'default',
     'language-settings'          => 'Language Settings',
     'iso-code'                   => 'ISO-CODE',
     'download'                   => 'Downlaod',
@@ -479,7 +479,7 @@ return [
     'lang-doesnot-exist'         => 'Language package does not exist.',
     'active-lang-error'          => 'Language package can not be deleted when it is active.',
     'language-error'             => 'Language package not found in your lang directroy.',
-    'lang-fallback-lang'         => 'Cannot delete system\'s defualt fallback language', 
+    'lang-fallback-lang'         => 'Cannot delete system\'s defualt fallback language',
 
     /*
       |--------------------------------------
@@ -495,7 +495,7 @@ return [
     'plugin-path-missing'   => 'Plugin File Path is not exist',
     'no-plugin-file'        => 'Their is no ',
     'plugin-config-missing' => 'Their is no <b>config.php or ServiceProvider.php</b>',
-    
+
     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]
@@ -1028,7 +1028,7 @@ return [
     'organization_profile'                 => 'Organization Profile',
     'organization-s_head'                  => "Organization's Head",
     'select_department_manager'            => 'Select Department Manager',
-    'select_organization_manager'          => "Select Organization Manager",
+    'select_organization_manager'          => 'Select Organization Manager',
     'users_of'                             => 'Users of',
     'organization_created_successfully'    => 'Organization  Created Successfully',
     'organization_can_not_create'          => 'Organization can not Create',
@@ -1419,59 +1419,59 @@ return [
     *Latest update 27-07-2016
     *-----------------------------------------------------------------------------------
     */
-   'queue'=>'Queue',
-   'queues'=>'Queues',
+   'queue'  => 'Queue',
+   'queues' => 'Queues',
 
    /**-------------------------------------------------------------------------------------------------
     * OTP  messages body to send to user while registering, resetting passwords
     *--------------------------------------------------------------------------------------------------
     */
-   "hello"                   =>"Hello",
-   "reset-link-msg"          => ",\r\nHere is the link to reset your password.\r\n",
-   "otp-for-your"            => ",\r\nOTP for your",
-   "account-verification-is" => "account verification is",
-   "extra-text"              => ".\r\nYou can login to verify your account via OTP or just click on the link we've sent to your email address.",
-   "otp-not-sent"            => "We faced some problem in sending OTP please try after some time.",
-   
+   'hello'                   => 'Hello',
+   'reset-link-msg'          => ",\r\nHere is the link to reset your password.\r\n",
+   'otp-for-your'            => ",\r\nOTP for your",
+   'account-verification-is' => 'account verification is',
+   'extra-text'              => ".\r\nYou can login to verify your account via OTP or just click on the link we've sent to your email address.",
+   'otp-not-sent'            => 'We faced some problem in sending OTP please try after some time.',
+
     /**-------------------------------------------------------------------------------------------
      * Ticket number settings 03-08-2016
      * ------------------------------------------------------------------------------------------
      */
-    "format"=>'Format',
-    "ticket-number-format"=>'This setting is used to generate ticket numbers. Use hash signs (`#`) where digits are to be placed & dollar sign(‘$’) where characters are to be placed . Any other text in the number format will be preserved. ',
-    "ticket-number-type"=>'Choose a sequence from which to derive new ticket numbers. The system has a incrementing sequence and a random sequence by default',
-    
+    'format'               => 'Format',
+    'ticket-number-format' => 'This setting is used to generate ticket numbers. Use hash signs (`#`) where digits are to be placed & dollar sign(‘$’) where characters are to be placed . Any other text in the number format will be preserved. ',
+    'ticket-number-type'   => 'Choose a sequence from which to derive new ticket numbers. The system has a incrementing sequence and a random sequence by default',
+
     /**----------------------------------------------------------------------------------------------------
      * Social media integration
      * ---------------------------------------------------------------------------------------------------------
      */
-    
-    "client_id"=>"Client id",
-    "client_secret"=>"Client Secret",
-    "redirect"=>"Redirect Url",
-    "details"=>'Details',
-    "social-media"=>"Social Media",
-    
+
+    'client_id'     => 'Client id',
+    'client_secret' => 'Client Secret',
+    'redirect'      => 'Redirect Url',
+    'details'       => 'Details',
+    'social-media'  => 'Social Media',
+
     /**----------------------------------------------------------------------------------------------
      * Report
      * ----------------------------------------------------------------------------------------------
      */
-    
-    'report' => 'Report',
-    'Report' => 'REPORT',
-    'start_date' => 'Start Date',
-    'end_date'   => 'End Date',
-    'select'    =>  'Select',
-    'generate'  =>  'Generate',
-    'day'       =>  'Day',
-    'week'      =>  'Week',
-    'month'     =>  'Month',
-    'Currnet_In_Progress'   =>  'CURRENT IN PROGRESS',
-    'Total_Created'     => 'TOTAL CREATED',
-    'Total_Reopened'    =>  'TOTAL REOPENED',
-    'Total_Closed'      =>  'TOTAL CLOSED',
-    'tabular'           =>  'Tabular',
-    
-    
-    
+
+    'report'                => 'Report',
+    'Report'                => 'REPORT',
+    'start_date'            => 'Start Date',
+    'end_date'              => 'End Date',
+    'select'                => 'Select',
+    'generate'              => 'Generate',
+    'day'                   => 'Day',
+    'week'                  => 'Week',
+    'month'                 => 'Month',
+    'Currnet_In_Progress'   => 'CURRENT IN PROGRESS',
+    'Total_Created'         => 'TOTAL CREATED',
+    'Total_Reopened'        => 'TOTAL REOPENED',
+    'Total_Closed'          => 'TOTAL CLOSED',
+    'tabular'               => 'Tabular',
+
+
+
 ];

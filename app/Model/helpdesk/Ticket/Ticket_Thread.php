@@ -3,8 +3,8 @@
 namespace App\Model\helpdesk\Ticket;
 
 //use App\BaseModel;
-use Illuminate\Database\Eloquent\Model;
 use File;
+use Illuminate\Database\Eloquent\Model;
 
 class Ticket_Thread extends Model
 {
@@ -32,15 +32,17 @@ class Ticket_Thread extends Model
      {
          return str_replace('"', "'", $value);
      }
-     
-     public function thread($content){
-//         $porufi = $this->purify($content);
+
+    public function thread($content)
+    {
+        //         $porufi = $this->purify($content);
 //         dd($content,$porufi);
          return $content;
 //         return $this->purify($content);
-     }
-     
-     public function purify($value){
+    }
+
+    public function purify($value)
+    {
         require_once base_path('vendor'.DIRECTORY_SEPARATOR.'htmlpurifier'.DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'HTMLPurifier.auto.php');
         $path = base_path('vendor'.DIRECTORY_SEPARATOR.'htmlpurifier'.DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'HTMLPurifier'.DIRECTORY_SEPARATOR.'DefinitionCache'.DIRECTORY_SEPARATOR.'Serializer');
         if (!File::exists($path)) {
@@ -54,6 +56,7 @@ class Ticket_Thread extends Model
         if ($value != strip_tags($value)) {
             $value = $purifier->purify($value);
         }
+
         return $value;
-     }
+    }
 }

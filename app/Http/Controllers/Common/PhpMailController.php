@@ -12,10 +12,12 @@ use App\User;
 use Auth;
 use Mail;
 
-class PhpMailController extends Controller {
-
-    public function fetch_smtp_details($id) {
+class PhpMailController extends Controller
+{
+    public function fetch_smtp_details($id)
+    {
         $emails = Emails::where('id', '=', $id)->first();
+
         return $emails;
     }
 
@@ -24,7 +26,8 @@ class PhpMailController extends Controller {
      *
      * @return type
      */
-    public function company() {
+    public function company()
+    {
         $company = Company::Where('id', '=', '1')->first();
         if ($company->company_name == null) {
             $company = 'Support Center';
@@ -43,7 +46,8 @@ class PhpMailController extends Controller {
      *
      * @return type integer
      */
-    public function mailfrom($reg, $dept_id) {
+    public function mailfrom($reg, $dept_id)
+    {
         $email = Email::where('id', '=', '1')->first();
         if ($reg == 1) {
             return $email->sys_email;
@@ -57,17 +61,20 @@ class PhpMailController extends Controller {
         }
     }
 
-    public function sendmail($from, $to, $message, $template_variables) {
+    public function sendmail($from, $to, $message, $template_variables)
+    {
         $this->setQueue();
         $job = new \App\Jobs\SendEmail($from, $to, $message, $template_variables);
         $dispatch = $this->dispatch($job);
+
         return $dispatch;
     }
 
-    public function sendEmail($from, $to, $message, $template_variables) {
+    public function sendEmail($from, $to, $message, $template_variables)
+    {
         $from_address = $this->fetch_smtp_details($from);
         if ($from_address == null) {
-            throw new Exception("Invalid Email Configuration");
+            throw new Exception('Invalid Email Configuration');
         }
 
         $this->setMailConfig($from_address);
@@ -95,11 +102,11 @@ class PhpMailController extends Controller {
         $ticket_link_with_number = $this->checkElement('ticket_link_with_number', $template_variables);
 
         $system_from = $this->checkElement('system_from', $template_variables);
-        if ($system_from === "") {
+        if ($system_from === '') {
             $system_from = $this->company();
         }
         $system_link = $this->checkElement('system_link', $template_variables);
-        if ($system_link === "") {
+        if ($system_link === '') {
             $system_link = url('/');
         }
         $system_error = $this->checkElement('system_error', $template_variables);
@@ -125,7 +132,7 @@ class PhpMailController extends Controller {
                     if ($template_data->subject) {
                         $subject = $template_data->subject;
                         if ($ticket_number != null) {
-                            $subject = $subject . ' [#' . $ticket_number . ']';
+                            $subject = $subject.' [#'.$ticket_number.']';
                         }
                     } else {
                         $subject = $message['subject'];
@@ -151,17 +158,18 @@ class PhpMailController extends Controller {
 
             if ($template_type == 'ticket-reply-agent') {
                 $line = '---Reply above this line--- <br/><br/>';
-                $content = $line . $messagebody;
+                $content = $line.$messagebody;
             } else {
                 $content = $messagebody;
             }
         }
         $send = $this->laravelMail($recipants, $recipantname, $subject, $content, $cc, $attachment);
+
         return $send;
     }
 
-    public function setMailConfig($from_address) {
-
+    public function setMailConfig($from_address)
+    {
         $username = $from_address->email_address;
         $fromname = $from_address->email_name;
         $password = \Crypt::decrypt($from_address->password);
@@ -171,57 +179,59 @@ class PhpMailController extends Controller {
         $protocol = $from_address->sending_protocol;
         $this->setServices($from_address->id, $protocol);
         $configs = [
-            'username' => $username,
-            'from' => ['address' => $username, 'name' => $fromname,],
-            'password' => $password,
+            'username'   => $username,
+            'from'       => ['address' => $username, 'name' => $fromname],
+            'password'   => $password,
             'encryption' => $smtpsecure,
-            'host' => $host,
-            'port' => $port,
-            'driver' => $protocol,
+            'host'       => $host,
+            'port'       => $port,
+            'driver'     => $protocol,
         ];
         foreach ($configs as $key => $config) {
             if (is_array($config)) {
                 foreach ($config as $from) {
-                    \Config::set('mail.' . $key, $config);
+                    \Config::set('mail.'.$key, $config);
                 }
             } else {
-                \Config::set('mail.' . $key, $config);
+                \Config::set('mail.'.$key, $config);
             }
         }
     }
 
-    public function setServices($emailid, $protocol) {
+    public function setServices($emailid, $protocol)
+    {
         $service = new \App\Model\MailJob\FaveoMail();
         $services = $service->where('email_id', $emailid)->lists('value', 'key')->toArray();
         $controller = new \App\Http\Controllers\Admin\helpdesk\EmailsController();
         $controller->setServiceConfig($protocol, $services);
     }
 
-    public function checkElement($element, $array) {
-        $value = "";
+    public function checkElement($element, $array)
+    {
+        $value = '';
         if (is_array($array)) {
-            if (key_exists($element, $array)) {
+            if (array_key_exists($element, $array)) {
                 $value = $array[$element];
             }
         }
+
         return $value;
     }
 
-    public function laravelMail($to, $toname, $subject, $data, $cc, $attach) {
+    public function laravelMail($to, $toname, $subject, $data, $cc, $attach)
+    {
+        $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach) {
+            $m->to($to, $toname)->subject($subject);
 
-            $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach) {
-
-                        $m->to($to, $toname)->subject($subject);
-
-                        if ($cc != null) {
-                            foreach ($cc as $collaborator) {
-                                //mail to collaborators
+            if ($cc != null) {
+                foreach ($cc as $collaborator) {
+                    //mail to collaborators
                                 $collab_user_id = $collaborator->user_id;
-                                $user_id_collab = User::where('id', '=', $collab_user_id)->first();
-                                $collab_email = $user_id_collab->email;
-                                $m->cc($collab_email);
-                            }
-                        }
+                    $user_id_collab = User::where('id', '=', $collab_user_id)->first();
+                    $collab_email = $user_id_collab->email;
+                    $m->cc($collab_email);
+                }
+            }
 
                         //            $mail->addBCC($bc);
 
@@ -234,20 +244,21 @@ class PhpMailController extends Controller {
                                 $m->attach($file_path, ['as' => $file_name, 'mime' => $mime]);
                             }
                         }
-                    });
-            if (is_object($mail) || (is_object($mail) && $mail->getStatusCode() == 200)) {
-                $mail = 1;
-            }
-            return $mail;
-        
+        });
+        if (is_object($mail) || (is_object($mail) && $mail->getStatusCode() == 200)) {
+            $mail = 1;
+        }
+
+        return $mail;
     }
 
-    public function setQueue() {
+    public function setQueue()
+    {
         $short = 'database';
         $field = [
             'driver' => 'database',
-            'table' => 'jobs',
-            'queue' => 'default',
+            'table'  => 'jobs',
+            'queue'  => 'default',
             'expire' => 60,
         ];
         $queue = new \App\Model\MailJob\QueueService();
@@ -260,11 +271,11 @@ class PhpMailController extends Controller {
         $this->setQueueConfig($short, $field);
     }
 
-    public function setQueueConfig($short, $field) {
+    public function setQueueConfig($short, $field)
+    {
         \Config::set('queue.default', $short);
         foreach ($field as $key => $value) {
             \Config::set("queue.connections.$short.$key", $value);
         }
     }
-
 }

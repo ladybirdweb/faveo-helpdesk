@@ -12,8 +12,8 @@ use App\Http\Requests\helpdesk\TemplateUdate;
 // models
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Email\Template;
-use App\Model\helpdesk\Utility\Languages;
 use App\Model\helpdesk\Settings\CommonSettings;
+use App\Model\helpdesk\Utility\Languages;
 // classes
 use Exception;
 use Illuminate\Http\Request;
@@ -329,13 +329,13 @@ class TemplateController extends Controller
                 $mail->AddAddress($address);
                 $mail->Subject = $request->subject; // subject of the email
                 $body = $request->message; // body of the email
-                $mail->CharSet = "utf8";
+                $mail->CharSet = 'utf8';
 //                $mail->MsgHTML($body);
 //                $body = $request->message;
                 $rtl = CommonSettings::where('option_name', '=', 'enable_rtl')->first();
-                if($rtl->option_value == 1) {
+                if ($rtl->option_value == 1) {
                     $mail->ContentType = 'text/html';
-                    $body = '<html dir="rtl" xml:lang="ar" lang="ar"><head></head><body dir="rtl">' . $body . '</body></html>';
+                    $body = '<html dir="rtl" xml:lang="ar" lang="ar"><head></head><body dir="rtl">'.$body.'</body></html>';
                 } else {
                 }
                 if (!$mail->Send()) {
@@ -364,13 +364,13 @@ class TemplateController extends Controller
                 $mail->setFrom($email_details->email_address, $email_details->email_name);
                 $mail->addAddress($request->to, '');     // Add a recipient
                 $mail->isHTML(true);                                  // Set email format to HTML
-                $mail->CharSet = "utf8";
+                $mail->CharSet = 'utf8';
                 $mail->Subject = $request->subject;
                 $body = $request->message;
                 $rtl = CommonSettings::where('option_name', '=', 'enable_rtl')->first();
-                if($rtl->option_value == 1) {
+                if ($rtl->option_value == 1) {
                     $mail->ContentType = 'text/html';
-                    $body = '<html dir="rtl" xml:lang="ar" lang="ar"><head></head><body dir="rtl">' . $body . '</body></html>';
+                    $body = '<html dir="rtl" xml:lang="ar" lang="ar"><head></head><body dir="rtl">'.$body.'</body></html>';
                 } else {
                 }
                 $mail->Body = $body;
@@ -380,6 +380,7 @@ class TemplateController extends Controller
                     $return = Lang::get('lang.message_has_been_sent');
                 }
             }
+
             return redirect()->back()->with('success', $return);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());

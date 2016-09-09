@@ -350,6 +350,7 @@ class TicketWorkflowController extends Controller
                 $ticket_settings_details = $this->changeStatus($workflow_action, $ticket_settings_details);
             }
         }
+
         return $ticket_settings_details;
     }
 

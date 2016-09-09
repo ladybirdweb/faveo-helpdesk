@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('Illuminate\Contracts\Auth\Registrar');
-        require_once __DIR__ . '/../Http/helpers.php';
+        require_once __DIR__.'/../Http/helpers.php';
     }
 
     public function boot()
@@ -51,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
         \View::composer('themes.default1.update.notification', function () {
             $notification = new BarNotification();
             $not = [
-                'notification' => $notification->where('value','!=','')->get(),
+                'notification' => $notification->where('value', '!=', '')->get(),
             ];
             view()->share($not);
         });

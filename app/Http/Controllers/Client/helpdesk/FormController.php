@@ -11,9 +11,9 @@ use App\Model\helpdesk\Agent\Department;
 // models
 use App\Model\helpdesk\Form\Fields;
 use App\Model\helpdesk\Manage\Help_topic;
+use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
-use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
@@ -34,15 +34,16 @@ use Redirect;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class FormController extends Controller {
-
+class FormController extends Controller
+{
     /**
      * Create a new controller instance.
      * Constructor to check.
      *
      * @return void
      */
-    public function __construct(TicketWorkflowController $TicketWorkflowController) {
+    public function __construct(TicketWorkflowController $TicketWorkflowController)
+    {
         $this->middleware('board');
         // creating a TicketController instance
         $this->TicketWorkflowController = $TicketWorkflowController;
@@ -55,28 +56,30 @@ class FormController extends Controller {
      *
      * @return type
      */
-    public function getForm(Help_topic $topic, CountryCode $code) {
+    public function getForm(Help_topic $topic, CountryCode $code)
+    {
         if (\Config::get('database.install') == '%0%') {
             return \Redirect::route('licence');
         }
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         if (!\Auth::check() && ($settings->status == 1 || $settings->status == '1')) {
-            return redirect('auth/login')->with(['login_require'=> 'Please login to your account for submitting a ticket', 'referer' => 'form']);
+            return redirect('auth/login')->with(['login_require' => 'Please login to your account for submitting a ticket', 'referer' => 'form']);
         }
-            $location = GeoIP::getLocation('');
-            $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
-            if (System::first()->status == 1) {
-                $topics = $topic->get();
-                $codes = $code->get();
-                if ($phonecode->phonecode) {
-                    $phonecode = $phonecode->phonecode;
-                } else {
-                    $phonecode = "";
-                }
-                return view('themes.default1.client.helpdesk.form', compact('topics', 'codes'))->with('phonecode', $phonecode);
+        $location = GeoIP::getLocation('');
+        $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+        if (System::first()->status == 1) {
+            $topics = $topic->get();
+            $codes = $code->get();
+            if ($phonecode->phonecode) {
+                $phonecode = $phonecode->phonecode;
             } else {
-                return \Redirect::route('home');
+                $phonecode = '';
             }
+
+            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes'))->with('phonecode', $phonecode);
+        } else {
+            return \Redirect::route('home');
+        }
     }
 
     /**
@@ -87,43 +90,43 @@ class FormController extends Controller {
      *
      * @return type string
      */
-    public function postForm($id, Help_topic $topic) {
+    public function postForm($id, Help_topic $topic)
+    {
         if ($id != 0) {
             $helptopic = $topic->where('id', '=', $id)->first();
             $custom_form = $helptopic->custom_form;
             $values = Fields::where('forms_id', '=', $custom_form)->get();
             if (!$values) {
-                
             }
             if ($values) {
                 foreach ($values as $form_data) {
-                    if ($form_data->type == "select") {
+                    if ($form_data->type == 'select') {
                         $form_fields = explode(',', $form_data->value);
-                        $var = "";
+                        $var = '';
                         foreach ($form_fields as $form_field) {
-                            $var .= '<option value="' . $form_field . '">' . $form_field . '</option>';
+                            $var .= '<option value="'.$form_field.'">'.$form_field.'</option>';
                         }
-                        echo '<br/><label>' . ucfirst($form_data->label) . '</label><select class="form-control" name="' . $form_data->name . '">' . $var . '</select>';
-                    } elseif ($form_data->type == "radio") {
+                        echo '<br/><label>'.ucfirst($form_data->label).'</label><select class="form-control" name="'.$form_data->name.'">'.$var.'</select>';
+                    } elseif ($form_data->type == 'radio') {
                         $type2 = $form_data->value;
                         $vals = explode(',', $type2);
-                        echo '<br/><label>' . ucfirst($form_data->label) . '</label><br/>';
+                        echo '<br/><label>'.ucfirst($form_data->label).'</label><br/>';
                         foreach ($vals as $val) {
-                            echo '<input type="' . $form_data->type . '" name="' . $form_data->name . '"> ' . $form_data->value . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                            echo '<input type="'.$form_data->type.'" name="'.$form_data->name.'"> '.$form_data->value.'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                         }
-                        echo "<br/>";
-                    } elseif ($form_data->type == "textarea") {
+                        echo '<br/>';
+                    } elseif ($form_data->type == 'textarea') {
                         $type3 = $form_data->value;
-                        echo '<br/><label>' . $form_data->label . '</label></br><textarea id="unique-textarea" name="' . $form_data->name . '" class="form-control" style="height:15%;"></textarea>';
-                    } elseif ($form_data->type == "checkbox") {
+                        echo '<br/><label>'.$form_data->label.'</label></br><textarea id="unique-textarea" name="'.$form_data->name.'" class="form-control" style="height:15%;"></textarea>';
+                    } elseif ($form_data->type == 'checkbox') {
                         $type4 = $form_data->value;
                         $checks = explode(',', $type4);
-                        echo '<br/><label>' . ucfirst($form_data->label) . '</label><br/>';
+                        echo '<br/><label>'.ucfirst($form_data->label).'</label><br/>';
                         foreach ($checks as $check) {
-                            echo '<input type="' . $form_data->type . '" name="' . $form_data->name . '">&nbsp&nbsp' . $check;
+                            echo '<input type="'.$form_data->type.'" name="'.$form_data->name.'">&nbsp&nbsp'.$check;
                         }
                     } else {
-                        echo '<br/><label>' . ucfirst($form_data->label) . '</label><input type="' . $form_data->type . '" class="form-control"   name="' . $form_data->name . '" />';
+                        echo '<br/><label>'.ucfirst($form_data->label).'</label><input type="'.$form_data->type.'" class="form-control"   name="'.$form_data->name.'" />';
                     }
                 }
                 echo '<br/><br/>';
@@ -139,7 +142,8 @@ class FormController extends Controller {
      * @param type Request $request
      * @param type User    $user
      */
-    public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code) {
+    public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code)
+    {
         $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token');
 
         $name = $request->input('Name');
@@ -151,12 +155,12 @@ class FormController extends Controller {
         $mobile_number = $request->input('Mobile');
         $status = $ticket_settings->first()->status;
         $helptopic = $request->input('helptopic');
-        $helpTopicObj = Help_topic::where('id','=', $helptopic);
-        if($helpTopicObj->exists() && ($helpTopicObj->value('status')==1)){
+        $helpTopicObj = Help_topic::where('id', '=', $helptopic);
+        if ($helpTopicObj->exists() && ($helpTopicObj->value('status') == 1)) {
             $department = $helpTopicObj->value('department');
-        }else{
-            $defaultHelpTopicID = Ticket::where('id', '=', '1')->first()->help_topic; 
-            $department = Help_topic::where('id','=', $defaultHelpTopicID)->value('department');
+        } else {
+            $defaultHelpTopicID = Ticket::where('id', '=', '1')->first()->help_topic;
+            $department = Help_topic::where('id', '=', $defaultHelpTopicID)->value('department');
         }
         $sla = $ticket_settings->first()->sla;
         $priority = $ticket_settings->first()->priority;
@@ -171,8 +175,8 @@ class FormController extends Controller {
             $geoipcode = $code->where('iso', '=', $location['isoCode'])->first();
             if ($phonecode == null) {
                 $data = [
-                    'fails' => Lang::get('lang.country-code-required-error'),
-                    'phonecode' => $geoipcode->phonecode,
+                    'fails'              => Lang::get('lang.country-code-required-error'),
+                    'phonecode'          => $geoipcode->phonecode,
                     'country_code_error' => 1,
                 ];
 
@@ -181,8 +185,8 @@ class FormController extends Controller {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $phonecode)->get();
                 if (!count($code)) {
                     $data = [
-                        'fails' => Lang::get('lang.incorrect-country-code-error'),
-                        'phonecode' => $geoipcode->phonecode,
+                        'fails'              => Lang::get('lang.incorrect-country-code-error'),
+                        'phonecode'          => $geoipcode->phonecode,
                         'country_code_error' => 1,
                     ];
 
@@ -208,7 +212,7 @@ class FormController extends Controller {
                 }
             }
             // dd($result);
-            return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is') . ' ' . $result[0] . '. ' . Lang::get('lang.Please-save-this-for-future-reference'));
+            return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is').' '.$result[0].'. '.Lang::get('lang.Please-save-this-for-future-reference'));
         }
 //        dd($result);
     }
@@ -220,14 +224,14 @@ class FormController extends Controller {
      *
      * @return type view
      */
-    public function post_ticket_reply($id, Request $request) {
-
+    public function post_ticket_reply($id, Request $request)
+    {
         try {
             if ($comment != null) {
                 $tickets = Tickets::where('id', '=', $id)->first();
                 $thread = Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
 
-                $subject = $thread->title . '[#' . $tickets->ticket_number . ']';
+                $subject = $thread->title.'[#'.$tickets->ticket_number.']';
                 $body = $request->input('comment');
 
                 $user_cred = User::where('id', '=', $tickets->user_id)->first();
@@ -261,13 +265,14 @@ class FormController extends Controller {
         }
     }
 
-    public function getCustomForm(Request $request) {
-        $html = "";
+    public function getCustomForm(Request $request)
+    {
+        $html = '';
         $helptopic_id = $request->input('helptopic');
         $helptopics = new Help_topic();
         $helptopic = $helptopics->find($helptopic_id);
         if (!$helptopic) {
-            throw new Exception("We can not find your request");
+            throw new Exception('We can not find your request');
         }
         $custom_form = $helptopic->custom_form;
         if ($custom_form) {
@@ -276,7 +281,7 @@ class FormController extends Controller {
             $form_controller = new \App\Http\Controllers\Admin\helpdesk\FormController($fields, $forms);
             $html = $form_controller->renderForm($custom_form);
         }
+
         return $html;
     }
-
 }

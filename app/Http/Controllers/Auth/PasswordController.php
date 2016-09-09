@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 // controllers
 use App\Http\Controllers\Common\PhpMailController;
-use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Controller;
 // request
 use App\User;
@@ -53,7 +52,7 @@ class PasswordController extends Controller
     {
         $date = date('Y-m-d H:i:s');
         $this->validate($request, ['email' => 'required|email']);
-        \Event::fire('reset.password',array());
+        \Event::fire('reset.password', []);
         $user = User::where('email', '=', $request->only('email'))->first();
         if (isset($user)) {
             $user1 = $user->email;
@@ -73,9 +72,10 @@ class PasswordController extends Controller
                 'url'    => url('password/reset/'.$code),
                 'name'   => $user->user_name,
                 'mobile' => $user->mobile,
-                'code'   => $user->country_code];
-                \Event::fire('reset.password2',array($value));
+                'code'   => $user->country_code, ];
+                \Event::fire('reset.password2', [$value]);
             }
+
             return redirect()->back()->with('status', Lang::get('lang.we_have_e-mailed_your_password_reset_link'));
         } else {
             return redirect()->back()->with('fails', Lang::get("lang.we_can't_find_a_user_with_that_e-mail_address"));

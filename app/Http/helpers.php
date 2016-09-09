@@ -1,9 +1,6 @@
 <?php
 
-function loging($context,$message,$level='error')
+function loging($context, $message, $level = 'error')
 {
-    
-    \Log::$level($message.":-:-:-".$context);
-
+    \Log::$level($message.':-:-:-'.$context);
 }
-

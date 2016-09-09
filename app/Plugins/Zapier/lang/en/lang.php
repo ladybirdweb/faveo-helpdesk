@@ -1,5 +1,6 @@
 <?php
+
 return [
-    "zapier-integrations"=>"Zapier Integrations",
-    'applications'=>'Applications',
+    'zapier-integrations' => 'Zapier Integrations',
+    'applications'        => 'Applications',
 ];

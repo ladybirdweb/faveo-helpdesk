@@ -15,7 +15,7 @@ return [
       |
      */
 
-    'driver' =>env('MAIL_DRIVER', ''),
+    'driver' => env('MAIL_DRIVER', ''),
     /*
       |--------------------------------------------------------------------------
       | SMTP Host Address

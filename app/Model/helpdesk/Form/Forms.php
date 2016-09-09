@@ -14,50 +14,59 @@ class Forms extends BaseModel
      * @var array
      */
     protected $fillable = ['formname'];
-    
-    
-    public function fieldRelation(){
+
+    public function fieldRelation()
+    {
         $related = "App\Model\helpdesk\Form\Fields";
+
         return $this->hasMany($related);
     }
-    
-    public function fields(){
+
+    public function fields()
+    {
         $relation = $this->fieldRelation()->get();
-        return $relation; 
+
+        return $relation;
     }
-    
-    public function fieldsDelete(){
+
+    public function fieldsDelete()
+    {
         $fields = $this->fields();
-        if($fields->count()>0){
-            foreach($fields as $field){
+        if ($fields->count() > 0) {
+            foreach ($fields as $field) {
                 $field->delete();
             }
         }
     }
-    
-    public function formValueRelation(){
+
+    public function formValueRelation()
+    {
         $related = "App\Model\helpdesk\Form\FieldValue";
-        return $this->hasMany($related,'child_id');
+
+        return $this->hasMany($related, 'child_id');
     }
-    
-    public function formValueChild(){
+
+    public function formValueChild()
+    {
         $childs = $this->formValueRelation()->get();
+
         return $childs;
     }
-    
-    public function deleteFormChild(){
+
+    public function deleteFormChild()
+    {
         $childs = $this->formValueChild();
-        if($childs->count()>0){
-            foreach ($childs as $child){
-                $child->child_id = NULL;
+        if ($childs->count() > 0) {
+            foreach ($childs as $child) {
+                $child->child_id = null;
                 $child->save();
             }
         }
     }
-    
-    public function delete() {
+
+    public function delete()
+    {
         $this->fieldsDelete();
         parent::delete();
     }
-    
 }
