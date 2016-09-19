@@ -111,7 +111,7 @@ class MailController extends Controller
                         }
                         foreach ($mailsIds as $mailId) {
                             try {
-                                $overview = $mailbox->get_overview($mailId);
+                                $overview = $mailbox->getMailsInfo($mailId);
                             } catch (Exception $e) {
                                 return \Lang::get('lang.unable_to_fetch_emails');
                             }
