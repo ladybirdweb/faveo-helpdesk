@@ -61,7 +61,7 @@ class FormController extends Controller
         if (\Config::get('database.install') == '%0%') {
             return \Redirect::route('licence');
         }
-        $location = GeoIP::getLocation('');
+        $location = GeoIP::getLocation();
         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
         if (System::first()->status == 1) {
             $topics = $topic->get();
