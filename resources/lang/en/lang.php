@@ -1394,12 +1394,12 @@ return [
    'use_subject'                                    => 'Use Subject',
    'reopen'                                         => 'Reopen',
    'invalid_attempt'                                => 'Invalid Attempt',
-    
+
     /**--------------------------------------------------------------------------------------------
      * Attachment Updated
      * --------------------------------------------------------------------------------------------
      */
-    'unable_to_load_file_type'  =>  'Unable to load file type',
-    
-    
+    'unable_to_load_file_type'  => 'Unable to load file type',
+
+
 ];
