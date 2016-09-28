@@ -90,7 +90,7 @@ class PhpMailController extends Controller
             } else {
                 $add_embedded_images = null;
             }
-            
+
                 // template variables
                 if (Auth::user()) {
                     $agent = Auth::user()->user_name;
@@ -272,31 +272,31 @@ class PhpMailController extends Controller
                     $mail->addAttachment($file_path, $file_name);
                 }
             }
-            
+
             // inline images embedded as attachments
             if ($add_embedded_images != null) {
-                    // dd($add_embedded_images);
+                // dd($add_embedded_images);
                     foreach ($add_embedded_images as $add_embedded_image) {
-                        if(isset($add_embedded_image->id)) {
+                        if (isset($add_embedded_image->id)) {
                             $cid = $add_embedded_image->id;
                         } else {
                             $cid = null;
                         }
-                        if(isset($add_embedded_image->name)) {
+                        if (isset($add_embedded_image->name)) {
                             $file_name = $add_embedded_image->name;
                         } else {
                             $file_name = null;
                         }
-                        if(isset($add_embedded_image->filePath)) {
+                        if (isset($add_embedded_image->filePath)) {
                             $file_path = $add_embedded_image->filePath;
                         } else {
                             $file_path = null;
                         }
-                        if(isset($add_embedded_image->disposition)) {
-                            if($add_embedded_image->disposition == 'INLINE') {
+                        if (isset($add_embedded_image->disposition)) {
+                            if ($add_embedded_image->disposition == 'INLINE') {
                                 $mail->AddEmbeddedImage($file_path, $cid, $file_name);
                             } else {
-                                $mail->addAttachment($file_path, $file_name);       
+                                $mail->addAttachment($file_path, $file_name);
                             }
                         } else {
                             $file_path = $add_embedded_image->getRealPath();
@@ -305,7 +305,7 @@ class PhpMailController extends Controller
                         }
                     }
             }
-            
+
             $mail->CharSet = 'utf8';
             $mail->Subject = $subject;
             if ($template == 'ticket-reply-agent') {
