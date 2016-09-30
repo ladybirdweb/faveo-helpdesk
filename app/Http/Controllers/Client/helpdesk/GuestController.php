@@ -55,7 +55,7 @@ class GuestController extends Controller
      public function getProfile(CountryCode $code)
      {
          $user = Auth::user();
-         $location = GeoIP::getLocation('');
+         $location = GeoIP::getLocation();
          $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
 
          return view('themes.default1.client.helpdesk.profile', compact('user'))->with('phonecode', $phonecode->phonecode);

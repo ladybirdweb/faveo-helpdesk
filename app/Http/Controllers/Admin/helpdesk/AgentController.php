@@ -88,7 +88,7 @@ class AgentController extends Controller
             $departments = $department->get();
             // list all the teams in a single variable
             $teams = $team->lists('id', 'name')->toArray();
-            $location = GeoIP::getLocation('');
+            $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
             // returns to the page with all the variables and their datas
             return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team'))->with('phonecode', $phonecode->phonecode);
@@ -172,7 +172,7 @@ class AgentController extends Controller
     public function edit($id, User $user, Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team, CountryCode $code)
     {
         try {
-            $location = GeoIP::getLocation('');
+            $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
             $user = $user->whereId($id)->first();
             $team = $team->get();

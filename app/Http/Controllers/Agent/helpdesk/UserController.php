@@ -159,7 +159,7 @@ class UserController extends Controller
     public function create(CountryCode $code)
     {
         try {
-            $location = GeoIP::getLocation('');
+            $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
 
             return view('themes.default1.agent.helpdesk.user.create')->with('phonecode', $phonecode->phonecode);
@@ -263,7 +263,7 @@ class UserController extends Controller
             $user = new User();
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
-            $location = GeoIP::getLocation('');
+            $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
 
             return view('themes.default1.agent.helpdesk.user.edit', compact('users'))->with('phonecode', $phonecode->phonecode);
@@ -333,7 +333,7 @@ class UserController extends Controller
     public function getProfileedit(CountryCode $code)
     {
         $user = Auth::user();
-        $location = GeoIP::getLocation('');
+        $location = GeoIP::getLocation();
         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
         try {
             return view('themes.default1.agent.helpdesk.user.profile-edit', compact('user'))->with('phonecode', $phonecode->phonecode);

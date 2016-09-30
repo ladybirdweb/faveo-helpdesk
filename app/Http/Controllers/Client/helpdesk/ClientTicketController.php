@@ -83,10 +83,11 @@ class ClientTicketController extends Controller
         $team_assign = null;
         $ticket_status = null;
         $auto_response = 0;
-        
+
         $inline_attachment = null;
 
         $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response, $inline_attachment);
+
         return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
     }
 }

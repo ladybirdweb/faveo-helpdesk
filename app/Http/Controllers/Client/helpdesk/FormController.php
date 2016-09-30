@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Client\helpdesk;
 
 // controllers
 use App\Http\Controllers\Agent\helpdesk\TicketWorkflowController;
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\Common\FileuploadController;
+use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\ClientRequest;
 use App\Model\helpdesk\Agent\Department;
@@ -61,7 +61,7 @@ class FormController extends Controller
         if (\Config::get('database.install') == '%0%') {
             return \Redirect::route('licence');
         }
-        $location = GeoIP::getLocation('');
+        $location = GeoIP::getLocation();
         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
         if (System::first()->status == 1) {
             $topics = $topic->get();
@@ -75,6 +75,7 @@ class FormController extends Controller
             $fileupload = $fileupload->file_upload_max_size();
             $max_size_in_bytes = $fileupload[0];
             $max_size_in_actual = $fileupload[1];
+
             return view('themes.default1.client.helpdesk.form', compact('topics', 'codes', 'max_size_in_bytes', 'max_size_in_actual'))->with('phonecode', $phonecode);
         } else {
             return \Redirect::route('home');
@@ -194,7 +195,7 @@ class FormController extends Controller
             }
         }
         // this param is used for inline attachments via email
-        if(empty($attachments)) {
+        if (empty($attachments)) {
             $inline_attachment = $attachments;
         } else {
             $inline_attachment = null;
