@@ -1352,7 +1352,7 @@ return [
     'sorry_you_are_not_allowed_token_expired'                                          => 'Sorry you are not allowed. Token Expired!',
     'thank_you_for_your_rating'                                                        => 'Thank you for your rating!',
     'your_ticket_has_been'                                                             => 'Your ticket has been',
-    'failed_to_send_email_contact_administrator'                                       => 'Email sending faied. Please contact system Administrator',
+    'failed_to_send_email_contact_administrator'                                       => 'Email sending failed. Please contact system Administrator',
     /*
     * |---------------------------------------------------------------------------------------
       |Api settings
