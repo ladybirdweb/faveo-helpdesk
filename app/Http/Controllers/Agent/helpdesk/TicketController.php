@@ -392,7 +392,6 @@ class TicketController extends Controller
         }
     }
 
-
     /**
      * Shows the ticket thread details.
      *
