@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
 
-class FileuploadController extends Controller
-{
-    public function __construct()
-    {
+class FileuploadController extends Controller {
+
+    public function __construct() {
         // checking authentication
         $this->middleware('auth');
         // checking if role is agent
@@ -16,8 +15,7 @@ class FileuploadController extends Controller
 
     // Returns a file size limit in bytes based on the PHP upload_max_filesize
     // and post_max_size
-    public function file_upload_max_size()
-    {
+    function file_upload_max_size() {
         static $max_size = -1;
 
         if ($max_size < 0) {
@@ -33,13 +31,11 @@ class FileuploadController extends Controller
                 $max_size_in_actual = ini_get('upload_max_filesize');
             }
         }
-
         return ['0' => $max_size_in_bytes, '1' => $max_size_in_actual];
 //        return $max_size_in_bytes;
     }
 
-    public function parse_size($size)
-    {
+    function parse_size($size) {
         $unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
         $size = preg_replace('/[^0-9\.]/', '', $size); // Remove the non-numeric characters from the size.
         if ($unit) {
@@ -49,4 +45,5 @@ class FileuploadController extends Controller
             return round($size);
         }
     }
+
 }

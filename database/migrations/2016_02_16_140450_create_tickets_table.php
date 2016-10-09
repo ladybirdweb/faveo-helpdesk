@@ -43,6 +43,8 @@ class CreateTicketsTable extends Migration
             $table->dateTime('closed_at')->nullable();
             $table->dateTime('last_message_at')->nullable();
             $table->dateTime('last_response_at')->nullable();
+            $table->integer('approval');
+            $table->integer('follow_up');
             $table->timestamps();
         });
     }

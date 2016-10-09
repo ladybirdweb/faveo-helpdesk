@@ -150,7 +150,7 @@ inner_statement:
 ;
 
 non_empty_statement:
-      '{' inner_statement_list '}'                          { $$ = $2; }
+      '{' inner_statement_list '}'                          { $$ = $2; prependLeadingComments($$); }
     | T_IF parentheses_expr statement elseif_list else_single
           { $$ = Stmt\If_[$2, ['stmts' => toArray($3), 'elseifs' => $4, 'else' => $5]]; }
     | T_IF parentheses_expr ':' inner_statement_list new_elseif_list new_else_single T_ENDIF ';'
@@ -183,6 +183,7 @@ non_empty_statement:
     | T_THROW expr ';'                                      { $$ = Stmt\Throw_[$2]; }
     | T_GOTO T_STRING ';'                                   { $$ = Stmt\Goto_[$2]; }
     | T_STRING ':'                                          { $$ = Stmt\Label[$1]; }
+    | expr error                                            { $$ = $1; }
     | error                                                 { $$ = array(); /* means: no statement */ }
 ;
 

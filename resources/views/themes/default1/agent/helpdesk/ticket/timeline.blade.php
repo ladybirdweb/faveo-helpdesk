@@ -104,7 +104,7 @@ if ($thread->title != "") {
 <!-- Main content -->
 <div class="box box-primary">
     <div class="box-header">
-        <h3 class="box-title" id="refresh2"><i class="fa fa-user"> </i> <?= $title ?></h3>
+        <h3 class="box-title" id="refresh2"><i class="fa fa-user"> </i> {!! $thread->getSubject() !!}</h3>
         <div class="pull-right">
             <!-- <button type="button" class="btn btn-default"><i class="fa fa-edit" style="color:green;"> </i> Edit</button> -->
             <?php
@@ -123,6 +123,8 @@ if ($thread->title != "") {
             <button type="button" id="surrender_button" class="btn btn-default" data-toggle="modal" data-target="#surrender"> <i class="fa fa-arrows-alt" style="color:red;"> </i>  {!! Lang::get('lang.surrender') !!}</button>
             @endif
 
+            <?php Event::fire('show-add-event-btn', array()); ?>
+
             <a href="{{url('ticket/print/'.$tickets->id)}}" target="_blank" class="btn btn-primary"><i class="fa fa-print" > </i> {!! Lang::get('lang.generate_pdf') !!}</a>
             <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="d1"><i class="fa fa-exchange" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
@@ -130,9 +132,25 @@ if ($thread->title != "") {
                 </button>
                 <ul class="dropdown-menu">
                     <li id="open"><a href="#"><i class="fa fa-folder-open-o" style="color:red;"> </i>{!! Lang::get('lang.open') !!}</a></li>
+                   
+                    <?php if ( $tickets_approval->status==7) {?>
+                  @if(Auth::user()->role == 'admin')
+                     <li id="approval_close"><a href="#"><i class="glyphicon glyphicon-thumbs-up" style="color:red;"> </i>{!! Lang::get('lang.approval') !!}</a></li>
+                     @endif
+                    
+                    <?php } ?>
+
+                     <?php if ( $tickets_approval->status==3) {?>
                     <?php if ($group->can_edit_ticket == 1) {?>
                     <li id="close"><a href="#"><i class="fa fa-check" style="color:green;"> </i>{!! Lang::get('lang.close') !!}</a></li>
                     <?php } ?>
+                     <?php } ?>
+
+                     <?php if ( $tickets_approval->status==1) {?>
+                    <?php if ($group->can_edit_ticket == 1) {?>
+                    <li id="close"><a href="#"><i class="fa fa-check" style="color:green;"> </i>{!! Lang::get('lang.close') !!}</a></li>
+                    <?php } ?>
+                     <?php } ?>
                     <li id="resolved"><a href="#"><i class="fa fa-check-circle-o " style="color:green;"> </i>{!! Lang::get('lang.resolved') !!} </a></li>
                 </ul>
             </div>
@@ -227,7 +245,7 @@ if ($thread->title != "") {
                                 <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $tickets->status)->first(); ?><td title="{{$status->properties}}">{{$status->name}}</td></tr>
                                 <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first(); ?><td title="{{$priority->priority_desc}}">{{$priority->priority_desc}}</td></tr>
                                 <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   <?php $dept123 = App\Model\helpdesk\Agent\Department::where('id', '=', $tickets->dept_id)->first(); ?><td title="{{$dept123->name}}">{{$dept123->name}}</td></tr>
-                                <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        <td>{{$user->email}}</td></tr>
+                                <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        <td>{{str_limit($user->email,30)}}</td></tr>
                                 @if($user->ban > 0)  <tr><td style="color:orange;"><i class="fa fa-warning"></i><b>
                                             {!!  Lang::get('lang.this_ticket_is_under_banned_user')!!}</td><td></td></tr>@endif
                             </div>
@@ -241,8 +259,10 @@ if ($thread->title != "") {
                         $LastResponse = App\User::where('id', '=', $TicketDatarow->user_id)->first();
                         if ($LastResponse->role == "user") {
                             $rep = "#F39C12";
-                            $username = $LastResponse->user_name;
-                        } else {
+                            $username = $LastResponse->first_name . " " . $LastResponse->last_name;
+                            if ($LastResponse->first_name == null || $LastResponse->first_name == '') {
+                                $username = $LastResponse->user_name;
+                            }                        } else {
                             $rep = "#000";
                             $username = $LastResponse->first_name . " " . $LastResponse->last_name;
                             if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
@@ -259,10 +279,10 @@ if ($thread->title != "") {
                             <div id="refresh3">
 
                                 @if($user->phone_number !=null)<tr><td><b>{!! Lang::get('lang.phone') !!}:</b></td>          <td>{{$user->phone_number}}</td></tr>@endif
-                                @if($user->mobile !=null)<tr><td><b>{!! Lang::get('lang.mobile') !!}:</b></td>          <td>{{$user->ext . $user->phone_number}}</td></tr>@endif
+                                @if($user->mobile !=null)<tr><td><b>{!! Lang::get('lang.mobile') !!}:</b></td>          <td>{{$user->ext . $user->mobile}}</td></tr>@endif
                                 <tr><td><b>{!! Lang::get('lang.source') !!}:</b></td>         <td>{{$ticket_source}}</td></tr>
                                 <tr><td><b>{!! Lang::get('lang.help_topic') !!}:</b></td>     <?php $help_topic = App\Model\helpdesk\Manage\Help_topic::where('id', '=', $tickets->help_topic_id)->first(); ?><td title="{{$help_topic->topic}}">{{$help_topic->topic}}</td></tr>
-                                <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{$username}}</td></tr>
+                                <tr><td><b>{!! Lang::get('lang.last_message') !!}:</b></td>   <td>{{str_limit($username,30)}}</td></tr>
                                 <tr><td><b>{!! Lang::get('lang.organization') !!}:</b></td>   <td>{!!$LastResponse->getOrgWithLink()!!}</td></tr>
                                 <?php Event::fire(new App\Events\TicketDetailTable($TicketData)); ?>
                             </div>
@@ -561,7 +581,7 @@ if ($thread->title != "") {
                                         // $i = 0;
                                         foreach ($attachments as $attachment) {
                                             // $i++;
-                                            if ($attachment->type == 'jpg' || $attachment->type == 'png') {
+                                            if (mime($attachment->type)==true) {
                                                 $image = @imagecreatefromstring($attachment->file);
                                                 ob_start();
                                                 imagejpeg($image, null, 80);
@@ -654,7 +674,7 @@ if ($thread->title != "") {
                                             <?php
                                             
                                             if($conversation->user_id != null) {
-                                                if ($role->role == "user") {
+                                                if ($role->first_name == '' || $role->first_name == null) {
                                                     $usernam = $role->user_name;
                                                 } else {
                                                     $usernam = $role->first_name . " " . $role->last_name;
@@ -672,9 +692,9 @@ if ($thread->title != "") {
                                                 @endif
                                                 <span class="username"  style="margin-bottom:4px;margin-top:2px;">
                                                     @if($conversation->user_id != null) 
-                                                        <a href='{!! url("/user/".$role->id) !!}'>{!! $usernam !!}</a>
+                                                        <a href='{!! url("/user/".$role->id) !!}'>{!! str_limit($usernam,30) !!}</a>
                                                     @else
-                                                        {!! $usernam !!}
+                                                        {!! str_limit($usernam,30) !!}
                                                     @endif
                                                 </span>
                                                 <span class="description" style="margin-bottom:4px;margin-top:4px;"><i class="fa fa-clock-o"></i> {{UTC::usertimezone($conversation->created_at)}}</span>
@@ -685,12 +705,21 @@ if ($thread->title != "") {
                                            
                                         </h3>
                                         <div class="timeline-body" style="padding-left:30px;margin-bottom:-20px">
+                                            @if($conversation->firstContent()=='yes')
+                                             <div class="embed-responsive embed-responsive-16by9">
+                                            <iframe id="loader_frame{{$conversation->id}}" class="embed-responsive-item">Body of html email here</iframe>
+                                            </div>
+                                            <script>
+                                                $('#loader_frame{{$conversation->id}}')[0].contentDocument.body.innerHTML = '{!!$conversation->purify()!!}';
+                                            </script>
+                                            @else 
                                             {!! $body !!}
-                                        </div>
-                                        @if($conversation->id == $ij->id)
+                                            @endif
+                                            
+                                            @if($conversation->id == $ij->id)
         <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->id)->get(); ?>
                                         @if(isset($ticket_form_datas))
-                                        <div class="box-body col-md-9">
+                                        
                                             <br/>
                                             <table class="table table-bordered">
                                                 <tbody>
@@ -701,9 +730,11 @@ if ($thread->title != "") {
                                                     </tr>
                                                     @endforeach
                                                 </tbody></table>
+                                        
+                                        @endif
+                                        @endif
                                         </div>
-                                        @endif
-                                        @endif
+                                        
                                         <br/><br/>
                                         <div class="timeline-footer" style="margin-bottom:-5px">
                                             @if(!$conversation->is_internal)
@@ -731,7 +762,7 @@ if ($thread->title != "") {
                                                     $power = $size > 0 ? floor(log($size, 1024)) : 0;
                                                     $value = number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
                                                     if ($attachment->poster == 'ATTACHMENT') {
-                                                        if ($attachment->type == 'jpg' || $attachment->type == 'JPG' || $attachment->type == 'jpeg' || $attachment->type == 'JPEG' || $attachment->type == 'png' || $attachment->type == 'PNG' || $attachment->type == 'gif' || $attachment->type == 'GIF') {
+                                                        if (mime($attachment->type)==true) {
                                                             $image = @imagecreatefromstring($attachment->file);
                                                             ob_start();
                                                             imagejpeg($image, null, 80);
@@ -740,7 +771,8 @@ if ($thread->title != "") {
                                                             $var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;height:133px;" src="data:image/jpg;base64,' . base64_encode($data) . '"/></a>';
                                                             echo '<li style="background-color:#f4f4f4;"><span class="mailbox-attachment-icon has-img">' . $var . '</span><div class="mailbox-attachment-info"><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></div></li>';
                                                         } else {
-                                                            $var = '<a style="max-width:200px;height:133px;color:#666;" href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff;">' . strtoupper($attachment->type) . '</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></span></div></a>';
+                                                            //$var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;height:133px;" src="data:'.$attachment->type.';base64,' . base64_encode($data) . '"/></a>';
+                                                            $var = '<a style="max-width:200px;height:133px;color:#666;" href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff; font-size:18px;">' . strtoupper($attachment->type) . '</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></span></div></a>';
                                                             echo '<li style="background-color:#f4f4f4;">' . $var . '</li>';
                                                         }
                                                     }
@@ -1022,9 +1054,9 @@ if ($thread->title != "") {
                             <p>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}?</p>
                             <select id="asssign" class="form-control" name="assign_to">
                                 <?php
-                                $assign = App\User::where('role', '!=', 'user')->get();
+                                $assign = App\User::where('role', '!=', 'user')->where('active', '=', '1')->get();
                                 $count_assign = count($assign);
-                                $teams = App\Model\helpdesk\Agent\Teams::all();
+                                $teams = App\Model\helpdesk\Agent\Teams::where('status', '=', '1')->get();
                                 $count_teams = count($teams);
                                 ?>
                                 <optgroup label="Teams ( {!! $count_teams !!} )">
@@ -1068,7 +1100,7 @@ if ($thread->title != "") {
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
+    <?php \Event::fire('show-add-calendar-model', array())?>
     <!-- add or search user Modal -->
     <div class="modal fade" id="addccc">
         <div class="modal-dialog">
@@ -1407,6 +1439,43 @@ if ($thread->title != "") {
     })
             return false;
     });
+    
+    // approval close ticket
+ $('#approval_close').on('click', function(e) {
+     
+    $.ajax({
+    type: "GET",
+            url: "../ticket/close/get-approval/{{$tickets->id}}",//route 600
+            beforeSend: function() {
+            $("#hidespin").hide();
+                    $("#spin").show();
+                    $("#hide2").hide();
+                    $("#show2").show();
+            },
+
+            success: function(response) {
+           
+            $("#refresh").load("../thread/{{$tickets->id}}   #refresh");
+             
+                    $("#show2").hide();
+                    $("#spin").hide();
+                    $("#hide2").show();
+                    $("#hidespin").show();
+                    $("#d1").trigger("click");
+                    var message = "successfull approval";
+                    $("#alert11").show();
+                    $('#message-success1').html(message);
+                    setInterval(function(){
+                    $("#alert11").hide();
+                            setTimeout(function() {
+                            window.location = document.referrer;
+                            }, 500);
+                    }, 2000);
+            }
+    })
+            return false;
+    });
+
             // Resolved  a ticket
             $('#resolved').on('click', function(e) {
     $.ajax({
@@ -2197,5 +2266,4 @@ echo $ticket_data->title;
             });
             }
 </script>
-
 @stop

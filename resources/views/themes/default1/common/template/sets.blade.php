@@ -51,9 +51,29 @@
                         $ratName = $status->template;
                     }
                     ?>
-                    <td><input type="radio" disabled="disabled" value="Active"<?php echo ($ratName == $set->name) ? 'checked' : '' ?> /></td>
                     <td>
-                        {!! link_to_route('active.template-set',Lang::get('lang.activate_this_set'),[$set->name],['class'=>'btn btn-success btn-sm']) !!}
+                        @if($ratName == $set->name)
+                        <a style='color:green'>Active</a>
+                         @else()
+                          <a style='color:red'>Inactive</a>
+                          @endif
+
+                       
+                    <td>
+                        <?php
+                        $settings = DB::table('settings_email')->whereId(1)->first();
+                        if ($set->name == $settings->template) {
+                            $dis = "disabled";
+                        } else {
+                            $dis = "";
+                        }
+                        ?>
+                        @if($set->name == $settings->template)
+                       <button class="btn btn-success btn-sm {!! $dis !!}" data-toggle="modal" data-target="">{!! Lang::get('lang.activate_this_set') !!}</button>
+                        @else()
+                        {!! link_to_route('active.template-set',Lang::get('lang.activate_this_set'),[$set->name],['class'=>'btn btn-success btn-sm $dis']) !!}
+                         @endif
+
                         {!! link_to_route('show.templates',Lang::get('lang.show'),[$set->id],['class'=>'btn btn-success btn-sm']) !!}
                         <div class="modal fade" id="{{$set->id}}">
                             <div class="modal-dialog">

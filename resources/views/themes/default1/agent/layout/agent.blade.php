@@ -39,6 +39,11 @@
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
         <!-- Select2 -->
         <link href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}" rel="stylesheet" type="text/css" />
+        <!--Daterangepicker-->
+        <link rel="stylesheet" href="{{asset("lb-faveo/plugins/daterangepicker/daterangepicker.css")}}" rel="stylesheet" type="text/css" />
+        <!--calendar -->
+        <!-- fullCalendar 2.2.5-->
+        <link href="{{asset('lb-faveo/plugins/fullcalendar/fullcalendar.min.css')}}" rel="stylesheet" type="text/css" />
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -98,6 +103,7 @@
                             @if(Auth::user()->role == 'admin')
                                 <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
                             @endif
+                            <?php \Event::fire('calendar.topbar', array()); ?>
                         </ul>
                         @else
                             <?php \Event::fire('service.desk.agent.topbar', array()); ?>
@@ -247,16 +253,23 @@
                         <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
                         <?php
                         if (Auth::user()->role == 'admin') {
+
 //$inbox = App\Model\helpdesk\Ticket\Tickets::all();
                             $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
                             $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->get();
-                            $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '1')->get();
+                            $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  array(1, 7))->get();
+                            $followup_ticket= App\Model\helpdesk\Ticket\Tickets::where('status', '1')->where('follow_up', '1')->get();
+                            $closingapproval = App\Model\helpdesk\Ticket\Tickets::where('status', '7')->get();
+                            
                             $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->get();
                         } elseif (Auth::user()->role == 'agent') {
 //$inbox = App\Model\helpdesk\Ticket\Tickets::where('dept_id','',Auth::user()->primary_dpt)->get();
                             $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
                             $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
-                            $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
+                            $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  array(1, 7))->where('dept_id', '=', Auth::user()->primary_dpt)->get();
+                            $followup_ticket= App\Model\helpdesk\Ticket\Tickets::where('status', '1')->where('follow_up', '1')->get();
+                            $closingapproval = App\Model\helpdesk\Ticket\Tickets::where('status', '7')->get();
+                            
                             $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
                         }
                         if (Auth::user()->role == 'agent') {
@@ -311,6 +324,24 @@
                                 <small class="label pull-right bg-green">{{$overdue_ticket}}</small>
                             </a>
                         </li>
+                        <li @yield('followup')>
+                             <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
+                                <i class="glyphicon glyphicon-import"></i> <span>{!! Lang::get('lang.followup') !!}</span>
+                                <small class="label pull-right bg-green">{{count($followup_ticket)}}</small>
+                            </a>
+                        </li>
+                        <?php
+                        $settings = App\Model\helpdesk\Settings\Approval::where('id','=',1)->first();
+                        // dd($settings);
+                        ?>
+                       @if($settings->status == 1)
+                        <li @yield('approval')>
+                             <a href="{{url('ticket/approval/closed')}}" id="load-unassigned">
+                                <i class="fa fa fa-bell"></i> <span>{!! Lang::get('lang.approval') !!}</span>
+                                <small class="label pull-right bg-green">{{count($closingapproval)}}</small>
+                            </a>
+                        </li>
+                        @endif
                         <li @yield('trash')>
                              <a href="{{url('trash')}}">
                                 <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
@@ -388,7 +419,9 @@
                                     <li id="bar" @yield('myticket')><a href="{{ url('/ticket/myticket')}}" >{!! Lang::get('lang.my_tickets') !!}</a></li>
                                     {{-- < li id = "bar" @yield('ticket') > < a href = "{{ url('ticket') }}" >Ticket</a></li> --}}
                                     {{-- < li id = "bar" @yield('overdue') > < a href = "{{ url('/ticket/overdue') }}" >Overdue</a></li> --}}
+                                   
                                     <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
+                                   <li id="bar" @yield('approvel')><a href="{{ url('ticket/approval/closed')}}" >{!! Lang::get('lang.approval') !!}</a></li>
                                     <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
                                     <?php if ($group->can_create_ticket == 1) { ?>
                                         <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
@@ -459,10 +492,11 @@
     <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" type="text/javascript"></script>
 
     <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" type="text/javascript"></script>
-
+    <!-- full calendar-->
+    <script src="{{asset('lb-faveo/plugins/fullcalendar/fullcalendar.min.js')}}" type="text/javascript"></script>
+    <script src="{{asset('lb-faveo/plugins/daterangepicker/daterangepicker.js')}}" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
-
         $('.noti_User').click(function () {
         var id = this.id;
                 var dataString = 'id=' + id;
@@ -555,7 +589,6 @@
             window.location = "{{URL::route('dashboard')}}";
         }
     }
-    
     function clickReport(e) {
         if (e.ctrlKey === true) {
             window.open('{{URL::route("report.index")}}', '_blank');
@@ -564,6 +597,8 @@
         }
     }
 </script>
+<?php Event::fire('show.calendar.script', array()); ?>
+<?php Event::fire('load-calendar-scripts', array()); ?>
 @yield('FooterInclude')
 </body>
 </html>

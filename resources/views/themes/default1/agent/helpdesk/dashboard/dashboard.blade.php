@@ -82,18 +82,30 @@ class="active"
         }
     }
     ?>
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <a href="{!! route('inbox.ticket') !!}">
-            <div class="info-box">
-                <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">{!! Lang::get('lang.inbox') !!}</span>
-                    <span class="info-box-number"><?php echo count($tickets); ?> <small> {!! Lang::get('lang.tickets') !!}</small></span>
-                </div><!-- /.info-box-content -->
-            </div><!-- /.info-box -->
-        </a>
-    </div><!-- /.col -->
-    <div class="col-md-3 col-sm-6 col-xs-12">
+         <?php
+ if (Auth::user()->role == 'admin' || Auth::user()->role == 'agent') {
+            $todaytickets = count(App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->whereRaw('date(duedate) = ?', [date('Y-m-d')])->get());
+        } else {
+            $dept =  App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
+            $todaytickets = count(App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->whereRaw('date(duedate) = ?', [date('Y-m-d')])->where('dept_id', '=', $dept->id)->get());
+        }
+ ?>
+    <div class="col-md-2" style="width:20%;">
+ <a href="{!! route('inbox.ticket') !!}">
+          <div class="info-box">
+             <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">{!! Lang::get('lang.inbox') !!}</span>
+              <span class="info-box-number"><?php echo count($tickets); ?> <small> {!! Lang::get('lang.tickets') !!}</small>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          </a>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-2" style="width:20%;">
         <a href="{!! route('unassigned') !!}">
             <div class="info-box">
                 <span class="info-box-icon bg-orange"><i class="fa fa-user-times"></i></span>
@@ -103,13 +115,12 @@ class="active"
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </a>
-    </div><!-- /.col -->
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
 
-    <!-- fix for small devices only -->
-    <div class="clearfix visible-sm-block"></div>
-
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <a href="{!! route('overdue.ticket') !!}">
+               <div class="col-md-2" style="width:20%;" >
+          <a href="{!! route('overdue.ticket') !!}">
             <div class="info-box">
                 <span class="info-box-icon bg-red"><i class="fa fa-calendar-times-o"></i></span>
                 <div class="info-box-content">
@@ -118,9 +129,10 @@ class="active"
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </a>
-    </div><!-- /.col -->
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <a href="{!! route('myticket.ticket') !!}">
+        </div>
+
+        <div class="col-md-2" style="width:20%;">
+          <a href="{!! route('myticket.ticket') !!}">
             <div class="info-box">
                 <span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
                 <div class="info-box-content">
@@ -129,7 +141,21 @@ class="active"
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </a>
-    </div><!-- /.col -->
+        </div>
+        <!-- /.col -->
+               <div class="col-md-2" style="width:20%;">
+                 <a href="{!! route('ticket.duetoday') !!}">
+            <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="glyphicon glyphicon-eye-open"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">{!! Lang::get('lang.duetoday') !!}</span>
+                    <span class="info-box-number">{{ $todaytickets }} <small> Tickets</small></span>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
+        </a>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
 
 </div>
 <div class="box box-info">

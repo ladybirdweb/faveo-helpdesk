@@ -9,10 +9,9 @@ use League\OAuth1\Client\Credentials\TokenCredentials;
  * Magento OAuth 1.0a.
  *
  * This class reflects two Magento oddities:
- *  - Magento does not offer a user info endpoint for the currently
- *    authenticated user.
  *  - Magento expects the oauth_verifier to be located in the header instead of
  *    the post body.
+ *  - Magento expects the Accept to be located in the header
  *
  * Additionally, this is initialized with two additional parameters:
  *  - Boolean 'admin' to use the admin vs customer
@@ -90,7 +89,7 @@ class Magento extends Server
      */
     public function urlUserDetails()
     {
-        return '';
+        return $this->baseUri.'/api/rest/customers';
     }
 
     /**
@@ -98,7 +97,31 @@ class Magento extends Server
      */
     public function userDetails($data, TokenCredentials $tokenCredentials)
     {
-        return new User();
+        if (!is_array($data) || !count($data)) {
+            throw new \Exception('Not possible to get user info');
+        }
+
+        $id = key($data);
+        $data = current($data);
+
+        $user = new User();
+        $user->uid = $id;
+
+        $mapping = array(
+            'email' => 'email',
+            'firstName' => 'firstname',
+            'lastName'  => 'lastname',
+        );
+        foreach ($mapping as $userKey => $dataKey) {
+            if (!isset($data[$dataKey])) {
+                continue;
+            }
+            $user->{$userKey} = $data[$dataKey];
+        }
+
+        $user->extra = array_diff_key($data, array_flip($mapping));
+
+        return $user;
     }
 
     /**
@@ -106,7 +129,7 @@ class Magento extends Server
      */
     public function userUid($data, TokenCredentials $tokenCredentials)
     {
-        return;
+        return key($data);
     }
 
     /**
@@ -114,7 +137,11 @@ class Magento extends Server
      */
     public function userEmail($data, TokenCredentials $tokenCredentials)
     {
-        return;
+        $data = current($data);
+        if (!isset($data['email'])) {
+            return;
+        }
+        return $data['email'];
     }
 
     /**
@@ -145,17 +172,13 @@ class Magento extends Server
         );
     }
 
-    /**
-     * Magento does not implement a user info endpoint.
-     *
-     * @param TokenCredentials $tokenCredentials
-     * @param bool             $force
-     *
-     * @return array empty array
-     */
-    protected function fetchUserDetails(TokenCredentials $tokenCredentials, $force = true)
+    protected function getHttpClientDefaultHeaders()
     {
-        return array();
+        $defaultHeaders = parent::getHttpClientDefaultHeaders();
+        // Accept header is required, @see Mage_Api2_Model_Renderer::factory
+        $defaultHeaders['Accept'] = 'application/json';
+
+        return $defaultHeaders;
     }
 
     /**

@@ -30,7 +30,7 @@ For generating the URL, you can use any of the standard Laravel URL-generation m
 
 - ``url('path/to/route')`` (``URL::to()``)
 - ``secure_url('path/to/route')``
-- ``route('routename')`` (``URL::route()``)
+- ``route('routename')`` or ``route('routename', 'param')`` or ``route('routename', ['param1', 'param2'])`` (``URL::route()``)
 - ``action('controller@action')`` (``URL::action()``)
 - Or just pass a string URL (``'http://www.example.com/'``)
 
@@ -64,6 +64,8 @@ This is another static page, but this has a parent link before it:
         $breadcrumbs->push('Blog', route('blog'));
     });
 
+It works by calling the closure for the ``home`` breadcrumb defined above.
+
 It would be rendered like this:
 
 .. raw:: html
@@ -77,6 +79,8 @@ It would be rendered like this:
     ::
 
         Home > Blog
+
+Note that the default template does not create a link for the last breadcrumb (the one for the current page), even when a URL is specified. You can override this by creating your own template - see :doc:`templates` for more details.
 
 
 ================================================================================

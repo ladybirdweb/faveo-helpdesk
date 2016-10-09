@@ -48,7 +48,7 @@ class Client implements ProviderInterface
     private $client;
     private static $basePath = '/geoip/v2.1';
 
-    const VERSION = 'v2.4.1';
+    const VERSION = 'v2.4.2';
 
     /**
      * Constructor.
@@ -238,6 +238,5 @@ class Client implements ProviderInterface
 
         $class = "GeoIp2\\Model\\" . $class;
         return new $class($body, $this->locales);
-
     }
 }

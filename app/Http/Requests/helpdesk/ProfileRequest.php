@@ -31,6 +31,7 @@ class ProfileRequest extends Request
         return [
             'first_name'  => 'required',
             'profile_pic' => 'mimes:png,jpeg',
+            // 'mobile'      => 'unique:users,mobile',
         ];
     }
 }

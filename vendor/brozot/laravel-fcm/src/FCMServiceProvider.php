@@ -41,7 +41,7 @@ class FCMServiceProvider extends ServiceProvider {
 		});
 	}
 
-	protected function provide()
+	public function provides()
 	{
 		return [ 'fcm.client', 'fcm.group', 'fcm.sender' ];
 	}

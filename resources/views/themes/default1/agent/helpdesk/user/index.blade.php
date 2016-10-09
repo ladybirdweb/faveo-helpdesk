@@ -67,6 +67,7 @@ class="active"
         Lang::get('lang.status'),
         Lang::get('lang.ban'),
         Lang::get('lang.last_login'),
+         Lang::get('lang.role'),
         Lang::get('lang.action'))  // these are the column headings to be shown
         ->setUrl(route('user.list'))  // this is the route where data will be retrieved
         ->render() !!}

@@ -7,11 +7,10 @@ use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\CompanyRequest;
 use App\Http\Requests\helpdesk\EmailRequest;
-use App\Http\Requests\helpdesk\Job\TaskRequest;
 use App\Http\Requests\helpdesk\RatingUpdateRequest;
 use App\Http\Requests\helpdesk\StatusRequest;
-// models
 use App\Http\Requests\helpdesk\SystemRequest;
+// models
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Email\Template;
@@ -20,8 +19,8 @@ use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Notification\UserNotification;
 use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Settings\Alert;
-use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
+use App\Model\helpdesk\Settings\Followup;
 use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Settings\Responder;
 use App\Model\helpdesk\Settings\System;
@@ -32,29 +31,30 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Workflow\WorkflowClose;
-// classes
+use App\Model\helpdesk\Settings\CommonSettings;
 use DateTime;
+// classes
 use DB;
 use Exception;
 use File;
 use Illuminate\Http\Request;
 use Input;
 use Lang;
+use App\Http\Requests\helpdesk\Job\TaskRequest;
 
 /**
  * SettingsController.
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class SettingsController extends Controller
-{
+class SettingsController extends Controller {
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         // $this->smtp();
         $this->middleware('auth');
         $this->middleware('roles');
@@ -68,8 +68,7 @@ class SettingsController extends Controller
      *
      * @return Response
      */
-    public function getcompany(Company $company)
-    {
+    public function getcompany(Company $company) {
         try {
             /* fetch the values of company from company table */
             $companys = $company->whereId('1')->first();
@@ -89,14 +88,13 @@ class SettingsController extends Controller
      *
      * @return Response
      */
-    public function postcompany($id, Company $company, CompanyRequest $request)
-    {
+    public function postcompany($id, Company $company, CompanyRequest $request) {
         /* fetch the values of company request  */
         $companys = $company->whereId('1')->first();
         if (Input::file('logo')) {
             $name = Input::file('logo')->getClientOriginalName();
             $destinationPath = 'uploads/company/';
-            $fileName = rand(0000, 9999).'.'.$name;
+            $fileName = rand(0000, 9999) . '.' . $name;
             Input::file('logo')->move($destinationPath, $fileName);
             $companys->logo = $fileName;
         }
@@ -110,7 +108,7 @@ class SettingsController extends Controller
             return redirect('getcompany')->with('success', Lang::get('lang.company_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getcompany')->with('fails', Lang::get('lang.company_can_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect('getcompany')->with('fails', Lang::get('lang.company_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -119,8 +117,7 @@ class SettingsController extends Controller
      *
      *  @return type string
      */
-    public function deleteLogo()
-    {
+    public function deleteLogo() {
         $path = $_GET['data1']; //get file path of logo image
         if (!unlink($path)) {
             return 'false';
@@ -147,8 +144,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time, CommonSettings $common_settings)
-    {
+    public function getsystem(System $system, Department $department, Timezones $timezone, Date_format $date, Date_time_format $date_time, Time_format $time, CommonSettings $common_settings) {
         try {
             /* fetch the values of system from system table */
             $systems = $system->whereId('1')->first();
@@ -163,9 +159,11 @@ class SettingsController extends Controller
             $send_otp = $common_settings->select('status')
                     ->where('option_name', '=', 'send_otp')
                     ->first();
-            //dd($send_otp->status);
+            $email_mandatory = $common_settings->select('status')
+                    ->where('option_name', '=', 'email_mandatory')
+                    ->first();
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp'));
+            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -180,10 +178,8 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function postsystem($id, System $system, SystemRequest $request)
-    {
+    public function postsystem($id, System $system, SystemRequest $request) {
         try {
-            //dd($request->user_set_ticket_status);
             /* fetch the values of system request  */
             $systems = $system->whereId('1')->first();
             /* fill the values to coompany table */
@@ -204,11 +200,13 @@ class SettingsController extends Controller
             }
             $sotp = CommonSettings::where('option_name', '=', 'send_otp')
                     ->update(['status' => $request->send_otp]);
+            $email_mandatory = CommonSettings::where('option_name', '=', 'email_mandatory')
+                    ->update(['status' => $request->email_mandatory]);
             /* redirect to Index page with Success Message */
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getsystem')->with('fails', Lang::get('lang.system_can_not_updated').'<br>'.$e->getMessage());
+            return redirect('getsystem')->with('fails', Lang::get('lang.system_can_not_updated') . '<br>' . $e->getMessage());
         }
     }
 
@@ -222,8 +220,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function getticket(Ticket $ticket, Sla_plan $sla, Help_topic $topic, Ticket_Priority $priority)
-    {
+    public function getticket(Ticket $ticket, Sla_plan $sla, Help_topic $topic, Ticket_Priority $priority) {
         try {
             /* fetch the values of ticket from ticket table */
             $tickets = $ticket->whereId('1')->first();
@@ -247,8 +244,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function postticket($id, Ticket $ticket, Request $request)
-    {
+    public function postticket($id, Ticket $ticket, Request $request) {
         try {
             /* fetch the values of ticket request  */
             $tickets = $ticket->whereId('1')->first();
@@ -269,7 +265,7 @@ class SettingsController extends Controller
             return redirect('getticket')->with('success', Lang::get('lang.ticket_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getticket')->with('fails', Lang::get('lang.ticket_can_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect('getticket')->with('fails', Lang::get('lang.ticket_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -282,8 +278,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function getemail(Email $email, Template $template, Emails $email1)
-    {
+    public function getemail(Email $email, Template $template, Emails $email1) {
         try {
             /* fetch the values of email from Email table */
             $emails = $email->whereId('1')->first();
@@ -307,8 +302,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function postemail($id, Email $email, EmailRequest $request)
-    {
+    public function postemail($id, Email $email, EmailRequest $request) {
         try {
             /* fetch the values of email request  */
             $emails = $email->whereId('1')->first();
@@ -327,7 +321,7 @@ class SettingsController extends Controller
             return redirect('getemail')->with('success', Lang::get('lang.email_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getemail')->with('fails', Lang::get('lang.email_can_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect('getemail')->with('fails', Lang::get('lang.email_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -340,8 +334,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function getSchedular(Email $email, Template $template, Emails $email1, WorkflowClose $workflow)
-    {
+    public function getSchedular(Email $email, Template $template, Emails $email1, WorkflowClose $workflow) {
         // try {
         /* fetch the values of email from Email table */
         $emails = $email->whereId('1')->first();
@@ -354,31 +347,42 @@ class SettingsController extends Controller
         $cron_path = base_path('artisan');
         $command = ":- <pre>***** php $cron_path schedule:run >> /dev/null 2>&1</pre>";
         $shared = ":- <pre>/usr/bin/php-cli -q  $cron_path schedule:run >> /dev/null 2>&1</pre>";
-        $warn = '';
+        $warn = "";
         $condition = new \App\Model\MailJob\Condition();
         $job = $condition->checkActiveJob();
         $commands = [
-            ''                   => 'Select',
-            'everyMinute'        => 'Every Minute',
-            'everyFiveMinutes'   => 'Every Five Minute',
-            'everyTenMinutes'    => 'Every Ten Minute',
+            '' => 'Select',
+            'everyMinute' => 'Every Minute',
+            'everyFiveMinutes' => 'Every Five Minute',
+            'everyTenMinutes' => 'Every Ten Minute',
             'everyThirtyMinutes' => 'Every Thirty Minute',
-            'hourly'             => 'Every Hour',
-            'daily'              => 'Every Day',
-            'dailyAt'            => 'Daily at',
-            'weekly'             => 'Every Week',
-            'monthly'            => 'Monthly',
-            'yearly'             => 'Yearly',
+            'hourly' => 'Every Hour',
+            'daily' => 'Every Day',
+            'dailyAt' => 'Daily at',
+            'weekly' => 'Every Week',
+            'monthly' => 'Monthly',
+            'yearly' => 'Yearly',
         ];
-        if (ini_get('register_argc_argv') == '') {
+        $followupcommands = [
+            '' => 'Select',
+            'everyMinute' => 'Every Minute',
+            'everyFiveMinutes' => 'Every Five Minute',
+            'everyTenMinutes' => 'Every Ten Minute',
+            'everyThirtyMinutes' => 'Every Thirty Minute',
+            'hourly' => 'Every Hour',
+            'daily' => 'Every Day',
+            'weekly' => 'Every Week',
+            'monthly' => 'Monthly',
+            'yearly' => 'Yearly',
+        ];
+        if (ini_get('register_argc_argv') == "") {
             //$warn = "Please make 'register_argc_argv' flag as on. Or you can set all your job url in cron";
         }
 
-        return view('themes.default1.admin.helpdesk.settings.cron.cron', compact('emails', 'templates', 'emails1', 'workflow', 'warn', 'command', 'commands', 'condition', 'shared'));
+        return view('themes.default1.admin.helpdesk.settings.cron.cron', compact('emails', 'templates', 'emails1', 'workflow', 'warn', 'command', 'commands','followupcommands','condition','shared'));
         // } catch {
         // }
     }
-
     /**
      * Update the specified schedular in storage for cron job.
      *
@@ -387,9 +391,27 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function postSchedular(Email $email, Template $template, Emails $email1, TaskRequest $request, WorkflowClose $workflow)
-    {
+    public function postSchedular(Email $email, Template $template, Followup $followup, Emails $email1, TaskRequest $request, WorkflowClose $workflow) {
         try {
+
+            $followup=$followup->whereId('1')->first();
+            $status=$request->followup_notification_cron;
+            
+            if ($status='null') {
+           
+                $followup->status = $request->followup_notification_cron;
+
+            }
+            if($status= 1) {
+                $followup->status = $request->followup_notification_cron;
+                $followup->condition = $request->followup_notification_commands;
+                $followup->save();
+            }
+            if ($request->followup_notification_dailyAt) {
+                $followup->condition = $request->followup_notification_dailyAt;
+                $followup->save();
+            }
+
             /* fetch the values of email request  */
             $emails = $email->whereId('1')->first();
             if ($request->email_fetching) {
@@ -416,7 +438,7 @@ class SettingsController extends Controller
             return redirect('job-scheduler')->with('success', Lang::get('lang.job-scheduler-success'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('job-scheduler')->with('fails', Lang::get('lang.job-scheduler-error').'<li>'.$e->getMessage().'</li>');
+            return redirect('job-scheduler')->with('fails', Lang::get('lang.job-scheduler-error') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -427,8 +449,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function getresponder(Responder $responder)
-    {
+    public function getresponder(Responder $responder) {
         try {
             /* fetch the values of responder from responder table */
             $responders = $responder->whereId('1')->first();
@@ -447,8 +468,7 @@ class SettingsController extends Controller
      *
      * @return type
      */
-    public function postresponder(Responder $responder, Request $request)
-    {
+    public function postresponder(Responder $responder, Request $request) {
         try {
             /* fetch the values of responder request  */
             $responders = $responder->whereId('1')->first();
@@ -465,7 +485,7 @@ class SettingsController extends Controller
             return redirect('getresponder')->with('success', Lang::get('lang.auto_response_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getresponder')->with('fails', Lang::get('lang.auto_response_can_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect('getresponder')->with('fails', Lang::get('lang.auto_response_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -476,8 +496,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function getalert(Alert $alert)
-    {
+    public function getalert(Alert $alert) {
         try {
             /* fetch the values of alert from alert table */
             $alerts = $alert->whereId('1')->first();
@@ -497,8 +516,7 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function postalert($id, Alert $alert, Request $request)
-    {
+    public function postalert($id, Alert $alert, Request $request) {
         try {
             /* fetch the values of alert request  */
             $alerts = $alert->whereId('1')->first();
@@ -553,7 +571,7 @@ class SettingsController extends Controller
             return redirect('getalert')->with('success', Lang::get('lang.alert_&_notices_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getalert')->with('fails', Lang::get('lang.alert_&_notices_can_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect('getalert')->with('fails', Lang::get('lang.alert_&_notices_can_not_updated') . '<li>' . $e->getMessage() . '</li>');
         }
     }
 
@@ -562,8 +580,7 @@ class SettingsController extends Controller
      *
      *  @return type json
      */
-    public function generateApiKey()
-    {
+    public function generateApiKey() {
         $key = str_random(32);
 
         return $key;
@@ -574,8 +591,7 @@ class SettingsController extends Controller
      *
      * @return type view
      */
-    public function settings()
-    {
+    public function settings() {
         return view('themes.default1.admin.helpdesk.setting');
     }
 
@@ -587,8 +603,7 @@ class SettingsController extends Controller
      *
      * @return Response
      */
-    public function getStatuses()
-    {
+    public function getStatuses() {
         try {
             /* fetch the values of company from company table */
             $statuss = \DB::table('ticket_status')->get();
@@ -607,8 +622,7 @@ class SettingsController extends Controller
      *
      * @return Response
      */
-    public function getEditStatuses($id)
-    {
+    public function getEditStatuses($id) {
         try {
             /* fetch the values of company from company table */
             $status = \DB::table('ticket_status')->where('id', '=', $id)->first();
@@ -627,8 +641,7 @@ class SettingsController extends Controller
      *
      * @return Response
      */
-    public function editStatuses($id, StatusRequest $request)
-    {
+    public function editStatuses($id, StatusRequest $request) {
         try {
             /* fetch the values of company from company table */
             $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->first();
@@ -659,8 +672,7 @@ class SettingsController extends Controller
      *
      * @return type redirect
      */
-    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss, StatusRequest $request)
-    {
+    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss, StatusRequest $request) {
         try {
             /* fetch the values of company from company table */
             $statuss->name = $request->input('name');
@@ -689,8 +701,7 @@ class SettingsController extends Controller
      *
      * @return type redirect
      */
-    public function deleteStatuses($id)
-    {
+    public function deleteStatuses($id) {
         try {
             if ($id > 5) {
                 /* fetch the values of company from company table */
@@ -710,8 +721,7 @@ class SettingsController extends Controller
      *
      * @return type view
      */
-    public function notificationSettings()
-    {
+    public function notificationSettings() {
         return view('themes.default1.admin.helpdesk.settings.notification');
     }
 
@@ -720,8 +730,7 @@ class SettingsController extends Controller
      *
      * @return type redirect
      */
-    public function deleteReadNoti()
-    {
+    public function deleteReadNoti() {
         $markasread = UserNotification::where('is_read', '=', 1)->get();
         foreach ($markasread as $mark) {
             $mark->delete();
@@ -736,14 +745,13 @@ class SettingsController extends Controller
      *
      * @return type redirect
      */
-    public function deleteNotificationLog()
-    {
+    public function deleteNotificationLog() {
         $days = Input::get('no_of_days');
         if ($days == null) {
             return redirect()->back()->with('fails', 'Please enter valid no of days');
         }
         $date = new DateTime();
-        $date->modify($days.' day');
+        $date->modify($days . ' day');
         $formatted_date = $date->format('Y-m-d H:i:s');
         $markasread = UserNotification::where('created_at', '<=', $formatted_date)->get();
         foreach ($markasread as $mark) {
@@ -751,7 +759,7 @@ class SettingsController extends Controller
             \App\Model\helpdesk\Notification\Notification::whereId($mark->notification_id)->delete();
         }
 
-        return redirect()->back()->with('success', Lang::get('lang.you_have_deleted_all_the_notification_records_since').$days.' days.');
+        return redirect()->back()->with('success', Lang::get('lang.you_have_deleted_all_the_notification_records_since') . $days . ' days.');
     }
 
     /**
@@ -759,8 +767,7 @@ class SettingsController extends Controller
      *
      *  @return type View
      */
-    public function RatingSettings()
-    {
+    public function RatingSettings() {
         try {
             $ratings = Rating::orderBy('display_order', 'asc')->get();
 
@@ -777,8 +784,7 @@ class SettingsController extends Controller
      *
      * @return type view
      */
-    public function editRatingSettings($id)
-    {
+    public function editRatingSettings($id) {
         try {
             $rating = Rating::whereId($id)->first();
 
@@ -793,8 +799,7 @@ class SettingsController extends Controller
      *
      *  @return type Redirect
      */
-    public function PostRatingSettings($id, Rating $ratings, RatingUpdateRequest $request)
-    {
+    public function PostRatingSettings($id, Rating $ratings, RatingUpdateRequest $request) {
         try {
             $rating = $ratings->whereId($id)->first();
             $rating->name = $request->input('name');
@@ -816,12 +821,11 @@ class SettingsController extends Controller
      *
      * @return type redirect
      */
-    public function createRating()
-    {
+    public function createRating() {
         try {
             return view('themes.default1.admin.helpdesk.settings.create-ratings');
         } catch (Exception $ex) {
-            return redirect('getratings')->with('fails', Lang::get('lang.ratings_can_not_be_created').'<li>'.$ex->getMessage().'</li>');
+            return redirect('getratings')->with('fails', Lang::get('lang.ratings_can_not_be_created') . '<li>' . $ex->getMessage() . '</li>');
         }
     }
 
@@ -834,8 +838,7 @@ class SettingsController extends Controller
      *
      * @return type redirect
      */
-    public function storeRating(Rating $rating, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs, \App\Http\Requests\helpdesk\RatingRequest $request)
-    {
+    public function storeRating(Rating $rating, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs, \App\Http\Requests\helpdesk\RatingRequest $request) {
         $rating->name = $request->input('name');
         $rating->display_order = $request->input('display_order');
         $rating->allow_modification = $request->input('allow_modification');
@@ -854,16 +857,13 @@ class SettingsController extends Controller
      *
      *  @return type Redirect
      */
-    public function RatingDelete($slug, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs)
-    {
+    public function RatingDelete($slug, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs) {
         $ratingrefs->where('rating_id', '=', $slug)->delete();
         Rating::whereId($slug)->delete();
 
         return redirect()->back()->with('success', Lang::get('lang.rating_deleted_successfully'));
     }
-
-    public function saveConditions()
-    {
+    public function saveConditions() {
         if (\Input::get('fetching-commands') && \Input::get('notification-commands')) {
             $fetching_commands = \Input::get('fetching-commands');
             $fetching_dailyAt = \Input::get('fetching-dailyAt');
@@ -874,66 +874,62 @@ class SettingsController extends Controller
             $fetching_command = $this->getCommand($fetching_commands, $fetching_dailyAt);
             $notification_command = $this->getCommand($notification_commands, $notification_dailyAt);
             $work_command = $this->getCommand($work_commands, $workflow_dailyAt);
-            $jobs = ['fetching' => $fetching_command, 'notification' => $notification_command, 'work' => $work_command];
+            $jobs  = ['fetching'=>$fetching_command,'notification'=>$notification_command,'work'=>$work_command];
             $this->storeCommand($jobs);
         }
     }
 
-    public function getCommand($command, $daily_at)
-    {
+    public function getCommand($command, $daily_at) {
+
+        
         if ($command == 'dailyAt') {
             $command = "dailyAt,$daily_at";
         }
-
         return $command;
     }
-
-    public function storeCommand($array = [])
-    {
+    
+    public function storeCommand($array=[]){
         $command = new \App\Model\MailJob\Condition();
         $commands = $command->get();
-        if ($commands->count() > 0) {
-            foreach ($commands as $condition) {
+        if($commands->count()>0){
+            foreach($commands as $condition){
                 $condition->delete();
             }
         }
-        if (count($array) > 0) {
-            foreach ($array as $key => $save) {
+        if(count($array)>0){
+            foreach($array as $key=>$save){
                 $command->create([
-                    'job'   => $key,
-                    'value' => $save,
+                    'job'=>$key,
+                    'value'=>$save,
                 ]);
             }
         }
+        
     }
 
-    public function getTicketNumber(Request $request)
-    {
+    public function getTicketNumber(Request $request) {
         $this->validate($request, [
             'format' => ['required', 'regex:/^(?=.*[$|-|#]).+$/'],
-            'type'   => 'required',
+            'type' => 'required',
         ]);
 
         $format = $request->input('format');
         $type = $request->input('type');
         $number = $this->switchNumber($format, $type);
-
         return $number;
     }
 
-    public function switchNumber($format, $type)
-    {
+    public function switchNumber($format, $type) {
         switch ($type) {
-            case 'random':
+            case "random":
                 return $this->createRandomNumber($format);
-            case 'sequence':
+            case "sequence":
                 return $this->createSequencialNumber($format);
         }
     }
 
-    public function createRandomNumber($format)
-    {
-        $number = '';
+    public function createRandomNumber($format) {
+        $number = "";
         $array = str_split($format);
         for ($i = 0; $i < count($array); $i++) {
             if ($array[$i] === '$') {
@@ -946,13 +942,11 @@ class SettingsController extends Controller
                 $number .= $array[$i];
             }
         }
-
         return $number;
     }
 
-    public function createSequencialNumber($format)
-    {
-        $number = '';
+    public function createSequencialNumber($format) {
+        $number = "";
         $array_format = str_split($format);
         $count = count($array_format);
         for ($i = 0; $i < $count; $i++) {
@@ -970,13 +964,11 @@ class SettingsController extends Controller
                 $number .= $array_format[$i];
             }
         }
-
         return $number;
         //return $this->nthTicketNumber($number);
     }
 
-    public function checkCurrentFormat($current, $format)
-    {
+    public function checkCurrentFormat($current, $format) {
         $check = true;
         $array_current = str_split($current);
         $array_format = str_split($format);
@@ -990,12 +982,10 @@ class SettingsController extends Controller
                 return false;
             }
         }
-
         return $check;
     }
 
-    public function nthTicketNumber($current, $type, $format, $force = false)
-    {
+    public function nthTicketNumber($current, $type, $format, $force = false) {
         $check = $this->checkCurrentFormat($current, $format);
         if ($check === false && $force === false) {
             $current = $this->createSequencialNumber($format);
@@ -1015,17 +1005,15 @@ class SettingsController extends Controller
         if ($type === 'random') {
             $number = $this->createRandomNumber($format);
         }
-
         return $number;
     }
 
-    public function getRandomAlphebet()
-    {
-        $alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    public function getRandomAlphebet() {
+        $alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $shuffled = str_shuffle($alpha);
         $shuffled_array = str_split($shuffled);
         $char = $shuffled_array[0];
-
         return $char;
     }
+
 }

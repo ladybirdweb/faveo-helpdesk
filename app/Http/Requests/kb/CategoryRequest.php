@@ -24,7 +24,6 @@ class CategoryRequest extends Request
     public function rules()
     {
         $id = $this->segment(2);
-
         return [
             'name'        => 'required|max:250|unique:kb_category,name,'.$id,
             'description' => 'required',

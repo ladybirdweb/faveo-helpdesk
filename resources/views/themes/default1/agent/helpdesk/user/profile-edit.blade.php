@@ -53,6 +53,7 @@ class="active"
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <br/>
                     <li class="error-message-padding">{!! $errors->first('first_name', ':message') !!}</li>
+                    <li class="error-message-padding">{!! $errors->first('mobile', ':message') !!}</li>
                 </div>
                 @endif
                 @endif
@@ -240,13 +241,16 @@ class="active"
     });
 </script>
 @if($verify == 1 || $verify == '1')
-    <script type="text/javascript">
-    $('#agent-profile').on('submit', function(e){
-        var old_mobile = "<?php echo $user->mobile;?>";
-        var email = "<?php echo $user->email;?>";
-        var full_name = "<?php echo $user->first_name; ?>";
-        var mobile = document.getElementById('mobile').value;
-        var code = document.getElementById('code').value;
+<script type="text/javascript">
+$('#agent-profile').on('submit', function(e){
+    var old_mobile = "<?php echo $user->mobile;?>";
+    var email = "<?php echo $user->email;?>";
+    var full_name = "<?php echo $user->first_name; ?>";
+    var mobile = document.getElementById('mobile').value;
+    var code = document.getElementById('code').value;
+    if (code == '' || code == null) {
+            //do nothingalert
+    } else {
         var id = "<?php echo $user->id; ?>";
         if (mobile !== old_mobile) {
             e.preventDefault();
@@ -258,7 +262,7 @@ class="active"
                     mobile : mobile,
                     full_name: full_name,
                     email: email,
-                    code: 0// will be accessible in $_POST['data1']
+                    code: code // will be accessible in $_POST['data1']
                 },
                 dataType: 'json', 
                 beforeSend: function() {
@@ -315,10 +319,12 @@ class="active"
                 }
             });
         }
-    });
-    $('.closemodal').on('click', function(){
-        $('#last-modal').css('display', 'none');
-    });
-    </script>
+          
+    }
+});
+$('.closemodal').on('click', function(){
+    $('#last-modal').css('display', 'none');
+});
+</script>
 @endif
 @stop

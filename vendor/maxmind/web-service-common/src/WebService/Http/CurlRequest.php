@@ -54,7 +54,9 @@ class CurlRequest implements Request
     {
         $curl = curl_init($this->url);
 
-        $opts[CURLOPT_CAINFO] = $this->options['caBundle'];
+        if (!empty($this->options['caBundle'])) {
+            $opts[CURLOPT_CAINFO] = $this->options['caBundle'];
+        }
         $opts[CURLOPT_SSL_VERIFYHOST] = 2;
         $opts[CURLOPT_FOLLOWLOCATION] = false;
         $opts[CURLOPT_SSL_VERIFYPEER] = true;

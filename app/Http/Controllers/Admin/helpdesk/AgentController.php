@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin\helpdesk;
 
 // controller
-use App\Http\Controllers\Common\PhpMailController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Common\PhpMailController;
 // request
 use App\Http\Requests\helpdesk\AgentRequest;
 use App\Http\Requests\helpdesk\AgentUpdate;
@@ -88,10 +88,11 @@ class AgentController extends Controller
             $departments = $department->get();
             // list all the teams in a single variable
             $teams = $team->lists('id', 'name')->toArray();
-            $location = GeoIP::getLocation('');
+            $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
             // returns to the page with all the variables and their datas
-            return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team'))->with('phonecode', $phonecode->phonecode);
+            $send_otp = DB::table('common_settings')->select('status')->where('option_name', '=', 'send_otp')->first();
+            return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team', 'send_otp'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             // returns if try fails with exception meaagse
             return redirect()->back()->with('fails', $e->getMessage());
@@ -118,7 +119,13 @@ class AgentController extends Controller
             }
         }
         // fixing the user role to agent
-        $user->fill($request->except(['group', 'primary_department', 'agent_time_zone']))->save();
+        $user->fill($request->except(['group', 'primary_department', 'agent_time_zone', 'mobile']))->save();
+        if ($request->get('mobile'))
+        {
+            $user->mobile = $request->get('mobile');
+        } else{
+            $user->mobile = null;
+        }
         $user->assign_group = $request->group;
         $user->primary_dpt = $request->primary_department;
         $user->agent_tzone = $request->agent_time_zone;
@@ -139,7 +146,7 @@ class AgentController extends Controller
             // fetch user credentails to send mail
             $name = $user->first_name;
             $email = $user->email;
-            if ($request->input('send_email')) {
+            if($request->input('send_email')) {
                 try {
                     // send mail on registration
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
@@ -152,7 +159,6 @@ class AgentController extends Controller
             if ($request->input('active') == '0' || $request->input('active') == 0) {
                 \Event::fire(new \App\Events\LoginEvent($request));
             }
-
             return redirect('agents')->with('success', Lang::get('lang.agent_creation_success'));
         } else {
             // returns if fails
@@ -176,7 +182,7 @@ class AgentController extends Controller
     public function edit($id, User $user, Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team, CountryCode $code)
     {
         try {
-            $location = GeoIP::getLocation('');
+            $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
             $user = $user->whereId($id)->first();
             $team = $team->get();

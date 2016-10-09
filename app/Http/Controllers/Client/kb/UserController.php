@@ -24,10 +24,9 @@ use Lang;
 use Mail;
 use Redirect;
 
-class UserController extends Controller
-{
-    public function __construct()
-    {
+class UserController extends Controller {
+
+    public function __construct() {
         $this->middleware('board');
     }
 
@@ -36,20 +35,18 @@ class UserController extends Controller
      *
      * @return response
      */
-    public function getArticle(Article $article, Category $category, Settings $settings)
-    {
+    public function getArticle(Article $article, Category $category, Settings $settings) {
         $setting = $settings->first();
         $pagination = $setting->pagination;
         if (!Auth::check() || \Auth::user()->role == 'user') {
             $article = $article->where('status', '1');
         }
         $article = $article->where('type', '1');
-        $article = $article->orderBy('publish_time', 'desc');
+        $article = $article->orderBy('publish_time','desc');
         $article = $article->paginate($pagination);
-
+        
         $article->setPath('article-list');
         $categorys = $category->get();
-
         return view('themes.default1.client.kb.article-list.articles', compact('time', 'categorys', 'article'));
     }
 
@@ -62,8 +59,7 @@ class UserController extends Controller
      *
      * @return string excerpt
      */
-    public static function getExcerpt($str, $startPos = 0, $maxLength = 50)
-    {
+    public static function getExcerpt($str, $startPos = 0, $maxLength = 50) {
         if (strlen($str) > $maxLength) {
             $excerpt = substr($str, $startPos, $maxLength - 3);
             $lastSpace = strrpos($excerpt, ' ');
@@ -86,16 +82,15 @@ class UserController extends Controller
      *
      * @return type view
      */
-    public function search(SearchRequest $request, Category $category, Article $article, Settings $settings)
-    {
+    public function search(SearchRequest $request, Category $category, Article $article, Settings $settings) {
         $settings = $settings->first();
         $pagination = $settings->pagination;
         $search = $request->input('s');
-        $result = $article->where('name', 'LIKE', '%'.$search.'%')
-                ->orWhere('slug', 'LIKE', '%'.$search.'%')
-                ->orWhere('description', 'LIKE', '%'.$search.'%')
+        $result = $article->where('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('slug', 'LIKE', '%' . $search . '%')
+                ->orWhere('description', 'LIKE', '%' . $search . '%')
                 ->paginate($pagination);
-        $result->setPath('search');
+        $result->setPath('search?s='.$search);
         $categorys = $category->get();
 
         return view('themes.default1.client.kb.article-list.search', compact('categorys', 'result'));
@@ -106,16 +101,15 @@ class UserController extends Controller
      *
      * @return response
      */
-    public function show($slug, Article $article, Category $category)
-    {
+    public function show($slug, Article $article, Category $category) {
         //ArticleController::timezone();
         $tz = \App\Model\helpdesk\Settings\System::where('id', '1')->first()->time_zone;
         $tz = \App\Model\helpdesk\Utility\Timezones::where('id', $tz)->first()->name;
         date_default_timezone_set($tz);
         $date = \Carbon\Carbon::now()->toDateTimeString();
         $arti = $article->where('slug', $slug);
-
-        if (!Auth::check() || \Auth::user()->role == 'user') {
+        
+        if (!Auth::check()|| \Auth::user()->role == 'user') {
             $arti = $arti->where('status', '1');
             $arti = $arti->where('publish_time', '<', $date);
         }
@@ -131,8 +125,7 @@ class UserController extends Controller
         }
     }
 
-    public function getCategory($slug, Article $article, Category $category, Relationship $relation)
-    {
+    public function getCategory($slug, Article $article, Category $category, Relationship $relation) {
         /* get the article_id where category_id == current category */
         $catid = $category->where('slug', $slug)->first();
         if (!$catid) {
@@ -148,8 +141,7 @@ class UserController extends Controller
         return view('themes.default1.client.kb.article-list.category', compact('all', 'id', 'categorys', 'article_id'));
     }
 
-    public function home(Article $article, Category $category, Relationship $relation)
-    {
+    public function home(Article $article, Category $category, Relationship $relation) {
         if (Config::get('database.install') == '%0%') {
             return redirect('step1');
         } else {
@@ -161,8 +153,7 @@ class UserController extends Controller
         }
     }
 
-    public function Faq(Faq $faq, Category $category)
-    {
+    public function Faq(Faq $faq, Category $category) {
         $faq = $faq->where('id', '1')->first();
         $categorys = $category->get();
 
@@ -174,8 +165,7 @@ class UserController extends Controller
      *
      * @return response
      */
-    public function contact(Category $category, Settings $settings)
-    {
+    public function contact(Category $category, Settings $settings) {
         $settings = $settings->whereId('1')->first();
         $categorys = $category->get();
 
@@ -187,8 +177,7 @@ class UserController extends Controller
      *
      * @return response
      */
-    public function postContact(ContactRequest $request, Contact $contact)
-    {
+    public function postContact(ContactRequest $request, Contact $contact) {
         $this->port();
         $this->host();
         $this->encryption();
@@ -206,8 +195,8 @@ class UserController extends Controller
         //echo $message;
         //echo $contact->email;
         $mail = Mail::send('themes.default1.client.kb.article-list.contact-details', ['name' => $name, 'email' => $email, 'subject' => $subject, 'details' => $details], function ($message) use ($contact) {
-            $message->to($contact->email, $contact->name)->subject('Contact');
-        });
+                    $message->to($contact->email, $contact->name)->subject('Contact');
+                });
         if ($mail) {
             return redirect('contact')->with('success', Lang::get('lang.your_details_send_to_system'));
         } else {
@@ -215,8 +204,7 @@ class UserController extends Controller
         }
     }
 
-    public function contactDetails()
-    {
+    public function contactDetails() {
         return view('themes.default1.client.kb.article-list.contact-details');
     }
 
@@ -230,11 +218,10 @@ class UserController extends Controller
      *
      * @return type response
      */
-    public function postComment($slug, Article $article, CommentRequest $request, Comment $comment)
-    {
+    public function postComment($slug, Article $article, CommentRequest $request, Comment $comment) {
         $article = $article->where('slug', $slug)->first();
-        if (!$article) {
-            return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed'));
+        if(!$article){
+           return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed')); 
         }
         $id = $article->id;
         $comment->article_id = $id;
@@ -245,49 +232,42 @@ class UserController extends Controller
         }
     }
 
-    public function getPage($name, Page $page)
-    {
+    public function getPage($name, Page $page) {
         $page = $page->where('slug', $name)->first();
-        if ($page) {
+        if($page){
             return view('themes.default1.client.kb.article-list.pages', compact('page'));
-        } else {
+        }else{
             return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed'));
         }
     }
 
-    public static function port()
-    {
+    public static function port() {
         $setting = Settings::whereId('1')->first();
         Config::set('mail.port', $setting->port);
     }
 
-    public static function host()
-    {
+    public static function host() {
         $setting = Settings::whereId('1')->first();
         Config::set('mail.host', $setting->host);
     }
 
-    public static function encryption()
-    {
+    public static function encryption() {
         $setting = Settings::whereId('1')->first();
         Config::set(['mail.encryption' => $setting->encryption, 'mail.username' => $setting->email]);
     }
 
-    public static function email()
-    {
+    public static function email() {
         $setting = Settings::whereId('1')->first();
         Config::set(['mail.from' => ['address' => $setting->email, 'name' => 'asd']]);
         //dd(Config::get('mail'));
     }
 
-    public static function password()
-    {
+    public static function password() {
         $setting = Settings::whereId('1')->first();
         Config::set(['mail.password' => $setting->password, 'mail.sendmail' => $setting->email]);
     }
 
-    public function getCategoryList(Article $article, Category $category, Relationship $relation)
-    {
+    public function getCategoryList(Article $article, Category $category, Relationship $relation) {
         //$categorys = $category->get();
         $categorys = $category->get();
         // $categorys->setPath('home');
@@ -309,15 +289,13 @@ class UserController extends Controller
     // 	//return substr($date, 0, -6);
     // }
 
-    public function clientProfile()
-    {
+    public function clientProfile() {
         $user = Auth::user();
 
         return view('themes.default1.client.kb.article-list.profile', compact('user'));
     }
 
-    public function postClientProfile($id, ProfileRequest $request)
-    {
+    public function postClientProfile($id, ProfileRequest $request) {
         $user = Auth::user();
         $user->gender = $request->input('gender');
         $user->save();
@@ -336,7 +314,7 @@ class UserController extends Controller
             //$extension = Input::file('profile_pic')->getClientOriginalExtension();
             $name = Input::file('profile_pic')->getClientOriginalName();
             $destinationPath = 'lb-faveo/dist/img';
-            $fileName = rand(0000, 9999).'.'.$name;
+            $fileName = rand(0000, 9999) . '.' . $name;
             //echo $fileName;
             Input::file('profile_pic')->move($destinationPath, $fileName);
             $user->profile_pic = $fileName;
@@ -350,8 +328,7 @@ class UserController extends Controller
         }
     }
 
-    public function postClientProfilePassword($id, ProfilePassword $request)
-    {
+    public function postClientProfilePassword($id, ProfilePassword $request) {
         $user = Auth::user();
         //echo $user->password;
         if (Hash::check($request->input('old_password'), $user->getAuthPassword())) {
@@ -363,4 +340,5 @@ class UserController extends Controller
             return redirect()->back()->with('fails', Lang::get('lang.password_was_not_updated'));
         }
     }
+
 }

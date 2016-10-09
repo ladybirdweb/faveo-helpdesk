@@ -15,7 +15,7 @@ class="active"
 @stop
 
 @section('content')
-<script src="{{asset('ckeditor/ckeditor.js')}}"></script>
+ <script src="{{asset('vendor/unisharp/laravel-ckeditor/ckeditor.js')}}"></script>
 {!! Form::model($article,['url' => 'article/'.$article->id , 'method' => 'PATCH'] )!!}
 <div class="row">
     <div class="content-header">
@@ -85,14 +85,13 @@ class="active"
                     {!! Form::textarea('description',$article->description,['class' => 'form-control','id'=>'editor','size' => '128x20','placeholder'=>Lang::get('lang.enter_the_description')]) !!}
                 </div>
                 <script>
-                    CKEDITOR.config.allowedContent = true;
-CKEDITOR.replace('editor', {
-    filebrowserImageBrowseUrl: '{{url("laravel-filemanager?type=Images")}}',
-    filebrowserImageUploadUrl: '{{url("laravel-filemanager/upload?type=Images")}}',
-    filebrowserBrowseUrl: '{{url("laravel-filemanager?type=Files")}}',
-    filebrowserUploadUrl: '{{url("laravel-filemanager/upload?type=Files")}}'
-});
-                </script>
+  CKEDITOR.replace( 'description', {
+    filebrowserImageBrowseUrl: "{{url('laravel-filemanager?type=Images')}}",
+    filebrowserImageUploadUrl: "{{url('laravel-filemanager/upload?type=Images')}}",
+    filebrowserBrowseUrl: "{{url('laravel-filemanager?type=Files')}}",
+    filebrowserUploadUrl: "{{url('laravel-filemanager/upload?type=Files')}}"
+  });
+</script>
             </div>
         </div>
     </div>

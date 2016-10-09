@@ -77,7 +77,6 @@ class CategoryController extends Controller
                         /* add column name */
                         ->addColumn('name', function ($model) {
                             $string = strip_tags($model->name);
-
                             return str_limit($string, 20);
                         })
                         /* add column Created */
@@ -121,7 +120,7 @@ class CategoryController extends Controller
     public function create(Category $category)
     {
         /* Get the all attributes in the category model */
-        $category = $category->lists('name', 'id')->toArray();
+        $category = $category->lists('name','id')->toArray();
         /* get the view page to create new category with all attributes
           of category model */
         try {
@@ -148,7 +147,6 @@ class CategoryController extends Controller
         // send success message to index page
         try {
             $category->fill($request->input())->save();
-
             return Redirect::back()->with('success', Lang::get('lang.category_inserted_successfully'));
         } catch (Exception $e) {
             return Redirect::back()->with('fails', Lang::get('lang.category_not_inserted').'<li>'.$e->getMessage().'</li>');
@@ -167,9 +165,9 @@ class CategoryController extends Controller
     {
         /* get the atributes of the category model whose id == $id */
         $category = Category::whereId($id)->first();
-        $categories = Category::lists('name', 'id')->toArray();
+        $categories = Category::lists('name','id')->toArray();
         /* get the Edit page the selected category via id */
-        return view('themes.default1.agent.kb.category.edit', compact('category', 'categories'));
+        return view('themes.default1.agent.kb.category.edit', compact('category','categories'));
     }
 
     /**
@@ -193,7 +191,6 @@ class CategoryController extends Controller
         try {
             $category->slug = $slug;
             $category->fill($request->input())->save();
-
             return redirect('category')->with('success', Lang::get('lang.category_updated_successfully'));
         } catch (Exception $e) {
             //redirect to index with fails message

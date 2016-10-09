@@ -1,3 +1,8 @@
+2.5.2 / 2017-09-04
+==================
+
+* [fixed] Exceptions are properly highlighted in error messages (@ciaranmcnulty)
+
 2.5.1 / 2016-07-16
 ==================
 

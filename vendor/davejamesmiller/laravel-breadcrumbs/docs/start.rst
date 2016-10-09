@@ -40,7 +40,7 @@ Add the service provider to ``providers``:
 
     'providers' => [
         // ...
-        'DaveJamesMiller\Breadcrumbs\ServiceProvider',
+        DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
     ],
 
 And add the facade to ``aliases``:
@@ -49,7 +49,7 @@ And add the facade to ``aliases``:
 
     'aliases' => [
         // ...
-        'Breadcrumbs' => 'DaveJamesMiller\Breadcrumbs\Facade',
+        'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
     ],
 
 
@@ -57,7 +57,7 @@ And add the facade to ``aliases``:
  2. Define your breadcrumbs
 ================================================================================
 
-Create a file called ``app/Http/breadcrumbs.php`` that looks like this:
+Create a file called ``routes/breadcrumbs.php`` that looks like this:
 
 .. code-block:: php
 
@@ -106,7 +106,7 @@ See the :doc:`defining` section for more details.
  3. Choose a template
 ================================================================================
 
-By default a `Bootstrap <http://getbootstrap.com/components/#breadcrumbs>`_-compatible unordered list will be rendered, so if you're using Bootstrap 3 you can skip this step.
+By default a `Bootstrap <http://getbootstrap.com/components/#breadcrumbs>`_-compatible ordered list will be rendered, so if you're using Bootstrap 3 you can skip this step.
 
 First initialise the config file by running this command:
 

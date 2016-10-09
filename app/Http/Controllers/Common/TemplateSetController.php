@@ -8,6 +8,7 @@ use App\Model\Common\Template;
 use App\Model\Common\TemplateSet;
 use Illuminate\Http\Request;
 use Lang;
+use Exception;
 
 class TemplateSetController extends Controller
 {

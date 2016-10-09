@@ -7,19 +7,19 @@ use App\Http\Controllers\Controller;
 // request
 use App\Http\Requests\helpdesk\EmailsEditRequest;
 use App\Http\Requests\helpdesk\EmailsRequest;
-use App\Http\Requests\helpdesk\Mail\MailRequest;
-// model
 use App\Model\helpdesk\Agent\Department;
+// model
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Utility\MailboxProtocol;
-// classes
 use Crypt;
+// classes
 use Exception;
 use Illuminate\Http\Request;
 use Lang;
+use App\Http\Requests\helpdesk\Mail\MailRequest;
 
 /**
  * ======================================
@@ -29,15 +29,14 @@ use Lang;
  *
  * @author Ladybird <info@ladybirdweb.com>
  */
-class EmailsControllerOld extends Controller
-{
+class EmailsController extends Controller {
+
     /**
      * Defining constructor variables.
      *
      * @return type
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->middleware('auth');
         $this->middleware('roles');
     }
@@ -49,8 +48,7 @@ class EmailsControllerOld extends Controller
      *
      * @return type view
      */
-    public function index(Emails $email)
-    {
+    public function index(Emails $email) {
         try {
             // fetch all the emails from emails table
             $emails = $email->get();
@@ -71,8 +69,7 @@ class EmailsControllerOld extends Controller
      *
      * @return type Response
      */
-    public function create(Department $department, Help_topic $help, Ticket_Priority $ticket_priority, MailboxProtocol $mailbox_protocol)
-    {
+    public function create(Department $department, Help_topic $help, Ticket_Priority $ticket_priority, MailboxProtocol $mailbox_protocol) {
         try {
             // fetch all the departments from the department table
             $departments = $department->get();
@@ -101,8 +98,7 @@ class EmailsControllerOld extends Controller
      *
      * @return int
      */
-    public function validatingEmailSettings(MailRequest $request, $id = '')
-    {
+    public function validatingEmailSettings(MailRequest $request, $id = "") {
         $service_request = $request->except('sending_status', '_token', 'email_address', 'email_name', 'password', 'department', 'priority', 'help_topic', 'fetching_protocol', 'fetching_host', 'fetching_port', 'fetching_encryption', 'imap_authentication', 'sending_protocol', 'sending_host', 'sending_port', 'sending_encryption', 'smtp_authentication', 'internal_notes', '_wysihtml5_mode', 'code');
         $service = $request->input('sending_protocol');
         $send = 0;
@@ -118,7 +114,6 @@ class EmailsControllerOld extends Controller
             } catch (Exception $ex) {
                 \Log::error($ex->getMessage());
                 $result = ['fails' => $ex->getMessage()];
-
                 return response()->json(compact('result'));
             }
             if ($imap_check[0] == 0) {
@@ -134,7 +129,6 @@ class EmailsControllerOld extends Controller
             } catch (Exception $ex) {
                 \Log::error($ex->getMessage());
                 $result = ['fails' => $ex->getMessage()];
-
                 return response()->json(compact('result'));
             }
             if ($send === 0) {
@@ -150,8 +144,7 @@ class EmailsControllerOld extends Controller
         return $this->jsonResponse($send, $imap_check);
     }
 
-    public function sendDiagnoEmail($request)
-    {
+    public function sendDiagnoEmail($request) {
         try {
             $mailservice_id = $request->input('sending_protocol');
             $driver = $this->getDriver($mailservice_id);
@@ -166,51 +159,47 @@ class EmailsControllerOld extends Controller
             $this->emailService($driver, $service_request);
             $this->setMailConfig($driver, $username, $name, $password, $enc, $host, $port);
             $controller = new \App\Http\Controllers\Common\PhpMailController();
-            $to = 'example@ladybirdweb.com';
-            $toname = 'test';
-            $subject = 'test';
-            $data = 'test';
+            $to = "example@ladybirdweb.com";
+            $toname = "test";
+            $subject = "test";
+            $data = "test";
             //dd(\Config::get('mail'),\Config::get('services'));
             $send = $controller->laravelMail($to, $toname, $subject, $data, [], []);
         } catch (Exception $e) {
             \Log::error($e->getMessage());
             //dd($e);
         }
-
         return $send;
     }
 
-    public function setMailConfig($driver, $username, $name, $password, $enc, $host, $port)
-    {
+    public function setMailConfig($driver, $username, $name, $password, $enc, $host, $port) {
         $configs = [
-            'username'   => $username,
-            'from'       => ['address' => $username, 'name' => $name],
-            'password'   => $password,
+            'username' => $username,
+            'from' => ['address' => $username, 'name' => $name,],
+            'password' => $password,
             'encryption' => $enc,
-            'host'       => $host,
-            'port'       => $port,
-            'driver'     => $driver,
+            'host' => $host,
+            'port' => $port,
+            'driver' => $driver,
         ];
         foreach ($configs as $key => $config) {
             if (is_array($config)) {
                 foreach ($config as $from) {
-                    \Config::set('mail.'.$key, $config);
+                    \Config::set('mail.' . $key, $config);
                 }
             } else {
-                \Config::set('mail.'.$key, $config);
+                \Config::set('mail.' . $key, $config);
             }
         }
     }
 
-    public function getDriver($driver_id)
-    {
-        $short = '';
+    public function getDriver($driver_id) {
+        $short = "";
         $email_drivers = new \App\Model\MailJob\MailService();
         $email_driver = $email_drivers->find($driver_id);
         if ($email_driver) {
             $short = $email_driver->short_name;
         }
-
         return $short;
     }
 
@@ -222,10 +211,9 @@ class EmailsControllerOld extends Controller
      *
      * @return type Redirect
      */
-    public function store($request, $imap_check, $service_request = [], $id = '')
-    {
+    public function store($request, $imap_check, $service_request = [], $id = "") {
         $email = new Emails();
-        if ($id !== '') {
+        if ($id !== "") {
             $email = $email->find($id);
         }
         try {
@@ -278,7 +266,7 @@ class EmailsControllerOld extends Controller
             // inserting the encrypted value of password
             $email->password = Crypt::encrypt($request->input('password'));
             $email->save(); // run save
-            if ($id === '') {
+            if ($id === "") {
                 // Creating a default system email as the first email is inserted to the system
                 $email_settings = Email::where('id', '=', '1')->first();
                 $email_settings->sys_email = $email->id;
@@ -289,7 +277,7 @@ class EmailsControllerOld extends Controller
             if (count($service_request) > 0) {
                 $this->saveMailService($email->id, $service_request, $this->getDriver($request->sending_protocol));
             }
-
+            
             return 1;
         } catch (Exception $e) {
             return 0;
@@ -308,8 +296,7 @@ class EmailsControllerOld extends Controller
      *
      * @return type Response
      */
-    public function edit($id, Department $department, Help_topic $help, Emails $email, Ticket_Priority $ticket_priority, MailboxProtocol $mailbox_protocol)
-    {
+    public function edit($id, Department $department, Help_topic $help, Emails $email, Ticket_Priority $ticket_priority, MailboxProtocol $mailbox_protocol) {
         try {
             $sys_email = \DB::table('settings_email')->select('sys_email')->where('id', '=', 1)->first();
             // dd($sys_email);
@@ -344,8 +331,8 @@ class EmailsControllerOld extends Controller
      *
      * @return int
      */
-    public function validatingEmailSettingsUpdate($id, MailRequest $request)
-    {
+    public function validatingEmailSettingsUpdate($id, MailRequest $request) {
+
         return $this->validatingEmailSettings($request, $id);
     }
 
@@ -358,9 +345,9 @@ class EmailsControllerOld extends Controller
      *
      * @return type Response
      */
-    public function update($id, $request)
-    {
+    public function update($id, $request) {
         try {
+
             if ($request->sys_email == 'on') {
                 $system = \DB::table('settings_email')
                         ->where('id', '=', 1)
@@ -386,8 +373,7 @@ class EmailsControllerOld extends Controller
      *
      * @return type Redirect
      */
-    public function destroy($id, Emails $email)
-    {
+    public function destroy($id, Emails $email) {
         // fetching the details on the basis of the $id passed to the function
         $default_system_email = Email::where('id', '=', '1')->first();
         if ($default_system_email->sys_email) {
@@ -418,32 +404,30 @@ class EmailsControllerOld extends Controller
      *
      * @return type int
      */
-    public function getImapStream($request, $validate)
-    {
+    public function getImapStream($request, $validate) {
         $fetching_status = $request->input('fetching_status');
         $username = $request->input('email_address');
         $password = $request->input('password');
         $protocol_id = $request->input('mailbox_protocol');
-        $fetching_protocol = '/'.$request->input('fetching_protocol');
-        $fetching_encryption = '/'.$request->input('fetching_encryption');
+        $fetching_protocol = '/' . $request->input('fetching_protocol');
+        $fetching_encryption = '/' . $request->input('fetching_encryption');
         if ($fetching_encryption == '/none') {
             $fetching_encryption2 = '/novalidate-cert';
             $mailbox_protocol = $fetching_encryption2;
             $host = $request->input('fetching_host');
             $port = $request->input('fetching_port');
-            $mailbox = '{'.$host.':'.$port.$fetching_protocol.$mailbox_protocol.'}INBOX';
+            $mailbox = '{' . $host . ':' . $port . $fetching_protocol . $mailbox_protocol . '}INBOX';
         } else {
-            $mailbox_protocol = $fetching_protocol.$fetching_encryption;
+            $mailbox_protocol = $fetching_protocol . $fetching_encryption;
             $host = $request->input('fetching_host');
             $port = $request->input('fetching_port');
-            $mailbox = '{'.$host.':'.$port.$mailbox_protocol.$validate.'}INBOX';
-            $mailbox_protocol = $fetching_encryption.$validate;
+            $mailbox = '{' . $host . ':' . $port . $mailbox_protocol . $validate . '}INBOX';
+            $mailbox_protocol = $fetching_encryption . $validate;
         }
         try {
             $imap_stream = imap_open($mailbox, $username, $password);
         } catch (\Exception $ex) {
             \Log::error($ex->getMessage());
-
             return $ex->getMessage();
         }
         //$imap_stream = imap_open($mailbox, $username, $password);
@@ -463,8 +447,7 @@ class EmailsControllerOld extends Controller
      *
      * @return type int
      */
-    public function checkImapStream($imap_stream)
-    {
+    public function checkImapStream($imap_stream) {
         $check_imap_stream = imap_check($imap_stream);
         if ($check_imap_stream) {
             $imap_stream = 1;
@@ -482,8 +465,7 @@ class EmailsControllerOld extends Controller
      *
      * @return int
      */
-    public function getSmtp($request)
-    {
+    public function getSmtp($request) {
         $sending_status = $request->input('sending_status');
         // cheking for the sending protocol
         if ($request->input('sending_protocol') == 'smtp') {
@@ -499,8 +481,8 @@ class EmailsControllerOld extends Controller
                 $mail->SMTPAuth = true;                               // Enable SMTP authentication
                 $mail->SMTPOptions = [
                     'ssl' => [
-                        'verify_peer'       => false,
-                        'verify_peer_name'  => false,
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
                         'allow_self_signed' => true,
                     ],
                 ];
@@ -532,8 +514,7 @@ class EmailsControllerOld extends Controller
      *
      * @return type string or null
      */
-    public function departmentValue($dept)
-    {
+    public function departmentValue($dept) {
         if ($dept) {
             $email_department = $dept;
         } else {
@@ -550,8 +531,7 @@ class EmailsControllerOld extends Controller
      *
      * @return type string or null
      */
-    public function priorityValue($priority)
-    {
+    public function priorityValue($priority) {
         if ($priority) {
             $email_priority = $priority;
         } else {
@@ -568,8 +548,7 @@ class EmailsControllerOld extends Controller
      *
      * @return type string or null
      */
-    public function helpTopicValue($help_topic)
-    {
+    public function helpTopicValue($help_topic) {
         if ($help_topic) {
             $email_help_topic = $help_topic;
         } else {
@@ -579,20 +558,18 @@ class EmailsControllerOld extends Controller
         return $email_help_topic;
     }
 
-    public function emailService($service, $value = [])
-    {
+    public function emailService($service, $value = []) {
         switch ($service) {
-            case 'mailgun':
+            case "mailgun":
                 $this->setServiceConfig($service, $value);
-            case 'mandrill':
+            case "mandrill":
                 $this->setServiceConfig($service, $value);
-            case 'ses':
+            case "ses":
                 $this->setServiceConfig($service, $value);
         }
     }
 
-    public function setServiceConfig($service, $value)
-    {
+    public function setServiceConfig($service, $value) {
         //dd($service);
         if (count($value) > 0) {
             foreach ($value as $k => $v) {
@@ -601,8 +578,7 @@ class EmailsControllerOld extends Controller
         }
     }
 
-    public function jsonResponse($out, $in)
-    {
+    public function jsonResponse($out, $in) {
         if ($out !== 1) {
             $result = ['fails' => Lang::get('lang.outgoing_email_connection_failed')];
         }
@@ -616,8 +592,7 @@ class EmailsControllerOld extends Controller
         return response()->json(compact('result'));
     }
 
-    public function saveMailService($emailid, $request, $driver)
-    {
+    public function saveMailService($emailid, $request, $driver) {
         $mail_service = new \App\Model\MailJob\FaveoMail();
         $mails = $mail_service->where('email_id', $emailid)->get();
         if (count($request) > 0) {
@@ -626,12 +601,13 @@ class EmailsControllerOld extends Controller
             }
             foreach ($request as $key => $value) {
                 $mail_service->create([
-                    'drive'    => $driver,
-                    'key'      => $key,
-                    'value'    => $value,
+                    'drive' => $driver,
+                    'key' => $key,
+                    'value' => $value,
                     'email_id' => $emailid,
                 ]);
             }
         }
     }
+
 }

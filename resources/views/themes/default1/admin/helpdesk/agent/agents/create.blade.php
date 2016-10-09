@@ -125,7 +125,7 @@ class="active"
             <!--country code-->
             <div class="col-xs-1 form-group {{  $errors->has('country_code') ? 'has-error' : '' }}">
 
-                {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
+                {!! Form::label('country_code',Lang::get('lang.country-code')) !!} @if($send_otp->status ==1)<span class="text-red"> *</span>@endif
                 {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
 
             </div>
@@ -136,7 +136,7 @@ class="active"
             </div>
             <!-- Mobile -->
             <div class="col-xs-3 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
-                {!! Form::label('mobile',Lang::get('lang.mobile_number')) !!}
+                {!! Form::label('mobile',Lang::get('lang.mobile_number')) !!}@if($send_otp->status ==1)<span class="text-red"> *</span>@endif
                 {!! Form::text('mobile',null,['class' => 'form-control']) !!}
             </div>
         </div>

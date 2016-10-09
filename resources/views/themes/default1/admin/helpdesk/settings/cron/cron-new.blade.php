@@ -117,6 +117,28 @@
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
+        <!-- Follow up notification -->
+       <div class="col-md-6">
+            <div class="info-box">
+                <!-- Apply any bg-* class to to the icon to color it -->
+                <span class="info-box-icon bg-aqua"><i class="glyphicon glyphicon-random"></i></span>
+                <div class="info-box-content">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {!! Form::label('followup_notification_cron',Lang::get('lang.followup_Notification')) !!}<br>
+                           {!! Form::checkbox('followup_notification_cron',1,$condition->checkActiveJob()['notification'],['id'=>'notification_cron1']) !!}&nbsp;{{Lang::get('lang.cron_notification')}}
+                        </div>
+                    </div>
+                    <div class="col-md-6" id="notification1">
+                        {!! Form::select('followup_notification_commands',$followupcommands,$condition->getConditionValue('notification')['condition'],['class'=>'form-control','id'=>'notification-command1']) !!}
+                        <div id='notification-daily-at1'>
+                            {!! Form::text('followup_notification_dailyAt',$condition->getConditionValue('notification')['at'],['class'=>'form-control']) !!}
+                        </div>
+                    </div>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
+        </div>
+
     </div>
     <div class="box-footer">
         {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
@@ -204,6 +226,35 @@
                 $("#workflow-daily-at").show();
             } else {
                 $("#workflow-daily-at").hide();
+            }
+        }
+    });
+//follow up
+     $(document).ready(function () {
+        var checked = $("#notification_cron1").is(':checked');
+        check(checked, 'notification_cron1');
+        $("#notification_cron1").on('click', function () {
+            checked = $("#notification_cron1").is(':checked');
+            check(checked);
+        });
+        var command = $("#notification-command1").val();
+        showDailyAt(command);
+        $("#notification-command1").on('change', function () {
+            command = $("#notification-command1").val();
+            showDailyAt(command);
+        });
+        function check(checked, id) {
+            if (checked) {
+                $("#notification1").show();
+            } else {
+                $("#notification1").hide();
+            }
+        }
+        function showDailyAt(command) {
+            if (command === 'dailyAt') {
+                $("#notification-daily-at1").show();
+            } else {
+                $("#notification-daily-at1").hide();
             }
         }
     });

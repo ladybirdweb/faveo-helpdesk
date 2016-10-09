@@ -4,8 +4,8 @@ namespace App\Model\helpdesk\Form;
 
 use App\BaseModel;
 
-class Fields extends BaseModel
-{
+class Fields extends BaseModel {
+
     protected $table = 'custom_form_fields';
 
     /**
@@ -15,55 +15,44 @@ class Fields extends BaseModel
      */
     protected $fillable = ['forms_id', 'label', 'name', 'type', 'value', 'required'];
 
-    public function valueRelation()
-    {
+    public function valueRelation() {
         $related = "App\Model\helpdesk\Form\FieldValue";
-
         return $this->hasMany($related, 'field_id');
     }
 
-    public function values()
-    {
+    public function values() {
         $value = $this->valueRelation();
-
         return $value;
     }
-
-    public function valuesAsString()
-    {
-        $string = '';
+    
+    public function valuesAsString(){
+        $string = "";
         $values = $this->values()->lists('field_value')->toArray();
-        if (count($values) > 0) {
+        if(count($values)>0){
             $string = implode(',', $values);
         }
-
         return $string;
+        
     }
-
-    public function requiredFieldForCheck()
-    {
+    
+    public function requiredFieldForCheck(){
         $check = false;
         $required = $this->attributes['required'];
-        if ($required === '1') {
+        if($required==='1'){
             $check = true;
         }
-
+        return $check;
+    }
+    public function nonRequiredFieldForCheck(){
+        $check = false;
+        $required = $this->attributes['required'];
+        if($required!=='1'){
+            $check = true;
+        }
         return $check;
     }
 
-    public function nonRequiredFieldForCheck()
-    {
-        $check = false;
-        $required = $this->attributes['required'];
-        if ($required !== '1') {
-            $check = true;
-        }
-
-        return $check;
-    }
-
-    public function deleteValues()
-    {
+    public function deleteValues() {
         $values = $this->values()->get();
         if ($values->count() > 0) {
             foreach ($values as $value) {
@@ -72,8 +61,9 @@ class Fields extends BaseModel
         }
     }
 
-    public function delete()
-    {
+    public function delete() {
+        $this->deleteValues();
         parent::delete();
     }
+
 }

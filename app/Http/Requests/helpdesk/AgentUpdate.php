@@ -31,7 +31,7 @@ class AgentUpdate extends Request
         return [
             'user_name'           => 'required|max:30|min:3|unique:users,user_name,'.$this->segment(2),
             'first_name'          => 'required|max:30',
-            'last_name'           => 'required|max:30',
+            // 'last_name'           => 'required|max:30',
             'email'               => 'required|email|unique:users,email,'.$this->segment(2),
             'active'              => 'required',
             'role'                => 'required',
@@ -39,6 +39,7 @@ class AgentUpdate extends Request
             'primary_department'  => 'required',
             'agent_time_zone'     => 'required',
             'team'                => 'required',
+            'mobile'              => 'unique:users,mobile,'.$this->segment(2),
         ];
     }
 }
