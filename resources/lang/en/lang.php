@@ -494,6 +494,9 @@ return [
     'plugin-path-missing'   => 'Plugin File Path is not exist',
     'no-plugin-file'        => 'Their is no ',
     'plugin-config-missing' => 'Their is no <b>config.php or ServiceProvider.php</b>',
+    'plugin-info'           => 'Are you a coder? We encourage you to write your own plugins and make\'em available for the community.' ,
+    'plugin-info-pro'       => ' to checkout the plugins available with Pro edition.',
+    'click-here'            => 'Click here',
     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]

@@ -81,6 +81,15 @@ class="active"
             {!!Session::get('fails')!!}
         </div>
         @endif
+        @if($info == 1)
+        <div class="alert alert-info alert-dismissable">
+            <i class="fa fa-info-circle"></i>
+            <b></b>
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{Lang::get('lang.plugin-info')}}
+            <ul><li><a href="http://www.faveohelpdesk.com/plugins/" target="_blank">{{Lang::get('lang.click-here')}}</a>{{Lang::get('lang.plugin-info-pro')}}</li></ul>
+        </div>
+        @endif
         <div class="row">
             <div class="col-md-12">
                 <script src="{{asset('lb-faveo/plugins/jQuery/jQuery-2.1.4.min.js')}}" type="text/javascript"></script>

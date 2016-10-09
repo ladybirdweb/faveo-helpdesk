@@ -279,7 +279,7 @@ class SettingsController extends Controller
 
     public function Plugins()
     {
-        return view('themes.default1.admin.helpdesk.settings.plugins');
+        return view('themes.default1.admin.helpdesk.settings.plugins', ['info' => 1]);
     }
 
     public function GetPlugin()
