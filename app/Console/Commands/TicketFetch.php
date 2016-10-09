@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Http\Controllers\Agent\helpdesk\MailController;
-use Event;
 use App\Http\Controllers\Agent\helpdesk\TicketWorkflowController;
+use Event;
+use Illuminate\Console\Command;
 
-class TicketFetch extends Command {
-
+class TicketFetch extends Command
+{
     /**
      * The name and signature of the console command.
      *
@@ -28,7 +28,8 @@ class TicketFetch extends Command {
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -37,9 +38,9 @@ class TicketFetch extends Command {
      *
      * @return mixed
      */
-    public function handle() {
+    public function handle()
+    {
         if (env('DB_INSTALL') == 1) {
-
             $controller = $this->mailController();
             $emails = new \App\Model\helpdesk\Email\Emails();
             $settings_email = new \App\Model\helpdesk\Settings\Email();
@@ -47,19 +48,20 @@ class TicketFetch extends Command {
             $ticket = new \App\Model\helpdesk\Settings\Ticket();
             $controller->readmails($emails, $settings_email, $system, $ticket);
             Event::fire('ticket.fetch', ['event' => '']);
-            loging('fetching-ticket', 'Ticket has read','info');
+            loging('fetching-ticket', 'Ticket has read', 'info');
             //\Log::info('Ticket has read');
             $this->info('Ticket has read');
         }
     }
 
-    public function mailController() {
+    public function mailController()
+    {
         $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
         $NotificationController = new \App\Http\Controllers\Common\NotificationController();
         $ticket = new \App\Http\Controllers\Agent\helpdesk\TicketController($PhpMailController, $NotificationController);
         $work = new TicketWorkflowController($ticket);
         $controller = new MailController($work);
+
         return $controller;
     }
-
 }

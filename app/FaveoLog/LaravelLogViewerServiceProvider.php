@@ -4,8 +4,8 @@ namespace App\FaveoLog;
 
 use Illuminate\Support\ServiceProvider;
 
-class LaravelLogViewerServiceProvider extends ServiceProvider {
-
+class LaravelLogViewerServiceProvider extends ServiceProvider
+{
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -18,17 +18,18 @@ class LaravelLogViewerServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function boot() {
+    public function boot()
+    {
         if (method_exists($this, 'package')) {
-            $this->package('rap2hpoutre/laravel-log-viewer', 'laravel-log-viewer', __DIR__ . '/../../');
+            $this->package('rap2hpoutre/laravel-log-viewer', 'laravel-log-viewer', __DIR__.'/../../');
         }
 
 
-        $view_path = app_path() . DIRECTORY_SEPARATOR . 'FaveoLog' . DIRECTORY_SEPARATOR . 'views';
+        $view_path = app_path().DIRECTORY_SEPARATOR.'FaveoLog'.DIRECTORY_SEPARATOR.'views';
         $this->loadViewsFrom($view_path, 'log');
-        
-        $lang_path = app_path() . DIRECTORY_SEPARATOR . 'FaveoLog' . DIRECTORY_SEPARATOR . 'lang';
-        $this->loadTranslationsFrom($lang_path, "log");
+
+        $lang_path = app_path().DIRECTORY_SEPARATOR.'FaveoLog'.DIRECTORY_SEPARATOR.'lang';
+        $this->loadTranslationsFrom($lang_path, 'log');
     }
 
     /**
@@ -36,7 +37,8 @@ class LaravelLogViewerServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function register() {
+    public function register()
+    {
         // Add routes
         $routes = app_path('/FaveoLog/routes.php');
         if (file_exists($routes)) {
@@ -49,8 +51,8 @@ class LaravelLogViewerServiceProvider extends ServiceProvider {
      *
      * @return array
      */
-    public function provides() {
-        return array();
+    public function provides()
+    {
+        return [];
     }
-
 }

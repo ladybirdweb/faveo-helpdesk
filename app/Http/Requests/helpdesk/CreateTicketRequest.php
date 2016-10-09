@@ -1,7 +1,10 @@
 <?php
+
 namespace App\Http\Requests\helpdesk;
+
 use App\Http\Requests\Request;
 use App\Model\helpdesk\Settings\CommonSettings;
+
 /**
  * CreateTicketRequest.
  *
@@ -18,14 +21,16 @@ class CreateTicketRequest extends Request
     {
         return true;
     }
-    
+
     public function wantsJson()
     {
-        if(in_array('api',$this->segments())){
+        if (in_array('api', $this->segments())) {
             return true;
         }
+
         return false;
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -33,14 +38,15 @@ class CreateTicketRequest extends Request
      */
     public function rules()
     {
-        $check = $this->check(new CommonSettings);
+        $check = $this->check(new CommonSettings());
         if ($check != 0) {
             return $check;
         }
+
         return [
-            'email'     => 'required|email|max:60',
+            'email'       => 'required|email|max:60',
             'first_name'  => 'required|min:3|max:40',
-            'helptopic' => 'required',
+            'helptopic'   => 'required',
             // 'dept' => 'required',
             'sla'      => 'required',
             'subject'  => 'required|min:5',
@@ -48,11 +54,15 @@ class CreateTicketRequest extends Request
             'priority' => 'required',
         ];
     }
+
     /**
      *@category Funcion to set rule if send opt is enabled
-     *@param Object $settings (instance of Model common settings)
+     *
+     *@param object $settings (instance of Model common settings)
+     *
      *@author manish.verma@ladybirdweb.com
-     *@return array|int 
+     *
+     *@return array|int
      */
     public function check($settings)
     {
@@ -61,9 +71,9 @@ class CreateTicketRequest extends Request
         // dd($settings->status, $email_mandatory->status);
         if (($settings->status == '1' || $settings->status == 1) && ($email_mandatory->status == '1' || $email_mandatory->status == 1)) {
             return [
-                'email'     => 'required|email|max:60',
+                'email'       => 'required|email|max:60',
                 'first_name'  => 'required|min:3|max:40',
-                'helptopic' => 'required',
+                'helptopic'   => 'required',
                 // 'dept' => 'required',
                 'sla'      => 'required',
                 'subject'  => 'required|min:5',
@@ -76,9 +86,11 @@ class CreateTicketRequest extends Request
             return 0;
         } elseif (($settings->status == '0' || $settings->status == 0) && ($email_mandatory->status == '0' || $email_mandatory->status == 0)) {
             $rule = $this->onlyMobleRequired();
+
             return $rule;
         } elseif (($settings->status == '1' || $settings->status == 1) && ($email_mandatory->status == '0' || $email_mandatory->status == 0)) {
             $rule = $this->onlyMobleRequired();
+
             return $rule;
         } else {
             return 0;
@@ -87,15 +99,17 @@ class CreateTicketRequest extends Request
 
     /**
      *@category function to make only moble required rule
+     *
      *@param null
+     *
      *@return array
      */
     public function onlyMobleRequired()
     {
         return [
-                'email'     => 'email|max:60',
+                'email'       => 'email|max:60',
                 'first_name'  => 'required|min:3|max:40',
-                'helptopic' => 'required',
+                'helptopic'   => 'required',
                 // 'dept' => 'required',
                 'sla'      => 'required',
                 'subject'  => 'required|min:5',

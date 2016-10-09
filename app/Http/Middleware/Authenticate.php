@@ -44,6 +44,7 @@ class Authenticate
         if ($this->auth->guest()) {
             if ($request->ajax()) {
                 $result = ['fails' => 'Unauthorized! Please login again'];
+
                 return response()->json(compact('result'));
             } else {
                 return redirect()->guest('auth/login');

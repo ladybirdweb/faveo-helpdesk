@@ -14,53 +14,61 @@ class Emails extends BaseModel
         'fetching_status', 'move_to_folder', 'delete_email', 'do_nothing',
         'sending_status', 'authentication', 'header_spoofing', 'imap_config',
     ];
-    
-    public function getCurrentDrive(){
-        $drive  = $this->attributes['sending_protocol'];
+
+    public function getCurrentDrive()
+    {
+        $drive = $this->attributes['sending_protocol'];
         $mailServices = new \App\Model\MailJob\MailService();
-        $id = "";
-        $mailService = $mailServices->where('short_name',$drive)->first();
-        if($mailService){
+        $id = '';
+        $mailService = $mailServices->where('short_name', $drive)->first();
+        if ($mailService) {
             $id = $mailService->id;
         }
+
         return $id;
-        
     }
-    
-    public function getExtraField($key){
-        $value = "";
+
+    public function getExtraField($key)
+    {
+        $value = '';
         $id = $this->attributes['id'];
         $services = new \App\Model\MailJob\FaveoMail();
-        $service = $services->where('email_id',$id)->where('key',$key)->first();
-        if($service){
+        $service = $services->where('email_id', $id)->where('key', $key)->first();
+        if ($service) {
             $value = $service->value;
         }
+
         return $value;
-        
     }
-    
-    public function extraFieldRelation(){
+
+    public function extraFieldRelation()
+    {
         $related = "App\Model\MailJob\FaveoMail";
-        return $this->hasMany($related,'email_id');
+
+        return $this->hasMany($related, 'email_id');
     }
-    
-    public function deleteExtraFields(){
+
+    public function deleteExtraFields()
+    {
         $fields = $this->extraFieldRelation()->get();
-        if($fields->count()>0){
-            foreach ($fields as $field){
+        if ($fields->count() > 0) {
+            foreach ($fields as $field) {
                 $field->delete();
             }
         }
     }
-    
-    public function getPasswordAttribute($value){
-        if($value){
+
+    public function getPasswordAttribute($value)
+    {
+        if ($value) {
             return \Crypt::decrypt($value);
         }
+
         return $value;
     }
-    
-    public function delete() {
+
+    public function delete()
+    {
         $this->deleteExtraFields();
         parent::delete();
     }

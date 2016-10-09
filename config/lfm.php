@@ -33,7 +33,7 @@ return [
         'image/jpeg',
         'image/pjpeg',
         'image/png',
-        'image/gif'
+        'image/gif',
     ],
 
 
@@ -44,6 +44,6 @@ return [
         'image/png',
         'image/gif',
         'application/pdf',
-        'text/plain'
+        'text/plain',
     ],
 ];

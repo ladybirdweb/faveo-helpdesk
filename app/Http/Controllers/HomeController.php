@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Model\helpdesk\Ticket\Tickets;
-use App\Http\Controllers\Controller;
+
 class HomeController extends Controller
 {
     /*
