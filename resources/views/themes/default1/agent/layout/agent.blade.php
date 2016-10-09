@@ -258,7 +258,7 @@
                             $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
                             $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->get();
                             $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  array(1, 7))->get();
-                            $followup_ticket= App\Model\helpdesk\Ticket\Tickets::where('status', '1')->where('follow_up', '1')->get();
+
                             $closingapproval = App\Model\helpdesk\Ticket\Tickets::where('status', '7')->get();
                             
                             $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->get();
@@ -267,7 +267,7 @@
                             $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
                             $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
                             $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  array(1, 7))->where('dept_id', '=', Auth::user()->primary_dpt)->get();
-                            $followup_ticket= App\Model\helpdesk\Ticket\Tickets::where('status', '1')->where('follow_up', '1')->get();
+                            
                             $closingapproval = App\Model\helpdesk\Ticket\Tickets::where('status', '7')->get();
                             
                             $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
@@ -322,12 +322,6 @@
                             <a href="{{url('ticket/overdue')}}" id="load-unassigned">
                                 <i class="fa fa-calendar-times-o"></i> <span>{!! Lang::get('lang.overdue') !!}</span>
                                 <small class="label pull-right bg-green">{{$overdue_ticket}}</small>
-                            </a>
-                        </li>
-                        <li @yield('followup')>
-                             <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
-                                <i class="glyphicon glyphicon-import"></i> <span>{!! Lang::get('lang.followup') !!}</span>
-                                <small class="label pull-right bg-green">{{count($followup_ticket)}}</small>
                             </a>
                         </li>
                         <?php

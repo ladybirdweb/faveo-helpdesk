@@ -18,8 +18,6 @@ class Kernel extends ConsoleKernel {
         'App\Console\Commands\SendReport',
         'App\Console\Commands\CloseWork',
         'App\Console\Commands\TicketFetch',
-        'App\Console\Commands\FollowUp',
-        'App\Console\Commands\SendMessage',
     ];
 
     /**
