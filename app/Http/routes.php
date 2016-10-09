@@ -447,7 +447,6 @@ Route::group(['middleware' => ['web']], function () {
             'as'   => 'error.logs',
             'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs',
         ]);
-
     });
     /*
       |------------------------------------------------------------------
