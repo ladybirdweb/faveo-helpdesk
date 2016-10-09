@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Lang;
 
 /**
  * CheckRoleAgent.
@@ -25,6 +26,6 @@ class CheckRoleAgent
             return $next($request);
         }
 
-        return redirect('dashboard')->with('fails', 'You are not Autherised');
+        return redirect('dashboard')->with('fails', Lang::get('lang.not-autherised'));
     }
 }

@@ -24,12 +24,13 @@ return [
     'required-error'                                                 => 'Please fill all required feilds',
     'invalid'                                                        => 'Incorrect User id or password',
     'sorry_something_went_wrong'                                     => 'Sorry, Something went wrong',
-    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'     => "Were working on it and we'll get it fixed as soon as we can.",
+    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'     => "We're working on it and we'll get it fixed as soon as we can.",
     'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found' => 'We are sorry, but the page you are looking for can not be found.',
     'go_back'                                                        => 'Go Back',
     'the_board_is_offline'                                           => 'The Board is Offline',
     'error_establishing_connection_to_database'                      => 'Error establishing connection to database',
     'unauthorized_access'                                            => 'Unauthorized Access',
+    'not-autherised'                                                 => 'You are not autherised',
     'otp-not-matched'                                                => 'Oops! The OTP code you entered didn\'t match with the one we\'d sent to your number.',
     'otp-invalid'                                                    => 'OTP code must be a 6 digit number.',
     'otp-input-title'                                                => 'Enter 6 digits OTP code.',
@@ -45,12 +46,12 @@ return [
     'remember'                           => 'Remember Me',
     'signmein'                           => 'Sign me In',
     'iforgot'                            => 'I forgot my Password',
-    'email_address'                      => 'E-Mail Address',
+    'email_address'                      => 'Email Address',
     'password'                           => 'Password',
     'woops'                              => 'Whoops!',
     'theirisproblem'                     => 'There were some problems with your input.',
     'login'                              => 'Login',
-    'e-mail'                             => 'E-mail',
+    'e-mail'                             => 'Email',
     'reg_new_member'                     => 'Register a new membership',
     'this_account_is_currently_inactive' => 'This account is currently Inactive!',
     'not-registered'                     => 'Email/username is not registered',
@@ -86,8 +87,8 @@ return [
     'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble'                        => 'Activate Your Account ! Click on Link that we\'ve sent to your mail or login to your account and enter the OTP code we\'ve sent on your mobile number',
     'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup' => 'Account created, please contact to system admin as we were unable to send OTP code to your mobile and email to your email address.',
     'this_field_do_not_match_our_records'                                                         => 'This Field do not match our records.',
-    'we_have_e-mailed_your_password_reset_link'                                                   => 'We have e-mailed your password reset link!',
-    "we_can't_find_a_user_with_that_e-mail_address"                                               => "We can't find a user with that e-mail address.",
+    'we_have_e-mailed_your_password_reset_link'                                                   => 'We have emailed your password reset link!',
+    "we_can't_find_a_user_with_that_e-mail_address"                                               => "We can't find a user with that email address.",
     /*
       |--------------------------------------
       |   Reset Password Page
@@ -104,7 +105,7 @@ return [
     'i_know_my_password'            => 'I know my password',
     'recover_passord'               => 'Recover Password',
     'send_password_reset_link'      => 'Send pasword Reset Link',
-    'enter_email_to_reset_password' => 'Enter E-mail/Mobile number to reset password',
+    'enter_email_to_reset_password' => 'Enter Email/Mobile number to reset password',
     'link'                          => 'Link',
     'email_or_mobile'               => 'Email or mobile',
     /*
@@ -1359,7 +1360,7 @@ return [
     'sorry_you_are_not_allowed_token_expired'                                          => 'Sorry you are not allowed. Token Expired!',
     'thank_you_for_your_rating'                                                        => 'Thank you for your rating!',
     'your_ticket_has_been'                                                             => 'Your ticket has been',
-    'failed_to_send_email_contact_administrator'                                       => 'Email sending faied. Please contact system Administrator',
+    'failed_to_send_email_contact_administrator'                                       => 'Email sending failed. Please contact system Administrator',
     /*
      * |---------------------------------------------------------------------------------------
       |Api settings
