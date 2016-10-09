@@ -448,19 +448,6 @@ Route::group(['middleware' => ['web']], function () {
             'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs',
         ]);
 
-        /*
-         * Approval
-         */
-        Route::get('approval/settings', ['as' => 'approval.settings', 'uses' => 'Agent\helpdesk\TicketController@settingsApproval']);
-        Route::post('settingsUpdateApproval/settings', ['as' => 'settingsUpdateApproval.settings', 'uses' => 'Agent\helpdesk\TicketController@settingsUpdateApproval']);
-
-        Route::get('/ticket/approval/closed', ['as' => 'closed.approvel.ticket', 'uses' => 'Agent\helpdesk\TicketController@approverClosedTicketList']); /*  Get Closed Ticket */
-        Breadcrumbs::register('closed.approvel.ticket', function ($breadcrumbs) {
-            $breadcrumbs->parent('dashboard');
-            $breadcrumbs->push(Lang::get('lang.approvel_ticket_list'), route('closed.approvel.ticket'));
-        });
-        Route::get('/ticket/get-approval', ['as' => 'get.approval.ticket', 'uses' => 'Agent\helpdesk\TicketController@getApproval']);  /* Get tickets in datatable */
-        Route::get('/ticket/close/get-approval/{id}', ['as' => 'get.close.approval.ticket', 'uses' => 'Agent\helpdesk\TicketController@getCloseapproval']);  /* Get tickets in datatable */
     });
     /*
       |------------------------------------------------------------------
@@ -707,16 +694,6 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('help-topic-pdf', ['as' => 'help.topic.pdf', 'uses' => 'Agent\helpdesk\ReportController@helptopicPdf']);
     });
 
-        /*
-         * Followup tickets
-         */
-        Route::get('/ticket/followup', ['as' => 'followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@followupTicketList']); //  Get Closed Ticket /
-//        Breadcrumbs::register('closed.approvel.ticket', function ($breadcrumbs) {
-//            $breadcrumbs->parent('dashboard');
-//            $breadcrumbs->push(Lang::get('lang.approvel_ticket_list'), route('closed.approvel.ticket'));
-//        });
-        Route::get('/ticket/get-followup', ['as' => 'get.followup.ticket', 'uses' => 'Agent\helpdesk\TicketController@getFollowup']);  // Get tickets in datatable /
-        Route::get('/ticket/close/get-approval/{id}', ['as' => 'get.close.approval.ticket', 'uses' => 'Agent\helpdesk\TicketController@getCloseapproval']);  // Get tickets in datatable /
     /*
       |------------------------------------------------------------------
       |Guest Routes

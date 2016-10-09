@@ -461,18 +461,6 @@
                         <p class="box-title" >{!! Lang::get('lang.close_ticket_workflow') !!}</p>
                     </div>
                 </div>
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                           <a href="{{url('approval/settings')}}">
-                                <span class="fa-stack fa-2x">    
-                                    <i class="glyphicon glyphicon-repeat"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.approval') !!}</p>
-                    </div>
-                </div>
             </div>
         </div>
         <!-- /.row -->
