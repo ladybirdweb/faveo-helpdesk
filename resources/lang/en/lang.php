@@ -41,12 +41,12 @@ return [
     'remember'                              => 'Remember Me',
     'signmein'                              => 'Sign me In',
     'iforgot'                               => 'I forgot my Password',
-    'email_address'                         => 'E-Mail Address',
+    'email_address'                         => 'Email Address',
     'password'                              => 'Password',
     'woops'                                 => 'Whoops!',
     'theirisproblem'                        => 'There were some problems with your input.',
     'login'                                 => 'Login',
-    'e-mail'                                => 'E-mail',
+    'e-mail'                                => 'Email',
     'reg_new_member'                        => 'Register a new membership',
     'this_account_is_currently_inactive'    => 'This account is currently Inactive!',
     /*
@@ -70,8 +70,8 @@ return [
     'see-profile2'                                                => 's profile',
     'activate_your_account_click_on_Link_that_send_to_your_mail'  => 'Activate Your Account ! Click on Link that send to your mail',
     'this_field_do_not_match_our_records'                         => 'This Field do not match our records.',
-    'we_have_e-mailed_your_password_reset_link'                   => 'We have e-mailed your password reset link!',
-    "we_can't_find_a_user_with_that_e-mail_address"               => "We can't find a user with that e-mail address.",
+    'we_have_e-mailed_your_password_reset_link'                   => 'We have emailed your password reset link!',
+    "we_can't_find_a_user_with_that_e-mail_address"               => "We can't find a user with that email address.",
 
 
     /*
@@ -88,7 +88,7 @@ return [
     'i_know_my_password'            => 'I know my password',
     'recover_passord'               => 'Recover Password',
     'send_password_reset_link'      => 'Send pasword Reset Link',
-    'enter_email_to_reset_password' => 'Enter E-mail to reset password',
+    'enter_email_to_reset_password' => 'Enter Email to reset password',
     'link'                          => 'Link',
     /*
       |----------------------------------------------------------------------------------------
