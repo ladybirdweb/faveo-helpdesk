@@ -319,9 +319,10 @@ class UnAuthController extends Controller
 
     /**
      *@category function to change system's language
-     *@param string $lang //desired language's iso code 
-     *@return response
      *
+     *@param string $lang //desired language's iso code
+     *
+     *@return response
      */
     public static function changeLanguage($lang)
     {
@@ -340,7 +341,8 @@ class UnAuthController extends Controller
             // dd()
         } else {
             return false;
-        } 
+        }
+
         return true;
     }
 }

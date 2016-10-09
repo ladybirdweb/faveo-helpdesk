@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Common; 
+namespace App\Http\Controllers\Common;
+
 use Socialite;
 
-class Socialite extends Socialite{
-    
+class Socialite extends Socialite
+{
 }
-

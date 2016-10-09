@@ -26,6 +26,7 @@ use App\Model\helpdesk\Utility\CountryCode;
 use App\Model\helpdesk\Utility\Date_format;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Languages;
+use App\Model\helpdesk\Utility\Limit_Login;
 use App\Model\helpdesk\Utility\Log_notification;
 use App\Model\helpdesk\Utility\MailboxProtocol;
 use App\Model\helpdesk\Utility\Time_format;
@@ -33,7 +34,6 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\helpdesk\Workflow\WorkflowClose;
 use App\Model\kb\Settings;
-use App\Model\helpdesk\Utility\Limit_Login;
 // Knowledge base
 use Illuminate\Database\Seeder;
 

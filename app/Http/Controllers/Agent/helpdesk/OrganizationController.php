@@ -16,8 +16,8 @@ use App\Model\helpdesk\Agent_panel\User_org;
 use App\User;
 // classes
 use Exception;
-use Lang;
 use Illuminate\Http\Request;
+use Lang;
 
 /**
  * OrganizationController
@@ -329,15 +329,16 @@ class OrganizationController extends Controller
 
         return '['.$last.']';
     }
-    
-    public function getOrgAjax(Request $request){
+
+    public function getOrgAjax(Request $request)
+    {
         $org = new Organization();
         $q = $request->input('term');
-        $orgs = $org->where('name','LIKE','%'.$q.'%')
-                ->select('name as label','id as value')
+        $orgs = $org->where('name', 'LIKE', '%'.$q.'%')
+                ->select('name as label', 'id as value')
                 ->get()
                 ->toJson();
+
         return $orgs;
     }
-    
 }

@@ -8,7 +8,6 @@ use App;
 use App\Http\Controllers\Controller;
 //supports
 use App\Http\Requests;
-use Cache;
 use Config;
 //classes
 use File;
@@ -17,8 +16,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Input;
 use Lang;
-use Validator;
 use UnAuth;
+use Validator;
 
 /**
  * SlaController.
@@ -53,7 +52,6 @@ class LanguageController extends Controller
         } else {
             return \Redirect::back();
         }
-
     }
 
     /**
@@ -89,11 +87,10 @@ class LanguageController extends Controller
         return \Datatable::collection(new Collection($values))
                         ->addColumn('language', function ($model) {
                             if ($model == Config::get('app.fallback_locale')) {
-                                return Config::get('languages.'.$model).' ('.Lang::get('lang.default').')';    
+                                return Config::get('languages.'.$model).' ('.Lang::get('lang.default').')';
                             } else {
                                 return Config::get('languages.'.$model);
                             }
-                            
                         })
                         ->addColumn('id', function ($model) {
                             return $model;
@@ -229,16 +226,17 @@ class LanguageController extends Controller
                 if ($success) {
                     //sending back with success message
                     Session::flash('success', Lang::get('lang.delete-success'));
-    
+
                     return Redirect::back();
                 } else {
                     //sending back with error message
                     Session::flash('fails', Lang::get('lang.lang-doesnot-exist'));
-    
+
                     return Redirect::back();
                 }
             } else {
                 Session::flash('fails', Lang::get('lang.lang-fallback-lang'));
+
                 return redirect('languages');
             }
         } else {
@@ -247,5 +245,4 @@ class LanguageController extends Controller
             return redirect('languages');
         }
     }
-    
 }

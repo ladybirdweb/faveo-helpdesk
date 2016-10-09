@@ -24,8 +24,8 @@ use Illuminate\Http\Request;
 use Input;
 use Redirect;
 use Session;
-use View;
 use UnAuth;
+use View;
 
 /**
  * |=======================================================================
@@ -380,6 +380,7 @@ class InstallController extends Controller
 
                 Artisan::call('key:generate');
                 \Cache::forever('language', $language);
+
                 return View::make('themes/default1/installer/helpdesk/view6');
             } catch (Exception $e) {
                 return Redirect::route('account')->with('fails', $e->getMessage());
