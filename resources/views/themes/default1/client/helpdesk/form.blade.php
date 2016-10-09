@@ -89,7 +89,6 @@ class = "active"
         </div>
         <div class="row col-md-12">
             
-            
                 @if(Auth::user())
                     
                         {!! Form::hidden('Name',Auth::user()->user_name,['class' => 'form-control']) !!}
@@ -109,11 +108,13 @@ class = "active"
                     
                 @else
                     <div class="col-md-12 form-group {{ $errors->has('Email') ? 'has-error' : '' }}">
-                        {!! Form::label('Email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
-                        {!! Form::text('Email',null,['class' => 'form-control']) !!}
+                        {!! Form::label('Email',Lang::get('lang.email')) !!}
+                        @if($email_mandatory->status == 1 || $email_mandatory->status == '1')
+                        <span class="text-red"> *</span>
+                        @endif
+                        {!! Form::email('Email',null,['class' => 'form-control']) !!}
                     </div>
                 @endif
-
 
 
                 
@@ -122,17 +123,29 @@ class = "active"
                     
             <div class="col-md-2 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
                 {!! Form::label('Code',Lang::get('lang.country-code')) !!}
+                 @if($email_mandatory->status == 0 || $email_mandatory->status == '0')
+                        <span class="text-red"> *</span>
+                        @endif
+
                 {!! Form::text('Code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
             </div>
-            <div class="col-md-5 form-group {{ $errors->has('Phone') ? 'has-error' : '' }}">
-                {!! Form::label('Mobile',Lang::get('lang.mobile_number')) !!}
-                {!! Form::text('Mobile',null,['class' => 'form-control']) !!}
+            <div class="col-md-5 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
+                {!! Form::label('mobile',Lang::get('lang.mobile_number')) !!}
+                 @if($email_mandatory->status == 0 || $email_mandatory->status == '0')
+                        <span class="text-red"> *</span>
+                        @endif
+                {!! Form::text('mobile',null,['class' => 'form-control']) !!}
             </div>
             <div class="col-md-5 form-group {{ $errors->has('Phone') ? 'has-error' : '' }}">
                 {!! Form::label('Phone',Lang::get('lang.phone')) !!}
                 {!! Form::text('Phone',null,['class' => 'form-control']) !!}
             </div>
-              @endif
+            @else 
+                {!! Form::hidden('mobile',Auth::user()->mobile,['class' => 'form-control']) !!}
+                {!! Form::hidden('Code',Auth::user()->country_code,['class' => 'form-control']) !!}
+                {!! Form::hidden('Phone',Auth::user()->phone_number,['class' => 'form-control']) !!}
+ 
+           @endif
             <div class="col-md-12 form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
                 {!! Form::label('help_topic', Lang::get('lang.choose_a_help_topic')) !!} 
                 {!! $errors->first('help_topic', '<spam class="help-block">:message</spam>') !!}
@@ -155,6 +168,27 @@ class = "active"
                     @endforeach
                 </select>
             </div>
+            <!-- priority -->
+             <?php 
+             $Priority = App\Model\helpdesk\Settings\CommonSettings::where('id','=',6)->first(); 
+             $user_Priority=$Priority->status;
+            ?>
+             
+             @if($user_Priority == 1)
+             <div class="col-md-12 form-group">
+                <div class="row">
+                    <div class="col-md-1">
+                        <label>{!! Lang::get('lang.priority') !!}:</label>
+                    </div>
+                    <div class="col-md-12">
+                        <?php $Priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('status','=',1)->get(); ?>
+                        {!! Form::select('priority', ['Priority'=>$Priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control select']) !!}
+                    </div>
+                 </div>
+            </div>
+            @else
+
+            @endif
             <div class="col-md-12 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
                 {!! Form::label('Subject',Lang::get('lang.subject')) !!}<span class="text-red"> *</span>
                 {!! Form::text('Subject',null,['class' => 'form-control']) !!}

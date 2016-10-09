@@ -23,6 +23,7 @@ use App\User;
 use Auth;
 // classes
 use DateTime;
+use DB;
 use Exception;
 use GeoIP;
 use Hash;
@@ -59,7 +60,7 @@ class GuestController extends Controller
     public function getProfile(CountryCode $code)
     {
         $user = Auth::user();
-        $location = GeoIP::getLocation('');
+        $location = GeoIP::getLocation();
         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $status = $settings->status;
@@ -114,13 +115,45 @@ class GuestController extends Controller
                     $user->country_code = $request->input('country_code');
                 }
             }
-            $user->fill($request->except('profile_pic', 'gender'))->save();
+            if ($request->get('mobile')) {
+                $mobile = $request->get('mobile');
+            } else {
+                $mobile = null;
+            }
+            $check = $this->checkMobile($mobile);
+            if ($check == true) {
+                return redirect()->back()->with(['fails1' => Lang::get('lang.mobile-has-been-taken'), 'country_code' => 1])->withInput();
+            }
+            $user->fill($request->except('profile_pic', 'gender', 'mobile'));
+            $user->mobile = $mobile;
+            $user->save();
 
             return redirect()->back()->with('success1', Lang::get('lang.profile_updated_sucessfully'));
         }
         if ($user->fill($request->except('profile_pic'))->save()) {
             return redirect()->back()->with('success1', Lang::get('lang.profile_updated_sucessfully'));
         }
+    }
+
+    /**
+     *@category fucntion to check if mobile number is unqique or not
+     *
+     *@param string $mobile
+     *
+     *@return bool true(if mobile exists in users table)/false (if mobile does not exist in user table)
+     */
+    public function checkMobile($mobile)
+    {
+        if ($mobile) {
+            $check = User::where('mobile', '=', $mobile)
+                ->where('id', '<>', \Auth::user()->id)
+                ->first();
+            if (count($check) > 0) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -365,11 +398,13 @@ class GuestController extends Controller
 
     public function resendOTP(OtpVerifyRequest $request)
     {
-        // dd($request->input());
-        if (!\Schema::hasTable('user_verfication')) {
-            \Event::fire(new \App\Events\LoginEvent($request));
+        if (\Schema::hasTable('sms')) {
+            $sms = DB::table('sms')->get();
+            if (count($sms) > 0) {
+                \Event::fire(new \App\Events\LoginEvent($request));
 
-            return 1;
+                return 1;
+            }
         } else {
             return 'Plugin has not been setup successfully.';
         }
@@ -379,36 +414,42 @@ class GuestController extends Controller
     {
         // dd(Input::all());
         // $user = User::select('id', 'mobile', 'user_name')->where('email', '=', $request->input('email'))->first();
-        $otp_length = strlen(Input::get('otp'));
-        if (($otp_length == 6 && !preg_match('/[a-z]/i', Input::get('otp')))) {
-            $otp2 = Hash::make(Input::get('otp'));
-            $otp = Otp::select('otp', 'updated_at')->where('user_id', '=', Input::get('u_id'))
-                    ->first();
-            $date1 = date_format($otp->updated_at, 'Y-m-d h:i:sa');
-            $date2 = date('Y-m-d h:i:sa');
-            $time1 = new DateTime($date2);
-            $time2 = new DateTime($date1);
-            $interval = $time1->diff($time2);
-            if ($interval->i > 10 || $interval->h > 0) {
-                $message = Lang::get('lang.otp-expired');
-
-                return $message;
-            } else {
-                if (Hash::check(Input::get('otp'), $otp->otp)) {
-                    Otp::where('user_id', '=', Input::get('u_id'))
-                            ->update(['otp' => '']);
-                    // User::where('id', '=', $user->id)
-                    //     ->update(['active' => 1]);
-                    // $this->openTicketAfterVerification($user->id);
-                    return 1;
-                } else {
-                    $message = Lang::get('lang.otp-not-matched');
+        $otp = Otp::select('otp', 'updated_at')->where('user_id', '=', Input::get('u_id'))
+                                ->first();
+        if ($otp != null) {
+            $otp_length = strlen(Input::get('otp'));
+            if (($otp_length == 6 && !preg_match('/[a-z]/i', Input::get('otp')))) {
+                $otp2 = Hash::make(Input::get('otp'));
+                $date1 = date_format($otp->updated_at, 'Y-m-d h:i:sa');
+                $date2 = date('Y-m-d h:i:sa');
+                $time1 = new DateTime($date2);
+                $time2 = new DateTime($date1);
+                $interval = $time1->diff($time2);
+                if ($interval->i > 10 || $interval->h > 0) {
+                    $message = Lang::get('lang.otp-expired');
 
                     return $message;
+                } else {
+                    if (Hash::check(Input::get('otp'), $otp->otp)) {
+                        Otp::where('user_id', '=', Input::get('u_id'))
+                            ->update(['otp' => '']);
+                        // User::where('id', '=', $user->id)
+                        //     ->update(['active' => 1]);
+                        // $this->openTicketAfterVerification($user->id);
+                        return 1;
+                    } else {
+                        $message = Lang::get('lang.otp-not-matched');
+
+                        return $message;
+                    }
                 }
+            } else {
+                $message = Lang::get('lang.otp-invalid');
+
+                return $message;
             }
         } else {
-            $message = Lang::get('lang.otp-invalid');
+            $message = Lang::get('lang.otp-not-matched');
 
             return $message;
         }
@@ -421,7 +462,6 @@ class GuestController extends Controller
             $this->changeRedirect();
             $users = Socialite::driver($provider)->user();
             $this->forgetSession();
-            dd($users);
             $user['provider'] = $provider;
             $user['social_id'] = $users->id;
             $user['name'] = $users->name;

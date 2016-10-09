@@ -20,9 +20,9 @@ class="active"
 $date_time_format = UTC::getDateTimeFormat();
 if (Auth::user()->role == 'agent') {
     $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
-    $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->paginate(20);
+    $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  array(1, 7))->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->paginate(20);
 } else {
-    $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->orderBy('id', 'DESC')->paginate(20);
+    $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  array(1, 7))->orderBy('id', 'DESC')->paginate(20);
 }
 ?>
 <!-- Main content -->
@@ -52,8 +52,11 @@ if (Auth::user()->role == 'agent') {
             <!-- Check all button -->
             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
             {{-- <a class="btn btn-default btn-sm" id="click"><i class="fa fa-refresh"></i></a> --}}
+            
             <input type="submit" class="submit btn btn-default text-orange btn-sm" id="delete" name="submit" value="{!! Lang::get('lang.delete') !!}">
+            {{--@if(Auth::user()->role == 'admin')--}}
             <input type="submit" class="submit btn btn-default text-yellow btn-sm" id="close" name="submit" value="{!! Lang::get('lang.close') !!}">
+            {{--@endif--}}
             <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
         <!--</div>-->
         <p><p/>

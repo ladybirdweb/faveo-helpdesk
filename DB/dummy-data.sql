@@ -115,7 +115,8 @@ INSERT INTO `common_settings` (`id`, `option_name`, `option_value`, `status`, `o
 (1, 'ticket_token_time_duration', '1', '', '', '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
 (2, 'enable_rtl', '', '', '', '2016-06-14 09:07:17', '2016-06-14 09:07:17'),
 (3, 'user_set_ticket_status', '',1,'','2016-06-14 09:07:17','2016-06-14 09:07:17'),
-(4, 'send_otp', '',0,'','2016-06-14 09:07:17','2016-06-14 09:07:17');
+(4, 'send_otp', '',0,'','2016-06-14 09:07:17','2016-06-14 09:07:17'),
+(5, 'email_mandatory', '',1,'','2016-06-14 09:07:17','2016-06-14 09:07:17');
 
 -- --------------------------------------------------------
 
@@ -1349,7 +1350,7 @@ CREATE TABLE IF NOT EXISTS `settings_ticket` (
 --
 
 INSERT INTO `settings_ticket` (`id`, `num_format`, `num_sequence`, `priority`, `sla`, `help_topic`, `max_open_ticket`, `collision_avoid`, `lock_ticket_frequency`, `captcha`, `status`, `claim_response`, `assigned_ticket`, `answered_ticket`, `agent_mask`, `html`, `client_update`, `max_file_size`, `created_at`, `updated_at`) VALUES
-(1, '#ABCD 1234 1234567', '0', '1', '2', '1', '', '2', '0', '', 1, 0, 0, 0, 0, 0, 0, 0, '2016-06-14 09:07:06', '2016-06-14 09:07:06');
+(1, '$$$$-####-####', 'sequence', '1', '2', '1', '', '2', '0', '', 1, 0, 0, 0, 0, 0, 0, 0, '2016-06-14 09:07:06', '2016-06-14 09:07:06');
 
 -- --------------------------------------------------------
 
@@ -1590,7 +1591,7 @@ CREATE TABLE IF NOT EXISTS `tickets` (
 --
 
 INSERT INTO `tickets` (`id`, `ticket_number`, `user_id`, `dept_id`, `team_id`, `priority_id`, `sla`, `help_topic_id`, `status`, `rating`, `ratingreply`, `flags`, `ip_address`, `assigned_to`, `lock_by`, `lock_at`, `source`, `isoverdue`, `reopened`, `isanswered`, `html`, `is_deleted`, `closed`, `is_transferred`, `transferred_at`, `reopened_at`, `duedate`, `closed_at`, `last_message_at`, `last_response_at`, `created_at`, `updated_at`) VALUES
-(1, 'AAAB-0001-0000001', 2, 1, NULL, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, NULL, 3, 0, 0, 1, 0, 0, 0, 0, '0000-00-00 00:00:00', NULL, '2016-06-14 20:48:09', NULL, NULL, NULL, '2016-06-14 09:18:09', '2016-06-14 09:18:37');
+(1, 'AAAA-0000-0000', 2, 1, NULL, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, NULL, 3, 0, 0, 1, 0, 0, 0, 0, '0000-00-00 00:00:00', NULL, '2016-06-14 20:48:09', NULL, NULL, NULL, '2016-06-14 09:18:09', '2016-06-14 09:18:37');
 
 -- --------------------------------------------------------
 
@@ -1727,8 +1728,8 @@ INSERT INTO `ticket_status` (`id`, `name`, `state`, `mode`, `message`, `flags`, 
 (2, 'Resolved', 'closed', 1, 'Ticket have been Resolved by', 0, 2, 0, '', 'Resolved tickets.', '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
 (3, 'Closed', 'closed', 3, 'Ticket have been Closed by', 0, 3, 0, '', 'Closed tickets. Tickets will still be accessible on client and staff panels.', '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
 (4, 'Archived', 'archived', 3, 'Ticket have been Archived by', 0, 4, 0, '', 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.', '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
-(5, 'Deleted', 'deleted', 3, 'Ticket have been Deleted by', 0, 5, 0, '', 'Tickets queued for deletion. Not accessible on ticket queues.', '2016-06-14 09:07:04', '2016-06-14 09:07:04'),
-(6, 'Unverified', 'unverified', 3, 'User account verification required.', 0, 6, 0, '', 'Ticket will be open after user verifies his/her account.', '2016-06-14 09:07:04', '2016-06-14 09:07:04');
+(5, 'Deleted', 'deleted', 3, 'Ticket have been Deleted by', 0, 5, 0, '', 'Tickets queued for deletion. Not accessible on ticket queues.', '2016-06-14 09:07:04', '2016-06-14 09:07:04');
+-- (6, 'Unverified', 'unverified', 3, 'User account verification required.', 0, 6, 0, '', 'Ticket will be open after user verifies his/her account.', '2016-06-14 09:07:04', '2016-06-14 09:07:04');
 
 -- --------------------------------------------------------
 
@@ -2316,6 +2317,25 @@ ALTER TABLE `workflow_action`
 --
 ALTER TABLE `workflow_rules`
   ADD CONSTRAINT `workflow_rules_1` FOREIGN KEY (`workflow_id`) REFERENCES `workflow_name` (`id`) ON UPDATE NO ACTION;
+
+-- ------------------------------------------------------
+
+--
+-- Table structure for table `field_values`
+--
+
+DROP TABLE IF EXISTS `field_values`;
+CREATE TABLE IF NOT EXISTS `field_values` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `field_id` int(10) UNSIGNED DEFAULT NULL,
+  `child_id` int(10) UNSIGNED DEFAULT NULL,
+  `field_key` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `field_value` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `field_values_field_id_foreign` (`field_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -54,14 +54,27 @@ class RegisterRequest extends Request
     public function check($settings)
     {
         $settings = $settings->select('status')->where('option_name', '=', 'send_otp')->first();
-        if ($settings->status == '1' || $settings->status == 1) {
+        $email_mandatory = $settings->select('status')->where('option_name', '=', 'email_mandatory')->first();
+        // dd($settings->status, $email_mandatory->status);
+        if ($settings->status == '0' || $settings->status == 0 && ($email_mandatory->status == 0 || $email_mandatory->status == '0')) {
+            return 0;
+        } elseif (($settings->status == '1' || $settings->status == 1) && ($email_mandatory->status == 1 || $email_mandatory->status == '1')) {
             return [
                 'email'                 => 'required|max:50|email|unique:users',
                 'full_name'             => 'required',
                 'password'              => 'required|min:6',
                 'password_confirmation' => 'required|same:password',
                 'code'                  => 'required',
-                'mobile'                => 'required',
+                'mobile'                => 'required|unique:users',
+            ];
+        } elseif (($settings->status == '1' || $settings->status == 1) && ($email_mandatory->status == 0 || $email_mandatory->status == '0')) {
+            return [
+                'email'                 => 'max:50|email|unique:users',
+                'full_name'             => 'required',
+                'password'              => 'required|min:6',
+                'password_confirmation' => 'required|same:password',
+                'code'                  => 'required',
+                'mobile'                => 'required|unique:users',
             ];
         } else {
             return 0;

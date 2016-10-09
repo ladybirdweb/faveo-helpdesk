@@ -12,13 +12,11 @@ use App\Http\Requests\helpdesk\TemplateUdate;
 // models
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Email\Template;
-use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Utility\Languages;
 // classes
 use Exception;
 use Illuminate\Http\Request;
 use Input;
-use Lang;
 
 /**
  * TemplateController.
@@ -320,69 +318,22 @@ class TemplateController extends Controller
     public function postDiagno(DiagnosRequest $request)
     {
         try {
-            $email_details = Emails::where('id', '=', $request->from)->first();
-            if ($email_details->sending_protocol == 'mail') {
-                $mail = new \PHPMailer(); // defaults to using php "mail()"
-                $mail->IsSendmail(); // telling the class to use SendMail transport
-                $mail->SetFrom($email_details->email_address, $email_details->email_name); // sender details
-                $address = $request->to; // receiver email
-                $mail->AddAddress($address);
-                $mail->Subject = $request->subject; // subject of the email
-                $body = $request->message; // body of the email
-                $mail->CharSet = 'utf8';
-//                $mail->MsgHTML($body);
-//                $body = $request->message;
-                $rtl = CommonSettings::where('option_name', '=', 'enable_rtl')->first();
-                if ($rtl->option_value == 1) {
-                    $mail->ContentType = 'text/html';
-                    $body = '<html dir="rtl" xml:lang="ar" lang="ar"><head></head><body dir="rtl">'.$body.'</body></html>';
-                } else {
-                }
-                if (!$mail->Send()) {
-                    $return = Lang::get('lang.mailer_error').': '.$mail->ErrorInfo;
-                } else {
-                    $return = Lang::get('lang.message_has_been_sent');
-                }
-            } elseif ($email_details->sending_protocol == 'smtp') {
-                $mail = new \PHPMailer();
-                $mail->isSMTP();                                            // Set mailer to use SMTP
-                if ($email_details->smtp_validate == '1') {
-                    $mail->SMTPOptions = [
-                        'ssl' => [
-                            'verify_peer'       => false,
-                            'verify_peer_name'  => false,
-                            'allow_self_signed' => true,
-                        ],
-                    ];
-                }
-                $mail->Host = $email_details->sending_host;                 // Specify main and backup SMTP servers
-                $mail->SMTPAuth = true;                                     // Enable SMTP authentication
-                $mail->Username = $email_details->email_address;                 // SMTP username
-                $mail->Password = \Crypt::decrypt($email_details->password);                           // SMTP password
-                $mail->SMTPSecure = $email_details->sending_encryption;                            // Enable TLS encryption, `ssl` also accepted
-                $mail->Port = $email_details->sending_port;                                    // TCP port to connect to
-                $mail->setFrom($email_details->email_address, $email_details->email_name);
-                $mail->addAddress($request->to, '');     // Add a recipient
-                $mail->isHTML(true);                                  // Set email format to HTML
-                $mail->CharSet = 'utf8';
-                $mail->Subject = $request->subject;
-                $body = $request->message;
-                $rtl = CommonSettings::where('option_name', '=', 'enable_rtl')->first();
-                if ($rtl->option_value == 1) {
-                    $mail->ContentType = 'text/html';
-                    $body = '<html dir="rtl" xml:lang="ar" lang="ar"><head></head><body dir="rtl">'.$body.'</body></html>';
-                } else {
-                }
-                $mail->Body = $body;
-                if (!$mail->send()) {
-                    $return = Lang::get('lang.mailer_error').': '.$mail->ErrorInfo;
-                } else {
-                    $return = Lang::get('lang.message_has_been_sent');
-                }
+            $to = $request->input('to');
+            $subject = $request->input('subject');
+            $msg = $request->input('message');
+            $from = $request->input('from');
+            $from_address = Emails::where('id', '=', $from)->first();
+            if (!$from_address) {
+                throw new Exception('Sorry! We can not find your request');
             }
+            $controller = new PhpMailController();
+            $controller->setMailConfig($from_address);
+            $controller->laravelMail($to, '', $subject, $msg, [], null);
 
-            return redirect()->back()->with('success', $return);
+            return redirect()->back()->with('success', 'Mail has send successfully');
         } catch (Exception $e) {
+            dd($e);
+
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }

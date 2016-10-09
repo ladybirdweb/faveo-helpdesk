@@ -1,7 +1,7 @@
 ## Documents
 
   1. [Installation](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/installation.md)
-  1. [Intergration](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/integration.md)
+  1. [Integration](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/integration.md)
   1. [Config](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/config.md)
   1. [Customization](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/customization.md)
   1. [Events](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/events.md)
@@ -17,7 +17,7 @@
     Sample 1 - Replace by ID:
     ```html
     <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
-    <textarea id="my-editor" name="content" class="form-control">{!! old('content', $content) !!}</textarea>
+    <textarea id="my-editor" name="content" class="form-control">{!! old('content', 'test editor content') !!}</textarea>
     <script>
       CKEDITOR.replace( 'my-editor', {
         filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
@@ -32,8 +32,9 @@
     
     ```html
     <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="/vendor/unisharp/laravel-ckeditor/adapters/jquery.js"></script>
-    <textarea name="content" class="form-control my-editor">{!! old('content', $content) !!}</textarea>
+    <textarea name="content" class="form-control my-editor">{!! old('content', 'test editor content') !!}</textarea>
     <script>
       $('textarea.my-editor').ckeditor({
         filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
@@ -52,7 +53,7 @@
 <script>
   var editor_config = {
     path_absolute : "/",
-    selector: "textarea",
+    selector: "textarea.my-editor",
     plugins: [
       "advlist autolink lists link image charmap print preview hr anchor pagebreak",
       "searchreplace wordcount visualblocks visualchars code fullscreen",
@@ -87,7 +88,7 @@
 </script>
 ```
 
-##Independent use
+##Standalone button
 
 If you are going to use filemanager independently, meaning set the value of an input to selected photo/file url, follow this structure:
 

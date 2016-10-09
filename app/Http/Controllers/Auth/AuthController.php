@@ -11,6 +11,7 @@ use App\Http\Requests\helpdesk\LoginRequest;
 use App\Http\Requests\helpdesk\OtpVerifyRequest;
 use App\Http\Requests\helpdesk\RegisterRequest;
 use App\Model\helpdesk\Settings\CommonSettings;
+use App\Model\helpdesk\Settings\Plugin;
 use App\Model\helpdesk\Settings\Security;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 // classes
@@ -125,6 +126,7 @@ class AuthController extends Controller
     {
         // Event for login
         $settings = $settings->select('status')->where('option_name', '=', 'send_otp')->first();
+        $email_mandatory = $settings->select('status')->where('option_name', '=', 'email_mandatory')->first();
         //dd($settings->status);
         \Event::fire(new \App\Events\FormRegisterEvent());
         if (Auth::user()) {
@@ -134,7 +136,7 @@ class AuthController extends Controller
                 // return view('auth.register');
             }
         } else {
-            return view('auth.register', compact('settings'));
+            return view('auth.register', compact('settings', 'email_mandatory'));
         }
     }
 
@@ -153,33 +155,55 @@ class AuthController extends Controller
         $user->password = $password;
         $name = $request->input('full_name');
         $user->first_name = $name;
-        $user->user_name = $request->input('email');
-        $user->email = $request->input('email');
-        if (array_key_exists('mobile', $request_array) && array_key_exists('code', $request_array)) {
+        if ($request_array['email'] == '') {
+            $user->email = null;
+        } else {
+            $user->email = $request->input('email');
+        }
+        if ($request_array['mobile'] == '') {
+            $user->mobile = null;
+        } else {
             $user->mobile = $request->input('mobile');
+        }
+        if ($request_array['code'] == '') {
+            $user->country_code = 0;
+        } else {
             $user->country_code = $request->input('code');
+        }
+        if ($request_array['email'] != '') {
+            $user->user_name = $request->input('email');
+        } else {
+            $user->user_name = $request->input('mobile');
         }
         $user->role = 'user';
         $code = str_random(60);
         $user->remember_token = $code;
         $user->save();
-        $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $message12 = '';
+        $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
+        $sms = Plugin::select('status')->where('name', '=', 'SMS')->first();
+        // Event for login
+        \Event::fire(new \App\Events\LoginEvent($request));
         $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/'.$code)]);
         if ($var == null) {
             $message12 = Lang::get('lang.failed_to_send_email_contact_administrator');
 
-            return redirect('home')->with('warning', $message12);
+            return redirect('home')->with('fails', $message12);
         } else {
             if ($settings->status == 1 || $settings->status == '1') {
-                $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_and_moble');
+                if (count($sms) > 0) {
+                    if ($sms->status == 1 || $sms->status == '1') {
+                        $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_and_moble');
+                    } else {
+                        $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup');
+                    }
+                } else {
+                    $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup');
+                }
             } else {
                 $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
             }
         }
-
-        // Event for login
-        \Event::fire(new \App\Events\LoginEvent($request));
 
         return redirect('home')->with('success', $message12);
     }
@@ -194,11 +218,11 @@ class AuthController extends Controller
     public function accountActivate($token)
     {
         $user = User::where('remember_token', '=', $token)->first();
-        $this->openTicketAfterVerification($user->id);
         if ($user) {
             $user->active = 1;
             $user->remember_token = null;
             $user->save();
+            $this->openTicketAfterVerification($user->id);
 
             return redirect('/auth/login')->with('status', 'Acount activated. Login to start');
         } else {
@@ -300,6 +324,16 @@ class AuthController extends Controller
                                 ])->with(['error' => Lang::get('lang.this_account_is_currently_inactive'),
                             'referer'             => $referer, ]);
             }
+        } else {
+            if ($check_active->active == 0 && !$check_active->mobile) {
+                return redirect()->back()
+                                ->withInput($request->only('email', 'remember'))
+                                ->withErrors([
+                                    'email'       => $this->getFailedLoginMessage(),
+                                    'password'    => $this->getFailedLoginMessage(),
+                                ])->with(['error' => Lang::get('lang.this_account_is_currently_inactive'),
+                            'referer'             => $referer, ]);
+            }
         }
         $loginAttempts = 1;
         // If session has login attempts, retrieve attempts counter and attempts time
@@ -337,8 +371,9 @@ class AuthController extends Controller
                                 ->withInput($request->input())
                                 ->with(['values' => $request->input(),
                                     'referer'    => $referer,
-                                    'name'       => $check_active->user_name,
-                                    'number'     => $check_active->mobile, ]);
+                                    'name'       => $check_active->first_name,
+                                    'number'     => $check_active->mobile,
+                                    'code'       => $check_active->country_code, ]);
             }
             if (Auth::user()->role == 'user') {
                 if ($request->input('referer')) {
@@ -446,6 +481,13 @@ class AuthController extends Controller
         return Lang::get('lang.this_field_do_not_match_our_records');
     }
 
+    /**
+     *@category function to show verify OTP page
+     *
+     *@param null
+     *
+     *@return response|view
+     */
     public function getVerifyOTP()
     {
         if (\Session::has('values')) {
@@ -455,36 +497,52 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     *@category function to verify OTP
+     *
+     *@param $request
+     *
+     *@return int|string
+     */
     public function verifyOTP(LoginRequest $request)
     {
-        $user = User::select('id', 'mobile', 'user_name')->where('email', '=', $request->input('email'))->first();
+        $user = User::select('id', 'mobile', 'user_name')->where('email', '=', $request->input('email'))
+            ->orWhere('user_name', '=', $request->input('email'))->first();
         $otp_length = strlen($request->input('otp'));
-        if (($otp_length == 6 && !preg_match('/[a-z]/i', $request->input('otp')))) {
-            $otp2 = Hash::make($request->input('otp'));
-            $otp = Otp::select('otp', 'updated_at')->where('user_id', '=', $user->id)
-                    ->first();
-            $date1 = date_format($otp->updated_at, 'Y-m-d h:i:sa');
-            $date2 = date('Y-m-d h:i:sa');
-            $time1 = new DateTime($date2);
-            $time2 = new DateTime($date1);
-            $interval = $time1->diff($time2);
-            if ($interval->i > 30 || $interval->h > 0) {
-                $message = Lang::get('lang.otp-expired');
-            } else {
-                if (Hash::check($request->input('otp'), $otp->otp)) {
-                    Otp::where('user_id', '=', $user->id)
-                            ->update(['otp' => '']);
-                    User::where('id', '=', $user->id)
-                            ->update(['active' => 1]);
-                    $this->openTicketAfterVerification($user->id);
-
-                    return $this->postLogin($request);
-                } else {
-                    $message = Lang::get('lang.otp-not-matched');
-                }
-            }
+        if (!\Schema::hasTable('user_verification')) {
+            $message = Lang::get('lang.opt-can-not-be-verified');
         } else {
-            $message = Lang::get('lang.otp-invalid');
+            $otp = Otp::select('otp', 'updated_at')->where('user_id', '=', $user->id)
+                        ->first();
+            if ($otp != null) {
+                if (($otp_length == 6 && !preg_match('/[a-z]/i', $request->input('otp')))) {
+                    $otp2 = Hash::make($request->input('otp'));
+                    $date1 = date_format($otp->updated_at, 'Y-m-d h:i:sa');
+                    $date2 = date('Y-m-d h:i:sa');
+                    $time1 = new DateTime($date2);
+                    $time2 = new DateTime($date1);
+                    $interval = $time1->diff($time2);
+                    if ($interval->i > 30 || $interval->h > 0) {
+                        $message = Lang::get('lang.otp-expired');
+                    } else {
+                        if (Hash::check($request->input('otp'), $otp->otp)) {
+                            Otp::where('user_id', '=', $user->id)
+                                    ->update(['otp' => '']);
+                            User::where('id', '=', $user->id)
+                                    ->update(['active' => 1]);
+                            $this->openTicketAfterVerification($user->id);
+
+                            return $this->postLogin($request);
+                        } else {
+                            $message = Lang::get('lang.otp-not-matched');
+                        }
+                    }
+                } else {
+                    $message = Lang::get('lang.otp-invalid');
+                }
+            } else {
+                $message = Lang::get('lang.otp-not-matched');
+            }
         }
 
         return \Redirect::route('otp-verification')
@@ -497,9 +555,22 @@ class AuthController extends Controller
 
     public function resendOTP(OtpVerifyRequest $request)
     {
-        \Event::fire(new \App\Events\LoginEvent($request));
+        if (!\Schema::hasTable('user_verification') || !\Schema::hasTable('sms')) {
+            $message = Lang::get('lang.opt-can-not-be-verified');
 
-        return 1;
+            return $message;
+        } else {
+            $sms = DB::table('sms')->get();
+            if (count($sms) > 0) {
+                \Event::fire(new \App\Events\LoginEvent($request));
+
+                return 1;
+            } else {
+                $message = Lang::get('lang.opt-can-not-be-verified');
+
+                return $message;
+            }
+        }
     }
 
     /**
@@ -519,10 +590,12 @@ class AuthController extends Controller
                 ->get();
         Tickets::where(['user_id' => $id, 'status' => 6])
                 ->update(['status' => 1]);
-        foreach ($ticket as $value) {
-            $ticket_id = $value->id;
-            Ticket_Thread::where('ticket_id', '=', $ticket_id)
+        if ($ticket != null) {
+            foreach ($ticket as $value) {
+                $ticket_id = $value->id;
+                Ticket_Thread::where('ticket_id', '=', $ticket_id)
                     ->update(['updated_at' => date('Y-m-d H:i:s')]);
+            }
         }
     }
 

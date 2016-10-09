@@ -15,6 +15,7 @@ use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
 use App\Model\helpdesk\Ticket\Ticket_attachments;
+use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
@@ -62,10 +63,11 @@ class FormController extends Controller
             return \Redirect::route('licence');
         }
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
+        $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
         if (!\Auth::check() && ($settings->status == 1 || $settings->status == '1')) {
             return redirect('auth/login')->with(['login_require' => 'Please login to your account for submitting a ticket', 'referer' => 'form']);
         }
-        $location = GeoIP::getLocation('');
+        $location = GeoIP::getLocation();
         $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
         if (System::first()->status == 1) {
             $topics = $topic->get();
@@ -76,7 +78,7 @@ class FormController extends Controller
                 $phonecode = '';
             }
 
-            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes'))->with('phonecode', $phonecode);
+            return view('themes.default1.client.helpdesk.form', compact('topics', 'codes', 'email_mandatory'))->with('phonecode', $phonecode);
         } else {
             return \Redirect::route('home');
         }
@@ -144,15 +146,26 @@ class FormController extends Controller
      */
     public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code)
     {
-        $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token');
-
+        $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token', 'mobile', 'Code');
         $name = $request->input('Name');
         $phone = $request->input('Phone');
-        $email = $request->input('Email');
+        if ($request->input('Email')) {
+            if ($request->input('Email')) {
+                $email = $request->input('Email');
+            } else {
+                $email = null;
+            }
+        } else {
+            $email = null;
+        }
         $subject = $request->input('Subject');
         $details = $request->input('Details');
         $phonecode = $request->input('Code');
-        $mobile_number = $request->input('Mobile');
+        if ($request->input('mobile')) {
+            $mobile_number = $request->input('mobile');
+        } else {
+            $mobile_number = null;
+        }
         $status = $ticket_settings->first()->status;
         $helptopic = $request->input('helptopic');
         $helpTopicObj = Help_topic::where('id', '=', $helptopic);
@@ -163,7 +176,15 @@ class FormController extends Controller
             $department = Help_topic::where('id', '=', $defaultHelpTopicID)->value('department');
         }
         $sla = $ticket_settings->first()->sla;
-        $priority = $ticket_settings->first()->priority;
+
+         // $priority = $ticket_settings->first()->priority;
+         $default_priority = Ticket_Priority::where('is_default', '=', 1)->first();
+        $user_priority = CommonSettings::where('id', '=', 6)->first();
+        if ($user_priority->status == 0) {
+            $priority = $default_priority->priority_id;
+        } else {
+            $priority = $request->input('priority');
+        }
         $source = $ticket_source->where('name', '=', 'web')->first()->id;
         $attachments = $request->file('attachment');
         $collaborator = null;
@@ -195,7 +216,7 @@ class FormController extends Controller
             }
         }
         $result = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response);
-
+        // dd($result);
         if ($result[1] == 1) {
             $ticketId = Tickets::where('ticket_number', '=', $result[0])->first();
             $thread = Ticket_Thread::where('ticket_id', '=', $ticketId->id)->first();
@@ -213,6 +234,8 @@ class FormController extends Controller
             }
             // dd($result);
             return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is').' '.$result[0].'. '.Lang::get('lang.Please-save-this-for-future-reference'));
+        } else {
+            return Redirect::back()->withInput($request->except('password'))->with('fails', Lang::get('lang.failed-to-create-user-tcket-as-mobile-has-been-taken'));
         }
 //        dd($result);
     }

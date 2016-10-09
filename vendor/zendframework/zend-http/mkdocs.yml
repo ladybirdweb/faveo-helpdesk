@@ -1,0 +1,19 @@
+docs_dir: doc/book
+site_dir: doc/html
+pages:
+    - index.md
+    - Intro: intro.md
+    - Reference:
+        - Request: request.md
+        - Response: response.md
+        - Headers: headers.md
+        - Client:
+            - Intro: client/intro.md
+            - Adapters: client/adapters.md
+            - "Static Client": client/static.md
+            - "Cookie Persistence": client/cookies.md
+            - Advanced: client/advanced.md
+site_name: zend-http
+site_description: zend-http
+repo_url: 'https://github.com/zendframework/zend-http'
+copyright: 'Copyright (c) 2016 <a href="http://www.zend.com/">Zend Technologies USA Inc.</a>'

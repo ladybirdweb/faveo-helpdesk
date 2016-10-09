@@ -108,8 +108,6 @@ class TicketController extends Controller
 
             return $thread;
         } catch (\Exception $e) {
-            dd($e);
-
             return $e->getMessage();
         }
     }

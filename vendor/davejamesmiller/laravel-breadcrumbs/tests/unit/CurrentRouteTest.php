@@ -38,18 +38,19 @@ class CurrentRouteTest extends TestCase {
 		$this->call('GET', '/sample/blah/object');
 	}
 
-	/**
-	 * @expectedException DaveJamesMiller\Breadcrumbs\Exception
-	 * @expectedExceptionMessage The current route (GET /sample/unnamed) is not named - please check routes.php for an "as" parameter
-	 */
+    /**
+     * @expectedException DaveJamesMiller\Breadcrumbs\Exception
+     * @expectedExceptionMessage The current route (GET /sample/unnamed) is not named - please check routes.php for an "as" parameter
+     */
 	public function testUnnamedRoute()
 	{
 		Route::get('/sample/unnamed', function()
 		{
-			$this->assertSame(['sample', []], $this->currentRoute->get());
+			$this->currentRoute->get();
 		});
 
-		$this->call('GET', '/sample/unnamed');
+		// Laravel 5.3+ catches the exception
+		throw $this->call('GET', '/sample/unnamed')->exception;
 	}
 
 	public function testSet()

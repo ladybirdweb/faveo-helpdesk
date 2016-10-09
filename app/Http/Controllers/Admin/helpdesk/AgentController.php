@@ -88,10 +88,12 @@ class AgentController extends Controller
             $departments = $department->get();
             // list all the teams in a single variable
             $teams = $team->lists('id', 'name')->toArray();
-            $location = GeoIP::getLocation('');
+            $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
             // returns to the page with all the variables and their datas
-            return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team'))->with('phonecode', $phonecode->phonecode);
+            $send_otp = DB::table('common_settings')->select('status')->where('option_name', '=', 'send_otp')->first();
+
+            return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team', 'send_otp'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             // returns if try fails with exception meaagse
             return redirect()->back()->with('fails', $e->getMessage());
@@ -118,7 +120,12 @@ class AgentController extends Controller
             }
         }
         // fixing the user role to agent
-        $user->fill($request->except(['group', 'primary_department', 'agent_time_zone']))->save();
+        $user->fill($request->except(['group', 'primary_department', 'agent_time_zone', 'mobile']))->save();
+        if ($request->get('mobile')) {
+            $user->mobile = $request->get('mobile');
+        } else {
+            $user->mobile = null;
+        }
         $user->assign_group = $request->group;
         $user->primary_dpt = $request->primary_department;
         $user->agent_tzone = $request->agent_time_zone;
@@ -176,7 +183,7 @@ class AgentController extends Controller
     public function edit($id, User $user, Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team, CountryCode $code)
     {
         try {
-            $location = GeoIP::getLocation('');
+            $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
             $user = $user->whereId($id)->first();
             $team = $team->get();

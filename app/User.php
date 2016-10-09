@@ -99,7 +99,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function getEmailAttribute($value)
     {
         if (!$value) {
-            $value = 'Not Avalable';
+            $value = \Lang::get('lang.not-available');
         }
 
         return $value;

@@ -172,12 +172,10 @@ class="active"
                 <div class="box-footer">
                     {!! Form::submit(Lang::get('lang.update'),['class'=>'btn btn-primary'])!!}
                 </div>
-                @include('themes.default1.client.helpdesk.social-sync.sync')
             </div>
         </div>
     </div>
     {!! Form::close() !!}
-    
 </div>
 <!-- Modal for last step of setting -->
 <div class="modal fade in" id="last-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none; padding-right: 15px;background-color: rgba(0, 0, 0, 0.7);">
@@ -238,6 +236,9 @@ class="active"
         var mobile = document.getElementById('mobile').value;
         var code = document.getElementById('code').value;
         var id = "<?php echo $user->id; ?>";
+        if (code == '' || code == null) {
+            //do nothing
+        } else {
         if (mobile !== old_mobile) {
             e.preventDefault();
             $('#last-modal').css('display', 'block');
@@ -248,7 +249,7 @@ class="active"
                     mobile : mobile,
                     full_name: full_name,
                     email: email,
-                    code: 0// will be accessible in $_POST['data1']
+                    code: code// will be accessible in $_POST['data1']
                 },
                 dataType: 'json', 
                 beforeSend: function() {
@@ -304,6 +305,7 @@ class="active"
                     }
                 }
             });
+        }
         }
     });
     $('.closemodal').on('click', function(){

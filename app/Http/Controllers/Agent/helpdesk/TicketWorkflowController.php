@@ -166,6 +166,8 @@ class TicketWorkflowController extends Controller
                 }
             }
         }
+
+        //dd($form_data);
         if ($ticket_settings_details['reject'] == true) {
             return ['0' => false, '1' => false];
         } else {
@@ -285,7 +287,7 @@ class TicketWorkflowController extends Controller
      */
     public function checkStarts($statement, $to_check)
     {
-        if (substr($to_check, 0, strlen($statement)) ==  $statement) {
+        if (substr($to_check, 0, strlen($statement)) == $statement) {
             return true;
         } else {
             return false;
@@ -303,7 +305,7 @@ class TicketWorkflowController extends Controller
     public function checkEnds($statement, $to_check)
     {
         $to_check = strip_tags($to_check);
-        if (substr($to_check, -strlen($statement)) ==  $statement) {
+        if (substr($to_check, -strlen($statement)) == $statement) {
             return true;
         } else {
             return false;

@@ -28,6 +28,9 @@ These providers allow integration with other providers not supported by `oauth1-
 so please help them out with a pull request if you notice this.
 
 - [Intuit](https://packagist.org/packages/wheniwork/oauth1-intuit)
+- [500px](https://packagist.org/packages/mechant/oauth1-500px)
+- [Etsy](https://packagist.org/packages/y0lk/oauth1-etsy)
+- [Xero](https://packagist.org/packages/Invoiced/oauth1-xero)
 
 #### Terminology (as per the RFC 5849 specification):
 
@@ -83,12 +86,8 @@ so please help them out with a pull request if you notice this.
 
 Via Composer
 
-```json
-{
-    "require": {
-        "league/oauth1-client": "~1.0"
-    }
-}
+```shell
+$ composer require league/oauth1-client
 ```
 
 

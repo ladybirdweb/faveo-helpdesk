@@ -22,7 +22,7 @@ class RenameController extends LfmController {
     public function getRename()
     {
         $old_name = Input::get('file');
-        $new_name = Input::get('new_name');
+        $new_name = trim(Input::get('new_name'));
 
         $file_path  = parent::getPath('directory');
         $thumb_path = parent::getPath('thumb');
@@ -36,7 +36,9 @@ class RenameController extends LfmController {
 
         $new_file = $file_path . $new_name;
 
-        if (File::exists($new_file)) {
+        if (Config::get('lfm.alphanumeric_directory') && preg_match('/[^\w-]/i', $new_name)) {
+            return Lang::get('laravel-filemanager::lfm.error-folder-alnum');
+        } elseif (File::exists($new_file)) {
             return Lang::get('laravel-filemanager::lfm.error-rename');
         }
 
@@ -53,7 +55,7 @@ class RenameController extends LfmController {
         }
 
         Event::fire(new ImageWasRenamed($old_file, $new_file));
-        
+
         return 'OK';
     }
 }

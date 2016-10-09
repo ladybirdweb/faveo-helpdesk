@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Admin\helpdesk;
 
 // controllers
+use App\Http\Controllers\Admin\MailFetch as Fetch;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\helpdesk\EmailsRequest;
-use App\Http\Requests\helpdesk\Mail\MailRequest;
 // model
+use App\Http\Requests\helpdesk\Mail\MailRequest;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Settings\Email;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
-use App\Model\helpdesk\Utility\MailboxProtocol;
 // classes
+use App\Model\helpdesk\Utility\MailboxProtocol;
 use Crypt;
 use Exception;
 use Lang;
-use Log;
 
 /**
  * ======================================
@@ -101,43 +101,35 @@ class EmailsController extends Controller
      */
     public function validatingEmailSettings(MailRequest $request, $id = '')
     {
+        //dd($request->all());
         try {
             $service_request = $request->except('sending_status', '_token', 'email_address', 'email_name', 'password', 'department', 'priority', 'help_topic', 'fetching_protocol', 'fetching_host', 'fetching_port', 'fetching_encryption', 'imap_authentication', 'sending_protocol', 'sending_host', 'sending_port', 'sending_encryption', 'smtp_authentication', 'internal_notes', '_wysihtml5_mode', 'code');
             $service = $request->input('sending_protocol');
             $validate = '/novalidate-cert';
             $fetch = 1;
             $send = 1;
-            if ($request->input('imap_validate') == 'on') {
-                $validate = '/validate-cert';
-            }
-
-            if ($request->input('fetching_status') == 'on') {
+            //dd($request->input('fetching_status'));
+            if ($request->input('fetching_status')) {
                 $fetch = $this->getImapStream($request, $validate);
             }
-            //dd($fetch);
-            if ($request->input('sending_status') == 'on') {
+            if ($request->input('sending_status') === 'on') {
                 $this->emailService($service, $service_request);
                 $send = $this->sendDiagnoEmail($request);
             }
-            //dd($send);
             if ($send == 1 && $fetch == 1) {
                 $this->store($request, $service_request, $id);
 
                 return $this->jsonResponse('success', Lang::get('lang.success'));
             }
-            //dd($send,$fetch);
+
             return $this->validateEmailError($send, $fetch);
-            //dd($send,$fetch);
         } catch (Exception $ex) {
-            dd($ex);
             $message = $ex->getMessage();
-            if (imap_last_error()) {
+            if ($request->input('fetching_status') && imap_last_error()) {
                 $message = imap_last_error();
             }
-            //dd($message);
-            //dd($ex->getMessage());
             loging('mail-config', $message);
-            //Log::error($ex->getMessage());
+
             return $this->jsonResponse('fails', $message);
         }
     }
@@ -212,13 +204,10 @@ class EmailsController extends Controller
         } else {
             $email->auto_response = 0;
         }
-        $email->fetching_encryption = '/'.$request->input('fetching_encryption');
+        $email->fetching_encryption = $request->input('fetching_encryption');
         if (!$request->input('imap_validate')) {
-            $email->fetching_encryption = '/'.$request->input('fetching_encryption').'/novalidate-cert';
+            $email->mailbox_protocol = 'novalidate-cert';
         }
-
-
-        // fetching department value
         $email->department = $this->departmentValue($request->input('department'));
         // fetching priority value
         $email->priority = $this->priorityValue($request->input('priority'));
@@ -227,6 +216,9 @@ class EmailsController extends Controller
         // inserting the encrypted value of password
         $email->password = Crypt::encrypt($request->input('password'));
         $email->save(); // run save
+        if ($request->input('fetching_status')) {
+            $this->fetch($email);
+        }
         if ($id === '') {
             // Creating a default system email as the first email is inserted to the system
             $email_settings = Email::where('id', '=', '1')->first();
@@ -238,7 +230,9 @@ class EmailsController extends Controller
         if (count($service_request) > 0) {
             $this->saveMailService($email->id, $service_request, $this->getDriver($request->sending_protocol));
         }
-        $this->readMails($email);
+        if ($request->input('fetching_status')) {
+            $this->fetch($email);
+        }
 
         return 1;
     }
@@ -417,11 +411,9 @@ class EmailsController extends Controller
             // fetching the database instance of the current email
             $emails = $email->whereId($id)->first();
             // checking if deleting the email is success or if it's carrying any dependencies
-            if ($emails->delete() == true) {
-                return redirect('emails')->with('success', Lang::get('lang.email_deleted_sucessfully'));
-            } else {
-                return redirect('emails')->with('fails', Lang::get('lang.email_can_not_delete'));
-            }
+            $emails->delete();
+
+            return redirect('emails')->with('success', Lang::get('lang.email_deleted_sucessfully'));
         } catch (Exception $e) {
             // returns if the try fails
             return redirect()->back()->with('fails', $e->getMessage());
@@ -435,30 +427,28 @@ class EmailsController extends Controller
      *
      * @return type int
      */
-    public function getImapStream($request, $validate)
+    public function getImapStream($request)
     {
-        $fetching_status = $request->input('fetching_status');
+        $host = $request->input('fetching_host');
+        $port = $request->input('fetching_port');
+        $service = $request->input('fetching_protocol');
+        $encryption = $request->input('fetching_encryption');
+        $validate = $request->input('imap_validate');
         $username = $request->input('email_address');
         $password = $request->input('password');
-        $protocol_id = $request->input('mailbox_protocol');
-        $fetching_protocol = '/'.$request->input('fetching_protocol');
-        $fetching_encryption = '/'.$request->input('fetching_encryption');
-        if ($fetching_encryption == '/none') {
-            $fetching_encryption2 = '/novalidate-cert';
-            $mailbox_protocol = $fetching_encryption2;
-            $host = $request->input('fetching_host');
-            $port = $request->input('fetching_port');
-            $mailbox = '{'.$host.':'.$port.$fetching_protocol.$mailbox_protocol.'}INBOX';
-        } else {
-            $mailbox_protocol = $fetching_protocol.$fetching_encryption;
-            $host = $request->input('fetching_host');
-            $port = $request->input('fetching_port');
-            $mailbox = '{'.$host.':'.$port.$mailbox_protocol.$validate.'}INBOX';
-            //dd($mailbox);
-            $mailbox_protocol = $fetching_encryption.$validate;
+        $server = new Fetch($host, $port, $service);
+        //$server->setFlag('novalidate-cert');
+        if ($encryption != '') {
+            $server->setFlag($encryption);
         }
-        //dd($mailbox, $username, $password);
-        imap_open($mailbox, $username, $password);
+        if (!$validate) {
+            $server->setFlag('novalidate-cert');
+        } else {
+            $server->setFlag('validate-cert');
+        }
+
+        $server->setAuthentication($username, $password);
+        $server->getImapStream();
 
         return 1;
     }
@@ -627,7 +617,7 @@ class EmailsController extends Controller
         }
     }
 
-    public function readMails($email)
+    public function readMails()
     {
         $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
         $NotificationController = new \App\Http\Controllers\Common\NotificationController();
@@ -638,6 +628,16 @@ class EmailsController extends Controller
         $settings_email = new Email();
         $system = new \App\Model\helpdesk\Settings\System();
         $ticket = new \App\Model\helpdesk\Settings\Ticket();
-        $controller->fetchEmail($email);
+        $controller->readmails($emails, $settings_email, $system, $ticket);
+    }
+
+    public function fetch($email)
+    {
+        $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
+        $NotificationController = new \App\Http\Controllers\Common\NotificationController();
+        $TicketController = new \App\Http\Controllers\Agent\helpdesk\TicketController($PhpMailController, $NotificationController);
+        $TicketWorkflowController = new \App\Http\Controllers\Agent\helpdesk\TicketWorkflowController($TicketController);
+        $controller = new \App\Http\Controllers\Agent\helpdesk\MailController($TicketWorkflowController);
+        $controller->fetch($email);
     }
 }

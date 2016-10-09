@@ -39,7 +39,8 @@ class CloseWork extends Command
     public function handle()
     {
         if (env('DB_INSTALL') == 1) {
-            $controller = new UnAuthController();
+            $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
+            $controller = new UnAuthController($PhpMailController);
             $controller->autoCloseTickets();
             loging('ticket-close-workflow', 'Close ticket workflow executed', 'info');
             //\Log::info('Close ticket workflow executed');

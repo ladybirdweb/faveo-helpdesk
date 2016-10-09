@@ -24,10 +24,17 @@ class MailRequest extends Request
     public function rules()
     {
         $id = $this->segment(2);
+        $email_address_rule = 'required|email|unique:emails';
+        if ($id) {
+            $email_address_rule = 'required|email|unique:emails,id,'.$id;
+        }
+
+
         $rules = [
-            'email_address' => 'required|email|unique:emails,id,'.$id,
-            'email_name'    => 'required',
-            'password'      => 'required',
+            'email_address'    => $email_address_rule,
+            'email_name'       => 'required',
+            'password'         => 'required',
+            'sending_protocol' => 'required_if:sending_status,on',
         ];
         $driver = $this->input('sending_protocol');
         $driver_rules = $this->getDriver($driver);

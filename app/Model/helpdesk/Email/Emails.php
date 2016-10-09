@@ -58,6 +58,15 @@ class Emails extends BaseModel
         }
     }
 
+    public function getPasswordAttribute($value)
+    {
+        if ($value) {
+            return \Crypt::decrypt($value);
+        }
+
+        return $value;
+    }
+
     public function delete()
     {
         $this->deleteExtraFields();

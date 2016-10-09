@@ -40,7 +40,7 @@ class ContentLength implements HeaderInterface
 
     public function __construct($value = null)
     {
-        if ($value) {
+        if (null !== $value) {
             HeaderValue::assertValid($value);
             $this->value = $value;
         }

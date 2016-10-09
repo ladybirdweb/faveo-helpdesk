@@ -27,10 +27,9 @@ active
                         </div>
                     </div>
                 @endif
-        <form action="http://www.faveohelpdesk.com/billing/serial" method="post">
+        {!! Form::open(['url'=> '/post-serial']) !!}
             <input type="hidden" name="domain" value="http://{{ $_SERVER['HTTP_HOST'] }}">
             <input type="hidden" name="url" value="http://{{$_SERVER['HTTP_HOST']}}{{$_SERVER['REQUEST_URI']}}">
-            <input type="hidden" name="_token" value="{{csrf_token()}}">
             <table ng-controller="AutotabController">
             <div>
                 
@@ -55,15 +54,15 @@ active
                     </td>
                     <td ng-repeat="productKey in productKeys" style="margin-left: 150px;">
                         {!! $errors->first('serial', '<spam class="help-block">:message</spam>') !!}
-                        <input type="text" name="first" id="productKey1" ng-model="productKey.set1" maxlength="4" size="4" required style="padding: 3px; margin-left: 180px; width: 50px;">&nbsp;-
-                        <input type="text" name="second" id="productKey2" ng-model="productKey.set2" maxlength="4" size="4" required style="padding: 3px; margin-left: 3px; width: 50px;">&nbsp;-
-                        <input type="text" name="third" id="productKey3" ng-model="productKey.set3" maxlength="4" size="4" required style="padding: 3px; margin-left: 3px; width: 50px;">&nbsp;-
-                        <input type="text" name="forth" id="productKey4" ng-model="productKey.set4" maxlength="4" size="4" required style="padding: 3px; margin-left: 3px; width: 50px;">
+                        <input type="text" name="first" id="productKey1" ng-model="productKey.set1" maxlength="4" size="4" style="padding: 3px; margin-left: 180px; width: 50px;">&nbsp;-
+                        <input type="text" name="second" id="productKey2" ng-model="productKey.set2" maxlength="4" size="4" style="padding: 3px; margin-left: 3px; width: 50px;">&nbsp;-
+                        <input type="text" name="third" id="productKey3" ng-model="productKey.set3" maxlength="4" size="4" style="padding: 3px; margin-left: 3px; width: 50px;">&nbsp;-
+                        <input type="text" name="forth" id="productKey4" ng-model="productKey.set4" maxlength="4" size="4" style="padding: 3px; margin-left: 3px; width: 50px;">
                     </td>
                 </tr>
             </table>
             <br>
-            <p class="wc-setup-actions step">
+            <p class="setup-actions step">
                 <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue">
             </p>
         </form>

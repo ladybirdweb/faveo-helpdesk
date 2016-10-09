@@ -18,14 +18,14 @@ class CreateUsersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->boolean('gender');
-            $table->string('email')->nullable();
+            $table->string('email')->nullable()->unique();
             $table->boolean('ban');
             $table->string('password', 60);
             $table->integer('active');
             $table->string('ext');
             $table->integer('country_code');
             $table->string('phone_number');
-            $table->string('mobile');
+            $table->string('mobile')->nullable()->unique();
             $table->text('agent_sign', 65535);
             $table->string('account_type');
             $table->string('account_status');

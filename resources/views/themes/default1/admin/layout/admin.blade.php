@@ -30,7 +30,10 @@
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
 
         <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet" type="text/css" >
-
+        <!-- Colorpicker -->
+        
+        <link href="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.css")}}" rel="stylesheet" type="text/css" />
+        
         <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
 
         <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
@@ -263,6 +266,7 @@
                                 <li @yield('sla')><a href="{{url('sla')}}"><i class="fa fa-clock-o"></i>{!! Lang::get('lang.sla_plans') !!}</a></li>
                                 <li @yield('forms')><a href="{{url('forms')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.forms') !!}</a></li>
                                 <li @yield('workflow')><a href="{{url('workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.workflow') !!}</a></li>
+                                <li @yield('priority')><a href="{{url('ticket_priority')}}"><i class="fa fa-asterisk"></i>{!! Lang::get('lang.priority') !!}</a></li>
                             </ul>
                         </li>
 
@@ -284,7 +288,9 @@
                                 <li @yield('status')><a href="{{url('setting-status')}}"><i class="fa fa-plus-square-o"></i>{!! Lang::get('lang.status') !!}</a></li>
                                 <li @yield('notification')><a href="{{url('settings-notification')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.notifications') !!}</a></li>
                                 <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-star"></i>{!! Lang::get('lang.ratings') !!}</a></li>
+                                
                                 <li @yield('close-workflow')><a href="{{url('close-workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.close-workflow') !!}</a></li>
+                              <li @yield('Approval')><a href="{{url('approval/settings')}}"><i class="glyphicon glyphicon-repeat"></i>{!! Lang::get('lang.approval') !!}</a></li>
                             </ul>
                         </li>
                         <li class="treeview @yield('error-bugs')">
@@ -385,29 +391,21 @@
         <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}"  type="text/javascript"></script>
         
         <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
-<script>
-$(function () {
-//Add text editor
-    $("textarea").wysihtml5();
-});
-// $(function(){
-//     $("#checkUpdate").on('click',function(){
-//             $.ajax({
-//                 type: "GET",
-//                 url: "{!! URL::route('version-check') !!}",
-//             beforeSend: function() {
-//                 $("#gif-update").show();
-//                 },
-//             success:function(response){
-//                 alert(response);
-//                 $("#gif-update").hide();
-//                 }
-//             })
-//         return false;
-//     });
-// });
+        <!-- Colorpicker -->
+        <script src="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.js")}}" ></script>
+        <!--date time picker-->
+        <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
 
+@if (trim($__env->yieldContent('no-toolbar')))
+    <h1>@yield('no-toolbar')</h1>
+@else
+    <script>
+    $(function () {
+    //Add text editor
+        $("textarea").wysihtml5();
+    });
     </script>
+@endif
     <script>
         $('#read-all').click(function () {
 
@@ -440,4 +438,17 @@ $(function () {
 
     @yield('FooterInclude')
 </body>
+<script>
+    $(function() {
+      
+        
+        $('input[type="checkbox"]').iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        });
+        $('input[type="radio"]').iCheck({
+            radioClass: 'iradio_flat-blue'
+        });
+    
+    });        
+</script>
 </html>

@@ -13,6 +13,7 @@
   ],
   "require": {
     "php": ">=5.3",
+    "composer/ca-bundle": "^1.0.3",
     "ext-curl": "*",
     "ext-json": "*"
   },

@@ -16,7 +16,13 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
+
+@if($users->role == 'user')
 <h1>{!! Lang::get('lang.user_profile') !!} </h1>
+
+@elseif($users->role == 'agent')
+<h1>{!! Lang::get('lang.agent_profile') !!} </h1>
+@endif
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -50,12 +56,12 @@ class="active"
     <div class="col-md-3">
         <div class="box box-primary">
             <div class="box-header">
-                <a href="{{route('user.edit', $users->id)}}" data-toggle="tooltip" data-placement="left" class="pull-right" title="{!! Lang::get('lang.edit') !!}"><i class="fa fa-edit"></i></a>
+                <!-- <a href="{{route('user.edit', $users->id)}}" data-toggle="tooltip" data-placement="left" class="pull-right" title="{!! Lang::get('lang.edit') !!}"><i class="fa fa-edit"></i></a> -->
             </div>
             <div class="box-body ">
                 <div>
                     <center>
-                        <img src="{{ Gravatar::src($users -> email) }}" class="img-circle" alt="User Image" style="border:3px solid #CBCBDA;padding:3px;">	
+                        <img src="{{ Gravatar::src($users -> email) }}" class="img-circle" alt="User Image" style="border:3px solid #CBCBDA;padding:3px;">  
                         @if($users->first_name || $users->last_name)
                         <h3 class="">{{$users->first_name}} {{$users->last_name}}</h3>
                         @else
@@ -65,17 +71,17 @@ class="active"
                 </div>
             </div>
             @if($users->user_name)
-                <div class="box-footer">
-                    <b>{{Lang::get('lang.user_name')}}</b>
-                    <a class="pull-right" href="{{route('user.show', $users->id)}}">
-                        {{$users->user_name }}
-                    </a>
-                </div>
+            <div class="box-footer">
+                <b>{{Lang::get('lang.user_name')}}</b>
+                <a class="pull-right" href="{{route('user.show', $users->id)}}">
+                    {{str_limit($users->user_name,10) }}
+                </a>
+            </div>
             @endif
             <div class="box-footer">
                 <b>{{Lang::get('lang.email')}}</b>
                 <a class="pull-right" href="{{route('user.show', $users->id)}}">
-                    {{$users->email }}
+                    {{str_limit($users->email,10) }}
                 </a>
             </div>
             <div class="box-footer">
@@ -86,7 +92,7 @@ class="active"
                     @if($user_org == null)
                     <b>{!! Lang::get('lang.organization') !!}</b>
                     <a href="" class="pull-right"  data-toggle="modal" data-target="#assign"><i class="fa fa-hand-o-right" style="color:orange;"> </i> {!! Lang::get('lang.assign') !!} </a>
-                    <a href="" data-toggle="modal" data-target="#create_org" class="pull-right"> {{Lang::get('lang.create')}} <b style="color:#000"> / </b>&nbsp; </a>
+                    <a href="" data-toggle="modal" data-target="#create_org" class="pull-right"> {{Lang::get('lang.create')}} |&nbsp;</a>
                     @else
                     <?php
                     $org_id = $user_org->org_id;
@@ -94,7 +100,6 @@ class="active"
                     ?>
                     <b>{!! Lang::get('lang.organization') !!}</b>
                     <a class="pull-right" href="#" data-toggle="modal" data-target="#{{$org_id}}delete" title="{!! Lang::get('lang.remove') !!}"><i class="fa fa-times" style="color:red;"> </i></a> 
-                    <a href="{!! URL::route('organizations.show',$organization->id) !!}" class="pull-right">{!! $organization->name !!}&nbsp;/&nbsp;</a>
                     <div class="modal fade" id="{{$org_id}}delete">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -118,6 +123,15 @@ class="active"
             </div>
 
             <div class="box-footer">
+                <b>{{Lang::get('lang.role')}}</b>
+                <a class="pull-right">
+
+                    <span style="color:green;">{!! $users->role !!}</span>
+
+                </a>
+            </div>
+
+            <div class="box-footer">
                 <b>{{Lang::get('lang.status')}}</b>
                 <a class="pull-right">
                     @if($users->active == '1')
@@ -128,28 +142,28 @@ class="active"
                 </a>
             </div>            
             @if($users->country_code)
-                <div class="box-footer">
-                    <b>{{Lang::get('lang.country_code')}}</b>
-                    <a class="pull-right"> {{$users->country_code}}</a>
-                </div>
+            <div class="box-footer">
+                <b>{{Lang::get('lang.country_code')}}</b>
+                <a class="pull-right"> {{$users->country_code}}</a>
+            </div>
             @endif
             @if($users->ext)
-                <div class="box-footer">
-                    <b>{{Lang::get('lang.ext')}}</b>
-                    <a class="pull-right"> {{$users->ext}}</a>
-                </div>
+            <div class="box-footer">
+                <b>{{Lang::get('lang.ext')}}</b>
+                <a class="pull-right"> {{$users->ext}}</a>
+            </div>
             @endif
             @if($users->mobile)
-                <div class="box-footer">
-                    <b>{{Lang::get('lang.mobile')}}</b>
-                    <a class="pull-right"> {{$users->mobile}}</a>
-                </div>
+            <div class="box-footer">
+                <b>{{Lang::get('lang.mobile')}}</b>
+                <a class="pull-right"> {{$users->mobile}}</a>
+            </div>
             @endif
             @if($users->phone_number)
-                <div class="box-footer">
-                    <b>{{Lang::get('lang.phone')}}</b>
-                    <a class="pull-right"> {{$users->phone_number}}</a>
-                </div>
+            <div class="box-footer">
+                <b>{{Lang::get('lang.phone')}}</b>
+                <a class="pull-right"> {{$users->phone_number}}</a>
+            </div>
             @endif
             @if($users->internal_note)
             <div class="box-footer">
@@ -160,18 +174,327 @@ class="active"
             @endif
             @if($users->twitterLink()!=="")
             <div class="box-footer">
-               {!! $users->twitterLink() !!}
+                {!! $users->twitterLink() !!}
             </div>
             @endif
         </div>
     </div>
+    <div class="col-md-6 pull-right">
+        <!-- <div class="box box-primary"> -->
+        <div class="box-body">
+            @if(Auth::user()->role == 'admin')
+            @if($users->role == 'user')
+            <div class="btn-group">
+                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal1">{{Lang::get('lang.change_role_to_agent')}}</button>
+            </div>
+            <div class="btn-group">
+                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal4">{{Lang::get('lang.change_role_to_admin')}}</button>
+            </div>
+            @else
+            <div class="btn-group">
+                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal2">{{Lang::get('lang.change_role_to_user')}}</button>
+                <!-- <button type="button" class="btn btn-primary" id="role_user">Change Role TO User</button> -->
+            </div>
+            <div class="btn-group">
+                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal4">{{Lang::get('lang.change_role_to_admin')}}</button>
+            </div>
+            @endif
+            @endif
+            <a href="{{route('user.edit', $users->id)}}"><button type="button"  href="{{route('user.edit', $users->id)}}" class="btn btn-primary btn-sm">{{Lang::get('lang.edit')}}</button></a>
+            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal">{{Lang::get('lang.change_password')}}</button>
+            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal3">{{Lang::get('lang.delete')}}</button>
+            <!-- <button type="button" class="btn btn-primary">Delete</button> -->
+        </div>
+    </div>
+
+    <!-- Delete -->
+    <form action="{!!URL::route('user.post.delete', $users->id)!!}" method="post" role="form">
+        <div class="modal fade" id="addNewCategoryModal3" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="titleLabel">Delete Agent</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        What should be done with content owned by this user?</br>
+                        <?php $user = App\User::where('id', $users->id)->first(); ?>
+                        @if($user->role == 'agent')
+                        {!! Form::label('delete_all_content',Lang::get('lang.delete_all_content')) !!} <span class="text-red"> *</span>
+                        <?php
+                        $open = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get();
+                        ?>
+                        <?php $user = App\User::where('id', $users->id)->first(); ?>
+                        <?php
+                        $open = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get());
+                        ?>
+
+                        @if(!$open)
+                        <!-- <input type="checkbox" id="delete_checkbox" name="delete_all" value="1" checked> -->
+                        @elseif($open)
+                        <input type="checkbox" id="delete_checkbox" name="delete_all" value="1">
+
+                        @endif
+                         @endif
+                        <!--    Hi Admin 
+                            @if($users->role=='agent')  
+                            Assign  tickets of the agent will delete?
+                            Create ticket By agent Will Delete?
+                            @elseif($users->role=='user')
+                            Crete ticket by user Will Delete?
+                            @endif -->
+                        <!--  -->
+                        <?php $user = App\User::where('id', $users->id)->first(); ?>
+                        <?php
+                        $open = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get());
+                        $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '2')->get());
+                        $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '5')->get());
+                        ?>
+                        @if($open>0)  
+                        <div id="delete_assign_body">
+                            <p>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}?</p>
+                            <select id="asssign" class="form-control" name="assign_to">
+                                <?php
+                                $assign = App\User::where('role', '!=', 'user')->get();
+                                $count_assign = count($assign);
+                                $teams = App\Model\helpdesk\Agent\Teams::all();
+                                $count_teams = count($teams);
+                                ?>
+                                <!--    <optgroup label="Teams ( {!! $count_teams !!} )">
+                                       @foreach($teams as $team)
+                                       <option  value="team_{{$team->id}}">{!! $team->name !!}</option>
+                                       @endforeach
+                                   </optgroup> -->
+                                <optgroup label="Agents ( {!! $count_assign !!} )">
+                                    @foreach($assign as $user)
+                                    <option  value="user_{{$user->id}}">{{$user->first_name." ".$user->last_name}}</option>
+                                    @endforeach
+                                </optgroup>
+                            </select>
+                        </div>
+                        @endif
+
+                    </div>
+
+                </div>
+              
+                <div class="box-footer">
+                    {!! Form::submit(Lang::get('lang.confirm_deletion'),['class'=>'btn btn-primary'])!!}
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <!-- Role -->
+    <!-- Admin -->
+    <form action="{!!URL::route('user.post.rolechangeadmin', $users->id)!!}" method="post" role="form">
+        <div class="modal fade" id="addNewCategoryModal4" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.role_change')}}:</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <?php
+                        $groups = App\Model\helpdesk\Agent\Groups::all(array('id', 'name'));
+                        $departments = App\Model\helpdesk\Agent\Department::all(array('id', 'name'));
+                        ?>
+
+                        <!-- <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}"> -->
+                        {!! Form::label('assign_group',Lang::get('lang.assigned_group')) !!} <span class="text-red"> *</span>
+                        {!!Form::select('group',[Lang::get('lang.groups')=>$groups->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        <!-- </div> -->
+                        <!-- primary dept -->
+                        <!-- <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}"> -->
+                        {!! Form::label('primary_dpt',Lang::get('lang.primary_department')) !!} <span class="text-red"> *</span>
+                        {!! Form::select('primary_department', [Lang::get('lang.departments')=>$departments->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        <!-- </div> -->
+
+                    </div>
+
+                </div>
+                <div class="box-footer">
+                    {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <!-- user -->
+    <form action="{!!URL::route('user.post.rolechangeuser', $users->id)!!}" method="post" role="form">
+        <div class="modal fade" id="addNewCategoryModal2" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.role_change')}}:</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+
+                        Are u sure?
+                        Role Change Agent To User
+
+                    </div>
+
+                </div>
+                <div class="box-footer">
+                    {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <!-- agent -->
+    <form action="{!!URL::route('user.post.rolechangeagent', $users->id)!!}" method="post" role="form">
+        <div class="modal fade" id="addNewCategoryModal1" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.role_change')}}:</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <?php
+                        $groups = App\Model\helpdesk\Agent\Groups::all(array('id', 'name'));
+                        $departments = App\Model\helpdesk\Agent\Department::all(array('id', 'name'));
+                        ?>
+
+                        <!-- <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}"> -->
+                        {!! Form::label('assign_group',Lang::get('lang.assigned_group')) !!} <span class="text-red"> *</span>
+                        {!!Form::select('group',[Lang::get('lang.groups')=>$groups->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        <!-- </div> -->
+                        <!-- primary dept -->
+                        <!-- <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}"> -->
+                        {!! Form::label('primary_dpt',Lang::get('lang.primary_department')) !!} <span class="text-red"> *</span>
+                        {!! Form::select('primary_department', [Lang::get('lang.departments')=>$departments->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        <!-- </div> -->
+
+                    </div>
+
+                </div>
+                <div class="box-footer">
+                    {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <!-- Change password -->
+
+    <div class="modal fade" id="addNewCategoryModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.change_password')}}:</h4>
+                </div>
+
+                <div class="modal-body">
+                    
+                        <button class="btn btn-warning pull-right" id="changepassword">{{Lang::get('lang.password_generator')}}</button>
+                    
+                    <br/>
+                    <form name="myForm" action="{!!URL::route('user.post.changepassword', $users->id)!!}" method="post" role="form" onsubmit="return validateForm()">
+                        <div class="form-group">
+
+                            <!-- <div class="form-group {{ $errors->has('change_password') ? 'has-error' : '' }}"> -->
+                            {!! Form::label('New password',Lang::get('lang.new_password')) !!} <span class="text-red"> *</span>
+                            <input type="text" class="form-control" name="change_password" id="changepassword1" >
+
+                            <p id="demo" style="color:red"></p>
+
+                            <!-- </div> -->
+
+                        </div>
+
+                </div>
+
+            </div>
+            <div class="box-footer">
+                {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary','id'=>'savepassword'])!!}
+            </div>
+            </form>
+        </div>
+    </div>
+    <script>
+
+        $("#delete_checkbox").click(function () {
+            // alert('ok');
+
+            $("#delete_assign_body").toggle();
+
+        });
+
+    </script>
+
+    <script>
+        function validateForm() {
+            var x = document.forms["myForm"]["change_password"].value;
+            if (x == null || x == "") {
+                // alert("please enter your password");
+                document.getElementById("demo").innerHTML = "Enter Password";
+                return false;
+            }
+        }
+    </script>
+    <script>
+
+        $('#changepassword').click(function () {
+            $.ajax({
+                type: 'get',
+                url: '{{route("user.changepassword")}}',
+                // data: {settings_approval: settings_approval},
+                success: function (result) {
+                    // with('success', Lang::get('lang.approval_settings-created-successfully'));
+                    // alert("Hi, testing");
+                    // var x =result;
+                    var sum = result;
+
+                    document.getElementById("changepassword1").value = sum;
+
+                }
+            });
+
+        });
+
+    </script>
     <div class="col-md-9">
         {{-- detals table starts --}}
-        <?php $user = App\User::where('id', $users->id)->first(); ?>
         <?php
-        $open = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '1')->get());
-        $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '2')->get());
-        $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '5')->get());
+        $user = App\User::where('id', $users->id)->first();
+        // dd( $user->role);
+
+        if ($users->role != 'user') {
+            $open = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get());
+            $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '2')->orderBy('id', 'DESC')->paginate(20);
+            $counted = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '2')->get());
+            $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '5')->get());
+        }
+        if ($users->role == 'user') {
+            $open = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '1')->get());
+            $tickets = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '2')->orderBy('id', 'DESC')->paginate(20);
+            $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '2')->get());
+            $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '5')->get());
+            // dd($deleted);
+        }
         ?>
         <div class="row">
             <div class="col-md-12">
@@ -233,7 +556,11 @@ class="active"
                                         <th>{!! Lang::get('lang.last_activity') !!}</th>
                                         </thead>
                                         <tbody id="hello">
+                                            @if($users->role != 'user')
+                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->orderBy('id', 'DESC')->paginate(20); ?>
+                                            @elseif($users->role ='user')
                                             <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '1')->orderBy('id', 'DESC')->paginate(20); ?>
+                                            @endif
                                             @foreach ($tickets  as $ticket)
                                             <tr <?php if ($ticket->seen_by == null) { ?> style="color:green;" <?php }
                                             ?> >
@@ -285,7 +612,7 @@ class="active"
                                                 <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first(); ?>
                                                 <td class="mailbox-priority">@if($priority != null)<spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam>@endif</td>
                                         <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
-                                        <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
+                                        <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! str_limit($username,20) !!}</td>
                                         <td>{!! $assigned !!}</td>
                                         <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
                                         </tr>
@@ -352,7 +679,11 @@ class="active"
                                         <th>{!! Lang::get('lang.last_activity') !!}</th>
                                         </thead>
                                         <tbody id="hello">
+                                            @if($users->role != 'user')
+                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '2')->orderBy('id', 'DESC')->paginate(20); ?>
+                                            @elseif($users->role ='user')
                                             <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '2')->orderBy('id', 'DESC')->paginate(20); ?>
+                                            @endif
                                             @foreach ($tickets  as $ticket)
                                             <tr <?php if ($ticket->seen_by == null) { ?> style="color:green;" <?php } ?> >
                                                 <td ><input type="checkbox" class="icheckbox_flat-blue" name="select_all[]" value="{{$ticket->id}}"/></td>
@@ -403,7 +734,7 @@ class="active"
                                                 <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first(); ?>
                                                 <td class="mailbox-priority">@if($priority != null)<spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam>@endif</td>
                                         <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
-                                        <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
+                                        <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! str_limit($username,20) !!}</td>
                                         <td>{!! $assigned !!}</td>
                                         <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
                                         </tr>
@@ -473,7 +804,11 @@ class="active"
                                         <th>{!! Lang::get('lang.last_activity') !!}</th>
                                         </thead>
                                         <tbody id="hello">
+                                            @if($users->role != 'user')
+                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '5')->orderBy('id', 'DESC')->paginate(20); ?>
+                                            @elseif($users->role ='user')
                                             <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '5')->orderBy('id', 'DESC')->paginate(20); ?>
+                                            @endif
                                             @foreach ($tickets  as $ticket)
                                             <tr <?php if ($ticket->seen_by == null) { ?> style="color:green;" <?php }
                                             ?> >
@@ -525,7 +860,7 @@ class="active"
                                                 <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first(); ?>
                                                 <td class="mailbox-priority">@if($priority != null)<spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam>@endif</td>
                                         <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
-                                        <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
+                                        <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! str_limit($username,20) !!}</td>
                                         <td>{!! $assigned !!}</td>
                                         <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
                                         </tr>
@@ -544,6 +879,7 @@ class="active"
                 </div><!-- /.col -->          
             </div> <!-- /.row -->
         </div>
+        @if(Auth::user()->role == 'user')
         <div class="row">
             <div class="col-md-12">
                 <link type="text/css" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet">
@@ -571,7 +907,7 @@ class="active"
                                     }
                                     ?>
                                     <script type="text/javascript">
-                                        $(function() {
+                                        $(function () {
                                             var timestring1 = "{!! $start_date !!}";
                                             var timestring2 = "{!! date('m/d/Y') !!}";
                                             $('#datepicker4').datetimepicker({
@@ -587,7 +923,7 @@ class="active"
                                         {!! Form::text('end_date',null,['class'=>'form-control','id'=>'datetimepicker3'])!!}
                                     </div>
                                     <script type="text/javascript">
-                                        $(function() {
+                                        $(function () {
                                             var timestring1 = "{!! $start_date !!}";
                                             var timestring2 = "{!! date('m/d/Y') !!}";
                                             $('#datetimepicker3').datetimepicker({
@@ -624,6 +960,7 @@ class="active"
             </div>
         </div>
     </div>
+    @endif
     <!-- END CUSTOM TABS -->
     {{-- MODAL POPUPS --}}
     <div class="modal fade" id="create_org">
@@ -635,16 +972,16 @@ class="active"
                     <h4 class="modal-title">{!! Lang::get('lang.create_organization') !!}</h4>
                 </div>
                 <div class="modal-body">
-                    <!-- failure message -->						        
+                    <!-- failure message -->                                
                     <div class="alert alert-danger alert-dismissable" id="alert-danger" style="display:none;"> 
                         <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!} ! <span id="get-danger"></span> </b>
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    </div>						        
+                    </div>                              
                     <div class="row" id="hide">
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>{!! Lang::get('lang.name') !!}</label>
-                               	<input type="text" name="name" class="form-control">
+                                <input type="text" name="name" class="form-control">
                                 <spam id="error-name" style="display:none;position:fixed" class="call-out text-red">This is a required field</spam>
                                 <spam id="error-name1" style="display:none;position:fixed" class="call-out text-red">! Allready Taken</spam>
                                 <br/>
@@ -699,19 +1036,19 @@ class="active"
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     <script type="text/javascript">
-        jQuery(document).ready(function($) {
+        jQuery(document).ready(function ($) {
             // create org
-            $('#form').on('submit', function() {
+            $('#form').on('submit', function () {
                 $.ajax({
                     type: "POST",
                     url: "../user-org/{{$users->id}}",
                     dataType: "html",
                     data: $(this).serialize(),
-                    beforeSend: function() {
+                    beforeSend: function () {
                         $("#hide").hide();
                         $("#show2").show();
                     },
-                    success: function(response) {
+                    success: function (response) {
                         $("#show2").hide();
                         $("#hide").show();
                         if (response == 0) {
@@ -722,7 +1059,7 @@ class="active"
                             // $("#show").show();
                             $("#alert-success").show();
                             $('#get-success').html(message);
-                            setInterval(function() {
+                            setInterval(function () {
                                 $("#alert-success").hide();
                             }, 4000);
                         } else {
@@ -783,19 +1120,19 @@ class="active"
 
     <script type="text/javascript">
         // Assign a ticket
-        jQuery(document).ready(function($) {
+        jQuery(document).ready(function ($) {
             // create org
-            $('#org_assign').on('submit', function() {
+            $('#org_assign').on('submit', function () {
                 $.ajax({
                     type: "POST",
                     url: "../user-org-assign/{{$users->id}}",
                     dataType: "html",
                     data: $(this).serialize(),
-                    beforeSend: function() {
+                    beforeSend: function () {
                         $("#hide").hide();
                         $("#show2").show();
                     },
-                    success: function(response) {
+                    success: function (response) {
                         $("#show2").hide();
                         $("#hide").show();
 
@@ -807,7 +1144,7 @@ class="active"
                             // $("#show").show();
                             $("#alert-success").show();
                             $('#get-success').html(message);
-                            setInterval(function() {
+                            setInterval(function () {
                                 $("#alert-success").hide();
                             }, 4000);
                         }
@@ -817,17 +1154,17 @@ class="active"
             });
         });
 
-        $(function() {
+        $(function () {
             //Enable check and uncheck all functionality
-            $(".checkbox-toggle").click(function() {
+            $(".checkbox-toggle").click(function () {
                 var clicks = $(this).data('clicks');
                 if (clicks) {
                     //Uncheck all checkboxes
-                    $(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
+                    $(" input[type='checkbox']").iCheck("uncheck");
                     $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
                 } else {
                     //Check all checkboxes
-                    $(".mailbox-messages input[type='checkbox']").iCheck("check");
+                    $("input[type='checkbox']").iCheck("check");
                     $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
                 }
                 $(this).data("clicks", !clicks);
@@ -836,9 +1173,9 @@ class="active"
 
 
 
-        $(function() {
+        $(function () {
             // Enable check and uncheck all functionality
-            $(".checkbox-toggle").click(function() {
+            $(".checkbox-toggle").click(function () {
                 var clicks = $(this).data('clicks');
                 if (clicks) {
                     //Uncheck all checkboxes
@@ -852,8 +1189,8 @@ class="active"
         });
 
 
-        $(document).ready(function() { /// Wait till page is loaded
-            $('#click').click(function() {
+        $(document).ready(function () { /// Wait till page is loaded
+            $('#click').click(function () {
                 $('#refresh').load('open #refresh');
                 $("#show").show();
             });
@@ -861,7 +1198,7 @@ class="active"
 
 
 
-        $(function() {
+        $(function () {
             $("textarea").wysihtml5();
         });
     </script>
@@ -870,8 +1207,8 @@ class="active"
     </div>
     <script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
     <script type="text/javascript">
-        $(document).ready(function() {
-            $.getJSON("../user-agen/<?php echo $users->id; ?>", function(result) {
+        $(document).ready(function () {
+            $.getJSON("../user-agen/<?php echo $users->id; ?>", function (result) {
                 var labels = [], open = [], closed = [], reopened = [], open_total = 0, closed_total = 0, reopened_total = 0;
                 for (var i = 0; i < result.length; i++) {
                     labels.push(result[i].date);
@@ -960,10 +1297,10 @@ class="active"
                 });
 
             });
-            $('#click me').click(function() {
+            $('#click me').click(function () {
                 $('#foo').submit();
             });
-            $('#foo').submit(function(event) {
+            $('#foo').submit(function (event) {
                 // get the form data
                 // there are many ways to get this data using jQuery (you can use the class or id also)
                 var date1 = $('#datepicker4').val();
@@ -977,7 +1314,7 @@ class="active"
                     data: formData, // our data object
                     dataType: 'json', // what type of data do we expect back from the server
 
-                    success: function(result2) {
+                    success: function (result2) {
 
                         var labels = [], open = [], closed = [], reopened = [], open_total = 0, closed_total = 0, reopened_total = 0;
 
@@ -1116,15 +1453,15 @@ class="active"
             });
         });
 
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             // Close a ticket
-            $('#close').on('click', function(e) {
+            $('#close').on('click', function (e) {
                 $.ajax({
                     type: "GET",
                     url: "agen",
-                    beforeSend: function() {
+                    beforeSend: function () {
                     },
-                    success: function(response) {
+                    success: function (response) {
                     }
                 })
                 return false;
@@ -1134,4 +1471,3 @@ class="active"
     <script src="{{asset("lb-faveo/plugins/moment-develop/moment.js")}}" type="text/javascript"></script>
     <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
     @stop
-    <!-- /content -->

@@ -252,6 +252,20 @@
                         <p class="box-title" >{!! Lang::get('lang.workflow') !!}</p>
                     </div>
                 </div>
+                <!-- priority -->
+                 <div class="col-md-2 col-sm-6">
+                    <div class="settingiconblue">
+                        <div class="settingdivblue">
+                            <a href="{{url('ticket_priority')}}">
+                                <span class="fa-stack fa-2x">
+                                    
+                                    <i class="fa fa-asterisk fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <p class="box-title" >{!! Lang::get('lang.priority') !!}</p>
+                    </div>
+                </div>
                 <!--/.col-md-2-->
                 <!--/.col-md-2-->
                 <div class="col-md-2 col-sm-6">

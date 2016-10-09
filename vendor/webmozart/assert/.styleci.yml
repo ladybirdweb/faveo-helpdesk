@@ -5,7 +5,3 @@ enabled:
 
 disabled:
     - empty_return
-
-    # Unusable at the moment
-    # https://github.com/StyleCI/StyleCI/issues/471
-    - psr0

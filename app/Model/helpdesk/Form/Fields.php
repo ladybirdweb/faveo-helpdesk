@@ -74,6 +74,7 @@ class Fields extends BaseModel
 
     public function delete()
     {
+        $this->deleteValues();
         parent::delete();
     }
 }

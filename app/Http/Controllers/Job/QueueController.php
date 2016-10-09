@@ -80,7 +80,7 @@ class QueueController extends Controller
             if (!$queue) {
                 throw new Exception('Sorry we can not find your request');
             }
-            if ($queue->isActivate() == false && $id != 1) {
+            if ($queue->isActivate() == false && $id != 1 && $id != 2) {
                 throw new Exception("To activate $queue->name , Please configure it first");
             }
             if ($active_queue) {

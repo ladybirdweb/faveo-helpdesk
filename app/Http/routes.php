@@ -90,6 +90,12 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->parent('teams.index');
             $breadcrumbs->push(Lang::get('lang.edit'), url('teams/{teams}/edit'));
         });
+        Route::get('/teams/show/{id}', ['as' => 'teams.show', 'uses' => 'Admin\helpdesk\TeamController@show']); /*  Get Team View */
+         Breadcrumbs::register('teams.show', function ($breadcrumbs) {
+             $breadcrumbs->parent('teams.index');
+             $breadcrumbs->push(Lang::get('lang.show'), url('teams/{teams}/show'));
+         });
+        Route::get('getshow/{id}', ['as' => 'teams.getshow.list', 'uses' => 'Admin\helpdesk\TeamController@getshow']);
         Route::resource('agents', 'Admin\helpdesk\AgentController'); // in agents module, for CRUD
         Breadcrumbs::register('agents.index', function ($breadcrumbs) {
             $breadcrumbs->parent('setting');
@@ -441,6 +447,7 @@ Route::group(['middleware' => ['web']], function () {
             'as'   => 'error.logs',
             'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs',
         ]);
+
     });
     /*
       |------------------------------------------------------------------
@@ -686,6 +693,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('help-topic-report/{date1}/{date2}/{id}', ['as' => 'report.helptopic', 'uses' => 'Agent\helpdesk\ReportController@chartdataHelptopic']); /* To show dashboard pages */
         Route::post('help-topic-pdf', ['as' => 'help.topic.pdf', 'uses' => 'Agent\helpdesk\ReportController@helptopicPdf']);
     });
+
     /*
       |------------------------------------------------------------------
       |Guest Routes
@@ -781,7 +789,8 @@ Route::group(['middleware' => ['web']], function () {
       |
      */
     Route::get('/serial', ['as' => 'serialkey', 'uses' => 'Installer\helpdesk\InstallController@serialkey']);
-    Route::post('/CheckSerial/{id}', ['as' => 'CheckSerial', 'uses' => 'Installer\helpdesk\InstallController@PostSerialKey']);
+    Route::post('/post-serial', ['as' => 'post.serialkey', 'uses' => 'Installer\helpdesk\InstallController@postSerialKeyToFaveo']);
+    Route::post('/CheckSerial', ['as' => 'CheckSerial', 'uses' => 'Installer\helpdesk\InstallController@PostSerialKey']);
     Route::get('/JavaScript-disabled', ['as' => 'js-disabled', 'uses' => 'Installer\helpdesk\InstallController@jsDisabled']);
     Route::get('/step1', ['as' => 'licence', 'uses' => 'Installer\helpdesk\InstallController@licence']);
     Route::post('/step1post', ['as' => 'postlicence', 'uses' => 'Installer\helpdesk\InstallController@licencecheck']);
@@ -1198,4 +1207,46 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('social/media', ['as' => 'social', 'uses' => 'Admin\helpdesk\SocialMedia\SocialMediaController@index']);
     Route::get('social/media/{provider}', ['as' => 'social.media', 'uses' => 'Admin\helpdesk\SocialMedia\SocialMediaController@settings']);
     Route::post('social/media/{provider}', ['as' => 'social.media.post', 'uses' => 'Admin\helpdesk\SocialMedia\SocialMediaController@postSettings']);
+    /*
+     * Ticket_Priority Settings
+     */
+    Route::get('ticket_priority', ['as' => 'priority.index', 'uses' => 'Admin\helpdesk\PriorityController@priorityIndex']);
+    Route::post('user_ticket_priority', ['as' => 'user.priority.index', 'uses' => 'Admin\helpdesk\PriorityController@userPriorityIndex']);
+
+    Route::get('get_index', ['as' => 'priority.index1', 'uses' => 'Admin\helpdesk\PriorityController@priorityIndex1']);
+    Breadcrumbs::register('priority.index', function ($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('Ticket Priority'), route('priority.index'));
+    });
+    Route::get('ticket_priority/create', ['as' => 'priority.create', 'uses' => 'Admin\helpdesk\PriorityController@priorityCreate']);
+    Breadcrumbs::register('priority.create', function ($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('Ticket Priority'), route('priority.index'));
+        $breadcrumbs->push(Lang::get('lang.create'), route('priority.create'));
+    });
+    Route::post('ticket_priority/create1', ['as' => 'priority.create1', 'uses' => 'Admin\helpdesk\PriorityController@priorityCreate1']);
+    Route::post('ticket_priority/edit1', ['as' => 'priority.edit1', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit1']);
+    Route::get('ticket_priority/{ticket_priority}/edit', ['as' => 'priority.edit', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit']);
+    Breadcrumbs::register('priority.edit', function ($breadcrumbs) {
+        $breadcrumbs->push(Lang::get('Ticket Priority'), route('priority.index'));
+        $breadcrumbs->push(Lang::get('Edit'), route('priority.index'));
+    });
+    Route::get('ticket_priority/{ticket_priority}/destroy', ['as' => 'priority.destroy', 'uses' => 'Admin\helpdesk\PriorityController@destroy']);
+ // user---arindam
+ Route::post('rolechangeadmin/{id}', ['as' => 'user.post.rolechangeadmin',  'uses' => 'Agent\helpdesk\UserController@changeRoleAdmin']);
+    Route::post('rolechangeagent/{id}', ['as' => 'user.post.rolechangeagent',  'uses' => 'Agent\helpdesk\UserController@changeRoleAgent']);
+    Route::post('rolechangeuser/{id}', ['as' => 'user.post.rolechangeuser',  'uses' => 'Agent\helpdesk\UserController@changeRoleUser']);
+    Route::get('password', ['as' => 'user.changepassword',  'uses' => 'Agent\helpdesk\UserController@randomPassword']);
+    Route::post('changepassword/{id}', ['as' => 'user.post.changepassword',  'uses' => 'Agent\helpdesk\UserController@randomPostPassword']);
+    Route::post('delete/{id}', ['as' => 'user.post.delete',  'uses' => 'Agent\helpdesk\UserController@deleteAgent']);
+
+   //due today ticket
+   Route::get('duetoday', ['as' => 'ticket.duetoday',  'uses' => 'Agent\helpdesk\TicketController@dueTodayTicketlist']);
+
+  // Route::post('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']);
+ Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' => 'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
+        // Breadcrumbs::register('open.ticket', function ($breadcrumbs) {
+        //     $breadcrumbs->parent('dashboard');
+        //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
+        // });
 });

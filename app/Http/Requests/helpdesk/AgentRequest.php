@@ -35,9 +35,9 @@ class AgentRequest extends Request
         }
 
         return [
-            //'user_name'  => 'required|unique:users|max:30',
+            'user_name'  => 'required|unique:users|max:30',
             'first_name' => 'required|max:30',
-            'last_name'  => 'required|max:30',
+            // 'last_name'  => 'required|max:30',
             'email'      => 'required|unique:users',
             'active'     => 'required',
             // 'account_status' => 'required',
@@ -45,8 +45,8 @@ class AgentRequest extends Request
             'primary_department'  => 'required',
             'agent_time_zone'     => 'required',
             // 'phone_number' => 'phone:IN',
-            // 'mobile' => 'phone:IN',
-            'team' => 'required',
+            'mobile' => 'unique:users',
+            'team'   => 'required',
         ];
     }
 
@@ -64,9 +64,9 @@ class AgentRequest extends Request
         $settings = $settings->select('status')->where('option_name', '=', 'send_otp')->first();
         if ($settings->status == '1' || $settings->status == 1) {
             return [
-                //'user_name'           => 'required|unique:users|max:30',
+                'user_name'           => 'required|unique:users|max:30',
                 'first_name'          => 'required|max:30',
-                'last_name'           => 'required|max:30',
+                // 'last_name'           => 'required|max:30',
                 'email'               => 'required|unique:users',
                 'active'              => 'required',
             // 'account_status'       => 'required',
@@ -76,7 +76,7 @@ class AgentRequest extends Request
                 // 'phone_number' => 'phone:IN',
                 // 'mobile' => 'phone:IN',
                 'team'                => 'required',
-                'mobile'              => 'required',
+                'mobile'              => 'required|unique:users',
                 'country_code'        => 'required',
             ];
         } else {

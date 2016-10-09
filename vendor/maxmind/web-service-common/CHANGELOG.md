@@ -1,6 +1,22 @@
 CHANGELOG
 =========
 
+0.3.1 (2016-08-10)
+------------------
+
+* On Mac OS X when using a curl built against SecureTransport, the certs
+  in the system's keychain will now be used instead of the CA bundle on
+  the file system.
+
+0.3.0 (2016-08-09)
+------------------
+
+* This package now uses `composer/ca-bundle` by default rather than a CA
+  bundle distributed with this package. `composer/ca-bundle` will first try
+  to use the system CA bundle and will fall back to the Mozilla CA bundle
+  when no system bundle is available. You may still specify your own bundle
+  using the `caBundle` option.
+
 0.2.1 (2016-06-13)
 ------------------
 

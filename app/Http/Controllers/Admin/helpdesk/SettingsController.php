@@ -23,6 +23,7 @@ use App\Model\helpdesk\Settings\Alert;
 use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
+use App\Model\helpdesk\Settings\Followup;
 use App\Model\helpdesk\Settings\Responder;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
@@ -163,9 +164,11 @@ class SettingsController extends Controller
             $send_otp = $common_settings->select('status')
                     ->where('option_name', '=', 'send_otp')
                     ->first();
-            //dd($send_otp->status);
+            $email_mandatory = $common_settings->select('status')
+                    ->where('option_name', '=', 'email_mandatory')
+                    ->first();
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp'));
+            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -183,7 +186,6 @@ class SettingsController extends Controller
     public function postsystem($id, System $system, SystemRequest $request)
     {
         try {
-            //dd($request->user_set_ticket_status);
             /* fetch the values of system request  */
             $systems = $system->whereId('1')->first();
             /* fill the values to coompany table */
@@ -204,6 +206,8 @@ class SettingsController extends Controller
             }
             $sotp = CommonSettings::where('option_name', '=', 'send_otp')
                     ->update(['status' => $request->send_otp]);
+            $email_mandatory = CommonSettings::where('option_name', '=', 'email_mandatory')
+                    ->update(['status' => $request->email_mandatory]);
             /* redirect to Index page with Success Message */
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {
@@ -370,11 +374,23 @@ class SettingsController extends Controller
             'monthly'            => 'Monthly',
             'yearly'             => 'Yearly',
         ];
+        $followupcommands = [
+            ''                   => 'Select',
+            'everyMinute'        => 'Every Minute',
+            'everyFiveMinutes'   => 'Every Five Minute',
+            'everyTenMinutes'    => 'Every Ten Minute',
+            'everyThirtyMinutes' => 'Every Thirty Minute',
+            'hourly'             => 'Every Hour',
+            'daily'              => 'Every Day',
+            'weekly'             => 'Every Week',
+            'monthly'            => 'Monthly',
+            'yearly'             => 'Yearly',
+        ];
         if (ini_get('register_argc_argv') == '') {
             //$warn = "Please make 'register_argc_argv' flag as on. Or you can set all your job url in cron";
         }
 
-        return view('themes.default1.admin.helpdesk.settings.cron.cron', compact('emails', 'templates', 'emails1', 'workflow', 'warn', 'command', 'commands', 'condition', 'shared'));
+        return view('themes.default1.admin.helpdesk.settings.cron.cron', compact('emails', 'templates', 'emails1', 'workflow', 'warn', 'command', 'commands', 'followupcommands', 'condition', 'shared'));
         // } catch {
         // }
     }
@@ -387,9 +403,25 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function postSchedular(Email $email, Template $template, Emails $email1, TaskRequest $request, WorkflowClose $workflow)
+    public function postSchedular(Email $email, Template $template, Followup $followup, Emails $email1, TaskRequest $request, WorkflowClose $workflow)
     {
         try {
+            $followup = $followup->whereId('1')->first();
+            $status = $request->followup_notification_cron;
+
+            if ($status = 'null') {
+                $followup->status = $request->followup_notification_cron;
+            }
+            if ($status = 1) {
+                $followup->status = $request->followup_notification_cron;
+                $followup->condition = $request->followup_notification_commands;
+                $followup->save();
+            }
+            if ($request->followup_notification_dailyAt) {
+                $followup->condition = $request->followup_notification_dailyAt;
+                $followup->save();
+            }
+
             /* fetch the values of email request  */
             $emails = $email->whereId('1')->first();
             if ($request->email_fetching) {

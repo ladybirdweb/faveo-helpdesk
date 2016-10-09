@@ -128,24 +128,18 @@ class FormController extends Controller
         try {
             $forms = new Forms();
             $require = Input::get('required');
-            //dd($require);
-//            $count = count($required);
-//            $require = [];
-//            for ($i = 2; $i < $count + 2; $i++) {
-//                for ($j = 0; $j < 1; $j++) {
-//                    array_push($require, $required[$i][$j]);
-//                }
-//            }
+
             $forms->formname = Input::get('formname');
             $forms->save();
             $count = count(Input::get('name'));
             $fields = [];
             for ($i = 0; $i <= $count; $i++) {
                 if (!empty(Input::get('name')[$i])) {
+                    $name = str_slug(Input::get('name')[$i], '_');
                     $field = Fields::create([
                                 'forms_id' => $forms->id,
                                 'label'    => Input::get('label')[$i],
-                                'name'     => Input::get('name')[$i],
+                                'name'     => $name,
                                 'type'     => Input::get('type')[$i],
                                 'required' => $require[$i],
                     ]);
@@ -254,10 +248,11 @@ class FormController extends Controller
             }
             //dd(Input::get('label'),Input::get('name'),Input::get('type'),Input::get('required'));
             for ($i = 0; $i < $count; $i++) {
+                $name = str_slug(Input::get('name')[$i], '_');
                 $field = $field->create([
                     'forms_id' => $forms->id,
                     'label'    => Input::get('label')[$i],
-                    'name'     => Input::get('name')[$i],
+                    'name'     => $name,
                     'type'     => Input::get('type')[$i],
                     'required' => Input::get('required')[$i],
                 ]);
@@ -386,7 +381,7 @@ class FormController extends Controller
                         'field_id'    => $fieldid,
                         'child_id'    => $childid,
                         'field_key'   => $key,
-                        'field_value' => $value,
+                        'field_value' => str_slug($value, '_'),
                     ]);
                 }
             }
@@ -417,6 +412,7 @@ class FormController extends Controller
 
     public function renderChild(Request $request)
     {
+        self::setSession();
         $render = '';
         $value = $request->input('valueid');
         $fieldid = $request->input('fieldid');
@@ -433,22 +429,22 @@ class FormController extends Controller
         return $render;
     }
 
-    public static function jqueryScript($value, $fieldid, $fieldname, $type = '')
+    public static function jqueryScript($value, $fieldid, $fieldname, $type = '', $index = '')
     {
         if ($type == 'select') {
             return self::jquerySelectScript($fieldid);
         }
         if ($type == 'checkbox') {
-            return self::jqueryCheckboxScript($value, $fieldid, $fieldname);
+            return self::jqueryCheckboxScript($fieldid, $index);
         }
 
         return '<script>
             $("#'.str_slug($value).'").on("change", function () {
                 var valueid = $("#'.str_slug($value).'").val();
                 var fieldid = $("#'.$fieldid.str_slug($value).'").val();
-                send(valueid,fieldid);
+                send'.$fieldid.str_slug($value).'(valueid,fieldid);
             });
-            function send(valueid,fieldid) {
+            function send'.$fieldid.str_slug($value).'(valueid,fieldid) {
                 $.ajax({
                     url: "'.url('forms/render/child/').'",
                     dataType: "html",
@@ -464,27 +460,34 @@ class FormController extends Controller
         </script>';
     }
 
-    public static function jqueryCheckboxScript($value, $fieldid, $fieldname)
+    public static function jqueryCheckboxScript($fieldid, $index)
     {
+        $session = self::getSession();
         $fields = new Fields();
         $field = $fields->find($fieldid);
         if ($field) {
             return '<script>
-            $("#'.str_slug($value).'").on("change", function () {
-                var valueid = $("#'.str_slug($value).'").val();
-                var fieldid = $("#'.$fieldid.str_slug($value).'").val();
-                send(valueid,fieldid);
+            $("#'.$session.$index.'").on("change", function () {
+                var valueid = $("#'.$session.$index.'").val();
+                var fieldid = $("#f'.$session.$index.'").val();
+                if($(this).is(":checked")) {
+                    send'.$session.$index.'(valueid,fieldid);
+                }else{
+                    $("#div'.$session.'"+valueid).empty();
+                }
             });
-            function send(valueid,fieldid) {
+            function send'.$session.$index.'(valueid,fieldid) {
                 $.ajax({
                     url: "'.url('forms/render/child/').'",
                     dataType: "html",
                     data: {"valueid": valueid,"fieldid": fieldid},
                     success: function (response) {
-                        $("#'.$value.'").html(response);
+                        
+                        $("#div'.$session.'"+valueid).html(response);
+                        
                     },
                     error: function (response) {
-                        $("#'.$value.'").html(response);
+                        $("#div'.$session.'"+valueid).html(response);
                     }
                 });
             }
@@ -496,27 +499,28 @@ class FormController extends Controller
     {
         $fields = new Fields();
         $field = $fields->find($fieldid);
+        $session = self::getSession();
         if ($field) {
             return '<script>
     $(document).ready(function () {
-        var valueid = $(".'.$fieldid.'").val();
-       var fieldid = $("#hidden'.$fieldid.'").val();
-                send(valueid,fieldid);
-        $(".'.$fieldid.'").on("change", function () {
-            valueid = $(".'.$fieldid.'").val();
-            var fieldid = $("#hidden'.$fieldid.'").val();
-                send(valueid,fieldid);
+        var valueid = $(".'.$session.$fieldid.'").val();
+       var fieldid = $("#hidden'.$session.$fieldid.'").val();
+                send'.$session.$fieldid.'(valueid,fieldid);
+        $(".'.$session.$fieldid.'").on("change", function () {
+            valueid = $(".'.$session.$fieldid.'").val();
+            var fieldid = $("#hidden'.$session.$fieldid.'").val();
+                send'.$session.$fieldid.'(valueid,fieldid);
         });
-        function send(valueid,fieldid) {
+        function send'.$session.$fieldid.'(valueid,fieldid) {
             $.ajax({
                 url: "'.url('forms/render/child/').'",
                 dataType: "html",
                  data: {"valueid": valueid,"fieldid": fieldid},
                 success: function (response) {
-                    $("#'.$field->name.'").html(response);
+                    $("#'.$session.$field->name.'").html(response);
                 },
                 error: function (response) {
-                    $("#'.$field->name.'").html(response);
+                    $("#'.$session.$field->name.'").html(response);
                 }
             });
         }
@@ -528,11 +532,12 @@ class FormController extends Controller
 
     public static function selectForm($field_type, $field, $required, $required_class)
     {
+        $session = self::getSession();
         $script = self::jqueryScript($field_value = '', $field->id, $field->name, $field_type);
-        $form_hidden = Form::hidden('fieldid[]', $field->id, ['id' => 'hidden'.$field->id]).Form::label($field->label, $field->label, ['class' => $required_class]);
-        $select = Form::$field_type($field->name, ['' => 'Select', 'Selects' => $field->values()->lists('field_value', 'field_value')->toArray()], null, ['class' => "form-control $field->id", 'id' => $field->id, 'required' => $required]).'</br>';
+        $form_hidden = Form::hidden('fieldid[]', $field->id, ['id' => 'hidden'.$session.$field->id]).Form::label($field->label, $field->label, ['class' => $required_class]);
+        $select = Form::$field_type($field->name, ['' => 'Select', 'Selects' => $field->values()->lists('field_value', 'field_value')->toArray()], null, ['class' => "form-control $session$field->id", 'id' => $session.$field->id, 'required' => $required]).'</br>';
         $html = $script.$form_hidden.$select;
-        $response_div = '<div id='.$field->name.'></div>';
+        $response_div = '<div id='.$session.$field->name.'></div>';
 
         return $html.$response_div;
     }
@@ -546,7 +551,7 @@ class FormController extends Controller
             foreach ($values as $field_value) {
                 $script = self::jqueryScript($field_value, $field->id, $field->name, $field_type);
                 $radio .= '<div>'.Form::hidden('fieldid[]', $field->id, ['id' => $field->id.str_slug($field_value)]);
-                $radio .= Form::$field_type($field->name, $field_value, null, ['class' => "$field->id", 'id' => str_slug($field_value), 'required' => $required]).$script.'<span>   '.$field_value.'</span></div>';
+                $radio .= Form::$field_type($field->name, $field_value, null, ['class' => "$field->id", 'id' => str_slug($field_value), 'required' => $required]).$script.'<span>   '.removeUnderscore($field_value).'</span></div>';
             }
             $html = Form::label($field->label, $field->label, ['class' => $required_class]).'</br>'.$radio.'<div id='.$field->name.'></br></div>';
         }
@@ -556,17 +561,20 @@ class FormController extends Controller
 
     public static function checkboxForm($field_type, $field, $required, $required_class)
     {
+        $session = self::getSession();
         $checkbox = '';
         $html = '';
         $values = $field->values()->lists('field_value')->toArray();
         if (count($values) > 0) {
+            $i = 1;
             foreach ($values as $field_value) {
-                $script = self::jqueryScript($field_value, $field->id, $field->name, $field_type);
-                $checkbox .= '<div>'.Form::hidden('fieldid[]', $field->id, ['id' => $field->id.str_slug($field_value)]);
-                $checkbox .= Form::$field_type($field_value, $field_value, null, ['class' => "$field->id", 'id' => str_slug($field_value), 'required' => $required]);
-                $checkbox .= '<span>   '.$field_value.'</span></div>';
+                $script = self::jqueryScript($field_value, $field->id, $field->name, $field_type, $i);
+                $checkbox .= Form::hidden('fieldid[]', $field->id, ['id' => 'f'.$session.$i]);
+                $checkbox .= Form::$field_type($field->name, $field_value, null, ['class' => "$field->id", 'id' => $session.$i, 'required' => $required]);
+                $checkbox .= '<span>   '.removeUnderscore($field_value).'</span>';
                 //$checkbox .="</br>";
-                $checkbox .= '<div id='.$field_value.'></div>'.$script;
+                $checkbox .= '<div>'.$script.'<div id=div'.$session.$field_value.'></div></div>';
+                $i++;
             }
             $html = Form::label($field->label, $field->label, ['class' => $required_class]).'</br>'.$checkbox;
         }
@@ -595,5 +603,22 @@ class FormController extends Controller
         }
 
         return $class;
+    }
+
+    public static function setSession()
+    {
+        $form = self::getSession();
+        $form++;
+        \Session::set('fromid', $form);
+    }
+
+    public static function getSession()
+    {
+        $form = 0;
+        if (\Session::has('fromid')) {
+            $form = \Session::get('fromid');
+        }
+
+        return $form;
     }
 }

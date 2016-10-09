@@ -61,7 +61,7 @@ class="active"
             <div class="col-xs-4 form-group {!! $errors->has('password') ? 'has-error' : ''!!}" id="password_error">
                 {!! Form::label('password',Lang::get('lang.password')) !!} <span class="text-red"> *</span>
                 {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
-                <input type="password" name="password" class="form-control" id="password" value={!! Crypt::decrypt($emails->password) !!} >
+                <input type="password" name="password" class="form-control" id="password" value={!! $emails->password !!} >
             </div>
         </div>
     </div>
@@ -145,23 +145,19 @@ class="active"
                 {!! $errors->first('fetching_encryption', '<spam class="help-block">:message</spam>') !!}
                 <select name="fetching_encryption" class='form-control'  id='fetching_encryption'>
                     <option value=""> -----Select----- </option>
+  
                     <option <?php
-                    if ($emails->fetching_encryption == 'none') {
-                        echo 'selected="selected"';
-                    }
-                    ?> value="none">None</option>
-                    <option <?php
-                    if ($emails->fetching_encryption == '/ssl/novalidate-cert' || $emails->fetching_encryption === '/ssl/validate-cert') {
+                    if ($emails->fetching_encryption == 'ssl' || $emails->fetching_encryption === 'ssl') {
                         echo 'selected="selected"';
                     }
                     ?> value="ssl">SSL</option>
                     <option <?php
-                    if ($emails->fetching_encryption == '/tls/novalidate-cert' || $emails->fetching_encryption === '/tls/validate-cert') {
+                    if ($emails->fetching_encryption == 'tls' || $emails->fetching_encryption === 'tls') {
                         echo 'selected="selected"';
                     }
                     ?> value="tls">TLS</option>
                     <option <?php
-                    if ($emails->fetching_encryption == '/starttls/novalidate-cert' || $emails->fetching_encryption === '/starttls/validate-cert') {
+                    if ($emails->fetching_encryption == 'starttls' || $emails->fetching_encryption === 'starttls') {
                         echo 'selected="selected"';
                     }
                     ?> value="starttls">STARTTLS</option>
@@ -222,7 +218,7 @@ class="active"
             <div class="col-xs-2 form-group {!! $errors->has('sending_encryption') ? 'has-error' : ''!!}" id="sending_encryption_error">
                 {!! Form::label('sending_encryption',Lang::get('lang.encryption')) !!}
                 {!! $errors->first('sending_encryption', '<spam class="help-block">:message</spam>') !!} 
-                {!!Form::select('sending_encryption',[''=>'-----Select-----', 'none' => 'None', 'ssl' => 'SSL', 'tls' => 'TLS', 'starttls' => 'STARTTLS'],null,['class' => 'form-control select']) !!}
+                {!!Form::select('sending_encryption',[''=>'-----Select-----','ssl' => 'SSL', 'tls' => 'TLS', 'starttls' => 'STARTTLS'],null,['class' => 'form-control select']) !!}
             </div> 
             <div class="col-xs-2 form-group {!! $errors->has('smtp_authentication') ? 'has-error' : ''!!}" id="smtp_authentication_error">
                 {!! Form::label('sending_authentication',Lang::get('lang.authentication')) !!}

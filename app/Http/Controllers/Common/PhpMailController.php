@@ -10,6 +10,7 @@ use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
 use App\User;
 use Auth;
+use Exception;
 use Mail;
 
 class PhpMailController extends Controller
@@ -172,7 +173,7 @@ class PhpMailController extends Controller
     {
         $username = $from_address->email_address;
         $fromname = $from_address->email_name;
-        $password = \Crypt::decrypt($from_address->password);
+        $password = $from_address->password;
         $smtpsecure = $from_address->sending_encryption;
         $host = $from_address->sending_host;
         $port = $from_address->sending_port;
@@ -220,30 +221,38 @@ class PhpMailController extends Controller
 
     public function laravelMail($to, $toname, $subject, $data, $cc, $attach)
     {
+        //dd($to, $toname, $subject, $data, $cc, $attach);
+        //dd(\Config::get('mail'));
+        //dd($attach);
         $mail = Mail::send('emails.mail', ['data' => $data], function ($m) use ($to, $subject, $toname, $cc, $attach) {
             $m->to($to, $toname)->subject($subject);
 
             if ($cc != null) {
                 foreach ($cc as $collaborator) {
                     //mail to collaborators
-                                $collab_user_id = $collaborator->user_id;
+                            $collab_user_id = $collaborator->user_id;
                     $user_id_collab = User::where('id', '=', $collab_user_id)->first();
                     $collab_email = $user_id_collab->email;
                     $m->cc($collab_email);
                 }
             }
 
-                        //            $mail->addBCC($bc);
-
-                        if ($attach != null) {
-                            $size = count($attach);
-                            for ($i = 0; $i < $size; $i++) {
-                                $file_name = $attach[$i]->getClientOriginalName();
-                                $file_path = $attach[$i]->getRealPath();
-                                $mime = $attach[$i]->getClientMimeType();
-                                $m->attach($file_path, ['as' => $file_name, 'mime' => $mime]);
-                            }
+                    //            $mail->addBCC($bc);
+                    $size = count($attach);
+            if ($size > 0) {
+                for ($i = 0; $i < $size; $i++) {
+                    if (is_array($attach) && array_key_exists($i, $attach)) {
+                        $mode = 'normal';
+                        if (is_array($attach[$i]) && array_key_exists('mode', $attach[$i])) {
+                            $mode = $attach[$i]['mode'];
                         }
+                        $file = $attach[$i]['file_path'];
+                        $name = $attach[$i]['file_name'];
+                        $mime = $attach[$i]['mime'];
+                        $this->attachmentMode($m, $file, $name, $mime, $mode);
+                    }
+                }
+            }
         });
         if (is_object($mail) || (is_object($mail) && $mail->getStatusCode() == 200)) {
             $mail = 1;
@@ -277,5 +286,14 @@ class PhpMailController extends Controller
         foreach ($field as $key => $value) {
             \Config::set("queue.connections.$short.$key", $value);
         }
+    }
+
+    public function attachmentMode($message, $file, $name, $mime, $mode)
+    {
+        if ($mode == 'data') {
+            return $message->attachData(base64_decode($file, true), $name, ['mime' => $mime]);
+        }
+
+        return $message->attach($file, ['as' => $name, 'mime' => $mime]);
     }
 }

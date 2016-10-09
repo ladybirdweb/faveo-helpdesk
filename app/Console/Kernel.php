@@ -30,10 +30,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         if (env('DB_INSTALL') == 1) {
-            $schedule->command('queue:listen', ['--tries' => 1])->everyMinute()->withoutOverlapping();
+            $queue = $this->getCurrentQueue();
+            $schedule->command('queue:listen '.$queue, ['--tries' => 1])->everyMinute()->withoutOverlapping();
             $this->execute($schedule, 'fetching');
             $this->execute($schedule, 'notification');
             $this->execute($schedule, 'work');
+            $this->execute($schedule, 'followup');
+            $this->execute($schedule, 'message');
             loging('cron', 'executed successfully', 'info');
         }
     }
@@ -51,6 +54,12 @@ class Kernel extends ConsoleKernel
                 break;
             case 'work':
                 $this->getCondition($schedule->command('ticket:close'), $command);
+                break;
+            case 'followup':
+                $this->getCondition($schedule->command('users:followup'), $command);
+                break;
+            case 'message':
+                $this->getCondition($schedule->command('message:send'), $command);
                 break;
         }
     }
@@ -100,5 +109,17 @@ class Kernel extends ConsoleKernel
                 $schedule->dailyAt($at)->withoutOverlapping();
                 break;
         }
+    }
+
+    public function getCurrentQueue()
+    {
+        $queue = 'database';
+        $services = new \App\Model\MailJob\QueueService();
+        $current = $services->where('status', 1)->first();
+        if ($current) {
+            $queue = $current->short_name;
+        }
+
+        return $queue;
     }
 }

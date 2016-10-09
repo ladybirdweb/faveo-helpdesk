@@ -27,6 +27,7 @@ class CreateTicketThreadTable extends Migration
             $table->string('ip_address');
             $table->timestamps();
         });
+        \DB::statement('ALTER TABLE `ticket_thread` MODIFY `body` LONGBLOB');
     }
 
     /**

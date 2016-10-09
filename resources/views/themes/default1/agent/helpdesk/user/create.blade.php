@@ -73,27 +73,33 @@ class="active"
         @endif        
         <div class="row">
             <!-- First name : first name : Required -->
-            <div class="col-xs-4 form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
+            <div class="col-xs-6 form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
                 {!! Form::label('first_name',Lang::get('lang.first_name')) !!}<span class="text-red"> *</span>
                 {!! Form::text('first_name',null,['class' => 'form-control']) !!}
             </div>
             <!-- Last name : last name : Required -->
-            <div class="col-xs-4 form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
+            <div class="col-xs-6 form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
                 {!! Form::label('last_name',Lang::get('lang.last_name')) !!}
                 {!! Form::text('last_name',null,['class' => 'form-control']) !!}
             </div>
             <!-- User Name : Text : Required-->
-            <div class="col-xs-4 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
+        </div>
+        <div class="row">
+            <!-- Email Address : Email : Required -->
+            <div class="col-xs-6 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+                {!! Form::label('email',Lang::get('lang.email')) !!}
+                @if ($email_mandatory->status == 1 || $email_mandatory->status == '1')
+                <span class="text-red"> *</span>
+                @endif
+                {!! Form::email('email',null,['class' => 'form-control']) !!}
+            </div>
+            
+            <div class="col-xs-6 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
                 {!! Form::label('user_name',Lang::get('lang.user_name')) !!}<span class="text-red"> *</span>
                 {!! Form::text('user_name',null,['class' => 'form-control']) !!}
             </div>
         </div>
         <div class="row">
-            <!-- Email Address : Email : Required -->
-            <div class="col-xs-6 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-                {!! Form::label('email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
-                {!! Form::email('email',null,['class' => 'form-control']) !!}
-            </div>
             <div class="col-xs-6 form-group {{ $errors->has('organization') ? 'has-error' : '' }}">
                 {!! Form::label('organization',Lang::get('lang.organization')) !!}
                 {!! Form::select('org_id',[''=>'Select','Organization'=>$org],null,['class' => 'form-control','id'=>'org']) !!}
@@ -103,12 +109,18 @@ class="active"
         <div class="row">
             <div class="col-xs-1 form-group {{ $errors->has('country_code') ? 'has-error' : '' }}">
                 {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
+                @if ($email_mandatory->status == 0 || $settings->status == 1)
+                     <span class="text-red"> *</span>
+                @endif
                 <!-- {!! $errors->first('country_code', '<spam class="help-block">:message</spam>') !!} -->
                 {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
             </div>
             <!-- mobile Number : Text :  -->
             <div class="col-md-3 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
                 {!! Form::label('mobile',Lang::get('lang.mobile')) !!}
+                @if ($email_mandatory->status == 0 || $settings->status == 1)
+                     <span class="text-red"> *</span>
+                @endif
                 {!! Form::text('mobile',null,['class' => 'form-control']) !!}
             </div>
             <div class="col-xs-1 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">

@@ -10,7 +10,7 @@ PR is welcome!
 
  * The project was forked from [tsawler/laravel-filemanager](http://packalyst.com/packages/package/tsawler/laravel-filemanager)
  * Customizable routes and middlewares
- * Supported locales : en, fr, bg, tr, fa, es, pt-BR, tr, zh-CN, zh-TW
+ * Supported locales : en, fr, bg, tr, fa, es, pt-BR, tr, zh-CN, zh-TW, ar
  * Supports public and private folders for multi users
  * Supports multi-level folders
  * Supports using independently(see integration doc)
@@ -18,7 +18,7 @@ PR is welcome!
 ## Documents
 
   1. [Installation](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/installation.md)
-  1. [Intergration](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/integration.md)
+  1. [Integration](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/integration.md)
   1. [Config](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/config.md)
   1. [Customization](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/customization.md)
   1. [Events](https://github.com/UniSharp/laravel-filemanager/blob/master/doc/events.md)

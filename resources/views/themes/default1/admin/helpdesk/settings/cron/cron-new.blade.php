@@ -117,6 +117,9 @@
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
+        <!-- Follow up notification -->
+       
+
     </div>
     <div class="box-footer">
         {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
@@ -204,6 +207,35 @@
                 $("#workflow-daily-at").show();
             } else {
                 $("#workflow-daily-at").hide();
+            }
+        }
+    });
+//follow up
+     $(document).ready(function () {
+        var checked = $("#notification_cron1").is(':checked');
+        check(checked, 'notification_cron1');
+        $("#notification_cron1").on('click', function () {
+            checked = $("#notification_cron1").is(':checked');
+            check(checked);
+        });
+        var command = $("#notification-command1").val();
+        showDailyAt(command);
+        $("#notification-command1").on('change', function () {
+            command = $("#notification-command1").val();
+            showDailyAt(command);
+        });
+        function check(checked, id) {
+            if (checked) {
+                $("#notification1").show();
+            } else {
+                $("#notification1").hide();
+            }
+        }
+        function showDailyAt(command) {
+            if (command === 'dailyAt') {
+                $("#notification-daily-at1").show();
+            } else {
+                $("#notification-daily-at1").hide();
             }
         }
     });

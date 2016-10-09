@@ -11,12 +11,13 @@ use DebugBar\DataCollector\TimeDataCollector;
 class QueryCollector extends PDOCollector
 {
     protected $timeCollector;
-    protected $queries = array();
+    protected $queries = [];
     protected $renderSqlWithParams = false;
     protected $findSource = false;
     protected $explainQuery = false;
-    protected $explainTypes = array('SELECT'); // array('SELECT', 'INSERT', 'UPDATE', 'DELETE'); for MySQL 5.6.3+
+    protected $explainTypes = ['SELECT']; // ['SELECT', 'INSERT', 'UPDATE', 'DELETE']; for MySQL 5.6.3+
     protected $showHints = false;
+    protected $reflection = [];
 
     /**
      * @param TimeDataCollector $timeCollector
@@ -80,7 +81,7 @@ class QueryCollector extends PDOCollector
      */
     public function addQuery($query, $bindings, $time, $connection)
     {
-        $explainResults = array();
+        $explainResults = [];
         $time = $time / 1000;
         $endTime = microtime(true);
         $startTime = $endTime - $time;
@@ -98,8 +99,9 @@ class QueryCollector extends PDOCollector
 
         $bindings = $this->checkBindings($bindings);
         if (!empty($bindings) && $this->renderSqlWithParams) {
-            foreach ($bindings as $binding) {
-                $query = preg_replace('/\?/', $pdo->quote($binding), $query, 1);
+            foreach ($bindings as $key => $binding) {
+                $regex = is_numeric($key) ? '/\?/' : "/:{$key}/";
+                $query = preg_replace($regex, $pdo->quote($binding), $query, 1);
             }
         }
 
@@ -111,7 +113,7 @@ class QueryCollector extends PDOCollector
             }
         }
 
-        $this->queries[] = array(
+        $this->queries[] = [
             'query' => $query,
             'bindings' => $this->escapeBindings($bindings),
             'time' => $time,
@@ -119,7 +121,7 @@ class QueryCollector extends PDOCollector
             'explain' => $explainResults,
             'connection' => $connection->getDatabaseName(),
             'hints' => $this->showHints ? $hints : null,
-        );
+        ];
 
         if ($this->timeCollector !== null) {
             $this->timeCollector->addMeasure($query, $startTime, $endTime);
@@ -171,7 +173,7 @@ class QueryCollector extends PDOCollector
      */
     protected function performQueryAnalysis($query)
     {
-        $hints = array();
+        $hints = [];
         if (preg_match('/^\\s*SELECT\\s*`?[a-zA-Z0-9]*`?\\.?\\*/i', $query)) {
             $hints[] = 'Use <code>SELECT *</code> only if you need all columns from table';
         }
@@ -195,7 +197,7 @@ class QueryCollector extends PDOCollector
         }
         return implode("<br />", $hints);
     }
-    
+
     /**
      * Use a backtrace to search for the origin of the query.
      */
@@ -211,7 +213,13 @@ class QueryCollector extends PDOCollector
                 if (isset($trace['object']) && is_a($trace['object'], 'Twig_Template')) {
                     list($file, $line) = $this->getTwigInfo($trace);
                 } elseif (strpos($trace['file'], storage_path()) !== false) {
-                    return 'Template file';
+                    $hash = pathinfo($trace['file'], PATHINFO_FILENAME);
+                    $line = isset($trace['line']) ? $trace['line'] : '?';
+
+                    if ($name = $this->findViewFromHash($hash)) {
+                        return 'view::' . $name . ':' . $line;
+                    }
+                    return 'view::' . $hash . ':' . $line;
                 } else {
                     $file = $trace['file'];
                     $line = isset($trace['line']) ? $trace['line'] : '?';
@@ -220,6 +228,32 @@ class QueryCollector extends PDOCollector
                 return $this->normalizeFilename($file) . ':' . $line;
             } elseif (isset($trace['function']) && $trace['function'] == 'Illuminate\Routing\{closure}') {
                 return 'Route binding';
+            }
+        }
+    }
+
+    /**
+     * Find the template name from the hash.
+     *
+     * @param  string $hash
+     * @return null|string
+     */
+    protected function findViewFromHash($hash)
+    {
+        $finder = app('view')->getFinder();
+
+        if (isset($this->reflection['viewfinderViews'])) {
+            $property = $this->reflection['viewfinderViews'];
+        } else {
+            $reflection = new \ReflectionClass($finder);
+            $property = $reflection->getProperty('views');
+            $property->setAccessible(true);
+            $this->reflection['viewfinderViews'] = $property;
+        }
+
+        foreach ($property->getValue($finder) as $name => $path){
+            if (sha1($path) == $hash || md5($path) == $hash) {
+                return $name;
             }
         }
     }
@@ -237,12 +271,12 @@ class QueryCollector extends PDOCollector
         if (isset($trace['line'])) {
             foreach ($trace['object']->getDebugInfo() as $codeLine => $templateLine) {
                 if ($codeLine <= $trace['line']) {
-                    return array($file, $templateLine);
+                    return [$file, $templateLine];
                 }
             }
         }
 
-        return array($file, -1);
+        return [$file, -1];
     }
 
     /**
@@ -258,13 +292,13 @@ class QueryCollector extends PDOCollector
         }
         return str_replace(base_path(), '', $path);
     }
-    
+
     /**
      * Reset the queries.
      */
     public function reset()
     {
-        $this->queries = array();
+        $this->queries = [];
     }
 
     /**
@@ -275,7 +309,7 @@ class QueryCollector extends PDOCollector
         $totalTime = 0;
         $queries = $this->queries;
 
-        $statements = array();
+        $statements = [];
         foreach ($queries as $query) {
             $totalTime += $query['time'];
 
@@ -284,33 +318,33 @@ class QueryCollector extends PDOCollector
                 $bindings['hints'] = $query['hints'];
             }
 
-            $statements[] = array(
+            $statements[] = [
                 'sql' => $this->formatSql($query['query']),
                 'params' => (object) $bindings,
                 'duration' => $query['time'],
                 'duration_str' => $this->formatDuration($query['time']),
                 'stmt_id' => $query['source'],
                 'connection' => $query['connection'],
-            );
+            ];
 
             //Add the results from the explain as new rows
             foreach($query['explain'] as $explain){
-                $statements[] = array(
+                $statements[] = [
                     'sql' => ' - EXPLAIN #' . $explain->id . ': `' . $explain->table . '` (' . $explain->select_type . ')',
                     'params' => $explain,
                     'row_count' => $explain->rows,
                     'stmt_id' => $explain->id,
-                );
+                ];
             }
         }
 
-        $data = array(
+        $data = [
             'nb_statements' => count($queries),
             'nb_failed_statements' => 0,
             'accumulated_duration' => $totalTime,
             'accumulated_duration_str' => $this->formatDuration($totalTime),
             'statements' => $statements
-        );
+        ];
         return $data;
     }
 
@@ -338,17 +372,17 @@ class QueryCollector extends PDOCollector
      */
     public function getWidgets()
     {
-        return array(
-            "queries" => array(
+        return [
+            "queries" => [
                 "icon" => "inbox",
                 "widget" => "PhpDebugBar.Widgets.SQLQueriesWidget",
                 "map" => "queries",
                 "default" => "[]"
-            ),
-            "queries:badge" => array(
+            ],
+            "queries:badge" => [
                 "map" => "queries.nb_statements",
                 "default" => 0
-            )
-        );
+            ]
+        ];
     }
 }

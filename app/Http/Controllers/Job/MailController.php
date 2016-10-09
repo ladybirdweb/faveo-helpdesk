@@ -52,7 +52,7 @@ class MailController extends Controller
                 case 'sendmail':
                     return $form;
                 case 'mailgun':
-                    $form .= "<div class='row'>".$this->form('Doamin', 'domain', 'col-md-6 form-group');
+                    $form .= "<div class='row'>".$this->form('Domain', 'domain', 'col-md-6 form-group');
                     $form .= $this->form('Secret Key', 'secret', 'col-md-6 form-group').'</div>';
 
                     return $form;
