@@ -9,9 +9,9 @@ use App\Http\Controllers\Controller;
 use App\Model\helpdesk\Email\Emails;
 // models
 use App\Model\helpdesk\Settings\CommonSettings;
+use App\Model\helpdesk\Settings\Followup;
 use App\Model\helpdesk\Ticket\Ticket_Status;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
-use App\Model\helpdesk\Settings\Followup;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Ticket\TicketToken;
 use App\User;
@@ -320,9 +320,10 @@ class UnAuthController extends Controller
 
     /**
      *@category function to change system's language
-     *@param string $lang //desired language's iso code 
-     *@return response
      *
+     *@param string $lang //desired language's iso code
+     *
+     *@return response
      */
     public static function changeLanguage($lang)
     {
@@ -341,54 +342,55 @@ class UnAuthController extends Controller
             // dd()
         } else {
             return false;
-        } 
+        }
+
         return true;
     }
 
     // Follow up tickets
        public function followup()
-    {
-        $followup=Followup::whereId('1')->first();
-         $condition=$followup->condition;
+       {
+           $followup = Followup::whereId('1')->first();
+           $condition = $followup->condition;
          // dd($condition);
 
         switch ($condition) {
-            case "everyMinute":
-              $followup_set= ' + 1 minute';
+            case 'everyMinute':
+              $followup_set = ' + 1 minute';
                 break;
-            case "everyFiveMinutes":
-               $followup_set= ' + 5 minute';
+            case 'everyFiveMinutes':
+               $followup_set = ' + 5 minute';
                 break;
-            case "everyTenMinutes":
-               $followup_set= ' + 10 minute';
+            case 'everyTenMinutes':
+               $followup_set = ' + 10 minute';
                 break;
-            case "everyThirtyMinutes":
-               $followup_set=' + 30 minute';
+            case 'everyThirtyMinutes':
+               $followup_set = ' + 30 minute';
                 break;
-            case "hourly":
-               $followup_set=' + 1 hours';
+            case 'hourly':
+               $followup_set = ' + 1 hours';
                 break;
-            case "daily":
-               $followup_set=' + 1 day';
+            case 'daily':
+               $followup_set = ' + 1 day';
                 break;
-            case "weekly":
-               $followup_set=' + 7 day';
+            case 'weekly':
+               $followup_set = ' + 7 day';
                 break;
-            case "monthly":
-               $followup_set=' + 30 day';
+            case 'monthly':
+               $followup_set = ' + 30 day';
                 break;
-            case "yearly":
-               $followup_set=' + 365 day';
+            case 'yearly':
+               $followup_set = ' + 365 day';
                 break;
         }
 
-  if($followup->status=1){
-            $tickets=Tickets::where('id', '>=', 1)->where('status', '!=', 5)->get();
+           if ($followup->status = 1) {
+               $tickets = Tickets::where('id', '>=', 1)->where('status', '!=', 5)->get();
         // dd( $tickets);
          // $tickets=Tickets::where('id', '>=', 1)->where('status', '!=', 5)->pluck('id');
         // dd( $tickets);
          // $id=1;
-        foreach($tickets as $ticket) {
+        foreach ($tickets as $ticket) {
             // $id=1;
             // $id++;
         // $ticket=Tickets::where('status', '!=', 5)->get();
@@ -396,27 +398,20 @@ class UnAuthController extends Controller
         // dd($ticket);
             // if($ticket != null){
                 // dd('here');
-            $ck=date('Y-m-d H:i:s', strtotime($ticket->updated_at . $followup_set));
+            $ck = date('Y-m-d H:i:s', strtotime($ticket->updated_at.$followup_set));
             // dd($ck);
-            $current_time=date('Y-m-d H:i:s');
-            if($current_time>$ck){
-
-                $ticket->follow_up=1;
+            $current_time = date('Y-m-d H:i:s');
+            if ($current_time > $ck) {
+                $ticket->follow_up = 1;
                 $ticket->save();
              //  Tickets::where('id', '=',$id)
              // ->update(['follow_up' => 1]);
-         
+
             // }
-
-        }
+            }
         //       if($id=2)
-        // {dd($ticket);}          
-
-       }
+        // {dd($ticket);}
         }
-
-      }
-
-
+           }
+       }
 }
-

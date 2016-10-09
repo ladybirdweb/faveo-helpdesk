@@ -13,10 +13,11 @@ class User_org extends BaseModel
     /* define fillable fields */
     protected $fillable = ['id', 'org_id', 'user_id'];
 
-    public function setOrgIdAttribute($value){
-        if($value==""){
+    public function setOrgIdAttribute($value)
+    {
+        if ($value == '') {
             $this->attributes['org_id'] = null;
-        }else{
+        } else {
             $this->attributes['org_id'] = $value;
         }
     }

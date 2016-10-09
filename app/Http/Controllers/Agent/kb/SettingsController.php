@@ -144,11 +144,13 @@ class SettingsController extends Controller
                             $name = "<p>$model->name</p><br>";
                             $email = "<p>$model->email</p><br>";
                             $website = "<p>$model->website</p><br>";
+
                             return $name.$email.$website;
                         })
-                        
+
                         ->addColumn('comment', function ($model) {
-                            $created =  TicketController::usertimezone(date($model->created_at));
+                            $created = TicketController::usertimezone(date($model->created_at));
+
                             return $model->comment."<p>$created</p>";
                         })
                         ->addColumn('status', function ($model) {
@@ -159,7 +161,7 @@ class SettingsController extends Controller
                                 return '<p style="color:red"">'.\Lang::get('lang.not_published');
                             }
                         })
-                        
+
                         ->addColumn('Actions', function ($model) {
                             return '<div class="row"><div class="col-md-12"><a href=comment/delete/'.$model->id.' class="btn btn-danger btn-xs">'.\Lang::get('lang.delete').'</a></div><div class="col-md-12"><a href=published/'.$model->id.' class="btn btn-warning btn-xs">'.\Lang::get('lang.publish').'</a></div></div>';
                         })

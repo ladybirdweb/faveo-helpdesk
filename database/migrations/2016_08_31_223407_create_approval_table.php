@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateApprovalTable extends Migration
 {
@@ -15,12 +15,11 @@ class CreateApprovalTable extends Migration
         //
 
           Schema::create('approval', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('status');
-            $table->timestamps();
-        });
-
+              $table->increments('id');
+              $table->string('name');
+              $table->string('status');
+              $table->timestamps();
+          });
     }
 
     /**
