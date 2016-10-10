@@ -95,6 +95,7 @@ return [
     'create_email'                   => 'Create Email',
     'email_address'                  => 'Email Address',
     'email_name'                     => 'Email Name',
+    'email_to'                       => 'Email to',
     'help_topic'                     => 'Help Topic',
     'auto_response'                  => 'Auto Response',
     'host_name'                      => 'Host Name',
