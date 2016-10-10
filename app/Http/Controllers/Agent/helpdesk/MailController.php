@@ -120,7 +120,6 @@ class MailController extends Controller
                                 $mail = $mailbox->getMail($mailId);
                                 try {
                                     $mail = $mailbox->getMail($mailId);
-                                    
                                 } catch (\PhpImap\Exception $e) {
                                     echo 'Connection error';
                                 }
@@ -172,7 +171,7 @@ class MailController extends Controller
                                 } else {
                                     $subject = 'No Subject';
                                 }
-                                
+
                                 $to = $mail->to;
                                 $fromname = $mail->fromName;
                                 $fromaddress = $mail->fromAddress;
