@@ -280,3 +280,23 @@ ALTER TABLE `users` ADD UNIQUE (`mobile`);
 --
 UPDATE `settings_ticket` 
 SET `num_format` = '$$$$-####-###' , `num_sequence` = 'sequence';
+
+-- ----------------------------------------------------------------------
+
+-- 
+-- Insert new values in `template_types` 
+--
+INSERT INTO `template_types` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(12, 'team_assign_ticket', '2016-10-10 01:29:36', '2016-10-10 01:29:36'),
+(13, 'reset_new_password', '2016-10-10 01:29:36', '2016-10-10 01:29:36');
+
+-- --------------------------------------------------------------------------
+
+--
+--Insert new values in `templates` table
+--
+INSERT INTO `templates` (`id`, `name`, `variable`, `type`, `subject`, `message`, `description`, `set_id`, `created_at`, `updated_at`) VALUES
+(12, 'This template is for sending notice to team when ticket is assigned to team', '1', 12, '', '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to your team : {!!$team!!} by {!!$ticket_assigner!!} <br /><br />Thank You<br />Kind Regards,<br />{!!$system_from!!}</div>', '', 1, '2016-10-10 01:29:38', '2016-10-10 01:29:38'),
+(13, 'This template is for sending notice to client when password is changed', '1', 13, 'Verify your email address', 'Hello {!!$user!!},<br /><br />Your password is successfully changed.Your new password is : {!!$user_password!!}<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', '', 1, '2016-10-10 01:29:38', '2016-10-10 01:29:38');
+ -- --------------------------------------------------------------------------
+ 
