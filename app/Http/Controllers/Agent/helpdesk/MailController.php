@@ -120,6 +120,7 @@ class MailController extends Controller
                                 $mail = $mailbox->getMail($mailId);
                                 try {
                                     $mail = $mailbox->getMail($mailId);
+                                    
                                 } catch (\PhpImap\Exception $e) {
                                     echo 'Connection error';
                                 }
@@ -171,6 +172,8 @@ class MailController extends Controller
                                 } else {
                                     $subject = 'No Subject';
                                 }
+                                
+                                $to = $mail->to;
                                 $fromname = $mail->fromName;
                                 $fromaddress = $mail->fromAddress;
                                 $ticket_source = Ticket_source::where('name', '=', 'email')->first();
@@ -182,7 +185,7 @@ class MailController extends Controller
                                 $form_data = null;
                                 $team_assign = null;
                                 $ticket_status = null;
-                                $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response, $mail->getAttachments());
+                                $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $to, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response, $mail->getAttachments());
 
                                 if ($result[1] == true) {
                                     $ticket_table = Tickets::where('ticket_number', '=', $result[0])->first();
