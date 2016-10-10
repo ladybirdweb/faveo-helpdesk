@@ -343,7 +343,7 @@ return [
      */
     'default'            => 'default',
     'iso-code'           => 'ISO-CODE',
-    'download'           => 'Downlaod',
+    'download'           => 'Download',
     'upload_file'        => 'Upload File',
     'enter_iso-code'     => 'Enter ISO-CODE',
     'eg.'                => 'Example',

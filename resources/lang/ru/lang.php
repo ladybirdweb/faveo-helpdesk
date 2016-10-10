@@ -310,7 +310,7 @@ return [
      */
     'default'            => 'default',
     'iso-code'           => 'ISO-CODE',
-    'download'           => 'Downlaod',
+    'download'           => 'Download',
     'upload_file'        => 'Загрузить файл',
     'enter_iso-code'     => 'Enter ISO-CODE',
     'eg.'                => 'Example',
