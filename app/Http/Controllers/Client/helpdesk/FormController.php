@@ -149,6 +149,7 @@ class FormController extends Controller
         $name = $request->input('Name');
         $phone = $request->input('Phone');
         $email = $request->input('Email');
+        $to = '';
         $subject = $request->input('Subject');
         $details = $request->input('Details');
         $phonecode = $request->input('Code');
@@ -200,7 +201,7 @@ class FormController extends Controller
         } else {
             $inline_attachment = null;
         }
-        $result = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response, $inline_attachment);
+        $result = $this->TicketWorkflowController->workflow($email, $name, $to, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response, $inline_attachment);
 
         if ($result[1] == 1) {
             $ticketId = Tickets::where('ticket_number', '=', $result[0])->first();
@@ -244,6 +245,7 @@ class FormController extends Controller
 
                 $fromaddress = $user_cred->email;
                 $fromname = $user_cred->user_name;
+                $to = '';
                 $phone = '';
                 $phonecode = '';
                 $mobile_number = '';
@@ -260,7 +262,7 @@ class FormController extends Controller
                 $ticket_status = null;
                 $auto_response = 0;
 
-                $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
+                $this->TicketWorkflowController->workflow($fromaddress, $to, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
 
                 return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
             } else {

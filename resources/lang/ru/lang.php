@@ -93,6 +93,7 @@ return [
     'create_email'            => 'Создать Email',
     'email_address'           => 'Email Address',
     'email_name'              => 'Email Name',
+    'email_to'                => 'Email to',
     'help_topic'              => 'Help Topic',
     'auto_response'           => 'Автоматический Ответ',
     'host_name'               => 'Host Name',
