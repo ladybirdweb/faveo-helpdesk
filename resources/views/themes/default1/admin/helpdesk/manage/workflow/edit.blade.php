@@ -179,6 +179,11 @@ class="active"
                                                             echo "selected='selected'";
                                                         }
                                                         ?> >{!! Lang::get('lang.email_name') !!}</option>
+                                                        <option value="email_to" <?php
+                                                        if ($workflow_rule->matching_scenario == 'email_to') {
+                                                            echo "selected='selected'";
+                                                        }
+                                                        ?> >{!! Lang::get('lang.email_to') !!}</option>
                                                         <option value="subject" <?php
                                                         if ($workflow_rule->matching_scenario == 'subject') {
                                                             echo "selected='selected'";
