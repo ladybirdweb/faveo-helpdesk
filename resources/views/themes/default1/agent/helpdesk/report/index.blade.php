@@ -121,7 +121,7 @@ class="active"
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="#" id="stop"><input type="checkbox" name="open" id="open"> {!! lang::get('lang.created') !!} {!! lang::get('lang.tickets') !!}</a></li>
                                 <li><a href="#" id="stop"><input type="checkbox" name="closed" id="closed"> {!! lang::get('lang.closed') !!} {!! lang::get('lang.tickets') !!}</a></li>
-                                <li><a href="#" id="stop"><input type="checkbox" name="reopened" id="reopened"> {!! lang::get('lang.reopened') !!} {!! lang::get('lang.tickets') !!}</a></li>
+                                <li><a href="#" id="stop"><input type="checkbox" name="reopened" id="reopened"> {!! Lang::get('lang.reopened') !!} {!! lang::get('lang.tickets') !!}</a></li>
                             </ul>
                         </div>
                     </div>

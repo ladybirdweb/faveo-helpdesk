@@ -1451,6 +1451,7 @@ return [
     'Total_Reopened'      => 'TOTAL REOPENED',
     'Total_Closed'        => 'TOTAL CLOSED',
     'tabular'             => 'Tabular',
+    'reopened'            => 'Reopened',
     /* ---------------------------------------------------------------------------------------
      * Ticket Priority
      * -----------------------------------------------------------------------------------
