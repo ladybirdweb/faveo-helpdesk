@@ -266,3 +266,17 @@ SET  `status` = 1
 WHERE `priority` = 'Normal';
 
 -- --------------------------------------------------------------------
+
+-- 
+-- Alter `users` table 
+--
+ALTER TABLE `users` MODIFY `mobile` VARCHAR(30) DEFAULT NULL;
+ALTER TABLE `users` ADD UNIQUE (`mobile`);
+
+-- --------------------------------------------------------------------
+
+--
+--Alter `settings_ticket` table
+--
+UPDATE `settings_ticket` 
+SET `num_format` = '$$$$-####-###' , `num_sequence` = 'sequence';
