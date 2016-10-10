@@ -52,7 +52,7 @@ class TicketWorkflowController extends Controller
             if ($workflow) {
                 // get all the rules of workflow which has a foreign key of those workflow which are applied to creating any ticket from any source
                 $workflow_rules = WorkflowRules::where('workflow_id', '=', $workflow->id)->get();
-                
+
                 foreach ($workflow_rules as $workflow_rule) {
                     // checking for the workflow rules to which workflow rule type it is
                     if ($workflow_rule->matching_scenario == 'email') {
@@ -124,7 +124,6 @@ class TicketWorkflowController extends Controller
                                     $ticket_settings_details = $this->applyActionCondition($workflows_email->id, $ticket_settings_details);
                                 }
                             } elseif ($workflow_rule->matching_scenario == 'email_to') {
-                                
                                 foreach ($contact_details['email_to'] as $email_toaddress => $email_toname) {
                                     if ($rule_condition = $this->checkRuleCondition($email_toaddress, $workflow_rule->matching_relation, $workflow_rule->matching_value) == true) {
                                         $ticket_settings_details = $this->applyActionCondition($workflows_email->id, $ticket_settings_details);
