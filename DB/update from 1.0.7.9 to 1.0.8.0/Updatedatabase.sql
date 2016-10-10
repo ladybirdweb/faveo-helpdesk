@@ -265,6 +265,21 @@ UPDATE `ticket_priority`
 SET  `status` = 1
 WHERE `priority` = 'Normal';
 
+UPDATE `ticket_priority`
+SET `priority_color` = '#80ff00'
+WHERE `id` = 1;
+
+UPDATE `ticket_priority`
+SET `priority_color` = '#367FA9'
+WHERE `id` = 2;
+
+UPDATE `ticket_priority`
+SET `priority_color` = '#ffff00'
+WHERE `id` = 3;
+
+UPDATE `ticket_priority`
+SET `priority_color` = '#ff6666'
+WHERE `id` = 4;
 -- --------------------------------------------------------------------
 
 -- 
@@ -299,4 +314,4 @@ INSERT INTO `templates` (`id`, `name`, `variable`, `type`, `subject`, `message`,
 (12, 'This template is for sending notice to team when ticket is assigned to team', '1', 12, '', '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to your team : {!!$team!!} by {!!$ticket_assigner!!} <br /><br />Thank You<br />Kind Regards,<br />{!!$system_from!!}</div>', '', 1, '2016-10-10 01:29:38', '2016-10-10 01:29:38'),
 (13, 'This template is for sending notice to client when password is changed', '1', 13, 'Verify your email address', 'Hello {!!$user!!},<br /><br />Your password is successfully changed.Your new password is : {!!$user_password!!}<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', '', 1, '2016-10-10 01:29:38', '2016-10-10 01:29:38');
  -- --------------------------------------------------------------------------
- 
+
