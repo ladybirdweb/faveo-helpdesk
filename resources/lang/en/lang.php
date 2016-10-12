@@ -726,7 +726,7 @@ return [
       |
      */
     'are_you_sure'       => 'Are you sure',
-    'staffs'             => 'Staffs',
+    'staffs'             => 'Staff',
     'name'               => 'Name',
     'user_name'          => 'User Name',
     'status'             => 'Status',

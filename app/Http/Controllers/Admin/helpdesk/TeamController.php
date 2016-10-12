@@ -68,8 +68,7 @@ class TeamController extends Controller
     public function create(User $user)
     {
         try {
-            $user = $user->get();
-
+            $user = $user->where('role', '<>', 'user')->where('active', '=', 1)->get();
             return view('themes.default1.admin.helpdesk.agent.teams.create', compact('user'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -148,7 +147,7 @@ $users = DB::table('team_assign_agent')->select('team_assign_agent.id', 'team_as
             ->showColumns('user_name')
 
             ->addColumn('first_name', function ($model) {
-                $full_name = $model->first_name.' '.$model->last_name;
+                $full_name = ucfirst($model->first_name).' '.ucfirst($model->last_name);
 
                 return $full_name;
             })
@@ -204,7 +203,7 @@ $users = DB::table('team_assign_agent')->select('team_assign_agent.id', 'team_as
     public function edit($id, User $user, Assign_team_agent $assign_team_agent, Teams $team)
     {
         try {
-            $user = $user->whereId($id)->first();
+            $user = $user->where('role', '<>', 'user')->where('active', '=', 1)->get();
             $teams = $team->whereId($id)->first();
             $agent_team = $assign_team_agent->where('team_id', $id)->get();
             $agent_id = $agent_team->lists('agent_id', 'agent_id');

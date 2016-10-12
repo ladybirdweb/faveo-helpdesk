@@ -139,4 +139,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         return $html;
     }
+    
+    /**
+     *@category accessor function to return full name
+     *@param null
+     *@return $string
+     */
+    public function getFullNameAttribute()
+    {
+        if($this->first_name) {
+            return ucfirst($this->first_name) . " " . ucfirst($this->last_name);
+        } 
+        return $this->user_name;
+    }
 }

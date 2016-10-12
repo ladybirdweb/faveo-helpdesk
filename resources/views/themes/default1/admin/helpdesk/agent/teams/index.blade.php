@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.staffs')}}</h1>
+<h1>{{Lang::get('lang.teams')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -72,7 +72,7 @@ class="active"
                                 $team_lead = "";
                             } else {
                                 $users = App\User::whereId($team->team_lead)->first();
-                                $team_lead = $users->first_name . " " . $users->last_name;
+                                $team_lead = $users->full_name;
                             }
                             ?>
                         <td>{{count($assign_team_agent->where('team_id',$team->id))}}</td>
