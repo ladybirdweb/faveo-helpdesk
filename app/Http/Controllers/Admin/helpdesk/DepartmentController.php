@@ -77,7 +77,9 @@ class DepartmentController extends Controller
     {
         try {
             $slas = $sla->get();
-            $user = $user->where('role', 'agent2')->get();
+            $user = $user->where('role', '<>', 'user')
+            ->where('active', '=', 1)
+            ->get();
             $emails = $email->get();
             $templates = $template->get();
             $department = $department->get();
@@ -154,7 +156,9 @@ class DepartmentController extends Controller
                     ->where('id', '=', 1)
                     ->first();
             $slas = $sla->get();
-            $user = $user->where('primary_dpt', $id)->get();
+            $user = $user->where('primary_dpt', $id)
+            ->where('active', '=', 1)
+            ->get();
             $emails = $email->get();
             $templates = $template->get();
             $departments = $department->whereId($id)->first();

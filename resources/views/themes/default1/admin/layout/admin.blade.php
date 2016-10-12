@@ -290,7 +290,6 @@
                                 <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-star"></i>{!! Lang::get('lang.ratings') !!}</a></li>
                                 
                                 <li @yield('close-workflow')><a href="{{url('close-workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.close-workflow') !!}</a></li>
-                              <li @yield('Approval')><a href="{{url('approval/settings')}}"><i class="glyphicon glyphicon-repeat"></i>{!! Lang::get('lang.approval') !!}</a></li>
                             </ul>
                         </li>
                         <li class="treeview @yield('error-bugs')">

@@ -66,7 +66,7 @@ class="active"
             
 
             <div class="pull-right">
-                <a href="" class="btn btn-primary">dddd</a>
+                <a href="{{URL::route('teams.index')}}" class="btn btn-primary"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{Lang::get('lang.go_back')}}</a>
             </div>
         </div>
         <input type="hidden" name="show_id" value={{$id}}>

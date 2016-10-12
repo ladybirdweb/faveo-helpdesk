@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.staffs')}}</h1>
+<h1>{{Lang::get('lang.departments')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -88,7 +88,7 @@ class="active"
                     $manager = "";
                 } else {
                     $manager = App\User::whereId($department->manager)->first();
-                    $manager = $manager->user_name;
+                    $manager = $manager->full_name;
                 }
 
                 if ($department->sla == null) {
