@@ -111,6 +111,7 @@ class NotificationController extends Controller
     public function show()
     {
         $notifications = $this->getNotifications();
+
         return view('notifications-all', compact('notifications'));
     }
 
@@ -149,6 +150,7 @@ class NotificationController extends Controller
                     'notification_types.type as type', 'notification_types.icon_class as icon_class')
                 ->orderBy('user_notification.created_at', 'desc')
                 ->paginate(10);
+
         return $notifications;
     }
 }
