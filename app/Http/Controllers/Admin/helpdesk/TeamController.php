@@ -69,6 +69,7 @@ class TeamController extends Controller
     {
         try {
             $user = $user->where('role', '<>', 'user')->where('active', '=', 1)->get();
+
             return view('themes.default1.admin.helpdesk.agent.teams.create', compact('user'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
