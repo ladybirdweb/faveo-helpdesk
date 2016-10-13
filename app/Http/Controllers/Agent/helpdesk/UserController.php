@@ -411,67 +411,47 @@ class UserController extends Controller
         $users = User::where('id', '=', $id)->first();
         if ($users->role == 'user') {
             if ($delete_all == null || $delete_all == 1) {
-                if ($ticket_id = Tickets::where('user_id', '=', $id)->get()) {
-                    $ticket = Tickets::where('user_id', '=', $id)->first();
-                        // dd($ticket->id);
-                $ticket_colabarator_id = Ticket_Collaborator::where('ticket_id', '=', $ticket->id)->first();
-                    // dd($ticket_colabarator_id->id);
-                        if ($ticket_colabarator_id) {
-                            // Ticket_Collaborator::where('id', '=', $ticket_colabarator_id->id)->delete();
+                $tickets = Tickets::where('user_id', '=' ,$id)->get();
+                if(count($tickets) > 0) {
+                    foreach ($tickets as $ticket) {
+                        $notification = Notification::select('id')->where('model_id', '=', $ticket->id)->get();
+                        foreach ($notification as $id) {
+                            $user_notification = UserNotification::where(
+                                            'notification_id', '=', $id->id);
+                            $user_notification->delete();
                         }
-                    $user_notification_userid = Ticket_Thread::select('user_id')->where('user_id', '!=', $id)->first();
-                        // dd($user_notification_userid->user_id);
-                        if ($user_notification_userid) {
-                            // UserNotification::where('user_id', '=', $user_notification_userid->user_id)->delete();
+                        $notification = Notification::select('id')->where('model_id', '=', $ticket->id);
+                        $notification->delete();
+                        $thread = Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
+                        foreach ($thread as $th_id) {
+                            // echo $th_id->id." ";
+                            $attachment = Ticket_attachments::where('thread_id', '=', $th_id->id)->get();
+                            if (count($attachment)) {
+                                foreach ($attachment as $a_id) {
+                                    Ticket_attachments::where('id','=', $a_id->id)
+                                    ->delete();
+                                }
+                                // echo "<br>";
+                            }
+                            $thread = Ticket_Thread::find($th_id->id);
+//                            dd($thread);
+                            $thread->delete();
                         }
-
-
-
-                    if (Ticket_Thread::where('user_id', '=', $id)) {
-                        $ticket_attach = Ticket_Thread::select('ticket_id')->where('user_id', '=', $id)->first();
-
-
-                        if ($ticket_attach) {
-                            $ticket_attachments = Ticket_Thread::where('ticket_id', '=', $ticket_attach->ticket_id)->get();
-
-                            foreach ($ticket_attachments as $value) {
-                                $ticket_attachments = Ticket_attachments::where('thread_id', '=', $value->id)->delete();
+                        $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket->id)->get();
+                        if (count($collaborators)) {
+                            foreach ($collaborators as $collab_id) {
+                                echo $collab_id->id;
+                                $collab = Ticket_Collaborator::where('id', '=', $collab_id->id)
+                                ->delete();
                             }
                         }
-
-                            // dd('ok');
-                            $ticket_id = Tickets::where('user_id', '=', $id)->select('id')->get();
-                        foreach ($ticket_id as $value) {
-                            $thread = Ticket_Thread::where('ticket_id', '=', $value->id)->delete();
-                        }
+                        $tickets = Tickets::find($ticket->id);
+                        $tickets->delete();
                     }
-
-
-
-                    if (Notification::where('userid_created', '=', $id)) {
-                        DB::table('notifications')->where('userid_created', '=', $id)->delete();
-                        DB::table('notifications')->where('type_id', '=', $id)->delete();
-                    }
-
-
-                    if (User_org::where('user_id', '=', $id)) {
-                        DB::table('user_assign_organization')->where('user_id', '=', $id)->delete();
-                    }
-
-                    if (Tickets::where('user_id', '=', $id)) {
-                        DB::table('tickets')->where('user_id', '=', $id)->delete();
-                    }
-                    $user_details = User::where('id', '=', $id)->first();
-                    $user_details->delete();
-
-                    return redirect('user')->with('success', Lang::get('lang.user_delete_successfully'));
-                } else {
-                    $organization = User_org::where('user_id', '=', $id)->delete();
-                    $user = User::find($id);
-                    $user->delete();
-
-                    return redirect('user')->with('success', Lang::get('lang.user_delete_successfully'));
                 }
+
+                return redirect('user')->with('success', Lang::get('lang.user_delete_successfully'));
+                
             }
         }
 
