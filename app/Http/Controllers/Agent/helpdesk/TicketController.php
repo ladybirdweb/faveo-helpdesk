@@ -923,12 +923,11 @@ class TicketController extends Controller
             if (Alert::first()->ticket_status == 1 || Alert::first()->ticket_admin_email == 1) {
                 // send email to admin
                 $admins = User::where('role', '=', 'admin')->get();
-//                $set_mails = [];
                 foreach ($admins as $admin) {
                     $to_email = $admin->email;
                     $to_user = $admin->first_name;
                     $to_user_name = $admin->first_name;
-                    $set_mails = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
+                    array_push($set_mails, ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name]);
                 }
             }
 
@@ -943,7 +942,7 @@ class TicketController extends Controller
                             $to_email = $agent->email;
                             $to_user = $agent->first_name;
                             $to_user_name = $agent->first_name;
-                            $set_mails = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
+                            array_push($set_mails, ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name]);
                         }
                     }
                 }
@@ -955,14 +954,14 @@ class TicketController extends Controller
                 $to_email = $assigned_to->email;
                 $to_user = $assigned_to->first_name;
                 $to_user_name = $assigned_to->first_name;
-                $set_mails = ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name];
+                array_push($set_mails, ['to_email' => $to_email, 'to_user' => $to_user, 'to_user_name' => $to_user_name]);
             }
-            //dd($set_mails);
             $emails_to_be_sent = array_unique($set_mails, SORT_REGULAR);
             foreach ($emails_to_be_sent as $email_data) {
                 try {
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $email_data['to_user'], 'email' => $email_data['to_email']], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $email_data['to_user_name'], 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $email_data['to_user_name'], 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
                 } catch (\Exception $e) {
+                    dd($e);
                 }
             }
             $data = [
