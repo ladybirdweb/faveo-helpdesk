@@ -449,6 +449,9 @@ class UserController extends Controller
                         $tickets->delete();
                     }
                 }
+                $organization = User_org::where('user_id', '=', $users->id)->delete();
+                $user = User::where('id', '=', $users->id)
+                ->delete();
 
                 return redirect('user')->with('success', Lang::get('lang.user_delete_successfully'));
                 
