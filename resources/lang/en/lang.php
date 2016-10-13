@@ -1364,7 +1364,7 @@ return [
 
     'webhooks'                         => 'Webhooks',
     'enter_url_to_send_ticket_details' => 'Enter the URL to send the ticket details',
-    'API'                              => 'API',
+    'api'                              => 'API',
     'api_key'                          => 'API key',
     'api_key_mandatory'                => 'API key mandatory',
     'api_configurations'               => 'API configurations',
