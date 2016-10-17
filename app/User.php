@@ -47,7 +47,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         if (!$pic) {
             $pic = asset('uploads/profilepic/'.$value);
         }
-        if (!$pic) {
+
+        if ($this->endsWith($pic, 'profilepic')) {
             $pic = \Gravatar::src($this->attributes['email']);
         }
         
@@ -154,5 +155,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
 
         return $this->user_name;
+    }
+    /**
+     * @category function to check profile pic source srting ends with profilepic or not
+     * @param string $haystack, $needle
+     * @return boolean true/false 
+     */
+    function endsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+
+        return (substr($haystack, -$length) === $needle);
     }
 }

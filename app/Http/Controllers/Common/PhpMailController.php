@@ -108,7 +108,7 @@ class PhpMailController extends Controller
         }
         $system_link = $this->checkElement('system_link', $template_variables);
         if ($system_link === '') {
-            $system_link = url('/');
+            $system_link = \Config::get('app.url');
         }
         $system_error = $this->checkElement('system_error', $template_variables);
         $agent_sign = $this->checkElement('agent_sign', $template_variables);
