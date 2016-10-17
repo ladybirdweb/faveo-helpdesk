@@ -411,8 +411,8 @@ class UserController extends Controller
         $users = User::where('id', '=', $id)->first();
         if ($users->role == 'user') {
             if ($delete_all == null || $delete_all == 1) {
-                $tickets = Tickets::where('user_id', '=' ,$id)->get();
-                if(count($tickets) > 0) {
+                $tickets = Tickets::where('user_id', '=', $id)->get();
+                if (count($tickets) > 0) {
                     foreach ($tickets as $ticket) {
                         $notification = Notification::select('id')->where('model_id', '=', $ticket->id)->get();
                         foreach ($notification as $id) {
@@ -428,7 +428,7 @@ class UserController extends Controller
                             $attachment = Ticket_attachments::where('thread_id', '=', $th_id->id)->get();
                             if (count($attachment)) {
                                 foreach ($attachment as $a_id) {
-                                    Ticket_attachments::where('id','=', $a_id->id)
+                                    Ticket_attachments::where('id', '=', $a_id->id)
                                     ->delete();
                                 }
                                 // echo "<br>";
@@ -454,7 +454,6 @@ class UserController extends Controller
                 ->delete();
 
                 return redirect('user')->with('success', Lang::get('lang.user_delete_successfully'));
-                
             }
         }
 
