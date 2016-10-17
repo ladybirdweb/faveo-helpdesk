@@ -1,5 +1,6 @@
 <?php namespace Unisharp\Laravelfilemanager\controllers;
 
+use Illuminate\Support\Facades\Event;
 use Unisharp\Laravelfilemanager\controllers\Controller;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
@@ -8,6 +9,7 @@ use Illuminate\Support\Str;
 use Lang;
 use Intervention\Image\Facades\Image;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Unisharp\Laravelfilemanager\Events\ImageWasUploaded;
 
 /**
  * Class UploadController
@@ -51,6 +53,8 @@ class UploadController extends LfmController {
             $this->makeThumb($dest_path, $new_filename);
         }
 
+        Event::fire(new ImageWasUploaded(realpath($dest_path.'/'.$new_filename)));
+
         // upload via ckeditor 'Upload' tab
         if (!Input::has('show_list')) {
             return $this->useFile($new_filename);
@@ -67,11 +71,16 @@ class UploadController extends LfmController {
         $is_valid = false;
 
         $file = Input::file('upload');
+
         if (empty($file)) {
             throw new \Exception(Lang::get('laravel-filemanager::lfm.error-file-empty'));
-        }
-        if (!$file instanceof UploadedFile) {
+        } elseif (!$file instanceof UploadedFile) {
             throw new \Exception(Lang::get('laravel-filemanager::lfm.error-instance'));
+        } elseif ($file->getError() == UPLOAD_ERR_INI_SIZE) {
+            $max_size = ini_get('upload_max_filesize');
+            throw new \Exception(Lang::get('laravel-filemanager::lfm.error-file-size', ['max' => $max_size]));
+        } elseif ($file->getError() != UPLOAD_ERR_OK) {
+            dd('File failed to upload. Error code: ' . $file->getError());
         }
 
         $mimetype = $file->getMimeType();
@@ -100,12 +109,12 @@ class UploadController extends LfmController {
 
     private function getNewName($file)
     {
-        $new_filename = $file->getClientOriginalName();
+        $new_filename = trim(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
 
         if (Config::get('lfm.rename_file') === true) {
             $new_filename = uniqid();
         } elseif (Config::get('lfm.alphanumeric_filename') === true) {
-            $new_filename = preg_replace('/[^A-Za-z0-9\-\']/', '_', $file->getClientOriginalName());
+            $new_filename = preg_replace('/[^A-Za-z0-9\-\']/', '_', $new_filename);
         }
 
         $new_filename = $new_filename . '.' . $file->getClientOriginalExtension();
@@ -129,7 +138,7 @@ class UploadController extends LfmController {
 
     private function useFile($new_filename)
     {
-        $file = parent::getUrl() . $new_filename;
+        $file = parent::getUrl('directory') . $new_filename;
 
         return "<script type='text/javascript'>
 

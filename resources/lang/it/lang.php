@@ -96,7 +96,6 @@ return [
     'create_email'                   => 'Crea Email',
     'email_address'                  => 'Indirizzo Email',
     'email_name'                     => 'Nome Email',
-    'email_to'                       => 'Email to',
     'help_topic'                     => 'Argomento della Guida',
     'auto_response'                  => 'Auto Risposta',
     'host_name'                      => 'Nome Host',

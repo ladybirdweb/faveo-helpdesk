@@ -260,6 +260,27 @@ class HttpKernelTest extends \PHPUnit_Framework_TestCase
         $kernel->handle($request, HttpKernelInterface::MASTER_REQUEST);
     }
 
+    /**
+     * @expectedException Symfony\Component\HttpKernel\Exception\BadRequestHttpException
+     */
+    public function testInconsistentClientIpsOnMasterRequests()
+    {
+        $dispatcher = new EventDispatcher();
+        $dispatcher->addListener(KernelEvents::REQUEST, function ($event) {
+            $event->getRequest()->getClientIp();
+        });
+
+        $kernel = new HttpKernel($dispatcher, $this->getResolver());
+
+        $request = new Request();
+        $request->setTrustedProxies(array('1.1.1.1'));
+        $request->server->set('REMOTE_ADDR', '1.1.1.1');
+        $request->headers->set('FORWARDED', '2.2.2.2');
+        $request->headers->set('X_FORWARDED_FOR', '3.3.3.3');
+
+        $kernel->handle($request, $kernel::MASTER_REQUEST, false);
+    }
+
     protected function getResolver($controller = null)
     {
         if (null === $controller) {

@@ -70,27 +70,36 @@ class="active"
             @endif
         </div>
         @endif
-        <!-- Email Address : Email : Required -->
         <div class="row">
             <!-- First name : first name : Required -->
-            <div class="col-xs-3 form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
+            <div class="col-xs-4 form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
                 {!! Form::label('first_name',Lang::get('lang.first_name')) !!}<span class="text-red"> *</span>
                 {!! Form::text('first_name',null,['class' => 'form-control']) !!}
             </div>
             <!-- Last name : last name : Required -->
-            <div class="col-xs-3 form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
+            <div class="col-xs-4 form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
                 {!! Form::label('last_name',Lang::get('lang.last_name')) !!}
                 {!! Form::text('last_name',null,['class' => 'form-control']) !!}
             </div>
             <!-- User Name : Text : Required-->
-            <div class="col-xs-3 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
+            <div class="col-xs-4 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
                 {!! Form::label('user_name',Lang::get('lang.user_name')) !!}<span class="text-red"> *</span>
                 {!! Form::text('user_name',null,['class' => 'form-control']) !!}
             </div>
-            <div class="col-md-3 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-                {!! Form::label('email',Lang::get('lang.email')) !!} <span class="text-red"> *</span>
+        </div>
+        <div class="row">
+            <!-- Email Address : Email : Required -->
+            <div class="col-xs-6 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+                {!! Form::label('email',Lang::get('lang.email')) !!}<span class="text-red"> *</span>
                 {!! Form::email('email',null,['class' => 'form-control']) !!}
-            </div>            
+            </div>
+            <div class="col-xs-6 form-group {{ $errors->has('organization') ? 'has-error' : '' }}">
+                {!! Form::label('organization',Lang::get('lang.organization')) !!}
+                {!! Form::select('org_id',[''=>'Select','Organization'=>$org],null,['class' => 'form-control','id'=>'org']) !!}
+                
+            </div>
+        </div>
+        <div class="row">     
             <div class="col-xs-1 form-group {{ Session::has('country_code_error') ? 'has-error' : '' }}">
                 {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
                 {!! $errors->first('country_code', '<spam class="help-block">:message</spam>') !!}
@@ -155,4 +164,31 @@ class="active"
     
     });        
 </script>
+@stop
+@section('FooterInclude')
+<!--<script>
+    $('#org').autocomplete({
+        minLength: 1,
+        source: function (request, response) {
+            $.getJSON("{{url('get-organization')}}", {
+                term: request.term
+            }, function (data) {
+                var array = data.error ? [] : $.map(data, function (m) {
+                    return {
+                        label: m.label,
+                        value: m.value
+                    };
+                });
+                response(array);
+            });
+        },
+        select: function (event, ui) {
+            $("#org").val(ui.item.label); // display the selected text
+            $("#field_id").val(ui.item.value); // save selected id to hidden input
+            return false;
+        }
+    });
+
+</script>-->
+
 @stop

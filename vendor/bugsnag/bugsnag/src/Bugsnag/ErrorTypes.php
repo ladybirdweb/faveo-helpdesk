@@ -81,11 +81,25 @@ class Bugsnag_ErrorTypes
         ),
     );
 
+    /**
+     * Is the given error code fatal?
+     *
+     * @param int $code the error code
+     *
+     * @return bool
+     */
     public static function isFatal($code)
     {
         return self::getSeverity($code) == 'error';
     }
 
+    /**
+     * Get the name of the given error code.
+     *
+     * @param int $code the error code
+     *
+     * @return string
+     */
     public static function getName($code)
     {
         if (array_key_exists($code, self::$ERROR_TYPES)) {
@@ -95,6 +109,13 @@ class Bugsnag_ErrorTypes
         }
     }
 
+    /**
+     * Get the severity of the given error code.
+     *
+     * @param int $code the error code
+     *
+     * @return string
+     */
     public static function getSeverity($code)
     {
         if (array_key_exists($code, self::$ERROR_TYPES)) {
@@ -104,6 +125,13 @@ class Bugsnag_ErrorTypes
         }
     }
 
+    /**
+     * Get the the levels for the given severity.
+     *
+     * @param string $severity the given severity
+     *
+     * @return int
+     */
     public static function getLevelsForSeverity($severity)
     {
         $levels = 0;

@@ -56,7 +56,6 @@
     <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}" type="text/javascript"></script>
 
     <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
-
     <!-- iCheck -->
     <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
 

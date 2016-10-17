@@ -22,15 +22,22 @@
         <link href="{{asset("lb-faveo/css/tabby.css")}}" rel="stylesheet" type="text/css" >
         <!-- In app notification style -->
         <link href="{{asset("css/notification-style.css")}}" rel="stylesheet" type="text/css">
-        
+
         <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
-        
+
         <link  href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css">
+
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
 
         <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet" type="text/css" >
+        <!-- Colorpicker -->
         
+        <link href="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.css")}}" rel="stylesheet" type="text/css" />
+        
+        <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
+
         <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
+
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -239,6 +246,8 @@
                                 <li @yield('template')><a href="{{ url('template-sets') }}"><i class="fa fa-mail-forward"></i>{!! Lang::get('lang.templates') !!}</a></li>
                                 <li @yield('email')><a href="{{url('getemail')}}"><i class="fa fa-at"></i>{!! Lang::get('lang.email-settings') !!}</a></li>
                                 <li @yield('diagnostics')><a href="{{ url('getdiagno') }}"><i class="fa fa-plus"></i>{!! Lang::get('lang.diagnostics') !!}</a></li>
+                                <li @yield('queue')><a href="{{ url('queue') }}"><i class="fa fa-upload"></i>{!! Lang::get('lang.queues') !!}</a></li>
+                               
                                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Auto Response</a></li> -->
                                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Rules/a></li> -->
                                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Breaklines</a></li> -->
@@ -257,6 +266,7 @@
                                 <li @yield('sla')><a href="{{url('sla')}}"><i class="fa fa-clock-o"></i>{!! Lang::get('lang.sla_plans') !!}</a></li>
                                 <li @yield('forms')><a href="{{url('forms')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.forms') !!}</a></li>
                                 <li @yield('workflow')><a href="{{url('workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.workflow') !!}</a></li>
+                                <li @yield('priority')><a href="{{url('ticket_priority')}}"><i class="fa fa-asterisk"></i>{!! Lang::get('lang.priority') !!}</a></li>
                             </ul>
                         </li>
 
@@ -278,6 +288,7 @@
                                 <li @yield('status')><a href="{{url('setting-status')}}"><i class="fa fa-plus-square-o"></i>{!! Lang::get('lang.status') !!}</a></li>
                                 <li @yield('notification')><a href="{{url('settings-notification')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.notifications') !!}</a></li>
                                 <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-star"></i>{!! Lang::get('lang.ratings') !!}</a></li>
+                                
                                 <li @yield('close-workflow')><a href="{{url('close-workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.close-workflow') !!}</a></li>
                             </ul>
                         </li>
@@ -313,6 +324,12 @@
                             <a href="{{ url('api') }}">
                                 <i class="fa fa-cogs"></i>
                                 <span>{!! Lang::get('lang.api') !!}</span>
+                            </a>
+                        </li>
+                        <li class="treeview @yield('Log')">
+                            <a href="{{ url('logs') }}">
+                                <i class="fa fa-lock"></i>
+                                <span>Logs</span>
                             </a>
                         </li>
                         @endif
@@ -373,65 +390,21 @@
         <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}"  type="text/javascript"></script>
         
         <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
-<script>
-$(function () {
-//Add text editor
-    $("textarea").wysihtml5();
-});
-// $(function(){
-//     $("#checkUpdate").on('click',function(){
-//             $.ajax({
-//                 type: "GET",
-//                 url: "{!! URL::route('version-check') !!}",
-//             beforeSend: function() {
-//                 $("#gif-update").show();
-//                 },
-//             success:function(response){
-//                 alert(response);
-//                 $("#gif-update").hide();
-//                 }
-//             })
-//         return false;
-//     });
-// });
-$(function () {
-//Enable iCheck plugin for checkboxes
-//iCheck for checkbox and radio inputs
-    $('input[type="checkbox"]').iCheck({
-        checkboxClass: 'icheckbox_flat-blue',
-        radioClass: 'iradio_flat-blue'
+        <!-- Colorpicker -->
+        <script src="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.js")}}" ></script>
+        <!--date time picker-->
+        <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
+
+@if (trim($__env->yieldContent('no-toolbar')))
+    <h1>@yield('no-toolbar')</h1>
+@else
+    <script>
+    $(function () {
+    //Add text editor
+        $("textarea").wysihtml5();
     });
-//Enable check and uncheck all functionality
-    $(".checkbox-toggle").click(function () {
-        var clicks = $(this).data('clicks');
-        if (clicks) {
-//Uncheck all checkboxes
-            $("input[type='checkbox']", ".mailbox-messages").iCheck("uncheck");
-        } else {
-//Check all checkboxes
-            $("input[type='checkbox']", ".mailbox-messages").iCheck("check");
-        }
-        $(this).data("clicks", !clicks);
-    });
-//Handle starring for glyphicon and font awesome
-    $(".mailbox-star").click(function (e) {
-        e.preventDefault();
-//detect type
-        var $this = $(this).find("a > i");
-        var glyph = $this.hasClass("glyphicon");
-        var fa = $this.hasClass("fa");
-//Switch states
-        if (glyph) {
-            $this.toggleClass("glyphicon-star");
-            $this.toggleClass("glyphicon-star-empty");
-        }
-        if (fa) {
-            $this.toggleClass("fa-star");
-            $this.toggleClass("fa-star-o");
-        }
-    });
-});
     </script>
+@endif
     <script>
         $('#read-all').click(function () {
 
@@ -464,4 +437,17 @@ $(function () {
 
     @yield('FooterInclude')
 </body>
+<script>
+    $(function() {
+      
+        
+        $('input[type="checkbox"]').iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        });
+        $('input[type="radio"]').iCheck({
+            radioClass: 'iradio_flat-blue'
+        });
+    
+    });        
+</script>
 </html>

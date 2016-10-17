@@ -157,9 +157,21 @@ class PhoneNumberUtil
     protected static $MOBILE_TOKEN_MAPPINGS;
 
     /**
+     * Set of country codes that have geographically assigned mobile numbers (see GEO_MOBILE_COUNTRIES
+     * below) which are not based on *area codes*. For example, in China mobile numbers start with a
+     * carrier indicator, and beyond that are geographically assigned: this carrier indicator is not
+     * considered to be an area code.
+     *
+     * @var array
+     */
+    protected static $GEO_MOBILE_COUNTRIES_WITHOUT_MOBILE_AREA_CODES;
+
+    /**
      * Set of country calling codes that have geographically assigned mobile numbers. This may not be
      * complete; we add calling codes case by case, as we find geographical mobile numbers or hear
-     * from user reports.
+     * from user reports. Note that countries like the US, where we can't distinguish between
+     * fixed-line or mobile numbers, are not listed here, since we consider FIXED_LINE_OR_MOBILE to be
+     * a possibly geographically-related type anyway (like FIXED_LINE).
      *
      * @var array
      */
@@ -361,10 +373,16 @@ class PhoneNumberUtil
         static::$MOBILE_TOKEN_MAPPINGS['52'] = "1";
         static::$MOBILE_TOKEN_MAPPINGS['54'] = "9";
 
+        static::$GEO_MOBILE_COUNTRIES_WITHOUT_MOBILE_AREA_CODES = array();
+        static::$GEO_MOBILE_COUNTRIES_WITHOUT_MOBILE_AREA_CODES[] = 86; // China
+
         static::$GEO_MOBILE_COUNTRIES = array();
         static::$GEO_MOBILE_COUNTRIES[] = 52; // Mexico
         static::$GEO_MOBILE_COUNTRIES[] = 54; // Argentina
         static::$GEO_MOBILE_COUNTRIES[] = 55; // Brazil
+        static::$GEO_MOBILE_COUNTRIES[] = 62; // Indonesia: some prefixes only (fixed CMDA wireless)
+
+        static::$GEO_MOBILE_COUNTRIES = array_merge(static::$GEO_MOBILE_COUNTRIES, static::$GEO_MOBILE_COUNTRIES_WITHOUT_MOBILE_AREA_CODES);
     }
 
     /**
@@ -606,7 +624,19 @@ class PhoneNumberUtil
             return 0;
         }
 
-        if (!$this->isNumberGeographical($number)) {
+        $type = $this->getNumberType($number);
+        $countryCallingCode = $number->getCountryCode();
+
+        if ($type === PhoneNumberType::MOBILE
+            // Note this is a rough heuristic; it doesn't cover Indonesia well, for example, where area
+            // codes are present for some mobile phones but not for others. We have no better way of
+            // representing this in the metadata at this point.
+            && in_array($countryCallingCode, self::$GEO_MOBILE_COUNTRIES_WITHOUT_MOBILE_AREA_CODES)
+        ) {
+            return 0;
+        }
+
+        if (!$this->isNumberGeographical($type, $countryCallingCode)) {
             return 0;
         }
 
@@ -682,7 +712,7 @@ class PhoneNumberUtil
                 if ($nbMatches > 0 && $matches[0][1] === 0) {
                     return $regionCode;
                 }
-            } else if ($this->getNumberTypeHelper($nationalNumber, $metadata) != PhoneNumberType::UNKNOWN) {
+            } elseif ($this->getNumberTypeHelper($nationalNumber, $metadata) != PhoneNumberType::UNKNOWN) {
                 return $regionCode;
             }
         }
@@ -748,7 +778,7 @@ class PhoneNumberUtil
         if ($isFixedLine) {
             if ($metadata->isSameMobileAndFixedLinePattern()) {
                 return PhoneNumberType::FIXED_LINE_OR_MOBILE;
-            } else if ($this->isNumberMatchingDesc($nationalNumber, $metadata->getMobile())) {
+            } elseif ($this->isNumberMatchingDesc($nationalNumber, $metadata->getMobile())) {
                 return PhoneNumberType::FIXED_LINE_OR_MOBILE;
             }
             return PhoneNumberType::FIXED_LINE;
@@ -803,20 +833,34 @@ class PhoneNumberUtil
     }
 
     /**
+     * isNumberGeographical(PhoneNumber)
+     *
      * Tests whether a phone number has a geographical association. It checks if the number is
      * associated to a certain region in the country where it belongs to. Note that this doesn't
      * verify if the number is actually in use.
-     * @param PhoneNumber $phoneNumber
+     *
+     * isNumberGeographical(PhoneNumberType, $countryCallingCode)
+     *
+     * Tests whether a phone number has a geographical association, as represented by its type and the
+     * country it belongs to.
+     *
+     * This version exists since calculating the phone number type is expensive; if we have already
+     * done this, we don't want to do it again.
+     *
+     * @param PhoneNumber|PhoneNumberType $phoneNumberObjOrType A PhoneNumber object, or a PhoneNumberType integer
+     * @param int|null $countryCallingCode Used when passing a PhoneNumberType
      * @return bool
      */
-    public function isNumberGeographical(PhoneNumber $phoneNumber)
+    public function isNumberGeographical($phoneNumberObjOrType, $countryCallingCode = null)
     {
-        $numberType = $this->getNumberType($phoneNumber);
+        if ($phoneNumberObjOrType instanceof PhoneNumber) {
+            return $this->isNumberGeographical($this->getNumberType($phoneNumberObjOrType), $phoneNumberObjOrType->getCountryCode());
+        }
 
-        return $numberType == PhoneNumberType::FIXED_LINE
-        || $numberType == PhoneNumberType::FIXED_LINE_OR_MOBILE
-        || (in_array($phoneNumber->getCountryCode(), static::$GEO_MOBILE_COUNTRIES)
-            && $numberType == PhoneNumberType::MOBILE);
+        return $phoneNumberObjOrType == PhoneNumberType::FIXED_LINE
+        || $phoneNumberObjOrType == PhoneNumberType::FIXED_LINE_OR_MOBILE
+        || (in_array($countryCallingCode, static::$GEO_MOBILE_COUNTRIES)
+            && $phoneNumberObjOrType == PhoneNumberType::MOBILE);
     }
 
     /**
@@ -1124,7 +1168,6 @@ class PhoneNumberUtil
             } else {
                 $formattedNationalNumber = $m->replaceAll($numberFormatRule);
             }
-
         }
         if ($numberFormat == PhoneNumberFormat::RFC3966) {
             // Strip any leading punctuation.
@@ -1412,7 +1455,7 @@ class PhoneNumberUtil
             if ($defaultRegion !== null) {
                 $countryCode = $regionMetadata->getCountryCode();
                 $phoneNumber->setCountryCode($countryCode);
-            } else if ($keepRawInput) {
+            } elseif ($keepRawInput) {
                 $phoneNumber->clearCountryCodeSource();
             }
         }
@@ -1652,7 +1695,7 @@ class PhoneNumberUtil
                 NumberParseException::INVALID_COUNTRY_CODE,
                 "Country calling code supplied was not recognised."
             );
-        } else if ($defaultRegionMetadata !== null) {
+        } elseif ($defaultRegionMetadata !== null) {
             // Check to see if the number starts with the country calling code for the default region. If
             // so, we remove the country calling code, and do some checks on the validity of the number
             // before and after.
@@ -1939,7 +1982,7 @@ class PhoneNumberUtil
      * non-geographical country calling codes, the region code 001 is returned. Also, in the case
      * of no region code being found, an empty list is returned.
      * @param int $countryCallingCode
-     * @return array|null
+     * @return array
      */
     public function getRegionCodesForCountryCode($countryCallingCode)
     {
@@ -2234,7 +2277,7 @@ class PhoneNumberUtil
             if ($this->isNANPACountry($regionCallingFrom)) {
                 return $countryCode . " " . $rawInput;
             }
-        } else if ($metadataForRegionCallingFrom !== null &&
+        } elseif ($metadataForRegionCallingFrom !== null &&
             $countryCode == $this->getCountryCodeForValidRegion($regionCallingFrom)
         ) {
             $formattingPattern =
@@ -2328,7 +2371,7 @@ class PhoneNumberUtil
                 // country calling code.
                 return $countryCallingCode . " " . $this->format($number, PhoneNumberFormat::NATIONAL);
             }
-        } else if ($countryCallingCode == $this->getCountryCodeForValidRegion($regionCallingFrom)) {
+        } elseif ($countryCallingCode == $this->getCountryCodeForValidRegion($regionCallingFrom)) {
             // If regions share a country calling code, the country calling code need not be dialled.
             // This also applies when dialling within a region, so this if clause covers both these cases.
             // Technically this is the case for dialling from La Reunion to other overseas departments of
@@ -2349,7 +2392,7 @@ class PhoneNumberUtil
 
         if ($uniqueInternationalPrefixMatcher->matches()) {
             $internationalPrefixForFormatting = $internationalPrefix;
-        } else if ($metadataForRegionCallingFrom->hasPreferredInternationalPrefix()) {
+        } elseif ($metadataForRegionCallingFrom->hasPreferredInternationalPrefix()) {
             $internationalPrefixForFormatting = $metadataForRegionCallingFrom->getPreferredInternationalPrefix();
         }
 

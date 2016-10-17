@@ -36,20 +36,33 @@ class="active"
         <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.instructions_on_creating_form') !!}.</div>
     </div>
     <div class="box-body with-border">
+        @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
             <i class="fa fa-check-circle"></i>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('success')}}       
+            {{Session::get('success')}}
         </div>
         @endif
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <b>{!! Lang::get('lang.alert') !!}!</b><br>
-
-            <li class="error-message-padding" >{{Session::get('fails')}}</li>
+            {{Session::get('fails')}}
+        </div>
+        @endif
+        @if(Session::has('warn'))
+        <div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            {{Session::get('warn')}}
         </div>
         @endif
         <h3 class="box-title">{!! Lang::get('lang.form_properties') !!}</h3>
@@ -77,7 +90,7 @@ class="active"
         </div>
         <div class="row">
         </div>
-        <div class="box-body" id="welcomeDiv"  style="display:none;">
+        <div class="box-body" id="welcomeDiv">
             <table id="example2" class="table table-bordered table-striped">
                 <thead>
                 <th>{!! Lang::get('lang.label') !!} </th>
@@ -88,7 +101,27 @@ class="active"
                 <th>{!! Lang::get('lang.action') !!} </th>
                 </thead>
                 <tbody class="inputField">
-                    <tr></tr>  
+                    
+                    <tr>
+                        <td><input type="text" class="form-control" name="label[]"></td>
+                        <td><input type="text" class="form-control" name="name[]"></td>
+                        <td>
+                            <select name="type[]" class="form-control">
+                                <option>text</option>
+                                <option>email</option>
+                                <option>password</option>
+                                <option>textarea</option>
+                                <option>select</option>
+                                <option>radio</option>
+                                <option>checkbox</option>
+                                <option>hidden</option>
+                            </select>
+                        </td>
+                        <td><input type="text" name="value[]" class="form-control"></td>
+                        <td>{!! Lang::get("lang.yes") !!}&nbsp;&nbsp;<input type=radio name="required[0]" value=1 checked>&nbsp;&nbsp;{!! Lang::get("lang.no") !!}&nbsp;&nbsp;<input type=radio name="required[0]" value=0></td>
+                        <td><button type="button" class="remove_field btn btn-danger"><i class="fa fa-trash-o"></i>&nbsp {!! Lang::get("lang.remove") !!}</button></td>
+                    </tr>
+                    
                 </tbody>
             </table>
         </div>  
@@ -106,13 +139,13 @@ class="active"
         var max_fields = 10;
         var wrapper = $(".inputField");
         var add_button = $(".addField");
-        var x = 1;
+        var x = 0;
         $(add_button).click(function(e)
         {
             e.preventDefault();
             if (x < max_fields) {
                 x++;
-                $(wrapper).append('<tr><td><input type="text" class="form-control" name="label[]"></td><td><input type="text" class="form-control" name="name[]"></td><td><select name="type[]" class="form-control"><option>text</option><option>email</option><option>password</option><option>textarea</option><option>select</option><option>radio</option><option>checkbox</option></select></td><td><textarea name="value[]" class="form-control"></textarea></td><td>{!! Lang::get("lang.yes") !!}&nbsp;&nbsp;<input type=radio name="required[' + x + '][]" value=1 checked>&nbsp;&nbsp;{!! Lang::get("lang.no") !!}&nbsp;&nbsp;<input type=radio name="required[' + x + '][]" value=0></td><td><button type="button" class="remove_field btn btn-danger"><i class="fa fa-trash-o"></i>&nbsp {!! Lang::get("lang.remove") !!}</button></td></tr>');
+                $(wrapper).append('<tr><td><input type="text" class="form-control" name="label[]"></td><td><input type="text" class="form-control" name="name[]"></td><td><select name="type[]" class="form-control"><option>text</option><option>email</option><option>password</option><option>textarea</option><option>select</option><option>radio</option><option>checkbox</option><option>hidden</option></select></td><td><input type="text" name="value[]" class="form-control"></td><td>{!! Lang::get("lang.yes") !!}&nbsp;&nbsp;<input type=radio name="required['+x+']" value=1 checked>&nbsp;&nbsp;{!! Lang::get("lang.no") !!}&nbsp;&nbsp;<input type=radio name="required['+x+']" value=0></td><td><button type="button" class="remove_field btn btn-danger"><i class="fa fa-trash-o"></i>&nbsp {!! Lang::get("lang.remove") !!}</button></td></tr>');
             }
         });
         $(wrapper).on("click", ".remove_field", function(e)

@@ -78,19 +78,21 @@ class LibraryController extends Controller
     {
         try {
             $encrypted = json_decode($encrypted);
-            $sealed_data = $encrypted->seal;
-            $envelope = $encrypted->envelope;
-            $input = base64_decode($sealed_data);
-            $einput = base64_decode($envelope);
-            $path = storage_path('app'.DIRECTORY_SEPARATOR.'private.key');
-            $key_content = file_get_contents($path);
-            $private_key = openssl_get_privatekey($key_content);
-            $plaintext = null;
-            openssl_open($input, $plaintext, $einput, $private_key);
+            if ($encrypted) {
+                $sealed_data = $encrypted->seal;
+                $envelope = $encrypted->envelope;
+                $input = base64_decode($sealed_data);
+                $einput = base64_decode($envelope);
+                $path = storage_path('app'.DIRECTORY_SEPARATOR.'private.key');
+                $key_content = file_get_contents($path);
+                $private_key = openssl_get_privatekey($key_content);
+                $plaintext = null;
+                openssl_open($input, $plaintext, $einput, $private_key);
 
-            return $plaintext;
+                return $plaintext;
+            }
         } catch (Exception $ex) {
-            // dd($ex);
+            dd($ex);
         }
     }
 

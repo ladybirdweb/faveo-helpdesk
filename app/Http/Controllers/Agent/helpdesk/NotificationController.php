@@ -34,28 +34,37 @@ class NotificationController extends Controller
      * */
     public function send_notification()
     {
+        //        dd('sdckjdsc');
         //fetching email settings
         $email = Email::where('id', '=', '1')->first();
+        //dd('yes');
+        $send = 0;
+        $date = [0];
+       // dd($date);
         // checking if the daily notification is enabled or not
         if ($email->notification_cron == 1) {
             // checking if current date is equal to the last entered daily notification log
             $notification = Log_notification::where('log', '=', 'NOT-1')->orderBy('id', 'DESC')->first();
-            $date = explode(' ', $notification->created_at);
-            if (date('Y-m-d') == $date[0]) {
-            } else {
+            if ($notification) {
+                $date = explode(' ', $notification->created_at);
+            }
+           // if (date('Y-m-d') !== $date[0]) {
                 // creating a daily notification log
-                Log_notification::create(['log' => 'NOT-1']);
+
                 $company = $this->company();
                 // Send notification details to admin
-                $this->send_notification_to_admin($company);
+                $send += $this->send_notification_to_admin($company);
                 // Send notification details to team lead
-                //$this->send_notification_to_team_lead($company);
+                $send += $this->send_notification_to_team_lead($company);
                 // Send notification details to manager of a department
-                //$this->send_notification_to_manager($company);
+                $send += $this->send_notification_to_manager($company);
                 // Send notification details to all the agents
-                //$this->send_notification_to_agent($company);
-            }
+                $send += $this->send_notification_to_agent($company);
+            //}
+             Log_notification::create(['log' => 'NOT-1']);
         }
+
+        return $send;
     }
 
     /**
@@ -79,14 +88,17 @@ class NotificationController extends Controller
             $to = [
                 'name'  => $user_name,
                 'email' => $email,
-                    ];
+            ];
             $message = [
                 'subject'  => 'Daily Report',
                 'scenario' => null,
                 'body'     => $contents,
-                    ];
-            $this->dispatch((new \App\Jobs\SendEmail($from, $to, $message))->onQueue('emails'));
-            //$this->PhpMailController->sendEmail($from,$to,$message);
+            ];
+            $job = new \App\Jobs\SendEmail($from, $to, $message);
+            $dispatch = $this->dispatch($job);
+
+            return $dispatch;
+            //return $this->PhpMailController->sendEmail($from,$to,$message);
         }
     }
 
@@ -109,7 +121,19 @@ class NotificationController extends Controller
                     $user_name = $user->first_name.' '.$user->last_name;
                     $view = View::make('emails.notifications.manager', ['company' => $company, 'name' => $user_name]);
                     $contents = $view->render();
-                    $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
+                    $from = $this->PhpMailController->mailfrom('1', '0');
+                    $to = [
+                        'name'  => $user_name,
+                        'email' => $email,
+                    ];
+                    $message = [
+                        'subject'  => 'Daily Report',
+                        'scenario' => null,
+                        'body'     => $contents,
+                    ];
+
+                    return $this->dispatch((new \App\Jobs\SendEmail($from, $to, $message)));
+                    //$this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
                 }
             }
         }
@@ -134,7 +158,19 @@ class NotificationController extends Controller
                     $user_name = $user->first_name.' '.$user->last_name;
                     $view = View::make('emails.notifications.lead', ['company' => $company, 'name' => $user_name, 'team_id' => $team->id]);
                     $contents = $view->render();
-                    $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
+                    $from = $this->PhpMailController->mailfrom('1', '0');
+                    $to = [
+                        'name'  => $user_name,
+                        'email' => $email,
+                    ];
+                    $message = [
+                        'subject'  => 'Daily Report',
+                        'scenario' => null,
+                        'body'     => $contents,
+                    ];
+
+                    return $this->dispatch((new \App\Jobs\SendEmail($from, $to, $message)));
+                    //$this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
                 }
             }
         }
@@ -155,7 +191,19 @@ class NotificationController extends Controller
             $user_name = $user->first_name.' '.$user->last_name;
             $view = View::make('emails.notifications.agent', ['company' => $company, 'name' => $user_name, 'user_id' => $user->id]);
             $contents = $view->render();
-            $this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
+            $from = $this->PhpMailController->mailfrom('1', '0');
+            $to = [
+                'name'  => $user_name,
+                'email' => $email,
+                    ];
+            $message = [
+                'subject'  => 'Daily Report',
+                'scenario' => null,
+                'body'     => $contents,
+                    ];
+
+            return $this->dispatch((new \App\Jobs\SendEmail($from, $to, $message)));
+            //$this->PhpMailController->sendEmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => 'Daily Report', 'scenario' => null, 'body' => $contents]);
         }
     }
 

@@ -122,22 +122,22 @@ class="active"
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="form-group">
                     {!! Form::label('user_set_ticket_status',Lang::get('lang.user_set_ticket_status')) !!}
                     <div class="row">
                         <div class="col-xs-5">
-                            <input type="radio" name="user_set_ticket_status" value="0" @if($common_setting->status == '0')checked="true" @endif>{{Lang::get('lang.no')}}
+                            <input type="radio" name="user_set_ticket_status" value="0" @if($common_setting->status == '0')checked="true" @endif>&nbsp;{{Lang::get('lang.no')}}
                         </div>
                         <div class="col-xs-6">
-                            <input type="radio" name="user_set_ticket_status" value="1" @if($common_setting->status == '1')checked="true" @endif>{{Lang::get('lang.yes')}}
+                            <input type="radio" name="user_set_ticket_status" value="1" @if($common_setting->status == '1')checked="true" @endif>&nbsp;{{Lang::get('lang.yes')}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">    
-            <div class="col-md-5">
+            <div class="col-md-4" data-toggle="tooltip" title="{!! Lang::get('lang.the_rtl_support_is_only_applicable_to_the_outgoing_mails') !!}">
                 <div class="form-group">
                     {!! Form::label('status',Lang::get('lang.rtl')) !!}
                     <div class="row">
@@ -147,8 +147,31 @@ class="active"
                             ?>
                             <input type="checkbox" name="enable_rtl" @if($rtl->option_value == 1) checked @endif> {{Lang::get('lang.enable')}}
                         </div>
-                        <div class="col-xs-12">
-                            <code>{!! Lang::get('lang.the_rtl_support_is_only_applicable_to_the_outgoing_mails') !!}</code>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" data-toggle="tooltip" title="{!! Lang::get('lang.otp_usage_info') !!}">
+                <div class="form-group">
+                    {!! Form::label('send_otp',Lang::get('lang.allow_unverified_users_to_create_ticket')) !!}
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <input type="radio" name="send_otp" value="0" @if($send_otp->status == '0')checked="true" @endif>&nbsp;{{Lang::get('lang.yes')}}
+                        </div>
+                        <div class="col-xs-6">
+                            <input type="radio" name="send_otp" value="1" @if($send_otp->status == '1')checked="true" @endif>&nbsp;{{Lang::get('lang.no')}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" data-toggle="tooltip" title="{!! Lang::get('lang.email_man_info') !!}">
+                <div class="form-group">
+                    {!! Form::label('email_mandatory',Lang::get('lang.make-email-mandatroy')) !!}
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <input type="radio" name="email_mandatory" value="1" @if($email_mandatory->status == '1')checked="true" @endif>&nbsp;{{Lang::get('lang.yes')}}
+                        </div>
+                        <div class="col-xs-6">
+                            <input type="radio" name="email_mandatory" value="0" @if($email_mandatory->status == '0')checked="true" @endif>&nbsp;{{Lang::get('lang.no')}}
                         </div>
                     </div>
                 </div>

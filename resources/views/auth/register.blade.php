@@ -31,10 +31,38 @@
     <span class="glyphicon glyphicon-user form-control-feedback"></span>
 </div>
 <!-- Email -->
+@if (($email_mandatory->status == 1 || $email_mandatory->status == '1'))
 <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
     {!! Form::text('email',null,['placeholder'=>Lang::get('lang.email'),'class' => 'form-control']) !!}
     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 </div>
+@elseif (($settings->status == 0 || $settings->status == '0') && ($email_mandatory->status == 0 || $email_mandatory->status == '0'))
+<div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
+    {!! Form::text('email',null,['placeholder'=>Lang::get('lang.email'),'class' => 'form-control']) !!}
+    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+</div>
+@else
+    {!! Form::hidden('email', null) !!}
+@endif
+@if($settings->status == '1' || $settings->status == 1)
+<div class='row'>
+    <div class="col-md-3">
+        <div class="form-group {{ $errors->has('code') ? 'has-error' : '' }}">
+        {!! Form::text('code',null,['placeholder'=>91,'class' => 'form-control']) !!}
+        </div>    
+    </div>
+    <div class="col-md-9">
+        <div class="form-group has-feedback {{ $errors->has('mobile') ? 'has-error' : '' }}">
+        {!! Form::text('mobile',null,['placeholder'=>Lang::get('lang.mobile'),'class' => 'form-control']) !!}
+        <span class="glyphicon glyphicon-phone form-control-feedback"></span>
+        </div>
+    </div>
+</div>
+@else
+    {!! Form::hidden('mobile', null) !!}
+    {!! Form::hidden('code', null) !!}
+
+@endif
 <!-- Password -->
 <div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}">
     {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}

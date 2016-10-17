@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.staffs')}}</h1>
+<h1>{{Lang::get('lang.teams')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -60,8 +60,7 @@ class="active"
             <!-- team lead -->
             <div class="col-xs-6 form-group {{ $errors->has('team_lead') ? 'has-error' : '' }}">
                 {!! Form::label('team_lead',Lang::get('lang.team_lead')) !!}
-                <?php $user = App\User::where('role', 'admin')->orWhere('role', 'agent')->get(); ?>
-                {!! Form::select('team_lead',[''=>Lang::get('lang.select_a_team_lead'), Lang::get('lang.members')=>$user->lists('user_name','id')->toArray()],null,['class' => 'form-control']) !!}	
+                {!! Form::select('team_lead',[''=>Lang::get('lang.select_a_team_lead'), Lang::get('lang.members')=>$user->lists('full_name','id')->toArray()],null,['class' => 'form-control']) !!}	
             </div>
         </div>
         <!-- status -->

@@ -19,12 +19,13 @@
     "require-dev": {
         "mockery/mockery" : "0.9.*",
         "phpunit/phpunit" : "4.7.*",
+        "satooshi/php-coveralls": "dev-master",
         "laravel/laravel": "5.2.*"
-
     },
     "autoload": {
         "psr-4": {
-            "LaravelFCM\\": "src/"
+            "LaravelFCM\\": "src/",
+            "LaravelFCM\\Mocks\\": "tests/mocks"
         }
     },
     "autoload-dev": {

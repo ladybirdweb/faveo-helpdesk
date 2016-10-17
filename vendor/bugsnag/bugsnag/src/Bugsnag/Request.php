@@ -2,13 +2,29 @@
 
 class Bugsnag_Request
 {
+    /**
+     * Are we currently processing a request?
+     *
+     * @return bool
+     */
     public static function isRequest()
     {
         return isset($_SERVER['REQUEST_METHOD']);
     }
 
+    /**
+     * Get the request formatted as meta data.
+     *
+     * @return array
+     */
     public static function getRequestMetaData()
     {
+        static $requestData;
+
+        if ($requestData !== null) {
+            return $requestData;
+        }
+
         $requestData = array();
 
         $methodsWithPayload = array('PUT');
@@ -23,12 +39,14 @@ class Bugsnag_Request
         if (!empty($_POST)) {
             $requestData['request']['params'] = $_POST;
         } else {
+            $input = file_get_contents('php://input');
+
             if (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') === 0) {
-                $requestData['request']['params'] = json_decode(file_get_contents('php://input'), true);
+                $requestData['request']['params'] = json_decode($input, true);
             }
 
             if (isset($_SERVER['REQUEST_METHOD']) && in_array(strtoupper($_SERVER['REQUEST_METHOD']), $methodsWithPayload)) {
-                parse_str(file_get_contents('php://input'), $params);
+                parse_str($input, $params);
                 if (isset($requestData['request']['params']) && is_array($requestData['request']['params'])) {
                     $requestData['request']['params'] = array_merge($requestData['request']['params'], $params);
                 } else {
@@ -50,42 +68,61 @@ class Bugsnag_Request
         return $requestData;
     }
 
+    /**
+     * Get the request context.
+     *
+     * @return string|null
+     */
     public static function getContext()
     {
         if (self::isRequest() && isset($_SERVER['REQUEST_METHOD']) && isset($_SERVER['REQUEST_URI'])) {
             return $_SERVER['REQUEST_METHOD'].' '.strtok($_SERVER['REQUEST_URI'], '?');
-        } else {
-            return;
         }
     }
 
+    /**
+     * Get the request id.
+     *
+     * @return string|null
+     */
     public static function getUserId()
     {
         if (self::isRequest()) {
             return self::getRequestIp();
-        } else {
-            return;
         }
     }
 
+    /**
+     * Get the request url.
+     *
+     * @return string
+     */
     public static function getCurrentUrl()
     {
         $schema = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (!empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)) ? 'https://' : 'http://';
 
-        return $schema.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
+
+        return $schema.$host.$_SERVER['REQUEST_URI'];
     }
 
+    /**
+     * Get the request ip.
+     *
+     * @return string
+     */
     public static function getRequestIp()
     {
         return isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
     }
 
+    /**
+     * Get the request headers.
+     *
+     * @return array
+     */
     public static function getRequestHeaders()
     {
-        if (function_exists('getallheaders')) {
-            return getallheaders();
-        }
-
         $headers = array();
 
         foreach ($_SERVER as $name => $value) {

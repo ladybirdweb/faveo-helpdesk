@@ -29,6 +29,39 @@ class Fields extends BaseModel
         return $value;
     }
 
+    public function valuesAsString()
+    {
+        $string = '';
+        $values = $this->values()->lists('field_value')->toArray();
+        if (count($values) > 0) {
+            $string = implode(',', $values);
+        }
+
+        return $string;
+    }
+
+    public function requiredFieldForCheck()
+    {
+        $check = false;
+        $required = $this->attributes['required'];
+        if ($required === '1') {
+            $check = true;
+        }
+
+        return $check;
+    }
+
+    public function nonRequiredFieldForCheck()
+    {
+        $check = false;
+        $required = $this->attributes['required'];
+        if ($required !== '1') {
+            $check = true;
+        }
+
+        return $check;
+    }
+
     public function deleteValues()
     {
         $values = $this->values()->get();
@@ -41,6 +74,7 @@ class Fields extends BaseModel
 
     public function delete()
     {
+        $this->deleteValues();
         parent::delete();
     }
 }

@@ -22,8 +22,6 @@ class SendReport extends Command
      * @var string
      */
     protected $description = 'Sending the report mail ';
-    protected $report;
-    protected $mail;
 
     /**
      * Create a new command instance.
@@ -32,9 +30,6 @@ class SendReport extends Command
      */
     public function __construct()
     {
-        $mail = new PhpMailController();
-        $report = new NotificationController($mail);
-        $this->report = $report;
         parent::__construct();
     }
 
@@ -46,11 +41,23 @@ class SendReport extends Command
     public function handle()
     {
         try {
-            $this->report->send_notification();
-            \Log::info('Report has send');
-            $this->info('Report has send');
+            if (env('DB_INSTALL') == 1) {
+                $mail = new PhpMailController();
+                $mail->setQueue();
+                $this_report = new NotificationController($mail);
+                $report = $this_report->send_notification();
+
+                if ($report !== 0) {
+                    loging('sending-mail-report', 'Report has send', 'info');
+                    //\Log::info("Report has send");
+                    $this->info('Report has send');
+                } else {
+                    loging('sending-mail-report', 'Nothing to send', 'info');
+                    $this->info('Nothing to send');
+                }
+            }
         } catch (Exception $ex) {
-            dd($ex);
+            //dd($ex);
             $this->error($ex->getMessage());
         }
     }

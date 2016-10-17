@@ -568,13 +568,14 @@ class Request extends HttpRequest
      */
     protected function detectBasePath()
     {
-        $filename = basename($this->getServer()->get('SCRIPT_FILENAME', ''));
         $baseUrl  = $this->getBaseUrl();
 
         // Empty base url detected
         if ($baseUrl === '') {
             return '';
         }
+
+        $filename = basename($this->getServer()->get('SCRIPT_FILENAME', ''));
 
         // basename() matches the script filename; return the directory
         if (basename($baseUrl) === $filename) {

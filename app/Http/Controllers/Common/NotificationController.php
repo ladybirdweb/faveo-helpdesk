@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Common;
 
-use App\Http\Controllers\Api\v1\PushNotificationController;
 use App\Http\Controllers\Controller;
 use App\Model\helpdesk\Notification\Notification;
 use App\Model\helpdesk\Notification\NotificationType;
@@ -29,9 +28,8 @@ class NotificationController extends Controller
     /**
      * Constructor.
      */
-    public function __construct(PushNotificationController $PushNotificationController)
+    public function __construct()
     {
-        $this->PushNotificationController = $PushNotificationController;
         $user = new User();
         $this->user = $user;
         // checking authentication
@@ -144,6 +142,13 @@ class NotificationController extends Controller
         $notifications = UserNotification::join('notifications', 'user_notification.notification_id', '=', 'notifications.id')
                 ->join('notification_types', 'notifications.type_id', '=', 'notification_types.id')
                 ->where('user_notification.user_id', '=', \Auth::user()->id)
+                ->select('notification_types.id as id', 'notifications.id as notification_id',
+                    'user_notification.user_id as user_id', 'user_notification.is_read as is_read',
+                    'user_notification.created_at as created_at', 'user_notification.updated_at as updated_at', 'notifications.model_id as model_id',
+                    'notifications.userid_created as userid_created',
+                    'notifications.type_id as type_id', 'notification_types.message as message',
+                    'notification_types.type as type', 'notification_types.icon_class as icon_class')
+                ->orderBy('user_notification.created_at', 'desc')
                 ->paginate(10);
 
         return $notifications;

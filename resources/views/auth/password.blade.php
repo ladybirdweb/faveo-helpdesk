@@ -34,7 +34,7 @@
     <!-- Email -->
     <!-- <div class="input-group margin"> -->
     <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
-        <input type="email" class="form-control" name="email" placeholder="{!! Lang::get('lang.email') !!}" value="{{ old('email') }}">
+        <input type="text" class="form-control" name="email" placeholder="{!! Lang::get('lang.email_or_mobile') !!}" value="{{ old('email') }}">
          <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
     </div>
     

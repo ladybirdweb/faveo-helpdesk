@@ -21,10 +21,18 @@ API Index
     * LaravelFCM\Response
         * [BaseResponse](LaravelFCM-Response-BaseResponse.md)
         * [DownstreamResponse](LaravelFCM-Response-DownstreamResponse.md)
+        * [DownstreamResponseContract](LaravelFCM-Response-DownstreamResponseContract.md)
         * LaravelFCM\Response\Exceptions
             * [InvalidRequestException](LaravelFCM-Response-Exceptions-InvalidRequestException.md)
             * [ServerResponseException](LaravelFCM-Response-Exceptions-ServerResponseException.md)
             * [UnauthorizedRequestException](LaravelFCM-Response-Exceptions-UnauthorizedRequestException.md)
         * [GroupResponse](LaravelFCM-Response-GroupResponse.md)
+        * [GroupResponseContract](LaravelFCM-Response-GroupResponseContract.md)
         * [TopicResponse](LaravelFCM-Response-TopicResponse.md)
+        * [TopicResponseContract](LaravelFCM-Response-TopicResponseContract.md)
+    * LaravelFCM\Test
+        * LaravelFCM\Test\Mocks
+            * [MockDownstreamResponse](LaravelFCM-Test-Mocks-MockDownstreamResponse.md)
+            * [MockGroupResponse](LaravelFCM-Test-Mocks-MockGroupResponse.md)
+            * [MockTopicResponse](LaravelFCM-Test-Mocks-MockTopicResponse.md)
 

@@ -95,7 +95,7 @@ class UserController extends Controller
                 ->orWhere('slug', 'LIKE', '%'.$search.'%')
                 ->orWhere('description', 'LIKE', '%'.$search.'%')
                 ->paginate($pagination);
-        $result->setPath('search');
+        $result->setPath('search?s='.$search);
         $categorys = $category->get();
 
         return view('themes.default1.client.kb.article-list.search', compact('categorys', 'result'));

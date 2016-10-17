@@ -9,7 +9,7 @@ Class GroupResponse
 * Class name: GroupResponse
 * Namespace: LaravelFCM\Response
 * Parent class: [LaravelFCM\Response\BaseResponse](LaravelFCM-Response-BaseResponse.md)
-
+* This class implements: [LaravelFCM\Response\GroupResponseContract](LaravelFCM-Response-GroupResponseContract.md)
 
 
 Constants
@@ -114,39 +114,42 @@ Log the response
 
 ### numberSuccess
 
-    integer LaravelFCM\Response\GroupResponse::numberSuccess()
+    integer LaravelFCM\Response\GroupResponseContract::numberSuccess()
 
 Get the number of device reached with success
 
 
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\GroupResponseContract](LaravelFCM-Response-GroupResponseContract.md)
 
 
 
 
 ### numberFailure
 
-    integer LaravelFCM\Response\GroupResponse::numberFailure()
+    integer LaravelFCM\Response\GroupResponseContract::numberFailure()
 
 Get the number of device which thrown an error
 
 
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\GroupResponseContract](LaravelFCM-Response-GroupResponseContract.md)
 
 
 
 
 ### tokensFailed
 
-    array LaravelFCM\Response\GroupResponse::tokensFailed()
+    array LaravelFCM\Response\GroupResponseContract::tokensFailed()
 
 Get all token in group that fcm cannot reach
 
 
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\GroupResponseContract](LaravelFCM-Response-GroupResponseContract.md)
 
 
 

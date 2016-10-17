@@ -33,9 +33,9 @@
 
     "require-dev": {
         "behat/behat":           "^3.0.11",
-        "bossa/phpspec2-expect": "~1.0",
         "symfony/filesystem":    "~2.1|~3.0",
-        "phpunit/phpunit":       "~4.4"
+        "phpunit/phpunit":       "~4.4",
+        "ciaranmcnulty/versionbasedtestskipper": "^0.2.1"
     },
 
     "suggest": {
@@ -58,7 +58,7 @@
 
     "extra": {
         "branch-alias": {
-            "dev-master": "2.2.x-dev"
+            "dev-master": "2.5.x-dev"
         }
     }
 }

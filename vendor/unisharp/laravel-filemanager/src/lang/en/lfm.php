@@ -13,7 +13,6 @@ return [
     'menu-download'     => 'Download',
     'menu-resize'       => 'Resize',
     'menu-crop'         => 'Crop',
-    'menu-new'          => 'New',
 
     'title-page'        => 'File Manager',
     'title-panel'       => 'Laravel FileManager',
@@ -34,16 +33,21 @@ return [
     'message-delete'    => 'Are you sure you want to delete this item?',
     'message-name'      => 'Folder name:',
     'message-rename'    => 'Rename to:',
+    'message-extension_not_found' => 'Please install gd or imagick extension to crop, resize, and make thumbnails of images.',
 
     'error-rename'      => 'File name already in use!',
     'error-file-empty'  => 'You must choose a file!',
     'error-file-exist'  => 'A file with this name already exists!',
+    'error-file-size'   => 'File size exceeds server limit! (maximum size: :max)',
     'error-delete'      => 'You cannot delete this folder because it is not empty!',
     'error-folder-name' => 'Folder name cannot be empty!',
     'error-folder-exist'=> 'A folder with this name already exists!',
+    'error-folder-alnum'=> 'Only alphanumeric folder names are allowed!',
     'error-mime'        => 'Unexpected MimeType: ',
     'error-instance'    => 'The uploaded file should be an instance of UploadedFile',
     'error-invalid'     => 'Invalid upload request',
+    'error-other'       => 'An error has occured: ',
+    'error-too-large'   => 'Request entity too large!',
 
     'btn-upload'        => 'Upload File',
     'btn-uploading'     => 'Uploading...',
@@ -61,4 +65,5 @@ return [
     'resize-new-width'  => 'Width:',
 
     'locale-bootbox'    => 'en',
+    'menu-new'=>'New',
 ];

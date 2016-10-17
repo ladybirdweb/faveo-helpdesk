@@ -19,8 +19,16 @@ class = "active"
     </blockquote>
     <div class="archive-list archive-article">
         <?php foreach ($article_id as $id) { ?>
-            <?php $article = App\Model\kb\Article::where('id', $id)->orderBy('created_at', 'ASC')->get(); ?>
-            @foreach($article as $arti)
+            <?php
+            $article = App\Model\kb\Article::where('id', $id);
+            if (!Auth::user() || Auth::user()->role == 'user') {
+                $article = $article->where('status', 1);
+                $article = $article->where('type', 1);
+            }
+            $article = $article->orderBy('publish_time', 'desc');
+            $article = $article->get();
+            ?>
+            @forelse($article as $arti)
             <article class="hentry">
                 <header class="entry-header">
                     <i class="fa fa-list-alt fa-2x fa-fw pull-left text-muted"></i>
@@ -39,7 +47,9 @@ class = "active"
                     </div><!-- .entry-meta -->
                 </footer><!-- .entry-footer -->
             </article><!-- .hentry -->
-            @endforeach
+            @empty
+            <p>No articles available</p>
+            @endforelse
             <?php
         }
         //echo $all->render();

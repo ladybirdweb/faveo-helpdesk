@@ -24,7 +24,6 @@
         
         <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css"/>
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-
         <link href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css"/>
 
         <link href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet" rel="stylesheet"/>
@@ -40,8 +39,11 @@
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
         <!-- Select2 -->
         <link href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}" rel="stylesheet" type="text/css" />
-        <!-- autocomplete -->
-        <link href="{{asset("lb-faveo/css/autocomplete.css")}}" rel="stylesheet" type="text/css" />
+        <!--Daterangepicker-->
+        <link rel="stylesheet" href="{{asset("lb-faveo/plugins/daterangepicker/daterangepicker.css")}}" rel="stylesheet" type="text/css" />
+        <!--calendar -->
+        <!-- fullCalendar 2.2.5-->
+        <link href="{{asset('lb-faveo/plugins/fullcalendar/fullcalendar.min.css')}}" rel="stylesheet" type="text/css" />
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -94,11 +96,14 @@
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         @if($replacetop==0)
                         <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
-                            <li @yield('Dashboard')><a data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard();">{!! Lang::get('lang.dashboard') !!}</a></li>
+                            <li @yield('Dashboard')><a id="dash" data-target="#tabA" href="{{URL::route('dashboard')}}" onclick="clickDashboard(event);">{!! Lang::get('lang.dashboard') !!}</a></li>
                             <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
-
+                            @if(Auth::user()->role == 'admin')
+                                <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
+                            @endif
+                            <?php \Event::fire('calendar.topbar', array()); ?>
                         </ul>
                         @else
                             <?php \Event::fire('service.desk.agent.topbar', array()); ?>
@@ -215,9 +220,7 @@
                             <div class="col-xs-3"></div>
                             <div class="col-xs-2" style="width:50%;">
                                 <a href="{!! url('profile') !!}">
-
                                     <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
-
                                 </a>
                             </div>
                         </div>
@@ -250,16 +253,23 @@
                         <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
                         <?php
                         if (Auth::user()->role == 'admin') {
+
 //$inbox = App\Model\helpdesk\Ticket\Tickets::all();
                             $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
                             $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->get();
-                            $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '1')->get();
+                            $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  array(1, 7))->get();
+
+                            $closingapproval = App\Model\helpdesk\Ticket\Tickets::where('status', '7')->get();
+                            
                             $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->get();
                         } elseif (Auth::user()->role == 'agent') {
 //$inbox = App\Model\helpdesk\Ticket\Tickets::where('dept_id','',Auth::user()->primary_dpt)->get();
                             $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
                             $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
-                            $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
+                            $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  array(1, 7))->where('dept_id', '=', Auth::user()->primary_dpt)->get();
+                            
+                            $closingapproval = App\Model\helpdesk\Ticket\Tickets::where('status', '7')->get();
+                            
                             $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
                         }
                         if (Auth::user()->role == 'agent') {
@@ -292,27 +302,40 @@
                         }
                         ?>
                         <li @yield('inbox')>
-                             <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
-                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green"><?php echo count($tickets); ?></small>                                            </a>
+                            <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
+                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green"><?php echo count($tickets); ?></small>                                            
+                            </a>
                         </li>
                         <li @yield('myticket')>
-                             <a href="{{url('ticket/myticket')}}" id="load-myticket">
+                            <a href="{{url('ticket/myticket')}}" id="load-myticket">
                                 <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!} </span>
                                 <small class="label pull-right bg-green">{{count($myticket)}}</small>
                             </a>
                         </li>
                         <li @yield('unassigned')>
-                             <a href="{{url('unassigned')}}" id="load-unassigned">
+                            <a href="{{url('unassigned')}}" id="load-unassigned">
                                 <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
                                 <small class="label pull-right bg-green">{{count($unassigned)}}</small>
                             </a>
                         </li>
                         <li @yield('overdue')>
-                             <a href="{{url('ticket/overdue')}}" id="load-unassigned">
+                            <a href="{{url('ticket/overdue')}}" id="load-unassigned">
                                 <i class="fa fa-calendar-times-o"></i> <span>{!! Lang::get('lang.overdue') !!}</span>
                                 <small class="label pull-right bg-green">{{$overdue_ticket}}</small>
                             </a>
                         </li>
+                        <?php
+                        $settings = App\Model\helpdesk\Settings\Approval::where('id','=',1)->first();
+                        // dd($settings);
+                        ?>
+                       {{--@if($settings->status == 1)
+                        <li @yield('approval')>
+                             <a href="{{url('ticket/approval/closed')}}" id="load-unassigned">
+                                <i class="fa fa fa-bell"></i> <span>{!! Lang::get('lang.approval') !!}</span>
+                                <small class="label pull-right bg-green">{{count($closingapproval)}}</small>
+                            </a>
+                        </li>
+                        @endif--}}
                         <li @yield('trash')>
                              <a href="{{url('trash')}}">
                                 <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
@@ -356,7 +379,6 @@
                             <?php }
                         }
                         ?>
-
                         @endif
 <?php \Event::fire('service.desk.agent.sidebar', array()); ?>
                     </ul>
@@ -366,7 +388,6 @@
             <?php
             $agent_group = Auth::user()->assign_group;
             $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
-// dd($group);
             ?>
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
@@ -392,7 +413,9 @@
                                     <li id="bar" @yield('myticket')><a href="{{ url('/ticket/myticket')}}" >{!! Lang::get('lang.my_tickets') !!}</a></li>
                                     {{-- < li id = "bar" @yield('ticket') > < a href = "{{ url('ticket') }}" >Ticket</a></li> --}}
                                     {{-- < li id = "bar" @yield('overdue') > < a href = "{{ url('/ticket/overdue') }}" >Overdue</a></li> --}}
+                                   
                                     <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
+                                   <li id="bar" @yield('approvel')><a href="{{ url('ticket/approval/closed')}}" >{!! Lang::get('lang.approval') !!}</a></li>
                                     <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
                                     <?php if ($group->can_create_ticket == 1) { ?>
                                         <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
@@ -402,25 +425,23 @@
                             <div class="tabs-pane @yield('tools-bar')" id="tabD">
                                 <ul class="nav navbar-nav">
                                     <li id="bar" @yield('tools')><a href="{{ url('/canned/list')}}" >{!! Lang::get('lang.canned_response') !!}</a></li>
-                                    @if(Auth::user()->role == 'admin')
                                     <li id="bar" @yield('kb')><a href="{{ url('/comment')}}" >{!! Lang::get('lang.knowledge_base') !!}</a></li>
-                                    @endif
                                 </ul>
                             </div>
+                            @if(Auth::user()->role == 'admin')
+                                <div class="tabs-pane @yield('report-bar')" id="tabD">
+                                    <ul class="nav navbar-nav">
+                                    </ul>
+                                </div>
+                            @endif
                             @endif
 <?php \Event::fire('service.desk.agent.topsubbar', array()); ?>
                         </div>
                     </div>
                 </div>
                 <section class="content-header">
-                    <!--<div class="row">-->
-                    <!--<div class="col-md-6">-->
                     @yield('PageHeader')
-                    <!--</div>-->
-                    <!--<div class="pull-right">-->
                     {!! Breadcrumbs::renderIfExists() !!}
-                    <!--</div>-->
-                    <!--</div>-->
                 </section>
                 <!-- Main content -->
                 <section class="content">
@@ -435,7 +456,6 @@
             </footer>
         </div><!-- ./wrapper -->
 
-
     <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}" type="text/javascript"></script>
     
     <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
@@ -447,6 +467,7 @@
     <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}"  type="text/javascript"></script>
     <!-- AdminLTE App -->
     <script src="{{asset("lb-faveo/js/app.min.js")}}" type="text/javascript"></script>
+
     <!-- iCheck -->
     <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
     <!-- jquery ui -->
@@ -465,10 +486,11 @@
     <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" type="text/javascript"></script>
 
     <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" type="text/javascript"></script>
-
+    <!-- full calendar-->
+    <script src="{{asset('lb-faveo/plugins/fullcalendar/fullcalendar.min.js')}}" type="text/javascript"></script>
+    <script src="{{asset('lb-faveo/plugins/daterangepicker/daterangepicker.js')}}" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
-
         $('.noti_User').click(function () {
         var id = this.id;
                 var dataString = 'id=' + id;
@@ -480,7 +502,6 @@
                         cache: false,
                         success: function (html)
                         {
-
                         }
                 });
         });
@@ -555,10 +576,23 @@
             });
 </script>
 <script type="text/javascript">
-    function clickDashboard() {
-        window.location = "{{URL::route('dashboard')}}";
+    function clickDashboard(e) {
+        if (e.ctrlKey === true) {
+            window.open('{{URL::route("dashboard")}}', '_blank');
+        } else {
+            window.location = "{{URL::route('dashboard')}}";
+        }
+    }
+    function clickReport(e) {
+        if (e.ctrlKey === true) {
+            window.open('{{URL::route("report.index")}}', '_blank');
+        } else {
+            window.location = "{{URL::route('report.index')}}";
+        }
     }
 </script>
+<?php Event::fire('show.calendar.script', array()); ?>
+<?php Event::fire('load-calendar-scripts', array()); ?>
 @yield('FooterInclude')
 </body>
 </html>

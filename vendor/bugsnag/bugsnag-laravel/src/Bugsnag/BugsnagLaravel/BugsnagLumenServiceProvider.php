@@ -1,4 +1,6 @@
-<?php namespace Bugsnag\BugsnagLaravel;
+<?php
+
+namespace Bugsnag\BugsnagLaravel;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -36,15 +38,15 @@ class BugsnagLumenServiceProvider extends ServiceProvider
 
             $client = new \Bugsnag_Client($config['api_key']);
             $client->setStripPath(base_path());
-            $client->setProjectRoot(base_path() . '/app');
+            $client->setProjectRoot(base_path().'/app');
             $client->setAutoNotify(false);
             $client->setBatchSending(false);
             $client->setReleaseStage($app->environment());
             $client->setNotifier(array(
-                                     'name'    => 'Bugsnag Lumen',
-                                     'version' => '1.6.4',
-                                     'url'     => 'https://github.com/bugsnag/bugsnag-laravel'
-                                 ));
+                'name' => 'Bugsnag Lumen',
+                'version' => '1.7.0',
+                'url' => 'https://github.com/bugsnag/bugsnag-laravel',
+            ));
 
             if (isset($config['notify_release_stages']) && is_array($config['notify_release_stages'])) {
                 $client->setNotifyReleaseStages($config['notify_release_stages']);
@@ -86,6 +88,6 @@ class BugsnagLumenServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return array("bugsnag");
+        return array('bugsnag');
     }
 }

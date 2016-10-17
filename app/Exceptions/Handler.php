@@ -90,6 +90,8 @@ class Handler extends ExceptionHandler
     {
         if (config('app.debug') == true) {
             return parent::render($request, $e);
+        } elseif ($e instanceof ValidationException) {
+            return parent::render($request, $e);
         }
 
         return  response()->view('errors.500');

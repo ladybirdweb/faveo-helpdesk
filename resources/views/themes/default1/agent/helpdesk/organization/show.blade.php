@@ -49,14 +49,14 @@ class="active"
             <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                     @if($orgs->phone)<li><a>
-                        <b>{!! Lang::get('lang.phone') !!}</b>  
-                        <span class="pull-right"> {{$orgs->phone}}</span></a></li>@endif
+                            <b>{!! Lang::get('lang.phone') !!}</b>  
+                            <span class="pull-right"> {{$orgs->phone}}</span></a></li>@endif
                     @if($orgs->address)<li><a>
-                        <b>{!! Lang::get('lang.address') !!}</b>  
-                        <br/> <center>{!! $orgs->address !!}</center></a></li>@endif
+                            <b>{!! Lang::get('lang.address') !!}</b>  
+                            <br/> <center>{!! $orgs->address !!}</center></a></li>@endif
                     @if($orgs->internal_notes)<li><a>
-                        <b>{!! Lang::get('lang.internal_notes') !!}</b>  
-                        <br/> <center>{!! $orgs->internal_notes !!}</center></a></li>@endif
+                            <b>{!! Lang::get('lang.internal_notes') !!}</b>  
+                            <br/> <center>{!! $orgs->internal_notes !!}</center></a></li>@endif
                 </ul>
                 <button data-toggle="modal" data-target="#assign_head" id="button_select" class="btn btn-primary btn-flat btn-block">{!! Lang::get('lang.select_organization_manager') !!}</button>
             </div>
@@ -130,9 +130,13 @@ class="active"
         foreach ($user_orga_relations as $user_orga_relation) {
             $user_orga_relation_id[] = $user_orga_relation->user_id;
         }
+//        dd($user_orga_relation_id);
+//        $models = \App\Model\helpdesk\Ticket\Tickets::whereIn('user_id', $user_orga_relation_id)->get();
+
         $open = count(\App\Model\helpdesk\Ticket\Tickets::whereIn('user_id', $user_orga_relation_id)->where('status', '=', '1')->get());
         $counted = count(\App\Model\helpdesk\Ticket\Tickets::whereIn('user_id', $user_orga_relation_id)->where('status', '=', '2')->get());
         $deleted = count(\App\Model\helpdesk\Ticket\Tickets::whereIn('user_id', $user_orga_relation_id)->where('status', '=', '5')->get());
+//        dd($open);
         ?>
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">

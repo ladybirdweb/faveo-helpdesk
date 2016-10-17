@@ -1,10 +1,12 @@
 <?php namespace LaravelFCM;
 
-use Illuminate\Support\ServiceProvider;
-use LaravelFCM\Sender\FCMSender;
 use LaravelFCM\Sender\FCMGroup;
+use LaravelFCM\Sender\FCMSender;
+use Illuminate\Support\ServiceProvider;
 
 class FCMServiceProvider extends ServiceProvider {
+
+	protected $defer = true;
 
 	public function boot()
 	{
@@ -20,26 +22,28 @@ class FCMServiceProvider extends ServiceProvider {
 
 	public function register()
 	{
-		$this->app->bind('fcm.group', function($app) {
-			return new FCMGroup();
-		});
-
-		$this->app->bind('fcm.sender', function($app) {
-			return new FCMSender();
-		});
-		
-		$this->registerClient();
-	}
-
-	public function registerClient()
-	{
 		$this->app->singleton('fcm.client', function($app) {
 			return (new FCMManager($app))->driver();
 		});
+
+		$this->app->bind('fcm.group', function($app) {
+			$client = $app[ 'fcm.client' ];
+			$url = $app[ 'config' ]->get('fcm.http.server_group_url');
+
+			return new FCMGroup($client, $url);
+		});
+
+		$this->app->bind('fcm.sender', function($app) {
+			$client = $app[ 'fcm.client' ];
+			$url = $app[ 'config' ]->get('fcm.http.server_send_url');
+
+			return new FCMSender($client, $url);
+		});
 	}
 
-	protected function provide()
+	public function provides()
 	{
-		return [ 'fcm', 'fcm.client' ];
+		return [ 'fcm.client', 'fcm.group', 'fcm.sender' ];
 	}
+
 }

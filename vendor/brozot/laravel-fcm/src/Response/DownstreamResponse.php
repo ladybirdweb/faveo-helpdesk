@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
  *
  * @package LaravelFCM\Response
  */
-class DownstreamResponse extends BaseResponse {
+class DownstreamResponse extends BaseResponse implements DownstreamResponseContract{
 
 	const MULTICAST_ID = 'multicast_id';
 	const CANONICAL_IDS = "canonical_ids";

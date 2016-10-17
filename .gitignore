@@ -1,10 +1,11 @@
 # Please try and keep this file organized by alphabetical order. Single files first, then directories.
 .env
+example.env
 Homestead.yaml
 Homestead.json
 /app/Plugins/Reseller/
-/app/Plugins/
 /app/Plugins/ServiceDesk/
+/app/Plugins/Social/
 /config/lfm.php
 /nbproject/private/
 /node_modules
@@ -12,3 +13,8 @@ Homestead.json
 /public/lb-faveo/media/
 /public/uploads
 /public/photos/
+/app/FaveoJob
+
+app/Plugins/ServiceDesk.zip
+
+app/Plugins/Social.zip

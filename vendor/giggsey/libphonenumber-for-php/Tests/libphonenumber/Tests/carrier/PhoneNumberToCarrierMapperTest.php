@@ -77,10 +77,6 @@ class PhoneNumberToCarrierMapperTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        if(!extension_loaded('intl')) {
-            $this->markTestSkipped('The intl extension must be installed');
-        }
-
         $this->carrierMapper = PhoneNumberToCarrierMapper::getInstance(self::TEST_META_DATA_FILE_PREFIX);
     }
 
@@ -138,6 +134,5 @@ class PhoneNumberToCarrierMapperTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals("", $this->carrierMapper->getNameForNumber(self::$UK_INVALID_NUMBER, "en"));
         $this->assertEquals("", $this->carrierMapper->getNameForNumber(self::$AO_INVALID_NUMBER, "en"));
-
     }
 }

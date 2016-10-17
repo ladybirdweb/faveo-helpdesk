@@ -155,6 +155,18 @@
                         <p class="box-title" >{!! Lang::get('lang.email-settings') !!}</p>
                     </div>
                 </div>
+                <div class="col-md-2 col-sm-6">
+                    <div class="settingiconblue">
+                        <div class="settingdivblue">
+                            <a href="{{url('queue')}}">
+                                <span class="fa-stack fa-2x">
+                                    <i class="fa fa-upload fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <p class="box-title" >{!! Lang::get('lang.queues') !!}</p>
+                    </div>
+                </div>
                 <!--col-md-2-->
                 <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
@@ -240,8 +252,35 @@
                         <p class="box-title" >{!! Lang::get('lang.workflow') !!}</p>
                     </div>
                 </div>
+                <!-- priority -->
+                 <div class="col-md-2 col-sm-6">
+                    <div class="settingiconblue">
+                        <div class="settingdivblue">
+                            <a href="{{url('ticket_priority')}}">
+                                <span class="fa-stack fa-2x">
+                                    
+                                    <i class="fa fa-asterisk fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <p class="box-title" >{!! Lang::get('lang.priority') !!}</p>
+                    </div>
+                </div>
                 <!--/.col-md-2-->
-
+                <!--/.col-md-2-->
+                <div class="col-md-2 col-sm-6">
+                    <div class="settingiconblue">
+                        <div class="settingdivblue">
+                            <a href="{{url('url/settings')}}">
+                                <span class="fa-stack fa-2x">
+                                    <i class="fa fa-server fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <p class="box-title" >Url</p>
+                    </div>
+                </div>
+                <!--/.col-md-2-->
             </div>
         </div>
         <!-- /.row -->
@@ -508,6 +547,19 @@
                         <p class="box-title" >{!! Lang::get('lang.social') !!}</p>
                     </div>
                 </div>
+                
+                <div class="col-md-2 col-sm-6">
+                    <div class="settingiconblue">
+                        <div class="settingdivblue">
+                            <a href="{{ url('social/media') }}">
+                                <span class="fa-stack fa-2x">
+                                    <i class="fa fa-medium fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <p class="box-title" >Social media integration</p>
+                    </div>
+                </div>
                 <!--/.col-md-2-->                                        
             </div>
         </div>
@@ -564,6 +616,34 @@
                             </a>
                         </div>
                         <p class="box-title" >{!! Lang::get('lang.api') !!}</p>
+                    </div>
+                </div>
+                <!--/.col-md-2-->
+            </div>
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- ./box-body -->
+</div>
+<div class="box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Logs</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <!--/.col-md-2-->
+                <div class="col-md-2 col-sm-6">
+                    <div class="settingiconblue">
+                        <div class="settingdivblue">
+                            <a href="{{ url('logs') }}">
+                                <span class="fa-stack fa-2x">
+                                    <i class="fa fa-lock"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <p class="box-title" >Logs</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->

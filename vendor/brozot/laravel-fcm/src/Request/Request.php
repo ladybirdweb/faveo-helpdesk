@@ -1,9 +1,9 @@
 <?php namespace LaravelFCM\Request;
 
+use LaravelFCM\Message\Topics;
 use LaravelFCM\Message\Options;
 use LaravelFCM\Message\PayloadData;
 use LaravelFCM\Message\PayloadNotification;
-use LaravelFCM\Message\Topics;
 
 /**
  * Class Request

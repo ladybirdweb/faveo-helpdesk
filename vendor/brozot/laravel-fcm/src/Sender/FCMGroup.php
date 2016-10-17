@@ -8,7 +8,7 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
  *
  * @package LaravelFCM\Sender
  */
-class FCMGroup extends BaseSender {
+class FCMGroup extends HTTPSender {
 	
 	const CREATE = "create";
 	const ADD = "add";
@@ -96,13 +96,4 @@ class FCMGroup extends BaseSender {
 		return $response->getReasonPhrase() != 'OK' || $response->getStatusCode() != 200;
 	}
 
-	/**
-	 * get the url
-	 *
-	 * @return string
-	 */
-	protected function getUrl()
-	{
-		return $this->config['server_group_url'];
-	}
 }

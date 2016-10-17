@@ -8,7 +8,6 @@ use App;
 use App\Http\Controllers\Controller;
 //supports
 use App\Http\Requests;
-use Cache;
 use Config;
 //classes
 use File;
@@ -17,6 +16,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Input;
 use Lang;
+use UnAuth;
 use Validator;
 
 /**
@@ -46,24 +46,12 @@ class LanguageController extends Controller
      */
     public function switchLanguage($lang)
     {
-        //if(Cache::has('language'))
-        //{
-        //  return Cache::get('language');
-        //} else return 'false';
-        // Cache::put('language',$)
-        $path = base_path('resources/lang');  // Path to check available language packages
-        if (array_key_exists($lang, Config::get('languages')) && in_array($lang, scandir($path))) {
-            // dd(array_key_exists($lang, Config::get('languages')));
-            // app()->setLocale($lang);
-
-            Cache::forever('language', $lang);
-            // dd(Cache::get('language'));
-            // dd()
+        $changed = UnAuth::changeLanguage($lang);
+        if (!$changed) {
+            return \Redirect::back()->with('fails', Lang::get('lang.language-error'));
         } else {
-            return Redirect::back()->with('fails', Lang::get('lang.language-error'));
+            return \Redirect::back();
         }
-
-        return Redirect::back();
     }
 
     /**

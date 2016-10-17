@@ -1,4 +1,6 @@
-<?php namespace Bugsnag\BugsnagLaravel;
+<?php
+
+namespace Bugsnag\BugsnagLaravel;
 
 use Illuminate\Support\Facades\Facade;
 

@@ -335,7 +335,7 @@ active
             <label for="dummy-data" style="color:#3AA7D9">Install dummy data</label>
             <br><br>
             <p class="setup-actions step">
-                <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Install">
+                <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Install" onclick="this.disabled=true;this.value='Installing, please wait...';this.form.submit();">
                 <a href="{{url('step4')}}" class="button button-large button-next" style="float: left">Previous</a>
             </p>
         </form>

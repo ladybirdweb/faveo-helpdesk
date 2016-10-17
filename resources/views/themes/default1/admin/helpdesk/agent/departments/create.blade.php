@@ -17,7 +17,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.staffs')}}</h1>
+<h1>{{Lang::get('lang.departments')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -88,7 +88,7 @@ class="active"
             <!-- manager -->
             <div class="col-xs-6 form-group {{ $errors->has('manager') ? 'has-error' : '' }}">
                 {!! Form::label('manager',Lang::get('lang.manager')) !!}
-                {!!Form::select('manager',[''=>Lang::get('lang.select_a_manager'),Lang::get('lang.manager')=>$user->lists('user_name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                {!!Form::select('manager',[''=>Lang::get('lang.select_a_manager'),Lang::get('lang.manager')=>$user->lists('full_name','id')->toArray()],null,['class' => 'form-control select']) !!}
             </div>
         </div>
     </div>

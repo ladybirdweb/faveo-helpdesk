@@ -1,13 +1,13 @@
 Webmozart Assert
 ================
 
-[![Build Status](https://travis-ci.org/webmozart/assert.svg?branch=1.0.2)](https://travis-ci.org/webmozart/assert)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/689b709c-117b-4076-82e5-000862e8a211/mini.png)](https://insight.sensiolabs.com/projects/689b709c-117b-4076-82e5-000862e8a211)
+[![Build Status](https://travis-ci.org/webmozart/assert.svg?branch=1.1.0)](https://travis-ci.org/webmozart/assert)
+[![Build status](https://ci.appveyor.com/api/projects/status/lyg83bcsisrr94se/branch/master?svg=true)](https://ci.appveyor.com/project/webmozart/assert/branch/master)
 [![Latest Stable Version](https://poser.pugx.org/webmozart/assert/v/stable.svg)](https://packagist.org/packages/webmozart/assert)
 [![Total Downloads](https://poser.pugx.org/webmozart/assert/downloads.svg)](https://packagist.org/packages/webmozart/assert)
-[![Dependency Status](https://www.versioneye.com/php/webmozart:assert/1.0.2/badge.svg)](https://www.versioneye.com/php/webmozart:assert/1.0.2)
+[![Dependency Status](https://www.versioneye.com/php/webmozart:assert/1.1.0/badge.svg)](https://www.versioneye.com/php/webmozart:assert/1.1.0)
 
-Latest release: [1.0.2](https://packagist.org/packages/webmozart/assert#1.0.2)
+Latest release: [1.1.0](https://packagist.org/packages/webmozart/assert#1.1.0)
 
 PHP >= 5.3.9
 
@@ -51,7 +51,7 @@ Installation
 Use [Composer] to install the package:
 
 ```
-$ composer require webmozart/assert:~1.0
+$ composer require webmozart/assert
 ```
 
 Example
@@ -99,6 +99,7 @@ Method                                          | Description
 `numeric($value, $message = '')`                | Check that a value is numeric
 `boolean($value, $message = '')`                | Check that a value is a boolean
 `scalar($value, $message = '')`                 | Check that a value is a scalar
+`object($value, $message = '')`                 | Check that a value is an object
 `resource($value, $type = null, $message = '')` | Check that a value is a resource
 `isCallable($value, $message = '')`             | Check that a value is a callable
 `isArray($value, $message = '')`                | Check that a value is an array
@@ -148,6 +149,7 @@ Method                                              | Description
 `minLength($value, $min, $message = '')`            | Check that a string has at least a certain number of characters
 `maxLength($value, $max, $message = '')`            | Check that a string has at most a certain number of characters
 `lengthBetween($value, $min, $max, $message = '')`  | Check that a string has a length in the given range
+`uuid($value, $message = '')`                       | Check that a string is a valid UUID
 
 ### File Assertions
 
@@ -159,13 +161,17 @@ Method                              | Description
 `readable($value, $message = '')`   | Check that a value is a readable path
 `writable($value, $message = '')`   | Check that a value is a writable path
 
-### Class Assertions
+### Object Assertions
 
-Method                                               | Description
----------------------------------------------------- | --------------------------------------------------
-`classExists($value, $message = '')`                 | Check that a value is an existing class name
-`subclassOf($value, $class, $message = '')`          | Check that a class is a subclass of another
-`implementsInterface($value, $class, $message = '')` | Check that a class implements an interface
+Method                                                | Description
+----------------------------------------------------- | --------------------------------------------------
+`classExists($value, $message = '')`                  | Check that a value is an existing class name
+`subclassOf($value, $class, $message = '')`           | Check that a class is a subclass of another
+`implementsInterface($value, $class, $message = '')`  | Check that a class implements an interface
+`propertyExists($value, $property, $message = '')`    | Check that a property exists in a class/object
+`propertyNotExists($value, $property, $message = '')` | Check that a property does not exist in a class/object
+`methodExists($value, $method, $message = '')`        | Check that a method exists in a class/object
+`methodNotExists($value, $method, $message = '')`     | Check that a method does not exist in a class/object
 
 ### Array Assertions
 

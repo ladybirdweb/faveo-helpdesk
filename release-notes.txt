@@ -1,14 +1,4 @@
 |=======================================================
-| v1.0.7.9 R.C.
-|=======================================================
-
-R.C.
-
-    This is a release candidate. We havent made any official release yet. 
-    This candidate version needs to be tested further.
-    Wait till the official release.
-
-|=======================================================
 | v1.0.7.7
 |=======================================================
 
@@ -82,6 +72,12 @@ Bug Fixes
     |------------------------------------------
 
     To upgrade read instructions here http://ladybirdweb.com/support/show/v1075
+
+    |------------------------------------------
+    |Updating from 1.0.7.4 to 1.0.7.5
+    |------------------------------------------
+    Please read this instruction carefully before updating from 1.0.7.4 to 1.0.7.5 
+    http://ladybirdweb.com/support/show/bug-after-update-from-1074-to-1075-or-higher-version
 
 |=======================================================
 | v1.0.7.4

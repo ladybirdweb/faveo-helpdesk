@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\helpdesk\TemplateSetRequest;
 use App\Model\Common\Template;
 use App\Model\Common\TemplateSet;
+use Exception;
 use Illuminate\Http\Request;
 use Lang;
 

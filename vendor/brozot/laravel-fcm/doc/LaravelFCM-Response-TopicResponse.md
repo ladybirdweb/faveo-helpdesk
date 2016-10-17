@@ -9,7 +9,7 @@ Class TopicResponse
 * Class name: TopicResponse
 * Namespace: LaravelFCM\Response
 * Parent class: [LaravelFCM\Response\BaseResponse](LaravelFCM-Response-BaseResponse.md)
-
+* This class implements: [LaravelFCM\Response\TopicResponseContract](LaravelFCM-Response-TopicResponseContract.md)
 
 
 Constants
@@ -114,20 +114,21 @@ Log the response
 
 ### isSuccess
 
-    boolean LaravelFCM\Response\TopicResponse::isSuccess()
+    boolean LaravelFCM\Response\TopicResponseContract::isSuccess()
 
 true if topic sent with success
 
 
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\TopicResponseContract](LaravelFCM-Response-TopicResponseContract.md)
 
 
 
 
 ### error
 
-    string LaravelFCM\Response\TopicResponse::error()
+    string LaravelFCM\Response\TopicResponseContract::error()
 
 return error message
 you should test if it's necessary to resent it
@@ -135,19 +136,21 @@ you should test if it's necessary to resent it
 
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\TopicResponseContract](LaravelFCM-Response-TopicResponseContract.md)
 
 
 
 
 ### shouldRetry
 
-    boolean LaravelFCM\Response\TopicResponse::shouldRetry()
+    boolean LaravelFCM\Response\TopicResponseContract::shouldRetry()
 
 return true if it's necessary resent it using exponential backoff
 
 
 
 * Visibility: **public**
+* This method is defined by [LaravelFCM\Response\TopicResponseContract](LaravelFCM-Response-TopicResponseContract.md)
 
 
 

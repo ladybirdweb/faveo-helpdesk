@@ -32,9 +32,11 @@ class="active"
 {!! Form::open(['action' => 'Admin\helpdesk\FormController@store','method' => 'post']) !!}
 <div class="box box-primary">
     <div class="box-header">
+        
         <h2 class="box-title"style="margin-left:-10px">{{Lang::get('lang.create')}}</h2>{!! Form::submit(Lang::get('lang.save'),['class'=>'pull-right btn btn-primary'])!!}
     </div>
     <div class="box-body">
+        
         <!-- title: text -->
         <div class="box-body table-responsive no-padding"style="overflow:hidden">
             <div class="row">

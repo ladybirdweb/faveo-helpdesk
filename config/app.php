@@ -33,8 +33,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.0.7.9.1',
-
+    'version' => 'Community 1.0.8.0 RC',
     /*
       |--------------------------------------------------------------------------
       | Application Name
@@ -43,8 +42,7 @@ return [
       | This Applocation name is used for installation and update checking
       |
      */
-    'name' => 'Faveo helpdesk community',
-
+        'name' => 'Faveo Helpdesk Pro',
     /*
       |--------------------------------------------------------------------------
       | Application URL
@@ -137,14 +135,9 @@ return [
 
         'Illuminate\Broadcasting\BroadcastServiceProvider',
         'DaveJamesMiller\Breadcrumbs\ServiceProvider',
-
-
         /*
          * Laravel Framework Service Providers...
          */
-
-
-            //
 
 
         'Illuminate\Auth\AuthServiceProvider',
@@ -158,7 +151,6 @@ return [
         'Illuminate\Foundation\Providers\FoundationServiceProvider',
         'Illuminate\Hashing\HashServiceProvider',
         Illuminate\Mail\MailServiceProvider::class,
-
         'Illuminate\Pagination\PaginationServiceProvider',
         'Illuminate\Pipeline\PipelineServiceProvider',
         'Illuminate\Queue\QueueServiceProvider',
@@ -182,13 +174,20 @@ return [
         'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
         'Chumper\Datatable\DatatableServiceProvider',
         'Chumper\Zipper\ZipperServiceProvider',
-        Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class,
-
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
         'Torann\GeoIP\GeoIPServiceProvider',
+        Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+        Unisharp\Ckeditor\ServiceProvider::class,
         LaravelFCM\FCMServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Collective\Bus\BusServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
+        App\FaveoLog\LaravelLogViewerServiceProvider::class,
+
+
+
     ],
     /*
       |--------------------------------------------------------------------------
@@ -251,6 +250,11 @@ return [
         'FCM'         => LaravelFCM\Facades\FCM::class,
         'FCMGroup'    => LaravelFCM\Facades\FCMGroup::class,
         'Debugbar'    => Barryvdh\Debugbar\Facade::class,
+        'Excel'       => Maatwebsite\Excel\Facades\Excel::class,
+        'Socialite'   => Laravel\Socialite\Facades\Socialite::class,
+        'UnAuth'      => 'App\Http\Controllers\Client\helpdesk\UnAuthController',
+        'Finder'      => App\Helper\Finder::class,
+
     ],
-    'name'  => 'faveo helpdesk community',
+
 ];

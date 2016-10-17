@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Http\Controllers\Agent\helpdesk\TicketController as CoreTicketController;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\helpdesk\TicketRequest;
 //use Illuminate\Support\Facades\Request as Value;
+use App\Http\Requests\helpdesk\TicketRequest;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Manage\Help_topic;
@@ -119,24 +120,9 @@ class ApiController extends Controller
      *
      * @return json
      */
-    public function createTicket()
+    public function createTicket(\App\Http\Requests\helpdesk\CreateTicketRequest $request, \App\Model\helpdesk\Utility\CountryCode $code)
     {
         try {
-            $v = \Validator::make($this->request->all(), [
-                        'user_id'   => 'required|exists:users,id',
-                        'subject'   => 'required',
-                        'body'      => 'required',
-                        'helptopic' => 'required|exists:help_topic,id',
-                        'sla'       => 'required|exists:sla_plan,id',
-                        'priority'  => 'required|exists:ticket_priority,priority_id',
-                        'dept'      => 'required|exists:department,id',
-            ]);
-            if ($v->fails()) {
-                $error = $v->errors();
-
-                return response()->json(compact('error'));
-            }
-
             $user_id = $this->request->input('user_id');
 
             $subject = $this->request->input('subject');
@@ -159,15 +145,19 @@ class ApiController extends Controller
             /*
              * return s ticket number
              */
-            $response = $this->ticket->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach);
+            $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
+            $NotificationController = new \App\Http\Controllers\Common\NotificationController();
+            $core = new CoreTicketController($PhpMailController, $NotificationController);
+            $response = $core->post_newticket($request, $code, true);
+            //$response = $this->ticket->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach);
             //return $response;
             /*
              * return ticket details
              */
             //dd($response);
-            $result = $this->thread->where('id', $response)->first();
+            //$result = $this->thread->where('id', $response)->first();
             //$result = $this->attach($result->id,$file);
-            return response()->json(compact('result'));
+            return response()->json(compact('response'));
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
@@ -347,6 +337,7 @@ class ApiController extends Controller
             //dd('sdhjbc');
 //            $result = $this->model->where('assigned_to', '=', null)->where('status', '1')->orderBy('id', 'DESC')->get();
 //            return response()->json(compact('result'));
+            $user = \JWTAuth::parseToken()->authenticate();
             $unassigned = $this->user->join('tickets', function ($join) {
                 $join->on('users.id', '=', 'tickets.user_id')
                         ->whereNull('assigned_to')->where('status', '=', 1);
@@ -361,6 +352,11 @@ class ApiController extends Controller
                         ->whereNotNull('title');
                     })
                     ->select(\DB::raw('max(ticket_thread.updated_at) as updated_at'), 'user_name', 'first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+                    ->where(function ($query) use ($user) {
+                        if ($user->role != 'admin') {
+                            $query->where('tickets.dept_id', '=', $user->primary_dpt);
+                        }
+                    })
                     ->orderBy('updated_at', 'desc')
                     ->groupby('tickets.id')
                     ->distinct()
@@ -391,7 +387,7 @@ class ApiController extends Controller
         try {
             //            $result = $this->model->where('status', '>', 1)->where('status', '<', 4)->orderBy('id', 'DESC')->get();
 //            return response()->json(compact('result'));
-
+            $user = \JWTAuth::parseToken()->authenticate();
             $result = $this->user->join('tickets', function ($join) {
                 $join->on('users.id', '=', 'tickets.user_id')
                         ->where('status', '=', 3)->orWhere('status', '=', 2);
@@ -406,6 +402,11 @@ class ApiController extends Controller
                         ->whereNotNull('title');
                     })
                     ->select(\DB::raw('max(ticket_thread.updated_at) as updated_at'), 'user_name', 'first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+                    ->where(function ($query) use ($user) {
+                        if ($user->role != 'admin') {
+                            $query->where('tickets.dept_id', '=', $user->primary_dpt);
+                        }
+                    })
                     ->orderBy('updated_at', 'desc')
                     ->groupby('tickets.id')
                     ->distinct()
@@ -946,6 +947,7 @@ class ApiController extends Controller
     public function inbox()
     {
         try {
+            $user = \JWTAuth::parseToken()->authenticate();
             $inbox = $this->user->join('tickets', function ($join) {
                 $join->on('users.id', '=', 'tickets.user_id')
                         ->where('status', '=', 1);
@@ -959,7 +961,12 @@ class ApiController extends Controller
                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id')
                         ->whereNotNull('ticket_thread.title');
                     })
-                    ->select(\DB::raw('max(ticket_thread.updated_at) as updated_at'), 'user_name', 'first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'ticket_thread.title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+                    ->select(\DB::raw('max(ticket_thread.updated_at) as updated_at'), 'user_name', 'first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'ticket_thread.title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name', 'department.id as department_id', 'users.primary_dpt as user_dpt')
+                    ->where(function ($query) use ($user) {
+                        if ($user->role != 'admin') {
+                            $query->where('tickets.dept_id', '=', $user->primary_dpt);
+                        }
+                    })
                     ->orderBy('updated_at', 'desc')
                     ->groupby('tickets.id')
                     ->distinct()
@@ -1021,6 +1028,7 @@ class ApiController extends Controller
     public function getTrash()
     {
         try {
+            $user = \JWTAuth::parseToken()->authenticate();
             $trash = $this->user->join('tickets', function ($join) {
                 $join->on('users.id', '=', 'tickets.user_id')
                         ->where('status', '=', 5);
@@ -1035,6 +1043,11 @@ class ApiController extends Controller
                         ->whereNotNull('title');
                     })
                     ->select(\DB::raw('max(ticket_thread.updated_at) as updated_at'), 'user_name', 'first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+                    ->where(function ($query) use ($user) {
+                        if ($user->role != 'admin') {
+                            $query->where('tickets.dept_id', '=', $user->primary_dpt);
+                        }
+                    })
                     ->orderBy('updated_at', 'desc')
                     ->groupby('tickets.id')
                     ->distinct()
@@ -1072,9 +1085,10 @@ class ApiController extends Controller
 
                 return response()->json(compact('error'));
             }
+            //$user = \JWTAuth::parseToken()->authenticate();
             $result = $this->user->join('tickets', function ($join) use ($id) {
                 $join->on('users.id', '=', 'tickets.assigned_to')
-                            ->where('status', '=', 1);
+                        ->where('status', '=', 1);
                         //->where('user_id', '=', $id);
             })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
@@ -1088,6 +1102,11 @@ class ApiController extends Controller
                     })
                     ->where('users.id', $id)
                     ->select(\DB::raw('max(ticket_thread.updated_at) as updated_at'), 'user_name', 'first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'title', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+//                    ->where(function($query) use($user) {
+//                        if ($user->role != 'admin') {
+//                            $query->where('tickets.dept_id', '=', $user->primary_dpt);
+//                        }
+//                    })
                     ->orderBy('updated_at', 'desc')
                     ->groupby('tickets.id')
                     ->distinct()
@@ -1182,9 +1201,9 @@ class ApiController extends Controller
                         ->where('tickets.id', '=', $id);
             });
             $response = $this->differenciateHelpTopic($query);
-            //$select = 'users.email','users.user_name','users.first_name','users.last_name','tickets.id','ticket_number','num_sequence','user_id','priority_id','sla','max_open_ticket','captcha','status','lock_by','lock_at','source','isoverdue','reopened','isanswered','is_deleted', 'closed','is_transfer','transfer_at','reopened_at','duedate','closed_at','last_message_at','last_response_at';
+            //$select = 'users.email','users.user_name','users.first_name','users.last_name','tickets.id','ticket_number','num_sequence','user_id','priority_id','sla','max_open_ticket','captcha','status','lock_by','lock_at','source','isoverdue','reopened','isanswered','is_deleted', 'closed','is_transfer','transfer_at','reopened_at','duedate','closed_at','last_message_at';
 
-             $result = $response->addSelect('users.email', 'users.user_name', 'users.first_name', 'users.last_name', 'tickets.id', 'ticket_number', 'user_id', 'priority_id', 'sla', 'status', 'lock_by', 'lock_at', 'source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'reopened_at', 'duedate', 'closed_at', 'last_message_at', 'last_response_at', 'tickets.created_at', 'tickets.updated_at')->first();
+            $result = $response->addSelect('users.email', 'users.user_name', 'users.first_name', 'users.last_name', 'tickets.id', 'ticket_number', 'user_id', 'priority_id', 'sla', 'status', 'lock_by', 'lock_at', 'source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'reopened_at', 'duedate', 'closed_at', 'tickets.created_at', 'tickets.updated_at')->first();
 
             return response()->json(compact('result'));
         } catch (\Exception $e) {

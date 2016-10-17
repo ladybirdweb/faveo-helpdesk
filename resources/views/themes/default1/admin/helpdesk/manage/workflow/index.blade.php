@@ -70,11 +70,6 @@ class="active"
     <!-- /.col -->
 </div>
 <script>
-    function confirm_delete() {
-        return confirm('are you sure?');
-    }
-
-
     $(function() {
         $("#example1").DataTable();
         $('#example2').DataTable({
@@ -86,6 +81,5 @@ class="active"
             "autoWidth": false
         });
     });
-
 </script>
 @stop

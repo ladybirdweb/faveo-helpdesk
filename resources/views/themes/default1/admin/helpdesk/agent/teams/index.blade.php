@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.staffs')}}</h1>
+<h1>{{Lang::get('lang.teams')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -60,7 +60,7 @@ class="active"
                     </tr>
                     @foreach($teams as $team)
                     <tr>
-                        <td><a href="{{route('teams.edit', $team->id)}}"> {{$team->name }}</a></td>
+                        <td><a href="{{route('teams.show', $team->id)}}"> {{$team->name }}</a></td>
                         <td>
                             @if($team->status=='1')
                             <span style="color:green">{{Lang::get('lang.active')}}</span>
@@ -72,15 +72,26 @@ class="active"
                                 $team_lead = "";
                             } else {
                                 $users = App\User::whereId($team->team_lead)->first();
-                                $team_lead = $users->first_name . " " . $users->last_name;
+                                $team_lead = $users->full_name;
                             }
                             ?>
                         <td>{{count($assign_team_agent->where('team_id',$team->id))}}</td>
                         <td>{{ $team_lead }}</td>
                         <td>
                             {!! Form::open(['route'=>['teams.destroy', $team->id],'method'=>'DELETE']) !!}
+
                             <!-- To pop up a confirm Message -->
+                           @if ($team->status == 0) 
+                            <a href="{{route('teams.show', $team->id)}}" class="btn btn-success btn-xs btn-flat" disabled='disabled'><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.show') !!}</a>
+                            
+                            @endif
+                             @if ($team->status == 1) 
+                            <a href="{{route('teams.show', $team->id)}}" class="btn btn-success btn-xs btn-flat" ><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.show') !!}</a>
+                            
+                            @endif
+
                             <a href="{{route('teams.edit', $team->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a>
+                            
                             {!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> '.Lang::get('lang.delete'),
                             ['type' => 'submit',
                             'class'=> 'btn btn-warning btn-xs btn-flat',

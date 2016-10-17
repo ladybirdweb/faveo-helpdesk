@@ -482,16 +482,17 @@ class Builder
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
+        $page = $page ?: Paginator::resolveCurrentPage($pageName);
+
+        $perPage = $perPage ?: $this->model->getPerPage();
+
         $query = $this->toBase();
 
         $total = $query->getCountForPagination();
 
-        $this->forPage(
-            $page = $page ?: Paginator::resolveCurrentPage($pageName),
-            $perPage = $perPage ?: $this->model->getPerPage()
-        );
+        $results = $total ? $this->forPage($page, $perPage)->get($columns) : new Collection;
 
-        return new LengthAwarePaginator($this->get($columns), $total, $perPage, $page, [
+        return new LengthAwarePaginator($results, $total, $perPage, $page, [
             'path' => Paginator::resolveCurrentPath(),
             'pageName' => $pageName,
         ]);
@@ -710,7 +711,7 @@ class Builder
      * @param  string  $relation
      * @return array
      */
-    public function nestedRelations($relation)
+    protected function nestedRelations($relation)
     {
         $nested = [];
 
@@ -1143,6 +1144,29 @@ class Builder
     }
 
     /**
+     * Add the given scopes to the current builder instance.
+     *
+     * @param  array  $scopes
+     * @return mixed
+     */
+    public function scopes(array $scopes)
+    {
+        $builder = $this;
+
+        foreach ($scopes as $scope => $parameters) {
+            if (is_int($scope)) {
+                list($scope, $parameters) = [$parameters, []];
+            }
+
+            $builder = $builder->callScope(
+                [$this->model, 'scope'.ucfirst($scope)], (array) $parameters
+            );
+        }
+
+        return $builder;
+    }
+
+    /**
      * Apply the given scope on the current builder instance.
      *
      * @param  callable $scope
@@ -1275,7 +1299,7 @@ class Builder
     /**
      * Get the underlying query builder instance.
      *
-     * @return \Illuminate\Database\Query\Builder|static
+     * @return \Illuminate\Database\Query\Builder
      */
     public function getQuery()
     {

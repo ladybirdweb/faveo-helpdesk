@@ -1,4 +1,5 @@
 <?php
+
 /*
   |--------------------------------------------------------------------------
   | Application Routes
@@ -13,15 +14,18 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['middleware' => 'update', 'middleware' => 'install'], function () {
         Route::controllers([
             'auth'     => 'Auth\AuthController',
-            // 'password' => 'Auth\PasswordController',
-        ]);
-    });
-    Route::controllers([
             'password' => 'Auth\PasswordController',
-    ]);
-
+        ]);
+        Route::get('social/login/redirect/{provider}/{redirect?}', ['uses' => 'Auth\AuthController@redirectToProvider', 'as' => 'social.login']);
+        Route::get('social/login/{provider}', ['as' => 'social.login.callback', 'uses' => 'Auth\AuthController@handleProviderCallback']);
+        Route::get('social-sync', ['as' => 'social.sync', 'uses' => 'Client\helpdesk\GuestController@sync']);
+    });
     Route::get('account/activate/{token}', ['as' => 'account.activate', 'uses' => 'Auth\AuthController@accountActivate']);
     Route::get('getmail/{token}', 'Auth\AuthController@getMail');
+    Route::get('verify-otp', ['as' => 'otp-verification', 'uses' => 'Auth\AuthController@getVerifyOTP']);
+    Route::post('verify-otp', ['as' => 'otp-verification', 'uses' => 'Auth\AuthController@verifyOTP']);
+    Route::post('resend/opt', ['as' => 'resend-otp', 'uses' => 'Auth\AuthController@resendOTP']);
+
     /*
       |-------------------------------------------------------------------------------
       | Admin Routes
@@ -86,6 +90,12 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->parent('teams.index');
             $breadcrumbs->push(Lang::get('lang.edit'), url('teams/{teams}/edit'));
         });
+        Route::get('/teams/show/{id}', ['as' => 'teams.show', 'uses' => 'Admin\helpdesk\TeamController@show']); /*  Get Team View */
+         Breadcrumbs::register('teams.show', function ($breadcrumbs) {
+             $breadcrumbs->parent('teams.index');
+             $breadcrumbs->push(Lang::get('lang.show'), url('teams/{teams}/show'));
+         });
+        Route::get('getshow/{id}', ['as' => 'teams.getshow.list', 'uses' => 'Admin\helpdesk\TeamController@getshow']);
         Route::resource('agents', 'Admin\helpdesk\AgentController'); // in agents module, for CRUD
         Breadcrumbs::register('agents.index', function ($breadcrumbs) {
             $breadcrumbs->parent('setting');
@@ -192,14 +202,15 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->push(Lang::get('lang.edit'), url('sla/{sla}/edit'));
         });
         Route::resource('forms', 'Admin\helpdesk\FormController');
+        Route::get('forms/add-child/{formid}', ['as' => 'forms.add.child', 'uses' => 'Admin\helpdesk\FormController@addChildForm']);
         Route::post('forms/field/{fieldid}/child', [
             'as'   => 'forms.field.child',
             'uses' => 'Admin\helpdesk\FormController@addChild',
-            ]);
+        ]);
         Route::get('forms/render/child', [
             'as'   => 'forms.field.child',
             'uses' => 'Admin\helpdesk\FormController@renderChild',
-            ]);
+        ]);
         Breadcrumbs::register('forms.index', function ($breadcrumbs) {
             $breadcrumbs->parent('setting');
             $breadcrumbs->push(Lang::get('lang.forms'), route('forms.index'));
@@ -215,6 +226,10 @@ Route::group(['middleware' => ['web']], function () {
         Breadcrumbs::register('forms.show', function ($breadcrumbs) {
             $breadcrumbs->parent('forms.index');
             $breadcrumbs->push(Lang::get('lang.view'), url('forms/{forms}'));
+        });
+        Breadcrumbs::register('forms.add.child', function ($breadcrumbs) {
+            $breadcrumbs->parent('forms.index');
+            $breadcrumbs->push('Add Child', url('forms/add-child/{forms}'));
         });
         Route::get('delete-forms/{id}', ['as' => 'forms.delete', 'uses' => 'Admin\helpdesk\FormController@delete']);
         //$router->model('id','getcompany');
@@ -450,6 +465,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('user-agen1', 'Agent\helpdesk\DashboardController@userChartData');
         Route::post('user-chart-range', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
         Route::resource('user', 'Agent\helpdesk\UserController'); /* User router is used to control the CRUD of user */
+        Route::get('user-export', ['as' => 'user.export', 'uses' => 'Agent\helpdesk\UserController@getExportUser']); /* User router is used to control the CRUD of user */
+        Route::post('user-export', ['as' => 'user.export.post', 'uses' => 'Agent\helpdesk\UserController@exportUser']); /* User router is used to control the CRUD of user */
+
         Breadcrumbs::register('user.index', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
             $breadcrumbs->push(Lang::get('lang.user_directory'), route('user.index'));
@@ -469,6 +487,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('user-list', ['as' => 'user.list', 'uses' => 'Agent\helpdesk\UserController@user_list']);
         // Route::get('user/delete/{id}', ['as' => 'user.delete' , 'uses' => 'Agent\helpdesk\UserController@destroy']);
         Route::resource('organizations', 'Agent\helpdesk\OrganizationController'); /* organization router used to deal CRUD function of organization */
+        Route::get('get-organization', ['as' => 'org.get.ajax', 'uses' => 'Agent\helpdesk\OrganizationController@getOrgAjax']);
         Breadcrumbs::register('organizations.index', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
             $breadcrumbs->push(Lang::get('lang.organizations'), route('organizations.index'));
@@ -500,6 +519,10 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->parent('profile');
             $breadcrumbs->push(Lang::get('lang.edit'), url('profile-edit'));
         });
+
+        Route::post('verify-number', ['as' => 'agent-verify-number', 'uses' => 'Agent\helpdesk\UserController@resendOTP']);
+        Route::post('verify-number2', ['as' => 'post-agent-verify-number', 'uses' => 'Agent\helpdesk\UserController@verifyOTP']);
+
         Route::patch('agent-profile', ['as' => 'agent-profile', 'uses' => 'Agent\helpdesk\UserController@postProfileedit']); /* User Profile Post */
         Route::patch('agent-profile-password/{id}', 'Agent\helpdesk\UserController@postProfilePassword'); /*  Profile Password Post */
         Route::get('canned/list', ['as' => 'canned.list', 'uses' => 'Agent\helpdesk\CannedController@index']); /* Canned list */
@@ -656,7 +679,20 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('/get-closed-tickets/{id}', ['as' => 'get.dept.close', 'uses' => 'Agent\helpdesk\Ticket2Controller@getCloseTickets']);
         //in progress ticket of department
         Route::get('/get-under-process-tickets/{id}', ['as' => 'get.dept.inprocess', 'uses' => 'Agent\helpdesk\Ticket2Controller@getInProcessTickets']);
+
+        // route for graphical reporting
+        Route::get('report', ['as' => 'report.index', 'uses' => 'Agent\helpdesk\ReportController@index']); /* To show dashboard pages */
+        Breadcrumbs::register('report.index', function ($breadcrumbs) {
+            $breadcrumbs->parent('dashboard');
+            $breadcrumbs->push(Lang::get('lang.dashboard'), route('dashboard'));
+        });
+        // default route to get the data for the first time
+        Route::get('help-topic-report', 'Agent\helpdesk\ReportController@chartdataHelptopic');
+        // route to get the data on change
+        Route::post('help-topic-report/{date1}/{date2}/{id}', ['as' => 'report.helptopic', 'uses' => 'Agent\helpdesk\ReportController@chartdataHelptopic']); /* To show dashboard pages */
+        Route::post('help-topic-pdf', ['as' => 'help.topic.pdf', 'uses' => 'Agent\helpdesk\ReportController@helptopicPdf']);
     });
+
     /*
       |------------------------------------------------------------------
       |Guest Routes
@@ -683,7 +719,7 @@ Route::group(['middleware' => ['web']], function () {
     });
 
     Route::post('postform/{id}', 'Client\helpdesk\FormController@postForm'); /* post the AJAX form for create a ticket by guest user */
-    Route::post('postedform', 'Client\helpdesk\FormController@postedForm'); /* post the form to store the value */
+    Route::post('postedform', ['as' => 'client.form.post', 'uses' => 'Client\helpdesk\FormController@postedForm']); /* post the form to store the value */
     Route::get('check', 'CheckController@getcheck'); //testing checkbox auto-populate
     Route::post('postcheck/{id}', 'CheckController@postcheck');
     Route::get('get-helptopic-form', 'Client\helpdesk\FormController@getCustomForm');
@@ -728,6 +764,14 @@ Route::group(['middleware' => ['web']], function () {
         Route::patch('client-profile-edit', 'Client\helpdesk\GuestController@postProfile'); /* User Profile Post */
         Route::patch('client-profile-password', 'Client\helpdesk\GuestController@postProfilePassword'); /*  Profile Password Post */
         Route::post('post/reply/{id}', ['as' => 'client.reply', 'uses' => 'Client\helpdesk\ClientTicketController@reply']);
+        Route::post('verify-client-number', ['as' => 'client-verify-number', 'uses' => 'Client\helpdesk\GuestController@resendOTP']);
+        Breadcrumbs::register('client-verify-number', function ($breadcrumbs) {
+            $breadcrumbs->push('Profile', route('client-verify-number'));
+        });
+        Route::post('verify-client-number2', ['as' => 'post-client-verify-number', 'uses' => 'Client\helpdesk\GuestController@verifyOTP']);
+        Breadcrumbs::register('post-client-verify-number', function ($breadcrumbs) {
+            $breadcrumbs->push('My Profile', route('post-client-verify-number'));
+        });
     });
 //====================================================================================
     Route::get('checkticket', 'Client\helpdesk\ClientTicketController@getCheckTicket'); /* Check your Ticket */
@@ -744,7 +788,8 @@ Route::group(['middleware' => ['web']], function () {
       |
      */
     Route::get('/serial', ['as' => 'serialkey', 'uses' => 'Installer\helpdesk\InstallController@serialkey']);
-    Route::post('/CheckSerial/{id}', ['as' => 'CheckSerial', 'uses' => 'Installer\helpdesk\InstallController@PostSerialKey']);
+    Route::post('/post-serial', ['as' => 'post.serialkey', 'uses' => 'Installer\helpdesk\InstallController@postSerialKeyToFaveo']);
+    Route::post('/CheckSerial', ['as' => 'CheckSerial', 'uses' => 'Installer\helpdesk\InstallController@PostSerialKey']);
     Route::get('/JavaScript-disabled', ['as' => 'js-disabled', 'uses' => 'Installer\helpdesk\InstallController@jsDisabled']);
     Route::get('/step1', ['as' => 'licence', 'uses' => 'Installer\helpdesk\InstallController@licence']);
     Route::post('/step1post', ['as' => 'postlicence', 'uses' => 'Installer\helpdesk\InstallController@licencecheck']);
@@ -996,8 +1041,8 @@ Route::group(['middleware' => ['web']], function () {
     // Route::patch('client-profile-edit',['as' => 'client-profile-edit', 'uses' => 'Client\kb\UserController@postClientProfile']);
     // Route::patch('client-profile-password/{id}',['as' => 'client-profile-password', 'uses' => 'Client\kb\UserController@postClientProfilePassword']);
     Route::get('/inbox/data', ['as' => 'api.inbox', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);
-    Route::get('/report', 'HomeController@getreport');
-    Route::get('/reportdata', 'HomeController@pushdata');
+//    Route::get('/report', 'HomeController@getreport');
+//    Route::get('/reportdata', 'HomeController@pushdata');
     /*
      * ================================================================================================
      * @version v1
@@ -1094,7 +1139,7 @@ Route::group(['middleware' => ['web']], function () {
         /*
          * FCM token response
          */
-        Route::post('fcmtoken', ['as' => 'fcmtoken', 'uses' => 'Api\v1\PushNotificationController@fcmToken']);
+        Route::post('fcmtoken', ['as' => 'fcmtoken', 'uses' => 'Common\PushNotificationController@fcmToken']);
     });
     /*
      * Update module
@@ -1114,4 +1159,93 @@ Route::group(['middleware' => ['web']], function () {
 
 
     Route::get('test', ['as' => 'test', 'uses' => 'Common\PushNotificationController@response']);
+
+    Route::get('mail/config/service', ['as' => 'mail.config.service', 'uses' => 'Job\MailController@serviceForm']);
+    /*
+     * Queue
+     */
+    Breadcrumbs::register('queue', function ($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.queues'), route('queue'));
+    });
+    Route::get('queue', ['as' => 'queue', 'uses' => 'Job\QueueController@index']);
+    Route::get('form/queue', ['as' => 'queue.form', 'uses' => 'Job\QueueController@getForm']);
+    Breadcrumbs::register('queue.edit', function ($breadcrumbs) {
+        $id = \Input::segment(2);
+        $breadcrumbs->parent('queue');
+        $breadcrumbs->push(Lang::get('lang.edit'), route('queue.edit', $id));
+    });
+    Route::get('queue/{id}', ['as' => 'queue.edit', 'uses' => 'Job\QueueController@edit']);
+    Route::post('queue/{id}', ['as' => 'queue.update', 'uses' => 'Job\QueueController@update']);
+    Route::get('queue/{id}/activate', ['as' => 'queue.activate', 'uses' => 'Job\QueueController@activate']);
+    Route::get('get-ticket-number', ['as' => 'get.ticket.number', 'uses' => 'Admin\helpdesk\SettingsController@getTicketNumber']);
+    Route::get('genereate-pdf/{threadid}', ['as' => 'thread.pdf', 'uses' => 'Agent\helpdesk\TicketController@pdfThread']);
+
+    /*
+     * Url Settings
+     */
+    Breadcrumbs::register('url', function ($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push('URL', route('url.settings'));
+    });
+    Route::get('url/settings', ['as' => 'url.settings', 'uses' => 'Admin\helpdesk\UrlSettingController@settings']);
+    Route::patch('url/settings', ['as' => 'url.settings.post', 'uses' => 'Admin\helpdesk\UrlSettingController@postSettings']);
+
+    /*
+     * Social media settings
+     */
+    Breadcrumbs::register('social', function ($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('lang.social-media'), route('social'));
+    });
+    Breadcrumbs::register('social.media', function ($breadcrumbs) {
+        $id = \Input::segment(2);
+        $breadcrumbs->parent('social');
+        $breadcrumbs->push(Lang::get('lang.settings'), route('social.media', $id));
+    });
+    Route::get('social/media', ['as' => 'social', 'uses' => 'Admin\helpdesk\SocialMedia\SocialMediaController@index']);
+    Route::get('social/media/{provider}', ['as' => 'social.media', 'uses' => 'Admin\helpdesk\SocialMedia\SocialMediaController@settings']);
+    Route::post('social/media/{provider}', ['as' => 'social.media.post', 'uses' => 'Admin\helpdesk\SocialMedia\SocialMediaController@postSettings']);
+    /*
+     * Ticket_Priority Settings
+     */
+    Route::get('ticket_priority', ['as' => 'priority.index', 'uses' => 'Admin\helpdesk\PriorityController@priorityIndex']);
+    Route::post('user_ticket_priority', ['as' => 'user.priority.index', 'uses' => 'Admin\helpdesk\PriorityController@userPriorityIndex']);
+
+    Route::get('get_index', ['as' => 'priority.index1', 'uses' => 'Admin\helpdesk\PriorityController@priorityIndex1']);
+    Breadcrumbs::register('priority.index', function ($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('Ticket Priority'), route('priority.index'));
+    });
+    Route::get('ticket_priority/create', ['as' => 'priority.create', 'uses' => 'Admin\helpdesk\PriorityController@priorityCreate']);
+    Breadcrumbs::register('priority.create', function ($breadcrumbs) {
+        $breadcrumbs->parent('setting');
+        $breadcrumbs->push(Lang::get('Ticket Priority'), route('priority.index'));
+        $breadcrumbs->push(Lang::get('lang.create'), route('priority.create'));
+    });
+    Route::post('ticket_priority/create1', ['as' => 'priority.create1', 'uses' => 'Admin\helpdesk\PriorityController@priorityCreate1']);
+    Route::post('ticket_priority/edit1', ['as' => 'priority.edit1', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit1']);
+    Route::get('ticket_priority/{ticket_priority}/edit', ['as' => 'priority.edit', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit']);
+    Breadcrumbs::register('priority.edit', function ($breadcrumbs) {
+        $breadcrumbs->push(Lang::get('Ticket Priority'), route('priority.index'));
+        $breadcrumbs->push(Lang::get('Edit'), route('priority.index'));
+    });
+    Route::get('ticket_priority/{ticket_priority}/destroy', ['as' => 'priority.destroy', 'uses' => 'Admin\helpdesk\PriorityController@destroy']);
+ // user---arindam
+ Route::post('rolechangeadmin/{id}', ['as' => 'user.post.rolechangeadmin',  'uses' => 'Agent\helpdesk\UserController@changeRoleAdmin']);
+    Route::post('rolechangeagent/{id}', ['as' => 'user.post.rolechangeagent',  'uses' => 'Agent\helpdesk\UserController@changeRoleAgent']);
+    Route::post('rolechangeuser/{id}', ['as' => 'user.post.rolechangeuser',  'uses' => 'Agent\helpdesk\UserController@changeRoleUser']);
+    Route::get('password', ['as' => 'user.changepassword',  'uses' => 'Agent\helpdesk\UserController@randomPassword']);
+    Route::post('changepassword/{id}', ['as' => 'user.post.changepassword',  'uses' => 'Agent\helpdesk\UserController@randomPostPassword']);
+    Route::post('delete/{id}', ['as' => 'user.post.delete',  'uses' => 'Agent\helpdesk\UserController@deleteAgent']);
+
+   //due today ticket
+   Route::get('duetoday', ['as' => 'ticket.duetoday',  'uses' => 'Agent\helpdesk\TicketController@dueTodayTicketlist']);
+
+  // Route::post('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']);
+ Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' => 'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
+        // Breadcrumbs::register('open.ticket', function ($breadcrumbs) {
+        //     $breadcrumbs->parent('dashboard');
+        //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
+        // });
 });

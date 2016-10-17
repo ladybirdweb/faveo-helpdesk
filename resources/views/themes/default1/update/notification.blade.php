@@ -1,3 +1,4 @@
+
 <li class="dropdown notifications-menu">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-refresh"></i>
@@ -19,5 +20,12 @@
             @endif
 
         </ul>
+        <!--<li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
+                <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;" id="notification-loader">
+            </div><div class="col-md-5"></div></li>
+        <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
+        </li>-->
+
     </ul>
 </li>
+

@@ -45,9 +45,9 @@ The ``$data`` array's entries will be merged into the breadcrumb as properties, 
 
 .. code-block:: html+php
 
-    <li><a href="{{{ $breadcrumb->url }}}">
-        <img src="/images/icons/{{{ $breadcrumb->icon }}}">
-        {{{ $breadcrumb->title }}}
+    <li><a href="{{ $breadcrumb->url }}">
+        <img src="/images/icons/{{ $breadcrumb->icon }}">
+        {{ $breadcrumb->title }}
     </a></li>
 
 Do not use the following keys in your data array, as they will be overwritten: ``title``, ``url``, ``first``, ``last``.
@@ -57,7 +57,38 @@ Do not use the following keys in your data array, as they will be overwritten: `
  Defining breadcrumbs in a different file
 ================================================================================
 
-If you don't want to use ``app/Http/breadcrumbs.php``, you can define them in ``app/Http/routes.php`` or any other file as long as it's loaded by Laravel.
+If you don't want to use ``routes/breadcrumbs.php`` (or ``app/Http/breadcrumbs.php`` in Laravel 5.2 and below), you can create a custom service provider to use instead of ``DaveJamesMiller\Breadcrumbs\ServiceProvider`` and override the ``registerBreadcrumbs()`` method:
+
+.. code-block:: php
+
+    <?php
+
+    namespace App\Providers;
+
+    use DaveJamesMiller\Breadcrumbs\ServiceProvider;
+
+    class BreadcrumbsServiceProvider extends ServiceProvider
+    {
+        public function registerBreadcrumbs()
+        {
+            require base_path('path/to/breadcrumbs.php');
+        }
+    }
+
+If you are creating your own package, simply load them from your service provider's ``boot()`` method:
+
+.. code-block:: php
+
+    class MyServiceProvider extends ServiceProvider
+    {
+        public function register() {}
+
+        public function boot()
+        {
+            if (class_exists('Breadcrumbs'))
+                require __DIR__ . '/breadcrumbs.php';
+        }
+    }
 
 
 .. _switching-views:
@@ -126,8 +157,8 @@ If you want to pass an array of parameters instead you can use these methods:
 By default an exception will be thrown if the breadcrumb doesn't exist, so you know to add it. If you want suppress this you can call the following methods instead:
 
 - ``Breadcrumbs::renderIfExists()`` (returns an empty string)
-- ``Breadcrumbs::renderArrayIfExists()`` (returns an empty string)
+- ``Breadcrumbs::renderIfExistsArray()`` (returns an empty string) (was ``renderArrayIfExists`` before 3.0.0)
 - ``Breadcrumbs::generateIfExists()`` (returns an empty array)
-- ``Breadcrumbs::generateArrayIfExists()`` (returns an empty array)
+- ``Breadcrumbs::generateIfExistsArray()`` (returns an empty array) (was ``generateArrayIfExists`` before 3.0.0)
 
 Alternatively you can call ``Breadcrumbs::exists('name')``, which returns a boolean.

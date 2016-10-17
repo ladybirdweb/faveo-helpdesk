@@ -2,7 +2,7 @@
 
 namespace libphonenumber\geocoding;
 
-
+use Giggsey\Locale\Locale;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberType;
@@ -27,10 +27,6 @@ class PhoneNumberOfflineGeocoder
 
     protected function __construct($phonePrefixDataDirectory)
     {
-        if(!extension_loaded('intl')) {
-            throw new \RuntimeException('The intl extension must be installed');
-        }
-
         $this->phoneUtil = PhoneNumberUtil::getInstance();
 
         $this->prefixFileReader = new PrefixFileReader(dirname(__FILE__) . $phonePrefixDataDirectory);
@@ -79,24 +75,11 @@ class PhoneNumberOfflineGeocoder
 
         if ($numberType === PhoneNumberType::UNKNOWN) {
             return "";
-        } elseif (!$this->canBeGeocoded($numberType)) {
+        } elseif (!$this->phoneUtil->isNumberGeographical($numberType, $number->getCountryCode())) {
             return $this->getCountryNameForNumber($number, $locale);
         }
 
         return $this->getDescriptionForValidNumber($number, $locale, $userRegion);
-    }
-
-    /**
-     * A similar method is implemented as PhoneNumberUtil.isNumberGeographical, which performs a
-     * stricter check, as it determines if a number has a geographical association. Also, if new
-     * phone number types were added, we should check if this other method should be updated too.
-     *
-     * @param int $numberType
-     * @return boolean
-     */
-    protected function canBeGeocoded($numberType)
-    {
-        return ($numberType === PhoneNumberType::FIXED_LINE || $numberType === PhoneNumberType::MOBILE || $numberType === PhoneNumberType::FIXED_LINE_OR_MOBILE);
     }
 
     /**
@@ -144,7 +127,7 @@ class PhoneNumberOfflineGeocoder
         }
 
         return Locale::getDisplayRegion(
-            Locale::countryCodeToLocale($regionCode),
+            '-' . $regionCode,
             $locale
         );
     }

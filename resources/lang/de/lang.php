@@ -95,7 +95,6 @@ return [
     'create_email'                   => 'Create Email',
     'email_address'                  => 'Email Address',
     'email_name'                     => 'Email Name',
-    'email_to'                       => 'Email to',
     'help_topic'                     => 'Help Topic',
     'auto_response'                  => 'Auto Response',
     'host_name'                      => 'Host Name',
@@ -344,7 +343,7 @@ return [
      */
     'default'            => 'default',
     'iso-code'           => 'ISO-CODE',
-    'download'           => 'Download',
+    'download'           => 'Downlaod',
     'upload_file'        => 'Upload File',
     'enter_iso-code'     => 'Enter ISO-CODE',
     'eg.'                => 'Example',

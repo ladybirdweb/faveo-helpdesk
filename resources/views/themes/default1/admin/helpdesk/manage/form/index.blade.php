@@ -57,8 +57,19 @@ class="active"
                 @foreach($forms as $form)
                 <tr>
                     <td>{!! $form->formname !!}</td>
-                    <td>{!! link_to_route('forms.show', Lang::get('lang.view_this_form') ,[$form->id],['id'=>'View','class'=>'btn btn-primary btn-sm']) !!}
-                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$form->id}}delete">{!! Lang::get('lang.delete_from') !!}</button>
+                    <td>
+                        <div class="btn-group">
+                            {!! link_to_route('forms.edit', Lang::get('lang.edit') ,[$form->id],['id'=>'View','class'=>'btn btn-primary btn-sm']) !!}
+                        </div>
+                        <div class="btn-group">
+                            {!! link_to_route('forms.show', Lang::get('lang.view_this_form') ,[$form->id],['id'=>'View','class'=>'btn btn-primary btn-sm']) !!}
+                        </div>
+                        <div class="btn-group">
+                            {!! link_to_route('forms.add.child', 'Add Child' ,[$form->id],['id'=>'add-child','class'=>'btn btn-primary btn-sm']) !!}
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$form->id}}delete">{!! Lang::get('lang.delete_from') !!}</button>
+                        </div>
                         <div class="modal fade" id="{{$form->id}}delete">
                             <div class="modal-dialog">
                                 <div class="modal-content">

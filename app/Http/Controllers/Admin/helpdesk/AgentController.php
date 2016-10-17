@@ -91,7 +91,9 @@ class AgentController extends Controller
             $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
             // returns to the page with all the variables and their datas
-            return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team'))->with('phonecode', $phonecode->phonecode);
+            $send_otp = DB::table('common_settings')->select('status')->where('option_name', '=', 'send_otp')->first();
+
+            return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team', 'send_otp'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             // returns if try fails with exception meaagse
             return redirect()->back()->with('fails', $e->getMessage());
@@ -118,7 +120,12 @@ class AgentController extends Controller
             }
         }
         // fixing the user role to agent
-        $user->fill($request->except(['group', 'primary_department', 'agent_time_zone']))->save();
+        $user->fill($request->except(['group', 'primary_department', 'agent_time_zone', 'mobile']))->save();
+        if ($request->get('mobile')) {
+            $user->mobile = $request->get('mobile');
+        } else {
+            $user->mobile = null;
+        }
         $user->assign_group = $request->group;
         $user->primary_dpt = $request->primary_department;
         $user->agent_tzone = $request->agent_time_zone;
@@ -149,6 +156,10 @@ class AgentController extends Controller
                 }
             }
             // returns for the success case
+            if ($request->input('active') == '0' || $request->input('active') == 0) {
+                \Event::fire(new \App\Events\LoginEvent($request));
+            }
+
             return redirect('agents')->with('success', Lang::get('lang.agent_creation_success'));
         } else {
             // returns if fails

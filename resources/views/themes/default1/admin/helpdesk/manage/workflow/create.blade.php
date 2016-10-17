@@ -136,7 +136,6 @@ class="active"
                                                         <option value="">-- {!! Lang::get('lang.select_one') !!} --</option>
                                                         <option value="email">{!! Lang::get('lang.email') !!}</option>
                                                         <option value="email_name">{!! Lang::get('lang.email_name') !!}</option>
-                                                        <option value="email_to">{!! Lang::get('lang.email_to') !!}</option>
                                                         <option value="subject">{!! Lang::get('lang.subject') !!}</option>
                                                         <option value="message">{!! Lang::get('lang.message') !!}/{!! Lang::get('lang.body') !!}</option>
                                                     </select>

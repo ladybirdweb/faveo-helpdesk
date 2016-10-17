@@ -28,6 +28,34 @@ class Tickets extends BaseModel
         return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_Form_Data', 'ticket_id');
     }
 
+    public function extraFields()
+    {
+        $id = $this->attributes['id'];
+        $ticket_form_datas = \App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $id)->get();
+
+        return $ticket_form_datas;
+    }
+
+    public function source()
+    {
+        $source_id = $this->attributes['source'];
+        $sources = new Ticket_source();
+        $source = $sources->find($source_id);
+
+        return $source;
+    }
+
+    public function sourceCss()
+    {
+        $css = 'fa fa-comment';
+        $source = $this->source();
+        if ($source) {
+            $css = $source->css_class;
+        }
+
+        return $css;
+    }
+
     public function delete()
     {
         $this->thread()->delete();

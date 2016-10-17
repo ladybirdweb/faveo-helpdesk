@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+1.1.1 (2016-09-15)
+------------------
+
+* Development files were added to the `.gitattributes` as `export-ignore` so
+  that they are not part of the Composer release. Pull request by Michele
+  Locati. GitHub #39.
+
 1.1.0 (2016-01-04)
 ------------------
 

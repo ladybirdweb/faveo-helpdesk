@@ -1,23 +1,21 @@
 <?php namespace LaravelFCM\Sender;
 
-use GuzzleHttp\Exception\ClientException;
-use LaravelFCM\FCMRequest;
-use LaravelFCM\Message\Options;
-use LaravelFCM\Message\PayloadData;
-use LaravelFCM\Message\PayloadNotification;
-use \GuzzleHttp\Psr7\Response as GuzzleResponse;
 use LaravelFCM\Message\Topics;
 use LaravelFCM\Request\Request;
-use LaravelFCM\Response\DownstreamResponse;
+use LaravelFCM\Message\Options;
+use LaravelFCM\Message\PayloadData;
 use LaravelFCM\Response\GroupResponse;
 use LaravelFCM\Response\TopicResponse;
+use GuzzleHttp\Exception\ClientException;
+use LaravelFCM\Response\DownstreamResponse;
+use LaravelFCM\Message\PayloadNotification;
 
 /**
  * Class FCMSender
  *
  * @package LaravelFCM\Sender
  */
-class FCMSender extends BaseSender {
+class FCMSender extends HTTPSender {
 
 	const MAX_TOKEN_PER_REQUEST = 1000;
 
@@ -39,17 +37,13 @@ class FCMSender extends BaseSender {
 	{
 		$response = null;
 
-		if (is_array($to)) {
+		if (is_array($to) && !empty($to)) {
+
 			$partialTokens = array_chunk($to, self::MAX_TOKEN_PER_REQUEST, false);
 			foreach ($partialTokens as $tokens) {
 				$request = new Request($tokens, $options, $notification, $data);
-				
-				try {
-					$responseGuzzle = $this->client->post($this->url, $request->build());
-				}
-				catch (ClientException $e) {
-					$responseGuzzle = $e->getResponse();
-				}
+
+				$responseGuzzle = $this->post($request);
 
 				$responsePartial = new DownstreamResponse($responseGuzzle, $tokens);
 				if (!$response) {
@@ -62,8 +56,9 @@ class FCMSender extends BaseSender {
 		}
 		else {
 			$request = new Request($to, $options, $notification, $data);
-			$response = $this->client->post($this->url, $request->build());
-			$response = new DownstreamResponse($response, $to);
+			$responseGuzzle = $this->post($request);
+
+			$response = new DownstreamResponse($responseGuzzle, $to);
 		}
 
 		return $response;
@@ -83,14 +78,9 @@ class FCMSender extends BaseSender {
 	{
 		$request = new Request($notificationKey, $options, $notification, $data);
 
-		try {
-			$response = $this->client->post($this->url, $request->build());
-		}
-		catch (ClientException $e) {
-			$response = $e->getResponse();
-		}
+		$responseGuzzle = $this->post($request);
 
-		return new GroupResponse($response, $notificationKey);
+		return new GroupResponse($responseGuzzle, $notificationKey);
 	}
 
 	/**
@@ -105,27 +95,29 @@ class FCMSender extends BaseSender {
 	 */
 	public function sendToTopic(Topics $topics, Options $options = null, PayloadNotification $notification = null, PayloadData $data = null)
 	{
-
 		$request = new Request(null, $options, $notification, $data, $topics);
-		try {
-			$response = $this->client->post($this->url, $request->build());
-		}
-		catch (ClientException $e) {
-			$response = $e->getResponse();
-		}
 
+		$responseGuzzle = $this->post($request);
 
-		return new TopicResponse($response, $topics);
+		return new TopicResponse($responseGuzzle, $topics);
 	}
 
-
 	/**
-	 * get the url
+	 * @internal
 	 *
-	 * @return string
+	 * @param $request
+	 *
+	 * @return null|\Psr\Http\Message\ResponseInterface
 	 */
-	protected function getUrl()
+	private function post($request)
 	{
-		return $this->config[ 'server_send_url' ];
+		try {
+			$responseGuzzle = $this->client->post($this->url, $request->build());
+		}
+		catch (ClientException $e) {
+			$responseGuzzle = $e->getResponse();
+		}
+
+		return $responseGuzzle;
 	}
 }

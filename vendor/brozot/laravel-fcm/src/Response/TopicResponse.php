@@ -1,7 +1,7 @@
 <?php namespace LaravelFCM\Response;
 
-use LaravelFCM\Message\Topics;
 use Monolog\Logger;
+use LaravelFCM\Message\Topics;
 use Monolog\Handler\StreamHandler;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
  *
  * @package LaravelFCM\Response
  */
-class TopicResponse extends BaseResponse {
+class TopicResponse extends BaseResponse implements TopicResponseContract{
 
 	const LIMIT_RATE_TOPICS_EXCEEDED = "TopicsMessageRateExceeded";
 

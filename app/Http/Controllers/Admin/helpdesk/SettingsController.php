@@ -7,10 +7,11 @@ use App\Http\Controllers\Controller;
 // requests
 use App\Http\Requests\helpdesk\CompanyRequest;
 use App\Http\Requests\helpdesk\EmailRequest;
+use App\Http\Requests\helpdesk\Job\TaskRequest;
 use App\Http\Requests\helpdesk\RatingUpdateRequest;
 use App\Http\Requests\helpdesk\StatusRequest;
-use App\Http\Requests\helpdesk\SystemRequest;
 // models
+use App\Http\Requests\helpdesk\SystemRequest;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Email\Template;
@@ -22,6 +23,7 @@ use App\Model\helpdesk\Settings\Alert;
 use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
+use App\Model\helpdesk\Settings\Followup;
 use App\Model\helpdesk\Settings\Responder;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
@@ -31,8 +33,8 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Workflow\WorkflowClose;
-use DateTime;
 // classes
+use DateTime;
 use DB;
 use Exception;
 use File;
@@ -156,10 +158,17 @@ class SettingsController extends Controller
             /* Fetch the values from Timezones table */
             $timezones = $timezone->get();
             /* Fetch status value of common settings */
-            $common_setting = $common_settings->select('status')->where('option_name', '=', 'user_set_ticket_status')->first();
-            // /dd($common_setting);
+            $common_setting = $common_settings->select('status')
+                    ->where('option_name', '=', 'user_set_ticket_status')
+                    ->first();
+            $send_otp = $common_settings->select('status')
+                    ->where('option_name', '=', 'send_otp')
+                    ->first();
+            $email_mandatory = $common_settings->select('status')
+                    ->where('option_name', '=', 'email_mandatory')
+                    ->first();
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting'));
+            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -177,7 +186,6 @@ class SettingsController extends Controller
     public function postsystem($id, System $system, SystemRequest $request)
     {
         try {
-            //dd($request->user_set_ticket_status);
             /* fetch the values of system request  */
             $systems = $system->whereId('1')->first();
             /* fill the values to coompany table */
@@ -196,6 +204,10 @@ class SettingsController extends Controller
                 $usts->status = $request->user_set_ticket_status;
                 $usts->save();
             }
+            $sotp = CommonSettings::where('option_name', '=', 'send_otp')
+                    ->update(['status' => $request->send_otp]);
+            $email_mandatory = CommonSettings::where('option_name', '=', 'email_mandatory')
+                    ->update(['status' => $request->email_mandatory]);
             /* redirect to Index page with Success Message */
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {
@@ -343,8 +355,42 @@ class SettingsController extends Controller
         $emails1 = $email1->get();
 
         $workflow = $workflow->whereId('1')->first();
+        $cron_path = base_path('artisan');
+        $command = ":- <pre>***** php $cron_path schedule:run >> /dev/null 2>&1</pre>";
+        $shared = ":- <pre>/usr/bin/php-cli -q  $cron_path schedule:run >> /dev/null 2>&1</pre>";
+        $warn = '';
+        $condition = new \App\Model\MailJob\Condition();
+        $job = $condition->checkActiveJob();
+        $commands = [
+            ''                   => 'Select',
+            'everyMinute'        => 'Every Minute',
+            'everyFiveMinutes'   => 'Every Five Minute',
+            'everyTenMinutes'    => 'Every Ten Minute',
+            'everyThirtyMinutes' => 'Every Thirty Minute',
+            'hourly'             => 'Every Hour',
+            'daily'              => 'Every Day',
+            'dailyAt'            => 'Daily at',
+            'weekly'             => 'Every Week',
+            'monthly'            => 'Monthly',
+            'yearly'             => 'Yearly',
+        ];
+        $followupcommands = [
+            ''                   => 'Select',
+            'everyMinute'        => 'Every Minute',
+            'everyFiveMinutes'   => 'Every Five Minute',
+            'everyTenMinutes'    => 'Every Ten Minute',
+            'everyThirtyMinutes' => 'Every Thirty Minute',
+            'hourly'             => 'Every Hour',
+            'daily'              => 'Every Day',
+            'weekly'             => 'Every Week',
+            'monthly'            => 'Monthly',
+            'yearly'             => 'Yearly',
+        ];
+        if (ini_get('register_argc_argv') == '') {
+            //$warn = "Please make 'register_argc_argv' flag as on. Or you can set all your job url in cron";
+        }
 
-        return view('themes.default1.admin.helpdesk.settings.crone', compact('emails', 'templates', 'emails1', 'workflow'));
+        return view('themes.default1.admin.helpdesk.settings.cron.cron', compact('emails', 'templates', 'emails1', 'workflow', 'warn', 'command', 'commands', 'followupcommands', 'condition', 'shared'));
         // } catch {
         // }
     }
@@ -357,10 +403,25 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function postSchedular(Email $email, Template $template, Emails $email1, Request $request, WorkflowClose $workflow)
+    public function postSchedular(Email $email, Template $template, Followup $followup, Emails $email1, TaskRequest $request, WorkflowClose $workflow)
     {
-        // dd($request);
         try {
+            $followup = $followup->whereId('1')->first();
+            $status = $request->followup_notification_cron;
+
+            if ($status = 'null') {
+                $followup->status = $request->followup_notification_cron;
+            }
+            if ($status = 1) {
+                $followup->status = $request->followup_notification_cron;
+                $followup->condition = $request->followup_notification_commands;
+                $followup->save();
+            }
+            if ($request->followup_notification_dailyAt) {
+                $followup->condition = $request->followup_notification_dailyAt;
+                $followup->save();
+            }
+
             /* fetch the values of email request  */
             $emails = $email->whereId('1')->first();
             if ($request->email_fetching) {
@@ -376,12 +437,13 @@ class SettingsController extends Controller
             $emails->save();
             //workflow
             $work = $workflow->whereId('1')->first();
-            if ($request->condition == 'on') {
+            if ($request->condition) {
                 $work->condition = 1;
             } else {
                 $work->condition = 0;
             }
             $work->save();
+            $this->saveConditions();
             /* redirect to Index page with Success Message */
             return redirect('job-scheduler')->with('success', Lang::get('lang.job-scheduler-success'));
         } catch (Exception $e) {
@@ -725,7 +787,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * 	To display the list of ratings in the system.
+     *  To display the list of ratings in the system.
      *
      *  @return type View
      */
@@ -759,7 +821,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * 	To store rating data.
+     *  To store rating data.
      *
      *  @return type Redirect
      */
@@ -822,7 +884,7 @@ class SettingsController extends Controller
     /**
      *  To delete a type of rating.
      *
-     * 	@return type Redirect
+     *  @return type Redirect
      */
     public function RatingDelete($slug, \App\Model\helpdesk\Ratings\RatingRef $ratingrefs)
     {
@@ -830,5 +892,172 @@ class SettingsController extends Controller
         Rating::whereId($slug)->delete();
 
         return redirect()->back()->with('success', Lang::get('lang.rating_deleted_successfully'));
+    }
+
+    public function saveConditions()
+    {
+        if (\Input::get('fetching-commands') && \Input::get('notification-commands')) {
+            $fetching_commands = \Input::get('fetching-commands');
+            $fetching_dailyAt = \Input::get('fetching-dailyAt');
+            $notification_commands = \Input::get('notification-commands');
+            $notification_dailyAt = \Input::get('notification-dailyAt');
+            $work_commands = \Input::get('work-commands');
+            $workflow_dailyAt = \Input::get('workflow-dailyAt');
+            $fetching_command = $this->getCommand($fetching_commands, $fetching_dailyAt);
+            $notification_command = $this->getCommand($notification_commands, $notification_dailyAt);
+            $work_command = $this->getCommand($work_commands, $workflow_dailyAt);
+            $jobs = ['fetching' => $fetching_command, 'notification' => $notification_command, 'work' => $work_command];
+            $this->storeCommand($jobs);
+        }
+    }
+
+    public function getCommand($command, $daily_at)
+    {
+        if ($command == 'dailyAt') {
+            $command = "dailyAt,$daily_at";
+        }
+
+        return $command;
+    }
+
+    public function storeCommand($array = [])
+    {
+        $command = new \App\Model\MailJob\Condition();
+        $commands = $command->get();
+        if ($commands->count() > 0) {
+            foreach ($commands as $condition) {
+                $condition->delete();
+            }
+        }
+        if (count($array) > 0) {
+            foreach ($array as $key => $save) {
+                $command->create([
+                    'job'   => $key,
+                    'value' => $save,
+                ]);
+            }
+        }
+    }
+
+    public function getTicketNumber(Request $request)
+    {
+        $this->validate($request, [
+            'format' => ['required', 'regex:/^(?=.*[$|-|#]).+$/'],
+            'type'   => 'required',
+        ]);
+
+        $format = $request->input('format');
+        $type = $request->input('type');
+        $number = $this->switchNumber($format, $type);
+
+        return $number;
+    }
+
+    public function switchNumber($format, $type)
+    {
+        switch ($type) {
+            case 'random':
+                return $this->createRandomNumber($format);
+            case 'sequence':
+                return $this->createSequencialNumber($format);
+        }
+    }
+
+    public function createRandomNumber($format)
+    {
+        $number = '';
+        $array = str_split($format);
+        for ($i = 0; $i < count($array); $i++) {
+            if ($array[$i] === '$') {
+                $number .= $this->getRandomAlphebet();
+            }
+            if ($array[$i] === '#') {
+                $number .= rand(0, 9);
+            }
+            if ($array[$i] !== '$' && $array[$i] !== '#') {
+                $number .= $array[$i];
+            }
+        }
+
+        return $number;
+    }
+
+    public function createSequencialNumber($format)
+    {
+        $number = '';
+        $array_format = str_split($format);
+        $count = count($array_format);
+        for ($i = 0; $i < $count; $i++) {
+            //dd($sub);
+            if ($array_format[$i] === '$') {
+                $number .= 'A';
+            }
+
+            if ($array_format[$i] === '#') {
+                $number .= '0';
+            }
+
+
+            if ($array_format[$i] !== '$' && $array_format[$i] !== '#') {
+                $number .= $array_format[$i];
+            }
+        }
+
+        return $number;
+        //return $this->nthTicketNumber($number);
+    }
+
+    public function checkCurrentFormat($current, $format)
+    {
+        $check = true;
+        $array_current = str_split($current);
+        $array_format = str_split($format);
+        $count_current = count($array_current);
+        $count_format = count($array_format);
+        if ($count_current === $count_format) {
+            return false;
+        }
+        for ($i = 0; $i < $count_current; $i++) {
+            if ($array_current[$i] !== $array_format[$i]) {
+                return false;
+            }
+        }
+
+        return $check;
+    }
+
+    public function nthTicketNumber($current, $type, $format, $force = false)
+    {
+        $check = $this->checkCurrentFormat($current, $format);
+        if ($check === false && $force === false) {
+            $current = $this->createSequencialNumber($format);
+        }
+        if ($type === 'sequence') {
+            $pos_first = stripos($current, '-');
+            $pos_last = strpos($current, '-', $pos_first + 1);
+            $current = str_replace('-', '', $current);
+            $number = ++$current;
+            if ($pos_first) {
+                $number = substr_replace($number, '-', $pos_first, 0);
+            }
+            if ($pos_last) {
+                $number = substr_replace($number, '-', $pos_last, 0);
+            }
+        }
+        if ($type === 'random') {
+            $number = $this->createRandomNumber($format);
+        }
+
+        return $number;
+    }
+
+    public function getRandomAlphebet()
+    {
+        $alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $shuffled = str_shuffle($alpha);
+        $shuffled_array = str_split($shuffled);
+        $char = $shuffled_array[0];
+
+        return $char;
     }
 }

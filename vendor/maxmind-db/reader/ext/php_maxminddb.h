@@ -15,7 +15,7 @@
 
 #ifndef PHP_MAXMINDDB_H
 #define PHP_MAXMINDDB_H 1
-#define PHP_MAXMINDDB_VERSION "1.1.0"
+#define PHP_MAXMINDDB_VERSION "1.1.1"
 #define PHP_MAXMINDDB_EXTNAME "maxminddb"
 
 extern zend_module_entry maxminddb_module_entry;

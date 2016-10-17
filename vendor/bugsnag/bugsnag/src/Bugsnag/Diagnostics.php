@@ -2,13 +2,30 @@
 
 class Bugsnag_Diagnostics
 {
+    /**
+     * The config instance.
+     *
+     * @var Bugsnag_Configuration
+     */
     private $config;
 
+    /**
+     * Create a new diagnostics instance.
+     *
+     * @param Bugsnag_Configuration $config the configuration instance
+     *
+     * @return void
+     */
     public function __construct(Bugsnag_Configuration $config)
     {
         $this->config = $config;
     }
 
+    /**
+     * Get the application information.
+     *
+     * @return array
+     */
     public function getAppData()
     {
         $appData = array();
@@ -28,18 +45,33 @@ class Bugsnag_Diagnostics
         return $appData;
     }
 
+    /**
+     * Get the device information.
+     *
+     * @return array
+     */
     public function getDeviceData()
     {
         return array(
-            'hostname' => $this->config->get('hostname', gethostname()),
+            'hostname' => $this->config->get('hostname', php_uname('n')),
         );
     }
 
+    /**
+     * Get the error context.
+     *
+     * @return array
+     */
     public function getContext()
     {
         return $this->config->get('context', Bugsnag_Request::getContext());
     }
 
+    /**
+     * Get the current user.
+     *
+     * @return array
+     */
     public function getUser()
     {
         $defaultUser = array();

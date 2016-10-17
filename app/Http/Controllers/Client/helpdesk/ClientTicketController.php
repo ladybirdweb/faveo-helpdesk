@@ -68,7 +68,6 @@ class ClientTicketController extends Controller
 
         $fromaddress = $user_cred->email;
         $fromname = $user_cred->user_name;
-        $to = '';
         $phone = '';
         $phonecode = '';
         $mobile_number = '';
@@ -85,9 +84,7 @@ class ClientTicketController extends Controller
         $ticket_status = null;
         $auto_response = 0;
 
-        $inline_attachment = null;
-
-        $this->TicketWorkflowController->workflow($fromaddress, $fromname, $to, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response, $inline_attachment);
+        $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
 
         return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
     }

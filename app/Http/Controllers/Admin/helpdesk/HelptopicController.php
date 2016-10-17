@@ -87,7 +87,7 @@ class HelptopicController extends Controller
             $forms = $form->get();
             $agents = $agent->where('role', '=', 'agent')->get();
             $slas = $sla->get();
-            $priority = $priority->get();
+            $priority = Ticket_Priority::where('status', '=', 1)->get();
 
             return view('themes.default1.admin.helpdesk.manage.helptopic.create', compact('priority', 'departments', 'topics', 'forms', 'agents', 'slas'));
         } catch (Exception $e) {
@@ -148,7 +148,7 @@ class HelptopicController extends Controller
             $topics = $topic->whereId($id)->first();
             $forms = $form->get();
             $slas = $sla->get();
-            $priority = $priority->get();
+            $priority = Ticket_Priority::where('status', '=', 1)->get();
             $sys_help_topic = \DB::table('settings_ticket')
                                 ->select('help_topic')
                                 ->where('id', '=', 1)->first();

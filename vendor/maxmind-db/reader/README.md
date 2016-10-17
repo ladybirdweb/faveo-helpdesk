@@ -57,7 +57,7 @@ $reader = new Reader($databaseFile);
 
 print_r($reader->get($ipAddress));
 
-$reader->close()
+$reader->close();
 ```
 
 ## Optional PHP C Extension ##
