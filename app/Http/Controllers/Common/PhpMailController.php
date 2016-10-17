@@ -179,12 +179,12 @@ class PhpMailController extends Controller
         $port = $from_address->sending_port;
         $protocol = $from_address->sending_protocol;
         $this->setServices($from_address->id, $protocol);
-        if($protocol=='mail'){
-            $username = "";
-            $fromname="";
-            $host="";
-            $smtpsecure ="";
-            $port="";
+        if ($protocol == 'mail') {
+            $username = '';
+            $fromname = '';
+            $host = '';
+            $smtpsecure = '';
+            $port = '';
         }
         $configs = [
             'username'   => $username,

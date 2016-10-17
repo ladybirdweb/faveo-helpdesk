@@ -1518,7 +1518,7 @@ return [
      'password_generator'                                         => 'Password Generator',
      'depertment'                                                 => 'Depertment',
      'duetoday'                                                   => 'Due Today',
-     'today-due_tickets'                                          => 'Today\'s due ticekts', 
+     'today-due_tickets'                                          => 'Today\'s due ticekts',
      'password_change_successfully'                               => 'Password Change Successfully',
      'role_change_successfully'                                   => 'Role Change Successfully',
      'user_delete_successfully'                                   => 'User Delete Successfully',
