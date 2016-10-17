@@ -178,7 +178,7 @@ return [
         'Torann\GeoIP\GeoIPServiceProvider',
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-        Unisharp\LaravelCkeditor\ServiceProvider::class,
+        Unisharp\Ckeditor\ServiceProvider::class,
         LaravelFCM\FCMServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         Collective\Bus\BusServiceProvider::class,
