@@ -2065,10 +2065,14 @@ CREATE TABLE IF NOT EXISTS `ticket_source` (
 -- Dumping data for table `ticket_source`
 --
 
-INSERT INTO `ticket_source` (`id`, `name`, `value`) VALUES
-(1, 'web', 'Web'),
-(2, 'email', 'E-mail'),
-(3, 'agent', 'Agent Panel');
+INSERT INTO `ticket_source` (`id`, `name`, `value`, `css_class`) VALUES
+(1, 'web', 'Web', 'fa fa-internet-explorer'),
+(2, 'email', 'E-mail', 'fa fa-envelope'),
+(3, 'agent', 'Agent Panel', 'fa fa-envelope'),
+(4, 'facebook', 'Facebook', 'fa fa-facebook'),
+(5, 'twitter', 'Twitter', 'fa fa-twitter'),
+(6, 'call', 'Call', 'fa fa-phone'),
+(7, 'chat', 'Chat', 'fa fa-comment');
 
 -- --------------------------------------------------------
 

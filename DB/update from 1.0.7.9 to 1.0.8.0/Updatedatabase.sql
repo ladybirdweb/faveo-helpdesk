@@ -316,3 +316,29 @@ INSERT INTO `templates` (`id`, `name`, `variable`, `type`, `subject`, `message`,
 (13, 'This template is for sending notice to client when password is changed', '1', 13, 'Verify your email address', 'Hello {!!$user!!},<br /><br />Your password is successfully changed.Your new password is : {!!$user_password!!}<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', '', 1, '2016-10-10 01:29:38', '2016-10-10 01:29:38');
  -- --------------------------------------------------------------------------
 
+--
+-- Alter Table structure for table `ticket_source`
+--
+
+DROP TABLE IF EXISTS `ticket_source`;
+CREATE TABLE IF NOT EXISTS `ticket_source` (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `css_class` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `ticket_source`
+--
+
+INSERT INTO `ticket_source` (`id`, `name`, `value`, `css_class`) VALUES
+(1, 'web', 'Web', 'fa fa-internet-explorer'),
+(2, 'email', 'E-mail', 'fa fa-envelope'),
+(3, 'agent', 'Agent Panel', 'fa fa-envelope'),
+(4, 'facebook', 'Facebook', 'fa fa-facebook'),
+(5, 'twitter', 'Twitter', 'fa fa-twitter'),
+(6, 'call', 'Call', 'fa fa-phone'),
+(7, 'chat', 'Chat', 'fa fa-comment');
+-- ----------------------------------------------------------------------

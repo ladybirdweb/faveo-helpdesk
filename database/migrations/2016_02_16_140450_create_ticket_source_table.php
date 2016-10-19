@@ -16,6 +16,7 @@ class CreateTicketSourceTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('value');
+            $table->string('css_class');
         });
     }
 
