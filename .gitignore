@@ -3,9 +3,6 @@
 example.env
 Homestead.yaml
 Homestead.json
-/app/Plugins/Reseller/
-/app/Plugins/ServiceDesk/
-/app/Plugins/Social/
 /config/lfm.php
 /nbproject/private/
 /node_modules
@@ -14,7 +11,3 @@ Homestead.json
 /public/uploads
 /public/photos/
 /app/FaveoJob
-
-app/Plugins/ServiceDesk.zip
-
-app/Plugins/Social.zip
