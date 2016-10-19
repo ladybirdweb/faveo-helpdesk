@@ -55,12 +55,6 @@ class Kernel extends ConsoleKernel
             case 'work':
                 $this->getCondition($schedule->command('ticket:close'), $command);
                 break;
-            case 'followup':
-                $this->getCondition($schedule->command('users:followup'), $command);
-                break;
-            case 'message':
-                $this->getCondition($schedule->command('message:send'), $command);
-                break;
         }
     }
 
