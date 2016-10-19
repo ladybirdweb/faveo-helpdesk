@@ -281,13 +281,9 @@ class DatabaseSeeder extends Seeder
         // System::create(array('id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32'));
         Ticket::create(['num_format' => '$$$$-####-####', 'num_sequence' => 'sequence', 'collision_avoid' => '2', 'priority' => '1', 'sla' => '2', 'help_topic' => '1', 'status' => '1']);
         /* Ticket source */
-        Ticket_source::create(['name' => 'web', 'value' => 'Web', 'css_class' => 'fa fa-internet-explorer']);
-        Ticket_source::create(['name' => 'email', 'value' => 'E-mail', 'css_class' => 'fa fa-envelope']);
-        Ticket_source::create(['name' => 'agent', 'value' => 'Agent Panel', 'css_class' => 'fa fa-envelope']);
-        Ticket_source::create(['name' => 'facebook', 'value' => 'Facebook', 'css_class' => 'fa fa-facebook']);
-        Ticket_source::create(['name' => 'twitter', 'value' => 'Twitter', 'css_class' => 'fa fa-twitter']);
-        Ticket_source::create(['name' => 'call', 'value' => 'Call', 'css_class' => 'fa fa-phone']);
-        Ticket_source::create(['name' => 'chat', 'value' => 'Chat', 'css_class' => 'fa fa-comment']);
+        Ticket_source::create(['name' => 'web', 'value' => 'Web']);
+        Ticket_source::create(['name' => 'email', 'value' => 'E-mail']);
+        Ticket_source::create(['name' => 'agent', 'value' => 'Agent Panel']);
         /* Version check */
         Version_Check::create(['id' => '1']);
         /* System widgets */
