@@ -113,10 +113,13 @@ class GuestController extends Controller
                 $user->mobile = null;
             }
             if ($user->save()) {
+                return redirect()->back()->with('success', Lang::get('lang.Profile-Updated-sucessfully'));                
             } else {
+                return redirect()->back()->route('profile')->with('fails', Lang::get('lang.Profile-Updated-sucessfully'));
             }
 
         } catch (Exception $e) {
+            return redirect()->back()->route('profile')->with('fails', $e->getMessage());
         }
     }
 
