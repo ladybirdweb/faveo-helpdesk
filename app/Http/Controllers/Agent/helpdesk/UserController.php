@@ -668,60 +668,46 @@ class UserController extends Controller
      */
     public function postProfileedit(ProfileRequest $request)
     {
-        // geet authenticated user details
-        $user = Auth::user();
-        $user->gender = $request->input('gender');
-        $user->save();
-        // checking availability of agent profile ppicture
-        if ($user->profile_pic == 'avatar5.png' || $user->profile_pic == 'avatar2.png') {
-            if ($request->input('gender') == 1) {
-                $name = 'avatar5.png';
-                $destinationPath = 'uploads/profilepic';
-                $user->profile_pic = $name;
-            } elseif ($request->input('gender') == 0) {
-                $name = 'avatar2.png';
-                $destinationPath = 'uploads/profilepic';
-                $user->profile_pic = $name;
+        try {
+            // geet authenticated user details
+            $user = Auth::user();
+            if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
+                return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
+            } else {
+                $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
+                if (!count($code)) {
+                    return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
+                 }
+                $user->country_code = $request->country_code;
             }
-        }
-        // checking if the post system includes agent profile picture upload
-        if (Input::file('profile_pic')) {
+            $user->fill($request->except('profile_pic', 'mobile'));
+            $user->gender = $request->input('gender');
+            $user->save();
+            if (Input::file('profile_pic')) {
             // fetching picture name
-            $name = Input::file('profile_pic')->getClientOriginalName();
+                $name = Input::file('profile_pic')->getClientOriginalName();
             // fetching upload destination path
-            $destinationPath = 'uploads/profilepic';
+                $destinationPath = 'uploads/profilepic';
             // adding a random value to profile picture filename
-            $fileName = rand(0000, 9999).'.'.$name;
+                $fileName = rand(0000, 9999).'.'.$name;
             // moving the picture to a destination folder
-            Input::file('profile_pic')->move($destinationPath, $fileName);
+                Input::file('profile_pic')->move($destinationPath, $fileName);
             // saving filename to database
-            $user->profile_pic = $fileName;
-        } else {
-            try {
-                if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
-                    return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
-                } else {
-                    $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
-                    if (!count($code)) {
-                        return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
-                    }
-                    $user->country_code = $request->country_code;
-                }
-                $user->fill($request->except('profile_pic', 'gender', 'mobile'))->save();
-                if ($request->get('mobile')) {
-                    $user->mobile = $request->get('mobile');
-                } else {
-                    $user->mobile = null;
-                }
-                $user->save();
-
-                return Redirect::route('profile')->with('success', Lang::get('lang.Profile-Updated-sucessfully'));
-            } catch (Exception $e) {
-                return Redirect::route('profile')->with('success', $e->getMessage());
+                $user->profile_pic = $fileName;
             }
-        }
-        if ($user->fill($request->except('profile_pic'))->save()) {
-            return Redirect::route('profile')->with('success', Lang::get('lang.Profile-Updated-sucessfully'));
+            if ($request->get('mobile')) {
+                $user->mobile = $request->get('mobile');
+            } else {
+                $user->mobile = null;
+            }
+            if ($user->save()) {
+                return Redirect::route('profile')->with('success', Lang::get('lang.Profile-Updated-sucessfully'));                
+            } else {
+                return Redirect::route('profile')->with('fails', Lang::get('lang.Profile-Updated-sucessfully'));
+            }
+
+        } catch (Exception $e) {
+            return Redirect::route('profile')->with('fails', $e->getMessage());
         }
     }
 

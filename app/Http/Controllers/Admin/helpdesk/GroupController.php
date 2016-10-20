@@ -191,7 +191,7 @@ class GroupController extends Controller
         if ($users) {
             $user = '<li>'.Lang::get('lang.there_are_agents_assigned_to_this_group_please_unassign_them_from_this_group_to_delete').'</li>';
 
-            return redirect('groups')->with('fails', Lang('lang.group_cannot_delete').$user);
+            return redirect('groups')->with('fails', Lang::get('lang.group_cannot_delete').$user);
         }
         $group_assign_department->where('group_id', $id)->delete();
         $groups = $group->whereId($id)->first();
