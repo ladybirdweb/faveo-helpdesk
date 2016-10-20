@@ -80,58 +80,43 @@ class GuestController extends Controller
      */
     public function postProfile(ProfileRequest $request)
     {
-        $user = User::where('id', '=', Auth::user()->id)->first();
-        $user->gender = $request->get('gender');
-        $user->save();
-        if ($user->profile_pic == 'avatar5.png' || $user->profile_pic == 'avatar2.png') {
-            if ($request->input('gender') == 1) {
-                $name = 'avatar5.png';
-                $destinationPath = 'uploads/profilepic';
-                $user->profile_pic = $name;
-            } elseif ($request->input('gender') == 0) {
-                $name = 'avatar2.png';
-                $destinationPath = 'uploads/profilepic';
-                $user->profile_pic = $name;
-            }
-        }
-        if (Input::file('profile_pic')) {
-            //$extension = Input::file('profile_pic')->getClientOriginalExtension();
-            $name = Input::file('profile_pic')->getClientOriginalName();
-            $destinationPath = 'uploads/profilepic';
-            $fileName = rand(0000, 9999).'.'.$name;
-            //echo $fileName;
-            Input::file('profile_pic')->move($destinationPath, $fileName);
-            $user->profile_pic = $fileName;
-        } else {
+        try {
+            // geet authenticated user details
+            $user = Auth::user();
             if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
-                return redirect()->back()->with(['fails1' => Lang::get('lang.country-code-required-error'),
-                            'country_code'                => 1, ])->withInput();
+                return redirect()->back()->with(['fails' => Lang::get('lang.country-code-required-error'), 'country_code_error' => 1])->withInput();
             } else {
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
                 if (!count($code)) {
-                    return redirect()->back()->with(['fails1' => Lang::get('lang.incorrect-country-code-error'),
-                                'country_code'                => 1, ])->withInput();
-                } else {
-                    $user->country_code = $request->input('country_code');
-                }
+                    return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
+                 }
+                $user->country_code = $request->country_code;
+            }
+            $user->fill($request->except('profile_pic', 'mobile'));
+            $user->gender = $request->input('gender');
+            $user->save();
+            if (Input::file('profile_pic')) {
+            // fetching picture name
+                $name = Input::file('profile_pic')->getClientOriginalName();
+            // fetching upload destination path
+                $destinationPath = 'uploads/profilepic';
+            // adding a random value to profile picture filename
+                $fileName = rand(0000, 9999).'.'.$name;
+            // moving the picture to a destination folder
+                Input::file('profile_pic')->move($destinationPath, $fileName);
+            // saving filename to database
+                $user->profile_pic = $fileName;
             }
             if ($request->get('mobile')) {
-                $mobile = $request->get('mobile');
+                $user->mobile = $request->get('mobile');
             } else {
-                $mobile = null;
+                $user->mobile = null;
             }
-            $check = $this->checkMobile($mobile);
-            if ($check == true) {
-                return redirect()->back()->with(['fails1' => Lang::get('lang.mobile-has-been-taken'), 'country_code' => 1])->withInput();
+            if ($user->save()) {
+            } else {
             }
-            $user->fill($request->except('profile_pic', 'gender', 'mobile'));
-            $user->mobile = $mobile;
-            $user->save();
 
-            return redirect()->back()->with('success1', Lang::get('lang.profile_updated_sucessfully'));
-        }
-        if ($user->fill($request->except('profile_pic'))->save()) {
-            return redirect()->back()->with('success1', Lang::get('lang.profile_updated_sucessfully'));
+        } catch (Exception $e) {
         }
     }
 

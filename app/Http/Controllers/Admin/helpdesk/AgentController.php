@@ -240,7 +240,8 @@ class AgentController extends Controller
             if ($request->input('country_code') != '' or $request->input('country_code') != null) {
                 $user->country_code = $request->input('country_code');
             }
-            $user->fill($request->except('daylight_save', 'limit_access', 'directory_listing', 'vocation_mode', 'assign_team'))->save();
+            $user->mobile = ($request->input('mobile') == '') ? null : $request->input('mobile');
+            $user->fill($request->except('daylight_save', 'limit_access', 'directory_listing', 'vocation_mode', 'assign_team', 'mobile'));
             $user->assign_group = $request->group;
             $user->primary_dpt = $request->primary_department;
             $user->agent_tzone = $request->agent_time_zone;

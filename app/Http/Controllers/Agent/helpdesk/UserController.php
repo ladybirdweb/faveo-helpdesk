@@ -610,8 +610,9 @@ class UserController extends Controller
                     $users->country_code = $request->country_code;
                 }
             }
-            // dd($request->input());
-            $users->fill($request->input())->save();
+            $users->mobile = ($request->input('mobile') == '') ? null : $request->input('mobile');
+            $users->fill($request->except('mobile'));
+            $users->save();
             $orgid = $request->input('org_id');
             $this->storeUserOrgRelation($users->id, $orgid);
             /* redirect to Index page with Success Message */
