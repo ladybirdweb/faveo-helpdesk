@@ -89,14 +89,14 @@ class GuestController extends Controller
                 $code = CountryCode::select('phonecode')->where('phonecode', '=', $request->get('country_code'))->get();
                 if (!count($code)) {
                     return redirect()->back()->with(['fails' => Lang::get('lang.incorrect-country-code-error'), 'country_code_error' => 1])->withInput();
-                 }
+                }
                 $user->country_code = $request->country_code;
             }
             $user->fill($request->except('profile_pic', 'mobile'));
             $user->gender = $request->input('gender');
             $user->save();
             if (Input::file('profile_pic')) {
-            // fetching picture name
+                // fetching picture name
                 $name = Input::file('profile_pic')->getClientOriginalName();
             // fetching upload destination path
                 $destinationPath = 'uploads/profilepic';
@@ -113,11 +113,10 @@ class GuestController extends Controller
                 $user->mobile = null;
             }
             if ($user->save()) {
-                return redirect()->back()->with('success', Lang::get('lang.Profile-Updated-sucessfully'));                
+                return redirect()->back()->with('success', Lang::get('lang.Profile-Updated-sucessfully'));
             } else {
                 return redirect()->back()->route('profile')->with('fails', Lang::get('lang.Profile-Updated-sucessfully'));
             }
-
         } catch (Exception $e) {
             return redirect()->back()->route('profile')->with('fails', $e->getMessage());
         }
