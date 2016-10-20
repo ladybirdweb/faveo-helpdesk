@@ -35,8 +35,6 @@ class Kernel extends ConsoleKernel
             $this->execute($schedule, 'fetching');
             $this->execute($schedule, 'notification');
             $this->execute($schedule, 'work');
-            $this->execute($schedule, 'followup');
-            $this->execute($schedule, 'message');
             loging('cron', 'executed successfully', 'info');
         }
     }
