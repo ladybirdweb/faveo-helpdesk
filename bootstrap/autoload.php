@@ -2,7 +2,6 @@
 
 ini_set('xdebug.max_nesting_level', 500);
 ini_set('memory_limit', '256M');
-ini_set('max_execution_time', 300);
 define('LARAVEL_START', microtime(true));
 
 /*
