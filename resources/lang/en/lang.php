@@ -1507,10 +1507,6 @@ return [
      * User Module
      * --------------------------------------------------------------------------------------------
      */
-     'agent_report'                                               =>'Agent Report',
-     'assign_tickets'=>'Assign Tickets',
-     'delete_agent'=>'Delete Agent',
-     'delete_user'=>'Delete User',
      'confirm_deletion'                                           => 'Confirm Deletion',
      'delete_all_content'                                         => ' Delete all content',
      'agent_profile'                                              => 'Agent Profile',
@@ -1527,7 +1523,7 @@ return [
      'role_change_successfully'                                   => 'Role Change Successfully',
      'user_delete_successfully'                                   => 'User Delete Successfully',
      'agent_delete_successfully'                                  => 'Agent Delete Successfully',
-     'select_another_agent'                                        => 'Select Another Agent',
-    'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent Delete Successfully And Ticket Assign TO Another Agent',
+     'select_another_user'                                        => 'Select Another User',
+    'agent_delete_successfully_and_ticket_assign_to_another_user' => 'Agent Delete Successfully And Ticket Assign TO Another User',
 
 ];

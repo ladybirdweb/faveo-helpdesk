@@ -216,14 +216,7 @@ class="active"
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span>
                         </button>
-                         @if($users->role=='user')
-                        <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.delete_user')}}</h4>
-                       @endif 
-                        @if($users->role=='agent')
-                         <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.delete_agent')}}</h4>
-                           @endif
-                       
-                    
+                        <h4 class="modal-title" id="titleLabel">Delete Agent</h4>
                     </div>
 
                     <div class="modal-body">
@@ -886,19 +879,13 @@ class="active"
                 </div><!-- /.col -->          
             </div> <!-- /.row -->
         </div>
-        @if(Auth::user()->role == 'admin')
+        @if(Auth::user()->role == 'user')
         <div class="row">
             <div class="col-md-12">
                 <link type="text/css" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet">
                 <div class="box box-info">
                     <div class="box-header with-border">
-                    @if($users->role=='user')
                         <h3 class="box-title">{!! Lang::get('lang.user_report') !!}</h3>
-                       @endif 
-                        @if($users->role=='agent')
-                         <h3 class="box-title">{!! Lang::get('lang.agent_report') !!}</h3>
-                           @endif
-
                     </div>
                     <div class="box-body">
                         <form id="foo">
@@ -956,17 +943,7 @@ class="active"
                                             <style>
                                                 #legend-holder { border: 1px solid #ccc; float: left; width: 25px; height: 25px; margin: 1px; }
                                             </style>
-
-                                             @if($users->role=='user')
-
-                                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span class="lead"> <span id="total-created-tickets" ></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.created') !!} </span></div>
-                                             @endif 
-                        @if($users->role=='agent')
-                        <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span class="lead"> <span id="total-created-tickets" ></span> {!! Lang::get('lang.assign_tickets') !!}  </span></div>
-                         
-                           @endif
-
-
+                                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span class="lead"> <span id="total-created-tickets" ></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.created') !!} </span></div> 
                                             <div class="col-md-4"><span id="legend-holder" style="background-color: #6DC5B2;"></span>&nbsp; <span class="lead"> <span id="total-reopen-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.reopen') !!}  </span></div> 
                                             <div class="col-md-4"><span id="legend-holder" style="background-color: #E3B870;"></span>&nbsp; <span class="lead"> <span id="total-closed-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.closed') !!}  </span></div> 
                                         </div>
