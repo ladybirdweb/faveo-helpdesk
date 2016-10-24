@@ -1897,11 +1897,11 @@ class TicketController extends Controller
             foreach ($selectall as $delete) {
                 $ticket = Tickets::whereId($delete)->first();
                 if ($value == 'Delete') {
-                    $this->delete($delete, new Tickets);
+                    $this->delete($delete, new Tickets());
                 } elseif ($value == 'Close') {
-                    $this->close($delete, new Tickets);
+                    $this->close($delete, new Tickets());
                 } elseif ($value == 'Open') {
-                    $this->open($delete, new Tickets);
+                    $this->open($delete, new Tickets());
                 } elseif ($value == 'Delete forever') {
                     $notification = Notification::select('id')->where('model_id', '=', $ticket->id)->get();
                     foreach ($notification as $id) {
