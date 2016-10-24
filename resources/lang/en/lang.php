@@ -1508,9 +1508,9 @@ return [
      * --------------------------------------------------------------------------------------------
      */
      'agent_report'                                               =>'Agent Report',
-     'assign_tickets'=>'Assign Tickets',
-     'delete_agent'=>'Delete Agent',
-     'delete_user'=>'Delete User',
+     'assign_tickets'                                             =>'Assign Tickets',
+     'delete_agent'                                               =>'Delete Agent',
+     'delete_user'                                                =>'Delete User',
      'confirm_deletion'                                           => 'Confirm Deletion',
      'delete_all_content'                                         => ' Delete all content',
      'agent_profile'                                              => 'Agent Profile',
