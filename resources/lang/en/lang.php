@@ -1528,6 +1528,6 @@ return [
      'user_delete_successfully'                                     => 'User deleted successfully',
      'agent_delete_successfully'                                    => 'Agent deleted successfully',
      'select_another_agent'                                         => 'Select another agent',
-     'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent delete successfully and ticket assign to another agent',
+     'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
 
 ];

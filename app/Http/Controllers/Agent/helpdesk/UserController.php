@@ -491,7 +491,7 @@ class UserController extends Controller
                     $user = User::find($id);
                     $user->delete();
 
-                    return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully_and_ticket_assign_to_another_user'));
+                    return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully_and_ticket_assign_to_another_agent'));
                 }
                 if (User_org::where('user_id', '=', $id)) {
                     DB::table('user_assign_organization')->where('user_id', '=', $id)->delete();
