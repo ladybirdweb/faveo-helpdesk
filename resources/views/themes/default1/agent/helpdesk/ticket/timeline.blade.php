@@ -200,7 +200,7 @@ if ($thread->title != "") {
                     <?php
                     $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first();
                     ?>
-                    <div class="callout callout-{{$priority->priority_color}}">
+                    <div class="callout callout-{{$priority->priority_color}}" style = 'background-color:{{$priority->priority_color}}'>
                         <div class="row">
                             <div class="col-md-3">
                                 <?php

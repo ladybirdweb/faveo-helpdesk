@@ -465,7 +465,7 @@ class UserController extends Controller
                 $ticket = Tickets::where('assigned_to', '=', $id)->where('status', '=', '1')->get();
                 if ($assign_to[0] == 'user') {
                     if ($users->id == $assign_to[1]) {
-                        return redirect('user')->with('warning', Lang::get('lang.select_another_user'));
+                        return redirect('user')->with('warning', Lang::get('lang.select_another_agent'));
                     }
                     $user_detail = User::where('id', '=', $assign_to[1])->first();
                     $assignee = $user_detail->first_name.' '.$user_detail->last_name;
