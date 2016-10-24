@@ -1917,7 +1917,7 @@ class TicketController extends Controller
                         $attachment = Ticket_attachments::where('thread_id', '=', $th_id->id)->get();
                         if (count($attachment)) {
                             foreach ($attachment as $a_id) {
-                                echo $a_id->id . ' ';
+                                // echo $a_id->id . ' ';
                                 $attachment = Ticket_attachments::find($a_id->id);
                                 $attachment->delete();
                             }
@@ -1930,7 +1930,7 @@ class TicketController extends Controller
                     $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket->id)->get();
                     if (count($collaborators)) {
                         foreach ($collaborators as $collab_id) {
-                            echo $collab_id->id;
+                            // echo $collab_id->id;
                             $collab = Ticket_Collaborator::find($collab_id->id);
                             $collab->delete();
                         }
