@@ -505,7 +505,7 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->push(Lang::get('lang.view_organization_profile'), url('organizations/{organizations}'));
         });
         Route::get('org-list', ['as' => 'org.list', 'uses' => 'Agent\helpdesk\OrganizationController@org_list']);
-        Route::get('organization-autofill', ['as' => 'post.organization.autofill', 'uses' => 'Agent\helpdesk\OrganizationController@organizationAutofill']);//auto fill organization name//
+        Route::get('organization-autofill', ['as' => 'post.organization.autofill', 'uses' => 'Agent\helpdesk\OrganizationController@organizationAutofill']); //auto fill organization name//
         Route::get('org/delete/{id}', ['as' => 'org.delete', 'uses' => 'Agent\helpdesk\OrganizationController@destroy']);
         Route::get('org-chart/{id}', 'Agent\helpdesk\OrganizationController@orgChartData');
 //    Route::post('org-chart-range', ['as' => 'post.org.chart', 'uses' => 'Agent\helpdesk\OrganizationController@orgChartData']);
