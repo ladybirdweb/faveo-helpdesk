@@ -748,7 +748,7 @@ class UserController extends Controller
     public function UserAssignOrg($id)
     {
         $org_name = Input::get('org');
-        $org= Organization::where('name','=',$org_name)->lists('id')->first();
+        $org = Organization::where('name', '=', $org_name)->lists('id')->first();
         $user_org = new User_org();
         $user_org->org_id = $org;
         $user_org->user_id = $id;
