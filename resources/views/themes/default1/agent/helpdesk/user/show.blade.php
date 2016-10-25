@@ -54,7 +54,7 @@ class="active"
 @endif
 <div class="row">
     <div class="col-md-3">
-        <div class="box box-primary">
+        <div class="box box-primary" >
             <div class="box-header">
                 <!-- <a href="{{route('user.edit', $users->id)}}" data-toggle="tooltip" data-placement="left" class="pull-right" title="{!! Lang::get('lang.edit') !!}"><i class="fa fa-edit"></i></a> -->
             </div>
@@ -84,6 +84,7 @@ class="active"
                     {{str_limit($users->email,10) }}
                 </a>
             </div>
+            @if($users->role=='user')
             <div class="box-footer">
                 <div id="refresh-org">
                     <?php
@@ -93,12 +94,19 @@ class="active"
                     <b>{!! Lang::get('lang.organization') !!}</b>
                     <a href="" class="pull-right"  data-toggle="modal" data-target="#assign"><i class="fa fa-hand-o-right" style="color:orange;"> </i> {!! Lang::get('lang.assign') !!} </a>
                     <a href="" data-toggle="modal" data-target="#create_org" class="pull-right"> {{Lang::get('lang.create')}} |&nbsp;</a>
-                    @else
+                    @endif
+                    @if($user_org != null)
                     <?php
                     $org_id = $user_org->org_id;
                     $organization = App\Model\helpdesk\Agent_panel\Organization::where('id', '=', $org_id)->first();
                     ?>
                     <b>{!! Lang::get('lang.organization') !!}</b>
+
+                    &nbsp;&nbsp;&nbsp;
+                 
+                    <span style="color:green;">{{$organization->name}}</span>
+                    
+                     
                     <a class="pull-right" href="#" data-toggle="modal" data-target="#{{$org_id}}delete" title="{!! Lang::get('lang.remove') !!}"><i class="fa fa-times" style="color:red;"> </i></a> 
                     <div class="modal fade" id="{{$org_id}}delete">
                         <div class="modal-dialog">
@@ -121,6 +129,7 @@ class="active"
 
                 </div>
             </div>
+            @endif
 
             <div class="box-footer">
                 <b>{{Lang::get('lang.role')}}</b>
@@ -179,33 +188,8 @@ class="active"
             @endif
         </div>
     </div>
-    <div class="col-md-6 pull-right">
-        <!-- <div class="box box-primary"> -->
-        <div class="box-body">
-            @if(Auth::user()->role == 'admin')
-            @if($users->role == 'user')
-            <div class="btn-group">
-                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal1">{{Lang::get('lang.change_role_to_agent')}}</button>
-            </div>
-            <div class="btn-group">
-                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal4">{{Lang::get('lang.change_role_to_admin')}}</button>
-            </div>
-            @else
-            <div class="btn-group">
-                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal2">{{Lang::get('lang.change_role_to_user')}}</button>
-                <!-- <button type="button" class="btn btn-primary" id="role_user">Change Role TO User</button> -->
-            </div>
-            <div class="btn-group">
-                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal4">{{Lang::get('lang.change_role_to_admin')}}</button>
-            </div>
-            @endif
-            @endif
-            <a href="{{route('user.edit', $users->id)}}"><button type="button"  href="{{route('user.edit', $users->id)}}" class="btn btn-primary btn-sm">{{Lang::get('lang.edit')}}</button></a>
-            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal">{{Lang::get('lang.change_password')}}</button>
-            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal3">{{Lang::get('lang.delete')}}</button>
-            <!-- <button type="button" class="btn btn-primary">Delete</button> -->
-        </div>
-    </div>
+    <div class="col-md-9" style="margin-left:-10px;">
+
 
     <!-- Delete -->
     <form action="{!!URL::route('user.post.delete', $users->id)!!}" method="post" role="form">
@@ -295,6 +279,7 @@ class="active"
             </div>
         </div>
     </form>
+        </div>
     <!-- Role -->
     <!-- Admin -->
     <form action="{!!URL::route('user.post.rolechangeadmin', $users->id)!!}" method="post" role="form">
@@ -507,7 +492,37 @@ class="active"
             <div class="col-md-12">
                 <!-- Custom Tabs -->
                 <div class="nav-tabs-custom">
-                    <ul class="nav nav-tabs">
+            <div class="box box-primary">
+                
+                 </br>
+                <div style="margin-left:1%;">
+            @if(Auth::user()->role == 'admin')
+            @if($users->role == 'user')
+            <div class="btn-group">
+                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal1">{{Lang::get('lang.change_role_to_agent')}}</button>
+            </div>
+            <div class="btn-group">
+                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal4">{{Lang::get('lang.change_role_to_admin')}}</button>
+            </div>
+            @else
+            <div class="btn-group">
+                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal2">{{Lang::get('lang.change_role_to_user')}}</button>
+                <!-- <button type="button" class="btn btn-primary" id="role_user">Change Role TO User</button> -->
+            </div>
+            <div class="btn-group">
+                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal4">{{Lang::get('lang.change_role_to_admin')}}</button>
+            </div>
+            @endif
+            @endif
+            <a href="{{route('user.edit', $users->id)}}"><button type="button"  href="{{route('user.edit', $users->id)}}" class="btn btn-primary btn-sm">{{Lang::get('lang.edit')}}</button></a>
+            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal">{{Lang::get('lang.change_password')}}</button>
+            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal3">{{Lang::get('lang.delete')}}</button>
+            <!-- <button type="button" class="btn btn-primary">Delete</button> -->
+     </div>
+<div style="padding:1%;">
+                    <ul class="nav nav-tabs" >
+                    
+                      </br>
                         <li class="active"><a href="#tab_1" data-toggle="tab">{!! Lang::get('lang.open_tickets') !!} ({{$open}})</a></li>
                         <li><a href="#tab_2" data-toggle="tab">{!! Lang::get('lang.closed_tickets') !!} ({{$counted}})</a></li>
                         <li><a href="#tab_3" data-toggle="tab">{!! Lang::get('lang.deleted_tickets') !!} ({{$deleted}})</a></li>
@@ -884,7 +899,11 @@ class="active"
                         </div><!-- /.tab-content -->
                     </div><!-- nav-tabs-custom -->
                 </div><!-- /.col -->          
-            </div> <!-- /.row -->
+            </div>
+            </div>
+                        
+            <!-- /.row -->
+        </div>
         </div>
         @if(Auth::user()->role == 'admin')
         <div class="row">
@@ -1120,16 +1139,9 @@ class="active"
                     </div>
                     <div id="assign_body">
                         <p>{!! Lang::get('lang.please_select_an_organization') !!}</p>
-                        <select id="org" class="form-control" name="org">
-                            <?php
-                            $orgs = App\Model\helpdesk\Agent_panel\Organization::all();
-                            ?>
-                            <optgroup label="Select Organizations">
-                                @foreach($orgs as $org)
-                                <option  value="{{$org->id}}">{!! $org->name !!}</option>
-                                @endforeach
-                            </optgroup>
-                        </select>
+
+                        <input type="text" id="org" class="form-control" name="org">
+                   
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -1176,6 +1188,29 @@ class="active"
                 return false;
             });
         });
+
+// autocomplete organization name
+         $(document).ready(function(){                   
+                    $("#org").autocomplete({
+
+                        source:"{!!URL::route('post.organization.autofill')!!}",
+                        minLength:1,
+                        select:function(evt, ui) {
+                            // // this.form.phone_number.value = ui.item.phone_number;
+                            // // this.form.user_name.value = ui.item.user_name;
+                            // if(ui.item.first_name) {
+                            //     this.form.first_name.value = ui.item.first_name;
+                            // }
+                            // if(ui.item.last_name) {
+                            //     this.form.last_name.value = ui.item.last_name;
+                            // }
+                            
+                        }
+                    });
+                });
+
+//close autocomplite
+
 
         $(function () {
             //Enable check and uncheck all functionality
