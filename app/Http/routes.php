@@ -645,6 +645,7 @@ Route::group(['middleware' => ['web']], function () {
         // Route::get('message' , 'MessageController@show');
         Route::post('lock', ['as' => 'lock', 'uses' => 'Agent\helpdesk\TicketController@lock']);
         Route::patch('user-org-assign/{id}', ['as' => 'user.assign.org', 'uses' => 'Agent\helpdesk\UserController@UserAssignOrg']);
+        Route::patch('user-org-edit-assign/{id}', ['as' => 'user.editassign.org', 'uses' => 'Agent\helpdesk\UserController@UsereditAssignOrg']);
         Route::patch('/user-org/{id}', 'Agent\helpdesk\UserController@User_Create_Org');
         Route::patch('/head-org/{id}', 'Agent\helpdesk\OrganizationController@Head_Org');
         // Department ticket
