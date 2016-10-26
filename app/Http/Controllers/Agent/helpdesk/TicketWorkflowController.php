@@ -61,6 +61,10 @@ class TicketWorkflowController extends Controller
                         if ($rule_condition = $this->checkRuleCondition($contact_details['email_name'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
                             $ticket_settings_details = $this->applyActionCondition($workflow->id, $ticket_settings_details);
                         }
+                    } elseif ($worklfow_rule->matching_scenario == 'email_to') {
+                        if ($rule_condition = $this->checkRuleCondition($contact_details['email_to'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                            $ticket_settings_details = $this->applyActionCondition($workflow->id, $ticket_settings_details);
+                        }
                     } elseif ($worklfow_rule->matching_scenario == 'subject') {
                         if ($rule_condition = $this->checkRuleCondition($contact_details['subject'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
                             $ticket_settings_details = $this->applyActionCondition($workflow->id, $ticket_settings_details);
