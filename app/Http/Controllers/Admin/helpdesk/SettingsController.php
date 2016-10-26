@@ -356,8 +356,8 @@ class SettingsController extends Controller
 
         $workflow = $workflow->whereId('1')->first();
         $cron_path = base_path('artisan');
-        $command = ":- <pre>***** php $cron_path schedule:run >> /dev/null 2>&1</pre>";
-        $shared = ":- <pre>/usr/bin/php-cli -q  $cron_path schedule:run >> /dev/null 2>&1</pre>";
+        $command = ":- <pre>***** php $cron_path schedule:run > /dev/null 2>&1</pre>";
+        $shared = ":- <pre>/usr/bin/php-cli -q  $cron_path schedule:run > /dev/null 2>&1</pre>";
         $warn = '';
         $condition = new \App\Model\MailJob\Condition();
         $job = $condition->checkActiveJob();

@@ -1897,41 +1897,11 @@ class TicketController extends Controller
             foreach ($selectall as $delete) {
                 $ticket = Tickets::whereId($delete)->first();
                 if ($value == 'Delete') {
-                    $ticket->status = 5;
-                    $ticket->save();
-                    $data = [
-                        'id'         => $ticket->ticket_number,
-                        'status'     => 'Deleted',
-                        'first_name' => Auth::user()->first_name,
-                        'last_name'  => Auth::user()->last_name,
-                    ];
-                    \Event::fire('change-status', [$data]);
+                    $this->delete($delete, new Tickets());
                 } elseif ($value == 'Close') {
-                    $ticket->status = 2;
-                    $ticket->closed = 1;
-                    $ticket->closed_at = date('Y-m-d H:i:s');
-                    $ticket->save();
-                    $data = [
-                        'id'         => $ticket->ticket_number,
-                        'status'     => 'Closed',
-                        'first_name' => Auth::user()->first_name,
-                        'last_name'  => Auth::user()->last_name,
-                    ];
-                    \Event::fire('change-status', [$data]);
+                    $this->close($delete, new Tickets());
                 } elseif ($value == 'Open') {
-                    $ticket->status = 1;
-                    $ticket->reopened = 1;
-                    $ticket->reopened_at = date('Y-m-d H:i:s');
-                    $ticket->closed = 0;
-                    $ticket->closed_at = null;
-                    $ticket->save();
-                    $data = [
-                        'id'         => $ticket->ticket_number,
-                        'status'     => 'Open',
-                        'first_name' => Auth::user()->first_name,
-                        'last_name'  => Auth::user()->last_name,
-                    ];
-                    \Event::fire('change-status', [$data]);
+                    $this->open($delete, new Tickets());
                 } elseif ($value == 'Delete forever') {
                     $notification = Notification::select('id')->where('model_id', '=', $ticket->id)->get();
                     foreach ($notification as $id) {
@@ -1947,7 +1917,7 @@ class TicketController extends Controller
                         $attachment = Ticket_attachments::where('thread_id', '=', $th_id->id)->get();
                         if (count($attachment)) {
                             foreach ($attachment as $a_id) {
-                                echo $a_id->id.' ';
+                                // echo $a_id->id . ' ';
                                 $attachment = Ticket_attachments::find($a_id->id);
                                 $attachment->delete();
                             }
@@ -1960,7 +1930,7 @@ class TicketController extends Controller
                     $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket->id)->get();
                     if (count($collaborators)) {
                         foreach ($collaborators as $collab_id) {
-                            echo $collab_id->id;
+                            // echo $collab_id->id;
                             $collab = Ticket_Collaborator::find($collab_id->id);
                             $collab->delete();
                         }

@@ -465,7 +465,7 @@ class UserController extends Controller
                 $ticket = Tickets::where('assigned_to', '=', $id)->where('status', '=', '1')->get();
                 if ($assign_to[0] == 'user') {
                     if ($users->id == $assign_to[1]) {
-                        return redirect('user')->with('warning', Lang::get('lang.select_another_user'));
+                        return redirect('user')->with('warning', Lang::get('lang.select_another_agent'));
                     }
                     $user_detail = User::where('id', '=', $assign_to[1])->first();
                     $assignee = $user_detail->first_name.' '.$user_detail->last_name;
@@ -491,7 +491,7 @@ class UserController extends Controller
                     $user = User::find($id);
                     $user->delete();
 
-                    return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully_and_ticket_assign_to_another_user'));
+                    return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully_and_ticket_assign_to_another_agent'));
                 }
                 if (User_org::where('user_id', '=', $id)) {
                     DB::table('user_assign_organization')->where('user_id', '=', $id)->delete();
@@ -747,7 +747,8 @@ class UserController extends Controller
      */
     public function UserAssignOrg($id)
     {
-        $org = Input::get('org');
+        $org_name = Input::get('org');
+        $org = Organization::where('name', '=', $org_name)->lists('id')->first();
         $user_org = new User_org();
         $user_org->org_id = $org;
         $user_org->user_id = $id;
