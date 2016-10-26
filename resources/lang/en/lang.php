@@ -131,6 +131,8 @@ return [
     'create_email'                                                                     => 'Create email',
     'email_address'                                                                    => 'Email address',
     'email_name'                                                                       => 'Email name',
+    'email_from'                                                                       => 'Email from',
+    'email_to'                                                                         => 'Email to',
     'help_topic'                                                                       => 'Help topic',
     'auto_response'                                                                    => 'Auto response',
     'host_name'                                                                        => 'Host name',
