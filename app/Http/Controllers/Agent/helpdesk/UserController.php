@@ -748,66 +748,49 @@ class UserController extends Controller
     public function UserAssignOrg($id)
     {
         $org_name = Input::get('org');
-         
-         if($org_name){
-           
-        $org= Organization::where('name','=',$org_name)->lists('id')->first();
-        if($org){
 
-        $user_org = new User_org();
-        $user_org->org_id = $org;
-        $user_org->user_id = $id;
-        $user_org->save();
+        if ($org_name) {
+            $org = Organization::where('name', '=', $org_name)->lists('id')->first();
+            if ($org) {
+                $user_org = new User_org();
+                $user_org->org_id = $org;
+                $user_org->user_id = $id;
+                $user_org->save();
 
-        return 1;
-        }
-        else{
-            
-             return 0;
-
-        }
-
-    }
-        else{
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
             return 2;
-
         }
     }
 
-
-     /**
+    /**
      * Assigning an user to an organization.
      *
      * @param type $id
-     *   
+     *
      * @return type boolean
      */
     public function UsereditAssignOrg($id)
     {
-            $org_name = Input::get('org');
-         
-         if($org_name){
-           
-        $org= Organization::where('name','=',$org_name)->lists('id')->first();
-        if($org){
+        $org_name = Input::get('org');
 
-        $user_org =User_org::where('user_id','=',$id)->first();
-        $user_org->org_id = $org;
-        $user_org->user_id = $id;
-        $user_org->save();
+        if ($org_name) {
+            $org = Organization::where('name', '=', $org_name)->lists('id')->first();
+            if ($org) {
+                $user_org = User_org::where('user_id', '=', $id)->first();
+                $user_org->org_id = $org;
+                $user_org->user_id = $id;
+                $user_org->save();
 
-        return 1;
-        }
-        else{
-            
-             return 0;
-
-        }
-
-    }
-        else{
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
             return 2;
-
         }
     }
 
