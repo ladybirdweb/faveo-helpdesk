@@ -173,12 +173,17 @@ class="active"
                                                         if ($workflow_rule->matching_scenario == 'email') {
                                                             echo "selected='selected'";
                                                         }
-                                                        ?> >{!! Lang::get('lang.email') !!}</option>
+                                                        ?> >{!! Lang::get('lang.email_from') !!}</option>
                                                         <option value="email_name" <?php
                                                         if ($workflow_rule->matching_scenario == 'email_name') {
                                                             echo "selected='selected'";
                                                         }
                                                         ?> >{!! Lang::get('lang.email_name') !!}</option>
+                                                        <option value="email_to" <?php
+                                                        if ($workflow_rule->matching_scenario == 'email_to') {
+                                                            echo "selected='selected'";
+                                                        }
+                                                        ?> >{!! Lang::get('lang.email_to') !!}</option>
                                                         <option value="subject" <?php
                                                         if ($workflow_rule->matching_scenario == 'subject') {
                                                             echo "selected='selected'";
