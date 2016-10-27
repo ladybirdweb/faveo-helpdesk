@@ -190,6 +190,7 @@ class MailController extends Controller
         if (!$body) {
             $body = $message->getMessageBody();
         }
+        $toaddress = $message->getAddresses('to');
         $subject = $message->getSubject();
         $address = $message->getAddresses('reply-to');
         if (!$address) {
@@ -198,10 +199,10 @@ class MailController extends Controller
         $collaborators = $this->collaburators($message, $email);
         $attachments = $message->getAttachments();
         //dd(['body' => $body, 'subject' => $subject, 'address' => $address, 'cc' => $collaborator, 'attachments' => $attachments]);
-        $this->workflow($address, $subject, $body, $collaborators, $attachments, $email);
+        $this->workflow($address, $subject, $toaddress, $body, $collaborators, $attachments, $email);
     }
 
-    public function workflow($address, $subject, $body, $collaborator, $attachments, $email)
+    public function workflow($address, $subject, $toaddress, $body, $collaborator, $attachments, $email)
     {
         $fromaddress = checkArray('address', $address[0]);
         $fromname = checkArray('name', $address[0]);
@@ -217,7 +218,7 @@ class MailController extends Controller
         $team_assign = null;
         $ticket_status = null;
         $auto_response = $email->auto_response;
-        $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone = '', $phonecode = '', $mobile_number = '', $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data = [], $auto_response);
+        $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $toaddress, $subject, $body, $phone = '', $phonecode = '', $mobile_number = '', $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data = [], $auto_response);
         if ($result[1] == true) {
             $this->updateThread($result[0], $body, $attachments);
         }

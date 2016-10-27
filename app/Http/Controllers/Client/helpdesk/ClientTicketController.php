@@ -60,6 +60,7 @@ class ClientTicketController extends Controller
     {
         $tickets = Tickets::where('id', '=', $id)->first();
         $thread = Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
+        $toaddress = '';
 
         $subject = $thread->title.'[#'.$tickets->ticket_number.']';
         $body = $request->input('comment');
@@ -84,7 +85,7 @@ class ClientTicketController extends Controller
         $ticket_status = null;
         $auto_response = 0;
 
-        $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
+        $this->TicketWorkflowController->workflow($fromaddress, $fromname, $toaddress, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response);
 
         return \Redirect::back()->with('success1', Lang::get('lang.successfully_replied'));
     }

@@ -128,11 +128,10 @@ class TicketWorkflowController extends Controller
                             } elseif ($worklfow_rule->matching_scenario == 'email_name') {
                                 if ($rule_condition = $this->checkRuleCondition($contact_details['email_name'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_email->id, $ticket_settings_details);
-                                } elseif ($worklfow_rule->matching_scenario == 'email_to') {
-                                
+                                }
+                            } elseif ($worklfow_rule->matching_scenario == 'email_to') {
                                 foreach ($contact_details['email_to'] as $email_toaddress => $email_toname) {
                                     if ($rule_condition = $this->checkRuleCondition($email_toaddress, $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
-                            \Log::info('applying condition');
                                         $ticket_settings_details = $this->applyActionCondition($workflows_email->id, $ticket_settings_details);
                                         break;
                                     }
