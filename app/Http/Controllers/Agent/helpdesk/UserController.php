@@ -242,8 +242,10 @@ class UserController extends Controller
             }
             // save user credentails
             if ($user->save() == true) {
-                $orgid = $request->input('org_id');
-                $this->storeUserOrgRelation($user->id, $orgid);
+                if ($request->input('org_id') != ""){
+                    $orgid = $request->input('org_id');
+                    $this->storeUserOrgRelation($user->id, $orgid);
+                }
                 // fetch user credentails to send mail
                 $name = $user->first_name;
                 $email = $user->email;
@@ -613,8 +615,10 @@ class UserController extends Controller
             $users->mobile = ($request->input('mobile') == '') ? null : $request->input('mobile');
             $users->fill($request->except('mobile'));
             $users->save();
-            $orgid = $request->input('org_id');
-            $this->storeUserOrgRelation($users->id, $orgid);
+            if($request->input('org_id') != "") {
+                $orgid = $request->input('org_id');
+                $this->storeUserOrgRelation($users->id, $orgid);                
+            }
             /* redirect to Index page with Success Message */
             return redirect('user')->with('success', Lang::get('lang.User-profile-Updated-Successfully'));
         } catch (Exception $e) {
