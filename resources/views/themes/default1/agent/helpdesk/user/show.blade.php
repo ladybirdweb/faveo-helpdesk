@@ -1258,6 +1258,7 @@ class="active"
                             setInterval(function () {
                                 $("#alert-success").hide();
                             }, 4000);
+                            window.location.reload(true);
 
                         }
                             if (response == 0) {
