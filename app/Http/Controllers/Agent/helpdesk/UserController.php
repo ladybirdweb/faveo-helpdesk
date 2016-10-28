@@ -242,8 +242,10 @@ class UserController extends Controller
             }
             // save user credentails
             if ($user->save() == true) {
-                $orgid = $request->input('org_id');
-                $this->storeUserOrgRelation($user->id, $orgid);
+                if ($request->input('org_id') != '') {
+                    $orgid = $request->input('org_id');
+                    $this->storeUserOrgRelation($user->id, $orgid);
+                }
                 // fetch user credentails to send mail
                 $name = $user->first_name;
                 $email = $user->email;
@@ -491,7 +493,7 @@ class UserController extends Controller
                     $user = User::find($id);
                     $user->delete();
 
-                    return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully_and_ticket_assign_to_another_user'));
+                    return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully_and_ticket_assign_to_another_agent'));
                 }
                 if (User_org::where('user_id', '=', $id)) {
                     DB::table('user_assign_organization')->where('user_id', '=', $id)->delete();
@@ -613,8 +615,10 @@ class UserController extends Controller
             $users->mobile = ($request->input('mobile') == '') ? null : $request->input('mobile');
             $users->fill($request->except('mobile'));
             $users->save();
-            $orgid = $request->input('org_id');
-            $this->storeUserOrgRelation($users->id, $orgid);
+            if ($request->input('org_id') != '') {
+                $orgid = $request->input('org_id');
+                $this->storeUserOrgRelation($users->id, $orgid);
+            }
             /* redirect to Index page with Success Message */
             return redirect('user')->with('success', Lang::get('lang.User-profile-Updated-Successfully'));
         } catch (Exception $e) {
@@ -748,7 +752,6 @@ class UserController extends Controller
     public function UserAssignOrg($id)
     {
         $org_name = Input::get('org');
-
         if ($org_name) {
             $org = Organization::where('name', '=', $org_name)->lists('id')->first();
             if ($org) {
