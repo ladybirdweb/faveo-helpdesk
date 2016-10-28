@@ -37,6 +37,11 @@ class="active"
     <i class="fa fa-check-circle"> </i> <b>  <span id="get-success"></span></b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 </div>
+<!-- INfo message -->
+<div id="alert-danger" class="alert alert-danger alert-dismissable" style="display:none;">
+    <i class="fa fa-check-circle"> </i> <b>  <span id="get-danger"></span></b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+</div>
 @if(Session::has('success1'))
 <div id="success-alert" class="alert alert-success alert-dismissable">
     <i class="fa  fa-check-circle"> </i>
@@ -104,7 +109,7 @@ class="active"
 
                     &nbsp;&nbsp;&nbsp;
                  
-                    <span style="color:green;">{{$organization->name}}</span>
+                   <a href=""   data-toggle="modal" data-target="#editassign"> <span style="color:green;">{{$organization->name}}</span> </a>
                     
                      
                     <a class="pull-right" href="#" data-toggle="modal" data-target="#{{$org_id}}delete" title="{!! Lang::get('lang.remove') !!}"><i class="fa fa-times" style="color:red;"> </i></a> 
@@ -1119,6 +1124,9 @@ class="active"
     <div class="modal fade" id="assign">
         <div class="modal-dialog">
             <div class="modal-content">
+
+           <!--  <form name="myorgForm" action="{!!URL::route('user.editassign.org', $users->id)!!}" id='org_assign' method="PATCH" role="form" onsubmit="return validateFormedit()"> -->
+
                 {!! Form::model($users->id, ['id'=>'org_assign','method' => 'PATCH'] )!!}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" id="dismiss" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -1140,7 +1148,8 @@ class="active"
                     <div id="assign_body">
                         <p>{!! Lang::get('lang.please_select_an_organization') !!}</p>
 
-                        <input type="text" id="org" class="form-control" name="org">
+                        <input type="text" id="org" class="form-control" name="org" >
+                         <p id="orgdemo" style="color:red"></p>
                    
                     </div>
                 </div>
@@ -1153,7 +1162,74 @@ class="active"
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+
+<!-- edit assign oranization -->
+
+                     <?php
+                       
+                       $assign_org_id=App\Model\helpdesk\Agent_panel\User_org::where('user_id','=',$users->id)->first();
+                      if($assign_org_id)
+                       {$organization=App\Model\helpdesk\Agent_panel\Organization::where('id','=',$assign_org_id->org_id)->first();}
+                       
+                     ?>
+                     @if($assign_org_id)
+
+    <div class="modal fade" id="editassign">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                {!! Form::model($users->id, ['id'=>'org_edit_assign','method' => 'PATCH'] )!!}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="editdismiss" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{!! Lang::get('lang.assign') !!}</h4>
+                </div>
+              <!--   <div id="assign_alert" class="alert alert-success alert-dismissable" style="display:none;">
+                    <button id="assign_dismiss" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                    <div id="message-success1"></div>
+                </div> -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-6" id="assign_loader" style="display:none;">
+                            <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
+                        </div>
+                    </div>
+                    <div id="assign_body">
+                        <p>{!! Lang::get('lang.please_select_an_organization') !!}</p>
+
+                        
+                        
+                       <input type="text" id="editorg" class="form-control" name="org" value="{{$organization->name}}">
+                    
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis4">{!! Lang::get('lang.close') !!}</button>
+                    <button type="submit" class="btn btn-success pull-right" id="submt3">{!! Lang::get('lang.assign') !!}</button>
+                </div>
+                {!! Form::close()!!}
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    @endif
+
     <script type="text/javascript">
+
+
+
+
+
+        // function validateFormedit() {
+        //     var x = document.forms["myorgForm"]["org"].value;
+        //     if (x == null || x == "") {
+        //         // alert("please enter your password");
+        //         document.getElementById("orgdemo").innerHTML = "Select Organization";
+        //         return false;
+        //     }
+        // }
+    
         // Assign a ticket
         jQuery(document).ready(function ($) {
             // create org
@@ -1182,12 +1258,115 @@ class="active"
                             setInterval(function () {
                                 $("#alert-success").hide();
                             }, 4000);
+
+                        }
+                            if (response == 0) {
+                            message = " Organization not found"
+                            $("#dismiss").trigger("click");
+                            $("#refresh-org").load("../user/{{ $users->id }}  #refresh-org");
+                            // $("#refresh2").load("../thread/{{$users->id}}   #refresh2");
+                            // $("#show").show();
+                            $("#alert-danger").show();
+                            $('#get-danger').html(message);
+                            setInterval(function () {
+                                $("#alert-danger").hide();
+                            }, 4000);
+                        }
+
+                        if (response == 2) {
+                            message = "Select Organization"
+                            $("#dismiss").trigger("click");
+                            $("#refresh-org").load("../user/{{ $users->id }}  #refresh-org");
+                            // $("#refresh2").load("../thread/{{$users->id}}   #refresh2");
+                            // $("#show").show();
+                            $("#alert-danger").show();
+                            $('#get-danger').html(message);
+                            setInterval(function () {
+                                $("#alert-danger").hide();
+                            }, 4000);
+                        }
+
+
+
+
+
+
+                    }
+                })
+                return false;
+            });
+        });
+
+// edit assign organization
+
+ jQuery(document).ready(function ($) {
+            // create org
+            $('#org_edit_assign').on('submit', function () {
+                $.ajax({
+                    type: "POST",
+                    url: "../user-org-edit-assign/{{$users->id}}",
+                    dataType: "html",
+                    data: $(this).serialize(),
+                    beforeSend: function () {
+                        $("#hide").hide();
+                        $("#show2").show();
+                    },
+                    success: function (response) {
+                        $("#editassign").hide();
+                        $("#hide").show();
+
+                        if (response == 1) {
+                            message = "Organization added successfully."
+                            $("#dismiss").trigger("click");
+                            $("#refresh-org").load("../user/{{ $users->id }}  #refresh-org");
+                            // $("#refresh2").load("../thread/{{$users->id}}   #refresh2");
+                            // $("#show").show();
+                            $("#alert-success").show();
+                            $('#get-success').html(message);
+                            setInterval(function () {
+                                $("#alert-success").hide();
+                            }, 4000);
+                             window.location.reload(true);
+                             
+                        }
+
+                         if (response == 0) {
+                            message = " Organization not found"
+                            $("#dismiss").trigger("click");
+                            $("#refresh-org").load("../user/{{ $users->id }}  #refresh-org");
+                            // $("#refresh2").load("../thread/{{$users->id}}   #refresh2");
+                            // $("#show").show();
+                            $("#alert-danger").show();
+                            $('#get-danger').html(message);
+                            setInterval(function () {
+                                $("#alert-danger").hide();
+                            }, 4000);
+                             window.location.reload(true);
+                            
+                        }
+
+                        if (response == 2) {
+                            message = "Select Organization"
+                            $("#dismiss").trigger("click");
+                            $("#refresh-org").load("../user/{{ $users->id }}  #refresh-org");
+                            // $("#refresh2").load("../thread/{{$users->id}}   #refresh2");
+                            // $("#show").show();
+                            $("#alert-danger").show();
+                            $('#get-danger').html(message);
+                            setInterval(function () {
+                                $("#alert-danger").hide();
+                            }, 4000);
+                            window.location.reload(true);
+                             
                         }
                     }
                 })
                 return false;
             });
         });
+
+
+
 
 // autocomplete organization name
          $(document).ready(function(){                   
@@ -1196,14 +1375,20 @@ class="active"
                         source:"{!!URL::route('post.organization.autofill')!!}",
                         minLength:1,
                         select:function(evt, ui) {
-                            // // this.form.phone_number.value = ui.item.phone_number;
-                            // // this.form.user_name.value = ui.item.user_name;
-                            // if(ui.item.first_name) {
-                            //     this.form.first_name.value = ui.item.first_name;
-                            // }
-                            // if(ui.item.last_name) {
-                            //     this.form.last_name.value = ui.item.last_name;
-                            // }
+                           
+                            
+                        }
+                    });
+                });
+
+
+             $(document).ready(function(){                   
+                    $("#editorg").autocomplete({
+
+                        source:"{!!URL::route('post.organization.autofill')!!}",
+                        minLength:1,
+                        select:function(evt, ui) {
+                           
                             
                         }
                     });
