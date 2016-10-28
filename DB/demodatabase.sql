@@ -619,12 +619,6 @@ CREATE TABLE IF NOT EXISTS `emails` (
   KEY `help_topic` (`help_topic`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Dumping data for table `emails`
---
-
-INSERT INTO `emails` (`id`, `email_address`, `email_name`, `department`, `priority`, `help_topic`, `user_name`, `password`, `fetching_host`, `fetching_port`, `fetching_protocol`, `fetching_encryption`, `mailbox_protocol`, `imap_config`, `folder`, `sending_host`, `sending_port`, `sending_protocol`, `sending_encryption`, `smtp_validate`, `smtp_authentication`, `internal_notes`, `auto_response`, `fetching_status`, `move_to_folder`, `delete_email`, `do_nothing`, `sending_status`, `authentication`, `header_spoofing`, `created_at`, `updated_at`) VALUES
-(1, 'demo.faveo@gmail.com', 'ABC Support', NULL, NULL, NULL, '', 'eyJpdiI6IlYrZEF6dld2Wit6dXFCeHQ1cFwvQVZBPT0iLCJ2YWx1ZSI6IjRsMUxoSkY4MmdcL3VaalNmenRYU0lBV2dcLzdpUWRjdnRhNUVoWEVGNEdCcz0iLCJtYWMiOiIxMzVjZDc4MzJhNzI0YjA3ODYzY2RlODljNzBhN2NmMGFlYzI5YjUwZWMwYjRiZWQwNTU0ZWQ5ZjYxYzIzYWY0In0=', 'imap.gmail.com', '993', 'imap', '/ssl/novalidate-cert', '', '', '', 'smtp.gmail.com', '465', 'smtp', 'ssl', '', '', '', 0, 1, 0, 0, 0, 1, 0, 0, '2016-05-16 05:10:15', '2016-05-16 05:10:15');
 
 -- --------------------------------------------------------
 
