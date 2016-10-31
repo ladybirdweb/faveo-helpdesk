@@ -94,9 +94,9 @@ class PriorityController extends Controller
                             })
                             ->addColumn('action', function ($model) {
                                 if ($model->is_default > 0) {
-                                    return '<a href='.url('ticket_priority/'.$model->priority_id.'/edit')." class='btn btn-info btn-xs' disabled='disabled'>Edit</a>&nbsp;<a href=".url('ticket_priority/'.$model->priority_id.'/destroy')." class='btn btn-warning btn-info btn-xs' disabled='disabled' > delete </a>";
+                                    return '<a href='.url('ticket/priority/'.$model->priority_id.'/edit')." class='btn btn-info btn-xs' disabled='disabled'>Edit</a>&nbsp;<a href=".url('ticket_priority/'.$model->priority_id.'/destroy')." class='btn btn-warning btn-info btn-xs' disabled='disabled' > delete </a>";
                                 } else {
-                                    return '<a href='.url('ticket_priority/'.$model->priority_id.'/edit')." class='btn btn-info btn-xs'>Edit</a>&nbsp;<a class='btn btn-danger btn-xs' onclick='confirmDelete(".$model->priority_id.")'>Delete </a>";
+                                    return '<a href='.url('ticket/priority/'.$model->priority_id.'/edit')." class='btn btn-info btn-xs'>Edit</a>&nbsp;<a class='btn btn-danger btn-xs' onclick='confirmDelete(".$model->priority_id.")'>Delete </a>";
                                 }
                             })
                             ->searchColumns('priority')

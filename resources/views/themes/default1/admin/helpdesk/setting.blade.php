@@ -256,7 +256,7 @@
                  <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
                         <div class="settingdivblue">
-                            <a href="{{url('ticket_priority')}}">
+                            <a href="{{url('ticket/priority')}}">
                                 <span class="fa-stack fa-2x">
                                     
                                     <i class="fa fa-asterisk fa-stack-1x"></i>
