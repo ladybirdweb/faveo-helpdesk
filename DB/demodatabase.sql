@@ -2036,10 +2036,10 @@ CREATE TABLE IF NOT EXISTS `ticket_priority` (
 --
 
 INSERT INTO `ticket_priority` (`priority_id`, `priority`, `priority_desc`, `priority_color`, `priority_urgency`, `ispublic`, `status`, `is_default`) VALUES
-(1, 'Low', 'Low', '#80ff00', 4, 1, 0, NULL),
-(2, 'Normal', 'Normal', '#367FA9', 3, 1, 1, NULL),
-(3, 'High', 'High', '#ffff00', 2, 1, 0, NULL),
-(4, 'Emergency', 'Emergency', '#ff6666', 1, 1, 0, NULL);
+(1, 'Low', 'Low', '#00a65a', 4, 1, 0, NULL),
+(2, 'Normal', 'Normal', '#00bfef', 3, 1, 1, NULL),
+(3, 'High', 'High', '#f39c11', 2, 1, 0, NULL),
+(4, 'Emergency', 'Emergency', '#dd4b38', 1, 1, 0, NULL);
 
 -- --------------------------------------------------------
 

@@ -612,13 +612,10 @@ class="active"
                                                 $LastResponse = App\User::where('id', '=', $TicketDatarow->user_id)->first();
                                                 if ($LastResponse->role == "user") {
                                                     $rep = "#F39C12";
-                                                    $username = $LastResponse->user_name;
+                                                    $username = $LastResponse->full_name;
                                                 } else {
                                                     $rep = "#000";
-                                                    $username = $LastResponse->first_name . " " . $LastResponse->last_name;
-                                                    if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
-                                                        $username = $LastResponse->user_name;
-                                                    }
+                                                    $username = $LastResponse->full_name;
                                                 }
                                                 $titles = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
                                                 $count = count($titles);
