@@ -215,10 +215,10 @@ class DatabaseSeeder extends Seeder
         Ticket_status::create(['name' => 'Request Approval', 'state' => 'unverified', 'mode' => '3', 'message' => 'Approval requested by', 'flags' => '0', 'sort' => '7', 'properties' => 'Ticket will be approve  after Admin verifies  this ticket']);
 
         /* Ticket priority */
-        Ticket_priority::create(['priority' => 'Low', 'status' => 1, 'priority_desc' => 'Low', 'priority_color' => '#80ff00', 'priority_urgency' => '4', 'ispublic' => '1']);
-        Ticket_priority::create(['priority' => 'Normal', 'status' => 1, 'priority_desc' => 'Normal', 'priority_color' => '#367FA9', 'priority_urgency' => '3', 'ispublic' => '1', 'is_default' => '1']);
-        Ticket_priority::create(['priority' => 'High', 'status' => 1, 'priority_desc' => 'High', 'priority_color' => '#ffff00', 'priority_urgency' => '2', 'ispublic' => '1']);
-        Ticket_priority::create(['priority' => 'Emergency', 'status' => 1, 'priority_desc' => 'Emergency', 'priority_color' => '#ff6666', 'priority_urgency' => '1', 'ispublic' => '1']);
+        Ticket_priority::create(['priority' => 'Low', 'status' => 1, 'priority_desc' => 'Low', 'priority_color' => '#00a65a', 'priority_urgency' => '4', 'ispublic' => '1']);
+        Ticket_priority::create(['priority' => 'Normal', 'status' => 1, 'priority_desc' => 'Normal', 'priority_color' => '#00bfef', 'priority_urgency' => '3', 'ispublic' => '1', 'is_default' => '1']);
+        Ticket_priority::create(['priority' => 'High', 'status' => 1, 'priority_desc' => 'High', 'priority_color' => '#f39c11', 'priority_urgency' => '2', 'ispublic' => '1']);
+        Ticket_priority::create(['priority' => 'Emergency', 'status' => 1, 'priority_desc' => 'Emergency', 'priority_color' => '#dd4b38', 'priority_urgency' => '1', 'ispublic' => '1']);
 
         /* Approval */
         Approval::create(['name' => 'approval', 'status' => '0']);
