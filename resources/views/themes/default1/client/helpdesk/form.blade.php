@@ -175,6 +175,7 @@ class = "active"
             ?>
              
              @if($user_Priority == 1)
+             @if(Auth::user()->active == '1')
              <div class="col-md-12 form-group">
                 <div class="row">
                     <div class="col-md-1">
@@ -186,7 +187,7 @@ class = "active"
                     </div>
                  </div>
             </div>
-            @else
+           @endif
 
             @endif
             <div class="col-md-12 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
