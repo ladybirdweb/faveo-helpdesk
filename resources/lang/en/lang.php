@@ -376,8 +376,7 @@ return [
     'reload-now'                          => 'Reload now',
     'ticket-lock-inactive'                => 'You have been inactive for a while. Please reload the page.',
     'make-system-default-mail'            => 'Make this email system\'s default email',
-    'thread' 
-                                 => 'Thread',
+    'thread'                              => 'Thread',
     /*
       |--------------------------------------
       |   Access Settings Page
@@ -1472,26 +1471,26 @@ return [
      * Ticket Priority
      * -----------------------------------------------------------------------------------
      */
-    'ticket_priority'               => 'Ticket priority',
-    'priority'                      => 'Priority',
-    'priority_desc'                 => 'Priority description',
-    'priority_urgency'              => 'Priority urgency',
-    'priority_id'                   => 'Priority Id',
-    'priority_color'                => 'Priority color',
-    'ispublic'                      => 'IsPublic',
-    'is_default'                    => 'By default',
-    'create_ticket_priority'        => 'Create ticket priority',
-    'agent_notes'                   => 'Agent notes',
-    'select_priority'               => 'Select priority',
-    'normal'                        => 'Normal',
-    'ispublic'                      => 'Visibility',
-    'make-default-priority'         => 'Make default priority',
-    'priority_successfully_created' => 'Priority successfully created',
-    'priority_successfully_updated' => 'Priority successfully updated',
-    'delete_successfully'           => 'Delete successfully',
-    'user_priority_status'          => 'User priority status',
-    'current' =>'Current:',
-    'active_user_can_select_the_priority_while_creating_ticket'=>'Active user can select the priority while creating ticket',
+    'ticket_priority'                                           => 'Ticket priority',
+    'priority'                                                  => 'Priority',
+    'priority_desc'                                             => 'Priority description',
+    'priority_urgency'                                          => 'Priority urgency',
+    'priority_id'                                               => 'Priority Id',
+    'priority_color'                                            => 'Priority color',
+    'ispublic'                                                  => 'IsPublic',
+    'is_default'                                                => 'By default',
+    'create_ticket_priority'                                    => 'Create ticket priority',
+    'agent_notes'                                               => 'Agent notes',
+    'select_priority'                                           => 'Select priority',
+    'normal'                                                    => 'Normal',
+    'ispublic'                                                  => 'Visibility',
+    'make-default-priority'                                     => 'Make default priority',
+    'priority_successfully_created'                             => 'Priority successfully created',
+    'priority_successfully_updated'                             => 'Priority successfully updated',
+    'delete_successfully'                                       => 'Delete successfully',
+    'user_priority_status'                                      => 'User priority status',
+    'current'                                                   => 'Current:',
+    'active_user_can_select_the_priority_while_creating_ticket' => 'Active user can select the priority while creating ticket',
 
     /* --------------------------------------------------------------------------------------------
      * Approval Updated
