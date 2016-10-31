@@ -49,13 +49,17 @@ class="active"
     <div class="box-header with-border">
         <span class="lead border-right">{!! Lang::get('lang.priority') !!}</span>
         <div class="pull-right">
-             <a href="{{route('priority.create')}}" class="btn btn-primary">{{Lang::get('lang.create_ticket_priority')}}</a>
+             <a href="{{route('priority.create')}}" class="btn btn-primary"> {{Lang::get('lang.create_ticket_priority')}}</a>
         </div>
     </div>
+
+
+<!-- <li><a class="right" title="" data-placement="right" data-toggle="tooltip" href="#" data-original-title="Tooltip on right"> sss</a></li> -->
+<a class="right" title="" data-placement="right" data-toggle="tooltip" href="#" data-original-title="{{Lang::get('lang.active_user_can_select_the_priority_while_creating_ticket')}}">
     <div class="box-header with-border">
-        <span class="lead border-right">{!! Lang::get('lang.user_priority_status') !!}</span>
+        <span class="lead border-right" >{!! Lang::get('lang.current') !!}{!! Lang::get('lang.user_priority_status') !!}</span>
        
-           
+           </a>
                             <div class="btn-group pull-right" id="toggle_event_editing">
                                 <button type="button"  class="btn {{$user_status->status == '0' ? 'btn-info' : 'btn-default'}} locked_active">Inactive</button>
                                 <button type="button"  class="btn {{$user_status->status == '1' ? 'btn-info' : 'btn-default'}} unlocked_inactive">Active</button>
@@ -65,6 +69,11 @@ class="active"
              <!-- <a href="{{route('priority.create')}}" class="btn btn-primary">{{Lang::get('lang.create_ticket_priority')}}</a> -->
         
     </div>
+
+
+
+
+
     <div class="box-body">
         {!! Datatable::table()
         ->addColumn(
@@ -79,13 +88,16 @@ class="active"
     <div class="box-footer">
     </div>
 </div>
+<script type="text/javascript">
+    $('a').tooltip()
+</script>
 
 <script>
     function confirmDelete(priority_id) {
         var r = confirm('Are you sure?');
         if (r == true) {
             // alert('{!! url("ticket_priority") !!}/' + priority_id + '/destroy');
-            window.location = '{!! url("ticket_priority") !!}/' + priority_id + '/destroy';
+            window.location = '{!! url("ticket/priority") !!}/' + priority_id + '/destroy';
             //    $url('ticket_priority/' . $model->priority_id . '/destroy')
         } else {
             return false;
@@ -112,7 +124,7 @@ class="active"
         $.ajax({
             type: 'post',
             url: '{{route("user.priority.index")}}',
-            data: {user_settings_priority: user_settings_priority},
+            data: {user/settings/priority: user_settings_priority},
             success: function (result) {
                 // with('success', Lang::get('lang.approval_settings-created-successfully'));
                 // alert("Hi, testing");

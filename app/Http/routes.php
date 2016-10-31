@@ -1211,28 +1211,28 @@ Route::group(['middleware' => ['web']], function () {
     /*
      * Ticket_Priority Settings
      */
-    Route::get('ticket_priority', ['as' => 'priority.index', 'uses' => 'Admin\helpdesk\PriorityController@priorityIndex']);
-    Route::post('user_ticket_priority', ['as' => 'user.priority.index', 'uses' => 'Admin\helpdesk\PriorityController@userPriorityIndex']);
+    Route::get('ticket/priority', ['as' => 'priority.index', 'uses' => 'Admin\helpdesk\PriorityController@priorityIndex']);
+    Route::post('user/ticket/priority', ['as' => 'user.priority.index', 'uses' => 'Admin\helpdesk\PriorityController@userPriorityIndex']);
 
     Route::get('get_index', ['as' => 'priority.index1', 'uses' => 'Admin\helpdesk\PriorityController@priorityIndex1']);
     Breadcrumbs::register('priority.index', function ($breadcrumbs) {
         $breadcrumbs->parent('setting');
         $breadcrumbs->push(Lang::get('Ticket Priority'), route('priority.index'));
     });
-    Route::get('ticket_priority/create', ['as' => 'priority.create', 'uses' => 'Admin\helpdesk\PriorityController@priorityCreate']);
+    Route::get('ticket/priority/create', ['as' => 'priority.create', 'uses' => 'Admin\helpdesk\PriorityController@priorityCreate']);
     Breadcrumbs::register('priority.create', function ($breadcrumbs) {
         $breadcrumbs->parent('setting');
         $breadcrumbs->push(Lang::get('Ticket Priority'), route('priority.index'));
         $breadcrumbs->push(Lang::get('lang.create'), route('priority.create'));
     });
     Route::post('ticket_priority/create1', ['as' => 'priority.create1', 'uses' => 'Admin\helpdesk\PriorityController@priorityCreate1']);
-    Route::post('ticket_priority/edit1', ['as' => 'priority.edit1', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit1']);
-    Route::get('ticket_priority/{ticket_priority}/edit', ['as' => 'priority.edit', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit']);
+    Route::post('ticket/priority/edit1', ['as' => 'priority.edit1', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit1']);
+    Route::get('ticket/priority/{ticket_priority}/edit', ['as' => 'priority.edit', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit']);
     Breadcrumbs::register('priority.edit', function ($breadcrumbs) {
         $breadcrumbs->push(Lang::get('Ticket Priority'), route('priority.index'));
         $breadcrumbs->push(Lang::get('Edit'), route('priority.index'));
     });
-    Route::get('ticket_priority/{ticket_priority}/destroy', ['as' => 'priority.destroy', 'uses' => 'Admin\helpdesk\PriorityController@destroy']);
+    Route::get('ticket/priority/{ticket_priority}/destroy', ['as' => 'priority.destroy', 'uses' => 'Admin\helpdesk\PriorityController@destroy']);
  // user---arindam
  Route::post('rolechangeadmin/{id}', ['as' => 'user.post.rolechangeadmin',  'uses' => 'Agent\helpdesk\UserController@changeRoleAdmin']);
     Route::post('rolechangeagent/{id}', ['as' => 'user.post.rolechangeagent',  'uses' => 'Agent\helpdesk\UserController@changeRoleAgent']);
