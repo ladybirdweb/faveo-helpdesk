@@ -872,7 +872,7 @@ if ($thread->title != "") {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{!! Lang::get('lang.priority') !!} <span class="text-red"> *</span></label>
-    <?php $ticket_prioritys = App\Model\helpdesk\Ticket\Ticket_Priority::all() ?>
+    <?php $ticket_prioritys = App\Model\helpdesk\Ticket\Ticket_Priority::where('status','=',1)->get() ?>
                                     <select class="form-control" name="ticket_priority">
                                         @foreach($ticket_prioritys as $ticket_priority)
                                         <option value="{!! $ticket_priority->priority_id !!}" <?php

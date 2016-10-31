@@ -174,8 +174,10 @@ class = "active"
              $user_Priority=$Priority->status;
             ?>
              
-             @if($user_Priority == 1)
-             <div class="col-md-12 form-group">
+             @if(!Auth::user())
+            
+             
+           <div class="col-md-12 form-group">
                 <div class="row">
                     <div class="col-md-1">
                         <label>{!! Lang::get('lang.priority') !!}:</label>
@@ -186,7 +188,6 @@ class = "active"
                     </div>
                  </div>
             </div>
-            @else
 
             @endif
             <div class="col-md-12 form-group {{ $errors->has('Subject') ? 'has-error' : '' }}">
