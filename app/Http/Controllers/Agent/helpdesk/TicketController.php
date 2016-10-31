@@ -2537,7 +2537,7 @@ class TicketController extends Controller
                             }
                             $priority = DB::table('ticket_priority')->select('priority_desc', 'priority_color')->where('priority_id', '=', $ticket->priority_id)->first();
                             if ($priority != null) {
-                                $prio = '<button class="btn btn-xs '.$rep.'" style="background-color: '.$priority->priority_color.'">'.ucfirst($priority->priority_desc).'</button>';
+                                $prio = '<button class="btn btn-xs '.$rep.'" style="background-color: '.$priority->priority_color.'; color:#F9F9F9">'.ucfirst($priority->priority_desc).'</button>';
                             } else {
                                 $prio = '';
                             }
