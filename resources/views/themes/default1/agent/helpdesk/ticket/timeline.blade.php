@@ -566,65 +566,7 @@ if ($thread->title != "") {
                                             <?php
                                         }
                                     }
-                                    $attachment = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->first();
-                                    if ($attachment == null) {
-                                        $body = $conversation->body;
-                                        $body = $conversation->thread($body);
-                                    } else {
-                                        // dd($attachment->file);
-                                        // print $attachment->file;
-                                        // header("Content-type: image/jpeg");
-                                        // echo "<img src='".base64_decode($attachment->file)."' style='width:128px;height:128px'/> ";
-                                        $body = $conversation->body;
-                                        $body = $conversation->thread($body);
-                                        $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->orderBy('id', 'DESC')->get();
-                                        // $i = 0;
-                                        foreach ($attachments as $attachment) {
-                                            // $i++;
-                                            if (mime($attachment->type)==true) {
-                                                $image = @imagecreatefromstring($attachment->file);
-                                                ob_start();
-                                                imagejpeg($image, null, 80);
-                                                $data = ob_get_contents();
-                                                ob_end_clean();
-                                                $var = '<img style="max-width:200px;max-height:200px;" src="data:image/' . $attachment->type . ';base64,' . base64_encode($data) . '" />';
-                                                // echo $var;
-                                                // echo $attachment->name;
-                                                // $body = explode($attachment->name, $body);
-                                                $body = str_replace($attachment->name, "data:image/" . $attachment->type . ";base64," . base64_encode($data), $body);
-
-                                                $string = $body;
-                                                $start = "<head>";
-                                                $end = "</head>";
-                                                if (strpos($string, $start) == false || strpos($string, $start) == false) {
-                                                    
-                                                } else {
-                                                    $ini = strpos($string, $start);
-                                                    $ini += strlen($start);
-                                                    $len = strpos($string, $end, $ini) - $ini;
-                                                    $parsed = substr($string, $ini, $len);
-                                                    $body2 = $parsed;
-                                                    $body = str_replace($body2, " ", $body);
-                                                }
-                                            } else {
-                                            }
-                                        }
-                                        // echo $body;
-                                        // $body = explode($attachment->file, $body);
-                                        // $body = $body[0];
-                                    }
-                                    $string = $body;
-                                    $start = "<head>";
-                                    $end = "</head>";
-                                    if (strpos($string, $start) == false || strpos($string, $start) == false) {
-                                    } else {
-                                        $ini = strpos($string, $start);
-                                        $ini += strlen($start);
-                                        $len = strpos($string, $end, $ini) - $ini;
-                                        $parsed = substr($string, $ini, $len);
-                                        $body2 = $parsed;
-                                        $body = str_replace($body2, " ", $body);
-                                    }
+                                    
                                     if($conversation->user_id != null) {
                                         if ($conversation->is_internal) {
                                             $color = '#A19CFF';
@@ -713,7 +655,7 @@ if ($thread->title != "") {
                                                 $('#loader_frame{{$conversation->id}}')[0].contentDocument.body.innerHTML = '{!!$conversation->purify()!!}';
                                             </script>
                                             @else 
-                                            {!! $body !!}
+                                            {!! $conversation->body !!}
                                             @endif
                                             
                                             @if($conversation->id == $ij->id)
@@ -755,29 +697,11 @@ if ($thread->title != "") {
                                             }
                                             ?>
                                             <ul class='mailbox-attachments clearfix'>
-                                                <?php
-                                                foreach ($attachments as $attachment) {
-                                                    $size = $attachment->size;
-                                                    $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
-                                                    $power = $size > 0 ? floor(log($size, 1024)) : 0;
-                                                    $value = number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
-                                                    if ($attachment->poster == 'ATTACHMENT') {
-                                                        if (mime($attachment->type)==true) {
-                                                            $image = @imagecreatefromstring($attachment->file);
-                                                            ob_start();
-                                                            imagejpeg($image, null, 80);
-                                                            $data = ob_get_contents();
-                                                            ob_end_clean();
-                                                            $var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;height:133px;" src="data:image/jpg;base64,' . base64_encode($data) . '"/></a>';
-                                                            echo '<li style="background-color:#f4f4f4;"><span class="mailbox-attachment-icon has-img">' . $var . '</span><div class="mailbox-attachment-info"><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></div></li>';
-                                                        } else {
-                                                            //$var = '<a href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><img style="max-width:200px;height:133px;" src="data:'.$attachment->type.';base64,' . base64_encode($data) . '"/></a>';
-                                                            $var = '<a style="max-width:200px;height:133px;color:#666;" href="' . URL::route('image', array('image_id' => $attachment->id)) . '" target="_blank"><span class="mailbox-attachment-icon" style="background-color:#fff; font-size:18px;">' . strtoupper($attachment->type) . '</span><div class="mailbox-attachment-info"><span ><b style="word-wrap: break-word;">' . $attachment->name . '</b><br/><p>' . $value . '</p></span></div></a>';
-                                                            echo '<li style="background-color:#f4f4f4;">' . $var . '</li>';
-                                                        }
-                                                    }
-                                                }
-                                                ?>
+                                                @forelse($attachments as $attachment)
+                                                {!! $attachment->getFile() !!}
+                                                @empty 
+                                                
+                                                @endforelse
                                             </ul>
                                         </div>
                                     </div>
@@ -1891,28 +1815,30 @@ if ($thread->title != "") {
                     }
                     if (response == 1)
                     {
-                        $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
-                        var message = "{{ Lang::get('lang.you_have_successfully_replied_to_your_ticket') }}";
-                        $("#alert21").show();
-                        $('#message-success2').html(message);
-                        setInterval(function(){$("#alert21").hide(); }, 4000);
-                        $("#newtextarea").empty();
-                        var div = document.getElementById('newtextarea');
-                        div.innerHTML = div.innerHTML + '<textarea style="width:98%;height:200px;" name="reply_content" class="form-control" id="reply_content"/></textarea>';
-                        $("#newtextarea1").empty();
-                        var div1 = document.getElementById('newtextarea1');
-                        div1.innerHTML = div1.innerHTML + '<textarea style="width:98%;height:200px;" name="InternalContent" class="form-control" id="InternalContent"/></textarea>';
-                        var wysihtml5Editor = $('textarea').wysihtml5().data("wysihtml5").editor;
-                        setInterval(function(){
-                            var head= document.getElementsByTagName('head')[0];
-                            var script= document.createElement('script');
-                            script.type= 'text/javascript';
-                            script.src= '{{asset("lb-faveo/js/jquery.rating.pack.js")}}';
-                            head.appendChild(script);
-//                            $('.rating-cancel').hide();
-//                            $(".star-rating-control").attr("disabled", "disabled").off('hover');
-//                            $(".star-rating-control").addClass("disabled")
-                        }, 4000);
+                        location.reload();
+//                        $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
+//                        var message = "{{ Lang::get('lang.you_have_successfully_replied_to_your_ticket') }}";
+//                        $("#alert21").show();
+//                        $('#message-success2').html(message);
+//                        setInterval(function(){$("#alert21").hide(); }, 4000);
+//                        $("#newtextarea").empty();
+//                        var div = document.getElementById('newtextarea');
+//                        div.innerHTML = div.innerHTML + '<textarea style="width:98%;height:200px;" name="reply_content" class="form-control" id="reply_content"/></textarea>';
+//                        $("#newtextarea1").empty();
+//                        var div1 = document.getElementById('newtextarea1');
+//                        div1.innerHTML = div1.innerHTML + '<textarea style="width:98%;height:200px;" name="InternalContent" class="form-control" id="InternalContent"/></textarea>';
+//                        var wysihtml5Editor = $('textarea').wysihtml5().data("wysihtml5").editor;
+//                        setInterval(function(){
+//                            var head= document.getElementsByTagName('head')[0];
+//                            var script= document.createElement('script');
+//                            script.type= 'text/javascript';
+//                            script.src= '{{asset("lb-faveo/js/jquery.rating.pack.js")}}';
+//                            head.appendChild(script);
+////                            $('.rating-cancel').hide();
+////                            $(".star-rating-control").attr("disabled", "disabled").off('hover');
+////                            $(".star-rating-control").addClass("disabled")
+//                        }, 4000);
+                
                     } else {
                     // alert('fail');
                     // $( "#dismis4" ).trigger( "click" );

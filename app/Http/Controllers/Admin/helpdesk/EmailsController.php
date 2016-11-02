@@ -252,12 +252,10 @@ class EmailsController extends Controller
         $this->emailService($driver, $service_request);
         $this->setMailConfig($driver, $username, $name, $password, $enc, $host, $port);
         $controller = new \App\Http\Controllers\Common\PhpMailController();
-        $to = 'example@ladybirdweb.com';
-        $toname = 'test';
         $subject = 'test';
         $data = 'test';
         //dd(\Config::get('mail'),\Config::get('services'));
-        $send = $controller->laravelMail($to, $toname, $subject, $data, [], []);
+        $send = $controller->laravelMail($username, $name, $subject, $data, [], []);
 
         return $send;
     }
