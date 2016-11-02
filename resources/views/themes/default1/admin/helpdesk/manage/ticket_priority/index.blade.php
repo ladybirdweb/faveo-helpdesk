@@ -124,7 +124,7 @@ class="active"
         $.ajax({
             type: 'post',
             url: '{{route("user.priority.index")}}',
-            data: {user/settings/priority: user_settings_priority},
+            data: {user_settings_priority: user_settings_priority},
             success: function (result) {
                 // with('success', Lang::get('lang.approval_settings-created-successfully'));
                 // alert("Hi, testing");
