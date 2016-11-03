@@ -281,7 +281,7 @@ class TicketController extends Controller
     public function newticket(CountryCode $code)
     {
         $location = GeoIP::getLocation();
-        $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+        $phonecode = $code->where('iso', '=', $location->iso_code)->first();
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
 
@@ -330,7 +330,7 @@ class TicketController extends Controller
             $status = 1;
             if ($phone != null || $mobile_number != null) {
                 $location = GeoIP::getLocation();
-                $geoipcode = $code->where('iso', '=', $location['isoCode'])->first();
+                $geoipcode = $code->where('iso', '=', $location->iso_code)->first();
                 if ($phonecode == null) {
                     $data = [
                         'fails'              => Lang::get('lang.country-code-required-error'),

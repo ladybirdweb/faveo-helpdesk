@@ -25,7 +25,7 @@
         "tymon/jwt-auth": "0.5.*",
         "php": ">=5.5.9",
         "davejamesmiller/laravel-breadcrumbs": "^3.0",
-        "torann/geoip": "0.2.*@dev",
+        "torann/geoip": "1.0.*",
         "davibennun/laravel-push-notification": "dev-laravel5",
         "brozot/laravel-fcm": "^1.0",
         "barryvdh/laravel-debugbar": "^2.2",

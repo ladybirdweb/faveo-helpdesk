@@ -2060,62 +2060,6 @@
         ]
     },
     {
-        "name": "torann/geoip",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Torann/laravel-geoip.git",
-            "reference": "f16f839160b1ab1fe41382e18ec9a32dd09b10fd"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Torann/laravel-geoip/zipball/f16f839160b1ab1fe41382e18ec9a32dd09b10fd",
-            "reference": "f16f839160b1ab1fe41382e18ec9a32dd09b10fd",
-            "shasum": ""
-        },
-        "require": {
-            "illuminate/console": "~5.0",
-            "illuminate/support": "~5.0",
-            "php": ">=5.5.9"
-        },
-        "require-dev": {
-            "phpspec/phpspec": "~2.1",
-            "phpunit/phpunit": "~4.0"
-        },
-        "time": "2015-06-30 16:13:35",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "0.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Torann\\GeoIP\\": "src/Torann/GeoIP"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD 2-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Daniel Stainback",
-                "email": "daniel@lyften.com"
-            }
-        ],
-        "description": "Supports the two main GeoIP services (infoDB and Maxmind).",
-        "keywords": [
-            "geoip",
-            "geolocation",
-            "laravel",
-            "laravel 5",
-            "location"
-        ]
-    },
-    {
         "name": "phpdocumentor/reflection-common",
         "version": "1.0",
         "version_normalized": "1.0.0.0",
@@ -6417,6 +6361,73 @@
             "richtext",
             "text",
             "wysiwyg"
+        ]
+    },
+    {
+        "name": "torann/geoip",
+        "version": "1.0.2",
+        "version_normalized": "1.0.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Torann/laravel-geoip.git",
+            "reference": "ae77f4ad99926fa35c89378f00a6a7295a7246ea"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Torann/laravel-geoip/zipball/ae77f4ad99926fa35c89378f00a6a7295a7246ea",
+            "reference": "ae77f4ad99926fa35c89378f00a6a7295a7246ea",
+            "shasum": ""
+        },
+        "require": {
+            "illuminate/console": "~5.0",
+            "illuminate/support": "~5.0",
+            "php": ">=5.5.9"
+        },
+        "require-dev": {
+            "geoip2/geoip2": "~2.1",
+            "mockery/mockery": "^0.9.4",
+            "phpunit/phpunit": "^4.8"
+        },
+        "suggest": {
+            "geoip2/geoip2": "Required to use the MaxMind database or web service with GeoIP (~2.1).",
+            "monolog/monolog": "Allows for storing location not found errors to the log"
+        },
+        "time": "2016-10-17 17:29:40",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/helpers.php"
+            ],
+            "psr-4": {
+                "Torann\\GeoIP\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD 2-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Daniel Stainback",
+                "email": "torann@gmail.com"
+            }
+        ],
+        "description": "Support for multiple GeoIP services.",
+        "keywords": [
+            "IP API",
+            "geoip",
+            "geolocation",
+            "infoDB",
+            "laravel",
+            "laravel 5",
+            "location",
+            "maxmind"
         ]
     }
 ]

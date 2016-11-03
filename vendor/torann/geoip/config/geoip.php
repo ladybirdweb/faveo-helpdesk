@@ -1,5 +1,7 @@
 <?php
+
 return [
+
     /*
     |--------------------------------------------------------------------------
     | Logging Configuration
@@ -9,7 +11,9 @@ return [
     | for the IP provided.
     |
     */
+
     'log_failures' => true,
+
     /*
     |--------------------------------------------------------------------------
     | Include Currency in Results
@@ -19,7 +23,9 @@ return [
     | by matching their ISO code to a preset list of currencies.
     |
     */
+
     'include_currency' => true,
+
     /*
     |--------------------------------------------------------------------------
     | Default Service
@@ -31,7 +37,9 @@ return [
     | Supported: "maxmind_database", "maxmind_api", "ipapi"
     |
     */
+
     'service' => 'ipapi',
+
     /*
     |--------------------------------------------------------------------------
     | Storage Specific Configuration
@@ -40,26 +48,32 @@ return [
     | Here you may configure as many storage drivers as you wish.
     |
     */
+
     'services' => [
+
         'maxmind_database' => [
             'class' => \Torann\GeoIP\Services\MaxMindDatabase::class,
             'database_path' => storage_path('app/geoip.mmdb'),
             'update_url' => 'https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz',
             'locales' => ['en'],
         ],
+
         'maxmind_api' => [
             'class' => \Torann\GeoIP\Services\MaxMindWebService::class,
             'user_id' => env('MAXMIND_USER_ID'),
             'license_key' => env('MAXMIND_LICENSE_KEY'),
             'locales' => ['en'],
         ],
+
         'ipapi' => [
             'class' => \Torann\GeoIP\Services\IPApi::class,
             'secure' => true,
             'key' => env('IPAPI_KEY'),
             'continent_path' => storage_path('app/continents.json'),
         ],
+
     ],
+
     /*
     |--------------------------------------------------------------------------
     | Default Cache Driver
@@ -75,7 +89,9 @@ return [
     |  none - Disable cached
     |
     */
+
     'cache' => 'all',
+
     /*
     |--------------------------------------------------------------------------
     | Cache Tags
@@ -85,7 +101,9 @@ return [
     | drivers in Laravel. This is done so that only locations can be cleared.
     |
     */
-    'cache_tags' => '',
+
+    'cache_tags' => ['torann-geoip-location'],
+
     /*
     |--------------------------------------------------------------------------
     | Cache Expiration
@@ -94,7 +112,9 @@ return [
     | Define how long cached location are valid.
     |
     */
+
     'cache_expires' => 30,
+
     /*
     |--------------------------------------------------------------------------
     | Default Location
@@ -103,19 +123,21 @@ return [
     | Return when a location is not found.
     |
     */
+
     'default_location' => [
         'ip' => '127.0.0.0',
-        'iso_code' => 'IN',
-        'country' => 'INDIA',
-        'city' => 'Bangalore',
-        'state' => 'KA',
+        'iso_code' => 'US',
+        'country' => 'United States',
+        'city' => 'New Haven',
+        'state' => 'CT',
         'state_name' => 'Connecticut',
         'postal_code' => '06510',
         'lat' => 41.31,
         'lon' => -72.92,
-        'timezone' => 'Asia/Kolkata',
+        'timezone' => 'America/New_York',
         'continent' => 'NA',
         'default' => true,
         'currency' => 'USD',
     ],
+
 ];
