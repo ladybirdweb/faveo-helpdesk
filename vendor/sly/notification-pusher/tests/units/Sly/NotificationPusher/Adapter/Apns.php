@@ -32,7 +32,7 @@ class Apns extends Units\Test
                 ->message
                     ->contains('certificate')
             ->exception(function() {
-                $object = new TestedModel(array('certificate' => 'absent.pem'));
+                $object = new TestedModel(['certificate' => 'absent.pem']);
             })
                 ->isInstanceOf('\Sly\NotificationPusher\Exception\AdapterException')
                 ->message
@@ -41,7 +41,7 @@ class Apns extends Units\Test
             ->when($this->mockGenerator()->orphanize('__construct'))
             ->and($this->mockClass('\Sly\NotificationPusher\Adapter\Apns', '\Mock'))
             ->and($object = new \Mock\Apns())
-            ->and($object->setParameters(array('certificate' => 'test.pem', 'passPhrase' => 'test')))
+            ->and($object->setParameters(['certificate' => 'test.pem', 'passPhrase' => 'test']))
             ->array($object->getParameters())
                 ->isNotEmpty()
                 ->hasSize(2)
@@ -59,6 +59,16 @@ class Apns extends Units\Test
                 ->isFalse()
             ->boolean($object->supports(self::APNS_TOKEN_EXAMPLE))
                 ->isTrue()
+        ;
+    }
+
+    public function testDefinedParameters()
+    {
+        $this->if($this->mockGenerator()->orphanize('__construct'))
+            ->and($this->mockClass('\Sly\NotificationPusher\Adapter\Apns', '\Mock'))
+            ->and($object = new \Mock\Apns())
+            ->array($defaultParameters = $object->getDefinedParameters())
+                ->isEmpty()
         ;
     }
 
@@ -95,7 +105,7 @@ class Apns extends Units\Test
             ->and($this->mockGenerator()->orphanize('open'))
             ->and($this->mockClass('\ZendService\Apple\Apns\Client\Message', '\Mock\ZendService'))
             ->and($serviceClient = new \Mock\ZendService\Message())
-            ->and($object->getMockController()->getParameters = array())
+            ->and($object->getMockController()->getParameters = [])
             ->exception(function() use($object) {
                 $object->getOpenedClient(new BaseServiceClient());
             })
@@ -103,7 +113,7 @@ class Apns extends Units\Test
                 ->message
                     ->contains('Certificate must be a valid path to a APNS certificate')
 
-            ->when($object = new TestedModel(array('certificate' => __DIR__.'/../Resources/apns-certificate.pem')))
+            ->when($object = new TestedModel(['certificate' => __DIR__.'/../Resources/apns-certificate.pem']))
             ->and($object->getOpenedClient($serviceClient))
         ;
     }
@@ -149,7 +159,9 @@ class Apns extends Units\Test
             ->and($this->mockClass('\Sly\NotificationPusher\Model\Push', '\Mock'))
             ->and($push = new \Mock\Push())
             ->and($push->getMockController()->getMessage = new BaseMessage('Test'))
-            ->and($push->getMockController()->getDevices = new BaseDeviceCollection(array(new BaseDevice(self::APNS_TOKEN_EXAMPLE))))
+            ->and($push->getMockController()->getDevices = new BaseDeviceCollection(
+                [new BaseDevice(self::APNS_TOKEN_EXAMPLE)]
+            ))
 
             ->and($object->getMockController()->getServiceMessageFromOrigin = new BaseServiceMessage())
             ->and($object->getMockController()->getOpenedClient = $serviceClient)

@@ -1,17 +1,18 @@
-# NotificationPusher
+# NotificationPusher [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ph3nol/notificationpusher?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Standalone PHP library for easy devices message notifications push.
 
 [![Latest Stable Version](https://poser.pugx.org/sly/notification-pusher/v/stable.png)](https://packagist.org/packages/sly/notification-pusher)
 [![Total Downloads](https://poser.pugx.org/sly/notification-pusher/downloads.png)](https://packagist.org/packages/sly/notification-pusher)
 [![Build Status](https://secure.travis-ci.org/Ph3nol/NotificationPusher.png)](http://travis-ci.org/Ph3nol/NotificationPusher)
+
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/4f6f80c4-281a-4903-bf4c-1eb264995dbd/big.png)](https://insight.sensiolabs.com/projects/4f6f80c4-281a-4903-bf4c-1eb264995dbd)
 
 **Feel free to contribute! Thanks.**
 
 ## Requirements
 
-* PHP 5.3+
+* PHP 5.5+
 * PHP Curl and OpenSSL modules
 * Specific adapters requirements (like APNS certificate, GCM API key, etc.)
 

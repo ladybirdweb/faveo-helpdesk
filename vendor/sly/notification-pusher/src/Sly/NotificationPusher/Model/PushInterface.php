@@ -25,7 +25,7 @@ interface PushInterface
      */
     const STATUS_PENDING = 'pending';
     const STATUS_PUSHED  = 'sent';
-    
+
     /**
      * Get Status.
      *

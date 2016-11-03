@@ -20,22 +20,22 @@ Here is how to translate this with code (just a little not-working example):
 <?php
 
 // First, instantiate the manager and declare an adapter.
-$pushManager    = new PushManager();
-$exampleAdapter = new ApnsAdapter();
+$pushManager    = new Sly\NotificationPusher\PushManager();
+$exampleAdapter = new Sly\NotificationPusher\Adapter\Apns();
 
 // Set the device(s) to push the notification to.
-$devices = new DeviceCollection(array(
-    new Device('Token1'),
-    new Device('Token2'),
-    new Device('Token3'),
+$devices = new Sly\NotificationPusher\Collection\DeviceCollection(array(
+    new Sly\NotificationPusher\Model\Device('Token1'),
+    new Sly\NotificationPusher\Model\Device('Token2'),
+    new Sly\NotificationPusher\Model\Device('Token3'),
     // ...
 ));
 
 // Then, create the push skel.
-$message = new Message('This is an example.');
+$message = new Sly\NotificationPusher\Model\Message('This is an example.');
 
 // Finally, create and add the push to the manager, and push it!
-$push = new Push($exampleAdapter, $devices, $message);
+$push = new Sly\NotificationPusher\Model\Push($exampleAdapter, $devices, $message);
 $pushManager->add($push);
 $pushManager->push();
 ```
@@ -49,7 +49,7 @@ instance constructor second argument:
 ``` php
 <?php
 
-$message = new Message('This is an example.', array(
+$message = new Sly\NotificationPusher\Model\Message('This is an example.', array(
     'badge' => 1,
     'sound' => 'example.aiff',
     // ...
@@ -66,13 +66,13 @@ Here is an example of this:
 ``` php
 <?php
 
-$message = new Message('This is an example.', array(
+$message = new Sly\NotificationPusher\Model\Message('This is an example.', array(
     'badge' => 1,
     // ...
 ));
 
-$devices = new DeviceCollection(array(
-    new Device('Token1', array('badge' => 5)),
+$devices = new Sly\NotificationPusher\Collection\DeviceCollection(array(
+    new Sly\NotificationPusher\Model\Device('Token1', array('badge' => 5)),
     // ...
 ));
 ```

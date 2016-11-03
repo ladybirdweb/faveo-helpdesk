@@ -43,10 +43,10 @@ class Push extends Units\Test
     {
         $this->if($this->mockClass('\Sly\NotificationPusher\Adapter\AdapterInterface', '\Mock'))
             ->and($adapter = new \Mock\AdapterInterface())
-            ->and($devices = new BaseDeviceCollection(array(new BaseDevice('Token1'), new BaseDevice('Token2'), new BaseDevice('Token3'))))
+            ->and($devices = new BaseDeviceCollection([new BaseDevice('Token1'), new BaseDevice('Token2'), new BaseDevice('Token3')]))
             ->and($message = new BaseMessage('Test'))
 
-            ->and($object = new TestedModel($adapter, $devices, $message, array('param' => 'test')))
+            ->and($object = new TestedModel($adapter, $devices, $message, ['param' => 'test']))
 
             ->object($object->getDevices())
                 ->isInstanceOf('\Sly\NotificationPusher\Collection\DeviceCollection')
@@ -64,7 +64,7 @@ class Push extends Units\Test
     {
         $this->if($this->mockClass('\Sly\NotificationPusher\Adapter\AdapterInterface', '\Mock'))
             ->and($adapter = new \Mock\AdapterInterface())
-            ->and($devices = new BaseDeviceCollection(array(new BaseDevice('Token1'), new BaseDevice('Token2'), new BaseDevice('Token3'))))
+            ->and($devices = new BaseDeviceCollection([new BaseDevice('Token1'), new BaseDevice('Token2'), new BaseDevice('Token3')]))
             ->and($message = new BaseMessage('Test'))
 
             ->and($object = new TestedModel($adapter, $devices, $message))
@@ -136,7 +136,7 @@ class Push extends Units\Test
                 ->isInstanceOf('\Sly\NotificationPusher\Adapter\Apns')
 
             ->when($object->setAdapter($gcmAdapter))
-            ->and($object->setDevices(new BaseDeviceCollection(array(new BaseDevice(self::GCM_TOKEN_EXAMPLE)))))
+            ->and($object->setDevices(new BaseDeviceCollection([new BaseDevice(self::GCM_TOKEN_EXAMPLE)])))
             ->object($object->getAdapter())
                 ->isInstanceOf('\Sly\NotificationPusher\Adapter\Gcm')
         ;
@@ -146,7 +146,7 @@ class Push extends Units\Test
     {
         $this->if($this->mockClass('\Sly\NotificationPusher\Adapter\AdapterInterface', '\Mock'))
             ->and($adapter = new \Mock\AdapterInterface())
-            ->and($devices = new BaseDeviceCollection(array(new BaseDevice('Token1'), new BaseDevice('Token2'), new BaseDevice('Token3'))))
+            ->and($devices = new BaseDeviceCollection([new BaseDevice('Token1'), new BaseDevice('Token2'), new BaseDevice('Token3')]))
             ->and($message = new BaseMessage('Test'))
 
             ->and($object = new TestedModel($adapter, $devices, $message))

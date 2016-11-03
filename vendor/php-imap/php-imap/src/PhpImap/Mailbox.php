@@ -15,7 +15,7 @@ class Mailbox {
 	protected $imapRetriesNum = 0;
 	protected $imapParams = array();
 	protected $serverEncoding;
-	protected $attachmentsDir;
+	protected $attachmentsDir = null;
 	protected $expungeOnDisconnect = true;
 	private $imapStream;
 
@@ -51,7 +51,18 @@ class Mailbox {
 		$this->imapRetriesNum = $retriesNum;
 		$this->imapParams = $params;
 	}
-
+        
+        /**
+         * Set custom folder for attachments in case you want to have tree of folders for each email
+         * i.e. a/1 b/1 c/1 where a,b,c - senders, i.e. john@smith.com
+         * @param string $dir folder where to save attachments
+         * 
+         * @return void
+         */
+        public function setAttachmentsDir($dir) {
+                $this->attachmentsDir = $dir;
+        }
+        
 	/**
 	 * Get IMAP mailbox connection stream
 	 * @param bool $forceConnection Initialize connection if it's not initialized
@@ -70,10 +81,25 @@ class Mailbox {
 		return $this->imapStream;
 	}
 
+	/**
+	 * Switch mailbox without opening a new connection
+	 * 
+	 * @param string $imapPath
+	 */
+	public function switchMailbox($imapPath = '') {
+		$this->imapPath = $imapPath;
+		$imapStream = @imap_reopen($this->getImapStream(), $imapPath);
+		if(!$imapStream) {
+			throw new Exception("Couldn't switch  mailbox: " . imap_last_error());
+		}
+	}
+
 	protected function initImapStream() {
 		$imapStream = @imap_open($this->imapPath, $this->imapLogin, $this->imapPassword, $this->imapOptions, $this->imapRetriesNum, $this->imapParams);
 		if(!$imapStream) {
-			throw new Exception('Connection error: ' . imap_last_error());
+			$lastError = imap_last_error();
+			imap_errors();
+			throw new Exception('Connection error: ' . $lastError);
 		}
 		return $imapStream;
 	}
@@ -165,10 +191,8 @@ class Mailbox {
 	 * @return array mailsIds (or empty array)
 	 */
 	public function searchMailbox($criteria = 'ALL') {
-            //dd($this->getImapStream());
 		$mailsIds = imap_search($this->getImapStream(), $criteria, SE_UID, $this->serverEncoding);
-		//dd($mailsIds);
-                return $mailsIds ? $mailsIds : array();
+		return $mailsIds ? $mailsIds : array();
 	}
 
 	/**
@@ -324,7 +348,7 @@ class Mailbox {
 		}
 		return $mails;
 	}
-
+	
 	/**
 	 * Get information about the current mailbox.
 	 *
@@ -459,6 +483,12 @@ class Mailbox {
 				$mail->cc[strtolower($cc->mailbox . '@' . $cc->host)] = isset($cc->personal) ? $this->decodeMimeStr($cc->personal, $this->serverEncoding) : null;
 			}
 		}
+		
+		if(isset($head->bcc)) {
+			foreach($head->bcc as $bcc) {
+				$mail->bcc[strtolower($bcc->mailbox . '@' . $bcc->host)] = isset($bcc->personal) ? $this->decodeMimeStr($bcc->personal, $this->serverEncoding) : null;
+			}
+		}
 
 		if(isset($head->reply_to)) {
 			foreach($head->reply_to as $replyTo) {
@@ -528,6 +558,12 @@ class Mailbox {
 			? trim($partStructure->id, " <>")
 			: (isset($params['filename']) || isset($params['name']) ? mt_rand() . mt_rand() : null);
 
+		// ignore contentId on body when mail isn't multipart (https://github.com/barbushin/php-imap/issues/71)
+		if (!$partNum && TYPETEXT === $partStructure->type)
+		{
+			$attachmentId = null;
+		}
+
 		if($attachmentId) {
 			if(empty($params['filename']) && empty($params['name'])) {
 				$fileName = $attachmentId . '.' . strtolower($partStructure->subtype);
@@ -550,6 +586,12 @@ class Mailbox {
 				);
 				$fileSysName = preg_replace('~[\\\\/]~', '', $mail->id . '_' . $attachmentId . '_' . preg_replace(array_keys($replace), $replace, $fileName));
 				$attachment->filePath = $this->attachmentsDir . DIRECTORY_SEPARATOR . $fileSysName;
+				
+				if(strlen($attachment->filePath) > 255) {
+					$ext = pathinfo($attachment->filePath, PATHINFO_EXTENSION);
+					$attachment->filePath = substr($attachment->filePath, 0, 255 -1 -strlen($ext)).".".$ext;
+				}
+				
 				file_put_contents($attachment->filePath, $data);
 			}
 			$mail->addAttachment($attachment);
