@@ -18,6 +18,7 @@ return array(
     'Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'Vsmoraes\\Pdf\\' => array($vendorDir . '/vsmoraes/laravel-pdf/src'),
     'Unisharp\\Laravelfilemanager\\' => array($vendorDir . '/unisharp/laravel-filemanager/src'),
+    'Unisharp\\Ckeditor\\' => array($vendorDir . '/unisharp/laravel-ckeditor'),
     'Tymon\\JWTAuth\\' => array($vendorDir . '/tymon/jwt-auth/src'),
     'Torann\\GeoIP\\' => array($vendorDir . '/torann/geoip/src/Torann/GeoIP'),
     'TijsVerkoyen\\CssToInlineStyles\\' => array($vendorDir . '/tijsverkoyen/css-to-inline-styles/src'),
