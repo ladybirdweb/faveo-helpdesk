@@ -383,7 +383,7 @@ class TicketController extends Controller
                 return Redirect('newticket')->with('fails', Lang::get('lang.failed-to-create-user-tcket-as-mobile-has-been-taken'))->withInput($request->except('password'));
             }
         } catch (Exception $e) {
-            dd($e);
+            // dd($e);
             if ($api != false) {
                 return $e->getMessage();
             }
@@ -960,7 +960,7 @@ class TicketController extends Controller
                 try {
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $email_data['to_user'], 'email' => $email_data['to_email']], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $email_data['to_user_name'], 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $email_data['to_user_name'], 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
                 } catch (\Exception $e) {
-                    dd($e);
+                    // dd($e);
                 }
             }
             $data = [
