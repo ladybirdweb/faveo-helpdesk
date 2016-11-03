@@ -172,7 +172,7 @@ class MailController extends Controller
             }
             $server->setFlag($cert);
             $server->setAuthentication($username, $password);
-            $date = date("d M Y", strToTime("-1 days"));
+            $date = date('d M Y', strtotime('-1 days'));
             $messages = $server->search("SINCE \"$date\" UNSEEN");
             $this->message($messages, $email);
         }
@@ -338,20 +338,21 @@ class MailController extends Controller
      *
      * @return type file
      */
-    public function get_data($id) {
+    public function get_data($id)
+    {
         $attachment = \App\Model\helpdesk\Ticket\Ticket_attachments::where('id', '=', $id)->first();
         if (mime($attachment->type) == true) {
-            echo "<img src=data:$attachment->type;base64," . $attachment->file . ">";
+            echo "<img src=data:$attachment->type;base64,".$attachment->file.'>';
         } else {
             $file = base64_decode($attachment->file);
+
             return response($file)
                             ->header('Cache-Control', 'no-cache private')
                             ->header('Content-Description', 'File Transfer')
                             ->header('Content-Type', $attachment->type)
                             ->header('Content-length', strlen($file))
-                            ->header('Content-Disposition', 'attachment; filename=' . $attachment->name)
+                            ->header('Content-Disposition', 'attachment; filename='.$attachment->name)
                             ->header('Content-Transfer-Encoding', 'binary');
         }
     }
-
 }
