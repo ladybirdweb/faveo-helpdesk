@@ -566,7 +566,7 @@ class TicketController extends Controller
             $attachment_files = null;
         }
 
-        $thread = Ticket_Thread::where('ticket_id', '=', $ticket_id)->first();
+        $thread = Ticket_Thread::where('ticket_id', '=', $ticket_id)->orderBy('id')->first();
         $ticket_subject = $thread->title;
         $user_id = $tickets->user_id;
         $user = User::where('id', '=', $user_id)->first();
@@ -2477,7 +2477,7 @@ class TicketController extends Controller
                             return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
                         })
                         ->addColumn('subject', function ($ticket) {
-                            $subject = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
+                            $subject = Ticket_Thread::where('ticket_id', '=', $ticket->id)->orderBy('id')->first();
                             if (isset($subject->title)) {
                                 $string = str_limit($subject->getSubject(), 20);
                             } else {
