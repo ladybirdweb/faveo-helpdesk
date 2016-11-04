@@ -77,7 +77,7 @@ class EmailsController extends Controller
             // fetch all the helptopics from the helptopic table
             $helps = $help->get();
             // fetch all the types of active priority from the ticket_priority table
-            $priority = $ticket_priority->where('status','=',1)->get();
+            $priority = $ticket_priority->where('status', '=', 1)->get();
             // fetch all the types of mailbox protocols from the mailbox_protocols table
             $mailbox_protocols = $mailbox_protocol->get();
 
@@ -320,7 +320,7 @@ class EmailsController extends Controller
             // get all the helptopic
             $helps = $help->get();
             // get all active the priority
-              $priority = $ticket_priority->where('status','=',1)->get();
+              $priority = $ticket_priority->where('status', '=', 1)->get();
             // get all the mailbox protocols
             $mailbox_protocols = $mailbox_protocol->get();
 
