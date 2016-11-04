@@ -258,7 +258,7 @@ class MailController extends Controller
     public function manageAttachment($data, $filename, $type, $size, $disposition, $thread_id)
     {
         $upload = new Ticket_attachments();
-        $upload->file = base64_encode($data);
+        $upload->file = $data;
         $upload->thread_id = $thread_id;
         $upload->name = $filename;
         $upload->type = $type;

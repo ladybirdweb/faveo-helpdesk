@@ -11,6 +11,12 @@ class Ticket_attachments extends Model
                             'id', 'thread_id', 'name', 'size', 'type', 'file', 'data', 'poster', 'updated_at', 'created_at',
                             ];
 
+
+    public function setFileAttribute($value)
+    {
+        $this->attributes['file'] = base64_encode($value);
+    }
+
     public function getFile()
     {
         $size = $this->size;
