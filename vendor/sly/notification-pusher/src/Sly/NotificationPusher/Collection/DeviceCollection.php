@@ -27,7 +27,7 @@ class DeviceCollection extends AbstractCollection implements \IteratorAggregate
      *
      * @param array $devices Devices
      */
-    public function __construct(array $devices = array())
+    public function __construct(array $devices = [])
     {
         $this->coll = new \ArrayIterator();
 
@@ -59,10 +59,10 @@ class DeviceCollection extends AbstractCollection implements \IteratorAggregate
      */
     public function getTokens()
     {
-        $tokens = array();
+        $tokens = [];
 
-        foreach ($this as $token => $device) {
-            $tokens[] = $token;
+        foreach ($this as $device) {
+            $tokens[] = $device->getToken();
         }
 
         return array_unique(array_filter($tokens));

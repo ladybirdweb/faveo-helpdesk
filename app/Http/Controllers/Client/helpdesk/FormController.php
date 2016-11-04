@@ -68,7 +68,7 @@ class FormController extends Controller
             return redirect('auth/login')->with(['login_require' => 'Please login to your account for submitting a ticket', 'referer' => 'form']);
         }
         $location = GeoIP::getLocation();
-        $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+        $phonecode = $code->where('iso', '=', $location->iso_code)->first();
         if (System::first()->status == 1) {
             $topics = $topic->get();
             $codes = $code->get();
@@ -199,7 +199,7 @@ class FormController extends Controller
         $team_assign = null;
         if ($phone != null || $mobile_number != null) {
             $location = GeoIP::getLocation();
-            $geoipcode = $code->where('iso', '=', $location['isoCode'])->first();
+            $geoipcode = $code->where('iso', '=', $location->iso_code)->first();
             if ($phonecode == null) {
                 $data = [
                     'fails'              => Lang::get('lang.country-code-required-error'),

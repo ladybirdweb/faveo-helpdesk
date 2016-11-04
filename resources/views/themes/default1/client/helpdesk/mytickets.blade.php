@@ -71,7 +71,7 @@ class="active"
     ?> >
                                 <td><input type="checkbox" class="icheckbox_flat-blue" name="select_all[]" value="{{$ticket->id}}"/></td>
                                 <?php
-                                $title = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
+                                $title = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->orderBy('id')->first();
                                 $string = strip_tags($title->title);
                                 if (strlen($string) > 40) {
                                     $stringCut = substr($string, 0, 40);

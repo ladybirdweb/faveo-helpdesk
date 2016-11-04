@@ -21,7 +21,7 @@ abstract class BaseParameteredModel
     /**
      * @var array
      */
-    protected $parameters = array();
+    protected $parameters = [];
 
     /**
      * Get parameters.

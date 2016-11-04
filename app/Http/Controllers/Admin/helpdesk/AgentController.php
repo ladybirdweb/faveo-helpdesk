@@ -89,7 +89,7 @@ class AgentController extends Controller
             // list all the teams in a single variable
             $teams = $team->lists('id', 'name')->toArray();
             $location = GeoIP::getLocation();
-            $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+            $phonecode = $code->where('iso', '=', $location->iso_code)->first();
             // returns to the page with all the variables and their datas
             $send_otp = DB::table('common_settings')->select('status')->where('option_name', '=', 'send_otp')->first();
 
@@ -184,7 +184,7 @@ class AgentController extends Controller
     {
         try {
             $location = GeoIP::getLocation();
-            $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+            $phonecode = $code->where('iso', '=', $location->iso_code)->first();
             $user = $user->whereId($id)->first();
             $team = $team->get();
             $teams1 = $team->lists('name', 'id');

@@ -31,7 +31,21 @@ class ProfileRequest extends Request
         return [
             'first_name'  => 'required',
             'profile_pic' => 'mimes:png,jpeg',
-            // 'mobile'      => 'unique:users,mobile',
+            'mobile'      => $this->checkMobile(),
         ];
+    }
+
+    /**
+     *Check the mobile number is unique or not.
+     *
+     *@return string
+     */
+    public function checkMobile()
+    {
+        if (\Auth::user()->mobile === Request::get('mobile')) {
+            return '';
+        } else {
+            return 'unique:users';
+        }
     }
 }

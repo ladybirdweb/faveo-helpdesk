@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\Yaml\Tests;
 
-use Symfony\Bridge\PhpUnit\ErrorAssert;
 use Symfony\Component\Yaml\Inline;
 use Symfony\Component\Yaml\Yaml;
 
@@ -225,7 +224,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getReservedIndicators
-     * @expectedException Symfony\Component\Yaml\Exception\ParseException
+     * @expectedException \Symfony\Component\Yaml\Exception\ParseException
      * @expectedExceptionMessage cannot start a plain scalar; you need to quote the scalar.
      */
     public function testParseUnquotedScalarStartingWithReservedIndicator($indicator)
@@ -240,7 +239,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getScalarIndicators
-     * @expectedException Symfony\Component\Yaml\Exception\ParseException
+     * @expectedException \Symfony\Component\Yaml\Exception\ParseException
      * @expectedExceptionMessage cannot start a plain scalar; you need to quote the scalar.
      */
     public function testParseUnquotedScalarStartingWithScalarIndicator($indicator)
@@ -255,14 +254,12 @@ class InlineTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group legacy
-     * @requires function Symfony\Bridge\PhpUnit\ErrorAssert::assertDeprecationsAreTriggered
+     * @expectedDeprecation Not quoting the scalar "%bar " starting with the "%" indicator character is deprecated since Symfony 3.1 and will throw a ParseException in 4.0.
      * throws \Symfony\Component\Yaml\Exception\ParseException in 4.0
      */
     public function testParseUnquotedScalarStartingWithPercentCharacter()
     {
-        ErrorAssert::assertDeprecationsAreTriggered('Not quoting the scalar "%foo " starting with the "%" indicator character is deprecated since Symfony 3.1 and will throw a ParseException in 4.0.', function () {
-            Inline::parse('{ foo: %foo }');
-        });
+        Inline::parse('{ foo: %bar }');
     }
 
     /**
@@ -510,7 +507,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $expected = new \DateTime($yaml);
         $expected->setTimeZone(new \DateTimeZone('UTC'));
         $expected->setDate($year, $month, $day);
-        $expected->setTime($hour, $minute, $second);
+        @$expected->setTime($hour, $minute, $second, 1000000 * ($second - (int) $second));
 
         $this->assertEquals($expected, Inline::parse($yaml, Yaml::PARSE_DATETIME));
     }
@@ -518,9 +515,9 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     public function getTimestampTests()
     {
         return array(
-            'canonical' => array('2001-12-15T02:59:43.1Z', 2001, 12, 15, 2, 59, 43),
-            'ISO-8601' => array('2001-12-15t21:59:43.10-05:00', 2001, 12, 16, 2, 59, 43),
-            'spaced' => array('2001-12-15 21:59:43.10 -5', 2001, 12, 16, 2, 59, 43),
+            'canonical' => array('2001-12-15T02:59:43.1Z', 2001, 12, 15, 2, 59, 43.1),
+            'ISO-8601' => array('2001-12-15t21:59:43.10-05:00', 2001, 12, 16, 2, 59, 43.1),
+            'spaced' => array('2001-12-15 21:59:43.10 -5', 2001, 12, 16, 2, 59, 43.1),
             'date' => array('2001-12-15', 2001, 12, 15, 0, 0, 0),
         );
     }
@@ -533,7 +530,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $expected = new \DateTime($yaml);
         $expected->setTimeZone(new \DateTimeZone('UTC'));
         $expected->setDate($year, $month, $day);
-        $expected->setTime($hour, $minute, $second);
+        @$expected->setTime($hour, $minute, $second, 1000000 * ($second - (int) $second));
 
         $expectedNested = array('nested' => array($expected));
         $yamlNested = "{nested: [$yaml]}";

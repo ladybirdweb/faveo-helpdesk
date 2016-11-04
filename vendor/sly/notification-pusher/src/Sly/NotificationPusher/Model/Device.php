@@ -29,7 +29,7 @@ class Device extends BaseParameteredModel implements DeviceInterface
      * @param string $token      Token
      * @param array  $parameters Parameters
      */
-    public function __construct($token, array $parameters = array())
+    public function __construct($token, array $parameters = [])
     {
         $this->token      = $token;
         $this->parameters = $parameters;

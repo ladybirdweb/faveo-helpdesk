@@ -21,7 +21,7 @@ abstract class BaseOptionedModel
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * Get options.

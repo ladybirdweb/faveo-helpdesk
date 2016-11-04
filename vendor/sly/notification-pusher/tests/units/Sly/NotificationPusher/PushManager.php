@@ -37,7 +37,7 @@ class PushManager extends Units\Test
             ->and($this->mockClass('\Sly\NotificationPusher\Model\Push', '\Mock'))
             ->and($push = new \Mock\Push())
             ->and($push->getMockController()->getMessage = new BaseMessage('Test'))
-            ->and($push->getMockController()->getDevices = new BaseDeviceCollection(array(new BaseDevice(self::APNS_TOKEN_EXAMPLE))))
+            ->and($push->getMockController()->getDevices = new BaseDeviceCollection([new BaseDevice(self::APNS_TOKEN_EXAMPLE)]))
 
             ->and($object = new TestedModel())
 
@@ -59,7 +59,7 @@ class PushManager extends Units\Test
             ->and($this->mockClass('\Sly\NotificationPusher\Model\Push', '\Mock'))
             ->and($push = new \Mock\Push())
             ->and($push->getMockController()->getMessage = new BaseMessage('Test'))
-            ->and($push->getMockController()->getDevices = new BaseDeviceCollection(array(new BaseDevice(self::APNS_TOKEN_EXAMPLE))))
+            ->and($push->getMockController()->getDevices = new BaseDeviceCollection([new BaseDevice(self::APNS_TOKEN_EXAMPLE)]))
             ->and($push->getMockController()->getAdapter = $apnsAdapter)
 
             ->and($object = new TestedModel())

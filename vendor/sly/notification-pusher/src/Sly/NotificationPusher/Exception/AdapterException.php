@@ -11,8 +11,6 @@
 
 namespace Sly\NotificationPusher\Exception;
 
-use Sly\NotificationPusher\Exception\ExceptionInterface;
-
 /**
  * AdapterException.
  *

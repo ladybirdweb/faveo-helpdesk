@@ -2,8 +2,8 @@
 
 ## Create an adapter
 
-To create your own adapter, just create a class with taking care to extends `\Sly\NotificationPusher\Adapter\BaseAdapter`
-and implements `\Sly\NotificationPusher\Adapter\AdapterInterface` which contains some required methods:
+To create your own adapter, just create a class with taking care to extends `\Sly\NotificationPusher\Adapter\BaseAdapter`,
+which implicitly implements `\Sly\NotificationPusher\Adapter\AdapterInterface` which contains some required methods:
 
 * `push`: contains the adapter logic to push notifications
 * `supports`: return the token condition for using the adapter
