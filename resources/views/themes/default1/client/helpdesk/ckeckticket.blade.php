@@ -89,7 +89,8 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                     <?php
                     $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first();
                     ?>
-                    <div class="callout callout-default ">
+                    <div class="callout callout-{{$priority->priority_color}}" style = 'background-color:{{$priority->priority_color}}; color:#F9F9F9'>
+                    <!-- <div class="callout callout-default "> -->
                         <div class="row">
                             <div class="col-md-3"> 
                                 <?php
@@ -135,13 +136,15 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
 
                         <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first(); ?>
 
-                            @if($priority->priority_id == 1)
-                            <td title="{{$priority->priority_desc}}" style="color:green">{{$priority->priority_desc}}</td>
+                       <!-- {{$priority->priority}} -->
+                             <td title="{{$priority->priority}}">{{$priority->priority}}</td>
+                        <!--     @if($priority->priority_id == 1)
+                            <td title="{{$priority->priority_color}}"style = 'background-color:{{$priority->priority_color}}; color:#F9F9F9'></td>
                             @elseif($priority->priority_id == 2)
                             <td title="{{$priority->priority_desc}}" style="color:orange">{{$priority->priority_desc}}</td>
                             @elseif($priority->priority_id == 3)
                             <td title="{{$priority->priority_desc}}" style="color:red">{{$priority->priority_desc}}</td>
-                            @endif
+                            @endif -->
 
                         </tr>
                         <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   

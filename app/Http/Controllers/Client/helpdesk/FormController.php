@@ -93,7 +93,10 @@ class FormController extends Controller
      * @return type string
      */
     public function postForm($id, Help_topic $topic)
+
+
     {
+
         if ($id != 0) {
             $helptopic = $topic->where('id', '=', $id)->first();
             $custom_form = $helptopic->custom_form;
@@ -146,6 +149,7 @@ class FormController extends Controller
      */
     public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code)
     {
+        
         $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token', 'mobile', 'Code');
         $name = $request->input('Name');
         $phone = $request->input('Phone');

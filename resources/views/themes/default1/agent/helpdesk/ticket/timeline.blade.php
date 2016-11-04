@@ -721,7 +721,7 @@ if ($thread->title != "") {
                                         @if(isset($ticket_form_datas))
                                         
                                             <br/>
-                                            <table class="table table-bordered">
+                                            <table class="table table-bordered" style="display: none;">
                                                 <tbody>
                                                     @foreach($ticket_form_datas as $ticket_form_data)
                                                     <tr>
@@ -729,7 +729,9 @@ if ($thread->title != "") {
                                                         <td>{!! $ticket_form_data->content !!}</td>
                                                     </tr>
                                                     @endforeach
-                                                </tbody></table>
+                                                </tbody>
+
+                                                </table>
                                         
                                         @endif
                                         @endif
