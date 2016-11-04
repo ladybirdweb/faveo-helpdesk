@@ -567,6 +567,10 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
             array (
                 0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
             ),
+            'Fetch' => 
+            array (
+                0 => __DIR__ . '/..' . '/tedivm/fetch/src',
+            ),
         ),
         'D' => 
         array (
@@ -1505,6 +1509,9 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'Dotenv\\Validator' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Validator.php',
         'EasyPeasyICS' => __DIR__ . '/..' . '/phpmailer/phpmailer/extras/EasyPeasyICS.php',
         'Encoding_Map' => __DIR__ . '/..' . '/phenx/php-font-lib/classes/Encoding_Map.php',
+        'Fetch\\Attachment' => __DIR__ . '/..' . '/tedivm/fetch/src/Fetch/Attachment.php',
+        'Fetch\\Message' => __DIR__ . '/..' . '/tedivm/fetch/src/Fetch/Message.php',
+        'Fetch\\Server' => __DIR__ . '/..' . '/tedivm/fetch/src/Fetch/Server.php',
         'File_ANSI' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/File/ANSI.php',
         'File_ASN1' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/File/ASN1.php',
         'File_ASN1_Element' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/File/ASN1.php',

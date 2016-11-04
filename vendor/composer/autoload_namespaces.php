@@ -29,6 +29,7 @@ return array(
     'Guzzle' => array($vendorDir . '/guzzle/guzzle/src'),
     'ForceUTF8\\' => array($vendorDir . '/neitanod/forceutf8/src'),
     'File' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
+    'Fetch' => array($vendorDir . '/tedivm/fetch/src'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
     'Davibennun\\LaravelPushNotification' => array($vendorDir . '/davibennun/laravel-push-notification/src'),

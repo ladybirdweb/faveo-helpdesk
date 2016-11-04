@@ -35,7 +35,8 @@
         "maatwebsite/excel": "~2.1.0",
         "laravelcollective/bus": "^5.2",
         "laravel/socialite": "^2.0",
-        "unisharp/laravel-ckeditor": "^4.5"
+        "unisharp/laravel-ckeditor": "^4.5",
+        "tedivm/fetch": "0.6.*"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
