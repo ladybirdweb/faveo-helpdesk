@@ -671,7 +671,9 @@ if ($thread->title != "") {
                                                         <td>{!! $ticket_form_data->content !!}</td>
                                                     </tr>
                                                     @endforeach
-                                                </tbody></table>
+                                                </tbody>
+
+                                                </table>
                                         
                                         @endif
                                         @endif

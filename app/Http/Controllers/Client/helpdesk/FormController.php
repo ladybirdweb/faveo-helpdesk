@@ -180,7 +180,7 @@ class FormController extends Controller
          // $priority = $ticket_settings->first()->priority;
          $default_priority = Ticket_Priority::where('is_default', '=', 1)->first();
         $user_priority = CommonSettings::where('id', '=', 6)->first();
-        if ($user_priority->status == 0) {
+        if (!($request->input('priority'))) {
             $priority = $default_priority->priority_id;
         } else {
             $priority = $request->input('priority');
