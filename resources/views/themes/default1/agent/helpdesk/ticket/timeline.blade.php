@@ -663,7 +663,7 @@ if ($thread->title != "") {
                                         @if(isset($ticket_form_datas))
                                         
                                             <br/>
-                                            <table class="table table-bordered" style="display: none;">
+                                            <table class="table table-bordered">
                                                 <tbody>
                                                     @foreach($ticket_form_datas as $ticket_form_data)
                                                     <tr>
@@ -798,7 +798,6 @@ if ($thread->title != "") {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{!! Lang::get('lang.priority') !!} <span class="text-red"> *</span></label>
-
     <?php $ticket_prioritys = App\Model\helpdesk\Ticket\Ticket_Priority::where('status', '=', 1)->get(); ?>
                                     <select class="form-control" name="ticket_priority">
                                         @foreach($ticket_prioritys as $ticket_priority)
