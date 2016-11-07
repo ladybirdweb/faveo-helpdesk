@@ -118,7 +118,7 @@ class Ticket_Thread extends Model
         if ($this->attach()->where('poster', 'INLINE')->get()->count() > 0) {
             $search = $this->attach()->where('poster', 'INLINE')->lists('name')->toArray();
             foreach ($this->attach()->where('poster', 'INLINE')->get() as $key => $attach) {
-                $replace[$key] = "data:$attach->type;base64,".base64_encode($attach->file);
+                $replace[$key] = "data:$attach->type;base64,".$attach->file;
             }
             $body = str_replace($search, $replace, $body);
         }

@@ -19,7 +19,7 @@ script: phpunit
 # fast_finish: If your build fails do not continue trying to build, just stop.
 matrix:
   allow_failures:
-    - php: 5.6
+    - php: 5.5
     - php: hhvm
   fast_finish: true
 

@@ -15,7 +15,7 @@ class BaseParameteredModel extends Units\Test
 {
     public function testMethods()
     {
-        $this->if($object = new Device('Test', array('param' => 'test')))
+        $this->if($object = new Device('Test', ['param' => 'test']))
             ->boolean($object->hasParameter('param'))
                 ->isTrue()
             ->string($object->getParameter('param'))
@@ -28,7 +28,7 @@ class BaseParameteredModel extends Units\Test
             ->string($object->getParameter('renotExist', '12345'))
                 ->isEqualTo('12345')
 
-            ->when($object->setParameters(array('chuck' => 'norris')))
+            ->when($object->setParameters(['chuck' => 'norris']))
             ->boolean($object->hasParameter('chuck'))
                 ->isTrue()
             ->string($object->getParameter('chuck'))

@@ -215,10 +215,10 @@ class DatabaseSeeder extends Seeder
         Ticket_status::create(['name' => 'Request Approval', 'state' => 'unverified', 'mode' => '3', 'message' => 'Approval requested by', 'flags' => '0', 'sort' => '7', 'properties' => 'Ticket will be approve  after Admin verifies  this ticket']);
 
         /* Ticket priority */
-        Ticket_priority::create(['priority' => 'Low', 'status' => 1, 'priority_desc' => 'Low', 'priority_color' => '#00a65a', 'priority_urgency' => '4', 'ispublic' => '1']);
-        Ticket_priority::create(['priority' => 'Normal', 'status' => 1, 'priority_desc' => 'Normal', 'priority_color' => '#00bfef', 'priority_urgency' => '3', 'ispublic' => '1', 'is_default' => '1']);
-        Ticket_priority::create(['priority' => 'High', 'status' => 1, 'priority_desc' => 'High', 'priority_color' => '#f39c11', 'priority_urgency' => '2', 'ispublic' => '1']);
-        Ticket_priority::create(['priority' => 'Emergency', 'status' => 1, 'priority_desc' => 'Emergency', 'priority_color' => '#dd4b38', 'priority_urgency' => '1', 'ispublic' => '1']);
+        Ticket_priority::create(['priority' => 'Low', 'status' => 1, 'priority_desc' => 'Low', 'priority_color' => '#00a65a', 'priority_urgency' => '4', 'ispublic' => 1, 'is_default' => 0]);
+        Ticket_priority::create(['priority' => 'Normal', 'status' => 1, 'priority_desc' => 'Normal', 'priority_color' => '#00bfef', 'priority_urgency' => '3', 'ispublic' => 1, 'is_default' => 1]);
+        Ticket_priority::create(['priority' => 'High', 'status' => 1, 'priority_desc' => 'High', 'priority_color' => '#f39c11', 'priority_urgency' => '2', 'ispublic' => 1, 'is_default' => 0]);
+        Ticket_priority::create(['priority' => 'Emergency', 'status' => 1, 'priority_desc' => 'Emergency', 'priority_color' => '#dd4b38', 'priority_urgency' => '1', 'ispublic' => 1, 'is_default' => 0]);
 
         /* Approval */
         Approval::create(['name' => 'approval', 'status' => '0']);
@@ -278,7 +278,7 @@ class DatabaseSeeder extends Seeder
         Company::create(['id' => '1']);
         Email::create(['id' => '1', 'template' => 'default', 'email_fetching' => '1', 'notification_cron' => '1', 'all_emails' => '1', 'email_collaborator' => '1', 'attachment' => '1']);
         Responder::create(['id' => '1', 'new_ticket' => '1', 'agent_new_ticket' => '1']);
-        System::create(array('id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32'));
+        System::create(['id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32']);
         Ticket::create(['num_format' => '$$$$-####-####', 'num_sequence' => 'sequence', 'collision_avoid' => '2', 'priority' => '1', 'sla' => '2', 'help_topic' => '1', 'status' => '1']);
         /* Ticket source */
         Ticket_source::create(['name' => 'web', 'value' => 'Web']);
@@ -2025,7 +2025,7 @@ class DatabaseSeeder extends Seeder
         /*
          * All the common settings will be listed here
          */
-        CommonSettings::create([ 'option_name' => 'ticket_token_time_duration', 'option_value' => '1']);
+        CommonSettings::create(['option_name' => 'ticket_token_time_duration', 'option_value' => '1']);
         CommonSettings::create(['option_name' => 'enable_rtl', 'option_value' => '']);
         CommonSettings::create(['option_name' => 'user_set_ticket_status', 'status' => 1]);
         CommonSettings::create(['option_name' => 'send_otp', 'status' => 0]);

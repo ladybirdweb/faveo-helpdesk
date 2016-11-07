@@ -20,10 +20,10 @@ use Sly\NotificationPusher\PushManager,
 ;
 
 // First, instantiate the manager.
-// 
+//
 // Example for production environment:
-// $pushManager = new PushManager(PushManager::ENVIRONMENT_PRODUCTION);
-// 
+// $pushManager = new PushManager(PushManager::ENVIRONMENT_PROD);
+//
 // Development one by default (without argument).
 $pushManager = new PushManager(PushManager::ENVIRONMENT_DEV);
 

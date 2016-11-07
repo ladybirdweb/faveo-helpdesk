@@ -156,8 +156,8 @@ class PriorityController extends Controller
         $tk_priority->ispublic = $request->ispublic;
         $tk_priority->save();
         if ($request->input('default_priority') == 'on') {
-            Ticket_Priority::where('is_default', '>', '0')
-                    ->update(['is_default' => '0']);
+            Ticket_Priority::where('is_default', '=', 1)
+                    ->update(['is_default' => 0]);
             Ticket_Priority::where('priority_id', '=', $priority_id)
                     ->update(['is_default' => 1]);
         }

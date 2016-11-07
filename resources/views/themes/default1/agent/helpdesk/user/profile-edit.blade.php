@@ -46,16 +46,18 @@ class="active"
                 @endif
                 @if(Session::has('errors'))
                 <?php //dd($errors); ?>
-                @if($errors->first('first_name'))
                 <div class="alert alert-danger alert-dismissable">
                     <i class="fa fa-ban"></i>
                     <b>{!! Lang::get('lang.alert') !!}!</b>
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <br/>
+                    @if($errors->first('first_name'))
                     <li class="error-message-padding">{!! $errors->first('first_name', ':message') !!}</li>
+                    @endif
+                    @if($errors->first('mobile'))
                     <li class="error-message-padding">{!! $errors->first('mobile', ':message') !!}</li>
+                    @endif
                 </div>
-                @endif
                 @endif
                 <!-- first name -->
                 <div class="form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">

@@ -281,7 +281,7 @@ class TicketController extends Controller
     public function newticket(CountryCode $code)
     {
         $location = GeoIP::getLocation();
-        $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+        $phonecode = $code->where('iso', '=', $location->iso_code)->first();
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
 
@@ -330,7 +330,7 @@ class TicketController extends Controller
             $status = 1;
             if ($phone != null || $mobile_number != null) {
                 $location = GeoIP::getLocation();
-                $geoipcode = $code->where('iso', '=', $location['isoCode'])->first();
+                $geoipcode = $code->where('iso', '=', $location->iso_code)->first();
                 if ($phonecode == null) {
                     $data = [
                         'fails'              => Lang::get('lang.country-code-required-error'),
@@ -383,7 +383,7 @@ class TicketController extends Controller
                 return Redirect('newticket')->with('fails', Lang::get('lang.failed-to-create-user-tcket-as-mobile-has-been-taken'))->withInput($request->except('password'));
             }
         } catch (Exception $e) {
-            dd($e);
+            // dd($e);
             if ($api != false) {
                 return $e->getMessage();
             }
@@ -566,7 +566,7 @@ class TicketController extends Controller
             $attachment_files = null;
         }
 
-        $thread = Ticket_Thread::where('ticket_id', '=', $ticket_id)->first();
+        $thread = Ticket_Thread::where('ticket_id', '=', $ticket_id)->orderBy('id')->first();
         $ticket_subject = $thread->title;
         $user_id = $tickets->user_id;
         $user = User::where('id', '=', $user_id)->first();
@@ -960,7 +960,7 @@ class TicketController extends Controller
                 try {
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $email_data['to_user'], 'email' => $email_data['to_email']], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $email_data['to_user_name'], 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $email_data['to_user_name'], 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
                 } catch (\Exception $e) {
-                    dd($e);
+                    // dd($e);
                 }
             }
             $data = [
@@ -2477,7 +2477,7 @@ class TicketController extends Controller
                             return "<input type='checkbox' name='select_all[]' id='".$ticket->id."' onclick='someFunction(this.id)' class='selectval icheckbox_flat-blue' value='".$ticket->id."'></input>";
                         })
                         ->addColumn('subject', function ($ticket) {
-                            $subject = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
+                            $subject = Ticket_Thread::where('ticket_id', '=', $ticket->id)->orderBy('id')->first();
                             if (isset($subject->title)) {
                                 $string = str_limit($subject->getSubject(), 20);
                             } else {

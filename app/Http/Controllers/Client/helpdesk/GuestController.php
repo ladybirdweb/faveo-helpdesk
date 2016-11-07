@@ -61,7 +61,7 @@ class GuestController extends Controller
     {
         $user = Auth::user();
         $location = GeoIP::getLocation();
-        $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+        $phonecode = $code->where('iso', '=', $location->iso_code)->first();
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $status = $settings->status;
 

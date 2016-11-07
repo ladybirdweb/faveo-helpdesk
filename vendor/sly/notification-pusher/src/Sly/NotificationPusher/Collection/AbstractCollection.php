@@ -23,7 +23,7 @@ abstract class AbstractCollection
      * @var \ArrayIterator
      */
     protected $coll;
-    
+
     /**
      * Get.
      *
@@ -53,7 +53,7 @@ abstract class AbstractCollection
      */
     public function isEmpty()
     {
-        return (bool) $this->count();
+        return $this->count() === 0;
     }
 
     /**

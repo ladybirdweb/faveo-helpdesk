@@ -245,7 +245,7 @@ return [
         'JWTAuth'     => 'Tymon\JWTAuth\Facades\JWTAuth',
         'JWTFactory'  => 'Tymon\JWTAuth\Facades\JWTFactory',
         'Breadcrumbs' => 'DaveJamesMiller\Breadcrumbs\Facade',
-        'GeoIP'       => 'Torann\GeoIP\GeoIPFacade',
+        'GeoIP'       => \Torann\GeoIP\Facades\GeoIP::class,
         'Image'       => Intervention\Image\Facades\Image::class,
         'FCM'         => LaravelFCM\Facades\FCM::class,
         'FCMGroup'    => LaravelFCM\Facades\FCMGroup::class,

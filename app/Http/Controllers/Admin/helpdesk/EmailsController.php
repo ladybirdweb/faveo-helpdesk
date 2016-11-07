@@ -77,7 +77,7 @@ class EmailsController extends Controller
             // fetch all the helptopics from the helptopic table
             $helps = $help->get();
             // fetch all the types of active priority from the ticket_priority table
-            $priority = $ticket_priority->where('status','=',1)->get();
+            $priority = $ticket_priority->where('status', '=', 1)->get();
             // fetch all the types of mailbox protocols from the mailbox_protocols table
             $mailbox_protocols = $mailbox_protocol->get();
 
@@ -252,12 +252,10 @@ class EmailsController extends Controller
         $this->emailService($driver, $service_request);
         $this->setMailConfig($driver, $username, $name, $password, $enc, $host, $port);
         $controller = new \App\Http\Controllers\Common\PhpMailController();
-        $to = 'example@ladybirdweb.com';
-        $toname = 'test';
         $subject = 'test';
         $data = 'test';
         //dd(\Config::get('mail'),\Config::get('services'));
-        $send = $controller->laravelMail($to, $toname, $subject, $data, [], []);
+        $send = $controller->laravelMail($username, $name, $subject, $data, [], []);
 
         return $send;
     }
@@ -322,7 +320,7 @@ class EmailsController extends Controller
             // get all the helptopic
             $helps = $help->get();
             // get all active the priority
-              $priority = $ticket_priority->where('status','=',1)->get();
+              $priority = $ticket_priority->where('status', '=', 1)->get();
             // get all the mailbox protocols
             $mailbox_protocols = $mailbox_protocol->get();
 

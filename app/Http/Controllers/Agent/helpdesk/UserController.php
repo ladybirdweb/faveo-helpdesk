@@ -188,7 +188,7 @@ class UserController extends Controller
             $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
             $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
             $location = GeoIP::getLocation();
-            $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+            $phonecode = $code->where('iso', '=', $location->iso_code)->first();
             $org = Organization::lists('name', 'id')->toArray();
 
             return view('themes.default1.agent.helpdesk.user.create', compact('org', 'settings', 'email_mandatory'))->with('phonecode', $phonecode->phonecode);
@@ -575,7 +575,7 @@ class UserController extends Controller
             /* select the field where id = $id(request Id) */
             $users = $user->whereId($id)->first();
             $location = GeoIP::getLocation();
-            $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+            $phonecode = $code->where('iso', '=', $location->iso_code)->first();
             $org = Organization::lists('name', 'id')->toArray();
 
             return view('themes.default1.agent.helpdesk.user.edit', compact('users', 'org', '$settings', '$email_mandatory'))->with('phonecode', $phonecode->phonecode);
@@ -651,7 +651,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $location = GeoIP::getLocation();
-        $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+        $phonecode = $code->where('iso', '=', $location->iso_code)->first();
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $status = $settings->status;
         try {

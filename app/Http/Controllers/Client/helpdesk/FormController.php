@@ -68,7 +68,7 @@ class FormController extends Controller
             return redirect('auth/login')->with(['login_require' => 'Please login to your account for submitting a ticket', 'referer' => 'form']);
         }
         $location = GeoIP::getLocation();
-        $phonecode = $code->where('iso', '=', $location['isoCode'])->first();
+        $phonecode = $code->where('iso', '=', $location->iso_code)->first();
         if (System::first()->status == 1) {
             $topics = $topic->get();
             $codes = $code->get();
@@ -93,10 +93,7 @@ class FormController extends Controller
      * @return type string
      */
     public function postForm($id, Help_topic $topic)
-
-
     {
-
         if ($id != 0) {
             $helptopic = $topic->where('id', '=', $id)->first();
             $custom_form = $helptopic->custom_form;
@@ -149,7 +146,6 @@ class FormController extends Controller
      */
     public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code)
     {
-        
         $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token', 'mobile', 'Code');
         $name = $request->input('Name');
         $phone = $request->input('Phone');
@@ -186,10 +182,8 @@ class FormController extends Controller
         $user_priority = CommonSettings::where('id', '=', 6)->first();
         if (!($request->input('priority'))) {
             $priority = $default_priority->priority_id;
- 
         } else {
             $priority = $request->input('priority');
-             
         }
         $source = $ticket_source->where('name', '=', 'web')->first()->id;
         $attachments = $request->file('attachment');
@@ -199,7 +193,7 @@ class FormController extends Controller
         $team_assign = null;
         if ($phone != null || $mobile_number != null) {
             $location = GeoIP::getLocation();
-            $geoipcode = $code->where('iso', '=', $location['isoCode'])->first();
+            $geoipcode = $code->where('iso', '=', $location->iso_code)->first();
             if ($phonecode == null) {
                 $data = [
                     'fails'              => Lang::get('lang.country-code-required-error'),
