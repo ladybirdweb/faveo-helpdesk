@@ -19,10 +19,12 @@ class Ticket_attachments extends Model
     public function getFileAttribute($value)
     {
         if (base64_decode($value, true) === false) {
-           $value = base64_encode($value);
+            $value = base64_encode($value);
         }
+
         return $value;
     }
+
     public function getFile()
     {
         $size = $this->size;
