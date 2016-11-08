@@ -13,7 +13,7 @@
         <title> @yield('title') {!! strip_tags($title_name) !!} </title>
         <!-- faveo favicon -->
         <link href="{{asset("lb-faveo/media/images/favicon.ico")}}"  rel="shortcut icon" >
-
+        
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <!-- Bootstrap 3.3.2 -->
         <link href="{{asset("lb-faveo/css/bootstrap.min.css")}}" rel="stylesheet" type="text/css" />
@@ -27,22 +27,22 @@
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
-
+        
         <link href="{{asset("lb-faveo/css/app.css")}}" rel="stylesheet" type="text/css" />
-
+        
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
 
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
-
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
         @yield('HeadInclude')
     </head>
     <body>
         <div id="page" class="hfeed site">
             <header id="masthead" class="site-header" role="banner">
+                
                 <div class="container" style="">
                     <div id="logo" class="site-logo text-center" style="font-size: 30px;">
                         <?php
@@ -116,71 +116,11 @@
                                 </li>
                             </ul><!-- .navbar-user -->
                             @else
-                            </ul>
-                            @if(isset($errors))
-                            <ul class="nav navbar-nav navbar-login">
-                                <li 
-                                <?php
-                                if (is_object($errors)) {
-                                    if ($errors->first('email') || $errors->first('password')) {
-                                        ?> class="sfHover" 
-                                            <?php
-                                        }
-                                    }
-                                    ?> 
-                                    ><a href="#"  data-toggle="collapse"  
-                                        <?php
-                                        if (is_object($errors)) {
-                                            if ($errors->first('email') || $errors->first('password')) {
-                                                
-                                            } else {
-                                                ?> class="collapsed" 
-                                            <?php
-                                        }
-                                    }
-                                    ?> 
-                                    data-target="#login-form"   >{!! Lang::get('lang.login') !!} <i class="sub-indicator fa fa-chevron-circle-down fa-fw text-muted"></i></a></li>
-                            </ul><!-- .navbar-login -->
-                            @endif
-                            <div  id="login-form" @if(isset($errors))<?php if ($errors->first('email') || $errors->first('password')) { ?> class="login-form collapse fade clearfix in" <?php } else { ?> class="login-form collapse fade clearfix" <?php } ?>@endif >
-                                 <div class="row">
-                                    <div class="col-md-12">
-                                        {!!  Form::open(['action'=>'Auth\AuthController@postLogin', 'method'=>'post']) !!}
-                                        @if(Session::has('errors'))
-                                        @if(Session::has('check'))
-                                        <?php goto b; ?>
-                                        @endif
-                                        <div class="alert alert-danger alert-dismissable">
-                                            @if(Session::has('error'))
-                                            {!! Session::get('error') !!}
-                                            @else
-                                            {!! Lang::get('lang.required-error') !!}
-                                            @endif
-                                        </div>
-                                        <?php b: ?>
-                                        @endif
-                                        <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('email') ? 'has-error' : '' !!} @endif">
-                                            {!! Form::text('email',null,['placeholder'=>Lang::get('lang.e-mail'),'class' => 'form-control']) !!}
-                                            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                                        </div>
-                                        <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('password') ? 'has-error' : '' !!} @endif">
-                                            {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}
-                                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                                        </div>
-                                        <ul class="list-unstyled pull-left">
-                                            <li><a href="{{url('password/email')}}">{!! Lang::get('lang.forgot_password') !!}</a><br></li>
-                                            <li><a href="{{url('auth/register')}}">{!! Lang::get('lang.create_account') !!}</a></li>
-                                        </ul>
-                                        <button type="submit" class="btn btn-custom pull-right">{!! Lang::get('lang.login') !!}</button>
-                                        {!! Form::close() !!}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        @include('themes.default1.client.layout.social-login')
-                                    </div>
-                                </div>
-                            </div><!-- #login-form -->
+                            
+                           
+                        
+                            
+                     
                             @endif
                         </nav><!-- #site-navigation -->
                     </div><!-- #navbar -->
@@ -189,9 +129,9 @@
                         <div class="form-border">
                             <div class="form-inline ">
                                 <div class="form-group">
-                                    <input type="text" name="s" class="search-field form-control input-lg" title="Enter search term" placeholder="{!! Lang::get('lang.have_a_question?_type_your_search_term_here') !!}" required/>
+                                    <input type="text" name="s" id="s" class="search-field form-control input-lg" title="Enter search term" placeholder="{!! Lang::get('lang.have_a_question?_type_your_search_term_here') !!}" required />
                                 </div>
-                                <button type="submit" class="search-submit btn btn-custom btn-lg pull-right">{!! Lang::get('lang.search') !!}</button>
+                                <button type="submit" class="search-submit btn btn-custom btn-lg pull-right check-s">{!! Lang::get('lang.search') !!}</button>
                             </div>
                         </div>
                         {!! Form::close() !!}
@@ -225,7 +165,7 @@
                             <!-- failure message -->
                             @if(Session::has('fails'))
                             @if(Session::has('check'))
-                            <?php goto a; ?>
+<?php goto a; ?>
                             @endif
                             <div class="alert alert-danger alert-dismissable">
                                 <i class="fa fa-ban"></i>
@@ -233,7 +173,7 @@
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                 {{Session::get('fails')}}
                             </div>
-                            <?php a: ?>
+<?php a: ?>
                             @endif
                             @yield('content')
                             <div id="sidebar" class="site-sidebar col-md-3">
@@ -320,7 +260,7 @@
                             <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
                         </div>
                         <div class="site-social text-right col-md-6">
-                            <?php $socials = App\Model\helpdesk\Theme\Widgets::all(); ?>
+<?php $socials = App\Model\helpdesk\Theme\Widgets::all(); ?>
                             <ul class="list-inline hidden-print">
                                 @foreach($socials as $social)
                                 @if($social->name == 'facebook')
@@ -384,22 +324,23 @@
                     </div>
             </footer><!-- #colophon -->
             <!-- jQuery 2.1.1 -->
+
             <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
             <!-- Bootstrap 3.3.2 JS -->
             <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
             <!-- Slimscroll -->
             <script src="{{asset("lb-faveo/js/superfish.js")}}" type="text/javascript"></script>
-
+            
             <script src="{{asset("lb-faveo/js/mobilemenu.js")}}" type="text/javascript"></script>
-
+            
             <script src="{{asset("lb-faveo/js/know.js")}}" type="text/javascript"></script>
-
+            
             <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
-
+            
             <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
-
+            
             <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
-
+            
             <script>
 $(function () {
 //Enable check and uncheck all functionality
@@ -433,6 +374,6 @@ $(function () {
     });
 });
             </script>
-          
+
     </body>
 </html>

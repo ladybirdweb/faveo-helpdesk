@@ -41,13 +41,15 @@ return [
       |   Login Page
       |--------------------------------------
      */
-    'Login_to_start_your_session'        => 'Login to start your session',
+    'login_to_start_your_session'        => 'Login to start your session',
     'login'                              => 'Login',
+    
     'remember'                           => 'Remember me',
     'signmein'                           => 'Sign me in',
     'iforgot'                            => 'I forgot my password',
     'email_address'                      => 'Email address',
     'password'                           => 'Password',
+    'password_confirmation'                 => 'Password confirmation',
     'woops'                              => 'Whoops!',
     'theirisproblem'                     => 'There were some problems with your input.',
     'login'                              => 'Login',
@@ -64,6 +66,10 @@ return [
     'verify-number'                      => 'Verify number',
     'get-verify-message'                 => 'Enter the OTP code we\'ve sent to your new number.',
     'number-verification-sussessfull'    => 'Your number has been verified successfully, please wait we are updating your profile.',
+    'enter_your_email_here'             => 'Enter Your Email Here',
+
+
+
     /*
       |--------------------------------------
       |   Register Page

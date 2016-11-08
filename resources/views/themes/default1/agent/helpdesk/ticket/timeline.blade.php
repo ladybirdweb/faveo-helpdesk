@@ -1535,6 +1535,7 @@ if ($thread->title != "") {
                     $("#alert11").show();
                     $('#message-success1').html(message);
                     setInterval(function(){$("#alert11").hide(); }, 4000);
+                     window.location.reload(true);
             }
             else if (response == 1) {
             $("#error-subject").show();

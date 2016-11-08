@@ -482,13 +482,13 @@ class="active"
         if ($users->role != 'user') {
             $open = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get());
             $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '2')->orderBy('id', 'DESC')->paginate(20);
-            $counted = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '2')->get());
+            $counted = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '3')->get());
             $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '5')->get());
         }
         if ($users->role == 'user') {
             $open = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '1')->get());
             $tickets = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '2')->orderBy('id', 'DESC')->paginate(20);
-            $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '2')->get());
+            $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '3')->get());
             $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '5')->get());
             // dd($deleted);
         }
@@ -654,7 +654,7 @@ class="active"
                         </div><!-- /.tab-pane -->
                         <div class="tab-pane" id="tab_2">
                             {{-- open tab --}}
-                            <?php $closed = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', 2)->get()); ?>
+                            <?php $closed = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '3')->get()); ?>
                             @if(Session::has('success'))
                             <div id="success-alert" class="alert alert-success alert-dismissable">
                                 <i class="fa  fa-check-circle"> </i>
@@ -679,7 +679,7 @@ class="active"
                                     <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
                                     <div class="pull-right">
                                         <?php
-                                        $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '2')->get());
+                                        $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '3')->get());
                                         if ($counted < 20) {
                                             echo $counted . "/" . $counted;
                                         } else {
@@ -704,9 +704,9 @@ class="active"
                                         </thead>
                                         <tbody id="hello">
                                             @if($users->role != 'user')
-                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '2')->orderBy('id', 'DESC')->paginate(20); ?>
+                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '3')->orderBy('id', 'DESC')->paginate(20); ?>
                                             @elseif($users->role ='user')
-                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '2')->orderBy('id', 'DESC')->paginate(20); ?>
+                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '3')->orderBy('id', 'DESC')->paginate(20); ?>
                                             @endif
                                             @foreach ($tickets  as $ticket)
                                             <tr <?php if ($ticket->seen_by == null) { ?> style="color:green;" <?php } ?> >
