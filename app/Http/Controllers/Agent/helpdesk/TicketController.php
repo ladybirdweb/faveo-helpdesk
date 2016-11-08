@@ -242,10 +242,10 @@ class TicketController extends Controller
     public function get_closed()
     {
         if (Auth::user()->role == 'admin') {
-            $tickets = Tickets::where('status', '>', 1)->where('status', '<', 4)->get();
+            $tickets = Tickets::where('status', '>', 2)->where('status', '<', 4)->get();
         } else {
             $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
-            $tickets = Tickets::where('status', '>', 1)->where('dept_id', '=', $dept->id)->where('status', '<', 4)->get();
+            $tickets = Tickets::where('status', '>', 2)->where('dept_id', '=', $dept->id)->where('status', '<', 4)->get();
         }
 
         return $this->getTable($tickets);
