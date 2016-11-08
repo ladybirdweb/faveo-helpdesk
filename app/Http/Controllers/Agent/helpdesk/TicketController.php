@@ -2422,8 +2422,6 @@ class TicketController extends Controller
             $new_thread = new Ticket_Thread();
             $new_thread->ticket_id = $thread->ticket_id;
             $new_thread->user_id = Auth::user()->id;
-            $new_thread->poster = $thread->poster;
-            $new_thread->source = $thread->source;
             $new_thread->is_internal = 0;
             $new_thread->title = $thread->title;
             $new_thread->body = Lang::get('lang.get_merge_message').
@@ -2435,8 +2433,6 @@ class TicketController extends Controller
             $new_parent_thread = new Ticket_Thread();
             $new_parent_thread->ticket_id = $p_id;
             $new_parent_thread->user_id = Auth::user()->id;
-            $new_parent_thread->poster = $parent_thread->poster;
-            $new_parent_thread->source = $parent_thread->source;
             $new_parent_thread->is_internal = 1;
             $new_parent_thread->title = $thread->title;
             $new_parent_thread->body = Lang::get('lang.ticket')."&nbsp;<a href='".route('ticket.thread', [$value])."'>#".$ticket->ticket_number.'</a>&nbsp'.Lang::get('lang.ticket_merged').'<br><br><b>'.Lang::get('lang.merge-reason').':</b>&nbsp;&nbsp;'.$reason;

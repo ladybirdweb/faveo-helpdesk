@@ -16,6 +16,15 @@ class Ticket_attachments extends Model
         $this->attributes['file'] = base64_encode($value);
     }
 
+    public function getFileAttribute($value)
+    {
+        if (base64_decode($value, true) === false) {
+            $value = base64_encode($value);
+        }
+
+        return $value;
+    }
+
     public function getFile()
     {
         $size = $this->size;
