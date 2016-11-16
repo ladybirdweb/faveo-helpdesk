@@ -109,7 +109,7 @@ class UserController extends Controller
                             }
                             if (strlen($string) > 20) {
                                 // truncate string
-                                $stringCut = mb_substr($string, 0, 20, "UTF-8");
+                                $stringCut = mb_substr($string, 0, 20, 'UTF-8');
                             } else {
                                 $stringCut = $string;
                             }
