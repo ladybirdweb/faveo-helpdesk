@@ -985,11 +985,11 @@ if ($thread->title != "") {
                                 $teams = App\Model\helpdesk\Agent\Teams::where('status', '=', '1')->get();
                                 $count_teams = count($teams);
                                 ?>
-                                <optgroup label="Teams ( {!! $count_teams !!} )">
+                                <!--<optgroup label="Teams ( {!! $count_teams !!} )">
                                     @foreach($teams as $team)
                                     <option  value="team_{{$team->id}}">{!! $team->name !!}</option>
                                     @endforeach
-                                </optgroup>
+                                </optgroup>-->
                                 <optgroup label="Agents ( {!! $count_assign !!} )">
                                     @foreach($assign as $user)
                                     <option  value="user_{{$user->id}}">{{$user->first_name." ".$user->last_name}}</option>
