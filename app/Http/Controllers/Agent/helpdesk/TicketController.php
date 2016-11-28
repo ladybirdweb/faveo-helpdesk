@@ -1237,10 +1237,6 @@ class TicketController extends Controller
     public function close($id, Tickets $ticket)
     {
         $ticket = Tickets::where('id', '=', $id)->first();
-
-        $approval = Approval::where('id', '=', 1)->first();
-        //Admin can close direce
-        if (Auth::user()->role == 'admin') {
             if (Auth::user()->role == 'user') {
                 $ticket_status = $ticket->where('id', '=', $id)->where('user_id', '=', Auth::user()->id)->first();
             } else {
@@ -1291,7 +1287,6 @@ class TicketController extends Controller
             \Event::fire('change-status', [$data]);
 
             return 'your ticket'.$ticket_status->ticket_number.' has been closed';
-        }
     }
 
     /**
