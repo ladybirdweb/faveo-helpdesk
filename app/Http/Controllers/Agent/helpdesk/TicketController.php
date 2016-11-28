@@ -1246,6 +1246,11 @@ class TicketController extends Controller
             if ($ticket_status == null) {
                 return redirect()->route('unauth');
             }
+            if(\Auth::user()->role == 'user') {
+                $is_internal = 0;
+            } else {
+                $is_internal = 1;
+            }
             $ticket_status->status = 3;
             $ticket_status->closed = 1;
             $ticket_status->closed_at = date('Y-m-d H:i:s');
@@ -1256,7 +1261,7 @@ class TicketController extends Controller
             $thread = new Ticket_Thread();
             $thread->ticket_id = $ticket_status->id;
             $thread->user_id = Auth::user()->id;
-            $thread->is_internal = 1;
+            $thread->is_internal = $is_internal;
             $thread->body = $ticket_status_message->message.' '.Auth::user()->first_name.' '.Auth::user()->last_name;
             $thread->save();
 

@@ -74,9 +74,10 @@ class="active"
                                 $title = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->orderBy('id')->first();
                                 $string = strip_tags($title->title);
                                 if (strlen($string) > 40) {
-                                    $stringCut = substr($string, 0, 40);
-                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')) . ' ...';
+                                    $stringCut = substr($string, 0, 25);
+                                    $string = $stringCut.'....';
                                 }
+                                // dd($stringCut);
                                 $TicketData = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)
                                     ->where('user_id', '!=' , null)
                                     ->max('id');
