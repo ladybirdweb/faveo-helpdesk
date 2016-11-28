@@ -765,7 +765,7 @@ if ($thread->title != "") {
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{!! Lang::get('lang.help_topic') !!} <span class="text-red"> *</span></label>
-    <?php $help_topics = App\Model\helpdesk\Manage\Help_topic::all() ?>
+    <?php $help_topics = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->get() ?>
                                     <select class="form-control" name="help_topic">
                                         @foreach($help_topics as $helptopic)
                                         <option value="{!! $helptopic->id !!}" <?php
