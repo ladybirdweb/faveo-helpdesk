@@ -170,7 +170,7 @@ $conversations = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '='
 $ij = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
 $user = App\User::where('id', '=', $tickets->user_id)->first();
 foreach ($conversations as $conversation) {
-    $role = $conversation->user;
+    $role = App\User::where('id', '=', $conversation->user_id)->first();
     $body = $conversation->thread($conversation->body);
     ?>
     <ol class="comment-list" >
