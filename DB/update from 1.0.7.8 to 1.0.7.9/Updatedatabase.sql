@@ -42,4 +42,4 @@ CREATE TABLE IF NOT EXISTS `field_values` (
 --
 UPDATE `settings_ticket` SET `num_format` = '$$$$-####-####', `num_sequence` = 'sequence' WHERE `id` = 1;
 
-----------------------------------------------------------------------
+-- --------------------------------------------------------------------

@@ -201,9 +201,7 @@ CREATE TABLE IF NOT EXISTS `user_additional_infos` (
 -- Alter Table structure for table `common_settings`
 --
 INSERT INTO `common_settings` (`id`, `option_name`, `option_value`, `status`, `optional_field`, `created_at`, `updated_at`)
-VALUES (4, 'send_otp', '',0,'','2016-06-14 09:07:17','2016-06-14 09:07:17'),
-       (5, 'email_mandatory', '',1,'','2016-06-14 09:07:17','2016-06-14 09:07:17'),
-       (6, 'user_priority', '', '0', '', '2016-10-09 15:32:50', '2016-10-09 15:32:50');
+VALUES (6, 'user_priority', '', '0', '', '2016-10-09 15:32:50', '2016-10-09 15:32:50');
 -- --------------------------------------------------------
 
 --
@@ -289,14 +287,6 @@ ALTER TABLE `users` MODIFY `mobile` VARCHAR(30) DEFAULT NULL;
 UPDATE `users` SET `mobile` = NULL WHERE `mobile` = '';
 ALTER TABLE `users` ADD UNIQUE (`mobile`);
 
--- --------------------------------------------------------------------
-
---
--- Alter `settings_ticket` table
---
-UPDATE `settings_ticket` 
-SET `num_format` = '$$$$-####-###' , `num_sequence` = 'sequence';
-
 -- ----------------------------------------------------------------------
 
 -- 
@@ -342,3 +332,11 @@ INSERT INTO `ticket_source` (`id`, `name`, `value`, `css_class`) VALUES
 (6, 'call', 'Call', 'fa fa-phone'),
 (7, 'chat', 'Chat', 'fa fa-comment');
 -- ----------------------------------------------------------------------
+
+--
+-- Alter tickets table
+--
+
+ALTER TABLE `tickets`
+ADD COLUMN `approval` tinyint(10),
+ADD COLUMN `follow_up` tinyint(10) ;
