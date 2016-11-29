@@ -2815,7 +2815,7 @@ class TicketController extends Controller
             $attachments = $attachment->where('thread_id', $thread_id)->get();
             if ($attachments->count() > 0) {
                 foreach ($attachments as $key => $attach) {
-                    $array[$key]['file_path'] = base64_encode($attach->file);
+                    $array[$key]['file_path'] = $attach->file;
                     $array[$key]['file_name'] = $attach->name;
                     $array[$key]['mime'] = $attach->type;
                     $array[$key]['mode'] = 'data';
