@@ -1528,13 +1528,14 @@ if ($thread->title != "") {
             $("#show").hide();
                     $("#hide").show();
                     if (response == 0) {
-            message = "{!! Lang::get('lang.ticket_updated_successfully') !!}"
-                    $("#dismis").trigger("click");
-                    $("#refresh1").load("../thread/{{$tickets->id}}   #refresh1");
-                    $("#refresh2").load("../thread/{{$tickets->id}}   #refresh2");
-                    $("#alert11").show();
-                    $('#message-success1').html(message);
-                    setInterval(function(){$("#alert11").hide(); }, 4000);
+                        location.reload();
+            // message = "{!! Lang::get('lang.ticket_updated_successfully') !!}"
+            //         $("#dismis").trigger("click");
+            //         $("#refresh1").load("../thread/{{$tickets->id}}   #refresh1");
+            //         $("#refresh2").load("../thread/{{$tickets->id}}   #refresh2");
+            //         $("#alert11").show();
+            //         $('#message-success1').html(message);
+            //         setInterval(function(){$("#alert11").hide(); }, 4000);
             }
             else if (response == 1) {
             $("#error-subject").show();
@@ -1573,7 +1574,7 @@ if ($thread->title != "") {
             // var message = "Success";
             // $('#message-success1').html(message);
             // setInterval(function(){$("#alert11").hide(); },4000);   
-
+            location.reload();
             var message = "Success!";
                     $("#alert11").show();
                     $('#message-success1').html(message);
@@ -1868,6 +1869,7 @@ if ($thread->title != "") {
 
             if (response == 1)
             {
+                location.reload();
             // alert('ticket has been un assigned');
             var message = "{!! Lang::get('lang.you_have_unassigned_your_ticket') !!}";
                     $("#alert11").show();

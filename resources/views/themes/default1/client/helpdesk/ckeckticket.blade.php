@@ -224,27 +224,10 @@ foreach ($conversations as $conversation) {
                 <div class="comment-content">
                     @if($conversation->firstContent()=='yes')
                                              <div class="embed-responsive embed-responsive-16by9">
-                                            <iframe id="loader_frame{{$conversation->id}}" class="embed-responsive-item">Body of html email here</iframe>
-<script type="text/javascript">
-jQuery(document).ready(function () {
-            jQuery('.embed-responsive-16by9').css('height','auto');
-            jQuery('.embed-responsive-16by9').css('padding','0');
-            jQuery('#loader_frame{{$conversation->id}}').css('width','100%');
-            jQuery('#loader_frame{{$conversation->id}}').css('position','static');
-            jQuery('#loader_frame{{$conversation->id}}').css('border','none');
-            var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-            var h     = mydiv.height();
-            jQuery('#loader_frame{{$conversation->id}}').css('height', h+20);
-            setInterval(function(){
-                h = jQuery('#loader_frame{{$conversation->id}}').height();
-                if (!!navigator.userAgent.match(/Trident\/7\./)){
-                    jQuery('#loader_frame{{$conversation->id}}').css('height', h);
-                }else{
-                    jQuery('#loader_frame{{$conversation->id}}').css('height', h);
-                }
-            }, 2000);
-        });
-</script>
+                                            <iframe id="loader_frame{{$conversation->id}}" class="embed-responsive-item" onload="iframeLoaded()">Body of html email here</iframe>
+<script>
+                                                $('#loader_frame{{$conversation->id}}')[0].contentDocument.body.innerHTML = '{!!$conversation->purify()!!}';
+                                            </script>
                                             </div>
                                             <script>
                                                  setTimeout(function(){ 

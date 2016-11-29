@@ -83,7 +83,7 @@ class="active"
     }
     ?>
          <?php
- if (Auth::user()->role == 'admin' || Auth::user()->role == 'agent') {
+ if (Auth::user()->role == 'admin') {
             $todaytickets = count(App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->whereRaw('date(duedate) = ?', [date('Y-m-d')])->get());
         } else {
             $dept =  App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();

@@ -75,7 +75,7 @@ class EmailsController extends Controller
             // fetch all the departments from the department table
             $departments = $department->get();
             // fetch all the helptopics from the helptopic table
-            $helps = $help->get();
+            $helps = $help->where('status', '=', 1)->get();
             // fetch all the types of active priority from the ticket_priority table
             $priority = $ticket_priority->where('status', '=', 1)->get();
             // fetch all the types of mailbox protocols from the mailbox_protocols table
@@ -114,7 +114,7 @@ class EmailsController extends Controller
             }
             if ($request->input('sending_status') === 'on') {
                 $this->emailService($service, $service_request);
-                $send = $this->sendDiagnoEmail($request);
+                $send = $this->checkMail($request);
             }
             if ($send == 1 && $fetch == 1) {
                 $this->store($request, $service_request, $id);
@@ -318,7 +318,7 @@ class EmailsController extends Controller
             //get count of emails
             $count = $email->count();
             // get all the helptopic
-            $helps = $help->get();
+            $helps = $help->where('status', '=', 1)->get();
             // get all active the priority
               $priority = $ticket_priority->where('status', '=', 1)->get();
             // get all the mailbox protocols
@@ -637,5 +637,26 @@ class EmailsController extends Controller
         $TicketWorkflowController = new \App\Http\Controllers\Agent\helpdesk\TicketWorkflowController($TicketController);
         $controller = new \App\Http\Controllers\Agent\helpdesk\MailController($TicketWorkflowController);
         $controller->fetch($email);
+    }
+
+    public function checkMail($request) {
+        $mailservice_id = $request->input('sending_protocol');
+        $driver = $this->getDriver($mailservice_id);
+        $username = $request->input('email_address');
+        $password = $request->input('password');
+        $name = $request->input('email_name');
+        $host = $request->input('sending_host');
+        $port = $request->input('sending_port');
+        $enc = $request->input('sending_encryption');
+        $service_request = $request->except('sending_status', '_token', 'email_address', 'email_name', 'password', 'department', 'priority', 'help_topic', 'fetching_protocol', 'fetching_host', 'fetching_port', 'fetching_encryption', 'imap_authentication', 'sending_protocol', 'sending_host', 'sending_port', 'sending_encryption', 'smtp_authentication', 'internal_notes', '_wysihtml5_mode');
+
+        $this->emailService($driver, $service_request);
+        $this->setMailConfig($driver, $username, $name, $password, $enc, $host, $port);
+        $transport = \Swift_SmtpTransport::newInstance($host, $port, $enc);
+        $transport->setUsername($username);
+        $transport->setPassword($password);
+        $mailer = \Swift_Mailer::newInstance($transport);
+        $mailer->getTransport()->start();
+        return 1;
     }
 }
