@@ -185,11 +185,6 @@ class AuthController extends Controller
         // Event for login
         \Event::fire(new \App\Events\LoginEvent($request));
         $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/'.$code)]);
-        if ($var == null) {
-            $message12 = Lang::get('lang.failed_to_send_email_contact_administrator');
-
-            return redirect('home')->with('fails', $message12);
-        } else {
             if ($settings->status == 1 || $settings->status == '1') {
                 if (count($sms) > 0) {
                     if ($sms->status == 1 || $sms->status == '1') {
@@ -203,7 +198,6 @@ class AuthController extends Controller
             } else {
                 $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
             }
-        }
 
         return redirect('home')->with('success', $message12);
     }

@@ -85,7 +85,7 @@ class TicketController extends Controller
             $tickets = Tickets::whereIn('status', [1, 7])->get();
         } else {
             $dept = DB::table('department')->where('id', '=', Auth::user()->primary_dpt)->first();
-            $tickets = Tickets::whereIn('status', [1, 7])->where('dept_id', '=', $dept->id)->get();
+            $tickets = Tickets::whereIn('status', [1, 7])->where('dept_id', '=', $dept->id)->orWhere('assigned_to', '=', Auth::user()->id)->get();
         }
 
         return $this->getTable($tickets);
@@ -1508,10 +1508,10 @@ class TicketController extends Controller
 
             $agent = $user_detail->first_name;
             $agent_email = $user_detail->email;
-
+            $ticket_link = route('ticket.thread', $id);
             $master = Auth::user()->first_name.' '.Auth::user()->last_name;
             try {
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket->dept_id), $to = ['name' => $agent, 'email' => $agent_email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'assign-ticket'], $template_variables = ['ticket_agent_name' => $agent, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master]);
+                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket->dept_id), $to = ['name' => $agent, 'email' => $agent_email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'assign-ticket'], $template_variables = ['ticket_agent_name' => $agent, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master, 'ticket_link' => $ticket_link]);
             } catch (\Exception $e) {
                 return 0;
             }
