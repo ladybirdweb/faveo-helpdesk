@@ -78,14 +78,14 @@ class="active"
             @if($users->user_name)
             <div class="box-footer">
                 <b>{{Lang::get('lang.user_name')}}</b>
-                <a class="pull-right" href="{{route('user.show', $users->id)}}">
+                <a class="pull-right" href="{{route('user.show', $users->id)}}" title="{{$users->user_name}}">
                     {{str_limit($users->user_name,10) }}
                 </a>
             </div>
             @endif
             <div class="box-footer">
                 <b>{{Lang::get('lang.email')}}</b>
-                <a class="pull-right" href="{{route('user.show', $users->id)}}">
+                <a class="pull-right" href="{{route('user.show', $users->id)}}" title="{{$users->email}}">
                     {{str_limit($users->email,10) }}
                 </a>
             </div>

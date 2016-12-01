@@ -155,7 +155,8 @@ class="active"
 
                 {!! Form::label('phone_number',Lang::get('lang.phone')) !!}
 
-                {!! Form::text('phone_number',null,['class' => 'form-control']) !!}
+                <!-- {!! Form::text('phone_number',null,['class' => 'form-control']) !!} -->
+                {!! Form::input('number','phone_number',null,['class' => 'form-control', 'id' => 'phone_number']) !!}
 
             </div>
 
@@ -163,8 +164,9 @@ class="active"
             <div class="col-xs-3 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
 
                 {!! Form::label('mobile',Lang::get('lang.mobile_number')) !!}
+                 {!! Form::input('number','mobile',null,['class' => 'form-control', 'id' => 'mobile']) !!}
 
-                {!! Form::text('mobile',null,['class' => 'form-control']) !!}
+                <!-- {!! Form::text('mobile',null,['class' => 'form-control']) !!} -->
 
             </div>
 
