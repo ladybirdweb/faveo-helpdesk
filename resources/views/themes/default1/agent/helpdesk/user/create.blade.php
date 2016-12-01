@@ -121,7 +121,8 @@ class="active"
                 @if ($email_mandatory->status == 0 || $settings->status == 1)
                      <span class="text-red"> *</span>
                 @endif
-                {!! Form::text('mobile',null,['class' => 'form-control']) !!}
+                {!! Form::input('number','mobile',null,['class' => 'form-control', 'id' => 'mobile']) !!}
+                <!-- {!! Form::text('mobile',null,['class' => 'form-control']) !!} -->
             </div>
             <div class="col-xs-1 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">
                 <label for="ext">{!! Lang::get('lang.ext') !!}</label>  
@@ -129,7 +130,8 @@ class="active"
             </div>
             <div class="col-xs-3 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
                 <label for="phone_number">{!! Lang::get('lang.phone') !!}</label>
-                {!! Form::text('phone_number',null,['class' => 'form-control']) !!}
+                  {!! Form::input('number','phone_number',null,['class' => 'form-control', 'id' => 'phone_number']) !!}
+                <!-- {!! Form::text('phone_number',null,['class' => 'form-control']) !!} -->
             </div>
             <div class="col-md-3 form-group {{ $errors->has('active') ? 'has-error' : '' }}">
                 {!! Form::label('active',Lang::get('lang.status')) !!}

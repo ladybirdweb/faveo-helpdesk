@@ -132,12 +132,14 @@ class="active"
             <!-- phone -->
             <div class="col-xs-3 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
                 {!! Form::label('phone_number',Lang::get('lang.phone')) !!}
-                {!! Form::text('phone_number',null,['class' => 'form-control']) !!}
+                <!-- {!! Form::text('phone_number',null,['class' => 'form-control']) !!} -->
+                {!! Form::input('number','phone_number',null,['class' => 'form-control', 'id' => 'phone_number']) !!}
             </div>
             <!-- Mobile -->
             <div class="col-xs-3 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
                 {!! Form::label('mobile',Lang::get('lang.mobile_number')) !!}@if($send_otp->status ==1)<span class="text-red"> *</span>@endif
-                {!! Form::text('mobile',null,['class' => 'form-control']) !!}
+                <!-- {!! Form::text('mobile',null,['class' => 'form-control']) !!} -->
+                 {!! Form::input('number','mobile',null,['class' => 'form-control', 'id' => 'mobile']) !!}
             </div>
         </div>
         <div>

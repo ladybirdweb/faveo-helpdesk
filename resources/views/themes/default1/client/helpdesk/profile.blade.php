@@ -100,15 +100,15 @@ class="active"
                         <div class="col-xs-8 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
                             <!-- phone number -->
                             {!! Form::label('phone_number',Lang::get('lang.phone')) !!}
-                           
-                            {!! Form::text('phone_number',null,['class' => 'form-control']) !!}
+                           {!! Form::input('number','phone_number',null,['class' => 'form-control', 'id' => 'phone_number']) !!}
+                            <!-- {!! Form::text('phone_number',null,['class' => 'form-control']) !!} -->
                         </div>
                     </div>
                     <div class="form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
                         <!-- mobile -->
                         {!! Form::label('mobile',Lang::get('lang.mobile_number')) !!}
-                        
-                        {!! Form::text('mobile',null,['class' => 'form-control', 'id' => 'mobile']) !!}
+                        {!! Form::input('number','mobile',null,['class' => 'form-control', 'id' => 'mobile']) !!}
+                        <!-- {!! Form::text('mobile',null,['class' => 'form-control', 'id' => 'mobile']) !!} -->
                     </div>
                     <div class="form-group {{ $errors->has('profile_pic') ? 'has-error' : '' }}">
                         <!-- profile pic -->
