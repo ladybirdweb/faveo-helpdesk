@@ -29,7 +29,11 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
 <li>
     <a href="{!! URL('user/'.$user->id) !!}">
         <span>{!! Lang::get('lang.User') !!} </span>
+        @if($user->first_name && $user->last_name)
+         </br><i class="fa fa-user"></i> <b>{{$user->first_name." ".$user->last_name}}</b>
+         @else
         </br><i class="fa fa-user"></i> <b>{{$user->user_name}}</b>
+        @endif
     </a>
 </li>
 <li >
@@ -980,7 +984,7 @@ if ($thread->title != "") {
                             <p>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}?</p>
                             <select id="asssign" class="form-control" name="assign_to">
                                 <?php
-                                $assign = App\User::where('role', '!=', 'user')->where('active', '=', '1')->get();
+                                $assign = App\User::where('role', '!=', 'user')->where('active', '=', '1')->where('primary_dpt','=',$tickets->dept_id)->get();
                                 $count_assign = count($assign);
                                 $teams = App\Model\helpdesk\Agent\Teams::where('status', '=', '1')->get();
                                 $count_teams = count($teams);

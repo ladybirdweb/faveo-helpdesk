@@ -1548,5 +1548,6 @@ return [
      'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
      //login,registration
      'enter_your_email_here'=>'Enter your email here',
+     'login_to_start_your_session'=>'Login to start your session',
 
 ];

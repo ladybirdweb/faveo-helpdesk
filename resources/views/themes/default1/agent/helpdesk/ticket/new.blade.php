@@ -178,10 +178,28 @@ class="active"
                     </div>
                 </div>
                 <div class="col-md-3">
+
+                    <script type="text/javascript">
+    $(document).ready(function () {
+        // var helpTopic = $("#selectid").val();
+        // send(helpTopic);
+        $("#selectid").on("change", function () {
+
+         $helpTopic = $("#selectid").val();
+           // send(helpTopic);
+        });
+        });
+        </script>
+
+
+
+
+
+
                     <!-- assign to -->
                     <div class="form-group">
                         <label>{!! Lang::get('lang.assign_to') !!}:</label>
-                        <?php $agents = App\User::where('role', '!=', 'user')->get(); ?>
+                        <?php $agents = App\User::where('role', '!=', 'user')->where('primary_dpt','=',$helpTopic)->get(); ?>
                         {!! Form::select('assignto', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')->toArray()],null,['class' => 'form-control select']) !!}
                     </div>
                 </div>
@@ -250,7 +268,10 @@ class="active"
         var helpTopic = $("#selectid").val();
         send(helpTopic);
         $("#selectid").on("change", function () {
+
             helpTopic = $("#selectid").val();
+
+            // alert(helpTopic);
             send(helpTopic);
         });
         function send(helpTopic) {
