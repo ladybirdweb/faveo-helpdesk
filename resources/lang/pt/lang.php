@@ -48,7 +48,7 @@ return [
       |--------------------------------------
      */
 
-    'Login_to_start_your_session'           => 'Efetue o login para iniciar a sessão',
+    'login_to_start_your_session'           => 'Efetue o login para iniciar a sessão',
     'login'                                 => 'Login',
     'remember'                              => 'Me lembrar',
     'signmein'                              => 'Inscreva-se',

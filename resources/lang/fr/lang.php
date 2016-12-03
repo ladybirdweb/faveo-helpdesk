@@ -52,7 +52,7 @@ return [
       |   Login Page
       |--------------------------------------
      */
-   'Login_to_start_your_session'           => 'Connectez-vous pour démarrer votre session ',
+   'login_to_start_your_session'           => 'Connectez-vous pour démarrer votre session ',
    'login'                                 => 'Identifiant',
    'remember'                              => 'Se souvenir de moi',
    'signmein'                              => 'Connexion',

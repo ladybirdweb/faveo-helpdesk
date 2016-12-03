@@ -28,7 +28,7 @@ return [
       |   Login Page
       |--------------------------------------
      */
-    'Login_to_start_your_session' => 'Login per incominciare la tua sessione',
+    'login_to_start_your_session' => 'Login per incominciare la tua sessione',
     'login'                       => 'Login',
     'remember'                    => 'Ricordami',
     'signmein'                    => 'Segnami',

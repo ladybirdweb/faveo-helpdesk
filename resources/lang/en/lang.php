@@ -41,7 +41,7 @@ return [
       |   Login Page
       |--------------------------------------
      */
-    'Login_to_start_your_session'        => 'Login to start your session',
+    'login_to_start_your_session'        => 'Login to start your session',
     'login'                              => 'Login',
     'remember'                           => 'Remember me',
     'signmein'                           => 'Sign me in',
@@ -86,7 +86,7 @@ return [
     'activate_your_account_click_on_Link_that_send_to_your_mail'                                  => 'Activate your account! Click on the link that we\'ve sent to your mail',
     'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble'                        => 'Activate your account! Click on the link that we\'ve sent to your mail or login to your account and enter the OTP code we\'ve sent on your mobile number',
     'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup' => 'Account created, please contact to system admin as we were unable to send OTP code to your mobile and email to your email address.',
-    'this_field_do_not_match_our_records'                                                         => 'This field does not match our records.',
+    'this_field_do_not_match_our_records'                                                         => ' does not match our records.',
     'we_have_e-mailed_your_password_reset_link'                                                   => 'We have emailed your password reset link!',
     "we_can't_find_a_user_with_that_e-mail_address"                                               => "We can't find a user with that email address.",
     /*
@@ -1548,5 +1548,8 @@ return [
      'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
      //login,registration
      'enter_your_email_here'=>'Enter your email here',
+
+     /*********** Updated 3-12-2016 **********/
+     'activate'  => 'Activate',
 
 ];

@@ -30,7 +30,7 @@ class CreateQueueServicesTable extends Migration
                 'status'     => 0,
             ]);
         }
-        $q = $queue->where('short_name', 'database')->first();
+        $q = $queue->where('short_name', 'sync')->first();
         if ($q) {
             $q->status = 1;
             $q->save();
