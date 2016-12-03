@@ -55,7 +55,7 @@ return [
       |   Login Page
       |--------------------------------------
      */
-    'Login_to_start_your_session'        => 'Log in om te beginnen',
+    'login_to_start_your_session'        => 'Log in om te beginnen',
     'login'                              => 'Inloggen',
     'remember'                           => 'Onthoud mij',
     'signmein'                           => 'Inloggen',

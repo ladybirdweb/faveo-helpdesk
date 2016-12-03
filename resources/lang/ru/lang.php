@@ -25,7 +25,7 @@ return [
       |   Login Page
       |--------------------------------------
      */
-    'Login_to_start_your_session' => 'Авторизуйтесь, чтобы начать сеанс',
+    'login_to_start_your_session' => 'Авторизуйтесь, чтобы начать сеанс',
     'login'                       => 'Login',
     'remember'                    => 'Запомнить меня',
     'signmein'                    => 'Запишите меня в',
