@@ -22,6 +22,18 @@
     </div>
 @stop
 @section('content')
+@if(!Session::has('error'))
+    <div class="alert alert-danger alert-dismissable">
+        <i class="fa fa-ban"></i>
+        <b>{!! Lang::get('lang.alert') !!} !</b>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
 <div id="content" class="site-content col-md-12">
     <div id="corewidgetbox">
         <div class="widgetrow text-center">

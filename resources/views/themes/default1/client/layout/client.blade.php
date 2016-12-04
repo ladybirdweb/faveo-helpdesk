@@ -150,13 +150,13 @@
                                         @if(Session::has('check'))
                                         <?php goto b; ?>
                                         @endif
+                                        @if(Session::has('error'))
                                         <div class="alert alert-danger alert-dismissable">
-                                            @if(Session::has('error'))
+                                            
                                             {!! Session::get('error') !!}
-                                            @else
-                                            {!! Lang::get('lang.required-error') !!}
-                                            @endif
+                                           
                                         </div>
+                                         @endif
                                         <?php b: ?>
                                         @endif
                                         <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('email') ? 'has-error' : '' !!} @endif">

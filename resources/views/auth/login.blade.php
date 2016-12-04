@@ -13,13 +13,7 @@
         <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 @stop
-@if(Session::has('status'))
-<div class="alert alert-success alert-dismissable">
-    <i class="fa  fa-check-circle"> </i> <b> {!! Lang::get('lang.success') !!} </b>
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    {{Session::get('status')}}
-</div>
-@endif
+
 
 
 <!-- @if (count($errors) > 0)
@@ -43,6 +37,24 @@
     </div>
 @stop
 @section('content')
+
+@if(Session::has('status'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fa  fa-check-circle"> </i> <b> {!! Lang::get('lang.success') !!} </b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('status')}}
+</div>
+
+@endif
+
+@if(Session::has('error'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fa  fa-check-circle"> </i> <b> {!! Lang::get('lang.alert') !!} </b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('error')}}
+</div>
+@else
+
 @if (count($errors) > 0)
 <div class="alert alert-danger alert-dismissable">
     <i class="fa fa-ban"></i>
@@ -53,6 +65,8 @@
     @endforeach
 </div>
 @endif
+@endif
+
 <div id="content" class="site-content col-md-12">
     <div id="corewidgetbox">
         <div class="widgetrow text-center">
@@ -115,7 +129,6 @@
 <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
     {!! Form::text('email',null,['placeholder'=> Lang::get("lang.email") ,'class' => 'form-control']) !!}
     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-    {!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
 
 </div>
 </div>
@@ -126,7 +139,6 @@
         
  {!! Form::password('password',['placeholder'=>Lang::get("lang.password"),'class' => 'form-control']) !!}
     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-        {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
 
 </div>
 </div>
