@@ -172,7 +172,7 @@ class = "active"
             </div>
             <!-- priority -->
              <?php 
-             $Priority = App\Model\helpdesk\Settings\CommonSettings::where('id','=',6)->first(); 
+             $Priority = App\Model\helpdesk\Settings\CommonSettings::select('status')->where('option_name','=', 'user_priority')->first(); 
              $user_Priority=$Priority->status;
             ?>
              

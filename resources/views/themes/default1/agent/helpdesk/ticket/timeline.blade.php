@@ -1733,7 +1733,7 @@ alert(h+20);
             {
             $("#refresh1").load("../thread/{{$tickets->id}}   #refresh1");
                     // $("#t4").load("../thread/{{$tickets->id}}   #t4");
-                    var message = "{!! Lang::get('lang.you_have_successfully_replied_to_your_ticket') !!}";
+                    var message = "{!! Lang::get('lang.updated-internal-note') !!}";
                     $("#alert21").show();
                     $('#message-success2').html(message);
                     setInterval(function(){$("#alert21").hide(); }, 4000);

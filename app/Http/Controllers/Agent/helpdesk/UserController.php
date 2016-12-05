@@ -734,7 +734,7 @@ class UserController extends Controller
 
                 return redirect('profile-edit')->with('success1', Lang::get('lang.password_updated_sucessfully'));
             } catch (Exception $e) {
-                return redirect('profile-edit')->with('fails', $e->getMessage());
+                return redirect('profile-edit')->with('fails1', $e->getMessage());
             }
         } else {
             return redirect('profile-edit')->with('fails1', Lang::get('lang.password_was_not_updated_incorrect_old_password'));
