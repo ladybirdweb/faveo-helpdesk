@@ -1003,4 +1003,14 @@ class UserController extends Controller
             return $message;
         }
     }
+
+    /**
+     */
+    public function getAgentDetails()
+    {
+        $users = User::where('role', '<>', 'user')->where('active', '=', 1)->get();
+        foreach ($users as $user) {
+             echo "<option value='user_$user->id'>".$user->full_name.'</option>';
+        }
+    }
 }

@@ -1464,62 +1464,65 @@ class TicketController extends Controller
      */
     public function assign($id)
     {
+        $ticket_array = []; 
+        if(strpos($id, ',') !== false) {
+            $ticket_array = explode(',', $id);
+        } else {
+            array_push($ticket_array, $id);
+        }
         $UserEmail = Input::get('assign_to');
         $assign_to = explode('_', $UserEmail);
-        $ticket = Tickets::where('id', '=', $id)->first();
+        $user_detail = null;
+        foreach ($ticket_array as $id) {
+            $ticket = Tickets::where('id', '=', $id)->first();
+            if ($assign_to[0] == 'team') {
+                $ticket->team_id = $assign_to[1];
+                $team_detail = Teams::where('id', '=', $assign_to[1])->first();
+                $assignee = $team_detail->name;
+                $ticket_number = $ticket->ticket_number;
+                $ticket->save();
+                $ticket_thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
+                $ticket_subject = $ticket_thread->title;
+                $thread = new Ticket_Thread();
+                $thread->ticket_id = $ticket->id;
+                $thread->user_id = Auth::user()->id;
+                $thread->is_internal = 1;
+                $thread->body = 'This Ticket has been assigned to '.$assignee;
+                $thread->save();
+            } elseif ($assign_to[0] == 'user') {
+                $ticket->assigned_to = $assign_to[1];
+                if( $user_detail === null) {
+                    $user_detail = User::where('id', '=', $assign_to[1])->first();
+                    $assignee = $user_detail->first_name.' '.$user_detail->last_name;
+                }
+                $company = $this->company();
+                $system = $this->system();
+                $ticket_number = $ticket->ticket_number;
+                $ticket->save();
+                $data = [
+                    'id' => $id,
+                ];
+                \Event::fire('ticket-assignment', [$data]);
+                $ticket_thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
+                $ticket_subject = $ticket_thread->title;
+                $thread = new Ticket_Thread();
+                $thread->ticket_id = $ticket->id;
+                $thread->user_id = Auth::user()->id;
+                $thread->is_internal = 1;
+                $thread->body = 'This Ticket has been assigned to '.$assignee;
+                $thread->save();
 
-        if ($assign_to[0] == 'team') {
-            $ticket->team_id = $assign_to[1];
-            $team_detail = Teams::where('id', '=', $assign_to[1])->first();
-            $assignee = $team_detail->name;
-
-            $ticket_number = $ticket->ticket_number;
-            $ticket->save();
-
-            $ticket_thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
-            $ticket_subject = $ticket_thread->title;
-
-            $thread = new Ticket_Thread();
-            $thread->ticket_id = $ticket->id;
-            $thread->user_id = Auth::user()->id;
-            $thread->is_internal = 1;
-            $thread->body = 'This Ticket has been assigned to '.$assignee;
-            $thread->save();
-        } elseif ($assign_to[0] == 'user') {
-            $ticket->assigned_to = $assign_to[1];
-            $user_detail = User::where('id', '=', $assign_to[1])->first();
-            $assignee = $user_detail->first_name.' '.$user_detail->last_name;
-
-            $company = $this->company();
-            $system = $this->system();
-
-            $ticket_number = $ticket->ticket_number;
-            $ticket->save();
-            $data = [
-                'id' => $id,
-            ];
-            \Event::fire('ticket-assignment', [$data]);
-            $ticket_thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
-            $ticket_subject = $ticket_thread->title;
-
-            $thread = new Ticket_Thread();
-            $thread->ticket_id = $ticket->id;
-            $thread->user_id = Auth::user()->id;
-            $thread->is_internal = 1;
-            $thread->body = 'This Ticket has been assigned to '.$assignee;
-            $thread->save();
-
-            $agent = $user_detail->first_name;
-            $agent_email = $user_detail->email;
-            $ticket_link = route('ticket.thread', $id);
-            $master = Auth::user()->first_name.' '.Auth::user()->last_name;
-            try {
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket->dept_id), $to = ['name' => $agent, 'email' => $agent_email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'assign-ticket'], $template_variables = ['ticket_agent_name' => $agent, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master, 'ticket_link' => $ticket_link]);
-            } catch (\Exception $e) {
-                return 0;
+                $agent = $user_detail->first_name;
+                $agent_email = $user_detail->email;
+                $ticket_link = route('ticket.thread', $id);
+                $master = Auth::user()->first_name.' '.Auth::user()->last_name;
+                try {
+                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket->dept_id), $to = ['name' => $agent, 'email' => $agent_email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'assign-ticket'], $template_variables = ['ticket_agent_name' => $agent, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master, 'ticket_link' => $ticket_link]);
+                } catch (\Exception $e) {
+                    return 0;
+                }
             }
         }
-
         return 1;
     }
 
