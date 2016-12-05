@@ -24,7 +24,6 @@ class LaravelLogViewerServiceProvider extends ServiceProvider
             $this->package('rap2hpoutre/laravel-log-viewer', 'laravel-log-viewer', __DIR__.'/../../');
         }
 
-
         $view_path = app_path().DIRECTORY_SEPARATOR.'FaveoLog'.DIRECTORY_SEPARATOR.'views';
         $this->loadViewsFrom($view_path, 'log');
 

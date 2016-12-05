@@ -11,12 +11,12 @@
  |--------------------------------------------------------------------------------
  |        Added by  :
  |     translated   : [NO/YES]
- |      Added on    :    
+ |      Added on    :
  */
 return [
     /*
       |----------------------------------------------------------------------------------------
-      | Authentication Pages [French(fr)] 
+      | Authentication Pages [French(fr)]
       | The following language lines are used in all authentication related issues to translate
       | some words in view to French. You are free to change them to anything you want to
       | customize your views to better match your application.
@@ -35,18 +35,18 @@ return [
     'required-error'                                                    => 'Merci de renseigner les champs obligatoires',
     'invalid'                                                           => 'Identifiant utilisateur ou mot de passe incorrect',
     'sorry_something_went_wrong'                                        => 'Désolé, un problème est survenu',
-    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'        => "Nous travaillons au problème et nous allons corriger dès que possible.",
+    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'        => 'Nous travaillons au problème et nous allons corriger dès que possible.',
     'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'    => 'Nous sommes désolés, mais la page que vous recherchez est inconnue.',
     'go_back'                                                           => 'Retour',
     'the_board_is_offline'                                              => 'Le suivi est hors ligne',
     'error_establishing_connection_to_database'                         => 'Erreur de connexion à la base de données',
     'unauthorized_access'                                               => '﻿Accès non autorisé',
-    'not-autherised'                                                 => 'Vous n\'êtes pas autorisé',
-    'otp-not-matched'                                                => 'Oops! Le code OTP que vous avez saisi ne correspond pas avec celui que nous vous avons envoyé.',
-    'otp-invalid'                                                    => 'Le code OTP doit avoir 6 numéros.',
-    'otp-input-title'                                                => 'Saisir 6 numéro pour le code OTP.',
-    'otp-expired'                                                    => 'Votre code OTP a été périmé.<br/> Cliquer pour "Renvoyer un code OTP" et recevoir un nouveau code OTP par téléphone.',
-    'resend-otp-title'                                               => 'Clique ici pour renvoyer un code OTP',
+    'not-autherised'                                                    => 'Vous n\'êtes pas autorisé',
+    'otp-not-matched'                                                   => 'Oops! Le code OTP que vous avez saisi ne correspond pas avec celui que nous vous avons envoyé.',
+    'otp-invalid'                                                       => 'Le code OTP doit avoir 6 numéros.',
+    'otp-input-title'                                                   => 'Saisir 6 numéro pour le code OTP.',
+    'otp-expired'                                                       => 'Votre code OTP a été périmé.<br/> Cliquer pour "Renvoyer un code OTP" et recevoir un nouveau code OTP par téléphone.',
+    'resend-otp-title'                                                  => 'Clique ici pour renvoyer un code OTP',
     /*
       |--------------------------------------
       |   Login Page
@@ -63,50 +63,50 @@ return [
    'theirisproblem'                        => 'Il y a eu un problème avec votre saisie',
    'login'                                 => 'Identifiant',
 
-  'e-mail'                                => 'Email',
-  'reg_new_member'                        => 'Inscrivez-vous',
+  'e-mail'                                 => 'Email',
+  'reg_new_member'                         => 'Inscrivez-vous',
    'this_account_is_currently_inactive'    => 'Ce compte est actuellement inactif!',
-    'not-registered'                     => 'Email/identifiant n\'est pas enregistré',
-    'verify'                             => 'Verification',
-    'enter-otp'                          => 'Entrer code OTP',
-    'did-not-recive-code'                => 'Vous n\'avez pas reçu votre code?',
-    'resend_otp'                         => 'Renvoyer code OTP',
-    'verify-screen-msg'                  => 'Votre compte est actuellement inactif.<br/>Pour activer votre compte, merci de saisir le code OTP que nous vous avons envotyé',
-    'otp-sent'                           => 'Nous vous avons envoyé un code OTP à voter mobile.',
-    'verify-number'                      => 'Verifier les chiffres',
-    'get-verify-message'                 => 'Entrer le code OTP que nous vous avons envoyé à votre nouveau numéro.',
-    'number-verification-sussessfull'    => 'Votre numéro a été vérifié avec succès, merci d\'attendre la mise à jour de votre profile.',
+    'not-registered'                       => 'Email/identifiant n\'est pas enregistré',
+    'verify'                               => 'Verification',
+    'enter-otp'                            => 'Entrer code OTP',
+    'did-not-recive-code'                  => 'Vous n\'avez pas reçu votre code?',
+    'resend_otp'                           => 'Renvoyer code OTP',
+    'verify-screen-msg'                    => 'Votre compte est actuellement inactif.<br/>Pour activer votre compte, merci de saisir le code OTP que nous vous avons envotyé',
+    'otp-sent'                             => 'Nous vous avons envoyé un code OTP à voter mobile.',
+    'verify-number'                        => 'Verifier les chiffres',
+    'get-verify-message'                   => 'Entrer le code OTP que nous vous avons envoyé à votre nouveau numéro.',
+    'number-verification-sussessfull'      => 'Votre numéro a été vérifié avec succès, merci d\'attendre la mise à jour de votre profile.',
     /*
       |--------------------------------------
       |   Register Page
       |--------------------------------------
      */
-    'registration'                                                => 'Inscription',
-    'full_name'                                                   => 'Nom complet',
-    'firstname'                                                   => 'Prénom',
-    'lastname'                                                    => 'Nom',
-    'profilepicture'                                              => 'Photo de profil',
-    'oldpassword'                                                 => 'Ancien mot de passe',
-    'newpassword'                                                 => 'Nouveau mot de passe',
-    'retype_password'                                             => 'Retapez le mot de passe',
-    'i_agree_to_the'                                              => 'J\'accepte les',
-    'terms'                                                       => 'termes',
-    'register'                                                    => 'S\'Inscrir',
-    'i_already_have_a_membership'                                 => 'Je suis déjà inscrit',
-    'see-profile1'                                                => 'Cliquez ici pour voir le profil de',
-    'see-profile2'                                                => 'Afficher le profile',
-    'activate_your_account_click_on_Link_that_send_to_your_mail'  => 'Activez votre compte ! Cliquez sur le lien envoyer dans votre messagerie',
+    'registration'                                                                                => 'Inscription',
+    'full_name'                                                                                   => 'Nom complet',
+    'firstname'                                                                                   => 'Prénom',
+    'lastname'                                                                                    => 'Nom',
+    'profilepicture'                                                                              => 'Photo de profil',
+    'oldpassword'                                                                                 => 'Ancien mot de passe',
+    'newpassword'                                                                                 => 'Nouveau mot de passe',
+    'retype_password'                                                                             => 'Retapez le mot de passe',
+    'i_agree_to_the'                                                                              => 'J\'accepte les',
+    'terms'                                                                                       => 'termes',
+    'register'                                                                                    => 'S\'Inscrir',
+    'i_already_have_a_membership'                                                                 => 'Je suis déjà inscrit',
+    'see-profile1'                                                                                => 'Cliquez ici pour voir le profil de',
+    'see-profile2'                                                                                => 'Afficher le profile',
+    'activate_your_account_click_on_Link_that_send_to_your_mail'                                  => 'Activez votre compte ! Cliquez sur le lien envoyer dans votre messagerie',
     'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble'                        => 'Activez votre compte ! Cliquez sur le lien envoyer dans votre messagerie ou connectez vous à votre compte et saisissez le code OTP code que nous vous avons envoyé à votre mobile',
     'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup' => 'Compte créé, Veuillez contacter l\'administrateur du système car nous n\'avons pas pu envoyer le code OTP à votre mobile et envoyez un email à votre adresse.',
-    'this_field_do_not_match_our_records'                         => 'Ce champ ne correspondent pas à nos enregistrements',
-    'we_have_e-mailed_your_password_reset_link'                   => 'Nous avons envoyé le lien de réinitialisation de mot de passe!',
-    "we_can't_find_a_user_with_that_e-mail_address"               => "Nous ne pouvons pas trouver un utilisateur avec cette adresse email",
+    'this_field_do_not_match_our_records'                                                         => 'Ce champ ne correspondent pas à nos enregistrements',
+    'we_have_e-mailed_your_password_reset_link'                                                   => 'Nous avons envoyé le lien de réinitialisation de mot de passe!',
+    "we_can't_find_a_user_with_that_e-mail_address"                                               => 'Nous ne pouvons pas trouver un utilisateur avec cette adresse email',
     /*
       |--------------------------------------
       |   Reset Password Page
       |--------------------------------------
      */
-    'reset_password' => 'Réinitialiser le mot de passe',
+    'reset_password'              => 'Réinitialiser le mot de passe',
     'password-reset-successfully' => 'Votre mot de passe a été réinitialisé. Connectez vous à votre compte avec le nouveau mot de passe',
     'password-can-not-reset'      => 'Nous n\'avons pas réinitialisé votre mot de passe, Merci de ré-essayer plus tard.',
     /*
@@ -143,7 +143,7 @@ return [
     'create_email'                                                                         => 'Créer un Email',
     'email_address'                                                                        => 'Adresse Email',
     'email_name'                                                                           => 'Nom Email',
-    'email_to'                                                                             => 'Email à', 
+    'email_to'                                                                             => 'Email à',
     'help_topic'                                                                           => 'Thème de support',
     'auto_response'                                                                        => 'Réponse automatique',
     'host_name'                                                                            => 'Nom d\'hôte',
@@ -215,7 +215,7 @@ return [
     'Assign ticket'             => 'Ticket assigné à un agent',
     'Create ticket'             => 'Email envoyé au client pour la création du ticket réussi',
     'Check ticket'              => 'si un client veut vérifier son ticket via le portail client alors un lien lui sera envoyé. Ce lien permet au client de voir les détails de son ticket, sans se connecter au système',
-  'Ticket reply agent'        => 'Une notification est envoyée à l\'email de l\'agent une fois que le client répond au ticket',
+  'Ticket reply agent'          => 'Une notification est envoyée à l\'email de l\'agent une fois que le client répond au ticket',
     'Registration notification' => 'Le mot de passe et le login sont envoyés par email lors de l\'inscription',
     'Reset password'            => 'Email avec le lien de réinitialisation du mot de passe',
     'Error report'              => 'Etat des erreurs',
@@ -355,7 +355,7 @@ return [
     'cron_notification'                   => 'Activer la notification cron',
     'cron'                                => 'Ordonnancement de tâches informatiques',
     'cron-jobs'                           => 'Tâches Cron',
-    'crone-url-message'                   => "Voici les URL des tâches du planificateur(cron job) de Faveo de votre système.",
+    'crone-url-message'                   => 'Voici les URL des tâches du planificateur(cron job) de Faveo de votre système.',
     'clipboard-copy-message'              => 'Copier dans le presse-papier',
     'click'                               => 'Cliquez ici',
     'check-cron-set'                      => 'Pour vérifier comment paramétrer les tâches cron sur votre serveur.',
@@ -890,9 +890,8 @@ return [
     'there_are_agents_assigned_to_this_group_please_unassign_them_from_this_group_to_delete'   => 'Il ya des agents assignés à ce groupe. Merci de les retirer de ce groupe pour pouvoir le supprimer',
     'group_cannot_delete'                                                                      => 'Le groupe ne peut pas être supprimé',
     'group_deleted_successfully'                                                               => 'Groupe supprimé avec succès',
-    'group_cannot_delete'                                                                    => 'Le groupe ne peut être supprimé',
+    'group_cannot_delete'                                                                      => 'Le groupe ne peut être supprimé',
     'failed_to_load_the_page'                                                                  => 'Echec du chargement de la page',
-
 
     /*
       |--------------------------------------
@@ -967,8 +966,6 @@ return [
     'unable_to_fetch_emails'                                                        => 'Impossible de synchroniser les emails',
     'reply_content_is_a_required_field'                                             => 'Le contenu de la réponse est un champ obligatoire',
     'internal_content_is_a_required_field'                                          => 'Le contenu interne est un champ obligatoire',
-
-
 
     /*
       |-----------------------------------------------
@@ -1268,7 +1265,6 @@ return [
     'manage_status'                         => 'Gérer statut',
     'notifications'                         => 'Notifications',
 
-
     'auto_close_workflow'               => 'Fermeture automatique du Workflow',
     'close_ticket_workflow_settings'    => 'Fermer les paramètres du Workflow de ticket',
     'successfully_saved_your_settings'  => 'Paramètres enregistrés avec succès',
@@ -1551,27 +1547,27 @@ return [
      * User Module
      * --------------------------------------------------------------------------------------------
      */
-     'agent_report'                                                 => 'Rapport Agent',
-     'assign_tickets'                                               => 'Assigner tickets',
-     'delete_agent'                                                 => 'Supprimer agent',
-     'delete_user'                                                  => 'Supprimer utilisateur',
-     'confirm_deletion'                                             => 'Confirmer suppression',
-     'delete_all_content'                                           => 'Supprimer tous les éléments',
-     'agent_profile'                                                => 'Profile Agent',
-     'change_role_to_admin'                                         => 'Changer role pour administrateur',
-     'change_role_to_user'                                          => 'Changer role pour utilisateur',
-     'change_role_to_agent'                                         => 'Changer role pour agent',
-     'change_password'                                              => 'Changer mot de passe',
-     'role_change'                                                  => 'Changement de rôle',
+     'agent_report'                                                         => 'Rapport Agent',
+     'assign_tickets'                                                       => 'Assigner tickets',
+     'delete_agent'                                                         => 'Supprimer agent',
+     'delete_user'                                                          => 'Supprimer utilisateur',
+     'confirm_deletion'                                                     => 'Confirmer suppression',
+     'delete_all_content'                                                   => 'Supprimer tous les éléments',
+     'agent_profile'                                                        => 'Profile Agent',
+     'change_role_to_admin'                                                 => 'Changer role pour administrateur',
+     'change_role_to_user'                                                  => 'Changer role pour utilisateur',
+     'change_role_to_agent'                                                 => 'Changer role pour agent',
+     'change_password'                                                      => 'Changer mot de passe',
+     'role_change'                                                          => 'Changement de rôle',
      'generateur de mot de passe'                                           => 'Password generator',
-     'depertment'                                                   => 'Departement',
-     'duetoday'                                                     => 'Prévu aujourd\'hui',
-     'today-due_tickets'                                            => 'Tickets prévus aujourd\'hui',
-     'password_change_successfully'                                 => 'Mot de passe changé avec succès',
-     'role_change_successfully'                                     => 'Role changé avec succès',
-     'user_delete_successfully'                                     => 'Utilisateur supprimé avec succès',
-     'agent_delete_successfully'                                    => 'Agent supprimé avec succès',
-     'select_another_agent'                                         => 'Selectionner un autre agent',
-     'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent supprimé avec succès et ticket assigné à un autre agent',
+     'depertment'                                                           => 'Departement',
+     'duetoday'                                                             => 'Prévu aujourd\'hui',
+     'today-due_tickets'                                                    => 'Tickets prévus aujourd\'hui',
+     'password_change_successfully'                                         => 'Mot de passe changé avec succès',
+     'role_change_successfully'                                             => 'Role changé avec succès',
+     'user_delete_successfully'                                             => 'Utilisateur supprimé avec succès',
+     'agent_delete_successfully'                                            => 'Agent supprimé avec succès',
+     'select_another_agent'                                                 => 'Selectionner un autre agent',
+     'agent_delete_successfully_and_ticket_assign_to_another_agent'         => 'Agent supprimé avec succès et ticket assigné à un autre agent',
 
 ];

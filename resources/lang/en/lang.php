@@ -948,8 +948,6 @@ return [
     'reply_content_is_a_required_field'                                  => 'Reply content is a required field',
     'internal_content_is_a_required_field'                               => 'Internal content is a required field',
 
-
-
     /*
       |-----------------------------------------------
       |  Profile
@@ -1247,7 +1245,6 @@ return [
     'security_settings_saved_successfully'  => 'Security settings saved successfully',
     'manage_status'                         => 'Manage status',
     'notifications'                         => 'Notifications',
-
 
     'auto_close_workflow'               => 'Auto-close workflow',
     'close_ticket_workflow_settings'    => 'Close ticket workflow settings',
@@ -1547,10 +1544,10 @@ return [
      'select_another_agent'                                         => 'Select another agent',
      'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
      //login,registration
-     'enter_your_email_here'=>'Enter your email here',
+     'enter_your_email_here'=> 'Enter your email here',
 
      /*********** Updated 3-12-2016 **********/
-     'activate'  => 'Activate',
+     'activate'                    => 'Activate',
      'system-email-not-configured' => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
 
 ];

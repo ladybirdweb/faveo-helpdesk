@@ -30,7 +30,6 @@ class PriorityRequest extends Request
     {
         return [
 
-
              'priority'                                      => 'required|max:10',
             'status'                                         => 'required',
             'priority_desc'                                  => 'required|max:255',
@@ -38,9 +37,6 @@ class PriorityRequest extends Request
              'ispublic'                                      => 'required',
              'priority_successfully_updated'                 => 'priority successfully updated',
                           'priority_successfully_created!!!' => 'priority successfully created',
-
-
-
 
         ];
     }

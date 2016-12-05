@@ -88,7 +88,6 @@ class ReportController extends Controller
 //            $help_topic = Help_topic::where('status', '=', '1')->min('id');
         }
 
-
         $return = '';
         $last = '';
         $j = 0;

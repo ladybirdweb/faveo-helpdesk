@@ -153,7 +153,6 @@ $users = DB::table('team_assign_agent')->select('team_assign_agent.id', 'team_as
                 return $full_name;
             })
 
-
             ->addColumn('active', function ($model) {
                 if ($model->active == '1') {
                     $role = "<a class='btn btn-success btn-xs'>".'Active'.'</a>';
@@ -163,7 +162,6 @@ $users = DB::table('team_assign_agent')->select('team_assign_agent.id', 'team_as
 
                 return $role;
             })
-
 
             ->addColumn('assign_group', function ($model) {
                 $group = Groups::whereId($model->assign_group)->first();
