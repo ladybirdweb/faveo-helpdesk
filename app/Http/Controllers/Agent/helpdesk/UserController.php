@@ -1005,15 +1005,17 @@ class UserController extends Controller
     }
 
     /**
-     * @category function to get user details and show in select field 
+     * @category function to get user details and show in select field
+     *
      * @param null
+     *
      * @return data
      */
     public function getAgentDetails()
     {
         $users = User::where('role', '<>', 'user')->where('active', '=', 1)->get();
         foreach ($users as $user) {
-             echo "<option value='user_$user->id'>".$user->full_name.'</option>';
+            echo "<option value='user_$user->id'>".$user->full_name.'</option>';
         }
     }
 }
