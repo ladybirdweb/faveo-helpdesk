@@ -179,28 +179,12 @@ class="active"
                 </div>
                 <div class="col-md-3">
 
-                    <script type="text/javascript">
-    $(document).ready(function () {
-        // var helpTopic = $("#selectid").val();
-        // send(helpTopic);
-        $("#selectid").on("change", function () {
-
-         $helpTopic = $("#selectid").val();
-           // send(helpTopic);
-        });
-        });
-        </script>
-
-
-
-
-
-
+    
                     <!-- assign to -->
                     <div class="form-group">
                         <label>{!! Lang::get('lang.assign_to') !!}:</label>
-                        <?php $agents = App\User::where('role', '!=', 'user')->where('primary_dpt','=',$helpTopic)->get(); ?>
-                        {!! Form::select('assignto', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        
+                        {!! Form::select('assignto', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')->toArray()],null,['class' => 'form-control select','id'=>'agent_id']) !!}
                     </div>
                 </div>
                 <div id="response" class="col-md-6 form-group"></div>
@@ -271,9 +255,24 @@ class="active"
 
             helpTopic = $("#selectid").val();
 
-            // alert(helpTopic);
+                $.ajax({
+                // url: "{{url('/get-helptopic-form')}}",
+                 url: '{{route("newticket1")}}',
+                data: {'helptopic': helpTopic},
+                type: "GET",
+                dataType: "html",
+                success: function (response) {
+                    // $("#response").html(response);
+                },
+                error: function (response) {
+                    // $("#response").html(response);
+                }
+            });
             send(helpTopic);
         });
+         
+        
+        
         function send(helpTopic) {
             $.ajax({
                 url: "{{url('/get-helptopic-form')}}",

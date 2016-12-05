@@ -277,14 +277,31 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function newticket(CountryCode $code)
+    public function newticket(CountryCode $code,Request $request)
     {
+        $helptopic=$request->helptopic;
+        // dd($helptopic);
+        $agents = User::where('role', '!=', 'user')->where('primary_dpt','=',$helptopic)->get(); 
         $location = GeoIP::getLocation();
         $phonecode = $code->where('iso', '=', $location->iso_code)->first();
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
 
-        return view('themes.default1.agent.helpdesk.ticket.new', compact('email_mandatory', 'settings'))->with('phonecode', $phonecode->phonecode);
+        return view('themes.default1.agent.helpdesk.ticket.new', compact('agents','email_mandatory', 'settings'))->with('phonecode', $phonecode->phonecode);
+    }
+
+
+     public function newticket1(CountryCode $code,Request $request)
+    {
+        $helptopic=$request->helptopic;
+        // dd($helptopic);
+        $agents = User::where('role', '!=', 'user')->where('primary_dpt','=',$helptopic)->get(); 
+        $location = GeoIP::getLocation();
+        $phonecode = $code->where('iso', '=', $location->iso_code)->first();
+        $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
+        $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
+
+        return view('themes.default1.agent.helpdesk.ticket.new', compact('agents','email_mandatory', 'settings'))->with('phonecode', $phonecode->phonecode);
     }
 
     /**

@@ -626,6 +626,8 @@ Route::group(['middleware' => ['web']], function () {
         });
         Route::get('/ticket/get-assigned', ['as' => 'get.assigned.ticket', 'uses' => 'Agent\helpdesk\TicketController@get_assigned']);  /* Get tickets in datatable */
         Route::get('/newticket', ['as' => 'newticket', 'uses' => 'Agent\helpdesk\TicketController@newticket']); /*  Get Create New Ticket */
+         Route::get('/newticket1', ['as' => 'newticket1', 'uses' => 'Agent\helpdesk\TicketController@newticket1']);
+
         Breadcrumbs::register('newticket', function ($breadcrumbs) {
             $breadcrumbs->parent('dashboard');
 
