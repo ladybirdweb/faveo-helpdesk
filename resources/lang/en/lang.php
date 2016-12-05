@@ -1544,15 +1544,15 @@ return [
      'select_another_agent'                                         => 'Select another agent',
      'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
      //login,registration
-<<<<<<< HEAD
+
      'enter_your_email_here'=>'Enter your email here',
      'login_to_start_your_session'=>'Login to start your session',
-=======
-     'enter_your_email_here'=> 'Enter your email here',
+
+     
 
      /*********** Updated 3-12-2016 **********/
      'activate'                    => 'Activate',
      'system-email-not-configured' => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
->>>>>>> refs/remotes/origin/developement
+
 
 ];

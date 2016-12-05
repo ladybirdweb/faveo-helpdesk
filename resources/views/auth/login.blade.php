@@ -107,14 +107,14 @@
 <script type="text/javascript" >try {if (top.location.hostname != self.location.hostname) { throw 1; }} catch (e) { top.location.href = self.location.href; }</script>
 </div></div>
  <div class="login-box" style=" width: 500px;
-    height: 150px;"  valign = "center">
+   "  valign = "center">
  <div class="form-border">
      
-                <div align="center">
+                <!-- <div align="center">
                  <h4 style="background-color: #0084b4;"> <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png')}}" width="100px;"></a>
-</h4>
+                 </h4>
                   
-                </div>
+                </div> -->
                
                 <div>
  <h4 class="box-title" align="center">{{Lang::get('lang.login_to_start_your_session')}}</h4>

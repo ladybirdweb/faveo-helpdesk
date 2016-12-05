@@ -277,31 +277,33 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function newticket(CountryCode $code,Request $request)
+    public function newticket(CountryCode $code)
     {
-        $helptopic=$request->helptopic;
-        // dd($helptopic);
-        $agents = User::where('role', '!=', 'user')->where('primary_dpt','=',$helptopic)->get(); 
+        
+        $assignto_agent=User::where('role', '!=', 'user')->where('primary_dpt','=',1)->get();
+        
         $location = GeoIP::getLocation();
         $phonecode = $code->where('iso', '=', $location->iso_code)->first();
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
 
-        return view('themes.default1.agent.helpdesk.ticket.new', compact('agents','email_mandatory', 'settings'))->with('phonecode', $phonecode->phonecode);
+        return view('themes.default1.agent.helpdesk.ticket.new', compact('assignto_agent','email_mandatory', 'settings'))->with('phonecode', $phonecode->phonecode);
     }
 
 
      public function newticket1(CountryCode $code,Request $request)
-    {
-        $helptopic=$request->helptopic;
-        // dd($helptopic);
-        $agents = User::where('role', '!=', 'user')->where('primary_dpt','=',$helptopic)->get(); 
-        $location = GeoIP::getLocation();
-        $phonecode = $code->where('iso', '=', $location->iso_code)->first();
-        $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
-        $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
+    {   
 
-        return view('themes.default1.agent.helpdesk.ticket.new', compact('agents','email_mandatory', 'settings'))->with('phonecode', $phonecode->phonecode);
+
+        $depertment_id=$request->helptopic;
+        $dept_id=Department::select('id')->where('id','=',$depertment_id)->first();
+        $assignto_agent = User::select('id','first_name')->where('role', '!=', 'user')->where('primary_dpt','=',$dept_id->id)->get();
+        $html = "";
+        foreach ($assignto_agent as  $agent) {
+            $html .= "<option value='".$agent->id."'>".$agent->first_name."</option>";
+        }
+        echo $html;
+        
     }
 
     /**
@@ -2584,9 +2586,16 @@ class TicketController extends Controller
                         //     return "<a href='' title=''><span style='color:".$rep."'>".ucfirst($username).'</span></a>';
                         // })
                         ->addColumn('assigned_to', function ($ticket) {
-                            if ($ticket->assigned_to == null) {
+                            if ($ticket->assigned_to == null && $ticket->team_id == null) {
                                 return "<span style='color:red'>Unassigned</span>";
-                            } else {
+                            } elseif($ticket->team_id != null){
+                                $assign = DB::table('teams')->where('id', '=', $ticket->team_id)->first();
+                                $url = route('user.show', $ticket->team_id);
+                                 // return "$assign->name";
+                                 return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.ucfirst($assign->name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:green'>".ucfirst($assign->name).'</span></a>';
+
+                            } 
+                            else{
                                 $assign = DB::table('users')->where('id', '=', $ticket->assigned_to)->first();
                                 $url = route('user.show', $ticket->assigned_to);
 

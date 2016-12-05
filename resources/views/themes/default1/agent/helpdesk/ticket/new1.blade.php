@@ -160,11 +160,11 @@ class="active"
                         <!-- helptopic -->
                         <?php $helptopic = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->get(); ?>
                         <select  name="helptopic" class="form-control select" id="selectid">
-                        <option>select Helptopic</option>
+                        <!-- <option>select agent</option> -->
                             @foreach($helptopic as $helptopic)
                             
-                         <option value="{{ $helptopic->department }}">{{ $helptopic->topic}}</option>
-                            @endforeach
+     <option value="{{ $helptopic->id }}">{{ $helptopic->topic}}</option>
+    @endforeach
                         </select>
                         <!-- {!! Form::select('helptopic', ['Helptopic'=>$helptopic->lists('topic','id')->toArray()],null,['class' => 'form-control select','id'=>'selectid']) !!} -->
                     </div>
@@ -191,7 +191,9 @@ class="active"
                     <div class="form-group">
                         <label>{!! Lang::get('lang.assign_to') !!}:</label>
                 <select  name="assignto" class="form-control select" id="agent_id">
-                <option value="">Select</option>
+                @foreach($assignto_agent as $assignto_agents)
+     <option value="{{ $assignto_agents->id }}">{{ $assignto_agents->first_name}}</option>
+              @endforeach
               </select>
                      
                     </div>
@@ -263,22 +265,23 @@ class="active"
         $("#selectid").on("change", function () {
 
             helpTopic = $("#selectid").val();
-            
+            alert(helpTopic);
 
                 $.ajax({
-               
+                // url: "{{url('/get-helptopic-form')}}",
                  url: '{{route("newticket1")}}',
                 data: {'helptopic': helpTopic},
                 type: "GET",
                 dataType: "html",
-                success: function (data) {
-                    $("#agent_id").empty();
-                     $(data).appendTo('#agent_id'); 
-                     
-                },
+                // success: function (response) {
+                //     // alert('ajex');
+                //      // window.location.reload(true);
+                //      // $('#agent_id').load();
+                //     // $('#agent_id').selectmenu('refresh');
+                // },
                 
             });
-            
+            send(helpTopic);
         });
          
         

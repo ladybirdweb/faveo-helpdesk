@@ -98,11 +98,11 @@
  <div class="login-box" style=" width: 500px;"  valign = "center">
  <div class="form-border">
      
-<div align="center">
+<!-- <div align="center">
                  <h4 style="background-color: #0084b4;"> <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png')}}" width="100px;"></a>
                  </h4>
                   
-                </div>
+                </div> -->
                
                 <div>
  <h3 class="box-title" align="center">Forgot your password</h3>
