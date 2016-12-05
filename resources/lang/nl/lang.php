@@ -11,7 +11,7 @@
  |--------------------------------------------------------------------------------
  |        Added by  :
  |     translated   : [NO/YES]
- |      Added on    :    
+ |      Added on    :
  */
 
 return [
@@ -55,7 +55,7 @@ return [
       |   Login Page
       |--------------------------------------
      */
-    'Login_to_start_your_session'        => 'Log in om te beginnen',
+    'login_to_start_your_session'        => 'Log in om te beginnen',
     'login'                              => 'Inloggen',
     'remember'                           => 'Onthoud mij',
     'signmein'                           => 'Inloggen',
@@ -83,26 +83,26 @@ return [
       |   Register Page
       |--------------------------------------
      */
-'registration' 																					=> 'Registratie',
-'full_name' 																					=> 'Volledige naam',
-'firstname' 																					=> 'Voornaam',
-'lastname' 																						=> 'Achternaam',
-'profilepicture' 																				=> 'Profielfoto',
-'oldpassword' 																					=> 'Oude wachtwoord',
-'newpassword' 																					=> 'Nieuwe wachtwoord',
-'retype_password' 																				=> 'Herhaal wachtwoord',
-'i_agree_to_the' 																				=> 'Ik ga akkoord met de',
-'terms' 																						=> 'algemene voorwaarden',
-'register' 																						=> 'Registreren',
-'i_already_have_a_membership' 																	=> 'Ik heb al een profiel',
-'see-profile1' 																					=> 'Klik hier om dit te bekijken ',
-'see-profile2' 																					=> 's profiel',
-'activate_your_account_click_on_Link_that_send_to_your_mail' 									=> 'Activeer je account ! Klik op de link welke we naar je e-mailadres hebben gestuurd',
-'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble' 							=> 'Activeer je account ! Klik op de link welke we naar je e-mailadres hebben gestuur of login op je account en voer de OTP code in welke we naar je mobiele nummer hebben gestuurd.',
-'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup' 	=> 'Account aangemaakt. Neem contact op met de systeembeheer want we konden geen OTP code naar je mobiele nummer verzenden, ook konden we geen e-mail versturen naar je e-mailadres.',
-'this_field_do_not_match_our_records' 															=> 'Dit veld komt niet overeen met onze gegevens.',
-'we_have_e-mailed_your_password_reset_link' 													=> 'We hebben een link verstuurd om je wachtwoord te resetten!',
-"we_can't_find_a_user_with_that_e-mail_address" 												=> 'We kunnen geen gebruiker met dat e-mailadres vinden.',
+'registration'                                                                                    => 'Registratie',
+'full_name'                                                                                       => 'Volledige naam',
+'firstname'                                                                                       => 'Voornaam',
+'lastname'                                                                                        => 'Achternaam',
+'profilepicture'                                                                                  => 'Profielfoto',
+'oldpassword'                                                                                     => 'Oude wachtwoord',
+'newpassword'                                                                                     => 'Nieuwe wachtwoord',
+'retype_password'                                                                                 => 'Herhaal wachtwoord',
+'i_agree_to_the'                                                                                  => 'Ik ga akkoord met de',
+'terms'                                                                                           => 'algemene voorwaarden',
+'register'                                                                                        => 'Registreren',
+'i_already_have_a_membership'                                                                     => 'Ik heb al een profiel',
+'see-profile1'                                                                                    => 'Klik hier om dit te bekijken ',
+'see-profile2'                                                                                    => 's profiel',
+'activate_your_account_click_on_Link_that_send_to_your_mail'                                      => 'Activeer je account ! Klik op de link welke we naar je e-mailadres hebben gestuurd',
+'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble'                            => 'Activeer je account ! Klik op de link welke we naar je e-mailadres hebben gestuur of login op je account en voer de OTP code in welke we naar je mobiele nummer hebben gestuurd.',
+'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup'     => 'Account aangemaakt. Neem contact op met de systeembeheer want we konden geen OTP code naar je mobiele nummer verzenden, ook konden we geen e-mail versturen naar je e-mailadres.',
+'this_field_do_not_match_our_records'                                                             => 'Dit veld komt niet overeen met onze gegevens.',
+'we_have_e-mailed_your_password_reset_link'                                                       => 'We hebben een link verstuurd om je wachtwoord te resetten!',
+"we_can't_find_a_user_with_that_e-mail_address"                                                   => 'We kunnen geen gebruiker met dat e-mailadres vinden.',
     /*
       |--------------------------------------
       |   Reset Password Page
@@ -121,7 +121,7 @@ return [
     'send_password_reset_link'      => 'Stuur wachtwoord reset link',
     'enter_email_to_reset_password' => 'Voer een e-mailadres of mobiel nummer in om je wachtwoord te resetten',
     'link'                          => 'Link',
-    'email_or_mobile'               => 'E-mailadres of mobiele telefoonnummer', 
+    'email_or_mobile'               => 'E-mailadres of mobiele telefoonnummer',
     /*
       |----------------------------------------------------------------------------------------
       | Emails Pages [English(en)]
@@ -539,8 +539,8 @@ return [
     'plugin-info'           => 'Ben je een programmeur? We moedigen je aan om je eigen plugins te schrijven en deze beschikbaar te maken voor de community.',
     'plugin-info-pro'       => 'Om de plugins te bekijken welke beschikbaar zijn bij de PRO versie van Faveo;',
     'click-here'            => 'Klik hier',
-    
-	/*
+
+    /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [English(en)]
       |----------------------------------------------------------------------------------------
@@ -686,7 +686,7 @@ return [
     'are_you_sure_you_want_to_delete'       => 'Weet je zeker dat je dit wil verwijderen?',
     'close'                                 => 'Sluiten',
     'instructions'                          => 'Instructies',
-    'instructions_on_creating_form'         => "Selecteer hieronder welk soort veld je wil toevoegen. Vergeet niet om de veldopties in te stellen en scheidt de waarden met een komma. Als je klaar bent met het maken van het formulier kun je deze opslaan door te kiezen voor: Formulier opslaan",
+    'instructions_on_creating_form'         => 'Selecteer hieronder welk soort veld je wil toevoegen. Vergeet niet om de veldopties in te stellen en scheidt de waarden met een komma. Als je klaar bent met het maken van het formulier kun je deze opslaan door te kiezen voor: Formulier opslaan',
     'form_properties'                       => 'Eigenschappen formulier',
     'adding_fields'                         => 'Velden toevoegen',
     'click_add_fields_button_to_add_fields' => "Klik op de knop <b>'Velden toevoegen'</b> om een veld toe te voegen",
@@ -1062,7 +1062,7 @@ return [
     'please_select_an_organization'     => 'Selecteer een organisatie',
     'please_select_an_user'             => 'Selecteer een gebruiker',
     'organization_profile'              => 'Organisatie profiel',
-    'organization-s_head'               => "Organisatie directeur",
+    'organization-s_head'               => 'Organisatie directeur',
     'select_department_manager'         => 'Selecteer afdelingsmanager',
     'select_organization_manager'       => 'Selecteer organisatiemanager',
     'users_of'                          => 'Gebruikers van',
@@ -1389,7 +1389,7 @@ return [
     'password_updated_sucessfully'                                                     => 'Wachtwoord succesvol bijgewerkt',
     'password_was_not_updated_incorrect_old_password'                                  => 'Wachtwoord niet bijgewerkt. Het oude wachtwoord klopt niet',
     'there_is_no_such_ticket_number'                                                   => 'Dit ticket nummer bestaat niet',
-    "email_didn't_match_with_ticket_number"                                            => "E-mail adres hoort niet bij dit ticket nummer",
+    "email_didn't_match_with_ticket_number"                                            => 'E-mail adres hoort niet bij dit ticket nummer',
     'we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'        => 'We hebben een link naar je e-mailadres gestuurd. Klik op de link in het bericht om je ticket te bekijken',
     'no_records_on_publish_time'                                                       => 'Geen informatie gevonden op dit tijdstip',
     'your_details_send_to_system'                                                      => 'Je informatie is naar het systeem verzonden',

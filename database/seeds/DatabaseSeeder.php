@@ -1985,10 +1985,7 @@ class DatabaseSeeder extends Seeder
             'numcode'             => '716',
             'phonecode'           => '263', ]);
 
-
-
         Security::create(['id' => '1', 'lockout_message' => 'You have been locked out of application due to too many failed login attempts.', 'backlist_offender' => '0', 'backlist_threshold' => '15', 'lockout_period' => '15', 'days_to_keep_logs' => '0']);
-
 
         TemplateSet::create(['id' => '1', 'name' => 'default', 'active' => '1']);
 
@@ -2006,7 +2003,6 @@ class DatabaseSeeder extends Seeder
         TemplateType::create(['id' => '12', 'name' => 'team_assign_ticket']);
         TemplateType::create(['id' => '13', 'name' => 'reset_new_password']);
 
-
         Template::create(['id' => '1', 'variable' => '0', 'name' => 'This template is for sending notice to agent when ticket is assigned to them', 'type' => '1', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to you by {!!$ticket_assigner!!} <br/> Please check and resppond on the ticket.<br /> Link: {!!$ticket_link!!}<br /><br />Thank You<br />Kind Regards,<br /> {!!$system_from!!}</div>', 'set_id' => '1']);
         Template::create(['id' => '2', 'variable' => '1', 'name' => 'This template is for sending notice to client with ticket link to check ticket without logging in to system', 'type' => '2', 'subject' => 'Check your Ticket', 'message' => '<div>Hello {!!$user!!},<br/><br/>Click the link below to view your requested ticket<br/> {!!$ticket_link_with_number!!}<br/><br/>Kind Regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
         Template::create(['id' => '3', 'variable' => '0', 'name' => 'This template is for sending notice to client when ticket status is changed to close', 'type' => '3', 'message' => '<div>Hello,<br/><br/>This message is regarding your ticket ID {!!$ticket_number!!}. We are changing the status of this ticket to "Closed" as the issue appears to be resolved.<br/><br/>Thank you<br/>Kind regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
@@ -2020,7 +2016,6 @@ class DatabaseSeeder extends Seeder
         Template::create(['id' => '11', 'variable' => '1', 'name' => 'This template is for sending notice to client about registration confirmation link', 'type' => '11', 'subject' => 'Verify your email address', 'message' => '<p>Hello {!!$user!!}, </p><p>This email is confirmation that you are now registered at our helpdesk.</p><p><b>Registered Email:</b> {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p> {!!$system_from!!} </p>', 'set_id' => '1']);
         Template::create(['id' => '12', 'variable' => '1', 'name' => 'This template is for sending notice to team when ticket is assigned to team', 'type' => '12', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to your team : {!!$team!!} by {!!$ticket_assigner!!} <br /><br />Thank You<br />Kind Regards,<br />{!!$system_from!!}</div>', 'set_id' => '1']);
         Template::create(['id' => '13', 'variable' => '1', 'name' => 'This template is for sending notice to client when password is changed', 'type' => '13', 'subject' => 'Verify your email address', 'message' => 'Hello {!!$user!!},<br /><br />Your password is successfully changed.Your new password is : {!!$user_password!!}<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', 'set_id' => '1']);
-
 
         /*
          * All the common settings will be listed here
@@ -2037,7 +2032,6 @@ class DatabaseSeeder extends Seeder
          */
         Rating::create(['id' => '1', 'name' => 'OverAll Satisfaction', 'display_order' => '1', 'allow_modification' => '1', 'rating_scale' => '5', 'rating_area' => 'Helpdesk Area']);
         Rating::create(['id' => '2', 'name' => 'Reply Rating', 'display_order' => '1', 'allow_modification' => '1', 'rating_scale' => '5', 'rating_area' => 'Comment Area']);
-
 
         Limit_Login::create(['id' => '1']);
     }

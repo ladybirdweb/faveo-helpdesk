@@ -36,7 +36,6 @@ return [
         'image/gif',
     ],
 
-
     // valid file mimetypes (only when '/laravel-filemanager?type=Files')
     'valid_file_mimetypes' => [
         'image/jpeg',

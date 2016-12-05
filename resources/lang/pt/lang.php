@@ -12,7 +12,7 @@
  |--------------------------------------------------------------------------------
  |        Added by  :
  |     translated   : [NO/YES]
- |      Added on    :    
+ |      Added on    :
  */
 return [
     /*
@@ -38,7 +38,7 @@ return [
     'required-error'                                                    => 'Preencha todos os campos obrigatórios',
     'invalid'                                                           => 'Usuário ou senha incorretos',
     'sorry_something_went_wrong'                                        => 'Desculpe, algo esta errado',
-    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'        => "Estamos trabalhando para corrigir essa situação.",
+    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'        => 'Estamos trabalhando para corrigir essa situação.',
     'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'    => 'Desculpe, a página não pode ser encontrada.',
     'go_back'                                                           => 'Voltar',
     'the_board_is_offline'                                              => 'A página está Offline',
@@ -48,7 +48,7 @@ return [
       |--------------------------------------
      */
 
-    'Login_to_start_your_session'           => 'Efetue o login para iniciar a sessão',
+    'login_to_start_your_session'           => 'Efetue o login para iniciar a sessão',
     'login'                                 => 'Login',
     'remember'                              => 'Me lembrar',
     'signmein'                              => 'Inscreva-se',
@@ -83,8 +83,7 @@ return [
     'activate_your_account_click_on_Link_that_send_to_your_mail'  => 'Ative sua conta ! Clique no link enviado para o seu e-mail',
     'this_field_do_not_match_our_records'                         => 'Campo não correspondente.',
     'we_have_e-mailed_your_password_reset_link'                   => 'Enviamos um link para redefinir a senha!',
-    "we_can't_find_a_user_with_that_e-mail_address"               => "Nenhum usuário cadastrado com esse endereço de e-mail.",
-
+    "we_can't_find_a_user_with_that_e-mail_address"               => 'Nenhum usuário cadastrado com esse endereço de e-mail.',
 
     /*
       |--------------------------------------
@@ -118,42 +117,42 @@ return [
       |  Emails Create Page
       |--------------------------------------
      */
-    'emails'                                        => 'E-mails',
-    'incoming_emails'                               => 'Caixa de entrada',
-    'reuired_authentication'                        => 'Requer autenticação',
-    'fetching_email_via_imap'                       => 'Buscando e-mail via IMAP',
-    'create_email'                                  => 'Criar E-mail',
-    'email_address'                                 => 'Endereço de E-mail',
-    'email_name'                                    => 'Nome de E-mail',
-    'help_topic'                                    => 'Tópico de ajuda',
-    'auto_response'                                 => 'Resposta automática',
-    'host_name'                                     => 'Nome do Host',
-    'port_number'                                   => 'Número da Porta',
-    'mail_box_protocol'                             => 'Protocolo de Caixa de E-mail',
-    'authentication_required'                       => 'Requer autenticação',
-    'yes'                                           => 'Sim',
-    'no'                                            => 'Não',
-    'header_spoofing'                               => 'Mascarar Cabeçalho',
-    'allow_for_this_email'                          => 'Permitir este E-mail',
-    'imap_config'                                   => 'Configuração IMAP',
-    'email_information_and_settings'                => 'Informações e configurações de E-mail',
-    'incoming_email_information'                    => 'Informações de E-mails recebidos',
-    'outgoing_email_information'                    => 'Informações de E-mails enviados',
-    'new_ticket_settings'                           => 'Configurações de novos tickets',
-    'protocol'                                      => 'Protocolo',
-    'fetching_protocol'                             => 'Protocolo de busca',
-    'transfer_protocol'                             => 'Protocolo de transferência',
-    'from_name'                                     => 'Destinatário',
-    'add_an_email'                                  => 'Novo E-mail',
-    'edit_an_email'                                 => 'Editar E-mail',
-    'disable_for_this_email_address'                => 'Desabilitado para o endereço de E-mail',
-    'validate_certificates_from_tls_or_ssl_server'  => 'Validar Certificados do servidor TLS/SSL',
-    'authentication'                                => 'Autenticação',
-    'incoming_email_connection_failed_please_check_email_credentials_or_imap_settings'     =>  'Conexão a caixa de entrada falhou! Verifique as credencias de E-mail ou as configurações IMAP',
-    'outgoing_email_connection_failed'      =>  'Conexão a caixa de saida falhou',
-    'you_cannot_delete_system_default_email'    =>  'Não é possível excluir o E-mail padrão do sistema',
-    'email_deleted_sucessfully'         =>      'E-mail deletado com sucesso',
-    'email_can_not_delete'    =>   'E-mail não pode ser deletado ',
+    'emails'                                                                               => 'E-mails',
+    'incoming_emails'                                                                      => 'Caixa de entrada',
+    'reuired_authentication'                                                               => 'Requer autenticação',
+    'fetching_email_via_imap'                                                              => 'Buscando e-mail via IMAP',
+    'create_email'                                                                         => 'Criar E-mail',
+    'email_address'                                                                        => 'Endereço de E-mail',
+    'email_name'                                                                           => 'Nome de E-mail',
+    'help_topic'                                                                           => 'Tópico de ajuda',
+    'auto_response'                                                                        => 'Resposta automática',
+    'host_name'                                                                            => 'Nome do Host',
+    'port_number'                                                                          => 'Número da Porta',
+    'mail_box_protocol'                                                                    => 'Protocolo de Caixa de E-mail',
+    'authentication_required'                                                              => 'Requer autenticação',
+    'yes'                                                                                  => 'Sim',
+    'no'                                                                                   => 'Não',
+    'header_spoofing'                                                                      => 'Mascarar Cabeçalho',
+    'allow_for_this_email'                                                                 => 'Permitir este E-mail',
+    'imap_config'                                                                          => 'Configuração IMAP',
+    'email_information_and_settings'                                                       => 'Informações e configurações de E-mail',
+    'incoming_email_information'                                                           => 'Informações de E-mails recebidos',
+    'outgoing_email_information'                                                           => 'Informações de E-mails enviados',
+    'new_ticket_settings'                                                                  => 'Configurações de novos tickets',
+    'protocol'                                                                             => 'Protocolo',
+    'fetching_protocol'                                                                    => 'Protocolo de busca',
+    'transfer_protocol'                                                                    => 'Protocolo de transferência',
+    'from_name'                                                                            => 'Destinatário',
+    'add_an_email'                                                                         => 'Novo E-mail',
+    'edit_an_email'                                                                        => 'Editar E-mail',
+    'disable_for_this_email_address'                                                       => 'Desabilitado para o endereço de E-mail',
+    'validate_certificates_from_tls_or_ssl_server'                                         => 'Validar Certificados do servidor TLS/SSL',
+    'authentication'                                                                       => 'Autenticação',
+    'incoming_email_connection_failed_please_check_email_credentials_or_imap_settings'     => 'Conexão a caixa de entrada falhou! Verifique as credencias de E-mail ou as configurações IMAP',
+    'outgoing_email_connection_failed'                                                     => 'Conexão a caixa de saida falhou',
+    'you_cannot_delete_system_default_email'                                               => 'Não é possível excluir o E-mail padrão do sistema',
+    'email_deleted_sucessfully'                                                            => 'E-mail deletado com sucesso',
+    'email_can_not_delete'                                                                 => 'E-mail não pode ser deletado ',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
@@ -322,7 +321,7 @@ return [
     'cron_notification'                   => 'Ativar notificação cron',
     'cron'                                => 'Agenda de tarefas',
     'cron-jobs'                           => 'Tarefas Cron',
-    'crone-url-message'                   => "Estas são as agenda de tarefas para o seu sistema.",
+    'crone-url-message'                   => 'Estas são as agenda de tarefas para o seu sistema.',
     'clipboard-copy-message'              => 'Copiado para área de transferência.',
     'click'                               => 'Clique aqui',
     'check-cron-set'                      => 'Pode verificar como criar agenda de tarefas em seu servidor.',
@@ -444,27 +443,27 @@ return [
       |------------------------------------------------
      */
     'language-settings'          => 'Configurações de linguagem',
-    'iso-code'           => 'ISO-CODE',
-    'download'           => 'Download',
-    'upload_file'        => 'Upload de arquivos',
-    'enter_iso-code'     => 'Informe o iso-code',
-    'eg.'                => 'Exemplo',
-    'for'                => 'Para',
-    'english'            => 'Inglês',
-    'language-name'      => 'Nome da linguagem',
-    'file'               => 'Arquivo',
-    'read-more'          => 'Leia mais.',
-    'enable_lang'        => 'Ativar.',
-    'add-lang-package'   => 'Adicionar novo pacote de linguagem',
-    'package_exist'      => 'O pacote já existe.',
-    'iso-code-error'     => 'Iso-code esta errado. Informe um iso-code correto.',
-    'zipp-error'         => 'Erro no arquivo Zip. Ele deve conter apenas arquivos php.',
-    'upload-success'     => 'Carregado com sucesso.',
-    'file-error'         => 'Erro no arquivo ou arquivo inválido.',
-    'delete-success'     => 'Pacote de linguagem deletado com sucesso.',
-    'lang-doesnot-exist' => 'Pacote de linguagem não existe.',
-    'active-lang-error'  => 'Pacote de linguagem não pode ser excluído quando esta ativo.',
-    'language-error'     => 'Pacote de linguagem não encontrado.',
+    'iso-code'                   => 'ISO-CODE',
+    'download'                   => 'Download',
+    'upload_file'                => 'Upload de arquivos',
+    'enter_iso-code'             => 'Informe o iso-code',
+    'eg.'                        => 'Exemplo',
+    'for'                        => 'Para',
+    'english'                    => 'Inglês',
+    'language-name'              => 'Nome da linguagem',
+    'file'                       => 'Arquivo',
+    'read-more'                  => 'Leia mais.',
+    'enable_lang'                => 'Ativar.',
+    'add-lang-package'           => 'Adicionar novo pacote de linguagem',
+    'package_exist'              => 'O pacote já existe.',
+    'iso-code-error'             => 'Iso-code esta errado. Informe um iso-code correto.',
+    'zipp-error'                 => 'Erro no arquivo Zip. Ele deve conter apenas arquivos php.',
+    'upload-success'             => 'Carregado com sucesso.',
+    'file-error'                 => 'Erro no arquivo ou arquivo inválido.',
+    'delete-success'             => 'Pacote de linguagem deletado com sucesso.',
+    'lang-doesnot-exist'         => 'Pacote de linguagem não existe.',
+    'active-lang-error'          => 'Pacote de linguagem não pode ser excluído quando esta ativo.',
+    'language-error'             => 'Pacote de linguagem não encontrado.',
 
     /*
       |--------------------------------------
@@ -537,7 +536,7 @@ return [
     'make-default-helptopic'                => 'Definir tópico de ajuda como padrão',
     /*
       |--------------------------------------
-      |  SLA plan Index Page 
+      |  SLA plan Index Page
       |--------------------------------------
      */
     'sla_plans'    => 'SLA Plans',
@@ -546,7 +545,7 @@ return [
     'added_date'   => 'Added Date',
     /*
       |--------------------------------------
-      |  SLA plan Create Page 
+      |  SLA plan Create Page
       |--------------------------------------
      */
     'transient'                                             => 'Transient',
@@ -849,10 +848,9 @@ return [
     'group_cannot_delete'                                                                      => 'Grupo não pode ser deletado',
     'failed_to_load_the_page'                                                                  => 'Falha ao carregar a página',
 
-
     /*
       |--------------------------------------
-      |  SMTP Page 
+      |  SMTP Page
       |--------------------------------------
      */
     'driver'     => 'Driver',
@@ -922,9 +920,6 @@ return [
     'tickets_have_been_closed'                                                      => 'Os tickets selecionados foram fechados.',
     'tickets_have_been_opened'                                                      => 'Os tickets selecionados foram abertos.',
 
-
-
-
     /*
       |-----------------------------------------------
       |  Profile
@@ -969,7 +964,7 @@ return [
     'user'                                              => 'Usuário',
     'users'                                             => 'Usuários',
     'create_user'                                       => 'Criar usuário',
-    'edit_user'                                         => 'Editar usuário', 
+    'edit_user'                                         => 'Editar usuário',
     'full_name'                                         => 'Nome completo',
     'mobile'                                            => 'Mobile',
     'last_login'                                        => 'Último login',
@@ -1001,7 +996,7 @@ return [
     'please_select_an_organization'        => 'Selecione uma organização por favor',
     'please_select_an_user'                => 'Selecione um usuário por favor',
     'organization_profile'                 => 'Perfil de organização',
-    'organization-s_head'                  => "Organização mestre",
+    'organization-s_head'                  => 'Organização mestre',
     'select_department_manager'            => 'Selecione o gerente de departamento',
     'users_of'                             => 'Usuário do',
     'organization_created_successfully'    => 'Organização criada com sucesso',
@@ -1219,7 +1214,6 @@ return [
     'manage_status'                         => 'Gerenciar Status',
     'notifications'                         => 'Notificações',
 
-
     'auto_close_workflow'               => 'Finalizar automaticamente Workflow',
     'close_ticket_workflow_settings'    => 'Fechar configurações do workflow',
     'successfully_saved_your_settings'  => 'Configurações salvas com sucesso.',
@@ -1333,7 +1327,7 @@ return [
     'password_updated_sucessfully'                                                     => 'Senha atualizada com sucesso',
     'password_was_not_updated_incorrect_old_password'                                  => 'A senha não foi atualizada. Senha antiga incorreta',
     'there_is_no_such_ticket_number'                                                   => 'Não existe nenhum ticket com este número',
-    "email_didn't_match_with_ticket_number"                                            => "E-mail não corresponde com o número do ticket",
+    "email_didn't_match_with_ticket_number"                                            => 'E-mail não corresponde com o número do ticket',
     'we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'        => 'Enviamos-lhe um link por e-mail. Por favor, clique no link para ver o ticket',
     'no_records_on_publish_time'                                                       => 'Não há registros neste período',
     'your_details_send_to_system'                                                      => 'Enviar seus dados para o sistema',
@@ -1349,7 +1343,7 @@ return [
     'failed_to_send_email_contact_administrator'                                       => 'Envio de email falhou. Entre em contato com administrador do sistema',
     /*
     * |---------------------------------------------------------------------------------------
-      |Api settings 
+      |Api settings
     * |----------------------------------------------------------------------------------
     * |The following lanuage line used to get english traslation of api settings in admin panel
     * |
@@ -1387,5 +1381,5 @@ return [
    'that_email_is not_available_in_this_system'     => 'Esse e-mail não está disponível neste sistema',
    'use_subject'                                    => 'Use Assunto',
    'reopen'                                         => 'Reabrir',
-    
+
 ];

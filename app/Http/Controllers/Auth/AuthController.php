@@ -150,41 +150,44 @@ class AuthController extends Controller
      */
     public function postRegister(User $user, RegisterRequest $request)
     {
-        $request_array = $request->input();
-        $password = Hash::make($request->input('password'));
-        $user->password = $password;
-        $name = $request->input('full_name');
-        $user->first_name = $name;
-        if ($request_array['email'] == '') {
-            $user->email = null;
-        } else {
-            $user->email = $request->input('email');
-        }
-        if ($request_array['mobile'] == '') {
-            $user->mobile = null;
-        } else {
-            $user->mobile = $request->input('mobile');
-        }
-        if ($request_array['code'] == '') {
-            $user->country_code = 0;
-        } else {
-            $user->country_code = $request->input('code');
-        }
-        if ($request_array['email'] != '') {
-            $user->user_name = $request->input('email');
-        } else {
-            $user->user_name = $request->input('mobile');
-        }
-        $user->role = 'user';
-        $code = str_random(60);
-        $user->remember_token = $code;
-        $user->save();
-        $message12 = '';
-        $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
-        $sms = Plugin::select('status')->where('name', '=', 'SMS')->first();
-        // Event for login
-        \Event::fire(new \App\Events\LoginEvent($request));
-        $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/'.$code)]);
+        try {
+            $request_array = $request->input();
+            $password = Hash::make($request->input('password'));
+            $user->password = $password;
+            $name = $request->input('full_name');
+            $user->first_name = $name;
+            if ($request_array['email'] == '') {
+                $user->email = null;
+            } else {
+                $user->email = $request->input('email');
+            }
+            if ($request_array['mobile'] == '') {
+                $user->mobile = null;
+            } else {
+                $user->mobile = $request->input('mobile');
+            }
+            if ($request_array['code'] == '') {
+                $user->country_code = 0;
+            } else {
+                $user->country_code = $request->input('code');
+            }
+            if ($request_array['email'] != '') {
+                $user->user_name = $request->input('email');
+            } else {
+                $user->user_name = $request->input('mobile');
+            }
+            $user->role = 'user';
+            $code = str_random(60);
+            $user->remember_token = $code;
+            $user->save();
+            $message12 = '';
+            $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
+            $sms = Plugin::select('status')->where('name', '=', 'SMS')->first();
+            // Event for login
+            \Event::fire(new \App\Events\LoginEvent($request));
+            if ($request_array['email'] != '') {
+                $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/'.$code)]);
+            }
             if ($settings->status == 1 || $settings->status == '1') {
                 if (count($sms) > 0) {
                     if ($sms->status == 1 || $sms->status == '1') {
@@ -199,7 +202,10 @@ class AuthController extends Controller
                 $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
             }
 
-        return redirect('home')->with('success', $message12);
+            return redirect('home')->with('success', $message12);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('fails', $e->getMessage());
+        }
     }
 
     /**

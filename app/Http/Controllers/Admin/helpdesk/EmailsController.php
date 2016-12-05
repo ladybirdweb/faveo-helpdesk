@@ -639,7 +639,8 @@ class EmailsController extends Controller
         $controller->fetch($email);
     }
 
-    public function checkMail($request) {
+    public function checkMail($request)
+    {
         $mailservice_id = $request->input('sending_protocol');
         $driver = $this->getDriver($mailservice_id);
         $username = $request->input('email_address');
@@ -657,6 +658,7 @@ class EmailsController extends Controller
         $transport->setPassword($password);
         $mailer = \Swift_Mailer::newInstance($transport);
         $mailer->getTransport()->start();
+
         return 1;
     }
 }

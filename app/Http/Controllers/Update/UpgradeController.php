@@ -137,7 +137,6 @@ class UpgradeController extends Controller
                     continue;
                 }
 
-
                 //Make the directory if we need to...
                 if (!is_dir($update.'/'.$thisFileDir.'/')) {
                     \File::makeDirectory($update.'/'.$thisFileDir, 0775, true, true);
@@ -251,7 +250,6 @@ class UpgradeController extends Controller
             }
 
             return redirect('dashboard')->with('fails', 'Could not find latest realeases from repository.');
-
 
 //            else {
 //                return redirect()->back();

@@ -57,6 +57,7 @@ class = "active"
     @if(Session::has('check'))
     <?php goto a; ?>
     @endif
+    @if(!Session::has('error'))
     <div class="alert alert-danger alert-dismissable">
         <i class="fa fa-ban"></i>
         <b>{!! Lang::get('lang.alert') !!} !</b>
@@ -67,6 +68,7 @@ class = "active"
             @endforeach
         </ul>
     </div>
+    @endif
     <?php a: ?>
     @endif
     <!-- open a form -->

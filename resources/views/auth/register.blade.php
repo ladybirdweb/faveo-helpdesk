@@ -14,26 +14,6 @@
         <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css">
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 @stop
-@if(Session::has('status'))
-<div class="alert alert-success alert-dismissable">
-    <i class="fa  fa-check-circle"> </i> <b> {!! Lang::get('lang.success') !!} </b>
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    {{Session::get('status')}}
-</div>
-@endif
-
-<!-- 
-@if (count($errors) > 0)
-<div class="alert alert-danger alert-dismissable">
-    <i class="fa fa-ban"></i>
-    <b>{!! Lang::get('lang.alert') !!} !</b>
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    @foreach ($errors->all() as $error)
-    <li>{{ $error }}</li>
-    @endforeach
-</div>
-@endif -->
-
 
 @section('breadcrumb')
     <div class="site-hero clearfix">
@@ -44,6 +24,13 @@
     </div>
 @stop
 @section('content')
+@if(Session::has('status'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fa  fa-check-circle"> </i> <b> {!! Lang::get('lang.success') !!} </b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('status')}}
+</div>
+@endif
 
 @if (count($errors) > 0)
 <div class="alert alert-danger alert-dismissable">
@@ -117,7 +104,6 @@
             
  {!! Form::text('full_name',null,['placeholder'=>Lang::get('lang.full_name'),'class' => 'form-control']) !!}
  <span class="glyphicon glyphicon-user form-control-feedback"></span>
-         {!! $errors->first('full_name', '<spam class="help-block">:message</spam>') !!}
 
 </div>
 <!-- Email -->
@@ -125,13 +111,11 @@
 <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
     {!! Form::text('email',null,['placeholder'=>Lang::get('lang.email'),'class' => 'form-control']) !!}
     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-    {!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
 </div>
 @elseif (($settings->status == 0 || $settings->status == '0') && ($email_mandatory->status == 0 || $email_mandatory->status == '0'))
 <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
     {!! Form::text('email',null,['placeholder'=>Lang::get('lang.email'),'class' => 'form-control']) !!}
     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-    {!! $errors->first('email', '<spam class="help-block">:message</spam>') !!}
 </div>
 @else
     {!! Form::hidden('email', null) !!}
@@ -141,14 +125,12 @@
     <div class="col-md-3">
         <div class="form-group {{ $errors->has('code') ? 'has-error' : '' }}">
         {!! Form::text('code',null,['placeholder'=>91,'class' => 'form-control']) !!}
-            {!! $errors->first('code', '<spam class="help-block">:message</spam>') !!}
         </div>    
     </div>
     <div class="col-md-9">
         <div class="form-group has-feedback {{ $errors->has('mobile') ? 'has-error' : '' }}">
         {!! Form::text('mobile',null,['placeholder'=>Lang::get('lang.mobile'),'class' => 'form-control']) !!}
         <span class="glyphicon glyphicon-phone form-control-feedback"></span>
-        {!! $errors->first('mobile', '<spam class="help-block">:message</spam>') !!}
         </div>
     </div>
 </div>
@@ -162,7 +144,6 @@
            
     {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}
     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-            {!! $errors->first('password', '<spam class="help-block">:message</spam>') !!}
 
 </div>
 <!-- Confirm password -->
@@ -170,7 +151,6 @@
            
     {!! Form::password('password_confirmation',['placeholder'=>Lang::get('lang.retype_password'),'class' => 'form-control']) !!}
     <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
-            {!! $errors->first('password_confirmation', '<spam class="help-block">:message</spam>') !!}
 
 </div>
    

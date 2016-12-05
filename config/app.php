@@ -139,7 +139,6 @@ return [
          * Laravel Framework Service Providers...
          */
 
-
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
         'Illuminate\Cache\CacheServiceProvider',
@@ -185,8 +184,6 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         App\FaveoLog\LaravelLogViewerServiceProvider::class,
-
-
 
     ],
     /*
