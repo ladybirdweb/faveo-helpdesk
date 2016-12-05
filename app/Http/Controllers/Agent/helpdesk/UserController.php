@@ -459,7 +459,6 @@ class UserController extends Controller
             }
         }
 
-
         if ($users->role == 'agent') {
             if ($delete_all == null) {
                 $UserEmail = Input::get('assign_to');

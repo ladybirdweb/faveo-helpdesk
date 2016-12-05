@@ -997,7 +997,6 @@ class SettingsController extends Controller
                 $number .= '0';
             }
 
-
             if ($array_format[$i] !== '$' && $array_format[$i] !== '#') {
                 $number .= $array_format[$i];
             }

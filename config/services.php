@@ -62,5 +62,4 @@ return [
         'redirect'      => '', //'http://localhost/FaveoVersions/faveo-helpdesk/public/social/login/bitbucket', //redirect
     ],
 
-
 ];

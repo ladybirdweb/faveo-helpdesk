@@ -516,7 +516,6 @@ class TicketController extends Controller
         }
         $ticket_id = $request->input('ticket_ID');
 
-
         $tickets = Tickets::where('id', '=', $ticket_id)->first();
         $tickets->isanswered = '1';
         $tickets->save();
@@ -597,7 +596,6 @@ class TicketController extends Controller
         }
         // sending attachments via php mail function
         $message = '';
-
 
         $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket_id)->get();
 
@@ -2144,7 +2142,6 @@ class TicketController extends Controller
                 $rating_ref->save();
             }
         }
-
 
         return redirect()->back()->with('Success', 'Thank you for your rating!');
     }

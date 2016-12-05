@@ -11,8 +11,8 @@ use App\Model\helpdesk\Settings\Email;
 use App\User;
 use Auth;
 use Exception;
-use Mail;
 use Lang;
+use Mail;
 
 class PhpMailController extends Controller
 {
@@ -121,7 +121,6 @@ class PhpMailController extends Controller
         $email_address = $this->checkElement('email_address', $template_variables);
         $user = $this->checkElement('user', $template_variables);
 
-
         $status = \DB::table('settings_email')->first();
 
         $template = TemplateType::where('name', '=', $template_type)->first();
@@ -148,7 +147,6 @@ class PhpMailController extends Controller
                 $subject = null;
             }
 
-
             $variables = ['{!!$user!!}', '{!!$agent!!}', '{!!$ticket_number!!}', '{!!$content!!}', '{!!$from!!}', '{!!$ticket_agent_name!!}', '{!!$ticket_client_name!!}', '{!!$ticket_client_email!!}', '{!!$ticket_body!!}', '{!!$ticket_assigner!!}', '{!!$ticket_link_with_number!!}', '{!!$system_error!!}', '{!!$agent_sign!!}', '{!!$department_sign!!}', '{!!$password_reset_link!!}', '{!!$email_address!!}', '{!!$user_password!!}', '{!!$system_from!!}', '{!!$system_link!!}', '{!!$ticket_link!!}'];
 
             $data = [$user, $agent, $ticket_number, $content, $from, $ticket_agent_name, $ticket_client_name, $ticket_client_email, $ticket_body, $ticket_assigner, $ticket_link_with_number, $system_error, $agent_sign, $department_sign, $password_reset_link, $email_address, $user_password, $system_from, $system_link, $ticket_link];
@@ -157,7 +155,6 @@ class PhpMailController extends Controller
                 $messagebody = str_replace($variables[$key], $data[$key], $contents);
                 $contents = $messagebody;
             }
-
 
             if ($template_type == 'ticket-reply-agent') {
                 $line = '---Reply above this line--- <br/><br/>';

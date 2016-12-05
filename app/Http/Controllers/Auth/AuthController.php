@@ -150,7 +150,7 @@ class AuthController extends Controller
      */
     public function postRegister(User $user, RegisterRequest $request)
     {
-        try{
+        try {
             $request_array = $request->input();
             $password = Hash::make($request->input('password'));
             $user->password = $password;
@@ -162,7 +162,7 @@ class AuthController extends Controller
                 $user->email = $request->input('email');
             }
             if ($request_array['mobile'] == '') {
-            $user->mobile = null;
+                $user->mobile = null;
             } else {
                 $user->mobile = $request->input('mobile');
             }
@@ -188,19 +188,20 @@ class AuthController extends Controller
             if ($request_array['email'] != '') {
                 $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/'.$code)]);
             }
-                if ($settings->status == 1 || $settings->status == '1') {
-                    if (count($sms) > 0) {
-                        if ($sms->status == 1 || $sms->status == '1') {
-                            $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_and_moble');
-                        } else {
-                            $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup');
-                        }
+            if ($settings->status == 1 || $settings->status == '1') {
+                if (count($sms) > 0) {
+                    if ($sms->status == 1 || $sms->status == '1') {
+                        $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_and_moble');
                     } else {
                         $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup');
                     }
                 } else {
-                    $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
+                    $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup');
                 }
+            } else {
+                $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
+            }
+
             return redirect('home')->with('success', $message12);
         } catch (\Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());

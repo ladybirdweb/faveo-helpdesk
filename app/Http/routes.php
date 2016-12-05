@@ -28,34 +28,29 @@ Route::group(['middleware' => ['web']], function () {
       | Here is defining entire routes for the Admin Panel
       |
      */
-     Route::get('password/email/{one?}/{two?}/{three?}/{four?}/{five?}',['as' => 'password.email', 'uses' => 'Auth\PasswordController@getEmail']);
-        Breadcrumbs::register('password.email', function ($breadcrumbs) {
-            $breadcrumbs->parent('/');
-            $breadcrumbs->push('Login', url('auth/login'));
-            $breadcrumbs->push('Forgot Password', url('password/email'));
-        });
+     Route::get('password/email/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'password.email', 'uses' => 'Auth\PasswordController@getEmail']);
+    Breadcrumbs::register('password.email', function ($breadcrumbs) {
+        $breadcrumbs->parent('/');
+        $breadcrumbs->push('Login', url('auth/login'));
+        $breadcrumbs->push('Forgot Password', url('password/email'));
+    });
 
-   
     // register page
-        Route::get('auth/register/{one?}/{two?}/{three?}/{four?}/{five?}',['as' => 'auth.register', 'uses' => 'Auth\AuthController@getRegister']);
-        Breadcrumbs::register('auth.register', function ($breadcrumbs) {
-            $breadcrumbs->parent('/');
-            $breadcrumbs->push('Login', url('auth/login'));
-            $breadcrumbs->push('Create Account', url('auth/register'));
-        });
-
+        Route::get('auth/register/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'auth.register', 'uses' => 'Auth\AuthController@getRegister']);
+    Breadcrumbs::register('auth.register', function ($breadcrumbs) {
+        $breadcrumbs->parent('/');
+        $breadcrumbs->push('Login', url('auth/login'));
+        $breadcrumbs->push('Create Account', url('auth/register'));
+    });
 
   // Auth login
-        Route::get('auth/login/{one?}/{two?}/{three?}/{four?}/{five?}',['as' => 'auth.login', 'uses' => 'Auth\AuthController@getLogin']);
-        Breadcrumbs::register('auth.login', function ($breadcrumbs) {
-            $breadcrumbs->parent('/');
-               $breadcrumbs->push('Create Account', url('auth/register'));
-            $breadcrumbs->push('Login', url('auth/login'));
-         
-        });
+        Route::get('auth/login/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'auth.login', 'uses' => 'Auth\AuthController@getLogin']);
+    Breadcrumbs::register('auth.login', function ($breadcrumbs) {
+        $breadcrumbs->parent('/');
+        $breadcrumbs->push('Create Account', url('auth/register'));
+        $breadcrumbs->push('Login', url('auth/login'));
+    });
 
-
-    
     Route::get('account/activate/{token}', ['as' => 'account.activate', 'uses' => 'Auth\AuthController@accountActivate']);
     Route::get('getmail/{token}', 'Auth\AuthController@getMail');
     Route::get('verify-otp', ['as' => 'otp-verification', 'uses' => 'Auth\AuthController@getVerifyOTP']);
@@ -1193,8 +1188,6 @@ Route::group(['middleware' => ['web']], function () {
         $api_control = new \App\Http\Controllers\Common\ApiSettings();
         $api_control->ticketDetailEvent($details);
     });
-
-
 
     Route::get('test', ['as' => 'test', 'uses' => 'Common\PushNotificationController@response']);
 

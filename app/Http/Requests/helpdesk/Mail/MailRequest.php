@@ -29,7 +29,6 @@ class MailRequest extends Request
             $email_address_rule = 'required|email|unique:emails,id,'.$id;
         }
 
-
         $rules = [
             'email_address'    => $email_address_rule,
             'email_name'       => 'required',

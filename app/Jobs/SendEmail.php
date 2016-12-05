@@ -8,10 +8,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class SendEmail extends Job implements SelfHandling,ShouldQueue
+class SendEmail extends Job implements SelfHandling, ShouldQueue
 {
     use InteractsWithQueue,SerializesModels;
-
 
     protected $from;
     protected $to;
