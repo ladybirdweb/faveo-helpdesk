@@ -1549,5 +1549,5 @@ return [
      /*********** Updated 3-12-2016 **********/
      'activate'                    => 'Activate',
      'system-email-not-configured' => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
-     'assign-ticket' => 'Assign tickets',
+     'assign-ticket'               => 'Assign tickets',
 ];

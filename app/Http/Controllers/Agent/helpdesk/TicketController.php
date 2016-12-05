@@ -1464,8 +1464,8 @@ class TicketController extends Controller
      */
     public function assign($id)
     {
-        $ticket_array = []; 
-        if(strpos($id, ',') !== false) {
+        $ticket_array = [];
+        if (strpos($id, ',') !== false) {
             $ticket_array = explode(',', $id);
         } else {
             array_push($ticket_array, $id);
@@ -1491,7 +1491,7 @@ class TicketController extends Controller
                 $thread->save();
             } elseif ($assign_to[0] == 'user') {
                 $ticket->assigned_to = $assign_to[1];
-                if( $user_detail === null) {
+                if ($user_detail === null) {
                     $user_detail = User::where('id', '=', $assign_to[1])->first();
                     $assignee = $user_detail->first_name.' '.$user_detail->last_name;
                 }
@@ -1523,6 +1523,7 @@ class TicketController extends Controller
                 }
             }
         }
+
         return 1;
     }
 
@@ -2556,12 +2557,13 @@ class TicketController extends Controller
                                     $name = $from->user_name;
                                 }
                             }
-                            $color = "";
-                            if($verify->status == 1 || $verify->status == '1') {
-                                if($from->active == 0 || $from->active == '0') {
+                            $color = '';
+                            if ($verify->status == 1 || $verify->status == '1') {
+                                if ($from->active == 0 || $from->active == '0') {
                                     $color = "<i class='fa fa-exclamation-triangle'></i>";
                                 }
                             }
+
                             return "<a href='".$url."' title='".Lang::get('lang.see-profile1').' '.ucfirst($from->user_name).'&apos;'.Lang::get('lang.see-profile2')."'><span style='color:#508983'>".ucfirst(str_limit($name, 30)).' <span style="color:#f75959">'.$color.'</span></span></a>';
                         })
                         // ->addColumn('Last Replier', function ($ticket) {
