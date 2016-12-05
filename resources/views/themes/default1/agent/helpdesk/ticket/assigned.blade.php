@@ -54,6 +54,8 @@ if (Auth::user()->role == 'agent') {
         <input type="submit" class="submit btn btn-default text-orange btn-sm" id="delete" name="submit" value="{!! Lang::get('lang.delete') !!}">
         <input type="submit" class="submit btn btn-default text-yellow btn-sm" id="close" name="submit" value="{!! Lang::get('lang.close') !!}">
         <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
+        <button type="button" class="btn btn-sm btn-default" id="assign_Ticket" data-toggle="modal" data-target="#AssignTickets" style="display: none;"><i class="fa fa-hand-o-right"> </i> {!! Lang::get('lang.assign') !!}</button>
+
         <!--</div>-->
         <p><p/>
         <div class="mailbox-messages" id="refresh">
@@ -161,7 +163,41 @@ if (Auth::user()->role == 'agent') {
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
+<!-- Assign ticket model-->
+<div class="modal fade" id="AssignTickets">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="assign-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{!! Lang::get('lang.assign-ticket') !!} </h4>
+            </div><!-- /.modal-header-->
+            <div class ="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                    </div>
+                    <div class="col-md-6" id="assign_loader"  style="display:none;">
+                        <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
+                    </div><!-- /.merge-loader -->
+                </div>
+                <div id="assign_body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {!! Form::open(['id'=>'assign-form','method' => 'PATCH'] )!!}
+                                <label>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}</label>
+                                <select class="form-control" id="select-assign-agent"  name="assign_to" data-placeholder="{!! Lang::get('lang.select_agent') !!}" style="width: 100%;"><option value=""></option></select>
+                            </div>
+                        </div>
+                    </div><!-- mereg-body-form -->
+                </div><!-- merge-body -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">{!! Lang::get('lang.close') !!}</button>
+                <input  type="submit" id="merge-btn" class="btn btn-primary pull-right" value="{!! Lang::get('lang.assign') !!}"></input>
+                {!! Form::close() !!}
+            </div><!-- /.modal-footer -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- Assign ticket model-->
 <!-- Modal -->   
 <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none; padding-right: 15px;background-color: rgba(0, 0, 0, 0.7);">
     <div class="modal-dialog" role="document">
@@ -217,6 +253,7 @@ if (Auth::user()->role == 'agent') {
                     return $(this).val();
                 }).get();
                 // alert(checkboxValues);
+                showAssign(t_id);
             } else {
                 //Check all checkboxes
                 $("input[type='checkbox']", ".mailbox-messages").iCheck("check");
@@ -224,6 +261,7 @@ if (Auth::user()->role == 'agent') {
                 t_id = [];
             }
             $(this).data("clicks", !clicks);
+            showAssign(t_id);
 
         });
 
@@ -399,6 +437,51 @@ if (Auth::user()->role == 'agent') {
             })
             return false;
         });
+        $('#AssignTickets').on('show.bs.modal', function() {
+            $.ajax({
+                type: "POST",
+                url: "{{route('get-agents')}}",
+                dataType: "html",
+                beforeSend: function() {
+                    $("#assign_body").hide();
+                    $("#assign_loader").show();
+                },
+                success: function(data) {
+                    $("#assign_loader").hide();
+                    $("#assign_body").show();
+                    $('#select-assign-agent').html(data);
+                }
+            });
+        });
+
+        // Assign a ticket
+        $('#assign-form').on('submit', function() {
+            $.ajax({
+                type: "POST",
+                url: "../ticket/assign/"+t_id,
+                dataType: "html",
+                data: $(this).serialize(),
+                beforeSend: function() {
+                $("#assign_body").hide();
+                    $("#assign_loader").show();
+                },
+                success: function(response) {
+                    if (response == 1)
+                    {
+                        location.reload();
+                        var message = "Success!";
+                            $("#alert11").show();
+                            $('#message-success1').html(message);
+                            setInterval(function(){$("#dismiss11").trigger("click"); }, 2000);
+                    }
+                    $("#assign_body").show();
+                    $("#assign_loader").hide();
+                    $("#dismis4").trigger("click");
+                }
+            })
+            return false;
+        });
+
     });
 
     function someFunction(id) {
@@ -416,6 +499,16 @@ if (Auth::user()->role == 'agent') {
             var index = t_id.indexOf(id);
             t_id.splice(index, 1);
             // alert(t_id);
+        }
+        showAssign(t_id);
+    }
+
+    function showAssign(t_id)
+    {
+        if (t_id.length >= 1) {
+            $('#assign_Ticket').css('display', 'inline');
+        } else {
+            $('#assign_Ticket').css('display', 'none');
         }
     }
 </script>

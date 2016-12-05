@@ -1005,6 +1005,9 @@ class UserController extends Controller
     }
 
     /**
+     * @category function to get user details and show in select field 
+     * @param null
+     * @return data
      */
     public function getAgentDetails()
     {

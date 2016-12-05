@@ -195,7 +195,7 @@ if (Auth::user()->role == 'agent') {
                 </div><!-- merge-body -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">{!! Lang::get('lang.close') !!}</button>
-                <input  type="submit" id="merge-btn" class="btn btn-primary pull-right" value="{!! Lang::get('lang.merge') !!}"></input>
+                <input  type="submit" id="merge-btn" class="btn btn-primary pull-right" value="{!! Lang::get('lang.assign') !!}"></input>
                 {!! Form::close() !!}
             </div><!-- /.modal-footer -->
         </div><!-- /.modal-content -->
@@ -236,12 +236,10 @@ if (Auth::user()->role == 'agent') {
                 //Uncheck all checkboxes
                 $(".mailbox-messages input[type='checkbox']").iCheck("uncheck");
                 $(".fa", this).removeClass("fa-check-square-o").addClass('fa-square-o');
-                $('#assign_Ticket').css('display', 'none');
             } else {
                 //Check all checkboxes
                 $(".mailbox-messages input[type='checkbox']").iCheck("check");
                 $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
-                $('#assign_Ticket').css('display', 'inline');
             }
             $(this).data("clicks", !clicks);
         });
@@ -260,11 +258,13 @@ if (Auth::user()->role == 'agent') {
                     return $(this).val();
                 }).get();
                 // alert(checkboxValues);
+                showAssign(t_id);
             } else {
                 //Check all checkboxes
                 $("input[type='checkbox']", ".mailbox-messages").iCheck("check");
                 // alert('Hallo');
                 t_id = [];
+                showAssign(t_id);
             }
             $(this).data("clicks", !clicks);
 
@@ -446,7 +446,6 @@ if (Auth::user()->role == 'agent') {
         });
 
         $('#AssignTickets').on('show.bs.modal', function() {
-            alert(t_id);
             $.ajax({
                 type: "POST",
                 url: "{{route('get-agents')}}",
@@ -509,6 +508,11 @@ if (Auth::user()->role == 'agent') {
             t_id.splice(index, 1);
             // alert(t_id);
         }
+        showAssign(t_id);
+    }
+
+    function showAssign(t_id)
+    {
         if (t_id.length >= 1) {
             $('#assign_Ticket').css('display', 'inline');
         } else {
