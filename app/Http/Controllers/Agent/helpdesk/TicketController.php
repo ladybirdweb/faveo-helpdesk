@@ -298,11 +298,22 @@ class TicketController extends Controller
         $depertment_id=$request->helptopic;
         $dept_id=Department::select('id')->where('id','=',$depertment_id)->first();
         $assignto_agent = User::select('id','first_name')->where('role', '!=', 'user')->where('primary_dpt','=',$dept_id->id)->get();
+        $teams = Teams::where('status', '=', '1')->get();
+        $count_teams = count($teams);
         $html = "";
         foreach ($assignto_agent as  $agent) {
-            $html .= "<option value='".$agent->id."'>".$agent->first_name."</option>";
+             
+                $html .= "<option value='user_".$agent->id."'>".$agent->first_name."</option>";
+            
+        
         }
-        echo $html;
+        // team_{{$team->id}}
+        $html1 = "";
+        foreach ($teams as  $team) {
+           $html1 .=  "<option value='team_".$team->id."'>".$team->name."</option>";
+        }
+
+        echo $html,$html1;
         
     }
 
@@ -315,6 +326,24 @@ class TicketController extends Controller
      */
     public function post_newticket(CreateTicketRequest $request, CountryCode $code, $api = false)
     {
+
+       //  $ticket_assign = Input::get('assignto');
+       //  $assignto = explode('_', $ticket_assign);
+        
+
+       //  if ($assignto[0] == 'team') {
+       //      // $ticket->team_id = $assignto[1];
+       //      $team_detail = Teams::where('id', '=', $assignto[1])->first();
+       //      $assignee = $team_detail->name;
+
+           
+       //  } elseif ($assignto[0] == 'user') {
+       //      // $ticket->assigned_to = $assignto[1];
+       //      $user_detail = User::where('id', '=', $assignto[1])->first();
+       //      $assignee = $user_detail->first_name.' '.$user_detail->last_name;
+            
+       // }
+       //  dd('oooooooooo');
         try {
             if ($request->input('email')) {
                 $email = $request->input('email');
@@ -325,11 +354,39 @@ class TicketController extends Controller
             $helptopic = $request->input('helptopic');
             $sla = $request->input('sla');
             $duedate = $request->input('duedate');
-            if ($request->input('assignto')) {
-                $assignto = $request->input('assignto');
-            } else {
-                $assignto = null;
+
+        $ticket_assign =$request->input('assignto');
+        $assignto = explode('_', $ticket_assign);
+        
+// dd('okkkk');
+        if ($assignto[0] == 'team') {
+            $team_id = $assignto[1];
+              $assigned_to = null;
+            // $team_detail = Teams::where('id', '=', $assignto[1])->first();
+            // $assignee = $team_detail->name;
+
+           
+        } elseif ($assignto[0] == 'user') {
+            $assigned_to = $assignto[1];
+            $team_id= null;
+            // $user_detail = User::where('id', '=', $assignto[1])->first();
+            // $assignee = $user_detail->first_name.' '.$user_detail->last_name;
+            
+       }
+       else {
+                // $assigned_to = null;
             }
+
+
+
+
+// dd($team_id);
+
+         // if ($request->input('assignto')) {
+         //        $assignto = $request->input('assignto');
+         //    } else {
+         //        $assignto = null;
+         //    }
             $subject = $request->input('subject');
             $body = $request->input('body');
             $priority = $request->input('priority');
@@ -377,7 +434,7 @@ class TicketController extends Controller
                 }
             }
             //create user
-            $result = $this->create_user($email, $fullname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source->id, $headers, $help->department, $assignto, $form_data, $auto_response, $status);
+            $result = $this->create_user($email, $fullname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source->id, $headers, $help->department,$assigned_to,$team_id, $form_data, $auto_response, $status);
             if ($result[1]) {
                 $status = $this->checkUserVerificationStatus();
                 if ($status == 1) {
@@ -744,13 +801,17 @@ class TicketController extends Controller
             $force = true;
         }
         $controller = new \App\Http\Controllers\Admin\helpdesk\SettingsController();
+
         if ($ticket_number) {
             $number = $controller->nthTicketNumber($ticket_number, $type, $format, $force);
+           
+
         } else {
+           
             $number = $controller->switchNumber($format, $type);
         }
         $number = $this->generateTicketIfExist($number, $type, $format);
-
+  
         return $number;
     }
 
@@ -813,7 +874,7 @@ class TicketController extends Controller
      *
      * @return type bool
      */
-    public function create_user($emailadd, $username, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $auto_response, $status)
+    public function create_user($emailadd, $username, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $headers, $dept, $assigned_to,$team_id, $from_data, $auto_response, $status)
     {
         // define global variables
         $email;
@@ -896,7 +957,7 @@ class TicketController extends Controller
             $username = $checkemail->first_name;
             $user_id = $checkemail->id;
         }
-        $ticket_number = $this->check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $from_data, $status);
+        $ticket_number = $this->check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assigned_to,$team_id, $from_data, $status);
 
         $ticket_number2 = $ticket_number[0];
         $ticketdata = Tickets::where('ticket_number', '=', $ticket_number2)->first();
@@ -1045,7 +1106,7 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status)
+    public function check_ticket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept,  $assigned_to,$team_id, $form_data, $status)
     {
         $read_ticket_number = explode('[#', $subject);
         if (isset($read_ticket_number[1])) {
@@ -1098,12 +1159,12 @@ class TicketController extends Controller
                     }
                 }
             } else {
-                $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status);
+                $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept,  $assigned_to,$team_id, $form_data, $status);
 
                 return [$ticket_number, 0];
             }
         } else {
-            $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status);
+            $ticket_number = $this->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assigned_to,$team_id, $form_data, $status);
 
             return [$ticket_number, 0];
         }
@@ -1121,28 +1182,36 @@ class TicketController extends Controller
      *
      * @return type string
      */
-    public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $status)
+    public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assigned_to,$team_id, $form_data, $status)
     {
+        // dd($dept);
         $ticket_number = '';
         $max_number = Tickets::whereRaw('id = (select max(`id`) from tickets)')->first();
         if ($max_number) {
             $ticket_number = $max_number->ticket_number;
         }
+        // dd($ticket_number);
 
         $user_status = User::select('active')->where('id', '=', $user_id)->first();
-        // dd($user_status->active);
+        
         $ticket = new Tickets();
+        // $ticket->ticket_number=$ticket_number;
         $ticket->ticket_number = $this->ticketNumber($ticket_number);
+        // dd('ppppppppppp');
         $ticket->user_id = $user_id;
         $ticket->dept_id = $dept;
         $ticket->help_topic_id = $helptopic;
         $ticket->sla = $sla;
-        $ticket->assigned_to = $assignto;
+
+        $ticket->assigned_to = $assigned_to;
+       
+        $ticket->team_id=$team_id;
 
         $ticket->priority_id = $priority;
         $ticket->source = $source;
+     
         $ticket_status = $this->checkUserVerificationStatus();
-        //dd($ticket_status);
+        
         if ($ticket_status == 0) {
             //check if user active then allow ticket creation else create unverified ticket
             if ($user_status->active == 1) {
@@ -1481,7 +1550,7 @@ class TicketController extends Controller
         $UserEmail = Input::get('assign_to');
         $assign_to = explode('_', $UserEmail);
         $ticket = Tickets::where('id', '=', $id)->first();
-
+dd($UserEmail);
         if ($assign_to[0] == 'team') {
             $ticket->team_id = $assign_to[1];
             $team_detail = Teams::where('id', '=', $assign_to[1])->first();
