@@ -64,6 +64,15 @@ if (DB_HOST && DB_USER && DB_NAME) {
                 if (version_compare($mysqli_version, '5') >= 0) {
                     $results[] = new TestResult('MySQL version is ' . $mysqli_version, STATUS_OK);
                     // $have_inno = check_have_inno($connection);
+                    $sql = "SHOW TABLES FROM ".DB_NAME;
+                    $res = mysqli_query($connection, $sql);
+                    if (mysqli_fetch_array($res) === null) {
+                        $results[] = new TestResult('Database is empty');
+                        $mysqli_ok = true;
+                    } else {
+                        $results[] = new TestResult('Faveo installation requires an empty database, your database already has tables and data in it.', STATUS_ERROR);
+                        $mysqli_ok = false;
+                    }
                 } else {
                     $results[] = new TestResult('Your MySQL version is ' . $mysqli_version . '. We recommend upgrading to at least MySQL5!', STATUS_ERROR);
                     $mysqli_ok = false;
@@ -205,6 +214,7 @@ $(document).ready(function () {
 
 
             <div  style="border-bottom: 1px solid #eee;">
+                @if(Cache::has('step4')) <?php Cache::forget('step4')?> @endif
                 <p class="setup-actions step">
                     <input type="submit" id="submitme" class="button-danger button button-large button-next" style="background-color: #d43f3a;color:#fff;" value="continue" disabled>
                     <a href="{{URL::route('configuration')}}" class="button button-large button-next" style="float: left;">Previous</a>
