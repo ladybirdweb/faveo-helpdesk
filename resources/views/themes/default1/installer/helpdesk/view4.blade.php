@@ -66,7 +66,7 @@ if (DB_HOST && DB_USER && DB_NAME) {
                     // $have_inno = check_have_inno($connection);
                     $sql = "SHOW TABLES FROM ".DB_NAME;
                     $res = mysqli_query($connection, $sql);
-                    if (!$res) {
+                    if (mysqli_fetch_array($res) === null) {
                         $results[] = new TestResult('Database is empty');
                         $mysqli_ok = true;
                     } else {
@@ -214,6 +214,7 @@ $(document).ready(function () {
 
 
             <div  style="border-bottom: 1px solid #eee;">
+                @if(Cache::has('step4')) <?php Cache::forget('step4')?> @endif
                 <p class="setup-actions step">
                     <input type="submit" id="submitme" class="button-danger button button-large button-next" style="background-color: #d43f3a;color:#fff;" value="continue" disabled>
                     <a href="{{URL::route('configuration')}}" class="button button-large button-next" style="float: left;">Previous</a>
