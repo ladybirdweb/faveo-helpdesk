@@ -594,4 +594,17 @@
 <?php Event::fire('load-calendar-scripts', array()); ?>
 @yield('FooterInclude')
 </body>
+<script>
+    $(function() {
+      
+        
+        $('input[type="checkbox"]').iCheck({
+            checkboxClass: 'icheckbox_flat-blue'
+        });
+        $('input[type="radio"]').iCheck({
+            radioClass: 'iradio_flat-blue'
+        });
+    
+    });        
+</script>
 </html>

@@ -146,7 +146,7 @@ class FormController extends Controller
      */
     public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code)
     {
-        $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token', 'mobile', 'Code');
+        $form_extras = $request->except('Name', 'Phone', 'Email', 'Subject', 'Details', 'helptopic', '_wysihtml5_mode', '_token', 'mobile', 'Code', 'priority');
         $name = $request->input('Name');
         $phone = $request->input('Phone');
         if ($request->input('Email')) {
@@ -179,7 +179,7 @@ class FormController extends Controller
 
          // $priority = $ticket_settings->first()->priority;
          $default_priority = Ticket_Priority::where('is_default', '=', 1)->first();
-        $user_priority = CommonSettings::where('id', '=', 6)->first();
+        $user_priority = CommonSettings::select('status')->where('option_name', '=', 'user_priority')->first();
         if (!($request->input('priority'))) {
             $priority = $default_priority->priority_id;
         } else {

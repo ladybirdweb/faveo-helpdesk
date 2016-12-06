@@ -481,6 +481,12 @@ class UserController extends Controller
                     if ($ticket_logic4 = User_org::where('user_id', '=', $id)->get()) {
                         $ticket_logic4 = User_org::where('user_id', '=', $id)->update(['user_id' => $assign_to[1]]);
                     }
+                    
+                    if($ticket_logic5 = Assign_team_agent::where('agent_id', '=', $id)->get())
+                    {
+
+                        $ticket_logic5 = Assign_team_agent::where('agent_id', '=', $id)->delete();
+                    }
 
                         // $thread2 = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
                         // $thread2->body = 'This Ticket have been Reassigned to' .' '.  $assignee;
@@ -488,7 +494,7 @@ class UserController extends Controller
                         // UserNotification::where('notification_id', '=', $ticket->id)->delete();
                         // $users = User::where('id', '=', $id)->get();
                         // $organization = User_org::where('user_id', '=', $id)->delete();
-                        Assign_team_agent::where('agent_id', '=', $id)->update(['agent_id' => $assign_to[1]]);
+                        // Assign_team_agent::where('agent_id', '=', $id)->update(['agent_id' => $assign_to[1]]);
                     $user = User::find($id);
                     $user->delete();
 
@@ -496,6 +502,10 @@ class UserController extends Controller
                 }
                 if (User_org::where('user_id', '=', $id)) {
                     DB::table('user_assign_organization')->where('user_id', '=', $id)->delete();
+                }
+                if($ticket_logic5 = Assign_team_agent::where('agent_id', '=', $id)->get())
+                {
+                    $ticket_logic5 = Assign_team_agent::where('agent_id', '=', $id)->delete();
                 }
                 $user = User::find($id);
                 $user->delete();
@@ -734,7 +744,7 @@ class UserController extends Controller
 
                 return redirect('profile-edit')->with('success1', Lang::get('lang.password_updated_sucessfully'));
             } catch (Exception $e) {
-                return redirect('profile-edit')->with('fails', $e->getMessage());
+                return redirect('profile-edit')->with('fails1', $e->getMessage());
             }
         } else {
             return redirect('profile-edit')->with('fails1', Lang::get('lang.password_was_not_updated_incorrect_old_password'));
@@ -1001,6 +1011,21 @@ class UserController extends Controller
             $message = Lang::get('lang.otp-not-matched');
 
             return $message;
+        }
+    }
+
+    /**
+     * @category function to get user details and show in select field
+     *
+     * @param null
+     *
+     * @return data
+     */
+    public function getAgentDetails()
+    {
+        $users = User::where('role', '<>', 'user')->where('active', '=', 1)->get();
+        foreach ($users as $user) {
+            echo "<option value='user_$user->id'>".$user->full_name.'</option>';
         }
     }
 }
