@@ -404,6 +404,8 @@
                                 <ul class="nav navbar-nav">
                                     <li id="bar" @yield('user')><a href="{{ url('user')}}" >{!! Lang::get('lang.user_directory') !!}</a></li></a></li>
                                     <li id="bar" @yield('organizations')><a href="{{ url('organizations')}}" >{!! Lang::get('lang.organizations') !!}</a></li></a></li>
+
+                                    <!-- <li id="bar" @yield('team')><a href="{{ url('teams')}}" >{!! Lang::get('lang.teams') !!}</a></li></a></li> -->
                                 </ul>
                             </div>
                             <div class="tabs-pane @yield('ticket-bar')" id="tabC">

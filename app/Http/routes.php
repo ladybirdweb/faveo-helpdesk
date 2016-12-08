@@ -121,6 +121,7 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->parent('teams.index');
             $breadcrumbs->push(Lang::get('lang.edit'), url('teams/{teams}/edit'));
         });
+        Route::get('/teams/profile/show/{id}', ['as' => 'teams.profile.show', 'uses' => 'Admin\helpdesk\TeamController@TeamShow']);
         Route::get('/teams/show/{id}', ['as' => 'teams.show', 'uses' => 'Admin\helpdesk\TeamController@show']); /*  Get Team View */
          Breadcrumbs::register('teams.show', function ($breadcrumbs) {
              $breadcrumbs->parent('teams.index');
@@ -492,7 +493,12 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('agen1', 'Agent\helpdesk\DashboardController@ChartData');
         Route::post('chart-range', ['as' => 'post.chart', 'uses' => 'Agent\helpdesk\DashboardController@ChartData']);
         Route::post('user-chart-range/{id}/{date1}/{date2}', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
-        Route::get('user-agen/{id}', 'Agent\helpdesk\DashboardController@userChartData');
+        // Route::get('user-agen/{id}', 'Agent\helpdesk\DashboardController@userChartData');
+
+ Route::get('user-agen/{id}', ['as' => 'user-agen.export', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
+
+
+
         Route::get('user-agen1', 'Agent\helpdesk\DashboardController@userChartData');
         Route::post('user-chart-range', ['as' => 'post.user.chart', 'uses' => 'Agent\helpdesk\DashboardController@userChartData']);
         Route::resource('user', 'Agent\helpdesk\UserController'); /* User router is used to control the CRUD of user */

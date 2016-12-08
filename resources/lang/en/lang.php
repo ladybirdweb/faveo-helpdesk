@@ -840,6 +840,13 @@ return [
     'select_a_team'               => 'Select a team',
     'select_a_team_lead'          => 'Select a team lead',
     'members'                     => 'Members',
+    'team_name'=>'Team Name',
+    'teamlead_name'=>'Teamlead Name',
+    'team_size'=>'Team Size',
+    'team_profile'=>'Team Profile',
+    'team_report'=>'Team Report',
+
+
     /*
       |--------------------------------------
       |  Group Create Page
@@ -1547,6 +1554,7 @@ return [
 
      'enter_your_email_here'=>'Enter your email here',
      'login_to_start_your_session'=>'Login to start your session',
+     //team module
 
      
 

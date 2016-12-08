@@ -103,6 +103,7 @@ class DashboardController extends Controller
 
     public function userChartData($id, $date111 = '', $date122 = '')
     {
+        dd($id);
         $date11 = strtotime($date122);
         $date12 = strtotime($date111);
         if ($date11 && $date12) {

@@ -85,12 +85,16 @@ class="active"
                             <a href="{{route('teams.show', $team->id)}}" class="btn btn-success btn-xs btn-flat" disabled='disabled'><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.show') !!}</a>
                             
                             @endif
-                             @if ($team->status == 1) 
-                            <a href="{{route('teams.show', $team->id)}}" class="btn btn-success btn-xs btn-flat" ><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.show') !!}</a>
-                            
+                             @if ($team->status == 1&& $team->team_lead == 1) 
+                            <a href="{{route('teams.profile.show', $team->id)}}" class="btn btn-success btn-xs btn-flat" ><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.show') !!}</a>
+                            <!--  @if ($team->team_lead == 1) 
+                             <a href="{{route('teams.profile.show', $team->id)}}" class="btn btn-primary btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.tickets') !!}</a>
+                            @endif -->
                             @endif
 
                             <a href="{{route('teams.edit', $team->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a>
+
+
                             
                             {!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> '.Lang::get('lang.delete'),
                             ['type' => 'submit',

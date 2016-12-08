@@ -58,6 +58,27 @@ class TeamController extends Controller
         }
     }
 
+    public function TeamShow($id)
+    {
+        try {
+            $teams=Teams::where('id','=',$id)->first();
+            $team_members=Assign_team_agent::where('id','=',$teams->id)->select('agent_id')->count();
+            // dd($team_members);
+            $users=user::where('id','=',$teams->team_lead)->select('user_name','first_name','last_name')->first();
+
+        if($users->first_name || $users->last_name)
+          {$team_lead_name =$users->first_name.' '. $users->last_name;}
+        else {$team_lead_name = $users->user_name;}
+                        
+        // dd($team_lead_name);
+            // $team_lead_name=
+            // $team_member=
+            return view('themes.default1.agent.helpdesk.user.teamshow', compact('assign_team_agent', 'teams','team_members','team_lead_name'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->getMessage());
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *

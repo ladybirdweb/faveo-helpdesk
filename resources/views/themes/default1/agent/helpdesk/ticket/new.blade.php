@@ -68,6 +68,9 @@ class="active"
             @if($errors->first('mobile'))
             <li class="error-message-padding">{!! $errors->first('mobile', ':message') !!}</li>
             @endif
+            @if($errors->first('helptopic'))
+            <li class="error-message-padding">{!! $errors->first('helptopic', ':message') !!}</li>
+            @endif
         </div>
         @endif
     </div><!-- /.box-header -->
@@ -155,12 +158,12 @@ class="active"
         <div class="form-group">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="form-group">
+                       <div class="form-group {{ $errors->has('helptopic') ? 'has-error' : '' }}">
                         <label>{!! Lang::get('lang.help_topic') !!}:</label>
                         <!-- helptopic -->
                         <?php $helptopic = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->get(); ?>
                         <select  name="helptopic" class="form-control select" id="selectid">
-                        <option>select Helptopic</option>
+                        <option value=" ">select Helptopic</option>
                             @foreach($helptopic as $helptopic)
                             
                          <option value="{{ $helptopic->department }}">{{ $helptopic->topic}}</option>
@@ -191,7 +194,7 @@ class="active"
                     <div class="form-group">
                         <label>{!! Lang::get('lang.assign_to') !!}:</label>
                 <select  name="assignto" class="form-control select" id="agent_id">
-                <option value="">Select</option>
+                <option value="">Select Agent</option>
               </select>
                      
                     </div>

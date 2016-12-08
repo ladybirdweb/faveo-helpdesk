@@ -1015,7 +1015,7 @@ alert(h+20);
                                 <?php
                                 $assign = App\User::where('role', '!=', 'user')->where('active', '=', '1')->where('primary_dpt','=',$tickets->dept_id)->get();
                                 $count_assign = count($assign);
-                                $teams = App\Model\helpdesk\Agent\Teams::where('status', '=', '1')->get();
+                                $teams = App\Model\helpdesk\Agent\Teams::where('status', '=', '1')->where('team_lead','!=',null)->get();
                                 $count_teams = count($teams);
                                 ?>
                                 <optgroup label="Teams ( {!! $count_teams !!} )">
