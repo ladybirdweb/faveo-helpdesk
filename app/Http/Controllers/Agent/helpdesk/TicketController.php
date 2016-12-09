@@ -1189,14 +1189,14 @@ class TicketController extends Controller {
             }
         }
         $ticket->save();
-        // dd($ticket);
+        
         if ($ticket->team_id != null) {
 
             $team_detail = Teams::where('id', '=', $ticket->team_id)->first();
             $assignee = $team_detail->name;
 
             $ticket_number = $ticket->ticket_number;
-            // $ticket->save();
+           
             $thread = new Ticket_Thread();
             $thread->ticket_id = $ticket->id;
             $thread->user_id = Auth::user()->id;
@@ -1210,7 +1210,7 @@ class TicketController extends Controller {
             // dd($teams);
             $team_lead_name = User::whereId($teams->team_lead)->first();
             $team_lead = $team_lead_name->first_name . " " . $team_lead_name->last_name; //
-            $team = $teams->name . " " . 'Member';
+            // $team = $teams->name . " " . 'Member';
             $team_lead_email = $team_lead_name->email; //teamlead email id
             $ticket_number = $ticket->ticket_number; //ticket number
             $member_ids = DB::table('team_assign_agent')->select('agent_id as user_id')->where('team_id', '=', $ticket->team_id)->get();
@@ -1221,9 +1221,10 @@ class TicketController extends Controller {
 
             $ticket_link = route('ticket.thread', $ticket->id);
             $notification = Alert::where('id', '=', '1')->first();
+           
             if($member_ids){
                 try {
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', $ticket->dept_id), $to = ['name' => $team_lead, 'email' => $team_lead_email, 'cc' => $member_ids], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'team_assign_ticket'], $template_variables = ['team_name' => $team, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master, 'ticket_link' => $ticket_link]);
+                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', $ticket->dept_id), $to = ['name' => $team_lead, 'email' => $team_lead_email, 'cc' => $member_ids], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'team_assign_ticket'], $template_variables = ['ticket_number' => $ticket_number, 'ticket_assigner' => $master, 'ticket_link' => $ticket_link]);
             } catch (\Exception $e) {
                 return 0;
             }
@@ -1631,7 +1632,7 @@ class TicketController extends Controller {
             $teams = Teams::whereId($UserEmail)->first();
             $team_lead_name = User::whereId($teams->team_lead)->first();
             $team_lead = $team_lead_name->first_name . " " . $team_lead_name->last_name; //
-            $team = $teams->name . " " . 'Member';
+            // $team = $teams->name . " " . 'Member';
 
 
             $team_lead_email = $team_lead_name->email; //teamlead email id
@@ -1648,7 +1649,7 @@ class TicketController extends Controller {
             if($member_ids)
             {
                 try {
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', $ticket->dept_id), $to = ['name' => $team_lead, 'email' => $team_lead_email, 'cc' => $member_ids], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'team_assign_ticket'], $template_variables = ['ticket_agent_name' => $team, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master, 'ticket_link' => $ticket_link]);
+                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', $ticket->dept_id), $to = ['name' => $team_lead, 'email' => $team_lead_email, 'cc' => $member_ids], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'team_assign_ticket'], $template_variables = ['ticket_number' => $ticket_number, 'ticket_assigner' => $master, 'ticket_link' => $ticket_link]);
             } catch (\Exception $e) {
                 return 0;
             }
@@ -1657,7 +1658,7 @@ class TicketController extends Controller {
             else{
 
                 try {
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', $ticket->dept_id), $to = ['name' => $team_lead, 'email' => $team_lead_email], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'team_assign_ticket'], $template_variables = ['ticket_agent_name' => $team, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master, 'ticket_link' => $ticket_link]);
+                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', $ticket->dept_id), $to = ['name' => $team_lead, 'email' => $team_lead_email], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'team_assign_ticket'], $template_variables = ['team_name' => $team, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master, 'ticket_link' => $ticket_link]);
             } catch (\Exception $e) {
                 return 0;
             }
