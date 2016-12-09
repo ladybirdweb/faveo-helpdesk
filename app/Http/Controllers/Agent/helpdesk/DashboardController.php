@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Agent\helpdesk;
 use App\Http\Controllers\Controller;
 // models
 use App\User;
+use App\Model\helpdesk\Agent\Teams;
 // classes
 use Auth;
 use DB;
@@ -103,7 +104,7 @@ class DashboardController extends Controller
 
     public function userChartData($id, $date111 = '', $date122 = '')
     {
-        dd($id);
+        // dd($id);
         $date11 = strtotime($date122);
         $date12 = strtotime($date111);
         if ($date11 && $date12) {
@@ -122,15 +123,28 @@ class DashboardController extends Controller
         for ($i = $date1; $i <= $date2; $i = $i + 86400) {
             $thisDate = date('Y-m-d', $i);
             $user = User::whereId($id)->first();
+            $team=Teams::whereId($id)->first();
             if ($user->role == 'user') {
                 $created = \DB::table('tickets')->select('created_at')->where('user_id', '=', $id)->where('created_at', 'LIKE', '%'.$thisDate.'%')->count();
                 $closed = \DB::table('tickets')->select('closed_at')->where('user_id', '=', $id)->where('closed_at', 'LIKE', '%'.$thisDate.'%')->count();
                 $reopened = \DB::table('tickets')->select('reopened_at')->where('user_id', '=', $id)->where('reopened_at', 'LIKE', '%'.$thisDate.'%')->count();
-            } else {
+            } 
+            elseif($team){
+                 $created = \DB::table('tickets')->select('created_at')->where('team_id', '=', $id)->where('created_at', 'LIKE', '%'.$thisDate.'%')->count();
+                $closed = \DB::table('tickets')->select('closed_at')->where('team_id', '=', $id)->where('closed_at', 'LIKE', '%'.$thisDate.'%')->count();
+                $reopened = \DB::table('tickets')->select('reopened_at')->where('team_id', '=', $id)->where('reopened_at', 'LIKE', '%'.$thisDate.'%')->count();
+                 }
+
+
+            else {
                 $created = \DB::table('tickets')->select('created_at')->where('assigned_to', '=', $id)->where('created_at', 'LIKE', '%'.$thisDate.'%')->count();
                 $closed = \DB::table('tickets')->select('closed_at')->where('assigned_to', '=', $id)->where('closed_at', 'LIKE', '%'.$thisDate.'%')->count();
                 $reopened = \DB::table('tickets')->select('reopened_at')->where('assigned_to', '=', $id)->where('reopened_at', 'LIKE', '%'.$thisDate.'%')->count();
             }
+
+
+
+
             $value = ['date' => $thisDate, 'open' => $created, 'closed' => $closed, 'reopened' => $reopened];
             $array = array_map('htmlentities', $value);
             $json = html_entity_decode(json_encode($array));

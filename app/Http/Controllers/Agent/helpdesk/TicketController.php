@@ -1248,18 +1248,12 @@ class TicketController extends Controller {
             $system = $this->system();
 
             $ticket_number = $ticket->ticket_number;
-            // dd($assignee, $ticket_number);
-            // $ticket->save();
-
             $data = [
                 'id' => $ticket->id,
             ];
             \Event::fire('ticket-assignment', [$data]);
-            // $ticket_thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
-            // $ticket_subject = $ticket_thread->title;
-
+           
             $thread = new Ticket_Thread();
-            
             $thread->ticket_id = $ticket->id;
             $thread->user_id = Auth::user()->id;
             $thread->is_internal = 1;
@@ -1615,6 +1609,7 @@ class TicketController extends Controller {
         if ($assign_to[0] == 'team') {
 
             $ticket->team_id = $assign_to[1];
+            $ticket->assigned_to =null;
             $team_detail = Teams::where('id', '=', $assign_to[1])->first();
             $assignee = $team_detail->name;
 
@@ -1669,7 +1664,9 @@ class TicketController extends Controller {
             }
             
         } elseif ($assign_to[0] == 'user') {
+
             $ticket->assigned_to = $assign_to[1];
+            $ticket->team_id=null;
             $user_detail = User::where('id', '=', $assign_to[1])->first();
             $assignee = $user_detail->first_name . ' ' . $user_detail->last_name;
 

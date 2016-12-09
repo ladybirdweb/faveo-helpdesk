@@ -121,7 +121,8 @@ Route::group(['middleware' => ['web']], function () {
             $breadcrumbs->parent('teams.index');
             $breadcrumbs->push(Lang::get('lang.edit'), url('teams/{teams}/edit'));
         });
-        Route::get('/teams/profile/show/{id}', ['as' => 'teams.profile.show', 'uses' => 'Admin\helpdesk\TeamController@TeamShow']);
+        Route::get('/assign-teams/{id}', ['as' => 'teams.profile.show', 'uses' => 'Admin\helpdesk\TeamController@TeamShow']);
+
         Route::get('/teams/show/{id}', ['as' => 'teams.show', 'uses' => 'Admin\helpdesk\TeamController@show']); /*  Get Team View */
          Breadcrumbs::register('teams.show', function ($breadcrumbs) {
              $breadcrumbs->parent('teams.index');

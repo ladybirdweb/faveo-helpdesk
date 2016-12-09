@@ -716,8 +716,7 @@ $assigned_to = App\User::where('id', '=', $ticket->assigned_to)->first();
     <script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            // route('user-agen.export', $users->id
-            $.getJSON("../user-agen/<?php echo $teams->id; ?>", function (result) {
+             $.getJSON("../user-agen/<?php echo $teams->id; ?>", function (result) {
                 var labels = [], open = [], closed = [], reopened = [], open_total = 0, closed_total = 0, reopened_total = 0;
                 for (var i = 0; i < result.length; i++) {
                     labels.push(result[i].date);
