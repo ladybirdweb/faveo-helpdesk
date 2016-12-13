@@ -16,13 +16,6 @@ WHERE `type` = 1;
 -- --------------------------------------------------------------------------------------
 
 -- 
---    Alter ticket_attechment table
--- 
-ALTER TABLE `ticket_attachment` ADD `path` VARCHAR(255) NULL DEFAULT NULL AFTER `file`, ADD `driver` VARCHAR(255) NULL DEFAULT NULL AFTER `path`;
-
--- --------------------------------------------------------------------------------------
-
--- 
 -- Update queue services tables
 -- 
 UPDATE `queue_services` SET `status` = 1 Where `name` LIKE 'Sync' OR `short_name` LIKE 'sync';
