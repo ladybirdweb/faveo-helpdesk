@@ -77,7 +77,6 @@ class="active"
                                     $stringCut = substr($string, 0, 25);
                                     $string = $stringCut.'....';
                                 }
-                                // dd($stringCut);
                                 $TicketData = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)
                                     ->where('user_id', '!=' , null)
                                     ->max('id');

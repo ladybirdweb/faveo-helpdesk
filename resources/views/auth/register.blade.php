@@ -167,6 +167,11 @@
                Already got an account? <a href="{{url('auth/login')}}" class="text-center">{!! Lang::get('lang.login') !!}</a>                
             </label>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                @include('themes.default1.client.layout.social-login')
+            </div>
+        </div>
     </div><!-- /.col --> </div>
 </div>
 </div>

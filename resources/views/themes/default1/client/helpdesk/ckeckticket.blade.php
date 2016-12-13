@@ -170,7 +170,7 @@ $conversations = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '='
 $ij = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $tickets->id)->first();
 $user = App\User::where('id', '=', $tickets->user_id)->first();
 foreach ($conversations as $conversation) {
-    $role = App\User::where('id', '=', $conversation->user_id)->first();
+    $role = $conversation->user;
     $body = $conversation->thread($conversation->body);
     ?>
     <ol class="comment-list" >
@@ -222,21 +222,46 @@ foreach ($conversations as $conversation) {
                     </div><!-- .comment-metadata -->
                 </footer><!-- .comment-meta -->
                 <div class="comment-content">
-                    @if($conversation->firstContent()=='yes')
+                   @if($conversation->firstContent()=='yes')
                                              <div class="embed-responsive embed-responsive-16by9">
-                                            <iframe id="loader_frame{{$conversation->id}}" class="embed-responsive-item" onload="iframeLoaded()">Body of html email here</iframe>
-<script>
-                                                $('#loader_frame{{$conversation->id}}')[0].contentDocument.body.innerHTML = '{!!$conversation->purify()!!}';
-                                            </script>
+                                            <iframe id="loader_frame{{$conversation->id}}" class="embed-responsive-item">Body of html email here</iframe>
+<script type="text/javascript">
+jQuery(document).ready(function () {
+/*          setInterval(function(){
+            var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
+            var h     = mydiv.height();
+alert(h+20);
+            }, 2000);*/
+                jQuery('.embed-responsive-16by9').css('height','auto');
+            jQuery('.embed-responsive-16by9').css('padding','0');
+            jQuery('#loader_frame{{$conversation->id}}').css('width','100%');
+            jQuery('#loader_frame{{$conversation->id}}').css('position','static');
+            jQuery('#loader_frame{{$conversation->id}}').css('border','none');
+            var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
+            var h     = mydiv.height();
+            jQuery('#loader_frame{{$conversation->id}}').css('height', h+20);
+            setInterval(function(){
+            //var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
+            //alert(mydiv.height());
+                h = jQuery('#loader_frame{{$conversation->id}}').height();
+                if (!!navigator.userAgent.match(/Trident\/7\./)){
+                    jQuery('#loader_frame{{$conversation->id}}').css('height', h);
+                }else {
+                    jQuery('#loader_frame{{$conversation->id}}').css('height', h);
+                }
+            }, 2000);
+        });
+</script>
                                             </div>
                                             <script>
                                                  setTimeout(function(){ 
-                                                       $('#loader_frame{{$conversation->id}}')[0].contentDocument.body.innerHTML = '{!!$conversation->purify()!!}'; }, 1000);
+                                                       $('#loader_frame{{$conversation->id}}')[0].contentDocument.body.innerHTML = '<body><style>body{display:inline-block;}</style>{!!$conversation->purify()!!}<body>';   }, 1000);
                                                 
                                             </script>
-                                            @else  
-                    {!! $body !!}
-                    @endif
+                                            @else 
+                                            {!! $conversation->body !!}
+                                            @endif
+                                            
                     @if($conversation->id == $ij->id)
                     <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->id)->get(); ?>
                     @if(isset($ticket_form_datas))

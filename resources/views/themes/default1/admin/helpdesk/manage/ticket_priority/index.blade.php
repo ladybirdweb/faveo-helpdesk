@@ -49,18 +49,17 @@ class="active"
     <div class="box-header with-border">
         <span class="lead border-right">{!! Lang::get('lang.priority') !!}</span>
         <div class="pull-right">
-             <a href="{{route('priority.create')}}" class="btn btn-primary"> {{Lang::get('lang.create_ticket_priority')}}</a>
+             <a href="{{route('priority.create')}}" class="btn btn-primary"> <span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_ticket_priority')}}</a>
         </div>
     </div>
 
-
-<!-- <li><a class="right" title="" data-placement="right" data-toggle="tooltip" href="#" data-original-title="Tooltip on right"> sss</a></li> -->
-    <div class="box-header with-border">
+      <div class="box-header with-border">
     <a class="right" title="" data-placement="right" data-toggle="tooltip" href="#" data-original-title="{{Lang::get('lang.active_user_can_select_the_priority_while_creating_ticket')}}">
 
         <span class="lead border-right" >{!! Lang::get('lang.current') !!}{!! Lang::get('lang.user_priority_status') !!}</span>
        
            </a>
+
                             <div class="btn-group pull-right" id="toggle_event_editing">
                                 <button type="button"  class="btn {{$user_status->status == '0' ? 'btn-info' : 'btn-default'}} locked_active">Inactive</button>
                                 <button type="button"  class="btn {{$user_status->status == '1' ? 'btn-info' : 'btn-default'}} unlocked_inactive">Active</button>
@@ -89,10 +88,10 @@ class="active"
     <div class="box-footer">
     </div>
 </div>
-<!-- <script type="text/javascript">
+<script type="text/javascript">
     $('a').tooltip()
 </script>
- -->
+
 <script>
     function confirmDelete(priority_id) {
         var r = confirm('Are you sure?');
@@ -107,7 +106,7 @@ class="active"
 </script>
 <script>
     $('#toggle_event_editing button').click(function () {
-        
+
         var user_settings_priority=1;
          var user_settings_priority=0;
         if ($(this).hasClass('locked_active') ) {

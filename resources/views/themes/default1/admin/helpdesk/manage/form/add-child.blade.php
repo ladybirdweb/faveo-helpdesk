@@ -8,7 +8,7 @@ active
 active
 @stop
 
-@section('form')
+@section('forms')
 class="active"
 @stop
 

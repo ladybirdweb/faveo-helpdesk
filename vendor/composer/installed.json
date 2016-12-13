@@ -2355,6 +2355,53 @@
         ]
     },
     {
+        "name": "zendframework/zend-stdlib",
+        "version": "3.0.1",
+        "version_normalized": "3.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/zendframework/zend-stdlib.git",
+            "reference": "8bafa58574204bdff03c275d1d618aaa601588ae"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/zendframework/zend-stdlib/zipball/8bafa58574204bdff03c275d1d618aaa601588ae",
+            "reference": "8bafa58574204bdff03c275d1d618aaa601588ae",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^5.5 || ^7.0"
+        },
+        "require-dev": {
+            "athletic/athletic": "~0.1",
+            "fabpot/php-cs-fixer": "1.7.*",
+            "phpunit/phpunit": "~4.0"
+        },
+        "time": "2016-04-12 21:19:36",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.0-dev",
+                "dev-develop": "3.1-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Zend\\Stdlib\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "homepage": "https://github.com/zendframework/zend-stdlib",
+        "keywords": [
+            "stdlib",
+            "zf2"
+        ]
+    },
+    {
         "name": "container-interop/container-interop",
         "version": "1.1.0",
         "version_normalized": "1.1.0.0",
@@ -4240,6 +4287,62 @@
         ]
     },
     {
+        "name": "laravel/socialite",
+        "version": "v2.0.18",
+        "version_normalized": "2.0.18.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/laravel/socialite.git",
+            "reference": "76ee5397fcdea5a062361392abca4eb397e519a3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/laravel/socialite/zipball/76ee5397fcdea5a062361392abca4eb397e519a3",
+            "reference": "76ee5397fcdea5a062361392abca4eb397e519a3",
+            "shasum": ""
+        },
+        "require": {
+            "guzzlehttp/guzzle": "~5.0|~6.0",
+            "illuminate/contracts": "~5.0",
+            "illuminate/http": "~5.0",
+            "illuminate/support": "~5.0",
+            "league/oauth1-client": "~1.0",
+            "php": ">=5.4.0"
+        },
+        "require-dev": {
+            "mockery/mockery": "~0.9",
+            "phpunit/phpunit": "~4.0|~5.0"
+        },
+        "time": "2016-06-22 12:40:16",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.0-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Laravel\\Socialite\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Taylor Otwell",
+                "email": "taylorotwell@gmail.com"
+            }
+        ],
+        "description": "Laravel wrapper around OAuth 1 & OAuth 2 libraries.",
+        "keywords": [
+            "laravel",
+            "oauth"
+        ]
+    },
+    {
         "name": "vlucas/phpdotenv",
         "version": "v2.4.0",
         "version_normalized": "2.4.0.0",
@@ -4805,6 +4908,57 @@
         ]
     },
     {
+        "name": "tedivm/fetch",
+        "version": "v0.6.1",
+        "version_normalized": "0.6.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/tedious/Fetch.git",
+            "reference": "154a84fdfa0d045c2871dd9f8708362fb9ea4acf"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/tedious/Fetch/zipball/154a84fdfa0d045c2871dd9f8708362fb9ea4acf",
+            "reference": "154a84fdfa0d045c2871dd9f8708362fb9ea4acf",
+            "shasum": ""
+        },
+        "require": {
+            "ext-imap": "*",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "fabpot/php-cs-fixer": "0.5.*",
+            "phpunit/phpunit": "4.2.*",
+            "satooshi/php-coveralls": "dev-master",
+            "tedivm/dovecottesting": "1.2.3"
+        },
+        "time": "2015-01-08 03:22:20",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Fetch": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Robert Hafner",
+                "email": "tedivm@tedivm.com"
+            }
+        ],
+        "description": "A PHP IMAP Library",
+        "homepage": "http://github.com/tedious/Fetch",
+        "keywords": [
+            "email",
+            "imap",
+            "pop3"
+        ]
+    },
+    {
         "name": "nikic/php-parser",
         "version": "v2.1.1",
         "version_normalized": "2.1.1.0",
@@ -4980,18 +5134,74 @@
         ]
     },
     {
-        "name": "giggsey/locale",
-        "version": "1.1.1",
-        "version_normalized": "1.1.1.0",
+        "name": "unisharp/laravel-ckeditor",
+        "version": "4.5.7",
+        "version_normalized": "4.5.7.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/giggsey/Locale.git",
-            "reference": "8238764fa3f2c5bd8bdf981e2e019401d49229e3"
+            "url": "https://github.com/UniSharp/laravel-ckeditor.git",
+            "reference": "cc9a5505dc3c3a060944aa8b5ce13515547263ec"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/giggsey/Locale/zipball/8238764fa3f2c5bd8bdf981e2e019401d49229e3",
-            "reference": "8238764fa3f2c5bd8bdf981e2e019401d49229e3",
+            "url": "https://api.github.com/repos/UniSharp/laravel-ckeditor/zipball/cc9a5505dc3c3a060944aa8b5ce13515547263ec",
+            "reference": "cc9a5505dc3c3a060944aa8b5ce13515547263ec",
+            "shasum": ""
+        },
+        "require": {
+            "illuminate/support": "~5.0"
+        },
+        "time": "2016-02-16 05:56:20",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Unisharp\\Ckeditor\\": "./"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0+",
+            "LGPL-2.1+",
+            "MPL-1.1+"
+        ],
+        "authors": [
+            {
+                "name": "CKSource",
+                "homepage": "http://cksource.com"
+            },
+            {
+                "name": "UniSharp Ltd. (Composer Package Maintainer)",
+                "homepage": "http://www.unisharp.com"
+            }
+        ],
+        "description": "JavaScript WYSIWYG web text editor (for laravel).",
+        "homepage": "http://ckeditor.com",
+        "keywords": [
+            "CKEditor",
+            "editor",
+            "fckeditor",
+            "html",
+            "javascript",
+            "laravel",
+            "richtext",
+            "text",
+            "wysiwyg"
+        ]
+    },
+    {
+        "name": "giggsey/locale",
+        "version": "1.1",
+        "version_normalized": "1.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/giggsey/Locale.git",
+            "reference": "d936229da2187025f693f25724c5af2a090f5e7c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/giggsey/Locale/zipball/d936229da2187025f693f25724c5af2a090f5e7c",
+            "reference": "d936229da2187025f693f25724c5af2a090f5e7c",
             "shasum": ""
         },
         "require": {
@@ -5009,7 +5219,7 @@
             "symfony/finder": "^2.8|^3.0",
             "symfony/process": "^2.8|^3.0"
         },
-        "time": "2016-10-24 20:49:55",
+        "time": "2016-10-05 20:26:22",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -5032,17 +5242,17 @@
     },
     {
         "name": "giggsey/libphonenumber-for-php",
-        "version": "7.7.3",
-        "version_normalized": "7.7.3.0",
+        "version": "7.7.2",
+        "version_normalized": "7.7.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-            "reference": "e55e956a7a8211af3dfbd9dd5372ccc5eb79e495"
+            "reference": "245324b87d59fe122945f5cf4521c75af2bd472a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/e55e956a7a8211af3dfbd9dd5372ccc5eb79e495",
-            "reference": "e55e956a7a8211af3dfbd9dd5372ccc5eb79e495",
+            "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/245324b87d59fe122945f5cf4521c75af2bd472a",
+            "reference": "245324b87d59fe122945f5cf4521c75af2bd472a",
             "shasum": ""
         },
         "require": {
@@ -5059,7 +5269,7 @@
             "satooshi/php-coveralls": "^1.0",
             "symfony/console": "^2.8|^3.0"
         },
-        "time": "2016-10-26 13:35:16",
+        "time": "2016-10-06 13:02:39",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -5096,17 +5306,17 @@
     },
     {
         "name": "symfony/event-dispatcher",
-        "version": "v3.1.6",
-        "version_normalized": "3.1.6.0",
+        "version": "v3.1.5",
+        "version_normalized": "3.1.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/event-dispatcher.git",
-            "reference": "28b0832b2553ffb80cabef6a7a812ff1e670c0bc"
+            "reference": "c0c00c80b3a69132c4e55c3e7db32b4a387615e5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/28b0832b2553ffb80cabef6a7a812ff1e670c0bc",
-            "reference": "28b0832b2553ffb80cabef6a7a812ff1e670c0bc",
+            "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/c0c00c80b3a69132c4e55c3e7db32b4a387615e5",
+            "reference": "c0c00c80b3a69132c4e55c3e7db32b4a387615e5",
             "shasum": ""
         },
         "require": {
@@ -5123,7 +5333,7 @@
             "symfony/dependency-injection": "",
             "symfony/http-kernel": ""
         },
-        "time": "2016-10-13 06:28:43",
+        "time": "2016-07-19 10:45:57",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -5207,21 +5417,21 @@
     },
     {
         "name": "league/flysystem",
-        "version": "1.0.32",
-        "version_normalized": "1.0.32.0",
+        "version": "1.0.28",
+        "version_normalized": "1.0.28.0",
         "source": {
             "type": "git",
             "url": "https://github.com/thephpleague/flysystem.git",
-            "reference": "1b5c4a0031697f46e779a9d1b309c2e1b24daeab"
+            "reference": "a9663643ff2d16d7f66ed1e0d3212c5491bc9044"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/1b5c4a0031697f46e779a9d1b309c2e1b24daeab",
-            "reference": "1b5c4a0031697f46e779a9d1b309c2e1b24daeab",
+            "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/a9663643ff2d16d7f66ed1e0d3212c5491bc9044",
+            "reference": "a9663643ff2d16d7f66ed1e0d3212c5491bc9044",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.5.9"
+            "php": ">=5.4.0"
         },
         "conflict": {
             "league/flysystem-sftp": "<1.0.6"
@@ -5246,7 +5456,7 @@
             "league/flysystem-webdav": "Allows you to use WebDAV storage",
             "league/flysystem-ziparchive": "Allows you to use ZipArchive adapter"
         },
-        "time": "2016-10-19 20:38:46",
+        "time": "2016-10-07 12:20:37",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -5534,8 +5744,8 @@
     },
     {
         "name": "symfony/css-selector",
-        "version": "v3.1.6",
-        "version_normalized": "3.1.6.0",
+        "version": "v3.1.5",
+        "version_normalized": "3.1.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/css-selector.git",
@@ -5657,80 +5867,24 @@
         ]
     },
     {
-        "name": "laravel/socialite",
-        "version": "v2.0.20",
-        "version_normalized": "2.0.20.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/laravel/socialite.git",
-            "reference": "aca8de9a93a28a119714e289c8bc599bd81aa88d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/laravel/socialite/zipball/aca8de9a93a28a119714e289c8bc599bd81aa88d",
-            "reference": "aca8de9a93a28a119714e289c8bc599bd81aa88d",
-            "shasum": ""
-        },
-        "require": {
-            "guzzlehttp/guzzle": "~5.0|~6.0",
-            "illuminate/contracts": "~5.0",
-            "illuminate/http": "~5.0",
-            "illuminate/support": "~5.0",
-            "league/oauth1-client": "~1.0",
-            "php": ">=5.4.0"
-        },
-        "require-dev": {
-            "mockery/mockery": "~0.9",
-            "phpunit/phpunit": "~4.0|~5.0"
-        },
-        "time": "2016-11-01 18:49:10",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.0-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Laravel\\Socialite\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Taylor Otwell",
-                "email": "taylorotwell@gmail.com"
-            }
-        ],
-        "description": "Laravel wrapper around OAuth 1 & OAuth 2 libraries.",
-        "keywords": [
-            "laravel",
-            "oauth"
-        ]
-    },
-    {
         "name": "symfony/yaml",
-        "version": "v3.1.6",
-        "version_normalized": "3.1.6.0",
+        "version": "v3.1.5",
+        "version_normalized": "3.1.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/yaml.git",
-            "reference": "7ff51b06c6c3d5cc6686df69004a42c69df09e27"
+            "reference": "368b9738d4033c8b93454cb0dbd45d305135a6d3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/yaml/zipball/7ff51b06c6c3d5cc6686df69004a42c69df09e27",
-            "reference": "7ff51b06c6c3d5cc6686df69004a42c69df09e27",
+            "url": "https://api.github.com/repos/symfony/yaml/zipball/368b9738d4033c8b93454cb0dbd45d305135a6d3",
+            "reference": "368b9738d4033c8b93454cb0dbd45d305135a6d3",
             "shasum": ""
         },
         "require": {
             "php": ">=5.5.9"
         },
-        "time": "2016-10-24 18:41:13",
+        "time": "2016-09-25 08:27:07",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -5892,17 +6046,17 @@
     },
     {
         "name": "symfony/dom-crawler",
-        "version": "v3.1.6",
-        "version_normalized": "3.1.6.0",
+        "version": "v3.1.5",
+        "version_normalized": "3.1.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/dom-crawler.git",
-            "reference": "59eee3c76eb89f21857798620ebdad7a05ad14f4"
+            "reference": "bb7395e8b1db3654de82b9f35d019958276de4d7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/59eee3c76eb89f21857798620ebdad7a05ad14f4",
-            "reference": "59eee3c76eb89f21857798620ebdad7a05ad14f4",
+            "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/bb7395e8b1db3654de82b9f35d019958276de4d7",
+            "reference": "bb7395e8b1db3654de82b9f35d019958276de4d7",
             "shasum": ""
         },
         "require": {
@@ -5915,7 +6069,7 @@
         "suggest": {
             "symfony/css-selector": ""
         },
-        "time": "2016-10-18 15:46:07",
+        "time": "2016-08-05 08:37:39",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -5949,56 +6103,9 @@
         "homepage": "https://symfony.com"
     },
     {
-        "name": "zendframework/zend-stdlib",
-        "version": "3.1.0",
-        "version_normalized": "3.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/zendframework/zend-stdlib.git",
-            "reference": "debedcfc373a293f9250cc9aa03cf121428c8e78"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/zend-stdlib/zipball/debedcfc373a293f9250cc9aa03cf121428c8e78",
-            "reference": "debedcfc373a293f9250cc9aa03cf121428c8e78",
-            "shasum": ""
-        },
-        "require": {
-            "php": "^5.6 || ^7.0"
-        },
-        "require-dev": {
-            "athletic/athletic": "~0.1",
-            "phpunit/phpunit": "~4.0",
-            "squizlabs/php_codesniffer": "^2.6.2"
-        },
-        "time": "2016-09-13 14:38:50",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.1-dev",
-                "dev-develop": "3.2-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Zend\\Stdlib\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "homepage": "https://github.com/zendframework/zend-stdlib",
-        "keywords": [
-            "stdlib",
-            "zf2"
-        ]
-    },
-    {
         "name": "symfony/options-resolver",
-        "version": "v3.1.6",
-        "version_normalized": "3.1.6.0",
+        "version": "v3.1.5",
+        "version_normalized": "3.1.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/options-resolver.git",
@@ -6118,167 +6225,85 @@
         ]
     },
     {
-        "name": "php-imap/php-imap",
-        "version": "2.0.8",
-        "version_normalized": "2.0.8.0",
+        "name": "aws/aws-sdk-php",
+        "version": "3.19.16",
+        "version_normalized": "3.19.16.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/barbushin/php-imap.git",
-            "reference": "949826c9b109113ec93a5214e85afce31cba000c"
+            "url": "https://github.com/aws/aws-sdk-php.git",
+            "reference": "5161b8956e0c0f8e4260edbfe36c1a78392e4934"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/barbushin/php-imap/zipball/949826c9b109113ec93a5214e85afce31cba000c",
-            "reference": "949826c9b109113ec93a5214e85afce31cba000c",
+            "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/5161b8956e0c0f8e4260edbfe36c1a78392e4934",
+            "reference": "5161b8956e0c0f8e4260edbfe36c1a78392e4934",
             "shasum": ""
         },
         "require": {
-            "ext-imap": "*",
-            "php": ">=5.3.0"
+            "guzzlehttp/guzzle": "^5.3.1|^6.2.1",
+            "guzzlehttp/promises": "~1.0",
+            "guzzlehttp/psr7": "~1.3.1",
+            "mtdowling/jmespath.php": "~2.2",
+            "php": ">=5.5"
         },
-        "time": "2016-08-13 15:39:00",
+        "require-dev": {
+            "andrewsville/php-token-reflection": "^1.4",
+            "aws/aws-php-sns-message-validator": "~1.0",
+            "behat/behat": "~3.0",
+            "doctrine/cache": "~1.4",
+            "ext-dom": "*",
+            "ext-json": "*",
+            "ext-openssl": "*",
+            "ext-pcre": "*",
+            "ext-simplexml": "*",
+            "ext-spl": "*",
+            "nette/neon": "^2.3",
+            "phpunit/phpunit": "~4.0|~5.0",
+            "psr/cache": "^1.0"
+        },
+        "suggest": {
+            "aws/aws-php-sns-message-validator": "To validate incoming SNS notifications",
+            "doctrine/cache": "To use the DoctrineCacheAdapter",
+            "ext-curl": "To send requests using cURL",
+            "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages"
+        },
+        "time": "2016-10-17 20:08:45",
         "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.0-dev"
+            }
+        },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "PhpImap\\": "src/PhpImap/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD 3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Sergey Barbushin",
-                "email": "barbushin@gmail.com",
-                "homepage": "http://linkedin.com/in/barbushin"
-            }
-        ],
-        "description": "PHP class to access mailbox by POP3/IMAP/NNTP using IMAP extension",
-        "homepage": "https://github.com/barbushin/php-imap",
-        "keywords": [
-            "imap",
-            "mail",
-            "php"
-        ]
-    },
-    {
-        "name": "phpmailer/phpmailer",
-        "version": "v5.2.16",
-        "version_normalized": "5.2.16.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/PHPMailer/PHPMailer.git",
-            "reference": "1d85f9ef3ecfc42bbc4f3c70d5e37ca9a65f629a"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/1d85f9ef3ecfc42bbc4f3c70d5e37ca9a65f629a",
-            "reference": "1d85f9ef3ecfc42bbc4f3c70d5e37ca9a65f629a",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.0.0"
-        },
-        "require-dev": {
-            "phpdocumentor/phpdocumentor": "*",
-            "phpunit/phpunit": "4.7.*"
-        },
-        "suggest": {
-            "league/oauth2-google": "Needed for Google XOAUTH2 authentication"
-        },
-        "time": "2016-06-06 09:09:37",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "class.phpmailer.php",
-                "class.phpmaileroauth.php",
-                "class.phpmaileroauthgoogle.php",
-                "class.smtp.php",
-                "class.pop3.php",
-                "extras/EasyPeasyICS.php",
-                "extras/ntlm_sasl_client.php"
+                "Aws\\": "src/"
+            },
+            "files": [
+                "src/functions.php"
             ]
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "LGPL-2.1"
+            "Apache-2.0"
         ],
         "authors": [
             {
-                "name": "Jim Jagielski",
-                "email": "jimjag@gmail.com"
-            },
-            {
-                "name": "Marcus Bointon",
-                "email": "phpmailer@synchromedia.co.uk"
-            },
-            {
-                "name": "Andy Prevost",
-                "email": "codeworxtech@users.sourceforge.net"
-            },
-            {
-                "name": "Brent R. Matzelle"
+                "name": "Amazon Web Services",
+                "homepage": "http://aws.amazon.com"
             }
         ],
-        "description": "PHPMailer is a full-featured email creation and transfer class for PHP"
-    },
-    {
-        "name": "unisharp/laravel-ckeditor",
-        "version": "4.5.7",
-        "version_normalized": "4.5.7.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/UniSharp/laravel-ckeditor.git",
-            "reference": "cc9a5505dc3c3a060944aa8b5ce13515547263ec"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/UniSharp/laravel-ckeditor/zipball/cc9a5505dc3c3a060944aa8b5ce13515547263ec",
-            "reference": "cc9a5505dc3c3a060944aa8b5ce13515547263ec",
-            "shasum": ""
-        },
-        "require": {
-            "illuminate/support": "~5.0"
-        },
-        "time": "2016-02-16 05:56:20",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Unisharp\\Ckeditor\\": "./"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-2.0+",
-            "LGPL-2.1+",
-            "MPL-1.1+"
-        ],
-        "authors": [
-            {
-                "name": "CKSource",
-                "homepage": "http://cksource.com"
-            },
-            {
-                "name": "UniSharp Ltd. (Composer Package Maintainer)",
-                "homepage": "http://www.unisharp.com"
-            }
-        ],
-        "description": "JavaScript WYSIWYG web text editor (for laravel).",
-        "homepage": "http://ckeditor.com",
+        "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
+        "homepage": "http://aws.amazon.com/sdkforphp",
         "keywords": [
-            "CKEditor",
-            "editor",
-            "fckeditor",
-            "html",
-            "javascript",
-            "laravel",
-            "richtext",
-            "text",
-            "wysiwyg"
+            "amazon",
+            "aws",
+            "cloud",
+            "dynamodb",
+            "ec2",
+            "glacier",
+            "s3",
+            "sdk"
         ]
     },
     {
@@ -6349,136 +6374,186 @@
         ]
     },
     {
-        "name": "aws/aws-sdk-php",
-        "version": "3.19.23",
-        "version_normalized": "3.19.23.0",
+        "name": "league/fractal",
+        "version": "0.14.0",
+        "version_normalized": "0.14.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/aws/aws-sdk-php.git",
-            "reference": "fbfb87734e5d298b40354ac7fb3f95d0f72ad16e"
+            "url": "https://github.com/thephpleague/fractal.git",
+            "reference": "56ad8933fbb40328ca3321c84143b2c16186eebf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/fbfb87734e5d298b40354ac7fb3f95d0f72ad16e",
-            "reference": "fbfb87734e5d298b40354ac7fb3f95d0f72ad16e",
+            "url": "https://api.github.com/repos/thephpleague/fractal/zipball/56ad8933fbb40328ca3321c84143b2c16186eebf",
+            "reference": "56ad8933fbb40328ca3321c84143b2c16186eebf",
             "shasum": ""
         },
         "require": {
-            "guzzlehttp/guzzle": "^5.3.1|^6.2.1",
-            "guzzlehttp/promises": "~1.0",
-            "guzzlehttp/psr7": "~1.3.1",
-            "mtdowling/jmespath.php": "~2.2",
-            "php": ">=5.5"
+            "php": ">=5.4"
         },
         "require-dev": {
-            "andrewsville/php-token-reflection": "^1.4",
-            "aws/aws-php-sns-message-validator": "~1.0",
-            "behat/behat": "~3.0",
-            "doctrine/cache": "~1.4",
-            "ext-dom": "*",
-            "ext-json": "*",
-            "ext-openssl": "*",
-            "ext-pcre": "*",
-            "ext-simplexml": "*",
-            "ext-spl": "*",
-            "nette/neon": "^2.3",
-            "phpunit/phpunit": "~4.0|~5.0",
-            "psr/cache": "^1.0"
+            "illuminate/contracts": "~5.0",
+            "mockery/mockery": "~0.9",
+            "pagerfanta/pagerfanta": "~1.0.0",
+            "phpunit/phpunit": "~4.0",
+            "squizlabs/php_codesniffer": "~1.5",
+            "zendframework/zend-paginator": "~2.3"
         },
         "suggest": {
-            "aws/aws-php-sns-message-validator": "To validate incoming SNS notifications",
-            "doctrine/cache": "To use the DoctrineCacheAdapter",
-            "ext-curl": "To send requests using cURL",
-            "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages"
+            "illuminate/pagination": "The Illuminate Pagination component.",
+            "pagerfanta/pagerfanta": "Pagerfanta Paginator",
+            "zendframework/zend-paginator": "Zend Framework Paginator"
         },
-        "time": "2016-11-03 20:28:28",
+        "time": "2016-07-21 09:56:14",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "3.0-dev"
+                "dev-master": "0.13-dev"
             }
         },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Aws\\": "src/"
+                "League\\Fractal\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Phil Sturgeon",
+                "email": "me@philsturgeon.uk",
+                "homepage": "http://philsturgeon.uk/",
+                "role": "Developer"
+            }
+        ],
+        "description": "Handle the output of complex data structures ready for API output.",
+        "homepage": "http://fractal.thephpleague.com/",
+        "keywords": [
+            "api",
+            "json",
+            "league",
+            "rest"
+        ]
+    },
+    {
+        "name": "laravelcollective/html",
+        "version": "v5.2.4",
+        "version_normalized": "5.2.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/LaravelCollective/html.git",
+            "reference": "3a312d39ffe37da0f57b602618b61fd07c1fcec5"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/LaravelCollective/html/zipball/3a312d39ffe37da0f57b602618b61fd07c1fcec5",
+            "reference": "3a312d39ffe37da0f57b602618b61fd07c1fcec5",
+            "shasum": ""
+        },
+        "require": {
+            "illuminate/http": "5.2.*",
+            "illuminate/routing": "5.2.*",
+            "illuminate/session": "5.2.*",
+            "illuminate/support": "5.2.*",
+            "illuminate/view": "5.2.*",
+            "php": ">=5.5.9"
+        },
+        "require-dev": {
+            "illuminate/database": "5.2.*",
+            "mockery/mockery": "~0.9",
+            "phpunit/phpunit": "~4.0"
+        },
+        "time": "2016-01-27 22:29:54",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Collective\\Html\\": "src/"
             },
             "files": [
-                "src/functions.php"
+                "src/helpers.php"
             ]
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "Apache-2.0"
+            "MIT"
         ],
         "authors": [
             {
-                "name": "Amazon Web Services",
-                "homepage": "http://aws.amazon.com"
+                "name": "Taylor Otwell",
+                "email": "taylorotwell@gmail.com"
+            },
+            {
+                "name": "Adam Engebretson",
+                "email": "adam@laravelcollective.com"
             }
         ],
-        "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
-        "homepage": "http://aws.amazon.com/sdkforphp",
-        "keywords": [
-            "amazon",
-            "aws",
-            "cloud",
-            "dynamodb",
-            "ec2",
-            "glacier",
-            "s3",
-            "sdk"
-        ]
+        "description": "HTML and Form Builders for the Laravel Framework",
+        "homepage": "http://laravelcollective.com"
     },
     {
-        "name": "tedivm/fetch",
-        "version": "v0.6.1",
-        "version_normalized": "0.6.1.0",
+        "name": "yajra/laravel-datatables-oracle",
+        "version": "v6.17.0",
+        "version_normalized": "6.17.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/tedious/Fetch.git",
-            "reference": "154a84fdfa0d045c2871dd9f8708362fb9ea4acf"
+            "url": "https://github.com/yajra/laravel-datatables.git",
+            "reference": "66186a1275156b922e5968a4d65bbc5966bbee5d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/tedious/Fetch/zipball/154a84fdfa0d045c2871dd9f8708362fb9ea4acf",
-            "reference": "154a84fdfa0d045c2871dd9f8708362fb9ea4acf",
+            "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/66186a1275156b922e5968a4d65bbc5966bbee5d",
+            "reference": "66186a1275156b922e5968a4d65bbc5966bbee5d",
             "shasum": ""
         },
         "require": {
-            "ext-imap": "*",
-            "php": ">=5.3.0"
+            "dompdf/dompdf": "^0.6.1",
+            "illuminate/database": "~5.0",
+            "illuminate/filesystem": "~5.0",
+            "illuminate/http": "~5.0",
+            "illuminate/support": "~5.0",
+            "illuminate/view": "~5.0",
+            "laravelcollective/html": "~5.0",
+            "league/fractal": "~0.12",
+            "maatwebsite/excel": "^2.0",
+            "php": ">=5.5.9"
         },
         "require-dev": {
-            "fabpot/php-cs-fixer": "0.5.*",
-            "phpunit/phpunit": "4.2.*",
-            "satooshi/php-coveralls": "dev-master",
-            "tedivm/dovecottesting": "1.2.3"
+            "mockery/mockery": "~0.9",
+            "phpunit/phpunit": "~4.0"
         },
-        "time": "2015-01-08 03:22:20",
+        "suggest": {
+            "barryvdh/laravel-snappy": "Allows exporting of dataTable to PDF using the print view."
+        },
+        "time": "2016-08-10 00:31:22",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
-            "psr-0": {
-                "Fetch": "src/"
+            "psr-4": {
+                "Yajra\\Datatables\\": "src/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "BSD-3-Clause"
+            "MIT"
         ],
         "authors": [
             {
-                "name": "Robert Hafner",
-                "email": "tedivm@tedivm.com"
+                "name": "Arjay Angeles",
+                "email": "aqangeles@gmail.com"
             }
         ],
-        "description": "A PHP IMAP Library",
-        "homepage": "http://github.com/tedious/Fetch",
+        "description": "jQuery DataTables API for Laravel 4|5",
         "keywords": [
-            "email",
-            "imap",
-            "pop3"
+            "datatable",
+            "datatables",
+            "datatables jquery plugin",
+            "laravel",
+            "laravel4",
+            "laravel5"
         ]
     }
 ]

@@ -2,6 +2,10 @@
 $social = new \App\Model\helpdesk\Settings\SocialMedia();
 ?>
 <br>
+@if($social->checkActive('twitter') || $social->checkActive('facebook') || $social->checkActive('google') || $social->checkActive('linkedin') || $social->checkActive('bitbucket') || $social->checkActive('github'))
+<center>{{Lang::get('lang.or')}}</center>
+@endif
+<br>
 @if($social->checkActive('twitter'))
 <a class="btn btn-block btn-social btn-twitter" href="{{ route('social.login', ['twitter']) }}" style="background-color: #55ACEE;color: white;">
     <span class="fa fa-twitter"></span> Sign in with Twitter

@@ -1,6 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
 
-@section('Settings')
+@section('Tickets')
 active
 @stop
 
@@ -10,6 +10,11 @@ class="active"
 
 @section('PageHeader')
 <h1>{!! Lang::get('lang.settings') !!}</h1>
+@stop
+
+@section('breadcrumbs')
+<ol class="breadcrumb">
+</ol>
 @stop
 
 @section('content')

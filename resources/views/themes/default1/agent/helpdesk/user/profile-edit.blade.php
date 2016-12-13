@@ -46,6 +46,7 @@ class="active"
                 @endif
                 @if(Session::has('errors'))
                 <?php //dd($errors); ?>
+               
                 <div class="alert alert-danger alert-dismissable">
                     <i class="fa fa-ban"></i>
                     <b>{!! Lang::get('lang.alert') !!}!</b>
@@ -99,20 +100,20 @@ class="active"
                         {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
                         {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code'), 'id' => 'code']) !!}
                     </div>
-                    <div class="col-xs-2 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">
-                        {!! Form::label('ext',Lang::get('lang.ext')) !!}
-                        {!! Form::text('ext',null,['class' => 'form-control']) !!}
-                    </div>
                     <!-- phone number -->
                     <div class="col-xs-8 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
                         {!! Form::label('phone_number',Lang::get('lang.phone')) !!}
                         {!! Form::text('phone_number',null,['class' => 'form-control']) !!}
                     </div>
+                    <div class="col-xs-2 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">
+                        {!! Form::label('ext',Lang::get('lang.ext')) !!}
+                        {!! Form::text('ext',null,['class' => 'form-control']) !!}
+                    </div>
                 </div>
                 <!-- mobile -->
                 <div class="form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
                     {!! Form::label('mobile',Lang::get('lang.mobile_number')) !!}
-                    {!! Form::text('mobile',null,['class' => 'form-control', 'id' => 'mobile']) !!}
+                    {!! Form::input('number', 'mobile',null,['class' => 'form-control', 'id' => 'mobile']) !!}
                 </div>
                 <div class="form-group {{ $errors->has('agent_sign') ? 'has-error' : '' }}">
                     {!! Form::label('agent_sign',Lang::get('lang.agent_sign')) !!}

@@ -98,7 +98,7 @@ class InstallerApiController extends Controller
                 $ENV['QUEUE_DRIVER'] = 'sync';
 
                 $config = '';
-
+                
                 foreach ($ENV as $key => $val) {
                     $config .= "{$key}={$val}\n";
                 }

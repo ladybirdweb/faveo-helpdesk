@@ -158,7 +158,7 @@ class="active"
                     <div class="form-group">
                         <label>{!! Lang::get('lang.help_topic') !!}:</label>
                         <!-- helptopic -->
-                        <?php $helptopic = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->get(); ?>
+                        <?php $helptopic = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->select('topic', 'id')->get(); ?>
                         {!! Form::select('helptopic', ['Helptopic'=>$helptopic->lists('topic','id')->toArray()],null,['class' => 'form-control select','id'=>'selectid']) !!}
                     </div>
                 </div>
@@ -166,7 +166,7 @@ class="active"
                     <!-- sla plan -->
                     <div class="form-group">
                         <label>{!! Lang::get('lang.sla_plan') !!}:</label>
-                        <?php $sla_plan = App\Model\helpdesk\Manage\Sla_plan::all(); ?>
+                        <?php $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('status', '=', 1)->select('grace_period', 'id')->get(); ?>
                         {!! Form::select('sla', ['SLA'=>$sla_plan->lists('grace_period','id')->toArray()],null,['class' => 'form-control select']) !!}
                     </div>
                 </div>
@@ -181,7 +181,7 @@ class="active"
                     <!-- assign to -->
                     <div class="form-group">
                         <label>{!! Lang::get('lang.assign_to') !!}:</label>
-                        <?php $agents = App\User::where('role', '!=', 'user')->get(); ?>
+                        <?php $agents = App\User::where('role', '!=', 'user')->where('active', '=', 1)->get(); ?>
                         {!! Form::select('assignto', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')->toArray()],null,['class' => 'form-control select']) !!}
                     </div>
                 </div>

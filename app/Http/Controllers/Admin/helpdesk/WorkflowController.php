@@ -356,7 +356,7 @@ class WorkflowController extends Controller
      */
     public function priority($id)
     {
-        $priorities = Ticket_Priority::all();
+        $priorities = Ticket_Priority::where('status', '=', 1)->get();
         $var = "<select name='action[".$id."][b]' class='form-control' required>";
         foreach ($priorities as $priority) {
             $var .= "<option value='".$priority->priority_id."'>".$priority->priority_desc.'</option>';

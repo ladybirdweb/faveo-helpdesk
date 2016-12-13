@@ -29,11 +29,10 @@ class RegisterRequest extends Request
      */
     public function rules()
     {
-        $check = $this->check(new CommonSettings());
+        $check = $this->check(new CommonSettings);
         if ($check != 0) {
             return $check;
         }
-
         return [
             'email'                 => 'required|max:50|email|unique:users',
             'full_name'             => 'required',
@@ -44,12 +43,9 @@ class RegisterRequest extends Request
 
     /**
      *@category Funcion to set rule if send opt is enabled
-     *
-     *@param object $settings (instance of Model common settings)
-     *
+     *@param Object $settings (instance of Model common settings)
      *@author manish.verma@ladybirdweb.com
-     *
-     *@return array|int
+     *@return array|int 
      */
     public function check($settings)
     {

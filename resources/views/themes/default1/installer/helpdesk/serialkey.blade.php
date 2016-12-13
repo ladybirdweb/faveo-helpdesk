@@ -54,10 +54,12 @@ active
                     </td>
                     <td ng-repeat="productKey in productKeys" style="margin-left: 150px;">
                         {!! $errors->first('serial', '<spam class="help-block">:message</spam>') !!}
-                        <input type="text" name="first" id="productKey1" ng-model="productKey.set1" maxlength="4" size="4" style="padding: 3px; margin-left: 180px; width: 50px;">&nbsp;-
-                        <input type="text" name="second" id="productKey2" ng-model="productKey.set2" maxlength="4" size="4" style="padding: 3px; margin-left: 3px; width: 50px;">&nbsp;-
-                        <input type="text" name="third" id="productKey3" ng-model="productKey.set3" maxlength="4" size="4" style="padding: 3px; margin-left: 3px; width: 50px;">&nbsp;-
-                        <input type="text" name="forth" id="productKey4" ng-model="productKey.set4" maxlength="4" size="4" style="padding: 3px; margin-left: 3px; width: 50px;">
+                        <div class="container">
+                            <input type="text" name="first" id="productKey1" ng-model="productKey.set1" maxlength="4" size="4" style="padding: 3px; margin-left: 180px; width: 50px;">&nbsp;-
+                            <input type="text" name="second" id="productKey2" ng-model="productKey.set2" maxlength="4" size="4" style="padding: 3px; margin-left: 3px; width: 50px;">&nbsp;-
+                            <input type="text" name="third" id="productKey3" ng-model="productKey.set3" maxlength="4" size="4" style="padding: 3px; margin-left: 3px; width: 50px;">&nbsp;-
+                            <input type="text" name="forth" id="productKey4" ng-model="productKey.set4" maxlength="4" size="4" style="padding: 3px; margin-left: 3px; width: 50px;">
+                        </div>
                     </td>
                 </tr>
             </table>
@@ -71,4 +73,23 @@ active
 <script src="{{asset("lb-faveo/js/jquery.autotab.js")}}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
 <script src="{{asset("lb-faveo/js/angular.js")}}" type="text/javascript"></script>
+<script type="text/javascript">
+var container = document.getElementsByClassName("container")[0];
+container.onkeyup = function(e) {
+    var target = e.srcElement;
+    var maxLength = parseInt(target.attributes["maxlength"].value, 10);
+    var myLength = target.value.length;
+    if (myLength >= maxLength) {
+        var next = target;
+        while (next = next.nextElementSibling) {
+            if (next == null)
+                break;
+            if (next.tagName.toLowerCase() == "input") {
+                next.focus();
+                break;
+            }
+        }
+    }
+}
+</script>
 @stop

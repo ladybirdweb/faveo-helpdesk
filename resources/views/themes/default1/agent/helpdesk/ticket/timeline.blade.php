@@ -10,6 +10,7 @@ active
 
 @section('PageHeader')
 <h1>{{Lang::get('lang.ticket-details')}}</h1>
+@include('themes.default1.agent.helpdesk.ticket.response-messages')
 @stop
 <?php
 $user = App\User::where('id', '=', $tickets->user_id)->first();
@@ -29,7 +30,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
 <li>
     <a href="{!! URL('user/'.$user->id) !!}">
         <span>{!! Lang::get('lang.User') !!} </span>
-        </br><i class="fa fa-user"></i> <b>{{$user->user_name}}</b>
+        </br><i class="fa fa-user"></i> <b>{{$user->name() }}</b>
     </a>
 </li>
 <li >
@@ -65,7 +66,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
         {!! $rating->name !!}:
         <small class="pull-right">
             <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
-                <input type="radio" class="star" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
+                <input type="radio" class="star not-apply" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
             <?php } ?>
         </small>
     </a>
@@ -84,7 +85,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
         {!! $rating->name !!}:
         <small class="pull-right">
             <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
-                <input type="radio" class="star" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($avg_rating == $i) ? 'checked' : '' ?> />
+                <input type="radio" class="star not-apply" id="star5" name="{!! $rating->name !!}" value="{!! $i !!}"<?php echo ($avg_rating == $i) ? 'checked' : '' ?> />
             <?php } ?>
         </small>
     </a>
@@ -112,22 +113,23 @@ if ($thread->title != "") {
 
             if ($group->can_edit_ticket == 1) {
                 ?>
-                <button type="button" class="btn btn-default" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><i class="fa fa-edit" style="color:green;"> </i> {!! Lang::get('lang.edit') !!}</button>
+                <button type="button" class="btn btn-sm btn-default" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><i class="fa fa-edit" style="color:green;"> </i> {!! Lang::get('lang.edit') !!}</button>
             <?php } ?>
 
             <?php if ($group->can_assign_ticket == 1) { ?>
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#{{$tickets->id}}assign"><i class="fa fa-hand-o-right" style="color:orange;"> </i> {!! Lang::get('lang.assign') !!}</button>
+                <button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#{{$tickets->id}}assign"><i class="fa fa-hand-o-right" style="color:orange;"> </i> {!! Lang::get('lang.assign') !!}</button>
             <?php } ?>
 
             @if($tickets->assigned_to == Auth::user()->id)
-            <button type="button" id="surrender_button" class="btn btn-default" data-toggle="modal" data-target="#surrender"> <i class="fa fa-arrows-alt" style="color:red;"> </i>  {!! Lang::get('lang.surrender') !!}</button>
+            <button type="button" id="surrender_button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#surrender"> <i class="fa fa-arrows-alt" style="color:red;"> </i>  {!! Lang::get('lang.surrender') !!}</button>
             @endif
+
 
             <?php Event::fire('show-add-event-btn', array()); ?>
 
-            <a href="{{url('ticket/print/'.$tickets->id)}}" target="_blank" class="btn btn-primary"><i class="fa fa-print" > </i> {!! Lang::get('lang.generate_pdf') !!}</a>
+            <a href="{{url('ticket/print/'.$tickets->id)}}" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-print" > </i> {!! Lang::get('lang.generate_pdf') !!}</a>
             <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="d1"><i class="fa fa-exchange" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
+                <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d1"><i class="fa fa-exchange" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
                     {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
@@ -156,7 +158,7 @@ if ($thread->title != "") {
             </div>
             <?php if ($group->can_delete_ticket == 1 || $group->can_ban_email == 1) { ?>
                 <div id="more-option" class="btn-group">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="d2"><i class="fa fa-cogs" style="color:teal;"> </i>
+                    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d2"><i class="fa fa-cogs" style="color:teal;"> </i>
                         {!! Lang::get('lang.more') !!} <span class="caret"></span>
                     </button>
                     <ul  class="dropdown-menu pull-right">
@@ -170,7 +172,9 @@ if ($thread->title != "") {
                         ?>
                         <?php if ($group->can_ban_email == 1) { ?>
                             <li data-toggle="modal" data-target="#banemail"><a href="#"><i class="fa fa-ban" style="color:red;"></i>{!! Lang::get('lang.ban_email') !!}</a></li>
-                        <?php }
+                        <?php 
+                        \Event::fire('ticket.details.more.list',[$tickets]);
+                        }
                         ?>          </ul>
                 </div>
             <?php }
@@ -242,9 +246,23 @@ if ($thread->title != "") {
                     <div class="col-md-6">
                         <table class="table table-hover">
                             <div id="refresh">
-                                <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $tickets->status)->first(); ?><td title="{{$status->properties}}">{{$status->name}}</td></tr>
-                                <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first(); ?><td title="{{$priority->priority_desc}}">{{$priority->priority_desc}}</td></tr>
-                                <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   <?php $dept123 = App\Model\helpdesk\Agent\Department::where('id', '=', $tickets->dept_id)->first(); ?><td title="{{$dept123->name}}">{{$dept123->name}}</td></tr>
+                                <tr><td><b>{!! Lang::get('lang.status') !!}:</b></td>       
+                                    <?php $status = App\Model\helpdesk\Ticket\Ticket_Status::where('id', '=', $tickets->status)->first(); ?>
+                                    @if($status)
+                                    <td title="{{$status->properties}}">{{$status->name}}</td>
+                                    @endif
+                                </tr>
+                                <tr><td><b>{!! Lang::get('lang.priority') !!}:</b></td>     
+                                    <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $tickets->priority_id)->first(); ?>
+                                    @if($priority)
+                                    <td title="{{$priority->priority_desc}}">{{$priority->priority_desc}}</td>
+                                    @endif
+                                </tr>
+                                <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   
+                                    <?php $dept123 = App\Model\helpdesk\Agent\Department::where('id', '=', $tickets->dept_id)->first(); ?>
+                                    @if($dept123)
+                                    <td title="{{$dept123->name}}">{{$dept123->name}}</td></tr>
+                                    @endif
                                 <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        <td>{{str_limit($user->email,30)}}</td></tr>
                                 @if($user->ban > 0)  <tr><td style="color:orange;"><i class="fa fa-warning"></i><b>
                                             {!!  Lang::get('lang.this_ticket_is_under_banned_user')!!}</td><td></td></tr>@endif
@@ -306,6 +324,7 @@ if ($thread->title != "") {
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#General" data-toggle="tab" style="color:#27C116;" id="aa"><i class="fa fa-reply-all"> </i> {!! Lang::get('lang.reply') !!}</a></li>
                 <li><a href="#Internal" data-toggle="tab" style="color:#0495FF;" id="bb"><i class="fa fa-file-text"> </i> {!! Lang::get('lang.internal_notes') !!}</a></li>
+                <?php Event::fire('timeline.tab.list',[$TicketData]); ?>
                 <!-- <li><a href="#Reply" data-toggle="tab" style="color:orange;"><i class="fa fa-mail-forward" > </i> Forward</a></li> -->
             </ul>
             <div class="tab-content">
@@ -343,6 +362,7 @@ if ($thread->title != "") {
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <div id="t1">
+                        <div id="reply-response"></div>
                         <div class="form-group">
                             <div class="row">
                                 <!-- to -->
@@ -370,7 +390,7 @@ if ($thread->title != "") {
                                 </div>
                             </div>
                         </div>
-                        <?php Event::fire(new App\Events\TimeLineFormEvent($TicketData)); ?>
+                        <?php Event::fire(new App\Events\TimeLineFormEvent($tickets)); ?>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-2">
@@ -403,6 +423,25 @@ if ($thread->title != "") {
                                             <textarea style="width:98%;height:20%;" name="reply_content" class="form-control" id="reply_content"></textarea>
                                         </div>
                                         {!! $errors->first('reply_content', '<spam class="help-block text-red">:message</spam>') !!}
+                                         <script src="{{asset('vendor/unisharp/laravel-ckeditor/ckeditor.js')}}"></script> 
+                                        <script>
+  CKEDITOR.replace( 'reply_content', {
+      toolbarGroups: [
+				{"name":"basicstyles","groups":["basicstyles"]},
+				{"name":"links","groups":["links"]},
+				{"name":"paragraph","groups":["list","blocks"]},
+				{"name":"document","groups":["mode"]},
+				{"name":"insert","groups":["insert"]},
+				{"name":"styles","groups":["styles"]},
+				{"name":"about","groups":["about"]}
+			],
+    filebrowserImageBrowseUrl: "{{url('laravel-filemanager?type=Images')}}",
+    filebrowserImageUploadUrl: "{{url('laravel-filemanager/upload?type=Images')}}",
+    filebrowserBrowseUrl: "{{url('laravel-filemanager?type=Files')}}",
+    filebrowserUploadUrl: "{{url('laravel-filemanager/upload?type=Files')}}",
+    removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+  });
+</script>
                                     </div>
                                 </div>
                             </div>
@@ -492,6 +531,7 @@ if ($thread->title != "") {
                         {!!Form::close()!!}
                     </div>
                 </div>
+                <?php Event::fire('timeline.tab.content',[$tickets]); ?>
             </div>
         </div>
         <!-- ticket  conversations -->
@@ -520,7 +560,9 @@ if ($thread->title != "") {
                     <ul class="timeline">
                         <!-- timeline time label -->
                         <?php
+                       
                         foreach ($conversations as $conversation) {
+                             
                             if ($conversation == null) {      
                             } else {
                                 ?>
@@ -541,8 +583,10 @@ if ($thread->title != "") {
                                         $data = $ConvDate[0];
                                     }
                                     if($conversation->user_id != null) {
-                                        $role = App\User::where('id', '=', $conversation->user_id)->first();
-                                    } 
+                                        $role = $conversation->user;
+                                    } else {
+                                        $role = null;
+                                    }
                                     ?>
                                 </li>
                                 <li>
@@ -566,7 +610,7 @@ if ($thread->title != "") {
                                             <?php
                                         }
                                     }
-                                    
+
                                     if($conversation->user_id != null) {
                                         if ($conversation->is_internal) {
                                             $color = '#A19CFF';
@@ -581,6 +625,7 @@ if ($thread->title != "") {
                                             }
                                         }
                                     }
+                                    
                                     ?>
                                     <div class="timeline-item">
                                         <span style="color:#fff;"><div class="pull-right">   <table><tbody>
@@ -590,7 +635,7 @@ if ($thread->title != "") {
                                                         @foreach($ratings as $rating) 
                                                         @if($rating->rating_area == 'Comment Area')
                                                         <?php
-                                                        $rating_value = App\Model\helpdesk\Ratings\RatingRef::where('rating_id', '=', $rating->id)->where('thread_id', '=', $conversation->id)->first();
+                                                        $rating_value = App\Model\helpdesk\Ratings\RatingRef::where('rating_id', '=', $tickets->rating_id)->where('thread_id', '=', $conversation->id)->select('rating_value')->first();
                                                         if ($rating_value == null) {
                                                             $ratingval = '0';
                                                         } else {
@@ -601,7 +646,7 @@ if ($thread->title != "") {
                                                             <th><div class="ticketratingtitle" style="color:#3c8dbc;" >{!! $rating->name !!} &nbsp;</div></th>&nbsp
                                                         <td style="button:disabled;">
                                                         <?php for ($i = 1; $i <= $rating->rating_scale; $i++) { ?>
-                                                            <input type="radio" class="star star-rating-readonly" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
+                                                            <input type="radio" class="star star-rating-readonly not-apply" id="star5" name="{!! $rating->name !!},{!! $conversation->id !!}" value="{!! $i !!}"<?php echo ($ratingval == $i) ? 'checked' : '' ?> />
                                                         <?php } ?>&nbsp;&nbsp;&nbsp;&nbsp;   
                                                         </td> 
                                                         </tr>
@@ -624,6 +669,7 @@ if ($thread->title != "") {
                                             } else {
                                                 $usernam = Lang::get('lang.system');
                                             }
+                                            
                                             ?>
                                             
                                             <div class="user-block" style="margin-bottom:-5px;margin-top:-2px;">
@@ -643,52 +689,59 @@ if ($thread->title != "") {
                                                 @if($conversation->id == $ij->id)
                                                 <a href="{{url('genereate-pdf/'.$conversation->id)}}" class= "pull-right fa fa-newspaper-o" title="generate pdf of this thread"></a>
                                                 @endif
+                                                
                                             </div><!-- /.user-block -->
                                            
                                         </h3>
                                         <div class="timeline-body" style="padding-left:30px;margin-bottom:-20px">
-                                            @if($conversation->firstContent()=='yes')
+                                            
+                                          
+                                            
+                                           @if($conversation->poster=='client')
                                              <div class="embed-responsive embed-responsive-16by9">
                                             <iframe id="loader_frame{{$conversation->id}}" class="embed-responsive-item">Body of html email here</iframe>
-                                            <script type="text/javascript">
+<script type="text/javascript">
 jQuery(document).ready(function () {
-/*          setInterval(function(){
-            var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-            var h     = mydiv.height();
+/*   setInterval(function(){
+   var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
+   var h     = mydiv.height();
 alert(h+20);
-            }, 2000);*/
-                jQuery('.embed-responsive-16by9').css('height','auto');
-            jQuery('.embed-responsive-16by9').css('padding','0');
-            jQuery('#loader_frame{{$conversation->id}}').css('width','100%');
-            jQuery('#loader_frame{{$conversation->id}}').css('position','static');
-            jQuery('#loader_frame{{$conversation->id}}').css('border','none');
-            var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-            var h     = mydiv.height();
-            jQuery('#loader_frame{{$conversation->id}}').css('height', h+20);
-            setInterval(function(){
-            //var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-            //alert(mydiv.height());
-                h = jQuery('#loader_frame{{$conversation->id}}').height();
-                if (!!navigator.userAgent.match(/Trident\/7\./)){
-                    jQuery('#loader_frame{{$conversation->id}}').css('height', h);
-                }else {
-                    jQuery('#loader_frame{{$conversation->id}}').css('height', h);
-                }
-            }, 2000);
-        });
+   }, 2000);*/
+             jQuery('.embed-responsive-16by9').css('height','auto');
+   jQuery('.embed-responsive-16by9').css('padding','0');
+   jQuery('#loader_frame{{$conversation->id}}').css('width','100%');
+   jQuery('#loader_frame{{$conversation->id}}').css('position','static');
+   jQuery('#loader_frame{{$conversation->id}}').css('border','none');
+   var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
+   var h     = mydiv.height();
+   jQuery('#loader_frame{{$conversation->id}}').css('height', h+20);
+   setInterval(function(){
+   //var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
+   //alert(mydiv.height());
+    h = jQuery('#loader_frame{{$conversation->id}}').height();
+    if (!!navigator.userAgent.match(/Trident\/7\./)){
+     jQuery('#loader_frame{{$conversation->id}}').css('height', h);
+    }else {
+     jQuery('#loader_frame{{$conversation->id}}').css('height', h);
+    }
+   }, 2000);
+  });
 </script>
                                             </div>
                                             <script>
                                                  setTimeout(function(){ 
-                                                       $('#loader_frame{{$conversation->id}}')[0].contentDocument.body.innerHTML = '<body><style>body{display:inline-block;}</style>{!!$conversation->purify()!!}<body>';   }, 1000);
+                                                       $('#loader_frame{{$conversation->id}}')[0].contentDocument.body.innerHTML = '<body><style>body{display:inline-block;height:auto;}</style>{!!$conversation->purify()!!}<body>';   }, 1000);
                                                 
                                             </script>
                                             @else 
                                             {!! $conversation->body !!}
                                             @endif
+                                           
+                   
                                             
+
                                             @if($conversation->id == $ij->id)
-        <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->id)->get(); ?>
+        <?php $ticket_form_datas = App\Model\helpdesk\Ticket\Ticket_Form_Data::where('ticket_id', '=', $tickets->ticket_id)->select('id')->get(); ?>
                                         @if(isset($ticket_form_datas))
                                         
                                             <br/>
@@ -696,45 +749,35 @@ alert(h+20);
                                                 <tbody>
                                                     @foreach($ticket_form_datas as $ticket_form_data)
                                                     <tr>
-                                                        <td style="width: 30%">{!! $ticket_form_data->title !!}</td>
-                                                        <td>{!! $ticket_form_data->content !!}</td>
+                                                        <td style="width: 30%">{!! $ticket_form_data->getFieldKeyLabel() !!}</td>
+                                                        <td>{!! removeUnderscore($ticket_form_data->content) !!}</td>
                                                     </tr>
                                                     @endforeach
-                                                </tbody>
-
-                                                </table>
+                                                </tbody></table>
                                         
                                         @endif
                                         @endif
+                                        
                                         </div>
                                         
                                         <br/><br/>
+                                        
                                         <div class="timeline-footer" style="margin-bottom:-5px">
                                             @if(!$conversation->is_internal)
                                                 @if($conversation->user_id != null)
-                                                    <?php Event::fire(new App\Events\Timeline($conversation, $role, $user)); ?>
+                                                    <?php Event::fire(new App\Events\Timeline($conversation, $role)); ?>
                                                 @endif
                                             @endif
-                                            <?php
-                                            $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $conversation->id)->get();
-                                            $i = 0;
-                                            foreach ($attachments as $attachment) {
-                                                if ($attachment->poster == 'ATTACHMENT') {
-                                                    $i++;
-                                                }
-                                            }
-                                            if ($i > 0) {
-                                                echo "<hr style='border-top: 1px dotted #FFFFFF;margin-top:0px;margin-bottom:0px;background-color:#8B8C90;'><h4 class='box-title'><b>" . $i . " </b> Attachments</h4>";
-                                            }
-                                            ?>
+                                           
                                             <ul class='mailbox-attachments clearfix'>
-                                                @forelse($attachments as $attachment)
-                                                {!! $attachment->getFile() !!}
-                                                @empty 
                                                 
+                                                @forelse ($conversation->attach as $attachment) 
+                                                    {!! $attachment->getFile() !!}
+                                                @empty
                                                 @endforelse
                                             </ul>
                                         </div>
+                                        
                                     </div>
                                 </li>
                                 <?php $lastid = $conversation->id ?>
@@ -745,10 +788,10 @@ alert(h+20);
                         <li>
                             <i class="fa fa-clock-o bg-gray"></i>
                         </li>
-                        <ul class="pull-right" style="padding-right:25px;padding-bottom:10px;">
-<?php echo $conversations->setPath(url('/thread/' . $tickets->id))->render(); ?>
+                        <ul class="pull-right" style="padding-right:40px" >
+                            <?php echo $conversations->setPath(url('/thread/' . $tickets->id))->render(); ?>
                         </ul>
-                    </ul>                
+                    </ul>               
                 </div><!-- /.col -->
             </div>
         </div><!-- /.row -->
@@ -778,7 +821,7 @@ alert(h+20);
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{!! Lang::get('lang.sla_plan') !!} <span class="text-red"> *</span></label>
-    <?php $sla_plans = App\Model\helpdesk\Manage\Sla_plan::all() ?>
+    <?php $sla_plans = App\Model\helpdesk\Manage\Sla_plan::where('status', '=', 1)->get() ?>
                                     <select class="form-control" name="sla_paln">
                                         @foreach($sla_plans as $sla_plan)
                                         <option value="{!! $sla_plan->id !!}" <?php
@@ -794,7 +837,8 @@ alert(h+20);
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{!! Lang::get('lang.help_topic') !!} <span class="text-red"> *</span></label>
-    <?php $help_topics = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->get() ?>
+
+    <?php $help_topics = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->get(); ?>
                                     <select class="form-control" name="help_topic">
                                         @foreach($help_topics as $helptopic)
                                         <option value="{!! $helptopic->id !!}" <?php
@@ -827,7 +871,7 @@ alert(h+20);
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{!! Lang::get('lang.priority') !!} <span class="text-red"> *</span></label>
-    <?php $ticket_prioritys = App\Model\helpdesk\Ticket\Ticket_Priority::where('status', '=', 1)->get(); ?>
+    <?php $ticket_prioritys = App\Model\helpdesk\Ticket\Ticket_Priority::where('status','=',1)->get(); ?>
                                     <select class="form-control" name="ticket_priority">
                                         @foreach($ticket_prioritys as $ticket_priority)
                                         <option value="{!! $ticket_priority->priority_id !!}" <?php
@@ -884,6 +928,7 @@ alert(h+20);
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
     <?php }
+    \Event::fire('ticket.detail.modelpopup',[$tickets]);
     ?>
     <!-- Change Owner Modal -->
     <div class="modal fade" id="ChangeOwner">
@@ -1014,11 +1059,7 @@ alert(h+20);
                                 $teams = App\Model\helpdesk\Agent\Teams::where('status', '=', '1')->get();
                                 $count_teams = count($teams);
                                 ?>
-                                <!--<optgroup label="Teams ( {!! $count_teams !!} )">
-                                    @foreach($teams as $team)
-                                    <option  value="team_{{$team->id}}">{!! $team->name !!}</option>
-                                    @endforeach
-                                </optgroup>-->
+                               
                                 <optgroup label="Agents ( {!! $count_assign !!} )">
                                     @foreach($assign as $user)
                                     <option  value="user_{{$user->id}}">{{$user->first_name." ".$user->last_name}}</option>
@@ -1055,7 +1096,7 @@ alert(h+20);
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    <?php \Event::fire('show-add-calendar-model', array())?>
+    <?php \Event::fire('show-add-calendar-model', array('id' => $tickets->id))?>
     <!-- add or search user Modal -->
     <div class="modal fade" id="addccc">
         <div class="modal-dialog">
@@ -1295,33 +1336,7 @@ alert(h+20);
             $("#InternalContent").wysihtml5();
             });
             jQuery('.star').attr('disabled', true);
-            $(function () {
-            // $('#cand').wysihtml5();
-            var wysihtml5Editor = $('#reply_content').wysihtml5().data("wysihtml5").editor;
-                    $('#select').on('change', function (e) {
-
-            //alert('hello2');
-            var $_token = $('#token').val();
-                    var data = $('#select').val();
-                    //var data1 = $(this).children('option:selected').data('id');
-                    //alert('data1');
-                    $.ajax({
-                    type        :   "POST",
-                            cache   :   false,
-                            headers :   { 'X-XSRF-TOKEN' : $_token },
-                            url         :   "../canned/" + data,
-                            dataType    :   'json',
-                            data        :   ({data}),
-                            success : function(response) {
-
-                            // alert(response);
-                            wysihtml5Editor.setValue(response, true);
-                                    console.log(wysihtml5Editor.getValue());
-                            }
-                    });
-                    return false;
-                });
-            });
+            
             $(function() {
                 $("#tags, #tags2").autocomplete({
                     source: 'auto/<?php echo $tickets->id; ?>'
@@ -1557,7 +1572,6 @@ alert(h+20);
             $("#show").hide();
                     $("#hide").show();
                     if (response == 0) {
-                        location.reload();
             // message = "{!! Lang::get('lang.ticket_updated_successfully') !!}"
             //         $("#dismis").trigger("click");
             //         $("#refresh1").load("../thread/{{$tickets->id}}   #refresh1");
@@ -1565,6 +1579,7 @@ alert(h+20);
             //         $("#alert11").show();
             //         $('#message-success1').html(message);
             //         setInterval(function(){$("#alert11").hide(); }, 4000);
+                location.reload();
             }
             else if (response == 1) {
             $("#error-subject").show();
@@ -1732,8 +1747,10 @@ alert(h+20);
             if (response == 1)
             {
             $("#refresh1").load("../thread/{{$tickets->id}}   #refresh1");
+            $(".embed-responsive-item").load("../thread/{{$tickets->id}}   .embed-responsive-item");
+            
                     // $("#t4").load("../thread/{{$tickets->id}}   #t4");
-                    var message = "{!! Lang::get('lang.updated-internal-note') !!}";
+                    var message = "{!! Lang::get('lang.internal-note-has-been-added') !!}";
                     $("#alert21").show();
                     $('#message-success2').html(message);
                     setInterval(function(){$("#alert21").hide(); }, 4000);
@@ -1812,6 +1829,9 @@ alert(h+20);
             }
 
             $('#form3').on('submit', function() {
+            for ( instance in CKEDITOR.instances ) {
+                CKEDITOR.instances[instance].updateElement();
+            }
             var fd = new FormData(document.getElementById("form3"));
             var reply_content = document.getElementById('reply_content').value;
             if(reply_content) {
@@ -1826,66 +1846,33 @@ alert(h+20);
                 $("#t1").show();
                 return false;
             }
+            var reply_content = document.getElementById('reply_content').value;
             $.ajax({
             type: "POST",
                     url: "../thread/reply/{{ $tickets->id }}",
                     enctype: 'multipart/form-data',
-                    dataType: "html",
+                    dataType: "json",
                     data: fd,
                     processData: false, // tell jQuery not to process the data
                     contentType: false, // tell jQuery not to set contentType
                     beforeSend: function() {
-                        
                     $("#t1").hide();
-                            $("#show3").show();
-                    },
-                    success: function(response) {
-                    if(response !== 1) {
-                        if(response === "file size exceeded") {
-                            alert(response);
-                        }
-                    }
-                    if (response == 1)
-                    {
-                        location.reload();
-//                        $("#refresh1").load("../thread/{{$tickets->id}}  #refresh1");
-//                        var message = "{{ Lang::get('lang.you_have_successfully_replied_to_your_ticket') }}";
-//                        $("#alert21").show();
-//                        $('#message-success2').html(message);
-//                        setInterval(function(){$("#alert21").hide(); }, 4000);
-//                        $("#newtextarea").empty();
-//                        var div = document.getElementById('newtextarea');
-//                        div.innerHTML = div.innerHTML + '<textarea style="width:98%;height:200px;" name="reply_content" class="form-control" id="reply_content"/></textarea>';
-//                        $("#newtextarea1").empty();
-//                        var div1 = document.getElementById('newtextarea1');
-//                        div1.innerHTML = div1.innerHTML + '<textarea style="width:98%;height:200px;" name="InternalContent" class="form-control" id="InternalContent"/></textarea>';
-//                        var wysihtml5Editor = $('textarea').wysihtml5().data("wysihtml5").editor;
-//                        setInterval(function(){
-//                            var head= document.getElementsByTagName('head')[0];
-//                            var script= document.createElement('script');
-//                            script.type= 'text/javascript';
-//                            script.src= '{{asset("lb-faveo/js/jquery.rating.pack.js")}}';
-//                            head.appendChild(script);
-////                            $('.rating-cancel').hide();
-////                            $(".star-rating-control").attr("disabled", "disabled").off('hover');
-////                            $(".star-rating-control").addClass("disabled")
-//                        }, 4000);
-                
-                    } else {
-                    // alert('fail');
-                    // $( "#dismis4" ).trigger( "click" );
-                    var message = "{!! Lang::get('lang.for_some_reason_your_reply_was_not_posted_please_try_again_later') !!}";
-                            $("#alert23").show();
-                            $('#message-danger2').html(message);
-                            setInterval(function(){$("#alert23").hide(); }, 4000);
-                    }
-                        $("#show3").hide();
-                        $("#t1").show();
-                    },
-                    error: function(response) {
-                        $("#show3").hide();
-                        $("#t1").show();
-                    }
+                    $("#show3").show();
+            },
+            success: function(json) {
+                    location.reload();
+                    //$('html, body').animate({ scrollTop: $("#heading").offset().top }, 500);
+            },
+                    error: function(json) {
+                    $("#show3").hide();
+                    $("#t1").show();
+                    var res = "";
+                    $.each(json.responseJSON, function (idx, topic) {
+                    res += "<li>" + topic + "</li>";
+                    });
+                    $("#reply-response").html("<div class='alert alert-danger'><strong>Whoops!</strong> There were some problems with your input.<br><br><ul>" + res + "</ul></div>");
+                    //$('html, body').animate({ scrollTop: $("#heading").offset().top }, 500);
+            }
             })
             return false;
     });
@@ -1898,7 +1885,6 @@ alert(h+20);
 
             if (response == 1)
             {
-                location.reload();
             // alert('ticket has been un assigned');
             var message = "{!! Lang::get('lang.you_have_unassigned_your_ticket') !!}";
                     $("#alert11").show();

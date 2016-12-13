@@ -1,14 +1,14 @@
 @extends('themes.default1.admin.layout.admin')
 
-@section('Manage')
+@section('Emails')
 active
 @stop
 
-@section('manage-bar')
+@section('emails-bar')
 active
 @stop
 
-@section('forms')
+@section('queue')
 class="active"
 @stop
 

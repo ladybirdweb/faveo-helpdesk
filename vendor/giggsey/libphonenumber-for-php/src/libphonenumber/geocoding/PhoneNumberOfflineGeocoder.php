@@ -170,7 +170,7 @@ class PhoneNumberOfflineGeocoder
             $scriptStr = "";
             $regionStr = Locale::getRegion($locale);
 
-            $mobileToken = PhoneNumberUtil::getCountryMobileToken($number->getCountryCode());
+            $mobileToken = $this->phoneUtil->getCountryMobileToken($number->getCountryCode());
             $nationalNumber = $this->phoneUtil->getNationalSignificantNumber($number);
             if ($mobileToken !== "" && (!strncmp($nationalNumber, $mobileToken, strlen($mobileToken)))) {
                 // In some countries, eg. Argentina, mobile numbers have a mobile token before the national

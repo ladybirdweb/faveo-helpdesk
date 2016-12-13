@@ -14,7 +14,7 @@
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 @stop
 @section('breadcrumb')
-	<div class="site-hero clearfix">
+    <div class="site-hero clearfix">
         <ol class="breadcrumb breadcrumb-custom">
             <li class="text">{!! Lang::get('lang.you_are_here') !!}: </li>
             <li><a href="{!! URL::route('/') !!}">{!! Lang::get('lang.home') !!}</a></li>

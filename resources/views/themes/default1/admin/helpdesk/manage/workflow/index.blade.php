@@ -30,7 +30,7 @@ class="active"
         <div class="box box-primary">
             <div class="box-header">
                 <h3 class="box-title">{!! Lang::get('lang.ticket_workflow') !!}</h3>
-                <a href="{!! URL::route('workflow.create') !!}" class="btn btn-primary pull-right">{!! Lang::get('lang.create') !!}</a>
+                <a href="{!! URL::route('workflow.create') !!}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{!! Lang::get('lang.create') !!}</a>
             </div>
             <!-- /.box-header -->
             <div class="box-body">

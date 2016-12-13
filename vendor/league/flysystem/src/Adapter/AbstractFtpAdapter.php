@@ -6,7 +6,6 @@ use DateTime;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\NotSupportedException;
-use League\Flysystem\SafeStorage;
 use RuntimeException;
 
 abstract class AbstractFtpAdapter extends AbstractAdapter
@@ -25,6 +24,16 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      * @var int
      */
     protected $port = 21;
+
+    /**
+     * @var string|null
+     */
+    protected $username;
+
+    /**
+     * @var string|null
+     */
+    protected $password;
 
     /**
      * @var bool
@@ -77,18 +86,12 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     protected $alternativeRecursion = false;
 
     /**
-     * @var SafeStorage
-     */
-    protected $safeStorage;
-
-    /**
      * Constructor.
      *
      * @param array $config
      */
     public function __construct(array $config)
     {
-        $this->safeStorage = new SafeStorage();
         $this->setConfig($config);
     }
 
@@ -223,7 +226,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     public function getUsername()
     {
-        return $this->safeStorage->retrieveSafely('username') ?: 'anonymous';
+        return empty($this->username) ? 'anonymous' : $this->username;
     }
 
     /**
@@ -235,7 +238,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     public function setUsername($username)
     {
-        $this->safeStorage->storeSafely('username', $username);
+        $this->username = $username;
 
         return $this;
     }
@@ -247,7 +250,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     public function getPassword()
     {
-        return $this->safeStorage->retrieveSafely('password');
+        return $this->password;
     }
 
     /**
@@ -259,7 +262,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     public function setPassword($password)
     {
-        $this->safeStorage->storeSafely('password', $password);
+        $this->password = $password;
 
         return $this;
     }

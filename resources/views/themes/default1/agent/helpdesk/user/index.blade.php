@@ -29,8 +29,33 @@ class="active"
 @section('content')
 <!-- open a form -->
 <div class="box box-primary">
+
+
+
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.user')}}</h3><a href="{{route('user.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_user')}}</a>
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="box-title ">{{Lang::get('lang.user')}}</h3>                
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-9">
+                    <div class="pull-right">
+                    <div id="labels-div" class="btn-group">
+                        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="labels-button"><i class="fa fa-eye" style="color:teal;"> </i>{{Lang::get('lang.view-option')}}<span class="caret"></span>
+                        </button>
+                        <ul  class="dropdown-menu pull-right" role="menu">
+                            <li><a href="#" class="active">{{Lang::get('lang.active-users')}}</a></li>
+                            <li><a href="#" class="inactive">{{Lang::get('lang.deleted-users')}}</a></li>
+                        </ul>
+                    </div>
+                    <a href="{{url('user-export')}}" class="btn btn-default btn-sm ">Export</a>
+                    <a href="{{route('user.create')}}" class="btn btn-primary btn-sm">{{Lang::get('lang.create_user')}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="box-body">
         <!-- check whether success or not -->
@@ -57,21 +82,14 @@ class="active"
             {{Session::get('fails')}}
         </div>
         @endif
-        <?php
-        $users = App\User::where('role', '=', 'user')->orderBy('id', 'ASC')->paginate(20);
-        ?>
-        {!! Datatable::table()
-        ->addColumn(Lang::get('lang.name'),
-        Lang::get('lang.email'),
-        Lang::get('lang.phone'),
-        Lang::get('lang.status'),
-        Lang::get('lang.ban'),
-        Lang::get('lang.last_login'),
-         Lang::get('lang.role'),
-        Lang::get('lang.action'))  // these are the column headings to be shown
-        ->setUrl(route('user.list'))  // this is the route where data will be retrieved
-        ->render() !!}
+        {!!$table->render('vendor.Chumper.template')!!}
     </div>
 </div>
+
+
+
+
+
+{!! $table->script('vendor.Chumper.user-javascript') !!}
 @stop
 <!-- /content -->

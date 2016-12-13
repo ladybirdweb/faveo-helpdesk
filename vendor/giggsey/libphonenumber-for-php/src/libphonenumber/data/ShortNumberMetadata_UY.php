@@ -14,12 +14,11 @@
 return array (
   'generalDesc' => 
   array (
-    'NationalNumberPattern' => '[19]\\d{2,3}',
-    'PossibleNumberPattern' => '\\d{3,4}',
+    'NationalNumberPattern' => '[19]\\d{2}',
+    'PossibleNumberPattern' => '\\d{3}',
     'PossibleLength' => 
     array (
       0 => 3,
-      1 => 4,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -52,11 +51,10 @@ return array (
   'emergency' => 
   array (
     'NationalNumberPattern' => '128|911',
-    'PossibleNumberPattern' => '\\d{3,4}',
+    'PossibleNumberPattern' => '\\d{3}',
     'ExampleNumber' => '911',
     'PossibleLength' => 
     array (
-      0 => 3,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -64,8 +62,8 @@ return array (
   ),
   'shortCode' => 
   array (
-    'NationalNumberPattern' => '1(?:0[4-9]|1[2368]|2[0-3568]|787)|911',
-    'PossibleNumberPattern' => '\\d{3,4}',
+    'NationalNumberPattern' => '1(?:0[4-9]|1[2368]|2[0-3568])|911',
+    'PossibleNumberPattern' => '\\d{3}',
     'ExampleNumber' => '104',
     'PossibleLength' => 
     array (

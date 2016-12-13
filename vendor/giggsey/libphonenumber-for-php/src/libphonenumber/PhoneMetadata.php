@@ -226,13 +226,8 @@ class PhoneMetadata
         }
 
         $output['id'] = $this->getId();
-        if ($this->hasCountryCode()) {
-            $output['countryCode'] = $this->getCountryCode();
-        }
-
-        if ($this->hasInternationalPrefix()) {
-            $output['internationalPrefix'] = $this->getInternationalPrefix();
-        }
+        $output['countryCode'] = $this->getCountryCode();
+        $output['internationalPrefix'] = $this->getInternationalPrefix();
 
         if ($this->hasPreferredInternationalPrefix()) {
             $output['preferredInternationalPrefix'] = $this->getPreferredInternationalPrefix();
@@ -254,9 +249,7 @@ class PhoneMetadata
             $output['nationalPrefixTransformRule'] = $this->getNationalPrefixTransformRule();
         }
 
-        if ($this->hasSameMobileAndFixedLinePattern()) {
-            $output['sameMobileAndFixedLinePattern'] = $this->isSameMobileAndFixedLinePattern();
-        }
+        $output['sameMobileAndFixedLinePattern'] = $this->isSameMobileAndFixedLinePattern();
 
         $output['numberFormat'] = array();
         foreach ($this->numberFormats() as $numberFormat) {
@@ -274,13 +267,9 @@ class PhoneMetadata
             $output['leadingDigits'] = $this->getLeadingDigits();
         }
 
-        if ($this->hasLeadingZeroPossible()) {
-            $output['leadingZeroPossible'] = $this->isLeadingZeroPossible();
-        }
+        $output['leadingZeroPossible'] = $this->isLeadingZeroPossible();
 
-        if ($this->hasMobileNumberPortableRegion()) {
-            $output['mobileNumberPortableRegion'] = $this->isMobileNumberPortableRegion();
-        }
+        $output['mobileNumberPortableRegion'] = $this->isMobileNumberPortableRegion();
 
         return $output;
     }
@@ -899,13 +888,9 @@ class PhoneMetadata
             $this->setLeadingDigits($input['leadingDigits']);
         }
 
-        if (isset($input['leadingZeroPossible'])) {
-            $this->setLeadingZeroPossible($input['leadingZeroPossible']);
-        }
+        $this->setLeadingZeroPossible($input['leadingZeroPossible']);
 
-        if (isset($input['mobileNumberPortableRegion'])) {
-            $this->setMobileNumberPortableRegion($input['mobileNumberPortableRegion']);
-        }
+        $this->setMobileNumberPortableRegion($input['mobileNumberPortableRegion']);
 
         return $this;
     }

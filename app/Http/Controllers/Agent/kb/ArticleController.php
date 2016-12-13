@@ -65,7 +65,7 @@ class ArticleController extends Controller
         $article = new Article();
         $articles = $article
                 ->select('id', 'name', 'description', 'publish_time', 'slug')
-                ->orderBy('publish_time', 'desc')
+                ->orderBy('publish_time','desc')
                 ->get();
         // returns chumper datatable
         return Datatable::Collection($articles)

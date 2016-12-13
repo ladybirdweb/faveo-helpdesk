@@ -2,72 +2,66 @@
 
 namespace App\Http\Controllers\Job;
 
+use Illuminate\Http\Request;
+
+use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Exception;
 use Form;
-use Illuminate\Http\Request;
 
 class MailController extends Controller
 {
-    public function serviceForm(Request $request)
-    {
+    public function serviceForm(Request $request){
         $serviceid = $request->input('service');
-
-        $short_name = '';
-        $mail_services = new \App\Model\MailJob\MailService();
+        
+        $short_name = "";
+        $mail_services  = new \App\Model\MailJob\MailService();
         $mail_service = $mail_services->find($serviceid);
-        if ($mail_service) {
+        if($mail_service){
             $short_name = $mail_service->short_name;
         }
         $form = $this->getServiceForm($short_name);
-
         return $form;
     }
-
-    public function form($label, $name, $class)
-    {
+    
+    public function form($label,$name,$class){
         $mailid = \Input::get('emailid');
-        if ($mailid) {
-            $emails = new \App\Model\helpdesk\Email\Emails();
-            $email = $emails->find($mailid);
-            $form = "<div class='".$class."'>".Form::label($name, $label)."<span class='text-red'> *</span>".
-                Form::text($name, $email->getExtraField($name), ['class' => 'form-control']).'</div>';
-        } else {
-            $form = "<div class='".$class."'>".Form::label($name, $label)."<span class='text-red'> *</span>".
-                Form::text($name, null, ['class' => 'form-control']).'</div>';
+        if($mailid){
+           $emails = new \App\Model\helpdesk\Email\Emails(); 
+           $email = $emails->find($mailid);
+           $form = "<div class='".$class."'>".Form::label($name, $label) ."<span class='text-red'> *</span>".
+                Form::text($name, $email->getExtraField($name), ['class' => "form-control"])."</div>";
+        }else{
+        $form = "<div class='".$class."'>".Form::label($name, $label) ."<span class='text-red'> *</span>".
+                Form::text($name, NULL, ['class' => "form-control"])."</div>";
         }
-
         return $form;
     }
-
-    public function getServiceForm($short_name)
-    {
-        $form = '';
-        try {
-            switch ($short_name) {
-                case 'smtp':
+    
+    public function getServiceForm($short_name){
+        $form = "";
+        try{
+            switch ($short_name){
+                case "smtp":
                     return $form;
-                case 'mail':
+                case "mail":
                     return $form;
-                case 'sendmail':
+                case "sendmail":
                     return $form;
-                case 'mailgun':
-                    $form .= "<div class='row'>".$this->form('Domain', 'domain', 'col-md-6 form-group');
-                    $form .= $this->form('Secret Key', 'secret', 'col-md-6 form-group').'</div>';
-
+                case "mailgun":
+                    $form .= "<div class='row'>".$this->form('Domain', 'domain','col-md-6 form-group');
+                    $form .= $this->form('Secret Key', 'secret','col-md-6 form-group')."</div>";
                     return $form;
-                case 'mandrill':
-                    $form .= "<div class='row'>".$this->form('Secret Key', 'secret', 'col-md-6 form-group').'</div>';
-
+                case "mandrill":
+                    $form .= "<div class='row'>".$this->form('Secret Key', 'secret','col-md-6 form-group')."</div>";
                     return $form;
-                case 'log':
+                case "log":
                     return $form;
-                case 'ses':
-                     $form .= "<div class='row'>".$this->form('Key', 'key', 'col-md-6 form-group');
-                    $form .= $this->form('Secret Key', 'secret', 'col-md-6 form-group').$this->form('Region', 'region', 'col-md-6 form-group').'</div>';
-
+                case "ses":
+                     $form .= "<div class='row'>".$this->form('Key', 'key','col-md-6 form-group');
+                    $form .= $this->form('Secret Key', 'secret','col-md-6 form-group').$this->form('Region', 'region','col-md-6 form-group')."</div>";
                     return $form;
-                default:
+                default :
                     return $form;
             }
         } catch (Exception $ex) {

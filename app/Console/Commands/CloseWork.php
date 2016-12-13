@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\Client\helpdesk\UnAuthController;
 use Illuminate\Console\Command;
+use App\Http\Controllers\Client\helpdesk\UnAuthController;
 
-class CloseWork extends Command
-{
+class CloseWork extends Command {
+
     /**
      * The name and signature of the console command.
      *
@@ -26,8 +26,7 @@ class CloseWork extends Command
      *
      * @return void
      */
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
     }
 
@@ -36,15 +35,15 @@ class CloseWork extends Command
      *
      * @return mixed
      */
-    public function handle()
-    {
+    public function handle() {
         if (env('DB_INSTALL') == 1) {
             $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
             $controller = new UnAuthController($PhpMailController);
             $controller->autoCloseTickets();
-            loging('ticket-close-workflow', 'Close ticket workflow executed', 'info');
+            loging('ticket-close-workflow', 'Close ticket workflow executed','info');
             //\Log::info('Close ticket workflow executed');
             $this->info('Close ticket workflow executed');
         }
     }
+
 }

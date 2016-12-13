@@ -1,8 +1,8 @@
 -- -----------------------------------------------------------
 
---
+-- 
 -- Table structure for table `conditions`
---
+-- 
 
 DROP TABLE IF EXISTS `conditions`;
 CREATE TABLE IF NOT EXISTS `conditions` (
@@ -16,9 +16,9 @@ CREATE TABLE IF NOT EXISTS `conditions` (
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `failed_jobs`
---
+-- 
 
 DROP TABLE IF EXISTS `failed_jobs`;
 CREATE TABLE IF NOT EXISTS `failed_jobs` (
@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `faveo_mails`
---
+-- 
 
 DROP TABLE IF EXISTS `faveo_mails`;
 CREATE TABLE IF NOT EXISTS `faveo_mails` (
@@ -50,9 +50,9 @@ CREATE TABLE IF NOT EXISTS `faveo_mails` (
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `faveo_queues`
---
+-- 
 
 DROP TABLE IF EXISTS `faveo_queues`;
 CREATE TABLE IF NOT EXISTS `faveo_queues` (
@@ -67,9 +67,9 @@ CREATE TABLE IF NOT EXISTS `faveo_queues` (
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `field_values`
---
+-- 
 
 DROP TABLE IF EXISTS `field_values`;
 CREATE TABLE IF NOT EXISTS `field_values` (
@@ -86,9 +86,9 @@ CREATE TABLE IF NOT EXISTS `field_values` (
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `jobs`
---
+-- 
 
 DROP TABLE IF EXISTS `jobs`;
 CREATE TABLE IF NOT EXISTS `jobs` (
@@ -106,9 +106,9 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `mail_services`
---
+-- 
 
 DROP TABLE IF EXISTS `mail_services`;
 CREATE TABLE IF NOT EXISTS `mail_services` (
@@ -120,9 +120,9 @@ CREATE TABLE IF NOT EXISTS `mail_services` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+-- 
 -- Dumping data for table `mail_services`
---
+-- 
 
 INSERT INTO `mail_services` (`id`, `name`, `short_name`, `created_at`, `updated_at`) VALUES
 (1, 'SMTP', 'smtp', '2016-10-09 15:32:44', '2016-10-09 15:32:44'),
@@ -134,9 +134,9 @@ INSERT INTO `mail_services` (`id`, `name`, `short_name`, `created_at`, `updated_
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `queue_services`
---
+-- 
 
 DROP TABLE IF EXISTS `queue_services`;
 CREATE TABLE IF NOT EXISTS `queue_services` (
@@ -149,9 +149,9 @@ CREATE TABLE IF NOT EXISTS `queue_services` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+-- 
 -- Dumping data for table `queue_services`
---
+-- 
 
 INSERT INTO `queue_services` (`id`, `name`, `short_name`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Sync', 'sync', 1, '2016-10-09 15:32:44', '2016-10-09 16:05:03'),
@@ -163,9 +163,9 @@ INSERT INTO `queue_services` (`id`, `name`, `short_name`, `status`, `created_at`
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `social_media`
---
+-- 
 
 DROP TABLE IF EXISTS `social_media`;
 CREATE TABLE IF NOT EXISTS `social_media` (
@@ -180,9 +180,9 @@ CREATE TABLE IF NOT EXISTS `social_media` (
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `user_additional_infos`
---
+-- 
 
 DROP TABLE IF EXISTS `user_additional_infos`;
 CREATE TABLE IF NOT EXISTS `user_additional_infos` (
@@ -196,17 +196,11 @@ CREATE TABLE IF NOT EXISTS `user_additional_infos` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- --------------------------------------------------------------
---
--- Alter Table structure for table `common_settings`
---
-INSERT INTO `common_settings` (`id`, `option_name`, `option_value`, `status`, `optional_field`, `created_at`, `updated_at`)
-VALUES (6, 'user_priority', '', '0', '', '2016-10-09 15:32:50', '2016-10-09 15:32:50');
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `approval`
---
+-- 
 
 DROP TABLE IF EXISTS `approval`;
 CREATE TABLE IF NOT EXISTS `approval` (
@@ -218,18 +212,18 @@ CREATE TABLE IF NOT EXISTS `approval` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+-- 
 -- Dumping data for table `approval`
---
+-- 
 
 INSERT INTO `approval` (`id`, `name`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'approval', '0', '2016-10-09 15:32:45', '2016-10-09 15:32:45');
 
 -- --------------------------------------------------------
 
---
+-- 
 -- Table structure for table `followup`
---
+-- 
 
 DROP TABLE IF EXISTS `followup`;
 CREATE TABLE IF NOT EXISTS `followup` (
@@ -242,9 +236,9 @@ CREATE TABLE IF NOT EXISTS `followup` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+-- 
 -- Dumping data for table `followup`
---
+-- 
 
 INSERT INTO `followup` (`id`, `name`, `status`, `condition`, `created_at`, `updated_at`) VALUES
 (1, 'followup', '', '', '2016-10-09 15:32:45', '2016-10-09 15:32:45');
@@ -253,10 +247,10 @@ INSERT INTO `followup` (`id`, `name`, `status`, `condition`, `created_at`, `upda
 
 -- 
 -- Alter ticket_priority table
---
+-- 
 ALTER TABLE `ticket_priority` ADD (`status` tinyint(1) DEFAULT 0, `is_default` varchar(30));
 
---
+-- 
 -- Update ticket_priority table values
 -- 
 UPDATE `ticket_priority`
@@ -282,7 +276,7 @@ WHERE `priority_id` = 4;
 
 -- 
 -- Alter `users` table 
---
+-- 
 ALTER TABLE `users` MODIFY `mobile` VARCHAR(30) DEFAULT NULL;
 UPDATE `users` SET `mobile` = NULL WHERE `mobile` = '';
 ALTER TABLE `users` ADD UNIQUE (`mobile`);
@@ -291,24 +285,24 @@ ALTER TABLE `users` ADD UNIQUE (`mobile`);
 
 -- 
 -- Insert new values in `template_types` 
---
+-- 
 INSERT INTO `template_types` (`id`, `name`, `created_at`, `updated_at`) VALUES
 (12, 'team_assign_ticket', '2016-10-10 01:29:36', '2016-10-10 01:29:36'),
 (13, 'reset_new_password', '2016-10-10 01:29:36', '2016-10-10 01:29:36');
 
 -- --------------------------------------------------------------------------
 
---
+-- 
 -- Insert new values in `templates` table
---
+-- 
 INSERT INTO `templates` (`id`, `name`, `variable`, `type`, `subject`, `message`, `description`, `set_id`, `created_at`, `updated_at`) VALUES
 (12, 'This template is for sending notice to team when ticket is assigned to team', '1', 12, '', '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to your team : {!!$team!!} by {!!$ticket_assigner!!} <br /><br />Thank You<br />Kind Regards,<br />{!!$system_from!!}</div>', '', 1, '2016-10-10 01:29:38', '2016-10-10 01:29:38'),
 (13, 'This template is for sending notice to client when password is changed', '1', 13, 'Verify your email address', 'Hello {!!$user!!},<br /><br />Your password is successfully changed.Your new password is : {!!$user_password!!}<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', '', 1, '2016-10-10 01:29:38', '2016-10-10 01:29:38');
  -- --------------------------------------------------------------------------
 
---
+-- 
 -- Alter Table structure for table `ticket_source`
---
+-- 
 
 DROP TABLE IF EXISTS `ticket_source`;
 CREATE TABLE IF NOT EXISTS `ticket_source` (
@@ -319,9 +313,9 @@ CREATE TABLE IF NOT EXISTS `ticket_source` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
+-- 
 -- Dumping data for table `ticket_source`
---
+-- 
 
 INSERT INTO `ticket_source` (`id`, `name`, `value`, `css_class`) VALUES
 (1, 'web', 'Web', 'fa fa-internet-explorer'),
@@ -333,9 +327,9 @@ INSERT INTO `ticket_source` (`id`, `name`, `value`, `css_class`) VALUES
 (7, 'chat', 'Chat', 'fa fa-comment');
 -- ----------------------------------------------------------------------
 
---
+-- 
 -- Alter tickets table
---
+-- 
 
 ALTER TABLE `tickets`
 ADD COLUMN `approval` tinyint(10),

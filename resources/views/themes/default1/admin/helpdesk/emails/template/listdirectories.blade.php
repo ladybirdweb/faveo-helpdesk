@@ -8,7 +8,7 @@ active
 active
 @stop
 
-@section('template')
+@section('emails')
 class="active"
 @stop
 

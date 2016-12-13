@@ -1,6 +1,6 @@
 @extends('themes.default1.admin.layout.admin')
 
-@section('Settings')
+@section('Tickets')
 active
 @stop
 

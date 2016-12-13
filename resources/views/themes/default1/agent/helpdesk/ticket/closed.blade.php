@@ -14,6 +14,31 @@ class="active"
 
 @section('PageHeader')
 <h1>{{Lang::get('lang.tickets')}}</h1>
+<style>
+ .tooltip1 {
+     position: relative;
+     /*display: inline-block;*/
+     /*border-bottom: 1px dotted black;*/
+ }
+ 
+ .tooltip1 .tooltiptext {
+     visibility: hidden;
+     width: 100%;
+     background-color: black;
+     color: #fff;
+     text-align: center;
+     border-radius: 6px;
+     padding: 5px 0;
+ 
+     /* Position the tooltip */
+     position: absolute;
+     z-index: 1;
+ }
+ 
+ .tooltip1:hover .tooltiptext {
+     visibility: visible;
+ }
+ </style>
 @stop
 
 @section('content')
@@ -47,6 +72,7 @@ if (Auth::user()->role == 'agent') {
             {{Session::get('fails')}}
         </div>
         @endif
+        
         {!! Form::open(['id'=>'modalpopup', 'route'=>'select_all','method'=>'post']) !!}
         <!--<div class="mailbox-controls">-->
         <!-- Check all button -->
@@ -54,45 +80,14 @@ if (Auth::user()->role == 'agent') {
         {{-- <a class="btn btn-default btn-sm" id="click"><i class="fa fa-refresh"></i></a> --}}
         <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" id="delete" value="{!! Lang::get('lang.delete') !!}">
         <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" id="close" value="{!! Lang::get('lang.open') !!}">
+        
+        
         <!--</div>-->
         <p><p/>
         <div class="mailbox-messages"  id="refresh">
             <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! Lang::get('lang.loading') !!}...</b></p>
             <!-- table -->
-            {!! Datatable::table() 
-            ->addColumn(
-            "",
-            Lang::get('lang.subject'),
-            Lang::get('lang.ticket_id'),
-            Lang::get('lang.priority'),
-            Lang::get('lang.from'),
-            Lang::get('lang.assigned_to'),
-            Lang::get('lang.last_activity')) 
-            ->setUrl(route('get.closed.ticket'))
-           
-            ->setOrder(array(6=>'desc'))  
-            ->setClass('table table-hover table-bordered table-striped')
-            ->setCallbacks("fnRowCallback",'function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-            var str = aData[3];
-            if(str.search("#000") == -1) {
-            $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #F3F3F3"});
-            $("td", nRow).mouseenter(function(){
-            $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #DEDFE0"});
-            });
-            $("td", nRow).mouseleave(function(){
-            $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd","border-right":"solid 0.5px #F3F3F3"});
-            });
-            } else {
-            $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
-            $("td", nRow).mouseenter(function(){
-            $("td", nRow).css({"background-color":"#DEDFE0", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #DEDFE0"});
-            });
-            $("td", nRow).mouseleave(function(){
-            $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
-            });   
-            }
-            }')       
-            ->render();!!}
+            {!!$table->render('vendor.Chumper.template')!!}
 
         </div><!-- /.mail-box-messages -->
         {!! Form::close() !!}
@@ -121,7 +116,7 @@ if (Auth::user()->role == 'agent') {
 </div>
 
 
-
+{!! $table->script('vendor.Chumper.ticket-javascript') !!}
 <script>
     var option = null;
     $(function() {

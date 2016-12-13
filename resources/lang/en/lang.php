@@ -48,6 +48,7 @@ return [
     'iforgot'                            => 'I forgot my password',
     'email_address'                      => 'Email address',
     'password'                           => 'Password',
+     'password_confirmation'                 => 'Password confirmation',
     'woops'                              => 'Whoops!',
     'theirisproblem'                     => 'There were some problems with your input.',
     'login'                              => 'Login',
@@ -64,6 +65,7 @@ return [
     'verify-number'                      => 'Verify number',
     'get-verify-message'                 => 'Enter the OTP code we\'ve sent to your new number.',
     'number-verification-sussessfull'    => 'Your number has been verified successfully, please wait we are updating your profile.',
+     'enter_your_email_here'             => 'Enter Your Email Here',
     /*
       |--------------------------------------
       |   Register Page
@@ -86,7 +88,7 @@ return [
     'activate_your_account_click_on_Link_that_send_to_your_mail'                                  => 'Activate your account! Click on the link that we\'ve sent to your mail',
     'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble'                        => 'Activate your account! Click on the link that we\'ve sent to your mail or login to your account and enter the OTP code we\'ve sent on your mobile number',
     'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup' => 'Account created, please contact to system admin as we were unable to send OTP code to your mobile and email to your email address.',
-    'this_field_do_not_match_our_records'                                                         => ' This field does not match our records.',
+    'this_field_do_not_match_our_records'                                                         => 'This field does not match our records.',
     'we_have_e-mailed_your_password_reset_link'                                                   => 'We have emailed your password reset link!',
     "we_can't_find_a_user_with_that_e-mail_address"                                               => "We can't find a user with that email address.",
     /*
@@ -161,6 +163,7 @@ return [
     'email_deleted_sucessfully'                                                        => 'Email deleted sucessfully',
     'email_can_not_delete'                                                             => 'Email can not delete',
     'outgoing_email_failed'                                                            => 'Outgoing email failed',
+    'system-email-not-configured'                                                      => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
@@ -377,6 +380,7 @@ return [
     'ticket-lock-inactive'                => 'You have been inactive for a while. Please reload the page.',
     'make-system-default-mail'            => 'Make this email system\'s default email',
     'thread'                              => 'Thread',
+    'labels'                              => 'Labels',
     /*
       |--------------------------------------
       |   Access Settings Page
@@ -454,6 +458,15 @@ return [
      */
     'current_ratings' => 'Current ratings',
     'edit_ratings'    => 'Edit ratings',
+
+    /*
+      |-------------------------------------------------
+      |Social login
+      |--------------------------------------------------
+    */
+      'social-login' => 'Social login',
+
+
     /*
       |------------------------------------------------
       | Language page
@@ -948,6 +961,8 @@ return [
     'reply_content_is_a_required_field'                                  => 'Reply content is a required field',
     'internal_content_is_a_required_field'                               => 'Internal content is a required field',
 
+
+
     /*
       |-----------------------------------------------
       |  Profile
@@ -1246,6 +1261,7 @@ return [
     'manage_status'                         => 'Manage status',
     'notifications'                         => 'Notifications',
 
+
     'auto_close_workflow'               => 'Auto-close workflow',
     'close_ticket_workflow_settings'    => 'Close ticket workflow settings',
     'successfully_saved_your_settings'  => 'Successfully saved your settings',
@@ -1488,7 +1504,7 @@ return [
     'user_priority_status'                                      => 'User priority status',
     'current'                                                   => 'Current:',
     'active_user_can_select_the_priority_while_creating_ticket' => 'Active user can select the priority while creating ticket',
-
+    
     /* --------------------------------------------------------------------------------------------
      * Approval Updated
      * --------------------------------------------------------------------------------------------
@@ -1543,12 +1559,31 @@ return [
      'agent_delete_successfully'                                    => 'Agent deleted successfully',
      'select_another_agent'                                         => 'Select another agent',
      'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
-     //login,registration
-     'enter_your_email_here'=> 'Enter your email here',
+     'deleted_user'                                                 => 'Deleted User',
+     'deleted_user_directory'                                       => 'Deleted User Directory',
+     'restore'                                                      => 'Restore',
+     'user_restore_successfully'                                    => 'User restore successfully',
 
-     /*********** Updated 3-12-2016 **********/
-     'activate'                    => 'Activate',
-     'system-email-not-configured' => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
-     'assign-ticket'               => 'Assign tickets',
-     'updated-internal-note'       => 'Your note has been added successfully',
+     /*** updates 28-11-2016***/
+     'apply'              => 'Apply',
+
+     /** updates 2-12-2016 **/
+     'sort-by'                      => 'Sort by',
+     'created-at'                   => 'Created at',
+     'or'                           => 'OR',
+     'activate'                     => 'Activate',
+     'system-email-not-configured'  => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
+     'assign-ticket'                => 'Assign tickets',
+     'can-not-inactive-group'       => 'Can not make the group inactive as it has agents assigned in it. Please assign those agents to another group and try again.',
+     'internal-note-has-been-added' => 'Internal note added to the ticket',
+     'active-users'                 => 'Active users',
+     'deleted-users'                => 'Deleted users',
+     'view-option'                  => 'View options',
+     'accoutn-not-verified'         => 'User account is not verified',
+     'enabled'                      => 'Enabled',
+     'disabled'                     => 'Disabled',
+     'user-account-is-deleted'      => 'This user account has been deleted.',
+     'restore-user'                 => 'Restore user account',
+     'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
+
 ];

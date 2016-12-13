@@ -166,14 +166,22 @@
                                         <div class="form-group has-feedback @if(isset($errors)) {!! $errors->has('password') ? 'has-error' : '' !!} @endif">
                                             {!! Form::password('password',['placeholder'=>Lang::get('lang.password'),'class' => 'form-control']) !!}
                                             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                                            <a href="{{url('password/email')}}" style="font-size: .8em" class="pull-left">{!! Lang::get('lang.forgot_password') !!}</a>
                                         </div>
-                                        <ul class="list-unstyled pull-left">
-                                            <li><a href="{{url('password/email')}}">{!! Lang::get('lang.forgot_password') !!}</a><br></li>
-                                            <li><a href="{{url('auth/register')}}">{!! Lang::get('lang.create_account') !!}</a></li>
-                                        </ul>
-                                        <button type="submit" class="btn btn-custom pull-right">{!! Lang::get('lang.login') !!}</button>
+                                        <div class="form-group pull-left">
+                                         <input type="checkbox" name="remember"> {!! Lang::get("lang.remember") !!}
+                                        </div>
+                                        <button type="submit" class="btn btn-custom  .btn-sm ">{!! Lang::get('lang.login') !!}</button>
                                         {!! Form::close() !!}
                                     </div>
+                                    {{Lang::get('lang.or')}}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <ul class="list-unstyled">
+                                            <a href="{{url('auth/register')}}" style="font-size: 1.2em">{!! Lang::get('lang.create_account') !!}</a>
+                                        </ul>
+                                    </div>
+                                </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">

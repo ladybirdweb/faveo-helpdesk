@@ -124,6 +124,10 @@ class GroupController extends Controller
     {
         // Database instannce to the current id
         $var = $group->whereId($id)->first();
+        $is_group_assigned = User::select('id')->where('assign_group', '=', $id)->count();
+        if ($is_group_assigned >= 1 && $request->input('group_status') == '0') {
+            return redirect('groups')->with('fails', Lang::get('lang.group_can_not_update').'<li>'.Lang::get('lang.can-not-inactive-group').'</li>');
+        }
         // Updating Name
         $var->name = $request->input('name');
         //Updating Status

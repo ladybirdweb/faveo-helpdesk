@@ -19,10 +19,10 @@ $.extend( true, $.fn.dataTable.defaults, {
 		$(".box-body").css({"opacity": "1"});
 		$('#blur-bg').css({"opacity": "1", "z-index": "99999"});
 		},
-	 "fnPreDrawCallback": function(oSettings, json) {
-	 	$(".box-body").css({"opacity":"0.4"});
-         }
-} );
+	"fnPreDrawCallback": function(oSettings, json) {
+	 	$(".box-body").css({"opacity":"0.3"});
+    }
+});
 
 
   

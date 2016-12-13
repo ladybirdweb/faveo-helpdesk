@@ -8,10 +8,6 @@ VALUES (5, 'email_mandatory', '',1,'','2016-06-14 09:07:17','2016-06-14 09:07:17
 -- INSERT INTO `ticket_status` (`id`, `name`, `state`, `mode`, `message`, `flags`, `sort`, `email_user`, `icon_class`, `properties`, `created_at`, `updated_at`)
 -- VALUES (6, 'Unverified', 'unverified', 3, 'User account verification required.', 0, 6, 0, '', 'Ticket will be open after user verifies his/her account.', '2016-06-14 09:07:04', '2016-06-14 09:07:04');
 
---
--- Alter Table structure for table `users`
---
-ALTER TABLE  `users` ADD  `fcm_token` VARCHAR( 500 ) NULL AFTER  `profile_pic`;
 
 -- ------------------------------------------------------
 

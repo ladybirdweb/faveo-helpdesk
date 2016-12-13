@@ -103,10 +103,6 @@ class CountryCodeToRegionCodeMapForTesting {
     0 => 'RE',
     1 => 'YT',
   ),
-  374 => 
-  array (
-    0 => 'AM',
-  ),
   375 => 
   array (
     0 => 'BY',

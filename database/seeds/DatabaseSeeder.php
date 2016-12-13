@@ -11,11 +11,9 @@ use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Notification\NotificationType;
 use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Settings\Alert;
-use App\Model\helpdesk\Settings\Approval;
 use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
-use App\Model\helpdesk\Settings\Followup;
 use App\Model\helpdesk\Settings\Responder;
 use App\Model\helpdesk\Settings\Security;
 use App\Model\helpdesk\Settings\System;
@@ -28,7 +26,6 @@ use App\Model\helpdesk\Utility\CountryCode;
 use App\Model\helpdesk\Utility\Date_format;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Languages;
-use App\Model\helpdesk\Utility\Limit_Login;
 use App\Model\helpdesk\Utility\Log_notification;
 use App\Model\helpdesk\Utility\MailboxProtocol;
 use App\Model\helpdesk\Utility\Time_format;
@@ -36,6 +33,8 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\helpdesk\Workflow\WorkflowClose;
 use App\Model\kb\Settings;
+use App\Model\helpdesk\Utility\Limit_Login;
+
 // Knowledge base
 use Illuminate\Database\Seeder;
 
@@ -215,16 +214,11 @@ class DatabaseSeeder extends Seeder
         Ticket_status::create(['name' => 'Request Approval', 'state' => 'unverified', 'mode' => '3', 'message' => 'Approval requested by', 'flags' => '0', 'sort' => '7', 'properties' => 'Ticket will be approve  after Admin verifies  this ticket']);
 
         /* Ticket priority */
-        Ticket_priority::create(['priority' => 'Low', 'status' => 1, 'priority_desc' => 'Low', 'priority_color' => '#00a65a', 'priority_urgency' => '4', 'ispublic' => 1, 'is_default' => 0]);
-        Ticket_priority::create(['priority' => 'Normal', 'status' => 1, 'priority_desc' => 'Normal', 'priority_color' => '#00bfef', 'priority_urgency' => '3', 'ispublic' => 1, 'is_default' => 1]);
-        Ticket_priority::create(['priority' => 'High', 'status' => 1, 'priority_desc' => 'High', 'priority_color' => '#f39c11', 'priority_urgency' => '2', 'ispublic' => 1, 'is_default' => 0]);
-        Ticket_priority::create(['priority' => 'Emergency', 'status' => 1, 'priority_desc' => 'Emergency', 'priority_color' => '#dd4b38', 'priority_urgency' => '1', 'ispublic' => 1, 'is_default' => 0]);
-
-        /* Approval */
-        Approval::create(['name' => 'approval', 'status' => '0']);
-
-        /*Followup*/
-        Followup::create(['name' => 'followup']);
+        Ticket_priority::create(['priority' => 'Low', 'status' => 1, 'priority_desc' => 'Low', 'priority_color' => '#00a65a', 'priority_urgency' => '4', 'ispublic' => '1']);
+        Ticket_priority::create(['priority' => 'Normal', 'status' => 1, 'priority_desc' => 'Normal', 'priority_color' => '#00bfef', 'priority_urgency' => '3', 'ispublic' => '1', 'is_default' => '1']);
+        Ticket_priority::create(['priority' => 'High', 'status' => 1, 'priority_desc' => 'High', 'priority_color' => '#f39c11', 'priority_urgency' => '2', 'ispublic' => '1']);
+        Ticket_priority::create(['priority' => 'Emergency', 'status' => 1, 'priority_desc' => 'Emergency', 'priority_color' => '#dd4b38', 'priority_urgency' => '1', 'ispublic' => '1']);
+      
 
         /* SLA Plans */
         Sla_plan::create(['name' => 'Sla 1', 'grace_period' => '6 Hours', 'status' => '1']);
@@ -278,7 +272,7 @@ class DatabaseSeeder extends Seeder
         Company::create(['id' => '1']);
         Email::create(['id' => '1', 'template' => 'default', 'email_fetching' => '1', 'notification_cron' => '1', 'all_emails' => '1', 'email_collaborator' => '1', 'attachment' => '1']);
         Responder::create(['id' => '1', 'new_ticket' => '1', 'agent_new_ticket' => '1']);
-        System::create(['id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32']);
+        System::create(array('id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32'));
         Ticket::create(['num_format' => '$$$$-####-####', 'num_sequence' => 'sequence', 'collision_avoid' => '2', 'priority' => '1', 'sla' => '2', 'help_topic' => '1', 'status' => '1']);
         /* Ticket source */
         Ticket_source::create(['name' => 'web', 'value' => 'Web']);
@@ -1985,7 +1979,10 @@ class DatabaseSeeder extends Seeder
             'numcode'             => '716',
             'phonecode'           => '263', ]);
 
+
+
         Security::create(['id' => '1', 'lockout_message' => 'You have been locked out of application due to too many failed login attempts.', 'backlist_offender' => '0', 'backlist_threshold' => '15', 'lockout_period' => '15', 'days_to_keep_logs' => '0']);
+
 
         TemplateSet::create(['id' => '1', 'name' => 'default', 'active' => '1']);
 
@@ -2003,6 +2000,7 @@ class DatabaseSeeder extends Seeder
         TemplateType::create(['id' => '12', 'name' => 'team_assign_ticket']);
         TemplateType::create(['id' => '13', 'name' => 'reset_new_password']);
 
+
         Template::create(['id' => '1', 'variable' => '0', 'name' => 'This template is for sending notice to agent when ticket is assigned to them', 'type' => '1', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to you by {!!$ticket_assigner!!} <br/> Please check and resppond on the ticket.<br /> Link: {!!$ticket_link!!}<br /><br />Thank You<br />Kind Regards,<br /> {!!$system_from!!}</div>', 'set_id' => '1']);
         Template::create(['id' => '2', 'variable' => '1', 'name' => 'This template is for sending notice to client with ticket link to check ticket without logging in to system', 'type' => '2', 'subject' => 'Check your Ticket', 'message' => '<div>Hello {!!$user!!},<br/><br/>Click the link below to view your requested ticket<br/> {!!$ticket_link_with_number!!}<br/><br/>Kind Regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
         Template::create(['id' => '3', 'variable' => '0', 'name' => 'This template is for sending notice to client when ticket status is changed to close', 'type' => '3', 'message' => '<div>Hello,<br/><br/>This message is regarding your ticket ID {!!$ticket_number!!}. We are changing the status of this ticket to "Closed" as the issue appears to be resolved.<br/><br/>Thank you<br/>Kind regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
@@ -2014,8 +2012,9 @@ class DatabaseSeeder extends Seeder
         Template::create(['id' => '9', 'variable' => '0', 'name' => 'This template is for sending notice to client when a reply made to his/her ticket', 'type' => '9', 'message' => '<span></span><div><span></span><p> {!!$content!!}<br/></p><p> {!!$agent_sign!!} </p><p><b>Ticket Details</b></p><p><b>Ticket ID:</b> {!!$ticket_number!!}</p></div>', 'set_id' => '1']);
         Template::create(['id' => '10', 'variable' => '0', 'name' => 'This template is for sending notice to agent when ticket reply is made by client on a ticket', 'type' => '10', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br/><b><br/></b>A reply been made to ticket {!!$ticket_number!!}<br/><b><br/></b><b>From<br/></b><b>Name: </b>{!!$ticket_client_name!!}<br/><b>E-mail: </b>{!!$ticket_client_email!!}<br/><b><br/></b> {!!$content!!}<br/><b><br/></b>Kind Regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
         Template::create(['id' => '11', 'variable' => '1', 'name' => 'This template is for sending notice to client about registration confirmation link', 'type' => '11', 'subject' => 'Verify your email address', 'message' => '<p>Hello {!!$user!!}, </p><p>This email is confirmation that you are now registered at our helpdesk.</p><p><b>Registered Email:</b> {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p> {!!$system_from!!} </p>', 'set_id' => '1']);
-        Template::create(['id' => '12', 'variable' => '1', 'name' => 'This template is for sending notice to team when ticket is assigned to team', 'type' => '12', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to your team : {!!$team!!} by {!!$ticket_assigner!!} <br /><br />Thank You<br />Kind Regards,<br />{!!$system_from!!}</div>', 'set_id' => '1']);
-        Template::create(['id' => '13', 'variable' => '1', 'name' => 'This template is for sending notice to client when password is changed', 'type' => '13', 'subject' => 'Verify your email address', 'message' => 'Hello {!!$user!!},<br /><br />Your password is successfully changed.Your new password is : {!!$user_password!!}<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', 'set_id' => '1']);
+         Template::create(['id' => '12', 'variable' => '1', 'name' => 'This template is for sending notice to team when ticket is assigned to team', 'type' => '12', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to your team : {!!$team!!} by {!!$ticket_assigner!!} <br /><br />Thank You<br />Kind Regards,<br />{!!$system_from!!}</div>', 'set_id' => '1']);
+          Template::create(['id' => '13', 'variable' => '1', 'name' => 'This template is for sending notice to client when password is changed', 'type' => '13', 'subject' => 'Verify your email address', 'message' => 'Hello {!!$user!!},<br /><br />Your password is successfully changed.Your new password is : {!!$user_password!!}<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', 'set_id' => '1']);
+
 
         /*
          * All the common settings will be listed here
@@ -2032,6 +2031,7 @@ class DatabaseSeeder extends Seeder
          */
         Rating::create(['id' => '1', 'name' => 'OverAll Satisfaction', 'display_order' => '1', 'allow_modification' => '1', 'rating_scale' => '5', 'rating_area' => 'Helpdesk Area']);
         Rating::create(['id' => '2', 'name' => 'Reply Rating', 'display_order' => '1', 'allow_modification' => '1', 'rating_scale' => '5', 'rating_area' => 'Comment Area']);
+
 
         Limit_Login::create(['id' => '1']);
     }

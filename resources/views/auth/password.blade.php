@@ -44,16 +44,6 @@
     {{Session::get('status')}}
 </div>
 @endif
-@if (count($errors) > 0)
-<div class="alert alert-danger alert-dismissable">
-    <i class="fa fa-ban"></i>
-    <b>{!! Lang::get('lang.alert') !!} !</b>
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    @foreach ($errors->all() as $error)
-    <li>{{ $error }}</li>
-    @endforeach
-</div>
-@endif
 <div id="content" class="site-content col-md-12">
     <div id="corewidgetbox">
         <div class="widgetrow text-center">

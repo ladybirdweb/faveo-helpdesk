@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Requests\helpdesk;
+use App\Model\helpdesk\Settings\CommonSettings;
 
 use App\Http\Requests\Request;
-use App\Model\helpdesk\Settings\CommonSettings;
 
 /**
  * AgentRequest.
@@ -29,11 +29,10 @@ class AgentRequest extends Request
      */
     public function rules()
     {
-        $check = $this->check(new CommonSettings());
+        $check = $this->check(new CommonSettings);
         if ($check != 0) {
             return $check;
         }
-
         return [
             'user_name'  => 'required|unique:users|max:30',
             'first_name' => 'required|max:30',
@@ -46,18 +45,15 @@ class AgentRequest extends Request
             'agent_time_zone'     => 'required',
             // 'phone_number' => 'phone:IN',
             'mobile' => 'unique:users',
-            'team'   => 'required',
+            'team' => 'required',
         ];
     }
 
     /**
      *@category Funcion to set rule if send opt is enabled
-     *
-     *@param object $settings (instance of Model common settings)
-     *
+     *@param Object $settings (instance of Model common settings)
      *@author manish.verma@ladybirdweb.com
-     *
-     *@return array|int
+     *@return array|int 
      */
     public function check($settings)
     {
@@ -76,8 +72,8 @@ class AgentRequest extends Request
                 // 'phone_number' => 'phone:IN',
                 // 'mobile' => 'phone:IN',
                 'team'                => 'required',
-                'mobile'              => 'required|unique:users',
-                'country_code'        => 'required',
+                'mobile'              =>  'required|unique:users',
+                'country_code'        =>  'required',
             ];
         } else {
             return 0;
