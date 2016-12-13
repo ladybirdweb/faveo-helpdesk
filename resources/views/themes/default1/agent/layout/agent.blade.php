@@ -324,18 +324,7 @@
                                 <small class="label pull-right bg-green">{{$overdue_ticket}}</small>
                             </a>
                         </li>
-                        <?php
-                        $settings = App\Model\helpdesk\Settings\Approval::where('id','=',1)->first();
-                        // dd($settings);
-                        ?>
-                       {{--@if($settings->status == 1)
-                        <li @yield('approval')>
-                             <a href="{{url('ticket/approval/closed')}}" id="load-unassigned">
-                                <i class="fa fa fa-bell"></i> <span>{!! Lang::get('lang.approval') !!}</span>
-                                <small class="label pull-right bg-green">{{count($closingapproval)}}</small>
-                            </a>
-                        </li>
-                        @endif--}}
+                        
                         <li @yield('trash')>
                              <a href="{{url('trash')}}">
                                 <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
