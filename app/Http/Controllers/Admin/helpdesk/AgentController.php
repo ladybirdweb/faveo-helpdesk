@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin\helpdesk;
 
 // controller
-use App\Http\Controllers\Controller;
 use App\Http\Controllers\Common\PhpMailController;
+use App\Http\Controllers\Controller;
 // request
 use App\Http\Requests\helpdesk\AgentRequest;
 use App\Http\Requests\helpdesk\AgentUpdate;
@@ -92,6 +92,7 @@ class AgentController extends Controller
             $phonecode = $code->where('iso', '=', $location->iso_code)->first();
             // returns to the page with all the variables and their datas
             $send_otp = DB::table('common_settings')->select('status')->where('option_name', '=', 'send_otp')->first();
+
             return view('themes.default1.admin.helpdesk.agent.agents.create', compact('assign', 'teams', 'agents', 'timezones', 'groups', 'departments', 'team', 'send_otp'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             // returns if try fails with exception meaagse
@@ -120,10 +121,9 @@ class AgentController extends Controller
         }
         // fixing the user role to agent
         $user->fill($request->except(['group', 'primary_department', 'agent_time_zone', 'mobile']))->save();
-        if ($request->get('mobile'))
-        {
+        if ($request->get('mobile')) {
             $user->mobile = $request->get('mobile');
-        } else{
+        } else {
             $user->mobile = null;
         }
         $user->assign_group = $request->group;
@@ -146,7 +146,7 @@ class AgentController extends Controller
             // fetch user credentails to send mail
             $name = $user->first_name;
             $email = $user->email;
-            if($request->input('send_email')) {
+            if ($request->input('send_email')) {
                 try {
                     // send mail on registration
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $email], $message = ['subject' => null, 'scenario' => 'registration-notification'], $template_variables = ['user' => $name, 'email_address' => $email, 'user_password' => $password]);
@@ -159,6 +159,7 @@ class AgentController extends Controller
             if ($request->input('active') == '0' || $request->input('active') == 0) {
                 \Event::fire(new \App\Events\LoginEvent($request));
             }
+
             return redirect('agents')->with('success', Lang::get('lang.agent_creation_success'));
         } else {
             // returns if fails
@@ -275,7 +276,6 @@ class AgentController extends Controller
             $user->id;
             $user->delete();
             throw new \Exception($error);
-
             return redirect('agents')->with('success', Lang::get('lang.agent_deleted_sucessfully'));
         } catch (\Exception $e) {
             return redirect('agents')->with('fails', $error);

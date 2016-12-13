@@ -9,9 +9,9 @@ use App\Http\Requests\helpdesk\TeamRequest;
 use App\Http\Requests\helpdesk\TeamUpdate;
 // models
 use App\Model\helpdesk\Agent\Assign_team_agent;
-use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Agent\Groups;
+use App\Model\helpdesk\Agent\Teams;
 use App\User;
 // classes
 use DB;
@@ -102,7 +102,8 @@ class TeamController extends Controller
             return redirect('teams')->with('fails', Lang::get('lang.teams_can_not_create').'<li>'.$e->getMessage().'</li>');
         }
     }
-       /**
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param type                   $id
@@ -117,79 +118,76 @@ class TeamController extends Controller
         try {
             $user = $user->whereId($id)->first();
             $teams = $team->whereId($id)->first();
-           
+
             // $team_lead_name=User::whereId($teams->team_lead)->first();
-            
+
             // $team_lead = $team_lead_name->first_name . " " . $team_lead_name->last_name;
-                
+
             // $total_members = $assign_team_agent->where('team_id',$id)->count();
-    
-            return view('themes.default1.admin.helpdesk.agent.teams.show', compact('user', 'teams','id'));
+
+            return view('themes.default1.admin.helpdesk.agent.teams.show', compact('user', 'teams', 'id'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
 
-public function getshow($id) {
-    // dd($request);
- 
+    public function getshow($id)
+    {
+        // dd($request);
+
 // $id = $request->input('show_id');
 
 // dd($id);
-            
-$users =  DB::table('team_assign_agent')->select('team_assign_agent.id','team_assign_agent.team_id','users.user_name','users.first_name' ,'users.last_name','users.active','users.assign_group','users.primary_dpt','users.role')
-          ->join('users','users.id','=','team_assign_agent.agent_id')
-          ->where('team_assign_agent.team_id', '=',$id);
+
+$users = DB::table('team_assign_agent')->select('team_assign_agent.id', 'team_assign_agent.team_id', 'users.user_name', 'users.first_name', 'users.last_name', 'users.active', 'users.assign_group', 'users.primary_dpt', 'users.role')
+          ->join('users', 'users.id', '=', 'team_assign_agent.agent_id')
+          ->where('team_assign_agent.team_id', '=', $id);
 //           ->get();
 // dd($users);
             return \Datatable::query($users)
             ->showColumns('user_name')
 
-            ->addColumn('first_name', function($model) {
-
+            ->addColumn('first_name', function ($model) {
                 $full_name = ucfirst($model->first_name).' '.ucfirst($model->last_name);
-                    return $full_name;
-                })
 
+                return $full_name;
+            })
 
-            ->addColumn('active', function($model) {
+            ->addColumn('active', function ($model) {
                 if ($model->active == '1') {
-                    $role = "<a class='btn btn-success btn-xs'>".'Active'."</a>";
+                    $role = "<a class='btn btn-success btn-xs'>".'Active'.'</a>';
                 } elseif ($model->active == 'agent') {
-                    $role = "<a class='btn btn-primary btn-xs'>".'Inactive'."</a>";
+                    $role = "<a class='btn btn-primary btn-xs'>".'Inactive'.'</a>';
                 }
-                    return $role;
-                })
 
+                return $role;
+            })
 
-            ->addColumn('assign_group', function($model) {
-                $group=Groups::whereId($model->assign_group)->first();
-                    return ($group->name);
-                })
-            ->addColumn('primary_dpt', function($model) {
-                $dept=Department::whereId($model->primary_dpt)->first();
-                    return $dept->name;
-                })
-            ->addColumn('role', function($model) {
+            ->addColumn('assign_group', function ($model) {
+                $group = Groups::whereId($model->assign_group)->first();
+
+                return $group->name;
+            })
+            ->addColumn('primary_dpt', function ($model) {
+                $dept = Department::whereId($model->primary_dpt)->first();
+
+                return $dept->name;
+            })
+            ->addColumn('role', function ($model) {
                 if ($model->role == 'admin') {
-                    $role = "<a class='btn btn-success btn-xs'>".$model->role."</a>";
+                    $role = "<a class='btn btn-success btn-xs'>".$model->role.'</a>';
                 } elseif ($model->role == 'agent') {
-                    $role = "<a class='btn btn-primary btn-xs'>".$model->role."</a>";
+                    $role = "<a class='btn btn-primary btn-xs'>".$model->role.'</a>';
                 }
-                    return $role;
-                })
+
+                return $role;
+            })
 
             // ->showColumns('role')
-            ->searchColumns('first_name','last_name')
-                        ->orderColumns('first_name','last_name')
+            ->searchColumns('first_name', 'last_name')
+                        ->orderColumns('first_name', 'last_name')
                         ->make();
-        
-
-
-        } 
-
-
-
+    }
 
     /**
      * Show the form for editing the specified resource.

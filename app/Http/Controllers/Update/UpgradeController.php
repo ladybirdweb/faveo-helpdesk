@@ -9,16 +9,18 @@ use Artisan;
 use Exception;
 use Illuminate\Http\Request;
 
-class UpgradeController extends Controller {
-
+class UpgradeController extends Controller
+{
     public $dir;
 
-    public function __construct() {
+    public function __construct()
+    {
         $dir = base_path();
         $this->dir = $dir;
     }
 
-    public function getLatestVersion() {
+    public function getLatestVersion()
+    {
         try {
             $name = \Config::get('app.name');
             //dd($name);
@@ -28,17 +30,17 @@ class UpgradeController extends Controller {
             $order_number = '44596328';
             $url = env('APP_URL');
             $data = [
-                'serial_key' => $serial_key,
+                'serial_key'   => $serial_key,
                 'order_number' => $order_number,
-                'name' => $name,
-                'version' => Utility::getFileVersion(),
+                'name'         => $name,
+                'version'      => Utility::getFileVersion(),
                 'request_type' => 'check_update',
-                'url' => $url,
+                'url'          => $url,
             ];
             $data = Utility::encryptByFaveoPublicKey(json_encode($data));
             //dd($data);
             $post_data = [
-                'data' => $data
+                'data' => $data,
             ];
             $url = 'http://faveohelpdesk.com/billing/public/verification';
             if (str_contains($url, ' ')) {
@@ -59,7 +61,8 @@ class UpgradeController extends Controller {
         }
     }
 
-    public function downloadLatestCode() {
+    public function downloadLatestCode()
+    {
         $name = \Config::get('app.name');
         $durl = 'http://www.faveohelpdesk.com/billing/public/download-url';
         if (str_contains($durl, ' ')) {
@@ -75,7 +78,8 @@ class UpgradeController extends Controller {
         return $download_url;
     }
 
-    public function saveLatestCodeAtTemp($download_url) {
+    public function saveLatestCodeAtTemp($download_url)
+    {
         echo '<p>Downloading New Update</p>';
         $context = stream_context_create(
                 [
@@ -87,10 +91,10 @@ class UpgradeController extends Controller {
 
         $newUpdate = file_get_contents($download_url, false, $context);
         if (!is_dir("$this->dir/UPDATES/")) {
-            \File::makeDirectory($this->dir . '/UPDATES/', 0777);
+            \File::makeDirectory($this->dir.'/UPDATES/', 0777);
         }
 
-        $dlHandler = fopen($this->dir . '/UPDATES/' . '/faveo-helpdesk-master.zip', 'w');
+        $dlHandler = fopen($this->dir.'/UPDATES/'.'/faveo-helpdesk-master.zip', 'w');
         if (!fwrite($dlHandler, $newUpdate)) {
             echo '<p>Could not save new update. Operation aborted.</p>';
             exit();
@@ -99,25 +103,28 @@ class UpgradeController extends Controller {
         echo '<p>Update Downloaded And Saved</p>';
     }
 
-    public function doUpdate() {
+    public function doUpdate()
+    {
         try {
             $memory_limit = ini_get('memory_limit');
             if ($memory_limit < 256) {
                 echo '<ul class=list-unstyled>';
                 echo "<li style='color:red;'>Sorry we can not process your request because of limited memory! You have only  $memory_limit. For this you need atleast 256 MB</li>";
                 echo '</ul>';
+
                 return 0;
             }
             if (!extension_loaded('zip')) {
                 echo '<ul class=list-unstyled>';
                 echo "<li style='color:red;'>Sorry we can not process your request because you don't have ZIP extension contact your system admin</li>";
                 echo '</ul>';
+
                 return 0;
             }
             //Artisan::call('down');
-            $update = $this->dir . '/UPDATES';
+            $update = $this->dir.'/UPDATES';
             //Open The File And Do Stuff
-            $zipHandle = zip_open($update . '/faveo-helpdesk-master.zip');
+            $zipHandle = zip_open($update.'/faveo-helpdesk-master.zip');
             //dd($update . '/faveo-' . $aV . '.zip');
 
             echo '<ul class=list-unstyled>';
@@ -130,30 +137,29 @@ class UpgradeController extends Controller {
                     continue;
                 }
 
-
                 //Make the directory if we need to...
-                if (!is_dir($update . '/' . $thisFileDir . '/')) {
-                    \File::makeDirectory($update . '/' . $thisFileDir, 0775, true, true);
+                if (!is_dir($update.'/'.$thisFileDir.'/')) {
+                    \File::makeDirectory($update.'/'.$thisFileDir, 0775, true, true);
                     // mkdir($update.'/'. $thisFileDir, 0775);
-                    echo '<li style="color:white;">Created Directory ' . $thisFileDir . '</li>';
+                    echo '<li style="color:white;">Created Directory '.$thisFileDir.'</li>';
                 }
 
                 //Overwrite the file
-                if (!is_dir($update . '/' . $thisFileName)) {
-                    echo '<li style="color:white;">' . $thisFileName . '...........';
+                if (!is_dir($update.'/'.$thisFileName)) {
+                    echo '<li style="color:white;">'.$thisFileName.'...........';
                     $contents = zip_entry_read($aF, zip_entry_filesize($aF));
                     $contents = str_replace("\r\n", "\n", $contents);
                     $updateThis = '';
 
                     //If we need to run commands, then do it.
-                    if ($thisFileName == $thisFileDir . '/.env') {
-                        if (is_file($update . '/' . $thisFileDir . '/.env')) {
-                            unlink($update . '/' . $thisFileDir . '/.env');
-                            unlink($update . '/' . $thisFileDir . '/config/database.php');
+                    if ($thisFileName == $thisFileDir.'/.env') {
+                        if (is_file($update.'/'.$thisFileDir.'/.env')) {
+                            unlink($update.'/'.$thisFileDir.'/.env');
+                            unlink($update.'/'.$thisFileDir.'/config/database.php');
                         }
                         echo' EXECUTED</li>';
                     } else {
-                        $updateThis = fopen($update . '/' . $thisFileName, 'w');
+                        $updateThis = fopen($update.'/'.$thisFileName, 'w');
                         fwrite($updateThis, $contents);
                         fclose($updateThis);
                         unset($contents);
@@ -166,12 +172,13 @@ class UpgradeController extends Controller {
             return true;
         } catch (Exception $ex) {
             echo '<ul class=list-unstyled>';
-            echo "<li style='color:red;'>" . $ex->getMessage() . "</li>";
+            echo "<li style='color:red;'>".$ex->getMessage().'</li>';
             echo '</ul>';
         }
     }
 
-    public function copyToActualDirectory($latest_version) {
+    public function copyToActualDirectory($latest_version)
+    {
         try {
             echo '<ul class=list-unstyled>';
             $directory = "$this->dir/UPDATES";
@@ -190,17 +197,18 @@ class UpgradeController extends Controller {
 
             $this->deleteBarNotification('new-version');
 
-            echo "<li style='color:green;'>&raquo; Faveo Updated to v" . Utility::getFileVersion() . "</li>";
+            echo "<li style='color:green;'>&raquo; Faveo Updated to v".Utility::getFileVersion().'</li>';
             echo '</ul>';
         } catch (Exception $ex) {
             echo '<ul class=list-unstyled>';
-            echo "<li style='color:red;'>" . $ex->getMessage() . "</li>";
+            echo "<li style='color:red;'>".$ex->getMessage().'</li>';
             echo '</ul>';
         }
         exit();
     }
 
-    public function deleteBarNotification($key) {
+    public function deleteBarNotification($key)
+    {
         try {
             $noti = new BarNotification();
             $notifications = $noti->where('key', $key)->get();
@@ -212,20 +220,24 @@ class UpgradeController extends Controller {
         }
     }
 
-    public function fileUpdate() {
+    public function fileUpdate()
+    {
         try {
             $latest_version = $this->getLatestVersion();
             if (Utility::getFileVersion() < $latest_version) {
                 $url = url('file-upgrade');
+
                 return view('themes.default1.update.file', compact('url'));
             }
+
             return redirect('dashboard')->with('fails', 'Could not find latest realeases from repository.');
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
 
-    public function fileUpgrading(Request $request) {
+    public function fileUpgrading(Request $request)
+    {
         try {
             //
             $latest_version = $this->getLatestVersion();
@@ -233,12 +245,11 @@ class UpgradeController extends Controller {
             $current_version = Utility::getFileVersion();
             if ($latest_version != '') {
                 if (Utility::getFileVersion() < $latest_version) {
-
                     return view('themes.default1.update.update', compact('latest_version', 'current_version', 'request'));
                 }
             }
-            return redirect('dashboard')->with('fails', 'Could not find latest realeases from repository.');
 
+            return redirect('dashboard')->with('fails', 'Could not find latest realeases from repository.');
 
 //            else {
 //                return redirect()->back();
@@ -248,7 +259,8 @@ class UpgradeController extends Controller {
         }
     }
 
-    public function testScroll() {
+    public function testScroll()
+    {
         $ex = 1000;
         echo '<ul style=list-unstyled>';
         for ($i = 0; $i < $ex; $i++) {
@@ -257,7 +269,8 @@ class UpgradeController extends Controller {
         echo '</ul>';
     }
 
-    public function fileUpgrading1(Request $request) {
+    public function fileUpgrading1(Request $request)
+    {
         if (Utility::getFileVersion() < Utility::getDatabaseVersion()) {
             $latest_version = $this->getLatestVersion();
 //            dd($latest_version);
@@ -267,7 +280,7 @@ class UpgradeController extends Controller {
                 echo "<p>CURRENT VERSION: $current_version</p>";
                 echo '<p>Reading Current Releases List</p>';
                 if ($latest_version > $current_version) {
-                    echo '<p>New Update Found: v' . $latest_version . '</p>';
+                    echo '<p>New Update Found: v'.$latest_version.'</p>';
                     $found = true;
                     if (!is_file("$this->dir/UPDATES/faveo-helpdesk-master.zip")) {
                         if ($request->get('dodownload') == true) {
@@ -278,7 +291,7 @@ class UpgradeController extends Controller {
                                 echo '<p>Error in you network connection.</p>';
                             }
                         } else {
-                            echo '<p>Latest code found. <a href=' . url('file-upgrade?dodownload=true') . '>&raquo; Download Now?</a></p>';
+                            echo '<p>Latest code found. <a href='.url('file-upgrade?dodownload=true').'>&raquo; Download Now?</a></p>';
                             exit();
                         }
                     } else {
@@ -287,7 +300,7 @@ class UpgradeController extends Controller {
                     if ($request->get('doUpdate') == true) {
                         $updated = $this->doUpdate();
                     } else {
-                        echo '<p>Update ready. <a href=' . url('file-upgrade?doUpdate=true') . '>&raquo; Install Now?</a></p>';
+                        echo '<p>Update ready. <a href='.url('file-upgrade?doUpdate=true').'>&raquo; Install Now?</a></p>';
                         exit();
                     }
 
@@ -307,17 +320,18 @@ class UpgradeController extends Controller {
         }
     }
 
-    public function getCurl($url) {
+    public function getCurl($url)
+    {
         try {
             $curl = Utility::_isCurl();
             if (!$curl) {
-                throw new Exception("Please enable your curl function to check latest update");
+                throw new Exception('Please enable your curl function to check latest update');
             }
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_URL, $url);
             if (curl_exec($ch) === false) {
-                echo 'Curl error: ' . curl_error($ch);
+                echo 'Curl error: '.curl_error($ch);
             }
             $data = curl_exec($ch);
             curl_close($ch);
@@ -328,11 +342,12 @@ class UpgradeController extends Controller {
         }
     }
 
-    public function postDownloadCurl($url, $data) {
+    public function postDownloadCurl($url, $data)
+    {
         try {
             $curl = Utility::_isCurl();
             if (!$curl) {
-                throw new Exception("Please enable your curl function to check latest update");
+                throw new Exception('Please enable your curl function to check latest update');
             }
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -340,21 +355,23 @@ class UpgradeController extends Controller {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_URL, $url);
             if (curl_exec($ch) === false) {
-                echo 'Curl error: ' . curl_error($ch);
+                echo 'Curl error: '.curl_error($ch);
             }
             $data = curl_exec($ch);
             curl_close($ch);
+
             return json_decode($data, true);
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
 
-    public function postCurl($url, $data) {
+    public function postCurl($url, $data)
+    {
         try {
             $curl = Utility::_isCurl();
             if (!$curl) {
-                throw new Exception("Please enable your curl function to check latest update");
+                throw new Exception('Please enable your curl function to check latest update');
             }
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -362,18 +379,20 @@ class UpgradeController extends Controller {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_URL, $url);
             if (curl_exec($ch) === false) {
-                echo 'Curl error: ' . curl_error($ch);
+                echo 'Curl error: '.curl_error($ch);
             }
             $data = curl_exec($ch);
             curl_close($ch);
             $data = Utility::decryptByFaveoPrivateKey($data);
+
             return json_decode($data, true);
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
 
-    public function databaseUpdate() {
+    public function databaseUpdate()
+    {
         try {
             if (Utility::getFileVersion() > Utility::getDatabaseVersion()) {
                 $url = url('database-upgrade');
@@ -387,7 +406,8 @@ class UpgradeController extends Controller {
         }
     }
 
-    public function databaseUpgrade() {
+    public function databaseUpgrade()
+    {
         try {
             if (Utility::getFileVersion() > Utility::getDatabaseVersion()) {
                 Artisan::call('migrate', ['--force' => true]);
@@ -400,5 +420,4 @@ class UpgradeController extends Controller {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
-
 }

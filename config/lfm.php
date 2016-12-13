@@ -33,9 +33,8 @@ return [
         'image/jpeg',
         'image/pjpeg',
         'image/png',
-        'image/gif'
+        'image/gif',
     ],
-
 
     // valid file mimetypes (only when '/laravel-filemanager?type=Files')
     'valid_file_mimetypes' => [
@@ -44,6 +43,6 @@ return [
         'image/png',
         'image/gif',
         'application/pdf',
-        'text/plain'
+        'text/plain',
     ],
 ];

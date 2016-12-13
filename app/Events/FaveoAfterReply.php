@@ -19,7 +19,7 @@ class FaveoAfterReply extends Event
      *
      * @return void
      */
-    public function __construct($para1 = '', $para2 = '', $para3 = '', $para4 = '', $para5 = '',$para6='')
+    public function __construct($para1 = '', $para2 = '', $para3 = '', $para4 = '', $para5 = '', $para6 = '')
     {
         $this->para1 = $para1;
         $this->para2 = $para2;

@@ -2,20 +2,19 @@
 
 namespace App\Http\ViewComposers;
 
-use Illuminate\View\View;
 use App\Model\Update\BarNotification;
+use Illuminate\View\View;
 
-class UpdateNotification {
-
-    public function __construct() {
-        
+class UpdateNotification
+{
+    public function __construct()
+    {
     }
 
-    public function compose(View $view) {
-
+    public function compose(View $view)
+    {
         $notification = new BarNotification();
         $notice = $notification->where('value', '!=', '')->select('value')->get();
         $view->with(['notification' => $notice]);
     }
-
 }

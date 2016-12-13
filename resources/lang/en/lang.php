@@ -41,31 +41,31 @@ return [
       |   Login Page
       |--------------------------------------
      */
-    'login_to_start_your_session'        => 'Login to start your session',
-    'login'                              => 'Login',
-    'remember'                           => 'Remember me',
-    'signmein'                           => 'Sign me in',
-    'iforgot'                            => 'I forgot my password',
-    'email_address'                      => 'Email address',
-    'password'                           => 'Password',
+    'login_to_start_your_session'            => 'Login to start your session',
+    'login'                                  => 'Login',
+    'remember'                               => 'Remember me',
+    'signmein'                               => 'Sign me in',
+    'iforgot'                                => 'I forgot my password',
+    'email_address'                          => 'Email address',
+    'password'                               => 'Password',
      'password_confirmation'                 => 'Password confirmation',
-    'woops'                              => 'Whoops!',
-    'theirisproblem'                     => 'There were some problems with your input.',
-    'login'                              => 'Login',
-    'e-mail'                             => 'Email',
-    'reg_new_member'                     => 'Register a new membership',
-    'this_account_is_currently_inactive' => 'This account is currently inactive!',
-    'not-registered'                     => 'Email/username is not registered',
-    'verify'                             => 'Verify',
-    'enter-otp'                          => 'Enter OTP',
-    'did-not-recive-code'                => 'Didn\'t recieve code?',
-    'resend_otp'                         => 'Resend OTP',
-    'verify-screen-msg'                  => 'Your account is currently inactive.<br/>To activate your account, please enter the OTP we\'ve sent on',
-    'otp-sent'                           => 'We\'ve sent an OTP code on your number.',
-    'verify-number'                      => 'Verify number',
-    'get-verify-message'                 => 'Enter the OTP code we\'ve sent to your new number.',
-    'number-verification-sussessfull'    => 'Your number has been verified successfully, please wait we are updating your profile.',
-     'enter_your_email_here'             => 'Enter Your Email Here',
+    'woops'                                  => 'Whoops!',
+    'theirisproblem'                         => 'There were some problems with your input.',
+    'login'                                  => 'Login',
+    'e-mail'                                 => 'Email',
+    'reg_new_member'                         => 'Register a new membership',
+    'this_account_is_currently_inactive'     => 'This account is currently inactive!',
+    'not-registered'                         => 'Email/username is not registered',
+    'verify'                                 => 'Verify',
+    'enter-otp'                              => 'Enter OTP',
+    'did-not-recive-code'                    => 'Didn\'t recieve code?',
+    'resend_otp'                             => 'Resend OTP',
+    'verify-screen-msg'                      => 'Your account is currently inactive.<br/>To activate your account, please enter the OTP we\'ve sent on',
+    'otp-sent'                               => 'We\'ve sent an OTP code on your number.',
+    'verify-number'                          => 'Verify number',
+    'get-verify-message'                     => 'Enter the OTP code we\'ve sent to your new number.',
+    'number-verification-sussessfull'        => 'Your number has been verified successfully, please wait we are updating your profile.',
+     'enter_your_email_here'                 => 'Enter Your Email Here',
     /*
       |--------------------------------------
       |   Register Page
@@ -465,7 +465,6 @@ return [
       |--------------------------------------------------
     */
       'social-login' => 'Social login',
-
 
     /*
       |------------------------------------------------
@@ -961,8 +960,6 @@ return [
     'reply_content_is_a_required_field'                                  => 'Reply content is a required field',
     'internal_content_is_a_required_field'                               => 'Internal content is a required field',
 
-
-
     /*
       |-----------------------------------------------
       |  Profile
@@ -1261,7 +1258,6 @@ return [
     'manage_status'                         => 'Manage status',
     'notifications'                         => 'Notifications',
 
-
     'auto_close_workflow'               => 'Auto-close workflow',
     'close_ticket_workflow_settings'    => 'Close ticket workflow settings',
     'successfully_saved_your_settings'  => 'Successfully saved your settings',
@@ -1504,7 +1500,7 @@ return [
     'user_priority_status'                                      => 'User priority status',
     'current'                                                   => 'Current:',
     'active_user_can_select_the_priority_while_creating_ticket' => 'Active user can select the priority while creating ticket',
-    
+
     /* --------------------------------------------------------------------------------------------
      * Approval Updated
      * --------------------------------------------------------------------------------------------
@@ -1567,7 +1563,7 @@ return [
      /*** updates 28-11-2016***/
      'apply'              => 'Apply',
 
-     /** updates 2-12-2016 **/
+     /* updates 2-12-2016 **/
      'sort-by'                      => 'Sort by',
      'created-at'                   => 'Created at',
      'or'                           => 'OR',

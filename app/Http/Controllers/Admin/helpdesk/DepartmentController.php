@@ -29,14 +29,15 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class DepartmentController extends Controller {
-
+class DepartmentController extends Controller
+{
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
         $this->middleware('roles');
     }
@@ -48,9 +49,11 @@ class DepartmentController extends Controller {
      *
      * @return type Response
      */
-    public function index(Department $department) {
+    public function index(Department $department)
+    {
         try {
             $departments = $department->get();
+
             return view('themes.default1.admin.helpdesk.agent.departments.index', compact('departments'));
         } catch (Exception $e) {
             return view('404');
@@ -70,14 +73,15 @@ class DepartmentController extends Controller {
      *
      * @return type Response
      */
-    public function create(User $user, Group_assign_department $group_assign_department, Department $department, Sla_plan $sla, Template $template, Emails $email, Groups $group) {
+    public function create(User $user, Group_assign_department $group_assign_department, Department $department, Sla_plan $sla, Template $template, Emails $email, Groups $group)
+    {
         try {
             $slas = $sla->where('status', '=', 1)
-                    ->select('grace_period','id')->get();
+                    ->select('grace_period', 'id')->get();
             $user = $user->where('role', '<>', 'user')
             ->where('active', '=', 1)
             ->get();
-            $emails = $email->select('email_name','id')->get();
+            $emails = $email->select('email_name', 'id')->get();
             $templates = $template->get();
             $department = $department->get();
             $groups = $group->lists('id', 'name');
@@ -96,7 +100,8 @@ class DepartmentController extends Controller {
      *
      * @return type Response
      */
-    public function store(Department $department, DepartmentRequest $request) {
+    public function store(Department $department, DepartmentRequest $request)
+    {
         try {
             $department->fill($request->except('group_id', 'manager', 'sla'))->save();
             if ($request->sla) {
@@ -119,6 +124,7 @@ class DepartmentController extends Controller {
                             ->where('id', 1)
                             ->update(['department' => $department->id]);
                 }
+
                 return redirect('departments')->with('success', Lang::get('lang.department_created_sucessfully'));
             } else {
                 return redirect('departments')->with('fails', Lang::get('lang.failed_to_create_department'));
@@ -143,18 +149,19 @@ class DepartmentController extends Controller {
      *
      * @return type Response
      */
-    public function edit($id, User $user, Group_assign_department $group_assign_department, Template $template, Teams $team, Department $department, Sla_plan $sla, Emails $email, Groups $group) {
+    public function edit($id, User $user, Group_assign_department $group_assign_department, Template $template, Teams $team, Department $department, Sla_plan $sla, Emails $email, Groups $group)
+    {
         try {
             $sys_department = \DB::table('settings_system')
                     ->select('department')
                     ->where('id', '=', 1)
                     ->first();
             $slas = $sla->where('status', '=', 1)
-                    ->select('grace_period','id')->get();
+                    ->select('grace_period', 'id')->get();
             $user = $user->where('primary_dpt', $id)
             ->where('active', '=', 1)
-            ->get();            
-            $emails = $email->select('email_name','id')->get();
+            ->get();
+            $emails = $email->select('email_name', 'id')->get();
             $templates = $template->get();
             $departments = $department->whereId($id)->first();
             //$groups = $group->lists('id', 'name');
@@ -176,7 +183,8 @@ class DepartmentController extends Controller {
      *
      * @return type Response
      */
-    public function update($id, Group_assign_department $group_assign_department, Department $department, DepartmentUpdate $request) {
+    public function update($id, Group_assign_department $group_assign_department, Department $department, DepartmentUpdate $request)
+    {
         // dd($id);
         try {
             $table = $group_assign_department->where('department_id', $id);
@@ -224,9 +232,10 @@ class DepartmentController extends Controller {
      *
      * @return type Response
      */
-    public function destroy($id, Department $department, Group_assign_department $group_assign_department, System $system, Tickets $tickets) {
+    public function destroy($id, Department $department, Group_assign_department $group_assign_department, System $system, Tickets $tickets)
+    {
         // try {
-        
+
         $system = $system->where('id', '=', '1')->first();
         if ($system->department == $id) {
             return redirect('departments')->with('fails', Lang::get('lang.you_cannot_delete_default_department'));
@@ -238,7 +247,7 @@ class DepartmentController extends Controller {
                 } else {
                     $text_tickets = 'Ticket';
                 }
-                $ticket = '<li>' . $tickets . ' ' . $text_tickets . Lang::get('lang.have_been_moved_to_default_department') . '</li>';
+                $ticket = '<li>'.$tickets.' '.$text_tickets.Lang::get('lang.have_been_moved_to_default_department').'</li>';
             } else {
                 $ticket = '';
             }
@@ -249,7 +258,7 @@ class DepartmentController extends Controller {
                 } else {
                     $text_user = 'User';
                 }
-                $user = '<li>' . $users . ' ' . $text_user . Lang::get('lang.have_been_moved_to_default_department') . '</li>';
+                $user = '<li>'.$users.' '.$text_user.Lang::get('lang.have_been_moved_to_default_department').'</li>';
             } else {
                 $user = '';
             }
@@ -260,28 +269,27 @@ class DepartmentController extends Controller {
                 } else {
                     $text_emails = 'Email';
                 }
-                $email = '<li>' . $emails . ' System ' . $text_emails . Lang::get('lang.have_been_moved_to_default_department') . ' </li>';
+                $email = '<li>'.$emails.' System '.$text_emails.Lang::get('lang.have_been_moved_to_default_department').' </li>';
             } else {
                 $email = '';
             }
             $helptopic = DB::table('help_topic')->where('department', '=', $id)->update(['department' => null], ['status' => '1']);
             if ($helptopic > 0) {
-                $helptopic = '<li>' . Lang::get('lang.the_associated_helptopic_has_been_deactivated') . '</li>';
+                $helptopic = '<li>'.Lang::get('lang.the_associated_helptopic_has_been_deactivated').'</li>';
             } else {
                 $helptopic = '';
             }
-            $message = $ticket . $user . $email . $helptopic;
+            $message = $ticket.$user.$email.$helptopic;
             /* Becouse of foreign key we delete group_assign_department first */
             $group_assign_department = $group_assign_department->where('department_id', $id);
             $group_assign_department->delete();
             $departments = $department->whereId($id)->first();
             /* Check the function is Success or Fail */
             if ($departments->delete() == true) {
-                return redirect('departments')->with('success', Lang::get('lang.department_deleted_sucessfully') . $message);
+                return redirect('departments')->with('success', Lang::get('lang.department_deleted_sucessfully').$message);
             } else {
                 return redirect('departments')->with('fails', Lang::get('lang.department_can_not_delete'));
             }
         }
     }
-
 }

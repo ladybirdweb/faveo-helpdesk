@@ -36,8 +36,8 @@ class ProfileRequest extends Request
     }
 
     /**
+     *Check the mobile number is unique or not.
      *
-     *Check the mobile number is unique or not
      *@return string
      */
     public function checkMobile()

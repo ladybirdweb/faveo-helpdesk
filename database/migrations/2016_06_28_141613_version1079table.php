@@ -1,16 +1,16 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Version1079table extends Migration {
-
+class Version1079table extends Migration
+{
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up() {
+    public function up()
+    {
         $current_version1 = \Config::get('app.version');
         $current_version2 = explode(' ', $current_version1);
         $current_version = $current_version2[1];
@@ -26,9 +26,8 @@ class Version1079table extends Migration {
         if (Schema::hasTable('common_settings')) {
             $settings = DB::table('common_settings')->where('option_name', 'itil')->first();
             if (!$settings) {
-                DB::table('common_settings')->insert(['option_name'=>'itil','status'=>'0']);
+                DB::table('common_settings')->insert(['option_name'=>'itil', 'status'=>'0']);
             }
         }
     }
-
 }

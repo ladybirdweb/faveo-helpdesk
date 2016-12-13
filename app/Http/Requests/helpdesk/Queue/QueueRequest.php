@@ -25,16 +25,19 @@ class QueueRequest extends Request
     {
         $request = $this->except('_token');
         $rules = $this->setRule($request);
+
         return $rules;
     }
-    
-    public function setRule($request){
+
+    public function setRule($request)
+    {
         $rules = [];
-        if(count($request)>0){
-            foreach($request as $key=>$value){
-                $rules[$key]='required';
+        if (count($request) > 0) {
+            foreach ($request as $key=>$value) {
+                $rules[$key] = 'required';
             }
         }
+
         return $rules;
     }
 }

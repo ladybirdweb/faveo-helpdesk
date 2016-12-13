@@ -16,7 +16,7 @@ class ComposerServiceProvider extends ServiceProvider
         view()->composer(
             [
                 'themes.default1.agent.layout.agent',
-                'themes.default1.agent.helpdesk.dashboard.dashboard'
+                'themes.default1.agent.helpdesk.dashboard.dashboard',
             ], 'App\Http\ViewComposers\AgentLayout'
         );
         view()->composer(

@@ -1461,7 +1461,7 @@ return [
     'user_priority_status'                                      => 'User priority status',
     'current'                                                   => 'Current:',
     'active_user_can_select_the_priority_while_creating_ticket' => 'Active user can select the priority while creating ticket',
-    
+
     /* --------------------------------------------------------------------------------------------
      * Approval Updated
      * --------------------------------------------------------------------------------------------
@@ -1524,7 +1524,7 @@ return [
      /*** updates 28-11-2016***/
      'apply'              => 'Apply',
 
-     /** updates 2-12-2016 **/
+     /* updates 2-12-2016 **/
      'sort-by'                      => 'Sort by',
      'created-at'                   => 'Created at',
      'or'                           => 'OR',
