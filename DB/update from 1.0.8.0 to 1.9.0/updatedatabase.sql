@@ -48,6 +48,8 @@ UPDATE `ticket_priority`
 SET `priority_color` = '#dd4b38'
 WHERE `ticket_priority`.`priority` = "Emergency";
 
+UPDATE `ticket_priority` SET `is_default` = '1' WHERE `ticket_priority`.`priority_id` = 2;
+
 -- ---------------------------------------------------------------------------------------------
 
 -- 
