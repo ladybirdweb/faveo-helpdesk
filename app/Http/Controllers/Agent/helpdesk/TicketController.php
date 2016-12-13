@@ -26,7 +26,6 @@ use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Model\helpdesk\Ticket\Ticket_Collaborator;
 use App\Model\helpdesk\Ticket\Ticket_Form_Data;
-use App\Model\helpdesk\Settings\Approval;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Status;
@@ -293,125 +292,6 @@ class TicketController extends Controller {
         }
     }
 
-    public function settingsApproval() {
-        try {
-
-            $approval_status = Approval::select('status')->first();
-            // dd($approval_status->status);
-
-            return view('themes.default1.admin.helpdesk.settings.approval', compact('approval_status'));
-        } catch (Exception $e) {
-            return Redirect()->back()->with('fails', $e->getMessage());
-        }
-    }
-
-    /**
-     * 
-     * @param Request $request
-     * @return string
-     */
-    public function settingsUpdateApproval(Request $request) {
-        try {
-            $approval = $request->settings_approval;
-
-            Approval::where('id', 1)->update(['status' => $approval]);
-
-            return 'Your Status Updated';
-            //\Redirect::route('approval.settings')->with('success', Lang::get('lang.approval_settings-created-successfully'));
-            // return Redirect('approval.settings')->with('success', Lang::get('lang.approval_settings-created-successfully'));
-        } catch (Exception $e) {
-            return Redirect()->back()->with('fails', $e->getMessage());
-        }
-    }
-
-    /**
-     * 
-     * @return type
-     */
-    public function approverClosedTicketList() {
-        try {
-            $table = \Datatable::table()
-                    ->addColumn(
-                            "", Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
-                    ->noScript();
-            // return view('themes.default1.agent.helpdesk.ticket.closed');
-            return view('themes.default1.agent.helpdesk.approval.approval_index', compact('table'));
-        } catch (Exception $e) {
-            return Redirect()->back()->with('fails', $e->getMessage());
-        }
-    }
-
-    /**
-     * 
-     * @param type $id
-     * @param Tickets $ticket
-     * @return int
-     */
-    public function getCloseapproval($id, Tickets $ticket) {
-        try {
-
-
-            Tickets::where('id', '=', $id)
-                    ->update(['approval' => 1]);
-            // ->update(['status' => 3]);
-            if (Auth::user()->role == 'user') {
-                $ticket_status = $ticket->where('id', '=', $id)->where('user_id', '=', Auth::user()->id)->first();
-            } else {
-                $ticket_status = $ticket->where('id', '=', $id)->first();
-            }
-            // checking for unautherised access attempt on other than owner ticket id
-            if ($ticket_status == null) {
-                return redirect()->route('unauth');
-            }
-
-            $ticket_status->status = 3;
-            $ticket_status->closed = 1;
-            $ticket_status->closed_at = date('Y-m-d H:i:s');
-            $ticket_status->save();
-            $ticket_thread = Ticket_Thread::where('ticket_id', '=', $ticket_status->id)->first();
-            $ticket_subject = $ticket_thread->title;
-            $ticket_status_message = Ticket_Status::where('id', '=', $ticket_status->status)->first();
-            $thread = new Ticket_Thread();
-            $thread->ticket_id = $ticket_status->id;
-            $thread->user_id = Auth::user()->id;
-            $thread->is_internal = 1;
-            $thread->body = $ticket_status_message->message . ' ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
-            $thread->save();
-
-            $user_id = $ticket_status->user_id;
-            $user = User::where('id', '=', $user_id)->first();
-            $email = $user->email;
-            $user_name = $user->user_name;
-            $ticket_number = $ticket_status->ticket_number;
-
-            $system_from = $this->company();
-            $sending_emails = Emails::where('department', '=', $ticket_status->dept_id)->first();
-            if ($sending_emails == null) {
-                $from_email = $this->system_mail();
-            } else {
-                $from_email = $sending_emails->id;
-            }
-            try {
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket_status->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
-            } catch (\Exception $e) {
-                return 0;
-            }
-            $data = [
-                'id' => $ticket_status->ticket_number,
-                'status' => 'Closed',
-                'first_name' => Auth::user()->first_name,
-                'last_name' => Auth::user()->last_name,
-            ];
-
-            \Event::fire('change-status', array($data));
-            return 'your ticket' . $ticket_status->ticket_number . ' has been closed request';
-
-            // return redirect('themes.default1.agent.helpdesk.approval.approval_index')->with('success', lang::get('lang.moved_to_trash'));
-            // return view('themes.default1.agent.helpdesk.approval.approval_index')->message = "{{Lang::get('lang.no-tickets-to-merge')}}";;
-        } catch (Exception $e) {
-            return Redirect()->back()->with('fails', $e->getMessage());
-        }
-    }
 
     /**
      * Shows the ticket thread details.
@@ -1281,11 +1161,6 @@ class TicketController extends Controller {
      */
     public function close($id, Tickets $ticket) {
         $ticket = Tickets::where('id', '=', $id)->first();
-
-        $approval = Approval::where('id', '=', 1)->first();
-        //Admin can close direce
-        if (Auth::user()->role == 'admin' || Auth::user()->role == 'user') {
-
             if (Auth::user()->role == 'user') {
                 $ticket_status = $ticket->where('id', '=', $id)->where('user_id', '=', Auth::user()->id)->first();
             } else {
@@ -1336,111 +1211,6 @@ class TicketController extends Controller {
             \Event::fire('change-status', [$data]);
 
             return 'your ticket' . $ticket_status->ticket_number . ' has been closed';
-        }
-
-
-
-
-        if ($approval->status == 0) {
-            $ticket_status = $ticket->where('id', '=', $id)->first();
-            // checking for unautherised access attempt on other than owner ticket id
-            if ($ticket_status == null) {
-                return redirect()->route('unauth');
-            }
-            $ticket_status->status = 3;
-            $ticket_status->closed = 1;
-            $ticket_status->closed_at = date('Y-m-d H:i:s');
-            $ticket_status->save();
-            $ticket_thread = Ticket_Thread::where('ticket_id', '=', $ticket_status->id)->first();
-            $ticket_subject = $ticket_thread->title;
-            $ticket_status_message = Ticket_Status::where('id', '=', $ticket_status->status)->first();
-            $thread = new Ticket_Thread();
-            $thread->ticket_id = $ticket_status->id;
-            $thread->user_id = Auth::user()->id;
-            $thread->is_internal = 1;
-            $thread->body = $ticket_status_message->message . ' ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
-            $thread->save();
-
-            $user_id = $ticket_status->user_id;
-            $user = User::where('id', '=', $user_id)->first();
-            $email = $user->email;
-            $user_name = $user->user_name;
-            $ticket_number = $ticket_status->ticket_number;
-
-            $system_from = $this->company();
-            $sending_emails = Emails::where('department', '=', $ticket_status->dept_id)->first();
-            if ($sending_emails == null) {
-                $from_email = $this->system_mail();
-            } else {
-                $from_email = $sending_emails->id;
-            }
-            try {
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket_status->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
-            } catch (\Exception $e) {
-                return 0;
-            }
-            $data = [
-                'id' => $ticket_status->ticket_number,
-                'status' => 'Closed',
-                'first_name' => Auth::user()->first_name,
-                'last_name' => Auth::user()->last_name,
-            ];
-            \Event::fire('change-status', [$data]);
-
-            return 'your ticket' . $ticket_status->ticket_number . ' has been closed';
-        }
-
-
-
-        if ($approval->status == 1) {
-            $ticket_status = $ticket->where('id', '=', $id)->first();
-            // checking for unautherised access attempt on other than owner ticket id
-            if ($ticket_status == null) {
-                return redirect()->route('unauth');
-            }
-
-            $ticket_status->status = 7;
-            $ticket_status->closed = 0;
-            // $ticket_status->closed_at = date('Y-m-d H:i:s');
-            $ticket_status->save();
-            $ticket_thread = Ticket_Thread::where('ticket_id', '=', $ticket_status->id)->first();
-            $ticket_subject = $ticket_thread->title;
-            $ticket_status_message = Ticket_Status::where('id', '=', $ticket_status->status)->first();
-            $thread = new Ticket_Thread();
-            $thread->ticket_id = $ticket_status->id;
-            $thread->user_id = Auth::user()->id;
-            // $thread->is_internal = 1;
-            $thread->body = $ticket_status_message->message . ' ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
-            $thread->save();
-
-            $user_id = $ticket_status->user_id;
-            $user = User::where('id', '=', $user_id)->first();
-            $email = $user->email;
-            $user_name = $user->user_name;
-            $ticket_number = $ticket_status->ticket_number;
-
-            $system_from = $this->company();
-            $sending_emails = Emails::where('department', '=', $ticket_status->dept_id)->first();
-            if ($sending_emails == null) {
-                $from_email = $this->system_mail();
-            } else {
-                $from_email = $sending_emails->id;
-            }
-            try {
-                $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket_status->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
-            } catch (\Exception $e) {
-                return 0;
-            }
-            $data = [
-                'id' => $ticket_status->ticket_number,
-                'status' => 'Closed',
-                'first_name' => Auth::user()->first_name,
-                'last_name' => Auth::user()->last_name,
-            ];
-
-            \Event::fire('change-status', array($data));
-            return 'your ticket' . $ticket_status->ticket_number . ' has been closed request';
-        }
     }
 
     /**
