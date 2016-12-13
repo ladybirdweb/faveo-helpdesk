@@ -296,7 +296,7 @@ class AuthController extends Controller
         }
         $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
         $result = $this->confirmIPAddress($value, $usernameinput);
-        
+
         // If attempts > 3 and time < 30 minutes
         $security = Security::whereId('1')->first();
         if ($result == 1) {
@@ -309,15 +309,15 @@ class AuthController extends Controller
             return redirect()->back()
                             ->withInput($request->only('email', 'remember'))
                             ->withErrors([
-                                'email'       => $this->getFailedLoginMessage(),
-                                'password'    => $this->getFailedLoginMessage(),
-                            ])->with(['error' => Lang::get('lang.not-registered'),
+                                'email'                     => $this->getFailedLoginMessage(),
+                                'password'                  => $this->getFailedLoginMessage(),
+                            ])->with(['error'               => Lang::get('lang.not-registered'),
                                       'referer'             => $referer, ]);
         }
 
         //if user exists
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
-        
+
         if ($settings->status == '1' || $settings->status == 1) { // check for otp verification setting
             // setting is enabled
             $sms = Plugin::select('status')->where('name', '=', 'SMS')->first();
@@ -328,7 +328,7 @@ class AuthController extends Controller
                     if (!$check_active->active) { //check account is active or not
                         // account is not active show verify otp window
                         if ($check_active->mobile) { //check user has mobile or not
-                        // user has mobile number return verify OTP screen 
+                        // user has mobile number return verify OTP screen
                             return \Redirect::route('otp-verification')
                                 ->withInput($request->input())
                                 ->with(['values' => $request->input(),
@@ -337,7 +337,7 @@ class AuthController extends Controller
                                     'number'     => $check_active->mobile,
                                     'code'       => $check_active->country_code, ]);
                         } else {
-                            goto a; //attenmpt login  (be careful while using goto statements) 
+                            goto a; //attenmpt login  (be careful while using goto statements)
                         }
                     } else {
                         goto a; //attenmpt login  (be careful while using goto statements)
@@ -392,14 +392,15 @@ class AuthController extends Controller
                         if ($request->input('referer')) {
                             return \Redirect::route($request->input('referer'));
                         }
+
                         return \Redirect::route('/');
                     } else {
                         return redirect()->intended($this->redirectPath());
                     }
                 }
-
             }
         }
+
         return redirect()->back()
                         ->withInput($request->only('email', 'remember'))
                         ->withErrors([
