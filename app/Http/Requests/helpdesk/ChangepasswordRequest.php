@@ -29,7 +29,7 @@ class ChangepasswordRequest extends Request
     public function rules()
     {
         return [
-            
+
             'change_password' => 'required',
             // 'message' => 'required',
         ];

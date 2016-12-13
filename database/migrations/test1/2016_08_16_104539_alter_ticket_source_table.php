@@ -1,16 +1,17 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class AlterTicketSourceTable extends Migration {
-
+class AlterTicketSourceTable extends Migration
+{
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up() {
+    public function up()
+    {
         if (!Schema::hasColumn('ticket_source', 'css_class')) {
             Schema::table('ticket_source', function (Blueprint $table) {
                 $table->string('css_class');
@@ -23,13 +24,14 @@ class AlterTicketSourceTable extends Migration {
         }
     }
 
-    public function values() {
+    public function values()
+    {
         return[
-            ['name' => 'web', 'value' => 'Web', 'css_class' => 'fa fa-internet-explorer',],
-            ['name' => 'email', 'value' => 'E-mail', 'css_class' => 'fa fa-envelope',],
-            ['name' => 'agent', 'value' => 'Agent Panel', 'css_class' => 'fa fa-envelope',],
-            ['name' => 'facebook', 'value' => 'Facebook', 'css_class' => 'fa fa-facebook',],
-            ['name' => 'twitter', 'value' => 'Twitter', 'css_class' => 'fa fa-twitter',],
+            ['name' => 'web', 'value' => 'Web', 'css_class' => 'fa fa-internet-explorer'],
+            ['name' => 'email', 'value' => 'E-mail', 'css_class' => 'fa fa-envelope'],
+            ['name' => 'agent', 'value' => 'Agent Panel', 'css_class' => 'fa fa-envelope'],
+            ['name' => 'facebook', 'value' => 'Facebook', 'css_class' => 'fa fa-facebook'],
+            ['name' => 'twitter', 'value' => 'Twitter', 'css_class' => 'fa fa-twitter'],
         ];
     }
 
@@ -38,10 +40,10 @@ class AlterTicketSourceTable extends Migration {
      *
      * @return void
      */
-    public function down() {
+    public function down()
+    {
         Schema::table('ticket_source', function (Blueprint $table) {
             //
         });
     }
-
 }

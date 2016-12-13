@@ -11,44 +11,53 @@ class Notification extends BaseModel
 
             'model_id', 'userid_created', 'type_id',
                             ];
-    
-    public function type(){
+
+    public function type()
+    {
         $related = 'App\Model\helpdesk\Notification\NotificationType';
         $id = 'type_id';
-        return $this->belongsTo($related,$id);
+
+        return $this->belongsTo($related, $id);
     }
-    
-    public function model(){
+
+    public function model()
+    {
         $related = 'App\Model\helpdesk\Ticket\Tickets';
         $id = 'model_id';
-        return $this->belongsTo($related,$id);
+
+        return $this->belongsTo($related, $id);
     }
-    
-    public function userNotification(){
+
+    public function userNotification()
+    {
         $related = 'App\Model\helpdesk\Notification\UserNotification';
         $foreignKey = 'notification_id';
+
         return $this->hasMany($related, $foreignKey);
     }
-    
-    public function deleteUserNotification(){
+
+    public function deleteUserNotification()
+    {
         $user_notifications = $this->userNotification;
-        if(count($user_notifications)>0){
-            foreach($user_notifications as $noti){
+        if (count($user_notifications) > 0) {
+            foreach ($user_notifications as $noti) {
                 $noti->delete();
             }
         }
     }
-    
-    public function dummyDelete(){
-         $user_notifications = UserNotification::get();
-         if(count($user_notifications)>0){
-            foreach($user_notifications as $noti){
+
+    public function dummyDelete()
+    {
+        $user_notifications = UserNotification::get();
+        if (count($user_notifications) > 0) {
+            foreach ($user_notifications as $noti) {
                 $noti->delete();
             }
         }
     }
-    
-    public function delete() {
+
+    public function delete()
+    {
         $this->deleteUserNotification();
        // $this->dummyDelete();
         parent::delete();

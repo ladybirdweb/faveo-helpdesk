@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Agent\helpdesk;
 
 // models
+use App\Http\Controllers\Admin\MailFetch as Fetch;
 use App\Http\Controllers\Controller;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Manage\Help_topic;
@@ -12,24 +13,24 @@ use App\Model\helpdesk\Settings\Ticket;
 use App\Model\helpdesk\Ticket\Ticket_attachments;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
-use App\Model\helpdesk\Ticket\Tickets;
 // classes
-use App\Http\Controllers\Admin\MailFetch as Fetch;
+use App\Model\helpdesk\Ticket\Tickets;
 
 /**
  * MailController.
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class MailController extends Controller {
-
+class MailController extends Controller
+{
     /**
      * constructor
      * Create a new controller instance.
      *
      * @param type TicketController $TicketController
      */
-    public function __construct(TicketWorkflowController $TicketWorkflowController) {
+    public function __construct(TicketWorkflowController $TicketWorkflowController)
+    {
         $this->middleware('board');
         $this->TicketWorkflowController = $TicketWorkflowController;
     }
@@ -39,7 +40,8 @@ class MailController extends Controller {
      *
      * @return type
      */
-    public function readmails(Emails $emails, Email $settings_email, System $system, Ticket $ticket) {
+    public function readmails(Emails $emails, Email $settings_email, System $system, Ticket $ticket)
+    {
         //dd($emails);
         if ($settings_email->first()->email_fetching == 1) {
             if ($settings_email->first()->all_emails == 1) {
@@ -60,7 +62,8 @@ class MailController extends Controller {
      *
      * @return type string
      */
-    public function separate_reply($body) {
+    public function separate_reply($body)
+    {
         $body2 = explode('---Reply above this line---', $body);
         $body3 = $body2[0];
 
@@ -68,51 +71,64 @@ class MailController extends Controller {
     }
 
     /**
-     * 
      * @param object $email
-     * @return integer
+     *
+     * @return int
      */
-    public function priority($email) {
+    public function priority($email)
+    {
         $priority = $email->priority;
         if (!$priority) {
             $priority = $this->ticketController()->getSystemDefaultPriority();
         }
+
         return $priority;
     }
 
     /**
-     * get department
+     * get department.
+     *
      * @param object $email
-     * @return integer
+     *
+     * @return int
      */
-    public function department($email) {
+    public function department($email)
+    {
         $department = $email->department;
         if (!$department) {
             $department = $this->ticketController()->getSystemDefaultDepartment();
         }
+
         return $department;
     }
 
     /**
-     * get help topic
+     * get help topic.
+     *
      * @param object $email
-     * @return integer
+     *
+     * @return int
      */
-    public function helptopic($email) {
+    public function helptopic($email)
+    {
         //dd($email);
         $helptopic = $email->help_topic;
         if (!$helptopic) {
             $helptopic = $this->ticketController()->getSystemDefaultHelpTopic();
         }
+
         return $helptopic;
     }
 
     /**
-     * get sla
+     * get sla.
+     *
      * @param object $email
-     * @return integer
+     *
+     * @return int
      */
-    public function sla($email) {
+    public function sla($email)
+    {
         $helptopic = $this->helptopic($email);
         $help = Help_topic::where('id', '=', $helptopic)->first();
         if ($help) {
@@ -121,21 +137,26 @@ class MailController extends Controller {
         if (!$sla) {
             $sla = $this->ticketController()->getSystemDefaultSla();
         }
+
         return $sla;
     }
 
     /**
-     * get ticket controller
+     * get ticket controller.
+     *
      * @return \App\Http\Controllers\Agent\helpdesk\TicketController
      */
-    public function ticketController() {
+    public function ticketController()
+    {
         $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
         $NotificationController = new \App\Http\Controllers\Common\NotificationController();
         $controller = new TicketController($PhpMailController, $NotificationController);
+
         return $controller;
     }
 
-    public function fetch($email) {
+    public function fetch($email)
+    {
         //  dd($email);
         if ($email) {
             $username = $email->email_address;
@@ -146,18 +167,19 @@ class MailController extends Controller {
             $encryption = $email->fetching_encryption;
             $cert = $email->mailbox_protocol;
             $server = new Fetch($host, $port, $service);
-            if ($encryption != null || $encryption != "") {
+            if ($encryption != null || $encryption != '') {
                 $server->setFlag($encryption);
             }
             $server->setFlag($cert);
             $server->setAuthentication($username, $password);
-            $date = date("d M Y", strToTime("-1 days"));
+            $date = date('d M Y', strtotime('-1 days'));
             $messages = $server->search("SINCE \"$date\" UNSEEN");
             $this->message($messages, $email);
         }
     }
 
-    public function message($messages, $email) {
+    public function message($messages, $email)
+    {
         if (count($messages) > 0) {
             foreach ($messages as $message) {
                 $this->getMessageContent($message, $email);
@@ -165,7 +187,8 @@ class MailController extends Controller {
         }
     }
 
-    public function getMessageContent($message, $email) {
+    public function getMessageContent($message, $email)
+    {
         $body = $message->getMessageBody(true);
         if (!$body) {
             $body = $message->getMessageBody();
@@ -182,7 +205,8 @@ class MailController extends Controller {
         $this->workflow($address, $subject, $body, $collaborators, $attachments, $email);
     }
 
-    public function workflow($address, $subject, $body, $collaborator, $attachments, $email) {
+    public function workflow($address, $subject, $body, $collaborator, $attachments, $email)
+    {
         $fromaddress = checkArray('address', $address[0]);
         $fromname = checkArray('name', $address[0]);
         $helptopic = $this->helptopic($email);
@@ -203,7 +227,8 @@ class MailController extends Controller {
         }
     }
 
-    public function updateThread($ticket_number, $body, $attachments) {
+    public function updateThread($ticket_number, $body, $attachments)
+    {
         $ticket_table = Tickets::where('ticket_number', '=', $ticket_number)->first();
         $thread_id = Ticket_Thread::where('ticket_id', '=', $ticket_table->id)->max('id');
         $thread = Ticket_Thread::where('id', '=', $thread_id)->first();
@@ -220,20 +245,20 @@ class MailController extends Controller {
             loging('attachment', 'FaveoStorage not installed');
         }
 
-        \Log::info("Ticket has created : ", ['id' => $thread->ticket_id]);
+        \Log::info('Ticket has created : ', ['id' => $thread->ticket_id]);
     }
 
-    public function saveAttachments($thread_id, $attachments = []) {
+    public function saveAttachments($thread_id, $attachments = [])
+    {
         if (is_array($attachments) && count($attachments) > 0) {
             foreach ($attachments as $attachment) {
-
                 $structure = $attachment->getStructure();
                 $disposition = 'ATTACHMENT';
                 if (isset($structure->disposition)) {
                     $disposition = $structure->disposition;
                 }
 
-                $filename = str_random(16) . '-' . $attachment->getFileName();
+                $filename = str_random(16).'-'.$attachment->getFileName();
                 $type = $attachment->getMimeType();
                 $size = $attachment->getSize();
                 $data = $attachment->getData();
@@ -245,7 +270,8 @@ class MailController extends Controller {
         }
     }
 
-    public function manageAttachment($data, $filename, $type, $size, $disposition, $thread_id) {
+    public function manageAttachment($data, $filename, $type, $size, $disposition, $thread_id)
+    {
         $upload = new Ticket_attachments();
         $upload->file = $data;
         $upload->thread_id = $thread_id;
@@ -258,25 +284,27 @@ class MailController extends Controller {
         }
     }
 
-    public function updateBody($attachment, $thread_id, $filename) {
+    public function updateBody($attachment, $thread_id, $filename)
+    {
         $structure = $attachment->getStructure();
         $disposition = 'ATTACHMENT';
         if (isset($structure->disposition)) {
             $disposition = $structure->disposition;
         }
         if ($disposition == 'INLINE' || $disposition == 'inline') {
-            $id = str_replace(">", "", str_replace("<", "", $structure->id));
+            $id = str_replace('>', '', str_replace('<', '', $structure->id));
             //$filename = $attachment->getFileName();
             $threads = new Ticket_Thread();
             $thread = $threads->find($thread_id);
             $body = $thread->body;
-            $body = str_replace('cid:' . $id, $filename, $body);
+            $body = str_replace('cid:'.$id, $filename, $body);
             $thread->body = $body;
             $thread->save();
         }
     }
 
-    public function collaburators($message, $email) {
+    public function collaburators($message, $email)
+    {
         $this_address = $email->email_address;
         $collaborator_cc = $message->getAddresses('cc');
         //dd($collaborator_cc);
@@ -311,6 +339,7 @@ class MailController extends Controller {
         if (array_key_exists($this_address, $array)) {
             unset($array[$this_address]);
         }
+
         return $array;
     }
 
@@ -321,18 +350,20 @@ class MailController extends Controller {
      *
      * @return type file
      */
-    public function get_data($id) {
+    public function get_data($id)
+    {
         $attachment = \App\Model\helpdesk\Ticket\Ticket_attachments::where('id', '=', $id)->first();
         if (mime($attachment->type) == true) {
-            echo "<img src=data:$attachment->type;base64," . $attachment->file . ">";
+            echo "<img src=data:$attachment->type;base64,".$attachment->file.'>';
         } else {
             $file = base64_decode($attachment->file);
+
             return response($file)
                             ->header('Cache-Control', 'no-cache private')
                             ->header('Content-Description', 'File Transfer')
                             ->header('Content-Type', $attachment->type)
                             ->header('Content-length', strlen($file))
-                            ->header('Content-Disposition', 'attachment; filename=' . $attachment->name)
+                            ->header('Content-Disposition', 'attachment; filename='.$attachment->name)
                             ->header('Content-Transfer-Encoding', 'binary');
         }
     }
@@ -344,12 +375,13 @@ class MailController extends Controller {
      *
      * @return type string
      */
-    public function separateReply($body) {
+    public function separateReply($body)
+    {
         $body2 = explode('---Reply above this line---', $body);
         if (is_array($body2) && array_key_exists(0, $body2)) {
             $body = $body2[0];
         }
+
         return $body;
     }
-
 }

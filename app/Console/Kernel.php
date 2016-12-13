@@ -2,12 +2,12 @@
 
 namespace App\Console;
 
+use App\Model\MailJob\Condition;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Model\MailJob\Condition;
 
-class Kernel extends ConsoleKernel {
-
+class Kernel extends ConsoleKernel
+{
     /**
      * The Artisan commands provided by your application.
      *
@@ -27,7 +27,8 @@ class Kernel extends ConsoleKernel {
      *
      * @return void
      */
-    protected function schedule(Schedule $schedule) {
+    protected function schedule(Schedule $schedule)
+    {
         if (env('DB_INSTALL') == 1) {
             $queue = $this->getCurrentQueue();
             $schedule->command('queue:listen '.$queue, ['--tries' => 1])->everyMinute();
@@ -37,75 +38,79 @@ class Kernel extends ConsoleKernel {
         }
     }
 
-    public function execute($schedule, $task) {
+    public function execute($schedule, $task)
+    {
         $condition = new Condition();
         $command = $condition->getConditionValue($task);
         switch ($task) {
-            case "fetching":
+            case 'fetching':
                 $this->getCondition($schedule->command('ticket:fetch'), $command);
                 break;
-            case "notification":
+            case 'notification':
                 $this->getCondition($schedule->command('report:send'), $command);
                 break;
-            case "work":
+            case 'work':
                 $this->getCondition($schedule->command('ticket:close'), $command);
                 break;
         }
     }
 
-    public function getCondition($schedule, $command) {
+    public function getCondition($schedule, $command)
+    {
         $condition = $command['condition'];
         $at = $command['at'];
         switch ($condition) {
-            case "everyMinute":
+            case 'everyMinute':
                 $schedule->everyMinute()->withoutOverlapping();
                 break;
-            case "everyFiveMinutes":
+            case 'everyFiveMinutes':
                 $schedule->everyFiveMinutes()->withoutOverlapping();
                 break;
-            case "everyTenMinutes":
+            case 'everyTenMinutes':
                 $schedule->everyTenMinutes()->withoutOverlapping();
                 break;
-            case "everyThirtyMinutes":
+            case 'everyThirtyMinutes':
                 $schedule->everyThirtyMinutes()->withoutOverlapping();
                 break;
-            case "hourly":
+            case 'hourly':
                 $schedule->hourly()->withoutOverlapping();
                 break;
-            case "daily":
+            case 'daily':
                 $schedule->daily()->withoutOverlapping();
                 break;
-            case "dailyAt":
+            case 'dailyAt':
                 $this->getConditionWithOption($schedule, $condition, $at);
                 break;
-            case "weekly":
+            case 'weekly':
                 $schedule->weekly()->withoutOverlapping();
                 break;
-            case "monthly":
+            case 'monthly':
                 $schedule->monthly()->withoutOverlapping();
                 break;
-            case "yearly":
+            case 'yearly':
                 $schedule->yearly()->withoutOverlapping();
                 break;
         }
     }
 
-    public function getConditionWithOption($schedule, $command, $at) {
+    public function getConditionWithOption($schedule, $command, $at)
+    {
         switch ($command) {
-            case "dailyAt":
+            case 'dailyAt':
                 $schedule->dailyAt($at)->withoutOverlapping();
                 break;
         }
     }
 
-    public function getCurrentQueue() {
+    public function getCurrentQueue()
+    {
         $queue = 'database';
         $services = new \App\Model\MailJob\QueueService();
         $current = $services->where('status', 1)->first();
         if ($current) {
             $queue = $current->short_name;
         }
+
         return $queue;
     }
-
 }

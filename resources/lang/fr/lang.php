@@ -72,7 +72,6 @@ return [
     'we_have_e-mailed_your_password_reset_link'                   => 'We have emailed your password reset link!',
     "we_can't_find_a_user_with_that_e-mail_address"               => "We can't find a user with that email address.",
 
-
     /*
       |--------------------------------------
       |   Reset Password Page
@@ -849,7 +848,6 @@ return [
     'group_deleted_successfully'                                                               => 'Groupe supprimé avec succès',
     'failed_to_load_the_page'                                                                  => 'Echec du chargement de la page',
 
-
     /*
       |--------------------------------------
       |  SMTP Page
@@ -923,8 +921,6 @@ return [
     'unable_to_fetch_emails'                                                        => 'Impossible de synchroniser les emails',
     'reply_content_is_a_required_field'                                             => 'Le contenu de la réponse est un champ obligatoire',
     'internal_content_is_a_required_field'                                          => 'Le contenu interne est un champ obligatoire',
-
-
 
     /*
       |-----------------------------------------------
@@ -1224,7 +1220,6 @@ return [
     'manage_status'                         => 'Gérer statut',
     'notifications'                         => 'Notifications',
 
-
     'auto_close_workflow'               => 'Workflow d\'auto fermeture',
     'close_ticket_workflow_settings'    => 'Fermer les paramètres de Workflow de ticket',
     'successfully_saved_your_settings'  => 'Paramètres enregistrés avec succès',
@@ -1476,7 +1471,7 @@ return [
     'user_priority_status'                                      => 'User priority status',
     'current'                                                   => 'Current:',
     'active_user_can_select_the_priority_while_creating_ticket' => 'Active user can select the priority while creating ticket',
-    
+
     /* --------------------------------------------------------------------------------------------
      * Approval Updated
      * --------------------------------------------------------------------------------------------
@@ -1539,7 +1534,7 @@ return [
      /*** updates 28-11-2016***/
      'apply'              => 'Apply',
 
-     /** updates 2-12-2016 **/
+     /* updates 2-12-2016 **/
      'sort-by'                      => 'Sort by',
      'created-at'                   => 'Created at',
      'or'                           => 'OR',
@@ -1557,6 +1552,5 @@ return [
      'user-account-is-deleted'      => 'This user account has been deleted.',
      'restore-user'                 => 'Restore user account',
      'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
-
 
 ];
