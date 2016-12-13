@@ -296,96 +296,110 @@ class AuthController extends Controller
         }
         $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
         $result = $this->confirmIPAddress($value, $usernameinput);
+        
         // If attempts > 3 and time < 30 minutes
         $security = Security::whereId('1')->first();
-        //dd($security->lockout_message);
         if ($result == 1) {
             return redirect()->back()->withErrors('email', 'Incorrect details')->with(['error' => $security->lockout_message, 'referer' => $referer]);
         }
-        //dd($request->input('email'));
+
         $check_active = User::where('email', '=', $request->input('email'))->orwhere('user_name', '=', $request->input('email'))->first();
-        if (!$check_active) {
+        if (!$check_active) { //check if user exists or not
+            //if user deos not exist then return back with error that user is not registered
             return redirect()->back()
                             ->withInput($request->only('email', 'remember'))
                             ->withErrors([
                                 'email'       => $this->getFailedLoginMessage(),
                                 'password'    => $this->getFailedLoginMessage(),
                             ])->with(['error' => Lang::get('lang.not-registered'),
-                        'referer'             => $referer, ]);
+                                      'referer'             => $referer, ]);
         }
+
+        //if user exists
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
-        if ($settings->status == '0' || $settings->status == 0) {
-            if ($check_active->active == 0) {
-                return redirect()->back()
-                                ->withInput($request->only('email', 'remember'))
-                                ->withErrors([
-                                    'email'       => $this->getFailedLoginMessage(),
-                                    'password'    => $this->getFailedLoginMessage(),
-                                ])->with(['error' => Lang::get('lang.this_account_is_currently_inactive'),
-                            'referer'             => $referer, ]);
-            }
-        } else {
-            if ($check_active->active == 0 && !$check_active->mobile) {
-                return redirect()->back()
-                                ->withInput($request->only('email', 'remember'))
-                                ->withErrors([
-                                    'email'       => $this->getFailedLoginMessage(),
-                                    'password'    => $this->getFailedLoginMessage(),
-                                ])->with(['error' => Lang::get('lang.this_account_is_currently_inactive'),
-                            'referer'             => $referer, ]);
-            }
-        }
-        $loginAttempts = 1;
-        // If session has login attempts, retrieve attempts counter and attempts time
-        if (\Session::has('loginAttempts')) {
-            $loginAttempts = \Session::get('loginAttempts');
-            $loginAttemptTime = \Session::get('loginAttemptTime');
-            $this->addLoginAttempt($value, $usernameinput);
-            // $credentials = $request->only('email', 'password');
-            $usernameinput = $request->input('email');
-            $password = $request->input('password');
-            $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
-            // If attempts > 3 and time < 10 minutes
-            if ($loginAttempts > $security->backlist_threshold && (time() - $loginAttemptTime <= ($security->lockout_period * 60))) {
-                return redirect()->back()->withErrors('email', 'incorrect email')->with('error', $security->lockout_message);
-            }
-            // If time > 10 minutes, reset attempts counter and time in session
-            if (time() - $loginAttemptTime > ($security->lockout_period * 60)) {
-                \Session::put('loginAttempts', 1);
-                \Session::put('loginAttemptTime', time());
-            }
-        } else { // If no login attempts stored, init login attempts and time
-            \Session::put('loginAttempts', $loginAttempts);
-            \Session::put('loginAttemptTime', time());
-            $this->clearLoginAttempts($value, $usernameinput);
-        }
-        // If auth ok, redirect to restricted area
-        \Session::put('loginAttempts', $loginAttempts + 1);
-
-        if (Auth::Attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
-            if ($check_active->active == 0) {
-                \Auth::logout();
-                \Session::flush();
-
-                return \Redirect::route('otp-verification')
+        
+        if ($settings->status == '1' || $settings->status == 1) { // check for otp verification setting
+            // setting is enabled
+            $sms = Plugin::select('status')->where('name', '=', 'SMS')->first();
+            if ($sms) { //check sms plugin installed or not
+                // plugin is installed
+                if ($sms->status == 1 || $sms->status === '1') { //check plugin is active or not
+                    // plugin is active
+                    if (!$check_active->active) { //check account is active or not
+                        // account is not active show verify otp window
+                        if ($check_active->mobile) { //check user has mobile or not
+                        // user has mobile number return verify OTP screen 
+                            return \Redirect::route('otp-verification')
                                 ->withInput($request->input())
                                 ->with(['values' => $request->input(),
                                     'referer'    => $referer,
                                     'name'       => $check_active->first_name,
                                     'number'     => $check_active->mobile,
                                     'code'       => $check_active->country_code, ]);
+                        } else {
+                            goto a; //attenmpt login  (be careful while using goto statements) 
+                        }
+                    } else {
+                        goto a; //attenmpt login  (be careful while using goto statements)
+                    }
+                } else {
+                    goto a; //attenmpt login  (be careful while using goto statements)
+                }
+            } else {
+                goto a; //attenmpt login  (be careful while using goto statements)
             }
-            if (Auth::user()->role == 'user') {
-                if ($request->input('referer')) {
-                    return \Redirect::route($request->input('referer'));
+        } else {
+            // setting is disabled
+            a: if (!$check_active->active) { //check account is active or not
+                // if accoutn is not active return back with error message that account is inactive
+                return redirect()->back()
+                                ->withInput($request->only('email', 'remember'))
+                                ->withErrors([
+                                    'email'       => $this->getFailedLoginMessage(),
+                                    'password'    => $this->getFailedLoginMessage(),
+                                ])->with(['error' => Lang::get('lang.this_account_is_currently_inactive'),
+                            'referer'             => $referer, ]);
+            } else {
+                // try login
+                $loginAttempts = 1;
+                // If session has login attempts, retrieve attempts counter and attempts time
+                if (\Session::has('loginAttempts')) {
+                    $loginAttempts = \Session::get('loginAttempts');
+                    $loginAttemptTime = \Session::get('loginAttemptTime');
+                    $this->addLoginAttempt($value, $usernameinput);
+                    // $credentials = $request->only('email', 'password');
+                    $usernameinput = $request->input('email');
+                    $password = $request->input('password');
+                    $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
+                    // If attempts > 3 and time < 10 minutes
+                    if ($loginAttempts > $security->backlist_threshold && (time() - $loginAttemptTime <= ($security->lockout_period * 60))) {
+                        return redirect()->back()->withErrors('email', 'incorrect email')->with('error', $security->lockout_message);
+                    }
+                    // If time > 10 minutes, reset attempts counter and time in session
+                    if (time() - $loginAttemptTime > ($security->lockout_period * 60)) {
+                        \Session::put('loginAttempts', 1);
+                        \Session::put('loginAttemptTime', time());
+                    }
+                } else { // If no login attempts stored, init login attempts and time
+                    \Session::put('loginAttempts', $loginAttempts);
+                    \Session::put('loginAttemptTime', time());
+                    $this->clearLoginAttempts($value, $usernameinput);
+                }
+                // If auth ok, redirect to restricted area
+                \Session::put('loginAttempts', $loginAttempts + 1);
+                if (Auth::Attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
+                    if (Auth::user()->role == 'user') {
+                        if ($request->input('referer')) {
+                            return \Redirect::route($request->input('referer'));
+                        }
+                        return \Redirect::route('/');
+                    } else {
+                        return redirect()->intended($this->redirectPath());
+                    }
                 }
 
-                return \Redirect::route('/');
-            } else {
-                return redirect()->intended($this->redirectPath());
             }
         }
-
         return redirect()->back()
                         ->withInput($request->only('email', 'remember'))
                         ->withErrors([
