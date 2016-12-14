@@ -491,18 +491,6 @@
                     </div>
                 </div>
                 
-                <div class="col-md-2 col-sm-6">
-                    <div class="settingiconblue">
-                        <div class="settingdivblue">
-                           <a href="{{url('approval/settings')}}">
-                                <span class="fa-stack fa-2x">    
-                                    <i class="glyphicon glyphicon-repeat"></i>
-                                </span>
-                            </a>
-                        </div>
-                        <p class="box-title" >{!! Lang::get('lang.approval') !!}</p>
-                    </div>
-                </div>
                 <?php \Event::fire('settings.system',[]); ?>
             </div>
         </div>
