@@ -33,7 +33,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'PRO 1.0.8.0 RC',
+    'version' => 'Community 1.9.0',
     /*
       |--------------------------------------------------------------------------
       | Application Name
