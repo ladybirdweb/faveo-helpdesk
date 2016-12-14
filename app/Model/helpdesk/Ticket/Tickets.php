@@ -7,7 +7,7 @@ use App\BaseModel;
 class Tickets extends BaseModel
 {
     protected $table = 'tickets';
-    protected $fillable = ['id', 'ticket_number', 'num_sequence', 'user_id', 'priority_id', 'sla', 'help_topic_id', 'max_open_ticket', 'captcha', 'status', 'lock_by', 'lock_at', 'source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'is_transfer', 'transfer_at', 'reopened_at', 'duedate', 'closed_at', 'last_message_at', 'last_response_at', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'ticket_number', 'num_sequence', 'user_id', 'priority_id', 'sla', 'help_topic_id', 'max_open_ticket', 'captcha', 'status', 'lock_by', 'lock_at', 'source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'is_transfer', 'transfer_at', 'reopened_at', 'duedate', 'closed_at', 'last_message_at', 'last_response_at', 'created_at', 'updated_at', 'assigned_to'];
 
 //        public function attach(){
 //            return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_attachments',);
@@ -21,6 +21,14 @@ class Tickets extends BaseModel
     public function collaborator()
     {
         return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_Collaborator', 'ticket_id');
+    }
+
+    public function helptopic()
+    {
+        $related = 'App\Model\helpdesk\Manage\Help_topic';
+        $foreignKey = 'help_topic_id';
+
+        return $this->belongsTo($related, $foreignKey);
     }
 
     public function formdata()
@@ -62,5 +70,34 @@ class Tickets extends BaseModel
         $this->collaborator()->delete();
         $this->formdata()->delete();
         parent::delete();
+    }
+
+    public function setAssignedToAttribute($value)
+    {
+        if (!$value) {
+            $this->attributes['assigned_to'] = null;
+        } else {
+            $this->attributes['assigned_to'] = $value;
+        }
+    }
+
+    public function getAssignedTo()
+    {
+        $agentid = $this->attributes['assigned_to'];
+        if ($agentid) {
+            $users = new \App\User();
+            $user = $users->where('id', $agentid)->first();
+            if ($user) {
+                return $user;
+            }
+        }
+    }
+
+    public function user()
+    {
+        $related = "App\User";
+        $foreignKey = 'user_id';
+
+        return $this->belongsTo($related, $foreignKey);
     }
 }

@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->boolean('ban');
             $table->string('password', 60);
             $table->integer('active');
+            $table->boolean('is_delete')->default(0);
             $table->string('ext');
             $table->integer('country_code');
             $table->string('phone_number');

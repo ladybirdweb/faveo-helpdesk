@@ -32,7 +32,7 @@ class="active"
 <div class="col-md-12">
 <div class="box box-primary">
 <div class="box-header">
-	<h2 class="box-title">{{Lang::get('lang.SLA_plan')}}</h2><a href="{{route('sla.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_SLA')}}</a></div>
+	<h2 class="box-title">{{Lang::get('lang.SLA_plan')}}</h2><a href="{{route('sla.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_SLA')}}</a></div>
 
 <div class="box-body table-responsive">
 

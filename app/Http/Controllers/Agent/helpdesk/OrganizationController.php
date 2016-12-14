@@ -61,16 +61,6 @@ class OrganizationController extends Controller
         }
     }
 
-     /**
-      * This function is used autofill organizations name .
-      *
-      * @return datatable
-      */
-     public function organizationAutofill()
-     {
-         return view('themes.default1.agent.helpdesk.organization.getautocomplete');
-     }
-
     /**
      * This function is used to display the list of Organizations.
      *
@@ -350,5 +340,15 @@ class OrganizationController extends Controller
                 ->toJson();
 
         return $orgs;
+    }
+
+    /**
+     * This function is used autofill organizations name .
+     *
+     * @return datatable
+     */
+    public function organizationAutofill()
+    {
+        return view('themes.default1.agent.helpdesk.organization.getautocomplete');
     }
 }

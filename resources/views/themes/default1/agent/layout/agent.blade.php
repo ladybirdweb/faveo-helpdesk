@@ -21,35 +21,38 @@
         <link href="{{asset("lb-faveo/plugins/iCheck/flat/blue.css")}}" rel="stylesheet" type="text/css" />
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <link href="{{asset("lb-faveo/css/tabby.css")}}" rel="stylesheet" type="text/css"/>
-        
+
         <link href="{{asset("lb-faveo/css/jquerysctipttop.css")}}" rel="stylesheet" type="text/css"/>
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <link href="{{asset("lb-faveo/css/editor.css")}}" rel="stylesheet" type="text/css"/>
 
         <link href="{{asset("lb-faveo/css/jquery.ui.css")}}" rel="stylesheet" rel="stylesheet"/>
-        
+
         <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet"  type="text/css"/>
-        
+
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css"/>
 
         <link href="{{asset("lb-faveo/css/faveo-css.css")}}" rel="stylesheet" type="text/css" />
-        
+
         <link href="{{asset("lb-faveo/css/notification-style.css")}}" rel="stylesheet" type="text/css" >
-        
+
         <link href="{{asset("lb-faveo/css/jquery.rating.css")}}" rel="stylesheet" type="text/css" />
         <!-- Select2 -->
         <link href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset("css/close-button.css")}}" rel="stylesheet" type="text/css" />
+
         <!--Daterangepicker-->
         <link rel="stylesheet" href="{{asset("lb-faveo/plugins/daterangepicker/daterangepicker.css")}}" rel="stylesheet" type="text/css" />
         <!--calendar -->
         <!-- fullCalendar 2.2.5-->
         <link href="{{asset('lb-faveo/plugins/fullcalendar/fullcalendar.min.css')}}" rel="stylesheet" type="text/css" />
+
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
         <script src="{{asset("lb-faveo/js/jquery-2.1.4.js")}}" type="text/javascript"></script>
-        
+
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
@@ -59,11 +62,6 @@
             <header class="main-header">
                 <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png')}}" width="100px;"></a>
                 <?php
-                $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
-                if ($company != null) {
-
-                }
-                $replacetop = 0;
                 $replacetop = \Event::fire('service.desk.agent.topbar.replace', array());
 
                 if (count($replacetop) == 0) {
@@ -71,7 +69,7 @@
                 } else {
                     $replacetop = $replacetop[0];
                 }
-                $replaceside = 0;
+
                 $replaceside = \Event::fire('service.desk.agent.sidebar.replace', array());
 
                 if (count($replaceside) == 0) {
@@ -90,9 +88,6 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <?php $notifications = App\Http\Controllers\Common\NotificationController::getNotifications();
-
-                    ?>
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         @if($replacetop==0)
                         <ul class="tabs tabs-horizontal nav navbar-nav navbar-left">
@@ -100,25 +95,26 @@
                             <li @yield('Users')><a data-target="#tabB" href="#">{!! Lang::get('lang.users') !!}</a></li>
                             <li @yield('Tickets')><a data-target="#tabC" href="#">{!! Lang::get('lang.tickets') !!}</a></li>
                             <li @yield('Tools')><a data-target="#tabD" href="#">{!! Lang::get('lang.tools') !!}</a></li>
-                            @if(Auth::user()->role == 'admin')
-                                <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
+                            @if($auth_user_role == 'admin')
+                            <li @yield('Report')><a href="{{URL::route('report.index')}}" onclick="clickReport(event);">Report</a></li>
                             @endif
                             <?php \Event::fire('calendar.topbar', array()); ?>
                         </ul>
                         @else
-                            <?php \Event::fire('service.desk.agent.topbar', array()); ?>
-                            @endif
-                        <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id', '=', Auth::user()->id)->where('is_read', '0')->get(); ?>
+                        <?php \Event::fire('service.desk.agent.topbar', array()); ?>
+                        @endif
+
                         <ul class="nav navbar-nav navbar-right">
-                            @if(Auth::user()->role == 'admin')
+                            @if($auth_user_role == 'admin')
                             <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
-                            @include('themes.default1.update.notification')
+
                             @endif
+                            @include('themes.default1.update.notification')
                             <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown notifications-menu" id="myDropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
                                     <i class="fa fa-bell-o"></i>
-                                    <span class="label label-danger" id="count">{!! count($noti) !!}</span>
+                                    <span class="label label-danger" id="count">{!! $notifications->count() !!}</span>
                                 </a>
                                 <ul class="dropdown-menu" style="width:500px">
 
@@ -130,43 +126,44 @@
 
                                     <li id="refreshNote">
 
-                                    <li class="header">You have {!! count($noti) !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
+                                    <li class="header">You have {!! $notifications->count() !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
 
                                     <ul class="menu">
-                                        @foreach($notifications as $notification)
-                                        <?php $user = App\User::whereId($notification->user_id)->first(); ?>
-                                        @if($notification->type == 'registration')
+
+                                        @if($notifications->count())
+                                        @foreach($notifications->orderBy('created_at', 'desc')->get()->take(10) as $notification)
+
+                                        @if($notification->notification->type->type == 'registration')
                                         @if($notification->is_read == 1)
-                                        <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
-                                                    {!! $notification->message !!}
+                                        <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
+                                                    {!! $notification->notification->type->message !!}
                                                 </a></span>
                                         </li>
                                         @else
-                                        <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
-                                                    {!! $notification->message !!}
+                                        <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
+                                                    {!! $notification->notification->type->message !!}
                                                 </a></span>
                                         </li>
                                         @endif
                                         @else
-
-                                        <?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification->model_id)->first(); ?>
                                         @if($notification->is_read == 1)
-                                        <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
-                                                    {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
+                                        <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
+                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
                                                 </a></span>
                                         </li>
-                                        @else
-                                        <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
-                                                    {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
+                                        @elseif($notification->notification->model)
+                                        <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
+                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
                                                 </a></span>
                                         </li>
                                         @endif
                                         @endif
                                         @endforeach
+                                        @endif
                                     </ul>
                             </li>
                             <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
@@ -179,17 +176,17 @@
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                @if(Auth::user())
-                                <img src="{{Auth::user()->profile_pic}}"class="user-image" alt="User Image"/>
-                                <span class="hidden-xs">{{Auth::user()->first_name." ".Auth::user()->last_name}}</span>
+                                @if($auth_user_id)
+                                <img src="{{$auth_user_profile_pic}}"class="user-image" alt="User Image"/>
+                                <span class="hidden-xs">{{$auth_name}}</span>
                                 @endif
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header"  style="background-color:#343F44;">
-                                    <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
+                                    <img src="{{$auth_user_profile_pic}}" class="img-circle" alt="User Image" />
                                     <p>
-                                        {{Auth::user()->first_name." ".Auth::user()->last_name}} - {{Auth::user()->role}}
+                                        {{$auth_name}} - {{$auth_user_role}}
                                         <small></small>
                                     </p>
                                 </li>
@@ -202,10 +199,15 @@
                                         <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! Lang::get('lang.sign_out') !!}</b></a>
                                     </div>
                                 </li>
+
                             </ul>
+
                         </li>
+
                         </ul>
+
                     </div>
+
                 </nav>
             </header>
             <!-- Left side column. contains the logo and sidebar -->
@@ -220,168 +222,110 @@
                             <div class="col-xs-3"></div>
                             <div class="col-xs-2" style="width:50%;">
                                 <a href="{!! url('profile') !!}">
-                                    <img src="{{Auth::user()->profile_pic}}" class="img-circle" alt="User Image" />
+                                    <img src="{{$auth_user_profile_pic}}" class="img-circle" alt="User Image" />
                                 </a>
                             </div>
                         </div>
                         @endif
                         <div class="info" style="text-align:center;">
-                            @if(Auth::user())
-                            <p>{{Auth::user()->first_name." ".Auth::user()->last_name}}</p>
+                            @if($auth_user_id)
+                            <p>{{$auth_name}}</p>
                             @endif
-                            @if(Auth::user() && Auth::user()->active==1)
+                            @if($auth_user_id && $auth_user_active==1)
                             <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                             @else
                             <a href="#"><i class="fa fa-circle"></i> Offline</a>
                             @endif
                         </div>
                     </div>
-                    <!-- search form -->
-                    {{-- < form action = "#" method = "get" class = "sidebar-form" > --}}
-                    {{-- < div class = "input-group" > --}}
-                    {{-- < input type = "text" name = "q" class = "form-control" placeholder = "Search..." / > --}}
-                    {{-- < span class = "input-group-btn" > --}}
-                    {{-- < button type = 'submit' name = 'seach' id = 'search-btn' class = "btn btn-flat" > < i class = "fa fa-search" > < /i></button > --}}
-                    {{-- < /span> --}}
-                    {{-- < /div> --}}
-                    {{-- < /form> --}}
-                    <!-- /.search form -->
-                    <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul id="side-bar" class="sidebar-menu">
                         @if($replaceside==0)
                         @yield('sidebar')
                         <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
-                        <?php
-                        if (Auth::user()->role == 'admin') {
-
-//$inbox = App\Model\helpdesk\Ticket\Tickets::all();
-                            $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
-                            $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->get();
-                            $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  array(1, 7))->get();
-
-                            $closingapproval = App\Model\helpdesk\Ticket\Tickets::where('status', '7')->get();
-                            
-                            $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->get();
-                        } elseif (Auth::user()->role == 'agent') {
-//$inbox = App\Model\helpdesk\Ticket\Tickets::where('dept_id','',Auth::user()->primary_dpt)->get();
-                            $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
-                            $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
-                            $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status',  array(1, 7))->where('dept_id', '=', Auth::user()->primary_dpt)->orWhere('assigned_to', '=', Auth::user()->id)->get();
-                            
-                            $closingapproval = App\Model\helpdesk\Ticket\Tickets::where('status', '7')->get();
-                            
-                            $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
-                        }
-                        if (Auth::user()->role == 'agent') {
-                            $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
-                            $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->get();
-                        } else {
-                            $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
-                        }
-                        $i = count($overdues);
-                        if ($i == 0) {
-                            $overdue_ticket = 0;
-                        } else {
-                            $j = 0;
-                            foreach ($overdues as $overdue) {
-                                $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $overdue->sla)->first();
-
-                                $ovadate = $overdue->created_at;
-                                $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)) . '<br/><br/>';
-                                if (date('Y-m-d H:i:s') > $new_date) {
-                                    $j++;
-                                    //$value[] = $overdue;
-                                }
-                            }
-                            // dd(count($value));
-                            if ($j > 0) {
-                                $overdue_ticket = $j;
-                            } else {
-                                $overdue_ticket = 0;
-                            }
-                        }
-                        ?>
+                        
                         <li @yield('inbox')>
-                            <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
-                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green"><?php echo count($tickets); ?></small>                                            
+                             <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
+                                <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green">{{$tickets -> count()}}</small>                                            
                             </a>
                         </li>
                         <li @yield('myticket')>
-                            <a href="{{url('ticket/myticket')}}" id="load-myticket">
+                             <a href="{{url('ticket/myticket')}}" id="load-myticket">
                                 <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!} </span>
-                                <small class="label pull-right bg-green">{{count($myticket)}}</small>
+                                <small class="label pull-right bg-green">{{$myticket -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('unassigned')>
-                            <a href="{{url('unassigned')}}" id="load-unassigned">
+                             <a href="{{url('unassigned')}}" id="load-unassigned">
                                 <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
-                                <small class="label pull-right bg-green">{{count($unassigned)}}</small>
+                                <small class="label pull-right bg-green">{{$unassigned -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('overdue')>
-                            <a href="{{url('ticket/overdue')}}" id="load-unassigned">
+                             <a href="{{url('ticket/overdue')}}" id="load-unassigned">
                                 <i class="fa fa-calendar-times-o"></i> <span>{!! Lang::get('lang.overdue') !!}</span>
-                                <small class="label pull-right bg-green">{{$overdue_ticket}}</small>
+                                <small class="label pull-right bg-green">{{$overdues->count()}}</small>
                             </a>
                         </li>
-                        
+                       
                         <li @yield('trash')>
                              <a href="{{url('trash')}}">
                                 <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
-                                <small class="label pull-right bg-green">{{count($deleted)}}</small>
+                                <small class="label pull-right bg-green">{{$deleted -> count()}}</small>
                             </a>
                         </li>
                         <li class="header">{!! Lang::get('lang.Departments') !!}</li>
                         <?php
-                        $depts = App\Model\helpdesk\Agent\Department::all();
-                        foreach ($depts as $dept) {
-                            $open = App\Model\helpdesk\Ticket\Tickets::where('status', '=', '1')->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->get();
-                            $open = count($open);
-                            $underprocess = App\Model\helpdesk\Ticket\Tickets::where('status', '=', '1')->where('assigned_to', '>', 0)->where('dept_id', '=', $dept->id)->get();
-                            $underprocess = count($underprocess);
-                            $closed = App\Model\helpdesk\Ticket\Tickets::where('status', '=', '2')->where('dept_id', '=', $dept->id)->get();
-                            $closed = count($closed);
+            $flattened = $department->flatMap(function ($values) {
+                return $values->keyBy('status');
+            });
+            $statuses = $flattened->keys();
+            ?>
+                            <?php
+                                $segments = \Request::segments();
+                                $segment = "";
+                                foreach($segments as $seg){
+                                    $segment.="/".$seg;
+                                }
+                                if(count($segments) > 2) {
+                                    $dept2 = $segments[1]; 
+                                    $status2 = $segments[2];
+                                } else {
+                                     $dept2 = ''; 
+                                    $status2 = '';
+                                }
+                            ?>
+                        @foreach($department as $name=>$dept) 
+                        
+                        <li class="treeview @if($dept2 === $name) @yield('ticket-bar') @endif ">
+                            <a href="#">
+                                <i class="fa fa-folder-open"></i> <span>{!! $name !!}</span> <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                           @foreach($statuses as $status)
+                           @if($dept->get($status))
+                           <ul class="treeview-menu">
+                                <li @if($status2 == $dept->get($status)->status && $dept2 === $name) @yield('inbox') @endif><a href="{{url('tickets/'.$name.'/'.$dept->get($status)->status)}}"><i class="fa fa-circle-o"></i> {!!$dept->get($status)->status !!}<small class="label pull-right bg-green">{{$dept->get($status)->count}}</small></a></li>
+                            </ul>
+                           @endif
+                            @endforeach
+                            
+                        </li>
+                        @endforeach
 
-                            if (Auth::user()->role == 'admin') {
-                                ?>
-                                <li class="treeview">
-                                    <a href="#">
-                                        <i class="fa fa-folder-open"></i> <span>{!! $dept->name !!}</span> <i class="fa fa-angle-left pull-right"></i>
-                                    </a>
-                                    <ul class="treeview-menu">
-                                        <li><a href="{!! url::route('dept.open.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.open') !!}<small class="label pull-right bg-green">{!! $open !!}</small></a></li>
-                                        <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.assigned') !!}<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
-                                        <li><a href="{!! url::route('dept.closed.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.closed') !!}<small class="label pull-right bg-green">{!! $closed !!}</small></a></li>
-                                    </ul>
-                                </li>
-                            <?php } if (Auth::user()->role == 'agent' && Auth::user()->primary_dpt == $dept->id) { ?>
-                                <li class="treeview">
-                                    <a href="#">
-                                        <i class="fa fa-folder-open"></i> <span>{!! $dept->name !!}</span> <i class="fa fa-angle-left pull-right"></i>
-                                    </a>
-                                    <ul class="treeview-menu">
-                                        <li><a href="{!! url::route('dept.open.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.open') !!}<small class="label pull-right bg-green">{!! $open !!}</small></a></li>
-                                        <li><a href="{!! url::route('dept.inprogress.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.assigned') !!}<small class="label pull-right bg-green">{!! $underprocess !!}</small></a></li>
-                                        <li><a href="{!! url::route('dept.closed.ticket',$dept->name) !!}"><i class="fa fa-circle-o"></i>{!! Lang::get('lang.closed') !!}<small class="label pull-right bg-green">{!! $closed !!}</small></a></li>
-                                    </ul>
-                                </li>
-                            <?php }
-                        }
-                        ?>
-                        @endif
+
 <?php \Event::fire('service.desk.agent.sidebar', array()); ?>
+                        @endif
                     </ul>
                 </section>
                 <!-- /.sidebar -->
             </aside>
-            <?php
-            $agent_group = Auth::user()->assign_group;
-            $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
-            ?>
+<?php
+$agent_group = $auth_user_assign_group;
+$group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
+?>
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
-                <div class="tab-content" style="background-color: white;padding: 0 20px 0 20px">
+                <div class="tab-content" style="background-color: white;padding: 0 0px 0 20px">
                     <div class="collapse navbar-collapse" id="navbar-collapse">
                         <div class="tabs-content">
                             @if($replacetop==0)
@@ -393,6 +337,7 @@
                                 <ul class="nav navbar-nav">
                                     <li id="bar" @yield('user')><a href="{{ url('user')}}" >{!! Lang::get('lang.user_directory') !!}</a></li></a></li>
                                     <li id="bar" @yield('organizations')><a href="{{ url('organizations')}}" >{!! Lang::get('lang.organizations') !!}</a></li></a></li>
+                                    
                                 </ul>
                             </div>
                             <div class="tabs-pane @yield('ticket-bar')" id="tabC">
@@ -402,12 +347,12 @@
                                     <li id="bar" @yield('myticket')><a href="{{ url('/ticket/myticket')}}" >{!! Lang::get('lang.my_tickets') !!}</a></li>
                                     {{-- < li id = "bar" @yield('ticket') > < a href = "{{ url('ticket') }}" >Ticket</a></li> --}}
                                     {{-- < li id = "bar" @yield('overdue') > < a href = "{{ url('/ticket/overdue') }}" >Overdue</a></li> --}}
-                                   
+
                                     <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
                                     <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
-                                    <?php if ($group->can_create_ticket == 1) { ?>
+<?php if ($group->can_create_ticket == 1) { ?>
                                         <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
-<?php } ?>
+                                    <?php } ?>
                                 </ul>
                             </div>
                             <div class="tabs-pane @yield('tools-bar')" id="tabD">
@@ -416,11 +361,11 @@
                                     <li id="bar" @yield('kb')><a href="{{ url('/comment')}}" >{!! Lang::get('lang.knowledge_base') !!}</a></li>
                                 </ul>
                             </div>
-                            @if(Auth::user()->role == 'admin')
-                                <div class="tabs-pane @yield('report-bar')" id="tabD">
-                                    <ul class="nav navbar-nav">
-                                    </ul>
-                                </div>
+                            @if($auth_user_role == 'admin')
+                            <div class="tabs-pane @yield('report-bar')" id="tabD">
+                                <ul class="nav navbar-nav">
+                                </ul>
+                            </div>
                             @endif
                             @endif
 <?php \Event::fire('service.desk.agent.topsubbar', array()); ?>
@@ -444,156 +389,157 @@
             </footer>
         </div><!-- ./wrapper -->
 
-    <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}" type="text/javascript"></script>
-    
-    <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
-    <!-- Bootstrap 3.3.2 JS -->
-    <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
-    <!-- Slimscroll -->
-    <script src="{{asset("lb-faveo/plugins/slimScroll/jquery.slimscroll.min.js")}}" type="text/javascript"></script>
-    <!-- FastClick -->
-    <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}"  type="text/javascript"></script>
-    <!-- AdminLTE App -->
-    <script src="{{asset("lb-faveo/js/app.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/ajax-jquery.min.js")}}" type="text/javascript"></script>
 
-    <!-- iCheck -->
-    <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
-    <!-- jquery ui -->
-    <script src="{{asset("lb-faveo/js/jquery.ui.js")}}" type="text/javascript"></script>
-    
-    <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
-    
-    <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
-    <!-- Page Script -->
-    <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}" type="text/javascript" ></script>
+        <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
+        <!-- Bootstrap 3.3.2 JS -->
+        <script src="{{asset("lb-faveo/js/bootstrap.min.js")}}" type="text/javascript"></script>
+        <!-- Slimscroll -->
+        <script src="{{asset("lb-faveo/plugins/slimScroll/jquery.slimscroll.min.js")}}" type="text/javascript"></script>
+        <!-- FastClick -->
+        <script src="{{asset("lb-faveo/plugins/fastclick/fastclick.min.js")}}"  type="text/javascript"></script>
+        <!-- AdminLTE App -->
+        <script src="{{asset("lb-faveo/js/app.min.js")}}" type="text/javascript"></script>
 
-    <script type="text/javascript" src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
+        <!-- iCheck -->
+        <script src="{{asset("lb-faveo/plugins/iCheck/icheck.min.js")}}" type="text/javascript"></script>
+        <!-- jquery ui -->
+        <script src="{{asset("lb-faveo/js/jquery.ui.js")}}" type="text/javascript"></script>
 
-    <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}" type="text/javascript"></script>
 
-    <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/plugins/datatables/jquery.dataTables.js")}}" type="text/javascript"></script>
+        <!-- Page Script -->
+        <script src="{{asset("lb-faveo/js/jquery.dataTables1.10.10.min.js")}}" type="text/javascript" ></script>
 
-    <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" type="text/javascript"></script>
-    <!-- full calendar-->
-    <script src="{{asset('lb-faveo/plugins/fullcalendar/fullcalendar.min.js')}}" type="text/javascript"></script>
-    <script src="{{asset('lb-faveo/plugins/daterangepicker/daterangepicker.js')}}" type="text/javascript"></script>
-    <script>
-        $(document).ready(function () {
-        $('.noti_User').click(function () {
-        var id = this.id;
-                var dataString = 'id=' + id;
-                $.ajax
-                ({
-                type: "POST",
-                        url: "{{url('mark-read')}}" + "/" + id,
-                        data: dataString,
-                        cache: false,
-                        success: function (html)
-                        {
-                        }
-                });
-        });
-        });
-                $('#read-all').click(function () {
+        <script type="text/javascript" src="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.js")}}"  type="text/javascript"></script>
 
-        var id2 = <?php echo \Auth::user()->id ?>;
-                var dataString = 'id=' + id2;
-                $.ajax
-                ({
-                type: "POST",
-                        url: "{{url('mark-all-read')}}" + "/" + id2,
-                        data: dataString,
-                        cache: false,
-                        beforeSend: function () {
-                        $('#myDropdown').on('hide.bs.dropdown', function () {
-                        return false;
-                        });
-                                $("#refreshNote").hide();
-                                $("#notification-loader").show();
-                        },
-                        success: function (response) {
-                        $("#refreshNote").load("<?php echo $_SERVER['REQUEST_URI']; ?>  #refreshNote");
-                                $("#notification-loader").hide();
-                                $('#myDropdown').removeClass('open');
-                        }
-                });
-        });</script>
-    <script>
-                $(function() {
-                // Enable check and uncheck all functionality
-                $(".checkbox-toggle").click(function() {
-                var clicks = $(this).data('clicks');
-                        if (clicks) {
-                //Uncheck all checkboxes
-                $("input[type='checkbox']", ".mailbox-messages").iCheck("uncheck");
-                } else {
-                //Check all checkboxes
-                $("input[type='checkbox']", ".mailbox-messages").iCheck("check");
-                }
-                $(this).data("clicks", !clicks);
-                });
-                        //Handle starring for glyphicon and font awesome
-                        $(".mailbox-star").click(function(e) {
-                e.preventDefault();
-                        //detect type
-                        var $this = $(this).find("a > i");
-                        var glyph = $this.hasClass("glyphicon");
-                        var fa = $this.hasClass("fa");
-                        //Switch states
-                        if (glyph) {
-                $this.toggleClass("glyphicon-star");
-                        $this.toggleClass("glyphicon-star-empty");
-                }
-                if (fa) {
-                $this.toggleClass("fa-star");
-                        $this.toggleClass("fa-star-o");
-                }
-                });
-                });
-</script>
+        <script src="{{asset("lb-faveo/js/jquery.rating.pack.js")}}" type="text/javascript"></script>
 
-<script src="{{asset("lb-faveo/js/tabby.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/plugins/select2/select2.full.min.js")}}" type="text/javascript"></script>
 
-<script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/plugins/moment/moment.js")}}" type="text/javascript"></script>
 
-<script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
+        <!-- full calendar-->
+        <script src="{{asset('lb-faveo/plugins/fullcalendar/fullcalendar.min.js')}}" type="text/javascript"></script>
+        <script src="{{asset('lb-faveo/plugins/daterangepicker/daterangepicker.js')}}" type="text/javascript"></script>
+        <script>
+                    $(document).ready(function () {
 
-<script type="text/javascript">
-            $.ajaxSetup({
-            headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
+            $('.noti_User').click(function () {
+            var id = this.id;
+                    var dataString = 'id=' + id;
+                    $.ajax
+                    ({
+                    type: "POST",
+                            url: "{{url('mark-read')}}" + "/" + id,
+                            data: dataString,
+                            cache: false,
+                            success: function (html)
+                            {
+                            }
+                    });
             });
-</script>
-<script type="text/javascript">
-    function clickDashboard(e) {
-        if (e.ctrlKey === true) {
-            window.open('{{URL::route("dashboard")}}', '_blank');
-        } else {
-            window.location = "{{URL::route('dashboard')}}";
-        }
-    }
-    function clickReport(e) {
-        if (e.ctrlKey === true) {
+            });
+                    $('#read-all').click(function () {
+
+            var id2 = <?php echo $auth_user_id ?>;
+                    var dataString = 'id=' + id2;
+                    $.ajax
+                    ({
+                    type: "POST",
+                            url: "{{url('mark-all-read')}}" + "/" + id2,
+                            data: dataString,
+                            cache: false,
+                            beforeSend: function () {
+                            $('#myDropdown').on('hide.bs.dropdown', function () {
+                            return false;
+                            });
+                                    $("#refreshNote").hide();
+                                    $("#notification-loader").show();
+                            },
+                            success: function (response) {
+                            $("#refreshNote").load("<?php echo $_SERVER['REQUEST_URI']; ?>  #refreshNote");
+                                    $("#notification-loader").hide();
+                                    $('#myDropdown').removeClass('open');
+                            }
+                    });
+            });</script>
+        <script>
+                    $(function() {
+                    // Enable check and uncheck all functionality
+                    $(".checkbox-toggle").click(function() {
+                    var clicks = $(this).data('clicks');
+                            if (clicks) {
+                    //Uncheck all checkboxes
+                    $("input[type='checkbox']", ".mailbox-messages").iCheck("uncheck");
+                    } else {
+                    //Check all checkboxes
+                    $("input[type='checkbox']", ".mailbox-messages").iCheck("check");
+                    }
+                    $(this).data("clicks", !clicks);
+                    });
+                            //Handle starring for glyphicon and font awesome
+                            $(".mailbox-star").click(function(e) {
+                    e.preventDefault();
+                            //detect type
+                            var $this = $(this).find("a > i");
+                            var glyph = $this.hasClass("glyphicon");
+                            var fa = $this.hasClass("fa");
+                            //Switch states
+                            if (glyph) {
+                    $this.toggleClass("glyphicon-star");
+                            $this.toggleClass("glyphicon-star-empty");
+                    }
+                    if (fa) {
+                    $this.toggleClass("fa-star");
+                            $this.toggleClass("fa-star-o");
+                    }
+                    });
+                    });</script>
+
+        <script src="{{asset("lb-faveo/js/tabby.js")}}" type="text/javascript"></script>
+
+        <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}" type="text/javascript"></script>
+
+        <script src="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js")}}" type="text/javascript"></script>
+
+        <script type="text/javascript">
+                    $.ajaxSetup({
+                    headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
+                    });</script>
+        <script type="text/javascript">
+                    function clickDashboard(e) {
+                    if (e.ctrlKey === true) {
+                    window.open('{{URL::route("dashboard")}}', '_blank');
+                    } else {
+                    window.location = "{{URL::route('dashboard')}}";
+                    }
+                    }
+
+            function clickReport(e) {
+            if (e.ctrlKey === true) {
             window.open('{{URL::route("report.index")}}', '_blank');
-        } else {
+            } else {
             window.location = "{{URL::route('report.index')}}";
-        }
-    }
-</script>
-<?php Event::fire('show.calendar.script', array()); ?>
-<?php Event::fire('load-calendar-scripts', array()); ?>
-@yield('FooterInclude')
-</body>
-<script>
+            }
+            }
+        </script>
+        <script>
     $(function() {
       
         
         $('input[type="checkbox"]').iCheck({
             checkboxClass: 'icheckbox_flat-blue'
         });
-        $('input[type="radio"]').iCheck({
+        $('input[type="radio"]:not(.not-apply)').iCheck({
             radioClass: 'iradio_flat-blue'
         });
     
     });        
 </script>
+<?php Event::fire('show.calendar.script', array()); ?>
+<?php Event::fire('load-calendar-scripts', array()); ?>
+        @yield('FooterInclude')
+    </body>
 </html>

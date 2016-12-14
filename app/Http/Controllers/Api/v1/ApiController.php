@@ -194,6 +194,9 @@ class ApiController extends Controller
             }
             $attach = $this->request->input('attachments');
             $result = $this->ticket->reply($this->thread, $this->request, $this->attach, $attach);
+            $result = $result->join('users', 'ticket_thread.user_id', '=', 'users.id')
+                    ->select('ticket_thread.*', 'users.first_name as first_name')
+                    ->first();
 
             return response()->json(compact('result'));
         } catch (\Exception $e) {
@@ -1200,10 +1203,44 @@ class ApiController extends Controller
                 $join->on('users.id', '=', 'tickets.user_id')
                         ->where('tickets.id', '=', $id);
             });
-            $response = $this->differenciateHelpTopic($query);
+
+            $response = $this->differenciateHelpTopic($query)
+            ->leftJoin('department', 'tickets.dept_id', '=', 'department.id')
+            ->leftJoin('ticket_priority', 'tickets.priority_id', '=', 'ticket_priority.priority_id')
+            ->leftJoin('ticket_status', 'tickets.status', '=', 'ticket_status.id')
+            ->leftJoin('sla_plan', 'tickets.sla', '=', 'sla_plan.id')
+            ->leftJoin('ticket_source', 'tickets.source', '=', 'ticket_source.id');
             //$select = 'users.email','users.user_name','users.first_name','users.last_name','tickets.id','ticket_number','num_sequence','user_id','priority_id','sla','max_open_ticket','captcha','status','lock_by','lock_at','source','isoverdue','reopened','isanswered','is_deleted', 'closed','is_transfer','transfer_at','reopened_at','duedate','closed_at','last_message_at';
 
-            $result = $response->addSelect('users.email', 'users.user_name', 'users.first_name', 'users.last_name', 'tickets.id', 'ticket_number', 'user_id', 'priority_id', 'sla', 'status', 'lock_by', 'lock_at', 'source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'reopened_at', 'duedate', 'closed_at', 'tickets.created_at', 'tickets.updated_at')->first();
+            $result = $response->addSelect(
+                    'users.email',
+                    'users.user_name',
+                    'users.first_name',
+                    'users.last_name',
+                    'tickets.id',
+                    'ticket_number',
+                    'user_id',
+                    'ticket_priority.priority_id',
+                    'ticket_priority.priority as priority_name',
+                    'department.name as dept_name',
+                    'ticket_status.name as status_name',
+                    'sla_plan.name as sla_name',
+                    'ticket_source.name as source_name',
+                    'sla_plan.id as sla',
+                    'ticket_status.id as status',
+                    'lock_by',
+                    'lock_at',
+                    'ticket_source.id as source',
+                    'isoverdue',
+                    'reopened',
+                    'isanswered',
+                    'is_deleted',
+                    'closed',
+                    'reopened_at',
+                    'duedate',
+                    'closed_at',
+                    'tickets.created_at',
+                    'tickets.updated_at')->first();
 
             return response()->json(compact('result'));
         } catch (\Exception $e) {
@@ -1419,6 +1456,8 @@ class ApiController extends Controller
                 return $query->select('tickets.dept_id');
             }
         }
+
+        return $query;
     }
 
     public function getSystem($check, $query)

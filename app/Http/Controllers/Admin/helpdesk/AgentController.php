@@ -79,11 +79,11 @@ class AgentController extends Controller
     {
         try {
             // gte all the teams
-            $team = $team_all->get();
+            $team = $team_all->where('status', '=', 1)->get();
             // get all the timezones
             $timezones = $timezone->get();
             // get all the groups
-            $groups = $group->get();
+            $groups = $group->where('group_status', '=', 1)->get();
             // get all department
             $departments = $department->get();
             // list all the teams in a single variable
@@ -186,10 +186,10 @@ class AgentController extends Controller
             $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location->iso_code)->first();
             $user = $user->whereId($id)->first();
-            $team = $team->get();
+            $team = $team->where('status', '=', 1)->get();
             $teams1 = $team->lists('name', 'id');
             $timezones = $timezone->get();
-            $groups = $group->get();
+            $groups = $group->where('group_status', '=', 1)->get();
             $departments = $department->get();
             $table = $team_assign_agent->where('agent_id', $id)->first();
             $teams = $team->lists('id', 'name')->toArray();

@@ -17,133 +17,103 @@ class="active"
 @stop
 
 @section('content')
-        <!-- check whether success or not -->
-        {{-- Success message --}}
-        @if(Session::has('success'))
-        <div class="alert alert-success alert-dismissable">
-            <i class="fa  fa-check-circle"></i>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('success')}}
-        </div>
-        @endif
-        {{-- failure message --}}
-        @if(Session::has('fails'))
-        <div class="alert alert-danger alert-dismissable">
-            <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('fails')}}
-        </div>
-        @endif
+<!-- check whether success or not -->
+{{-- Success message --}}
+@if(Session::has('success'))
+<div class="alert alert-success alert-dismissable">
+    <i class="fa  fa-check-circle"></i>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('success')}}
+</div>
+@endif
+{{-- failure message --}}
+@if(Session::has('fails'))
+<div class="alert alert-danger alert-dismissable">
+    <i class="fa fa-ban"></i>
+    <b>{!! Lang::get('lang.alert') !!}!</b>
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {{Session::get('fails')}}
+</div>
+@endif
 <link type="text/css" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet">
 {{-- <script src="{{asset("lb-faveo/dist/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script> --}}
 <div class="row">
     <?php
-    if (Auth::user()->role == 'admin') {
-//$inbox = App\Model\helpdesk\Ticket\Tickets::all();
-        $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
-        $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->get();
-        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '1')->get();
-        $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->get();
-    } elseif (Auth::user()->role == 'agent') {
-//$inbox = App\Model\helpdesk\Ticket\Tickets::where('dept_id','',Auth::user()->primary_dpt)->get();
-        $myticket = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', Auth::user()->id)->where('status', '1')->get();
-        $unassigned = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '=', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
-        $tickets = App\Model\helpdesk\Ticket\Tickets::where('status', '1')->where('dept_id', '=', Auth::user()->primary_dpt)->get();
-        $deleted = App\Model\helpdesk\Ticket\Tickets::where('status', '5')->where('dept_id', '=', Auth::user())->get();
-    }
-    if (Auth::user()->role == 'agent') {
-        $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
-        $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->get();
-    } else {
-        $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
-    }
-
-    $i = count($overdues);
-    if ($i == 0) {
-        $overdue_ticket = 0;
-    } else {
-        $j = 0;
-        foreach ($overdues as $overdue) {
-            $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $overdue->sla)->first();
-
-            $ovadate = $overdue->created_at;
-            $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)) . '<br/><br/>';
-            if (date('Y-m-d H:i:s') > $new_date) {
-                $j++;
-                //$value[] = $overdue;
-            }
-        }
-        // dd(count($value));
-        if ($j > 0) {
-            $overdue_ticket = $j;
-        } else {
-            $overdue_ticket = 0;
-        }
-    }
+    $overdue_ticket = count($overdues);
     ?>
-         <?php
- if (Auth::user()->role == 'admin') {
-            $todaytickets = count(App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->whereRaw('date(duedate) = ?', [date('Y-m-d')])->get());
-        } else {
-            $dept =  App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
-            $todaytickets = count(App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->whereRaw('date(duedate) = ?', [date('Y-m-d')])->where('dept_id', '=', $dept->id)->get());
-        }
- ?>
+    <!-- <div class="col-md-3 col-sm-6 col-xs-12"> -->
     <div class="col-md-2" style="width:20%;">
- <a href="{!! route('inbox.ticket') !!}">
-          <div class="info-box">
-             <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">{!! Lang::get('lang.inbox') !!}</span>
-              <span class="info-box-number"><?php echo count($tickets); ?> <small> {!! Lang::get('lang.tickets') !!}</small>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          </a>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-2" style="width:20%;">
+        <a href="{!! route('inbox.ticket') !!}">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="fa fa-envelope-o"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">{!! Lang::get('lang.inbox') !!}</span>
+                    <span class="info-box-number"><?php echo $tickets->count() ?> <small> {!! Lang::get('lang.tickets') !!}</small></span>
+                </div><!-- /.info-box-content -->
+            </div><!-- /.info-box -->
+        </a>
+    </div><!-- /.col -->
+    <!-- <div class="col-md-3 col-sm-6 col-xs-12"> -->
+    <div class="col-md-2" style="width:20%;">
         <a href="{!! route('unassigned') !!}">
             <div class="info-box">
                 <span class="info-box-icon bg-orange"><i class="fa fa-user-times"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">{!! Lang::get('lang.unassigned') !!}</span>
-                    <span class="info-box-number">{{count($unassigned) }} <small> {!! Lang::get('lang.tickets') !!}</small></span>
+                    <span class="info-box-number">{{$unassigned->count() }} <small> {!! Lang::get('lang.tickets') !!}</small></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </a>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
+    </div><!-- /.col -->
 
-               <div class="col-md-2" style="width:20%;" >
-          <a href="{!! route('overdue.ticket') !!}">
+    <!-- fix for small devices only -->
+    <div class="clearfix visible-sm-block"></div>
+
+    <!-- <div class="col-md-3 col-sm-6 col-xs-12"> -->
+    <div class="col-md-2" style="width:20%;">
+        <a href="{!! route('overdue.ticket') !!}">
             <div class="info-box">
                 <span class="info-box-icon bg-red"><i class="fa fa-calendar-times-o"></i></span>
                 <div class="info-box-content">
+
+                        <?php
+      if (Auth::user()->role == 'admin') {
+            $overdue_ticket = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('tickets.duedate','<', \Carbon\Carbon::now())->count();
+        } else {
+            $dept =  App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
+        $overdue_ticket = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('tickets.duedate','<', \Carbon\Carbon::now())->where('dept_id', '=', $dept->id)->count();
+        }
+      ?>
+
                     <span class="info-box-text">{!! Lang::get('lang.overdue') !!}</span>
                     <span class="info-box-number">{{ $overdue_ticket }} <small> Tickets</small></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </a>
-        </div>
-
-        <div class="col-md-2" style="width:20%;">
-          <a href="{!! route('myticket.ticket') !!}">
+    </div><!-- /.col -->
+    <!-- <div class="col-md-3 col-sm-6 col-xs-12"> -->
+    <div class="col-md-2" style="width:20%;">
+        <a href="{!! route('myticket.ticket') !!}">
             <div class="info-box">
                 <span class="info-box-icon bg-yellow"><i class="fa fa-user"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">{!! Lang::get('lang.my_tickets') !!}</span>
-                    <span class="info-box-number">{{count($myticket) }} <small> Tickets</small></span>
+                    <span class="info-box-number">{{$myticket->count() }} <small> Tickets</small></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </a>
-        </div>
-        <!-- /.col -->
-               <div class="col-md-2" style="width:20%;">
+    </div><!-- /.col -->
+
+
+     <div class="col-md-2" style="width:20%;">
+     <?php
+      if (Auth::user()->role == 'admin') {
+            $todaytickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->whereDate('tickets.duedate','=', \Carbon\Carbon::now()->format('Y-m-d'))->count();
+        } else {
+            $dept =  App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
+     $todaytickets = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->whereDate('tickets.duedate','=', \Carbon\Carbon::now()->format('Y-m-d'))->where('dept_id', '=', $dept->id)->count();
+        }
+      ?>
                  <a href="{!! route('ticket.duetoday') !!}">
             <div class="info-box">
                 <span class="info-box-icon bg-red"><i class="glyphicon glyphicon-eye-open"></i></span>
@@ -155,7 +125,6 @@ class="active"
         </a>
           <!-- /.info-box -->
         </div>
-        <!-- /.col -->
 
 </div>
 <div class="box box-info">
@@ -182,7 +151,7 @@ class="active"
                     }
                     ?>
                     <script type="text/javascript">
-                        $(function() {
+                        $(function () {
                             var timestring1 = "{!! $start_date !!}";
                             var timestring2 = "{!! date('m/d/Y') !!}";
                             $('#datepicker4').datetimepicker({
@@ -198,7 +167,7 @@ class="active"
                         {!! Form::text('end_date',null,['class'=>'form-control','id'=>'datetimepicker3'])!!}
                     </div>
                     <script type="text/javascript">
-                        $(function() {
+                        $(function () {
                             var timestring1 = "{!! $start_date !!}";
                             var timestring2 = "{!! date('m/d/Y') !!}";
                             $('#datetimepicker3').datetimepicker({
@@ -218,12 +187,12 @@ class="active"
                     <div class="col-sm-2" style="margin-bottom:-20px;">
                         <label class="lead">{!! Lang::get('lang.Legend') !!}:</label>
                     </div>
-                        <style>
-                            #legend-holder { border: 1px solid #ccc; float: left; width: 25px; height: 25px; margin: 1px; }
-                        </style>
-                        <div class="col-md-3"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span class="lead"> <span id="total-created-tickets" ></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.created') !!}</span></div> 
-                        <div class="col-md-3"><span id="legend-holder" style="background-color: #6DC5B2;"></span>&nbsp; <span class="lead"> <span id="total-reopen-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.reopen') !!}</span></div> 
-                        <div class="col-md-3"><span id="legend-holder" style="background-color: #E3B870;"></span>&nbsp; <span class="lead"> <span id="total-closed-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.closed') !!}</span></div> 
+                    <style>
+                        #legend-holder { border: 1px solid #ccc; float: left; width: 25px; height: 25px; margin: 1px; }
+                    </style>
+                    <div class="col-md-3"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span class="lead"> <span id="total-created-tickets" ></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.created') !!}</span></div> 
+                    <div class="col-md-3"><span id="legend-holder" style="background-color: #6DC5B2;"></span>&nbsp; <span class="lead"> <span id="total-reopen-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.reopen') !!}</span></div> 
+                    <div class="col-md-3"><span id="legend-holder" style="background-color: #E3B870;"></span>&nbsp; <span class="lead"> <span id="total-closed-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.closed') !!}</span></div> 
                 </div>
             </div>
         </form>
@@ -239,28 +208,34 @@ class="active"
     </div>
     <div class="box-body">
         <table class="table table-hover table-bordered">
-            <tr>
-                <th>{!! Lang::get('lang.department') !!}</th>
-                <th>{!! Lang::get('lang.opened') !!}</th>
-                <th>{!! Lang::get('lang.resolved') !!}</th>
-                <th>{!! Lang::get('lang.closed') !!}</th>
-                <th>{!! Lang::get('lang.deleted') !!}</th>
-            </tr>
-
-            <?php $departments = App\Model\helpdesk\Agent\Department::all(); ?>
-            @foreach($departments as $department)
             <?php
-            $open = App\Model\helpdesk\Ticket\Tickets::where('dept_id', '=', $department->id)->where('status', '=', 1)->count();
-            $resolve = App\Model\helpdesk\Ticket\Tickets::where('dept_id', '=', $department->id)->where('status', '=', 2)->count();
-            $close = App\Model\helpdesk\Ticket\Tickets::where('dept_id', '=', $department->id)->where('status', '=', 3)->count();
-            $delete = App\Model\helpdesk\Ticket\Tickets::where('dept_id', '=', $department->id)->where('status', '=', 5)->count();
+//            dd($department);
+            $flattened = $department->flatMap(function ($values) {
+                return $values->keyBy('status');
+            });
+            $statuses = $flattened->keys();
             ?>
             <tr>
-                <td>{!! $department->name !!}</td>
-                <td>{!! $open !!}</td>
-                <td>{!! $resolve !!}</td>
-                <td>{!! $close !!}</td>
-                <td>{!! $delete !!}</td>
+                <th>Department</th>
+                @forelse($statuses as $status)
+                 <th>{!! $status !!}</th>
+                @empty 
+                
+                @endforelse
+
+            </tr>
+            @foreach($department as $name=>$dept)
+            <tr>
+                <td>{!! $name !!}</td>
+                @forelse($statuses as $status)
+                @if($dept->get($status))
+                 <th>{!! $dept->get($status)->count !!}</th>
+                @else 
+                    <th></th>
+                 @endif
+                @empty 
+                
+                @endforelse
             </tr>
             @endforeach 
         </table>
@@ -271,8 +246,8 @@ class="active"
 </div>
 <script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
 <script type="text/javascript">
-                        $(document).ready(function() {
-                            $.getJSON("agen", function(result) {
+                        $(document).ready(function () {
+                            $.getJSON("agen", function (result) {
                                 var labels = [], open = [], closed = [], reopened = [], open_total = 0, closed_total = 0, reopened_total = 0;
                                 //,data2=[],data3=[],data4=[];
                                 for (var i = 0; i < result.length; i++) {
@@ -365,10 +340,10 @@ class="active"
                                 });
                                 document.getElementById("legendDiv").innerHTML = myLineChart.generateLegend();
                             });
-                            $('#click me').click(function() {
+                            $('#click me').click(function () {
                                 $('#foo').submit();
                             });
-                            $('#foo').submit(function(event) {
+                            $('#foo').submit(function (event) {
                                 // get the form data
                                 // there are many ways to get this data using jQuery (you can use the class or id also)
                                 var date1 = $('#datepicker4').val();
@@ -383,7 +358,7 @@ class="active"
                                     data: formData, // our data object
                                     dataType: 'json', // what type of data do we expect back from the server
 
-                                    success: function(result2) {
+                                    success: function (result2) {
                                         //  $.getJSON("agen", function (result) {
                                         var labels = [], open = [], closed = [], reopened = [], open_total = 0, closed_total = 0, reopened_total = 0;
                                         //,data2=[],data3=[],data4=[];
@@ -535,16 +510,16 @@ class="active"
                         });
 </script>
 <script type="text/javascript">
-    jQuery(document).ready(function() {
+    jQuery(document).ready(function () {
         // Close a ticket
-        $('#close').on('click', function(e) {
+        $('#close').on('click', function (e) {
             $.ajax({
                 type: "GET",
                 url: "agen",
-                beforeSend: function() {
+                beforeSend: function () {
 
                 },
-                success: function(response) {
+                success: function (response) {
 
                 }
             })

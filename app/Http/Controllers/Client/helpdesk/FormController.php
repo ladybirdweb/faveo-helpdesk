@@ -65,7 +65,7 @@ class FormController extends Controller
         $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
         $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
         if (!\Auth::check() && ($settings->status == 1 || $settings->status == '1')) {
-            return redirect('auth/login')->with(['login_require' => 'Please login to your account for submitting a ticket', 'referer' => 'form']);
+            return redirect('auth/login')->with(['login_require'=> 'Please login to your account for submitting a ticket', 'referer' => 'form']);
         }
         $location = GeoIP::getLocation();
         $phonecode = $code->where('iso', '=', $location->iso_code)->first();
@@ -179,7 +179,7 @@ class FormController extends Controller
 
          // $priority = $ticket_settings->first()->priority;
          $default_priority = Ticket_Priority::where('is_default', '=', 1)->first();
-        $user_priority = CommonSettings::select('status')->where('option_name', '=', 'user_priority')->first();
+        $user_priority = CommonSettings::where('option_name', '=', 'user_priority')->first();
         if (!($request->input('priority'))) {
             $priority = $default_priority->priority_id;
         } else {

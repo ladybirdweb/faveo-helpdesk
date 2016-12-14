@@ -1,22 +1,11 @@
 <?php
-/*
- |-------------------------------------------------------------------------------------
- |      Dutch translation [for version 1.0.8.0]
- |-------------------------------------------------------------------------------------
- |      Author      : Jean Lasson
- |      Email       : jean.lasson@free.fr
- |  Last translated : 30-11-2016
- |********************************************************************************
- |      Details of new words added for translation
- |--------------------------------------------------------------------------------
- |        Added by  :
- |     translated   : [NO/YES]
- |      Added on    :
- */
+
 return [
     /*
       |----------------------------------------------------------------------------------------
       | Authentication Pages [French(fr)]
+      |----------------------------------------------------------------------------------------
+      |
       | The following language lines are used in all authentication related issues to translate
       | some words in view to French. You are free to change them to anything you want to
       | customize your views to better match your application.
@@ -28,109 +17,88 @@ return [
       |   Error
       |--------------------------------------
      */
-    'success'                                                           => 'Réussis',
-    'fails'                                                             => 'Echecs',
+    'success'                                                           => 'Succès',
+    'fails'                                                             => 'Echec',
     'alert'                                                             => 'Alerte',
     'warning'                                                           => 'Attention',
     'required-error'                                                    => 'Merci de renseigner les champs obligatoires',
     'invalid'                                                           => 'Identifiant utilisateur ou mot de passe incorrect',
-    'sorry_something_went_wrong'                                        => 'Désolé, un problème est survenu',
-    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'        => 'Nous travaillons au problème et nous allons corriger dès que possible.',
-    'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'    => 'Nous sommes désolés, mais la page que vous recherchez est inconnue.',
-    'go_back'                                                           => 'Retour',
-    'the_board_is_offline'                                              => 'Le suivi est hors ligne',
-    'error_establishing_connection_to_database'                         => 'Erreur de connexion à la base de données',
-    'unauthorized_access'                                               => '﻿Accès non autorisé',
-    'not-autherised'                                                    => 'Vous n\'êtes pas autorisé',
-    'otp-not-matched'                                                   => 'Oops! Le code OTP que vous avez saisi ne correspond pas avec celui que nous vous avons envoyé.',
-    'otp-invalid'                                                       => 'Le code OTP doit avoir 6 numéros.',
-    'otp-input-title'                                                   => 'Saisir 6 numéro pour le code OTP.',
-    'otp-expired'                                                       => 'Votre code OTP a été périmé.<br/> Cliquer pour "Renvoyer un code OTP" et recevoir un nouveau code OTP par téléphone.',
-    'resend-otp-title'                                                  => 'Clique ici pour renvoyer un code OTP',
+    'sorry_something_went_wrong'                                        => 'Désolé, un imprévu a eu lieu',
+    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'        => 'Nous travaillons dessus et nous réparerons aussi vite que possible.',
+    'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'    => 'Nous sommes désolés, la page que vous cherchez ne peut pas être trouvée.',
+    'go_back'                                                           => 'Revenir',
+    'the_board_is_offline'                                              => 'Le système est hors ligne',
+    'error_establishing_connection_to_database'                         => 'Erreur lors de l\'établissement d\'une connexion avec la base de doonées.',
     /*
       |--------------------------------------
       |   Login Page
       |--------------------------------------
      */
-   'login_to_start_your_session'           => 'Connectez-vous pour démarrer votre session ',
-   'login'                                 => 'Identifiant',
-   'remember'                              => 'Se souvenir de moi',
-   'signmein'                              => 'Connexion',
-   'iforgot'                               => 'J\'ai oublié mon mot de passe',
-   'email_address'                         => 'Addresse Email',
-   'password'                              => 'Mot de passe',
-   'woops'                                 => 'Oups!',
-   'theirisproblem'                        => 'Il y a eu un problème avec votre saisie',
-   'login'                                 => 'Identifiant',
 
-  'e-mail'                                 => 'Email',
-  'reg_new_member'                         => 'Inscrivez-vous',
-   'this_account_is_currently_inactive'    => 'Ce compte est actuellement inactif!',
-    'not-registered'                       => 'Email/identifiant n\'est pas enregistré',
-    'verify'                               => 'Verification',
-    'enter-otp'                            => 'Entrer code OTP',
-    'did-not-recive-code'                  => 'Vous n\'avez pas reçu votre code?',
-    'resend_otp'                           => 'Renvoyer code OTP',
-    'verify-screen-msg'                    => 'Votre compte est actuellement inactif.<br/>Pour activer votre compte, merci de saisir le code OTP que nous vous avons envotyé',
-    'otp-sent'                             => 'Nous vous avons envoyé un code OTP à voter mobile.',
-    'verify-number'                        => 'Verifier les chiffres',
-    'get-verify-message'                   => 'Entrer le code OTP que nous vous avons envoyé à votre nouveau numéro.',
-    'number-verification-sussessfull'      => 'Votre numéro a été vérifié avec succès, merci d\'attendre la mise à jour de votre profile.',
+    'Login_to_start_your_session'           => 'Connectez-vous pour démarrer votre session ',
+    'login'                                 => 'Connexion',
+    'remember'                              => 'Se souvenir de moi',
+    'signmein'                              => 'Se connecter',
+    'iforgot'                               => 'Mot de passe oublié',
+    'email_address'                         => 'Adresse email',
+    'password'                              => 'Mot de passe',
+    'woops'                                 => 'Oups!',
+    'theirisproblem'                        => 'Il y a eu un problème avec ce que vous avez saisi',
+    'login'                                 => 'Connexion',
+    'e-mail'                                => 'E-mail',
+    'reg_new_member'                        => 'Inscrivez-vous',
+    'this_account_is_currently_inactive'    => 'Ce compte est actuellement inactif!',
     /*
       |--------------------------------------
       |   Register Page
       |--------------------------------------
      */
-    'registration'                                                                                => 'Inscription',
-    'full_name'                                                                                   => 'Nom complet',
-    'firstname'                                                                                   => 'Prénom',
-    'lastname'                                                                                    => 'Nom',
-    'profilepicture'                                                                              => 'Photo de profil',
-    'oldpassword'                                                                                 => 'Ancien mot de passe',
-    'newpassword'                                                                                 => 'Nouveau mot de passe',
-    'retype_password'                                                                             => 'Retapez le mot de passe',
-    'i_agree_to_the'                                                                              => 'J\'accepte les',
-    'terms'                                                                                       => 'termes',
-    'register'                                                                                    => 'S\'Inscrir',
-    'i_already_have_a_membership'                                                                 => 'Je suis déjà inscrit',
-    'see-profile1'                                                                                => 'Cliquez ici pour voir le profil de',
-    'see-profile2'                                                                                => 'Afficher le profile',
-    'activate_your_account_click_on_Link_that_send_to_your_mail'                                  => 'Activez votre compte ! Cliquez sur le lien envoyer dans votre messagerie',
-    'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble'                        => 'Activez votre compte ! Cliquez sur le lien envoyer dans votre messagerie ou connectez vous à votre compte et saisissez le code OTP code que nous vous avons envoyé à votre mobile',
-    'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup' => 'Compte créé, Veuillez contacter l\'administrateur du système car nous n\'avons pas pu envoyer le code OTP à votre mobile et envoyez un email à votre adresse.',
-    'this_field_do_not_match_our_records'                                                         => 'Ce champ ne correspondent pas à nos enregistrements',
-    'we_have_e-mailed_your_password_reset_link'                                                   => 'Nous avons envoyé le lien de réinitialisation de mot de passe!',
-    "we_can't_find_a_user_with_that_e-mail_address"                                               => 'Nous ne pouvons pas trouver un utilisateur avec cette adresse email',
+    'registration'                                                => 'Inscription',
+    'full_name'                                                   => 'Nom complet',
+    'firstname'                                                   => 'Nom',
+    'lastname'                                                    => 'Prénom',
+    'profilepicture'                                              => 'Photo de profil',
+    'oldpassword'                                                 => 'Ancien mot de passe',
+    'newpassword'                                                 => 'Nouveau mot de passe',
+    'retype_password'                                             => 'Retapez le mot de passe',
+    'i_agree_to_the'                                              => 'J\'accepte',
+    'terms'                                                       => 'termes',
+    'register'                                                    => 'Inscription',
+    'i_already_have_a_membership'                                 => 'Je suis déjà inscrit',
+    'see-profile1'                                                => 'Cliquez ici pour voir',
+    'see-profile2'                                                => 'Afficher le profile',
+    'activate_your_account_click_on_Link_that_send_to_your_mail'  => 'Activez-votre compte ! cliquez sur le lien qui vos a été envoyé par email. Activate your account! Click on the link that was sent to your mail',
+    'this_field_do_not_match_our_records'                         => 'This field does not match our records.',
+    'we_have_e-mailed_your_password_reset_link'                   => 'We have emailed your password reset link!',
+    "we_can't_find_a_user_with_that_e-mail_address"               => "We can't find a user with that email address.",
+
     /*
       |--------------------------------------
       |   Reset Password Page
       |--------------------------------------
      */
-    'reset_password'              => 'Réinitialiser le mot de passe',
-    'password-reset-successfully' => 'Votre mot de passe a été réinitialisé. Connectez vous à votre compte avec le nouveau mot de passe',
-    'password-can-not-reset'      => 'Nous n\'avons pas réinitialisé votre mot de passe, Merci de ré-essayer plus tard.',
+    'reset_password' => 'Réinitialiser le mot de passe',
     /*
       |--------------------------------------
       |   Forgot Password Page
       |--------------------------------------
      */
-    'i_know_my_password'            => 'Je connais que mon mot de passe',
-    'recover_passord'               => 'Récupérer mot de passe',
-    'send_password_reset_link'      => 'Envoyer le lien pour réinitialiser le mot de passe',
-    'enter_email_to_reset_password' => 'Indiquer votre email pour réinitialiser le mot de passe',
-    'link'                          => 'Lien',
-    'email_or_mobile'               => 'Email ou mobile',
+    'i_know_my_password'            => 'Je connais mon mot de passe',
+    'recover_passord'               => 'Récupérer le mot de passe',
+    'send_password_reset_link'      => 'Envoyer un lien et rinitialisez l\'\authentification',
+    'enter_email_to_reset_password' => 'Enter email to reset password',
+    'link'                          => 'Link',
     /*
       |----------------------------------------------------------------------------------------
-      | Emails Pages [French(fr)]
+      | Emails Pages [English(en)]
       |----------------------------------------------------------------------------------------
       |
       | The following language lines are used in all Emails related issues to translate
-      | some words in view to French. You are free to change them to anything you want to
+      | some words in view to English. You are free to change them to anything you want to
       | customize your views to better match your application.
       |
      */
-    'admin_panel' => 'Panneau d\'administration',
+    'admin_panel' => 'Paneau de l\'admin',
     /*
       |--------------------------------------
       |  Emails Create Page
@@ -138,122 +106,122 @@ return [
      */
     'emails'                                                                               => 'Emails',
     'incoming_emails'                                                                      => 'Emails entrants',
-    'reuired_authentication'                                                               => 'Authentification indiquée',
-    'fetching_email_via_imap'                                                              => 'Extraction d\'Email via IMAP',
-    'create_email'                                                                         => 'Créer un Email',
-    'email_address'                                                                        => 'Adresse Email',
-    'email_name'                                                                           => 'Nom Email',
-    'email_to'                                                                             => 'Email à',
-    'help_topic'                                                                           => 'Thème de support',
-    'auto_response'                                                                        => 'Réponse automatique',
-    'host_name'                                                                            => 'Nom d\'hôte',
-    'port_number'                                                                          => 'Numéro de port',
-    'mail_box_protocol'                                                                    => 'Protocole de boîte mail',
-    'authentication_required'                                                              => 'Authentification requise',
-    'yes'                                                                                  => 'Oui',
-    'no'                                                                                   => 'Non',
-    'header_spoofing'                                                                      => 'En-tête d\'usurpation',
-    'allow_for_this_email'                                                                 => 'Permettre cet Email',
-    'imap_config'                                                                          => 'Configuration IMAP',
-    'email_information_and_settings'                                                       => 'Informations de messagerie et paramètres',
-    'incoming_email_information'                                                           => 'Informations Email entrant',
-    'outgoing_email_information'                                                           => 'Informations Email sortant',
-    'new_ticket_settings'                                                                  => 'Paramètres des Tickets',
-    'protocol'                                                                             => 'Protocole',
-    'fetching_protocol'                                                                    => 'Protocole de récupération',
-    'transfer_protocol'                                                                    => 'Protocole de transfert',
-    'from_name'                                                                            => 'En tant que',
-    'add_an_email'                                                                         => 'Ajouter un Email',
-    'edit_an_email'                                                                        => 'Editer un Email',
-    'disable_for_this_email_address'                                                       => 'Désactiver pour cette adresse Email',
-    'validate_certificates_from_tls_or_ssl_server'                                         => 'Valider les certificats de serveur TLS/SSL',
-    'authentication'                                                                       => 'Authentification',
-    'incoming_email_connection_failed_please_check_email_credentials_or_imap_settings'     => 'Connexion de messagerie entrante a échoué! Veuillez vérifier les informations d\'identification Email ou paramètres Imap',
-    'outgoing_email_connection_failed'                                                     => 'La connexion Email sortant a échoué',
-    'you_cannot_delete_system_default_email'                                               => 'Vous ne pouvez pas supprimer l\'Email par défaut du système',
-    'email_deleted_sucessfully'                                                            => 'Email supprimé avec succès',
-    'email_can_not_delete'                                                                 => 'Email ne peut être supprimé',
-    'outgoing_email_failed'                                                                => 'Email sortant échoué',
+    'reuired_authentication'                                                               => 'Authentification requise',
+    'fetching_email_via_imap'                                                              => 'Retrouver les emails via IMAP',
+    'create_email'                                                                         => 'Create email',
+    'email_address'                                                                        => 'Email address',
+    'email_name'                                                                           => 'Email name',
+    'email_to'                                                                             => 'Email to',
+    'help_topic'                                                                           => 'Help topic',
+    'auto_response'                                                                        => 'Auto response',
+    'host_name'                                                                            => 'Host name',
+    'port_number'                                                                          => 'Port number',
+    'mail_box_protocol'                                                                    => 'Mail box protocol',
+    'authentication_required'                                                              => 'Authentication required',
+    'yes'                                                                                  => 'Yes',
+    'no'                                                                                   => 'No',
+    'header_spoofing'                                                                      => 'Header spoofing',
+    'allow_for_this_email'                                                                 => 'Allow for this email',
+    'imap_config'                                                                          => 'IMAP configuration',
+    'email_information_and_settings'                                                       => 'Email information and settings',
+    'incoming_email_information'                                                           => 'Incoming email information',
+    'outgoing_email_information'                                                           => 'Outgoing email information',
+    'new_ticket_settings'                                                                  => 'New ticket settings',
+    'protocol'                                                                             => 'Protocol',
+    'fetching_protocol'                                                                    => 'Fetching protocol',
+    'transfer_protocol'                                                                    => 'Transfer protocol',
+    'from_name'                                                                            => 'From name',
+    'add_an_email'                                                                         => 'Add an email',
+    'edit_an_email'                                                                        => 'Edit an email',
+    'disable_for_this_email_address'                                                       => 'Disable for this email address',
+    'validate_certificates_from_tls_or_ssl_server'                                         => 'Validate certificates from TLS/SSL server',
+    'authentication'                                                                       => 'Authentication',
+    'incoming_email_connection_failed_please_check_email_credentials_or_imap_settings'     => 'Incoming email connection failed! Please check email credentials or IMAP settings',
+    'outgoing_email_connection_failed'                                                     => 'Outgoing email connection failed',
+    'you_cannot_delete_system_default_email'                                               => 'You cannot delete system default email',
+    'email_deleted_sucessfully'                                                            => 'Email deleted sucessfully',
+    'email_can_not_delete'                                                                 => 'Email can not be deleted',
+    'outgoing_email_failed'                                                                => 'Outgoing email failed',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
       |--------------------------------------
      */
-    'ban_lists'                         => 'Listes',
-    'ban_email'                         => 'Email',
-    'banlists'                          => 'listes',
-    'ban_status'                        => 'Status',
-    'list_of_banned_emails'             => 'Liste des Emails interdits',
-    'edit_banned_email'                 => 'Modifier Email interdit',
-    'create_a_banned_email'             => 'Interdir un Email',
-    'email_banned_sucessfully'          => 'Création Email interdit réussie',
-    'email_can_not_ban'                 => 'Email ne peut être interdit',
-    'banned_email_updated_sucessfully'  => 'Mise à jour Email interdit réussie',
-    'banned_email_not_updated'          => 'Email interdit ne peut être mis à jour',
-    'banned_removed_sucessfully'        => 'Suppression Email interdit réussie',
+    'ban_lists'                         => 'Ban lists',
+    'ban_email'                         => 'Ban email',
+    'banlists'                          => 'Ban lists',
+    'ban_status'                        => 'Ban status',
+    'list_of_banned_emails'             => 'List of banned emails',
+    'edit_banned_email'                 => 'Edit banned email',
+    'create_a_banned_email'             => 'Create a banned email',
+    'email_banned_sucessfully'          => 'Email banned sucessfully',
+    'email_can_not_ban'                 => 'Email can not be banned',
+    'banned_email_updated_sucessfully'  => 'Banned email updated sucessfully',
+    'banned_email_not_updated'          => 'Banned email not updated',
+    'banned_removed_sucessfully'        => 'Banned removed sucessfully',
 
     /*
       |--------------------------------------
       |  Templates Index Page
       |--------------------------------------
      */
-    'templates'                                 => 'Modèles',
-    'template_set'                              => 'Groupe de modèles',
-    'create_template'                           => 'Créer Modèles',
-    'edit_template'                             => 'Editer Modèles',
-    'list_of_templates_sets'                    => 'Liste des modèles',
-    'create_set'                                => 'Créer un groupe',
-    'template_name'                             => 'Nom du Modèle',
-    'template_saved_successfully'               => 'Modèle enregistré avec succès.',
-    'template_updated_successfully'             => 'Modèle mis à jour avec succès',
-    'in_use'                                    => 'En cours d\'utilisation',
-    'you_have_created_a_new_template_set'       => 'Vous avez créé un nouveau groupe de modèles',
-    'you_have_successfully_activated_this_set'  => 'Vous avez avec succès activé ce groupe',
-    'template_set_deleted_successfully'         => 'Modèle supprimé avec succès',
+    'templates'                                 => 'Templates',
+    'template_set'                              => 'Template sets',
+    'create_template'                           => 'Create template',
+    'edit_template'                             => 'Edit template',
+    'list_of_templates_sets'                    => 'List of templates set',
+    'create_set'                                => 'Create set',
+    'template_name'                             => 'Template name',
+    'template_saved_successfully'               => 'Template saved successfully',
+    'template_updated_successfully'             => 'Template updated successfully',
+    'in_use'                                    => 'In use',
+    'you_have_created_a_new_template_set'       => 'You have created a new template set',
+    'you_have_successfully_activated_this_set'  => 'You have successfully activated this set',
+    'template_set_deleted_successfully'         => 'Template set deleted successfully',
     //Template Description
-    'Create ticket agent'       => 'Notification e-mail envoyé à l\'agent et l\'administrateur quand le ticket est créé',
-    'Assign ticket'             => 'Ticket assigné à un agent',
-    'Create ticket'             => 'Email envoyé au client pour la création du ticket réussi',
-    'Check ticket'              => 'si un client veut vérifier son ticket via le portail client alors un lien lui sera envoyé. Ce lien permet au client de voir les détails de son ticket, sans se connecter au système',
-  'Ticket reply agent'          => 'Une notification est envoyée à l\'email de l\'agent une fois que le client répond au ticket',
-    'Registration notification' => 'Le mot de passe et le login sont envoyés par email lors de l\'inscription',
-    'Reset password'            => 'Email avec le lien de réinitialisation du mot de passe',
-    'Error report'              => 'Etat des erreurs',
-    'Ticket creation'           => 'Première notification envoyée par le système lors de la création de tickets de clients',
-    'Ticket reply'              => 'Lors d\'une réponse faite par l\'agent sur un ticket, une notification par email est envoyée au client et aux collaborateurs',
-    'Close ticket'              => 'Email envoyé au client lors de la fermeture du ticket',
-    'Create ticket by agent'    => 'Un agent crée un ticket pour le client avec le nom du client',
+    'Create ticket agent'       => 'Notification email that is sent to agent and admin when ticket is created',
+    'Assign ticket'             => 'Ticket assigned to an agent',
+    'Create ticket'             => 'Mail sent to client for ticket creation successful message',
+    'Check ticket'              => 'if a client wants to check ticket via the customer portal then a link will be sent to the client. This link is for the client to view ticket details with a ticket number, without logging in to system',
+    'Ticket reply agent'        => 'A notification is sent to agent email once client replies to the ticket',
+    'Registration notification' => 'Password and username is sent on email on first registration',
+    'Reset password'            => 'Email with password reset link',
+    'Error report'              => 'Error report',
+    'Ticket creation'           => 'First notification sent by the system about the ticket creation to the client',
+    'Ticket reply'              => 'A reply made by the agent on a ticket, email notification is sent to client and collaborators',
+    'Close ticket'              => 'Mail sent to client on closing a ticket',
+    'Create ticket by agent'    => 'An agent creates a ticket for the client in the name of client',
     /*
       |--------------------------------------
       |  Templates Create Page
       |--------------------------------------
      */
-    'template_set_to_clone' => 'Groupe de Modèles à dupliquer',
-    'language'              => 'Langue',
+    'template_set_to_clone' => 'Template set to clone',
+    'language'              => 'Language',
     /*
       |--------------------------------------
       |  Diagnostics Page
       |--------------------------------------
      */
     'diagnostics'                => 'Diagnostics',
-    'from'                       => 'De',
-    'to'                         => 'à',
-    'subject'                    => 'Sujet',
+    'from'                       => 'From',
+    'to'                         => 'To',
+    'subject'                    => 'Subject',
     'message'                    => 'Message',
-    'send'                       => 'Envoyer',
-    'choose_an_email'            => 'Choisissez un email',
-    'email_diagnostic'           => 'Email Diagnostic',
-    'send-mail-to-diagnos'       => 'Envoyer un e-mail pour vérifier les paramètres de messagerie sortants',
-    'message_has_been_sent'      => 'Le message a été envoyé',
-    'message_sent_from_php_mail' => 'Message envoyé de Php-Mail',
-    'mailer_error'               => 'Erreur avec Email',
+    'send'                       => 'Send',
+    'choose_an_email'            => 'Choose an email',
+    'email_diagnostic'           => 'Email diagnostic',
+    'send-mail-to-diagnos'       => 'Send a mail to check outgoing email settings',
+    'message_has_been_sent'      => 'Message has been sent',
+    'message_sent_from_php_mail' => 'Message sent from PHP-Mail',
+    'mailer_error'               => 'Mailer error',
     /*
       |----------------------------------------------------------------------------------------
-      | Settings Pages [French(fr)]
+      | Settings Pages [English(en)]
       |----------------------------------------------------------------------------------------
       |
       | The following language lines are used in all Setting related issues to translate
-      | some words in view to French. You are free to change them to anything you want to
+      | some words in view to English. You are free to change them to anything you want to
       | customize your views to better match your application.
       |
      */
@@ -264,24 +232,24 @@ return [
       |--------------------------------------
      */
     'country-code'                  => 'Code',
-    'company'                       => 'Société',
-    'company_settings'              => 'Paramètrage Société',
-    'website'                       => 'Website',
+    'company'                       => 'Company',
+    'company_settings'              => 'Paramètres de l\'entreprise',
+    'website'                       => 'Site Web',
     'phone'                         => 'Téléphone',
     'address'                       => 'Addresse',
-    'landing'                       => 'Page Accueil',
+    'landing'                       => 'Landing page',
     'offline'                       => 'Page hors ligne',
-    'thank'                         => 'Page Remerciement',
+    'thank'                         => 'Remerciements',
     'logo'                          => 'Logo',
     'save'                          => 'Enregistrer',
-    'delete-logo'                   => 'Effacer le logo',
-    'click-delete'                  => 'Cliquez ici pour supprimer',
-    'use_logo'                      => 'Utiliser Logo',
-    'company_updated_successfully'  => 'Société mise à jour avec succès',
-    'company_can_not_updated'       => 'Société ne peut pas être mise à jour',
-    'enter-country-phone-code'      => 'Enter your country\'s phone code',
-    'country-code-required-error'   => 'Code pays est nécessaire avec un numéro de téléphone fixe/mobile.',
-    'incorrect-country-code-error'  => 'Code pays incorrect.',
+    'delete-logo'                   => 'Supprimer logo',
+    'click-delete'                  => 'CCliquez ici pour supprimer',
+    'use_logo'                      => 'Utiliser le logo',
+    'company_updated_successfully'  => 'Entreprise mise à jour avec succès',
+    'company_can_not_updated'       => 'L\'Entreprise ne peut pas être mise à jour',
+    'enter-country-phone-code'      => 'Entrez l\'indicatif téléphonique de votre pays',
+    'country-code-required-error'   => 'L\'indicatif est obligatoire pour le numéro de téléphone/mobile.',
+    'incorrect-country-code-error'  => 'Indicatif pays incorrect.',
     /*
       |--------------------------------------
       |   System Settings Page
@@ -292,42 +260,32 @@ return [
     'online'                                                     => 'En ligne',
     'offline'                                                    => 'Hors ligne',
     'name/title'                                                 => 'Nom/Titre',
-    'pagesize'                                                   => 'Taille Page',
+    'pagesize'                                                   => 'Taille de la page',
     'url'                                                        => 'URL',
     'default_department'                                         => 'Département par défaut',
-    'loglevel'                                                   => 'Niveau Log',
-    'purglog'                                                    => 'Purge des logs',
-    'nameformat'                                                 => 'Format de nom',
+    'loglevel'                                                   => 'Niveau de log',
+    'purglog'                                                    => 'Purger les logs',
+    'nameformat'                                                 => 'Format du nom',
     'timeformat'                                                 => 'Format de l\'heure',
     'date'                                                       => 'Date',
-    'dateformat'                                                 => 'Format de date',
-    'date_time'                                                  => 'Format heure/date',
-    'day_date_time'                                              => 'Format heure/jour/date',
+    'dateformat'                                                 => 'Format de la date',
+    'date_time'                                                  => 'Format de la date et heure',
+    'day_date_time'                                              => 'Format du jour, de la date et de l\'heure',
     'timezone'                                                   => 'Fuseau horaire par défaut',
     'Ticket-created-successfully'                                => 'Ticket créé avec succès!',
-    'Ticket-created-successfully2'                               => 'Le ticket a été créé mais non vérifié. Il sera affichée dans la boîte de réception une fois que l\'utilisateur aura vérifié son compte.',
-    'system_updated_successfully'                                => 'Système Mise à jour avec succès',
-    'system_can_not_updated'                                     => 'Impossible d\'effectuer la Mise à jour système',
-    'ticket_updated_successfully'                                => 'Le Ticket a été correctement mis à jour',
-    'ticket_can_not_updated'                                     => 'Impossible d\'effectuer la Mise à jour du Ticket',
-    'email_updated_successfully'                                 => 'Email a été correctement mis à jour',
-    'email_can_not_updated'                                      => 'Impossible d\'effectuer la Mise à jour de l\'Email',
-    'select_a_time_zone'                                         => 'Selectionnez le Fuseau horaire',
+    'system_updated_successfully'                                => 'Système mis à jour avec succès',
+    'system_can_not_updated'                                     => 'Le système ne peut pas être mis à jour',
+    'ticket_updated_successfully'                                => 'Ticket mis à jour avec succès',
+    'ticket_can_not_updated'                                     => 'Le ticket ne peut pas être mis à jour',
+    'email_updated_successfully'                                 => 'Email mis à jour avec succès',
+    'email_can_not_updated'                                      => 'L\'Email ne peut pas être mis à jour',
+    'select_a_time_zone'                                         => 'Sélectionnez un fuseau horaire',
     'select_a_date_time_format'                                  => 'Sélectionnez un format de date et heure',
-    'Ticket-has-been-created-successfully-your-ticket-number-is' => 'Ticket a été créé avec succès, votre numéro est',
-    'Please-save-this-for-future-reference'                      => 'Merci de garder de garder cette référence',
-    'email-moble-already-taken'                                  => 'Email ou numéro mobile déjà utilisé',
-    'mobile-has-been-taken'                                      => 'Numéro Mobile déjà utilisé',
-    'failed-to-create-user-tcket-as-mobile-has-been-taken'       => 'Erreur dans la création d\'un nouveau ticket parce que le numéro de mobile saisi est associé avec un utilisateur mais d\'autres informations que vous avez saisies ne correspondent pas aux informations de l\'utilisateur. Merci de vérifier les informations de l\'utilisateur ou créer un autre utilisateur',
-    'rtl'                                                        => 'RTL (De droite à gauche)',
-    'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   => 'Le soutien RTL est applicable uniquement aux mails sortants',
-    'user_set_ticket_status'                                     => 'Permettre aux utilisateurs de définir le statut des tickets',
-    'send_otp_for_account_verfication'                           => 'Envoyer code OTP aux utilisateurs',
-    'otp_usage_info'                                             => 'Si vous refusez aux utilisateurs non vérifiés de créer un ticket, nous envoyons un email avec lien de vérification et un sms avec code OTP aux utilisateurs. Si le courrier électronique est défini comme non obligatoire, les utilisateurs recevront leur nom d\'utilisateur et leur mot de passe sur leur mobile. [REMARQUE: les SMS seront envoyés en utilisant le plugin Faveo SMS].',
-    'send_otp_title_message'                                     => 'Envoyer un code OTP pour la vérification des comptes utilisateur, la réinitialisation du mot de passe et la vérification des numéros mobiles',
-    'allow_unverified_users_to_create_ticket'                    => 'Autoriser les utilisateur non vérifié à créer des tickets',
-    'make-email-mandatroy'                                       => 'Rendre obligatoire l\'envoi d\'un email pour la création d\'un ticket/utilisateur',
-    'email_man_info'                                             => 'Si l\'email n\'est pas obligatoire, les utilisateurs pourront s\'inscrire sans email. Nous vous recommandons de ne pas autoriser les utilisateurs non confirmés à créer un ticket afin que les utilisateurs puissent recevoir des notifications sur leur numéro de téléphone mobile et se connecter à leur compte en utilisant le nom d\'utilisateur et le mot de passe qu\'ils reçoivent sur leur numéro de téléphone mobile.',
+    'Ticket-has-been-created-successfully-your-ticket-number-is' => 'Le ticket a été créé avec succès, votre numéro de ticket est',
+    'Please-save-this-for-future-reference'                      => 'Merci de sauvegarder cela pour toute référence future',
+    'rtl'                                                        => 'RTL (Droite à Gauche)',
+    'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   => 'Le support RTL n\'est applicable qu\'aux emails sortants',
+    'user_set_ticket_status'                                     => 'Autoriser les utilisateurs à modifier le statut du ticket',
     /*
       |--------------------------------------
       |   Email Settings Page
@@ -335,62 +293,62 @@ return [
      */
     'email'                               => 'Email',
     'email-settings'                      => 'Paramètres Email',
-    'default_template'                    => 'Modèle par Défaut:',
-    'default_system_email'                => 'Système de messagerie par défaut:',
+    'default_template'                    => 'Modèles par défaut:',
+    'default_system_email'                => 'Email système par défaut:',
     'default_alert_email'                 => 'Email d\'alerte par défaut:',
     'admin_email'                         => 'Adresse Email des Admins:',
     'email_fetch'                         => 'Synchronisation des Emails:',
     'enable'                              => 'Activer',
     'default_MTA'                         => 'MTA par défaut',
-    'fetch_auto-corn'                     => 'synchroniser en cron automatique',
-    'strip_quoted_reply'                  => 'Ne pas reprendre la réponse',
+    'fetch_auto-corn'                     => 'synchroniser en auto-cron',
+    'strip_quoted_reply'                  => 'Bandeau de réponse citée',
     'reply_separator'                     => 'Séparateur de réponse',
-    'accept_all_email'                    => 'Accepter tous les Emails',
-    'accept_email_unknown'                => 'Accepter les emails des utilisateurs inconnus',
-    'accept_email_collab'                 => 'Accepter Email Collaborateurs',
-    'automatically_and_collab_from_email' => 'Ajouter automatiquement les collaborateurs des champs Email',
-    'default_alert_email'                 => 'Par défaut Alerte Email',
+    'accept_all_email'                    => 'Accepter tous les emails',
+    'accept_email_unknown'                => 'Accepter les Emails d\'utilisateurs non identifiés',
+    'accept_email_collab'                 => 'Accepter les collaborateurs de collaborateurs',
+    'automatically_and_collab_from_email' => 'Ajouter automatiquement des collaborateurs depuis des champs d\'Email',
+    'default_alert_email'                 => 'Email d\'alerte par défaut',
     'attachments'                         => 'Pièces jointes',
-    'email_attahment_user'                => 'Les pièces jointes à l\'email de l\'utilisateur',
-    'cron_notification'                   => 'Activer la notification cron',
-    'cron'                                => 'Ordonnancement de tâches informatiques',
+    'email_attahment_user'                => 'Pièces jointes des Emails à l\'utilisateur',
+    'cron_notification'                   => 'Activer le cron de notification',
+    'cron'                                => 'Planificateur de tâches',
     'cron-jobs'                           => 'Tâches Cron',
-    'crone-url-message'                   => 'Voici les URL des tâches du planificateur(cron job) de Faveo de votre système.',
-    'clipboard-copy-message'              => 'Copier dans le presse-papier',
+    'crone-url-message'                   => 'Voici les URL du planificateur de tâches Faveo (tâches cron) pour votre systèmes.',
+    'clipboard-copy-message'              => 'Copié dans le presse papier.',
     'click'                               => 'Cliquez ici',
-    'check-cron-set'                      => 'Pour vérifier comment paramétrer les tâches cron sur votre serveur.',
-    'notification-email'                  => 'Notifications par email',
+    'check-cron-set'                      => 'Pour voir comment paramétrer les tâches Cron sur votre serveur.',
+    'notification-email'                  => 'Notifications Email',
     'click-url-copy'                      => 'Cliquez ici pour copier l\'URL',
-    'job-scheduler-error'                 => 'Planificateur des tâches ne peut pas être mis à jour.',
-    'job-scheduler-success'               => 'Planificateur des tâches mis à jour avec succès.',
+    'job-scheduler-error'                 => 'Le Planificateur de tâches ne peut pas être mis à jour.',
+    'job-scheduler-success'               => 'Planificateur de tâches mis à jour avec succès.',
     /*
       |--------------------------------------
       |   Ticket Settings Page
       |--------------------------------------
      */
     'ticket'                                => 'Ticket',
-    'ticket-setting'                        => 'Paramètres du ticket',
-    'default_ticket_number_format'          => 'Format du numéro de ticket par défaut',
-    'default_ticket_number_sequence'        => 'Numéro de séquence de ticket par défaut',
+    'ticket-setting'                        => 'Paramètres des tickets',
+    'default_ticket_number_format'          => 'Format de numéro de ticket par défaut',
+    'default_ticket_number_sequence'        => 'Séquence chiffrée de ticket par défaut',
     'default_status'                        => 'Statut par défaut',
     'default_priority'                      => 'Priorité par défaut',
     'default_sla'                           => 'SLA par défaut',
-    'default_help_topic'                    => 'Thème d\'aide par défaut',
-    'maximum_open_tickets'                  => 'Nombre maximum de tickets ouverts',
-    'agent_collision_avoidance_duration'    => 'Durée du verrouillage par Agents',
-    'human_verification'                    => 'Vérification Humaine',
+    'default_help_topic'                    => 'Branche d\'aide par défaut',
+    'maximum_open_tickets'                  => 'Nombre Maximum de tickets ouverts',
+    'agent_collision_avoidance_duration'    => 'Durée du verrouillage des conflits entre Agents',
+    'human_verification'                    => 'Vérification humaine',
     'claim_on_response'                     => 'Appropriation de la réponse',
-    'assigned_tickets'                      => 'Tickets Assignés',
-    'answered_tickets'                      => 'Tickets Répondus',
-    'agent_identity_masking'                => 'Masquer l\'identité de l\'agent',
-    'enable_HTML_ticket_thread'             => 'Activer HTML dans le fil des tickets',
-    'allow_client_updates'                  => 'Permettre des mises à jour Client',
-    'lock_ticket_frequency'                 => 'Vérouiller les tickets',
+    'assigned_tickets'                      => 'Tickets assignés',
+    'answered_tickets'                      => 'Tickets répondus',
+    'agent_identity_masking'                => 'Masquage de l\'identité de l\'Agent',
+    'enable_HTML_ticket_thread'             => 'Activer le fil de tickets HTML',
+    'allow_client_updates'                  => 'Autoriser les mises à jour clients',
+    'lock_ticket_frequency'                 => 'Verrouillage des tickets',
     'only-once'                             => 'Une seule fois',
     'frequently'                            => 'Fréquemment',
-    'reload-now'                            => 'Recharger maintenant',
-    'ticket-lock-inactive'                  => 'Vous avez été inactif pendant un certain temps. Veuillez recharger la page.',
-    'make-system-default-mail'              => 'Faire que l\'email système soit par défaut',
+    'reload-now'                            => 'Recharger Maintenant',
+    'ticket-lock-inactive'                  => 'Vous avez été incatif depuis un moment. Merci d\'actualiser la page.',
+    'make-system-default-mail'              => 'Faire de cet Email l\'email par défaut du Système',
     'thread'                                => 'Fil',
     /*
       |--------------------------------------
@@ -398,19 +356,19 @@ return [
       |--------------------------------------
      */
     'access'                                           => 'Accès',
-    'expiration_policy'                                => 'Délai d\'expiration des mots de passe',
-    'allow_password_resets'                            => 'Permettre les réinitialisations de mot de passe',
-    'reset_token_expiration'                           => 'Réinitialiser le jeton d\'Expiration',
-    'agent_session_timeout'                            => 'Agent Session Timeout',
-    'bind_agent_session_IP'                            => 'Lier la Session de l’Agent à IP',
+    'expiration_policy'                                => 'Politique d\'expiration des mots de passe',
+    'allow_password_resets'                            => 'Autoriser la réinitialisation des mots de passe',
+    'reset_token_expiration'                           => 'Expiration du Jeton de réinitialisation',
+    'agent_session_timeout'                            => 'Expiration de la session d\'Agent',
+    'bind_agent_session_IP'                            => 'Lier la session d\'Agent à l\'IP',
     'registration_required'                            => 'Inscription requise',
-    'require_registration_and_login_to_create_tickets' => 'Exiger l’enregistrement et connexion pour créer des tickets',
-    'registration_method'                              => 'Méthode d’inscription',
-    'user_session_timeout'                             => 'Utilisateur Session Timeout',
-    'client_quick_access'                              => 'Accès rapide au client',
+    'require_registration_and_login_to_create_tickets' => 'Forcer l\'inscription et la connexion pour créer des tickets',
+    'registration_method'                              => 'Méthode d\'inscription',
+    'user_session_timeout'                             => 'Expiration de la session d\'utilisateur',
+    'client_quick_access'                              => 'Accès rapide client',
     'cron'                                             => 'Cron',
-    'cron_settings'                                    => 'Paramètres de cron',
-    'system-settings'                                  => 'Configuration du système',
+    'cron_settings'                                    => 'Paramètres Cron',
+    'system-settings'                                  => 'Paramètres Système',
     'settings-2'                                       => 'Paramètres',
 
     /*
@@ -418,40 +376,40 @@ return [
       |   Auto-Response Settings Page
       |--------------------------------------
      */
-    'auto_responce'                         => 'Réponse automatique',
-    'auto_responce-settings'                => 'Paramètres de réponse automatique',
-    'new_ticket'                            => 'Nouveau Ticket',
-    'new_ticket_by_agent'                   => 'Nouveau Ticket par Agent',
-    'new_message'                           => 'Nouveau Message',
-    'submitter'                             => 'Auteur : ',
-    'send_receipt_confirmation'             => 'Confirmation de réception',
+    'auto_responce'                         => 'Auto réponse',
+    'auto_responce-settings'                => 'Paramètres d\'auto réponse',
+    'new_ticket'                            => 'Nouveau ticket',
+    'new_ticket_by_agent'                   => 'Nouveau ticket par l\'agent',
+    'new_message'                           => 'Nouveau message',
+    'submitter'                             => 'créateur : ',
+    'send_receipt_confirmation'             => 'Envoyer un accusé de réception',
     'participants'                          => 'Participants : ',
-    'send_new_activity_notice'              => 'Envoyer des avis de nouvelle activité',
-    'overlimit_notice'                      => 'Avis de dépassement',
-    'email_attachments_to_the_user'         => 'Les pièces jointes de l\'utilisateur',
-    'auto_response_updated_successfully'    => 'Réponse automatique mise à jour avec succès',
-    'auto_response_can_not_updated'         => 'Réponse automatique ne peut pas être mise à jour',
+    'send_new_activity_notice'              => 'Me notifier des nouvelles activités',
+    'overlimit_notice'                      => 'Notification de surlimite',
+    'email_attachments_to_the_user'         => 'Pièces jointes Email à l\'utilisateur',
+    'auto_response_updated_successfully'    => 'Auto réponse créée avec succès',
+    'auto_response_can_not_updated'         => 'L\'auto réponse ne peut pas être mise à jour',
 
     /*
       |--------------------------------------
       |   Alert & Notice Settings Page
       |--------------------------------------
      */
-    'disable'                                               => 'Désactivation',
-    'admin_email_2'                                         => 'E-mail de l\'admin',
-    'alert_notices'                                         => 'Alerte & Avis',
-    'alert_notices_setitngs'                                => 'Paramètres Alerte et Avis',
-    'new_ticket_alert'                                      => 'Nouvelle alerte ticket',
+    'disable'                                               => 'Désactiver',
+    'admin_email_2'                                         => 'Email de l\'admin',
+    'alert_notices'                                         => 'Alertes et notifications',
+    'alert_notices_setitngs'                                => 'Paramètres d\'alertes et notifications',
+    'new_ticket_alert'                                      => 'Alerte nouveau ticket',
     'department_manager'                                    => 'Manager du département',
     'department_members'                                    => 'Membres du département',
-    'organization_account_manager'                          => 'Organisation responsable de compte',
-    'new_message_alert'                                     => 'Nouveau message d\'alerte',
+    'organization_account_manager'                          => 'Manager du Compte Organisation',
+    'new_message_alert'                                     => 'Alerte nouveau message',
     'last_respondent'                                       => 'Dernier répondant',
     'assigned_agent_team'                                   => 'Agent/groupe assigné',
     'new_internal_note_alert'                               => 'Alerte nouvelle note interne',
     'ticket_assignment_alert'                               => 'Alerte d\'assignement de ticket',
     'team_lead'                                             => 'Chef d\'équipe',
-    'team_members'                                          => 'Membres de l\'équipe',
+    'team_members'                                          => 'TMembres de l\'équipe',
     'ticket_transfer_alert'                                 => 'Alerte transfert de ticket',
     'overdue_ticket_alert'                                  => 'Alerte de tickets échus',
     'system_alerts'                                         => 'Alertes système',
@@ -515,9 +473,7 @@ return [
     'plugin-path-missing'   => 'Le chemin du Plugin n\'existe pas',
     'no-plugin-file'        => 'Il n\'y a pas ',
     'plugin-config-missing' => 'Il n\'y a pas de <b>config.php ou ServiceProvider.php</b>',
-    'plugin-info'           => 'Etes vous un développeur? nous vous invitons à développer vos plugins et les rendre disponibles pour la communauté.',
-    'plugin-info-pro'       => ' pour acheter les plugins disponibles avec l\'edition pro.',
-    'click-here'            => 'Cliquer ici',
+
     /*
       |----------------------------------------------------------------------------------------
       | Manage Pages [French(fr)]
@@ -529,19 +485,19 @@ return [
       |
      */
     'manage' => 'Gérer',
-     /*
+    /*
       |--------------------------------------
       |  Help Topic index Page
       |--------------------------------------
      */
-    'help_topics'       => 'Thème de Support',
-    'topic'             => 'Thème',
+    'help_topics'       => 'Branches de Support',
+    'topic'             => 'Branche',
     'type'              => 'Type',
     'priority'          => 'Priorité',
     'last_updated'      => 'Mis à jour pour la dernière fois',
-    'create_help_topic' => 'Créer un thème de Support',
+    'create_help_topic' => 'Créer une branche de Support',
     'action'            => 'Action',
-     /*
+    /*
       |--------------------------------------
       |  Help Topic Create Page
       |--------------------------------------
@@ -550,18 +506,18 @@ return [
     'disabled'                              => 'Désactivé',
     'public'                                => 'Publique',
     'private'                               => 'Privé',
-    'parent_topic'                          => 'Thème parent',
+    'parent_topic'                          => 'Branche parente',
     'Custom_form'                           => 'Formulaire customisé',
-    'SLA_plan'                              => 'Plan SLA',
+    'SLA_plan'                              => 'SLA',
     'sla-plans'                             => 'Plans SLA',
-    'auto_assign'                           => 'Assigner en automatique',
-    'auto_respons'                          => 'Réponse Automatique',
+    'auto_assign'                           => 'Auto assigner',
+    'auto_respons'                          => 'Auto réponse',
     'ticket_number_format'                  => 'Format du numéro de ticket',
     'system_default'                        => 'Par défaut',
-    'custom'                                => 'Personnalisé',
-    'internal_notes'                        => 'Notes internes',
-    'select_a_parent_topic'                 => 'Sélectionner un thème parent',
-    'custom_form'                           => 'Formulaire Personnalisé',
+    'custom'                                => 'Custom',
+    'internal_notes'                        => 'INotes internes',
+    'select_a_parent_topic'                 => 'Sélectionner une branche parente',
+    'custom_form'                           => 'formulaire customisé',
     'select_a_form'                         => 'Sélectionner un formulaire',
     'select_a_department'                   => 'Sélectionner un département',
     'departments'                           => 'Départements',
@@ -570,15 +526,15 @@ return [
     'select_a_sla_plan'                     => 'Sélectionner un SLA',
     'sla_plans'                             => 'Plans SLA',
     'select_an_agent'                       => 'Sélectionner un agent',
-    'helptopic_created_successfully'        => 'Thème de Support créée avec succès',
-    'helptopic_can_not_create'              => 'Le thème de Support ne peut pas être créé',
-    'helptopic_updated_successfully'        => 'Thème de Support mis à jour avec succès',
-    'helptopic_can_not_update'              => 'Le Thème de Support ne peut pas être mis à jour',
+    'helptopic_created_successfully'        => 'Branche de Support créée avec succès',
+    'helptopic_can_not_create'              => 'La Branche de Support ne peut pas être créée',
+    'helptopic_updated_successfully'        => 'Branche de Support mise à jour avec succès',
+    'helptopic_can_not_update'              => 'La Branche de Support ne peut pas être mise à jour',
     'you_cannot_delete_default_department'  => 'Vous ne pouvez pas supprimer le département par défaut',
-    'have_been_moved_to_default_help_topic' => 'a été déplacé dans le Thème de Support par défaut',
-    'helptopic_deleted_successfully'        => 'Thème de Support supprimée avec succès',
-    'make-default-helptopic'                => 'Marquer comme Thème de Support par défaut du système',
-     /*
+    'have_been_moved_to_default_help_topic' => 'a été déplacé dans la Branche de Support par défaut',
+    'helptopic_deleted_successfully'        => 'Branche de Support supprimée avec succès',
+    'make-default-helptopic'                => 'Marquer comme Branche de Support par défaut du système',
+    /*
       |--------------------------------------
       |  SLA plan Index Page
       |--------------------------------------
@@ -593,19 +549,19 @@ return [
       |--------------------------------------
      */
     'transient'                                             => 'Transitoire',
-    'ticket_overdue_alert'                                  => 'Alertes des tickets expirés',
+    'ticket_overdue_alert'                                  => 'Alertes des tickets échus',
     'sla_plan_created_successfully'                         => 'SLA créé avec succès',
     'sla_plan_can_not_create'                               => 'Le SLA ne peut pas être créé',
     'sla_plan_updated_successfully'                         => 'Le SLA a été mis à jour avec succès',
-    'sla_plan_can_not_update'                               => 'Le SLA ne peut pas être mis à jour',
+    'sla_plan_can_not_update'                               => 'Le Sla ne peut pas être mis à jour',
     'you_cannot_delete_default_department'                  => 'Vous ne pouvez pas supprimer le département par défaut',
     'have_been_moved_to_default_sla'                        => 'a été déplacé vers le SLA par défaut',
     'associated_department_have_been_moved_to_default_sla'  => 'Le département associé a été déplacé vers le SLA par défaut',
-    'associated_help_topic_have_been_moved_to_default_sla'  => 'Le thème de support a été déplacée vers le SLA par défaut',
+    'associated_help_topic_have_been_moved_to_default_sla'  => 'La branche de support a été déplacée vers le SLA par défaut',
     'sla_plan_deleted_successfully'                         => 'SLA supprimé avec succès',
     'sla_plan_can_not_delete'                               => 'Le SLA ne peut pas être supprimé',
     'make-default-sla'                                      => 'Marquer comme SLA par défaut du système',
-     /*
+    /*
       |--------------------------------------
       |  Work Flow
       |--------------------------------------
@@ -632,8 +588,8 @@ return [
     'not_equal_to'                      => 'N\'est pas égal à',
     'contains'                          => 'Contient',
     'does_not_contain'                  => 'Ne contient pas',
-    'starts_with'                       => 'Commence par',
-    'ends_with'                         => 'Se termine par',
+    'starts_with'                       => 'Commence avec',
+    'ends_with'                         => 'Se termine avec',
     'select_an_action'                  => 'Sélectionner une action',
     'reject_ticket'                     => 'Rejeter ticket',
     'set_department'                    => 'Configurer département',
@@ -641,7 +597,7 @@ return [
     'set_sla_plan'                      => 'Configurer SLA',
     'assign_team'                       => 'Assigner équipe',
     'assign_agent'                      => 'Assigner agent',
-    'set_help_topic'                    => 'Configurer thème de support',
+    'set_help_topic'                    => 'Configurer branche de support',
     'set_ticket_status'                 => 'Configurer statut de ticket',
     'workflow_created_successfully'     => 'Workflow créé avec succès',
     'workflow_updated_successfully'     => 'Workflow mis à jour avec succès',
@@ -659,7 +615,7 @@ return [
     'variable'                              => 'Variable',
     'create_form'                           => 'Créer formulaire',
     'forms'                                 => 'Formulaires',
-    'form_name'                             => 'Nom du formulaire',
+    'form_name'                             => 'FNom du formulaire',
     'view_this_form'                        => 'Voir ce formulaire',
     'delete_from'                           => 'Supprimer formulaire',
     'are_you_sure_you_want_to_delete'       => 'Êtes vous sûr de vouloir supprimer?',
@@ -670,14 +626,14 @@ return [
     'adding_fields'                         => 'Ajouter des champs',
     'click_add_fields_button_to_add_fields' => "Cliquez sur le bouton <b>'Ajouter des champs'</b> pour ajouter des champs",
     'add_fields'                            => 'Ajouter des champs',
-    'save_form'                             => 'Enregistrer formulaire',
+    'save_form'                             => 'enregistrer formulaire',
     'label'                                 => 'Libellé',
     'name'                                  => 'Nom',
     'type'                                  => 'Type',
     'values(selected_fields)'               => 'Valeurs (Champs sélectionnés)',
     'required'                              => 'Obligatoire',
     'Action'                                => 'Action',
-    'remove'                                => 'Supprimer',
+    'remove'                                => 'Retirer',
     'form_deleted_successfully'             => 'Formulaire supprimé avec succès',
     'successfully_created_form'             => 'Formulaire créé avec succès',
     'please_fill_form_name'                 => 'Merci de renseigner le nom du formulaire',
@@ -713,7 +669,7 @@ return [
       | customize your views to better match your application.
       |
      */
-    'themes' => 'Themes',
+    'themes' => 'Thèmes',
     /*
       |--------------------------------------
       |  Footer Pages
@@ -748,14 +704,14 @@ return [
       |
      */
     'are_you_sure'              => 'Êtes-vous sûr?',
-    'staffs'                    => 'Personnels',
+    'staffs'                    => 'Personnel',
     'name'                      => 'Nom',
     'user_name'                 => 'Nom d\'utilisateur',
     'status'                    => 'Statut',
     'group'                     => 'Groupe',
     'department'                => 'Département',
     'created'                   => 'Créé',
-    'lastlogin'                 => 'Dernière connexion',
+    'lastlogin'                 => 'LDernière connexion',
     'createagent'               => 'Créer un agent',
     'delete'                    => 'Supprimer',
     'agents'                    => 'Agents',
@@ -771,8 +727,8 @@ return [
       |--------------------------------------
      */
     'create_agent'                             => 'Créer agent',
-    'first_name'                               => 'Prénom',
-    'last_name'                                => 'Nom',
+    'first_name'                               => 'Nom',
+    'last_name'                                => 'Prénom',
     'mobile_number'                            => 'Téléphone mobile',
     'agent_signature'                          => 'Signature de l\'agent',
     'account_status_setting'                   => 'Paramètres de statut de compte',
@@ -782,12 +738,12 @@ return [
     'account_status'                           => 'Statut du compte',
     'locked'                                   => 'Verrouillé',
     'assigned_group'                           => 'Groupe assigné',
-    'primary_department'                       => 'Département principal',
+    'primary_department'                       => 'département primaire',
     'agent_time_zone'                          => 'Fuseau horaire de l\'agent',
-    'day_light_saving'                         => 'Sauvegarde du jour',
+    'day_light_saving'                         => 'Sauvegarde Day Light',
     'limit_access'                             => 'Limiter l\'accès',
     'directory_listing'                        => 'Liste des dossiers',
-    'vocation_mode'                            => 'Mode Affectation',
+    'vocation_mode'                            => 'Mode vocation',
     'assigned_team'                            => 'Equipe assignée',
     'agent_send_mail_error_on_agent_creation'  => 'Une erreur est apparue pendant l\'envoi de l\'email à l\'agent. Merci de vérifier les paramètres Email et de réessayer',
     'agent_creation_success'                   => 'Agent créé avec succès',
@@ -813,10 +769,10 @@ return [
     'outgoing_emails'                                  => 'Emails sortants',
     'outgoing_email'                                   => 'Email sortant',
     'template_set'                                     => 'Jeu de Modèles',
-    'auto_responding_settings'                         => 'Paramètres de réponse automatique',
+    'auto_responding_settings'                         => 'Paramètres d\'auto réponse',
     'disable_for_this_department'                      => 'Désactiver pour ce département',
-    'auto_response_email'                              => 'Email de réponse automatique',
-    'recipient'                                        => 'Destinataire',
+    'auto_response_email'                              => 'Email d\'auto réponse',
+    'recipient'                                        => 'Bénéficiaire',
     'group_access'                                     => 'Accès des groupes',
     'department_signature'                             => 'Signature du département',
     'list_of_departments'                              => 'Liste des départements',
@@ -831,7 +787,7 @@ return [
     'department_not_updated'                           => 'Département non mis à jour',
     'you_cannot_delete_default_department'             => 'Vous ne pouvez pas supprimer le département par défaut',
     'have_been_moved_to_default_department'            => 'a été déplacé vers le département par défaut',
-    'the_associated_helptopic_has_been_deactivated'    => 'Le thème de support associée a été désactivée',
+    'the_associated_helptopic_has_been_deactivated'    => 'La branche de support associée a été désactivée',
     'department_deleted_sucessfully'                   => 'Département supprimé avec succès',
     'department_can_not_delete'                        => 'Le département ne peut pas être supprimé',
     'select_a_department'                              => 'Sélectionner un département',
@@ -873,7 +829,7 @@ return [
     'can_transfer_ticket'                                                                      => 'Peut transférer un ticket',
     'can_delete_ticket'                                                                        => 'Peut supprimer un ticket',
     'can_ban_emails'                                                                           => 'Peut bannir des emails',
-    'can_manage_premade'                                                                       => 'Peut gérer les éléments prédéfinis',
+    'can_manage_premade'                                                                       => 'Peut gérer le premade',
     'can_manage_FAQ'                                                                           => 'Peut gérer les FAQ',
     'can_view_agent_stats'                                                                     => 'Peut voir les statistiques des agents',
     'department_access'                                                                        => 'Accès du département',
@@ -890,7 +846,6 @@ return [
     'there_are_agents_assigned_to_this_group_please_unassign_them_from_this_group_to_delete'   => 'Il ya des agents assignés à ce groupe. Merci de les retirer de ce groupe pour pouvoir le supprimer',
     'group_cannot_delete'                                                                      => 'Le groupe ne peut pas être supprimé',
     'group_deleted_successfully'                                                               => 'Groupe supprimé avec succès',
-    'group_cannot_delete'                                                                      => 'Le groupe ne peut être supprimé',
     'failed_to_load_the_page'                                                                  => 'Echec du chargement de la page',
 
     /*
@@ -905,11 +860,11 @@ return [
     'encryption' => 'Encryption',
     /*
       |----------------------------------------------------------------------------------------
-      | Agent Panel [French(fr)]
+      | Agent Panel [English(en)]
       |----------------------------------------------------------------------------------------
       |
       | The following language lines are used in all Agent Panel related issues to translate
-      | some words in view to French. You are free to change them to anything you want to
+      | some words in view to English. You are free to change them to anything you want to
       | customize your views to better match your application.
       |
      */
@@ -925,15 +880,15 @@ return [
     'trash'               => 'Corbeille',
     'Updates'             => 'MAJ',
     'no_new_updates'      => 'Pas de nouvelle MAJ',
-    'check_for_updates'   => 'Rechercher les MAJ',
-    'update-version'      => 'MAJ Version',
+    'check_for_updates'   => 'Rechercher des MAJ',
+    'update-version'      => 'Version MAJ',
     'open'                => 'Ouvrir',
-    'inprogress'          => 'En cours',
-    'inprogress_tickets'  => 'Tickets en cours',
+    'inprogress'          => 'En progrès',
+    'inprogress_tickets'  => 'ITickets en progrès',
     'closed'              => 'Fermés',
     'Departments'         => 'DEPARTEMENTS',
     'tools'               => 'Outils',
-    'canned'              => 'Conservé',
+    'canned'              => 'En boîte',
     'knowledge_base'      => 'Base de connaissances',
     'kb-settings'         => 'Paramètres de la Base de connaissances',
     'loading'             => 'Chargement',
@@ -950,13 +905,13 @@ return [
     'your_ticket_have_been_closed'                                                  => 'Votre ticket a été fermé',
     'your_ticket_have_been_resolved'                                                => 'Votre ticket a été résolu',
     'your_ticket_have_been_opened'                                                  => 'Votre ticket a été ouvert',
-    'your_ticket_have_been_moved_to_trash'                                          => 'Votre ticket a été déplacé dans la corbeille',
+    'your_ticket_have_been_moved_to_trash'                                          => 'YVotre ticket a été déplacé dans la corbeille',
     'this_email_have_been_banned'                                                   => 'Cet email a été banni',
     'ticket_updated_successfully'                                                   => 'Ticket mis à jour avec succès',
     'you_have_successfully_replied_to_your_ticket'                                  => 'Vous avez répondu à votre ticket',
     'for_some_reason_your_message_was_not_posted_please_try_again_later'            => 'Pour une raison inconnue, votre message n\'a pas été posté. Merci de réesayer ultérieurement',
     'for_some_reason_your_reply_was_not_posted_please_try_again_later'              => 'Pour une raison inconnue, votre réponse n\'a pas été postée. Merci de réesayer ultérieurement',
-    'you_have_unassigned_your_ticket'                                               => 'Vous avez désassigné votre ticket',
+    'you_have_unassigned_your_ticket'                                               => 'Vous désassigné votre ticket',
     'for_some_reason_your_request_failed'                                           => 'Pour une raison inconnue, votre requête n\'a pas abouti',
     'trash-delete-ticket'                                                           => 'Supprimer les tickets de manière permanente',
     'trash-delete-title-msg'                                                        => 'Cliquez ici pour supprimer les tickets de manière permanente.',
@@ -975,8 +930,8 @@ return [
     'view-profile'                          => 'Voir le profil',
     'edit-profile'                          => 'Modifier le profil',
     'user_information'                      => 'Informations',
-    'time_zone'                             => 'Fuseau horaire',
-    'phone_number'                          => 'Numéro de Téléphone',
+    'time_zone'                             => 'TFuseau horaire',
+    'phone_number'                          => 'PTéléphone',
     'contact_information'                   => 'Informations de contact',
     'Profile-Updated-sucessfully'           => 'Profil mis à jour avec succès.',
     'User-profile-Updated-Successfully'     => 'Le Profil de l\'utilisateur a été mis à jour avec succès.',
@@ -986,7 +941,7 @@ return [
       |  Dashboard
       |-----------------------------------------------
      */
-    'dashboard'         => 'Tableau de Bord',
+    'dashboard'         => 'Dashboard',
     'line_chart'        => 'Graphique',
     'statistics'        => 'Statistiques',
     'opened'            => 'Ouvert',
@@ -999,7 +954,7 @@ return [
     'report'            => 'Rapport',
     'Legend'            => 'LEGENDES',
     'total'             => 'Total',
-    'dashboard_reports' => 'Rapports',
+    'dashboard_reports' => 'Rapports dashboard',
     /*
       |------------------------------------------------
       |User Page
@@ -1014,7 +969,7 @@ return [
     'edit_user'                                         => 'Modifier utilisateur',
     'full_name'                                         => 'Nom complet',
     'mobile'                                            => 'Mobile',
-    'last_login'                                        => 'Dernier Identifiant',
+    'last_login'                                        => 'Last login',
     'user_profile'                                      => 'Profil utilisateur',
     'assign'                                            => 'Assigner',
     'open_tickets'                                      => 'Tickets ouverts',
@@ -1028,7 +983,7 @@ return [
     'the_user_has_been_removed_from_this_organization'  => 'L\'utilisateur a été retiré de cette organisation',
     'user_report'                                       => 'Rapport utilisateur',
     'send_password_via_email'                           => 'Envoyer le mot de passe via email',
-    'user_send_mail_error_on_user_creation'             => 'Une erreur est survenue lors de l\'envoi de l\'email au client. Merci de vérifier les paramètres Email et de réesayer ultérieurement',
+    'user_send_mail_error_on_user_creation'             => 'Une erreur est survenue lors de l\'envoi de l\'email au client. Marci de vérifier les paramètres Email et de réesayer ultérieurement',
     'country_code'                                      => 'Code pays',
     /*
       |------------------------------------------------
@@ -1037,9 +992,9 @@ return [
      */
     'organizations'                        => 'Organisations',
     'organization'                         => 'Organisation',
-    'organization_list'                    => 'Liste des organisations',
+    'organization_list'                    => 'Liste des organizations',
     'view_organization_profile'            => 'Voir le profile de l\'organisation',
-    'create_organization'                  => 'Créer une organisation',
+    'create_organization'                  => 'Créer organisation',
     'account_manager'                      => 'Manager de compte',
     'update'                               => 'Mettre à jour',
     'please_select_an_organization'        => 'Merci de sélectionner une organisation',
@@ -1065,7 +1020,7 @@ return [
     'ticket_id'                                       => 'ID Ticket',
     'priority'                                        => 'Priorité',
     'from'                                            => 'De',
-    'last_replier'                                    => 'Dernière personne à répondre',
+    'last_replier'                                    => 'Dernier répondant',
     'assigned_to'                                     => 'Assigné à',
     'last_activity'                                   => 'Dernière activité',
     'answered'                                        => 'Répondu',
@@ -1101,7 +1056,7 @@ return [
     'ticket_source'                                   => 'Source du ticket',
     'are_you_sure_to_ban'                             => 'Êtes-vous sûr de bannir?',
     'whome_do_you_want_to_assign_ticket'              => 'A qui voulez-vous assigner le ticket',
-    'are_you_sure_you_want_to_surrender_this_ticket'  => 'Etes-vous sûr de vouloir abandonner ce ticket',
+    'are_you_sure_you_want_to_surrender_this_ticket'  => 'Aêts-vous sûr de vouloir abandonner ce ticket',
     'add_collaborator'                                => 'Ajouter collaborateur',
     'search_existing_users'                           => 'Rechercher utilisateurs existants',
     'add_new_user'                                    => 'Ajouter nouvel utilisateur',
@@ -1112,7 +1067,7 @@ return [
     'max'                                             => 'Taille maximale de fichier',
     'add_cc'                                          => 'Ajouter CC',
     'recepients'                                      => 'Destinataires',
-    'select_a_canned_response'                        => 'Sélctionner une réponse prédéfinie',
+    'select_a_canned_response'                        => 'Sélctionner une réponse en boîte',
     'assign_to'                                       => 'Assigner à',
     'detail'                                          => 'Détail',
     'user_details'                                    => 'Détails utilisateur',
@@ -1136,7 +1091,7 @@ return [
     'select_tickets'                                  => 'Sélectionner les tickets à fusionner',
     'select-pparent-ticket'                           => 'Sélectionner le ticket parent',
     'merge-reason'                                    => 'Motif de la fusion',
-    'no-reason'                                       => 'Aucun motif n\'a été fourni.',
+    'no-reason'                                       => 'Aucun motuf n\'a été fourni.',
     'get_merge_message'                               => 'Ce ticket a été fusionné avec le ticket',
     'ticket_merged'                                   => ' a été fusionné avec ce ticket.',
     'no-tickets-to-merge'                             => 'Il n\'y a plus d\'autres tickets associés au propriétaire de ce ticket.',
@@ -1147,8 +1102,8 @@ return [
     'different-users'                                 => 'Tickets d\'utilisateurs différents',
     'clean-up'                                        => 'Supprimer définitivement',
     'hard-delete-success-message'                     => 'Les tickets ont été supprimés définitivement.',
-    'overdue'                                         => 'En retard',
-    'overdue-tickets'                                 => 'Tickets en retard',
+    'overdue'                                         => 'Echus',
+    'overdue-tickets'                                 => 'Tickets échus',
     'change_owner_for_ticket'                         => 'Changer le propriétaire du ticket',
 
     /*
@@ -1156,8 +1111,8 @@ return [
       |Tools Page
       |------------------------------------------------
      */
-    'canned_response'              => 'Réponse prédéfinie',
-    'create_canned_response'       => 'Créer une réponse prédéfinie',
+    'canned_response'              => 'Réponse en boîte',
+    'create_canned_response'       => 'Créer une réponse en boîte',
     'surrender'                    => 'Abandonner',
     'added_successfully'           => 'Ajouté avec succès',
     'updated_successfully'         => 'Mis à jour avec succès',
@@ -1206,16 +1161,16 @@ return [
     //auto-close workflow
     'close-msg1'                                           => 'Le nombre de jours après lequel les tickets sont automatiquement fermés.',
     'no_of_days'                                           => 'Nbre de jours',
-    'close-msg2'                                           => 'Activer la fermeture automatique du workflow?',
+    'close-msg2'                                           => 'Activer workflow auto-fermeture?',
     'enable_workflow'                                      => 'Activer workflow',
     'send_email_to_user'                                   => 'Envoyer email à l\'utilisateur',
     'close-msg3'                                           => 'Sélectionner un statut à appliquer à la fermeture du ticket.',
-    'close-msg4'                                           => 'Envoyer un email à l\'utilisateur à la fermeture automatique du ticket?',
+    'close-msg4'                                           => 'Envoyer un email à l\'utilisateur à l\'auto fermeture du ticket?',
     'edit_status'                                          => 'Modifier statut',
     'list_of_status'                                       => 'Liste des statuts',
     'status_settings'                                      => 'Paramètres statuts',
     'icon_class'                                           => 'Classe d\'icône',
-    'close_ticket_workflow'                                => 'Fermer le Workflow du ticket',
+    'close_ticket_workflow'                                => 'Workflow fermer le ticket',
     'ratings_settings'                                     => 'Paramètres Avis',
     'notification'                                         => 'Notification',
     'status_has_been_updated_successfully'                 => 'Le Statut a été mis à jour avec succès',
@@ -1241,17 +1196,17 @@ return [
     'rating_restrict'   => 'Restreindre l\'avis à un département',
     'rating_change'     => 'Permettre à l\'utilisateur de modifier l\'avis?',
     'security_msg1'     => 'Le message à afficher lorsqu\'un utilisateur (hôte) a été verrouillé.',
-    'security_msg2'     => 'le nombre de tentatives de connexion dont un utilisateur dispose avant le verrouillage du système. Configurer à 0 pour désactiver le verrouilllage.',
+    'security_msg2'     => 'le nombre de tentatives de connexion dont un utilisateur dispose avant que leur hôte/utilisateur ou ordinateur ne soit verrouillé en dehors du système. Configurer à 0 pour désactiver le verrouilllage.',
     'security_msg3'     => 'La durée en minutes pendant laquelle un hôte ou un utilisateur sont bannis du site après avoir dépassé le nombre autorisé de tentatives de connexions.',
-    'max_attempt'       => 'Maximum de tentatives de connexion par utilisateur',
-    'rating-msg1'       => 'Le plus haut avis qui peut être donné. Par exemple, si 5 est sélectionné, l\'avis le plus bas sera de 1 et le plus haut de 5.',
-    'enter_no_of_days'  => 'Entrer un nombre de jours',
+    'max_attempt'       => 'Maximum de tentatives de connexion par hôte/utilisateur',
+    'rating-msg1'       => 'L\'avis maximal qui peut être donné. Par exemple, si 5 est sélectionné, l\'avis le plus bas sera de 1 et le plus haut de 5.',
+    'enter_no_of_days'  => 'Entrer nbre de jours',
     'template-types'    => 'Types de modèles',
-    'close-workflow'    => 'Fermeture du workflow du ticket',
+    'close-workflow'    => 'CWorkflow fermeture de ticket',
     'template'          => 'Modèle',
     'rating_label'      => 'Libellé de l\'avis',
     'display_order'     => 'Ordre d\'affichage',
-    'rating_scale'      => 'Niveau des avis',
+    'rating_scale'      => 'Echelle des avis',
     'rating_area'       => 'Zone des avis',
 
     'modify'                                => 'Modifier',
@@ -1265,8 +1220,8 @@ return [
     'manage_status'                         => 'Gérer statut',
     'notifications'                         => 'Notifications',
 
-    'auto_close_workflow'               => 'Fermeture automatique du Workflow',
-    'close_ticket_workflow_settings'    => 'Fermer les paramètres du Workflow de ticket',
+    'auto_close_workflow'               => 'Workflow d\'auto fermeture',
+    'close_ticket_workflow_settings'    => 'Fermer les paramètres de Workflow de ticket',
     'successfully_saved_your_settings'  => 'Paramètres enregistrés avec succès',
 
     /*
@@ -1278,7 +1233,7 @@ return [
     'delete_noti'                                 => 'Supprimer toutes les notifications lues?',
     'noti_msg1'                                   => 'Jours avant de supprimer les logs de notifications',
     'noti_msg2'                                   => 'Vous pouvez entrer le nombre de jours avant que les logs de la base de données et l\'historique des notifications soient supprimés depuis le jour spécifié.',
-    'del_all_read'                                => 'Supprimer les consultés',
+    'del_all_read'                                => 'Supprimer Lu',
     'You_have_deleted_all_the_read_notifications' => 'Vous avez supprimé toutes les notifications lues',
     'view_all_notifications'                      => 'Voir toutes les notifications',
     /*
@@ -1288,17 +1243,17 @@ return [
      */
     'not_found'                                       => 'Non trouvé',
     'oops_page_not_found'                             => 'Oups! Page non trouvée',
-    'we_could_not_find_the_page_you_were_looking_for' => 'Nous n\'avons pas pu trouver la page que vous cherchiez pour',
+    'we_could_not_find_the_page_you_were_looking_for' => 'Nous n\'avons pas pu trouver la page que vous cherchez for',
     'internal_server_error'                           => 'Erreur interne du serveur',
-    'be_right_back'                                   => 'Retour rapide',
+    'be_right_back'                                   => 'De retour rapidement',
     'sorry'                                           => 'Désolé',
-    'we_are_working_on_it'                            => 'Nous y travaillons',
+    'we_are_working_on_it'                            => 'WNous y travaillons',
     'category'                                        => 'Categorie',
-    'addcategory'                                     => 'Ajouter une catégorie',
-    'allcategory'                                     => 'Toutes les catégories',
+    'addcategory'                                     => 'Ajouter catégorie',
+    'allcategory'                                     => 'TOutes les catégories',
     'article'                                         => 'Article',
     'articles'                                        => 'Articles',
-    'addarticle'                                      => 'Ajouter un article',
+    'addarticle'                                      => 'Ajouter article',
     'allarticle'                                      => 'Tous les articles',
     'pages'                                           => 'Pages',
     'addpages'                                        => 'Ajouter des pages',
@@ -1333,11 +1288,11 @@ return [
     'save'                                                                     => 'Enregistrer',
     'create'                                                                   => 'Créer',
     'dateformat'                                                               => 'Format de date',
-    'slug'                                                                     => 'Résultat faux',
-    'read_more'                                                                => 'Afficher d\'avantage',
+    'slug'                                                                     => 'Slug',
+    'read_more'                                                                => 'Savoir plus',
     'view_all'                                                                 => 'Voir tout',
     'categories'                                                               => 'Catégories',
-    'need_more_support'                                                        => 'Besoin de plus de support',
+    'need_more_support'                                                        => 'Plus de support',
     'if_you_did_not_find_an_answer_please_raise_a_ticket_describing_the_issue' => 'Si vous n\'avez pas trouvé de réponse, merce de créer un ticket décrivant le problème',
     'have_a_question?_type_your_search_term_here'                              => 'Vous avez une question? Entrez votre terme de recherche ici...',
     'search'                                                                   => 'Rechercher',
@@ -1346,10 +1301,10 @@ return [
     'post_message'                                                             => 'Poster message',
     /*
       |--------------------------------------------------------------------------------------
-      |  Client Panel [French(fr)]
+      |  Client Panel [English(en)]
       |--------------------------------------------------------------------------------------
       | The following language lines are used in all Agent Panel related issues to translate
-      | some words in view to French. You are free to change them to anything you want to
+      | some words in view to English. You are free to change them to anything you want to
       | customize your views to better match your application.
       |
      */
@@ -1362,8 +1317,8 @@ return [
     'you_are_here'                                                                     => 'Vous êtes ici',
     'have_a_ticket'                                                                    => 'Vous avez un ticket',
     'check_ticket_status'                                                              => 'Vérifier le statut du ticket',
-    'choose_a_help_topic'                                                              => 'Choisissez un thème de support',
-    'ticket_status'                                                                    => 'Statut du ticket',
+    'choose_a_help_topic'                                                              => 'Choisissez une branche de support',
+    'ticket_status'                                                                    => 'Statut ticket',
     'post_comment'                                                                     => 'Poster commentaire',
     'plugin'                                                                           => 'Plugin',
     'edit_profile'                                                                     => 'Modifier profil',
@@ -1372,7 +1327,7 @@ return [
     'no_article'                                                                       => 'Pas d\'article',
     'profile_settings'                                                                 => 'Paramètres du profil',
     'please_fill_all_required_feilds'                                                  => 'Merci de remplir les champs obligatoires.',
-    'successfully_replied'                                                             => 'Réponse envoyée avec succès',
+    'successfully_replied'                                                             => 'Réponse envoyée',
     'please_fill_some_data'                                                            => 'Merci de renseigner ces données!',
     'profile_updated_sucessfully'                                                      => 'Profil mis à jour avec succès',
     'password_updated_sucessfully'                                                     => 'Mot de passe mis à jour avec succès',
@@ -1394,15 +1349,15 @@ return [
     'failed_to_send_email_contact_administrator'                                       => 'Envoi d\'email échoué. Merci de contacter votre administrateur système',
     /*
     * |---------------------------------------------------------------------------------------
-      |Api settings
+      |API settings
     * |----------------------------------------------------------------------------------
-    * |The following lanuage line used to get French traslation of api settings in admin panel
+    * |The following lanuage line used to get english traslation of API settings in admin panel
     * |
     * |
     */
 
     'webhooks'                         => 'Webhooks',
-    'enter_url_to_send_ticket_details' => 'Entrer l\'URL pour envoyer les détails du ticket',
+    'enter_url_to_send_ticket_details' => 'Entrer l\'URL om envoyer les détails du ticket',
     'API'                              => 'API',
     'api_key'                          => 'Clé API',
     'api_key_mandatory'                => 'Clé API obligatoire',
@@ -1420,8 +1375,8 @@ return [
    'view-logs'                                      => 'Voir logs d\'erreurs',
    'not-authorised-error-debug'                     => 'Vous n\'êtes pas autorisé à accéder à cette URL',
    'error-debug-settings'                           => 'Paramètres erreurs et débugging',
-   'debugging'                                      => 'Mode Debug',
-   'bugsnag-debugging'                              => 'Envoyer les rapports de crash de l\'application pour aider à améliorer Faveo',
+   'debugging'                                      => 'Mode de débugging',
+   'bugsnag-debugging'                              => 'Envoyer les rapports de crash de l\'app pour aider à améliorer Faveo',
    'error-debug-settings-saved-message'             => 'Vos paramètres erreurs et débugging ont été enregistrés avec succès',
    'error-debug-settings-error-message'             => 'Vous n\'avez effectué aucun changement dans les paramètres.',
    'error-logs'                                     => 'Logs d\'erreurs',
@@ -1433,6 +1388,14 @@ return [
    'use_subject'                                    => 'Utiliser sujet',
    'reopen'                                         => 'Réouvrir',
    'invalid_attempt'                                => 'Tentative invalide',
+
+    /**--------------------------------------------------------------------------------------------
+     * Attachment Updated
+     * --------------------------------------------------------------------------------------------
+     */
+    'unable_to_load_file_type'  => 'Impossible de charger le type de fichier',
+
+    /************************************Translation reqiured after this line**************************/
     /* ---------------------------------------------------------------------------------------
      * Latest update 27-07-2016
      * -----------------------------------------------------------------------------------
@@ -1443,131 +1406,151 @@ return [
      * OTP  messages body to send to user while registering, resetting passwords
      * --------------------------------------------------------------------------------------------------
      */
-    'hello'                   => 'Bonjour',
-    'reset-link-msg'          => ",\r\nVoici le lien pour réinitialiser le mot de passe.\r\n",
-    'otp-for-your'            => ",\r\nCode OTP pour vous",
-    'account-verification-is' => 'la verification du compte est',
-    'extra-text'              => ".\r\nVous pouvez vous connecter pour vérifier votre compte avec le code OTP ou en cliquant sur le lien que nous vous avons envoyé à votre adresse email.",
-    'otp-not-sent'            => 'Nous avons rencontré un problème lors de l\'envoi du code OTP.',
+    'hello'                   => 'Hello',
+    'reset-link-msg'          => ",\r\nHere is the link to reset your password.\r\n",
+    'otp-for-your'            => ",\r\nOTP for your",
+    'account-verification-is' => 'account verification is',
+    'extra-text'              => ".\r\nYou can login to verify your account via OTP or just click on the link we've sent to your email address.",
+    'otp-not-sent'            => 'We faced some problem in sending OTP please try after some time.',
     /*     * -------------------------------------------------------------------------------------------
      * Ticket number settings 03-08-2016
      * ------------------------------------------------------------------------------------------
      */
     'format'               => 'Format',
-    'ticket-number-format' => 'Ce paramètre est utilisé pour générer des numéros de ticket. Vous pouvez utiliser le signe (`#`) et le signe (‘$’) dans la zone à saisir. Tout autre texte dans le format numérique sera conservé. ',
-    'ticket-number-type'   => 'Choisissez une séquence à partir de laquelle vous pouvez obtenir de nouveaux numéros de ticket. Le système a une séquence d\'incrémentation et une séquence aléatoire par défaut',
+    'ticket-number-format' => 'This setting is used to generate ticket numbers. Use hash signs (`#`) where digits are to be placed & dollar sign(‘$’) where characters are to be placed . Any other text in the number format will be preserved. ',
+    'ticket-number-type'   => 'Choose a sequence from which to derive new ticket numbers. The system has a incrementing sequence and a random sequence by default',
     /*     * ----------------------------------------------------------------------------------------------------
      * Social media integration
      * ---------------------------------------------------------------------------------------------------------
      */
     'client_id'     => 'Client id',
     'client_secret' => 'Client secret',
-    'redirect'      => 'Redirection URL',
+    'redirect'      => 'Redirect URL',
     'details'       => 'Details',
     'social-media'  => 'Social media',
     /*     * ----------------------------------------------------------------------------------------------
      * Report
      * ----------------------------------------------------------------------------------------------
      */
-    'report'              => 'Rapport',
-    'Report'              => 'RAPPORT',
-    'start_date'          => 'Date de début',
-    'end_date'            => 'Date de fin',
-    'select'              => 'Séléctionner',
-    'generate'            => 'Générer',
-    'day'                 => 'Jour',
-    'week'                => 'Semaine',
-    'month'               => 'Mois',
-    'Currnet_In_Progress' => 'ACTUELLEMENT EN TRAITEMENT',
-    'Total_Created'       => 'TOTAL CREATION',
-    'Total_Reopened'      => 'TOTAL REOUVERT',
-    'Total_Closed'        => 'TOTAL FERME',
-    'tabular'             => 'Tabulation',
-    'reopened'            => 'Réouvert',
+    'report'              => 'Report',
+    'Report'              => 'REPORT',
+    'start_date'          => 'Start date',
+    'end_date'            => 'End date',
+    'select'              => 'Select',
+    'generate'            => 'Generate',
+    'day'                 => 'Day',
+    'week'                => 'Week',
+    'month'               => 'Month',
+    'Currnet_In_Progress' => 'CURRENT IN PROGRESS',
+    'Total_Created'       => 'TOTAL CREATED',
+    'Total_Reopened'      => 'TOTAL REOPENED',
+    'Total_Closed'        => 'TOTAL CLOSED',
+    'tabular'             => 'Tabular',
+    'reopened'            => 'Reopened',
     /* ---------------------------------------------------------------------------------------
      * Ticket Priority
      * -----------------------------------------------------------------------------------
      */
-    'ticket_priority'                                           => 'Ticket priorité',
-    'priority'                                                  => 'Priorité',
-    'priority_desc'                                             => 'Priorité description',
-    'priority_urgency'                                          => 'Priorité urgence',
-    'priority_id'                                               => 'Priorité Id',
-    'priority_color'                                            => 'Priorité couleur',
-    'ispublic'                                                  => 'Est Public',
-    'is_default'                                                => 'par défaut',
-    'create_ticket_priority'                                    => 'Créer une priorité de ticket',
+    'ticket_priority'                                           => 'Ticket priority',
+    'priority'                                                  => 'Priority',
+    'priority_desc'                                             => 'Priority description',
+    'priority_urgency'                                          => 'Priority urgency',
+    'priority_id'                                               => 'Priority Id',
+    'priority_color'                                            => 'Priority color',
+    'ispublic'                                                  => 'IsPublic',
+    'is_default'                                                => 'By default',
+    'create_ticket_priority'                                    => 'Create ticket priority',
     'agent_notes'                                               => 'Agent notes',
-    'select_priority'                                           => 'Selectionner une priorité',
+    'select_priority'                                           => 'Select priority',
     'normal'                                                    => 'Normal',
-    'ispublic'                                                  => 'Visibilité',
-    'make-default-priority'                                     => 'Faire comme priorité par défaut',
-    'priority_successfully_created'                             => 'Priorité créée avec succès',
-    'priority_successfully_updated'                             => 'Priorité mise à jour avec succès',
-    'delete_successfully'                                       => 'Suppression réussie',
-    'user_priority_status'                                      => 'Statut de priorité de l\'utilisateur',
-    'current'                                                   => 'Actuel:',
-    'active_user_can_select_the_priority_while_creating_ticket' => 'L\'utilisateur actif peut sélectionner la priorité lors de la création du ticket',
-
-    /**--------------------------------------------------------------------------------------------
-     * Attachment Updated
-     * --------------------------------------------------------------------------------------------
-    */
-   'unable_to_load_file_type'  => 'Impossible de charger le type de fichier',
+    'ispublic'                                                  => 'Visibility',
+    'make-default-priority'                                     => 'Make default priority',
+    'priority_successfully_created'                             => 'Priority successfully created',
+    'priority_successfully_updated'                             => 'Priority successfully updated',
+    'delete_successfully'                                       => 'Delete successfully',
+    'user_priority_status'                                      => 'User priority status',
+    'current'                                                   => 'Current:',
+    'active_user_can_select_the_priority_while_creating_ticket' => 'Active user can select the priority while creating ticket',
 
     /* --------------------------------------------------------------------------------------------
      * Approval Updated
      * --------------------------------------------------------------------------------------------
      */
-    'approval'             => 'Approuvé',
-    'approval_tickets'     => 'Tickets approuvés',
-    'approve'              => 'Approuver',
-    'approval_request'     => 'Demande d\'approbation',
-    'approvel_ticket_list' => 'Liste des tickets approuvés',
+    'approval'             => 'Approval',
+    'approval_tickets'     => 'Approval tickets',
+    'approve'              => 'Approve',
+    'approval_request'     => 'Approval request',
+    'approvel_ticket_list' => 'Approvel ticket list',
 
-    'approval_settings'                      => 'Paramètres approbation',
-    'close_all_ticket_for_approval'          => 'Fermer toous les tickets pour approbation',
-    'approval_settings-created-successfully' => 'Paramètres approbation créés avec succès',
+    'approval_settings'                      => 'Approval settings',
+    'close_all_ticket_for_approval'          => 'Close all tickets for approval',
+    'approval_settings-created-successfully' => 'Approval settings created successfully',
 
     /* --------------------------------------------------------------------------------------------
      * Followup Updated
      * --------------------------------------------------------------------------------------------
      */
-     'followup'              => 'Suivre',
-     'followup_tickets'      => 'Suivre tickets',
-     'followup_Notification' => 'Suivre notification',
+     'followup'              => 'Followup',
+     'followup_tickets'      => 'Followup tickets',
+     'followup_Notification' => 'Followup notification',
 
      /*
       *--------------------------------------------------------------------------------------------
       *Updated 6-9-2016
       *---------------------------------------------------------------------------------------
       */
-     'not-available'  => 'Indisponible',
+     'not-available'  => 'Not available',
      /* --------------------------------------------------------------------------------------------
      * User Module
      * --------------------------------------------------------------------------------------------
      */
-     'agent_report'                                                         => 'Rapport Agent',
-     'assign_tickets'                                                       => 'Assigner tickets',
-     'delete_agent'                                                         => 'Supprimer agent',
-     'delete_user'                                                          => 'Supprimer utilisateur',
-     'confirm_deletion'                                                     => 'Confirmer suppression',
-     'delete_all_content'                                                   => 'Supprimer tous les éléments',
-     'agent_profile'                                                        => 'Profile Agent',
-     'change_role_to_admin'                                                 => 'Changer role pour administrateur',
-     'change_role_to_user'                                                  => 'Changer role pour utilisateur',
-     'change_role_to_agent'                                                 => 'Changer role pour agent',
-     'change_password'                                                      => 'Changer mot de passe',
-     'role_change'                                                          => 'Changement de rôle',
-     'generateur de mot de passe'                                           => 'Password generator',
-     'depertment'                                                           => 'Departement',
-     'duetoday'                                                             => 'Prévu aujourd\'hui',
-     'today-due_tickets'                                                    => 'Tickets prévus aujourd\'hui',
-     'password_change_successfully'                                         => 'Mot de passe changé avec succès',
-     'role_change_successfully'                                             => 'Role changé avec succès',
-     'user_delete_successfully'                                             => 'Utilisateur supprimé avec succès',
-     'agent_delete_successfully'                                            => 'Agent supprimé avec succès',
-     'select_another_agent'                                                 => 'Selectionner un autre agent',
-     'agent_delete_successfully_and_ticket_assign_to_another_agent'         => 'Agent supprimé avec succès et ticket assigné à un autre agent',
+     'agent_report'                                                 => 'Agent report',
+     'assign_tickets'                                               => 'Assign tickets',
+     'delete_agent'                                                 => 'Delete agent',
+     'delete_user'                                                  => 'Delete user',
+     'confirm_deletion'                                             => 'Confirm deletion',
+     'delete_all_content'                                           => 'Delete all content',
+     'agent_profile'                                                => 'Agent profile',
+     'change_role_to_admin'                                         => 'Change role to admin',
+     'change_role_to_user'                                          => 'Change role to user',
+     'change_role_to_agent'                                         => 'Change role to agent',
+     'change_password'                                              => 'Change password',
+     'role_change'                                                  => 'Role change',
+     'password_generator'                                           => 'Password generator',
+     'depertment'                                                   => 'Depertment',
+     'duetoday'                                                     => 'Due today',
+     'today-due_tickets'                                            => 'Today\'s due ticekts',
+     'password_change_successfully'                                 => 'Password changed successfully',
+     'role_change_successfully'                                     => 'Role changed successfully',
+     'user_delete_successfully'                                     => 'User deleted successfully',
+     'agent_delete_successfully'                                    => 'Agent deleted successfully',
+     'select_another_agent'                                         => 'Select another agent',
+     'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
+     'deleted_user'                                                 => 'Deleted User',
+     'deleted_user_directory'                                       => 'Deleted User Directory',
+     'restore'                                                      => 'Restore',
+     'user_restore_successfully'                                    => 'User restore successfully',
+
+     /*** updates 28-11-2016***/
+     'apply'              => 'Apply',
+
+     /* updates 2-12-2016 **/
+     'sort-by'                      => 'Sort by',
+     'created-at'                   => 'Created at',
+     'or'                           => 'OR',
+     'activate'                     => 'Activate',
+     'system-email-not-configured'  => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
+     'assign-ticket'                => 'Assign tickets',
+     'can-not-inactive-group'       => 'Can not make the group inactive as it has agents assigned in it. Please assign those agents to another group and try again.',
+     'internal-note-has-been-added' => 'Internal note added to the ticket',
+     'active-users'                 => 'Active users',
+     'deleted-users'                => 'Deleted users',
+     'view-option'                  => 'View options',
+     'accoutn-not-verified'         => 'User account is not verified',
+     'enabled'                      => 'Enabled',
+     'disabled'                     => 'Disabled',
+     'user-account-is-deleted'      => 'This user account has been deleted.',
+     'restore-user'                 => 'Restore user account',
+     'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
 
 ];

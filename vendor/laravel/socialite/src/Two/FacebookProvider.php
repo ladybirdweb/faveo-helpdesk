@@ -19,14 +19,14 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
      *
      * @var string
      */
-    protected $version = 'v2.8';
+    protected $version = 'v2.6';
 
     /**
      * The user fields being requested.
      *
      * @var array
      */
-    protected $fields = ['name', 'email', 'gender', 'verified', 'link'];
+    protected $fields = ['name', 'email', 'gender', 'verified'];
 
     /**
      * The scopes being requested.
@@ -116,7 +116,6 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
             'id' => $user['id'], 'nickname' => null, 'name' => isset($user['name']) ? $user['name'] : null,
             'email' => isset($user['email']) ? $user['email'] : null, 'avatar' => $avatarUrl.'?type=normal',
             'avatar_original' => $avatarUrl.'?width=1920',
-            'profileUrl' => isset($user['link']) ? $user['link'] : null,
         ]);
     }
 
@@ -171,7 +170,5 @@ class FacebookProvider extends AbstractProvider implements ProviderInterface
     public function reRequest()
     {
         $this->reRequest = true;
-
-        return $this;
     }
 }

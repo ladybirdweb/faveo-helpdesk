@@ -1,8 +1,0 @@
-Tests/ export-ignore
-build/ export-ignore
-.travis.yml export-ignore
-build.xml export-ignore
-phpunit.xml.dist export-ignore
-libphonenumber-for-php.spec export-ignore
-
-* text=auto

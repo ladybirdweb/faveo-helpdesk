@@ -1,10 +1,10 @@
 @extends('themes.default1.admin.layout.admin')
 
-@section('Settings')
+@section('Tickets')
 active
 @stop
 
-@section('settings-bar')
+@section('tickets-bar')
 active
 @stop
 

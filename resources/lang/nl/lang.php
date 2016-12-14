@@ -1568,4 +1568,34 @@ return [
      'select_another_user'                                        => 'Selecteer een andere gebruiker',
     'agent_delete_successfully_and_ticket_assign_to_another_user' => 'Medewerker succesvol verwijderd, het ticket is aan een andere gebruiker toegewezen',
 
+    /************************************New updates*************************************/
+    /*                             Translation Required                                 */
+    /************************************************************************************/
+    'deleted_user'                                                  => 'Deleted User',
+     'deleted_user_directory'                                       => 'Deleted User Directory',
+     'restore'                                                      => 'Restore',
+     'user_restore_successfully'                                    => 'User restore successfully',
+
+     /*** updates 28-11-2016***/
+     'apply'              => 'Apply',
+
+     /* updates 2-12-2016 **/
+     'sort-by'                      => 'Sort by',
+     'created-at'                   => 'Created at',
+     'or'                           => 'OR',
+     'activate'                     => 'Activate',
+     'system-email-not-configured'  => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
+     'assign-ticket'                => 'Assign tickets',
+     'can-not-inactive-group'       => 'Can not make the group inactive as it has agents assigned in it. Please assign those agents to another group and try again.',
+     'internal-note-has-been-added' => 'Internal note added to the ticket',
+     'active-users'                 => 'Active users',
+     'deleted-users'                => 'Deleted users',
+     'view-option'                  => 'View options',
+     'accoutn-not-verified'         => 'User account is not verified',
+     'enabled'                      => 'Enabled',
+     'disabled'                     => 'Disabled',
+     'user-account-is-deleted'      => 'This user account has been deleted.',
+     'restore-user'                 => 'Restore user account',
+     'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
+
 ];

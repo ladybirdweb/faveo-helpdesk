@@ -50,7 +50,7 @@ class TokenAuthController extends Controller
 //$credentials = $request->only('email', 'password');
 
         try {
-            if (!$token = JWTAuth::attempt([$field => $usernameinput, 'password' => $password, 'active' => 1])) {
+            if (!$token = JWTAuth::attempt([$field => $usernameinput, 'password' => $password, 'active'=>1])) {
                 return response()->json(['error' => 'invalid_credentials', 'status_code' => 401]);
             }
         } catch (JWTException $e) {

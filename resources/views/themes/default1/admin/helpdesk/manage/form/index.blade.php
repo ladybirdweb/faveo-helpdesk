@@ -40,7 +40,7 @@ class="active"
         <div class="box-title">
             {!! Lang::get('lang.forms') !!}
         </div>
-        <a href="{!! url('forms/create') !!}" class="pull-right"><button class="btn btn-primary">{!! Lang::get('lang.create_form') !!}</button></a> 
+        <a href="{!! url('forms/create') !!}" class="pull-right"><button class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> &nbsp;{!! Lang::get('lang.create_form') !!}</button></a> 
     </div>
     <div class="box-body">
         <table id="example2" class="table table-bordered table-striped">

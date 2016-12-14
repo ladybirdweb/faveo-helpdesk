@@ -279,7 +279,7 @@ class SettingsController extends Controller
 
     public function Plugins()
     {
-        return view('themes.default1.admin.helpdesk.settings.plugins', ['info' => 1]);
+        return view('themes.default1.admin.helpdesk.settings.plugins');
     }
 
     public function GetPlugin()
@@ -406,7 +406,7 @@ class SettingsController extends Controller
                         $app = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
                         chmod($app, 0644);
                         $str = "\n\n\t\t\t'App\\Plugins\\$filename"."\\ServiceProvider',";
-                        $line_i_am_looking_for = 187;
+                        $line_i_am_looking_for = 194;
                         $lines = file($app, FILE_IGNORE_NEW_LINES);
                         $lines[$line_i_am_looking_for] = $str;
                         file_put_contents($app, implode("\n", $lines));
@@ -578,7 +578,7 @@ class SettingsController extends Controller
         if (!$plug) {
             $app = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
             $str = "\n'App\\Plugins\\$slug"."\\ServiceProvider',";
-            $line_i_am_looking_for = 187;
+            $line_i_am_looking_for = 194;
             $lines = file($app, FILE_IGNORE_NEW_LINES);
             $lines[$line_i_am_looking_for] = $str;
             file_put_contents($app, implode("\n", $lines));
@@ -592,7 +592,7 @@ class SettingsController extends Controller
 
             $app = base_path().DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'app.php';
             $str = "\n'App\\Plugins\\$slug"."\\ServiceProvider',";
-            $line_i_am_looking_for = 187;
+            $line_i_am_looking_for = 194;
             $lines = file($app, FILE_IGNORE_NEW_LINES);
             $lines[$line_i_am_looking_for] = $str;
             file_put_contents($app, implode("\n", $lines));

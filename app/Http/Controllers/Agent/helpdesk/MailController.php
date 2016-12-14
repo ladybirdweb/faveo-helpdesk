@@ -180,8 +180,10 @@ class MailController extends Controller
 
     public function message($messages, $email)
     {
-        foreach ($messages as $message) {
-            $this->getMessageContent($message, $email);
+        if (count($messages) > 0) {
+            foreach ($messages as $message) {
+                $this->getMessageContent($message, $email);
+            }
         }
     }
 
@@ -191,6 +193,7 @@ class MailController extends Controller
         if (!$body) {
             $body = $message->getMessageBody();
         }
+        $body = $this->separateReply($body);
         $subject = $message->getSubject();
         $address = $message->getAddresses('reply-to');
         if (!$address) {
@@ -231,7 +234,17 @@ class MailController extends Controller
         $thread = Ticket_Thread::where('id', '=', $thread_id)->first();
         $thread->body = $this->separate_reply($body);
         $thread->save();
-        $this->saveAttachments($thread->id, $attachments);
+        if (file_exists(app_path('/FaveoStorage/Controllers/StorageController.php'))) {
+            try {
+                $storage = new \App\FaveoStorage\Controllers\StorageController();
+                $storage->saveAttachments($thread->id, $attachments);
+            } catch (\Exception $ex) {
+                loging('attachment', $ex->getMessage());
+            }
+        } else {
+            loging('attachment', 'FaveoStorage not installed');
+        }
+
         \Log::info('Ticket has created : ', ['id' => $thread->ticket_id]);
     }
 
@@ -249,6 +262,8 @@ class MailController extends Controller
                 $type = $attachment->getMimeType();
                 $size = $attachment->getSize();
                 $data = $attachment->getData();
+                //$path = storage_path('/');
+                //$attachment->saveToDirectory($path);
                 $this->manageAttachment($data, $filename, $type, $size, $disposition, $thread_id);
                 $this->updateBody($attachment, $thread_id, $filename);
             }
@@ -276,18 +291,15 @@ class MailController extends Controller
         if (isset($structure->disposition)) {
             $disposition = $structure->disposition;
         }
-        if ($disposition == 'INLINE') {
+        if ($disposition == 'INLINE' || $disposition == 'inline') {
             $id = str_replace('>', '', str_replace('<', '', $structure->id));
             //$filename = $attachment->getFileName();
-            $path = public_path('attachments');
-            $filepath = asset('attachments/'.$filename);
             $threads = new Ticket_Thread();
             $thread = $threads->find($thread_id);
             $body = $thread->body;
             $body = str_replace('cid:'.$id, $filename, $body);
             $thread->body = $body;
             $thread->save();
-            $attachment->saveToDirectory($path);
         }
     }
 
@@ -354,5 +366,22 @@ class MailController extends Controller
                             ->header('Content-Disposition', 'attachment; filename='.$attachment->name)
                             ->header('Content-Transfer-Encoding', 'binary');
         }
+    }
+
+    /**
+     * separate reply.
+     *
+     * @param type $body
+     *
+     * @return type string
+     */
+    public function separateReply($body)
+    {
+        $body2 = explode('---Reply above this line---', $body);
+        if (is_array($body2) && array_key_exists(0, $body2)) {
+            $body = $body2[0];
+        }
+
+        return $body;
     }
 }

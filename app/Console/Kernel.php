@@ -31,11 +31,10 @@ class Kernel extends ConsoleKernel
     {
         if (env('DB_INSTALL') == 1) {
             $queue = $this->getCurrentQueue();
-            $schedule->command('queue:listen '.$queue, ['--tries' => 1])->everyMinute()->withoutOverlapping();
+            $schedule->command('queue:listen '.$queue, ['--tries' => 1])->everyMinute();
             $this->execute($schedule, 'fetching');
             $this->execute($schedule, 'notification');
             $this->execute($schedule, 'work');
-            loging('cron', 'executed successfully', 'info');
         }
     }
 

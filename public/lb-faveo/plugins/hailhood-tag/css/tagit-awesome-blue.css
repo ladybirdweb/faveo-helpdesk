@@ -1,0 +1,190 @@
+.ui-autocomplete {
+    background-color: #fff;
+    position: absolute;
+    cursor: default;
+    list-style: none;
+    margin: 25px 0 0;
+    padding: 0;
+    border: 1px solid #E5E5E5;
+    border-top: none;
+    border-radius: 0 0 3px 3px;
+    -webkit-box-shadow: 0 3px 5px #888;
+    box-shadow: 0 3px 5px #888;
+    font-size: 12px;
+}
+
+.ui-autocomplete .ui-menu-item {
+    padding: 0;
+    margin: 0;
+}
+
+.ui-autocomplete  .ui-menu-item a {
+    display: block;
+    padding: 4px 6px;
+    margin: 0;
+    text-decoration: none;
+    line-height: 12px;
+    border-bottom: 1px solid #E5E5E5;
+    border-top: 1px solid #fff;
+    color: #78959D;
+    
+}
+
+.ui-autocomplete .ui-menu-item a.ui-state-hover,
+.ui-autocomplete .ui-menu-item a.ui-state-active {
+    background-color: #4b99ed;
+    color: #fff;
+    background-image: none;
+    border: 1px solid #a6cef7;
+}
+
+.ui-autocomplete-loading {
+    background: white url(ui-anim_basic_16x16.gif) right center no-repeat;
+}
+
+ul.tagit {
+    cursor: text;
+    overflow: auto;
+    font-size: 14px;
+    width: 97%;
+    padding: 3px;
+    margin-top: 2px;
+    margin-right: 6px;
+    margin-bottom: 16px;
+    border: 1px solid #E5E5E5;
+    background: #fff;
+    color: #fff;
+}
+
+ul.tagit li {
+    border-radius: 5px;
+    display: block;
+    float: left;
+    margin: 2px 5px 2px 0;
+    position: relative;
+}
+
+ul.tagit.ui-sortable li.tagit-choice a.ui-icon.ui-icon-grip-dotted-vertical{
+    float: left;
+    width: 12px;
+    margin-left: -5px;
+    cursor: move;
+}
+
+ul.tagit li.tagit-choice {
+    border: 1px solid #4b99ed;
+    display: inline-block;
+    text-decoration: none;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    padding: 4px 7px;
+    font-family: 'Helvetica Neue', helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 13px;
+    height: 13px;
+    vertical-align: middle;
+
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.4);
+    padding: 4px 13px 4px 7px;
+
+    background: #4bc2ed;
+    background: -moz-linear-gradient(top, #4bc2ed 0%, #2ea2cc 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4bc2ed), color-stop(100%,#2ea2cc));
+    background: -webkit-linear-gradient(top, #4bc2ed 0%,#2ea2cc 100%);
+    background: -o-linear-gradient(top, #4bc2ed 0%,#2ea2cc 100%);
+    background: -ms-linear-gradient(top, #4bc2ed 0%,#2ea2cc 100%);
+    background: linear-gradient(top, #4bc2ed 0%,#2ea2cc 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4bc2ed', endColorstr='#2ea2cc',GradientType=0 );
+
+}
+
+ul.tagit li.tagit-choice.selected {
+
+    color: #777777;
+    border: 1px solid #999999;
+
+    background: rgb(200,200,200);
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2M4YzhjOCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiNmI2YjYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  rgba(200,200,200,1) 0%, rgba(182,182,182,1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(200,200,200,1)), color-stop(100%,rgba(182,182,182,1)));
+    background: -webkit-linear-gradient(top,  rgba(200,200,200,1) 0%,rgba(182,182,182,1) 100%);
+    background: -o-linear-gradient(top,  rgba(200,200,200,1) 0%,rgba(182,182,182,1) 100%);
+    background: -ms-linear-gradient(top,  rgba(200,200,200,1) 0%,rgba(182,182,182,1) 100%);
+    background: linear-gradient(top,  rgba(200,200,200,1) 0%,rgba(182,182,182,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c8c8c8', endColorstr='#b6b6b6',GradientType=0 );
+
+}
+
+ul.tagit li.tagit-choice:hover {
+
+    text-decoration: none;
+
+    background: #4ba0ea;
+    background: -moz-linear-gradient(top, #4ba0ea 0%, #2f89ce 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4ba0ea), color-stop(100%,#2f89ce));
+    background: -webkit-linear-gradient(top, #4ba0ea 0%,#2f89ce 100%);
+    background: -o-linear-gradient(top, #4ba0ea 0%,#2f89ce 100%);
+    background: -ms-linear-gradient(top, #4ba0ea 0%,#2f89ce 100%);
+    background: linear-gradient(top, #4ba0ea 0%,#2f89ce 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4ba0ea', endColorstr='#2f89ce',GradientType=0 );
+}
+
+ul.tagit li.tagit-new {
+    padding: 2px 4px 3px;
+    padding: 2px 4px 1px;
+    padding: 2px 4px 1px 0;
+}
+
+ul.tagit li.tagit-choice input {
+    display: block;
+    float: left;
+    margin: 0 5px 0 0;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+ul.tagit li.tagit-choice a.tagit-close {
+    color: #ddd;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    outline: medium none;
+    padding: 0px 0 0px 3px;
+    text-decoration: none;
+    position: absolute;
+    display: block;
+    top: 3px;
+    right: 3px;
+    text-shadow: 1px -1px 0 rgba(0, 0, 0, 0.7);
+}
+
+ul.tagit li.tagit-choice a.tagit-close:hover {
+    color: #000;
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+ul.tagit div.tagit-label.hidden {
+	display: none;
+}
+
+ul.tagit input.tagit-edit {
+	margin: 0px 0px 0px 2px;
+	border: none;
+	line-height: 16px;
+}
+
+ul.tagit input[type="text"] {
+    -moz-box-sizing: border-box;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: inherit !important;
+    outline: none;
+}
+
+.tagit-hiddenSelect {
+    display:none;
+}

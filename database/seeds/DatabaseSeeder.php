@@ -11,11 +11,9 @@ use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Notification\NotificationType;
 use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Settings\Alert;
-use App\Model\helpdesk\Settings\Approval;
 use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
-use App\Model\helpdesk\Settings\Followup;
 use App\Model\helpdesk\Settings\Responder;
 use App\Model\helpdesk\Settings\Security;
 use App\Model\helpdesk\Settings\System;
@@ -215,16 +213,10 @@ class DatabaseSeeder extends Seeder
         Ticket_status::create(['name' => 'Request Approval', 'state' => 'unverified', 'mode' => '3', 'message' => 'Approval requested by', 'flags' => '0', 'sort' => '7', 'properties' => 'Ticket will be approve  after Admin verifies  this ticket']);
 
         /* Ticket priority */
-        Ticket_priority::create(['priority' => 'Low', 'status' => 1, 'priority_desc' => 'Low', 'priority_color' => '#00a65a', 'priority_urgency' => '4', 'ispublic' => 1, 'is_default' => 0]);
-        Ticket_priority::create(['priority' => 'Normal', 'status' => 1, 'priority_desc' => 'Normal', 'priority_color' => '#00bfef', 'priority_urgency' => '3', 'ispublic' => 1, 'is_default' => 1]);
-        Ticket_priority::create(['priority' => 'High', 'status' => 1, 'priority_desc' => 'High', 'priority_color' => '#f39c11', 'priority_urgency' => '2', 'ispublic' => 1, 'is_default' => 0]);
-        Ticket_priority::create(['priority' => 'Emergency', 'status' => 1, 'priority_desc' => 'Emergency', 'priority_color' => '#dd4b38', 'priority_urgency' => '1', 'ispublic' => 1, 'is_default' => 0]);
-
-        /* Approval */
-        Approval::create(['name' => 'approval', 'status' => '0']);
-
-        /*Followup*/
-        Followup::create(['name' => 'followup']);
+        Ticket_priority::create(['priority' => 'Low', 'status' => 1, 'priority_desc' => 'Low', 'priority_color' => '#00a65a', 'priority_urgency' => '4', 'ispublic' => '1']);
+        Ticket_priority::create(['priority' => 'Normal', 'status' => 1, 'priority_desc' => 'Normal', 'priority_color' => '#00bfef', 'priority_urgency' => '3', 'ispublic' => '1', 'is_default' => '1']);
+        Ticket_priority::create(['priority' => 'High', 'status' => 1, 'priority_desc' => 'High', 'priority_color' => '#f39c11', 'priority_urgency' => '2', 'ispublic' => '1']);
+        Ticket_priority::create(['priority' => 'Emergency', 'status' => 1, 'priority_desc' => 'Emergency', 'priority_color' => '#dd4b38', 'priority_urgency' => '1', 'ispublic' => '1']);
 
         /* SLA Plans */
         Sla_plan::create(['name' => 'Sla 1', 'grace_period' => '6 Hours', 'status' => '1']);

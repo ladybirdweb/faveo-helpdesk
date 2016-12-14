@@ -38,7 +38,7 @@ class Condition extends Model
 
     public function checkActiveJob()
     {
-        $result = ['fetching' => '', 'notification' => '', 'work' => '', 'message' => ''];
+        $result = ['fetching' => '', 'notification' => '', 'work' => '', 'message' => '', 'remind' => ''];
         $emails = new \App\Model\helpdesk\Settings\Email();
         $email = $emails->find(1);
         if ($email) {
@@ -55,17 +55,6 @@ class Condition extends Model
         if ($work) {
             if ($work->condition == 1) {
                 $result['work'] = true;
-            }
-        }
-        if (\Schema::hasTable('sms_notify_setting')) {
-            $message = new \App\Plugins\SMS\Model\SmsNotify();
-            $message = $message->select('status')->where('name', '=', 'open_ticket_nofification')->first();
-            if ($message) {
-                if ($message->status) {
-                    $result['message'] = true;
-                } else {
-                    $result['message'] = false;
-                }
             }
         }
 

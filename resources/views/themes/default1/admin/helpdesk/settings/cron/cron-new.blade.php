@@ -117,8 +117,6 @@
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </div>
-        <!-- Follow up notification -->
-       
 
     </div>
     <div class="box-footer">

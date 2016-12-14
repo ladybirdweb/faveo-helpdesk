@@ -28,7 +28,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $fillable = ['user_name', 'email', 'password', 'active', 'first_name', 'last_name', 'ban', 'ext', 'mobile', 'profile_pic',
         'phone_number', 'company', 'agent_sign', 'account_type', 'account_status',
         'assign_group', 'primary_dpt', 'agent_tzone', 'daylight_save', 'limit_access',
-        'directory_listing', 'vacation_mode', 'role', 'internal_note', 'country_code', ];
+        'directory_listing', 'vacation_mode', 'role', 'internal_note', 'country_code', 'not_accept_ticket', 'is_delete', ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -39,20 +39,27 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getProfilePicAttribute($value)
     {
-        $info = $this->getExtraInfo();
+        $info = $this->avatar();
         $pic = null;
-        if (count($info) > 0) {
+        if ($info) {
             $pic = $this->checkArray('avatar', $info);
         }
         if (!$pic) {
             $pic = asset('uploads/profilepic/'.$value);
         }
-
-        if ($this->endsWith($pic, 'profilepic')) {
+        if (!$value) {
             $pic = \Gravatar::src($this->attributes['email']);
         }
 
         return $pic;
+    }
+
+    public function avatar()
+    {
+        $related = 'App\UserAdditionalInfo';
+        $foreignKey = 'owner';
+
+        return $this->hasMany($related, $foreignKey)->select('value')->where('key', 'avatar')->first();
     }
 
     public function getOrganizationRelation()
@@ -141,36 +148,34 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $html;
     }
 
-    /**
-     *@category accessor function to return full name
-     *
-     *@param null
-     *
-     *@return $string
-     */
+    public function name()
+    {
+        $first_name = $this->first_name;
+        $last_name = $this->last_name;
+        $name = $this->user_name;
+        if ($first_name !== '' && $first_name !== null) {
+            if ($last_name !== '' && $last_name !== null) {
+                $name = $first_name.' '.$last_name;
+            } else {
+                $name = $first_name;
+            }
+        }
+
+        return $name;
+    }
+
     public function getFullNameAttribute()
     {
-        if ($this->first_name) {
-            return ucfirst($this->first_name).' '.ucfirst($this->last_name);
-        }
-
-        return $this->user_name;
+        return $this->name();
     }
 
-    /**
-     * @category function to check profile pic source srting ends with profilepic or not
-     *
-     * @param string $haystack, $needle
-     *
-     * @return bool true/false
-     */
-    public function endsWith($haystack, $needle)
-    {
-        $length = strlen($needle);
-        if ($length == 0) {
-            return true;
-        }
+//    public function save() {
+//        dd($this->id);
+//        parent::save();
+//    }
 
-        return substr($haystack, -$length) === $needle;
-    }
+//    public function save(array $options = array()) {
+//        parent::save($options);
+//        dd($this->where('id',$this->id)->select('first_name','last_name','user_name','email')->get()->toJson());
+//    }
 }

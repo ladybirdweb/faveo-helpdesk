@@ -31,7 +31,7 @@ class="active"
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">{{Lang::get('lang.help_topic')}}</h3>
-        <a href="{{route('helptopic.create')}}" class="btn btn-primary pull-right">{{Lang::get('lang.create_help_topic')}}</a>
+        <a href="{{route('helptopic.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_help_topic')}}</a>
     </div>
     <div class="box-body table-responsive">
         <!-- check whether success or not -->

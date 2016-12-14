@@ -44,7 +44,7 @@ class PriorityController extends Controller
      */
     public function priorityIndex()
     {
-        $user_status = CommonSettings::where('id', '=', 6)->first();
+        $user_status = CommonSettings::where('option_name', '=', 'user_priority')->first();
         // dd( $user_status);
 
        return view('themes.default1.admin.helpdesk.manage.ticket_priority.index', compact('user_status'));
@@ -60,7 +60,7 @@ class PriorityController extends Controller
         try {
             $user_status = $request->user_settings_priority;
 
-            CommonSettings::where('id', '=', 6)->update(['status' => $user_status]);
+            CommonSettings::where('option_name', '=', 'user_priority')->update(['status' => $user_status]);
 
             return 'Your Status Updated';
         } catch (Exception $e) {
@@ -94,7 +94,7 @@ class PriorityController extends Controller
                             })
                             ->addColumn('action', function ($model) {
                                 if ($model->is_default > 0) {
-                                    return '<a href='.url('ticket/priority/'.$model->priority_id.'/edit')." class='btn btn-info btn-xs' disabled='disabled'>Edit</a>&nbsp;<a href=".url('ticket_priority/'.$model->priority_id.'/destroy')." class='btn btn-warning btn-info btn-xs' disabled='disabled' > delete </a>";
+                                    return '<a href='.url('ticket/priority/'.$model->priority_id.'/edit')." class='btn btn-info btn-xs' disabled='disabled'>Edit</a>&nbsp;<a href=".url('ticket/priority/'.$model->priority_id.'/destroy')." class='btn btn-warning btn-info btn-xs' disabled='disabled' > delete </a>";
                                 } else {
                                     return '<a href='.url('ticket/priority/'.$model->priority_id.'/edit')." class='btn btn-info btn-xs'>Edit</a>&nbsp;<a class='btn btn-danger btn-xs' onclick='confirmDelete(".$model->priority_id.")'>Delete </a>";
                                 }
@@ -156,7 +156,7 @@ class PriorityController extends Controller
         $tk_priority->ispublic = $request->ispublic;
         $tk_priority->save();
         if ($request->input('default_priority') == 'on') {
-            Ticket_Priority::where('is_default', '=', 1)
+            Ticket_Priority::where('is_default', '>', 0)
                     ->update(['is_default' => 0]);
             Ticket_Priority::where('priority_id', '=', $priority_id)
                     ->update(['is_default' => 1]);

@@ -1,14 +1,14 @@
 @extends('themes.default1.admin.layout.admin')
 
-@section('Settings')
-class="active"
-@stop
-
-@section('settings-bar')
+@section('Manage')
 active
 @stop
 
-@section('access')
+@section('manage-bar')
+active
+@stop
+
+@section('url')
 class="active"
 @stop
 
@@ -16,16 +16,15 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-
+<h1>{!! Lang::get('lang.url') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
 @section('breadcrumbs')
-
 <ol class="breadcrumb">
-
 </ol>
 @stop
+
 @section('content')
 {!! Form::open(['url' => 'url/settings', 'method' => 'PATCH']) !!}
 <div class="box box-primary">

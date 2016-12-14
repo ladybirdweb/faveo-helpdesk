@@ -144,12 +144,14 @@ class FormController extends Controller
                                 'required' => $require[$i],
                     ]);
                     $field_id = $field->id;
-                    $this->createValues($field_id, Input::get('value')[$i]);
+                    $this->createValues($field_id, Input::get('value')[$i], null, $name);
                 }
             }
 
             return Redirect::back()->with('success', Lang::get('lang.successfully_created_form'));
         } catch (Exception $ex) {
+            dd($ex);
+
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
@@ -255,11 +257,13 @@ class FormController extends Controller
                     'required' => Input::get('required')[$i],
                 ]);
                 $field_id = $field->id;
-                $this->createValues($field_id, Input::get('value')[$i]);
+                $this->createValues($field_id, Input::get('value')[$i], null, $name);
             }
 
             return redirect()->back()->with('success', 'updated');
         } catch (Exception $ex) {
+            dd($ex);
+
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
@@ -531,7 +535,7 @@ class FormController extends Controller
         $session = self::getSession();
         $script = self::jqueryScript($field_value = '', $field->id, $field->name, $field_type);
         $form_hidden = Form::hidden('fieldid[]', $field->id, ['id' => 'hidden'.$session.$field->id]).Form::label($field->label, $field->label, ['class' => $required_class]);
-        $select = Form::$field_type($field->name, ['' => 'Select', 'Selects' => $field->values()->lists('field_value', 'field_value')->toArray()], null, ['class' => "form-control $session$field->id", 'id' => $session.$field->id, 'required' => $required]).'</br>';
+        $select = Form::$field_type($field->name, ['' => 'Select', 'Selects' => self::removeUnderscoreFromDB($field->values()->lists('field_value', 'field_value')->toArray())], null, ['class' => "form-control $session$field->id", 'id' => $session.$field->id, 'required' => $required]).'</br>';
         $html = $script.$form_hidden.$select;
         $response_div = '<div id='.$session.$field->name.'></div>';
 
@@ -616,5 +620,17 @@ class FormController extends Controller
         }
 
         return $form;
+    }
+
+    public static function removeUnderscoreFromDB($array)
+    {
+        $result = [];
+        if (is_array($array) && count($array) > 0) {
+            foreach ($array as $key => $value) {
+                $result[$key] = removeUnderscore($value);
+            }
+        }
+
+        return $result;
     }
 }

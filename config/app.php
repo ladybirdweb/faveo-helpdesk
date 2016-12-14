@@ -33,7 +33,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.0.8.0 RC',
+    'version' => 'Community 1.9.0',
     /*
       |--------------------------------------------------------------------------
       | Application Name
@@ -167,6 +167,7 @@ return [
         'App\Providers\EventServiceProvider',
         'App\Providers\RouteServiceProvider',
         'App\Providers\ConfigServiceProvider',
+        'App\Providers\ComposerServiceProvider',
         'Propaganistas\LaravelPhone\LaravelPhoneServiceProvider',
         'Bugsnag\BugsnagLaravel\BugsnagLaravelServiceProvider',
         'Vsmoraes\Pdf\PdfServiceProvider',
@@ -174,7 +175,7 @@ return [
         'Chumper\Datatable\DatatableServiceProvider',
         'Chumper\Zipper\ZipperServiceProvider',
         'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
-        'Torann\GeoIP\GeoIPServiceProvider',
+       \Torann\GeoIP\GeoIPServiceProvider::class,
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Unisharp\Ckeditor\ServiceProvider::class,
@@ -184,6 +185,8 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         App\FaveoLog\LaravelLogViewerServiceProvider::class,
+        App\FaveoStorage\StorageServiceProvider::class,
+        Yajra\Datatables\DatatablesServiceProvider::class,
 
     ],
     /*
@@ -251,6 +254,7 @@ return [
         'Socialite'   => Laravel\Socialite\Facades\Socialite::class,
         'UnAuth'      => 'App\Http\Controllers\Client\helpdesk\UnAuthController',
         'Finder'      => App\Helper\Finder::class,
+        'Datatables'  => Yajra\Datatables\Facades\Datatables::class,
 
     ],
 

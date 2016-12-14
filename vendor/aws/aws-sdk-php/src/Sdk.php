@@ -14,8 +14,6 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionApplicationDiscoveryService(array $args = [])
  * @method \Aws\AutoScaling\AutoScalingClient createAutoScaling(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionAutoScaling(array $args = [])
- * @method \Aws\Budgets\BudgetsClient createBudgets(array $args = [])
- * @method \Aws\MultiRegionClient createMultiRegionBudgets(array $args = [])
  * @method \Aws\CloudFormation\CloudFormationClient createCloudFormation(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionCloudFormation(array $args = [])
  * @method \Aws\CloudFront\CloudFrontClient createCloudFront(array $args = [])
@@ -130,8 +128,6 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionServiceCatalog(array $args = [])
  * @method \Aws\Ses\SesClient createSes(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionSes(array $args = [])
- * @method \Aws\Sms\SmsClient createSms(array $args = [])
- * @method \Aws\MultiRegionClient createMultiRegionSms(array $args = [])
  * @method \Aws\SnowBall\SnowBallClient createSnowBall(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionSnowBall(array $args = [])
  * @method \Aws\Sns\SnsClient createSns(array $args = [])
@@ -155,7 +151,7 @@ namespace Aws;
  */
 class Sdk
 {
-    const VERSION = '3.19.23';
+    const VERSION = '3.19.16';
 
     /** @var array Arguments for creating clients */
     private $args;

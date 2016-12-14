@@ -29,15 +29,10 @@ class MappingFileProvider
             $language = 'zh_Hant';
         }
 
-        // Loop through the $countryCallingCode and load the prefix
-        $prefixLength = strlen($countryCallingCode);
-
-        for ($i = $prefixLength; $i > 0; $i--) {
-            $prefix = substr($countryCallingCode, 0, $i);
-            if ($this->inMap($language, $prefix)) {
-                return $language . DIRECTORY_SEPARATOR . $prefix . '.php';
-            }
+        if ($this->inMap($language, $countryCallingCode)) {
+            return $language . DIRECTORY_SEPARATOR . $countryCallingCode . '.php';
         }
+
 
         return "";
     }

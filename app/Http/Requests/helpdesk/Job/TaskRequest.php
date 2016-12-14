@@ -36,12 +36,12 @@ class TaskRequest extends Request
     public function messages()
     {
         return [
-            'fetching-commands.required_if'     => 'Please choose your Email Fetching timing',
-            'notification-commands.required_if' => 'Please choose your Email Notification timing',
-            'work-commands.required_if'         => 'Please choose your Auto-close Workflow timing',
-            'workflow-dailyAt.required_if'      => 'Please enter the time for Auto-close Workflow timing',
-            'notification-dailyAt.required_if'  => 'Please enter the time for Email Notification timing',
-            'fetching-dailyAt.required_if'      => 'Please enter the time for Email Fetching timing',
+            'fetching-commands.required_if'    => 'Please choose your Email Fetching timing',
+            'notification-commands.required_if'=> 'Please choose your Email Notification timing',
+            'work-commands.required_if'        => 'Please choose your Auto-close Workflow timing',
+            'workflow-dailyAt.required_if'     => 'Please enter the time for Auto-close Workflow timing',
+            'notification-dailyAt.required_if' => 'Please enter the time for Email Notification timing',
+            'fetching-dailyAt.required_if'     => 'Please enter the time for Email Fetching timing',
 
         ];
     }

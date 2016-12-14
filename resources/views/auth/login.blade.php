@@ -176,6 +176,10 @@
 
 
 </div>
+            <div class="col-md-12">
+                @include('themes.default1.client.layout.social-login')
+            </div>
+
 <!-- /.login-page -->
   </div><!-- /.col -->
 </div>

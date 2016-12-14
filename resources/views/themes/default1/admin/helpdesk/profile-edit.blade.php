@@ -104,7 +104,7 @@
 
 				{!! Form::label('mobile',Lang::get('lang.mobile_number')) !!}
 				{!! $errors->first('mobile', '<spam class="help-block">:message</spam>') !!}
-				{!! Form::text('mobile',null,['class' => 'form-control']) !!}
+				{!! Form::input('number', 'mobile',null,['class' => 'form-control']) !!}
 
 			</div>
 

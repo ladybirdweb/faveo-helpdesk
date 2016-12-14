@@ -1382,4 +1382,165 @@ return [
    'use_subject'                                    => 'Use Assunto',
    'reopen'                                         => 'Reabrir',
 
+   /*******************************New updated ********************************************/
+   /*                       Translation Required                                          */
+   /***************************************************************************************/
+   'invalid_attempt'                            => 'Invalid Attempt',
+    /* ---------------------------------------------------------------------------------------
+     * Latest update 27-07-2016
+     * -----------------------------------------------------------------------------------
+     */
+    'queue'  => 'Queue',
+    'queues' => 'Queues',
+    /*     * -------------------------------------------------------------------------------------------------
+     * OTP  messages body to send to user while registering, resetting passwords
+     * --------------------------------------------------------------------------------------------------
+     */
+    'hello'                   => 'Hello',
+    'reset-link-msg'          => ",\r\nHere is the link to reset your password.\r\n",
+    'otp-for-your'            => ",\r\nOTP for your",
+    'account-verification-is' => 'account verification is',
+    'extra-text'              => ".\r\nYou can login to verify your account via OTP or just click on the link we've sent to your email address.",
+    'otp-not-sent'            => 'We faced some problem in sending OTP please try after some time.',
+    /*     * -------------------------------------------------------------------------------------------
+     * Ticket number settings 03-08-2016
+     * ------------------------------------------------------------------------------------------
+     */
+    'format'               => 'Format',
+    'ticket-number-format' => 'This setting is used to generate ticket numbers. Use hash signs (`#`) where digits are to be placed & dollar sign(‘$’) where characters are to be placed . Any other text in the number format will be preserved. ',
+    'ticket-number-type'   => 'Choose a sequence from which to derive new ticket numbers. The system has a incrementing sequence and a random sequence by default',
+    /*     * ----------------------------------------------------------------------------------------------------
+     * Social media integration
+     * ---------------------------------------------------------------------------------------------------------
+     */
+    'client_id'     => 'Client id',
+    'client_secret' => 'Client secret',
+    'redirect'      => 'Redirect URL',
+    'details'       => 'Details',
+    'social-media'  => 'Social media',
+    /*     * ----------------------------------------------------------------------------------------------
+     * Report
+     * ----------------------------------------------------------------------------------------------
+     */
+    'report'              => 'Report',
+    'Report'              => 'REPORT',
+    'start_date'          => 'Start date',
+    'end_date'            => 'End date',
+    'select'              => 'Select',
+    'generate'            => 'Generate',
+    'day'                 => 'Day',
+    'week'                => 'Week',
+    'month'               => 'Month',
+    'Currnet_In_Progress' => 'CURRENT IN PROGRESS',
+    'Total_Created'       => 'TOTAL CREATED',
+    'Total_Reopened'      => 'TOTAL REOPENED',
+    'Total_Closed'        => 'TOTAL CLOSED',
+    'tabular'             => 'Tabular',
+    'reopened'            => 'Reopened',
+    /* ---------------------------------------------------------------------------------------
+     * Ticket Priority
+     * -----------------------------------------------------------------------------------
+     */
+    'ticket_priority'                                           => 'Ticket priority',
+    'priority'                                                  => 'Priority',
+    'priority_desc'                                             => 'Priority description',
+    'priority_urgency'                                          => 'Priority urgency',
+    'priority_id'                                               => 'Priority Id',
+    'priority_color'                                            => 'Priority color',
+    'ispublic'                                                  => 'IsPublic',
+    'is_default'                                                => 'By default',
+    'create_ticket_priority'                                    => 'Create ticket priority',
+    'agent_notes'                                               => 'Agent notes',
+    'select_priority'                                           => 'Select priority',
+    'normal'                                                    => 'Normal',
+    'ispublic'                                                  => 'Visibility',
+    'make-default-priority'                                     => 'Make default priority',
+    'priority_successfully_created'                             => 'Priority successfully created',
+    'priority_successfully_updated'                             => 'Priority successfully updated',
+    'delete_successfully'                                       => 'Delete successfully',
+    'user_priority_status'                                      => 'User priority status',
+    'current'                                                   => 'Current:',
+    'active_user_can_select_the_priority_while_creating_ticket' => 'Active user can select the priority while creating ticket',
+
+    /* --------------------------------------------------------------------------------------------
+     * Approval Updated
+     * --------------------------------------------------------------------------------------------
+     */
+    'approval'             => 'Approval',
+    'approval_tickets'     => 'Approval tickets',
+    'approve'              => 'Approve',
+    'approval_request'     => 'Approval request',
+    'approvel_ticket_list' => 'Approvel ticket list',
+
+    'approval_settings'                      => 'Approval settings',
+    'close_all_ticket_for_approval'          => 'Close all tickets for approval',
+    'approval_settings-created-successfully' => 'Approval settings created successfully',
+
+    /* --------------------------------------------------------------------------------------------
+     * Followup Updated
+     * --------------------------------------------------------------------------------------------
+     */
+     'followup'              => 'Followup',
+     'followup_tickets'      => 'Followup tickets',
+     'followup_Notification' => 'Followup notification',
+
+     /*
+      *--------------------------------------------------------------------------------------------
+      *Updated 6-9-2016
+      *---------------------------------------------------------------------------------------
+      */
+     'not-available'  => 'Not available',
+     /* --------------------------------------------------------------------------------------------
+     * User Module
+     * --------------------------------------------------------------------------------------------
+     */
+     'agent_report'                                                 => 'Agent report',
+     'assign_tickets'                                               => 'Assign tickets',
+     'delete_agent'                                                 => 'Delete agent',
+     'delete_user'                                                  => 'Delete user',
+     'confirm_deletion'                                             => 'Confirm deletion',
+     'delete_all_content'                                           => 'Delete all content',
+     'agent_profile'                                                => 'Agent profile',
+     'change_role_to_admin'                                         => 'Change role to admin',
+     'change_role_to_user'                                          => 'Change role to user',
+     'change_role_to_agent'                                         => 'Change role to agent',
+     'change_password'                                              => 'Change password',
+     'role_change'                                                  => 'Role change',
+     'password_generator'                                           => 'Password generator',
+     'depertment'                                                   => 'Depertment',
+     'duetoday'                                                     => 'Due today',
+     'today-due_tickets'                                            => 'Today\'s due ticekts',
+     'password_change_successfully'                                 => 'Password changed successfully',
+     'role_change_successfully'                                     => 'Role changed successfully',
+     'user_delete_successfully'                                     => 'User deleted successfully',
+     'agent_delete_successfully'                                    => 'Agent deleted successfully',
+     'select_another_agent'                                         => 'Select another agent',
+     'agent_delete_successfully_and_ticket_assign_to_another_agent' => 'Agent deleted successfully and ticket assigned to another agent',
+     'deleted_user'                                                 => 'Deleted User',
+     'deleted_user_directory'                                       => 'Deleted User Directory',
+     'restore'                                                      => 'Restore',
+     'user_restore_successfully'                                    => 'User restore successfully',
+
+     /*** updates 28-11-2016***/
+     'apply'              => 'Apply',
+
+     /* updates 2-12-2016 **/
+     'sort-by'                      => 'Sort by',
+     'created-at'                   => 'Created at',
+     'or'                           => 'OR',
+     'activate'                     => 'Activate',
+     'system-email-not-configured'  => 'We are unable to process email request as the system has no configured email for sending mails. Please contact and report system admin.',
+     'assign-ticket'                => 'Assign tickets',
+     'can-not-inactive-group'       => 'Can not make the group inactive as it has agents assigned in it. Please assign those agents to another group and try again.',
+     'internal-note-has-been-added' => 'Internal note added to the ticket',
+     'active-users'                 => 'Active users',
+     'deleted-users'                => 'Deleted users',
+     'view-option'                  => 'View options',
+     'accoutn-not-verified'         => 'User account is not verified',
+     'enabled'                      => 'Enabled',
+     'disabled'                     => 'Disabled',
+     'user-account-is-deleted'      => 'This user account has been deleted.',
+     'restore-user'                 => 'Restore user account',
+     'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
+
 ];

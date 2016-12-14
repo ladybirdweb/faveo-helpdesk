@@ -3,7 +3,6 @@
 namespace libphonenumber\prefixmapper;
 
 use libphonenumber\PhoneNumber;
-use libphonenumber\PhoneNumberUtil;
 
 /**
  * A helper class doing file handling and lookup of phone number prefix mappings.
@@ -101,7 +100,18 @@ class PrefixFileReader
      */
     public function getDescriptionForNumber(PhoneNumber $number, $language, $script, $region)
     {
-        $phonePrefix = $number->getCountryCode() . PhoneNumberUtil::getInstance()->getNationalSignificantNumber($number);
+        $countryCallingCode = $number->getCountryCode();
+        // As the NANPA data is split into multiple files covering 3-digit areas, use a phone number
+        // prefix of 4 digits for NANPA instead, e.g. 1650.
+        if ($countryCallingCode === 1) {
+            $phonePrefix = (1000 + intval($number->getNationalNumber() / 10000000));
+        } elseif ($countryCallingCode === 86) {
+            // Split China into multiple files to reduce PHP memory usage
+            // @see https://github.com/giggsey/libphonenumber-for-php/issues/44
+            $phonePrefix = '86' . substr($number->getNationalNumber(), 0, 3);
+        } else {
+            $phonePrefix = $countryCallingCode;
+        }
 
         $phonePrefixDescriptions = $this->getPhonePrefixDescriptions($phonePrefix, $language, $script, $region);
 

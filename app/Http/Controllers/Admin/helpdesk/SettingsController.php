@@ -208,6 +208,13 @@ class SettingsController extends Controller
                     ->update(['status' => $request->send_otp]);
             $email_mandatory = CommonSettings::where('option_name', '=', 'email_mandatory')
                     ->update(['status' => $request->email_mandatory]);
+
+            if ($request->has('itil')) {
+                $itil = $request->input('itil');
+                $sett = CommonSettings::firstOrCreate(['option_name'=>'itil']);
+                $sett->status = $itil;
+                $sett->save();
+            }
             /* redirect to Index page with Success Message */
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));
         } catch (Exception $e) {
@@ -356,8 +363,8 @@ class SettingsController extends Controller
 
         $workflow = $workflow->whereId('1')->first();
         $cron_path = base_path('artisan');
-        $command = ":- <pre>***** php $cron_path schedule:run > /dev/null 2>&1</pre>";
-        $shared = ":- <pre>/usr/bin/php-cli -q  $cron_path schedule:run > /dev/null 2>&1</pre>";
+        $command = ":- <pre>***** php $cron_path schedule:run >> /dev/null 2>&1</pre>";
+        $shared = ":- <pre>/usr/bin/php-cli -q  $cron_path schedule:run >> /dev/null 2>&1</pre>";
         $warn = '';
         $condition = new \App\Model\MailJob\Condition();
         $job = $condition->checkActiveJob();
@@ -906,7 +913,7 @@ class SettingsController extends Controller
             $fetching_command = $this->getCommand($fetching_commands, $fetching_dailyAt);
             $notification_command = $this->getCommand($notification_commands, $notification_dailyAt);
             $work_command = $this->getCommand($work_commands, $workflow_dailyAt);
-            $jobs = ['fetching' => $fetching_command, 'notification' => $notification_command, 'work' => $work_command];
+            $jobs = ['fetching'=>$fetching_command, 'notification'=>$notification_command, 'work'=>$work_command];
             $this->storeCommand($jobs);
         }
     }
@@ -930,10 +937,10 @@ class SettingsController extends Controller
             }
         }
         if (count($array) > 0) {
-            foreach ($array as $key => $save) {
+            foreach ($array as $key=>$save) {
                 $command->create([
-                    'job'   => $key,
-                    'value' => $save,
+                    'job'  => $key,
+                    'value'=> $save,
                 ]);
             }
         }

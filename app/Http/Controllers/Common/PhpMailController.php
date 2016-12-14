@@ -50,26 +50,24 @@ class PhpMailController extends Controller
      */
     public function mailfrom($reg, $dept_id)
     {
-        $email = Email::where('id', '=', '1')->first();
-        if ($reg == 1) {
-            return $email->sys_email;
-        } elseif ($dept_id > 0) {
-            $department = Department::where('id', '=', $dept_id)->first();
-            if ($department->outgoing_email) {
-                return $department->outgoing_email;
-            } else {
-                return $email->sys_email;
-            }
+        $email_id = '';
+        $emails = Emails::where('department', '=', $dept_id)->first();
+
+        $email = Email::find(1);
+        if ($emails && $emails->sending_status) {
+            $email_id = $emails->id;
+        } else {
+            $email_id = $email->sys_email;
         }
+
+        return $email_id;
     }
 
     public function sendmail($from, $to, $message, $template_variables)
     {
         $this->setQueue();
         $job = new \App\Jobs\SendEmail($from, $to, $message, $template_variables);
-        $dispatch = $this->dispatch($job);
-
-        return $dispatch;
+        $this->dispatch($job);
     }
 
     public function sendEmail($from, $to, $message, $template_variables)

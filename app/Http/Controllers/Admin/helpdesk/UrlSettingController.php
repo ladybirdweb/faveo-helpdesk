@@ -64,11 +64,8 @@ RewriteRule ^(.*)$ http://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n";
 
     public function changeNonwww()
     {
-        //        $string = "\nRewriteEngine On
-//RewriteBase /
-//RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-//RewriteRule ^(.*)$ http://%1/$1 [R=301,L]\n";
-        $string = '';
+        $string = "RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]\n";
 
         return $string;
     }
@@ -102,7 +99,11 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n";
 
     public function writeHtaccess($string)
     {
+        //dd(public_path('.htaccess'),base_path('.htaccess'));
         $file = public_path('.htaccess');
+        if (!\File::exists($file)) {
+            $file = base_path('/../.htaccess');
+        }
         $this->deleteCustom();
         $content = file_get_contents($file);
         file_put_contents($file, $content."#custom\n".$string);
@@ -112,6 +113,9 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n";
     public function deleteCustom()
     {
         $file = public_path('.htaccess');
+        if (!\File::exists($file)) {
+            $file = base_path('/../.htaccess');
+        }
         $content = file_get_contents($file);
         $custom_pos = strpos($content, '#custom');
         if ($custom_pos) {

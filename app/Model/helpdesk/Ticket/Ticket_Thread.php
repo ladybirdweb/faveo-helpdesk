@@ -115,12 +115,16 @@ class Ticket_Thread extends Model
 
     public function inlineAttachment($body)
     {
-        if ($this->attach()->where('poster', 'INLINE')->get()->count() > 0) {
-            $search = $this->attach()->where('poster', 'INLINE')->lists('name')->toArray();
-            foreach ($this->attach()->where('poster', 'INLINE')->get() as $key => $attach) {
-                $replace[$key] = "data:$attach->type;base64,".$attach->file;
+        $attachments = $this->attach;
+        if ($attachments->count() > 0) {
+            foreach ($attachments as $key => $attach) {
+                if ($attach->poster == 'INLINE' || $attach->poster == 'inline') {
+                    $search = $attach->name;
+                    $replace = "data:$attach->type;base64,".$attach->file;
+                    $b = str_replace($search, $replace, $body);
+                    $body = $b;
+                }
             }
-            $body = str_replace($search, $replace, $body);
         }
 
         return $body;
@@ -140,5 +144,13 @@ class Ticket_Thread extends Model
         }
 
         return wordwrap($subject, 70, "<br>\n");
+    }
+
+    public function user()
+    {
+        $related = 'App\User';
+        $foreignKey = 'user_id';
+
+        return $this->belongsTo($related, $foreignKey);
     }
 }

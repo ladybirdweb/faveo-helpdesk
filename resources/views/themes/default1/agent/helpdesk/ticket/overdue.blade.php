@@ -12,38 +12,68 @@ active
 class="active"
 @stop
 @section('PageHeader')
-<h1>{{Lang::get('lang.tickets')}}</h1>@stop
+<h1>{{Lang::get('lang.tickets')}}</h1>
+<style>
+ .tooltip1 {
+     position: relative;
+     /*display: inline-block;*/
+     /*border-bottom: 1px dotted black;*/
+ }
+ 
+ .tooltip1 .tooltiptext {
+     visibility: hidden;
+     width: 100%;
+     background-color: black;
+     color: #fff;
+     text-align: center;
+     border-radius: 6px;
+     padding: 5px 0;
+ 
+     /* Position the tooltip */
+     position: absolute;
+     z-index: 1;
+ }
+ 
+ .tooltip1:hover .tooltiptext {
+     visibility: visible;
+ }
+ </style>
+@stop
 @section('content')
 <?php
-$date_time_format = UTC::getDateTimeFormat();
-if (Auth::user()->role == 'agent') {
-    $dept = \App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
-    $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->get();
-} else {
-    $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
-}
-$i = count($overdues);
-if ($i == 0) {
-    $overdue_ticket = 0;
-} else {
-    $j = 0;
-    foreach ($overdues as $overdue) {
-        $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $overdue->sla)->first();
+// $date_time_format = UTC::getDateTimeFormat();
+// if (Auth::user()->role == 'agent') {
+//     $dept = \App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
+//     $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->get();
+// } else {
+//     $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
+// }
+// $i = count($overdues);
+// if ($i == 0) {
+//     $overdue_ticket = 0;
+// } else {
+//     $j = 0;
+//     foreach ($overdues as $overdue) {
+//         $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $overdue->sla)->first();
 
-        $ovadate = $overdue->created_at;
-        $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)) . '<br/><br/>';
-        if (date('Y-m-d H:i:s') > $new_date) {
-            $j++;
-            //$value[] = $overdue;
-        }
-    }
-    // dd(count($value));
-    if ($j > 0) {
-        $overdue_ticket = $j;
-    } else {
-        $overdue_ticket = 0;
-    }
-}
+//         $ovadate = $overdue->created_at;
+//         $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)) . '<br/><br/>';
+//         if (date('Y-m-d H:i:s') > $new_date) {
+//             $j++;
+//             //$value[] = $overdue;
+//         }
+//     }
+//     // dd(count($value));
+//     if ($j > 0) {
+//         $overdue_ticket = $j;
+//     } else {
+//         $overdue_ticket = 0;
+//     }
+// }
+
+ $overdue_ticket=App\Model\helpdesk\Ticket\Tickets::where('tickets.duedate','<', \Carbon\Carbon::now())->count();
+
+
 ?>
 <!-- Main content -->
 <div class="box box-primary">
@@ -74,45 +104,13 @@ if ($i == 0) {
             <input type="submit" class="submit btn btn-default text-orange btn-sm" id="delete" name="submit" value="{!! Lang::get('lang.delete') !!}">
             <input type="submit" class="submit btn btn-default text-yellow btn-sm" id="close" name="submit" value="{!! Lang::get('lang.close') !!}">
             <button type="button" class="btn btn-sm btn-default text-green" id="Edit_Ticket" data-toggle="modal" data-target="#MergeTickets"><i class="fa fa-code-fork"> </i> {!! Lang::get('lang.merge') !!}</button>
-            <button type="button" class="btn btn-sm btn-default" id="assign_Ticket" data-toggle="modal" data-target="#AssignTickets" style="display: none;"><i class="fa fa-hand-o-right"> </i> {!! Lang::get('lang.assign') !!}</button>
-        <!--</div>-->
+            
+        <button type="button" class="btn btn-sm btn-default" id="assign_Ticket" data-toggle="modal" data-target="#AssignTickets" style="display: none;"><i class="fa fa-hand-o-right"> </i> {!! Lang::get('lang.assign') !!}</button>
+            <!--</div>-->
         <p><p/>
         <div class="mailbox-messages" id="refresh">
             <!--datatable-->
-            {!! Datatable::table()
-            ->addColumn(
-            "",
-            Lang::get('lang.subject'),
-            Lang::get('lang.ticket_id'),
-            Lang::get('lang.priority'),
-            Lang::get('lang.from'),
-            Lang::get('lang.assigned_to'),
-            Lang::get('lang.last_activity'))
-            ->setUrl(route('get.overdue.ticket'))
-            
-            ->setOrder(array(6=>'desc'))  
-            ->setClass('table table-hover table-bordered table-striped')
-            ->setCallbacks("fnRowCallback",'function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
-            var str = aData[3];
-            if(str.search("#000") == -1) {
-            $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #F3F3F3"});
-            $("td", nRow).mouseenter(function(){
-            $("td", nRow).css({"background-color":"#DEDFE0", "font-weight":"600", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #DEDFE0"});
-            });
-            $("td", nRow).mouseleave(function(){
-            $("td", nRow).css({"background-color":"#F3F3F3", "font-weight":"600", "border-bottom":"solid 0.5px #ddd","border-right":"solid 0.5px #F3F3F3"});
-            });
-            } else {
-            $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
-            $("td", nRow).mouseenter(function(){
-            $("td", nRow).css({"background-color":"#DEDFE0", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px #DEDFE0"});
-            });
-            $("td", nRow).mouseleave(function(){
-            $("td", nRow).css({"background-color":"white", "border-bottom":"solid 0.5px #ddd", "border-right":"solid 0.5px white"});
-            });   
-            }
-            }')               
-            ->render();!!}
+             {!!$table->render('vendor.Chumper.template')!!}
             <!-- /.datatable -->
         </div><!-- /.mail-box-messages -->
         {!! Form::close() !!}
@@ -216,7 +214,7 @@ if ($i == 0) {
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<!-- Assign ticket model--> 
+<!-- Assign ticket model-->
 <!-- Modal -->   
 <div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none; padding-right: 15px;background-color: rgba(0, 0, 0, 0.7);">
     <div class="modal-dialog" role="document">
@@ -238,7 +236,7 @@ if ($i == 0) {
     </div>
 </div>
 
-
+{!! $table->script('vendor.Chumper.ticket-javascript') !!}
 <script>
     var t_id = [];
     var option = null;
@@ -271,14 +269,14 @@ if ($i == 0) {
                 t_id = $('.selectval').map(function() {
                     return $(this).val();
                 }).get();
-                showAssign(t_id);
+                showAssign(t_id)
                 // alert(checkboxValues);
             } else {
                 //Check all checkboxes
                 $("input[type='checkbox']", ".mailbox-messages").iCheck("check");
                 // alert('Hallo');
                 t_id = [];
-                showAssign(t_id);
+                showAssign(t_id)
             }
             $(this).data("clicks", !clicks);
 
@@ -454,14 +452,9 @@ if ($i == 0) {
                         var message = "{{Lang::get('lang.merge-success')}}";
                         $("#merge-succ-alert").show();
                         $('#message-merge-succ').html(message);
-                        setInterval(function() {
+                        setTimeout(function () {
                             $("#alert11").hide();
-                            setTimeout(function() {
-                                var link = document.querySelector('#load-inbox');
-                                if (link) {
-                                    link.click();
-                                }
-                            }, 100);
+                            location.reload();
                         }, 1000);
 
                     }
@@ -536,6 +529,7 @@ if ($i == 0) {
         }
         showAssign(t_id);
     }
+
     function showAssign(t_id)
     {
         if (t_id.length >= 1) {
@@ -544,6 +538,5 @@ if ($i == 0) {
             $('#assign_Ticket').css('display', 'none');
         }
     }
-
 </script>
 @stop

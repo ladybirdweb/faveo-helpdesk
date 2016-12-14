@@ -41,7 +41,7 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root'   => storage_path().'/app',
+            'root'   => storage_path().'/app/attachments',
         ],
         's3' => [
             'driver' => 's3',

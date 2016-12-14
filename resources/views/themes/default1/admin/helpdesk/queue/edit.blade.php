@@ -4,7 +4,7 @@
 active
 @stop
 
-@section('email-bar')
+@section('emails-bar')
 active
 @stop
 

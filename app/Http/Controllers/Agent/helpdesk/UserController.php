@@ -25,8 +25,6 @@ use App\Model\helpdesk\Notification\Notification;
 use App\Model\helpdesk\Notification\UserNotification;
 use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Email;
-use App\Model\helpdesk\Ticket\Ticket_attachments;
-use App\Model\helpdesk\Ticket\Ticket_Collaborator;
 use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Utility\CountryCode;
@@ -81,7 +79,30 @@ class UserController extends Controller
     {
         try {
             /* get all values in Sys_user */
-            return view('themes.default1.agent.helpdesk.user.index');
+
+            $table = \ Datatable::table()
+            ->addColumn(Lang::get('lang.name'),
+                Lang::get('lang.email'),
+                Lang::get('lang.phone'),
+                Lang::get('lang.status'),
+                Lang::get('lang.ban'),
+                Lang::get('lang.last_login'),
+                Lang::get('lang.role'),
+                Lang::get('lang.action'))  // these are the column headings to be shown
+                ->noScript();
+
+            return view('themes.default1.agent.helpdesk.user.index', compact('table'));
+        } catch (Exception $e) {
+            return redirect()->back()->with('fails', $e->getMessage());
+        }
+    }
+
+    public function deletedUser()
+    {
+        try {
+            // dd('here');
+            /* get all values in Sys_user */
+            return view('themes.default1.agent.helpdesk.user.deleteduser');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -92,10 +113,19 @@ class UserController extends Controller
      *
      * @return datatable
      */
-    public function user_list()
+    public function user_list(Request $request)
     {
+        $type = $request->input('profiletype');
+
+        if ($type == 'active') {
+            $users = User::where('role', '!=', 'admin')->where('is_delete', '=', 0)->get();
+        } else {
+            $users = User::where('role', '!=', 'admin')->where('is_delete', '=', 1)->get();
+        }
+
         // displaying list of users with chumper datatables
-        return \Datatable::collection(User::where('role', '!=', 'admin')->get())
+        // return \Datatable::collection(User::where('role', "!=", "admin")->get())
+       return \Datatable::collection($users)
                         /* searchable column username and email */
                         ->searchColumns('user_name', 'email', 'phone')
                         /* order column username and email */
@@ -107,14 +137,14 @@ class UserController extends Controller
                             } else {
                                 $string = strip_tags($model->user_name);
                             }
-                            if (strlen($string) > 20) {
+                            if (strlen($string) > 30) {
                                 // truncate string
-                                $stringCut = mb_substr($string, 0, 20, 'UTF-8');
+                                $stringCut = mb_substr($string, 0, 30, 'UTF-8').'...';
                             } else {
                                 $stringCut = $string;
                             }
 
-                            return $stringCut;
+                            return "<a href='".route('user.show', $model->id)."' title='".$string."''>".$stringCut.'</a>';
                         })
                         /* column email */
                         ->addColumn('email', function ($model) {
@@ -172,9 +202,37 @@ class UserController extends Controller
                         })
                         /* column actions */
                         ->addColumn('Actions', function ($model) {
-                            return '<a href="'.route('user.edit', $model->id).'" class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp; <a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>';
+                            if ($model->is_delete == 0) {
+                                return '<a href="'.route('user.edit', $model->id).'" class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp; <a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>';
+                            } else {
+                                if (Auth::user()->role == 'admin') {
+                                    // @if(Auth::user()->role == 'admin')
+
+                           return '<a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>';
+                                }
+
+                                if (Auth::user()->role == 'agent') {
+                                    // @if(Auth::user()->role == 'admin')
+                             if ($model->role == 'user') {
+                                 return '<a href="'.route('user.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>';
+                             }
+                                }
+                            }
                         })
                         ->make();
+    }
+
+    public function restoreUser($id)
+    {
+        // dd($id);
+         // $delete_all = Input::get('delete_all');
+        $users = User::where('id', '=', $id)->first();
+        $users->is_delete = 0;
+        $users->active = 1;
+        $users->ban = 0;
+        $users->save();
+
+        return redirect('user')->with('success', Lang::get('lang.user_restore_successfully'));
     }
 
     /**
@@ -209,7 +267,6 @@ class UserController extends Controller
     {
         /* insert the input request to sys_user table */
         /* Check whether function success or not */
-
         if ($request->input('email') != '') {
             $user->email = $request->input('email');
         } else {
@@ -409,78 +466,43 @@ class UserController extends Controller
     public function deleteAgent($id)
     {
         // try {
-            $delete_all = Input::get('delete_all');
+        $delete_all = Input::get('delete_all');
+
+        $delete_all = Input::get('delete_all');
         $users = User::where('id', '=', $id)->first();
         if ($users->role == 'user') {
-            if ($delete_all == null || $delete_all == 1) {
-                $tickets = Tickets::where('user_id', '=', $id)->get();
-                if (count($tickets) > 0) {
-                    foreach ($tickets as $ticket) {
-                        $notification = Notification::select('id')->where('model_id', '=', $ticket->id)->get();
-                        foreach ($notification as $id) {
-                            $user_notification = UserNotification::where(
-                                            'notification_id', '=', $id->id);
-                            $user_notification->delete();
-                        }
-                        $notification = Notification::select('id')->where('model_id', '=', $ticket->id);
-                        $notification->delete();
-                        $thread = Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
-                        foreach ($thread as $th_id) {
-                            // echo $th_id->id." ";
-                            $attachment = Ticket_attachments::where('thread_id', '=', $th_id->id)->get();
-                            if (count($attachment)) {
-                                foreach ($attachment as $a_id) {
-                                    Ticket_attachments::where('id', '=', $a_id->id)
-                                    ->delete();
-                                }
-                                // echo "<br>";
-                            }
-                            $thread = Ticket_Thread::find($th_id->id);
-//                            dd($thread);
-                            $thread->delete();
-                        }
-                        $collaborators = Ticket_Collaborator::where('ticket_id', '=', $ticket->id)->get();
-                        if (count($collaborators)) {
-                            foreach ($collaborators as $collab_id) {
-                                echo $collab_id->id;
-                                $collab = Ticket_Collaborator::where('id', '=', $collab_id->id)
-                                ->delete();
-                            }
-                        }
-                        $tickets = Tickets::find($ticket->id);
-                        $tickets->delete();
-                    }
-                }
-                $organization = User_org::where('user_id', '=', $users->id)->delete();
-                $user = User::where('id', '=', $users->id)
-                ->delete();
+            $users = User::where('id', '=', $id)->first();
+            $users->is_delete = 1;
+            $users->active = 0;
+            $users->ban = 1;
+            $users->save();
 
-                return redirect('user')->with('success', Lang::get('lang.user_delete_successfully'));
-            }
+            return redirect('user')->with('success', Lang::get('lang.user_delete_successfully'));
         }
+        // }
 
         if ($users->role == 'agent') {
             if ($delete_all == null) {
                 $UserEmail = Input::get('assign_to');
                 $assign_to = explode('_', $UserEmail);
-                $ticket = Tickets::where('assigned_to', '=', $id)->where('status', '=', '1')->get();
+                $ticket = Tickets::where('assigned_to', '=', $id)->get();
                 if ($assign_to[0] == 'user') {
                     if ($users->id == $assign_to[1]) {
                         return redirect('user')->with('warning', Lang::get('lang.select_another_agent'));
                     }
-                    $user_detail = User::where('id', '=', $assign_to[1])->first();
-                    $assignee = $user_detail->first_name.' '.$user_detail->last_name;
-                    $ticket_logic1 = Tickets::where('assigned_to', '=', $id)
-                                ->update(['assigned_to' => $assign_to[1]]);
-                    if ($ticket_logic2 = Tickets::where('user_id', '=', $id)->get()) {
-                        $ticket_logic2 = Tickets::where('user_id', '=', $id)->update(['user_id' => $assign_to[1]]);
-                    }
-                    if ($ticket_logic3 = Ticket_Thread::where('user_id', '=', $id)->get()) {
-                        $ticket_logic3 = Ticket_Thread::where('user_id', '=', $id)->update(['user_id' => $assign_to[1]]);
-                    }
-                    if ($ticket_logic4 = User_org::where('user_id', '=', $id)->get()) {
-                        $ticket_logic4 = User_org::where('user_id', '=', $id)->update(['user_id' => $assign_to[1]]);
-                    }
+                    // $user_detail = User::where('id', '=', $assign_to[1])->first();
+                    // $assignee = $user_detail->first_name.' '.$user_detail->last_name;
+                    // $ticket_logic1 = Tickets::where('assigned_to', '=', $id)
+                    //             ->update(['assigned_to' => $assign_to[1]]);
+                    // if ($ticket_logic2 = Tickets::where('user_id', '=', $id)->get()) {
+                    //     $ticket_logic2 = Tickets::where('user_id', '=', $id)->update(['user_id' => $assign_to[1]]);
+                    // }
+                    // if ($ticket_logic3 = Ticket_Thread::where('user_id', '=', $id)->get()) {
+                    //     $ticket_logic3 = Ticket_Thread::where('user_id', '=', $id)->update(['user_id' => $assign_to[1]]);
+                    // }
+                    // if ($ticket_logic4 = User_org::where('user_id', '=', $id)->get()) {
+                    //     $ticket_logic4 = User_org::where('user_id', '=', $id)->update(['user_id' => $assign_to[1]]);
+                    // }
 
                         // $thread2 = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
                         // $thread2->body = 'This Ticket have been Reassigned to' .' '.  $assignee;
@@ -488,40 +510,75 @@ class UserController extends Controller
                         // UserNotification::where('notification_id', '=', $ticket->id)->delete();
                         // $users = User::where('id', '=', $id)->get();
                         // $organization = User_org::where('user_id', '=', $id)->delete();
-                        Assign_team_agent::where('agent_id', '=', $id)->update(['agent_id' => $assign_to[1]]);
+                        // Assign_team_agent::where('agent_id', '=', $id)->update(['agent_id' => $assign_to[1]]);
+           $tickets = Tickets::where('assigned_to', '=', $id)->get();
+
+                    foreach ($tickets as $ticket) {
+                        // code...
+
+            $ticket->assigned_to = $assign_to[1];
+                        $user_detail = User::where('id', '=', $assign_to[1])->first();
+                        $assignee = $user_detail->first_name.' '.$user_detail->last_name;
+                        $ticket_number = $ticket->ticket_number;
+                        $ticket->save();
+
+                        $thread = new Ticket_Thread();
+                        $thread->ticket_id = $ticket->id;
+                        $thread->user_id = Auth::user()->id;
+                        $thread->is_internal = 1;
+                        $thread->body = 'This Ticket has been assigned to '.$assignee;
+                        $thread->save();
+                    }
                     $user = User::find($id);
-                    $user->delete();
+                    $users->is_delete = 1;
+                    $users->active = 0;
+                    $users->ban = 1;
+                    $users->save();
 
                     return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully_and_ticket_assign_to_another_agent'));
                 }
-                if (User_org::where('user_id', '=', $id)) {
-                    DB::table('user_assign_organization')->where('user_id', '=', $id)->delete();
-                }
+
+                // if (User_org::where('user_id', '=', $id)) {
+                //     DB::table('user_assign_organization')->where('user_id', '=', $id)->delete();
+                // }
                 $user = User::find($id);
-                $user->delete();
+                $users->is_delete = 1;
+                $users->active = 0;
+                $users->ban = 1;
+                $users->save();
 
                 return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully'));
             } elseif ($delete_all == 1) {
-                if ($ticket = Tickets::where('user_id', '=', $id)->first()) {
-                    $ticket_assign = $ticket->assigned_to;
-                    Ticket_Thread::where('ticket_id', '=', $ticket->id)->delete();
-                    if ($ticket->user_id = $id) {
-                        Tickets::where('user_id', '=', $id)->delete();
-                    }
-                    if ($ticket_assign) {
-                        UserNotification::where('notification_id', '=', $ticket_assign)->delete();
-                    }
-                    UserNotification::where('notification_id', '=', $ticket->id)->delete();
-                    $users = User::where('id', '=', $id)->get();
+                if ($delete_all) {
+                    // dd('here');
+              $tickets = Tickets::where('assigned_to', '=', $id)->get();
+              // dd($tickets);
+             foreach ($tickets as $ticket) {
+                 $ticket->assigned_to = null;
+                 $ticket_number = $ticket->ticket_number;
+                 $ticket->save();
+
+                 $thread = new Ticket_Thread();
+                 $thread->ticket_id = $ticket->id;
+                 $thread->user_id = Auth::user()->id;
+                 $thread->is_internal = 1;
+                 $thread->body = 'This Ticket has been unassigned ';
+                 $thread->save();
+             }
+                    // $users = User::where('id', '=', $id)->get();
                     $user = User::find($id);
-                    $user->delete();
+                    $users->is_delete = 1;
+                    $users->active = 0;
+                    $users->save();
 
                     return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully'));
                 } else {
-                    Assign_team_agent::where('agent_id', '=', $id)->delete();
-                    User_org::where('user_id', '=', $id)->delete();
+                    // Assign_team_agent::where('agent_id', '=', $id)->delete();
+                    // User_org::where('user_id', '=', $id)->delete();
                     $user = User::find($id);
-                    $user->delete();
+                    $users->is_delete = 1;
+                    $users->active = 0;
+                    $users->save();
 
                     return redirect('user')->with('success', Lang::get('lang.agent_delete_successfully'));
                 }
@@ -567,6 +624,8 @@ class UserController extends Controller
     public function edit($id, CountryCode $code)
     {
         try {
+
+            // dd('here');
             $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
             $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
 
@@ -575,9 +634,14 @@ class UserController extends Controller
             $users = $user->whereId($id)->first();
             $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location->iso_code)->first();
-            $org = Organization::lists('name', 'id')->toArray();
+            $orgs = Organization::all();
+            // dd($org);
+            $organization_id = User_org::where('user_id', '=', $id)->lists('org_id')->first();
 
-            return view('themes.default1.agent.helpdesk.user.edit', compact('users', 'org', '$settings', '$email_mandatory'))->with('phonecode', $phonecode->phonecode);
+            // $org_name=Organization::where('id','=',$org_id)->lists('name')->first();
+            // dd($org_name);
+
+            return view('themes.default1.agent.helpdesk.user.edit', compact('users', 'orgs', '$settings', '$email_mandatory', 'organization_id'))->with('phonecode', $phonecode->phonecode);
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -594,7 +658,6 @@ class UserController extends Controller
      */
     public function update($id, Sys_userUpdate $request)
     {
-        //        dd($request);
         $user = new User();
         /* select the field where id = $id(request Id) */
         $users = $user->whereId($id)->first();
@@ -616,7 +679,8 @@ class UserController extends Controller
             $users->save();
             if ($request->input('org_id') != '') {
                 $orgid = $request->input('org_id');
-                $this->storeUserOrgRelation($users->id, $orgid);
+
+                $this->storeUserOrgRelation($id, $orgid);
             }
             /* redirect to Index page with Success Message */
             return redirect('user')->with('success', Lang::get('lang.User-profile-Updated-Successfully'));
@@ -734,7 +798,7 @@ class UserController extends Controller
 
                 return redirect('profile-edit')->with('success1', Lang::get('lang.password_updated_sucessfully'));
             } catch (Exception $e) {
-                return redirect('profile-edit')->with('fails1', $e->getMessage());
+                return redirect('profile-edit')->with('fails', $e->getMessage());
             }
         } else {
             return redirect('profile-edit')->with('fails1', Lang::get('lang.password_was_not_updated_incorrect_old_password'));
@@ -751,6 +815,7 @@ class UserController extends Controller
     public function UserAssignOrg($id)
     {
         $org_name = Input::get('org');
+
         if ($org_name) {
             $org = Organization::where('name', '=', $org_name)->lists('id')->first();
             if ($org) {
@@ -768,13 +833,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Assigning an user to an organization.
-     *
-     * @param type $id
-     *
-     * @return type boolean
-     */
     public function UsereditAssignOrg($id)
     {
         $org_name = Input::get('org');
@@ -1004,18 +1062,11 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * @category function to get user details and show in select field
-     *
-     * @param null
-     *
-     * @return data
-     */
     public function getAgentDetails()
     {
         $users = User::where('role', '<>', 'user')->where('active', '=', 1)->get();
         foreach ($users as $user) {
-            echo "<option value='user_$user->id'>".$user->full_name.'</option>';
+            echo "<option value='user_$user->id'>".$user->name().'</option>';
         }
     }
 }

@@ -12,9 +12,9 @@ use App\User;
 class NotificationController extends Controller
 {
     /**
-     *********************************************
+     * ********************************************
      * Class Notification Controller
-     *********************************************
+     * ********************************************
      * This controller is used to generate in app notification
      * under the folling occurrence
      * 1. Ticket Creation
@@ -111,7 +111,7 @@ class NotificationController extends Controller
     public function show()
     {
         $notifications = $this->getNotifications();
-
+        //dd($notifications);
         return view('notifications-all', compact('notifications'));
     }
 
@@ -132,6 +132,23 @@ class NotificationController extends Controller
         return 1;
     }
 
+    public function deleteAll()
+    {
+        try {
+            $notifications = new Notification();
+            if ($notifications->count() > 0) {
+                foreach ($notifications->get() as $notification) {
+                    $notification->delete();
+                }
+            }
+            $notifications->dummyDelete();
+
+            return redirect()->back()->with('success', 'deleted');
+        } catch (\Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
+        }
+    }
+
     /**
      * get the page to list the notifications.
      *
@@ -139,17 +156,15 @@ class NotificationController extends Controller
      */
     public static function getNotifications()
     {
-        $notifications = UserNotification::join('notifications', 'user_notification.notification_id', '=', 'notifications.id')
-                ->join('notification_types', 'notifications.type_id', '=', 'notification_types.id')
-                ->where('user_notification.user_id', '=', \Auth::user()->id)
-                ->select('notification_types.id as id', 'notifications.id as notification_id',
-                    'user_notification.user_id as user_id', 'user_notification.is_read as is_read',
-                    'user_notification.created_at as created_at', 'user_notification.updated_at as updated_at', 'notifications.model_id as model_id',
-                    'notifications.userid_created as userid_created',
-                    'notifications.type_id as type_id', 'notification_types.message as message',
-                    'notification_types.type as type', 'notification_types.icon_class as icon_class')
-                ->orderBy('user_notification.created_at', 'desc')
-                ->paginate(10);
+        $notifications = UserNotification::with([
+                    'notification.type' => function ($query) {
+                        $query->select('id', 'message', 'type');
+                    }, 'users' => function ($query) {
+                        $query->select('id', 'email', 'profile_pic');
+                    }, 'notification.model' => function ($query) {
+                        $query->select('id', 'ticket_number');
+                    },
+        ]);
 
         return $notifications;
     }

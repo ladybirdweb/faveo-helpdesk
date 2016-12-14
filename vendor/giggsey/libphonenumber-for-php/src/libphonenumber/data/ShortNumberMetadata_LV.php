@@ -18,11 +18,6 @@ return array (
     'PossibleNumberPattern' => '\\d{2,6}',
     'PossibleLength' => 
     array (
-      0 => 2,
-      1 => 3,
-      2 => 4,
-      3 => 5,
-      4 => 6,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -30,12 +25,11 @@ return array (
   ),
   'tollFree' => 
   array (
-    'NationalNumberPattern' => '116\\d{3}',
+    'NationalNumberPattern' => '116(?:000|111)',
     'PossibleNumberPattern' => '\\d{6}',
     'ExampleNumber' => '116000',
     'PossibleLength' => 
     array (
-      0 => 6,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -47,8 +41,6 @@ return array (
     'PossibleNumberPattern' => '\\d{4,5}',
     'PossibleLength' => 
     array (
-      0 => 4,
-      1 => 5,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -61,8 +53,6 @@ return array (
     'ExampleNumber' => '112',
     'PossibleLength' => 
     array (
-      0 => 2,
-      1 => 3,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -87,7 +77,6 @@ return array (
     'ExampleNumber' => '1181',
     'PossibleLength' => 
     array (
-      0 => 4,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -100,7 +89,6 @@ return array (
     'ExampleNumber' => '1655',
     'PossibleLength' => 
     array (
-      0 => 4,
     ),
     'PossibleLengthLocalOnly' => 
     array (

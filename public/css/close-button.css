@@ -1,0 +1,37 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 14 Oct, 2016, 9:55:14 AM
+    Author     : vijaysebastian
+*/
+/* Common */
+
+
+/* Close Button */
+
+[class*='close-'] {
+    color: #777;
+    font: 14px/100% arial, sans-serif;
+    position: absolute;
+    right: 5px;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #fff;
+    top: 5px;
+}
+
+.close-classic:after {
+    content: 'X'; /* ANSI X letter */
+}
+
+.close-thin:after {
+    content: '×'; /* UTF-8 symbol */
+}
+
+.close-thik:after {
+    content: '✖'; /* UTF-8 symbol */
+}
+
+

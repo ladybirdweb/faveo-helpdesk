@@ -76,11 +76,12 @@ class DepartmentController extends Controller
     public function create(User $user, Group_assign_department $group_assign_department, Department $department, Sla_plan $sla, Template $template, Emails $email, Groups $group)
     {
         try {
-            $slas = $sla->get();
+            $slas = $sla->where('status', '=', 1)
+                    ->select('grace_period', 'id')->get();
             $user = $user->where('role', '<>', 'user')
             ->where('active', '=', 1)
             ->get();
-            $emails = $email->get();
+            $emails = $email->select('email_name', 'id')->get();
             $templates = $template->get();
             $department = $department->get();
             $groups = $group->lists('id', 'name');
@@ -155,17 +156,18 @@ class DepartmentController extends Controller
                     ->select('department')
                     ->where('id', '=', 1)
                     ->first();
-            $slas = $sla->get();
+            $slas = $sla->where('status', '=', 1)
+                    ->select('grace_period', 'id')->get();
             $user = $user->where('primary_dpt', $id)
             ->where('active', '=', 1)
             ->get();
-            $emails = $email->get();
+            $emails = $email->select('email_name', 'id')->get();
             $templates = $template->get();
             $departments = $department->whereId($id)->first();
-            $groups = $group->lists('id', 'name');
+            //$groups = $group->lists('id', 'name');
             $assign = $group_assign_department->where('department_id', $id)->lists('group_id');
 
-            return view('themes.default1.admin.helpdesk.agent.departments.edit', compact('assign', 'team', 'templates', 'departments', 'slas', 'user', 'emails', 'groups', 'sys_department'));
+            return view('themes.default1.admin.helpdesk.agent.departments.edit', compact('assign', 'team', 'templates', 'departments', 'slas', 'user', 'emails', 'sys_department'));
         } catch (Exception $e) {
             return redirect('departments')->with('fails', $e->getMessage());
         }

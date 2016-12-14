@@ -317,7 +317,7 @@ class Inline
             }
 
             if ($output && '%' === $output[0]) {
-                @trigger_error(sprintf('Not quoting the scalar "%s" starting with the "%%" indicator character is deprecated since Symfony 3.1 and will throw a ParseException in 4.0.', $output), E_USER_DEPRECATED);
+                @trigger_error(sprintf('Not quoting the scalar "%s" starting with the "%%" indicator character is deprecated since Symfony 3.1 and will throw a ParseException in 4.0.' , $output), E_USER_DEPRECATED);
             }
 
             if ($evaluate) {
@@ -606,10 +606,7 @@ class Inline
                         return (float) str_replace(',', '', $scalar);
                     case preg_match(self::getTimestampRegex(), $scalar):
                         if (Yaml::PARSE_DATETIME & $flags) {
-                            $date = new \DateTime($scalar);
-                            $date->setTimeZone(new \DateTimeZone('UTC'));
-
-                            return $date;
+                            return new \DateTime($scalar, new \DateTimeZone('UTC'));
                         }
 
                         $timeZone = date_default_timezone_get();

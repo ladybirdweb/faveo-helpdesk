@@ -13,6 +13,31 @@ class="active"
 @stop
 
 @section('HeadInclude')
+<style>
+.tooltip1 {
+    position: relative;
+    /*display: inline-block;*/
+    /*border-bottom: 1px dotted black;*/
+}
+
+.tooltip1 .tooltiptext {
+    visibility: hidden;
+    width: 100%;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip1:hover .tooltiptext {
+    visibility: visible;
+}
+</style>
 @stop
 <!-- header -->
 @section('PageHeader')
@@ -39,7 +64,7 @@ class="active"
 </div>
 <!-- INfo message -->
 <div id="alert-danger" class="alert alert-danger alert-dismissable" style="display:none;">
-    <i class="fa fa-check-circle"> </i> <b>  <span id="get-danger"></span></b>
+    <i class="fa fa-ban"> </i> <b>  <span id="get-danger"></span></b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 </div>
 @if(Session::has('success1'))
@@ -57,6 +82,10 @@ class="active"
     {{Session::get('fails1')}}
 </div>
 @endif
+<?php $table = \Datatable::table()
+                ->addColumn(
+                        "", Lang::get('lang.subject'), Lang::get('lang.ticket_id'), Lang::get('lang.priority'), Lang::get('lang.from'), Lang::get('lang.assigned_to'), Lang::get('lang.last_activity'), Lang::get('lang.created-at'))
+                ->noScript();?>
 <div class="row">
     <div class="col-md-3">
         <div class="box box-primary" >
@@ -68,27 +97,29 @@ class="active"
                     <center>
                         <img src="{{ $users->profile_pic }}" class="img-circle" alt="User Image" style="border:3px solid #CBCBDA;padding:3px;">  
                         @if($users->first_name || $users->last_name)
-                        <h3 class="">{{$users->first_name}} {{$users->last_name}}</h3>
+                        <?php $name_of_user = $users->first_name.' '.$users->last_name; ?>
                         @else
-                        <h3 class="">{{$users->user_name}}</h3>
+                        <?php  $name_of_user = $users->user_name; ?>
                         @endif
+                        <h4 class="" title="{{$name_of_user}}">{{str_limit($name_of_user, 25)}}</h4>
                     </center>
                 </div>
             </div>
             @if($users->user_name)
             <div class="box-footer">
                 <b>{{Lang::get('lang.user_name')}}</b>
-                <a class="pull-right" href="{{route('user.show', $users->id)}}" title="{{$users->user_name}}">
+                <a class="pull-right" title="{{$users->user_name}}" href="{{route('user.show', $users->id)}}">
                     {{str_limit($users->user_name,10) }}
                 </a>
             </div>
             @endif
             <div class="box-footer">
                 <b>{{Lang::get('lang.email')}}</b>
-                <a class="pull-right" href="{{route('user.show', $users->id)}}" title="{{$users->email}}">
+                <a class="pull-right" title="{{$users->email}}" href="{{route('user.show', $users->id)}}">
                     {{str_limit($users->email,10) }}
                 </a>
             </div>
+             @if($users->is_delete != '1')
             @if($users->role=='user')
             <div class="box-footer">
                 <div id="refresh-org">
@@ -108,10 +139,10 @@ class="active"
                     <b>{!! Lang::get('lang.organization') !!}</b>
 
                     &nbsp;&nbsp;&nbsp;
-                 
-                   <a href=""   data-toggle="modal" data-target="#editassign"> <span style="color:green;">{{$organization->name}}</span> </a>
-                    
-                     
+
+                    <a href=""   data-toggle="modal" data-target="#editassign" title="{{$organization->name}}"> <span style="color:green;">{{str_limit($organization->name,15)}}</span> </a>
+
+
                     <a class="pull-right" href="#" data-toggle="modal" data-target="#{{$org_id}}delete" title="{!! Lang::get('lang.remove') !!}"><i class="fa fa-times" style="color:red;"> </i></a> 
                     <div class="modal fade" id="{{$org_id}}delete">
                         <div class="modal-dialog">
@@ -149,9 +180,9 @@ class="active"
                 <b>{{Lang::get('lang.status')}}</b>
                 <a class="pull-right">
                     @if($users->active == '1')
-                    <span style="color:green;">{!! Lang::get('lang.active') !!}</span>
+                    <span style="color:green;"> <span class="glyphicon glyphicon-ok-circle"></span>  <span class="glyphicon glyphicon-user"></span></span>
                     @else
-                    <span style="color:red;">{!! Lang::get('lang.inactive') !!}</span>
+                    <span style="color:red;"><span class="glyphicon glyphicon-ban-circle"></span><span class="glyphicon glyphicon-user"></span></span>
                     @endif
                 </a>
             </div>            
@@ -191,100 +222,112 @@ class="active"
                 {!! $users->twitterLink() !!}
             </div>
             @endif
+             @endif
         </div>
     </div>
     <div class="col-md-9" style="margin-left:-10px;">
 
 
-    <!-- Delete -->
-    <form action="{!!URL::route('user.post.delete', $users->id)!!}" method="post" role="form">
-        <div class="modal fade" id="addNewCategoryModal3" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span>
-                        </button>
-                         @if($users->role=='user')
-                        <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.delete_user')}}</h4>
-                       @endif 
-                        @if($users->role=='agent')
-                         <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.delete_agent')}}</h4>
-                           @endif
-                       
-                    
-                    </div>
+        <!-- Delete -->
+        <form action="{!!URL::route('user.post.delete', $users->id)!!}" method="post" role="form">
+            <div class="modal fade" id="addNewCategoryModal3" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span>
+                            </button>
+                            @if($users->role=='user')
+                            <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.delete_user')}}</h4>
+                            @endif 
+                            @if($users->role=='agent')
+                            <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.delete_agent')}}</h4>
+                            @endif
 
-                    <div class="modal-body">
-                        What should be done with content owned by this user?</br>
-                        <?php $user = App\User::where('id', $users->id)->first(); ?>
-                        @if($user->role == 'agent')
-                        {!! Form::label('delete_all_content',Lang::get('lang.delete_all_content')) !!} <span class="text-red"> *</span>
-                        <?php
-                        $open = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get();
-                        ?>
-                        <?php $user = App\User::where('id', $users->id)->first(); ?>
-                        <?php
-                        $open = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get());
-                        ?>
 
-                        @if(!$open)
-                        <!-- <input type="checkbox" id="delete_checkbox" name="delete_all" value="1" checked> -->
-                        @elseif($open)
-                        <input type="checkbox" id="delete_checkbox" name="delete_all" value="1">
-
-                        @endif
-                         @endif
-                        <!--    Hi Admin 
-                            @if($users->role=='agent')  
-                            Assign  tickets of the agent will delete?
-                            Create ticket By agent Will Delete?
-                            @elseif($users->role=='user')
-                            Crete ticket by user Will Delete?
-                            @endif -->
-                        <!--  -->
-                        <?php $user = App\User::where('id', $users->id)->first(); ?>
-                        <?php
-                        $open = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get());
-                        $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '3')->get());
-                        $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '5')->get());
-                        ?>
-                        @if($open>0)  
-                        <div id="delete_assign_body">
-                            <p>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}?</p>
-                            <select id="asssign" class="form-control" name="assign_to">
-                                <?php
-                                $assign = App\User::where('role', '!=', 'user')->get();
-                                $count_assign = count($assign);
-                                $teams = App\Model\helpdesk\Agent\Teams::all();
-                                $count_teams = count($teams);
-                                ?>
-                                <!--    <optgroup label="Teams ( {!! $count_teams !!} )">
-                                       @foreach($teams as $team)
-                                       <option  value="team_{{$team->id}}">{!! $team->name !!}</option>
-                                       @endforeach
-                                   </optgroup> -->
-                                <optgroup label="Agents ( {!! $count_assign !!} )">
-                                    @foreach($assign as $user)
-                                    <option  value="user_{{$user->id}}">{{$user->first_name." ".$user->last_name}}</option>
-                                    @endforeach
-                                </optgroup>
-                            </select>
                         </div>
-                        @endif
+
+                        <div class="modal-body">
+                            What should be done with content owned by this user?</br>
+
+                            <!-- <select name="type_of_delete" class="form-control">
+                            <option value="ban_delete">Ban and delete </option>
+                            <option value="delete">Delete</option>
+                            </select>
+ -->
+
+
+
+
+
+                            <?php $user = App\User::where('id', $users->id)->first(); ?>
+                            @if($user->role == 'agent')
+                            {!! Form::label('delete_all_content',Lang::get('lang.delete_all_content')) !!} <span class="text-red"> *</span>
+                            <?php
+                            $open = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get();
+                            ?>
+                            <?php $user = App\User::where('id', $users->id)->first(); ?>
+                            <?php
+                            $open = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get());
+                            ?>
+
+                            @if(!$open)
+                            
+                            @elseif($open)
+                            <input type="checkbox" id="delete_checkbox" name="delete_all" value="1">
+
+                            @endif
+                            @endif
+                            <!--    Hi Admin 
+                                @if($users->role=='agent')  
+                                Assign  tickets of the agent will delete?
+                                Create ticket By agent Will Delete?
+                                @elseif($users->role=='user')
+                                Crete ticket by user Will Delete?
+                                @endif -->
+                            <!--  -->
+                            <?php $user = App\User::where('id', $users->id)->first(); ?>
+                            <?php
+                            $open = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get());
+                            $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '3')->get());
+                            $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '5')->get());
+                            ?>
+                            @if($open>0 && $user->role == 'agent')  
+                            <div id="delete_assign_body">
+                                <p>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}?</p>
+                                <select id="asssign" class="form-control" name="assign_to">
+                                    <?php
+                                    $assign = App\User::where('role', '!=', 'user')->get();
+                                    $count_assign = count($assign);
+                                    $teams = App\Model\helpdesk\Agent\Teams::all();
+                                    $count_teams = count($teams);
+                                    ?>
+                                    <!--    <optgroup label="Teams ( {!! $count_teams !!} )">
+                                           @foreach($teams as $team)
+                                           <option  value="team_{{$team->id}}">{!! $team->name !!}</option>
+                                           @endforeach
+                                       </optgroup> -->
+                                    <optgroup label="Agents ( {!! $count_assign !!} )">
+                                        @foreach($assign as $user)
+                                        <option  value="user_{{$user->id}}">{{$user->first_name." ".$user->last_name}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                </select>
+                            </div>
+                            @endif
+
+                        </div>
 
                     </div>
 
-                </div>
-              
-                <div class="box-footer">
-                    {!! Form::submit(Lang::get('lang.confirm_deletion'),['class'=>'btn btn-primary'])!!}
-                </div>
+                    <div class="box-footer">
+                        {!! Form::submit(Lang::get('lang.confirm_deletion'),['class'=>'btn btn-primary'])!!}
+                    </div>
 
+                </div>
             </div>
-        </div>
-    </form>
-        </div>
+        </form>
+    </div>
     <!-- Role -->
     <!-- Admin -->
     <form action="{!!URL::route('user.post.rolechangeadmin', $users->id)!!}" method="post" role="form">
@@ -405,9 +448,9 @@ class="active"
                 </div>
 
                 <div class="modal-body">
-                    
-                        <button class="btn btn-warning pull-right" id="changepassword">{{Lang::get('lang.password_generator')}}</button>
-                    
+
+                    <button class="btn btn-warning pull-right" id="changepassword">{{Lang::get('lang.password_generator')}}</button>
+
                     <br/>
                     <form name="myForm" action="{!!URL::route('user.post.changepassword', $users->id)!!}" method="post" role="form" onsubmit="return validateForm()">
                         <div class="form-group">
@@ -431,13 +474,42 @@ class="active"
             </form>
         </div>
     </div>
-    <script>
 
-        $("#delete_checkbox").click(function () {
+    <!-- Restore -->
+      <!-- Admin -->
+    <form action="{!!URL::route('user.restore', $users->id)!!}" method="post" role="form">
+        <div class="modal modal-fade" id="addNewCategoryModal8" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="titleLabel">{{Lang::get('lang.restore')}}:</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                     Are you Sure?
+
+                    </div>
+
+                </div>
+                <div class="box-footer">
+                    {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
+                </div>
+
+            </div>
+        </div>
+    </form>
+    <script>
+$(document).ready(function(){ 
+        $("#delete_checkbox").click(function() {
             // alert('ok');
 
             $("#delete_assign_body").toggle();
 
+        });
         });
 
     </script>
@@ -454,12 +526,12 @@ class="active"
     </script>
     <script>
 
-        $('#changepassword').click(function () {
+        $('#changepassword').click(function() {
             $.ajax({
                 type: 'get',
                 url: '{{route("user.changepassword")}}',
                 // data: {settings_approval: settings_approval},
-                success: function (result) {
+                success: function(result) {
                     // with('success', Lang::get('lang.approval_settings-created-successfully'));
                     // alert("Hi, testing");
                     // var x =result;
@@ -473,7 +545,7 @@ class="active"
         });
 
     </script>
-    <div class="col-md-9">
+    <div class="col-md-9" >
         {{-- detals table starts --}}
         <?php
         $user = App\User::where('id', $users->id)->first();
@@ -481,444 +553,176 @@ class="active"
 
         if ($users->role != 'user') {
             $open = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->get());
-            $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '2')->orderBy('id', 'DESC')->paginate(20);
-            $counted = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '2')->get());
+            $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '3')->orderBy('id', 'DESC')->paginate(20);
+            $counted = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '3')->get());
             $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '5')->get());
         }
         if ($users->role == 'user') {
             $open = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '1')->get());
-            $tickets = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '2')->orderBy('id', 'DESC')->paginate(20);
+            $tickets = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '3')->orderBy('id', 'DESC')->paginate(20);
             $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '3')->get());
             $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '5')->get());
             // dd($deleted);
         }
         ?>
-        <div class="row">
+        <div class="row" >
             <div class="col-md-12">
                 <!-- Custom Tabs -->
                 <div class="nav-tabs-custom">
-            <div class="box box-primary">
-                
-                 </br>
-                <div style="margin-left:1%;">
-            @if(Auth::user()->role == 'admin')
-            @if($users->role == 'user')
-            <div class="btn-group">
-                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal1">{{Lang::get('lang.change_role_to_agent')}}</button>
-            </div>
-            <div class="btn-group">
-                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal4">{{Lang::get('lang.change_role_to_admin')}}</button>
-            </div>
-            @else
-            <div class="btn-group">
-                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal2">{{Lang::get('lang.change_role_to_user')}}</button>
-                <!-- <button type="button" class="btn btn-primary" id="role_user">Change Role TO User</button> -->
-            </div>
-            <div class="btn-group">
-                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal4">{{Lang::get('lang.change_role_to_admin')}}</button>
-            </div>
-            @endif
-            @endif
-            <a href="{{route('user.edit', $users->id)}}"><button type="button"  href="{{route('user.edit', $users->id)}}" class="btn btn-primary btn-sm">{{Lang::get('lang.edit')}}</button></a>
-            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal">{{Lang::get('lang.change_password')}}</button>
-            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal3">{{Lang::get('lang.delete')}}</button>
-            <!-- <button type="button" class="btn btn-primary">Delete</button> -->
-     </div>
-<div style="padding:1%;">
-                    <ul class="nav nav-tabs" >
-                    
-                      </br>
-                        <li class="active"><a href="#tab_1" data-toggle="tab">{!! Lang::get('lang.open_tickets') !!} ({{$open}})</a></li>
-                        <li><a href="#tab_2" data-toggle="tab">{!! Lang::get('lang.closed_tickets') !!} ({{$counted}})</a></li>
-                        <li><a href="#tab_3" data-toggle="tab">{!! Lang::get('lang.deleted_tickets') !!} ({{$deleted}})</a></li>
-                    </ul>
-                    <div class="tab-content no-padding">
-                        <div class="tab-pane active" id="tab_1">
-                            <?php $open = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '1')->get()); ?>
-                            @if(Session::has('success'))
-                            <div id="success-alert" class="alert alert-success alert-dismissable">
-                                <i class="fa  fa-check-circle"> </i>
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                {{Session::get('success')}}
+                    <div class="box box-primary">
+
+                        </br>
+                        <div style="margin-left:1%;">
+                            @if($users->is_delete != '1')
+                            @if(Auth::user()->role == 'admin')
+
+                            @if($users->role == 'user')
+                            <div class="btn-group">
+                                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal1">{{Lang::get('lang.change_role_to_agent')}}</button>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal4">{{Lang::get('lang.change_role_to_admin')}}</button>
+                            </div>
+                            @else
+                            <div class="btn-group">
+                                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal2">{{Lang::get('lang.change_role_to_user')}}</button>
+                                <!-- <button type="button" class="btn btn-primary" id="role_user">Change Role TO User</button> -->
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal4">{{Lang::get('lang.change_role_to_admin')}}</button>
                             </div>
                             @endif
-                            <!-- failure message -->
-                            @if(Session::has('fails'))
-                            <div class="alert alert-danger alert-dismissable">
-                                <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!} ! </b>
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                {{Session::get('fails')}}
-                            </div>
                             @endif
-                            <div class="box-body no-padding">
-                                {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
-                                <div class="mailbox-controls">
-                                    <!-- Check all button -->
-                                    <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-                                    <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
-                                    <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
-                                    <div class="pull-right">
-                                        <?php
-                                        $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '1')->get());
-                                        if ($counted < 20) {
-                                            echo $counted . "/" . $counted;
-                                        } else {
-                                            echo "20/" . $counted;
-                                        }
-                                        ?>
-                                    </div>
+                            @if(Auth::user()->role == 'admin')
+                            <a href="{{route('user.edit', $users->id)}}"><button type="button"  href="{{route('user.edit', $users->id)}}" class="btn btn-primary btn-sm">{{Lang::get('lang.edit')}}</button></a>
+                            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal">{{Lang::get('lang.change_password')}}</button>
+                            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal3">{{Lang::get('lang.delete')}}</button>
+                           
+                            @endif
+
+                            @if(Auth::user()->role == 'agent')
+                            @if($users->role == 'user')
+                            <a href="{{route('user.edit', $users->id)}}"><button type="button"  href="{{route('user.edit', $users->id)}}" class="btn btn-primary btn-sm">{{Lang::get('lang.edit')}}</button></a>
+                            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal">{{Lang::get('lang.change_password')}}</button>
+                            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal3">{{Lang::get('lang.delete')}}</button>
+                            
+                            @endif
+                            @endif
+                            @else
+                            @if(Auth::user()->role == 'admin')
+                            <div id="page" class="hfeed site">
+    <article class="hentry error404 text-center">
+        <h1 class="error-title"><i class="fa fa-trash text-info" style="color: grey"></i><span class="visible-print text-danger">0</span></h1>
+        <h2 class="entry-title text-muted">{!! Lang::get('lang.user-account-is-deleted') !!}</h2>
+        <div class="entry-content clearfix">
+            <p class="lead">{!! Lang::get('lang.delete-account-caution-info') !!}</p>
+            <p><button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addNewCategoryModal8">{{Lang::get('lang.restore-user')}}</button></a></p>
+        </div><!-- .entry-content -->
+    </article><!-- .hentry -->
+</div><!-- #page -->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    
                                 </div>
-                                <div class="table-responsive" id="refresh">
-                                    <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>Loading...</b></p>
-                                    <!-- table -->
-                                    <table class="table table-hover table-bordered">
-                                        <thead>
-                                        <th>
-                                        </th>
-                                        <th>{!! Lang::get('lang.subject') !!}</th>
-                                        <th>{!! Lang::get('lang.ticket_id') !!}</th>
-                                        <th>{!! Lang::get('lang.priority') !!}</th>
-                                        <th>{!! Lang::get('lang.last_replier') !!}</th>
-                                        <th>{!! Lang::get('lang.assigned_to') !!}</th>
-                                        <th>{!! Lang::get('lang.last_activity') !!}</th>
-                                        </thead>
-                                        <tbody id="hello">
-                                            @if($users->role != 'user')
-                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '1')->orderBy('id', 'DESC')->paginate(20); ?>
-                                            @elseif($users->role ='user')
-                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '1')->orderBy('id', 'DESC')->paginate(20); ?>
-                                            @endif
-                                            @foreach ($tickets  as $ticket)
-                                            <tr <?php if ($ticket->seen_by == null) { ?> style="color:green;" <?php }
-                                            ?> >
-                                                <td><input type="checkbox" class="icheckbox_flat-blue" name="select_all[]" value="{{$ticket->id}}"/></td>
-                                                <?php
-                                                //  collaborators
-                                                $collaborators = App\Model\helpdesk\Ticket\Ticket_Collaborator::where('ticket_id', '=', $ticket->id)->get();
-                                                $collab = count($collaborators);
-                                                //  title
-                                                $title = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
-                                                $string = strip_tags($title->title);
-                                                // check atatchments
-                                                $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $title->id)->first();
-                                                $attach = count($attachments);
-
-                                                if (strlen($string) > 40) {
-                                                    $stringCut = substr($string, 0, 40);
-                                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')) . ' ...';
-                                                }
-                                                $TicketData = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                                                $TicketDatarow = App\Model\helpdesk\Ticket\Ticket_Thread::where('id', '=', $TicketData)->first();
-                                                $LastResponse = App\User::where('id', '=', $TicketDatarow->user_id)->first();
-                                                if ($LastResponse->role == "user") {
-                                                    $rep = "#F39C12";
-                                                    $username = $LastResponse->full_name;
-                                                } else {
-                                                    $rep = "#000";
-                                                    $username = $LastResponse->full_name;
-                                                }
-                                                $titles = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
-                                                $count = count($titles);
-                                                foreach ($titles as $title) {
-                                                    $title = $title;
-                                                }
-                                                $assigned_to = App\User::where('id', '=', $ticket->assigned_to)->first();
-                                                if ($assigned_to == null) {
-                                                    $assigned = "Unassigned";
-                                                } else {
-                                                    $assigned = $assigned_to->first_name . " " . $assigned_to->last_name;
-                                                }
-                                                ?>
-                                                <td class="mailbox-name"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">{{$string}}   </a> ({!! $count!!}) <i class="{{$ticket->sourceCss()}}"></i>
-                                                    @if($collab > 0)&nbsp;<i class="fa fa-users"></i>@endif 
-                                                    @if($attach > 0)&nbsp;<i class="fa fa-paperclip"></i>@endif</td>
-                                                <td class="mailbox-Id"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">#{!! $ticket->ticket_number !!}</a></td>
-                                                <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first(); ?>
-                                                <td class="mailbox-priority">@if($priority != null)<spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam>@endif</td>
-                                        <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
-                                        <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! str_limit($username,20) !!}</td>
-                                        <td>{!! $assigned !!}</td>
-                                        <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
-                                        </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table><!-- /.table -->
-                                    <div class="pull-right">
-                                        <?php echo $tickets->setPath(url('user/' . $users->id))->render(); ?>&nbsp;
-                                    </div>
-                                </div><!-- /.mail-box-messages -->
-                                {!! Form::close() !!}
-
-                                {{-- end deleted tickets --}}
-                            </div>
-                        </div><!-- /.tab-pane -->
-                        <div class="tab-pane" id="tab_2">
-                            {{-- open tab --}}
-                            <?php $closed = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', 3)->get());?>
-                            @if(Session::has('success'))
-                            <div id="success-alert" class="alert alert-success alert-dismissable">
-                                <i class="fa  fa-check-circle"> </i>
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                {{Session::get('success')}}
                             </div>
                             @endif
-                            <!-- failure message -->
-                            @if(Session::has('fails'))
-                            <div class="alert alert-danger alert-dismissable">
-                                <i class="fa fa-ban"> </i> <b> {!! lang::get('lang.alert') !!} ! </b>
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                {{Session::get('fails')}}
-                            </div>
+
+
+                            @if(Auth::user()->role == 'agent')
+                            @if($users->role == 'user')
+                            This is a deleted contact 
+                            <button type="button" href="#myPopup" data-rel="popup" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addNewCategoryModal8">{{Lang::get('lang.restore')}}</button>
+                            @elseif($users->role == 'agent')
+                            This is a deleted contact 
                             @endif
-                            <div class="box-body no-padding">
-                                {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
-                                <div class="mailbox-controls">
-                                    <!-- Check all button -->
-                                    <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-                                    <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
-                                    <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
-                                    <div class="pull-right">
-                                        <?php
-                                        $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '3')->get());
-                                        if ($counted < 20) {
-                                            echo $counted . "/" . $counted;
-                                        } else {
-                                            echo "20/" . $counted;
-                                        }
-                                        ?>
-                                    </div>
-                                </div>
-                                <div class=" table-responsive" id="refresh">
-                                    <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>Loading...</b></p>
-                                    <!-- table -->
-                                    <table class="table table-hover table-bordered">
-                                        <thead>
-                                        <th>
-                                        </th>
-                                        <th>{!! Lang::get('lang.subject') !!}</th>
-                                        <th>{!! Lang::get('lang.ticket_id') !!}</th>
-                                        <th>{!! Lang::get('lang.priority') !!}</th>
-                                        <th>{!! Lang::get('lang.last_replier') !!}</th>
-                                        <th>{!! Lang::get('lang.assigned_to') !!}</th>
-                                        <th>{!! Lang::get('lang.last_activity') !!}</th>
-                                        </thead>
-                                        <tbody id="hello">
-                                            @if($users->role != 'user')
-                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '3')->orderBy('id', 'DESC')->paginate(20); ?>
-                                            @elseif($users->role ='user')
-                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '3')->orderBy('id', 'DESC')->paginate(20); ?>
-                                            @endif
-                                            @foreach ($tickets  as $ticket)
-                                            <tr <?php if ($ticket->seen_by == null) { ?> style="color:green;" <?php } ?> >
-                                                <td ><input type="checkbox" class="icheckbox_flat-blue" name="select_all[]" value="{{$ticket->id}}"/></td>
-                                                <?php
-                                                //  collaborators
-                                                $collaborators = App\Model\helpdesk\Ticket\Ticket_Collaborator::where('ticket_id', '=', $ticket->id)->get();
-                                                $collab = count($collaborators);
-                                                //  title
-                                                $title = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
-                                                $string = strip_tags($title->title);
-                                                // check atatchments
-                                                $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $title->id)->first();
-                                                $attach = count($attachments);
+                            @endif
 
-                                                if (strlen($string) > 40) {
-                                                    $stringCut = substr($string, 0, 40);
-                                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')) . ' ...';
-                                                }
-                                                $TicketData = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                                                $TicketDatarow = App\Model\helpdesk\Ticket\Ticket_Thread::where('id', '=', $TicketData)->first();
-                                                $LastResponse = App\User::where('id', '=', $TicketDatarow->user_id)->first();
-                                                if ($LastResponse->role == "user") {
-                                                    $rep = "#F39C12";
-                                                    $username = $LastResponse->user_name;
-                                                } else {
-                                                    $rep = "#000";
-                                                    $username = $LastResponse->first_name . " " . $LastResponse->last_name;
-                                                    if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
-                                                        $username = $LastResponse->user_name;
-                                                    }
-                                                }
-                                                $titles = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
-                                                $count = count($titles);
-                                                foreach ($titles as $title) {
-                                                    $title = $title;
-                                                }
-                                                $assigned_to = App\User::where('id', '=', $ticket->assigned_to)->first();
-                                                if ($assigned_to == null) {
-                                                    $assigned = "Unassigned";
-                                                } else {
-                                                    $assigned = $assigned_to->first_name . " " . $assigned_to->last_name;
-                                                }
-                                                ?>
-                                                <td class="mailbox-name"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">{{$string}}   </a> ({!! $count!!}) <i class="fa fa-comment"></i>
-                                                    @if($collab > 0)&nbsp;<i class="fa fa-users"></i>@endif 
-                                                    @if($attach > 0)&nbsp;<i class="fa fa-paperclip"></i>@endif</td>
-                                                <td class="mailbox-Id"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">#{!! $ticket->ticket_number !!}</a></td>
-                                                <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first(); ?>
-                                                <td class="mailbox-priority">@if($priority != null)<spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam>@endif</td>
-                                        <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
-                                        <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! str_limit($username,20) !!}</td>
-                                        <td>{!! $assigned !!}</td>
-                                        <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
-                                        </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table><!-- /.table -->
-
-                                    <div class="pull-right">
-                                        <?php echo $tickets->setPath(url('user/' . $users->id))->render(); ?>&nbsp;
-                                    </div>
-                                </div><!-- /.mail-box-messages -->
-                                {!! Form::close() !!}
-
-                                {{-- end deleted tickets --}}
-                            </div>
+<!-- 
+                           This was Deleted profile <a href="{{route('user.restore', $users->id)}}"><button type="button"  href="{{route('user.restore', $users->id)}}" class="btn btn-info btn-xl">{{Lang::get('lang.restore')}}</button></a> -->
+                            @endif
                         </div>
-                        <div class="tab-pane" id="tab_3">
-                            {{-- open tab --}}
-                            <?php $deleted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '5')->get()); ?>
 
-                            @if(Session::has('success'))
-                            <div id="success-alert" class="alert alert-success alert-dismissable">
-                                <i class="fa  fa-check-circle"> </i>
-                                <button type="button" id="close-alert" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                {{Session::get('success')}}
-                            </div>
-                            @endif
-                            <!-- failure message -->
-                            @if(Session::has('fails'))
-                            <div class="alert alert-danger alert-dismissable">
-                                <i class="fa fa-ban"> </i> <b> {!! lang::get('lang.alert') !!} ! </b>
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                {{Session::get('fails')}}
-                            </div>
-                            @endif
-                            <div class="box-body no-padding ">
 
-                                {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
-                                <div class="mailbox-controls">
-                                    <!-- Check all button -->
-                                    <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-                                    <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
-                                    <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
-                                    <div class="pull-right">
-                                        <?php
-                                        $counted = count(App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '5')->get());
-                                        if ($counted < 20) {
-                                            echo $counted . "/" . $counted;
-                                        } else {
-                                            echo "20/" . $counted;
-                                        }
-                                        ?>
+@if($users->is_delete != '1')
+                        <div style="padding:1%;">
+                            <ul class="nav nav-tabs" >
+
+                                </br>
+                                <li class="active"><a href="#tab_1" id="open_tab" data-toggle="tab">{!! Lang::get('lang.open_tickets') !!} ({{$open}})</a></li>
+                                <li><a href="#tab_2" id="closed_tab" data-toggle="tab">{!! Lang::get('lang.closed_tickets') !!} ({{$counted}})</a></li>
+                                <li><a href="#tab_3" id="deleted_tab" data-toggle="tab">{!! Lang::get('lang.deleted_tickets') !!} ({{$deleted}})</a></li>
+                            </ul>
+                            
+                            <div class="tab-content no-padding">
+                                    @if(Session::has('success'))
+                                    <div id="success-alert" class="alert alert-success alert-dismissable">
+                                        <i class="fa  fa-check-circle"> </i>
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        {{Session::get('success')}}
                                     </div>
+                                    @endif
+                                    <!-- failure message -->
+                                    @if(Session::has('fails'))
+                                    <div class="alert alert-danger alert-dismissable">
+                                        <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!} ! </b>
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        {{Session::get('fails')}}
+                                    </div>
+                                    @endif
+                                    {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
+                                        <div class="mailbox-controls">
+                                            <!-- Check all button -->
+                                            <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
+                                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
+                                            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
+                                            <div class="pull-right">
+                                            </div>
+                                            <!--</div>-->
+        <div id="more-option" class="btn-group">
+            <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d2">
+                <i class="fa fa-reorder" style="color:teal;"> </i>
+                    {!! Lang::get('lang.sort-by') !!} <span class="caret"></span>
+            </button>
+                <ul  class="dropdown-menu pull-right">
+                    <li data-toggle="modal" data-target="#ChangeOwner"><a href="#" class="toggle-vis" data-column="7"><i class="fa fa-plus-square-o" style="color:green;"> </i>{!!Lang::get('lang.created-at')!!}</a></li>
+                </ul>
+        </div>
+                                        </div>
+                                <div class="tab-pane active" id="tab_1">
                                 </div>
-                                <div class=" table-responsive" id="refresh">
-                                    <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>Loading...</b></p>
-                                    <!-- table -->
-                                    <table class="table table-hover table-bordered">
-                                        <thead>
-                                        <th>
-                                        </th>
-                                        <th>{!! Lang::get('lang.subject') !!}</th>
-                                        <th>{!! Lang::get('lang.ticket_id') !!}</th>
-                                        <th>{!! Lang::get('lang.priority') !!}</th>
-                                        <th>{!! Lang::get('lang.last_replier') !!}</th>
-                                        <th>{!! Lang::get('lang.assigned_to') !!}</th>
-                                        <th>{!! Lang::get('lang.last_activity') !!}</th>
-                                        </thead>
-                                        <tbody id="hello">
-                                            @if($users->role != 'user')
-                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', $users->id)->where('status', '=', '5')->orderBy('id', 'DESC')->paginate(20); ?>
-                                            @elseif($users->role ='user')
-                                            <?php $tickets = App\Model\helpdesk\Ticket\Tickets::where('user_id', '=', $users->id)->where('status', '=', '5')->orderBy('id', 'DESC')->paginate(20); ?>
-                                            @endif
-                                            @foreach ($tickets  as $ticket)
-                                            <tr <?php if ($ticket->seen_by == null) { ?> style="color:green;" <?php }
-                                            ?> >
-                                                <td ><input type="checkbox" class="icheckbox_flat-blue" name="select_all[]" value="{{$ticket->id}}"/></td>
-                                                <?php
-                                                //  collaborators
-                                                $collaborators = App\Model\helpdesk\Ticket\Ticket_Collaborator::where('ticket_id', '=', $ticket->id)->get();
-                                                $collab = count($collaborators);
-                                                //  title
-                                                $title = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
-                                                $string = strip_tags($title->title);
-                                                // check atatchments
-                                                $attachments = App\Model\helpdesk\Ticket\Ticket_attachments::where('thread_id', '=', $title->id)->first();
-                                                $attach = count($attachments);
+                                <div class="tab-pane active" id="tab_2">
+                                </div>
+                                <div class="tab-pane active" id="tab_3">
+                                </div>
+                                <div class="box-body mailbox-messages"  id="refresh">
+                                        <p style="display:none;text-align:center; position:fixed; margin-left:40%;margin-top:-70px;" id="show" class="text-red"><b>{!! Lang::get('lang.loading') !!}...</b></p>
+                                        <!-- table -->
 
-                                                if (strlen($string) > 40) {
-                                                    $stringCut = substr($string, 0, 40);
-                                                    $string = substr($stringCut, 0, strrpos($stringCut, ' ')) . ' ...';
-                                                }
-                                                $TicketData = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->max('id');
-                                                $TicketDatarow = App\Model\helpdesk\Ticket\Ticket_Thread::where('id', '=', $TicketData)->first();
-                                                $LastResponse = App\User::where('id', '=', $TicketDatarow->user_id)->first();
-                                                if ($LastResponse->role == "user") {
-                                                    $rep = "#F39C12";
-                                                    $username = $LastResponse->user_name;
-                                                } else {
-                                                    $rep = "#000";
-                                                    $username = $LastResponse->first_name . " " . $LastResponse->last_name;
-                                                    if ($LastResponse->first_name == null || $LastResponse->last_name == null) {
-                                                        $username = $LastResponse->user_name;
-                                                    }
-                                                }
-                                                $titles = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', $ticket->id)->get();
-                                                $count = count($titles);
-                                                foreach ($titles as $title) {
-                                                    $title = $title;
-                                                }
-                                                $assigned_to = App\User::where('id', '=', $ticket->assigned_to)->first();
-                                                if ($assigned_to == null) {
-                                                    $assigned = "Unassigned";
-                                                } else {
-                                                    $assigned = $assigned_to->first_name . " " . $assigned_to->last_name;
-                                                }
-                                                ?>
-                                                <td class="mailbox-name"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">{{$string}}   </a> ({!! $count!!}) <i class="fa fa-comment"></i>
-                                                    @if($collab > 0)&nbsp;<i class="fa fa-users"></i>@endif 
-                                                    @if($attach > 0)&nbsp;<i class="fa fa-paperclip"></i>@endif</td>
-                                                <td class="mailbox-Id"><a href="{!! route('ticket.thread',[$ticket->id]) !!}" title="{!! $title->title !!}">#{!! $ticket->ticket_number !!}</a></td>
-                                                <?php $priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('priority_id', '=', $ticket->priority_id)->first(); ?>
-                                                <td class="mailbox-priority">@if($priority != null)<spam class="btn btn-{{$priority->priority_color}} btn-xs">{{$priority->priority}}</spam>@endif</td>
-                                        <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
-                                        <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! str_limit($username,20) !!}</td>
-                                        <td>{!! $assigned !!}</td>
-                                        <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
-                                        </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table><!-- /.table -->
+                                        {!!$table->render('vendor.Chumper.template')!!}
 
-                                    <div class="pull-right">
-                                        <?php echo $tickets->setPath(url('/ticket/open'))->render(); ?>&nbsp;
-                                    </div>
                                 </div><!-- /.mail-box-messages -->
-                                {!! Form::close() !!}
-                            </div><!-- /.tab-pane -->
-                        </div><!-- /.tab-content -->
-                    </div><!-- nav-tabs-custom -->
-                </div><!-- /.col -->          
+                        </div><!-- /.col -->          
+                    </div>
+                </div>
+                {!!Form::close()!!}
+
+                <!-- /.row -->
             </div>
-            </div>
-                        
-            <!-- /.row -->
         </div>
-        </div>
-        @if(Auth::user()->role == 'admin')
+         @endif
+          @if($users->is_delete != '1')
+        
         <div class="row">
             <div class="col-md-12">
                 <link type="text/css" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet">
                 <div class="box box-info">
                     <div class="box-header with-border">
-                    @if($users->role=='user')
+                        @if($users->role=='user')
                         <h3 class="box-title">{!! Lang::get('lang.user_report') !!}</h3>
-                       @endif 
+                        @endif 
                         @if($users->role=='agent')
-                         <h3 class="box-title">{!! Lang::get('lang.agent_report') !!}</h3>
-                           @endif
+                        <h3 class="box-title">{!! Lang::get('lang.agent_report') !!}</h3>
+                        @endif
 
                     </div>
                     <div class="box-body">
@@ -941,7 +745,7 @@ class="active"
                                     }
                                     ?>
                                     <script type="text/javascript">
-                                        $(function () {
+                                        $(function() {
                                             var timestring1 = "{!! $start_date !!}";
                                             var timestring2 = "{!! date('m/d/Y') !!}";
                                             $('#datepicker4').datetimepicker({
@@ -957,7 +761,7 @@ class="active"
                                         {!! Form::text('end_date',null,['class'=>'form-control','id'=>'datetimepicker3'])!!}
                                     </div>
                                     <script type="text/javascript">
-                                        $(function () {
+                                        $(function() {
                                             var timestring1 = "{!! $start_date !!}";
                                             var timestring2 = "{!! date('m/d/Y') !!}";
                                             $('#datetimepicker3').datetimepicker({
@@ -978,14 +782,14 @@ class="active"
                                                 #legend-holder { border: 1px solid #ccc; float: left; width: 25px; height: 25px; margin: 1px; }
                                             </style>
 
-                                             @if($users->role=='user')
+                                            @if($users->role=='user')
 
                                             <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span class="lead"> <span id="total-created-tickets" ></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.created') !!} </span></div>
-                                             @endif 
-                        @if($users->role=='agent')
-                        <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span class="lead"> <span id="total-created-tickets" ></span> {!! Lang::get('lang.assign_tickets') !!}  </span></div>
-                         
-                           @endif
+                                            @endif 
+                                            @if($users->role=='agent')
+                                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span class="lead"> <span id="total-created-tickets" ></span> {!! Lang::get('lang.assign_tickets') !!}  </span></div>
+
+                                            @endif
 
 
                                             <div class="col-md-4"><span id="legend-holder" style="background-color: #6DC5B2;"></span>&nbsp; <span class="lead"> <span id="total-reopen-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.reopen') !!}  </span></div> 
@@ -1004,7 +808,7 @@ class="active"
             </div>
         </div>
     </div>
-    @endif
+    
     <!-- END CUSTOM TABS -->
     {{-- MODAL POPUPS --}}
     <div class="modal fade" id="create_org">
@@ -1080,19 +884,19 @@ class="active"
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     <script type="text/javascript">
-        jQuery(document).ready(function ($) {
+        jQuery(document).ready(function($) {
             // create org
-            $('#form').on('submit', function () {
+            $('#form').on('submit', function() {
                 $.ajax({
                     type: "POST",
                     url: "../user-org/{{$users->id}}",
                     dataType: "html",
                     data: $(this).serialize(),
-                    beforeSend: function () {
+                    beforeSend: function() {
                         $("#hide").hide();
                         $("#show2").show();
                     },
-                    success: function (response) {
+                    success: function(response) {
                         $("#show2").hide();
                         $("#hide").show();
                         if (response == 0) {
@@ -1103,9 +907,11 @@ class="active"
                             // $("#show").show();
                             $("#alert-success").show();
                             $('#get-success').html(message);
-                            setInterval(function () {
+                            setInterval(function() {
                                 $("#alert-success").hide();
-                            }, 4000);
+                            }, 6000);
+                            window.location.reload(true);
+
                         } else {
                             message = response;
                             $("#alert-danger").show();
@@ -1121,9 +927,6 @@ class="active"
     <div class="modal fade" id="assign">
         <div class="modal-dialog">
             <div class="modal-content">
-
-           <!--  <form name="myorgForm" action="{!!URL::route('user.editassign.org', $users->id)!!}" id='org_assign' method="PATCH" role="form" onsubmit="return validateFormedit()"> -->
-
                 {!! Form::model($users->id, ['id'=>'org_assign','method' => 'PATCH'] )!!}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" id="dismiss" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -1145,9 +948,8 @@ class="active"
                     <div id="assign_body">
                         <p>{!! Lang::get('lang.please_select_an_organization') !!}</p>
 
-                        <input type="text" id="org" class="form-control" name="org" >
-                         <p id="orgdemo" style="color:red"></p>
-                   
+                        <input type="text" id="org" class="form-control" name="org">
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -1160,16 +962,16 @@ class="active"
     </div><!-- /.modal -->
 
 
-<!-- edit assign oranization -->
+    <!-- Edit Organisation Assign Modal -->
+    <!-- edit assign oranization -->
 
-                     <?php
-                       
-                       $assign_org_id=App\Model\helpdesk\Agent_panel\User_org::where('user_id','=',$users->id)->first();
-                      if($assign_org_id)
-                       {$organization=App\Model\helpdesk\Agent_panel\Organization::where('id','=',$assign_org_id->org_id)->first();}
-                       
-                     ?>
-                     @if($assign_org_id)
+    <?php
+    $assign_org_id = App\Model\helpdesk\Agent_panel\User_org::where('user_id', '=', $users->id)->first();
+    if ($assign_org_id) {
+        $organization = App\Model\helpdesk\Agent_panel\Organization::where('id', '=', $assign_org_id->org_id)->first();
+    }
+    ?>
+    @if($assign_org_id)
 
     <div class="modal fade" id="editassign">
         <div class="modal-dialog">
@@ -1180,11 +982,11 @@ class="active"
                     <button type="button" class="close" data-dismiss="modal" id="editdismiss" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">{!! Lang::get('lang.assign') !!}</h4>
                 </div>
-              <!--   <div id="assign_alert" class="alert alert-success alert-dismissable" style="display:none;">
-                    <button id="assign_dismiss" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <h4><i class="icon fa fa-check"></i>Alert!</h4>
-                    <div id="message-success1"></div>
-                </div> -->
+                <!--   <div id="assign_alert" class="alert alert-success alert-dismissable" style="display:none;">
+                      <button id="assign_dismiss" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                      <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                      <div id="message-success1"></div>
+                  </div> -->
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-4">
@@ -1196,10 +998,10 @@ class="active"
                     <div id="assign_body">
                         <p>{!! Lang::get('lang.please_select_an_organization') !!}</p>
 
-                        
-                        
-                       <input type="text" id="editorg" class="form-control" name="org" value="{{$organization->name}}">
-                    
+
+
+                        <input type="text" id="editorg" class="form-control" name="org" value="{{$organization->name}}">
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -1211,36 +1013,23 @@ class="active"
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
     @endif
-
+    @endif
+    {!! $table->script('vendor.Chumper.tuser-javascript') !!}
     <script type="text/javascript">
-
-
-
-
-
-        // function validateFormedit() {
-        //     var x = document.forms["myorgForm"]["org"].value;
-        //     if (x == null || x == "") {
-        //         // alert("please enter your password");
-        //         document.getElementById("orgdemo").innerHTML = "Select Organization";
-        //         return false;
-        //     }
-        // }
-    
         // Assign a ticket
-        jQuery(document).ready(function ($) {
+        jQuery(document).ready(function($) {
             // create org
-            $('#org_assign').on('submit', function () {
+            $('#org_assign').on('submit', function() {
                 $.ajax({
                     type: "POST",
                     url: "../user-org-assign/{{$users->id}}",
                     dataType: "html",
                     data: $(this).serialize(),
-                    beforeSend: function () {
+                    beforeSend: function() {
                         $("#hide").hide();
                         $("#show2").show();
                     },
-                    success: function (response) {
+                    success: function(response) {
                         $("#show2").hide();
                         $("#hide").show();
 
@@ -1252,13 +1041,15 @@ class="active"
                             // $("#show").show();
                             $("#alert-success").show();
                             $('#get-success').html(message);
-                            setInterval(function () {
+                            setInterval(function() {
                                 $("#alert-success").hide();
                             }, 4000);
                             window.location.reload(true);
-
                         }
-                            if (response == 0) {
+
+
+
+                        if (response == 0) {
                             message = " Organization not found"
                             $("#dismiss").trigger("click");
                             $("#refresh-org").load("../user/{{ $users->id }}  #refresh-org");
@@ -1266,7 +1057,7 @@ class="active"
                             // $("#show").show();
                             $("#alert-danger").show();
                             $('#get-danger').html(message);
-                            setInterval(function () {
+                            setInterval(function() {
                                 $("#alert-danger").hide();
                             }, 4000);
                         }
@@ -1279,12 +1070,10 @@ class="active"
                             // $("#show").show();
                             $("#alert-danger").show();
                             $('#get-danger').html(message);
-                            setInterval(function () {
+                            setInterval(function() {
                                 $("#alert-danger").hide();
                             }, 4000);
                         }
-
-
 
 
 
@@ -1295,21 +1084,21 @@ class="active"
             });
         });
 
-// edit assign organization
+        // edit assign organization
 
- jQuery(document).ready(function ($) {
+        jQuery(document).ready(function($) {
             // create org
-            $('#org_edit_assign').on('submit', function () {
+            $('#org_edit_assign').on('submit', function() {
                 $.ajax({
                     type: "POST",
                     url: "../user-org-edit-assign/{{$users->id}}",
                     dataType: "html",
                     data: $(this).serialize(),
-                    beforeSend: function () {
+                    beforeSend: function() {
                         $("#hide").hide();
                         $("#show2").show();
                     },
-                    success: function (response) {
+                    success: function(response) {
                         $("#editassign").hide();
                         $("#hide").show();
 
@@ -1321,14 +1110,14 @@ class="active"
                             // $("#show").show();
                             $("#alert-success").show();
                             $('#get-success').html(message);
-                            setInterval(function () {
+                            setInterval(function() {
                                 $("#alert-success").hide();
                             }, 4000);
-                             window.location.reload(true);
-                             
+                            window.location.reload(true);
+
                         }
 
-                         if (response == 0) {
+                        if (response == 0) {
                             message = " Organization not found"
                             $("#dismiss").trigger("click");
                             $("#refresh-org").load("../user/{{ $users->id }}  #refresh-org");
@@ -1336,11 +1125,11 @@ class="active"
                             // $("#show").show();
                             $("#alert-danger").show();
                             $('#get-danger').html(message);
-                            setInterval(function () {
+                            setInterval(function() {
                                 $("#alert-danger").hide();
                             }, 4000);
-                             window.location.reload(true);
-                            
+                            window.location.reload(true);
+
                         }
 
                         if (response == 2) {
@@ -1351,11 +1140,11 @@ class="active"
                             // $("#show").show();
                             $("#alert-danger").show();
                             $('#get-danger').html(message);
-                            setInterval(function () {
+                            setInterval(function() {
                                 $("#alert-danger").hide();
                             }, 4000);
                             window.location.reload(true);
-                             
+
                         }
                     }
                 })
@@ -1366,38 +1155,44 @@ class="active"
 
 
 
+
 // autocomplete organization name
-         $(document).ready(function(){                   
-                    $("#org").autocomplete({
+        $(document).ready(function() {
+            $("#org").autocomplete({
+                source: "{!!URL::route('post.organization.autofill')!!}",
+                minLength: 1,
+                select: function(evt, ui) {
+                    // // this.form.phone_number.value = ui.item.phone_number;
+                    // // this.form.user_name.value = ui.item.user_name;
+                    // if(ui.item.first_name) {
+                    //     this.form.first_name.value = ui.item.first_name;
+                    // }
+                    // if(ui.item.last_name) {
+                    //     this.form.last_name.value = ui.item.last_name;
+                    // }
 
-                        source:"{!!URL::route('post.organization.autofill')!!}",
-                        minLength:1,
-                        select:function(evt, ui) {
-                           
-                            
-                        }
-                    });
-                });
+                }
+            });
+        });
 
 
-             $(document).ready(function(){                   
-                    $("#editorg").autocomplete({
+        $(document).ready(function() {
+            $("#editorg").autocomplete({
+                source: "{!!URL::route('post.organization.autofill')!!}",
+                minLength: 1,
+                select: function(evt, ui) {
 
-                        source:"{!!URL::route('post.organization.autofill')!!}",
-                        minLength:1,
-                        select:function(evt, ui) {
-                           
-                            
-                        }
-                    });
-                });
+
+                }
+            });
+        });
 
 //close autocomplite
 
 
-        $(function () {
+        $(function() {
             //Enable check and uncheck all functionality
-            $(".checkbox-toggle").click(function () {
+            $(".checkbox-toggle").click(function() {
                 var clicks = $(this).data('clicks');
                 if (clicks) {
                     //Uncheck all checkboxes
@@ -1414,9 +1209,9 @@ class="active"
 
 
 
-        $(function () {
+        $(function() {
             // Enable check and uncheck all functionality
-            $(".checkbox-toggle").click(function () {
+            $(".checkbox-toggle").click(function() {
                 var clicks = $(this).data('clicks');
                 if (clicks) {
                     //Uncheck all checkboxes
@@ -1430,8 +1225,8 @@ class="active"
         });
 
 
-        $(document).ready(function () { /// Wait till page is loaded
-            $('#click').click(function () {
+        $(document).ready(function() { /// Wait till page is loaded
+            $('#click').click(function() {
                 $('#refresh').load('open #refresh');
                 $("#show").show();
             });
@@ -1439,7 +1234,7 @@ class="active"
 
 
 
-        $(function () {
+        $(function() {
             $("textarea").wysihtml5();
         });
     </script>
@@ -1448,8 +1243,8 @@ class="active"
     </div>
     <script src="{{asset("lb-faveo/plugins/chartjs/Chart.min.js")}}" type="text/javascript"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
-            $.getJSON("../user-agen/<?php echo $users->id; ?>", function (result) {
+        $(document).ready(function() {
+            $.getJSON("../user-agen/<?php echo $users->id; ?>", function(result) {
                 var labels = [], open = [], closed = [], reopened = [], open_total = 0, closed_total = 0, reopened_total = 0;
                 for (var i = 0; i < result.length; i++) {
                     labels.push(result[i].date);
@@ -1538,10 +1333,10 @@ class="active"
                 });
 
             });
-            $('#click me').click(function () {
+            $('#click me').click(function() {
                 $('#foo').submit();
             });
-            $('#foo').submit(function (event) {
+            $('#foo').submit(function(event) {
                 // get the form data
                 // there are many ways to get this data using jQuery (you can use the class or id also)
                 var date1 = $('#datepicker4').val();
@@ -1555,7 +1350,7 @@ class="active"
                     data: formData, // our data object
                     dataType: 'json', // what type of data do we expect back from the server
 
-                    success: function (result2) {
+                    success: function(result2) {
 
                         var labels = [], open = [], closed = [], reopened = [], open_total = 0, closed_total = 0, reopened_total = 0;
 
@@ -1694,15 +1489,15 @@ class="active"
             });
         });
 
-        jQuery(document).ready(function () {
+        jQuery(document).ready(function() {
             // Close a ticket
-            $('#close').on('click', function (e) {
+            $('#close').on('click', function(e) {
                 $.ajax({
                     type: "GET",
                     url: "agen",
-                    beforeSend: function () {
+                    beforeSend: function() {
                     },
-                    success: function (response) {
+                    success: function(response) {
                     }
                 })
                 return false;

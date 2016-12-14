@@ -30,6 +30,8 @@
         <link href="{{asset("lb-faveo/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css")}}" rel="stylesheet" type="text/css" />
 
         <link href="{{asset("lb-faveo/plugins/datatables/dataTables.bootstrap.css")}}" rel="stylesheet" type="text/css" >
+        <!-- select2 -->
+        <link href="{{asset("lb-faveo/plugins/select2/select2.min.css")}}" rel="stylesheet" type="text/css">
         <!-- Colorpicker -->
         
         <link href="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.css")}}" rel="stylesheet" type="text/css" />
@@ -86,18 +88,16 @@
                             <?php \Event::fire('service.desk.admin.topbar', array()); ?>
                             @endif
                         </ul>
-
-
-                        <?php $noti = \App\Model\helpdesk\Notification\UserNotification::where('user_id', '=', Auth::user()->id)->where('is_read', '0')->get(); ?>
-
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
                             @include('themes.default1.update.notification')
                             <!-- User Account: style can be found in dropdown.less -->
+                            <ul class="nav navbar-nav navbar-right">
+                            <!-- User Account: style can be found in dropdown.less -->
                             <li class="dropdown notifications-menu" id="myDropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
                                     <i class="fa fa-bell-o"></i>
-                                    <span class="label label-danger" id="count">{!! count($noti) !!}</span>
+                                    <span class="label label-danger" id="count">{!! $notifications->count() !!}</span>
                                 </a>
                                 <ul class="dropdown-menu" style="width:500px">
 
@@ -109,44 +109,44 @@
 
                                     <li id="refreshNote">
 
-                                    <li class="header">You have {!! count($noti) !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a> </li>
+                                    <li class="header">You have {!! $notifications->count() !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
 
                                     <ul class="menu">
-                                        @foreach($notifications as $notification)
-                                        <?php $user = App\User::whereId($notification->user_id)->first(); ?>
-                                        @if($notification->type == 'registration')
+
+                                        @if($notifications->count())
+                                        @foreach($notifications->orderBy('created_at', 'desc')->get()->take(10) as $notification)
+
+                                        @if($notification->notification->type->type == 'registration')
                                         @if($notification->is_read == 1)
-                                        <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
-                                                    {!! $notification->message !!}
+                                        <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
+                                                    {!! $notification->notification->type->message !!}
                                                 </a></span>
                                         </li>
                                         @else
-                                        <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$user->profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('user.show', $notification->model_id) !!}" id="{{$notification->notification_id}}" class='noti_User'>
-                                                    {!! $notification->message !!}
+                                        <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
+                                                    {!! $notification->notification->type->message !!}
                                                 </a></span>
                                         </li>
                                         @endif
                                         @else
-
-                                        <?php $ticket_number = App\Model\helpdesk\Ticket\Tickets::whereId($notification->model_id)->first(); ?>
                                         @if($notification->is_read == 1)
-                                        <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
-                                                    {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
+                                        <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
+                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
                                                 </a></span>
                                         </li>
-                                        @else
-                                        <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$user->profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->model_id) !!}" id='{{ $notification->notification_id}}' class='noti_User'>
-                                                    {!! $notification->message !!} with id "{!!$ticket_number->ticket_number!!}"
+                                        @elseif($notification->notification->model)
+                                        <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
+                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
+                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
                                                 </a></span>
                                         </li>
                                         @endif
                                         @endif
                                         @endforeach
-
+                                        @endif
                                     </ul>
                             </li>
                             <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
@@ -154,7 +154,6 @@
                                 </div><div class="col-md-5"></div></li>
                             <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
                             </li>
-
                         </ul>
                         </li>
                         <li class="dropdown user user-menu">
@@ -245,8 +244,8 @@
                                 <li @yield('ban')><a href="{{ url('banlist') }}"><i class="fa fa-ban"></i>{!! Lang::get('lang.ban_lists') !!}</a></li>
                                 <li @yield('template')><a href="{{ url('template-sets') }}"><i class="fa fa-mail-forward"></i>{!! Lang::get('lang.templates') !!}</a></li>
                                 <li @yield('email')><a href="{{url('getemail')}}"><i class="fa fa-at"></i>{!! Lang::get('lang.email-settings') !!}</a></li>
-                                <li @yield('diagnostics')><a href="{{ url('getdiagno') }}"><i class="fa fa-plus"></i>{!! Lang::get('lang.diagnostics') !!}</a></li>
                                 <li @yield('queue')><a href="{{ url('queue') }}"><i class="fa fa-upload"></i>{!! Lang::get('lang.queues') !!}</a></li>
+                                <li @yield('diagnostics')><a href="{{ url('getdiagno') }}"><i class="fa fa-plus"></i>{!! Lang::get('lang.diagnostics') !!}</a></li>
                                
                                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Auto Response</a></li> -->
                                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Rules/a></li> -->
@@ -267,9 +266,23 @@
                                 <li @yield('forms')><a href="{{url('forms')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.forms') !!}</a></li>
                                 <li @yield('workflow')><a href="{{url('workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.workflow') !!}</a></li>
                                 <li @yield('priority')><a href="{{url('ticket/priority')}}"><i class="fa fa-asterisk"></i>{!! Lang::get('lang.priority') !!}</a></li>
+                                <li @yield('url')><a href="{{url('url/settings')}}"><i class="fa fa-server"></i>{!! Lang::get('lang.url') !!}</a></li>
                             </ul>
                         </li>
-
+                        <li class="treeview @yield('Tickets')">
+                            <a  href="#">
+                                <i class="fa fa-ticket"></i> <span>{!! Lang::get('lang.tickets') !!}</span> <i class="fa fa-angle-left pull-right"></i>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li @yield('tickets')><a href="{{url('getticket')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.ticket') !!}</a></li>
+                                <li @yield('auto-response')><a href="{{url('getresponder')}}"><i class="fa fa-reply-all"></i>{!! Lang::get('lang.auto_response') !!}</a></li>
+                                <li @yield('alert')><a href="{{url('getalert')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.alert_notices') !!}</a></li>
+                                <li @yield('status')><a href="{{url('setting-status')}}"><i class="fa fa-plus-square-o"></i>{!! Lang::get('lang.status') !!}</a></li>
+                                <li @yield('labels')><a href="{{url('labels')}}"><i class="fa fa-lastfm"></i>{!! Lang::get('lang.labels') !!}</a></li>
+                                <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-star"></i>{!! Lang::get('lang.ratings') !!}</a></li>
+                                <li @yield('close-workflow')><a href="{{url('close-workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.close-workflow') !!}</a></li>
+                            </ul>
+                        </li>
                         <li class="treeview @yield('Settings')">
                             <a href="#">
                                 <i class="fa fa-cog"></i>
@@ -279,17 +292,12 @@
                             <ul class="treeview-menu">
                                 <li @yield('company')><a href="{{url('getcompany')}}"><i class="fa fa-building"></i>{!! Lang::get('lang.company') !!}</a></li>
                                 <li @yield('system')><a href="{{url('getsystem')}}"><i class="fa fa-laptop"></i>{!! Lang::get('lang.system') !!}</a></li>
-                                <li @yield('tickets')><a href="{{url('getticket')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.ticket') !!}</a></li>
-                                <li @yield('auto-response')><a href="{{url('getresponder')}}"><i class="fa fa-reply-all"></i>{!! Lang::get('lang.auto_response') !!}</a></li>
-                                <li @yield('alert')><a href="{{url('getalert')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.alert_notices') !!}</a></li>
+                                <li @yield('social-login')><a href="{{ url('social/media') }}"><i class="fa fa-globe"></i> {!! Lang::get('lang.social-login') !!}</a></li>
                                 <li @yield('languages')><a href="{{url('languages')}}"><i class="fa fa-language"></i>{!! Lang::get('lang.language') !!}</a></li>
                                 <li @yield('cron')><a href="{{url('job-scheduler')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.cron') !!}</a></li>
                                 <li @yield('security')><a href="{{url('security')}}"><i class="fa fa-lock"></i>{!! Lang::get('lang.security') !!}</a></li>
-                                <li @yield('status')><a href="{{url('setting-status')}}"><i class="fa fa-plus-square-o"></i>{!! Lang::get('lang.status') !!}</a></li>
                                 <li @yield('notification')><a href="{{url('settings-notification')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.notifications') !!}</a></li>
-                                <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-star"></i>{!! Lang::get('lang.ratings') !!}</a></li>
-                                
-                                <li @yield('close-workflow')><a href="{{url('close-workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.close-workflow') !!}</a></li>
+                              <li @yield('Approval')><a href="{{url('approval/settings')}}"><i class="glyphicon glyphicon-repeat"></i>{!! Lang::get('lang.approval') !!}</a></li>
                             </ul>
                         </li>
                         <li class="treeview @yield('error-bugs')">
@@ -394,6 +402,8 @@
         <script src="{{asset("lb-faveo/plugins/colorpicker/bootstrap-colorpicker.min.js")}}" ></script>
         <!--date time picker-->
         <script src="{{asset("lb-faveo/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script>
+        <!-- select2 -->
+         <script src="{{asset("lb-faveo/plugins/select2/select2.min.js")}}" ></script>
 
 @if (trim($__env->yieldContent('no-toolbar')))
     <h1>@yield('no-toolbar')</h1>
