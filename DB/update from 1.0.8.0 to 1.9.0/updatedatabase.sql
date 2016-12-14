@@ -19,7 +19,7 @@ WHERE `type` = 1;
 -- Update queue services tables
 -- 
 UPDATE `queue_services` SET `status` = 1 Where `name` LIKE 'Sync' OR `short_name` LIKE 'sync';
-
+UPDATE `queue_services` SET `status` = 0 Where `name` NOT LIKE 'Sync' OR `short_name` NOT LIKE 'sync';
 -- ----------------------------------------------------------------------------------------
 
 -- 
