@@ -613,3 +613,7 @@ Breadcrumbs::register('labels.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('labels.index');
     $breadcrumbs->push(Lang::get('lang.edit'), 'labels.edit');
 });
+
+Breadcrumbs::register('readmails', function ($breadcrumbs) {
+    $breadcrumbs->push('readmails'), 'readmails');
+});
