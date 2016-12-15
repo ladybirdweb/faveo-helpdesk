@@ -143,15 +143,16 @@ class AgentLayout
 
     public function inbox()
     {
-        $ticket = $this->tickets();
-        if ($this->auth->role == 'admin') {
-            return $ticket->whereIn('status', [1, 7])->select('id');
-        } elseif ($this->auth->role == 'agent') {
-            return $ticket->whereIn('status', [1, 7])
-                    ->where('dept_id', '=', $this->auth->primary_dpt)
-                    ->orWhere('assigned_to', '=', Auth::user()->id)
-                    ->select('id');
+        $table = $this->tickets();
+        if (Auth::user()->role == 'agent') {
+            $id = Auth::user()->primary_dpt;
+            $table = $table->where('tickets.dept_id', '=', $id)->orWhere('assigned_to', '=', Auth::user()->id);
         }
+
+        return $table->Join('ticket_status', function ($join) {
+                    $join->on('ticket_status.id', '=', 'tickets.status')
+                        ->whereIn('ticket_status.id', [1, 7]);
+                });
     }
 
     public function overdues()

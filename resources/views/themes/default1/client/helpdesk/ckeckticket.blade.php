@@ -364,18 +364,27 @@ alert(h+20);
         <div class="form-group">
             <div class="col-md-12">
                 <div class="form-group ">
-                    <textarea class="form-control" name="comment" cols="30" rows="8"></textarea>
+                    <textarea class="form-control" id="reply-input" name="comment" cols="30" rows="8"></textarea>
                 </div>
             </div>                                              
         </div>
     </div>
     <div class="text-right">
-        <button type="submit" class="btn btn-custom btn-lg">{!! Lang::get('lang.post_comment') !!}</button>
+        <button type="submit" onClick="return checkFunction();" class="btn btn-custom btn-lg">{!! Lang::get('lang.post_comment') !!}</button>
     </div>
     {!! Form::close() !!}
 </div>
 
 <script type="text/javascript">
+    function checkFunction() {
+        var x;
+        x = document.getElementById("reply-input").value;
+        if (x == "") {
+            alert("{{Lang::get('lang.reply-can-not-be-empty')}}");
+            return false;
+        };
+    }
+
     $("#cc_page").on('click', '.search_r', function () {
         var search_r = $('a', this).attr('id');
         $.ajax({
