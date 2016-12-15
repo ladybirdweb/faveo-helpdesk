@@ -23,7 +23,6 @@ use App\Model\helpdesk\Settings\Alert;
 use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
-use App\Model\helpdesk\Settings\Followup;
 use App\Model\helpdesk\Settings\Responder;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
@@ -410,25 +409,9 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function postSchedular(Email $email, Template $template, Followup $followup, Emails $email1, TaskRequest $request, WorkflowClose $workflow)
+    public function postSchedular(Email $email, Template $template, Emails $email1, TaskRequest $request, WorkflowClose $workflow)
     {
         try {
-            $followup = $followup->whereId('1')->first();
-            $status = $request->followup_notification_cron;
-
-            if ($status = 'null') {
-                $followup->status = $request->followup_notification_cron;
-            }
-            if ($status = 1) {
-                $followup->status = $request->followup_notification_cron;
-                $followup->condition = $request->followup_notification_commands;
-                $followup->save();
-            }
-            if ($request->followup_notification_dailyAt) {
-                $followup->condition = $request->followup_notification_dailyAt;
-                $followup->save();
-            }
-
             /* fetch the values of email request  */
             $emails = $email->whereId('1')->first();
             if ($request->email_fetching) {
