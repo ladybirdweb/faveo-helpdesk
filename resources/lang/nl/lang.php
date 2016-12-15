@@ -1597,5 +1597,6 @@ return [
      'user-account-is-deleted'      => 'This user account has been deleted.',
      'restore-user'                 => 'Restore user account',
      'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
+     'reply-can-not-be-empty'       => 'Reply can not be blank. Please enter your reply.',
 
 ];
