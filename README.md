@@ -72,7 +72,7 @@ Faveo is designed & developed by <a href="http://www.ladybirdweb.com/" target="_
 <table style="border-collapse:collapse;">
 <tr>
 <td style="border:none; outline:none;">
-<a href='https://play.google.com/store/apps/details?id=co.helpdesk.faveo&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="90px" width="250px"/></a>
+<a href='https://play.google.com/store/apps/details?id=co.helpdesk.faveo&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1' target="_blank"><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="90px" width="250px"/></a>
 </td>
 <td style="border:none; outline:none;">
 <a href="https://appsto.re/in/cTjQgb.i" target="_blank"><img src="http://www.ladybirdweb.com/support/apple_badge.svg" height="62px" width="250px"/></a>
