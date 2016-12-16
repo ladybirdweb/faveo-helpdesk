@@ -1,4 +1,136 @@
 |=======================================================
+| v1.9.1
+|=======================================================
+
+Bug Fixes
+    
+    Admin was not able to save/update cron settings in new installation.
+    Incorrect count of tickets in dashboard while login as an agent .
+    In client panel users/clients were able to reply without entering any comment in comment field.
+
+|=======================================================
+| v1.9.1
+|=======================================================
+
+Change Log
+    
+    Datatable packaged form Chumper to Yajra
+    Version tag correction, following semantic versioning X.Y.Z format
+    Login/registration screen layouts
+    Attachment files storage option
+
+Bug Fixes
+    
+    Solved various issues listed on GitHub issue list
+    Ticket listing table optimization
+    Query optimization in admin/agent layouts for fast processing
+
+Known Bugs
+    
+    In ticket timeline the reply content added by clients are rendered using "iframe". The "iframe" behaves differently in different browsers. Height of iframe is not responsive.
+
+    NOTE: Chrome is recommended browser to open ticket timeline.
+
+    |=====================================================
+    |   update your Faveo version to v1.9.0
+    |======================================================
+    Follow our wiki article to update your faveo version to v1.9.0
+    https://github.com/ladybirdweb/faveo-helpdesk/wiki/Upgrade-guide-to-v1.9.0
+
+
+|=======================================================
+| v1.0.8.0
+|=======================================================
+    
+Enhancements
+    
+    Advance user module
+    One command for all cron jobs
+    System report
+    Custom URL redircetion and SSL support in URL
+    Socail login
+    Due today tickets
+    Custom forms update
+    Dynamic priority settings
+    Email non mandatory 
+    Laravle logs and queues
+
+Bug Fixes
+    Code cleanup
+    Email attachment/inline image related bugs
+
+    |===============================================
+    | Update to v1.0.8.0
+    |===============================================
+    Follow our wiki article to update your faveo version to v1.0.8.0
+    https://github.com/ladybirdweb/faveo-helpdesk/wiki/How-to-update-v1.0.7.9-to-v1.0.8.0
+
+
+|=======================================================
+| v1.0.7.9
+|=======================================================
+    
+Enhancements
+    
+    Ticket change status to show in client panel via settings.
+    Not to submit two tickets on double click of Ticket submit button.
+    Dashboard linking.
+    Incoming mail format check.
+    Added a thread for ticket reopen via email.
+    Ticket linking minor issue updated.
+    Nl2br added for ticket.
+    Different department users can view tickets if assigned.
+    Preventing fall back language from deleting.
+    Send email if checked to send email for first registration via agent panel.
+    Checking storage file permission while installation.
+    File info extension check during installation.
+    Curl extension check during installation.
+    Check for API mandatory.
+    RTL feature in email sending.
+
+Bug Fixed
+    
+    Moved media files to upload folder.
+    Multiple file upload via attachment exception handling.
+    Attachment issue fixed for ticket reply.
+    File uploading according to server configuration of post_max_size.
+    Code cleanup.
+    Department ticket issue and naming convention.
+    Help topic issue fixed in ticket creation.
+    Pdf issue.
+    Custom Form issue fixed for text area.
+    Agent panel layout color changed for differentiation.
+    Nesting level issue fixed.
+    Proper ticket threads count in client panel.
+    Validating dot files access via URL.
+    Breadcrumbs Update.
+    Exception handling for database server down issue.
+    In app notification fixed for different department tickets.
+    First name and user name issue fixed.
+    YouTube icon link fixed.
+    Clear error form fields on resubmit of form in email create/edit.
+    Exception handling on re-uploads of pre-uploaded plugin.
+    Department wise ticket creation had some exception.
+    Changed naming convention for organization manager.
+    Fixed trash side bar numbering.
+
+    |=================================================
+    |    Upgrade from v1.0.7.8 to v1.0.7.9 
+    |==================================================
+
+    Read upgrade giude here https://github.com/ladybirdweb/faveo-helpdesk/wiki/Manual-Upgrade-from-v1.0.7.8-to-v1.0.7.9
+
+|=======================================================
+| v1.0.7.8
+|=======================================================
+
+Bug Fixes
+    
+    Installer API bug fixed for .env file
+    Subject added utf8 encoding for email diagnostics
+
+
+|=======================================================
 | v1.0.7.7
 |=======================================================
 
