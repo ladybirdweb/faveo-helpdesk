@@ -69,13 +69,13 @@ Faveo is designed & developed by <a href="http://www.ladybirdweb.com/" target="_
 <h3>Don't panic if you come across bugs</h3>
 <p>Faveo is very very new in the market, the product is fully working and is production worthy but it definitely will have some bugs like any software. We fully support Faveo whether free or pro edition, incase you come across any bugs, email us through the <a href="http://www.faveohelpdesk.com/contact-us/">contact form</a>. We want to make your experience of using Faveo as memorable as possible, so help us make Faveo a World, top class helpdesk application. Do check out our roadmap to stayed tuned with future releases </p>
 <p>
-<table>
+<table style="border-collapse:collapse;">
 <tr>
-<td>
-<a href='https://play.google.com/store/apps/details?id=co.helpdesk.faveo&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="66px" width="150px"/></a>
+<td style="border:none; outline:none;">
+<a href='https://play.google.com/store/apps/details?id=co.helpdesk.faveo&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="90px" width="250px"/></a>
 </td>
-<td>
-<a href="https://appsto.re/in/cTjQgb.i" target="_blank"><img src="http://www.ladybirdweb.com/support/apple_badge.svg"  height="85px" width="150px"/></a>
+<td style="border:none; outline:none;">
+<a href="https://appsto.re/in/cTjQgb.i" target="_blank"><img src="http://www.ladybirdweb.com/support/apple_badge.svg" height="62px" width="250px"/></a>
 </td>
 </tr>
 </table>
