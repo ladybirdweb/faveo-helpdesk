@@ -397,14 +397,14 @@ if ($thread->title != "") {
                                     <label>{!! Lang::get('lang.response') !!}</label>
                                 </div>
                                 <div class="col-md-10">
-                                    <select class="form-control" style="width:55%" id="select">
+                                    <select class="form-control" style="width:55%" id="select" onchange="addCannedResponse()">
 
                                         <?php
                                         $canneds = App\Model\helpdesk\Agent_panel\Canned::where('user_id', '=', Auth::user()->id)->get();
                                         ?>                                                  
                                         <option value="zzz">{!! Lang::get('lang.select_a_canned_response') !!}</option>
                                         @foreach($canneds as $canned)
-                                        <option value="{!! $canned->id !!}" >{!! $canned->title !!}</option>
+                                        <option value="{!! $canned->message !!}" >{!! $canned->title !!}</option>
                                         @endforeach
                                         {{-- <option>Last Message</option> --}}
                                     </select>
@@ -2210,5 +2210,20 @@ echo $ticket_data->title;
             $(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
             });
             }
+
+    function addCannedResponse() {
+        var selectedResponse = document.getElementById( "select" );
+        var response = selectedResponse.options[selectedResponse.selectedIndex ].value;
+        if (response == 'zzz') {
+            for ( instance in CKEDITOR.instances ){
+                CKEDITOR.instances[instance].updateElement();
+                CKEDITOR.instances[instance].setData('');
+            }
+        } else {
+            for ( instance in CKEDITOR.instances ) {
+                CKEDITOR.instances[instance].insertHtml(response);
+            }
+        }
+    }
 </script>
 @stop
