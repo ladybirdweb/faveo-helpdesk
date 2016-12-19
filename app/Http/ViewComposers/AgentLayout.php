@@ -150,9 +150,9 @@ class AgentLayout
         }
 
         return $table->Join('ticket_status', function ($join) {
-                    $join->on('ticket_status.id', '=', 'tickets.status')
+            $join->on('ticket_status.id', '=', 'tickets.status')
                         ->whereIn('ticket_status.id', [1, 7]);
-                });
+        });
     }
 
     public function overdues()

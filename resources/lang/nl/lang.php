@@ -1599,7 +1599,7 @@ return [
      'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
      'reply-can-not-be-empty'       => 'Reply can not be blank. Please enter your reply.',
 
-     //update 18-12-2016 
+     //update 18-12-2016
      'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Your account has been created successfully. Please contact admin for account activation as we were not able to send you an OPT code.',
 
 ];
