@@ -183,9 +183,11 @@ class AuthController extends Controller
             $message12 = '';
             $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
             $sms = Plugin::select('status')->where('name', '=', 'SMS')->first();
-        // Event for login
-        \Event::fire(new \App\Events\LoginEvent($request));
-            $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/'.$code)]);
+            // Event for login
+            \Event::fire(new \App\Events\LoginEvent($request));
+            if ($request->input('email') !== '') {
+                $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/'.$code)]);
+            }
             if ($settings->status == 1 || $settings->status == '1') {
                 if (count($sms) > 0) {
                     if ($sms->status == 1 || $sms->status == '1') {
@@ -194,7 +196,11 @@ class AuthController extends Controller
                         $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup');
                     }
                 } else {
-                    $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
+                    if ($request->input('email') !== '') {
+                        $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
+                    } else {
+                        $message12 = Lang::get('lang.account-created-contact-admin-as-we-were-not-able-to-send-opt');
+                    }
                 }
             } else {
                 $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
