@@ -1108,4 +1108,11 @@ return [
 
      //update 18-12-2016
      'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Your account has been created successfully. Please contact admin for account activation as we were not able to send you an OPT code.',
+     //update 19-12-2016
+     'only-agents'         => 'Agent users',
+     'only-users'          => 'Clients users',
+     'banned-users'        => 'Banned users',
+     'inactive-users'      => 'Inactive users',
+     'all-users'           => 'All users',
+     'search'              => 'Search...',
 ];

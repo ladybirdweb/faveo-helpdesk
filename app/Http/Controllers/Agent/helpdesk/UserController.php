@@ -41,6 +41,7 @@ use Illuminate\Http\Request;
 use Input;
 use Lang;
 use Redirect;
+use Datatables;
 
 /**
  * UserController
@@ -85,7 +86,6 @@ class UserController extends Controller
                 Lang::get('lang.email'),
                 Lang::get('lang.phone'),
                 Lang::get('lang.status'),
-                Lang::get('lang.ban'),
                 Lang::get('lang.last_login'),
                 Lang::get('lang.role'),
                 Lang::get('lang.action'))  // these are the column headings to be shown
@@ -116,21 +116,42 @@ class UserController extends Controller
     public function user_list(Request $request)
     {
         $type = $request->input('profiletype');
+        $search = $request->input('searchTerm');
 
-        if ($type == 'active') {
-            $users = User::where('role', '!=', 'admin')->where('is_delete', '=', 0)->get();
+        if ($type === 'agents') {
+            $users = User::where('role', '=', 'agent')->where('is_delete', '=', 0);
+        } elseif ($type === 'users') {            
+            $users = User::where('role', '=', 'user')->where('is_delete', '=', 0);
+        } elseif ($type === 'active') {
+            $users = User::where('role', '!=', 'admin')->where('active', '=', 1);
+        } elseif ($type === 'inactive') {
+            $users = User::where('role', '!=', 'admin')->where('active', '=', 0);
+        } elseif ($type === 'deleted') {
+            $users = User::where('role', '!=', 'admin')->where('is_delete', '=', 1);
+        } elseif ($type === 'banned') {
+            $users = User::where('role', '!=', 'admin')->where('ban', '=', 1);
         } else {
-            $users = User::where('role', '!=', 'admin')->where('is_delete', '=', 1)->get();
+            $users = User::where('role', '!=', 'admin')->where('is_delete', '=', 0);
         }
+        
+        $users = $users->select('user_name', 'email', 'mobile', 'active', 'updated_at', 'role', 'id', 'last_name', 'country_code', 'phone_number');
 
+        if ($search !== '') {
+            $users = $users->where(function($query) use ($search){
+                            $query->where('user_name', 'LIKE', '%'.$search.'%');
+                            $query->orWhere('email', 'LIKE', '%'.$search.'%');
+                            $query->orWhere('first_name', 'LIKE', '%'.$search.'%');
+                            $query->orWhere('last_name', 'LIKE', '%'.$search.'%');
+                            $query->orWhere('mobile', 'LIKE', '%'.$search.'%');
+                            $query->orWhere('updated_at', 'LIKE', '%'.$search.'%');
+                            $query->orWhere('country_code', 'LIKE', '%'.$search.'%');
+                      });
+        }
         // displaying list of users with chumper datatables
         // return \Datatable::collection(User::where('role', "!=", "admin")->get())
-       return \Datatable::collection($users)
-                        /* searchable column username and email */
-                        ->searchColumns('user_name', 'email', 'phone')
-                        /* order column username and email */
-                        ->orderColumns('user_name', 'email')
+       return \Datatables::of($users)
                         /* column username */
+                        ->removeColumn('id', 'last_name', 'country_code', 'phone_number')
                         ->addColumn('user_name', function ($model) {
                             if ($model->first_name) {
                                 $string = strip_tags($model->first_name.' '.$model->last_name);
@@ -153,7 +174,7 @@ class UserController extends Controller
                             return $email;
                         })
                         /* column phone */
-                        ->addColumn('phone', function ($model) {
+                        ->addColumn('mobile', function ($model) {
                             $phone = '';
                             if ($model->phone_number) {
                                 $phone = $model->ext.' '.$model->phone_number;
@@ -167,7 +188,7 @@ class UserController extends Controller
                             return $phone;
                         })
                         /* column account status */
-                        ->addColumn('status', function ($model) {
+                        ->addColumn('active', function ($model) {
                             $status = $model->active;
                             if ($status == 1) {
                                 $stat = '<button class="btn btn-success btn-xs">Active</button>';
@@ -177,19 +198,8 @@ class UserController extends Controller
 
                             return $stat;
                         })
-                        /* column ban status */
-                        ->addColumn('ban', function ($model) {
-                            $status = $model->ban;
-                            if ($status == 1) {
-                                $stat = '<button class="btn btn-danger btn-xs">Banned</button>';
-                            } else {
-                                $stat = '<button class="btn btn-success btn-xs">Not Banned</button>';
-                            }
-
-                            return $stat;
-                        })
                         /* column last login date */
-                        ->addColumn('lastlogin', function ($model) {
+                        ->addColumn('updated_at', function ($model) {
                             $t = $model->updated_at;
 
                             return TicketController::usertimezone($t);
