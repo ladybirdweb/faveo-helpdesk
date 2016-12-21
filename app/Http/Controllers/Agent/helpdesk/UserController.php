@@ -32,6 +32,7 @@ use App\Model\helpdesk\Utility\Otp;
 use App\User;
 // classes
 use Auth;
+use Datatables;
 use DateTime;
 use DB;
 use Exception;
@@ -41,7 +42,6 @@ use Illuminate\Http\Request;
 use Input;
 use Lang;
 use Redirect;
-use Datatables;
 
 /**
  * UserController
@@ -120,7 +120,7 @@ class UserController extends Controller
 
         if ($type === 'agents') {
             $users = User::where('role', '=', 'agent')->where('is_delete', '=', 0);
-        } elseif ($type === 'users') {            
+        } elseif ($type === 'users') {
             $users = User::where('role', '=', 'user')->where('is_delete', '=', 0);
         } elseif ($type === 'active') {
             $users = User::where('role', '!=', 'admin')->where('active', '=', 1);
@@ -133,19 +133,19 @@ class UserController extends Controller
         } else {
             $users = User::where('role', '!=', 'admin')->where('is_delete', '=', 0);
         }
-        
+
         $users = $users->select('user_name', 'email', 'mobile', 'active', 'updated_at', 'role', 'id', 'last_name', 'country_code', 'phone_number');
 
         if ($search !== '') {
-            $users = $users->where(function($query) use ($search){
-                            $query->where('user_name', 'LIKE', '%'.$search.'%');
-                            $query->orWhere('email', 'LIKE', '%'.$search.'%');
-                            $query->orWhere('first_name', 'LIKE', '%'.$search.'%');
-                            $query->orWhere('last_name', 'LIKE', '%'.$search.'%');
-                            $query->orWhere('mobile', 'LIKE', '%'.$search.'%');
-                            $query->orWhere('updated_at', 'LIKE', '%'.$search.'%');
-                            $query->orWhere('country_code', 'LIKE', '%'.$search.'%');
-                      });
+            $users = $users->where(function ($query) use ($search) {
+                $query->where('user_name', 'LIKE', '%'.$search.'%');
+                $query->orWhere('email', 'LIKE', '%'.$search.'%');
+                $query->orWhere('first_name', 'LIKE', '%'.$search.'%');
+                $query->orWhere('last_name', 'LIKE', '%'.$search.'%');
+                $query->orWhere('mobile', 'LIKE', '%'.$search.'%');
+                $query->orWhere('updated_at', 'LIKE', '%'.$search.'%');
+                $query->orWhere('country_code', 'LIKE', '%'.$search.'%');
+            });
         }
         // displaying list of users with chumper datatables
         // return \Datatable::collection(User::where('role', "!=", "admin")->get())
