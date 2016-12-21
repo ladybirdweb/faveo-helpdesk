@@ -296,7 +296,7 @@
                                 <li @yield('cron')><a href="{{url('job-scheduler')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.cron') !!}</a></li>
                                 <li @yield('security')><a href="{{url('security')}}"><i class="fa fa-lock"></i>{!! Lang::get('lang.security') !!}</a></li>
                                 <li @yield('notification')><a href="{{url('settings-notification')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.notifications') !!}</a></li>
-                              <li @yield('Approval')><a href="{{url('approval/settings')}}"><i class="glyphicon glyphicon-repeat"></i>{!! Lang::get('lang.approval') !!}</a></li>
+                                <li @yield('storage')><a href="{{url('storage')}}"><i class="fa fa-save"></i>{!! Lang::get('storage::lang.storage') !!}</a></li>
                             </ul>
                         </li>
                         <li class="treeview @yield('error-bugs')">

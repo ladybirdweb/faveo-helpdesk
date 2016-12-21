@@ -1,9 +1,24 @@
 @extends('themes.default1.admin.layout.admin')
-@section('content')
-<section class="content-header">
-    <h1> {{Lang::get('storage::lang.settings')}} </h1>
 
-</section>
+@section('Settings')
+active
+@stop
+
+@section('settings-bar')
+active
+@stop
+
+@section('storage')
+class="active"
+@stop
+
+@section('PageHeader')
+<h1>{{ Lang::get('storage::lang.storage')}}</h1>
+@stop
+
+@section('HeadInclude')
+@stop
+@section('content')
 <div class="box box-primary">
 
     <div class="box-header with-border">
