@@ -122,7 +122,7 @@ class UserController extends Controller
             $users = User::where('role', '=', 'agent')->where('is_delete', '=', 0);
         } elseif ($type === 'users') {
             $users = User::where('role', '=', 'user')->where('is_delete', '=', 0);
-        } elseif ($type === 'active') {
+        } elseif ($type === 'active-users') {
             $users = User::where('role', '!=', 'admin')->where('active', '=', 1);
         } elseif ($type === 'inactive') {
             $users = User::where('role', '!=', 'admin')->where('active', '=', 0);

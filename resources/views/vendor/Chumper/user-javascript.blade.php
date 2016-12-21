@@ -39,44 +39,52 @@ foreach($segments as $seg){
 
         $('.all').on('click', function(){
             show = 'all';
-            $("#chumper").dataTable().fnDestroy();
-            myFunction(show, searchTerm);
+            classname = '.'+show;
+            filterTable(show);
+            toggleActiveClass(classname);
         });
 
         $('.active-users').on('click', function(){
-            show = 'active';
-            $("#chumper").dataTable().fnDestroy();
-            myFunction(show, searchTerm);
+            show = 'active-users';
+            classname = '.'+show;
+            filterTable(show);
+            toggleActiveClass(classname);
+            
         });
 
         $('.inactive').on('click', function(){
             show = 'inactive';
-            $("#chumper").dataTable().fnDestroy();
-            myFunction(show, searchTerm);
+            classname = '.'+show;
+            filterTable(show);
+            toggleActiveClass(classname);
         });
 
         $('.agents').on('click', function(){
             show = 'agents';
-            $("#chumper").dataTable().fnDestroy();
-            myFunction(show, searchTerm);
+            classname = '.'+show;
+            filterTable(show);
+            toggleActiveClass(classname);
         });
 
         $('.users').on('click', function(){
             show = 'users';
-            $("#chumper").dataTable().fnDestroy();
-            myFunction(show, searchTerm);
+            classname = '.'+show;
+            filterTable(show);
+            toggleActiveClass(classname);
         });
 
         $('.banned').on('click', function(){
             show = 'banned';
-            $("#chumper").dataTable().fnDestroy();
-            myFunction(show, searchTerm);
+            classname = '.'+show;
+            filterTable(show);
+            toggleActiveClass(classname);
         });
 
         $('.deleted').on('click', function(){
             show = 'deleted';
-            $("#chumper").dataTable().fnDestroy();
-            myFunction(show, searchTerm);
+            classname = '.'+show;
+            filterTable(show);
+            toggleActiveClass(classname);
         });
 
         document.getElementById('search-text').onkeypress = function(e){
@@ -87,6 +95,16 @@ foreach($segments as $seg){
                 $("#chumper").dataTable().fnDestroy();
                 myFunction(show, searchTerm);
             }
+        }
+
+        function filterTable(show) {
+            $("#chumper").dataTable().fnDestroy();
+            myFunction(show, searchTerm);
+        }
+
+        function toggleActiveClass(classname) {
+            $('.active').removeClass('active');
+            $(classname).parent('li').addClass('active');
         }
     });
 </script>
