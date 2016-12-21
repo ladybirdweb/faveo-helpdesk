@@ -42,7 +42,7 @@ class="active"
                 <div class="col-md-5">
                     <div class="box-tools" style="width: 235px">
                         <div class="has-feedback">
-                            <input type="text" class="form-control input-sm" id="search-text" name="search" placeholder="{{Lang::get('lang.search')}}">
+                            <input type="text" class="form-control input-sm" id="search-text" name="search" placeholder="{{Lang::get('lang.search')}}" style="height:30px">
                             <span class="fa fa-search form-control-feedback"></span>
                         </div>
                     </div><!-- /.box-tools -->

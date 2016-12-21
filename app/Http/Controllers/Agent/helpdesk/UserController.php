@@ -1074,7 +1074,7 @@ class UserController extends Controller
 
     public function getAgentDetails()
     {
-        $users = User::where('role', '<>', 'user')->where('active', '=', 1)->get();
+        $users = User::where('role', '<>', 'user')->where('active', '=', 1)->orderBy('first_name')->get();
         foreach ($users as $user) {
             echo "<option value='user_$user->id'>".$user->name().'</option>';
         }
