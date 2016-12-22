@@ -1155,5 +1155,7 @@ return [
      'inactive-users'      => 'Inactive users',
      'all-users'           => 'All users',
      'search'              => 'Search...',
+     //update 21-12-2016
+     'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
 
 ];

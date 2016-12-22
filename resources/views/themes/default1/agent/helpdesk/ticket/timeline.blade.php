@@ -948,7 +948,7 @@ alert(h+20);
                         <div class="tab-pane active" id="ahah1">
                             <div id="change_alert" class="alert alert-danger alert-dismissable" style="display:none;">
                                 <button id="change_dismiss" type="button" class="close" data-dismiss="alert"  aria-hidden="true">×</button>
-                                <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                                <h4><i class="icon fa fa-exclamation-circle"></i>Alert!</h4>
                                 <div id="message-success42"></div>
                             </div>
                             <div class="modal-body">
@@ -1645,15 +1645,17 @@ alert(h+20);
                     $("#change_loader").show();
             },
             success: function(response) {
-            if (response != 1)
-            {
-            // $("#assign_body").show();
-            var message = "{{Lang::get('lang.user-not-found')}}";
-                    $('#change_alert').show();
-                    $('#message-success42').html(message);
-                    setInterval(function(){$("#change_alert").hide(); }, 5000);
-                    $("#change_body").show();
-                    $("#change_loader").hide();
+            if (response != 1) {
+                // $("#assign_body").show();
+                var message = "{{Lang::get('lang.user-not-found')}}";
+                if (response == 400) {
+                    message = "{{Lang::get('lang.selected-user-is-already-the-owner')}}";
+                }
+                $('#change_alert').show();
+                $('#message-success42').html(message);
+                setInterval(function(){$("#change_alert").hide(); }, 5000);
+                $("#change_body").show();
+                $("#change_loader").hide();
             } else {
             $("#change_body").show();
                     $("#change_loader").hide();

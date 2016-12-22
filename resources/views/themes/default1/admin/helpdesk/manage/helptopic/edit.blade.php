@@ -135,7 +135,7 @@ class="active"
             <div class="col-md-4">
                 <div class="form-group {{ $errors->has('auto_assign') ? 'has-error' : '' }}">
                     {!! Form::label('auto_assign',Lang::get('lang.auto_assign')) !!}
-                    {!!Form::select('auto_assign', [''=>Lang::get('lang.select_an_agent'),Lang::get('lang.agents')=>$agents->lists('first_name','id')->toArray()],null,['class' => 'form-control']) !!}
+                    {!!Form::select('auto_assign', [''=>Lang::get('lang.select_an_agent'),Lang::get('lang.agents')=>$agents->lists('full_name','id')->toArray()],null,['class' => 'form-control']) !!}
                 </div>
             </div>
         </div>

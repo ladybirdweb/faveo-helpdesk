@@ -1118,7 +1118,7 @@ return [
     'minutes'                                        => ' minutes',
     'in_minutes'                                     => 'In minutes',
     'add_another_owner'                              => 'Add another owner',
-    'user-not-found'                                 => 'User not found. Try again or add a new user.',
+    'user-not-found'                                 => 'User not found or user is inactive. Try again or add a new user.',
     'change-success'                                 => 'Success! owner has been changed for this ticket.',
     'user-exists'                                    => 'User already exists. Try search existing user.',
     'valid-email'                                    => 'Enter a valid email address.',
@@ -1592,4 +1592,6 @@ return [
      'inactive-users'      => 'Inactive users',
      'all-users'           => 'All users',
      'search'              => 'Search...',
+     //update 21-12-2016
+     'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
 ];

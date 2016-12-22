@@ -2218,6 +2218,9 @@ class TicketController extends Controller
         if ($count === 1) {
             $user_id = $user->id;
             $ticket = Tickets::where('id', '=', $id)->first();
+            if($user_id === $ticket->user_id) {
+                return 400;
+            }
             $ticket_number = $ticket->ticket_number;
             $ticket->user_id = $user_id;
             $ticket->save();
