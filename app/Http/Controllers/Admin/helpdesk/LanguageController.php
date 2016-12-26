@@ -210,7 +210,8 @@ class LanguageController extends Controller
      */
     public function download()
     {
-        $file_path = base_path('public/downloads/en.zip');
+        $path = 'downloads'.DIRECTORY_SEPARATOR.'en.zip';
+        $file_path = public_path($path);
 
         return response()->download($file_path);
     }
