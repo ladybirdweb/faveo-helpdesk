@@ -255,7 +255,7 @@ class FilterController extends Controller
                         'u1.user_name as assign_user_name',
                         \DB::raw('max(ticket_thread.updated_at) as updated_at'),
                         \DB::raw('min(ticket_thread.updated_at) as created_at'),
-                        'u.first_name as first_name',                        
+                        'u.first_name as first_name',
                         'u.last_name as last_name',
                         'u1.first_name as assign_first_name',
                         'u1.last_name as assign_last_name',
