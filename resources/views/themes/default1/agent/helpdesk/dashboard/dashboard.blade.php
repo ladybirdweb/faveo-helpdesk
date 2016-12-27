@@ -38,9 +38,6 @@ class="active"
 <link type="text/css" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet">
 {{-- <script src="{{asset("lb-faveo/dist/js/bootstrap-datetimepicker4.7.14.min.js")}}" type="text/javascript"></script> --}}
 <div class="row">
-    <?php
-    $overdue_ticket = count($overdues);
-    ?>
     <!-- <div class="col-md-3 col-sm-6 col-xs-12"> -->
     <div class="col-md-2" style="width:20%;">
         <a href="{!! route('inbox.ticket') !!}">
@@ -75,18 +72,8 @@ class="active"
             <div class="info-box">
                 <span class="info-box-icon bg-red"><i class="fa fa-calendar-times-o"></i></span>
                 <div class="info-box-content">
-
-                        <?php
-      if (Auth::user()->role == 'admin') {
-            $overdue_ticket = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('tickets.duedate','<', \Carbon\Carbon::now())->count();
-        } else {
-            $dept =  App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
-        $overdue_ticket = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('tickets.duedate','<', \Carbon\Carbon::now())->where('dept_id', '=', $dept->id)->count();
-        }
-      ?>
-
-                    <span class="info-box-text">{!! Lang::get('lang.overdue') !!}</span>
-                    <span class="info-box-number">{{ $overdue_ticket }} <small> Tickets</small></span>
+s                    <span class="info-box-text">{!! Lang::get('lang.overdue') !!}</span>
+                    <span class="info-box-number">{{ $overdues->count() }} <small> Tickets</small></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->
         </a>

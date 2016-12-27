@@ -132,7 +132,7 @@ class FilterController extends Controller
                         $join->on('ticket_status.id', '=', 'tickets.status');
                     })
                     ->where('tickets.status', '=', 1)
-                    // ->where('tickets.isanswered', '=', 0)
+                    ->where('tickets.isanswered', '=', 0)
                     ->whereNotNull('tickets.duedate')
                     ->where('tickets.duedate', '!=', '00-00-00 00:00:00')
 
