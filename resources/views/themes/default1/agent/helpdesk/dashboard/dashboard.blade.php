@@ -72,7 +72,7 @@ class="active"
             <div class="info-box">
                 <span class="info-box-icon bg-red"><i class="fa fa-calendar-times-o"></i></span>
                 <div class="info-box-content">
-s                    <span class="info-box-text">{!! Lang::get('lang.overdue') !!}</span>
+                    <span class="info-box-text">{!! Lang::get('lang.overdue') !!}</span>
                     <span class="info-box-number">{{ $overdues->count() }} <small> Tickets</small></span>
                 </div><!-- /.info-box-content -->
             </div><!-- /.info-box -->

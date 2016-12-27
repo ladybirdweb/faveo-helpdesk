@@ -196,6 +196,7 @@ class FilterController extends Controller
                      ->leftJoin('ticket_status', function ($join) {
                          $join->on('ticket_status.id', '=', 'tickets.status');
                      })
+                    ->where('isanswered', '=', 0)
                     ->where('tickets.status', '=', 1);
             case '/duetoday':
                 if (Auth::user()->role == 'agent') {
@@ -238,7 +239,7 @@ class FilterController extends Controller
                         ->whereNotNull('title')
                         ->where('ticket_thread.is_internal', '<>', 1);
                     })
-
+                    ->leftJoin('ticket_thread as ticket_thread2', 'ticket_thread2.ticket_id', '=', 'tickets.id')
                     ->Join('ticket_source', 'ticket_source.id', '=', 'tickets.source')
                     ->leftJoin('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->leftJoin('users as u', 'u.id', '=', 'tickets.user_id')

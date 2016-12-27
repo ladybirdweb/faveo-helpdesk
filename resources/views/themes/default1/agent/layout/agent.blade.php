@@ -320,7 +320,7 @@
             </aside>
 <?php
 $agent_group = $auth_user_assign_group;
-$group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
+$group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first();
 ?>
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
@@ -344,10 +344,6 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where(
                                 <ul class="nav navbar-nav">
                                     <li id="bar" @yield('open')><a href="{{ url('/ticket/open')}}" id="load-open">{!! Lang::get('lang.open') !!}</a></li>
                                     <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
-                                    <li id="bar" @yield('myticket')><a href="{{ url('/ticket/myticket')}}" >{!! Lang::get('lang.my_tickets') !!}</a></li>
-                                    {{-- < li id = "bar" @yield('ticket') > < a href = "{{ url('ticket') }}" >Ticket</a></li> --}}
-                                    {{-- < li id = "bar" @yield('overdue') > < a href = "{{ url('/ticket/overdue') }}" >Overdue</a></li> --}}
-
                                     <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
                                     <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
 <?php if ($group->can_create_ticket == 1) { ?>

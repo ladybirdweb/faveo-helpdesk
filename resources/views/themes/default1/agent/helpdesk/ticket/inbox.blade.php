@@ -45,15 +45,15 @@ class="active"
 $date_time_format = UTC::getDateTimeFormat();
 if (Auth::user()->role == 'agent') {
     $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
-    $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status', array(1, 7))->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->paginate(20);
+    $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status', array(1, 7))->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->count();
 } else {
-    $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status', array(1, 7))->orderBy('id', 'DESC')->paginate(20);
+    $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status', array(1, 7))->orderBy('id', 'DESC')->count();
 }
 ?>
 <!-- Main content -->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.inbox') !!} </h3> <small id="title_refresh">{!! $tickets->total() !!} {!! Lang::get('lang.tickets') !!}</small>
+        <h3 class="box-title">{!! Lang::get('lang.inbox') !!} </h3> <small id="title_refresh">{!! $tickets !!} {!! Lang::get('lang.tickets') !!}</small>
     </div><!-- /.box-header -->
 
     <div class="box-body ">
