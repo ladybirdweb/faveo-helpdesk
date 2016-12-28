@@ -12,37 +12,7 @@ active
 
 @section('content')
 
-<?php  //dd(ini_get('disable_functions')); ?> 
-
-
-<?php
-// $sets = explode(",", ini_get('disable_functions'));
-// $required_functions = ['escapeshellarg'];
-// foreach ($sets as $key) {
-//     $key = trim($key);
-//     foreach ($required_functions as $value) {
-//         if($key == $value) {
-//             if (strpos(ini_get('disable_functions'), $key) !== false) {
-//                 dd("found");
-//             } else {
-//                 dd("not - found");
-//             }
-//         }
-//     }
-// }
-// dd($sets);
-
-// // foreach ( as $key => $value) {
-// //     # code...
-// // }
-// if (strpos($to_check, $statement) !== false) {
-//             return true;
-//         } else {
-//             return false;
-//         }
-?>
-
- <div id="form-content">
+<div id="form-content">
 <center><h1>Environment Test</h1></center>
          @if (Session::has('fail_to_change'))
            <div class="woocommerce-message woocommerce-tracker" >
@@ -208,7 +178,7 @@ function validate_zend_compatibility_mode(&$results) {
 function validate_extensions(&$results) {
     $ok = true;
 
-    $required_extensions = array('mcrypt', 'openssl', 'pdo', 'fileinfo', 'curl', 'zip');
+    $required_extensions = array('mcrypt', 'openssl', 'pdo', 'fileinfo', 'curl', 'zip', 'mbstring');
 
     foreach ($required_extensions as $required_extension) {
         if (extension_loaded($required_extension)) {
@@ -277,6 +247,16 @@ function checkDisabledFunctions(&$results) {
     return $ok;
 }
 
+function checkMaxExecutiontime(&$results)
+{
+    $ok = true;
+    if ((int)ini_get('max_execution_time') >=  120) {
+        $results[] = new TestResult("Maximum execution time is as per requirement.", STATUS_OK);
+    } else {
+        $results[] = new TestResult("Maximum execution time is too low. Recommneded execution time is 120 seconds ", STATUS_WARNING);
+    }
+    return $ok;
+}
 // ---------------------------------------------------
 //  Do the magic
 // ---------------------------------------------------
@@ -288,6 +268,7 @@ $memory_ok = validate_memory_limit($results);
 $extensions_ok = validate_extensions($results);
 $file_permission = checkFilePermission($results);
 $required_functions = checkDisabledFunctions($results);
+$check_execution_time = checkMaxExecutiontime($results);
 ?>
 <p class="setup-actions step">
 <?php 
@@ -297,7 +278,7 @@ foreach ($results as $result) {
 ?>
 </p>
 <?php
-if ($php_ok && $memory_ok && $extensions_ok && $file_permission && $required_functions) {
+if ($php_ok && $memory_ok && $extensions_ok && $file_permission && $required_functions && $check_execution_time) {
     ?>
 </div>  
 
