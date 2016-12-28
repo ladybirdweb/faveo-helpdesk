@@ -106,7 +106,7 @@ return [
      */
     'i_know_my_password'            => 'I know my password',
     'recover_passord'               => 'Recover password',
-    'send_password_reset_link'      => 'Send pasword reset link',
+    'send_password_reset_link'      => 'Send password reset link',
     'enter_email_to_reset_password' => 'Enter email/mobile number to reset password',
     'link'                          => 'Link',
     'email_or_mobile'               => 'Email or mobile',
