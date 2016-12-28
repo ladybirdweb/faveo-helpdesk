@@ -86,15 +86,24 @@ class TeamController extends Controller
      */
     public function store(Teams $team, TeamRequest $request)
     {
-        if ($request->team_lead) {
-            $team_lead = $request->team_lead;
-        } else {
-            $team_lead = null;
-        }
-        $team->team_lead = $team_lead;
         try {
             /* Check whether function success or not */
             $team->fill($request->except('team_lead'))->save();
+            $team_update = Teams::find($team->id);
+            if ($request->team_lead) {
+                $team_lead = $request->team_lead;
+                $team_update->update([
+                    'team_lead' => $team_lead
+                ]);
+                Assign_team_agent::create([
+                    'team_id' => $team_update->id,
+                    'agent_id' => $team_lead
+                ]);
+            } else {
+                $team_lead = null;
+            }
+
+
             /* redirect to Index page with Success Message */
             return redirect('teams')->with('success', Lang::get('lang.teams_created_successfully'));
         } catch (Exception $e) {
