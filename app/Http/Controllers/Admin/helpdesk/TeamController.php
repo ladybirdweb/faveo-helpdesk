@@ -68,7 +68,7 @@ class TeamController extends Controller
     public function create(User $user)
     {
         try {
-            $user = $user->where('role', '<>', 'user')->where('active', '=', 1)->get();
+            $user = $user->where('role', '<>', 'user')->where('active', '=', 1)->orderBy('first_name')->get();
 
             return view('themes.default1.admin.helpdesk.agent.teams.create', compact('user'));
         } catch (Exception $e) {
@@ -202,11 +202,16 @@ $users = DB::table('team_assign_agent')->select('team_assign_agent.id', 'team_as
     public function edit($id, User $user, Assign_team_agent $assign_team_agent, Teams $team)
     {
         try {
-            $user = $user->where('role', '<>', 'user')->where('active', '=', 1)->get();
+            $a_id = [];
             $teams = $team->whereId($id)->first();
             $agent_team = $assign_team_agent->where('team_id', $id)->get();
             $agent_id = $agent_team->lists('agent_id', 'agent_id');
-
+            foreach ($agent_id as $value) {
+                array_push($a_id, $value);
+            }
+            // dd($a_id);
+            $user = $user->whereIn('id', $a_id)->where('active', '=', 1)->orderBy('first_name')->get();
+            // dd($user);
             return view('themes.default1.admin.helpdesk.agent.teams.edit', compact('agent_id', 'user', 'teams', 'allagents'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
