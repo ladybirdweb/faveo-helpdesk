@@ -1137,7 +1137,7 @@ return [
     'merge-success'                                  => 'Tickets have been merged successfully.',
     'merge-error2'                                   => 'Please select ticket to merge.',
     'select-tickets-to merge'                        => 'Select two or more tickets to merge.',
-    'different-users'                                => 'Ticktes from different users',
+    'different-users'                                => 'Selected ticktes are from different users',
     'clean-up'                                       => 'Delete forever',
     'hard-delete-success-message'                    => 'Tickets have been deleted permanently.',
     'overdue'                                        => 'Overdue',
