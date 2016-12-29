@@ -93,16 +93,15 @@ class TeamController extends Controller
             if ($request->team_lead) {
                 $team_lead = $request->team_lead;
                 $team_update->update([
-                    'team_lead' => $team_lead
+                    'team_lead' => $team_lead,
                 ]);
                 Assign_team_agent::create([
-                    'team_id' => $team_update->id,
-                    'agent_id' => $team_lead
+                    'team_id'  => $team_update->id,
+                    'agent_id' => $team_lead,
                 ]);
             } else {
                 $team_lead = null;
             }
-
 
             /* redirect to Index page with Success Message */
             return redirect('teams')->with('success', Lang::get('lang.teams_created_successfully'));
