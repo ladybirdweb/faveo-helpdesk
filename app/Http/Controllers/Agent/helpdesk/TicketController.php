@@ -2426,6 +2426,7 @@ class TicketController extends Controller
             }
         }
         $this->sendMergeNotification($p_id, $t_id);
+
         return $success;
     }
 
@@ -2902,7 +2903,9 @@ class TicketController extends Controller
 
     /**
      *@category function to send notification of ticket merging to the owners
+     *
      *@param srting array $t_id, $p_id
+     *
      *@return null
      */
     public function sendMergeNotification($p_id, $t_id)
@@ -2915,10 +2918,10 @@ class TicketController extends Controller
                     $meged_ticket_details = Tickets::select('ticket_number')->whereIn('id', $t_id)->get();
                     $child_ticket_numbers = [];
                     foreach ($meged_ticket_details as $value) {
-                        array_push($child_ticket_numbers, $value->ticket_number); 
+                        array_push($child_ticket_numbers, $value->ticket_number);
                     }
                     // dd(implode(", ",$child_ticket_numbers), $ticket_details->ticket_number);
-                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket_details->dept_id), $to = ['user'  => $user_detail->full_name, 'email' => $user_detail->email], $message = ['subject' => '', 'body'    => '', 'scenario' => 'merge-ticket-notification',], $template_variables = ['user' => $user_detail->full_name, 'ticket_number' => $ticket_details->ticket_number, 'ticket_link'   => route('ticket.thread',$p_id), 'merged_ticket_numbers' => implode(", ",$child_ticket_numbers),]);
+                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket_details->dept_id), $to = ['user'  => $user_detail->full_name, 'email' => $user_detail->email], $message = ['subject' => '', 'body'    => '', 'scenario' => 'merge-ticket-notification'], $template_variables = ['user' => $user_detail->full_name, 'ticket_number' => $ticket_details->ticket_number, 'ticket_link'   => route('ticket.thread', $p_id), 'merged_ticket_numbers' => implode(', ', $child_ticket_numbers)]);
                 }
             }
         } catch (\Exception $e) {
