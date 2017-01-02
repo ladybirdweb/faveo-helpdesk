@@ -426,10 +426,10 @@ Breadcrumbs::register('report.index', function ($breadcrumbs) {
     $breadcrumbs->push(Lang::get('lang.dashboard'), route('dashboard'));
 });
 Breadcrumbs::register('home', function ($breadcrumbs) {
-    $breadcrumbs->push('Home', route('home'));
+    $breadcrumbs->push(Lang::get('lang.home'), route('home'));
 });
 Breadcrumbs::register('/', function ($breadcrumbs) {
-    $breadcrumbs->push('Home', route('/'));
+    $breadcrumbs->push(Lang::get('lang.home'), route('/'));
 });
 Breadcrumbs::register('form', function ($breadcrumbs) {
     $breadcrumbs->push('Create Ticket', route('form'));
