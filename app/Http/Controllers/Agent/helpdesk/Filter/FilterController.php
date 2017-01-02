@@ -132,7 +132,7 @@ class FilterController extends Controller
                         $join->on('ticket_status.id', '=', 'tickets.status');
                     })
                     ->where('tickets.status', '=', 1)
-                    // ->where('tickets.isanswered', '=', 0)
+                    ->where('tickets.isanswered', '=', 0)
                     ->whereNotNull('tickets.duedate')
                     ->where('tickets.duedate', '!=', '00-00-00 00:00:00')
 
@@ -196,6 +196,7 @@ class FilterController extends Controller
                      ->leftJoin('ticket_status', function ($join) {
                          $join->on('ticket_status.id', '=', 'tickets.status');
                      })
+                    ->where('isanswered', '=', 0)
                     ->where('tickets.status', '=', 1);
             case '/duetoday':
                 if (Auth::user()->role == 'agent') {
@@ -238,7 +239,7 @@ class FilterController extends Controller
                         ->whereNotNull('title')
                         ->where('ticket_thread.is_internal', '<>', 1);
                     })
-
+                    ->leftJoin('ticket_thread as ticket_thread2', 'ticket_thread2.ticket_id', '=', 'tickets.id')
                     ->Join('ticket_source', 'ticket_source.id', '=', 'tickets.source')
                     ->leftJoin('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->leftJoin('users as u', 'u.id', '=', 'tickets.user_id')
@@ -255,17 +256,17 @@ class FilterController extends Controller
                         'u1.user_name as assign_user_name',
                         \DB::raw('max(ticket_thread.updated_at) as updated_at'),
                         \DB::raw('min(ticket_thread.updated_at) as created_at'),
-                        'tickets.priority_id', 'tickets.assigned_to',
-                        DB::raw('COUNT(ticket_thread.updated_at) as countthread'),
-                        'ticket_priority.priority_color',
                         'u.first_name as first_name',
                         'u.last_name as last_name',
                         'u1.first_name as assign_first_name',
                         'u1.last_name as assign_last_name',
-                        'tickets.status',
-                        'tickets.user_id',
+                        'ticket_priority.priority_color',
+                        DB::raw('COUNT(DISTINCT ticket_thread2.id) as countthread'),
                         DB::raw('COUNT(ticket_attachment.thread_id) as countattachment'),
                         DB::raw('COUNT(ticket_collaborator.ticket_id) as countcollaborator'),
+                        'tickets.status',
+                        'tickets.user_id',
+                        'tickets.priority_id', 'tickets.assigned_to',
                         'ticket_status.name as tickets_status',
                         'ticket_source.css_class as css',
                         DB::raw('substring_index(group_concat(ticket_thread.poster order by ticket_thread.id desc) , ",", 1) as last_replier'),

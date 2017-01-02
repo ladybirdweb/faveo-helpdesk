@@ -106,7 +106,7 @@ return [
      */
     'i_know_my_password'            => 'I know my password',
     'recover_passord'               => 'Recover password',
-    'send_password_reset_link'      => 'Send pasword reset link',
+    'send_password_reset_link'      => 'Send password reset link',
     'enter_email_to_reset_password' => 'Enter email/mobile number to reset password',
     'link'                          => 'Link',
     'email_or_mobile'               => 'Email or mobile',
@@ -1118,7 +1118,7 @@ return [
     'minutes'                                        => ' minutes',
     'in_minutes'                                     => 'In minutes',
     'add_another_owner'                              => 'Add another owner',
-    'user-not-found'                                 => 'User not found. Try again or add a new user.',
+    'user-not-found'                                 => 'User not found or user is inactive. Try again or add a new user.',
     'change-success'                                 => 'Success! owner has been changed for this ticket.',
     'user-exists'                                    => 'User already exists. Try search existing user.',
     'valid-email'                                    => 'Enter a valid email address.',
@@ -1137,7 +1137,7 @@ return [
     'merge-success'                                  => 'Tickets have been merged successfully.',
     'merge-error2'                                   => 'Please select ticket to merge.',
     'select-tickets-to merge'                        => 'Select two or more tickets to merge.',
-    'different-users'                                => 'Ticktes from different users',
+    'different-users'                                => 'Selected ticktes are from different users',
     'clean-up'                                       => 'Delete forever',
     'hard-delete-success-message'                    => 'Tickets have been deleted permanently.',
     'overdue'                                        => 'Overdue',
@@ -1583,4 +1583,15 @@ return [
      'delete-account-caution-info'  => 'Please note this account may still have  open tickets in the system.',
      'reply-can-not-be-empty'       => 'Reply can not be blank. Please enter your reply.',
 
+     //update 18-12-2016
+     'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Your account has been created successfully. Please contact admin for account activation as we were not able to send you an OPT code.',
+     //update 19-12-2016
+     'only-agents'         => 'Agent users',
+     'only-users'          => 'Clients users',
+     'banned-users'        => 'Banned users',
+     'inactive-users'      => 'Inactive users',
+     'all-users'           => 'All users',
+     'search'              => 'Search...',
+     //update 21-12-2016
+     'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
 ];

@@ -171,8 +171,12 @@
                                         <div class="form-group pull-left">
                                          <input type="checkbox" name="remember"> {!! Lang::get("lang.remember") !!}
                                         </div>
-                                        <button type="submit" class="btn btn-custom  .btn-sm ">{!! Lang::get('lang.login') !!}</button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-custom  .btn-sm ">{!! Lang::get('lang.login') !!}</button>
                                         {!! Form::close() !!}
+                                        </div>
                                     </div>
                                     {{Lang::get('lang.or')}}
                                 <div class="row">

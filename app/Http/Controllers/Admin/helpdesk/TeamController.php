@@ -68,7 +68,7 @@ class TeamController extends Controller
     public function create(User $user)
     {
         try {
-            $user = $user->where('role', '<>', 'user')->where('active', '=', 1)->get();
+            $user = $user->where('role', '<>', 'user')->where('active', '=', 1)->orderBy('first_name')->get();
 
             return view('themes.default1.admin.helpdesk.agent.teams.create', compact('user'));
         } catch (Exception $e) {
@@ -86,15 +86,23 @@ class TeamController extends Controller
      */
     public function store(Teams $team, TeamRequest $request)
     {
-        if ($request->team_lead) {
-            $team_lead = $request->team_lead;
-        } else {
-            $team_lead = null;
-        }
-        $team->team_lead = $team_lead;
         try {
             /* Check whether function success or not */
             $team->fill($request->except('team_lead'))->save();
+            $team_update = Teams::find($team->id);
+            if ($request->team_lead) {
+                $team_lead = $request->team_lead;
+                $team_update->update([
+                    'team_lead' => $team_lead,
+                ]);
+                Assign_team_agent::create([
+                    'team_id'  => $team_update->id,
+                    'agent_id' => $team_lead,
+                ]);
+            } else {
+                $team_lead = null;
+            }
+
             /* redirect to Index page with Success Message */
             return redirect('teams')->with('success', Lang::get('lang.teams_created_successfully'));
         } catch (Exception $e) {
@@ -202,11 +210,16 @@ $users = DB::table('team_assign_agent')->select('team_assign_agent.id', 'team_as
     public function edit($id, User $user, Assign_team_agent $assign_team_agent, Teams $team)
     {
         try {
-            $user = $user->where('role', '<>', 'user')->where('active', '=', 1)->get();
+            $a_id = [];
             $teams = $team->whereId($id)->first();
             $agent_team = $assign_team_agent->where('team_id', $id)->get();
             $agent_id = $agent_team->lists('agent_id', 'agent_id');
-
+            foreach ($agent_id as $value) {
+                array_push($a_id, $value);
+            }
+            // dd($a_id);
+            $user = $user->whereIn('id', $a_id)->where('active', '=', 1)->orderBy('first_name')->get();
+            // dd($user);
             return view('themes.default1.admin.helpdesk.agent.teams.edit', compact('agent_id', 'user', 'teams', 'allagents'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());

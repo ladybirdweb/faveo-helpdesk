@@ -45,17 +45,15 @@ class="active"
 $date_time_format = UTC::getDateTimeFormat();
 if (Auth::user()->role == 'agent') {
     $dept = App\Model\helpdesk\Agent\Department::select('id', 'name')->where('id', '=', Auth::user()->primary_dpt)->first();
-    $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status', array(1, 7))->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->paginate(20);
     $dept_name =  $dept->name;
 } else {
     $dept_name = \Request::segments()[1];
-    $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('status', array(1, 7))->orderBy('id', 'DESC')->paginate(20);
 }
 ?>
 <!-- Main content -->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! $dept_name !!} / {!! $status !!} </h3> <small id="title_refresh">{!! $tickets->total() !!} {!! Lang::get('lang.tickets') !!}</small>
+        <h3 class="box-title">{!! $dept_name !!} / {!! $status !!} </h3>
     </div><!-- /.box-header -->
 
     <div class="box-body ">

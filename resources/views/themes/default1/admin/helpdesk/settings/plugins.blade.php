@@ -54,6 +54,11 @@ class="active"
         </div><!-- /.modal -->
     </div>
     <div class="box-body">
+        <div class="alert alert-info alert-dismissable">
+            <i class="fa fa-info-circle"></i>
+            <b>{!! Lang::get('lang.plugin-info') !!}</b><br/>
+            <a href="http://www.faveohelpdesk.com/plugins/" target="_blank">{!!Lang::get('lang.click-here')!!}</a>&nbsp;{!!Lang::get('lang.plugin-info-pro')!!}
+        </div>
         @if (count($errors) > 0)
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>

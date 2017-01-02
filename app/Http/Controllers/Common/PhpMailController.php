@@ -115,7 +115,7 @@ class PhpMailController extends Controller
         $department_sign = $this->checkElement('department_sign', $template_variables);
         $password_reset_link = $this->checkElement('password_reset_link', $template_variables);
         $user_password = $this->checkElement('user_password', $template_variables);
-
+        $merged_ticket_numbers = $this->checkElement('merged_ticket_numbers', $template_variables);
         $email_address = $this->checkElement('email_address', $template_variables);
         $user = $this->checkElement('user', $template_variables);
 
@@ -145,9 +145,9 @@ class PhpMailController extends Controller
                 $subject = null;
             }
 
-            $variables = ['{!!$user!!}', '{!!$agent!!}', '{!!$ticket_number!!}', '{!!$content!!}', '{!!$from!!}', '{!!$ticket_agent_name!!}', '{!!$ticket_client_name!!}', '{!!$ticket_client_email!!}', '{!!$ticket_body!!}', '{!!$ticket_assigner!!}', '{!!$ticket_link_with_number!!}', '{!!$system_error!!}', '{!!$agent_sign!!}', '{!!$department_sign!!}', '{!!$password_reset_link!!}', '{!!$email_address!!}', '{!!$user_password!!}', '{!!$system_from!!}', '{!!$system_link!!}', '{!!$ticket_link!!}'];
+            $variables = ['{!!$user!!}', '{!!$agent!!}', '{!!$ticket_number!!}', '{!!$content!!}', '{!!$from!!}', '{!!$ticket_agent_name!!}', '{!!$ticket_client_name!!}', '{!!$ticket_client_email!!}', '{!!$ticket_body!!}', '{!!$ticket_assigner!!}', '{!!$ticket_link_with_number!!}', '{!!$system_error!!}', '{!!$agent_sign!!}', '{!!$department_sign!!}', '{!!$password_reset_link!!}', '{!!$email_address!!}', '{!!$user_password!!}', '{!!$system_from!!}', '{!!$system_link!!}', '{!!$ticket_link!!}', '{!!$merged_ticket_numbers!!}'];
 
-            $data = [$user, $agent, $ticket_number, $content, $from, $ticket_agent_name, $ticket_client_name, $ticket_client_email, $ticket_body, $ticket_assigner, $ticket_link_with_number, $system_error, $agent_sign, $department_sign, $password_reset_link, $email_address, $user_password, $system_from, $system_link, $ticket_link];
+            $data = [$user, $agent, $ticket_number, $content, $from, $ticket_agent_name, $ticket_client_name, $ticket_client_email, $ticket_body, $ticket_assigner, $ticket_link_with_number, $system_error, $agent_sign, $department_sign, $password_reset_link, $email_address, $user_password, $system_from, $system_link, $ticket_link, $merged_ticket_numbers];
 
             foreach ($variables as $key => $variable) {
                 $messagebody = str_replace($variables[$key], $data[$key], $contents);

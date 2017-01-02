@@ -397,14 +397,14 @@ if ($thread->title != "") {
                                     <label>{!! Lang::get('lang.response') !!}</label>
                                 </div>
                                 <div class="col-md-10">
-                                    <select class="form-control" style="width:55%" id="select">
+                                    <select class="form-control" style="width:55%" id="select" onchange="addCannedResponse()">
 
                                         <?php
                                         $canneds = App\Model\helpdesk\Agent_panel\Canned::where('user_id', '=', Auth::user()->id)->get();
                                         ?>                                                  
                                         <option value="zzz">{!! Lang::get('lang.select_a_canned_response') !!}</option>
                                         @foreach($canneds as $canned)
-                                        <option value="{!! $canned->id !!}" >{!! $canned->title !!}</option>
+                                        <option value="{!! $canned->message !!}" >{!! $canned->title !!}</option>
                                         @endforeach
                                         {{-- <option>Last Message</option> --}}
                                     </select>
@@ -948,7 +948,7 @@ alert(h+20);
                         <div class="tab-pane active" id="ahah1">
                             <div id="change_alert" class="alert alert-danger alert-dismissable" style="display:none;">
                                 <button id="change_dismiss" type="button" class="close" data-dismiss="alert"  aria-hidden="true">×</button>
-                                <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                                <h4><i class="icon fa fa-exclamation-circle"></i>Alert!</h4>
                                 <div id="message-success42"></div>
                             </div>
                             <div class="modal-body">
@@ -1054,7 +1054,7 @@ alert(h+20);
                             <p>{!! Lang::get('lang.whome_do_you_want_to_assign_ticket') !!}?</p>
                             <select id="asssign" class="form-control" name="assign_to">
                                 <?php
-                                $assign = App\User::where('role', '!=', 'user')->where('active', '=', '1')->get();
+                                $assign = App\User::where('role', '!=', 'user')->where('active', '=', '1')->orderBy('first_name')->get();
                                 $count_assign = count($assign);
                                 $teams = App\Model\helpdesk\Agent\Teams::where('status', '=', '1')->get();
                                 $count_teams = count($teams);
@@ -1645,15 +1645,17 @@ alert(h+20);
                     $("#change_loader").show();
             },
             success: function(response) {
-            if (response != 1)
-            {
-            // $("#assign_body").show();
-            var message = "{{Lang::get('lang.user-not-found')}}";
-                    $('#change_alert').show();
-                    $('#message-success42').html(message);
-                    setInterval(function(){$("#change_alert").hide(); }, 5000);
-                    $("#change_body").show();
-                    $("#change_loader").hide();
+            if (response != 1) {
+                // $("#assign_body").show();
+                var message = "{{Lang::get('lang.user-not-found')}}";
+                if (response == 400) {
+                    message = "{{Lang::get('lang.selected-user-is-already-the-owner')}}";
+                }
+                $('#change_alert').show();
+                $('#message-success42').html(message);
+                setInterval(function(){$("#change_alert").hide(); }, 5000);
+                $("#change_body").show();
+                $("#change_loader").hide();
             } else {
             $("#change_body").show();
                     $("#change_loader").hide();
@@ -2210,5 +2212,20 @@ echo $ticket_data->title;
             $(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
             });
             }
+
+    function addCannedResponse() {
+        var selectedResponse = document.getElementById( "select" );
+        var response = selectedResponse.options[selectedResponse.selectedIndex ].value;
+        if (response == 'zzz') {
+            for ( instance in CKEDITOR.instances ){
+                CKEDITOR.instances[instance].updateElement();
+                CKEDITOR.instances[instance].setData('');
+            }
+        } else {
+            for ( instance in CKEDITOR.instances ) {
+                CKEDITOR.instances[instance].insertHtml(response);
+            }
+        }
+    }
 </script>
 @stop

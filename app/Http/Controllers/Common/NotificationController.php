@@ -164,7 +164,7 @@ class NotificationController extends Controller
                     }, 'notification.model' => function ($query) {
                         $query->select('id', 'ticket_number');
                     },
-        ]);
+        ])->where('user_id', '=', \Auth::user()->id);
 
         return $notifications;
     }

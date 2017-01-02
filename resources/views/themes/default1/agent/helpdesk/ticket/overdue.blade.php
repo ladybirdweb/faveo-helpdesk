@@ -41,38 +41,20 @@ class="active"
 @stop
 @section('content')
 <?php
-// $date_time_format = UTC::getDateTimeFormat();
-// if (Auth::user()->role == 'agent') {
-//     $dept = \App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
-//     $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->where('dept_id', '=', $dept->id)->orderBy('id', 'DESC')->get();
-// } else {
-//     $overdues = App\Model\helpdesk\Ticket\Tickets::where('status', '=', 1)->where('isanswered', '=', 0)->orderBy('id', 'DESC')->get();
-// }
-// $i = count($overdues);
-// if ($i == 0) {
-//     $overdue_ticket = 0;
-// } else {
-//     $j = 0;
-//     foreach ($overdues as $overdue) {
-//         $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $overdue->sla)->first();
 
-//         $ovadate = $overdue->created_at;
-//         $new_date = date_add($ovadate, date_interval_create_from_date_string($sla_plan->grace_period)) . '<br/><br/>';
-//         if (date('Y-m-d H:i:s') > $new_date) {
-//             $j++;
-//             //$value[] = $overdue;
-//         }
-//     }
-//     // dd(count($value));
-//     if ($j > 0) {
-//         $overdue_ticket = $j;
-//     } else {
-//         $overdue_ticket = 0;
-//     }
-// }
 
- $overdue_ticket=App\Model\helpdesk\Ticket\Tickets::where('tickets.duedate','<', \Carbon\Carbon::now())->count();
+    $otickets = App\Model\helpdesk\Ticket\Tickets::where('tickets.status', '=', 1)
+                    ->where('tickets.isanswered', '=', 0)
+                    ->whereNotNull('tickets.duedate')
+                    ->where('tickets.duedate', '!=', '00-00-00 00:00:00')
 
+                    // ->where('duedate','>',\Carbon\Carbon::now());
+                    ->where('tickets.duedate', '<', \Carbon\Carbon::now());
+    if (\Auth::user()->role === 'agent') {
+        $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
+        $otickets = $otickets->where('dept_id', '=', $dept->id);
+    }
+    $overdue_ticket = $otickets->count();
 
 ?>
 <!-- Main content -->

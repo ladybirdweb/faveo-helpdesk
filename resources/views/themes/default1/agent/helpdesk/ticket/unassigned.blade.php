@@ -44,9 +44,9 @@ class="active"
 $date_time_format = UTC::getDateTimeFormat();
 if (Auth::user()->role == 'agent') {
     $dept = App\Model\helpdesk\Agent\Department::where('id', '=', Auth::user()->primary_dpt)->first();
-    $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('dept_id', '=', $dept->id)->where('status', '1')->orderBy('id', 'DESC')->paginate(20);
+    $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('dept_id', '=', $dept->id)->where('status', '1')->orderBy('id', 'DESC')->count();
 } else {
-    $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '1')->orderBy('id', 'DESC')->paginate(20);
+    $tickets = App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', null)->where('status', '1')->orderBy('id', 'DESC')->count();
 }
 // dd($tickets);
 ?>
@@ -54,7 +54,7 @@ if (Auth::user()->role == 'agent') {
 <div class="box box-info">
     <div class="box-header with-border">
         <?php $counted = count(App\Model\helpdesk\Ticket\Tickets::where('assigned_to', '=', 0)->get()); ?>
-        <h3 class="box-title">{!! Lang::get('lang.unassigned') !!} </h3> <small id="title_refresh"> {!! $tickets->total() !!} {!! Lang::get('lang.tickets') !!}</small>
+        <h3 class="box-title">{!! Lang::get('lang.unassigned') !!} </h3> <small id="title_refresh"> {!! $tickets !!} {!! Lang::get('lang.tickets') !!}</small>
     </div><!-- /.box-header -->
     <div class="box-body">
         @if(Session::has('success'))
