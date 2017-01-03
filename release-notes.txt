@@ -26,6 +26,12 @@ Enhancements
     Check if JavaScript is enabled or not while installation
     Put max execution time and "mbstring" extension check while installation
 
+    |========================================================
+    | Upgrade giude
+    |========================================================
+
+    Follow this wiki article to upgrade your Faveo system
+    https://github.com/ladybirdweb/faveo-helpdesk/wiki/Upgrade-guide-for-v1.9.2
 
 |=======================================================
 | v1.9.1
