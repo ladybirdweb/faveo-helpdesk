@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.14
--- http://www.phpmyadmin.net
+-- version 4.6.4
+-- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 13, 2016 at 10:36 AM
--- Server version: 5.6.17
--- PHP Version: 5.5.12
+-- Generation Time: Jan 03, 2017 at 06:22 AM
+-- Server version: 5.7.14
+-- PHP Version: 5.6.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,10 +14,10 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `community`
+-- Database: `final`
 --
 
 -- --------------------------------------------------------
@@ -26,14 +26,13 @@ SET time_zone = "+00:00";
 -- Table structure for table `api_settings`
 --
 
-CREATE TABLE IF NOT EXISTS `api_settings` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `api_settings` (
+  `id` int(10) UNSIGNED NOT NULL,
   `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -41,15 +40,14 @@ CREATE TABLE IF NOT EXISTS `api_settings` (
 -- Table structure for table `banlist`
 --
 
-CREATE TABLE IF NOT EXISTS `banlist` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `banlist` (
+  `id` int(10) UNSIGNED NOT NULL,
   `ban_status` tinyint(1) NOT NULL,
   `email_address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `internal_notes` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -57,14 +55,13 @@ CREATE TABLE IF NOT EXISTS `banlist` (
 -- Table structure for table `bar_notifications`
 --
 
-CREATE TABLE IF NOT EXISTS `bar_notifications` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `bar_notifications` (
+  `id` int(10) UNSIGNED NOT NULL,
   `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `bar_notifications`
@@ -79,16 +76,14 @@ INSERT INTO `bar_notifications` (`id`, `key`, `value`, `created_at`, `updated_at
 -- Table structure for table `canned_response`
 --
 
-CREATE TABLE IF NOT EXISTS `canned_response` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
+CREATE TABLE `canned_response` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `message` text COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -96,16 +91,15 @@ CREATE TABLE IF NOT EXISTS `canned_response` (
 -- Table structure for table `common_settings`
 --
 
-CREATE TABLE IF NOT EXISTS `common_settings` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `common_settings` (
+  `id` int(10) UNSIGNED NOT NULL,
   `option_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `option_value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `optional_field` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `common_settings`
@@ -126,14 +120,13 @@ INSERT INTO `common_settings` (`id`, `option_name`, `option_value`, `status`, `o
 -- Table structure for table `conditions`
 --
 
-CREATE TABLE IF NOT EXISTS `conditions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `conditions` (
+  `id` int(10) UNSIGNED NOT NULL,
   `job` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -141,8 +134,8 @@ CREATE TABLE IF NOT EXISTS `conditions` (
 -- Table structure for table `country_code`
 --
 
-CREATE TABLE IF NOT EXISTS `country_code` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `country_code` (
+  `id` int(10) UNSIGNED NOT NULL,
   `iso` char(2) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `nicename` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
@@ -150,9 +143,8 @@ CREATE TABLE IF NOT EXISTS `country_code` (
   `numcode` smallint(6) NOT NULL,
   `phonecode` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=240 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `country_code`
@@ -405,13 +397,12 @@ INSERT INTO `country_code` (`id`, `iso`, `name`, `nicename`, `iso3`, `numcode`, 
 -- Table structure for table `custom_forms`
 --
 
-CREATE TABLE IF NOT EXISTS `custom_forms` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `custom_forms` (
+  `id` int(10) UNSIGNED NOT NULL,
   `formname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -419,8 +410,8 @@ CREATE TABLE IF NOT EXISTS `custom_forms` (
 -- Table structure for table `custom_form_fields`
 --
 
-CREATE TABLE IF NOT EXISTS `custom_form_fields` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `custom_form_fields` (
+  `id` int(10) UNSIGNED NOT NULL,
   `forms_id` int(11) NOT NULL,
   `label` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -428,9 +419,8 @@ CREATE TABLE IF NOT EXISTS `custom_form_fields` (
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `required` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -438,11 +428,10 @@ CREATE TABLE IF NOT EXISTS `custom_form_fields` (
 -- Table structure for table `date_format`
 --
 
-CREATE TABLE IF NOT EXISTS `date_format` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `format` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
+CREATE TABLE `date_format` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `format` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `date_format`
@@ -465,11 +454,10 @@ INSERT INTO `date_format` (`id`, `format`) VALUES
 -- Table structure for table `date_time_format`
 --
 
-CREATE TABLE IF NOT EXISTS `date_time_format` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `format` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
+CREATE TABLE `date_time_format` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `format` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `date_time_format`
@@ -492,12 +480,12 @@ INSERT INTO `date_time_format` (`id`, `format`) VALUES
 -- Table structure for table `department`
 --
 
-CREATE TABLE IF NOT EXISTS `department` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `department` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `sla` int(10) unsigned DEFAULT NULL,
-  `manager` int(10) unsigned DEFAULT NULL,
+  `sla` int(10) UNSIGNED DEFAULT NULL,
+  `manager` int(10) UNSIGNED DEFAULT NULL,
   `ticket_assignment` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `outgoing_email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `template_set` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -508,11 +496,8 @@ CREATE TABLE IF NOT EXISTS `department` (
   `group_access` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `department_sign` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `sla` (`sla`),
-  KEY `manager_2` (`manager`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `department`
@@ -529,13 +514,13 @@ INSERT INTO `department` (`id`, `name`, `type`, `sla`, `manager`, `ticket_assign
 -- Table structure for table `emails`
 --
 
-CREATE TABLE IF NOT EXISTS `emails` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `emails` (
+  `id` int(10) UNSIGNED NOT NULL,
   `email_address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `email_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `department` int(10) unsigned DEFAULT NULL,
-  `priority` int(10) unsigned DEFAULT NULL,
-  `help_topic` int(10) unsigned DEFAULT NULL,
+  `department` int(10) UNSIGNED DEFAULT NULL,
+  `priority` int(10) UNSIGNED DEFAULT NULL,
+  `help_topic` int(10) UNSIGNED DEFAULT NULL,
   `user_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `fetching_host` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -561,13 +546,8 @@ CREATE TABLE IF NOT EXISTS `emails` (
   `authentication` tinyint(1) NOT NULL,
   `header_spoofing` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `department` (`department`,`priority`,`help_topic`),
-  KEY `department_2` (`department`,`priority`,`help_topic`),
-  KEY `priority` (`priority`),
-  KEY `help_topic` (`help_topic`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -575,14 +555,13 @@ CREATE TABLE IF NOT EXISTS `emails` (
 -- Table structure for table `failed_jobs`
 --
 
-CREATE TABLE IF NOT EXISTS `failed_jobs` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `failed_jobs` (
+  `id` int(10) UNSIGNED NOT NULL,
   `connection` text COLLATE utf8_unicode_ci NOT NULL,
   `queue` text COLLATE utf8_unicode_ci NOT NULL,
   `payload` longtext COLLATE utf8_unicode_ci NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -590,16 +569,15 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
 -- Table structure for table `faveo_mails`
 --
 
-CREATE TABLE IF NOT EXISTS `faveo_mails` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `faveo_mails` (
+  `id` int(10) UNSIGNED NOT NULL,
   `email_id` int(11) NOT NULL,
   `drive` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -607,15 +585,14 @@ CREATE TABLE IF NOT EXISTS `faveo_mails` (
 -- Table structure for table `faveo_queues`
 --
 
-CREATE TABLE IF NOT EXISTS `faveo_queues` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `faveo_queues` (
+  `id` int(10) UNSIGNED NOT NULL,
   `service_id` int(11) NOT NULL,
   `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -623,17 +600,15 @@ CREATE TABLE IF NOT EXISTS `faveo_queues` (
 -- Table structure for table `field_values`
 --
 
-CREATE TABLE IF NOT EXISTS `field_values` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `field_id` int(10) unsigned DEFAULT NULL,
-  `child_id` int(10) unsigned DEFAULT NULL,
+CREATE TABLE `field_values` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `field_id` int(10) UNSIGNED DEFAULT NULL,
+  `child_id` int(10) UNSIGNED DEFAULT NULL,
   `field_key` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `field_value` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `field_values_field_id_foreign` (`field_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -641,8 +616,8 @@ CREATE TABLE IF NOT EXISTS `field_values` (
 -- Table structure for table `groups`
 --
 
-CREATE TABLE IF NOT EXISTS `groups` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `groups` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `group_status` tinyint(1) NOT NULL,
   `can_create_ticket` tinyint(1) NOT NULL,
@@ -659,9 +634,8 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `department_access` tinyint(1) NOT NULL,
   `admin_notes` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `groups`
@@ -678,16 +652,13 @@ INSERT INTO `groups` (`id`, `name`, `group_status`, `can_create_ticket`, `can_ed
 -- Table structure for table `group_assign_department`
 --
 
-CREATE TABLE IF NOT EXISTS `group_assign_department` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `group_id` int(10) unsigned NOT NULL,
-  `department_id` int(10) unsigned NOT NULL,
+CREATE TABLE `group_assign_department` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `group_id` int(10) UNSIGNED NOT NULL,
+  `department_id` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `group_id` (`group_id`),
-  KEY `department_id` (`department_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -695,32 +666,25 @@ CREATE TABLE IF NOT EXISTS `group_assign_department` (
 -- Table structure for table `help_topic`
 --
 
-CREATE TABLE IF NOT EXISTS `help_topic` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `help_topic` (
+  `id` int(10) UNSIGNED NOT NULL,
   `topic` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `parent_topic` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `custom_form` int(10) unsigned DEFAULT NULL,
-  `department` int(10) unsigned DEFAULT NULL,
-  `ticket_status` int(10) unsigned DEFAULT NULL,
-  `priority` int(10) unsigned DEFAULT NULL,
-  `sla_plan` int(10) unsigned DEFAULT NULL,
+  `custom_form` int(10) UNSIGNED DEFAULT NULL,
+  `department` int(10) UNSIGNED DEFAULT NULL,
+  `ticket_status` int(10) UNSIGNED DEFAULT NULL,
+  `priority` int(10) UNSIGNED DEFAULT NULL,
+  `sla_plan` int(10) UNSIGNED DEFAULT NULL,
   `thank_page` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `ticket_num_format` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `internal_notes` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
   `type` tinyint(1) NOT NULL,
-  `auto_assign` int(10) unsigned DEFAULT NULL,
+  `auto_assign` int(10) UNSIGNED DEFAULT NULL,
   `auto_response` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `custom_form` (`custom_form`),
-  KEY `department` (`department`),
-  KEY `ticket_status` (`ticket_status`),
-  KEY `priority` (`priority`),
-  KEY `sla_plan` (`sla_plan`),
-  KEY `auto_assign_2` (`auto_assign`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `help_topic`
@@ -737,18 +701,16 @@ INSERT INTO `help_topic` (`id`, `topic`, `parent_topic`, `custom_form`, `departm
 -- Table structure for table `jobs`
 --
 
-CREATE TABLE IF NOT EXISTS `jobs` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
   `queue` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `payload` longtext COLLATE utf8_unicode_ci NOT NULL,
-  `attempts` tinyint(3) unsigned NOT NULL,
-  `reserved` tinyint(3) unsigned NOT NULL,
-  `reserved_at` int(10) unsigned DEFAULT NULL,
-  `available_at` int(10) unsigned NOT NULL,
-  `created_at` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `jobs_queue_reserved_reserved_at_index` (`queue`,`reserved`,`reserved_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `attempts` tinyint(3) UNSIGNED NOT NULL,
+  `reserved` tinyint(3) UNSIGNED NOT NULL,
+  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
+  `available_at` int(10) UNSIGNED NOT NULL,
+  `created_at` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -756,8 +718,8 @@ CREATE TABLE IF NOT EXISTS `jobs` (
 -- Table structure for table `kb_article`
 --
 
-CREATE TABLE IF NOT EXISTS `kb_article` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `kb_article` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
@@ -765,9 +727,8 @@ CREATE TABLE IF NOT EXISTS `kb_article` (
   `type` tinyint(1) NOT NULL,
   `publish_time` datetime DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `kb_article`
@@ -776,7 +737,7 @@ CREATE TABLE IF NOT EXISTS `kb_article` (
 INSERT INTO `kb_article` (`id`, `name`, `slug`, `description`, `status`, `type`, `publish_time`, `created_at`, `updated_at`) VALUES
 (1, 'DISCLAIMERS', 'disclaimers', '<p>ABC clothing.com does not promise that the site will be inoffensive, error-free or uninterrupted, or that it will provide specific information from use of the site or any content, search, or link on it. The site and its content are delivered on an “as-is” and “as-available” basis. ABC clothing.com cannot ensure that files you download from the site will be free of viruses or contamination or destructive features.</p>\r\n\r\n<p>Thebclothing.com disclaims all warranties, express or implied, including any implied warranties of merchantability and fitness for a particular purpose. ABC clothing.com will not be liable for any damages of any kind arising from the use of this site, including, without limitation, direct, indirect, incidental, and punitive and consequential damages.</p>\r\n\r\n<p>ABC clothing.com disclaims any and all liability for the acts, omissions, and conduct of any third-party users, ABC clothing.com users, advertisers, and/or sponsors on the Site, in connection with the Site, or other-wise related to your use of the Site. ABC clothing.com is not responsible for the products, services, actions, or failure to act of any third party in connection with or referenced on the Site. Without limiting the fore-going, you may report the misconduct of users and/or third-party advertisers or service and/or product providers referenced on or included in the Site to ABC clothing.com at Support@abcclothing.com</p>\r\n\r\n<p>ABC clothing.com may investigate the claim and take appropriate action, at its sole discretion.</p>\r\n\r\n<p>For any query kindly drop mail us on  Support@abcclothing.com.</p>\r\n', 1, 1, '2016-12-13 08:54:00', '2016-12-13 03:25:28', '2016-12-13 03:25:28'),
 (2, 'CUSTOM ORDER', 'custom-order', '<p>You saw, you liked but couldn’t see your size? We will custom make it for you.</p>\r\n\r\n<p><strong>How it works:</strong></p>\r\n\r\n<ol><li>You liked something and want to modify a little or have something else on mind, do pen it down and share it with us on Support@abcclothing.com</li>\r\n  <li>We’ll work out the price depending on how detailed or intricate you want your garment.</li>\r\n <li>An advance would be required for any customized orders.</li>\r\n  <li>Once you’ve placed a deposit, we’ll make you a sketch of the garment.</li>\r\n  <li>We can complete your order in 15-20 days depending on the workload.</li>\r\n  <li>We will also share some updates on the garment in case something needs to be changed.</li>\r\n  <li>We finally ship it to your given address.</li>\r\n</ol><p><strong>Note:</strong> No returns and refunds.</p>\r\n', 1, 1, '2016-12-13 08:56:00', '2016-12-13 03:26:24', '2016-12-13 03:26:24'),
-(3, 'TROUSER SKIRTS', 'trouser-skirts', '<p>Paris takes its fashion very, very seriously. So seriously, in fact, that wearing the wrong thing has actually caused a riot.</p>\r\n\r\n<p>In 1911, two rival Parisian couture houses launched their "trouser skirts," an innovation in fashion that trod the very fixed line between the genders and seemed to promise greater flexibility for women in general. There were two different versions of the trouser skirt: One was a sort of baggy pant with a very low hanging crotch, described as "a sack with holes made for the legs to go through," not unlike the fashions on high streets today, and the other a pair of the same kind of pants topped with an over-skirt, again, not unlike high street fashions of today. Both versions were launched by models at the opening day of racing season to general revulsion and disgust, but thankfully, no violence.</p>\r\n\r\n<p>It wasn''t until the ladies attempted to promenade their future fashions on the boulevards that the fisticuffs started—at the Place de l''Opera, the poor models were attacked by a jeering mob of fashion Philistines, who pulled their hair, trampled their hats, and reduced them to tears. A squad of police officers on bicycles were dispatched to rescue the girls and escort them to safety.</p>\r\n', 1, 1, '2016-12-13 08:56:00', '2016-12-13 03:27:02', '2016-12-13 03:27:02'),
+(3, 'TROUSER SKIRTS', 'trouser-skirts', '<p>Paris takes its fashion very, very seriously. So seriously, in fact, that wearing the wrong thing has actually caused a riot.</p>\r\n\r\n<p>In 1911, two rival Parisian couture houses launched their "trouser skirts," an innovation in fashion that trod the very fixed line between the genders and seemed to promise greater flexibility for women in general. There were two different versions of the trouser skirt: One was a sort of baggy pant with a very low hanging crotch, described as "a sack with holes made for the legs to go through," not unlike the fashions on high streets today, and the other a pair of the same kind of pants topped with an over-skirt, again, not unlike high street fashions of today. Both versions were launched by models at the opening day of racing season to general revulsion and disgust, but thankfully, no violence.</p>\r\n\r\n<p>It wasn\'t until the ladies attempted to promenade their future fashions on the boulevards that the fisticuffs started—at the Place de l\'Opera, the poor models were attacked by a jeering mob of fashion Philistines, who pulled their hair, trampled their hats, and reduced them to tears. A squad of police officers on bicycles were dispatched to rescue the girls and escort them to safety.</p>\r\n', 1, 1, '2016-12-13 08:56:00', '2016-12-13 03:27:02', '2016-12-13 03:27:02'),
 (4, 'SECURE SHOPPING GUARANTEE', 'secure-shopping-guarantee', '<p>We accept all major Indian and International Credit/ Debit Cards, and Net Banking with over 40 Banks.</p>\r\n\r\n<p>NO Cash on Delivery (as random people order and share false addresses for fun)</p>\r\n\r\n<p>Yes, shopping at our e-store is 100% safe. All payment requests are directed to the secured PayU Payment Gateway. This gives you the highest level of protection possible whenever you use credit cards or make other financial or confidential transactions over the Internet.</p>\r\n\r\n<p>You can be assured that our e-store offers you the highest standards of security currently available on the net so as to ensure that your shopping experience is private, safe and secure.</p>\r\n', 1, 1, '2016-12-13 08:57:00', '2016-12-13 03:27:42', '2016-12-13 03:27:42'),
 (5, 'PRIVACY POLICY', 'privacy-policy', '<p>The ABC Clothing collects your basic information to service your requests. This basic information is gathered when you purchase products/Gift card vouchers or when you sign up for e-mail notifications. Information gathered from you includes your name, mailing address, e-mail and phone number. Only when you place an order, your card information is requested and is submitted via the highest level of encryption to make sure of the greatest amount of safety and security. Reason why we gather this information:</p>\r\n\r\n<p><strong>To process your order</strong>.<br />\r\nShipping and Customer Service.<br />\r\nWe also use the information to upgrade our products, customer services, website content and navigation.</p>\r\n\r\n<p><br /><strong>Internal Record Keeping</strong>.<br />\r\nWe at The ABC Clothing respect that you do not want your personal information shared with other companies. The information you provide shall, therefore, be only used to process your order and customer support. The ABC Clothing does not share, sell or rent customer information to any other company.</p>\r\n', 1, 1, '2016-12-13 08:58:00', '2016-12-13 03:28:31', '2016-12-13 03:28:31'),
 (6, ' SHIPPING POLICY', 'shipping-policy', '<p>We ship worldwide. We use FedEx/DTDC for shipping.</p>\r\n\r\n<p>Standard Shipping is usually 3-7 Working days for orders within India and 12-15 Working days for International Orders, but usually faster. IF your order doesn’t reach you in time, you may write to us at support@abcclothing.com</p>\r\n\r\n<p><strong>International Orders</strong></p>\r\n\r\n<p>For international orders, please note, your shipping will be calculated at the time of Check out only, this is a System Generated amount, based on your Zip Code, Region and Order Weight. (Approx Costs Rs.1250-1500 for 500 gms – International Shipment, subject to region)</p>\r\n\r\n<p><strong>Tracking</strong></p>\r\n\r\n<p>For tracking your order go to the following website, it will require your tracking ID which is sent via mail in your invoice.</p>\r\n', 1, 1, '2016-12-13 08:58:00', '2016-12-13 03:29:34', '2016-12-13 03:29:34'),
@@ -788,16 +749,13 @@ INSERT INTO `kb_article` (`id`, `name`, `slug`, `description`, `status`, `type`,
 -- Table structure for table `kb_article_relationship`
 --
 
-CREATE TABLE IF NOT EXISTS `kb_article_relationship` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `article_id` int(10) unsigned NOT NULL,
-  `category_id` int(10) unsigned NOT NULL,
+CREATE TABLE `kb_article_relationship` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `article_id` int(10) UNSIGNED NOT NULL,
+  `category_id` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `article_relationship_article_id_foreign` (`article_id`),
-  KEY `article_relationship_category_id_foreign` (`category_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `kb_article_relationship`
@@ -818,17 +776,16 @@ INSERT INTO `kb_article_relationship` (`id`, `article_id`, `category_id`, `creat
 -- Table structure for table `kb_category`
 --
 
-CREATE TABLE IF NOT EXISTS `kb_category` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `kb_category` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
   `parent` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `kb_category`
@@ -844,19 +801,17 @@ INSERT INTO `kb_category` (`id`, `name`, `slug`, `description`, `status`, `paren
 -- Table structure for table `kb_comment`
 --
 
-CREATE TABLE IF NOT EXISTS `kb_comment` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `article_id` int(10) unsigned NOT NULL,
+CREATE TABLE `kb_comment` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `article_id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `website` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `comment` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `comment_article_id_foreign` (`article_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -864,17 +819,16 @@ CREATE TABLE IF NOT EXISTS `kb_comment` (
 -- Table structure for table `kb_pages`
 --
 
-CREATE TABLE IF NOT EXISTS `kb_pages` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `kb_pages` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
   `visibility` tinyint(1) NOT NULL,
   `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -882,13 +836,12 @@ CREATE TABLE IF NOT EXISTS `kb_pages` (
 -- Table structure for table `kb_settings`
 --
 
-CREATE TABLE IF NOT EXISTS `kb_settings` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `kb_settings` (
+  `id` int(10) UNSIGNED NOT NULL,
   `pagination` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `kb_settings`
@@ -903,12 +856,11 @@ INSERT INTO `kb_settings` (`id`, `pagination`, `created_at`, `updated_at`) VALUE
 -- Table structure for table `languages`
 --
 
-CREATE TABLE IF NOT EXISTS `languages` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `languages` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `locale` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
+  `locale` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `languages`
@@ -931,16 +883,15 @@ INSERT INTO `languages` (`id`, `name`, `locale`) VALUES
 -- Table structure for table `login_attempts`
 --
 
-CREATE TABLE IF NOT EXISTS `login_attempts` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `login_attempts` (
+  `id` int(10) UNSIGNED NOT NULL,
   `User` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `IP` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `Attempts` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `LastLogin` datetime NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `login_attempts`
@@ -955,13 +906,12 @@ INSERT INTO `login_attempts` (`id`, `User`, `IP`, `Attempts`, `LastLogin`, `crea
 -- Table structure for table `log_notification`
 --
 
-CREATE TABLE IF NOT EXISTS `log_notification` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `log_notification` (
+  `id` int(10) UNSIGNED NOT NULL,
   `log` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `log_notification`
@@ -976,12 +926,11 @@ INSERT INTO `log_notification` (`id`, `log`, `created_at`, `updated_at`) VALUES
 -- Table structure for table `mailbox_protocol`
 --
 
-CREATE TABLE IF NOT EXISTS `mailbox_protocol` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mailbox_protocol` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `value` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+  `value` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `mailbox_protocol`
@@ -999,14 +948,13 @@ INSERT INTO `mailbox_protocol` (`id`, `name`, `value`) VALUES
 -- Table structure for table `mail_services`
 --
 
-CREATE TABLE IF NOT EXISTS `mail_services` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mail_services` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `short_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `mail_services`
@@ -1026,7 +974,7 @@ INSERT INTO `mail_services` (`id`, `name`, `short_name`, `created_at`, `updated_
 -- Table structure for table `migrations`
 --
 
-CREATE TABLE IF NOT EXISTS `migrations` (
+CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -1141,15 +1089,14 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES
 -- Table structure for table `notifications`
 --
 
-CREATE TABLE IF NOT EXISTS `notifications` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `notifications` (
+  `id` int(10) UNSIGNED NOT NULL,
   `model_id` int(11) NOT NULL,
   `userid_created` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `notifications`
@@ -1170,15 +1117,14 @@ INSERT INTO `notifications` (`id`, `model_id`, `userid_created`, `type_id`, `cre
 -- Table structure for table `notification_types`
 --
 
-CREATE TABLE IF NOT EXISTS `notification_types` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `notification_types` (
+  `id` int(10) UNSIGNED NOT NULL,
   `message` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `icon_class` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `notification_types`
@@ -1195,19 +1141,17 @@ INSERT INTO `notification_types` (`id`, `message`, `type`, `icon_class`, `create
 -- Table structure for table `organization`
 --
 
-CREATE TABLE IF NOT EXISTS `organization` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `organization` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `phone` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `website` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `head` int(10) unsigned DEFAULT NULL,
+  `head` int(10) UNSIGNED DEFAULT NULL,
   `internal_notes` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `head` (`head`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1215,12 +1159,10 @@ CREATE TABLE IF NOT EXISTS `organization` (
 -- Table structure for table `password_resets`
 --
 
-CREATE TABLE IF NOT EXISTS `password_resets` (
+CREATE TABLE `password_resets` (
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  KEY `password_resets_email_index` (`email`),
-  KEY `password_resets_token_index` (`token`)
+  `created_at` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1229,15 +1171,14 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 -- Table structure for table `plugins`
 --
 
-CREATE TABLE IF NOT EXISTS `plugins` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `plugins` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1245,15 +1186,14 @@ CREATE TABLE IF NOT EXISTS `plugins` (
 -- Table structure for table `queue_services`
 --
 
-CREATE TABLE IF NOT EXISTS `queue_services` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `queue_services` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `short_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `queue_services`
@@ -1273,8 +1213,8 @@ INSERT INTO `queue_services` (`id`, `name`, `short_name`, `status`, `created_at`
 -- Table structure for table `ratings`
 --
 
-CREATE TABLE IF NOT EXISTS `ratings` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `ratings` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `display_order` int(11) NOT NULL,
   `allow_modification` int(11) NOT NULL,
@@ -1282,9 +1222,8 @@ CREATE TABLE IF NOT EXISTS `ratings` (
   `rating_area` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `restrict` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `ratings`
@@ -1300,16 +1239,15 @@ INSERT INTO `ratings` (`id`, `name`, `display_order`, `allow_modification`, `rat
 -- Table structure for table `rating_ref`
 --
 
-CREATE TABLE IF NOT EXISTS `rating_ref` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `rating_ref` (
+  `id` int(10) UNSIGNED NOT NULL,
   `rating_id` int(11) NOT NULL,
   `ticket_id` int(11) NOT NULL,
   `thread_id` int(11) NOT NULL,
   `rating_value` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1317,8 +1255,8 @@ CREATE TABLE IF NOT EXISTS `rating_ref` (
 -- Table structure for table `settings_alert_notice`
 --
 
-CREATE TABLE IF NOT EXISTS `settings_alert_notice` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `settings_alert_notice` (
+  `id` int(10) UNSIGNED NOT NULL,
   `ticket_status` tinyint(1) NOT NULL,
   `ticket_admin_email` tinyint(1) NOT NULL,
   `ticket_department_manager` tinyint(1) NOT NULL,
@@ -1349,9 +1287,8 @@ CREATE TABLE IF NOT EXISTS `settings_alert_notice` (
   `sql_error` tinyint(1) NOT NULL,
   `excessive_failure` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `settings_alert_notice`
@@ -1366,17 +1303,16 @@ INSERT INTO `settings_alert_notice` (`id`, `ticket_status`, `ticket_admin_email`
 -- Table structure for table `settings_auto_response`
 --
 
-CREATE TABLE IF NOT EXISTS `settings_auto_response` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `settings_auto_response` (
+  `id` int(10) UNSIGNED NOT NULL,
   `new_ticket` tinyint(1) NOT NULL,
   `agent_new_ticket` tinyint(1) NOT NULL,
   `submitter` tinyint(1) NOT NULL,
   `participants` tinyint(1) NOT NULL,
   `overlimit` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `settings_auto_response`
@@ -1391,8 +1327,8 @@ INSERT INTO `settings_auto_response` (`id`, `new_ticket`, `agent_new_ticket`, `s
 -- Table structure for table `settings_company`
 --
 
-CREATE TABLE IF NOT EXISTS `settings_company` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `settings_company` (
+  `id` int(10) UNSIGNED NOT NULL,
   `company_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `website` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `phone` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -1403,9 +1339,8 @@ CREATE TABLE IF NOT EXISTS `settings_company` (
   `logo` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `use_logo` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `settings_company`
@@ -1420,8 +1355,8 @@ INSERT INTO `settings_company` (`id`, `company_name`, `website`, `phone`, `addre
 -- Table structure for table `settings_email`
 --
 
-CREATE TABLE IF NOT EXISTS `settings_email` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `settings_email` (
+  `id` int(10) UNSIGNED NOT NULL,
   `template` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `sys_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `alert_email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -1435,9 +1370,8 @@ CREATE TABLE IF NOT EXISTS `settings_email` (
   `email_collaborator` tinyint(1) NOT NULL,
   `attachment` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `settings_email`
@@ -1452,17 +1386,15 @@ INSERT INTO `settings_email` (`id`, `template`, `sys_email`, `alert_email`, `adm
 -- Table structure for table `settings_ratings`
 --
 
-CREATE TABLE IF NOT EXISTS `settings_ratings` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `settings_ratings` (
+  `id` int(10) UNSIGNED NOT NULL,
   `rating_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `publish` int(11) NOT NULL,
   `modify` int(11) NOT NULL,
   `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `settings_ratings_slug_unique` (`slug`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1470,17 +1402,16 @@ CREATE TABLE IF NOT EXISTS `settings_ratings` (
 -- Table structure for table `settings_security`
 --
 
-CREATE TABLE IF NOT EXISTS `settings_security` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `settings_security` (
+  `id` int(10) UNSIGNED NOT NULL,
   `lockout_message` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `backlist_offender` int(11) NOT NULL,
   `backlist_threshold` int(11) NOT NULL,
   `lockout_period` int(11) NOT NULL,
   `days_to_keep_logs` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `settings_security`
@@ -1495,8 +1426,8 @@ INSERT INTO `settings_security` (`id`, `lockout_message`, `backlist_offender`, `
 -- Table structure for table `settings_system`
 --
 
-CREATE TABLE IF NOT EXISTS `settings_system` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `settings_system` (
+  `id` int(10) UNSIGNED NOT NULL,
   `status` tinyint(1) NOT NULL,
   `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -1508,21 +1439,16 @@ CREATE TABLE IF NOT EXISTS `settings_system` (
   `api_key_mandatory` int(11) NOT NULL,
   `api_key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `name_format` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `time_farmat` int(10) unsigned DEFAULT NULL,
-  `date_format` int(10) unsigned DEFAULT NULL,
-  `date_time_format` int(10) unsigned DEFAULT NULL,
+  `time_farmat` int(10) UNSIGNED DEFAULT NULL,
+  `date_format` int(10) UNSIGNED DEFAULT NULL,
+  `date_time_format` int(10) UNSIGNED DEFAULT NULL,
   `day_date_time` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `time_zone` int(10) unsigned DEFAULT NULL,
+  `time_zone` int(10) UNSIGNED DEFAULT NULL,
   `content` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `time_farmat` (`time_farmat`),
-  KEY `date_format` (`date_format`),
-  KEY `date_time_format` (`date_time_format`),
-  KEY `time_zone` (`time_zone`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `settings_system`
@@ -1530,7 +1456,8 @@ CREATE TABLE IF NOT EXISTS `settings_system` (
 
 INSERT INTO `settings_system` (`id`, `status`, `url`, `name`, `department`, `page_size`, `log_level`, `purge_log`, `api_enable`, `api_key_mandatory`, `api_key`, `name_format`, `time_farmat`, `date_format`, `date_time_format`, `day_date_time`, `time_zone`, `content`, `version`, `created_at`, `updated_at`) VALUES
 (1, 1, '', '', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 32, '', '', '2016-12-13 03:19:29', '2016-12-13 03:19:29'),
-(2, 1, '', '', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 79, '', '1.0.8.0', '2016-12-13 03:19:53', '2016-12-13 03:19:53');
+(2, 1, '', '', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 79, '', '1.0.8.0', '2016-12-13 03:19:53', '2016-12-13 03:19:53'),
+(3, 1, '', '', '1', '', '', '', 0, 0, '', '', NULL, NULL, 1, '', 14, '', '1.9.2', '2017-01-03 06:17:47', '2017-01-03 06:17:47');
 
 -- --------------------------------------------------------
 
@@ -1538,8 +1465,8 @@ INSERT INTO `settings_system` (`id`, `status`, `url`, `name`, `department`, `pag
 -- Table structure for table `settings_ticket`
 --
 
-CREATE TABLE IF NOT EXISTS `settings_ticket` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `settings_ticket` (
+  `id` int(10) UNSIGNED NOT NULL,
   `num_format` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `num_sequence` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `priority` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -1558,9 +1485,8 @@ CREATE TABLE IF NOT EXISTS `settings_ticket` (
   `client_update` tinyint(1) NOT NULL,
   `max_file_size` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `settings_ticket`
@@ -1575,8 +1501,8 @@ INSERT INTO `settings_ticket` (`id`, `num_format`, `num_sequence`, `priority`, `
 -- Table structure for table `sla_plan`
 --
 
-CREATE TABLE IF NOT EXISTS `sla_plan` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `sla_plan` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `grace_period` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `admin_note` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -1584,9 +1510,8 @@ CREATE TABLE IF NOT EXISTS `sla_plan` (
   `transient` tinyint(1) NOT NULL,
   `ticket_overdue` tinyint(1) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `sla_plan`
@@ -1603,15 +1528,14 @@ INSERT INTO `sla_plan` (`id`, `name`, `grace_period`, `admin_note`, `status`, `t
 -- Table structure for table `social_media`
 --
 
-CREATE TABLE IF NOT EXISTS `social_media` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `social_media` (
+  `id` int(10) UNSIGNED NOT NULL,
   `provider` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1619,18 +1543,16 @@ CREATE TABLE IF NOT EXISTS `social_media` (
 -- Table structure for table `teams`
 --
 
-CREATE TABLE IF NOT EXISTS `teams` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `teams` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `team_lead` int(10) unsigned DEFAULT NULL,
+  `team_lead` int(10) UNSIGNED DEFAULT NULL,
   `assign_alert` tinyint(1) NOT NULL,
   `admin_notes` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `team_lead` (`team_lead`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `teams`
@@ -1647,16 +1569,13 @@ INSERT INTO `teams` (`id`, `name`, `status`, `team_lead`, `assign_alert`, `admin
 -- Table structure for table `team_assign_agent`
 --
 
-CREATE TABLE IF NOT EXISTS `team_assign_agent` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `team_id` int(10) unsigned DEFAULT NULL,
-  `agent_id` int(10) unsigned DEFAULT NULL,
+CREATE TABLE `team_assign_agent` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `team_id` int(10) UNSIGNED DEFAULT NULL,
+  `agent_id` int(10) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `team_id` (`team_id`),
-  KEY `agent_id` (`agent_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `team_assign_agent`
@@ -1672,17 +1591,16 @@ INSERT INTO `team_assign_agent` (`id`, `team_id`, `agent_id`, `created_at`, `upd
 -- Table structure for table `template`
 --
 
-CREATE TABLE IF NOT EXISTS `template` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `template` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
   `template_set_to_clone` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `language` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `internal_note` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1690,8 +1608,8 @@ CREATE TABLE IF NOT EXISTS `template` (
 -- Table structure for table `templates`
 --
 
-CREATE TABLE IF NOT EXISTS `templates` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `templates` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `variable` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `type` int(11) NOT NULL,
@@ -1700,9 +1618,8 @@ CREATE TABLE IF NOT EXISTS `templates` (
   `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `set_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=14 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `templates`
@@ -1716,12 +1633,13 @@ INSERT INTO `templates` (`id`, `name`, `variable`, `type`, `subject`, `message`,
 (5, 'This template is for sending notice to agent on new ticket creation', '0', 5, '', '<div>Hello {!!$ticket_agent_name!!},<br /><br />New ticket {!!$ticket_number!!}created <br /><br /><b>From</b><br /><b>Name:</b> {!!$ticket_client_name!!}   <br /><b>E-mail:</b> {!!$ticket_client_email!!}<br /><br /> {!!$content!!}<br /><br />Kind Regards,<br /> {!!$system_from!!}</div>', '', 1, '2016-12-13 03:19:51', '2016-12-13 03:19:51'),
 (6, 'This template is for sending notice to client on new ticket created by agent in name of client', '0', 6, '', '<div> {!!$content!!}<br /><br /> {!!$agent_sign!!}<br /><br />You can check the status of or update this ticket online at: {!!$system_link!!}</div>', '', 1, '2016-12-13 03:19:51', '2016-12-13 03:19:51'),
 (7, 'This template is for sending notice to client on new registration during new ticket creation for un registered clients', '1', 7, 'Registration Confirmation', '<p>Hello {!!$user!!}, </p><p>This email is confirmation that you are now registered at our helpdesk.</p><p><b>Registered Email:</b> {!!$email_address!!}</p><p><b>Password:</b> {!!$user_password!!}</p><p>You can visit the helpdesk to browse articles and contact us at any time: {!!$system_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p> {!!$system_from!!} </p>', '', 1, '2016-12-13 03:19:51', '2016-12-13 03:19:51'),
-(8, 'This template is for sending notice to any user about reset password option', '1', 8, 'Reset your Password', 'Hello {!!$user!!},<br /><br />You asked to reset your password. To do so, please click this link:<br /><br /> {!!$password_reset_link!!}<br /><br />This will let you change your password to something new. If you didn''t ask for this, don''t worry, we''ll keep your password safe.<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', '', 1, '2016-12-13 03:19:51', '2016-12-13 03:19:51'),
+(8, 'This template is for sending notice to any user about reset password option', '1', 8, 'Reset your Password', 'Hello {!!$user!!},<br /><br />You asked to reset your password. To do so, please click this link:<br /><br /> {!!$password_reset_link!!}<br /><br />This will let you change your password to something new. If you didn\'t ask for this, don\'t worry, we\'ll keep your password safe.<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', '', 1, '2016-12-13 03:19:51', '2016-12-13 03:19:51'),
 (9, 'This template is for sending notice to client when a reply made to his/her ticket', '0', 9, '', '<span></span><div><span></span><p> {!!$content!!}<br /></p><p> {!!$agent_sign!!} </p><p><b>Ticket Details</b></p><p><b>Ticket ID:</b> {!!$ticket_number!!}</p></div>', '', 1, '2016-12-13 03:19:51', '2016-12-13 03:19:51'),
 (10, 'This template is for sending notice to agent when ticket reply is made by client on a ticket', '0', 10, '', '<div>Hello {!!$ticket_agent_name!!},<br /><b><br /></b>A reply been made to ticket {!!$ticket_number!!}<br /><b><br /></b><b>From<br /></b><b>Name: </b>{!!$ticket_client_name!!}<br /><b>E-mail: </b>{!!$ticket_client_email!!}<br /><b><br /></b> {!!$content!!}<br /><b><br /></b>Kind Regards,<br /> {!!$system_from!!}</div>', '', 1, '2016-12-13 03:19:51', '2016-12-13 03:19:51'),
 (11, 'This template is for sending notice to client about registration confirmation link', '1', 11, 'Verify your email address', '<p>Hello {!!$user!!}, </p><p>This email is confirmation that you are now registered at our helpdesk.</p><p><b>Registered Email:</b> {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p> {!!$system_from!!} </p>', '', 1, '2016-12-13 03:19:52', '2016-12-13 03:19:52'),
 (12, 'This template is for sending notice to team when ticket is assigned to team', '1', 12, '', '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to your team : {!!$team!!} by {!!$ticket_assigner!!} <br /><br />Thank You<br />Kind Regards,<br />{!!$system_from!!}</div>', '', 1, '2016-12-13 03:19:52', '2016-12-13 03:19:52'),
-(13, 'This template is for sending notice to client when password is changed', '1', 13, 'Verify your email address', 'Hello {!!$user!!},<br /><br />Your password is successfully changed.Your new password is : {!!$user_password!!}<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', '', 1, '2016-12-13 03:19:52', '2016-12-13 03:19:52');
+(13, 'This template is for sending notice to client when password is changed', '1', 13, 'Verify your email address', 'Hello {!!$user!!},<br /><br />Your password is successfully changed.Your new password is : {!!$user_password!!}<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', '', 1, '2016-12-13 03:19:52', '2016-12-13 03:19:52'),
+(14, 'This template is to notify users when their tickets are merged.', '1', 14, 'Your tickets have been merged.', '<p>Hello {!!$user!!},<br />&nbsp;</p><p>Your ticket(s) with ticket number {!!$merged_ticket_numbers!!} have been closed and&nbsp;merged with <a href="{!!$ticket_link!!}">{!!$ticket_number!!}</a>.&nbsp;</p><p>Possible reasons for merging tickets</p><ul><li>Tickets are duplicate</li<li>Tickets state&nbsp;the same issue</li><li>Another member from your organization has created a ticket for the same issue</li></ul><p><a href="{!!$system_link!!}">Click here</a> to login to your account and check your tickets.</p><p>Regards,</p><p>{!!$system_from!!}</p>', '', 1, '2017-01-02 00:20:12', '2017-01-02 00:31:50');
 
 -- --------------------------------------------------------
 
@@ -1729,14 +1647,13 @@ INSERT INTO `templates` (`id`, `name`, `variable`, `type`, `subject`, `message`,
 -- Table structure for table `template_sets`
 --
 
-CREATE TABLE IF NOT EXISTS `template_sets` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `template_sets` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `active` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `template_sets`
@@ -1751,13 +1668,12 @@ INSERT INTO `template_sets` (`id`, `name`, `active`, `created_at`, `updated_at`)
 -- Table structure for table `template_types`
 --
 
-CREATE TABLE IF NOT EXISTS `template_types` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `template_types` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=14 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `template_types`
@@ -1776,7 +1692,8 @@ INSERT INTO `template_types` (`id`, `name`, `created_at`, `updated_at`) VALUES
 (10, 'ticket-reply-agent', '2016-12-13 03:19:48', '2016-12-13 03:19:48'),
 (11, 'registration', '2016-12-13 03:19:48', '2016-12-13 03:19:48'),
 (12, 'team_assign_ticket', '2016-12-13 03:19:48', '2016-12-13 03:19:48'),
-(13, 'reset_new_password', '2016-12-13 03:19:48', '2016-12-13 03:19:48');
+(13, 'reset_new_password', '2016-12-13 03:19:48', '2016-12-13 03:19:48'),
+(14, 'merge-ticket-notification', '2017-01-02 00:20:11', '2017-01-02 00:20:11');
 
 -- --------------------------------------------------------
 
@@ -1784,24 +1701,24 @@ INSERT INTO `template_types` (`id`, `name`, `created_at`, `updated_at`) VALUES
 -- Table structure for table `tickets`
 --
 
-CREATE TABLE IF NOT EXISTS `tickets` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tickets` (
+  `id` int(10) UNSIGNED NOT NULL,
   `ticket_number` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `user_id` int(10) unsigned DEFAULT NULL,
-  `dept_id` int(10) unsigned DEFAULT NULL,
-  `team_id` int(10) unsigned DEFAULT NULL,
-  `priority_id` int(10) unsigned DEFAULT NULL,
-  `sla` int(10) unsigned DEFAULT NULL,
-  `help_topic_id` int(10) unsigned DEFAULT NULL,
-  `status` int(10) unsigned DEFAULT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
+  `dept_id` int(10) UNSIGNED DEFAULT NULL,
+  `team_id` int(10) UNSIGNED DEFAULT NULL,
+  `priority_id` int(10) UNSIGNED DEFAULT NULL,
+  `sla` int(10) UNSIGNED DEFAULT NULL,
+  `help_topic_id` int(10) UNSIGNED DEFAULT NULL,
+  `status` int(10) UNSIGNED DEFAULT NULL,
   `rating` tinyint(1) NOT NULL,
   `ratingreply` tinyint(1) NOT NULL,
   `flags` int(11) NOT NULL,
   `ip_address` int(11) NOT NULL,
-  `assigned_to` int(10) unsigned DEFAULT NULL,
+  `assigned_to` int(10) UNSIGNED DEFAULT NULL,
   `lock_by` int(11) NOT NULL,
   `lock_at` datetime DEFAULT NULL,
-  `source` int(10) unsigned DEFAULT NULL,
+  `source` int(10) UNSIGNED DEFAULT NULL,
   `isoverdue` int(11) NOT NULL,
   `reopened` int(11) NOT NULL,
   `isanswered` int(11) NOT NULL,
@@ -1818,18 +1735,8 @@ CREATE TABLE IF NOT EXISTS `tickets` (
   `approval` int(11) NOT NULL,
   `follow_up` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `dept_id` (`dept_id`),
-  KEY `team_id` (`team_id`),
-  KEY `priority_id` (`priority_id`),
-  KEY `sla` (`sla`),
-  KEY `help_topic_id` (`help_topic_id`),
-  KEY `status` (`status`),
-  KEY `assigned_to` (`assigned_to`),
-  KEY `source` (`source`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `tickets`
@@ -1849,10 +1756,10 @@ INSERT INTO `tickets` (`id`, `ticket_number`, `user_id`, `dept_id`, `team_id`, `
 -- Table structure for table `ticket_attachment`
 --
 
-CREATE TABLE IF NOT EXISTS `ticket_attachment` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `ticket_attachment` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `thread_id` int(10) unsigned DEFAULT NULL,
+  `thread_id` int(10) UNSIGNED DEFAULT NULL,
   `size` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `poster` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -1860,10 +1767,8 @@ CREATE TABLE IF NOT EXISTS `ticket_attachment` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `file` mediumblob,
   `driver` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `thread_id` (`thread_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1871,18 +1776,15 @@ CREATE TABLE IF NOT EXISTS `ticket_attachment` (
 -- Table structure for table `ticket_collaborator`
 --
 
-CREATE TABLE IF NOT EXISTS `ticket_collaborator` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `ticket_collaborator` (
+  `id` int(10) UNSIGNED NOT NULL,
   `isactive` tinyint(1) NOT NULL,
-  `ticket_id` int(10) unsigned DEFAULT NULL,
-  `user_id` int(10) unsigned DEFAULT NULL,
+  `ticket_id` int(10) UNSIGNED DEFAULT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
   `role` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `ticket_id` (`ticket_id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1890,16 +1792,14 @@ CREATE TABLE IF NOT EXISTS `ticket_collaborator` (
 -- Table structure for table `ticket_form_data`
 --
 
-CREATE TABLE IF NOT EXISTS `ticket_form_data` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `ticket_id` int(10) unsigned DEFAULT NULL,
+CREATE TABLE `ticket_form_data` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `ticket_id` int(10) UNSIGNED DEFAULT NULL,
   `title` text COLLATE utf8_unicode_ci NOT NULL,
   `content` text COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `ticket_id` (`ticket_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1907,8 +1807,8 @@ CREATE TABLE IF NOT EXISTS `ticket_form_data` (
 -- Table structure for table `ticket_priority`
 --
 
-CREATE TABLE IF NOT EXISTS `ticket_priority` (
-  `priority_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `ticket_priority` (
+  `priority_id` int(10) UNSIGNED NOT NULL,
   `priority` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `priority_desc` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -1917,9 +1817,8 @@ CREATE TABLE IF NOT EXISTS `ticket_priority` (
   `ispublic` tinyint(1) NOT NULL,
   `is_default` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`priority_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `ticket_priority`
@@ -1937,13 +1836,12 @@ INSERT INTO `ticket_priority` (`priority_id`, `priority`, `status`, `priority_de
 -- Table structure for table `ticket_source`
 --
 
-CREATE TABLE IF NOT EXISTS `ticket_source` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `ticket_source` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `css_class` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=11 ;
+  `css_class` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `ticket_source`
@@ -1967,8 +1865,8 @@ INSERT INTO `ticket_source` (`id`, `name`, `value`, `css_class`) VALUES
 -- Table structure for table `ticket_status`
 --
 
-CREATE TABLE IF NOT EXISTS `ticket_status` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `ticket_status` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `state` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `mode` int(11) NOT NULL,
@@ -1979,9 +1877,8 @@ CREATE TABLE IF NOT EXISTS `ticket_status` (
   `icon_class` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `properties` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `ticket_status`
@@ -2002,12 +1899,12 @@ INSERT INTO `ticket_status` (`id`, `name`, `state`, `mode`, `message`, `flags`, 
 -- Table structure for table `ticket_thread`
 --
 
-CREATE TABLE IF NOT EXISTS `ticket_thread` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `ticket_id` int(10) unsigned DEFAULT NULL,
-  `user_id` int(10) unsigned DEFAULT NULL,
+CREATE TABLE `ticket_thread` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `ticket_id` int(10) UNSIGNED DEFAULT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
   `poster` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `source` int(10) unsigned DEFAULT NULL,
+  `source` int(10) UNSIGNED DEFAULT NULL,
   `reply_rating` int(11) NOT NULL,
   `rating_count` int(11) NOT NULL,
   `is_internal` tinyint(1) NOT NULL,
@@ -2016,12 +1913,8 @@ CREATE TABLE IF NOT EXISTS `ticket_thread` (
   `format` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `ip_address` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `ticket_id_2` (`ticket_id`),
-  KEY `user_id` (`user_id`),
-  KEY `source` (`source`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `ticket_thread`
@@ -2046,14 +1939,13 @@ INSERT INTO `ticket_thread` (`id`, `ticket_id`, `user_id`, `poster`, `source`, `
 -- Table structure for table `ticket_token`
 --
 
-CREATE TABLE IF NOT EXISTS `ticket_token` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `ticket_token` (
+  `id` int(10) UNSIGNED NOT NULL,
   `ticket_id` int(11) NOT NULL,
   `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -2061,12 +1953,11 @@ CREATE TABLE IF NOT EXISTS `ticket_token` (
 -- Table structure for table `timezone`
 --
 
-CREATE TABLE IF NOT EXISTS `timezone` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `timezone` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `location` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=114 ;
+  `location` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `timezone`
@@ -2193,11 +2084,10 @@ INSERT INTO `timezone` (`id`, `name`, `location`) VALUES
 -- Table structure for table `time_format`
 --
 
-CREATE TABLE IF NOT EXISTS `time_format` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `format` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+CREATE TABLE `time_format` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `format` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `time_format`
@@ -2213,8 +2103,8 @@ INSERT INTO `time_format` (`id`, `format`) VALUES
 -- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `users` (
+  `id` int(10) UNSIGNED NOT NULL,
   `user_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `first_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `last_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -2231,8 +2121,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `agent_sign` text COLLATE utf8_unicode_ci NOT NULL,
   `account_type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `account_status` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `assign_group` int(10) unsigned DEFAULT NULL,
-  `primary_dpt` int(10) unsigned DEFAULT NULL,
+  `assign_group` int(10) UNSIGNED DEFAULT NULL,
+  `primary_dpt` int(10) UNSIGNED DEFAULT NULL,
   `agent_tzone` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `daylight_save` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `limit_access` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -2244,26 +2134,21 @@ CREATE TABLE IF NOT EXISTS `users` (
   `profile_pic` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `users_email_unique` (`email`),
-  UNIQUE KEY `users_mobile_unique` (`mobile`),
-  KEY `assign_group_3` (`assign_group`),
-  KEY `primary_dpt_2` (`primary_dpt`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `user_name`, `first_name`, `last_name`, `gender`, `email`, `ban`, `password`, `active`, `is_delete`, `ext`, `country_code`, `phone_number`, `mobile`, `agent_sign`, `account_type`, `account_status`, `assign_group`, `primary_dpt`, `agent_tzone`, `daylight_save`, `limit_access`, `directory_listing`, `vacation_mode`, `company`, `role`, `internal_note`, `profile_pic`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'demo@admin.com', 'Demo', 'admin', 0, 'demo@admin.com', 0, '$2y$10$ZkHOJeJCKFzLtL4yWXZ3suVZlG.fJwD9oUI3nM5FGESmIkQV1hMXC', 1, 0, '', 0, '', NULL, '', '', '', 1, 1, '', '', '', '', '', '', 'admin', '', '', NULL, '2016-12-13 03:19:53', '2016-12-13 03:19:53'),
-(2, 'Abhrakasin', 'Abhrakasin', 'KK', 0, 'abhrakasin@gmail.com', 0, '$2y$10$nrMZMd72/HZbnzjBAi0RX.UQrNTtFeZFEK9aq.chDPZZ07rOC/6Ie', 1, 0, '', 0, '', NULL, '', '', '', 1, 1, '79', '', '', '', '', '', 'agent', '', '', NULL, '2016-12-13 03:32:41', '2016-12-13 03:32:42'),
-(3, 'Johan', 'Johan', 'Malhotra', 0, 'johan21@gmail.com', 0, '$2y$10$Eq8SHKUEXCkW5vqiWvA0Iu1UJmzZ.e5.Q3hI2tkxey5HZ2Lmbxb1C', 1, 0, '', 0, '', NULL, '', '', '', 2, 2, '7', '', '', '', '', '', 'agent', '', '', NULL, '2016-12-13 03:35:29', '2016-12-13 03:35:30'),
-(4, 'fidelm@gmail.com', 'Fidel Martin', '', 0, 'fidelm@gmail.com', 0, '$2y$10$wHupGhJqz2p4rcdS4eq4ZO.NQ65b0JjVsqhJwEEzOCl3vMKwzh9/S', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', 'PXj6d2s7rOqoh53gHdyPbiHOVvBmDoR5CnXg9kl7fRolIC92Y20UnFPSOryw', '2016-12-13 03:45:19', '2016-12-13 03:45:19'),
-(5, 'joseph2321@gmail.com', 'Joseph Rossignol', '', 0, 'joseph2321@gmail.com', 0, '$2y$10$7eQ0nFxQpQkWaKwUbzTsQ.ufQpRN1rwUGY5ER1KsoXoLd6KbMIHnG', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', 'nv7Z37jhwAVdt87WCVzsqweY6wUbic7ll44FNmygMmwcnErafCrVpnw6Krys', '2016-12-13 03:50:55', '2016-12-13 03:50:55'),
-(6, 'ichae1212@gmail.com', 'Ichae Semos', '', 0, 'ichae1212@gmail.com', 0, '$2y$10$aITz4IUuaxb0VHwF2V2CPefwf/Ft0VXpmHDC9feEfNXkW90GdjCFm', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', 'egq0NWPaxEkwkXmV3L0BJ4j4O6aKlgjzNZxea0XpYvCAeVvZLbXsjkKmWyBZ', '2016-12-13 03:55:54', '2016-12-13 03:55:54'),
-(7, 'kusti09@yahoo.com', 'Kusti Franti', '', 0, 'kusti09@yahoo.com', 0, '$2y$10$yNHebbyWfr6m1t4srRlYbuj2JN706ZBpyMI.gSJmuY9czJ3OzuQpq', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', '4JPKOO9UUjZ2yX1GI7WYaeljcdyFATmguwNGuUD9chDodCVfJVGBJvbepgOt', '2016-12-13 03:58:40', '2016-12-13 03:58:40');
+(1, 'demo_admin', 'Demo', 'Admin', 0, NULL, 0, '$2y$10$ZkHOJeJCKFzLtL4yWXZ3suVZlG.fJwD9oUI3nM5FGESmIkQV1hMXC', 1, 0, '', 0, '', NULL, '', '', '', 1, 1, '', '', '', '', '', '', 'admin', '', '', NULL, '2016-12-13 03:19:53', '2016-12-13 03:19:53'),
+(2, 'demo_agent', 'Abhrakasin', 'KK', 0, NULL, 0, '$2y$10$nrMZMd72/HZbnzjBAi0RX.UQrNTtFeZFEK9aq.chDPZZ07rOC/6Ie', 1, 0, '', 0, '', NULL, '', '', '', 1, 1, '79', '', '', '', '', '', 'agent', '', '', NULL, '2016-12-13 03:32:41', '2016-12-13 03:32:42'),
+(3, 'Johan', 'Johan', 'Malhotra', 0, NULL, 0, '$2y$10$Eq8SHKUEXCkW5vqiWvA0Iu1UJmzZ.e5.Q3hI2tkxey5HZ2Lmbxb1C', 1, 0, '', 0, '', NULL, '', '', '', 2, 2, '7', '', '', '', '', '', 'agent', '', '', NULL, '2016-12-13 03:35:29', '2016-12-13 03:35:30'),
+(4, 'demo_client', 'Fidel Martin', '', 0, NULL, 0, '$2y$10$wHupGhJqz2p4rcdS4eq4ZO.NQ65b0JjVsqhJwEEzOCl3vMKwzh9/S', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', 'PXj6d2s7rOqoh53gHdyPbiHOVvBmDoR5CnXg9kl7fRolIC92Y20UnFPSOryw', '2016-12-13 03:45:19', '2016-12-13 03:45:19'),
+(5, 'joseph2321@gmail.com', 'Joseph Rossignol', '', 0, NULL, 0, '$2y$10$7eQ0nFxQpQkWaKwUbzTsQ.ufQpRN1rwUGY5ER1KsoXoLd6KbMIHnG', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', 'nv7Z37jhwAVdt87WCVzsqweY6wUbic7ll44FNmygMmwcnErafCrVpnw6Krys', '2016-12-13 03:50:55', '2016-12-13 03:50:55'),
+(6, 'ichae1212@gmail.com', 'Ichae Semos', '', 0, NULL, 0, '$2y$10$aITz4IUuaxb0VHwF2V2CPefwf/Ft0VXpmHDC9feEfNXkW90GdjCFm', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', 'egq0NWPaxEkwkXmV3L0BJ4j4O6aKlgjzNZxea0XpYvCAeVvZLbXsjkKmWyBZ', '2016-12-13 03:55:54', '2016-12-13 03:55:54'),
+(7, 'kusti09@yahoo.com', 'Kusti Franti', '', 0, NULL, 0, '$2y$10$yNHebbyWfr6m1t4srRlYbuj2JN706ZBpyMI.gSJmuY9czJ3OzuQpq', 1, 0, '', 0, '', NULL, '', '', '', NULL, NULL, '', '', '', '', '', '', 'user', '', '', '4JPKOO9UUjZ2yX1GI7WYaeljcdyFATmguwNGuUD9chDodCVfJVGBJvbepgOt', '2016-12-13 03:58:40', '2016-12-13 03:58:40');
 
 -- --------------------------------------------------------
 
@@ -2271,16 +2156,15 @@ INSERT INTO `users` (`id`, `user_name`, `first_name`, `last_name`, `gender`, `em
 -- Table structure for table `user_additional_infos`
 --
 
-CREATE TABLE IF NOT EXISTS `user_additional_infos` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user_additional_infos` (
+  `id` int(10) UNSIGNED NOT NULL,
   `owner` int(11) NOT NULL,
   `service` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `key` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -2288,16 +2172,13 @@ CREATE TABLE IF NOT EXISTS `user_additional_infos` (
 -- Table structure for table `user_assign_organization`
 --
 
-CREATE TABLE IF NOT EXISTS `user_assign_organization` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `org_id` int(10) unsigned DEFAULT NULL,
-  `user_id` int(10) unsigned DEFAULT NULL,
+CREATE TABLE `user_assign_organization` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `org_id` int(10) UNSIGNED DEFAULT NULL,
+  `user_id` int(10) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `org_id` (`org_id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -2305,15 +2186,14 @@ CREATE TABLE IF NOT EXISTS `user_assign_organization` (
 -- Table structure for table `user_notification`
 --
 
-CREATE TABLE IF NOT EXISTS `user_notification` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user_notification` (
+  `id` int(10) UNSIGNED NOT NULL,
   `notification_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `is_read` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=15 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `user_notification`
@@ -2341,14 +2221,13 @@ INSERT INTO `user_notification` (`id`, `notification_id`, `user_id`, `is_read`, 
 -- Table structure for table `version_check`
 --
 
-CREATE TABLE IF NOT EXISTS `version_check` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `version_check` (
+  `id` int(10) UNSIGNED NOT NULL,
   `current_version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `new_version` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `version_check`
@@ -2363,15 +2242,14 @@ INSERT INTO `version_check` (`id`, `current_version`, `new_version`, `created_at
 -- Table structure for table `widgets`
 --
 
-CREATE TABLE IF NOT EXISTS `widgets` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `widgets` (
+  `id` int(11) NOT NULL,
   `name` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `title` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `value` text COLLATE utf8_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=21 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `widgets`
@@ -2405,16 +2283,14 @@ INSERT INTO `widgets` (`id`, `name`, `title`, `value`, `created_at`, `updated_at
 -- Table structure for table `workflow_action`
 --
 
-CREATE TABLE IF NOT EXISTS `workflow_action` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `workflow_id` int(10) unsigned NOT NULL,
+CREATE TABLE `workflow_action` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `workflow_id` int(10) UNSIGNED NOT NULL,
   `condition` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `action` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `workflow_action_1` (`workflow_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -2422,16 +2298,15 @@ CREATE TABLE IF NOT EXISTS `workflow_action` (
 -- Table structure for table `workflow_close`
 --
 
-CREATE TABLE IF NOT EXISTS `workflow_close` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `workflow_close` (
+  `id` int(10) UNSIGNED NOT NULL,
   `days` int(11) NOT NULL,
   `condition` int(11) NOT NULL,
   `send_email` int(11) NOT NULL,
   `status` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `workflow_close`
@@ -2446,17 +2321,16 @@ INSERT INTO `workflow_close` (`id`, `days`, `condition`, `send_email`, `status`,
 -- Table structure for table `workflow_name`
 --
 
-CREATE TABLE IF NOT EXISTS `workflow_name` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `workflow_name` (
+  `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `status` int(11) NOT NULL,
   `order` int(11) NOT NULL,
   `target` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `internal_note` text COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -2464,19 +2338,921 @@ CREATE TABLE IF NOT EXISTS `workflow_name` (
 -- Table structure for table `workflow_rules`
 --
 
-CREATE TABLE IF NOT EXISTS `workflow_rules` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `workflow_id` int(10) unsigned NOT NULL,
+CREATE TABLE `workflow_rules` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `workflow_id` int(10) UNSIGNED NOT NULL,
   `matching_criteria` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `matching_scenario` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `matching_relation` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `matching_value` text COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `workflow_rules_1` (`workflow_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `api_settings`
+--
+ALTER TABLE `api_settings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `banlist`
+--
+ALTER TABLE `banlist`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `bar_notifications`
+--
+ALTER TABLE `bar_notifications`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `canned_response`
+--
+ALTER TABLE `canned_response`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `common_settings`
+--
+ALTER TABLE `common_settings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `conditions`
+--
+ALTER TABLE `conditions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `country_code`
+--
+ALTER TABLE `country_code`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `custom_forms`
+--
+ALTER TABLE `custom_forms`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `custom_form_fields`
+--
+ALTER TABLE `custom_form_fields`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `date_format`
+--
+ALTER TABLE `date_format`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `date_time_format`
+--
+ALTER TABLE `date_time_format`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `department`
+--
+ALTER TABLE `department`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sla` (`sla`),
+  ADD KEY `manager_2` (`manager`);
+
+--
+-- Indexes for table `emails`
+--
+ALTER TABLE `emails`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `department` (`department`,`priority`,`help_topic`),
+  ADD KEY `department_2` (`department`,`priority`,`help_topic`),
+  ADD KEY `priority` (`priority`),
+  ADD KEY `help_topic` (`help_topic`);
+
+--
+-- Indexes for table `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `faveo_mails`
+--
+ALTER TABLE `faveo_mails`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `faveo_queues`
+--
+ALTER TABLE `faveo_queues`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `field_values`
+--
+ALTER TABLE `field_values`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `field_values_field_id_foreign` (`field_id`);
+
+--
+-- Indexes for table `groups`
+--
+ALTER TABLE `groups`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `group_assign_department`
+--
+ALTER TABLE `group_assign_department`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `group_id` (`group_id`),
+  ADD KEY `department_id` (`department_id`);
+
+--
+-- Indexes for table `help_topic`
+--
+ALTER TABLE `help_topic`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `custom_form` (`custom_form`),
+  ADD KEY `department` (`department`),
+  ADD KEY `ticket_status` (`ticket_status`),
+  ADD KEY `priority` (`priority`),
+  ADD KEY `sla_plan` (`sla_plan`),
+  ADD KEY `auto_assign_2` (`auto_assign`);
+
+--
+-- Indexes for table `jobs`
+--
+ALTER TABLE `jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `jobs_queue_reserved_reserved_at_index` (`queue`,`reserved`,`reserved_at`);
+
+--
+-- Indexes for table `kb_article`
+--
+ALTER TABLE `kb_article`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `kb_article_relationship`
+--
+ALTER TABLE `kb_article_relationship`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `article_relationship_article_id_foreign` (`article_id`),
+  ADD KEY `article_relationship_category_id_foreign` (`category_id`);
+
+--
+-- Indexes for table `kb_category`
+--
+ALTER TABLE `kb_category`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `kb_comment`
+--
+ALTER TABLE `kb_comment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `comment_article_id_foreign` (`article_id`);
+
+--
+-- Indexes for table `kb_pages`
+--
+ALTER TABLE `kb_pages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `kb_settings`
+--
+ALTER TABLE `kb_settings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `languages`
+--
+ALTER TABLE `languages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `login_attempts`
+--
+ALTER TABLE `login_attempts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `log_notification`
+--
+ALTER TABLE `log_notification`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mailbox_protocol`
+--
+ALTER TABLE `mailbox_protocol`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `mail_services`
+--
+ALTER TABLE `mail_services`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `notification_types`
+--
+ALTER TABLE `notification_types`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `organization`
+--
+ALTER TABLE `organization`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `head` (`head`);
+
+--
+-- Indexes for table `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD KEY `password_resets_email_index` (`email`),
+  ADD KEY `password_resets_token_index` (`token`);
+
+--
+-- Indexes for table `plugins`
+--
+ALTER TABLE `plugins`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `queue_services`
+--
+ALTER TABLE `queue_services`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ratings`
+--
+ALTER TABLE `ratings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `rating_ref`
+--
+ALTER TABLE `rating_ref`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `settings_alert_notice`
+--
+ALTER TABLE `settings_alert_notice`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `settings_auto_response`
+--
+ALTER TABLE `settings_auto_response`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `settings_company`
+--
+ALTER TABLE `settings_company`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `settings_email`
+--
+ALTER TABLE `settings_email`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `settings_ratings`
+--
+ALTER TABLE `settings_ratings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `settings_ratings_slug_unique` (`slug`);
+
+--
+-- Indexes for table `settings_security`
+--
+ALTER TABLE `settings_security`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `settings_system`
+--
+ALTER TABLE `settings_system`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `time_farmat` (`time_farmat`),
+  ADD KEY `date_format` (`date_format`),
+  ADD KEY `date_time_format` (`date_time_format`),
+  ADD KEY `time_zone` (`time_zone`);
+
+--
+-- Indexes for table `settings_ticket`
+--
+ALTER TABLE `settings_ticket`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `sla_plan`
+--
+ALTER TABLE `sla_plan`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `social_media`
+--
+ALTER TABLE `social_media`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `teams`
+--
+ALTER TABLE `teams`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `team_lead` (`team_lead`);
+
+--
+-- Indexes for table `team_assign_agent`
+--
+ALTER TABLE `team_assign_agent`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `team_id` (`team_id`),
+  ADD KEY `agent_id` (`agent_id`);
+
+--
+-- Indexes for table `template`
+--
+ALTER TABLE `template`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `templates`
+--
+ALTER TABLE `templates`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `template_sets`
+--
+ALTER TABLE `template_sets`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `template_types`
+--
+ALTER TABLE `template_types`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tickets`
+--
+ALTER TABLE `tickets`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `dept_id` (`dept_id`),
+  ADD KEY `team_id` (`team_id`),
+  ADD KEY `priority_id` (`priority_id`),
+  ADD KEY `sla` (`sla`),
+  ADD KEY `help_topic_id` (`help_topic_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `assigned_to` (`assigned_to`),
+  ADD KEY `source` (`source`);
+
+--
+-- Indexes for table `ticket_attachment`
+--
+ALTER TABLE `ticket_attachment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `thread_id` (`thread_id`);
+
+--
+-- Indexes for table `ticket_collaborator`
+--
+ALTER TABLE `ticket_collaborator`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ticket_id` (`ticket_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `ticket_form_data`
+--
+ALTER TABLE `ticket_form_data`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ticket_id` (`ticket_id`);
+
+--
+-- Indexes for table `ticket_priority`
+--
+ALTER TABLE `ticket_priority`
+  ADD PRIMARY KEY (`priority_id`);
+
+--
+-- Indexes for table `ticket_source`
+--
+ALTER TABLE `ticket_source`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ticket_status`
+--
+ALTER TABLE `ticket_status`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ticket_thread`
+--
+ALTER TABLE `ticket_thread`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ticket_id_2` (`ticket_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `source` (`source`);
+
+--
+-- Indexes for table `ticket_token`
+--
+ALTER TABLE `ticket_token`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `timezone`
+--
+ALTER TABLE `timezone`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `time_format`
+--
+ALTER TABLE `time_format`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD UNIQUE KEY `users_mobile_unique` (`mobile`),
+  ADD KEY `assign_group_3` (`assign_group`),
+  ADD KEY `primary_dpt_2` (`primary_dpt`);
+
+--
+-- Indexes for table `user_additional_infos`
+--
+ALTER TABLE `user_additional_infos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user_assign_organization`
+--
+ALTER TABLE `user_assign_organization`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `org_id` (`org_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `user_notification`
+--
+ALTER TABLE `user_notification`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `version_check`
+--
+ALTER TABLE `version_check`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `widgets`
+--
+ALTER TABLE `widgets`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `workflow_action`
+--
+ALTER TABLE `workflow_action`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `workflow_action_1` (`workflow_id`);
+
+--
+-- Indexes for table `workflow_close`
+--
+ALTER TABLE `workflow_close`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `workflow_name`
+--
+ALTER TABLE `workflow_name`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `workflow_rules`
+--
+ALTER TABLE `workflow_rules`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `workflow_rules_1` (`workflow_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `api_settings`
+--
+ALTER TABLE `api_settings`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `banlist`
+--
+ALTER TABLE `banlist`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `bar_notifications`
+--
+ALTER TABLE `bar_notifications`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `canned_response`
+--
+ALTER TABLE `canned_response`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `common_settings`
+--
+ALTER TABLE `common_settings`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `conditions`
+--
+ALTER TABLE `conditions`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `country_code`
+--
+ALTER TABLE `country_code`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=240;
+--
+-- AUTO_INCREMENT for table `custom_forms`
+--
+ALTER TABLE `custom_forms`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `custom_form_fields`
+--
+ALTER TABLE `custom_form_fields`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `date_format`
+--
+ALTER TABLE `date_format`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT for table `date_time_format`
+--
+ALTER TABLE `date_time_format`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT for table `department`
+--
+ALTER TABLE `department`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `emails`
+--
+ALTER TABLE `emails`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `faveo_mails`
+--
+ALTER TABLE `faveo_mails`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `faveo_queues`
+--
+ALTER TABLE `faveo_queues`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `field_values`
+--
+ALTER TABLE `field_values`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `groups`
+--
+ALTER TABLE `groups`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `group_assign_department`
+--
+ALTER TABLE `group_assign_department`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `help_topic`
+--
+ALTER TABLE `help_topic`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `jobs`
+--
+ALTER TABLE `jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `kb_article`
+--
+ALTER TABLE `kb_article`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `kb_article_relationship`
+--
+ALTER TABLE `kb_article_relationship`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `kb_category`
+--
+ALTER TABLE `kb_category`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `kb_comment`
+--
+ALTER TABLE `kb_comment`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `kb_pages`
+--
+ALTER TABLE `kb_pages`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `kb_settings`
+--
+ALTER TABLE `kb_settings`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `languages`
+--
+ALTER TABLE `languages`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT for table `login_attempts`
+--
+ALTER TABLE `login_attempts`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `log_notification`
+--
+ALTER TABLE `log_notification`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `mailbox_protocol`
+--
+ALTER TABLE `mailbox_protocol`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `mail_services`
+--
+ALTER TABLE `mail_services`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `notification_types`
+--
+ALTER TABLE `notification_types`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `organization`
+--
+ALTER TABLE `organization`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `plugins`
+--
+ALTER TABLE `plugins`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `queue_services`
+--
+ALTER TABLE `queue_services`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `ratings`
+--
+ALTER TABLE `ratings`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `rating_ref`
+--
+ALTER TABLE `rating_ref`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `settings_alert_notice`
+--
+ALTER TABLE `settings_alert_notice`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `settings_auto_response`
+--
+ALTER TABLE `settings_auto_response`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `settings_company`
+--
+ALTER TABLE `settings_company`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `settings_email`
+--
+ALTER TABLE `settings_email`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `settings_ratings`
+--
+ALTER TABLE `settings_ratings`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `settings_security`
+--
+ALTER TABLE `settings_security`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `settings_system`
+--
+ALTER TABLE `settings_system`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `settings_ticket`
+--
+ALTER TABLE `settings_ticket`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `sla_plan`
+--
+ALTER TABLE `sla_plan`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `social_media`
+--
+ALTER TABLE `social_media`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `teams`
+--
+ALTER TABLE `teams`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT for table `team_assign_agent`
+--
+ALTER TABLE `team_assign_agent`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `template`
+--
+ALTER TABLE `template`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `templates`
+--
+ALTER TABLE `templates`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+--
+-- AUTO_INCREMENT for table `template_sets`
+--
+ALTER TABLE `template_sets`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `template_types`
+--
+ALTER TABLE `template_types`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+--
+-- AUTO_INCREMENT for table `tickets`
+--
+ALTER TABLE `tickets`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `ticket_attachment`
+--
+ALTER TABLE `ticket_attachment`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `ticket_collaborator`
+--
+ALTER TABLE `ticket_collaborator`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `ticket_form_data`
+--
+ALTER TABLE `ticket_form_data`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `ticket_priority`
+--
+ALTER TABLE `ticket_priority`
+  MODIFY `priority_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `ticket_source`
+--
+ALTER TABLE `ticket_source`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+--
+-- AUTO_INCREMENT for table `ticket_status`
+--
+ALTER TABLE `ticket_status`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `ticket_thread`
+--
+ALTER TABLE `ticket_thread`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT for table `ticket_token`
+--
+ALTER TABLE `ticket_token`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `timezone`
+--
+ALTER TABLE `timezone`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+--
+-- AUTO_INCREMENT for table `time_format`
+--
+ALTER TABLE `time_format`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT for table `user_additional_infos`
+--
+ALTER TABLE `user_additional_infos`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `user_assign_organization`
+--
+ALTER TABLE `user_assign_organization`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `user_notification`
+--
+ALTER TABLE `user_notification`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+--
+-- AUTO_INCREMENT for table `version_check`
+--
+ALTER TABLE `version_check`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `widgets`
+--
+ALTER TABLE `widgets`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+--
+-- AUTO_INCREMENT for table `workflow_action`
+--
+ALTER TABLE `workflow_action`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `workflow_close`
+--
+ALTER TABLE `workflow_close`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `workflow_name`
+--
+ALTER TABLE `workflow_name`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `workflow_rules`
+--
+ALTER TABLE `workflow_rules`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- Constraints for dumped tables
 --
@@ -2491,16 +3267,16 @@ ALTER TABLE `canned_response`
 -- Constraints for table `department`
 --
 ALTER TABLE `department`
-  ADD CONSTRAINT `department_ibfk_2` FOREIGN KEY (`manager`) REFERENCES `users` (`id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `department_ibfk_1` FOREIGN KEY (`sla`) REFERENCES `sla_plan` (`id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `department_ibfk_1` FOREIGN KEY (`sla`) REFERENCES `sla_plan` (`id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `department_ibfk_2` FOREIGN KEY (`manager`) REFERENCES `users` (`id`) ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `emails`
 --
 ALTER TABLE `emails`
-  ADD CONSTRAINT `emails_ibfk_3` FOREIGN KEY (`help_topic`) REFERENCES `help_topic` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `emails_ibfk_1` FOREIGN KEY (`department`) REFERENCES `department` (`id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `emails_ibfk_2` FOREIGN KEY (`priority`) REFERENCES `ticket_priority` (`priority_id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `emails_ibfk_2` FOREIGN KEY (`priority`) REFERENCES `ticket_priority` (`priority_id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `emails_ibfk_3` FOREIGN KEY (`help_topic`) REFERENCES `help_topic` (`id`) ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `field_values`
@@ -2512,26 +3288,26 @@ ALTER TABLE `field_values`
 -- Constraints for table `group_assign_department`
 --
 ALTER TABLE `group_assign_department`
-  ADD CONSTRAINT `group_assign_department_ibfk_2` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `group_assign_department_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `group_assign_department_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `group_assign_department_ibfk_2` FOREIGN KEY (`department_id`) REFERENCES `department` (`id`) ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `help_topic`
 --
 ALTER TABLE `help_topic`
-  ADD CONSTRAINT `help_topic_ibfk_6` FOREIGN KEY (`auto_assign`) REFERENCES `users` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `help_topic_ibfk_1` FOREIGN KEY (`custom_form`) REFERENCES `custom_forms` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `help_topic_ibfk_2` FOREIGN KEY (`department`) REFERENCES `department` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `help_topic_ibfk_3` FOREIGN KEY (`ticket_status`) REFERENCES `ticket_status` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `help_topic_ibfk_4` FOREIGN KEY (`priority`) REFERENCES `ticket_priority` (`priority_id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `help_topic_ibfk_5` FOREIGN KEY (`sla_plan`) REFERENCES `sla_plan` (`id`);
+  ADD CONSTRAINT `help_topic_ibfk_5` FOREIGN KEY (`sla_plan`) REFERENCES `sla_plan` (`id`),
+  ADD CONSTRAINT `help_topic_ibfk_6` FOREIGN KEY (`auto_assign`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- Constraints for table `kb_article_relationship`
 --
 ALTER TABLE `kb_article_relationship`
-  ADD CONSTRAINT `article_relationship_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `kb_category` (`id`),
-  ADD CONSTRAINT `article_relationship_article_id_foreign` FOREIGN KEY (`article_id`) REFERENCES `kb_article` (`id`);
+  ADD CONSTRAINT `article_relationship_article_id_foreign` FOREIGN KEY (`article_id`) REFERENCES `kb_article` (`id`),
+  ADD CONSTRAINT `article_relationship_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `kb_category` (`id`);
 
 --
 -- Constraints for table `kb_comment`
@@ -2549,10 +3325,10 @@ ALTER TABLE `organization`
 -- Constraints for table `settings_system`
 --
 ALTER TABLE `settings_system`
-  ADD CONSTRAINT `settings_system_ibfk_4` FOREIGN KEY (`date_time_format`) REFERENCES `date_time_format` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `settings_system_ibfk_1` FOREIGN KEY (`time_zone`) REFERENCES `timezone` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `settings_system_ibfk_2` FOREIGN KEY (`time_farmat`) REFERENCES `time_format` (`id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `settings_system_ibfk_3` FOREIGN KEY (`date_format`) REFERENCES `date_format` (`id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `settings_system_ibfk_3` FOREIGN KEY (`date_format`) REFERENCES `date_format` (`id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `settings_system_ibfk_4` FOREIGN KEY (`date_time_format`) REFERENCES `date_time_format` (`id`) ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `teams`
@@ -2564,14 +3340,13 @@ ALTER TABLE `teams`
 -- Constraints for table `team_assign_agent`
 --
 ALTER TABLE `team_assign_agent`
-  ADD CONSTRAINT `team_assign_agent_ibfk_2` FOREIGN KEY (`agent_id`) REFERENCES `users` (`id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `team_assign_agent_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `team_assign_agent_ibfk_1` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `team_assign_agent_ibfk_2` FOREIGN KEY (`agent_id`) REFERENCES `users` (`id`) ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `tickets`
 --
 ALTER TABLE `tickets`
-  ADD CONSTRAINT `tickets_ibfk_9` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `tickets_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `tickets_ibfk_2` FOREIGN KEY (`dept_id`) REFERENCES `department` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `tickets_ibfk_3` FOREIGN KEY (`team_id`) REFERENCES `teams` (`id`) ON UPDATE NO ACTION,
@@ -2579,7 +3354,8 @@ ALTER TABLE `tickets`
   ADD CONSTRAINT `tickets_ibfk_5` FOREIGN KEY (`sla`) REFERENCES `sla_plan` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `tickets_ibfk_6` FOREIGN KEY (`help_topic_id`) REFERENCES `help_topic` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `tickets_ibfk_7` FOREIGN KEY (`status`) REFERENCES `ticket_status` (`id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `tickets_ibfk_8` FOREIGN KEY (`source`) REFERENCES `ticket_source` (`id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `tickets_ibfk_8` FOREIGN KEY (`source`) REFERENCES `ticket_source` (`id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `tickets_ibfk_9` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`id`) ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `ticket_attachment`
@@ -2591,8 +3367,8 @@ ALTER TABLE `ticket_attachment`
 -- Constraints for table `ticket_collaborator`
 --
 ALTER TABLE `ticket_collaborator`
-  ADD CONSTRAINT `ticket_collaborator_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `ticket_collaborator_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `ticket_collaborator_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `ticket_collaborator_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `ticket_form_data`
@@ -2604,23 +3380,23 @@ ALTER TABLE `ticket_form_data`
 -- Constraints for table `ticket_thread`
 --
 ALTER TABLE `ticket_thread`
-  ADD CONSTRAINT `ticket_thread_ibfk_3` FOREIGN KEY (`source`) REFERENCES `ticket_source` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `ticket_thread_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `tickets` (`id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `ticket_thread_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `ticket_thread_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `ticket_thread_ibfk_3` FOREIGN KEY (`source`) REFERENCES `ticket_source` (`id`) ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`primary_dpt`) REFERENCES `department` (`id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`assign_group`) REFERENCES `groups` (`id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`assign_group`) REFERENCES `groups` (`id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`primary_dpt`) REFERENCES `department` (`id`) ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `user_assign_organization`
 --
 ALTER TABLE `user_assign_organization`
-  ADD CONSTRAINT `user_assign_organization_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE NO ACTION,
-  ADD CONSTRAINT `user_assign_organization_ibfk_1` FOREIGN KEY (`org_id`) REFERENCES `organization` (`id`) ON UPDATE NO ACTION;
+  ADD CONSTRAINT `user_assign_organization_ibfk_1` FOREIGN KEY (`org_id`) REFERENCES `organization` (`id`) ON UPDATE NO ACTION,
+  ADD CONSTRAINT `user_assign_organization_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `workflow_action`

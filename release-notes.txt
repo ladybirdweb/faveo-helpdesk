@@ -1,3 +1,39 @@
+|======================================================
+|v1.9.2
+|======================================================
+
+Bug Fixes
+    Fixed single cron issue #366, #347
+    Corrected notification counts    
+    Fixed canned response error
+    Correct message for registration
+    Removed routes of PRO features
+    Exception handling while adding language
+    Showing agents in alphabetical order in various drop down menus
+    Handling the case when agent/admin adds same owner while changing ticket's owner
+    Fixed priority and auto assignment while creating ticket form cleint panel
+    Fixed typos in english language translation
+    Fixed counts of tickets of every categroy
+    Removed duplicate option from top nav bar
+    Fixed empty database check while installation
+    Assigning team leader in a team while creating new team
+    Fixed #361
+
+Enhancements
+    
+    Sending email notfications to users while merging their duplicate tickets
+    Implemented Yajra in users table
+    Custom filter and search option in users table
+    Check if JavaScript is enabled or not while installation
+    Put max execution time and "mbstring" extension check while installation
+
+    |========================================================
+    | Upgrade giude
+    |========================================================
+
+    Follow this wiki article to upgrade your Faveo system
+    https://github.com/ladybirdweb/faveo-helpdesk/wiki/Upgrade-guide-for-v1.9.2
+
 |=======================================================
 | v1.9.1
 |=======================================================

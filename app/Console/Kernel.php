@@ -30,8 +30,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         if (env('DB_INSTALL') == 1) {
-            $queue = $this->getCurrentQueue();
-            $schedule->command('queue:listen '.$queue, ['--tries' => 1])->everyMinute();
+
+            if ($this->getCurrentQueue() != 'sync') {
+                $schedule->command('queue:listen '.$this->getCurrentQueue().' --sleep 60')->everyMinute();
+            }
             $this->execute($schedule, 'fetching');
             $this->execute($schedule, 'notification');
             $this->execute($schedule, 'work');
@@ -61,34 +63,34 @@ class Kernel extends ConsoleKernel
         $at = $command['at'];
         switch ($condition) {
             case 'everyMinute':
-                $schedule->everyMinute()->withoutOverlapping();
+                $schedule->everyMinute();
                 break;
             case 'everyFiveMinutes':
-                $schedule->everyFiveMinutes()->withoutOverlapping();
+                $schedule->everyFiveMinutes();
                 break;
             case 'everyTenMinutes':
-                $schedule->everyTenMinutes()->withoutOverlapping();
+                $schedule->everyTenMinutes();
                 break;
             case 'everyThirtyMinutes':
-                $schedule->everyThirtyMinutes()->withoutOverlapping();
+                $schedule->everyThirtyMinutes();
                 break;
             case 'hourly':
-                $schedule->hourly()->withoutOverlapping();
+                $schedule->hourly();
                 break;
             case 'daily':
-                $schedule->daily()->withoutOverlapping();
+                $schedule->daily();
                 break;
             case 'dailyAt':
                 $this->getConditionWithOption($schedule, $condition, $at);
                 break;
             case 'weekly':
-                $schedule->weekly()->withoutOverlapping();
+                $schedule->weekly();
                 break;
             case 'monthly':
-                $schedule->monthly()->withoutOverlapping();
+                $schedule->monthly();
                 break;
             case 'yearly':
-                $schedule->yearly()->withoutOverlapping();
+                $schedule->yearly();
                 break;
         }
     }
@@ -97,7 +99,7 @@ class Kernel extends ConsoleKernel
     {
         switch ($command) {
             case 'dailyAt':
-                $schedule->dailyAt($at)->withoutOverlapping();
+                $schedule->dailyAt($at);
                 break;
         }
     }
