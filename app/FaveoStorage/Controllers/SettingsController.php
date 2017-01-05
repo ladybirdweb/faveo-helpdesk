@@ -108,11 +108,13 @@ class SettingsController extends Controller {
         $storage->upload();
     }
 
-    public function activate() {
+
+    public function activate()
+    {
         if (!\Schema::hasColumn('ticket_attachment', 'driver')) {
-            $path = 'app' . DIRECTORY_SEPARATOR . 'FaveoStorage' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'migrations';
+            $path = 'app'.DIRECTORY_SEPARATOR.'FaveoStorage'.DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'migrations';
             Artisan::call('migrate', [
-                '--path' => $path,
+                '--path'  => $path,
                 '--force' => true,
             ]);
         }

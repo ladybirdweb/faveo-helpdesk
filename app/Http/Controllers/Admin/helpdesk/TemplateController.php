@@ -327,16 +327,17 @@ class TemplateController extends Controller
                 throw new Exception('Sorry! We can not find your request');
             }
             $to_address = [
-                'name' => "",
-                'email' => $to
+
+                'name'  => '',
+                'email' => $to,
             ];
             $message = [
-                'subject' => $subject,
+                'subject'  => $subject,
                 'scenario' => null,
-                'body' => $msg
+                'body'     => $msg,
             ];
 
-            $this->PhpMailController->sendmail($from, $to_address, $message,[],[]);
+            $this->PhpMailController->sendmail($from, $to_address, $message, [], []);
             return redirect()->back()->with('success', 'Mail has send successfully');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
