@@ -326,14 +326,19 @@ class TemplateController extends Controller
             if (!$from_address) {
                 throw new Exception('Sorry! We can not find your request');
             }
-            $controller = new PhpMailController();
-            $controller->setMailConfig($from_address);
-            $controller->laravelMail($to, '', $subject, $msg, [], null);
+            $to_address = [
+                'name' => "",
+                'email' => $to
+            ];
+            $message = [
+                'subject' => $subject,
+                'scenario' => null,
+                'body' => $msg
+            ];
 
+            $this->PhpMailController->sendmail($from, $to_address, $message,[],[]);
             return redirect()->back()->with('success', 'Mail has send successfully');
         } catch (Exception $e) {
-            dd($e);
-
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }

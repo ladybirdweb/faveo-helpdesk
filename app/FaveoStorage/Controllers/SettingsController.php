@@ -11,26 +11,24 @@ use Lang;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class SettingsController extends Controller
-{
-    public function settingsIcon()
-    {
+class SettingsController extends Controller {
+
+    public function settingsIcon() {
         return ' <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
                         <div class="settingdivblue">
-                            <a href="'.url('storage').'">
+                            <a href="' . url('storage') . '">
                                 <span class="fa-stack fa-2x">
                                     <i class="fa fa-save fa-stack-1x"></i>
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >'.Lang::get('storage::lang.storage').'</p>
+                        <p class="box-title" >' . Lang::get('storage::lang.storage') . '</p>
                     </div>
                 </div>';
     }
 
-    public function settings()
-    {
+    public function settings() {
         try {
             $settings = new CommonSettings();
             $directories = $this->directories();
@@ -51,8 +49,7 @@ class SettingsController extends Controller
         }
     }
 
-    public function postSettings(Request $request)
-    {
+    public function postSettings(Request $request) {
         try {
             $requests = $request->except('_token');
             $this->delete();
@@ -70,8 +67,7 @@ class SettingsController extends Controller
         }
     }
 
-    public function delete()
-    {
+    public function delete() {
         $settings = CommonSettings::where('option_name', 'storage')->get();
         if ($settings->count() > 0) {
             foreach ($settings as $setting) {
@@ -80,17 +76,15 @@ class SettingsController extends Controller
         }
     }
 
-    public function save($key, $value)
-    {
+    public function save($key, $value) {
         CommonSettings::create([
-            'option_name'    => 'storage',
+            'option_name' => 'storage',
             'optional_field' => $key,
-            'option_value'   => $value,
+            'option_value' => $value,
         ]);
     }
 
-    public function directories($root = '')
-    {
+    public function directories($root = '') {
         if ($root == '') {
             $root = base_path();
         }
@@ -109,18 +103,19 @@ class SettingsController extends Controller
         return $paths;
     }
 
-    public function attachment()
-    {
+    public function attachment() {
         $storage = new StorageController();
         $storage->upload();
     }
 
-    public function activate()
-    {
-        $path = 'app'.DIRECTORY_SEPARATOR.'FaveoStorage'.DIRECTORY_SEPARATOR.'database'.DIRECTORY_SEPARATOR.'migrations';
-        Artisan::call('migrate', [
-            '--path' => $path,
-            '--force'=> true,
+    public function activate() {
+        if (!\Schema::hasColumn('ticket_attachment', 'driver')) {
+            $path = 'app' . DIRECTORY_SEPARATOR . 'FaveoStorage' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'migrations';
+            Artisan::call('migrate', [
+                '--path' => $path,
+                '--force' => true,
             ]);
+        }
     }
+
 }
