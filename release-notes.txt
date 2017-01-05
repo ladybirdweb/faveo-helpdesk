@@ -3,6 +3,7 @@
 |======================================================
 
 Bug Fixes
+    Fixed single cron issue #366, #347
     Corrected notification counts    
     Fixed canned response error
     Correct message for registration
