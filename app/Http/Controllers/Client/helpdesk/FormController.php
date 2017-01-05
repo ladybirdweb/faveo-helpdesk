@@ -178,10 +178,13 @@ class FormController extends Controller
         $sla = $ticket_settings->first()->sla;
 
          // $priority = $ticket_settings->first()->priority;
-         $default_priority = Ticket_Priority::where('is_default', '=', 1)->first();
+        $default_priority = Ticket_Priority::where('is_default', '=', 1)->first();
         $user_priority = CommonSettings::where('option_name', '=', 'user_priority')->first();
         if (!($request->input('priority'))) {
             $priority = $default_priority->priority_id;
+            if ($helpTopicObj->exists() && ($helpTopicObj->value('status') == 1)) {
+                $priority = $helpTopicObj->value('priority');
+            }
         } else {
             $priority = $request->input('priority');
         }
@@ -189,6 +192,9 @@ class FormController extends Controller
         $attachments = $request->file('attachment');
         $collaborator = null;
         $assignto = null;
+        if ($helpTopicObj->exists() && ($helpTopicObj->value('status') == 1)) {
+            $assignto = $helpTopicObj->value('auto_assign');
+        }
         $auto_response = 0;
         $team_assign = null;
         if ($phone != null || $mobile_number != null) {

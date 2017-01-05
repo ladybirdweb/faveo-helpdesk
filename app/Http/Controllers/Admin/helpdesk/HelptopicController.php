@@ -85,7 +85,7 @@ class HelptopicController extends Controller
             $departments = $department->get();
             $topics = $topic->get();
             $forms = $form->get();
-            $agents = $agent->where('role', '=', 'agent')->get();
+            $agents = $agent->where('role', '!=', 'user')->where('active', '=', 1)->orderBy('first_name')->get();
             $slas = $sla->get();
             $priority = Ticket_Priority::where('status', '=', 1)->get();
 
@@ -143,7 +143,7 @@ class HelptopicController extends Controller
     public function edit($id, Ticket_Priority $priority, Department $department, Help_topic $topic, Forms $form, Sla_plan $sla)
     {
         try {
-            $agents = User::where('role', '=', 'agent')->get();
+            $agents = User::where('role', '!=', 'user')->where('active', '=', 1)->orderBy('first_name')->get();
             $departments = $department->get();
             $topics = $topic->whereId($id)->first();
             $forms = $form->get();
