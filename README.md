@@ -48,7 +48,7 @@ Visit our website for more information on services offered by us <a href="http:/
 
 YouTube Channel
 --------------------------
-Find demo, installtion, configuration, tutorial videos on our channel <a href="https://www.youtube.com/channel/UC-eqh-h241b1janp6sU7Iiw" target="_blank">here</a>
+Find demo, installation, configuration, tutorial videos on our channel <a href="https://www.youtube.com/channel/UC-eqh-h241b1janp6sU7Iiw" target="_blank">here</a>
 
 Road Map for Community Edition
 --------------------------
