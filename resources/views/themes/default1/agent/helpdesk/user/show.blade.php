@@ -673,8 +673,9 @@ $(document).ready(function(){
                                         <div class="mailbox-controls">
                                             <!-- Check all button -->
                                             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-                                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
-                                            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
+                                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}" id="delete" onclick="appendValue(id)">
+                                            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}" id="close" onclick="appendValue(id)">
+                                            <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" value="{!! Lang::get('lang.open') !!}" id="open" onclick="appendValue(id)" style="display: none;">
                                             <div class="pull-right">
                                             </div>
                                             <!--</div>-->

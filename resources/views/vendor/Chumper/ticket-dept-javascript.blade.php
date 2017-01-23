@@ -89,4 +89,17 @@ $status = $segments[2];
         });
     });
 
+    function appendValue(id) {
+        var txt = document.getElementById(id);
+        if (id == 'delete') {
+            txt.value = 'Delete';
+        }else if(id == 'close') {
+            txt.value = 'Close';
+        }else if(id == 'open') {
+            txt.value = 'Open';
+        } else {
+            txt.value = 'Delete forever';
+        }
+    }
+
 </script>
