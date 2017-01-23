@@ -617,3 +617,7 @@ Breadcrumbs::register('labels.edit', function ($breadcrumbs) {
 Breadcrumbs::register('readmails', function ($breadcrumbs) {
     $breadcrumbs->push('readmails', 'readmails');
 });
+
+Breadcrumbs::register('notification', function($breadcrumbs){
+    $breadcrumbs->push('notification', 'notification');
+});

@@ -39,7 +39,6 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('auth/register/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'auth.register', 'uses' => 'Auth\AuthController@getRegister']);
     Breadcrumbs::register('auth.register', function ($breadcrumbs) {
         $breadcrumbs->parent('/');
-        $breadcrumbs->push('Login', url('auth/login'));
         $breadcrumbs->push('Create Account', url('auth/register'));
     });
 
@@ -47,7 +46,6 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('auth/login/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'auth.login', 'uses' => 'Auth\AuthController@getLogin']);
     Breadcrumbs::register('auth.login', function ($breadcrumbs) {
         $breadcrumbs->parent('/');
-        $breadcrumbs->push('Create Account', url('auth/register'));
         $breadcrumbs->push('Login', url('auth/login'));
     });
 
