@@ -674,7 +674,7 @@ $(document).ready(function(){
                                             <!-- Check all button -->
                                             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
                                             <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}" id="delete" onclick="appendValue(id)">
-                                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}" id="close" onclick="appendValue(id)">
+                                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}"  id="close" onclick="appendValue('close')">
                                             <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" value="{!! Lang::get('lang.open') !!}" id="open" onclick="appendValue(id)" style="display: none;">
                                             <div class="pull-right">
                                             </div>
@@ -713,7 +713,6 @@ $(document).ready(function(){
          @endif
           @if($users->is_delete != '1')
         
-        <div class="row">
             <div class="col-md-12">
                 <link type="text/css" href="{{asset("lb-faveo/css/bootstrap-datetimepicker4.7.14.min.css")}}" rel="stylesheet">
                 <div class="box box-info">
@@ -1572,21 +1571,6 @@ $(document).ready(function(){
                 // using the done promise callback
                 // stop the form from submitting the normal way and refreshing the page
                 event.preventDefault();
-            });
-        });
-
-        jQuery(document).ready(function() {
-            // Close a ticket
-            $('#close').on('click', function(e) {
-                $.ajax({
-                    type: "GET",
-                    url: "agen",
-                    beforeSend: function() {
-                    },
-                    success: function(response) {
-                    }
-                })
-                return false;
             });
         });
     </script>
