@@ -669,12 +669,12 @@ $(document).ready(function(){
                                         {{Session::get('fails')}}
                                     </div>
                                     @endif
-                                    {!! Form::open(['route'=>'select_all','method'=>'post']) !!}
+                                    {!! Form::open(['id'=>'modalpopup', 'route'=>'select_all','method'=>'post']) !!}
                                         <div class="mailbox-controls">
                                             <!-- Check all button -->
                                             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
                                             <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}" id="delete" onclick="appendValue(id)">
-                                            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}" id="close" onclick="appendValue(id)">
+                                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}" id="close" onclick="appendValue(id)">
                                             <input type="submit" class="btn btn-default text-blue btn-sm" name="submit" value="{!! Lang::get('lang.open') !!}" id="open" onclick="appendValue(id)" style="display: none;">
                                             <div class="pull-right">
                                             </div>
@@ -884,9 +884,32 @@ $(document).ready(function(){
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+    <!-- Modal -->   
+<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" style="display: none; padding-right: 15px;background-color: rgba(0, 0, 0, 0.7);">
+    <div class="modal-dialog" role="document">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close closemodal" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body" id="custom-alert-body" >
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary pull-left yes" data-dismiss="modal">{{Lang::get('lang.ok')}}</button>
+                    <button type="button" class="btn btn-default no">{{Lang::get('lang.cancel')}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script type="text/javascript">
         jQuery(document).ready(function($) {
             // create org
+            var option = null;
             $('#form').on('submit', function() {
                 $.ajax({
                     type: "POST",
@@ -922,6 +945,68 @@ $(document).ready(function(){
                 })
                 return false;
             });
+
+            $('#delete').on('click', function () {
+                option = 0;
+                $('#myModalLabel').html("{{Lang::get('lang.delete-tickets')}}");
+            });
+
+            $('#close').on('click', function () {
+                option = 1;
+                $('#myModalLabel').html("{{Lang::get('lang.close-tickets')}}");
+            });
+
+            $('#open').on('click', function () {
+                option = 2;
+                $('#myModalLabel').html("{{Lang::get('lang.open-tickets')}}");
+            });
+
+            $("#modalpopup").on('submit', function (e) {
+                e.preventDefault();
+                var msg = "{{Lang::get('lang.confirm')}}";
+                var values = getValues();
+                if (values == "") {
+                    msg = "{{Lang::get('lang.select-ticket')}}";
+                    $('.yes').html("{{Lang::get('lang.ok')}}");
+                    $('#myModalLabel').html("{{Lang::get('lang.alert')}}");
+                } else {
+                    $('.yes').html("Yes");
+                }
+                $('#custom-alert-body').html(msg);
+                $("#myModal").css("display", "block");
+            });
+
+            $(".closemodal, .no").click(function () {
+                $("#myModal").css("display", "none");
+            });
+
+            $(".closemodal, .no").click(function () {
+                $("#myModal").css("display", "none");
+            });
+
+            $('.yes').click(function () {
+                var values = getValues();
+                if (values == "") {
+                    $("#myModal").css("display", "none");
+                } else {
+                    $("#myModal").css("display", "none");
+                    $("#modalpopup").unbind('submit');
+                    if (option == 0) {
+                        $('#delete').click();
+                    } else if (option == 1) {
+                        $('#close').click();
+                    } else {
+                        $('#open').click();
+                    }
+                }
+            });
+
+            function getValues() {
+                var values = $('.selectval:checked').map(function () {
+                    return $(this).val();
+                }).get();
+                return values;
+            }
         });
     </script>
     <!-- Organisation Assign Modal -->
