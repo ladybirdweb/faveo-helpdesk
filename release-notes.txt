@@ -1,3 +1,24 @@
+
+|=====================================================
+| v1.9.3 (hot fix)
+|=====================================================
+## Bug fixed
+#344 
+System is storing the attachment in chosen storage medium(DB/file system) but not showing the attachments in ticket detail page or ticket timeline page.
+
+## How to Fix
+See this link https://github.com/ladybirdweb/faveo-helpdesk/commit/f4d71f3d743123d15558ab120af74499298a1891 for the details of changes made for bug fix.
+
+Or
+
+Open this file: Root_directory of faveo/app/Model/helpdesk/Ticket/Ticket_attachments.php
+search and replace
+`if ($this->poster == 'ATTACHMENT')`
+with 
+`if ($this->poster == 'ATTACHMENT' || $this->poster == 'attachment')`
+at line  **49**
+
+
 |======================================================
 |v1.9.2
 |======================================================
