@@ -5,7 +5,7 @@ return [
 |  Indonesian language translation for Faveo Helpdesk
 |  Author: Fajri Surya Putra
 |  Contact: fajrisuryaputra@outlook.co.id
-|  Collaborator: 
+|  Collaborator:
 |  Last update: 21-12-2016
 */
     /*
@@ -20,7 +20,7 @@ return [
      */
 
     'password' => 'Password harus mengandung minimal 6 karakter dan sama dengan konfirmasi password.',
-    'user'     => "Kami tidak dapat menemukan pengguna dengan alamat email tersebut.",
+    'user'     => 'Kami tidak dapat menemukan pengguna dengan alamat email tersebut.',
     'token'    => 'Token reset password ini tidak sesuai.',
     'sent'     => 'Kami sudah mengirimkan email tautan reset password Anda!',
     'reset'    => 'Password Anda sudah di reset!',

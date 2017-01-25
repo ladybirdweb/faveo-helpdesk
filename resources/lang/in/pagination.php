@@ -5,7 +5,7 @@ return [
 |  Indonesian language translation for Faveo Helpdesk
 |  Author: Fajri Surya Putra
 |  Contact: fajrisuryaputra@outlook.co.id
-|  Collaborator: 
+|  Collaborator:
 |  Last update: 21-12-2016
 */
     /*
