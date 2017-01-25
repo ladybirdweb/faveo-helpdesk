@@ -188,11 +188,6 @@ return [
         App\FaveoStorage\StorageServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
 
-
-
-
-        
-
     ],
     /*
       |--------------------------------------------------------------------------

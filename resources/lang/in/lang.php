@@ -3,7 +3,7 @@
 |  Indonesian language translation for Faveo Helpdesk
 |  Author: Fajri Surya Putra
 |  Contact: fajrisuryaputra@outlook.co.id
-|  Collaborator: 
+|  Collaborator:
 |  Last update: 21-12-2016
 */
 return [
@@ -30,14 +30,14 @@ return [
     'required-error'                                                 => 'Mohon isi bidang yang bertanda',
     'invalid'                                                        => 'ID dan password pengguna salah',
     'sorry_something_went_wrong'                                     => 'Maaf, terjadi kesalahan',
-    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'     => "Kami sedang mengerjakannya dan akan kami perbaiki secepatnya.",
+    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'     => 'Kami sedang mengerjakannya dan akan kami perbaiki secepatnya.',
     'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found' => 'Maaf, tapi halaman yang Anda cari tidak dapat ditemukan.',
     'go_back'                                                        => 'Kembali',
     'the_board_is_offline'                                           => 'Layanan sedang offline',
     'error_establishing_connection_to_database'                      => 'Gagal terhubung ke database',
     'unauthorized_access'                                            => 'Akses tidak diizinkan',
     'not-autherised'                                                 => 'Anda tidak memiliki izin',
-    'otp-not-matched'                                                => 'Ups! Kode OTP yang Anda masukkan tidak sesuai dengan kode yang kami kirim ke nomor Anda.', 
+    'otp-not-matched'                                                => 'Ups! Kode OTP yang Anda masukkan tidak sesuai dengan kode yang kami kirim ke nomor Anda.',
     'otp-invalid'                                                    => 'Kode OTP harus berisi 6 digit angka.',
     'otp-input-title'                                                => 'Masukkan 6 digit kode OTP.',
     'otp-expired'                                                    => 'Kode OTP Anda sudah kadaluarsa.<br/> Klik "Kirim Ulang OTP" untuk menerima kode OTP baru di ponsel Anda.',
@@ -92,11 +92,11 @@ return [
     'see-profile1'                                                                                => 'Klik disini untuk melihat profil ',
     'see-profile2'                                                                                => ' ',
     'activate_your_account_click_on_Link_that_send_to_your_mail'                                  => 'Aktifkan akun Anda! Klik tautan yang kami kirim ke email Anda',
-    'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble'                        => 'Aktifkan akun Anda! Klik tautan yang kami kirim ke email Anda atau login ke akun Anda dan masukkan kode OTP yang kami kirim ke nomor ponsel Anda', 
-    'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup' => 'Akun sudah dibuat, mohon hubungi administrator karena kami tidak dapat mengirimkan kode OTP ke nomor ponsel Anda dan email ke alamat email Anda.', 
+    'activate_your_account_click_on_Link_that_send_to_your_mail_and_moble'                        => 'Aktifkan akun Anda! Klik tautan yang kami kirim ke email Anda atau login ke akun Anda dan masukkan kode OTP yang kami kirim ke nomor ponsel Anda',
+    'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup' => 'Akun sudah dibuat, mohon hubungi administrator karena kami tidak dapat mengirimkan kode OTP ke nomor ponsel Anda dan email ke alamat email Anda.',
     'this_field_do_not_match_our_records'                                                         => 'Bidang ini tidak sesuai dengan data kami.',
     'we_have_e-mailed_your_password_reset_link'                                                   => 'Kami sudah mengirimkan tautan reset password Anda!',
-    "we_can't_find_a_user_with_that_e-mail_address"                                               => "Kami tidak menemukan pengguna dengan alamat email tersebut.",
+    "we_can't_find_a_user_with_that_e-mail_address"                                               => 'Kami tidak menemukan pengguna dengan alamat email tersebut.',
     /*
       |--------------------------------------
       |   Reset Password Page
@@ -163,13 +163,13 @@ return [
     'disable_for_this_email_address'                                                   => 'Matikan untuk alamat email ini',
     'validate_certificates_from_tls_or_ssl_server'                                     => 'Validasi sertifikat dari TLS/SSL server',
     'authentication'                                                                   => 'Otentikasi',
-    'incoming_email_connection_failed_please_check_email_credentials_or_imap_settings' => 'Koneksi email masuk gagal! Mohon periksa kembali tanda pengenal email atau Pengaturan IMAP', 
+    'incoming_email_connection_failed_please_check_email_credentials_or_imap_settings' => 'Koneksi email masuk gagal! Mohon periksa kembali tanda pengenal email atau Pengaturan IMAP',
     'outgoing_email_connection_failed'                                                 => 'Koneksi email keluar gagal',
     'you_cannot_delete_system_default_email'                                           => 'Anda tidak dapat menghapus email default sistem',
     'email_deleted_sucessfully'                                                        => 'Email berhasil dihapus',
     'email_can_not_delete'                                                             => 'Email tidak bisa dihapus',
     'outgoing_email_failed'                                                            => 'Email keluar gagal',
-    'system-email-not-configured'                                                      => 'Kami tidak dapat memproses permintaan email karena konfigurasi untuk sistem pengiriman email belum diatur.', 
+    'system-email-not-configured'                                                      => 'Kami tidak dapat memproses permintaan email karena konfigurasi untuk sistem pengiriman email belum diatur.',
     /*
       |--------------------------------------
       |  Ban Emails Create Page
@@ -206,18 +206,18 @@ return [
     'you_have_successfully_activated_this_set' => 'Anda telah mengaktifkan set ini',
     'template_set_deleted_successfully'        => 'Set template berhasil dihapus',
     //Template Description
-    'Create ticket agent'       => 'Email notifikasi yang dikirim ke agen dan admin saat tiket baru dibuat', 
-    'Assign ticket'             => 'Tiket ditugaskan ke agen', 
-    'Create ticket'             => 'Email dikirim ke klien saat pembuatan tiket baru berhasil', 
-    'Check ticket'              => 'Jika klien ingin memeriksa tiket melalui portal pelanggan maka tautan akan dikirim ke klien. Tautan ini ditujukan agar klien bisa melihat rincian tiket tanpa harus login ke sistem', 
-    'Ticket reply agent'        => 'Notifikasi dikirim ke email agen saat klien membalas tiket', 
+    'Create ticket agent'       => 'Email notifikasi yang dikirim ke agen dan admin saat tiket baru dibuat',
+    'Assign ticket'             => 'Tiket ditugaskan ke agen',
+    'Create ticket'             => 'Email dikirim ke klien saat pembuatan tiket baru berhasil',
+    'Check ticket'              => 'Jika klien ingin memeriksa tiket melalui portal pelanggan maka tautan akan dikirim ke klien. Tautan ini ditujukan agar klien bisa melihat rincian tiket tanpa harus login ke sistem',
+    'Ticket reply agent'        => 'Notifikasi dikirim ke email agen saat klien membalas tiket',
     'Registration notification' => 'Password dan username dikirim ke email saat pendaftaran pertama',
     'Reset password'            => 'Email dengan tautan reset password',
     'Error report'              => 'Laporan error',
-    'Ticket creation'           => 'Notifikasi pertama yang dikirim oleh sistem tentang pembuatan tiket untuk klien', 
-    'Ticket reply'              => 'Balasan yang dilakukan oleh agen pada tiket klien, email notifikasi dikirim untuk klien dan kolaborator', 
-    'Close ticket'              => 'Email dikirim ke klien saat tiket ditutup', 
-    'Create ticket by agent'    => 'Agen membuatkan tiket untuk klien', 
+    'Ticket creation'           => 'Notifikasi pertama yang dikirim oleh sistem tentang pembuatan tiket untuk klien',
+    'Ticket reply'              => 'Balasan yang dilakukan oleh agen pada tiket klien, email notifikasi dikirim untuk klien dan kolaborator',
+    'Close ticket'              => 'Email dikirim ke klien saat tiket ditutup',
+    'Create ticket by agent'    => 'Agen membuatkan tiket untuk klien',
     /*
       |--------------------------------------
       |  Templates Create Page
@@ -238,8 +238,8 @@ return [
     'send'                       => 'Kirim',
     'choose_an_email'            => 'Pilih email',
     'email_diagnostic'           => 'Diagnostik email',
-    'send-mail-to-diagnos'       => 'Kirim email untuk memeriksa pengaturan email keluar', 
-    'message_has_been_sent'      => 'Pesan berhasil dikirim', 
+    'send-mail-to-diagnos'       => 'Kirim email untuk memeriksa pengaturan email keluar',
+    'message_has_been_sent'      => 'Pesan berhasil dikirim',
     'message_sent_from_php_mail' => 'Pesan dikirim dari PHP-Mail',
     'mailer_error'               => 'Pengirim email error',
     /*
@@ -275,7 +275,7 @@ return [
     'company_updated_successfully' => 'Perusahaan berhasil diperbarui',
     'company_can_not_updated'      => 'Perusahaan tidak dapat diperbarui',
     'enter-country-phone-code'     => 'Masukkan kode telepon negara Anda',
-    'country-code-required-error'  => 'Kode dibutuhkan dengan nomor telepon/ponsel.', 
+    'country-code-required-error'  => 'Kode dibutuhkan dengan nomor telepon/ponsel.',
     'incorrect-country-code-error' => 'Kode negara salah.',
     /*
       |--------------------------------------
@@ -299,7 +299,7 @@ return [
     'day_date_time'                                              => 'Format hari, tanggal, dan jam',
     'timezone'                                                   => 'Zona waktu default',
     'Ticket-created-successfully'                                => 'Tiket berhasil dibuat!',
-    'Ticket-created-successfully2'                               => 'Tiket sudah dibuat tapi belum diverifikasi. Tiket akan dimunculkan di inbox setelah pengguna memverifikasi akunnya.', 
+    'Ticket-created-successfully2'                               => 'Tiket sudah dibuat tapi belum diverifikasi. Tiket akan dimunculkan di inbox setelah pengguna memverifikasi akunnya.',
     'system_updated_successfully'                                => 'Sistem berhasil diperbarui',
     'system_can_not_updated'                                     => 'Sistem tidak dapat diperbarui',
     'ticket_updated_successfully'                                => 'Tiket berhasil diperbarui',
@@ -312,16 +312,16 @@ return [
     'Please-save-this-for-future-reference'                      => 'Mohon disimpan untuk referensi',
     'email-moble-already-taken'                                  => 'Email atau nomor ponsel sudah ada',
     'mobile-has-been-taken'                                      => 'Nomor ponsel ini sudah ada',
-    'failed-to-create-user-tcket-as-mobile-has-been-taken'       => 'Gagal membuat tiket baru karena nomor ponsel yang Anda masukkan berhubungan dengan seorang pengguna. Tapi rincian lainnya yang dimasukkan tidak sesuai dengan rincian pengguna tersebut. Mohon verifikasi rincian pengguna atau buatlah pengguna baru.', 
+    'failed-to-create-user-tcket-as-mobile-has-been-taken'       => 'Gagal membuat tiket baru karena nomor ponsel yang Anda masukkan berhubungan dengan seorang pengguna. Tapi rincian lainnya yang dimasukkan tidak sesuai dengan rincian pengguna tersebut. Mohon verifikasi rincian pengguna atau buatlah pengguna baru.',
     'rtl'                                                        => 'RTL (Right to left)',
-    'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   => 'Dukungan RTL hanya berlaku untuk email keluar', 
-    'user_set_ticket_status'                                     => 'Izinkan pengguna untuk mengatur sendiri status tiket', 
+    'the_rtl_support_is_only_applicable_to_the_outgoing_mails'   => 'Dukungan RTL hanya berlaku untuk email keluar',
+    'user_set_ticket_status'                                     => 'Izinkan pengguna untuk mengatur sendiri status tiket',
     'send_otp_for_account_verfication'                           => 'Kirim OTP ke pengguna',
     'otp_usage_info'                                             => 'Jika Anda tidak mengizinkan pengguna yang belum diverifikasi untuk membuat tiket, kami akan mengirimkan email dengan tautan verifikasi dan SMS dengan kode OTP pada pengguna. Jika email tidak diatur sebagai hal yang wajib, maka pengguna akan menerima rincian username dan password melalui ponsel mereka. [CATATAN: SMS akan dikirim menggunakan plugin Faveo SMS]..',
-    'send_otp_title_message'                                     => 'Kirim OTP untuk verifikasi akun pengguna, reset password dan nomor ponsel', 
-    'allow_unverified_users_to_create_ticket'                    => 'Izinkan pengguna yang belum verifikasi untuk membuat tiket baru', 
-    'make-email-mandatroy'                                       => 'Jadikan email wajib untuk pembuatan tiket/pengguna baru', 
-    'email_man_info'                                             => 'Jika Anda tidak menjadikan email sebagai hal yang wajib, pengguna bisa mendaftar tanpa menggunakan email. Kami sarankan agar pengguna yang belum verifikasi tidak diizinkan membuat tiket agar pengguna bisa menerima notifikasi melalui nomor ponsel mereka dan login menggunakan username dan password yang mereka terima dari ponsel.', 
+    'send_otp_title_message'                                     => 'Kirim OTP untuk verifikasi akun pengguna, reset password dan nomor ponsel',
+    'allow_unverified_users_to_create_ticket'                    => 'Izinkan pengguna yang belum verifikasi untuk membuat tiket baru',
+    'make-email-mandatroy'                                       => 'Jadikan email wajib untuk pembuatan tiket/pengguna baru',
+    'email_man_info'                                             => 'Jika Anda tidak menjadikan email sebagai hal yang wajib, pengguna bisa mendaftar tanpa menggunakan email. Kami sarankan agar pengguna yang belum verifikasi tidak diizinkan membuat tiket agar pengguna bisa menerima notifikasi melalui nomor ponsel mereka dan login menggunakan username dan password yang mereka terima dari ponsel.',
     /*
       |--------------------------------------
       |   Email Settings Page
@@ -349,7 +349,7 @@ return [
     'cron_notification'                   => 'Aktifkan notifikasi cron',
     'cron'                                => 'Penjadwal Job',
     'cron-jobs'                           => 'Cron jobs',
-    'crone-url-message'                   => "Ini adalah URL penjadwal job Faveo (cron job) untuk sistem Anda.",
+    'crone-url-message'                   => 'Ini adalah URL penjadwal job Faveo (cron job) untuk sistem Anda.',
     'clipboard-copy-message'              => 'Salin ke clipboard.',
     'click'                               => 'Klik disini',
     'check-cron-set'                      => 'untuk memeriksa bagaimana mengatur cron jobs pada server Anda.',
@@ -516,7 +516,7 @@ return [
     'plugin-path-missing'   => 'Path berkas Plugin tidak',
     'no-plugin-file'        => 'Tidak ada ',
     'plugin-config-missing' => 'Tidak ada <b>config.php atau ServiceProvider.php</b>',
-    'plugin-info'           => 'Apakah Anda seorang programmer? Kami mengajak Anda untuk membuat plugin sendiri dan menjadikannya tersedia untuk komunitas.', 
+    'plugin-info'           => 'Apakah Anda seorang programmer? Kami mengajak Anda untuk membuat plugin sendiri dan menjadikannya tersedia untuk komunitas.',
     'plugin-info-pro'       => ' plugin tersedia dengan edisi Pro.',
     'click-here'            => 'Klik disini',
     /*
@@ -789,7 +789,7 @@ return [
     'directory_listing'                        => 'Listing direktori',
     'vocation_mode'                            => 'Mode pekerjaan',
     'assigned_team'                            => 'Tim',
-    'agent_send_mail_error_on_agent_creation'  => 'Terjadi error saat mengirimkan email ke agen. Mohon periksa pengaturan email dan cobalah kembali', 
+    'agent_send_mail_error_on_agent_creation'  => 'Terjadi error saat mengirimkan email ke agen. Mohon periksa pengaturan email dan cobalah kembali',
     'agent_creation_success'                   => 'Agen berhasil dibuat',
     'failed_to_create_agent'                   => 'Gagal membuat agen',
     'failed_to_edit_agent'                     => 'Gagal mengedit agen',
@@ -887,7 +887,7 @@ return [
     'group_can_not_create'                                                                   => 'Grup tidak bisa dibuat',
     'group_updated_successfully'                                                             => 'Grup berhasil diperbarui',
     'group_can_not_update'                                                                   => 'Grup tidak bisa diperbarui',
-    'there_are_agents_assigned_to_this_group_please_unassign_them_from_this_group_to_delete' => 'Ada agen yang tergabung di grup ini. Silahkan singkirkan dulu dulu dari grup ini untuk menghapusnya', 
+    'there_are_agents_assigned_to_this_group_please_unassign_them_from_this_group_to_delete' => 'Ada agen yang tergabung di grup ini. Silahkan singkirkan dulu dulu dari grup ini untuk menghapusnya',
     'group_cannot_delete'                                                                    => 'Grup tidak bisa dihapus',
     'group_deleted_successfully'                                                             => 'Grup berhasil dihapus',
     'group_cannot_delete'                                                                    => 'Grup tidak bisa dihapus',
@@ -953,8 +953,8 @@ return [
     'this_email_have_been_banned'                                        => 'Email ini sudah diblokir',
     'ticket_updated_successfully'                                        => 'Tiket berhasil diperbarui',
     'you_have_successfully_replied_to_your_ticket'                       => 'Anda telah membalas tiket Anda sendiri',
-    'for_some_reason_your_message_was_not_posted_please_try_again_later' => 'Untuk alasan tertentu pesan Anda tidak ditampilkan. Mohon coba beberapa saat lagi', 
-    'for_some_reason_your_reply_was_not_posted_please_try_again_later'   => 'Untuk alasan tertentu balasan tidak ditampilkan. Mohon coba beberapa saat lagi', 
+    'for_some_reason_your_message_was_not_posted_please_try_again_later' => 'Untuk alasan tertentu pesan Anda tidak ditampilkan. Mohon coba beberapa saat lagi',
+    'for_some_reason_your_reply_was_not_posted_please_try_again_later'   => 'Untuk alasan tertentu balasan tidak ditampilkan. Mohon coba beberapa saat lagi',
     'you_have_unassigned_your_ticket'                                    => 'Anda sudah mengosongkan tiket dari staff yang ditugaskan',
     'for_some_reason_your_request_failed'                                => 'Untuk alasan tertentu permintaan Anda dinyatakan gagal',
     'trash-delete-ticket'                                                => 'Hapus tiket secara permanen',
@@ -1027,7 +1027,7 @@ return [
     'the_user_has_been_removed_from_this_organization' => 'Pengguna ini sudah disingkirkan dari organisasi ini',
     'user_report'                                      => 'Laporan pengguna',
     'send_password_via_email'                          => 'Kirim password via email',
-    'user_send_mail_error_on_user_creation'            => 'Terjadi error saat mengirimkan email ke klien. Mohon periksa pengaturan email dan coba kembali', 
+    'user_send_mail_error_on_user_creation'            => 'Terjadi error saat mengirimkan email ke klien. Mohon periksa pengaturan email dan coba kembali',
     'country_code'                                     => 'Kode negara',
     /*
       |------------------------------------------------
@@ -1044,7 +1044,7 @@ return [
     'please_select_an_organization'     => 'Pilih organisasi',
     'please_select_an_user'             => 'Pilih pengguna',
     'organization_profile'              => 'Profil organisasi',
-    'organization-s_head'               => "Pimpinan organisasi",
+    'organization-s_head'               => 'Pimpinan organisasi',
     'select_department_manager'         => 'Pilih manajer departemen',
     'select_organization_manager'       => 'Pilih manajer organisasi',
     'users_of'                          => 'Pengguna dari',
@@ -1235,15 +1235,15 @@ return [
     'resolved_status'                       => 'Apa ini status tiket yang sudah tuntas?',
     'status_msg3'                           => 'Jika Anda memilih YA maka status tiket akan menjadi tuntas.',
     'status_msg2'                           => 'Jika Anda memilih YA maka status tiket akan menjadi terhapus.',
-    'rating-msg2'                           => 'Pilih departemen untuk membatasi rating atau obrolan tiket ini ke departemen tertentu. Jika tidak ada yang dipilih, maka rating akan muncul di semua departemen.', 
+    'rating-msg2'                           => 'Pilih departemen untuk membatasi rating atau obrolan tiket ini ke departemen tertentu. Jika tidak ada yang dipilih, maka rating akan muncul di semua departemen.',
     'rating-msg3'                           => 'Jika Anda memilih YA maka pengguna dapat mengubah rating.',
     'rating_restrict'                       => 'Batasi rating ke satu departemen',
     'rating_change'                         => 'Izinkan pengguna untuk mengganti rating?',
     'security_msg1'                         => 'Pesan yang akan ditampilkan pada pengguna (host) jika mereka terkunci dari luar.',
-    'security_msg2'                         => 'Jumlah usaha login yang diizinkan ke pengguna sebelum mereka dikunci dari luar sistem. Pasang menjadi 0 agar pengguna tidak terkunci dari luar.', 
-    'security_msg3'                         => 'Jumlah dalam menit pengguna yang terkunci dari luar karena beberapa kali gagal login.', 
+    'security_msg2'                         => 'Jumlah usaha login yang diizinkan ke pengguna sebelum mereka dikunci dari luar sistem. Pasang menjadi 0 agar pengguna tidak terkunci dari luar.',
+    'security_msg3'                         => 'Jumlah dalam menit pengguna yang terkunci dari luar karena beberapa kali gagal login.',
     'max_attempt'                           => 'Maksimum usaha login per pengguna',
-    'rating-msg1'                           => 'Rating maksimum yang bisa diberikan. Misalnya, jika dipilih 5, maka rating terendah adalah 1 dan yang tertinggi adalah 5.', 
+    'rating-msg1'                           => 'Rating maksimum yang bisa diberikan. Misalnya, jika dipilih 5, maka rating terendah adalah 1 dan yang tertinggi adalah 5.',
     'enter_no_of_days'                      => 'Masukkan jumlah hari',
     'template-types'                        => 'Tipe template',
     'close-workflow'                        => 'Alur penutupan tiket',
@@ -1276,8 +1276,8 @@ return [
     'notification_settings'                       => 'Pengaturan notifikasi',
     'delete_noti'                                 => 'Hapus semua notifikasi yang terbaca?',
     'noti_msg1'                                   => 'Jumlah hari untuk mengapus log notifikasi',
-    'noti_msg2'                                   => 'Anda dapat memasukkan jumlah hari dari log database yang akan dihapus dan rekaman notifikasi akan dihapus sesuai hari yang ditentukan.', 
-    'del_all_read'                                => 'Hapus semua yang terbaca', 
+    'noti_msg2'                                   => 'Anda dapat memasukkan jumlah hari dari log database yang akan dihapus dan rekaman notifikasi akan dihapus sesuai hari yang ditentukan.',
+    'del_all_read'                                => 'Hapus semua yang terbaca',
     'You_have_deleted_all_the_read_notifications' => 'Anda sudah menghapus semua notifikasi yang terbaca',
     'view_all_notifications'                      => 'Lihat semua notifikasi',
     /*
@@ -1337,7 +1337,7 @@ return [
     'view_all'                                                                 => 'Lihat semua',
     'categories'                                                               => 'Kategori',
     'need_more_support'                                                        => 'Butuh bantuan lebih',
-    'if_you_did_not_find_an_answer_please_raise_a_ticket_describing_the_issue' => 'Jika Anda tidak dapat menemukan jawaban yang dicari, silahkan kirim tiket untuk menjabarkan permasalahannya', 
+    'if_you_did_not_find_an_answer_please_raise_a_ticket_describing_the_issue' => 'Jika Anda tidak dapat menemukan jawaban yang dicari, silahkan kirim tiket untuk menjabarkan permasalahannya',
     'have_a_question?_type_your_search_term_here'                              => 'Punya pertanyaan? Ketik kata pencarian Anda disini...',
     'search'                                                                   => 'Cari',
     'frequently_asked_questions'                                               => 'Frequently Asked Questions',
@@ -1377,8 +1377,8 @@ return [
     'password_updated_sucessfully'                                                     => 'Password berhasil diperbarui',
     'password_was_not_updated_incorrect_old_password'                                  => 'Password tidak diperbarui. Password lama salah',
     'there_is_no_such_ticket_number'                                                   => 'Nomor tiket ini tidak ada',
-    "email_didn't_match_with_ticket_number"                                            => "Email tidak sesuai dengan nomor tiket",
-    'we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'        => 'Kami sudah mengirimkan tautan ke email Anda. Silahkan klik tautan tersebut untuk melihat tiket', 
+    "email_didn't_match_with_ticket_number"                                            => 'Email tidak sesuai dengan nomor tiket',
+    'we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'        => 'Kami sudah mengirimkan tautan ke email Anda. Silahkan klik tautan tersebut untuk melihat tiket',
     'no_records_on_publish_time'                                                       => 'Tidak ada data pada waktu terbit tersebut',
     'your_details_send_to_system'                                                      => 'Rincian Anda dikirim ke sistem',
     'your_details_can_not_send_to_system'                                              => 'Rincian Anda tidak bisa dikirim ke sistem',
@@ -1386,7 +1386,7 @@ return [
     'sorry_not_processed'                                                              => 'Maaf tidak dapat diproses',
     'profile_updated_sucessfully'                                                      => 'Profil berhasil diperbarui',
     'password_was_not_updated'                                                         => 'Password tidak bisa diperbarui',
-    'sorry_your_ticket_token_has_expired_please_try_to_resend_the_ticket_link_request' => 'Maaf token tiket Anda sudah kadaluarsa! Silahkan minta kirim ulang link tiket', 
+    'sorry_your_ticket_token_has_expired_please_try_to_resend_the_ticket_link_request' => 'Maaf token tiket Anda sudah kadaluarsa! Silahkan minta kirim ulang link tiket',
     'sorry_you_are_not_allowed_token_expired'                                          => 'Maaf, Anda tidak diizinkan. Token sudah kadaluarsa!',
     'thank_you_for_your_rating'                                                        => 'Terima kasih atas rating dari Anda!',
     'your_ticket_has_been'                                                             => 'Tiket Anda sudah',
@@ -1452,8 +1452,8 @@ return [
      * ------------------------------------------------------------------------------------------
      */
     'format'               => 'Format',
-    'ticket-number-format' => 'Pengaturan ini digunakan untuk generate nomor tiket. Gunakan tanda (`#`) untuk menempatkan angkat dan tanda dollar (‘$’) untuk menempatkan karakter. Teks lain dalam format angka akan tampil apa adanya. ',  
-    'ticket-number-type'   => 'Pilih urutan nomor tiket baru. Sistem akan menambahkan urutan nomor tiket secara default berurut atau acak', 
+    'ticket-number-format' => 'Pengaturan ini digunakan untuk generate nomor tiket. Gunakan tanda (`#`) untuk menempatkan angkat dan tanda dollar (‘$’) untuk menempatkan karakter. Teks lain dalam format angka akan tampil apa adanya. ',
+    'ticket-number-type'   => 'Pilih urutan nomor tiket baru. Sistem akan menambahkan urutan nomor tiket secara default berurut atau acak',
     /*     * ----------------------------------------------------------------------------------------------------
      * Social media integration
      * ---------------------------------------------------------------------------------------------------------
@@ -1574,9 +1574,9 @@ return [
      'created-at'                   => 'Dibuat pada',
      'or'                           => 'ATAU',
      'activate'                     => 'Aktifkan',
-     'system-email-not-configured'  => 'Kami tidak dapat memproses permintaan email karena email sistem belum diatur untuk mengirimkan email. Mohon laporkan dan hubungi admin.', 
+     'system-email-not-configured'  => 'Kami tidak dapat memproses permintaan email karena email sistem belum diatur untuk mengirimkan email. Mohon laporkan dan hubungi admin.',
      'assign-ticket'                => 'Tugaskan tiket',
-     'can-not-inactive-group'       => 'Tidak bisa menjadikan grup ini nonaktif karena ada agen yang ditugaskan di dalamnya. Mohon masukkan agen tersebut ke grup lain dan coba kembali.', 
+     'can-not-inactive-group'       => 'Tidak bisa menjadikan grup ini nonaktif karena ada agen yang ditugaskan di dalamnya. Mohon masukkan agen tersebut ke grup lain dan coba kembali.',
      'internal-note-has-been-added' => 'Catatan internal ditambahkan ke tiket',
      'active-users'                 => 'Pengguna aktif',
      'deleted-users'                => 'Pengguna yang terhapus',
@@ -1591,7 +1591,7 @@ return [
 
      //update 18-12-2016
      'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'Akun Anda berhasil dibuat. Mohon hubungi admin untuk aktivasi akun karena kami tidak dapat mengirimkan kode OTP.',
-     //update 19-12-2016 
+     //update 19-12-2016
      'only-agents'         => 'Pengguna agen',
      'only-users'          => 'Pengguna klien',
      'banned-users'        => 'Pengguna terblokir',

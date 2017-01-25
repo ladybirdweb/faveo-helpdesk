@@ -618,6 +618,6 @@ Breadcrumbs::register('readmails', function ($breadcrumbs) {
     $breadcrumbs->push('readmails', 'readmails');
 });
 
-Breadcrumbs::register('notification', function($breadcrumbs){
+Breadcrumbs::register('notification', function ($breadcrumbs) {
     $breadcrumbs->push('notification', 'notification');
 });
