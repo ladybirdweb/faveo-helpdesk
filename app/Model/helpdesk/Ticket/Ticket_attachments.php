@@ -46,7 +46,7 @@ class Ticket_attachments extends Model
         $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         $power = $size > 0 ? floor(log($size, 1024)) : 0;
         $value = number_format($size / pow(1024, $power), 2, '.', ',').' '.$units[$power];
-        if ($this->poster == 'ATTACHMENT') {
+        if ($this->poster == 'ATTACHMENT' || $this->poster == 'attachment') {
             if (mime($this->type) == 'image') {
                 $var = '<a href="'.\URL::route('image', ['image_id' => $this->id]).'" target="_blank"><img style="max-width:200px;height:133px;" src="data:image/jpg;base64,'.$this->file.'"/></a>';
 
