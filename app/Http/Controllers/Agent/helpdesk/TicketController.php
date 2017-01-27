@@ -1990,12 +1990,12 @@ class TicketController extends Controller
         $dept = Department::where('name', '=', $id)->first();
         if (Auth::user()->role == 'agent') {
             if (Auth::user()->primary_dpt == $dept->id) {
-                return view('themes.default1.agent.helpdesk.dept-ticket.open', compact('id'));
+                return view('themes.default1.agent.helpdesk.dept-ticket.tickets', compact('id'));
             } else {
                 return redirect()->back()->with('fails', 'Unauthorised!');
             }
         } else {
-            return view('themes.default1.agent.helpdesk.dept-ticket.open', compact('id'));
+            return view('themes.default1.agent.helpdesk.dept-ticket.tickets', compact('id'));
         }
     }
 
