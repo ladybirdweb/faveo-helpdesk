@@ -10,7 +10,7 @@
   | and give it the controller to call when that URI is requested.
   |
  */
-Route::group(['middleware' => ['web']], function () {
+Route::group(['middleware' => ['web', 'redirect']], function () {
     Route::group(['middleware' => 'update', 'middleware' => 'install'], function () {
         Route::controllers([
             'auth'     => 'Auth\AuthController',
@@ -703,7 +703,7 @@ Route::group(['middleware' => ['web']], function () {
      * @author Vijay Sebastian<vijay.sebastian@ladybirdweb.com>
      * @name Faveo
      */
-    Route::group(['prefix' => 'api/v1'], function () {
+    Route::group(['middleware' => ['redirect'], 'prefix' => 'api/v1'], function () {
         Route::post('register', 'Api\v1\ApiController@register');
         Route::post('authenticate', 'Api\v1\TokenAuthController@authenticate');
         Route::get('authenticate/user', 'Api\v1\TokenAuthController@getAuthenticatedUser');
