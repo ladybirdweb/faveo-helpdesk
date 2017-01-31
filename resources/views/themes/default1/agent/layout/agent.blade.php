@@ -56,6 +56,11 @@
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
+        <style type="text/css">
+            #bar {
+                border-right: 1px solid rgba(204, 204, 204, 0.41);
+            }
+        </style>
     </head>
     <body class="skin-blue fixed">
         <div class="wrapper">
@@ -207,7 +212,53 @@
                         </ul>
 
                     </div>
-
+                    <?php
+$agent_group = $auth_user_assign_group;
+$group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first();
+?>
+                    <div class="tab-content" style="background-color: #80B5D3;padding: 0 0px 0 0px">
+                    <div class="collapse navbar-collapse" id="navbar-collapse">
+                        <div class="tabs-content">
+                            @if($replacetop==0)
+                            <div class="tabs-pane @yield('dashboard-bar')"  id="tabA">
+                                <ul class="nav navbar-nav">
+                                </ul>
+                            </div>
+                            <div class="tabs-pane @yield('user-bar')" id="tabB">
+                                <ul class="nav navbar-nav">
+                                    <li id="bar" @yield('user')><a href="{{ url('user')}}" >{!! Lang::get('lang.user_directory') !!}</a></li></a></li>
+                                    <li id="bar" @yield('organizations')><a href="{{ url('organizations')}}" >{!! Lang::get('lang.organizations') !!}</a></li></a></li>
+                                    
+                                </ul>
+                            </div>
+                            <div class="tabs-pane @yield('ticket-bar')" id="tabC">
+                                <ul class="nav navbar-nav">
+                                    <li id="bar" @yield('open')><a href="{{ url('/ticket/open')}}" id="load-open">{!! Lang::get('lang.open') !!}</a></li>
+                                    <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
+                                    <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
+                                    <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
+<?php if ($group->can_create_ticket == 1) { ?>
+                                        <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
+                                    <?php } ?>
+                                </ul>
+                            </div>
+                            <div class="tabs-pane @yield('tools-bar')" id="tabD">
+                                <ul class="nav navbar-nav">
+                                    <li id="bar" @yield('tools')><a href="{{ url('/canned/list')}}" >{!! Lang::get('lang.canned_response') !!}</a></li>
+                                    <li id="bar" @yield('kb')><a href="{{ url('/comment')}}" >{!! Lang::get('lang.knowledge_base') !!}</a></li>
+                                </ul>
+                            </div>
+                            @if($auth_user_role == 'admin')
+                            <div class="tabs-pane @yield('report-bar')" id="tabD">
+                                <ul class="nav navbar-nav">
+                                </ul>
+                            </div>
+                            @endif
+                            @endif
+<?php \Event::fire('service.desk.agent.topsubbar', array()); ?>
+                        </div>
+                    </div>
+                </div>
                 </nav>
             </header>
             <!-- Left side column. contains the logo and sidebar -->
@@ -318,56 +369,11 @@
                 </section>
                 <!-- /.sidebar -->
             </aside>
-<?php
-$agent_group = $auth_user_assign_group;
-$group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first();
-?>
+
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
-                <div class="tab-content" style="background-color: white;padding: 0 0px 0 20px">
-                    <div class="collapse navbar-collapse" id="navbar-collapse">
-                        <div class="tabs-content">
-                            @if($replacetop==0)
-                            <div class="tabs-pane @yield('dashboard-bar')"  id="tabA">
-                                <ul class="nav navbar-nav">
-                                </ul>
-                            </div>
-                            <div class="tabs-pane @yield('user-bar')" id="tabB">
-                                <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('user')><a href="{{ url('user')}}" >{!! Lang::get('lang.user_directory') !!}</a></li></a></li>
-                                    <li id="bar" @yield('organizations')><a href="{{ url('organizations')}}" >{!! Lang::get('lang.organizations') !!}</a></li></a></li>
-                                    
-                                </ul>
-                            </div>
-                            <div class="tabs-pane @yield('ticket-bar')" id="tabC">
-                                <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('open')><a href="{{ url('/ticket/open')}}" id="load-open">{!! Lang::get('lang.open') !!}</a></li>
-                                    <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
-                                    <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
-                                    <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
-<?php if ($group->can_create_ticket == 1) { ?>
-                                        <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
-                                    <?php } ?>
-                                </ul>
-                            </div>
-                            <div class="tabs-pane @yield('tools-bar')" id="tabD">
-                                <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('tools')><a href="{{ url('/canned/list')}}" >{!! Lang::get('lang.canned_response') !!}</a></li>
-                                    <li id="bar" @yield('kb')><a href="{{ url('/comment')}}" >{!! Lang::get('lang.knowledge_base') !!}</a></li>
-                                </ul>
-                            </div>
-                            @if($auth_user_role == 'admin')
-                            <div class="tabs-pane @yield('report-bar')" id="tabD">
-                                <ul class="nav navbar-nav">
-                                </ul>
-                            </div>
-                            @endif
-                            @endif
-<?php \Event::fire('service.desk.agent.topsubbar', array()); ?>
-                        </div>
-                    </div>
-                </div>
+                
                 <section class="content-header">
                     @yield('PageHeader')
                     {!! Breadcrumbs::renderIfExists() !!}
