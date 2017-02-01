@@ -1565,5 +1565,7 @@ return [
      'search'              => 'Search...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
-
+      //update 1-2-2017
+     'system-outgoing-incoming-mail-not-configured' => 'You have not configured system mail. Faveo can\'t fetch tickets from mail or send mail to users without it.',
+     'confihure-the-mail-now' => 'Click here to configure the mail.',
 ];

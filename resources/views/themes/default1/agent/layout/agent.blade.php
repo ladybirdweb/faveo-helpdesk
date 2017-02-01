@@ -391,14 +391,16 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                 </section>
                 <!-- Main content -->
                 <section class="content">
+                @if (!$is_mail_conigured)
                     <div class="row">
                         <div class="col-md-12">
                         <div class="callout callout-warning lead">
-                        <h4>Reminder!</h4>
-                        <p>To use this main header instead of the regular one, you must add the <code>layout-top-nav</code> class to the body tag.</p>
+                        <h4><i class="fa fa-exclamation-triangle"></i>&nbsp;{{Lang::get('Alert')}}</h4>
+                        <p style="font-size:0.8em">{{Lang::get('lang.system-outgoing-incoming-mail-not-configured')}}&nbsp;<a href="{{URL::route('emails.create')}}">{{Lang::get('lang.confihure-the-mail-now')}}</a></p>
                         </div>
                         </div>
                     </div>
+                @endif
                     @yield('content')
                 </section><!-- /.content -->
             </div>
