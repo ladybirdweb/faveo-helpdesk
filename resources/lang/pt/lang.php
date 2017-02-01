@@ -1559,5 +1559,6 @@ return [
           //update 1-2-2017
      'system-outgoing-incoming-mail-not-configured' => 'You have not configured system mail. Faveo can\'t fetch tickets from mail or send mail to users without it.',
      'confihure-the-mail-now' => 'Click here to configure the mail.',
+     'system-mail-not-configured-agent-message' => 'System incoming and outgoing email settings are not configured. Please contct the admin.',
 
 ];

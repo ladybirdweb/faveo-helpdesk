@@ -338,7 +338,7 @@
 $agent_group = $auth_user_assign_group;
 $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first();
 ?>
-                    <div class="tab-content" style="background-color: #80B5D3; position: fixed; width:100% ;padding: 0 0px 0 0px; z-index:9999">                    <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <div class="tab-content" style="background-color: #80B5D3; position: fixed; width:100% ;padding: 0 0px 0 0px; z-index:999">                    <div class="collapse navbar-collapse" id="navbar-collapse">
                         <div class="tabs-content">
                             @if($replacetop==0)
                             <div class="tabs-pane @yield('dashboard-bar')"  id="tabA">
@@ -394,10 +394,16 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                 @if (!$is_mail_conigured)
                     <div class="row">
                         <div class="col-md-12">
-                        <div class="callout callout-warning lead">
-                        <h4><i class="fa fa-exclamation-triangle"></i>&nbsp;{{Lang::get('Alert')}}</h4>
-                        <p style="font-size:0.8em">{{Lang::get('lang.system-outgoing-incoming-mail-not-configured')}}&nbsp;<a href="{{URL::route('emails.create')}}">{{Lang::get('lang.confihure-the-mail-now')}}</a></p>
-                        </div>
+                            <div class="callout callout-warning lead">
+                                <h4><i class="fa fa-exclamation-triangle"></i>&nbsp;{{Lang::get('Alert')}}</h4>
+                                <p style="font-size:0.8em">
+                                @if (\Auth::user()->role == 'admin')
+                                    {{Lang::get('lang.system-outgoing-incoming-mail-not-configured')}}&nbsp;<a href="{{URL::route('emails.create')}}">{{Lang::get('lang.confihure-the-mail-now')}}</a>
+                                @else
+                                    {{Lang::get('lang.system-mail-not-configured-agent-message')}}
+                                @endif
+                                </p>
+                            </div>
                         </div>
                     </div>
                 @endif
