@@ -391,6 +391,14 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                 </section>
                 <!-- Main content -->
                 <section class="content">
+                    <div class="row">
+                        <div class="col-md-12">
+                        <div class="callout callout-warning lead">
+                        <h4>Reminder!</h4>
+                        <p>To use this main header instead of the regular one, you must add the <code>layout-top-nav</code> class to the body tag.</p>
+                        </div>
+                        </div>
+                    </div>
                     @yield('content')
                 </section><!-- /.content -->
             </div>

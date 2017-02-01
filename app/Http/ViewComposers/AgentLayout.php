@@ -5,6 +5,7 @@ namespace App\Http\ViewComposers;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Ticket\Tickets;
+use App\Model\helpdesk\Email\Emails;
 use App\User;
 use Auth;
 use Illuminate\View\View;
@@ -20,6 +21,7 @@ class AgentLayout
     protected $users;
     protected $tickets;
     protected $department;
+    protected $emails;
 
     /**
      * Create a new profile composer.
@@ -28,13 +30,14 @@ class AgentLayout
      *
      * @return void
      */
-    public function __construct(Company $company, User $users, Tickets $tickets, Department $department)
+    public function __construct(Company $company, User $users, Tickets $tickets, Department $department, Emails $emails)
     {
         $this->company = $company;
         $this->auth = Auth::user();
         $this->users = $users;
         $this->tickets = $tickets;
         $this->department = $department;
+        $this->emails = $emails;
     }
 
     /**
@@ -48,16 +51,17 @@ class AgentLayout
     {
         $notifications = \App\Http\Controllers\Common\NotificationController::getNotifications();
         $view->with([
-            'company'         => $this->company,
-            'notifications'   => $notifications,
-            'myticket'        => $this->myTicket(),
-            'unassigned'      => $this->unassigned(),
-            'followup_ticket' => $this->followupTicket(),
-            'deleted'         => $this->deleted(),
-            'tickets'         => $this->inbox(),
-            'department'      => $this->departments(),
-            'overdues'        => $this->overdues(),
-            'due_today'       => $this->getDueToday(),
+            'company'             => $this->company,
+            'notifications'       => $notifications,
+            'myticket'            => $this->myTicket(),
+            'unassigned'          => $this->unassigned(),
+            'followup_ticket'     => $this->followupTicket(),
+            'deleted'             => $this->deleted(),
+            'tickets'             => $this->inbox(),
+            'department'          => $this->departments(),
+            'overdues'            => $this->overdues(),
+            'due_today'           => $this->getDueToday(),
+            'is_mail_conigured'   => $this->getEmailConfig(),
         ]);
     }
 
@@ -193,5 +197,20 @@ class AgentLayout
                             ->where('dept_id', '=', $this->auth->primary_dpt)
                             ->whereRaw('date(duedate) = ?', [date('Y-m-d')]);
         }
+    }
+
+    /**
+     *@category function to check configured mails
+     *@param null
+     *@var $emails
+     *@return boolean true/false
+     */
+    public function getEmailConfig()
+    {
+        $emails = $this->emails->where('sending_status', '=', 1)->where('fetching_status', '=', 1)->count();
+        if ($emails >= 1) {
+            return true;
+        }
+        return false;
     }
 }
