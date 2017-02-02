@@ -3,9 +3,9 @@
 namespace App\Http\ViewComposers;
 
 use App\Model\helpdesk\Agent\Department;
+use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Ticket\Tickets;
-use App\Model\helpdesk\Email\Emails;
 use App\User;
 use Auth;
 use Illuminate\View\View;
@@ -201,9 +201,12 @@ class AgentLayout
 
     /**
      *@category function to check configured mails
+     *
      *@param null
+     *
      *@var $emails
-     *@return boolean true/false
+     *
+     *@return bool true/false
      */
     public function getEmailConfig()
     {
@@ -211,6 +214,7 @@ class AgentLayout
         if ($emails >= 1) {
             return true;
         }
+
         return false;
     }
 }
