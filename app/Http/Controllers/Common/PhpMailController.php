@@ -51,13 +51,15 @@ class PhpMailController extends Controller
     public function mailfrom($reg, $dept_id)
     {
         $email_id = '';
-        $dept_mail = Department::select('outgoing_email')->where('id', '=', $dept_id)->first();
+        $emails = Emails::where('department', '=', $dept_id)->first();
+
         $email = Email::find(1);
-        if ($dept_mail && $dept_mail->outgoing_email != '') {
-            $email_id = $dept_mail->outgoing_email;
+        if ($emails && $emails->sending_status) {
+            $email_id = $emails->id;
         } else {
             $email_id = $email->sys_email;
         }
+
         return $email_id;
     }
 
