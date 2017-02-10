@@ -51,8 +51,8 @@ class MailController extends Controller
                         try {
                             $this->fetch($e_mail);
                         } catch (\Exception $ex) {
-                            $add = "";
-                            if($email){
+                            $add = '';
+                            if ($email) {
                                 $add = $e_mail->email_address;
                             }
                             loging($add, $ex->getMessage());
