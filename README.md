@@ -28,9 +28,9 @@ Requirements
 To run Faveo your host just needs a couple of things:
 
   * Web Server: Apache or IIS or Nginx
-  * PHP Version: 5.5+ (5.6 recommended)
+  * PHP Version: 5.6+
   * PHP Extensions: Mcrypt, OpenSSL, Mbstring, Imap, Tokenizer
-  * Database: MySQL(5.0+) or Postgres or SQLite or SQL Server
+  * Database: MySQL(5.0+)
   * Web Server Extension: Pretty URLs or Search Engine Friendly URL's have to be enabled in your web server configuration
 
 Faveo Web Hosting
