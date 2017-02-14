@@ -594,17 +594,15 @@ class TicketController extends Controller
         }
     }
 
-    public function ticketChangeDepartment(Request $request) {
-        $ticket_id=$request->tkt_id;
+    public function ticketChangeDepartment(Request $request)
+    {
+        $ticket_id = $request->tkt_id;
         // $changer_by=$request->changer_user;
-        $ticket=Tickets::findOrFail($ticket_id);
-        $ticket->dept_id=$request->tkt_dept_transfer;
+        $ticket = Tickets::findOrFail($ticket_id);
+        $ticket->dept_id = $request->tkt_dept_transfer;
         $ticket->save();
 
-
         return redirect('ticket/inbox')->with('success', Lang::get('lang.ticket_department_successfully_changed'));
-       
-
     }
 
     /**
