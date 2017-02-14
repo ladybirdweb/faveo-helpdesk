@@ -11,10 +11,10 @@ use App\Http\Requests\helpdesk\SlaUpdate;
 use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Settings\Ticket;
 //classes
+use App\Model\helpdesk\Ticket\Tickets;
 use DB;
 use Exception;
 use Lang;
-use App\Model\helpdesk\Ticket\Tickets;
 
 /**
  * SlaController.
@@ -85,10 +85,10 @@ class SlaController extends Controller
             // $grace_period_time=$request->grace_period_time;
             // $grace_period_type=$request->grace_period_type;
             // $grace_period=($request->grace_period_time.' '.$request->grace_period_type);
-            $sla->name=$request->name;
-            $sla->grace_period=($request->grace_period_time.' '.$request->grace_period_type);
-            $sla->admin_note=$request->admin_note;
-            $sla->status=$request->status;
+            $sla->name = $request->name;
+            $sla->grace_period = ($request->grace_period_time.' '.$request->grace_period_type);
+            $sla->admin_note = $request->admin_note;
+            $sla->status = $request->status;
             $sla->save();
                 // dd('oh');
 
@@ -112,7 +112,6 @@ class SlaController extends Controller
     {
         try {
 
-
         //     $ticket=Tickets::where('id','=',9)->select('created_at','duedate')->first();
         //     // dd($ticket->created_at);
 
@@ -121,7 +120,6 @@ class SlaController extends Controller
         // $new_date = date_add($ovdate, date_interval_create_from_date_string($sla_plan->grace_period));
         // dd($new_date);
         // $ticket->duedate = $new_date;
-
 
             /* Direct to edit page along values of perticular field using Id */
             $slas = Sla_plan::whereId($id)->first();
@@ -154,10 +152,10 @@ class SlaController extends Controller
             /* Fill values to selected field using Id except Check box */
             $slas = Sla_plan::whereId($id)->first();
             // $grace_period=($request->grace_period_time.'-'.$request->grace_period_type);
-            $slas->name=$request->name;
-            $slas->grace_period=($request->grace_period_time.' '.$request->grace_period_type);
-            $slas->admin_note=$request->admin_note;
-            $slas->status=$request->status;
+            $slas->name = $request->name;
+            $slas->grace_period = ($request->grace_period_time.' '.$request->grace_period_type);
+            $slas->admin_note = $request->admin_note;
+            $slas->status = $request->status;
             $slas->save();
 
             $slas->fill($request->except('transient', 'ticket_overdue'))->save();

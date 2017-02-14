@@ -1602,14 +1602,14 @@ return [
 
      // arindam-14.2.2017
      // sla
-     'min'=>'Min',
-     'hours'=>'Hours',
-     'days'=>'Days',
-     'months'=>'Months',
-     'year'=>'Year',
+     'min'   => 'Min',
+     'hours' => 'Hours',
+     'days'  => 'Days',
+     'months'=> 'Months',
+     'year'  => 'Year',
 // department change
-     'change_department'=>'Change Department',
-    'ticket_department_successfully_changed'=>'Ticket Department Successfully Changed',
-    'select_another_department'=>'Select another department',
+     'change_department'                    => 'Change Department',
+    'ticket_department_successfully_changed'=> 'Ticket Department Successfully Changed',
+    'select_another_department'             => 'Select another department',
 
 ];
