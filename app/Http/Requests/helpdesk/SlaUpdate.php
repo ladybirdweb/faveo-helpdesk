@@ -30,7 +30,7 @@ class SlaUpdate extends Request
     {
         return [
             'name'         => 'required|max:50',
-            'grace_period' => 'required',
+            'grace_period_time' => 'required',
         ];
     }
 }
