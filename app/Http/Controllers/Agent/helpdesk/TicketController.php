@@ -578,10 +578,12 @@ class TicketController extends Controller
             $ticket = $ticket->where('id', '=', $ticket_id)->first();
             $ticket->sla = Input::get('sla_paln');
             $ticket->help_topic_id = Input::get('help_topic');
+
             $ticket->source = Input::get('ticket_source');
             $ticket->priority_id = Input::get('ticket_priority');
-            $dept = Help_topic::select('department')->where('id', '=', $ticket->help_topic_id)->first();
-            $ticket->dept_id = $dept->department;
+            // $dept = Help_topic::select('department')->where('id', '=', $ticket->help_topic_id)->first();
+            // $dept = $ticket->dept_id;
+            // $ticket->dept_id = $dept;
             $ticket->save();
 
             $threads = $thread->where('ticket_id', '=', $ticket_id)->first();
@@ -590,6 +592,19 @@ class TicketController extends Controller
 
             return 0;
         }
+    }
+
+    public function ticketChangeDepartment(Request $request) {
+        $ticket_id=$request->tkt_id;
+        // $changer_by=$request->changer_user;
+        $ticket=Tickets::findOrFail($ticket_id);
+        $ticket->dept_id=$request->tkt_dept_transfer;
+        $ticket->save();
+
+
+        return redirect('ticket/inbox')->with('success', Lang::get('lang.ticket_department_successfully_changed'));
+       
+
     }
 
     /**

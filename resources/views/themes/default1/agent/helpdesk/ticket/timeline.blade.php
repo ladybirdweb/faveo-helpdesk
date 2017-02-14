@@ -261,8 +261,14 @@ if ($thread->title != "") {
                                 <tr><td><b>{!! Lang::get('lang.department') !!}:</b></td>   
                                     <?php $dept123 = App\Model\helpdesk\Agent\Department::where('id', '=', $tickets->dept_id)->first(); ?>
                                     @if($dept123)
-                                    <td title="{{$dept123->name}}">{{$dept123->name}}</td></tr>
-                                    @endif
+                                    <td title="{{$dept123->name}}">{{$dept123->name}}</td>
+                                     @endif
+                                    <td>
+                                    <button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#{{$tickets->id}}depttransfer"><i class="fa fa-hand-o-right" style="color:orange;"> </i> {!! Lang::get('lang.change_department') !!}</button>
+                                    </td>
+                                    </tr>
+                                   
+
                                 <tr><td><b>{!! Lang::get('lang.email') !!}:</b></td>        <td>{{str_limit($user->email,30)}}</td></tr>
                                 @if($user->ban > 0)  <tr><td style="color:orange;"><i class="fa fa-warning"></i><b>
                                             {!!  Lang::get('lang.this_ticket_is_under_banned_user')!!}</td><td></td></tr>@endif
@@ -828,7 +834,7 @@ alert(h+20);
                                         if ($SlaPlan->id == $sla_plan->id) {
                                             echo "selected";
                                         }
-                                        ?> >{!! $sla_plan->grace_period !!}</option>
+                                        ?> >{!! $sla_plan->name." | ".$sla_plan->grace_period !!}</option>
                                         @endforeach
                                     </select>
                                     <spam id="error-sla" style="display:none" class="help-block text-red">This is a required field</spam>
@@ -1171,6 +1177,77 @@ alert(h+20);
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+
+
+
+<!-- Depertment transfer -->
+
+
+        <!-- Ticket Assign Modal -->
+        <div class="modal fade" id="{{$tickets->id}}depttransfer">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- {!! Form::open(['id'=>'form1','method' => 'PATCH'] )!!} -->
+                    {!! Form::open(['action' => 'Agent\helpdesk\TicketController@ticketChangeDepartment', 'method' => 'post']) !!}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{!! Lang::get('lang.change_department') !!}</h4>
+                    </div>
+                    <div id="assign_alert" class="alert alert-success alert-dismissable" style="display:none;">
+                        <button id="assign_dismiss" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-check"></i>Alert!</h4>
+                        <div id="message-success1"></div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-6" id="assign_loader" style="display:none;">
+                                <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}"><br/><br/><br/>
+                            </div>
+                        </div>
+
+                         <input type="hidden" name="tkt_id" value="{{$tickets->id}}">
+                         <!-- <input type="hidden" name="changer_user" value="{{Auth::user()->id}}"> -->
+                          <div id="change_dept">
+                            <p>{!! Lang::get('lang.select_another_department') !!}</p>
+ <?php
+$depts=App\Model\helpdesk\Agent\Department::all();
+
+ ?>
+  <select id="tkt_dept_transfer" class="form-control" name="tkt_dept_transfer">
+                                        @foreach($depts as $dept)
+                                        <option value="{!! $dept->id !!}"<?php
+                                        if ($dept->id == $tickets->dept_id) {
+                                            echo 'selected';
+                                        }
+                                        ?> >{!! $dept->name !!}</option>
+                                        @endforeach
+                                    </select>
+
+                                       </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis4">{!! Lang::get('lang.close') !!}</button>
+                        <button type="submit" class="btn btn-success pull-right" id="submt2">{!! Lang::get('lang.submit') !!}</button>
+                    </div>
+                    {!! Form::close()!!}
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+   
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Surrender Modal -->
     <div class="modal fade" id="surrender2">
         <div class="modal-dialog">
