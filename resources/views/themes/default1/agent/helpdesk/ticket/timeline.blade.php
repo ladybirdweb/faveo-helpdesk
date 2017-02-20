@@ -132,28 +132,11 @@ if ($thread->title != "") {
                 <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d1"><i class="fa fa-exchange" style="color:teal;" id="hidespin"> </i><i class="fa fa-spinner fa-spin" style="color:teal; display:none;" id="spin"></i>
                     {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu">
-                    <li id="open"><a href="#"><i class="fa fa-folder-open-o" style="color:red;"> </i>{!! Lang::get('lang.open') !!}</a></li>
-                   
-                    <?php if ( $tickets_approval->status==7) {?>
-                  @if(Auth::user()->role == 'admin')
-                     <li id="approval_close"><a href="#"><i class="glyphicon glyphicon-thumbs-up" style="color:red;"> </i>{!! Lang::get('lang.approval') !!}</a></li>
-                     @endif
-                    
-                    <?php } ?>
-
-                     <?php if ( $tickets_approval->status==3) {?>
-                    <?php if ($group->can_edit_ticket == 1) {?>
-                    <li id="close"><a href="#"><i class="fa fa-check" style="color:green;"> </i>{!! Lang::get('lang.close') !!}</a></li>
-                    <?php } ?>
-                     <?php } ?>
-
-                     <?php if ( $tickets_approval->status==1) {?>
-                    <?php if ($group->can_edit_ticket == 1) {?>
-                    <li id="close"><a href="#"><i class="fa fa-check" style="color:green;"> </i>{!! Lang::get('lang.close') !!}</a></li>
-                    <?php } ?>
-                     <?php } ?>
-                    <li id="resolved"><a href="#"><i class="fa fa-check-circle-o " style="color:green;"> </i>{!! Lang::get('lang.resolved') !!} </a></li>
+                 <?php $statuses = Finder::getCustomedStatus(); ?>
+                   <ul class="dropdown-menu">
+                    @foreach($statuses as $ticket_status)    
+                    <li onclick="changeStatus({!! $ticket_status -> id !!})"><a href="#"><i class="{!! $ticket_status->icon !!}" style="color:{!! $ticket_status->icon_color !!};"> </i>{!! $ticket_status->name !!}</a></li>
+                    @endforeach
                 </ul>
             </div>
             <?php if ($group->can_delete_ticket == 1 || $group->can_ban_email == 1) { ?>
@@ -2289,6 +2272,35 @@ echo $ticket_data->title;
             $(this).html($('<span />').width(Math.max(0, (Math.min(5, parseFloat($(this).html())))) * 16));
             });
             }
+
+
+             function changeStatus(id) {
+    var url = '{{url("ticket/change-status/" . $tickets->id . "/:id")}}';
+            url = url.replace(':id', id);
+            $.ajax({
+            type: "GET",
+                    url: url,
+                    dataType: "html",
+                    data: $(this).serialize(),
+                    beforeSend: function() {
+                    $("#hidespin").hide();
+                            $("#spin").show();
+                            $("#hide2").hide();
+                            $("#show2").show();
+                    },
+                    success: function(response) {
+                    $("#hide2").show();
+                            $("#show2").hide();
+                            $("#hidespin").show();
+                            $("#spin").hide();
+                             location.reload();
+                    },
+                    error: function(response) {
+
+                    }
+            })
+            return false;
+    }
 
     function addCannedResponse() {
         var selectedResponse = document.getElementById( "select" );

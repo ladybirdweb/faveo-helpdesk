@@ -2941,4 +2941,145 @@ class TicketController extends Controller
             //catch the exception
         }
     }
+
+
+     /**
+     * This function is used to change the status of a ticket
+     * @param type $ticket_id
+     * @param type $status_id
+     * @param type $user_id for unauthenticated users
+     * return type array/boolean
+     */
+    public function changeStatus($ticket_id, $status_id, $user_id = null) {
+        // $this->haltDue($status_id, $ticket_id);
+        $status = \App\Helper\Finder::status($status_id);
+        if (Auth::user()->role == 'agent' || Auth::user()->role == 'admin') {
+            $ticket = Tickets::where('id', '=', $ticket_id)->first();
+        } elseif (Auth::user()->role == 'user') {
+            if ($status->allow_client == 1) {
+                $ticket = Tickets::where('id', '=', $ticket_id)->first();
+            } else {
+                return 'false';
+            }
+        }
+        // checking for unautherised access attempt on other than owner ticket id
+        if ($ticket == null) {
+            return redirect()->route('unauth');
+        }
+
+        $thread = new Ticket_Thread;
+        $thread->ticket_id = $ticket_id;
+        $thread->user_id = Auth::user()->id;
+        $thread->is_internal = 1;
+        $old_status = \App\Helper\Finder::status($ticket->status);
+        if (Auth::user()->first_name) {
+            $user = Auth::user()->first_name;
+        } else {
+            $user = Auth::user()->user_name;
+        }
+        if (isset($status->message)) {
+            $variables = ['{!!$user!!}'];
+            $data = [$user];
+            $contents = $status->message;
+            foreach ($variables as $key => $variable) {
+                $messagebody = str_replace($variables[$key], $data[$key], $contents);
+                $contents = $messagebody;
+            }
+            $thread->body = $contents;
+        } else {
+            $thread->body = $old_status->name . '=>' . $status->name;
+        }
+        $ticket->status = $status->id;
+        //checking
+        if ($status->purpose == "closed") {
+            if ($old_status->purpose == "open") {
+                $ticket->closed = 1;
+                $ticket->closed_at = date('Y-m-d H:i:s');
+            }
+        } elseif ($status->purpose == "deleted") {
+            $ticket->is_deleted = 1;
+        } else {
+            if ($old_status->purpose == "closed") {
+                $ticket->reopened_at = date('Y-m-d H:i:s');
+            }
+        }
+        $ticket->save();
+        $thread->save();
+        //dd($status);
+        if ($status->purpose == "closed") {
+            $send_email_to = \App\Helper\Finder::rolesGroup($status->send_email);
+            if ($status->send_email > 0) {
+                $send_email_roles = \App\Helper\Finder::rolesGroup($status->send_email);
+                $separate_roles = explode(",", $send_email_roles); //collect(array_map('strtolower',explode(",", $send_email_roles)));
+                //dd($separate_roles);
+//                $users = User::
+//                        whereIn('users.role',$separate_roles)
+//                        ->where('users.active',1)
+//                        ->when($separate_roles->contains("admin"),function($query){
+//                            return  $query->leftJoin('users as admin','department_assign_agents.agent_id','=','admin.id')  
+//                             ->addSelect('admin.user_name as admin_username','admin.email as admin_email');
+//                        })
+//                        ->leftJoin('tickets','users.id','=','tickets.user_id')
+//                        ->select('users.user_name as client_username','users.first_name','users.last_name','users.email as client_email','users.role')
+//                        ->when($separate_roles->contains("agent"),function($query){
+//                            return $query->leftJoin('department_assign_agents','tickets.dept_id','=','department_assign_agents.department_id')
+//                             ->leftJoin('users as agent','department_assign_agents.agent_id','=','agent.id')  
+//                             ->addSelect('department_assign_agents.agent_id','agent.user_name as agent_username','agent.email as agent_email');
+//                        })
+//                        
+//                        ->where('users.id',$ticket->user_id)
+//                        ->distinct('users.email')
+//                        ->get();
+//                dd($users);
+
+                $user_details = '';
+                foreach ($separate_roles as $separated_role) {
+                    $separated_role = strtolower($separated_role);
+                    if ($separated_role == 'user') {
+                        $user_detail = User::where('id', $ticket->user_id)->where('active', 1)->select('user_name', 'email')->first();
+                        if ($user_detail) {
+                            $user_credentials[] = $this->groupUserCredentials($user_detail);
+                        }
+                    } elseif ($separated_role == 'admin') {
+                        $user_details = User::where('role', $separated_role)->where('active', 1)->select('user_name', 'email')->get();
+                        foreach ($user_details as $user_detail) {
+                            if ($user_detail) {
+                                $user_credentials[] = $this->groupUserCredentials($user_detail);
+                            }
+                        }
+                    } elseif ($separated_role == 'agent') {
+                        $user_details = User::where('primary_dpt', $ticket->dept_id)->where('role', $separated_role)->where('active', 1)->select('user_name', 'email')->get();
+                        foreach ($user_details as $user_detail) {
+                            if ($user_detail) {
+                                $user_credentials[] = $this->groupUserCredentials($user_detail);
+                            }
+                        }
+                    }
+                }
+                if ($ticket->assigned_to > 0) {
+                    $user_detail = User::where('id', $ticket->assigned_to)->where('active', 1)->select('user_name', 'email')->first();
+                    if ($user_detail != null) {
+                        $user_credentials[] = $this->groupUserCredentials($user_detail);
+                    }
+                }
+                $emails_to_be_sent = array_unique($user_credentials, SORT_REGULAR);
+                $ticket_thread = Ticket_Thread::where('ticket_id', '=', $ticket->id)->first();
+                $ticket_subject = $ticket_thread->title;
+                foreach ($emails_to_be_sent as $email_data) {
+                    try {
+                        $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket->dept_id), $to = ['name' => $email_data['to_user'], 'email' => $email_data['to_email']], $message = ['subject' => $ticket_subject . '[#' . $ticket->ticket_number . ']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket->ticket_number, 'closed' => $status->name]);
+                    } catch (Exception $e) {
+                        
+                    }
+                }
+            } else {
+                
+            }
+        } else {
+            return $status->name;
+        }
+    }
+
+
+    
 }

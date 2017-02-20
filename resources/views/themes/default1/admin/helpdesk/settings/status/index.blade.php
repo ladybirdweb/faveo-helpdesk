@@ -54,7 +54,7 @@ class="active"
             </thead>
             <tbody>
                 @foreach($statuss as $status)
-                <?php if ($status->name == 'Deleted' || Finder::checkApproval() == 0 &&  $status->id == 6) continue; ?>
+               
                 <tr>
                     <td><a href="{!! route('status.edit',$status->id) !!}"> {!! $status->name !!} </a>
                         
