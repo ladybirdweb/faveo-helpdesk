@@ -8,6 +8,6 @@ class TicketStatusType extends BaseModel
 {
     protected $table = 'ticket_status_type';
     protected $fillable = [
-        'id', 'name', 'created_at', 'updated_at'
+        'id', 'name', 'created_at', 'updated_at',
     ];
 }
