@@ -196,13 +196,6 @@ Route::group(['middleware' => ['web', 'redirect']], function () {
 
 
 
-
-
-
-
-
-
-
         // Route::get('setting-status', ['as' => 'statuss.index', 'uses' => 'Admin\helpdesk\SettingsController@getStatuses']); // direct to status setting page
 
         // Route::patch('status-update/{id}', ['as' => 'statuss.update', 'uses' => 'Admin\helpdesk\SettingsController@editStatuses']);
