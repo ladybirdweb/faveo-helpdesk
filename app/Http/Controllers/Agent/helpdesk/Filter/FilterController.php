@@ -92,33 +92,34 @@ class FilterController extends Controller
                 //         ->whereIn('ticket_status.id', [1, 7]);
                 //     });
                   return $table
-                    ->Join('ticket_status', 'ticket_status.id','=','tickets.status')
-                    ->Join('ticket_status_type',function($join){
-                         $join->on('ticket_status.purpose_of_status','=','ticket_status_type.id')
-                                 ->whereIn('ticket_status_type.name',['open']);
+                    ->Join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
+                    ->Join('ticket_status_type', function ($join) {
+                        $join->on('ticket_status.purpose_of_status', '=', 'ticket_status_type.id')
+                                 ->whereIn('ticket_status_type.name', ['open']);
                     });
             case '/ticket/closed':
                 if (Auth::user()->role == 'agent') {
                     $id = Auth::user()->primary_dpt;
                     $table = $table->where('tickets.dept_id', '=', $id);
                 }
+
                  return $table
-                    ->Join('ticket_status', 'ticket_status.id','=','tickets.status')
-                    ->Join('ticket_status_type',function($join){
-                         $join->on('ticket_status.purpose_of_status','=','ticket_status_type.id')
-                                 ->whereIn('ticket_status_type.name',['closed']);
+                    ->Join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
+                    ->Join('ticket_status_type', function ($join) {
+                        $join->on('ticket_status.purpose_of_status', '=', 'ticket_status_type.id')
+                                 ->whereIn('ticket_status_type.name', ['closed']);
                     });
                 // return $table
                 //     ->Join('ticket_status', function ($join) {
                 //         $join->on('ticket_status.id', '=', 'tickets.status')
                 //                 ->whereIn('ticket_status.name', ['closed']);
                 //     });
-                    case "/ticket/myticket":
+                    case '/ticket/myticket':
                     return $table
-                    ->Join('ticket_status', 'ticket_status.id','=','tickets.status')
-                    ->Join('ticket_status_type',function($join){
-                         $join->on('ticket_status.purpose_of_status','=','ticket_status_type.id')
-                                 ->whereIn('ticket_status_type.name',['open']);
+                    ->Join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
+                    ->Join('ticket_status_type', function ($join) {
+                        $join->on('ticket_status.purpose_of_status', '=', 'ticket_status_type.id')
+                                 ->whereIn('ticket_status_type.name', ['open']);
                     })
                     ->orWhere('tickets.assigned_to', '=', Auth::user()->id);
                     //->where('tickets.status','=',1 );
@@ -136,10 +137,10 @@ class FilterController extends Controller
                 }
 
                   return $table
-                     ->Join('ticket_status', 'ticket_status.id','=','tickets.status')
-                    ->Join('ticket_status_type',function($join){
-                         $join->on('ticket_status.purpose_of_status','=','ticket_status_type.id')
-                                 ->whereIn('ticket_status_type.name',['open']);
+                     ->Join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
+                    ->Join('ticket_status_type', function ($join) {
+                        $join->on('ticket_status.purpose_of_status', '=', 'ticket_status_type.id')
+                                 ->whereIn('ticket_status_type.name', ['open']);
                     })
                     ->where('tickets.assigned_to', '=', null)
                     ->where('tickets.team_id', '=', null);
@@ -157,18 +158,18 @@ class FilterController extends Controller
                 }
 
                  return $table
-                    ->Join('ticket_status', 'ticket_status.id','=','tickets.status')
-                    ->Join('ticket_status_type',function($join){
-                         $join->on('ticket_status.purpose_of_status','=','ticket_status_type.id')
-                                 ->whereIn('ticket_status_type.name',['open']);
+                    ->Join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
+                    ->Join('ticket_status_type', function ($join) {
+                        $join->on('ticket_status.purpose_of_status', '=', 'ticket_status_type.id')
+                                 ->whereIn('ticket_status_type.name', ['open']);
                     })
                     //->where('tickets.status', '=', 1)
                     // ->where('tickets.isanswered', '=', 0)
                     ->whereNotNull('tickets.duedate')
-                    ->where('tickets.duedate','!=', '00-00-00 00:00:00')
-                    
+                    ->where('tickets.duedate', '!=', '00-00-00 00:00:00')
+
                     // ->where('duedate','>',\Carbon\Carbon::now());
-                    ->where('tickets.duedate','<', \Carbon\Carbon::now());
+                    ->where('tickets.duedate', '<', \Carbon\Carbon::now());
 
                   // return $table
                   //   ->leftJoin('ticket_status', function ($join) {
@@ -198,11 +199,12 @@ class FilterController extends Controller
                     $id = Auth::user()->primary_dpt;
                     $table = $table->where('tickets.dept_id', '=', $id);
                 }
+
                  return $table
-                    ->Join('ticket_status', 'ticket_status.id','=','tickets.status')
-                    ->Join('ticket_status_type',function($join){
-                         $join->on('ticket_status.purpose_of_status','=','ticket_status_type.id')
-                                 ->whereIn('ticket_status_type.name',['deleted']);
+                    ->Join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
+                    ->Join('ticket_status_type', function ($join) {
+                        $join->on('ticket_status.purpose_of_status', '=', 'ticket_status_type.id')
+                                 ->whereIn('ticket_status_type.name', ['deleted']);
                     });
                 // return $table
                 //     ->Join('ticket_status', function ($join) {
@@ -215,11 +217,12 @@ class FilterController extends Controller
                     $id = Auth::user()->primary_dpt;
                     $table = $table->where('tickets.dept_id', '=', $id);
                 }
+
                  return $table
-                    ->Join('ticket_status', 'ticket_status.id','=','tickets.status')
-                    ->Join('ticket_status_type',function($join){
-                         $join->on('ticket_status.purpose_of_status','=','ticket_status_type.id')
-                                 ->whereIn('ticket_status_type.name',['open'])
+                    ->Join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
+                    ->Join('ticket_status_type', function ($join) {
+                        $join->on('ticket_status.purpose_of_status', '=', 'ticket_status_type.id')
+                                 ->whereIn('ticket_status_type.name', ['open'])
                                   ->where('tickets.isanswered', '=', 1);
                     });
                 // return $table
@@ -233,11 +236,12 @@ class FilterController extends Controller
                     $id = Auth::user()->primary_dpt;
                     $table = $table->where('tickets.dept_id', '=', $id);
                 }
+
                  return $table
-                    ->Join('ticket_status', 'ticket_status.id','=','tickets.status')
-                    ->Join('ticket_status_type',function($join){
-                         $join->on('ticket_status.purpose_of_status','=','ticket_status_type.id')
-                                 ->whereIn('ticket_status_type.name',['open']);
+                    ->Join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
+                    ->Join('ticket_status_type', function ($join) {
+                        $join->on('ticket_status.purpose_of_status', '=', 'ticket_status_type.id')
+                                 ->whereIn('ticket_status_type.name', ['open']);
                     })
                     ->where('tickets.assigned_to', '>', 0);
                     //->where('tickets.status','=',1 );
@@ -253,11 +257,12 @@ class FilterController extends Controller
                     $id = Auth::user()->primary_dpt;
                     $table = $table->where('tickets.dept_id', '=', $id);
                 }
+
                  return $table
-                    ->Join('ticket_status', 'ticket_status.id','=','tickets.status')
-                    ->Join('ticket_status_type',function($join){
-                         $join->on('ticket_status.purpose_of_status','=','ticket_status_type.id')
-                                 ->whereIn('ticket_status_type.name',['open']);
+                    ->Join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
+                    ->Join('ticket_status_type', function ($join) {
+                        $join->on('ticket_status.purpose_of_status', '=', 'ticket_status_type.id')
+                                 ->whereIn('ticket_status_type.name', ['open']);
                     });
                 // return $table
                 //      ->leftJoin('ticket_status', function ($join) {
@@ -270,14 +275,15 @@ class FilterController extends Controller
                     $id = Auth::user()->primary_dpt;
                     $table = $table->where('tickets.dept_id', '=', $id);
                 }
+
                   return $table
-                    ->Join('ticket_status', 'ticket_status.id','=','tickets.status')
-                    ->Join('ticket_status_type',function($join){
-                         $join->on('ticket_status.purpose_of_status','=','ticket_status_type.id')
-                                 ->whereIn('ticket_status_type.name',['open']);
+                    ->Join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
+                    ->Join('ticket_status_type', function ($join) {
+                        $join->on('ticket_status.purpose_of_status', '=', 'ticket_status_type.id')
+                                 ->whereIn('ticket_status_type.name', ['open']);
                     })
                     ->whereNotNull('tickets.duedate')
-                    ->whereDate('tickets.duedate','=', \Carbon\Carbon::now()->format('Y-m-d'));
+                    ->whereDate('tickets.duedate', '=', \Carbon\Carbon::now()->format('Y-m-d'));
 
                // return $table
                //      ->leftJoin('ticket_status', function ($join) {

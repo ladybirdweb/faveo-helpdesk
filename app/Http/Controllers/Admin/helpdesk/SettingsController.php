@@ -27,14 +27,13 @@ use App\Model\helpdesk\Settings\Responder;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
+use App\Model\helpdesk\Ticket\Ticket_Status;
+use App\Model\helpdesk\Ticket\TicketStatusType;
 use App\Model\helpdesk\Utility\Date_format;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Workflow\WorkflowClose;
-use App\Model\helpdesk\Ticket\Ticket_Status;
-use App\Model\helpdesk\Ticket\TicketStatusType;
-
 // classes
 use DateTime;
 use DB;
@@ -604,9 +603,7 @@ class SettingsController extends Controller
         return view('themes.default1.admin.helpdesk.setting');
     }
 
-
-
-      /**
+    /**
      * @param int $id
      * @param $compant instance of company table
      *
@@ -614,7 +611,8 @@ class SettingsController extends Controller
      *
      * @return Response
      */
-    public function getStatuses() {
+    public function getStatuses()
+    {
         try {
             /* fetch the values of company from company table */
             $statuss = Ticket_Status::where('purpose_of_status', '!=', 3)->where('purpose_of_status', '!=', 4)->paginate('10');
@@ -633,8 +631,10 @@ class SettingsController extends Controller
      *
      * @return type redirect
      */
-    public function createStatuses(Ticket_Status $statuss) {
+    public function createStatuses(Ticket_Status $statuss)
+    {
         $status_types = TicketStatusType::where('id', '<', 3)->get();
+
         return view('themes.default1.admin.helpdesk.settings.status.create', compact('status_types'));
     }
 
@@ -646,9 +646,10 @@ class SettingsController extends Controller
      *
      * @return type redirect
      */
-    public function storeStatuses(StatusRequest $request) {
+    public function storeStatuses(StatusRequest $request)
+    {
         try {
-            $statuss = new Ticket_Status;
+            $statuss = new Ticket_Status();
             /* fetch the values of company from company table */
             $statuss->name = $request->input('name');
             $statuss->order = $request->input('sort');
@@ -692,7 +693,7 @@ class SettingsController extends Controller
                 }
                 $statuss->default = 1;
             }
-           $statuss->halt_sla = $request->input('halt_sla');
+            $statuss->halt_sla = $request->input('halt_sla');
             $statuss->save();
             /* Direct to Company Settings Page */
             return redirect()->route('statuss.index')->with('success', Lang::get('lang.status_has_been_created_successfully'));
@@ -709,7 +710,8 @@ class SettingsController extends Controller
      *
      * @return Response
      */
-    public function getEditStatuses($id) {
+    public function getEditStatuses($id)
+    {
         try {
             /* fetch the values of company from company table */
             $status = Ticket_Status::find($id);
@@ -728,7 +730,8 @@ class SettingsController extends Controller
      *
      * @return Response
      */
-    public function editStatuses($id, StatusRequest $request) {
+    public function editStatuses($id, StatusRequest $request)
+    {
         try {
             $status = Ticket_Status::whereId($id)->first();
 
@@ -765,7 +768,7 @@ class SettingsController extends Controller
             } else {
                 $status->send_email = 0;
             }
-            $status->send_email=$email;
+            $status->send_email = $email;
             $status->message = $request->message;
 
             /* fetch the values of company from company table */
@@ -808,7 +811,8 @@ class SettingsController extends Controller
      *
      * @return type redirect
      */
-    public function deleteStatuses($id) {
+    public function deleteStatuses($id)
+    {
         try {
             $status_to_delete = Ticket_Status::whereId($id)->first();
             if ($status_to_delete->default == 1 || $id == Finder::statusApproval()) {
@@ -820,21 +824,17 @@ class SettingsController extends Controller
                 $default_status = Finder::defaultStatus($status_to_delete->purpose_of_status);
                 $tickets = DB::table('tickets')->where('status', '=', $id)->update(['status' => $default_status->id]);
                 $status_to_delete->delete();
-                return redirect()->back()->with('success', '<li>' . Lang::get('lang.associated_tickets_moved_to_default_status') . '<li>' . Lang::get('lang.status_deleted_successfully'));
+
+                return redirect()->back()->with('success', '<li>'.Lang::get('lang.associated_tickets_moved_to_default_status').'<li>'.Lang::get('lang.status_deleted_successfully'));
             } else {
                 $status_to_delete->delete();
-                return redirect()->back()->with('success', '<li>' . Lang::get('lang.status_deleted_successfully'));
+
+                return redirect()->back()->with('success', '<li>'.Lang::get('lang.status_deleted_successfully'));
             }
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
-
-
-
-
-
-
 
     // /**
     //  * @param int $id
@@ -901,7 +901,7 @@ class SettingsController extends Controller
     //         }
     //         $statuss->sort = $request->input('sort');
     //         $statuss->save();
-    //          Direct to Company Settings Page 
+    //          Direct to Company Settings Page
     //         return redirect()->back()->with('success', Lang::get('lang.status_has_been_updated_successfully'));
     //     } catch (Exception $e) {
     //         return redirect()->back()->with('fails', $e->getMessage());

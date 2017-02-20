@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateTicketStatusTypeTable extends Migration
 {
@@ -12,11 +12,12 @@ class CreateTicketStatusTypeTable extends Migration
      */
     public function up()
     {
-         Schema::create('ticket_status_type', function (Blueprint $table) {
+        Schema::create('ticket_status_type', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->timestamps();
-        });    }
+        });
+    }
 
     /**
      * Reverse the migrations.
@@ -25,7 +26,7 @@ class CreateTicketStatusTypeTable extends Migration
      */
     public function down()
     {
-       Schema::drop('ticket_status_type', function (Blueprint $table) {
+        Schema::drop('ticket_status_type', function (Blueprint $table) {
         });
     }
 }

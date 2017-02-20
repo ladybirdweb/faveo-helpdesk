@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AlterStatusTable extends Migration
 {
@@ -31,7 +31,7 @@ class AlterStatusTable extends Migration
             $table->dropColumn('email_user');
             $table->dropColumn('icon_class');
             $table->dropColumn('properties');
-             });
+        });
     }
 
     /**

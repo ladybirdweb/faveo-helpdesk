@@ -5,58 +5,33 @@ namespace App\Http\Controllers\Admin\helpdesk;
 // controllers
 use App\Http\Controllers\Controller;
 // requests
-use App\Http\Requests\helpdesk\CompanyRequest;
-use App\Http\Requests\helpdesk\EmailRequest;
-use App\Http\Requests\helpdesk\RatingUpdateRequest;
 use App\Http\Requests\helpdesk\StatusRequest;
-use App\Http\Requests\helpdesk\SystemRequest;
 // models
-use App\Model\helpdesk\Agent\Department;
-use App\Model\helpdesk\Email\Emails;
-use App\Model\helpdesk\Email\Template;
-use App\Model\helpdesk\Manage\Help_topic;
-use App\Model\helpdesk\Manage\Sla_plan;
-use App\Model\helpdesk\Notification\UserNotification;
-use App\Model\helpdesk\Ratings\Rating;
-use App\Model\helpdesk\Settings\Alert;
 use App\Model\helpdesk\Settings\Company;
-use App\Model\helpdesk\Settings\Email;
-use App\Model\helpdesk\Settings\Responder;
-use App\Model\helpdesk\Settings\System;
-use App\Model\helpdesk\Settings\Ticket;
-use App\Model\helpdesk\Ticket\Ticket_Priority;
-use App\Model\helpdesk\Utility\Date_format;
-use App\Model\helpdesk\Utility\Date_time_format;
-use App\Model\helpdesk\Utility\Time_format;
-use App\Model\helpdesk\Utility\Timezones;
-use App\Model\helpdesk\Workflow\WorkflowClose;
-use App\Model\helpdesk\Settings\CommonSettings;
-use DateTime;
 use App\Model\helpdesk\Ticket\Ticket_Status;
-use App\Model\helpdesk\Ticket\TicketStatusType;
 use App\Model\helpdesk\Ticket\Tickets;
+use App\Model\helpdesk\Ticket\TicketStatusType;
 // classes
 use DB;
 use Exception;
-use File;
-use Illuminate\Http\Request;
+use Finder;
 use Input;
 use Lang;
-use Finder;
 
 /**
  * SettingsController.
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class StatusController extends Controller {
-
+class StatusController extends Controller
+{
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         // $this->smtp();
         $this->middleware('auth');
         $this->middleware('roles');
@@ -70,7 +45,8 @@ class StatusController extends Controller {
      *
      * @return Response
      */
-    public function getStatuses() {
+    public function getStatuses()
+    {
         try {
             // dd('ppp');
             /* fetch the values of company from company table */
@@ -90,8 +66,10 @@ class StatusController extends Controller {
      *
      * @return type redirect
      */
-    public function createStatuses(Ticket_Status $statuss) {
+    public function createStatuses(Ticket_Status $statuss)
+    {
         $status_types = TicketStatusType::where('id', '<', 3)->get();
+
         return view('themes.default1.admin.helpdesk.settings.status.create', compact('status_types'));
     }
 
@@ -103,9 +81,10 @@ class StatusController extends Controller {
      *
      * @return type redirect
      */
-    public function storeStatuses(StatusRequest $request) {
+    public function storeStatuses(StatusRequest $request)
+    {
         try {
-            $statuss = new Ticket_Status;
+            $statuss = new Ticket_Status();
             /* fetch the values of company from company table */
             $statuss->name = $request->input('name');
             $statuss->order = $request->input('sort');
@@ -166,7 +145,8 @@ class StatusController extends Controller {
      *
      * @return Response
      */
-    public function getEditStatuses($id) {
+    public function getEditStatuses($id)
+    {
         try {
             /* fetch the values of company from company table */
             $status = Ticket_Status::find($id);
@@ -185,7 +165,8 @@ class StatusController extends Controller {
      *
      * @return Response
      */
-    public function editStatuses($id, StatusRequest $request) {
+    public function editStatuses($id, StatusRequest $request)
+    {
         try {
             $status = Ticket_Status::whereId($id)->first();
 
@@ -222,7 +203,7 @@ class StatusController extends Controller {
             } else {
                 $status->send_email = 0;
             }
-            $status->send_email=$email;
+            $status->send_email = $email;
             $status->message = $request->message;
 
             /* fetch the values of company from company table */
@@ -265,7 +246,8 @@ class StatusController extends Controller {
      *
      * @return type redirect
      */
-    public function deleteStatuses($id) {
+    public function deleteStatuses($id)
+    {
         try {
             $status_to_delete = Ticket_Status::whereId($id)->first();
             // if ($status_to_delete->default == 1 || $id == Finder::statusApproval()) {
@@ -277,16 +259,15 @@ class StatusController extends Controller {
                 $default_status = Finder::defaultStatus($status_to_delete->purpose_of_status);
                 $tickets = DB::table('tickets')->where('status', '=', $id)->update(['status' => $default_status->id]);
                 $status_to_delete->delete();
-                return redirect()->back()->with('success', '<li>' . Lang::get('lang.associated_tickets_moved_to_default_status') . '<li>' . Lang::get('lang.status_deleted_successfully'));
+
+                return redirect()->back()->with('success', '<li>'.Lang::get('lang.associated_tickets_moved_to_default_status').'<li>'.Lang::get('lang.status_deleted_successfully'));
             } else {
                 $status_to_delete->delete();
-                return redirect()->back()->with('success', '<li>' . Lang::get('lang.status_deleted_successfully'));
+
+                return redirect()->back()->with('success', '<li>'.Lang::get('lang.status_deleted_successfully'));
             }
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
-
 }
-
-
