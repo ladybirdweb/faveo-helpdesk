@@ -167,13 +167,49 @@ Route::group(['middleware' => ['web', 'redirect']], function () {
 
         Route::resource('close-workflow', 'Admin\helpdesk\CloseWrokflowController'); // direct to security setting page
         Route::patch('security/{id}', ['as' => 'securitys.update', 'uses' => 'Admin\helpdesk\SecurityController@update']); // direct to security setting page
-        Route::get('setting-status', ['as' => 'statuss.index', 'uses' => 'Admin\helpdesk\SettingsController@getStatuses']); // direct to status setting page
 
-        Route::patch('status-update/{id}', ['as' => 'statuss.update', 'uses' => 'Admin\helpdesk\SettingsController@editStatuses']);
 
-        Route::get('status/edit/{id}', ['as' => 'status.edit', 'uses' => 'Admin\helpdesk\SettingsController@getEditStatuses']);
-        Route::post('status-create', ['as' => 'statuss.create', 'uses' => 'Admin\helpdesk\SettingsController@createStatuses']);
-        Route::get('status-delete/{id}', ['as' => 'statuss.delete', 'uses' => 'Admin\helpdesk\SettingsController@deleteStatuses']);
+                   Route::get('setting-status', ['as' => 'statuss.index', 'uses' => 'Admin\helpdesk\StatusController@getStatuses']); // direct to status setting page
+//        });
+            Route::patch('status-update/{id}', ['as' => 'statuss.update', 'uses' => 'Admin\helpdesk\StatusController@editStatuses']);
+
+            Route::get('status-create', ['as' => 'statuss.create', 'uses' => 'Admin\helpdesk\StatusController@createStatuses']);
+
+//        Breadcrumbs::register('statuss.create', function ($breadcrumbs) {
+//            $breadcrumbs->parent('setting');
+//            $breadcrumbs->push('Create Status', route('statuss.create'));
+//        });
+            Route::get('status/edit/{id}', ['as' => 'status.edit', 'uses' => 'Admin\helpdesk\StatusController@getEditStatuses']);
+            Route::post('status-create', ['as' => 'statuss.store', 'uses' => 'Admin\helpdesk\StatusController@storeStatuses']);
+            Route::get('status-delete/{id}', ['as' => 'statuss.delete', 'uses' => 'Admin\helpdesk\StatusController@deleteStatuses']);
+
+
+            Route::get('ticket/status/{id}/{state}', ['as' => 'statuss.state', 'uses' => 'Agent\helpdesk\TicketController@updateStatuses']);
+
+            Route::patch('status-update/{id}', ['as' => 'statuss.update', 'uses' => 'Admin\helpdesk\StatusController@editStatuses']);
+
+            Route::get('status-create', ['as' => 'statuss.create', 'uses' => 'Admin\helpdesk\StatusController@createStatuses']);
+
+            Route::get('status/edit/{id}', ['as' => 'status.edit', 'uses' => 'Admin\helpdesk\StatusController@getEditStatuses']);
+            Route::post('status-create', ['as' => 'statuss.store', 'uses' => 'Admin\helpdesk\StatusController@storeStatuses']);
+            Route::get('status-delete/{id}', ['as' => 'statuss.delete', 'uses' => 'Admin\helpdesk\StatusController@deleteStatuses']);
+
+
+
+
+
+
+
+
+
+
+        // Route::get('setting-status', ['as' => 'statuss.index', 'uses' => 'Admin\helpdesk\SettingsController@getStatuses']); // direct to status setting page
+
+        // Route::patch('status-update/{id}', ['as' => 'statuss.update', 'uses' => 'Admin\helpdesk\SettingsController@editStatuses']);
+
+        // Route::get('status/edit/{id}', ['as' => 'status.edit', 'uses' => 'Admin\helpdesk\SettingsController@getEditStatuses']);
+        // Route::post('status-create', ['as' => 'statuss.create', 'uses' => 'Admin\helpdesk\SettingsController@createStatuses']);
+        // Route::get('status-delete/{id}', ['as' => 'statuss.delete', 'uses' => 'Admin\helpdesk\SettingsController@deleteStatuses']);
         Route::get('ticket/status/{id}/{state}', ['as' => 'statuss.state', 'uses' => 'Agent\helpdesk\TicketController@updateStatuses']);
         Route::get('getratings', ['as' => 'ratings.index', 'uses' => 'Admin\helpdesk\SettingsController@RatingSettings']);
 
@@ -370,6 +406,9 @@ Route::group(['middleware' => ['web', 'redirect']], function () {
         Route::get('/ticket/delete/{id}', ['as' => 'ticket.delete', 'uses' => 'Agent\helpdesk\TicketController@delete']); /*  Get Ticket Delete */
         Route::get('/email/ban/{id}', ['as' => 'ban.email', 'uses' => 'Agent\helpdesk\TicketController@ban']); /*  Get Ban Email */
         Route::get('/ticket/surrender/{id}', ['as' => 'ticket.surrender', 'uses' => 'Agent\helpdesk\TicketController@surrender']); /*  Get Ticket Surrender */
+
+
+   Route::get('/ticket/change-status/{id}/{id2}', ['as' => 'change.status', 'uses' => 'Agent\helpdesk\TicketController@changeStatus']);
         Route::get('/aaaa', 'Client\helpdesk\GuestController@ticket_number');
         Route::get('trash', ['as' => 'get-trash', 'uses' => 'Agent\helpdesk\TicketController@trash']); /* To show Deleted Tickets */
 

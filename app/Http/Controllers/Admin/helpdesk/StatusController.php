@@ -268,6 +268,9 @@ class StatusController extends Controller {
     public function deleteStatuses($id) {
         try {
             $status_to_delete = Ticket_Status::whereId($id)->first();
+            // if ($status_to_delete->default == 1 || $id == Finder::statusApproval()) {
+            //     return redirect()->back()->with('fails', Lang::get('lang.you_cannot_delete_a_default_ticket_status'));
+            // }
             $ticket_with_status = Tickets::where('status', $id)->first();
 
             if (isset($ticket_with_status)) {
