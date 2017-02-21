@@ -4,17 +4,17 @@ namespace App\Http\Middleware;
 
 use Cache;
 use Closure;
-use Session;
-// use Illuminate\Contracts\Routing\Middleware;
 use Illuminate\Support\Facades\App;
+// use Illuminate\Contracts\Routing\Middleware;
 use Illuminate\Support\Facades\Config;
+use Session;
 
 class LanguageMiddleware
 {
     public function handle($request, Closure $next)
     {
         $lang = '';
-        if(\Auth::check()) {
+        if (\Auth::check()) {
             if (\Auth::user()->user_language != null) {
                 $lang = \Auth::user()->user_language;
             } else {
@@ -41,6 +41,7 @@ class LanguageMiddleware
         } elseif (Cache::has('language')) {
             $lang = Cache::get('language');
         }
+
         return $lang;
     }
 }

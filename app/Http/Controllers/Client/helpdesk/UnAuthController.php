@@ -15,13 +15,13 @@ use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Ticket\TicketToken;
 use App\User;
-use Hash;
+use DB;
 // classes
+use Hash;
 use Illuminate\Http\Request;
 use Input;
 use Lang;
 use Session;
-use DB;
 
 /**
  * GuestController.
@@ -330,7 +330,7 @@ class UnAuthController extends Controller
     public static function changeLanguage($lang)
     {
         $path = base_path('resources/lang');  // Path to check available language packages
-        if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {            
+        if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
             \Cache::forever('language', $lang);
             DB::table('settings_system')->where('id', '=', 1)
                 ->update(['content' => $lang]);
@@ -344,8 +344,8 @@ class UnAuthController extends Controller
     // Follow up tickets
     public function followup()
     {
-           $followup = Followup::whereId('1')->first();
-           $condition = $followup->condition;
+        $followup = Followup::whereId('1')->first();
+        $condition = $followup->condition;
          // dd($condition);
 
         switch ($condition) {
@@ -386,7 +386,6 @@ class UnAuthController extends Controller
                 if ($current_time > $ck) {
                     $ticket->follow_up = 1;
                     $ticket->save();
-            
                 }
             }
         }
@@ -403,15 +402,16 @@ class UnAuthController extends Controller
     {
         $path = base_path('resources/lang');  // Path to check available language packages
         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
-            if(\Auth::check()) {
+            if (\Auth::check()) {
                 $id = \Auth::user()->id;
                 $user = User::find($id);
                 $user->user_language = $lang;
                 $user->save();
             } else {
-                Session::set('language',$lang);
+                Session::set('language', $lang);
             }
         }
+
         return redirect()->back();
     }
 }
