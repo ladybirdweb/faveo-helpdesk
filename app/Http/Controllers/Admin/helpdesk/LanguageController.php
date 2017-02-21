@@ -87,7 +87,7 @@ class LanguageController extends Controller
         $values = array_slice($values, 2); // skips array element $value[0] = '.' & $value[1] = '..'
         return \Datatable::collection(new Collection($values))
                         ->addColumn('language', function ($model) {
-                            $img_src = "lb-faveo/media/flags/".$model.".png";
+                            $img_src = "lb-faveo/flags/".$model.".png";
                             if ($model == Config::get('app.fallback_locale')) {
                                 return '<img src="'.asset($img_src).'"/>&nbsp;'.Config::get('languages.'.$model).' ('.Lang::get('lang.default').')';
                             } else {

@@ -197,11 +197,11 @@
                             @endif
                             <ul class="nav navbar-nav navbar-menu">
                             <?php $src = Lang::getLocale().'.png'; ?>
-                                <li><a href="#"><img src="{{asset("lb-faveo/media/flags/$src")}}"></img></a>
+                                <li><a href="#"><img src="{{asset("lb-faveo/flags/$src")}}"></img></a>
                                     <ul class="dropdown-menu">
                                         @foreach($langs as $key => $value)
                                             <?php $src = $key.".png"; ?>
-                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/media/flags/$src")}}"></img>&nbsp;{{$value}}</a></li>
+                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value}}</a></li>
                                         @endforeach
                                     </ul>
                                 </li>
