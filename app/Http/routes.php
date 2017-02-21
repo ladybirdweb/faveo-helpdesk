@@ -865,4 +865,10 @@ Route::group(['middleware' => ['web', 'redirect']], function () {
         //     $breadcrumbs->parent('dashboard');
         //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
         // });
+
+ /*-------------------------------------------------------------
+  | User language change
+  |-------------------------------------------------------------
+  */
+  Route::get('swtich-language/{id}', ['as' => 'switch-user-lang', 'uses' => 'Client\helpdesk\UnAuthController@changeUserLanguage']);
 });

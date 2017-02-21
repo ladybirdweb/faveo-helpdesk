@@ -621,3 +621,7 @@ Breadcrumbs::register('readmails', function ($breadcrumbs) {
 Breadcrumbs::register('notification', function ($breadcrumbs) {
     $breadcrumbs->push('notification', 'notification');
 });
+
+Breadcrumbs::register('switch-user-lang', function(){
+    $breadcrumbs->push('switch-language', 'switch-user-lang');
+});

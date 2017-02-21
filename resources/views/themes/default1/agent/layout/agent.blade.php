@@ -185,6 +185,16 @@
                             </li>
                         </ul>
                         </li>
+                        <li class="dropdown">
+                            <?php $src = Lang::getLocale().'.png'; ?>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/media/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                @foreach($langs as $key => $value)
+                                            <?php $src = $key.".png"; ?>
+                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/media/flags/$src")}}"></img>&nbsp;{{$value}}</a></li>
+                                @endforeach       
+                            </ul>
+                        </li>
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -567,6 +577,11 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
     
     });        
 </script>
+<script type="text/javascript">
+                function changeLang(lang) {
+                    location.href = "swtich-language/"+lang;
+                }
+            </script>
 <?php Event::fire('show.calendar.script', array()); ?>
 <?php Event::fire('load-calendar-scripts', array()); ?>
         @yield('FooterInclude')
