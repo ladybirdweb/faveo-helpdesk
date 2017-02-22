@@ -675,7 +675,7 @@ return array(
     'Text_Frame_Reflower' => $vendorDir . '/dompdf/dompdf/include/text_frame_reflower.cls.php',
     'Text_Renderer' => $vendorDir . '/dompdf/dompdf/include/text_renderer.cls.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
-    'TicketStatusSeeder' => $baseDir . '/database/seeds/TicketStatusSeeder.php',
+    'UpdateUsersTable2212017' => $baseDir . '/database/migrations/2017_02_22_084059_update_users_table_22_1_2017.php',
     'Version1079table' => $baseDir . '/database/migrations/2016_06_28_141613_version1079table.php',
     'Whoops\\Module' => $vendorDir . '/filp/whoops/src/deprecated/Zend/Module.php',
     'Whoops\\Provider\\Zend\\ExceptionStrategy' => $vendorDir . '/filp/whoops/src/deprecated/Zend/ExceptionStrategy.php',

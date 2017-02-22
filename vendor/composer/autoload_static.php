@@ -1303,7 +1303,7 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'Text_Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/text_frame_reflower.cls.php',
         'Text_Renderer' => __DIR__ . '/..' . '/dompdf/dompdf/include/text_renderer.cls.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
-        'TicketStatusSeeder' => __DIR__ . '/../..' . '/database/seeds/TicketStatusSeeder.php',
+        'UpdateUsersTable2212017' => __DIR__ . '/../..' . '/database/migrations/2017_02_22_084059_update_users_table_22_1_2017.php',
         'Version1079table' => __DIR__ . '/../..' . '/database/migrations/2016_06_28_141613_version1079table.php',
         'Whoops\\Module' => __DIR__ . '/..' . '/filp/whoops/src/deprecated/Zend/Module.php',
         'Whoops\\Provider\\Zend\\ExceptionStrategy' => __DIR__ . '/..' . '/filp/whoops/src/deprecated/Zend/ExceptionStrategy.php',
