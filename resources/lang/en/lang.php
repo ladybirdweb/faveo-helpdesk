@@ -1648,4 +1648,6 @@ return [
     'have_been_deleted_forever'                                                         => 'Have been Deleted forever',
     'related_tickets_moved_to_default_status'                                           => 'Related tickets moved to default status',
 
+    //updates 22-2-2017
+    'invalid-date-range' => 'Invalid date range',
 ];

@@ -428,7 +428,8 @@ if ($thread->title != "") {
     filebrowserImageUploadUrl: "{{url('laravel-filemanager/upload?type=Images')}}",
     filebrowserBrowseUrl: "{{url('laravel-filemanager?type=Files')}}",
     filebrowserUploadUrl: "{{url('laravel-filemanager/upload?type=Files')}}",
-    removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar'
+    removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar',
+    disableNativeSpellChecker: false
   });
 </script>
                                     </div>
