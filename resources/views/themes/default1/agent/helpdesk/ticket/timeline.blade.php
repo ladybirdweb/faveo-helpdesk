@@ -683,46 +683,25 @@ if ($thread->title != "") {
                                             </div><!-- /.user-block -->
                                            
                                         </h3>
-                                        <div class="timeline-body" style="padding-left:30px;margin-bottom:-20px">
+                                        <div class="timeline-body{{$conversation->id}}" style="padding-left:30px;margin-bottom:-20px;margin-top: 15px;">
                                             
                                           
                                             
-                                           @if($conversation->poster=='client')
-                                             <div class="embed-responsive embed-responsive-16by9">
-                                            <iframe id="loader_frame{{$conversation->id}}" class="embed-responsive-item">Body of html email here</iframe>
-<script type="text/javascript">
-jQuery(document).ready(function () {
-/*   setInterval(function(){
-   var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-   var h     = mydiv.height();
-alert(h+20);
-   }, 2000);*/
-             jQuery('.embed-responsive-16by9').css('height','auto');
-   jQuery('.embed-responsive-16by9').css('padding','0');
-   jQuery('#loader_frame{{$conversation->id}}').css('width','100%');
-   jQuery('#loader_frame{{$conversation->id}}').css('position','static');
-   jQuery('#loader_frame{{$conversation->id}}').css('border','none');
-   var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-   var h     = mydiv.height();
-   jQuery('#loader_frame{{$conversation->id}}').css('height', h+20);
-   setInterval(function(){
-   //var mydiv = jQuery('#loader_frame{{$conversation->id}}').contents().find("body");
-   //alert(mydiv.height());
-    h = jQuery('#loader_frame{{$conversation->id}}').height();
-    if (!!navigator.userAgent.match(/Trident\/7\./)){
-     jQuery('#loader_frame{{$conversation->id}}').css('height', h);
-    }else {
-     jQuery('#loader_frame{{$conversation->id}}').css('height', h);
-    }
-   }, 2000);
-  });
-</script>
-                                            </div>
+                                            @if($conversation->poster=='client')
+                                            
+                                            
                                             <script>
-                                                 setTimeout(function(){ 
-                                                       $('#loader_frame{{$conversation->id}}')[0].contentDocument.body.innerHTML = '<body><style>body{display:inline-block;height:auto;}</style>{!!$conversation->purify()!!}<body>';   }, 1000);
-                                                
+                                             setTimeout(function(){
+                                                var $iframe="Id{{$conversation->id}}";
+                                                $('<iframe src="javascript:void(0)" id='+$iframe+' class="iframe" frameborder="0"  scrolling="no" width="100%" style="height:1px"></iframe>').appendTo(".timeline-body{{$conversation->id}}").contents().find('body').append('<body><style>body{display:inline-block;}</style>{!!$conversation->purify()!!}<body>');
+                                                setTimeout(function(){
+                                                    var frameid=document.getElementById($iframe);
+                                                    var iframe_height=frameid.contentWindow.document.body.scrollHeight;
+                                                    frameid.style.height=iframe_height+"px";
+                                                }, 1000);
+                                            }, 500);
                                             </script>
+
                                             @else 
                                             {!! $conversation->body !!}
                                             @endif
