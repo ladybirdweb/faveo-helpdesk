@@ -699,7 +699,7 @@ if ($thread->title != "") {
                                                     var iframe_height=frameid.contentWindow.document.body.scrollHeight;
                                                     frameid.style.height=iframe_height+"px";
                                                 }, 1000);
-                                            }, 500);
+                                            }, 0);
                                             </script>
 
                                             @else 
