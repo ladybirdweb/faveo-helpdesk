@@ -1375,7 +1375,6 @@ Puede ingresar el número de días de registros de base de datos que se eliminar
     'post_comment'                                                                     => 'Publicar comentario',
     'plugin'                                                                           => 'Plugin',
     'edit_profile'                                                                     => 'Editar perfil',
-    'you_are_here'                                                                     => 'Estás aquí',
     'Send'                                                                             => 'ENVIAR',
     'no_article'                                                                       => 'Sin artículo',
     'profile_settings'                                                                 => 'Configuración de perfil',

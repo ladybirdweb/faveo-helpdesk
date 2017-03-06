@@ -1316,7 +1316,6 @@ return [
     'post_comment'                                                                     => 'Enviar comentário',
     'plugin'                                                                           => 'Plugin',
     'edit_profile'                                                                     => 'Editar Perfil',
-    'you_are_here'                                                                     => 'Você está aqui',
     'Send'                                                                             => 'ENVIAR',
     'no_article'                                                                       => 'Nenhum artigo',
     'profile_settings'                                                                 => 'Configurações de perfil',

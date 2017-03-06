@@ -830,7 +830,6 @@ return [
     /*                              Translation reuired                                      */
     /*****************************************************************************************/
     'edit_profile'                                                                     => 'Edit profile',
-    'you_are_here'                                                                     => 'You are here',
     'Send'                                                                             => 'SEND',
     'no_article'                                                                       => 'No article',
     'profile_settings'                                                                 => 'Profile settings',
