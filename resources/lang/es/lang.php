@@ -1561,7 +1561,7 @@ Puede ingresar el número de días de registros de base de datos que se eliminar
      'change_password'                                              => 'Cambia la contraseña',
      'role_change'                                                  => 'Cambio de rol',
      'password_generator'                                           => 'Generador de contraseñas',
-     'depertment'                                                   => 'Departmento',
+     'department'                                                   => 'Departmento',
      'duetoday'                                                     => 'Para hoy',
      'today-due_tickets'                                            => 'Tickets para hoy',
      'password_change_successfully'                                 => 'Contraseña cambiada con éxito',

@@ -1552,7 +1552,7 @@ return [
      'change_password'                                              => 'Ganti password',
      'role_change'                                                  => 'Ganti peran',
      'password_generator'                                           => 'Generator Password',
-     'depertment'                                                   => 'Departemen',
+     'department'                                                   => 'Departemen',
      'duetoday'                                                     => 'Kadaluarsa hari ini',
      'today-due_tickets'                                            => 'Tiket yang kadaluarsa hari ini',
      'password_change_successfully'                                 => 'Password berhasil diganti',

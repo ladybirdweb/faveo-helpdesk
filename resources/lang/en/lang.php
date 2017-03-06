@@ -1546,7 +1546,7 @@ return [
      'change_password'                                              => 'Change password',
      'role_change'                                                  => 'Role change',
      'password_generator'                                           => 'Password generator',
-     'depertment'                                                   => 'Department',
+     'department'                                                   => 'Department',
      'duetoday'                                                     => 'Due today',
      'today-due_tickets'                                            => 'Today\'s due tickets',
      'password_change_successfully'                                 => 'Password changed successfully',
