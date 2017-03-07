@@ -1366,7 +1366,6 @@ return [
     'post_comment'                                                                     => 'Kirim komentar',
     'plugin'                                                                           => 'Plugin',
     'edit_profile'                                                                     => 'Edit profil',
-    'you_are_here'                                                                     => 'Anda disini',
     'Send'                                                                             => 'KIRIM',
     'no_article'                                                                       => 'Tidak ada artikel',
     'profile_settings'                                                                 => 'Pengaturan profil',
