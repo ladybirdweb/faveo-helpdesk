@@ -70,7 +70,7 @@ return [
     'activate_your_account_click_on_Link_that_send_to_your_mail'  => 'Activez-votre compte ! cliquez sur le lien qui vos a été envoyé par email.',
     'this_field_do_not_match_our_records'                         => 'Ce champ ne correspond pas à nos enregistrements.',
     'we_have_e-mailed_your_password_reset_link'                   => 'Nous avons envoyé un lien de réinitialisation de votre mot de passe !',
-    "we_can't_find_a_user_with_that_e-mail_address"               => "Nous ne pouvons pas trouver un utilisateur avec cette adresse e-mail.",
+    "we_can't_find_a_user_with_that_e-mail_address"               => 'Nous ne pouvons pas trouver un utilisateur avec cette adresse e-mail.',
 
     /*
       |--------------------------------------
@@ -1569,7 +1569,6 @@ return [
      'system-outgoing-incoming-mail-not-configured' => 'You have not configured system mail. Faveo can\'t fetch tickets from mail or send mail to users without it.',
      'confihure-the-mail-now'                       => 'Click here to configure the mail.',
      'system-mail-not-configured-agent-message'     => 'System incoming and outgoing email settings are not configured. Please contct the admin.',
-
 
       // arindam-14.2.2017
      // sla
