@@ -1322,7 +1322,6 @@ return [
     'post_comment'                                                                     => 'Poster commentaire',
     'plugin'                                                                           => 'Plugin',
     'edit_profile'                                                                     => 'Modifier profil',
-    'you_are_here'                                                                     => 'Vous êtes ici',
     'Send'                                                                             => 'VALIDER',
     'no_article'                                                                       => 'Pas d\'article',
     'profile_settings'                                                                 => 'Paramètres du profil',
@@ -1517,7 +1516,7 @@ return [
      'change_password'                                              => 'Changer le mot de passe',
      'role_change'                                                  => 'Changer le rôle',
      'password_generator'                                           => 'Génerateur de mot de passe',
-     'depertment'                                                   => 'Département',
+     'department'                                                   => 'Département',
      'duetoday'                                                     => 'A faire aujourd\'hui',
      'today-due_tickets'                                            => 'Tickets a faire aujourd\'hui',
      'password_change_successfully'                                 => 'Mot de passe modifié avec succès',
@@ -1565,7 +1564,7 @@ return [
      'search'              => 'Rechercher...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'L\'utilisateur sélectionné est déjà le propriétaire du ticket.',
-     
+
       //update 1-2-2017
      'system-outgoing-incoming-mail-not-configured' => 'You have not configured system mail. Faveo can\'t fetch tickets from mail or send mail to users without it.',
      'confihure-the-mail-now'                       => 'Click here to configure the mail.',
