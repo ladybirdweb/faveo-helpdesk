@@ -1557,7 +1557,7 @@ return [
      'change_password'                                            => 'Verander wachtwoord',
      'role_change'                                                => 'Rol aanpassen',
      'password_generator'                                         => 'Wachtwoord generator',
-     'depertment'                                                 => 'Afdeling',
+     'department'                                                 => 'Afdeling',
      'duetoday'                                                   => 'Einddatum vandaag',
      'today-due_tickets'                                          => 'Ticket met een einddatum vandaag',
      'password_change_successfully'                               => 'Wachtwoord succesvol veranderd',

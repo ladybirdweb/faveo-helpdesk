@@ -1516,7 +1516,7 @@ return [
      'change_password'                                              => 'Changer le mot de passe',
      'role_change'                                                  => 'Changer le rôle',
      'password_generator'                                           => 'Génerateur de mot de passe',
-     'depertment'                                                   => 'Département',
+     'department'                                                   => 'Département',
      'duetoday'                                                     => 'A faire aujourd\'hui',
      'today-due_tickets'                                            => 'Tickets a faire aujourd\'hui',
      'password_change_successfully'                                 => 'Mot de passe modifié avec succès',
