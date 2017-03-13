@@ -289,7 +289,6 @@ body {
     opacity: 1;
     padding: 1em;
     text-align: center;
-    /* text-shadow:0 -1px 1px #8a4f7f,1px 0 1px #8a4f7f,0 1px 1px #8a4f7f,-1px 0 1px #8a4f7f */
     color: aliceblue;
 }
 
@@ -411,6 +410,7 @@ body {
     padding: .5em 1em;
     line-height: 1em;
     margin-right: .5em;
+    margin-bottom: 24px;    
     height: auto
 }
 
@@ -422,7 +422,6 @@ body {
     float: right;
     margin: 0;
     opacity: 1;
-    /*text-shadow:0 -1px 1px #8a4f7f,1px 0 1px #8a4f7f,0 1px 1px #8a4f7f,-1px 0 1px #8a4f7f*/
 }
 
 .return-to-dashboard {
