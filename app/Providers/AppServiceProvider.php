@@ -7,6 +7,7 @@ use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\ServiceProvider;
 use Queue;
 use View;
+use Illuminate\Support\Facades\Route;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
             loging('Failed Job - '.$event->connectionName, json_encode($event->job->payload()));
             
         });
+        Route::singularResourceParameters(false);
         // Please note the different namespace
         // and please add a \ in front of your classes in the global namespace
         \Event::listen('cron.collectJobs', function () {
