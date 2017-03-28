@@ -32,7 +32,7 @@ class Origin implements HeaderInterface
         }
 
         $uri = UriFactory::factory($value);
-        if (!$uri->isValid()) {
+        if (! $uri->isValid()) {
             throw new Exception\InvalidArgumentException('Invalid header value for Origin key: "' . $name . '"');
         }
 

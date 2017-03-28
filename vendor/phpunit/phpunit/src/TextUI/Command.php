@@ -726,7 +726,7 @@ class PHPUnit_TextUI_Command
      * @param string $printerClass
      * @param string $printerFile
      *
-     * @return PHPUnit_Util_Printer
+     * @return PHPUnit_Util_Printer|string
      */
     protected function handlePrinter($printerClass, $printerFile = '')
     {
@@ -924,7 +924,7 @@ Logging Options:
 Test Selection Options:
 
   --filter <pattern>        Filter which tests to run.
-  --testsuite <pattern>     Filter which testsuite to run.
+  --testsuite <name>        Filter which testsuite to run.
   --group ...               Only runs tests from the specified group(s).
   --exclude-group ...       Exclude tests from the specified group(s).
   --list-groups             List available test groups.

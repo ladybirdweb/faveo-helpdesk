@@ -48,15 +48,7 @@ class MailController extends Controller
                 $email = $emails->get();
                 if ($email->count() > 0) {
                     foreach ($email as $e_mail) {
-                        try {
-                            $this->fetch($e_mail);
-                        } catch (\Exception $ex) {
-                            $add = '';
-                            if ($email) {
-                                $add = $e_mail->email_address;
-                            }
-                            loging($add, $ex->getMessage());
-                        }
+                        $this->fetch($e_mail);
                     }
                 }
             }

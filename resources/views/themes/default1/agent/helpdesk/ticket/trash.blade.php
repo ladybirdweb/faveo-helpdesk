@@ -82,9 +82,9 @@ if (Auth::user()->role == 'agent') {
                 {!! Lang::get('lang.change_status') !!} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li ><input type="submit" class="btn btn-block btn-default btn-sm text-green" id="open"  name="submit" value="{!! Lang::get('lang.open') !!}" onclick="appendValue(id)">
+                <li ><input type="submit" class="btn btn-block btn-default btn-sm text-green" id="delete"  name="submit" value="{!! Lang::get('lang.open') !!}">
                 </li>
-                <li ><input type="submit" class="btn btn-block btn-default btn-sm text-yellow" name="submit"  id="close" value="{!! Lang::get('lang.close') !!}" onclick="appendValue(id)"></li>
+                <li ><input type="submit" class="btn btn-block btn-default btn-sm text-yellow" name="submit"  id="close" value="{!! Lang::get('lang.close') !!}"></li>
 
             </ul>
         </div>
@@ -166,7 +166,7 @@ if (Auth::user()->role == 'agent') {
             $("#show").show();
         });
 
-        $('#open').on('click', function() {
+        $('#delete').on('click', function() {
             option = 0;
             $('#myModalLabel').html("{{Lang::get('lang.open-tickets')}}");
         });
@@ -210,7 +210,7 @@ if (Auth::user()->role == 'agent') {
                 $("#modalpopup").unbind('submit');
                 if (option == 0) {
                     //alert('delete');
-                    $('#open').click();
+                    $('#delete').click();
                 } else if (option == 1) {
                     //alert('close');
                     $('#close').click();

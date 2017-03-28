@@ -68,18 +68,20 @@ class Local extends AbstractAdapter
      * @param int    $writeFlags
      * @param int    $linkHandling
      * @param array  $permissions
+     *
+     * @throws LogicException
      */
     public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::DISALLOW_LINKS, array $permissions = [])
     {
         $root = is_link($root) ? realpath($root) : $root;
         $this->permissionMap = array_replace_recursive(static::$permissions, $permissions);
-        $realRoot = $this->ensureDirectory($root);
+        $this->ensureDirectory($root);
 
-        if ( ! is_dir($realRoot) || ! is_readable($realRoot)) {
+        if ( ! is_dir($root) || ! is_readable($root)) {
             throw new LogicException('The root path ' . $root . ' is not readable.');
         }
 
-        $this->setPathPrefix($realRoot);
+        $this->setPathPrefix($root);
         $this->writeFlags = $writeFlags;
         $this->linkHandling = $linkHandling;
     }
@@ -89,7 +91,7 @@ class Local extends AbstractAdapter
      *
      * @param string $root root directory path
      *
-     * @return string real path to root
+     * @return void
      *
      * @throws Exception in case the root directory can not be created
      */
@@ -104,8 +106,6 @@ class Local extends AbstractAdapter
                 throw new Exception(sprintf('Impossible to create the root directory "%s".', $root));
             }
         }
-
-        return realpath($root);
     }
 
     /**
@@ -164,7 +164,9 @@ class Local extends AbstractAdapter
             $this->setVisibility($path, $visibility);
         }
 
-        return compact('path', 'visibility');
+        $type = 'file';
+
+        return compact('type', 'path', 'visibility');
     }
 
     /**
@@ -175,7 +177,7 @@ class Local extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         $stream = fopen($location, 'rb');
 
-        return compact('stream', 'path');
+        return ['type' => 'file', 'path' => $path, 'stream' => $stream];
     }
 
     /**
@@ -199,7 +201,9 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        return compact('path', 'size', 'contents', 'mimetype');
+        $type = 'file';
+
+        return compact('type', 'path', 'size', 'contents', 'mimetype');
     }
 
     /**
@@ -214,7 +218,7 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        return compact('contents', 'path');
+        return ['type' => 'file', 'path' => $path, 'contents' => $contents];
     }
 
     /**
@@ -258,7 +262,7 @@ class Local extends AbstractAdapter
     public function listContents($directory = '', $recursive = false)
     {
         $result = [];
-        $location = $this->applyPathPrefix($directory) . $this->pathSeparator;
+        $location = $this->applyPathPrefix($directory);
 
         if ( ! is_dir($location)) {
             return [];
@@ -311,7 +315,7 @@ class Local extends AbstractAdapter
             $mimetype = Util\MimeType::detectByFilename($location);
         }
 
-        return ['mimetype' => $mimetype];
+        return ['path' => $path, 'type' => 'file', 'mimetype' => $mimetype];
     }
 
     /**
@@ -332,7 +336,7 @@ class Local extends AbstractAdapter
         $permissions = octdec(substr(sprintf('%o', fileperms($location)), -4));
         $visibility = $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE;
 
-        return compact('visibility');
+        return compact('path', 'visibility');
     }
 
     /**
@@ -348,7 +352,7 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        return compact('visibility');
+        return compact('path', 'visibility');
     }
 
     /**
@@ -415,7 +419,9 @@ class Local extends AbstractAdapter
      *
      * @param SplFileInfo $file
      *
-     * @return array
+     * @return array|void
+     *
+     * @throws NotSupportedException
      */
     protected function normalizeFileInfo(SplFileInfo $file)
     {
@@ -488,16 +494,6 @@ class Local extends AbstractAdapter
         }
 
         return $normalized;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function applyPathPrefix($path)
-    {
-        $prefixedPath = parent::applyPathPrefix($path);
-
-        return str_replace('/', DIRECTORY_SEPARATOR, $prefixedPath);
     }
 
     /**

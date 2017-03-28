@@ -97,8 +97,8 @@ return [
       | will not be safe. Please do this before deploying an application!
       |
      */
-    'key'    => env('APP_KEY', 'F70u5RfMoiq7ptPR'),
-    'cipher' => MCRYPT_RIJNDAEL_128,
+    'key'    => env('APP_KEY', 'base64:h3KjrHeVxyE+j6c8whTAs2YI+7goylGZ/e2vElgXT6I='),
+    'cipher' => 'AES-256-CBC',
     /*
       |--------------------------------------------------------------------------
       | Logging Configuration
@@ -159,7 +159,9 @@ return [
         'Illuminate\Translation\TranslationServiceProvider',
         'Illuminate\Validation\ValidationServiceProvider',
         'Illuminate\View\ViewServiceProvider',
-        'Illuminate\Html\HtmlServiceProvider',
+        Illuminate\Notifications\NotificationServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -181,7 +183,7 @@ return [
         Unisharp\Ckeditor\ServiceProvider::class,
         LaravelFCM\FCMServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
-        Collective\Bus\BusServiceProvider::class,
+        //Collective\Bus\BusServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         App\FaveoLog\LaravelLogViewerServiceProvider::class,
@@ -231,8 +233,8 @@ return [
         'URL'         => 'Illuminate\Support\Facades\URL',
         'Validator'   => 'Illuminate\Support\Facades\Validator',
         'View'        => 'Illuminate\Support\Facades\View',
-        'Form'        => 'Illuminate\Html\FormFacade',
-        'HTML'        => 'Illuminate\Html\HtmlFacade',
+        'Form' => Collective\Html\FormFacade::class,
+        'Html' => Collective\Html\HtmlFacade::class,
         'phone'       => 'The :attribute field contains an invalid number.',
         'Bugsnag'     => 'Bugsnag\BugsnagLaravel\BugsnagFacade',
         'PDF'         => 'Vsmoraes\Pdf\PdfFacade',
@@ -255,6 +257,7 @@ return [
         'UnAuth'      => 'App\Http\Controllers\Client\helpdesk\UnAuthController',
         'Finder'      => App\Helper\Finder::class,
         'Datatables'  => Yajra\Datatables\Facades\Datatables::class,
+        'Notification' => Illuminate\Support\Facades\Notification::class,
 
     ],
 

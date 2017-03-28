@@ -23,7 +23,7 @@ matrix:
   fast_finish: true
 
 before_install:
-  - if [[ ${TRAVIS_PHP_VERSION:0:4} != "hhvm" ]]; then phpenv config-rm xdebug.ini; fi
+  - phpenv config-rm xdebug.ini || true
 
 install:
   - export COMPOSER_ROOT_VERSION=dev-master
@@ -35,3 +35,21 @@ script:
    - bin/phpspec run --format=pretty
    - ./vendor/bin/phpunit --testdox
    - ./vendor/bin/behat --format=pretty
+
+before_deploy:
+  - curl -LSs https://box-project.github.io/box2/installer.php | php
+  - export PATH=.:$PATH
+  - rm -Rfv ./vendor
+  - composer install --no-dev -o
+  - box.phar build
+
+deploy:
+  provider: releases
+  api_key:
+    secure: kuNoMV1YPvdIQvKwf7NgYIFP4ZskFrZCRgq/+iTzP/vbyeB1mu/hyNkHtdl0Fj/2LpN1IcWm+C7hZ29NjQJGyrEkGnD8HWnUEn6k+FLhETg+BlckDTwSyhauXRIoaJeNUItNYFydG8MjEMBQgWQpsT6lWNSRAa3uC82K2zjQAx0=
+  file: phpspec.phar
+  skip_cleanup: true
+  on:
+    tags: true
+    php: 5.6
+    condition: $DEPENDENCIES != "low"

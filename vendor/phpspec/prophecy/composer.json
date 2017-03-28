@@ -20,18 +20,25 @@
     "require": {
         "php":                               "^5.3|^7.0",
         "phpdocumentor/reflection-docblock": "^2.0|^3.0.2",
-        "sebastian/comparator":              "^1.1",
+        "sebastian/comparator":              "^1.1|^2.0",
         "doctrine/instantiator":             "^1.0.2",
-        "sebastian/recursion-context":       "^1.0"
+        "sebastian/recursion-context":       "^1.0|^2.0|^3.0"
     },
 
     "require-dev": {
-        "phpspec/phpspec": "^2.0"
+        "phpspec/phpspec": "^2.5|^3.2",
+        "phpunit/phpunit": "^4.8 || ^5.6.5"
     },
 
     "autoload": {
         "psr-0": {
             "Prophecy\\": "src/"
+        }
+    },
+
+    "autoload-dev": {
+        "psr-4": {
+            "Fixtures\\Prophecy\\": "fixtures"
         }
     },
 

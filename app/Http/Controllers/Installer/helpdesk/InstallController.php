@@ -168,12 +168,12 @@ class InstallController extends Controller
     {
         Cache::forever('step4', 'step4');
 
-        Session::set('default', $request->input('default'));
-        Session::set('host', $request->input('host'));
-        Session::set('databasename', $request->input('databasename'));
-        Session::set('username', $request->input('username'));
-        Session::set('password', $request->input('password'));
-        Session::set('port', $request->input('port'));
+        Session::put('default', $request->input('default'));
+        Session::put('host', $request->input('host'));
+        Session::put('databasename', $request->input('databasename'));
+        Session::put('username', $request->input('username'));
+        Session::put('password', $request->input('password'));
+        Session::put('port', $request->input('port'));
 
         return Redirect::route('database');
     }

@@ -11,13 +11,14 @@
 
 namespace Symfony\Component\VarDumper\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class HtmlDumperTest extends \PHPUnit_Framework_TestCase
+class HtmlDumperTest extends TestCase
 {
     public function testGet()
     {
@@ -59,8 +60,8 @@ class HtmlDumperTest extends \PHPUnit_Framework_TestCase
   <span class=sf-dump-key>4</span> => <span class=sf-dump-num>INF</span>
   <span class=sf-dump-key>5</span> => <span class=sf-dump-num>-INF</span>
   <span class=sf-dump-key>6</span> => <span class=sf-dump-num>{$intMax}</span>
-  "<span class=sf-dump-key>str</span>" => "<span class=sf-dump-str title="5 characters">d&%s;j&%s;</span>\\n"
-  <span class=sf-dump-key>7</span> => b"<span class=sf-dump-str title="2 binary or non-UTF-8 characters">&%s;</span>\\x00"
+  "<span class=sf-dump-key>str</span>" => "<span class=sf-dump-str title="5 characters">d&%s;j&%s;<span class=sf-dump-default>\\n</span></span>"
+  <span class=sf-dump-key>7</span> => b"<span class=sf-dump-str title="2 binary or non-UTF-8 characters">&%s;<span class=sf-dump-default>\\x00</span></span>"
   "<span class=sf-dump-key>[]</span>" => []
   "<span class=sf-dump-key>res</span>" => <span class=sf-dump-note>stream resource</span> <a class=sf-dump-ref>@{$res}</a><samp>
 %A  <span class=sf-dump-meta>wrapper_type</span>: "<span class=sf-dump-str title="9 characters">plainfile</span>"
@@ -75,7 +76,8 @@ class HtmlDumperTest extends \PHPUnit_Framework_TestCase
     +"<span class=sf-dump-public title="Runtime added dynamic property">bar</span>": "<span class=sf-dump-str title="3 characters">bar</span>"
   </samp>}
   "<span class=sf-dump-key>closure</span>" => <span class=sf-dump-note>Closure</span> {{$r}<samp>
-    <span class=sf-dump-meta>class</span>: "<span class=sf-dump-str title="48 characters">Symfony\Component\VarDumper\Tests\HtmlDumperTest</span>"
+    <span class=sf-dump-meta>class</span>: "<span class=sf-dump-str title="Symfony\Component\VarDumper\Tests\HtmlDumperTest
+48 characters"><span class=sf-dump-ellipsis>Symfony\Component\VarDumper\Tests</span>\HtmlDumperTest</span>"
     <span class=sf-dump-meta>this</span>: <abbr title="Symfony\Component\VarDumper\Tests\HtmlDumperTest" class=sf-dump-note>HtmlDumperTest</abbr> {{$r} &%s;}
     <span class=sf-dump-meta>parameters</span>: {<samp>
       <span class=sf-dump-meta>\$a</span>: {}
@@ -84,7 +86,8 @@ class HtmlDumperTest extends \PHPUnit_Framework_TestCase
         <span class=sf-dump-meta>default</span>: <span class=sf-dump-const>null</span>
       </samp>}
     </samp>}
-    <span class=sf-dump-meta>file</span>: "<span class=sf-dump-str title="%d characters">{$var['file']}</span>"
+    <span class=sf-dump-meta>file</span>: "<span class=sf-dump-str title="{$var['file']}
+%d characters"><span class=sf-dump-ellipsis>%sTests</span>%eFixtures%edumb-var.php</span>"
     <span class=sf-dump-meta>line</span>: "<span class=sf-dump-str title="%d characters">{$var['line']} to {$var['line']}</span>"
   </samp>}
   "<span class=sf-dump-key>line</span>" => <span class=sf-dump-num>{$var['line']}</span>
@@ -120,19 +123,41 @@ EOTXT
         $cloner = new VarCloner();
 
         $data = $cloner->cloneVar($var);
-        $out = fopen('php://memory', 'r+b');
-        $dumper->dump($data, $out);
-        rewind($out);
-        $out = stream_get_contents($out);
+        $out = $dumper->dump($data, true);
 
         $this->assertStringMatchesFormat(
-            <<<EOTXT
+            <<<'EOTXT'
 <foo></foo><bar>b"<span class=sf-dump-str title="7 binary or non-UTF-8 characters">&#1057;&#1083;&#1086;&#1074;&#1072;&#1088;&#1100;</span>"
 </bar>
 
 EOTXT
             ,
+            $out
+        );
+    }
 
+    public function testAppend()
+    {
+        $out = fopen('php://memory', 'r+b');
+
+        $dumper = new HtmlDumper();
+        $dumper->setDumpHeader('<foo></foo>');
+        $dumper->setDumpBoundaries('<bar>', '</bar>');
+        $cloner = new VarCloner();
+
+        $dumper->dump($cloner->cloneVar(123), $out);
+        $dumper->dump($cloner->cloneVar(456), $out);
+
+        $out = stream_get_contents($out, -1, 0);
+
+        $this->assertSame(<<<'EOTXT'
+<foo></foo><bar><span class=sf-dump-num>123</span>
+</bar>
+<bar><span class=sf-dump-num>456</span>
+</bar>
+
+EOTXT
+            ,
             $out
         );
     }

@@ -34,6 +34,24 @@ class ZipRepositoryTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($zip->fileExists('foo'));
     }
 
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Error: Failed to open idonotexist.zip! Error: ZipArchive::ER_
+     */
+    public function testOpenNonExistentZipThrowsException()
+    {
+        new ZipRepository('idonotexist.zip', false);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessageRegExp /Error: Failed to open (.*)ZipRepositoryTest.php! Error: ZipArchive::ER_NOZIP - Not a zip archive./
+     */
+    public function testOpenNonZipThrowsException()
+    {
+        new ZipRepository( __DIR__ . DIRECTORY_SEPARATOR . 'ZipRepositoryTest.php', false);
+    }
+
     public function testAddFile()
     {
         $this->mock->shouldReceive('addFile')->once()->with('bar', 'bar');

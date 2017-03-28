@@ -15,6 +15,13 @@ class Message
     protected $swift;
 
     /**
+     * CIDs of files embedded in the message.
+     *
+     * @var array
+     */
+    protected $embeddedFiles = [];
+
+    /**
      * Create a new message instance.
      *
      * @param  \Swift_Message  $swift
@@ -90,10 +97,17 @@ class Message
      *
      * @param  string|array  $address
      * @param  string|null  $name
+     * @param  bool  $override
      * @return $this
      */
-    public function cc($address, $name = null)
+    public function cc($address, $name = null, $override = false)
     {
+        if ($override) {
+            $this->swift->setCc($address, $name);
+
+            return $this;
+        }
+
         return $this->addAddresses($address, $name, 'Cc');
     }
 
@@ -102,10 +116,17 @@ class Message
      *
      * @param  string|array  $address
      * @param  string|null  $name
+     * @param  bool  $override
      * @return $this
      */
-    public function bcc($address, $name = null)
+    public function bcc($address, $name = null, $override = false)
     {
+        if ($override) {
+            $this->swift->setBcc($address, $name);
+
+            return $this;
+        }
+
         return $this->addAddresses($address, $name, 'Bcc');
     }
 
@@ -226,7 +247,13 @@ class Message
      */
     public function embed($file)
     {
-        return $this->swift->embed(Swift_Image::fromPath($file));
+        if (isset($this->embeddedFiles[$file])) {
+            return $this->embeddedFiles[$file];
+        }
+
+        return $this->embeddedFiles[$file] = $this->swift->embed(
+            Swift_Image::fromPath($file)
+        );
     }
 
     /**

@@ -27,13 +27,13 @@ class UnixPipes extends AbstractPipes
     /** @var bool */
     private $ptyMode;
     /** @var bool */
-    private $disableOutput;
+    private $haveReadSupport;
 
-    public function __construct($ttyMode, $ptyMode, $input, $disableOutput)
+    public function __construct($ttyMode, $ptyMode, $input, $haveReadSupport)
     {
         $this->ttyMode = (bool) $ttyMode;
         $this->ptyMode = (bool) $ptyMode;
-        $this->disableOutput = (bool) $disableOutput;
+        $this->haveReadSupport = (bool) $haveReadSupport;
 
         parent::__construct($input);
     }
@@ -48,7 +48,7 @@ class UnixPipes extends AbstractPipes
      */
     public function getDescriptors()
     {
-        if ($this->disableOutput) {
+        if (!$this->haveReadSupport) {
             $nullstream = fopen('/dev/null', 'c');
 
             return array(
@@ -120,7 +120,7 @@ class UnixPipes extends AbstractPipes
             do {
                 $data = fread($pipe, self::CHUNK_SIZE);
                 $read[$type] .= $data;
-            } while (isset($data[0]));
+            } while (isset($data[0]) && ($close || isset($data[self::CHUNK_SIZE - 1])));
 
             if (!isset($read[$type][0])) {
                 unset($read[$type]);
@@ -138,21 +138,16 @@ class UnixPipes extends AbstractPipes
     /**
      * {@inheritdoc}
      */
-    public function areOpen()
+    public function haveReadSupport()
     {
-        return (bool) $this->pipes;
+        return $this->haveReadSupport;
     }
 
     /**
-     * Creates a new UnixPipes instance.
-     *
-     * @param Process         $process
-     * @param string|resource $input
-     *
-     * @return UnixPipes
+     * {@inheritdoc}
      */
-    public static function create(Process $process, $input)
+    public function areOpen()
     {
-        return new static($process->isTty(), $process->isPty(), $input, $process->isOutputDisabled());
+        return (bool) $this->pipes;
     }
 }

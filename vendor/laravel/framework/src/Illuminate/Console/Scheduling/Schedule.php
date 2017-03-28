@@ -2,11 +2,20 @@
 
 namespace Illuminate\Console\Scheduling;
 
+use Illuminate\Console\Application;
+use Illuminate\Container\Container;
 use Symfony\Component\Process\ProcessUtils;
-use Symfony\Component\Process\PhpExecutableFinder;
+use Illuminate\Contracts\Cache\Repository as Cache;
 
 class Schedule
 {
+    /**
+     * The cache store implementation.
+     *
+     * @var \Illuminate\Contracts\Cache\Repository
+     */
+    protected $cache;
+
     /**
      * All of the events on the schedule.
      *
@@ -15,15 +24,26 @@ class Schedule
     protected $events = [];
 
     /**
+     * Create a new event instance.
+     *
+     * @param  \Illuminate\Contracts\Cache\Repository  $cache
+     * @return void
+     */
+    public function __construct(Cache $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
      * Add a new callback event to the schedule.
      *
-     * @param  string  $callback
+     * @param  string|callable  $callback
      * @param  array   $parameters
      * @return \Illuminate\Console\Scheduling\Event
      */
     public function call($callback, array $parameters = [])
     {
-        $this->events[] = $event = new CallbackEvent($callback, $parameters);
+        $this->events[] = $event = new CallbackEvent($this->cache, $callback, $parameters);
 
         return $event;
     }
@@ -37,19 +57,26 @@ class Schedule
      */
     public function command($command, array $parameters = [])
     {
-        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
-
-        if (defined('HHVM_VERSION')) {
-            $binary .= ' --php';
+        if (class_exists($command)) {
+            $command = Container::getInstance()->make($command)->getName();
         }
 
-        if (defined('ARTISAN_BINARY')) {
-            $artisan = ProcessUtils::escapeArgument(ARTISAN_BINARY);
-        } else {
-            $artisan = 'artisan';
-        }
+        return $this->exec(
+            Application::formatCommandString($command), $parameters
+        );
+    }
 
-        return $this->exec("{$binary} {$artisan} {$command}", $parameters);
+    /**
+     * Add a new job callback event to the schedule.
+     *
+     * @param  object|string  $job
+     * @return \Illuminate\Console\Scheduling\Event
+     */
+    public function job($job)
+    {
+        return $this->call(function () use ($job) {
+            dispatch(is_string($job) ? resolve($job) : $job);
+        })->name(is_string($job) ? $job : get_class($job));
     }
 
     /**
@@ -65,7 +92,7 @@ class Schedule
             $command .= ' '.$this->compileParameters($parameters);
         }
 
-        $this->events[] = $event = new Event($command);
+        $this->events[] = $event = new Event($this->cache, $command);
 
         return $event;
     }
@@ -79,18 +106,16 @@ class Schedule
     protected function compileParameters(array $parameters)
     {
         return collect($parameters)->map(function ($value, $key) {
-            return is_numeric($key) ? $value : $key.'='.(is_numeric($value) ? $value : ProcessUtils::escapeArgument($value));
-        })->implode(' ');
-    }
+            if (is_array($value)) {
+                $value = collect($value)->map(function ($value) {
+                    return ProcessUtils::escapeArgument($value);
+                })->implode(' ');
+            } elseif (! is_numeric($value) && ! preg_match('/^(-.$|--.*)/i', $value)) {
+                $value = ProcessUtils::escapeArgument($value);
+            }
 
-    /**
-     * Get all of the events on the schedule.
-     *
-     * @return array
-     */
-    public function events()
-    {
-        return $this->events;
+            return is_numeric($key) ? $value : "{$key}={$value}";
+        })->implode(' ');
     }
 
     /**
@@ -101,8 +126,16 @@ class Schedule
      */
     public function dueEvents($app)
     {
-        return array_filter($this->events, function ($event) use ($app) {
-            return $event->isDue($app);
-        });
+        return collect($this->events)->filter->isDue($app);
+    }
+
+    /**
+     * Get all of the events on the schedule.
+     *
+     * @return array
+     */
+    public function events()
+    {
+        return $this->events;
     }
 }

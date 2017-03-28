@@ -33,6 +33,23 @@ interface RepositoryInterface
     public function addFile($pathToFile, $pathInArchive);
 
     /**
+     * Add a file to the opened Archive using its contents
+     *
+     * @param $name
+     * @param $content
+     * @return void
+     */
+    public function addFromString($name, $content);
+
+    /**
+     * Add an empty directory
+     *
+     * @param $dirName
+     * @return void
+     */
+    public function addEmptyDir($dirName);
+
+    /**
      * Remove a file permanently from the Archive
      *
      * @param $pathInArchive
@@ -72,6 +89,14 @@ interface RepositoryInterface
      * @return boolean
      */
     public function fileExists($fileInArchive);
+
+    /**
+     * Sets the password to be used for decompressing
+     *
+     * @param $password
+     * @return boolean
+     */
+    public function usePassword($password);
 
     /**
      * Returns the status of the archive as a string

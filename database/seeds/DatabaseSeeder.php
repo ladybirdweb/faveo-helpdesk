@@ -22,7 +22,6 @@ use App\Model\helpdesk\Theme\Widgets;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Status;
-use App\Model\helpdesk\Ticket\TicketStatusType;
 use App\Model\helpdesk\Utility\CountryCode;
 use App\Model\helpdesk\Utility\Date_format;
 use App\Model\helpdesk\Utility\Date_time_format;
@@ -35,7 +34,6 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\helpdesk\Workflow\WorkflowClose;
 use App\Model\kb\Settings;
-// use App\Model\helpdesk\Ticket\Ticket_Status;
 // Knowledge base
 use Illuminate\Database\Seeder;
 
@@ -205,32 +203,14 @@ class DatabaseSeeder extends Seeder
         foreach ($timezone as $name => $location) {
             Timezones::create(['name' => $name, 'location' => $location]);
         }
-
-        /* Ticket Status Type */
-        TicketStatusType::create(['id' => '1', 'name' => 'open']);
-        TicketStatusType::create(['id' => '2', 'name' => 'closed']);
-        TicketStatusType::create(['id' => '3', 'name' => 'archieved']);
-        TicketStatusType::create(['id' => '4', 'name' => 'deleted']);
-
         /* Ticket status */
-        Ticket_status::create(['name' => 'Open', 'default' => '1', 'visibility_for_client' => '1', 'message' => 'Ticket have been Reopened by {!!$user!!}', 'allow_client' => '1', 'visibility_for_agent' => '1', 'purpose_of_status' => '1', 'secondary_status' => null, 'send_email' => '0', 'order' => '1', 'icon' => 'fa fa-folder-open-o', 'icon_color' => '#ff0000']);
-
-        Ticket_status::create(['name' => 'Resolved', 'default' => null, 'visibility_for_client' => '1', 'message' => 'Ticket have been Resolved by {!!$user!!}', 'allow_client' => '1', 'visibility_for_agent' => '1', 'purpose_of_status' => '2', 'secondary_status' => null, 'send_email' => '0', 'order' => '2', 'icon' => 'fa fa-check-circle-o', 'icon_color' => '#008000']);
-
-        Ticket_status::create(['name' => 'Closed', 'default' => '1', 'visibility_for_client' => '1', 'message' => 'Ticket have been Closed by {!!$user!!}', 'allow_client' => '1', 'visibility_for_agent' => '1', 'purpose_of_status' => '2', 'secondary_status' => null, 'send_email' => '1', 'order' => '3', 'icon' => 'fa fa-check', 'icon_color' => '#008000']);
-
-        Ticket_status::create(['name' => 'Archived', 'default' => null, 'visibility_for_client' => '1', 'message' => 'Ticket have been Archived by {!!$user!!}', 'allow_client' => '1', 'visibility_for_agent' => '1', 'purpose_of_status' => '3', 'secondary_status' => null, 'send_email' => '0', 'order' => '4', 'icon' => 'fa fa-trash', 'icon_color' => '#ff0000']);
-
-        Ticket_status::create(['name' => 'Deleted', 'default' => '1', 'visibility_for_client' => '1', 'message' => 'Ticket have been Deleted by {!!$user!!}', 'allow_client' => '1', 'visibility_for_agent' => '1', 'purpose_of_status' => '4', 'secondary_status' => null, 'send_email' => '0', 'order' => '5', 'icon' => 'fa fa-trash', 'icon_color' => '#ff0000']);
-
-        // /* Ticket status */
-        // Ticket_status::create(['name' => 'Open', 'state' => 'open', 'mode' => '3', 'message' => 'Ticket have been Reopened by', 'flags' => '0', 'sort' => '1', 'properties' => 'Open tickets.']);
-        // Ticket_status::create(['name' => 'Resolved', 'state' => 'closed', 'mode' => '1', 'message' => 'Ticket have been Resolved by', 'flags' => '0', 'sort' => '2', 'properties' => 'Resolved tickets.']);
-        // Ticket_status::create(['name' => 'Closed', 'state' => 'closed', 'mode' => '3', 'message' => 'Ticket have been Closed by', 'flags' => '0', 'sort' => '3', 'properties' => 'Closed tickets. Tickets will still be accessible on client and staff panels.']);
-        // Ticket_status::create(['name' => 'Archived', 'state' => 'archived', 'mode' => '3', 'message' => 'Ticket have been Archived by', 'flags' => '0', 'sort' => '4', 'properties' => 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.']);
-        // Ticket_status::create(['name' => 'Deleted', 'state' => 'deleted', 'mode' => '3', 'message' => 'Ticket have been Deleted by', 'flags' => '0', 'sort' => '5', 'properties' => 'Tickets queued for deletion. Not accessible on ticket queues.']);
-        // Ticket_status::create(['name' => 'Unverified', 'state' => 'unverified', 'mode' => '3', 'message' => 'User account verification required.', 'flags' => '0', 'sort' => '6', 'properties' => 'Ticket will be open after user verifies his/her account.']);
-        // Ticket_status::create(['name' => 'Request Approval', 'state' => 'unverified', 'mode' => '3', 'message' => 'Approval requested by', 'flags' => '0', 'sort' => '7', 'properties' => 'Ticket will be approve  after Admin verifies  this ticket']);
+        Ticket_status::create(['name' => 'Open', 'state' => 'open', 'mode' => '3', 'message' => 'Ticket have been Reopened by', 'flags' => '0', 'sort' => '1', 'properties' => 'Open tickets.']);
+        Ticket_status::create(['name' => 'Resolved', 'state' => 'closed', 'mode' => '1', 'message' => 'Ticket have been Resolved by', 'flags' => '0', 'sort' => '2', 'properties' => 'Resolved tickets.']);
+        Ticket_status::create(['name' => 'Closed', 'state' => 'closed', 'mode' => '3', 'message' => 'Ticket have been Closed by', 'flags' => '0', 'sort' => '3', 'properties' => 'Closed tickets. Tickets will still be accessible on client and staff panels.']);
+        Ticket_status::create(['name' => 'Archived', 'state' => 'archived', 'mode' => '3', 'message' => 'Ticket have been Archived by', 'flags' => '0', 'sort' => '4', 'properties' => 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.']);
+        Ticket_status::create(['name' => 'Deleted', 'state' => 'deleted', 'mode' => '3', 'message' => 'Ticket have been Deleted by', 'flags' => '0', 'sort' => '5', 'properties' => 'Tickets queued for deletion. Not accessible on ticket queues.']);
+        Ticket_status::create(['name' => 'Unverified', 'state' => 'unverified', 'mode' => '3', 'message' => 'User account verification required.', 'flags' => '0', 'sort' => '6', 'properties' => 'Ticket will be open after user verifies his/her account.']);
+        Ticket_status::create(['name' => 'Request Approval', 'state' => 'unverified', 'mode' => '3', 'message' => 'Approval requested by', 'flags' => '0', 'sort' => '7', 'properties' => 'Ticket will be approve  after Admin verifies  this ticket']);
 
         /* Ticket priority */
         Ticket_priority::create(['priority' => 'Low', 'status' => 1, 'priority_desc' => 'Low', 'priority_color' => '#00a65a', 'priority_urgency' => '4', 'ispublic' => '1']);

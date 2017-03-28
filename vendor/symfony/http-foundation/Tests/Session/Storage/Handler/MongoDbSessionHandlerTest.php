@@ -6,18 +6,19 @@
  * (c) Fabien Potencier <fabien@symfony.com>
  *
  * For the full copyright and license information, please view the LICENSE
- * file this was distributed with this source code.
+ * file that was distributed with this source code.
  */
 
 namespace Symfony\Component\HttpFoundation\Tests\Session\Storage\Handler;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\MongoDbSessionHandler;
 
 /**
  * @author Markus Bachmann <markus.bachmann@bachi.biz>
  * @group time-sensitive
  */
-class MongoDbSessionHandlerTest extends \PHPUnit_Framework_TestCase
+class MongoDbSessionHandlerTest extends TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -106,7 +107,7 @@ class MongoDbSessionHandlerTest extends \PHPUnit_Framework_TestCase
 
                 if (phpversion('mongodb')) {
                     $this->assertInstanceOf('MongoDB\BSON\UTCDateTime', $criteria[$this->options['expiry_field']]['$gte']);
-                    $this->assertGreaterThanOrEqual(round(intval((string) $criteria[$this->options['expiry_field']]['$gte']) / 1000), $testTimeout);
+                    $this->assertGreaterThanOrEqual(round(((int) $criteria[$this->options['expiry_field']]['$gte']) / 1000), $testTimeout);
                 } else {
                     $this->assertInstanceOf('MongoDate', $criteria[$this->options['expiry_field']]['$gte']);
                     $this->assertGreaterThanOrEqual($criteria[$this->options['expiry_field']]['$gte']->sec, $testTimeout);
@@ -164,7 +165,7 @@ class MongoDbSessionHandlerTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals('bar', $data[$this->options['data_field']]->getData());
             $this->assertInstanceOf('MongoDB\BSON\UTCDateTime', $data[$this->options['time_field']]);
             $this->assertInstanceOf('MongoDB\BSON\UTCDateTime', $data[$this->options['expiry_field']]);
-            $this->assertGreaterThanOrEqual($expectedExpiry, round(intval((string) $data[$this->options['expiry_field']]) / 1000));
+            $this->assertGreaterThanOrEqual($expectedExpiry, round(((int) $data[$this->options['expiry_field']]) / 1000));
         } else {
             $this->assertEquals('bar', $data[$this->options['data_field']]->bin);
             $this->assertInstanceOf('MongoDate', $data[$this->options['time_field']]);
@@ -287,7 +288,7 @@ class MongoDbSessionHandlerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(function ($criteria) {
                 if (phpversion('mongodb')) {
                     $this->assertInstanceOf('MongoDB\BSON\UTCDateTime', $criteria[$this->options['expiry_field']]['$lt']);
-                    $this->assertGreaterThanOrEqual(time() - 1, round(intval((string) $criteria[$this->options['expiry_field']]['$lt']) / 1000));
+                    $this->assertGreaterThanOrEqual(time() - 1, round(((int) $criteria[$this->options['expiry_field']]['$lt']) / 1000));
                 } else {
                     $this->assertInstanceOf('MongoDate', $criteria[$this->options['expiry_field']]['$lt']);
                     $this->assertGreaterThanOrEqual(time() - 1, $criteria[$this->options['expiry_field']]['$lt']->sec);

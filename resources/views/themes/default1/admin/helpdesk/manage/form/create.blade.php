@@ -60,7 +60,7 @@ class="active"
                     <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
                         {!! Form::label('type',Lang::get('lang.type')) !!}
                         {!! $errors->first('type', '<spam class="help-block">:message</spam>') !!}
-                        {!!Form::select('type', [''=>'Select a Type','types'=>$type->lists('type','id')] ,null,['class' => 'form-control'] ) !!}
+                        {!!Form::select('type', [''=>'Select a Type','types'=>$type->pluck('type','id')] ,null,['class' => 'form-control'] ) !!}
                     </div>
                 </div>
                 <!-- declare table head Vissibility -->
@@ -68,7 +68,7 @@ class="active"
                     <div class="form-group {{ $errors->has('visibility') ? 'has-error' : '' }}">
                         {!! Form::label('visibility',Lang::get('lang.visibility')) !!}
                         {!! $errors->first('visibility', '<spam class="help-block">:message</spam>') !!}
-                        {!!Form::select('visibility', [''=>'Select a Visibility','visibilities' =>$visibility->lists('visibility','id')],null,['class' => 'form-control'] ) !!}
+                        {!!Form::select('visibility', [''=>'Select a Visibility','visibilities' =>$visibility->pluck('visibility','id')],null,['class' => 'form-control'] ) !!}
                     </div>
                 </div>
                 <!-- declare table head variable -->

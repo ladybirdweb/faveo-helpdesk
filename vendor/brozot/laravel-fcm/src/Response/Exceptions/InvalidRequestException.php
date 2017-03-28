@@ -1,25 +1,25 @@
-<?php namespace LaravelFCM\Response\Exceptions;
+<?php
+
+namespace LaravelFCM\Response\Exceptions;
 
 use Exception;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 /**
- * Class InvalidRequestException
- *
- * @package LaravelFCM\Response\Exceptions
+ * Class InvalidRequestException.
  */
-class InvalidRequestException extends Exception {
+class InvalidRequestException extends Exception
+{
+    /**
+     * InvalidRequestException constructor.
+     *
+     * @param GuzzleResponse $response
+     */
+    public function __construct(GuzzleResponse $response)
+    {
+        $code = $response->getStatusCode();
+        $responseBody = $response->getBody()->getContents();
 
-	/**
-	 * InvalidRequestException constructor.
-	 *
-	 * @param GuzzleResponse $response
-	 */
-	public function __construct(GuzzleResponse $response)
-	{
-		$code = $response->getStatusCode();
-		$responseBody = $response->getBody()->getContents();
-
-		parent::__construct($responseBody, $code);
-	}
+        parent::__construct($responseBody, $code);
+    }
 }

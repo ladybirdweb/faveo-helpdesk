@@ -56,18 +56,6 @@
         <script src="{{asset("lb-faveo/js/jquery2.1.1.min.js")}}" type="text/javascript"></script>
 
         @yield('HeadInclude')
-        <style type="text/css">
-            #bar {
-                border-right: 1px solid rgba(204, 204, 204, 0.41);
-            }
-            #bar a{
-                color: #FFF;
-            }
-            #bar a:hover, #bar a:focus{
-                background-color: #357CA5;
-            }
-
-        </style>
     </head>
     <body class="skin-blue fixed">
         <div class="wrapper">
@@ -185,16 +173,6 @@
                             </li>
                         </ul>
                         </li>
-                        <li class="dropdown">
-                            <?php $src = Lang::getLocale().'.png'; ?>
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                @foreach($langs as $key => $value)
-                                            <?php $src = $key.".png"; ?>
-                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value}}</a></li>
-                                @endforeach       
-                            </ul>
-                        </li>
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -229,7 +207,7 @@
                         </ul>
 
                     </div>
-                    
+
                 </nav>
             </header>
             <!-- Left side column. contains the logo and sidebar -->
@@ -340,15 +318,15 @@
                 </section>
                 <!-- /.sidebar -->
             </aside>
-
-            <!-- Right side column. Contains the navbar and content of the page -->
-            <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
-                <?php
+<?php
 $agent_group = $auth_user_assign_group;
 $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first();
 ?>
-                    <div class="tab-content" style="background-color: #80B5D3; position: fixed; width:100% ;padding: 0 0px 0 0px; z-index:999">                    <div class="collapse navbar-collapse" id="navbar-collapse">
+            <!-- Right side column. Contains the navbar and content of the page -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <div class="tab-content" style="background-color: white;padding: 0 0px 0 20px">
+                    <div class="collapse navbar-collapse" id="navbar-collapse">
                         <div class="tabs-content">
                             @if($replacetop==0)
                             <div class="tabs-pane @yield('dashboard-bar')"  id="tabA">
@@ -390,33 +368,12 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                         </div>
                     </div>
                 </div>
-                @if ($segment == '/dashboard')
-                <!-- do nothing-->
-                @else
-                <br/><br/>
-                @endif
                 <section class="content-header">
                     @yield('PageHeader')
                     {!! Breadcrumbs::renderIfExists() !!}
                 </section>
                 <!-- Main content -->
                 <section class="content">
-                @if (!$is_mail_conigured)
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="callout callout-warning lead">
-                                <h4><i class="fa fa-exclamation-triangle"></i>&nbsp;{{Lang::get('Alert')}}</h4>
-                                <p style="font-size:0.8em">
-                                @if (\Auth::user()->role == 'admin')
-                                    {{Lang::get('lang.system-outgoing-incoming-mail-not-configured')}}&nbsp;<a href="{{URL::route('emails.create')}}">{{Lang::get('lang.confihure-the-mail-now')}}</a>
-                                @else
-                                    {{Lang::get('lang.system-mail-not-configured-agent-message')}}
-                                @endif
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                @endif
                     @yield('content')
                 </section><!-- /.content -->
             </div>
@@ -577,11 +534,6 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
     
     });        
 </script>
-<script type="text/javascript">
-                function changeLang(lang) {
-                    location.href = "swtich-language/"+lang;
-                }
-            </script>
 <?php Event::fire('show.calendar.script', array()); ?>
 <?php Event::fire('load-calendar-scripts', array()); ?>
         @yield('FooterInclude')

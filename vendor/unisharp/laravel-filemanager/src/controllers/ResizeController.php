@@ -1,17 +1,15 @@
 <?php namespace Unisharp\Laravelfilemanager\controllers;
 
-use Unisharp\Laravelfilemanager\controllers\Controller;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\View;
 use Intervention\Image\Facades\Image;
+use Unisharp\Laravelfilemanager\Events\ImageIsResizing;
+use Unisharp\Laravelfilemanager\Events\ImageWasResized;
 
 /**
  * Class ResizeController
  * @package Unisharp\Laravelfilemanager\controllers
  */
-class ResizeController extends LfmController {
-
+class ResizeController extends LfmController
+{
     /**
      * Dipsplay image for resizing
      *
@@ -20,11 +18,11 @@ class ResizeController extends LfmController {
     public function getResize()
     {
         $ratio = 1.0;
-        $image = Input::get('img');
+        $image = request('img');
 
-        $path_to_image   = parent::getPath('directory') . $image;
-        $original_width  = Image::make($path_to_image)->width();
-        $original_height = Image::make($path_to_image)->height();
+        $original_image  = Image::make(parent::getCurrentPath($image));
+        $original_width  = $original_image->width();
+        $original_height = $original_image->height();
 
         $scaled = false;
 
@@ -45,8 +43,8 @@ class ResizeController extends LfmController {
             $scaled = true;
         }
 
-        return View::make('laravel-filemanager::resize')
-            ->with('img', parent::getUrl('directory') . $image)
+        return view('laravel-filemanager::resize')
+            ->with('img', parent::getFileUrl($image))
             ->with('height', number_format($height, 0))
             ->with('width', $width)
             ->with('original_height', $original_height)
@@ -55,23 +53,23 @@ class ResizeController extends LfmController {
             ->with('ratio', $ratio);
     }
 
-
     public function performResize()
     {
-        $img    = Input::get('img');
-        $dataX  = Input::get('dataX');
-        $dataY  = Input::get('dataY');
-        $height = Input::get('dataHeight');
-        $width  = Input::get('dataWidth');
+        $img    = request('img');
+        $dataX  = request('dataX');
+        $dataY  = request('dataY');
+        $height = request('dataHeight');
+        $width  = request('dataWidth');
+        $image_path = public_path() . $img;
 
         try {
-            Image::make(public_path() . $img)->resize($width, $height)->save();
-            return "OK";
+            event(new ImageIsResizing($image_path));
+            Image::make($image_path)->resize($width, $height)->save();
+            event(new ImageWasResized($image_path));
+            return $this->success_response;
         } catch (Exception $e) {
             return "width : " . $width . " height: " . $height;
             return $e;
         }
-
     }
-
 }

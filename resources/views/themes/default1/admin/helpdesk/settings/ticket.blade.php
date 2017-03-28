@@ -89,7 +89,7 @@ class="active"
             <div class="col-md-6">
                 <div class="form-group {{ $errors->has('priority') ? 'has-error' : '' }}">
                     {!! Form::label('priority',Lang::get('lang.default_priority')) !!}
-                    {!!Form::select('priority', [''=>'select a priority','Priorities'=>$priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control']) !!}
+                    {!!Form::select('priority', [''=>'select a priority','Priorities'=>$priority->pluck('priority_desc','priority_id')->toArray()],null,['class' => 'form-control']) !!}
                 </div>
             </div>
         </div>
@@ -98,14 +98,14 @@ class="active"
             <!-- <div class="col-md-4">
                 <div class="form-group {{ $errors->has('sla') ? 'has-error' : '' }}">
                     {!! Form::label('sla',Lang::get('lang.default_sla')) !!}
-                    {!!Form::select('sla', $slas->lists('grace_period','id'),null,['class' => 'form-control']) !!}
+                    {!!Form::select('sla', $slas->pluck('grace_period','id'),null,['class' => 'form-control']) !!}
                 </div>
             </div> -->
             <!-- Default Help Topic:  Dropdowm from Help topic table	 -->
             <!-- <div class="col-md-4">
                 <div class="form-group {{ $errors->has('help_topic') ? 'has-error' : '' }}">
                     {!! Form::label('help_topic',Lang::get('lang.default_help_topic')) !!}
-                    {!!Form::select('help_topic', $topics->lists('topic','id'),null,['class' => 'form-control']) !!}
+                    {!!Form::select('help_topic', $topics->pluck('topic','id'),null,['class' => 'form-control']) !!}
                 </div>
             </div>
             --><!-- Agent Collision Avoidance Duration: text-number   -minutes  -->

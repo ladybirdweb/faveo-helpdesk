@@ -82,7 +82,7 @@ class Csrf extends AbstractValidator
             $options = ArrayUtils::iteratorToArray($options);
         }
 
-        if (!is_array($options)) {
+        if (! is_array($options)) {
             $options = (array) $options;
         }
 
@@ -124,7 +124,7 @@ class Csrf extends AbstractValidator
         $tokenFromValue = $this->getTokenFromHash($value);
         $tokenFromHash = $this->getTokenFromHash($hash);
 
-        if (!$tokenFromValue || !$tokenFromHash || ($tokenFromValue !== $tokenFromHash)) {
+        if (! $tokenFromValue || ! $tokenFromHash || ($tokenFromValue !== $tokenFromHash)) {
             $this->error(self::NOT_SAME);
             return false;
         }

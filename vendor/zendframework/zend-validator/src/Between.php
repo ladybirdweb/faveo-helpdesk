@@ -64,14 +64,14 @@ class Between extends AbstractValidator
         if ($options instanceof Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
         }
-        if (!is_array($options)) {
+        if (! is_array($options)) {
             $options = func_get_args();
             $temp['min'] = array_shift($options);
-            if (!empty($options)) {
+            if (! empty($options)) {
                 $temp['max'] = array_shift($options);
             }
 
-            if (!empty($options)) {
+            if (! empty($options)) {
                 $temp['inclusive'] = array_shift($options);
             }
 
@@ -79,7 +79,7 @@ class Between extends AbstractValidator
         }
 
         if (count($options) !== 2
-            && (!array_key_exists('min', $options) || !array_key_exists('max', $options))
+            && (! array_key_exists('min', $options) || ! array_key_exists('max', $options))
         ) {
             throw new Exception\InvalidArgumentException("Missing option. 'min' and 'max' have to be given");
         }

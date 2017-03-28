@@ -14,7 +14,6 @@ use PHPExcel_Style_Font;
 use PHPExcel_Style_Border;
 use PHPExcel_Worksheet_Drawing;
 use PHPExcel_Style_Alignment;
-use Illuminate\Support\Facades\Config;
 use Maatwebsite\Excel\Parsers\CssParser;
 use Maatwebsite\Excel\Classes\LaravelExcelWorksheet;
 
@@ -36,11 +35,11 @@ class Html extends PHPExcel_Reader_HTML {
      * Style per range
      * @var array
      */
-    protected $styles = array();
+    protected $styles = [];
 
-    protected $_dataArray = array();
+    protected $_dataArray = [];
 
-    protected $_nestedColumn = array('A');
+    protected $_nestedColumn = ['A'];
 
     /**
      * @var int
@@ -63,7 +62,7 @@ class Html extends PHPExcel_Reader_HTML {
      * HTML tags formatting settings
      * @var array
      */
-    protected $_formats = array();
+    protected $_formats = [];
 
     /**
      * The current colspan
@@ -127,7 +126,7 @@ class Html extends PHPExcel_Reader_HTML {
      */
     protected function setStyleFormats()
     {
-        $this->_formats = Config::get('excel.views.styles', array());
+        $this->_formats = config('excel.views.styles', []);
     }
 
     /**
@@ -273,7 +272,7 @@ class Html extends PHPExcel_Reader_HTML {
             // If is a dom element
             elseif ( $child instanceof DOMElement )
             {
-                $attributeArray = array();
+                $attributeArray = [];
 
                 // Set row (=parent) styles
                 if ( isset($this->styles[$row]) )
@@ -921,7 +920,7 @@ class Html extends PHPExcel_Reader_HTML {
 
         if ( $horizontal )
             $cells->getAlignment()->applyFromArray(
-                array('horizontal' => $horizontal)
+                ['horizontal' => $horizontal]
             );
     }
 
@@ -960,7 +959,7 @@ class Html extends PHPExcel_Reader_HTML {
 
         if ( $vertical )
             $cells->getAlignment()->applyFromArray(
-                array('vertical' => $vertical)
+                ['vertical' => $vertical]
             );
     }
 
@@ -988,7 +987,7 @@ class Html extends PHPExcel_Reader_HTML {
      * @param                        array @styles
      * @return void
      */
-    protected function parseCssAttributes($sheet, $column, $row, $styles = array())
+    protected function parseCssAttributes($sheet, $column, $row, $styles = [])
     {
         foreach ($styles as $tag)
         {
@@ -1033,10 +1032,10 @@ class Html extends PHPExcel_Reader_HTML {
                 $value = $this->getColor($value);
 
                 $cells->getFill()->applyFromArray(
-                    array(
+                    [
                         'type'  => PHPExcel_Style_Fill::FILL_SOLID,
-                        'color' => array('rgb' => $value)
-                    )
+                        'color' => ['rgb' => $value]
+                    ]
                 );
 
                 break;
@@ -1045,7 +1044,7 @@ class Html extends PHPExcel_Reader_HTML {
             case 'color':
                 $value = $this->getColor($value);
                 $cells->getFont()->getColor()->applyFromArray(
-                    array('rgb' => $value)
+                    ['rgb' => $value]
                 );
                 break;
 
@@ -1069,7 +1068,7 @@ class Html extends PHPExcel_Reader_HTML {
             // FONT FACE
             case 'font-family':
                 $cells->getFont()->applyFromArray(
-                    array('name' => $value)
+                    ['name' => $value]
                 );
                 break;
 
@@ -1113,7 +1112,7 @@ class Html extends PHPExcel_Reader_HTML {
 
                 if ( $horizontal )
                     $cells->getAlignment()->applyFromArray(
-                        array('horizontal' => $horizontal)
+                        ['horizontal' => $horizontal]
                     );
 
                 break;
@@ -1144,7 +1143,7 @@ class Html extends PHPExcel_Reader_HTML {
 
                 if ( $vertical )
                     $cells->getAlignment()->applyFromArray(
-                        array('vertical' => $vertical)
+                        ['vertical' => $vertical]
                     );
                 break;
 
@@ -1152,67 +1151,77 @@ class Html extends PHPExcel_Reader_HTML {
             case 'border':
             case 'borders':
                 $borders = explode(' ', $value);
-                $style = $borders[1];
-                $color = end($borders);
-                $color = $this->getColor($color);
-                $borderStyle = $this->borderStyle($style);
+                if (!empty($borders[1])) {
+                    $style = $borders[1];
+                    $color = end($borders);
+                    $color = $this->getColor($color);
+                    $borderStyle = $this->borderStyle($style);
 
-                $cells->getBorders()->applyFromArray(
-                    array('allborders' => array('style' => $borderStyle, 'color' => array('rgb' => $color)))
-                );
+                    $cells->getBorders()->applyFromArray(
+                        ['allborders' => ['style' => $borderStyle, 'color' => ['rgb' => $color]]]
+                    );
+                }
                 break;
 
             // Border-top
             case 'border-top':
                 $borders = explode(' ', $value);
-                $style = $borders[1];
-                $color = end($borders);
-                $color = $this->getColor($color);
+                if (!empty($borders[1])) {
+                    $style = $borders[1];
+                    $color = end($borders);
+                    $color = $this->getColor($color);
 
-                $borderStyle = $this->borderStyle($style);
+                    $borderStyle = $this->borderStyle($style);
 
-                $cells->getBorders()->getTop()->applyFromArray(
-                    array('style' => $borderStyle, 'color' => array('rgb' => $color))
-                );
+                    $cells->getBorders()->getTop()->applyFromArray(
+                        ['style' => $borderStyle, 'color' => ['rgb' => $color]]
+                    );
+                }
                 break;
 
             // Border-bottom
             case 'border-bottom':
                 $borders = explode(' ', $value);
-                $style = $borders[1];
-                $color = end($borders);
-                $color = $this->getColor($color);
-                $borderStyle = $this->borderStyle($style);
+                if (!empty($borders[1])) {
+                    $style = $borders[1];
+                    $color = end($borders);
+                    $color = $this->getColor($color);
+                    $borderStyle = $this->borderStyle($style);
 
-                $cells->getBorders()->getBottom()->applyFromArray(
-                    array('style' => $borderStyle, 'color' => array('rgb' => $color))
-                );
+                    $cells->getBorders()->getBottom()->applyFromArray(
+                        ['style' => $borderStyle, 'color' => ['rgb' => $color]]
+                    );
+                }
                 break;
 
             // Border-right
             case 'border-right':
                 $borders = explode(' ', $value);
-                $style = $borders[1];
-                $color = end($borders);
-                $color = $this->getColor($color);
-                $borderStyle = $this->borderStyle($style);
+                if (!empty($borders[1])) {
+                    $style = $borders[1];
+                    $color = end($borders);
+                    $color = $this->getColor($color);
+                    $borderStyle = $this->borderStyle($style);
 
-                $cells->getBorders()->getRight()->applyFromArray(
-                    array('style' => $borderStyle, 'color' => array('rgb' => $color))
-                );
+                    $cells->getBorders()->getRight()->applyFromArray(
+                        ['style' => $borderStyle, 'color' => ['rgb' => $color]]
+                    );
+                }
                 break;
 
             // Border-left
             case 'border-left':
                 $borders = explode(' ', $value);
-                $style = $borders[1];
-                $color = end($borders);
-                $color = $this->getColor($color);
-                $borderStyle = $this->borderStyle($style);
+                if (!empty($borders[1])) {
+                    $style = $borders[1];
+                    $color = end($borders);
+                    $color = $this->getColor($color);
+                    $borderStyle = $this->borderStyle($style);
 
-                $cells->getBorders()->getLeft()->applyFromArray(
-                    array('style' => $borderStyle, 'color' => array('rgb' => $color))
-                );
+                    $cells->getBorders()->getLeft()->applyFromArray(
+                        ['style' => $borderStyle, 'color' => ['rgb' => $color]]
+                    );
+                }
                 break;
 
             // wrap-text
@@ -1362,6 +1371,6 @@ class Html extends PHPExcel_Reader_HTML {
             }
         }
 
-        return array($column, $cellContent);
+        return [$column, $cellContent];
     }
 }

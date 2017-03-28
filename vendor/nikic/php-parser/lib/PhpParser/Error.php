@@ -62,6 +62,16 @@ class Error extends \RuntimeException
     }
 
     /**
+     * Sets the attributes of the node/token the error occured at.
+     *
+     * @param array $attributes
+     */
+    public function setAttributes(array $attributes) {
+        $this->attributes = $attributes;
+        $this->updateMessage();
+    }
+
+    /**
      * Sets the line of the PHP file the error occurred in.
      *
      * @param string $message Error message
@@ -120,6 +130,14 @@ class Error extends \RuntimeException
         return $this->toColumn($code, $this->attributes['endFilePos']);
     }
 
+    public function getMessageWithColumnInfo($code) {
+        return sprintf(
+            '%s from %d:%d to %d:%d', $this->getRawMessage(),
+            $this->getStartLine(), $this->getStartColumn($code),
+            $this->getEndLine(), $this->getEndColumn($code)
+        );
+    }
+
     private function toColumn($code, $pos) {
         if ($pos > strlen($code)) {
             throw new \RuntimeException('Invalid position information');
@@ -144,15 +162,5 @@ class Error extends \RuntimeException
         } else {
             $this->message .= ' on line ' . $this->getStartLine();
         }
-    }
-
-    /** @deprecated Use getStartLine() instead */
-    public function getRawLine() {
-        return $this->getStartLine();
-    }
-
-    /** @deprecated Use setStartLine() instead */
-    public function setRawLine($line) {
-        $this->setStartLine($line);
     }
 }

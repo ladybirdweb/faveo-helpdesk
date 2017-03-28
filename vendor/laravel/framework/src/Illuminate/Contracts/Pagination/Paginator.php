@@ -30,7 +30,7 @@ interface Paginator
     public function fragment($fragment = null);
 
     /**
-     * The the URL for the next page, or null.
+     * The URL for the next page, or null.
      *
      * @return string|null
      */
@@ -100,10 +100,11 @@ interface Paginator
     public function isEmpty();
 
     /**
-     * Render the paginator using a given Presenter.
+     * Render the paginator using a given view.
      *
-     * @param  \Illuminate\Contracts\Pagination\Presenter|null  $presenter
+     * @param  string|null  $view
+     * @param  array  $data
      * @return string
      */
-    public function render(Presenter $presenter = null);
+    public function render($view = null, $data = []);
 }

@@ -69,7 +69,6 @@
                         <nav class="navbar navbar-default site-navigation" role="navigation">
                             <ul class="nav navbar-nav navbar-menu">
                                 <li @yield('home')><a href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
-                                
                                 @if($system->first()->status == 1)
                                 <li @yield('submit')><a href="{{URL::route('form')}}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
                                 @endif
@@ -195,17 +194,6 @@
                                 </div>
                             </div><!-- #login-form -->
                             @endif
-                            <ul class="nav navbar-nav navbar-menu">
-                            <?php $src = Lang::getLocale().'.png'; ?>
-                                <li><a href="#"><img src="{{asset("lb-faveo/flags/$src")}}"></img></a>
-                                    <ul class="dropdown-menu">
-                                        @foreach($langs as $key => $value)
-                                            <?php $src = $key.".png"; ?>
-                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value}}</a></li>
-                                        @endforeach
-                                    </ul>
-                                </li>
-                                </ul>
                         </nav><!-- #site-navigation -->
                     </div><!-- #navbar -->
                     <div id="header-search" class="site-search clearfix" style="padding-bottom:5px"><!-- #header-search -->
@@ -458,11 +446,6 @@ $(function () {
         }
     });
 });
-            </script>
-            <script type="text/javascript">
-                function changeLang(lang) {
-                    location.href = "swtich-language/"+lang;
-                }
             </script>
           
     </body>

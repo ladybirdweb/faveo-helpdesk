@@ -40,14 +40,15 @@ class Ip extends AbstractValidator
      * Sets the options for this validator
      *
      * @param array|Traversable $options
-     * @throws Exception\InvalidArgumentException If there is any kind of IP allowed or $options is not an array or Traversable.
+     * @throws Exception\InvalidArgumentException If there is any kind of IP allowed or $options is not an array
+     *                                            or Traversable.
      * @return AbstractValidator
      */
     public function setOptions($options = [])
     {
         parent::setOptions($options);
 
-        if (!$this->options['allowipv4'] && !$this->options['allowipv6'] && !$this->options['allowipvfuture']) {
+        if (! $this->options['allowipv4'] && ! $this->options['allowipv6'] && ! $this->options['allowipvfuture']) {
             throw new Exception\InvalidArgumentException('Nothing to validate. Check your options');
         }
 
@@ -62,7 +63,7 @@ class Ip extends AbstractValidator
      */
     public function isValid($value)
     {
-        if (!is_string($value)) {
+        if (! is_string($value)) {
             $this->error(self::INVALID);
             return false;
         }
@@ -134,7 +135,7 @@ class Ip extends AbstractValidator
 
         if (strpos($value, '.')) {
             $lastcolon = strrpos($value, ':');
-            if (!($lastcolon && $this->validateIPv4(substr($value, $lastcolon + 1)))) {
+            if (! ($lastcolon && $this->validateIPv4(substr($value, $lastcolon + 1)))) {
                 return false;
             }
 

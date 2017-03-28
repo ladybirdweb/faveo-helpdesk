@@ -65,7 +65,9 @@ class Isbn extends AbstractValidator
                 $pattern = '/^[0-9]{13}$/';
                 $length  = 13;
             } else {
+                // @codingStandardsIgnoreStart
                 $pattern = "/^[0-9]{1,9}[{$sep}]{1}[0-9]{1,5}[{$sep}]{1}[0-9]{1,9}[{$sep}]{1}[0-9]{1,9}[{$sep}]{1}[0-9]{1}$/";
+                // @codingStandardsIgnoreEnd
                 $length  = 17;
             }
 
@@ -91,7 +93,7 @@ class Isbn extends AbstractValidator
      */
     public function isValid($value)
     {
-        if (!is_string($value) && !is_int($value)) {
+        if (! is_string($value) && ! is_int($value)) {
             $this->error(self::INVALID);
             return false;
         }
@@ -136,7 +138,7 @@ class Isbn extends AbstractValidator
     public function setSeparator($separator)
     {
         // check separator
-        if (!in_array($separator, ['-', ' ', ''])) {
+        if (! in_array($separator, ['-', ' ', ''])) {
             throw new Exception\InvalidArgumentException('Invalid ISBN separator.');
         }
 
@@ -164,7 +166,7 @@ class Isbn extends AbstractValidator
     public function setType($type)
     {
         // check type
-        if (!in_array($type, [self::AUTO, self::ISBN10, self::ISBN13])) {
+        if (! in_array($type, [self::AUTO, self::ISBN10, self::ISBN13])) {
             throw new Exception\InvalidArgumentException('Invalid ISBN type');
         }
 

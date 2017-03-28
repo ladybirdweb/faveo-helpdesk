@@ -1,4 +1,4 @@
-@if((sizeof($file_info) > 0) || (sizeof($directories) > 0))
+@if((sizeof($files) > 0) || (sizeof($directories) > 0))
 <table class="table table-condensed table-striped">
   <thead>
     <th style='width:50%;'>{{ Lang::get('laravel-filemanager::lfm.title-item') }}</th>
@@ -8,12 +8,12 @@
     <th>{{ Lang::get('laravel-filemanager::lfm.title-action') }}</th>
   </thead>
   <tbody>
-    @foreach($directories as $key => $dir_name)
+    @foreach($directories as $key => $directory)
     <tr>
       <td>
         <i class="fa fa-folder-o"></i>
-        <a class="folder-item pointer" data-id="{{ $dir_name['long'] }}">
-          {{ $dir_name['short'] }}
+        <a class="folder-item clickable" data-id="{{ $directory->path }}">
+          {{ $directory->name }}
         </a>
       </td>
       <td></td>
@@ -23,16 +23,12 @@
     </tr>
     @endforeach
 
-    @foreach($file_info as $file)
+    @foreach($files as $file)
     <tr>
       <td>
-        @if($type == 'Images')
-        <i class="fa fa-image"></i>
-        @else
         <i class="fa {{ $file['icon'] }}"></i>
-        @endif
         <?php $file_name = $file['name'];?>
-        <a href="javascript:useFile('{{ $file_name }}')">
+        <a href="javascript:useFile('{{ $file_name }}')" id="{{ $file_name }}" data-url="{{ $file['url'] }}">
           {{ $file_name }}
         </a>
         &nbsp;&nbsp;
@@ -47,22 +43,19 @@
         {{ $file['type'] }}
       </td>
       <td>
-        {{ date("Y-m-d h:m", $file['created']) }}
+        {{ date("Y-m-d h:m", $file['updated']) }}
       </td>
       <td>
         <a href="javascript:trash('{{ $file_name }}')">
           <i class="fa fa-trash fa-fw"></i>
         </a>
-        @if($type == 'Images')
+        @if($file['thumb'])
         <a href="javascript:cropImage('{{ $file_name }}')">
           <i class="fa fa-crop fa-fw"></i>
         </a>
         <a href="javascript:resizeImage('{{ $file_name }}')">
           <i class="fa fa-arrows fa-fw"></i>
         </a>
-        {{--<a href="javascript:notImp()">--}}
-        {{--<i class="fa fa-rotate-left fa-fw"></i>--}}
-        {{--</a>--}}
         @endif
       </td>
     </tr>

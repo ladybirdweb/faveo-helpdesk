@@ -3,18 +3,20 @@
 namespace Illuminate\Auth\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Console\AppNamespaceDetectorTrait;
+use Illuminate\Console\DetectsApplicationNamespace;
 
 class MakeAuthCommand extends Command
 {
-    use AppNamespaceDetectorTrait;
+    use DetectsApplicationNamespace;
 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:auth {--views : Only scaffold the authentication views}';
+    protected $signature = 'make:auth
+                    {--views : Only scaffold the authentication views}
+                    {--force : Overwrite existing views by default}';
 
     /**
      * The console command description.
@@ -33,10 +35,8 @@ class MakeAuthCommand extends Command
         'auth/register.stub' => 'auth/register.blade.php',
         'auth/passwords/email.stub' => 'auth/passwords/email.blade.php',
         'auth/passwords/reset.stub' => 'auth/passwords/reset.blade.php',
-        'auth/emails/password.stub' => 'auth/emails/password.blade.php',
         'layouts/app.stub' => 'layouts/app.blade.php',
         'home.stub' => 'home.blade.php',
-        'welcome.stub' => 'welcome.blade.php',
     ];
 
     /**
@@ -51,23 +51,19 @@ class MakeAuthCommand extends Command
         $this->exportViews();
 
         if (! $this->option('views')) {
-            $this->info('Installed HomeController.');
-
             file_put_contents(
                 app_path('Http/Controllers/HomeController.php'),
                 $this->compileControllerStub()
             );
 
-            $this->info('Updated Routes File.');
-
             file_put_contents(
-                app_path('Http/routes.php'),
+                base_path('routes/web.php'),
                 file_get_contents(__DIR__.'/stubs/make/routes.stub'),
                 FILE_APPEND
             );
         }
 
-        $this->comment('Authentication scaffolding generated successfully!');
+        $this->info('Authentication scaffolding generated successfully.');
     }
 
     /**
@@ -77,16 +73,12 @@ class MakeAuthCommand extends Command
      */
     protected function createDirectories()
     {
-        if (! is_dir(base_path('resources/views/layouts'))) {
-            mkdir(base_path('resources/views/layouts'), 0755, true);
+        if (! is_dir(resource_path('views/layouts'))) {
+            mkdir(resource_path('views/layouts'), 0755, true);
         }
 
-        if (! is_dir(base_path('resources/views/auth/passwords'))) {
-            mkdir(base_path('resources/views/auth/passwords'), 0755, true);
-        }
-
-        if (! is_dir(base_path('resources/views/auth/emails'))) {
-            mkdir(base_path('resources/views/auth/emails'), 0755, true);
+        if (! is_dir(resource_path('views/auth/passwords'))) {
+            mkdir(resource_path('views/auth/passwords'), 0755, true);
         }
     }
 
@@ -98,11 +90,16 @@ class MakeAuthCommand extends Command
     protected function exportViews()
     {
         foreach ($this->views as $key => $value) {
-            $path = base_path('resources/views/'.$value);
+            if (file_exists(resource_path('views/'.$value)) && ! $this->option('force')) {
+                if (! $this->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
+                    continue;
+                }
+            }
 
-            $this->line('<info>Created View:</info> '.$path);
-
-            copy(__DIR__.'/stubs/make/views/'.$key, $path);
+            copy(
+                __DIR__.'/stubs/make/views/'.$key,
+                resource_path('views/'.$value)
+            );
         }
     }
 

@@ -142,7 +142,7 @@ class Headers implements Countable, Iterator
      */
     public function addHeaders($headers)
     {
-        if (!is_array($headers) && !$headers instanceof Traversable) {
+        if (! is_array($headers) && ! $headers instanceof Traversable) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Expected array or Traversable; received "%s"',
                 (is_object($headers) ? get_class($headers) : gettype($headers))
@@ -259,7 +259,7 @@ class Headers implements Countable, Iterator
     public function get($name)
     {
         $key = static::createKey($name);
-        if (!in_array($key, $this->headersKeys)) {
+        if (! in_array($key, $this->headersKeys)) {
             return false;
         }
 
@@ -403,7 +403,7 @@ class Headers implements Countable, Iterator
         foreach ($this->headers as $header) {
             if ($header instanceof Header\MultipleHeaderInterface) {
                 $name = $header->getFieldName();
-                if (!isset($headers[$name])) {
+                if (! isset($headers[$name])) {
                     $headers[$name] = [];
                 }
                 $headers[$name][] = $header->getFieldValue();

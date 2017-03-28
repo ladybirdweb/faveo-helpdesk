@@ -1,86 +1,90 @@
-<?php namespace LaravelFCM\Mocks;
+<?php
+
+namespace LaravelFCM\Mocks;
 
 use LaravelFCM\Response\TopicResponseContract;
 
 /**
- * Class MockTopicResponse **Only use it for testing**
- *
- * @package LaravelFCM\Response
+ * Class MockTopicResponse **Only use it for testing**.
  */
-class MockTopicResponse implements TopicResponseContract {
+class MockTopicResponse implements TopicResponseContract
+{
+    /**
+     * @internal
+     *
+     * @var string
+     */
+    protected $topic;
 
+    /**
+     * @internal
+     *
+     * @var string
+     */
+    protected $messageId;
 
-	/**
-	 * @internal
-	 * @var string
-	 */
-	protected $topic;
+    /**
+     * @internal
+     *
+     * @var string
+     */
+    protected $error;
 
-	/**
-	 * @internal
-	 * @var string
-	 */
-	protected $messageId;
+    /**
+     * @internal
+     *
+     * @var bool
+     */
+    protected $needRetry = false;
 
-	/**
-	 * @internal
-	 * @var string
-	 */
-	protected $error;
+    /**
+     * if success set a message id.
+     *
+     * @param $messageId
+     */
+    public function setSuccess($messageId)
+    {
+        $this->messageId = $messageId;
+    }
 
-	/**
-	 * @internal
-	 * @var bool
-	 */
-	protected $needRetry = false;
+    /**
+     * true if topic sent with success.
+     *
+     * @return bool
+     */
+    public function isSuccess()
+    {
+        return  (bool) $this->messageId;
+    }
 
-	/**
-	 * if success set a message id
-	 *
-	 * @param $messageId
-	 */
-	public function setSuccess($messageId)
-	{
-		$this->messageId = $messageId;
-	}
+    /**
+     * set error.
+     *
+     * @param $error
+     */
+    public function setError($error)
+    {
+        $this->error = $error;
+    }
 
-	/**
-	 * true if topic sent with success
-	 *
-	 * @return bool
-	 */
-	public function isSuccess()
-	{
-		return  (bool) $this->messageId;
-	}
+    /**
+     * return error message
+     * you should test if it's necessary to resent it.
+     *
+     * @return string error
+     */
+    public function error()
+    {
+        $this->error;
+    }
 
-	/**
-	 * set error
-	 * @param $error
-	 */
-	public function setError($error)
-	{
-		$this->error = $error;
-	}
-
-	/**
-	 * return error message
-	 * you should test if it's necessary to resent it
-	 *
-	 * @return string error
-	 */
-	public function error()
-	{
-		$this->error;
-	}
-
-	/**
-	 * return true if it's necessary resent it using exponential backoff
-	 *
-	 * @return bool
-	 */
-	public function shouldRetry()
-	{
-		$this->error;
-	}
+    /**
+     * return true if it's necessary resent it using exponential backoff.
+     *
+     * @return bool
+     */
+    public function shouldRetry()
+    {
+        $this->error;
+    }
 }

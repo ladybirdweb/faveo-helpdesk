@@ -32,8 +32,10 @@ class GenericMultiHeader extends GenericHeader implements MultipleHeaderInterfac
         $name  = $this->getFieldName();
         $values = [$this->getFieldValue()];
         foreach ($headers as $header) {
-            if (!$header instanceof static) {
-                throw new Exception\InvalidArgumentException('This method toStringMultipleHeaders was expecting an array of headers of the same type');
+            if (! $header instanceof static) {
+                throw new Exception\InvalidArgumentException(
+                    'This method toStringMultipleHeaders was expecting an array of headers of the same type'
+                );
             }
             $values[] = $header->getFieldValue();
         }

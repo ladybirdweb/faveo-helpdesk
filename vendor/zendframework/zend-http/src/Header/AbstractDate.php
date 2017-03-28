@@ -134,7 +134,7 @@ abstract class AbstractDate implements HeaderInterface
      */
     public static function setDateFormat($format)
     {
-        if (!isset(static::$dateFormats[$format])) {
+        if (! isset(static::$dateFormats[$format])) {
             throw new Exception\InvalidArgumentException(
                 "No constant defined for provided date format: {$format}"
             );
@@ -172,7 +172,7 @@ abstract class AbstractDate implements HeaderInterface
                     $e
                 );
             }
-        } elseif (!($date instanceof DateTime)) {
+        } elseif (! ($date instanceof DateTime)) {
             throw new Exception\InvalidArgumentException('Date must be an instance of \DateTime or a string');
         }
 
@@ -226,7 +226,7 @@ abstract class AbstractDate implements HeaderInterface
                     $e
                 );
             }
-        } elseif (!($date instanceof DateTime)) {
+        } elseif (! ($date instanceof DateTime)) {
             throw new Exception\InvalidArgumentException('Date must be an instance of \DateTime or a string');
         }
 

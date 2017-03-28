@@ -67,7 +67,7 @@ class PhpMailController extends Controller
     {
         $this->setQueue();
         $job = new \App\Jobs\SendEmail($from, $to, $message, $template_variables);
-        $this->dispatch($job);
+        dispatch($job);
     }
 
     public function sendEmail($from, $to, $message, $template_variables)
@@ -206,7 +206,7 @@ class PhpMailController extends Controller
     public function setServices($emailid, $protocol)
     {
         $service = new \App\Model\MailJob\FaveoMail();
-        $services = $service->where('email_id', $emailid)->lists('value', 'key')->toArray();
+        $services = $service->where('email_id', $emailid)->pluck('value', 'key')->toArray();
         $controller = new \App\Http\Controllers\Admin\helpdesk\EmailsController();
         $controller->setServiceConfig($protocol, $services);
     }
@@ -279,7 +279,7 @@ class PhpMailController extends Controller
         if ($active_queue) {
             $short = $active_queue->short_name;
             $fields = new \App\Model\MailJob\FaveoQueue();
-            $field = $fields->where('service_id', $active_queue->id)->lists('value', 'key')->toArray();
+            $field = $fields->where('service_id', $active_queue->id)->pluck('value', 'key')->toArray();
         }
         $this->setQueueConfig($short, $field);
     }

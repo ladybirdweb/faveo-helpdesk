@@ -7,11 +7,13 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
     use Authenticatable,
-        CanResetPassword;
+        CanResetPassword,
+            Notifiable;
 
     /**
      * The database table used by the model.
@@ -119,7 +121,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $id = $this->attributes['id'];
         }
         $info = new UserAdditionalInfo();
-        $infos = $info->where('owner', $id)->lists('value', 'key')->toArray();
+        $infos = $info->where('owner', $id)->pluck('value', 'key')->toArray();
 
         return $infos;
     }

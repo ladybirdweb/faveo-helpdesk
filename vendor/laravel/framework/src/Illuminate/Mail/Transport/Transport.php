@@ -67,4 +67,34 @@ abstract class Transport implements Swift_Transport
             }
         }
     }
+
+    /**
+     * Iterate through registered plugins and execute plugins' methods.
+     *
+     * @param  \Swift_Mime_Message  $message
+     * @return void
+     */
+    protected function sendPerformed(Swift_Mime_Message $message)
+    {
+        $event = new Swift_Events_SendEvent($this, $message);
+
+        foreach ($this->plugins as $plugin) {
+            if (method_exists($plugin, 'sendPerformed')) {
+                $plugin->sendPerformed($event);
+            }
+        }
+    }
+
+    /**
+     * Get the number of recipients.
+     *
+     * @param  \Swift_Mime_Message  $message
+     * @return int
+     */
+    protected function numberOfRecipients(Swift_Mime_Message $message)
+    {
+        return count(array_merge(
+            (array) $message->getTo(), (array) $message->getCc(), (array) $message->getBcc()
+        ));
+    }
 }

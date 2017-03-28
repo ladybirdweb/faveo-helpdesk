@@ -916,7 +916,7 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
         if (isset($e)) {
             $checkException = false;
 
-            if (is_string($this->expectedException)) {
+            if (!($e instanceof PHPUnit_Framework_SkippedTestError) && is_string($this->expectedException)) {
                 $checkException = true;
 
                 if ($e instanceof PHPUnit_Framework_Exception) {
@@ -925,7 +925,8 @@ abstract class PHPUnit_Framework_TestCase extends PHPUnit_Framework_Assert imple
 
                 $reflector = new ReflectionClass($this->expectedException);
 
-                if ($this->expectedException == 'PHPUnit_Framework_Exception' ||
+                if ($this->expectedException === 'PHPUnit_Framework_Exception' ||
+                    $this->expectedException === '\PHPUnit_Framework_Exception' ||
                     $reflector->isSubclassOf('PHPUnit_Framework_Exception')) {
                     $checkException = true;
                 }

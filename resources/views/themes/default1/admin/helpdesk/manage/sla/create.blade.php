@@ -62,25 +62,10 @@ class="active"
             </div>
             <!-- Grace Period text form Required -->
             <div class="col-md-6">
-                <div class="form-group">
-                    {!! Form::label('grace_period',Lang::get('lang.grace_period')) !!}<span class="text-red"> *</span>
-                     <div class="row">
-                 <div class="col-md-3  {{ $errors->has('grace_period_time') ? 'has-error' : '' }}" style="padding:0;">
-                        <input type="number" name="grace_period_time" class="form-control">
-                    </div>
-                    <div class="col-md-5">
-                        <select name="grace_period_type" class="form-control">
-                            <option value="Min">{{Lang::get('lang.min')}}</option>
-                            <option value="Hours">{{Lang::get('lang.hours')}}</option>
-                            <option value="Days">{{Lang::get('lang.days')}}</option>
-                            <option value="Months">{{Lang::get('lang.months')}}</option>
-                            <option value="Year">{{Lang::get('lang.year')}}</option>
-                        </select>
-                    </div>
-                    </div>
+                <div class="form-group {{ $errors->has('grace_period') ? 'has-error' : '' }}">
+                    {!! Form::label('grace_period',Lang::get('lang.grace_period')) !!}
+                    {!! Form::select('grace_period',['6 Hours'=>'6 Hours', '12 Hours'=>'12 Hours', '18 Hours'=>'18 Hours', '24 Hours'=>'24 Hours', '36 Hours'=>'36 Hours', '48 Hours'=>'48 Hours'],null,['class' => 'form-control']) !!}
                 </div>
-
-               
             </div>
             <!-- status radio: required: Active|Dissable -->
             <div class="col-md-6">

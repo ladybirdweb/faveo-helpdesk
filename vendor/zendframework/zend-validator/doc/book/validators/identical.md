@@ -68,7 +68,7 @@ $form->add([
 $form->add([
     'name'       => 'elementTwo',
     'type'       => 'Password',
-    'validators' => array(
+    'validators' => [
         [
             'name'    => 'Identical',
             'options' => [
@@ -136,7 +136,7 @@ $inputFilter = new InputFilter();
 $inputFilter->add([
     'name' => 'confirmEmail', // references (5)
     'validators' => [
-        array(
+        [
             'name' => 'Identical',
             'options' => [
                 // 'user' key references 'user' fieldset (1), and 'email'
@@ -162,7 +162,7 @@ $inputFilter->add([
                         // 'deeperFieldsetInput' element (4)
                         'deeperFieldset' => 'deeperFieldsetInput',
                     ],
-               ],
+                ],
             ],
         ],
     ],
