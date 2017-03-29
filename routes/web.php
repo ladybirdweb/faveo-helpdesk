@@ -20,9 +20,13 @@ Route::group(['middleware' => 'update', 'middleware' => 'install'], function () 
     Route::get('social-sync', ['as' => 'social.sync', 'uses' => 'Client\helpdesk\GuestController@sync']);
 });
 
+Route::get('date/get', function() {
+    return faveoDate("", \Input::get('format'), \Input::get('tz'));
+});
+
 /*
   |-------------------------------------------------------------------------------
-  | @Anjali
+  | 
   |-------------------------------------------------------------------------------
   | Here is defining entire routes for the Admin Panel
   |
@@ -67,6 +71,37 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     //Notification marking
     Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
     Route::post('mark-all-read/{id}', 'Common\NotificationController@markAllRead');
+
+
+    /**
+     * Notification api
+     */
+    Route::get('notification/api/{userid}', [
+        'as' => 'notification.api',
+        'uses' => 'Agent\helpdesk\Notifications\Notification@appNotification'
+    ])->middleware(['role.agent']);
+
+    Route::get('notification/api/seen/{userid}', [
+        'as' => 'notification.api.seen',
+        'uses' => 'Agent\helpdesk\Notifications\Notification@notificationSeen'
+    ])->middleware(['role.agent']);
+
+    Route::get('notification/api/unseen/count/{userid}', [
+        'as' => 'notification.api.unseen.count',
+        'uses' => 'Agent\helpdesk\Notifications\Notification@notificationUnSeenCount'
+    ])->middleware(['role.agent']);
+
+    Route::get('notification/api/seen/all/{userid}', [
+        'as' => 'notification.api.seen.all',
+        'uses' => 'Agent\helpdesk\Notifications\Notification@notificationUpdateSeenAll'
+    ])->middleware(['role.agent']);
+    
+    Route::get('notification/sla', [
+        'as' => 'notification.sla',
+        'uses' => 'Agent\helpdesk\Notifications\NotificationController@notificationSla'
+    ]);
+
+
 
     Route::get('notifications-list', ['as' => 'notification.list', 'uses' => 'Common\NotificationController@show']);
     Route::post('notification-delete/{id}', ['as' => 'notification.delete', 'uses' => 'Common\NotificationController@delete']);
@@ -158,9 +193,9 @@ Route::group(['middleware' => 'roles', 'middleware' => 'auth', 'middleware' => '
     Route::get('getresponder', ['as' => 'getresponder', 'uses' => 'Admin\helpdesk\SettingsController@getresponder']); // direct to responder setting page
 
     Route::patch('postresponder/{id}', 'Admin\helpdesk\SettingsController@postresponder'); // Updating the Responder table with requests
-    Route::get('getalert', ['as' => 'getalert', 'uses' => 'Admin\helpdesk\SettingsController@getalert']); // direct to alert setting page
+    Route::get('alert', ['as' => 'getalert', 'uses' => 'Admin\helpdesk\SettingsController@getalert']); // direct to alert setting page
 
-    Route::patch('postalert/{id}', 'Admin\helpdesk\SettingsController@postalert'); // Updating the Alert table with requests
+    Route::patch('alert', 'Admin\helpdesk\SettingsController@postalert'); // Updating the Alert table with requests
     // Templates
 
     Route::get('security', ['as' => 'security.index', 'uses' => 'Admin\helpdesk\SecurityController@index']); // direct to security setting page
@@ -831,8 +866,10 @@ Route::get('duetoday', ['as' => 'ticket.duetoday', 'uses' => 'Agent\helpdesk\Tic
 
 // Route::post('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']);
 Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday', 'uses' => 'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
-    // Breadcrumbs::register('open.ticket', function ($breadcrumbs) {
-    //     $breadcrumbs->parent('dashboard');
-    //     $breadcrumbs->push(Lang::get('lang.tickets') . '&nbsp; > &nbsp;' . Lang::get('lang.open'), route('open.ticket'));
-    // });
+
+\Event::listen('notification-saved', function($event) {
+    $controller = new \App\Http\Controllers\Agent\helpdesk\Notifications\NotificationController();
+    $controller->saved($event);
+});
+
 

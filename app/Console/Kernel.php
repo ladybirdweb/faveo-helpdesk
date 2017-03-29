@@ -34,9 +34,11 @@ class Kernel extends ConsoleKernel
             if ($this->getCurrentQueue() != 'sync') {
                 $schedule->command('queue:listen '.$this->getCurrentQueue().' --sleep 60')->everyMinute();
             }
+            
             $this->execute($schedule, 'fetching');
             $this->execute($schedule, 'notification');
             $this->execute($schedule, 'work');
+            $schedule->command('sla-escalate')->everyThirtyMinutes();
         }
     }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="fbApp">
     <head>
-        <meta charset="UTF-8" ng-app="myApp">
+        <meta charset="UTF-8">
         <title>Faveo | HELP DESK</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <meta name="_token" content="{!! csrf_token() !!}"/>
@@ -57,7 +57,7 @@
 
         @yield('HeadInclude')
     </head>
-    <body class="skin-blue fixed">
+    <body class="skin-blue fixed" ng-controller="MainCtrl">
         <div class="wrapper">
             <header class="main-header">
                 <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png')}}" width="100px;"></a>
@@ -105,74 +105,16 @@
                         @endif
 
                         <ul class="nav navbar-nav navbar-right">
-                            @if($auth_user_role == 'admin')
+                         @if($auth_user_role == 'admin')
                             <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
 
                             @endif
+
                             @include('themes.default1.update.notification')
-                            <!-- User Account: style can be found in dropdown.less -->
-                            <li class="dropdown notifications-menu" id="myDropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
-                                    <i class="fa fa-bell-o"></i>
-                                    <span class="label label-danger" id="count">{!! $notifications->count() !!}</span>
-                                </a>
-                                <ul class="dropdown-menu" style="width:500px">
-
-                                    <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
-                                        <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                        <h4><i class="icon fa fa-check"></i>Alert!</h4>
-                                        <div id="message-success1"></div>
-                                    </div>
-
-                                    <li id="refreshNote">
-
-                                    <li class="header">You have {!! $notifications->count() !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
-
-                                    <ul class="menu">
-
-                                        @if($notifications->count())
-                                        @foreach($notifications->orderBy('created_at', 'desc')->get()->take(10) as $notification)
-
-                                        @if($notification->notification->type->type == 'registration')
-                                        @if($notification->is_read == 1)
-                                        <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
-                                                    {!! $notification->notification->type->message !!}
-                                                </a></span>
-                                        </li>
-                                        @else
-                                        <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
-                                                    {!! $notification->notification->type->message !!}
-                                                </a></span>
-                                        </li>
-                                        @endif
-                                        @else
-                                        @if($notification->is_read == 1)
-                                        <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
-                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
-                                                </a></span>
-                                        </li>
-                                        @elseif($notification->notification->model)
-                                        <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
-                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
-                                                </a></span>
-                                        </li>
-                                        @endif
-                                        @endif
-                                        @endforeach
-                                        @endif
-                                    </ul>
-                            </li>
-                            <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
-                                    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;" id="notification-loader">
-                                </div><div class="col-md-5"></div></li>
-                            <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
-                            </li>
-                        </ul>
-                        </li>
+                            <!-- START NOTIFICATION --> 
+                            @include('themes.default1.inapp-notification.notification')
+                            
+                            <!-- END NOTIFICATION --> 
                         <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -521,6 +463,10 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
             }
             }
         </script>
+        <script src="{{asset("lb-faveo/js/angular/angular.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
+
         <script>
     $(function() {
       
@@ -537,5 +483,6 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
 <?php Event::fire('show.calendar.script', array()); ?>
 <?php Event::fire('load-calendar-scripts', array()); ?>
         @yield('FooterInclude')
+        @stack('scripts')
     </body>
 </html>

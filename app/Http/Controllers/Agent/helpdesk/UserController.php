@@ -202,7 +202,7 @@ class UserController extends Controller
                         ->addColumn('updated_at', function ($model) {
                             $t = $model->updated_at;
 
-                            return TicketController::usertimezone($t);
+                            return faveoDate($t);
                         })
                         /* column Role */
                         ->addColumn('role', function ($model) {
