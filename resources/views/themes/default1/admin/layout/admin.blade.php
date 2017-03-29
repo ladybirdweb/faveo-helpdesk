@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="fbApp">
     <head>
         <meta charset="UTF-8">
         <title>Faveo | HELP DESK</title>
@@ -47,7 +47,7 @@
         <![endif]-->
         @yield('HeadInclude')
     </head>
-    <body class="skin-yellow fixed">
+    <body class="skin-yellow fixed" ng-controller="MainCtrl">
         <?php
         $replacetop = 0;
         $replacetop = \Event::fire('service.desk.admin.topbar.replace', array());
@@ -89,73 +89,16 @@
                             @endif
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
+                            @if($auth_user_role == 'admin')
                             <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
+
+                            @endif
+
                             @include('themes.default1.update.notification')
-                            <!-- User Account: style can be found in dropdown.less -->
-                            <ul class="nav navbar-nav navbar-right">
-                            <!-- User Account: style can be found in dropdown.less -->
-                            <li class="dropdown notifications-menu" id="myDropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="myFunction()">
-                                    <i class="fa fa-bell-o"></i>
-                                    <span class="label label-danger" id="count">{!! $notifications->count() !!}</span>
-                                </a>
-                                <ul class="dropdown-menu" style="width:500px">
-
-                                    <div id="alert11" class="alert alert-success alert-dismissable" style="display:none;">
-                                        <button id="dismiss11" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                        <h4><i class="icon fa fa-check"></i>Alert!</h4>
-                                        <div id="message-success1"></div>
-                                    </div>
-
-                                    <li id="refreshNote">
-
-                                    <li class="header">You have {!! $notifications->count() !!} notifications. <a class="pull-right" id="read-all" href="#">Mark all as read.</a></li>
-
-                                    <ul class="menu">
-
-                                        @if($notifications->count())
-                                        @foreach($notifications->orderBy('created_at', 'desc')->get()->take(10) as $notification)
-
-                                        @if($notification->notification->type->type == 'registration')
-                                        @if($notification->is_read == 1)
-                                        <li class="task" style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
-                                                    {!! $notification->notification->type->message !!}
-                                                </a></span>
-                                        </li>
-                                        @else
-                                        <li style="list-style: none; margin-left: -30px;"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="user-image"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('user.show', $notification->notification->model_id) !!}" id="{{$notification -> notification_id}}" class='noti_User'>
-                                                    {!! $notification->notification->type->message !!}
-                                                </a></span>
-                                        </li>
-                                        @endif
-                                        @else
-                                        @if($notification->is_read == 1)
-                                        <li  class="task" style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
-                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
-                                                </a></span>
-                                        </li>
-                                        @elseif($notification->notification->model)
-                                        <li style="list-style: none;margin-left: -30px"><span>&nbsp<img src="{{$notification -> users -> profile_pic}}" class="img-circle"  style="width:6%;height: 5%" alt="User Image" />
-                                                <a href="{!! route('ticket.thread', $notification->notification->model_id) !!}" id='{{ $notification -> notification_id}}' class='noti_User'>
-                                                    {!! $notification->notification->type->message !!} with id "{!!$notification->notification->model->ticket_number!!}"
-                                                </a></span>
-                                        </li>
-                                        @endif
-                                        @endif
-                                        @endforeach
-                                        @endif
-                                    </ul>
-                            </li>
-                            <li class="footer no-border"><div class="col-md-5"></div><div class="col-md-2">
-                                    <img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="display: none;" id="notification-loader">
-                                </div><div class="col-md-5"></div></li>
-                            <li class="footer"><a href="{{ url('notifications-list')}}">View all</a>
-                            </li>
-                        </ul>
-                        </li>
+                            <!-- START NOTIFICATION --> 
+                            @include('themes.default1.inapp-notification.notification')
+                            
+                            <!-- END NOTIFICATION --> 
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
@@ -276,7 +219,7 @@
                             <ul class="treeview-menu">
                                 <li @yield('tickets')><a href="{{url('getticket')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.ticket') !!}</a></li>
                                 <li @yield('auto-response')><a href="{{url('getresponder')}}"><i class="fa fa-reply-all"></i>{!! Lang::get('lang.auto_response') !!}</a></li>
-                                <li @yield('alert')><a href="{{url('getalert')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.alert_notices') !!}</a></li>
+                                <li @yield('alert')><a href="{{url('alert')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.alert_notices') !!}</a></li>
                                 <li @yield('status')><a href="{{url('setting-status')}}"><i class="fa fa-plus-square-o"></i>{!! Lang::get('lang.status') !!}</a></li>
                                 <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-star"></i>{!! Lang::get('lang.ratings') !!}</a></li>
                                 <li @yield('close-workflow')><a href="{{url('close-workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.close-workflow') !!}</a></li>
@@ -443,8 +386,13 @@
     <script src="{{asset("lb-faveo/js/tabby.js")}}"></script>
     <!-- CK Editor -->
     <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
+    <script src="{{asset("lb-faveo/js/angular/angular.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
+
 
     @yield('FooterInclude')
+    @stack('scripts')
 </body>
 <script>
     $(function() {
