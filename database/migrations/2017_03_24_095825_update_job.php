@@ -1,17 +1,18 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class UpdateJob extends Migration {
-
+class UpdateJob extends Migration
+{
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up() {
+    public function up()
+    {
         Schema::table('jobs', function (Blueprint $table) {
             $table->dropIndex('jobs_queue_reserved_reserved_at_index');
             $table->dropColumn('reserved');
@@ -23,7 +24,8 @@ class UpdateJob extends Migration {
         });
     }
 
-    public function down() {
+    public function down()
+    {
         Schema::table('jobs', function (Blueprint $table) {
             $table->tinyInteger('reserved')->unsigned();
             $table->index(['queue', 'reserved', 'reserved_at']);
@@ -34,5 +36,4 @@ class UpdateJob extends Migration {
             $table->dropColumn('exception');
         });
     }
-
 }

@@ -4,10 +4,10 @@ namespace App\Providers;
 
 use App\Model\Update\BarNotification;
 use Illuminate\Queue\Events\JobFailed;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Queue;
 use View;
-use Illuminate\Support\Facades\Route;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,7 +30,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Queue::failing(function (JobFailed $event) {
             loging('Failed Job - '.$event->connectionName, json_encode($event->job->payload()));
-            
         });
         Route::singularResourceParameters(false);
         // Please note the different namespace
