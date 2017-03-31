@@ -195,7 +195,7 @@ class InstallController extends Controller
 
         $ENV['APP_ENV'] = 'production';
         $ENV['APP_DEBUG'] = 'false';
-        $ENV['APP_KEY'] = 'SomeRandomString';
+        $ENV['APP_KEY'] = 'base64:h3KjrHeVxyE+j6c8whTAs2YI+7goylGZ/e2vElgXT6I=';
         $ENV['APP_BUGSNAG'] = 'true';
         $ENV['APP_URL'] = 'http://localhost';
         $ENV['DB_INSTALL'] = '%0%';
