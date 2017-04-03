@@ -22,10 +22,10 @@ use Auth;
 use DateTime;
 use DB;
 use Hash;
+use Illuminate\Http\Request;
 use Input;
 use Lang;
 use Socialite;
-use Illuminate\Http\Request;
 
 /**
  * ---------------------------------------------------
@@ -659,26 +659,27 @@ class AuthController extends Controller
         \Session::put($provider.'redirect', $url);
         $this->changeRedirect();
     }
-    
-     /**
+
+    /**
      * Log the user out of the application.
      *
      * @return \Illuminate\Http\Response
      */
     public function getLogout(Request $request)
     {
-        \Event::fire('user.logout',[]);
+        \Event::fire('user.logout', []);
         $login = new LoginController();
+
         return $login->logout($request);
-        
     }
-    
-    public function redirectPath(){
+
+    public function redirectPath()
+    {
         $auth = Auth::user();
-        if($auth && $auth->role!='user'){
-            return "dashboard";
-        }else{
-            return "/";
+        if ($auth && $auth->role != 'user') {
+            return 'dashboard';
+        } else {
+            return '/';
         }
     }
 }

@@ -30,7 +30,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         if (env('DB_INSTALL') == 1) {
-
             if ($this->getCurrentQueue() != 'sync') {
                 $schedule->command('queue:listen '.$this->getCurrentQueue().' --sleep 60')->everyMinute();
             }
@@ -117,12 +116,14 @@ class Kernel extends ConsoleKernel
 
         return $queue;
     }
+
     /**
      * Register the Closure based commands for the application.
      *
      * @return void
      */
-    protected function commands() {
+    protected function commands()
+    {
         require base_path('routes/console.php');
     }
 }
