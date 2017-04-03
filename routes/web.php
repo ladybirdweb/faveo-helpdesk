@@ -73,138 +73,6 @@ Route::group(['middleware' => 'redirect'], function () {
         Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
         Route::post('mark-all-read/{id}', 'Common\NotificationController@markAllRead');
 
-    Route::resource('templates', 'Common\TemplateController');
-    Route::get('get-templates', 'Common\TemplateController@GetTemplates');
-    Route::get('templates-delete', 'Common\TemplateController@destroy');
-    Route::get('testmail/{id}', 'Common\TemplateController@mailtest');
-    Route::resource('template-sets', 'Common\TemplateSetController'); // in template module, for CRUD
-    Route::get('delete-sets/{id}', ['as' => 'sets.delete', 'uses' => 'Common\TemplateSetController@deleteSet']);
-    Route::get('show-template/{id}', ['as' => 'show.templates', 'uses' => 'Common\TemplateController@showTemplate']);
-    Route::get('activate-templateset/{name}', ['as' => 'active.template-set', 'uses' => 'Common\TemplateSetController@activateSet']);
-    Route::resource('template', 'Admin\helpdesk\TemplateController'); // in template module, for CRUD
-    Route::get('list-directories', 'Admin\helpdesk\TemplateController@listdirectories');
-    Route::get('activate-set/{dir}', ['as' => 'active.set', 'uses' => 'Admin\helpdesk\TemplateController@activateset']);
-    Route::get('list-templates/{template}/{directory}', ['as' => 'template.list', 'uses' => 'Admin\helpdesk\TemplateController@listtemplates']);
-    Route::get('read-templates/{template}/{directory}', ['as' => 'template.read', 'uses' => 'Admin\helpdesk\TemplateController@readtemplate']);
-    Route::patch('write-templates/{contents}/{directory}', ['as' => 'template.write', 'uses' => 'Admin\helpdesk\TemplateController@writetemplate']);
-    Route::post('create-templates', ['as' => 'template.createnew', 'uses' => 'Admin\helpdesk\TemplateController@createtemplate']);
-    Route::get('delete-template/{template}/{path}', ['as' => 'templates.delete', 'uses' => 'Admin\helpdesk\TemplateController@deletetemplate']);
-    Route::get('getdiagno', ['as' => 'getdiagno', 'uses' => 'Admin\helpdesk\TemplateController@formDiagno']); // for getting form for diagnostic
-
-    Route::post('postdiagno', ['as' => 'postdiagno', 'uses' => 'Admin\helpdesk\TemplateController@postDiagno']); // for getting form for diagnostic
-    Route::resource('helptopic', 'Admin\helpdesk\HelptopicController'); // in helptopics module, for CRUD
-
-    Route::resource('sla', 'Admin\helpdesk\SlaController'); // in SLA Plan module, for CRUD
-
-    Route::resource('forms', 'Admin\helpdesk\FormController');
-    Route::get('forms/add-child/{formid}', ['as' => 'forms.add.child', 'uses' => 'Admin\helpdesk\FormController@addChildForm']);
-    Route::post('forms/field/{fieldid}/child', [
-        'as'   => 'forms.field.child',
-        'uses' => 'Admin\helpdesk\FormController@addChild',
-    ]);
-    Route::get('forms/render/child', [
-        'as'   => 'forms.field.child',
-        'uses' => 'Admin\helpdesk\FormController@renderChild',
-    ]);
-
-    Route::get('delete-forms/{id}', ['as' => 'forms.delete', 'uses' => 'Admin\helpdesk\FormController@delete']);
-    //$router->model('id','getcompany');
-    Route::get('job-scheduler', ['as' => 'get.job.scheder', 'uses' => 'Admin\helpdesk\SettingsController@getSchedular']); //to get ob scheduler form page
-
-    Route::patch('post-scheduler', ['as' => 'post.job.scheduler', 'uses' => 'Admin\helpdesk\SettingsController@postSchedular']); //to update job scheduler
-    Route::get('agent-profile-page/{id}', ['as' => 'agent.profile.page', 'uses' => 'Admin\helpdesk\AgentController@agent_profile']);
-    Route::get('getcompany', ['as' => 'getcompany', 'uses' => 'Admin\helpdesk\SettingsController@getcompany']); // direct to company setting page
-
-    Route::patch('postcompany/{id}', 'Admin\helpdesk\SettingsController@postcompany'); // Updating the Company table with requests
-    Route::get('delete-logo', ['as' => 'delete.logo', 'uses' => 'Admin\helpdesk\SettingsController@deleteLogo']); // deleting a logo
-    Route::get('getsystem', ['as' => 'getsystem', 'uses' => 'Admin\helpdesk\SettingsController@getsystem']); // direct to system setting page
-
-    Route::patch('postsystem/{id}', 'Admin\helpdesk\SettingsController@postsystem'); // Updating the System table with requests
-    Route::get('getticket', ['as' => 'getticket', 'uses' => 'Admin\helpdesk\SettingsController@getticket']); // direct to ticket setting page
-
-    Route::patch('postticket/{id}', 'Admin\helpdesk\SettingsController@postticket'); // Updating the Ticket table with requests
-    Route::get('getemail', ['as' => 'getemail', 'uses' => 'Admin\helpdesk\SettingsController@getemail']); // direct to email setting page
-
-    Route::get('ticket/tooltip', ['as' => 'ticket.tooltip', 'uses' => 'Agent\helpdesk\TicketController@getTooltip']);
-
-    Route::patch('postemail/{id}', 'Admin\helpdesk\SettingsController@postemail'); // Updating the Email table with requests
-    // Route::get('getaccess', 'Admin\helpdesk\SettingsController@getaccess'); // direct to access setting page
-    // Route::patch('postaccess/{id}', 'Admin\helpdesk\SettingsController@postaccess'); // Updating the Access table with requests
-    Route::get('getresponder', ['as' => 'getresponder', 'uses' => 'Admin\helpdesk\SettingsController@getresponder']); // direct to responder setting page
-
-    Route::patch('postresponder/{id}', 'Admin\helpdesk\SettingsController@postresponder'); // Updating the Responder table with requests
-    Route::get('getalert', ['as' => 'getalert', 'uses' => 'Admin\helpdesk\SettingsController@getalert']); // direct to alert setting page
-
-    Route::patch('postalert/{id}', 'Admin\helpdesk\SettingsController@postalert'); // Updating the Alert table with requests
-    // Templates
-
-    Route::get('security', ['as' => 'security.index', 'uses' => 'Admin\helpdesk\SecurityController@index']); // direct to security setting page
-    Route::resource('close-workflow', 'Admin\helpdesk\CloseWrokflowController'); // direct to security setting page
-
-    Route::resource('close-workflow', 'Admin\helpdesk\CloseWrokflowController'); // direct to security setting page
-    Route::patch('security/{id}', ['as' => 'securitys.update', 'uses' => 'Admin\helpdesk\SecurityController@update']); // direct to security setting page
-    Route::get('setting-status', ['as' => 'statuss.index', 'uses' => 'Admin\helpdesk\SettingsController@getStatuses']); // direct to status setting page
-
-    Route::patch('status-update/{id}', ['as' => 'statuss.update', 'uses' => 'Admin\helpdesk\SettingsController@editStatuses']);
-
-    Route::get('status/edit/{id}', ['as' => 'status.edit', 'uses' => 'Admin\helpdesk\SettingsController@getEditStatuses']);
-    Route::post('status-create', ['as' => 'statuss.create', 'uses' => 'Admin\helpdesk\SettingsController@createStatuses']);
-    Route::get('status-delete/{id}', ['as' => 'statuss.delete', 'uses' => 'Admin\helpdesk\SettingsController@deleteStatuses']);
-    Route::get('ticket/status/{id}/{state}', ['as' => 'statuss.state', 'uses' => 'Agent\helpdesk\TicketController@updateStatuses']);
-    Route::get('getratings', ['as' => 'ratings.index', 'uses' => 'Admin\helpdesk\SettingsController@RatingSettings']);
-
-    Route::get('deleter/{rating}', ['as' => 'ratings.delete', 'uses' => 'Admin\helpdesk\SettingsController@RatingDelete']);
-
-    Route::get('create-ratings', ['as' => 'rating.create', 'uses' => 'Admin\helpdesk\SettingsController@createRating']);
-    Route::post('store-ratings', ['as' => 'rating.store', 'uses' => 'Admin\helpdesk\SettingsController@storeRating']);
-
-    Route::get('editratings/{slug}', ['as' => 'rating.edit', 'uses' => 'Admin\helpdesk\SettingsController@editRatingSettings']);
-    Route::patch('postratings/{slug}', ['as' => 'settings.rating', 'uses' => 'Admin\helpdesk\SettingsController@PostRatingSettings']);
-    Route::get('remove-user-org/{id}', ['as' => 'removeuser.org', 'uses' => 'Agent\helpdesk\UserController@removeUserOrg']);
-    Route::get('admin-profile', ['as' => 'admin-profile', 'uses' => 'Admin\helpdesk\ProfileController@getProfile']); /*  User profile edit get  */
-
-    Route::get('admin-profile-edit', 'Admin\helpdesk\ProfileController@getProfileedit'); /*  Admin profile get  */
-    Route::patch('admin-profile', 'Admin\helpdesk\ProfileController@postProfileedit'); /* Admin Profile Post */
-    Route::patch('admin-profile-password', 'Admin\helpdesk\ProfileController@postProfilePassword'); /*  Admin Profile Password Post */
-    Route::get('widgets', ['as' => 'widgets', 'uses' => 'Common\SettingsController@widgets']); /* get the create footer page for admin */
-
-    Route::get('list-widget', 'Common\SettingsController@list_widget'); /* get the list widget page for admin */
-    Route::post('edit-widget/{id}', 'Common\SettingsController@edit_widget'); /* get the create footer page for admin */
-    Route::get('social-buttons', ['as' => 'social.buttons', 'uses' => 'Common\SettingsController@social_buttons']); /* get the create footer page for admin */
-
-    Route::get('list-social-buttons', ['as' => 'list.social.buttons', 'uses' => 'Common\SettingsController@list_social_buttons']); /* get the list widget page for admin */
-    Route::post('edit-widget/{id}', 'Common\SettingsController@edit_social_buttons'); /* get the create footer page for admin */
-    Route::get('version-check', ['as' => 'version-check', 'uses' => 'Common\SettingsController@version_check']); /* Check version  */
-    Route::post('post-version-check', ['as' => 'post-version-check', 'uses' => 'Common\SettingsController@post_version_check']); /* post Check version */
-    Route::get('admin', ['as' => 'setting', 'uses' => 'Admin\helpdesk\SettingsController@settings']);
-
-    Route::get('plugins', ['as' => 'plugins', 'uses' => 'Common\SettingsController@Plugins']);
-
-    Route::get('getplugin', ['as' => 'get.plugin', 'uses' => 'Common\SettingsController@GetPlugin']);
-    Route::post('post-plugin', ['as' => 'post.plugin', 'uses' => 'Common\SettingsController@PostPlugins']);
-    Route::get('getconfig', ['as' => 'get.config', 'uses' => 'Common\SettingsController@fetchConfig']);
-    Route::get('plugin/delete/{slug}', ['as' => 'delete.plugin', 'uses' => 'Common\SettingsController@DeletePlugin']);
-    Route::get('plugin/status/{slug}', ['as' => 'status.plugin', 'uses' => 'Common\SettingsController@StatusPlugin']);
-    //Routes for showing language table and switching language
-    Route::get('languages', ['as' => 'LanguageController', 'uses' => 'Admin\helpdesk\LanguageController@index']);
-
-    Route::get('get-languages', ['as' => 'getAllLanguages', 'uses' => 'Admin\helpdesk\LanguageController@getLanguages']);
-    Route::get('change-language/{lang}', ['as' => 'lang.switch', 'uses' => 'Admin\helpdesk\LanguageController@switchLanguage']);
-    //Route for download language template package
-    Route::get('/download-template', ['as' => 'download', 'uses' => 'Admin\helpdesk\LanguageController@download']);
-    //Routes for language file upload form-----------You may want to use csrf protection for these route--------------
-    Route::post('language/add', 'Admin\helpdesk\LanguageController@postForm');
-    Route::get('language/add', ['as' => 'add-language', 'uses' => 'Admin\helpdesk\LanguageController@getForm']);
-
-    //Routes for  delete language package
-    Route::get('delete-language/{lang}', ['as' => 'lang.delete', 'uses' => 'Admin\helpdesk\LanguageController@deleteLanguage']);
-    Route::get('generate-api-key', 'Admin\helpdesk\SettingsController@GenerateApiKey'); // route to generate api key
-    Route::post('validating-email-settings', ['as' => 'validating.email.settings', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettings']); // route to check email input validation
-    Route::post('validating-email-settings-on-update/{id}', ['as' => 'validating.email.settings.update', 'uses' => 'Admin\helpdesk\EmailsController@validatingEmailSettingsUpdate']); // route to check email input validation
-    Route::get('workflow', ['as' => 'workflow', 'uses' => 'Admin\helpdesk\WorkflowController@index']);
-
-    Route::get('workflow-list', ['as' => 'workflow.list', 'uses' => 'Admin\helpdesk\WorkflowController@workFlowList']);
-    Route::get('workflow/create', ['as' => 'workflow.create', 'uses' => 'Admin\helpdesk\WorkflowController@create']);
 
         /**
          * Notification api
@@ -213,27 +81,11 @@ Route::group(['middleware' => 'redirect'], function () {
             'as' => 'notification.api',
             'uses' => 'Agent\helpdesk\Notifications\Notification@appNotification'
         ])->middleware(['role.agent']);
-        
+
         Route::get('notification/api/seen/{userid}', [
             'as' => 'notification.api.seen',
             'uses' => 'Agent\helpdesk\Notifications\Notification@notificationSeen'
         ])->middleware(['role.agent']);
-        
-    Route::post('api', ['as' => 'api.settings.post', 'uses' => 'Common\ApiSettings@postSettings']);
-    /*
-     * Error and debugging
-     */
-    //route for showing error and debugging setting form page
-    Route::get('error-and-debugging-options', ['as' => 'err.debug.settings', 'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showSettings']);
-
-    //route for submit error and debugging setting form page
-    Route::post('post-settings', ['as' => 'post.error.debug.settings',
-        'uses'                         => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings', ]);
-    //route to error logs table page
-    Route::get('show-error-logs', [
-        'as'   => 'error.logs',
-        'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs',
-    ]);
 
         Route::get('notification/api/unseen/count/{userid}', [
             'as' => 'notification.api.unseen.count',
@@ -651,15 +503,15 @@ Route::group(['middleware' => 'redirect'], function () {
 //        $count = count($models);
 //        return Illuminate\Support\Facades\Redirect::back()->with('contents', $models)->with('counts', $count);
 //    });
-Route::any('getdata', function () {
-    $term = Illuminate\Support\Str::lower(Input::get('term'));
-    $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
-    foreach ($data as $v) {
-        return [
-            'value' => $v->ticket_number,
-        ];
-    }
-});
+    Route::any('getdata', function () {
+        $term = Illuminate\Support\Str::lower(Input::get('term'));
+        $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term . '%')->groupBy('ticket_number')->take(10)->get();
+        foreach ($data as $v) {
+            return [
+                'value' => $v->ticket_number,
+            ];
+        }
+    });
 
     Route::post('postform/{id}', 'Client\helpdesk\FormController@postForm'); /* post the AJAX form for create a ticket by guest user */
     Route::post('postedform', ['as' => 'client.form.post', 'uses' => 'Client\helpdesk\FormController@postedForm']); /* post the form to store the value */
@@ -744,38 +596,45 @@ Route::any('getdata', function () {
         $routeCollection = Route::getRoutes();
         echo "<table style='width:100%'>";
         echo '<tr>';
-        echo '<td>'.$value->getMethods()[0].'</td>';
-        echo '<td>'.$value->getName().'</td>';
-        echo '<td>'.$value->getPath().'</td>';
-        echo '<td>'.$value->getActionName().'</td>';
+        echo "<td width='10%'><h4>HTTP Method</h4></td>";
+        echo "<td width='10%'><h4>Route</h4></td>";
+        echo "<td width='10%'><h4>Url</h4></td>";
+        echo "<td width='80%'><h4>Corresponding Action</h4></td>";
         echo '</tr>';
-    }
-    echo '</table>';
-});
-/*
-  |=============================================================
-  |  Error Routes
-  |=============================================================
- */
-Route::get('500', ['as' => 'error500', function () {
-    return view('errors.500');
-}]);
+        foreach ($routeCollection as $value) {
+            echo '<tr>';
+            echo '<td>' . $value->getMethods()[0] . '</td>';
+            echo '<td>' . $value->getName() . '</td>';
+            echo '<td>' . $value->getPath() . '</td>';
+            echo '<td>' . $value->getActionName() . '</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+    });
+    /*
+      |=============================================================
+      |  Error Routes
+      |=============================================================
+     */
+    Route::get('500', ['as' => 'error500', function () {
+            return view('errors.500');
+        }]);
 
-Route::get('404', ['as' => 'error404', function () {
-    return view('errors.404');
-}]);
+    Route::get('404', ['as' => 'error404', function () {
+            return view('errors.404');
+        }]);
 
-Route::get('error-in-database-connection', ['as' => 'errordb', function () {
-    return view('errors.db');
-}]);
+    Route::get('error-in-database-connection', ['as' => 'errordb', function () {
+            return view('errors.db');
+        }]);
 
-Route::get('unauthorized', ['as' => 'unauth', function () {
-    return view('errors.unauth');
-}]);
+    Route::get('unauthorized', ['as' => 'unauth', function () {
+            return view('errors.unauth');
+        }]);
 
-Route::get('board-offline', ['as' => 'board.offline', function () {
-    return view('errors.offline');
-}]);
+    Route::get('board-offline', ['as' => 'board.offline', function () {
+            return view('errors.offline');
+        }]);
 
     /*
       |=============================================================
