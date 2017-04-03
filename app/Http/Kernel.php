@@ -62,6 +62,7 @@ class Kernel extends HttpKernel
         'update'      => \App\Http\Middleware\CheckUpdate::class,
         'board'       => \App\Http\Middleware\CheckBoard::class,
         'install'     => \App\Http\Middleware\Install::class,
+        'redirect' => \App\Http\Middleware\Redirect::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
     ];
 }
