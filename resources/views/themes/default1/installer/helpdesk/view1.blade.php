@@ -14,6 +14,7 @@ active
 
         <p>Please read this software license agreement carefully before downloading or using the software. By clicking on the "accept" button, opening the package, or downloading the product, you are consenting to be bound by this agreement. If you do not agree to all of the terms of this agreement, stop the installation process and exit.</p>
         <form action="{{URL::route('postlicence')}}" method="post">
+            {{ csrf_field() }}
             <div>
                 
                 <div id="openModal" class="modalDialog">

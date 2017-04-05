@@ -8,7 +8,7 @@ use App\Model\helpdesk\Agent\Groups;
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
-use App\Model\helpdesk\Notification\NotificationType;
+//use App\Model\helpdesk\Notification\NotificationType;
 use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Settings\Alert;
 use App\Model\helpdesk\Settings\CommonSettings;
@@ -27,7 +27,7 @@ use App\Model\helpdesk\Utility\Date_format;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Languages;
 use App\Model\helpdesk\Utility\Limit_Login;
-use App\Model\helpdesk\Utility\Log_notification;
+//use App\Model\helpdesk\Utility\Log_notification;
 use App\Model\helpdesk\Utility\MailboxProtocol;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
@@ -62,9 +62,9 @@ class DatabaseSeeder extends Seeder
         foreach ($date_time_formats as $date_time_format) {
             Date_time_format::create(['format' => $date_time_format]);
         }
-        NotificationType::create(['id' => '1', 'message' => 'A new user is registered', 'type' => 'registration', 'icon_class' => 'fa fa-user']);
-        NotificationType::create(['id' => '2', 'message' => 'You have a new reply on this ticket', 'type' => 'reply', 'icon_class' => 'fa fa-envelope']);
-        NotificationType::create(['id' => '3', 'message' => 'A new ticket has been created', 'type' => 'new_ticket', 'icon_class' => 'fa fa-envelope']);
+        //NotificationType::create(['id' => '1', 'message' => 'A new user is registered', 'type' => 'registration', 'icon_class' => 'fa fa-user']);
+//        NotificationType::create(['id' => '2', 'message' => 'You have a new reply on this ticket', 'type' => 'reply', 'icon_class' => 'fa fa-envelope']);
+//        NotificationType::create(['id' => '3', 'message' => 'A new ticket has been created', 'type' => 'new_ticket', 'icon_class' => 'fa fa-envelope']);
         WorkflowClose::create(['id' => '1', 'days' => '2', 'condition' => '1', 'send_email' => '1', 'status' => '3']);
 
         /* Date format */
@@ -264,13 +264,13 @@ class DatabaseSeeder extends Seeder
         help_topic::create(['topic' => 'Sales query', 'department' => '2', 'ticket_status' => '1', 'priority' => '2', 'sla_plan' => '1', 'ticket_num_format' => '1', 'status' => '0', 'type' => '1', 'auto_response' => '0']);
         help_topic::create(['topic' => 'Operational query', 'department' => '3', 'ticket_status' => '1', 'priority' => '2', 'sla_plan' => '1', 'ticket_num_format' => '1', 'status' => '0', 'type' => '1', 'auto_response' => '0']);
         /* Daily notification log */
-        Log_notification::create(['log' => 'NOT-1']);
+        //Log_notification::create(['log' => 'NOT-1']);
         /* System complete settings */
         $this->call(AlertSeeder::class);
         Company::create(['id' => '1']);
         Email::create(['id' => '1', 'template' => 'default', 'email_fetching' => '1', 'notification_cron' => '1', 'all_emails' => '1', 'email_collaborator' => '1', 'attachment' => '1']);
         Responder::create(['id' => '1', 'new_ticket' => '1', 'agent_new_ticket' => '1']);
-        System::create(['id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32']);
+        //System::create(['id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32']);
         Ticket::create(['num_format' => '$$$$-####-####', 'num_sequence' => 'sequence', 'collision_avoid' => '2', 'priority' => '1', 'sla' => '2', 'help_topic' => '1', 'status' => '1']);
         /* Ticket source */
         Ticket_source::create(['name' => 'web', 'value' => 'Web']);
