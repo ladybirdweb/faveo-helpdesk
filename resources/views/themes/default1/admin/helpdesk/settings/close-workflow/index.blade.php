@@ -113,7 +113,7 @@ class="active"
                 <div class="col-md-6">
                     <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.close-msg3') !!}</div>
                     <?php $user = \App\Model\helpdesk\Ticket\Ticket_Status::where('state', '=', 'closed')->get(); ?>
-                    {!! Form::select('status',[ Lang::get('lang.status')=>$user->pluck('name','id')->toArray()],null,['class' => 'form-control']) !!}	
+                    {!! Form::select('status',[ Lang::get('lang.status')=>$user->lists('name','id')->toArray()],null,['class' => 'form-control']) !!}	
                 </div>
             </div>
         </div>

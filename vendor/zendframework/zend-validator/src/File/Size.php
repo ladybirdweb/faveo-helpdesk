@@ -82,7 +82,7 @@ class Size extends AbstractValidator
             $argv = func_get_args();
             array_shift($argv);
             $options['max'] = array_shift($argv);
-            if (! empty($argv)) {
+            if (!empty($argv)) {
                 $options['useByteString'] = array_shift($argv);
             }
         }
@@ -121,7 +121,7 @@ class Size extends AbstractValidator
     public function getMin($raw = false)
     {
         $min = $this->options['min'];
-        if (! $raw && $this->getByteString()) {
+        if (!$raw && $this->getByteString()) {
             $min = $this->toByteString($min);
         }
 
@@ -166,7 +166,7 @@ class Size extends AbstractValidator
     public function getMax($raw = false)
     {
         $max = $this->options['max'];
-        if (! $raw && $this->getByteString()) {
+        if (!$raw && $this->getByteString()) {
             $max = $this->toByteString($max);
         }
 
@@ -239,7 +239,7 @@ class Size extends AbstractValidator
             $filename = $file['name'];
             $file     = $file['tmp_name'];
         } elseif (is_array($value)) {
-            if (! isset($value['tmp_name']) || ! isset($value['name'])) {
+            if (!isset($value['tmp_name']) || !isset($value['name'])) {
                 throw new Exception\InvalidArgumentException(
                     'Value array must be in $_FILES format'
                 );
@@ -308,7 +308,7 @@ class Size extends AbstractValidator
     protected function toByteString($size)
     {
         $sizes = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-        for ($i = 0; $size >= 1024 && $i < 9; $i++) {
+        for ($i=0; $size >= 1024 && $i < 9; $i++) {
             $size /= 1024;
         }
 
@@ -330,8 +330,8 @@ class Size extends AbstractValidator
         $type  = trim(substr($size, -2, 1));
 
         $value = substr($size, 0, -1);
-        if (! is_numeric($value)) {
-            $value = trim(substr($value, 0, -1));
+        if (!is_numeric($value)) {
+            $value = substr($value, 0, -1);
         }
 
         switch (strtoupper($type)) {

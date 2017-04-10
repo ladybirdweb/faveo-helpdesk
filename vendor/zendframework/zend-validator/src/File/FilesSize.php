@@ -61,7 +61,7 @@ class FilesSize extends Size
             $options = ArrayUtils::iteratorToArray($options);
         } elseif (is_scalar($options)) {
             $options = ['max' => $options];
-        } elseif (! is_array($options)) {
+        } elseif (!is_array($options)) {
             throw new Exception\InvalidArgumentException('Invalid options to validator provided');
         }
 
@@ -69,7 +69,7 @@ class FilesSize extends Size
             $argv = func_get_args();
             array_shift($argv);
             $options['max'] = array_shift($argv);
-            if (! empty($argv)) {
+            if (!empty($argv)) {
                 $options['useByteString'] = array_shift($argv);
             }
         }
@@ -98,7 +98,7 @@ class FilesSize extends Size
         $size = $this->getSize();
         foreach ($value as $files) {
             if (is_array($files)) {
-                if (! isset($files['tmp_name']) || ! isset($files['name'])) {
+                if (!isset($files['tmp_name']) || !isset($files['name'])) {
                     throw new Exception\InvalidArgumentException(
                         'Value array must be in $_FILES format'
                     );
@@ -113,7 +113,7 @@ class FilesSize extends Size
                 continue;
             }
 
-            if (! isset($this->files[$files])) {
+            if (!isset($this->files[$files])) {
                 $this->files[$files] = $files;
             } else {
                 // file already counted... do not count twice

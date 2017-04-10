@@ -37,7 +37,7 @@ class = "active"
         /* from whole attribute pick the article_id */
         $page = App\Model\kb\Relationship::where('category_id', '=', $category->id)->paginate('3');
         /* from whole attribute pick the article_id */
-        $article_id = $page->pluck('article_id');
+        $article_id = $page->lists('article_id');
         $count = count($article_id);
         ?>
         <div class="col-md-6">
@@ -109,7 +109,7 @@ class = "active"
     @foreach($categorys as $category)
     <?php
     $num = \App\Model\kb\Relationship::where('category_id', '=', $category->id)->get();
-    $article_id = $num->pluck('article_id');
+    $article_id = $num->lists('article_id');
     $numcount = count($article_id);
     ?>
     <li><a href="{{url('category-list/'.$category->slug)}}"><span class="badge pull-right">{{$numcount}}</span>{{$category->name}}</a></li>

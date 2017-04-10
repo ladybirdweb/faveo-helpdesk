@@ -9,12 +9,7 @@ class="active"
 @stop
 
 @section('PageHeader')
-<h1>{!! Lang::get('lang.settings') !!}</h1>
-@stop
-
-@section('breadcrumbs')
-<ol class="breadcrumb">
-</ol>
+<h1>{!! Lang::get('lang.status') !!}</h1>
 @stop
 
 @section('content')
@@ -22,43 +17,63 @@ class="active"
     <div class="box-header with-border">
         <h3 class="box-title">{!! Lang::get('lang.list_of_status') !!}</h3>
         <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-toggle="modal" data-target="#2create" id="create" title="{!! Lang::get('lang.create') !!}"><i class="fa fa-plus-circle fa-2x"></i></button>
+            <a href="{!! URL::route('statuss.create') !!}"><button class="btn btn-primary btn-sm" id="create" title="{!! Lang::get('lang.create') !!}">{!! Lang::get('lang.create') !!}</button></a>
         </div>
     </div><!-- /.box-header -->
     <div class="box-body">
-
         @if(Session::has('success'))
         <div class="alert alert-success alert-dismissable">
             <i class="fa fa-check-circle"></i>
+            <b>{!! Lang::get('lang.success') !!}</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            {{Session::get('success')}}
+            {!! Session::get('success') !!}
         </div>
         @endif
-        @if(Session::has('failed'))
+        @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
             <b>{!! Lang::get('lang.alert') !!} !</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <p>{{Session::get('failed')}}</p>                
+            <p>{!! Session::get('fails') !!}</p>
         </div>
         @endif
+        <?php
+        $status_type = new App\Model\helpdesk\Ticket\TicketStatusType();
+        ?>
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th>{!! Lang::get('lang.name') !!}</th>
-                    <th>{!! Lang::get('lang.display_order') !!}</th>
+                    <th>{!! Lang::get('lang.visible_to_client') !!}</th>
+                    <th>{!! Lang::get('lang.purpose_of_status') !!}</th>
+                    <th>{!! Lang::get('lang.send_email') !!}</th>
+                    <th>{!! Lang::get('lang.order') !!}</th>
+                    <th>{!! Lang::get('lang.icon') !!}</th>
                     <th>{!! Lang::get('lang.action') !!}</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($statuss as $status)
-                <?php if ($status->name == 'Deleted') continue; ?>
+                <?php if ($status->name == 'Deleted' || Finder::checkApproval() == 0 &&  $status->id == 6) continue; ?>
                 <tr>
-                    <td>{!! $status->name !!}</td>
-                    <td>{!! $status->sort !!}</td>
+                    <td><a href="{!! route('status.edit',$status->id) !!}"> {!! $status->name !!} </a>
+                        
+                    @if($status->default == 1) 
+                        ( {!! Lang::get('lang.Default') . " " . $status_type->where('id', $status->purpose_of_status)->first()->name; !!} )
+                    @endif
+                    </td>
+                    @if ($status->visibility_for_client == 1)
+                        <td><button class="btn btn-success btn-xs">{!! Lang::get('lang.yes') !!}</button></td>
+                    @elseif ($status->visibility_for_client == 0)
+                        <td><button class="btn btn-warning btn-xs">{!! Lang::get('lang.no') !!}</button></td>
+                    @endif
+                    <td>{!! $status_type->where('id', $status->purpose_of_status)->first()->name; !!}</td>
+                    <td>{!! Finder::rolesGroup($status->send_email) !!}</td>
+                    <td>{!! $status->order !!}</td>
+                    <td><span style="color:{!! $status->icon_color !!}"><i class="{!! $status->icon !!}"></i></span></td>
                     <td>
-                        <a href="{!! route('status.edit',$status->id) !!}"><button class="btn btn-info btn-sm">{!! Lang::get('lang.edit_details') !!}</button></a>
-                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#{{$status->id}}delete">{!! Lang::get('lang.delete') !!}</button>
+                        <a href="{!! route('status.edit',$status->id) !!}"><button class="btn btn-info btn-xs"> <i class='fa fa-edit'> </i> {!! Lang::get('lang.edit') !!}</button></a>
+                        <button class="btn btn-danger btn-xs" <?php if($status->default == 1 || $status->id == 6) { echo "disabled='disabled'"; } ?> data-toggle="modal" data-target="#{{$status->id}}delete"> <i class='fa fa-trash'> </i> {!! Lang::get('lang.delete') !!}</button>
                         <div class="modal fade" id="{{$status->id}}delete">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -84,95 +99,4 @@ class="active"
     </div><!-- /.box-body -->
 </div>
 
-<!-- create modal -->
-<div class="modal fade" id="2create">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            {!! Form::open(['route'=>'statuss.create']) !!}
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{!! Lang::get('lang.create') !!}</h4>
-            </div>
-            <div class="modal-body">
-                @if(Session::has('errors'))
-                <script type="text/javascript">
-                    $(document).ready(function() {
-                        $("#create").click();
-                    });
-                </script>
-                <div class="alert alert-danger alert-dismissable">
-                    <i class="fa fa-ban"></i>
-                    <b>{!! Lang::get('lang.alert') !!}!</b>
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    <br/>
-                    @foreach ($errors->all() as $error)
-                    <li class="error-message-padding">{{ $error }}</li>
-                    @endforeach 
-                </div>
-                @endif
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                            <label for="title">{!! Lang::get('lang.name') !!}: <span class="text-red"> *</span></label><br>
-                            {!! Form::text('name',null,['class'=>'form-control'])!!}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group {{ $errors->has('sort') ? 'has-error' : '' }}">
-                            <label for="title">{!! Lang::get('lang.display_order') !!}: <span class="text-red"> *</span></label><br>
-                            {!! Form::text('sort',null,['class'=>'form-control'])!!}
-                        </div>  
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group {{ $errors->has('icon_class') ? 'has-error' : '' }}">
-                            <label for="title">{!! Lang::get('lang.icon_class') !!}: <span class="text-red"> *</span></label><br>
-                            {!! Form::text('icon_class',null,['class'=>'form-control'])!!}
-                        </div> 
-                    </div>
-                </div>
-                <div class="form-group">
-                    {!! Form::label('gender',Lang::get('lang.resolved_status')) !!}
-                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.status_msg3') !!}</div>
-                    <div class="row">
-                        <div class="col-xs-3">
-                            {!! Form::radio('state','closed') !!} {{Lang::get('lang.yes')}}
-                        </div>
-                        <div class="col-xs-3">
-                            {!! Form::radio('state','open') !!} {{Lang::get('lang.no')}}
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    {!! Form::label('gender',Lang::get('lang.deleted_status')) !!}
-                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.status_msg2') !!}</div>
-                    <div class="row">
-                        <div class="col-xs-3">
-                            {!! Form::radio('delete','yes') !!} {{Lang::get('lang.yes')}}
-                        </div>
-                        <div class="col-xs-3">
-                            {!! Form::radio('delete','no') !!} {{Lang::get('lang.no')}}
-                        </div>
-                    </div>        
-                </div>
-                <div class="form-group">
-                    {!! Form::label('gender',Lang::get('lang.notify_user')) !!}
-                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.status_msg1') !!}</div>
-                    <div class="row">
-                        <div class="col-xs-3">
-                            {!! Form::radio('email_user','yes') !!} {{Lang::get('lang.yes')}}
-                        </div>
-                        <div class="col-xs-3">
-                            {!! Form::radio('email_user','no') !!} {{Lang::get('lang.no')}}
-                        </div>
-                    </div>        
-                </div>
-            </div>
-            <div class="modal-footer">
-                {!! Form::submit(Lang::get('lang.create_status'),['class'=>'btn btn-primary'])!!}
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">{!! Lang::get('lang.close') !!}</button>
-            </div>
-            {!! Form::close() !!}
-        </div> 
-    </div>
-</div>
 @stop

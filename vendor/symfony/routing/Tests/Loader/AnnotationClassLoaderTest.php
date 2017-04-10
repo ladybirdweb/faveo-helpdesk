@@ -136,10 +136,11 @@ class AnnotationClassLoaderTest extends AbstractAnnotationLoaderTest
             array_intersect_assoc($routeData['options'], $route->getOptions()),
             '->load preserves options annotation'
         );
+        $defaults = array_replace($methodArgs, $routeData['defaults']);
         $this->assertCount(
-            count($routeData['defaults']),
-            $route->getDefaults(),
-            '->load preserves defaults annotation'
+            count($defaults),
+            array_intersect_assoc($defaults, $route->getDefaults()),
+            '->load preserves defaults annotation and merges them with default arguments in method signature'
         );
         $this->assertEquals($routeData['schemes'], $route->getSchemes(), '->load preserves schemes annotation');
         $this->assertEquals($routeData['methods'], $route->getMethods(), '->load preserves methods annotation');

@@ -7,7 +7,6 @@ use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Contracts\Cache\Factory as FactoryContract;
-use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 
 class CacheManager implements FactoryContract
 {
@@ -162,12 +161,7 @@ class CacheManager implements FactoryContract
     {
         $prefix = $this->getPrefix($config);
 
-        $memcached = $this->app['memcached.connector']->connect(
-            $config['servers'],
-            array_get($config, 'persistent_id'),
-            array_get($config, 'options', []),
-            array_filter(array_get($config, 'sasl', []))
-        );
+        $memcached = $this->app['memcached.connector']->connect($config['servers']);
 
         return $this->repository(new MemcachedStore($memcached, $prefix));
     }
@@ -224,9 +218,9 @@ class CacheManager implements FactoryContract
     {
         $repository = new Repository($store);
 
-        if ($this->app->bound(DispatcherContract::class)) {
+        if ($this->app->bound('Illuminate\Contracts\Events\Dispatcher')) {
             $repository->setEventDispatcher(
-                $this->app[DispatcherContract::class]
+                $this->app['Illuminate\Contracts\Events\Dispatcher']
             );
         }
 
@@ -285,7 +279,7 @@ class CacheManager implements FactoryContract
      */
     public function extend($driver, Closure $callback)
     {
-        $this->customCreators[$driver] = $callback->bindTo($this, $this);
+        $this->customCreators[$driver] = $callback;
 
         return $this;
     }
@@ -299,6 +293,6 @@ class CacheManager implements FactoryContract
      */
     public function __call($method, $parameters)
     {
-        return $this->store()->$method(...$parameters);
+        return call_user_func_array([$this->store(), $method], $parameters);
     }
 }

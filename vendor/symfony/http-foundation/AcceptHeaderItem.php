@@ -57,7 +57,7 @@ class AcceptHeaderItem
      *
      * @param string $itemValue
      *
-     * @return self
+     * @return AcceptHeaderItem
      */
     public static function fromString($itemValue)
     {
@@ -103,7 +103,7 @@ class AcceptHeaderItem
      *
      * @param string $value
      *
-     * @return $this
+     * @return AcceptHeaderItem
      */
     public function setValue($value)
     {
@@ -127,7 +127,7 @@ class AcceptHeaderItem
      *
      * @param float $quality
      *
-     * @return $this
+     * @return AcceptHeaderItem
      */
     public function setQuality($quality)
     {
@@ -151,7 +151,7 @@ class AcceptHeaderItem
      *
      * @param int $index
      *
-     * @return $this
+     * @return AcceptHeaderItem
      */
     public function setIndex($index)
     {
@@ -211,7 +211,7 @@ class AcceptHeaderItem
      * @param string $name
      * @param string $value
      *
-     * @return $this
+     * @return AcceptHeaderItem
      */
     public function setAttribute($name, $value)
     {

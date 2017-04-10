@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\Translation\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\MessageCatalogue;
 
-class MessageCatalogueTest extends TestCase
+class MessageCatalogueTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetLocale()
     {
@@ -83,10 +82,10 @@ class MessageCatalogueTest extends TestCase
 
     public function testAddCatalogue()
     {
-        $r = $this->getMockBuilder('Symfony\Component\Config\Resource\ResourceInterface')->getMock();
+        $r = $this->getMock('Symfony\Component\Config\Resource\ResourceInterface');
         $r->expects($this->any())->method('__toString')->will($this->returnValue('r'));
 
-        $r1 = $this->getMockBuilder('Symfony\Component\Config\Resource\ResourceInterface')->getMock();
+        $r1 = $this->getMock('Symfony\Component\Config\Resource\ResourceInterface');
         $r1->expects($this->any())->method('__toString')->will($this->returnValue('r1'));
 
         $catalogue = new MessageCatalogue('en', array('domain1' => array('foo' => 'foo'), 'domain2' => array('bar' => 'bar')));
@@ -105,35 +104,28 @@ class MessageCatalogueTest extends TestCase
 
     public function testAddFallbackCatalogue()
     {
-        $r = $this->getMockBuilder('Symfony\Component\Config\Resource\ResourceInterface')->getMock();
+        $r = $this->getMock('Symfony\Component\Config\Resource\ResourceInterface');
         $r->expects($this->any())->method('__toString')->will($this->returnValue('r'));
 
-        $r1 = $this->getMockBuilder('Symfony\Component\Config\Resource\ResourceInterface')->getMock();
+        $r1 = $this->getMock('Symfony\Component\Config\Resource\ResourceInterface');
         $r1->expects($this->any())->method('__toString')->will($this->returnValue('r1'));
 
-        $r2 = $this->getMockBuilder('Symfony\Component\Config\Resource\ResourceInterface')->getMock();
-        $r2->expects($this->any())->method('__toString')->will($this->returnValue('r2'));
-
-        $catalogue = new MessageCatalogue('fr_FR', array('domain1' => array('foo' => 'foo'), 'domain2' => array('bar' => 'bar')));
+        $catalogue = new MessageCatalogue('en_US', array('domain1' => array('foo' => 'foo'), 'domain2' => array('bar' => 'bar')));
         $catalogue->addResource($r);
 
-        $catalogue1 = new MessageCatalogue('fr', array('domain1' => array('foo' => 'bar', 'foo1' => 'foo1')));
+        $catalogue1 = new MessageCatalogue('en', array('domain1' => array('foo' => 'bar', 'foo1' => 'foo1')));
         $catalogue1->addResource($r1);
 
-        $catalogue2 = new MessageCatalogue('en');
-        $catalogue2->addResource($r2);
-
         $catalogue->addFallbackCatalogue($catalogue1);
-        $catalogue1->addFallbackCatalogue($catalogue2);
 
         $this->assertEquals('foo', $catalogue->get('foo', 'domain1'));
         $this->assertEquals('foo1', $catalogue->get('foo1', 'domain1'));
 
-        $this->assertEquals(array($r, $r1, $r2), $catalogue->getResources());
+        $this->assertEquals(array($r, $r1), $catalogue->getResources());
     }
 
     /**
-     * @expectedException \Symfony\Component\Translation\Exception\LogicException
+     * @expectedException \LogicException
      */
     public function testAddFallbackCatalogueWithParentCircularReference()
     {
@@ -145,7 +137,7 @@ class MessageCatalogueTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Translation\Exception\LogicException
+     * @expectedException \LogicException
      */
     public function testAddFallbackCatalogueWithFallbackCircularReference()
     {
@@ -159,7 +151,7 @@ class MessageCatalogueTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Translation\Exception\LogicException
+     * @expectedException \LogicException
      */
     public function testAddCatalogueWhenLocaleIsNotTheSameAsTheCurrentOne()
     {
@@ -170,11 +162,11 @@ class MessageCatalogueTest extends TestCase
     public function testGetAddResource()
     {
         $catalogue = new MessageCatalogue('en');
-        $r = $this->getMockBuilder('Symfony\Component\Config\Resource\ResourceInterface')->getMock();
+        $r = $this->getMock('Symfony\Component\Config\Resource\ResourceInterface');
         $r->expects($this->any())->method('__toString')->will($this->returnValue('r'));
         $catalogue->addResource($r);
         $catalogue->addResource($r);
-        $r1 = $this->getMockBuilder('Symfony\Component\Config\Resource\ResourceInterface')->getMock();
+        $r1 = $this->getMock('Symfony\Component\Config\Resource\ResourceInterface');
         $r1->expects($this->any())->method('__toString')->will($this->returnValue('r1'));
         $catalogue->addResource($r1);
 

@@ -61,7 +61,7 @@ class TraceableEventDispatcher extends BaseTraceableEventDispatcher
     protected function postDispatch($eventName, Event $event)
     {
         switch ($eventName) {
-            case KernelEvents::CONTROLLER_ARGUMENTS:
+            case KernelEvents::CONTROLLER:
                 $this->stopwatch->start('controller', 'section');
                 break;
             case KernelEvents::RESPONSE:

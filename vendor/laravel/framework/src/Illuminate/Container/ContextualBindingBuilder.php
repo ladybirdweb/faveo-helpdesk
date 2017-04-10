@@ -61,8 +61,6 @@ class ContextualBindingBuilder implements ContextualBindingBuilderContract
      */
     public function give($implementation)
     {
-        $this->container->addContextualBinding(
-            $this->concrete, $this->needs, $implementation
-        );
+        $this->container->addContextualBinding($this->concrete, $this->needs, $implementation);
     }
 }

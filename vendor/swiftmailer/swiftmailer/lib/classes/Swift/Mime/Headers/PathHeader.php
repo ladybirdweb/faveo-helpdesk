@@ -80,7 +80,7 @@ class Swift_Mime_Headers_PathHeader extends Swift_Mime_Headers_AbstractHeader
      */
     public function setAddress($address)
     {
-        if (null === $address) {
+        if (is_null($address)) {
             $this->_address = null;
         } elseif ('' == $address) {
             $this->_address = '';

@@ -66,7 +66,7 @@ class ValidatorChain implements
      */
     public function getPluginManager()
     {
-        if (! $this->plugins) {
+        if (!$this->plugins) {
             $this->setPluginManager(new ValidatorPluginManager(new ServiceManager));
         }
         return $this->plugins;
@@ -137,11 +137,8 @@ class ValidatorChain implements
      * @param  int                  $priority
      * @return ValidatorChain Provides a fluent interface
      */
-    public function addValidator(
-        ValidatorInterface $validator,
-        $breakChainOnFailure = false,
-        $priority = self::DEFAULT_PRIORITY
-    ) {
+    public function addValidator(ValidatorInterface $validator, $breakChainOnFailure = false, $priority = self::DEFAULT_PRIORITY)
+    {
         return $this->attach($validator, $breakChainOnFailure, $priority);
     }
 
@@ -159,7 +156,7 @@ class ValidatorChain implements
     {
         $priority = self::DEFAULT_PRIORITY;
 
-        if (! $this->validators->isEmpty()) {
+        if (!$this->validators->isEmpty()) {
             $extractedNodes = $this->validators->toArray(PriorityQueue::EXTR_PRIORITY);
             rsort($extractedNodes, SORT_NUMERIC);
             $priority = $extractedNodes[0] + 1;

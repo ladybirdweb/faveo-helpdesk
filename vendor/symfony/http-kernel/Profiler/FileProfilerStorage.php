@@ -49,7 +49,7 @@ class FileProfilerStorage implements ProfilerStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function find($ip, $url, $limit, $method, $start = null, $end = null, $statusCode = null)
+    public function find($ip, $url, $limit, $method, $start = null, $end = null)
     {
         $file = $this->getIndexFilename();
 
@@ -63,10 +63,12 @@ class FileProfilerStorage implements ProfilerStorageInterface
         $result = array();
         while (count($result) < $limit && $line = $this->readLineFromFile($file)) {
             $values = str_getcsv($line);
-            list($csvToken, $csvIp, $csvMethod, $csvUrl, $csvTime, $csvParent, $csvStatusCode) = $values;
+            list($csvToken, $csvIp, $csvMethod, $csvUrl, $csvTime, $csvParent) = $values;
+            $csvStatusCode = isset($values[6]) ? $values[6] : null;
+
             $csvTime = (int) $csvTime;
 
-            if ($ip && false === strpos($csvIp, $ip) || $url && false === strpos($csvUrl, $url) || $method && false === strpos($csvMethod, $method) || $statusCode && false === strpos($csvStatusCode, $statusCode)) {
+            if ($ip && false === strpos($csvIp, $ip) || $url && false === strpos($csvUrl, $url) || $method && false === strpos($csvMethod, $method)) {
                 continue;
             }
 
@@ -152,7 +154,6 @@ class FileProfilerStorage implements ProfilerStorageInterface
             'method' => $profile->getMethod(),
             'url' => $profile->getUrl(),
             'time' => $profile->getTime(),
-            'status_code' => $profile->getStatusCode(),
         );
 
         if (false === file_put_contents($file, serialize($data))) {
@@ -260,7 +261,6 @@ class FileProfilerStorage implements ProfilerStorageInterface
         $profile->setMethod($data['method']);
         $profile->setUrl($data['url']);
         $profile->setTime($data['time']);
-        $profile->setStatusCode($data['status_code']);
         $profile->setCollectors($data['data']);
 
         if (!$parent && $data['parent']) {

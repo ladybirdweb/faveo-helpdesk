@@ -12,7 +12,7 @@ class Class_ extends Declaration
 
     protected $extends = null;
     protected $implements = array();
-    protected $flags = 0;
+    protected $type = 0;
 
     protected $uses = array();
     protected $constants = array();
@@ -112,7 +112,7 @@ class Class_ extends Declaration
      */
     public function getNode() {
         return new Stmt\Class_($this->name, array(
-            'flags' => $this->flags,
+            'type' => $this->type,
             'extends' => $this->extends,
             'implements' => $this->implements,
             'stmts' => array_merge($this->uses, $this->constants, $this->properties, $this->methods),

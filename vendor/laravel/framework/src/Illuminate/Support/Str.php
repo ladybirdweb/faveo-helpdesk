@@ -87,7 +87,7 @@ class Str
     public static function endsWith($haystack, $needles)
     {
         foreach ((array) $needles as $needle) {
-            if (substr($haystack, -strlen($needle)) === (string) $needle) {
+            if ((string) $needle === static::substr($haystack, -static::length($needle))) {
                 return true;
             }
         }
@@ -130,17 +130,6 @@ class Str
         $pattern = str_replace('\*', '.*', $pattern);
 
         return (bool) preg_match('#^'.$pattern.'\z#u', $value);
-    }
-
-    /**
-     * Convert a string to kebab case.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public static function kebab($value)
-    {
-        return static::snake($value, '-');
     }
 
     /**
@@ -205,10 +194,10 @@ class Str
      * Parse a Class@method style callback into class and method.
      *
      * @param  string  $callback
-     * @param  string|null  $default
+     * @param  string  $default
      * @return array
      */
-    public static function parseCallback($callback, $default = null)
+    public static function parseCallback($callback, $default)
     {
         return static::contains($callback, '@') ? explode('@', $callback, 2) : [$callback, $default];
     }
@@ -235,15 +224,28 @@ class Str
     {
         $string = '';
 
-        while (($len = strlen($string)) < $length) {
+        while (($len = static::length($string)) < $length) {
             $size = $length - $len;
 
             $bytes = random_bytes($size);
 
-            $string .= substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $size);
+            $string .= static::substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $size);
         }
 
         return $string;
+    }
+
+    /**
+     * Generate a more truly "random" bytes.
+     *
+     * @param  int  $length
+     * @return string
+     *
+     * @deprecated since version 5.2. Use random_bytes instead.
+     */
+    public static function randomBytes($length = 16)
+    {
+        return random_bytes($length);
     }
 
     /**
@@ -251,37 +253,32 @@ class Str
      *
      * Should not be considered sufficient for cryptography, etc.
      *
-     * @deprecated since version 5.3. Use the "random" method directly.
-     *
      * @param  int  $length
      * @return string
      */
     public static function quickRandom($length = 16)
     {
-        if (PHP_MAJOR_VERSION > 5) {
-            return static::random($length);
-        }
-
         $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-        return substr(str_shuffle(str_repeat($pool, $length)), 0, $length);
+        return static::substr(str_shuffle(str_repeat($pool, $length)), 0, $length);
     }
 
     /**
-     * Replace a given value in the string sequentially with an array.
+     * Compares two strings using a constant-time algorithm.
      *
-     * @param  string  $search
-     * @param  array   $replace
-     * @param  string  $subject
-     * @return string
+     * Note: This method will leak length information.
+     *
+     * Note: Adapted from Symfony\Component\Security\Core\Util\StringUtils.
+     *
+     * @param  string  $knownString
+     * @param  string  $userInput
+     * @return bool
+     *
+     * @deprecated since version 5.2. Use hash_equals instead.
      */
-    public static function replaceArray($search, array $replace, $subject)
+    public static function equals($knownString, $userInput)
     {
-        foreach ($replace as $value) {
-            $subject = static::replaceFirst($search, $value, $subject);
-        }
-
-        return $subject;
+        return hash_equals($knownString, $userInput);
     }
 
     /**
@@ -414,7 +411,7 @@ class Str
     public static function startsWith($haystack, $needles)
     {
         foreach ((array) $needles as $needle) {
-            if ($needle != '' && substr($haystack, 0, strlen($needle)) === (string) $needle) {
+            if ($needle != '' && mb_strpos($haystack, $needle) === 0) {
                 return true;
             }
         }

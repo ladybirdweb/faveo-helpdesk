@@ -48,12 +48,13 @@ class Redirector
      *
      * @param  int    $status
      * @param  array  $headers
-     * @param  mixed  $fallback
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function back($status = 302, $headers = [], $fallback = false)
+    public function back($status = 302, $headers = [])
     {
-        return $this->createRedirect($this->generator->previous($fallback), $status, $headers);
+        $back = $this->generator->previous();
+
+        return $this->createRedirect($back, $status, $headers);
     }
 
     /**
@@ -111,7 +112,9 @@ class Redirector
      */
     public function to($path, $status = 302, $headers = [], $secure = null)
     {
-        return $this->createRedirect($this->generator->to($path, [], $secure), $status, $headers);
+        $path = $this->generator->to($path, [], $secure);
+
+        return $this->createRedirect($path, $status, $headers);
     }
 
     /**
@@ -151,7 +154,9 @@ class Redirector
      */
     public function route($route, $parameters = [], $status = 302, $headers = [])
     {
-        return $this->to($this->generator->route($route, $parameters), $status, $headers);
+        $path = $this->generator->route($route, $parameters);
+
+        return $this->to($path, $status, $headers);
     }
 
     /**
@@ -165,7 +170,9 @@ class Redirector
      */
     public function action($action, $parameters = [], $status = 302, $headers = [])
     {
-        return $this->to($this->generator->action($action, $parameters), $status, $headers);
+        $path = $this->generator->action($action, $parameters);
+
+        return $this->to($path, $status, $headers);
     }
 
     /**
@@ -178,13 +185,15 @@ class Redirector
      */
     protected function createRedirect($path, $status, $headers)
     {
-        return tap(new RedirectResponse($path, $status, $headers), function ($redirect) {
-            if (isset($this->session)) {
-                $redirect->setSession($this->session);
-            }
+        $redirect = new RedirectResponse($path, $status, $headers);
 
-            $redirect->setRequest($this->generator->getRequest());
-        });
+        if (isset($this->session)) {
+            $redirect->setSession($this->session);
+        }
+
+        $redirect->setRequest($this->generator->getRequest());
+
+        return $redirect;
     }
 
     /**

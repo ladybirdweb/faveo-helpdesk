@@ -2,8 +2,6 @@
 
 namespace Illuminate\Auth\Passwords;
 
-use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
-
 trait CanResetPassword
 {
     /**
@@ -14,16 +12,5 @@ trait CanResetPassword
     public function getEmailForPasswordReset()
     {
         return $this->email;
-    }
-
-    /**
-     * Send the password reset notification.
-     *
-     * @param  string  $token
-     * @return void
-     */
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPasswordNotification($token));
     }
 }

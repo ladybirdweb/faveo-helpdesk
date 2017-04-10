@@ -82,9 +82,9 @@ class="active"
 		<!-- To show Whether a template in use or not:: TODO -->
 		<td></td>
 		<!-- Date Added -->
-		<td>{!! faveoDate($template->created_at) !!}</td>
+		<td>{!! UTC::usertimezone($template->created_at) !!}</td>
 		<!-- Last Updated -->
-		<td> {!! faveoDate($template->updated_at) !!} </td>
+		<td> {!! UTC::usertimezone($template->updated_at) !!} </td>
 		<!-- Deleting Fields -->
 		<td>
 			{!! Form::open(['route'=>['template.destroy', $template->id],'method'=>'DELETE']) !!}

@@ -66,7 +66,7 @@ class XPathExpr
     /**
      * @param $condition
      *
-     * @return $this
+     * @return XPathExpr
      */
     public function addCondition($condition)
     {
@@ -84,7 +84,7 @@ class XPathExpr
     }
 
     /**
-     * @return $this
+     * @return XPathExpr
      */
     public function addNameTest()
     {
@@ -97,7 +97,7 @@ class XPathExpr
     }
 
     /**
-     * @return $this
+     * @return XPathExpr
      */
     public function addStarPrefix()
     {
@@ -112,7 +112,7 @@ class XPathExpr
      * @param string    $combiner
      * @param XPathExpr $expr
      *
-     * @return $this
+     * @return XPathExpr
      */
     public function join($combiner, XPathExpr $expr)
     {

@@ -22,7 +22,7 @@ class Organization extends BaseModel
 
     public function getUserIds()
     {
-        $user_relations = $this->userRelation()->pluck('user_id')->toArray();
+        $user_relations = $this->userRelation()->lists('user_id')->toArray();
 
         return $user_relations;
     }

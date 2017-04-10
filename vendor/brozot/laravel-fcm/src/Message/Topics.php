@@ -1,226 +1,227 @@
-<?php
+<?php namespace LaravelFCM\Message;
 
-namespace LaravelFCM\Message;
 
 use Closure;
 use LaravelFCM\Message\Exceptions\NoTopicProvidedException;
 
 /**
- * Class Topics.
+ * Class Topics
  *
  * Create topic or a topic condition
+ *
+ * @package LaravelFCM\Message
  */
-class Topics
-{
-    /**
-     * @internal
-     *
-     * @var array of element in the condition
-     */
-    public $conditions = [];
+class Topics {
 
-    /**
-     * Add a topic, this method should be called before any conditional topic.
-     *
-     * @param string $first topicName
-     *
-     * @return $this
-     */
-    public function topic($first)
-    {
-        $this->conditions[] = compact('first');
+	/**
+	 * @internal
+	 * @var array of element in the condition
+	 */
+	public $conditions = [];
 
-        return $this;
-    }
+	/**
+	 * Add a topic, this method should be called before any conditional topic
+	 *
+	 * @param string $first topicName
+	 *
+	 * @return $this
+	 */
+	public function topic($first)
+	{
+		$this->conditions[] = compact('first');
 
-    /**
-     * Add a or condition to the precedent topic set.
-     *
-     * Parenthesis is a closure
-     *
-     * Equivalent of this: **'TopicA' in topic' || 'TopicB' in topics**
-     *
-     * ```
-     *          $topic = new Topics();
-     *          $topic->topic('TopicA')
-     *                ->orTopic('TopicB');
-     * ```
-     *
-     * Equivalent of this: **'TopicA' in topics && ('TopicB' in topics || 'TopicC' in topics)**
-     *
-     * ```
-     *          $topic = new Topics();
-     *          $topic->topic('TopicA')
-     *                ->andTopic(function($condition) {
-     *                      $condition->topic('TopicB')->orTopic('TopicC');
-     *          });
-     * ```
-     *
-     * > Note: Only two operators per expression are supported by fcm
-     *
-     * @param string|Closure $first topicName or closure
-     *
-     * @return Topics
-     */
-    public function orTopic($first)
-    {
-        return $this->on($first, ' || ');
-    }
+		return $this;
+	}
 
-    /**
-     * Add a and condition to the precedent topic set.
-     *
-     * Parenthesis is a closure
-     *
-     * Equivalent of this: **'TopicA' in topic' && 'TopicB' in topics**
-     *
-     * ```
-     *          $topic = new Topics();
-     *          $topic->topic('TopicA')
-     *                ->anTopic('TopicB');
-     * ```
-     *
-     * Equivalent of this: **'TopicA' in topics || ('TopicB' in topics && 'TopicC' in topics)**
-     *
-     * ```
-     *          $topic = new Topics();
-     *          $topic->topic('TopicA')
-     *                ->orTopic(function($condition) {
-     *                      $condition->topic('TopicB')->AndTopic('TopicC');
-     *          });
-     * ```
-     *
-     * > Note: Only two operators per expression are supported by fcm
-     *
-     * @param string|Closure $first topicName or closure
-     *
-     * @return Topics
-     */
-    public function andTopic($first)
-    {
-        return $this->on($first, ' && ');
-    }
+	/**
+	 * Add a or condition to the precedent topic set
+	 *
+	 * Parenthesis is a closure
+	 *
+	 * Equivalent of this: **'TopicA' in topic' || 'TopicB' in topics**
+	 *
+	 * ```
+	 *          $topic = new Topics();
+	 *          $topic->topic('TopicA')
+	 *                ->orTopic('TopicB');
+	 * ```
+	 *
+	 * Equivalent of this: **'TopicA' in topics && ('TopicB' in topics || 'TopicC' in topics)**
+	 *
+	 * ```
+	 *          $topic = new Topics();
+	 *          $topic->topic('TopicA')
+	 *                ->andTopic(function($condition) {
+	 *                      $condition->topic('TopicB')->orTopic('TopicC');
+	 *          });
+	 * ```
+	 *
+	 * > Note: Only two operators per expression are supported by fcm
+	 *
+	 * @param string|Closure $first topicName or closure
+	 *
+	 * @return Topics
+	 */
+	public function orTopic($first)
+	{
+		return $this->on($first, ' || ');
+	}
 
-    /**
-     * @internal
-     *
-     * @param $first
-     * @param $condition
-     *
-     * @return $this|Topics
-     */
-    private function on($first, $condition)
-    {
-        if ($first instanceof Closure) {
-            return $this->nest($first, $condition);
-        }
+	/**
+	 * Add a and condition to the precedent topic set
+	 *
+	 * Parenthesis is a closure
+	 *
+	 * Equivalent of this: **'TopicA' in topic' && 'TopicB' in topics**
+	 *
+	 * ```
+	 *          $topic = new Topics();
+	 *          $topic->topic('TopicA')
+	 *                ->anTopic('TopicB');
+	 * ```
+	 *
+	 * Equivalent of this: **'TopicA' in topics || ('TopicB' in topics && 'TopicC' in topics)**
+	 *
+	 * ```
+	 *          $topic = new Topics();
+	 *          $topic->topic('TopicA')
+	 *                ->orTopic(function($condition) {
+	 *                      $condition->topic('TopicB')->AndTopic('TopicC');
+	 *          });
+	 * ```
+	 *
+	 * > Note: Only two operators per expression are supported by fcm
+	 *
+	 * @param string|Closure $first topicName or closure
+	 *
+	 * @return Topics
+	 */
+	public function andTopic($first)
+	{
+		return $this->on($first, ' && ');
+	}
 
-        $this->conditions[] = compact('condition', 'first');
+	/**
+	 * @internal
+	 *
+	 * @param $first
+	 * @param $condition
+	 *
+	 * @return $this|Topics
+	 */
+	private function on($first, $condition)
+	{
 
-        return $this;
-    }
+		if ($first instanceof Closure) {
+			return $this->nest($first, $condition);
+		}
 
-    /**
-     * @internal
-     *
-     * @param Closure $callback
-     * @param         $condition
-     *
-     * @return $this
-     */
-    public function nest(Closure $callback, $condition)
-    {
-        $topic = new static();
+		$this->conditions[] = compact('condition', 'first');
 
-        $callback($topic);
-        if (count($topic->conditions)) {
-            $open_parenthesis = '(';
-            $topic = $topic->conditions;
-            $close_parenthesis = ')';
+		return $this;
+	}
 
-            $this->conditions[] = compact('condition', 'open_parenthesis', 'topic', 'close_parenthesis');
-        }
+	/**
+	 * @internal
+	 *
+	 * @param Closure $callback
+	 * @param         $condition
+	 *
+	 * @return $this
+	 */
+	public function nest(Closure $callback, $condition)
+	{
+		$topic = new static();
 
-        return $this;
-    }
+		$callback($topic);
+		if (count($topic->conditions)) {
 
-    /**
-     * Transform to array.
-     *
-     * @return array|string
-     *
-     * @throws NoTopicProvided
-     */
-    public function build()
-    {
-        $this->checkIfOneTopicExist();
+			$open_parenthesis = '(';
+			$topic = $topic->conditions;
+			$close_parenthesis = ')';
 
-        if ($this->hasOnlyOneTopic()) {
-            foreach ($this->conditions[0] as $topic) {
-                return '/topics/'.$topic;
-            }
-        }
+			$this->conditions[] = compact('condition', 'open_parenthesis', 'topic', 'close_parenthesis');
+		}
 
-        return [
-            'condition' => $this->topicsForFcm($this->conditions),
-        ];
-    }
+		return $this;
+	}
 
-    /**
-     * @internal
-     *
-     * @param $conditions
-     *
-     * @return string
-     */
-    private function topicsForFcm($conditions)
-    {
-        $condition = '';
-        foreach ($conditions as $partial) {
-            if (array_key_exists('condition', $partial)) {
-                $condition .= $partial['condition'];
-            }
+	/**
+	 * Transform to array
+	 *
+	 * @return array|string
+	 * @throws NoTopicProvided
+	 */
+	public function build()
+	{
+		$this->checkIfOneTopicExist();
 
-            if (array_key_exists('first', $partial)) {
-                $topic = $partial['first'];
-                $condition .= "'$topic' in topics";
-            }
+		if ($this->hasOnlyOneTopic()) {
+			foreach ($this->conditions[ 0] as $topic) {
+				return '/topics/'.$topic;
+			}
+		}
 
-            if (array_key_exists('open_parenthesis', $partial)) {
-                $condition .= $partial['open_parenthesis'];
-            }
+		return [
+			'condition' => $this->topicsForFcm($this->conditions)
+		];
+	}
 
-            if (array_key_exists('topic', $partial)) {
-                $condition .= $this->topicsForFcm($partial['topic']);
-            }
+	/**
+	 * @internal
+	 *
+	 * @param $conditions
+	 *
+	 * @return string
+	 */
+	private function topicsForFcm($conditions)
+	{
+		$condition = "";
+		foreach ($conditions as $partial) {
+			if (array_key_exists('condition', $partial)) {
+				$condition .= $partial['condition'];
+			}
 
-            if (array_key_exists('close_parenthesis', $partial)) {
-                $condition .= $partial['close_parenthesis'];
-            }
-        }
+			if (array_key_exists('first', $partial)) {
+				$topic = $partial['first'];
+				$condition .= "'$topic' in topics";
+			}
 
-        return $condition;
-    }
+			if (array_key_exists('open_parenthesis', $partial)) {
+				$condition .= $partial['open_parenthesis'];
+			}
 
-    /**
-     * Check if only one topic was set.
-     *
-     * @return bool
-     */
-    public function hasOnlyOneTopic()
-    {
-        return count($this->conditions) == 1;
-    }
+			if (array_key_exists('topic', $partial)) {
+				$condition .= $this->topicsForFcm($partial['topic']);
+			}
 
-    /**
-     * @internal
-     *
-     * @throws NoTopicProvidedException
-     */
-    private function checkIfOneTopicExist()
-    {
-        if (!count($this->conditions)) {
-            throw new NoTopicProvidedException('At least one topic must be provided');
-        }
-    }
+			if (array_key_exists('close_parenthesis', $partial)) {
+				$condition .= $partial['close_parenthesis'];
+			}
+		}
+
+		return $condition;
+	}
+
+	/**
+	 * Check if only one topic was set
+	 *
+	 * @return bool
+	 */
+	public function hasOnlyOneTopic()
+	{
+		return count($this->conditions) == 1;
+	}
+
+	/**
+	 * @internal
+	 *
+	 * @throws NoTopicProvidedException
+	 */
+	private function checkIfOneTopicExist()
+	{
+		if (!count($this->conditions)) {
+			throw new NoTopicProvidedException('At least one topic must be provided');
+		}
+	}
 }

@@ -4,8 +4,7 @@ namespace Unisharp\Laravelfilemanager\Events;
 
 class FolderWasRenamed
 {
-    private $old_path;
-    private $new_path;
+    private $path;
 
     public function __construct($old_path, $new_path)
     {
@@ -16,13 +15,14 @@ class FolderWasRenamed
     /**
      * @return string
      */
-    public function oldPath()
+    public function old_path()
     {
         return $this->old_path;
     }
 
-    public function newPath()
+    public function new_path()
     {
         return $this->new_path;
     }
+
 }

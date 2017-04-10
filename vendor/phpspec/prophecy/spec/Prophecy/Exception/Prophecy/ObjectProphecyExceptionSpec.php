@@ -3,11 +3,14 @@
 namespace spec\Prophecy\Exception\Prophecy;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Prophecy\ObjectProphecy;
+use spec\Prophecy\Exception\Prophecy;
 
 class ObjectProphecyExceptionSpec extends ObjectBehavior
 {
-    function let(ObjectProphecy $objectProphecy)
+    /**
+     * @param \Prophecy\Prophecy\ObjectProphecy $objectProphecy
+     */
+    function let($objectProphecy)
     {
         $this->beConstructedWith('message', $objectProphecy);
     }

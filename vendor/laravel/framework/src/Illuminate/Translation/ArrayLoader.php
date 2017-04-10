@@ -59,14 +59,4 @@ class ArrayLoader implements LoaderInterface
 
         return $this;
     }
-
-    /**
-     * Get an array of all the registered namespaces.
-     *
-     * @return array
-     */
-    public function namespaces()
-    {
-        return [];
-    }
 }

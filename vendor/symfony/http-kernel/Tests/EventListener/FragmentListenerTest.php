@@ -11,14 +11,13 @@
 
 namespace Symfony\Component\HttpKernel\Tests\EventListener;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\EventListener\FragmentListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\UriSigner;
 
-class FragmentListenerTest extends TestCase
+class FragmentListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function testOnlyTriggeredOnFragmentRoute()
     {
@@ -117,6 +116,6 @@ class FragmentListenerTest extends TestCase
 
     private function createGetResponseEvent(Request $request, $requestType = HttpKernelInterface::MASTER_REQUEST)
     {
-        return new GetResponseEvent($this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock(), $request, $requestType);
+        return new GetResponseEvent($this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'), $request, $requestType);
     }
 }

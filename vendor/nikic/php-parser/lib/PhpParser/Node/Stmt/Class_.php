@@ -2,8 +2,8 @@
 
 namespace PhpParser\Node\Stmt;
 
-use PhpParser\Error;
 use PhpParser\Node;
+use PhpParser\Error;
 
 class Class_ extends ClassLike
 {
@@ -17,14 +17,11 @@ class Class_ extends ClassLike
     const VISIBILITY_MODIFER_MASK = 7; // 1 | 2 | 4
 
     /** @var int Type */
-    public $flags;
+    public $type;
     /** @var null|Node\Name Name of extended class */
     public $extends;
     /** @var Node\Name[] Names of implemented interfaces */
     public $implements;
-
-    /** @deprecated Use $flags instead */
-    public $type;
 
     protected static $specialNames = array(
         'self'   => true,
@@ -37,7 +34,7 @@ class Class_ extends ClassLike
      *
      * @param string|null $name       Name
      * @param array       $subNodes   Array of the following optional subnodes:
-     *                                'flags'      => 0      : Flags
+     *                                'type'       => 0      : Type
      *                                'extends'    => null   : Name of extended class
      *                                'implements' => array(): Names of implemented interfaces
      *                                'stmts'      => array(): Statements
@@ -45,25 +42,43 @@ class Class_ extends ClassLike
      */
     public function __construct($name, array $subNodes = array(), array $attributes = array()) {
         parent::__construct($attributes);
-        $this->flags = isset($subNodes['flags']) ? $subNodes['flags']
-            : (isset($subNodes['type']) ? $subNodes['type'] : 0);
-        $this->type = $this->flags;
+        $this->type = isset($subNodes['type']) ? $subNodes['type'] : 0;
         $this->name = $name;
         $this->extends = isset($subNodes['extends']) ? $subNodes['extends'] : null;
         $this->implements = isset($subNodes['implements']) ? $subNodes['implements'] : array();
         $this->stmts = isset($subNodes['stmts']) ? $subNodes['stmts'] : array();
+
+        if (null !== $this->name && isset(self::$specialNames[strtolower($this->name)])) {
+            throw new Error(sprintf('Cannot use \'%s\' as class name as it is reserved', $this->name));
+        }
+
+        if (isset(self::$specialNames[strtolower($this->extends)])) {
+            throw new Error(
+                sprintf('Cannot use \'%s\' as class name as it is reserved', $this->extends),
+                $this->extends->getAttributes()
+            );
+        }
+
+        foreach ($this->implements as $interface) {
+            if (isset(self::$specialNames[strtolower($interface)])) {
+                throw new Error(
+                    sprintf('Cannot use \'%s\' as interface name as it is reserved', $interface),
+                    $interface->getAttributes()
+                );
+            }
+        }
     }
 
     public function getSubNodeNames() {
-        return array('flags', 'name', 'extends', 'implements', 'stmts');
+        return array('type', 'name', 'extends', 'implements', 'stmts');
     }
 
     public function isAbstract() {
-        return (bool) ($this->flags & self::MODIFIER_ABSTRACT);
+        return (bool) ($this->type & self::MODIFIER_ABSTRACT);
     }
 
     public function isFinal() {
-        return (bool) ($this->flags & self::MODIFIER_FINAL);
+        return (bool) ($this->type & self::MODIFIER_FINAL);
     }
 
     public function isAnonymous() {

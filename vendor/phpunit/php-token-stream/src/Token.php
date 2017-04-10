@@ -759,7 +759,6 @@ class PHP_Token_TRY extends PHP_Token {}
 class PHP_Token_UNSET extends PHP_Token {}
 class PHP_Token_UNSET_CAST extends PHP_Token {}
 class PHP_Token_USE extends PHP_Token {}
-class PHP_Token_USE_FUNCTION extends PHP_Token {}
 class PHP_Token_VAR extends PHP_Token {}
 class PHP_Token_VARIABLE extends PHP_Token {}
 class PHP_Token_WHILE extends PHP_Token {}
@@ -831,9 +830,7 @@ class PHP_Token_LAMBDA_ARROW extends PHP_Token {}
 class PHP_Token_LAMBDA_CP extends PHP_Token {}
 class PHP_Token_LAMBDA_OP extends PHP_Token {}
 class PHP_Token_ONUMBER extends PHP_Token {}
-class PHP_Token_NULLSAFE_OBJECT_OPERATOR extends PHP_Token {}
 class PHP_Token_SHAPE extends PHP_Token {}
-class PHP_Token_SUPER extends PHP_Token {}
 class PHP_Token_TYPE extends PHP_Token {}
 class PHP_Token_TYPELIST_GT extends PHP_Token {}
 class PHP_Token_TYPELIST_LT extends PHP_Token {}

@@ -26,7 +26,10 @@ class ArrayCountTokenSpec extends ObjectBehavior
         $this->scoreArgument(array(1,2))->shouldReturn(6);
     }
 
-    function it_scores_6_if_argument_countable_object_has_proper_count(\Countable $countable)
+    /**
+     * @param \Countable $countable
+     */
+    function it_scores_6_if_argument_countable_object_has_proper_count($countable)
     {
         $countable->count()->willReturn(2);
         $this->scoreArgument($countable)->shouldReturn(6);
@@ -44,7 +47,10 @@ class ArrayCountTokenSpec extends ObjectBehavior
         $this->scoreArgument(array(1))->shouldReturn(false);
     }
 
-    function it_does_not_score_if_argument_countable_object_has_wrong_count(\Countable $countable)
+    /**
+     * @param \Countable $countable
+     */
+    function it_does_not_score_if_argument_countable_object_has_wrong_count($countable)
     {
         $countable->count()->willReturn(3);
         $this->scoreArgument($countable)->shouldReturn(false);

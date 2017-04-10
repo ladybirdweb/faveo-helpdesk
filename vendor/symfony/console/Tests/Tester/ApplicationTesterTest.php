@@ -11,12 +11,11 @@
 
 namespace Symfony\Component\Console\Tests\Tester;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Tester\ApplicationTester;
 
-class ApplicationTesterTest extends TestCase
+class ApplicationTesterTest extends \PHPUnit_Framework_TestCase
 {
     protected $application;
     protected $tester;

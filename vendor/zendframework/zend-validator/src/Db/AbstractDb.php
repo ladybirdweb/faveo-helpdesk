@@ -107,22 +107,22 @@ abstract class AbstractDb extends AbstractValidator implements AdapterAwareInter
 
             $temp['field'] = array_shift($options);
 
-            if (! empty($options)) {
+            if (!empty($options)) {
                 $temp['exclude'] = array_shift($options);
             }
 
-            if (! empty($options)) {
+            if (!empty($options)) {
                 $temp['adapter'] = array_shift($options);
             }
 
             $options = $temp;
         }
 
-        if (! array_key_exists('table', $options) && ! array_key_exists('schema', $options)) {
+        if (!array_key_exists('table', $options) && !array_key_exists('schema', $options)) {
             throw new Exception\InvalidArgumentException('Table or Schema option missing!');
         }
 
-        if (! array_key_exists('field', $options)) {
+        if (!array_key_exists('field', $options)) {
             throw new Exception\InvalidArgumentException('Field option missing!');
         }
 

@@ -4,6 +4,7 @@ use PHPExcel_Settings;
 use PHPExcel_Shared_Font;
 use Maatwebsite\Excel\Readers\Html;
 use Maatwebsite\Excel\Classes\Cache;
+use Illuminate\Support\Facades\Config;
 use Maatwebsite\Excel\Classes\PHPExcel;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
@@ -13,7 +14,6 @@ use Maatwebsite\Excel\Classes\FormatIdentifier;
 use Maatwebsite\Excel\Readers\LaravelExcelReader;
 use Maatwebsite\Excel\Writers\LaravelExcelWriter;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
-use Laravel\Lumen\Application as LumenApplication;
 
 /**
  *
@@ -42,13 +42,9 @@ class ExcelServiceProvider extends ServiceProvider {
 
     public function boot()
     {
-        if ($this->app instanceof LumenApplication) {
-            $this->app->configure('excel');
-        } else {
-            $this->publishes([
-                __DIR__ . '/../../config/excel.php' => config_path('excel.php'),
-            ]);
-        }
+        $this->publishes([
+            __DIR__ . '/../../config/excel.php' => config_path('excel.php'),
+        ]);
 
         $this->mergeConfigFrom(
             __DIR__ . '/../../config/excel.php', 'excel'
@@ -84,7 +80,7 @@ class ExcelServiceProvider extends ServiceProvider {
         $me = $this;
 
         // Bind the PHPExcel class
-        $this->app->singleton('phpexcel', function () use ($me)
+        $this->app['phpexcel'] = $this->app->share(function () use ($me)
         {
             // Set locale
             $me->setLocale();
@@ -105,7 +101,7 @@ class ExcelServiceProvider extends ServiceProvider {
     protected function bindCssParser()
     {
         // Bind css parser
-        $this->app->singleton('excel.parsers.css', function ()
+        $this->app['excel.parsers.css'] = $this->app->share(function ()
         {
             return new CssParser(
                 new CssToInlineStyles()
@@ -120,7 +116,7 @@ class ExcelServiceProvider extends ServiceProvider {
     protected function bindReaders()
     {
         // Bind the laravel excel reader
-        $this->app->singleton('excel.reader', function ($app)
+        $this->app['excel.reader'] = $this->app->share(function ($app)
         {
             return new LaravelExcelReader(
                 $app['files'],
@@ -130,7 +126,7 @@ class ExcelServiceProvider extends ServiceProvider {
         });
 
         // Bind the html reader class
-        $this->app->singleton('excel.readers.html', function ($app)
+        $this->app['excel.readers.html'] = $this->app->share(function ($app)
         {
             return new Html(
                 $app['excel.parsers.css']
@@ -145,7 +141,7 @@ class ExcelServiceProvider extends ServiceProvider {
     protected function bindParsers()
     {
         // Bind the view parser
-        $this->app->singleton('excel.parsers.view', function ($app)
+        $this->app['excel.parsers.view'] = $this->app->share(function ($app)
         {
             return new ViewParser(
                 $app['excel.readers.html']
@@ -160,7 +156,7 @@ class ExcelServiceProvider extends ServiceProvider {
     protected function bindWriters()
     {
         // Bind the excel writer
-        $this->app->singleton('excel.writer', function ($app)
+        $this->app['excel.writer'] = $this->app->share(function ($app)
         {
             return new LaravelExcelWriter(
                 $app->make(Response::class),
@@ -177,7 +173,7 @@ class ExcelServiceProvider extends ServiceProvider {
     protected function bindExcel()
     {
         // Bind the Excel class and inject its dependencies
-        $this->app->singleton('excel', function ($app)
+        $this->app['excel'] = $this->app->share(function ($app)
         {
             $excel = new Excel(
                 $app['phpexcel'],
@@ -201,7 +197,7 @@ class ExcelServiceProvider extends ServiceProvider {
     protected function bindClasses()
     {
         // Bind the format identifier
-        $this->app->singleton('excel.identifier', function ($app)
+        $this->app['excel.identifier'] = $this->app->share(function ($app)
         {
             return new FormatIdentifier($app['files']);
         });
@@ -221,7 +217,7 @@ class ExcelServiceProvider extends ServiceProvider {
      */
     public function setLocale()
     {
-        $locale = config('app.locale', 'en_us');
+        $locale = Config::get('app.locale', 'en_us');
         PHPExcel_Settings::setLocale($locale);
     }
 
@@ -230,7 +226,7 @@ class ExcelServiceProvider extends ServiceProvider {
      */
     public function setAutoSizingSettings()
     {
-        $method = config('excel.export.autosize-method', PHPExcel_Shared_Font::AUTOSIZE_METHOD_APPROX);
+        $method = Config::get('excel.export.autosize-method', PHPExcel_Shared_Font::AUTOSIZE_METHOD_APPROX);
         PHPExcel_Shared_Font::setAutoSizeMethod($method);
     }
 
@@ -241,13 +237,13 @@ class ExcelServiceProvider extends ServiceProvider {
      */
     public function provides()
     {
-        return [
+        return array(
             'excel',
             'phpexcel',
             'excel.reader',
             'excel.readers.html',
             'excel.parsers.view',
             'excel.writer'
-        ];
+        );
     }
 }

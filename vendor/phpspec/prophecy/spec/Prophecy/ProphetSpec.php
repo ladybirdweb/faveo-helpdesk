@@ -4,14 +4,14 @@ namespace spec\Prophecy;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Prophecy\Argument\ArgumentsWildcard;
-use Prophecy\Doubler\Doubler;
-use Prophecy\Prophecy\MethodProphecy;
-use Prophecy\Prophecy\ProphecySubjectInterface;
 
 class ProphetSpec extends ObjectBehavior
 {
-    function let(Doubler $doubler, ProphecySubjectInterface $double)
+    /**
+     * @param \Prophecy\Doubler\Doubler                   $doubler
+     * @param \Prophecy\Prophecy\ProphecySubjectInterface $double
+     */
+    function let($doubler, $double)
     {
         $doubler->double(null, array())->willReturn($double);
 
@@ -24,14 +24,20 @@ class ProphetSpec extends ObjectBehavior
         $prophecy->shouldBeAnInstanceOf('Prophecy\Prophecy\ObjectProphecy');
     }
 
-    function it_constructs_new_prophecy_with_parent_class_if_specified($doubler, ProphecySubjectInterface $newDouble)
+    /**
+     * @param \Prophecy\Prophecy\ProphecySubjectInterface $newDouble
+     */
+    function it_constructs_new_prophecy_with_parent_class_if_specified($doubler, $newDouble)
     {
         $doubler->double(Argument::any(), array())->willReturn($newDouble);
 
         $this->prophesize('Prophecy\Prophet')->reveal()->shouldReturn($newDouble);
     }
 
-    function it_constructs_new_prophecy_with_interface_if_specified($doubler, ProphecySubjectInterface $newDouble)
+    /**
+     * @param \Prophecy\Prophecy\ProphecySubjectInterface $newDouble
+     */
+    function it_constructs_new_prophecy_with_interface_if_specified($doubler, $newDouble)
     {
         $doubler->double(null, Argument::any())->willReturn($newDouble);
 
@@ -51,12 +57,16 @@ class ProphetSpec extends ObjectBehavior
         $this->checkPredictions()->shouldReturn(null);
     }
 
+    /**
+     * @param \Prophecy\Prophecy\MethodProphecy    $method1
+     * @param \Prophecy\Prophecy\MethodProphecy    $method2
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments1
+     * @param \Prophecy\Argument\ArgumentsWildcard $arguments2
+     */
     function it_throws_AggregateException_if_defined_predictions_fail(
-        MethodProphecy $method1,
-        MethodProphecy $method2,
-        ArgumentsWildcard $arguments1,
-        ArgumentsWildcard $arguments2
-    ) {
+        $method1, $method2, $arguments1, $arguments2
+    )
+    {
         $method1->getMethodName()->willReturn('getName');
         $method1->getArgumentsWildcard()->willReturn($arguments1);
         $method1->checkPrediction()->willReturn(null);

@@ -45,7 +45,7 @@ class ExcludeExtension extends Extension
             $filename = $file['name'];
             $file     = $file['tmp_name'];
         } elseif (is_array($value)) {
-            if (! isset($value['tmp_name']) || ! isset($value['name'])) {
+            if (!isset($value['tmp_name']) || !isset($value['name'])) {
                 throw new Exception\InvalidArgumentException(
                     'Value array must be in $_FILES format'
                 );
@@ -67,9 +67,9 @@ class ExcludeExtension extends Extension
         $extension  = substr($filename, strrpos($filename, '.') + 1);
         $extensions = $this->getExtension();
 
-        if ($this->getCase() && (! in_array($extension, $extensions))) {
+        if ($this->getCase() && (!in_array($extension, $extensions))) {
             return true;
-        } elseif (! $this->getCase()) {
+        } elseif (!$this->getCase()) {
             foreach ($extensions as $ext) {
                 if (strtolower($ext) == strtolower($extension)) {
                     $this->error(self::FALSE_EXTENSION);

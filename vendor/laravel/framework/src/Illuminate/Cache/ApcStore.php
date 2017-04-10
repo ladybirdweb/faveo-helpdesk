@@ -55,12 +55,12 @@ class ApcStore extends TaggableStore implements Store
      *
      * @param  string  $key
      * @param  mixed   $value
-     * @param  float|int  $minutes
+     * @param  int     $minutes
      * @return void
      */
     public function put($key, $value, $minutes)
     {
-        $this->apc->put($this->prefix.$key, $value, (int) ($minutes * 60));
+        $this->apc->put($this->prefix.$key, $value, $minutes * 60);
     }
 
     /**
@@ -113,11 +113,11 @@ class ApcStore extends TaggableStore implements Store
     /**
      * Remove all items from the cache.
      *
-     * @return bool
+     * @return void
      */
     public function flush()
     {
-        return $this->apc->flush();
+        $this->apc->flush();
     }
 
     /**

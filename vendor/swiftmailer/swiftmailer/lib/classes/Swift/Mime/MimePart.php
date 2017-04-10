@@ -40,7 +40,7 @@ class Swift_Mime_MimePart extends Swift_Mime_SimpleMimeEntity
     {
         parent::__construct($headers, $encoder, $cache, $grammar);
         $this->setContentType('text/plain');
-        if (null !== $charset) {
+        if (!is_null($charset)) {
             $this->setCharset($charset);
         }
     }

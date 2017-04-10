@@ -123,6 +123,8 @@ class Swift_MailerTest extends \SwiftMailerTestCase
         $mailer->registerPlugin($plugin);
     }
 
+    // -- Creation methods
+
     private function _createPlugin()
     {
         return $this->getMockery('Swift_Events_EventListener')->shouldIgnoreMissing();

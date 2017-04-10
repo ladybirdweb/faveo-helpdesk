@@ -11,12 +11,11 @@
 
 namespace Symfony\Component\Routing\Tests\Matcher;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RequestContext;
 
-class RedirectableUrlMatcherTest extends TestCase
+class RedirectableUrlMatcherTest extends \PHPUnit_Framework_TestCase
 {
     public function testRedirectWhenNoSlash()
     {

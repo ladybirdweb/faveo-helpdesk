@@ -2,7 +2,7 @@
 
 namespace Intervention\Image\Exception;
 
-class NotWritableException extends ImageException
+class NotWritableException extends \RuntimeException
 {
     # nothing to override
 }

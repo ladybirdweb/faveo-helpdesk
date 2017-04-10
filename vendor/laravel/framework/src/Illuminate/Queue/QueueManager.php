@@ -82,7 +82,7 @@ class QueueManager implements FactoryContract, MonitorContract
      */
     public function looping($callback)
     {
-        $this->app['events']->listen(Events\Looping::class, $callback);
+        $this->app['events']->listen('illuminate.queue.looping', $callback);
     }
 
     /**
@@ -135,6 +135,8 @@ class QueueManager implements FactoryContract, MonitorContract
             $this->connections[$name] = $this->resolve($name);
 
             $this->connections[$name]->setContainer($this->app);
+
+            $this->connections[$name]->setEncrypter($this->app['encrypter']);
         }
 
         return $this->connections[$name];
@@ -150,9 +152,7 @@ class QueueManager implements FactoryContract, MonitorContract
     {
         $config = $this->getConfig($name);
 
-        return $this->getConnector($config['driver'])
-                        ->connect($config)
-                        ->setConnectionName($name);
+        return $this->getConnector($config['driver'])->connect($config);
     }
 
     /**
@@ -165,11 +165,11 @@ class QueueManager implements FactoryContract, MonitorContract
      */
     protected function getConnector($driver)
     {
-        if (! isset($this->connectors[$driver])) {
-            throw new InvalidArgumentException("No connector for [$driver]");
+        if (isset($this->connectors[$driver])) {
+            return call_user_func($this->connectors[$driver]);
         }
 
-        return call_user_func($this->connectors[$driver]);
+        throw new InvalidArgumentException("No connector for [$driver]");
     }
 
     /**
@@ -204,11 +204,11 @@ class QueueManager implements FactoryContract, MonitorContract
      */
     protected function getConfig($name)
     {
-        if (! is_null($name) && $name !== 'null') {
-            return $this->app['config']["queue.connections.{$name}"];
+        if ($name === null || $name === 'null') {
+            return ['driver' => 'null'];
         }
 
-        return ['driver' => 'null'];
+        return $this->app['config']["queue.connections.{$name}"];
     }
 
     /**
@@ -262,6 +262,8 @@ class QueueManager implements FactoryContract, MonitorContract
      */
     public function __call($method, $parameters)
     {
-        return $this->connection()->$method(...$parameters);
+        $callable = [$this->connection(), $method];
+
+        return call_user_func_array($callable, $parameters);
     }
 }

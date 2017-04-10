@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\HttpFoundation\Tests\Session\Storage\Proxy;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Storage\Proxy\NativeProxy;
 
 /**
@@ -19,7 +18,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\Proxy\NativeProxy;
  *
  * @author Drak <drak@zikula.org>
  */
-class NativeProxyTest extends TestCase
+class NativeProxyTest extends \PHPUnit_Framework_TestCase
 {
     public function testIsWrapper()
     {

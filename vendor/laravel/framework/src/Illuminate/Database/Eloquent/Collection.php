@@ -14,7 +14,7 @@ class Collection extends BaseCollection implements QueueableCollection
      *
      * @param  mixed  $key
      * @param  mixed  $default
-     * @return \Illuminate\Database\Eloquent\Model|static
+     * @return \Illuminate\Database\Eloquent\Model
      */
     public function find($key, $default = null)
     {
@@ -22,15 +22,7 @@ class Collection extends BaseCollection implements QueueableCollection
             $key = $key->getKey();
         }
 
-        if (is_array($key)) {
-            if ($this->isEmpty()) {
-                return new static;
-            }
-
-            return $this->whereIn($this->first()->getKeyName(), $key);
-        }
-
-        return Arr::first($this->items, function ($model) use ($key) {
+        return Arr::first($this->items, function ($itemKey, $model) use ($key) {
             return $model->getKey() == $key;
         }, $default);
     }
@@ -73,20 +65,23 @@ class Collection extends BaseCollection implements QueueableCollection
      * Determine if a key exists in the collection.
      *
      * @param  mixed  $key
-     * @param  mixed  $operator
      * @param  mixed  $value
      * @return bool
      */
-    public function contains($key, $operator = null, $value = null)
+    public function contains($key, $value = null)
     {
-        if (func_num_args() > 1 || $this->useAsCallable($key)) {
-            return parent::contains(...func_get_args());
+        if (func_num_args() == 2) {
+            return parent::contains($key, $value);
+        }
+
+        if ($this->useAsCallable($key)) {
+            return parent::contains($key);
         }
 
         $key = $key instanceof Model ? $key->getKey() : $key;
 
-        return parent::contains(function ($model) use ($key) {
-            return $model->getKey() == $key;
+        return parent::contains(function ($k, $m) use ($key) {
+            return $m->getKey() == $key;
         });
     }
 
@@ -97,8 +92,8 @@ class Collection extends BaseCollection implements QueueableCollection
      */
     public function modelKeys()
     {
-        return array_map(function ($model) {
-            return $model->getKey();
+        return array_map(function ($m) {
+            return $m->getKey();
         }, $this->items);
     }
 
@@ -117,21 +112,6 @@ class Collection extends BaseCollection implements QueueableCollection
         }
 
         return new static(array_values($dictionary));
-    }
-
-    /**
-     * Run a map over each of the items.
-     *
-     * @param  callable  $callback
-     * @return \Illuminate\Support\Collection
-     */
-    public function map(callable $callback)
-    {
-        $result = parent::map($callback);
-
-        return $result->contains(function ($item) {
-            return ! $item instanceof Model;
-        }) ? $result->toBase() : $result;
     }
 
     /**
@@ -180,13 +160,12 @@ class Collection extends BaseCollection implements QueueableCollection
      * Return only unique items from the collection.
      *
      * @param  string|callable|null  $key
-     * @param  bool  $strict
-     * @return static|\Illuminate\Support\Collection
+     * @return static
      */
-    public function unique($key = null, $strict = false)
+    public function unique($key = null)
     {
         if (! is_null($key)) {
-            return parent::unique($key, $strict);
+            return parent::unique($key);
         }
 
         return new static(array_values($this->getDictionary()));
@@ -200,10 +179,6 @@ class Collection extends BaseCollection implements QueueableCollection
      */
     public function only($keys)
     {
-        if (is_null($keys)) {
-            return new static($this->items);
-        }
-
         $dictionary = Arr::only($this->getDictionary(), $keys);
 
         return new static(array_values($dictionary));
@@ -246,6 +221,19 @@ class Collection extends BaseCollection implements QueueableCollection
         return $this->each(function ($model) use ($attributes) {
             $model->makeVisible($attributes);
         });
+    }
+
+    /**
+     * Make the given, typically hidden, attributes visible across the entire collection.
+     *
+     * @param  array|string  $attributes
+     * @return $this
+     *
+     * @deprecated since version 5.2. Use the "makeVisible" method directly.
+     */
+    public function withHidden($attributes)
+    {
+        return $this->makeVisible($attributes);
     }
 
     /**
@@ -365,5 +353,15 @@ class Collection extends BaseCollection implements QueueableCollection
     public function getQueueableIds()
     {
         return $this->modelKeys();
+    }
+
+    /**
+     * Get a base Support collection instance from this collection.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function toBase()
+    {
+        return new BaseCollection($this->items);
     }
 }

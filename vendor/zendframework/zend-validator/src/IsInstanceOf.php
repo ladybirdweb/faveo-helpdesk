@@ -52,7 +52,7 @@ class IsInstanceOf extends AbstractValidator
         }
 
         // If argument is not an array, consider first argument as class name
-        if (! is_array($options)) {
+        if (!is_array($options)) {
             $options = func_get_args();
 
             $tmpOptions = [];
@@ -61,7 +61,7 @@ class IsInstanceOf extends AbstractValidator
             $options = $tmpOptions;
         }
 
-        if (! array_key_exists('className', $options)) {
+        if (!array_key_exists('className', $options)) {
             throw new Exception\InvalidArgumentException('Missing option "className"');
         }
 

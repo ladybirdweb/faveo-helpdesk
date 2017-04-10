@@ -29,6 +29,7 @@ class ConfigDataCollector extends DataCollector
     private $kernel;
     private $name;
     private $version;
+    private $cacheVersionInfo = true;
 
     /**
      * Constructor.
@@ -124,6 +125,11 @@ class ConfigDataCollector extends DataCollector
     public function getSymfonyState()
     {
         return $this->data['symfony_state'];
+    }
+
+    public function setCacheVersionInfo($cacheVersionInfo)
+    {
+        $this->cacheVersionInfo = $cacheVersionInfo;
     }
 
     /**

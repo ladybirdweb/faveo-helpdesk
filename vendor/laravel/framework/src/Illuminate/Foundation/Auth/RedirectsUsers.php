@@ -11,8 +11,8 @@ trait RedirectsUsers
      */
     public function redirectPath()
     {
-        if (method_exists($this, 'redirectTo')) {
-            return $this->redirectTo();
+        if (property_exists($this, 'redirectPath')) {
+            return $this->redirectPath;
         }
 
         return property_exists($this, 'redirectTo') ? $this->redirectTo : '/home';

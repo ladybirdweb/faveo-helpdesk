@@ -11,8 +11,6 @@
 
 namespace Symfony\Component\Translation;
 
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
-
 /**
  * TranslatorBagInterface.
  *
@@ -27,7 +25,7 @@ interface TranslatorBagInterface
      *
      * @return MessageCatalogueInterface
      *
-     * @throws InvalidArgumentException If the locale contains invalid characters
+     * @throws \InvalidArgumentException If the locale contains invalid characters
      */
     public function getCatalogue($locale = null);
 }

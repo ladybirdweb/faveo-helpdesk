@@ -10,6 +10,7 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 
 class HtmlBuilder
 {
+
     use Macroable, Componentable {
         Macroable::__call as macroCall;
         Componentable::__call as componentCall;
@@ -51,18 +52,6 @@ class HtmlBuilder
     public function entities($value)
     {
         return htmlentities($value, ENT_QUOTES, 'UTF-8', false);
-    }
-
-    /**
-     * Convert all applicable characters to HTML entities.
-     *
-     * @param string $value
-     *
-     * @return string
-     */
-    public function escapeAll($value)
-    {
-        return htmlentities($value, ENT_QUOTES, 'UTF-8');
     }
 
     /**
@@ -158,11 +147,10 @@ class HtmlBuilder
      * @param string $title
      * @param array  $attributes
      * @param bool   $secure
-     * @param bool   $escape
      *
      * @return \Illuminate\Support\HtmlString
      */
-    public function link($url, $title = null, $attributes = [], $secure = null, $escape = true)
+    public function link($url, $title = null, $attributes = [], $secure = null)
     {
         $url = $this->url->to($url, [], $secure);
 
@@ -170,11 +158,7 @@ class HtmlBuilder
             $title = $url;
         }
 
-        if ($escape) {
-            $title = $this->entities($title);
-        }
-
-        return $this->toHtmlString('<a href="' . $url . '"' . $this->attributes($attributes) . '>' . $title . '</a>');
+        return $this->toHtmlString('<a href="' . $url . '"' . $this->attributes($attributes) . '>' . $this->entities($title) . '</a>');
     }
 
     /**
@@ -258,23 +242,18 @@ class HtmlBuilder
      * @param string $email
      * @param string $title
      * @param array  $attributes
-     * @param bool   $escape
      *
      * @return \Illuminate\Support\HtmlString
      */
-    public function mailto($email, $title = null, $attributes = [], $escape = true)
+    public function mailto($email, $title = null, $attributes = [])
     {
         $email = $this->email($email);
 
         $title = $title ?: $email;
 
-        if ($escape) {
-            $title = $this->entities($title);
-        }
-
         $email = $this->obfuscate('mailto:') . $email;
 
-        return $this->toHtmlString('<a href="' . $email . '"' . $this->attributes($attributes) . '>' . $title . '</a>');
+        return $this->toHtmlString('<a href="' . $email . '"' . $this->attributes($attributes) . '>' . $this->entities($title) . '</a>');
     }
 
     /**
@@ -287,18 +266,6 @@ class HtmlBuilder
     public function email($email)
     {
         return str_replace('@', '&#64;', $this->obfuscate($email));
-    }
-
-    /**
-     * Generates non-breaking space entities based on number supplied.
-     *
-     * @param int $num
-     *
-     * @return string
-     */
-    public function nbsp($num = 1)
-    {
-        return str_repeat('&nbsp;', $num);
     }
 
     /**
@@ -399,7 +366,7 @@ class HtmlBuilder
         if (is_array($value)) {
             return $this->nestedListing($key, $type, $value);
         } else {
-            return '<li>' . $this->escapeAll($value) . '</li>';
+            return '<li>' . e($value) . '</li>';
         }
     }
 
@@ -461,7 +428,7 @@ class HtmlBuilder
         }
 
         if (! is_null($value)) {
-            return $key . '="' . $this->escapeAll($value) . '"';
+            return $key . '="' . e($value) . '"';
         }
     }
 

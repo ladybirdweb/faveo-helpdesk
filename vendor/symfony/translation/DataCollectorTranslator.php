@@ -11,8 +11,6 @@
 
 namespace Symfony\Component\Translation;
 
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
-
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
@@ -38,7 +36,7 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
     public function __construct(TranslatorInterface $translator)
     {
         if (!$translator instanceof TranslatorBagInterface) {
-            throw new InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface and TranslatorBagInterface.', get_class($translator)));
+            throw new \InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface and TranslatorBagInterface.', get_class($translator)));
         }
 
         $this->translator = $translator;
@@ -88,20 +86,6 @@ class DataCollectorTranslator implements TranslatorInterface, TranslatorBagInter
     public function getCatalogue($locale = null)
     {
         return $this->translator->getCatalogue($locale);
-    }
-
-    /**
-     * Gets the fallback locales.
-     *
-     * @return array $locales The fallback locales
-     */
-    public function getFallbackLocales()
-    {
-        if ($this->translator instanceof Translator) {
-            return $this->translator->getFallbackLocales();
-        }
-
-        return array();
     }
 
     /**

@@ -2,12 +2,11 @@
 
 namespace PhpParser\Node\Scalar;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Scalar;
 
 class Encapsed extends Scalar
 {
-    /** @var Expr[] list of string parts */
+    /** @var array Encaps list */
     public $parts;
 
     /**

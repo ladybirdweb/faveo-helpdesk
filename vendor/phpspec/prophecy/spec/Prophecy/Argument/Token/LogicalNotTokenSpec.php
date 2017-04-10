@@ -7,7 +7,10 @@ use Prophecy\Argument\Token\TokenInterface;
 
 class LogicalNotTokenSpec extends ObjectBehavior
 {
-    function let(TokenInterface $token)
+    /**
+     * @param \Prophecy\Argument\Token\TokenInterface $token
+     */
+    function let($token)
     {
         $this->beConstructedWith($token);
     }

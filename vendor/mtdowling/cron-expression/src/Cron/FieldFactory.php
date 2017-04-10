@@ -2,8 +2,6 @@
 
 namespace Cron;
 
-use InvalidArgumentException;
-
 /**
  * CRON field factory implementing a flyweight factory
  * @link http://en.wikipedia.org/wiki/Cron
@@ -46,7 +44,7 @@ class FieldFactory
                     $this->fields[$position] = new YearField();
                     break;
                 default:
-                    throw new InvalidArgumentException(
+                    throw new \InvalidArgumentException(
                         $position . ' is not a valid position'
                     );
             }

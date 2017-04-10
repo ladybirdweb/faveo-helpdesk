@@ -46,8 +46,7 @@ class Service extends AbstractModel
             'endpointPrefix'   => null,
             'signingName'      => null,
             'signatureVersion' => null,
-            'protocol'         => null,
-            'uid'              => null
+            'protocol'         => null
         ];
 
         $definition += $defaults;
@@ -220,16 +219,6 @@ class Service extends AbstractModel
     public function getProtocol()
     {
         return $this->definition['metadata']['protocol'];
-    }
-
-    /**
-     * Get the uid string used by the service
-     *
-     * @return string
-     */
-    public function getUid()
-    {
-        return $this->definition['metadata']['uid'];
     }
 
     /**

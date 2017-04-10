@@ -11,11 +11,10 @@
 
 namespace Symfony\Component\HttpFoundation\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RequestMatcher;
 use Symfony\Component\HttpFoundation\Request;
 
-class RequestMatcherTest extends TestCase
+class RequestMatcherTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider testMethodFixtures

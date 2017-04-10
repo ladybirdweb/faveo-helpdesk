@@ -79,6 +79,8 @@ class Swift_Events_SendEventTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $evt->getFailedRecipients());
     }
 
+    // -- Creation Methods
+
     private function _createEvent(Swift_Transport $source,
         Swift_Mime_Message $message)
     {
@@ -87,11 +89,11 @@ class Swift_Events_SendEventTest extends \PHPUnit_Framework_TestCase
 
     private function _createTransport()
     {
-        return $this->getMockBuilder('Swift_Transport')->getMock();
+        return $this->getMock('Swift_Transport');
     }
 
     private function _createMessage()
     {
-        return $this->getMockBuilder('Swift_Mime_Message')->getMock();
+        return $this->getMock('Swift_Mime_Message');
     }
 }

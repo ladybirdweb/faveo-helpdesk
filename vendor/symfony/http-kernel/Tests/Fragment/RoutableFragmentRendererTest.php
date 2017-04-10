@@ -11,11 +11,10 @@
 
 namespace Symfony\Component\HttpKernel\Tests\Fragment;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
-class RoutableFragmentRendererTest extends TestCase
+class RoutableFragmentRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getGenerateFragmentUriData

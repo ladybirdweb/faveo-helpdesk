@@ -2,8 +2,8 @@
 
 namespace Illuminate\Queue\Jobs;
 
-use Illuminate\Container\Container;
 use Illuminate\Queue\DatabaseQueue;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Queue\Job as JobContract;
 
 class DatabaseJob extends Job implements JobContract
@@ -28,32 +28,25 @@ class DatabaseJob extends Job implements JobContract
      * @param  \Illuminate\Container\Container  $container
      * @param  \Illuminate\Queue\DatabaseQueue  $database
      * @param  \StdClass  $job
-     * @param  string  $connectionName
      * @param  string  $queue
      * @return void
      */
-    public function __construct(Container $container, DatabaseQueue $database, $job, $connectionName, $queue)
+    public function __construct(Container $container, DatabaseQueue $database, $job, $queue)
     {
         $this->job = $job;
         $this->queue = $queue;
         $this->database = $database;
         $this->container = $container;
-        $this->connectionName = $connectionName;
     }
 
     /**
-     * Release the job back into the queue.
+     * Fire the job.
      *
-     * @param  int  $delay
-     * @return mixed
+     * @return void
      */
-    public function release($delay = 0)
+    public function fire()
     {
-        parent::release($delay);
-
-        $this->delete();
-
-        return $this->database->release($this->queue, $this->job, $delay);
+        $this->resolveAndFire(json_decode($this->job->payload, true));
     }
 
     /**
@@ -66,6 +59,21 @@ class DatabaseJob extends Job implements JobContract
         parent::delete();
 
         $this->database->deleteReserved($this->queue, $this->job->id);
+    }
+
+    /**
+     * Release the job back into the queue.
+     *
+     * @param  int  $delay
+     * @return void
+     */
+    public function release($delay = 0)
+    {
+        parent::release($delay);
+
+        $this->delete();
+
+        $this->database->release($this->queue, $this->job, $delay);
     }
 
     /**
@@ -96,5 +104,35 @@ class DatabaseJob extends Job implements JobContract
     public function getRawBody()
     {
         return $this->job->payload;
+    }
+
+    /**
+     * Get the IoC container instance.
+     *
+     * @return \Illuminate\Container\Container
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
+     * Get the underlying queue driver instance.
+     *
+     * @return \Illuminate\Queue\DatabaseQueue
+     */
+    public function getDatabaseQueue()
+    {
+        return $this->database;
+    }
+
+    /**
+     * Get the underlying database job.
+     *
+     * @return \StdClass
+     */
+    public function getDatabaseJob()
+    {
+        return $this->job;
     }
 }

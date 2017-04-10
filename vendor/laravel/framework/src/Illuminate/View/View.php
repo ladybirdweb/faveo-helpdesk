@@ -9,8 +9,8 @@ use BadMethodCallException;
 use Illuminate\Support\Str;
 use Illuminate\Support\MessageBag;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\View\Engines\EngineInterface;
+use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\Support\MessageProvider;
 use Illuminate\Contracts\View\View as ViewContract;
 
@@ -89,15 +89,15 @@ class View implements ArrayAccess, ViewContract
             // Once we have the contents of the view, we will flush the sections if we are
             // done rendering all views so that there is nothing left hanging over when
             // another view gets rendered in the future by the application developer.
-            $this->factory->flushStateIfDoneRendering();
+            $this->factory->flushSectionsIfDoneRendering();
 
             return ! is_null($response) ? $response : $contents;
         } catch (Exception $e) {
-            $this->factory->flushState();
+            $this->factory->flushSections();
 
             throw $e;
         } catch (Throwable $e) {
-            $this->factory->flushState();
+            $this->factory->flushSections();
 
             throw $e;
         }
@@ -128,6 +128,18 @@ class View implements ArrayAccess, ViewContract
     }
 
     /**
+     * Get the sections of the rendered view.
+     *
+     * @return array
+     */
+    public function renderSections()
+    {
+        return $this->render(function () {
+            return $this->factory->getSections();
+        });
+    }
+
+    /**
      * Get the evaluated contents of the view.
      *
      * @return string
@@ -153,18 +165,6 @@ class View implements ArrayAccess, ViewContract
         }
 
         return $data;
-    }
-
-    /**
-     * Get the sections of the rendered view.
-     *
-     * @return array
-     */
-    public function renderSections()
-    {
-        return $this->render(function () {
-            return $this->factory->getSections();
-        });
     }
 
     /**
@@ -206,21 +206,33 @@ class View implements ArrayAccess, ViewContract
      */
     public function withErrors($provider)
     {
-        $this->with('errors', $this->formatErrors($provider));
+        if ($provider instanceof MessageProvider) {
+            $this->with('errors', $provider->getMessageBag());
+        } else {
+            $this->with('errors', new MessageBag((array) $provider));
+        }
 
         return $this;
     }
 
     /**
-     * Format the given message provider into a MessageBag.
+     * Get the view factory instance.
      *
-     * @param  \Illuminate\Contracts\Support\MessageProvider|array  $provider
-     * @return \Illuminate\Support\MessageBag
+     * @return \Illuminate\View\Factory
      */
-    protected function formatErrors($provider)
+    public function getFactory()
     {
-        return $provider instanceof MessageProvider
-                        ? $provider->getMessageBag() : new MessageBag((array) $provider);
+        return $this->factory;
+    }
+
+    /**
+     * Get the view's rendering engine.
+     *
+     * @return \Illuminate\View\Engines\EngineInterface
+     */
+    public function getEngine()
+    {
+        return $this->engine;
     }
 
     /**
@@ -272,26 +284,6 @@ class View implements ArrayAccess, ViewContract
     public function setPath($path)
     {
         $this->path = $path;
-    }
-
-    /**
-     * Get the view factory instance.
-     *
-     * @return \Illuminate\View\Factory
-     */
-    public function getFactory()
-    {
-        return $this->factory;
-    }
-
-    /**
-     * Get the view's rendering engine.
-     *
-     * @return \Illuminate\View\Engines\EngineInterface
-     */
-    public function getEngine()
-    {
-        return $this->engine;
     }
 
     /**
@@ -395,11 +387,11 @@ class View implements ArrayAccess, ViewContract
      */
     public function __call($method, $parameters)
     {
-        if (! Str::startsWith($method, 'with')) {
-            throw new BadMethodCallException("Method [$method] does not exist on view.");
+        if (Str::startsWith($method, 'with')) {
+            return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
         }
 
-        return $this->with(Str::snake(substr($method, 4)), $parameters[0]);
+        throw new BadMethodCallException("Method [$method] does not exist on view.");
     }
 
     /**

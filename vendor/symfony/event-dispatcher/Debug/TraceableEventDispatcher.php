@@ -153,7 +153,8 @@ class TraceableEventDispatcher implements TraceableEventDispatcherInterface
         $called = array();
         foreach ($this->called as $eventName => $listeners) {
             foreach ($listeners as $listener) {
-                $called[$eventName.'.'.$listener->getPretty()] = $listener->getInfo($eventName);
+                $info = $this->getListenerInfo($listener->getWrappedListener(), $eventName);
+                $called[$eventName.'.'.$info['pretty']] = $info;
             }
         }
 
@@ -191,10 +192,8 @@ class TraceableEventDispatcher implements TraceableEventDispatcherInterface
                 }
 
                 if (!$called) {
-                    if (!$listener instanceof WrappedListener) {
-                        $listener = new WrappedListener($listener, null, $this->stopwatch, $this);
-                    }
-                    $notCalled[$eventName.'.'.$listener->getPretty()] = $listener->getInfo($eventName);
+                    $info = $this->getListenerInfo($listener, $eventName);
+                    $notCalled[$eventName.'.'.$info['pretty']] = $info;
                 }
             }
         }
@@ -240,11 +239,12 @@ class TraceableEventDispatcher implements TraceableEventDispatcherInterface
     private function preProcess($eventName)
     {
         foreach ($this->dispatcher->getListeners($eventName) as $listener) {
-            $priority = $this->getListenerPriority($eventName, $listener);
-            $wrappedListener = new WrappedListener($listener, null, $this->stopwatch, $this);
+            $info = $this->getListenerInfo($listener, $eventName);
+            $name = isset($info['class']) ? $info['class'] : $info['type'];
+            $wrappedListener = new WrappedListener($listener, $name, $this->stopwatch, $this);
             $this->wrappedListeners[$eventName][] = $wrappedListener;
             $this->dispatcher->removeListener($eventName, $listener);
-            $this->dispatcher->addListener($eventName, $wrappedListener, $priority);
+            $this->dispatcher->addListener($eventName, $wrappedListener, $info['priority']);
         }
     }
 
@@ -261,13 +261,10 @@ class TraceableEventDispatcher implements TraceableEventDispatcherInterface
             $this->dispatcher->removeListener($eventName, $listener);
             $this->dispatcher->addListener($eventName, $listener->getWrappedListener(), $priority);
 
-            if (null !== $this->logger) {
-                $context = array('event' => $eventName, 'listener' => $listener->getPretty());
-            }
-
+            $info = $this->getListenerInfo($listener->getWrappedListener(), $eventName);
             if ($listener->wasCalled()) {
                 if (null !== $this->logger) {
-                    $this->logger->debug('Notified event "{event}" to listener "{listener}".', $context);
+                    $this->logger->debug('Notified event "{event}" to listener "{listener}".', array('event' => $eventName, 'listener' => $info['pretty']));
                 }
 
                 if (!isset($this->called[$eventName])) {
@@ -278,17 +275,78 @@ class TraceableEventDispatcher implements TraceableEventDispatcherInterface
             }
 
             if (null !== $this->logger && $skipped) {
-                $this->logger->debug('Listener "{listener}" was not called for event "{event}".', $context);
+                $this->logger->debug('Listener "{listener}" was not called for event "{event}".', array('listener' => $info['pretty'], 'event' => $eventName));
             }
 
             if ($listener->stoppedPropagation()) {
                 if (null !== $this->logger) {
-                    $this->logger->debug('Listener "{listener}" stopped propagation of the event "{event}".', $context);
+                    $this->logger->debug('Listener "{listener}" stopped propagation of the event "{event}".', array('listener' => $info['pretty'], 'event' => $eventName));
                 }
 
                 $skipped = true;
             }
         }
+    }
+
+    /**
+     * Returns information about the listener.
+     *
+     * @param object $listener  The listener
+     * @param string $eventName The event name
+     *
+     * @return array Information about the listener
+     */
+    private function getListenerInfo($listener, $eventName)
+    {
+        $info = array(
+            'event' => $eventName,
+            'priority' => $this->getListenerPriority($eventName, $listener),
+        );
+        if ($listener instanceof \Closure) {
+            $info += array(
+                'type' => 'Closure',
+                'pretty' => 'closure',
+            );
+        } elseif (is_string($listener)) {
+            try {
+                $r = new \ReflectionFunction($listener);
+                $file = $r->getFileName();
+                $line = $r->getStartLine();
+            } catch (\ReflectionException $e) {
+                $file = null;
+                $line = null;
+            }
+            $info += array(
+                'type' => 'Function',
+                'function' => $listener,
+                'file' => $file,
+                'line' => $line,
+                'pretty' => $listener,
+            );
+        } elseif (is_array($listener) || (is_object($listener) && is_callable($listener))) {
+            if (!is_array($listener)) {
+                $listener = array($listener, '__invoke');
+            }
+            $class = is_object($listener[0]) ? get_class($listener[0]) : $listener[0];
+            try {
+                $r = new \ReflectionMethod($class, $listener[1]);
+                $file = $r->getFileName();
+                $line = $r->getStartLine();
+            } catch (\ReflectionException $e) {
+                $file = null;
+                $line = null;
+            }
+            $info += array(
+                'type' => 'Method',
+                'class' => $class,
+                'method' => $listener[1],
+                'file' => $file,
+                'line' => $line,
+                'pretty' => $class.'::'.$listener[1],
+            );
+        }
+
+        return $info;
     }
 
     private function sortListenersByPriority($a, $b)

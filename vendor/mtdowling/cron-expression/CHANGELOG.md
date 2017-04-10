@@ -1,26 +1,17 @@
 # Change Log
 
-## [1.2.0] - 2017-01-22
+## [Unreleased]
 ### Added
-- Added IDE, CodeSniffer, and StyleCI.IO support
-
 ### Changed
-- Switched to PSR-4 Autoloading
-
 ### Fixed
-- 0 step expressions are handled better
-- Fixed `DayOfMonth` validation to be more strict
-- Typos
 
-## [1.1.0] - 2016-01-26
+## [1.1.0] - 2015-01-26
 ### Added
 - Support for non-hourly offset timezones 
 - Checks for valid expressions
-
 ### Changed
 - Max Iterations no longer hardcoded for `getRunDate()`
 - Supports DateTimeImmutable for newer PHP verions
-
 ### Fixed
 - Fixed looping bug for PHP 7 when determining the last specified weekday of a month
 

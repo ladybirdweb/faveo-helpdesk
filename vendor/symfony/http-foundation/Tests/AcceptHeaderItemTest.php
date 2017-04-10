@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\HttpFoundation\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\AcceptHeaderItem;
 
-class AcceptHeaderItemTest extends TestCase
+class AcceptHeaderItemTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider provideFromStringData

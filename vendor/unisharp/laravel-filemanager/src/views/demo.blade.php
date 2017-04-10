@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Laravel Filemanager</title>
-  <link rel="shortcut icon" type="image/png" href="{{ asset('vendor/laravel-filemanager/img/folder.png') }}">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
@@ -21,8 +20,8 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6 col-md-offset-3">
-        <h2>Standalone Button</h2>
+      <div class="col-md-4 col-md-offset-4">
+        <h2>Independent usage</h2>
         <div class="input-group">
           <span class="input-group-btn">
             <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
@@ -38,9 +37,6 @@
 
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  <script>
-   var route_prefix = "{{ url(config('lfm.prefix')) }}";
-  </script>
 
   <!-- CKEditor init -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/ckeditor/4.5.11/ckeditor.js"></script>
@@ -49,10 +45,10 @@
   <script>
     $('textarea[name=ce]').ckeditor({
       height: 100,
-      filebrowserImageBrowseUrl: route_prefix + '?type=Images',
-      filebrowserImageUploadUrl: route_prefix + '/upload?type=Images&_token={{csrf_token()}}',
-      filebrowserBrowseUrl: route_prefix + '?type=Files',
-      filebrowserUploadUrl: route_prefix + '/upload?type=Files&_token={{csrf_token()}}'
+      filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+      filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token={{csrf_token()}}',
+      filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+      filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token={{csrf_token()}}'
     });
   </script>
 
@@ -60,18 +56,21 @@
   <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   <script>
     var editor_config = {
-      path_absolute : "",
+      path_absolute : "/",
       selector: "textarea[name=tm]",
       plugins: [
-        "link image"
+        "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+        "searchreplace wordcount visualblocks visualchars code fullscreen",
+        "insertdatetime media nonbreaking save table contextmenu directionality",
+        "emoticons template paste textcolor colorpicker textpattern"
       ],
+      toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
       relative_urls: false,
-      height: 129,
       file_browser_callback : function(field_name, url, type, win) {
         var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
         var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
 
-        var cmsURL = editor_config.path_absolute + route_prefix + '?field_name=' + field_name;
+        var cmsURL = editor_config.path_absolute + 'laravel-filemanager?field_name=' + field_name;
         if (type == 'image') {
           cmsURL = cmsURL + "&type=Images";
         } else {
@@ -92,11 +91,9 @@
     tinymce.init(editor_config);
   </script>
 
+  <script src="/vendor/laravel-filemanager/js/lfm.js"></script>
   <script>
-    {!! \File::get(base_path('vendor/unisharp/laravel-filemanager/public/js/lfm.js')) !!}
-  </script>
-  <script>
-    $('#lfm').filemanager('image', {prefix: route_prefix});
+    $('#lfm').filemanager('image');
   </script>
 </body>
 </html>

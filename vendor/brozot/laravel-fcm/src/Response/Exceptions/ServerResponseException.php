@@ -1,37 +1,36 @@
-<?php
-
-namespace LaravelFCM\Response\Exceptions;
+<?php namespace LaravelFCM\Response\Exceptions;
 
 use Exception;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 /**
- * Class ServerResponseException.
+ * Class ServerResponseException
+ *
+ * @package LaravelFCM\Response\Exceptions
  */
-class ServerResponseException extends Exception
-{
-    /**
-     * retry after.
-     *
-     * @var int
-     */
-    public $retryAfter;
+class ServerResponseException extends Exception {
 
-    /**
-     * ServerResponseException constructor.
-     *
-     * @param GuzzleResponse $response
-     */
-    public function __construct(GuzzleResponse $response)
-    {
-        $code = $response->getStatusCode();
-        $responseHeader = $response->getHeaders();
-        $responseBody = $response->getBody()->getContents();
+	/**
+	 * retry after
+	 * @var int
+	 */
+	public $retryAfter;
 
-        if (array_keys($responseHeader, 'Retry-After')) {
-            $this->retryAfter = $responseHeader['Retry-After'];
-        }
+	/**
+	 * ServerResponseException constructor.
+	 *
+	 * @param GuzzleResponse $response
+	 */
+	public function __construct(GuzzleResponse $response)
+	{
+		$code = $response->getStatusCode();
+		$responseHeader = $response->getHeaders();
+		$responseBody = $response->getBody()->getContents();
 
-        parent::__construct($responseBody, $code);
-    }
+		if (array_keys($responseHeader, "Retry-After")) {
+			$this->retryAfter = $responseHeader["Retry-After"];
+		}
+
+		parent::__construct($responseBody, $code);
+	}
 }

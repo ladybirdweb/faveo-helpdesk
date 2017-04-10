@@ -13,8 +13,6 @@ namespace Symfony\Component\Translation\Catalogue;
 
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\MessageCatalogueInterface;
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
-use Symfony\Component\Translation\Exception\LogicException;
 
 /**
  * Base catalogues binary operation class.
@@ -74,17 +72,18 @@ abstract class AbstractOperation implements OperationInterface
      * @param MessageCatalogueInterface $source The source catalogue
      * @param MessageCatalogueInterface $target The target catalogue
      *
-     * @throws LogicException
+     * @throws \LogicException
      */
     public function __construct(MessageCatalogueInterface $source, MessageCatalogueInterface $target)
     {
         if ($source->getLocale() !== $target->getLocale()) {
-            throw new LogicException('Operated catalogues must belong to the same locale.');
+            throw new \LogicException('Operated catalogues must belong to the same locale.');
         }
 
         $this->source = $source;
         $this->target = $target;
         $this->result = new MessageCatalogue($source->getLocale());
+        $this->domains = null;
         $this->messages = array();
     }
 
@@ -106,7 +105,7 @@ abstract class AbstractOperation implements OperationInterface
     public function getMessages($domain)
     {
         if (!in_array($domain, $this->getDomains())) {
-            throw new InvalidArgumentException(sprintf('Invalid domain: %s.', $domain));
+            throw new \InvalidArgumentException(sprintf('Invalid domain: %s.', $domain));
         }
 
         if (!isset($this->messages[$domain]['all'])) {
@@ -122,7 +121,7 @@ abstract class AbstractOperation implements OperationInterface
     public function getNewMessages($domain)
     {
         if (!in_array($domain, $this->getDomains())) {
-            throw new InvalidArgumentException(sprintf('Invalid domain: %s.', $domain));
+            throw new \InvalidArgumentException(sprintf('Invalid domain: %s.', $domain));
         }
 
         if (!isset($this->messages[$domain]['new'])) {
@@ -138,7 +137,7 @@ abstract class AbstractOperation implements OperationInterface
     public function getObsoleteMessages($domain)
     {
         if (!in_array($domain, $this->getDomains())) {
-            throw new InvalidArgumentException(sprintf('Invalid domain: %s.', $domain));
+            throw new \InvalidArgumentException(sprintf('Invalid domain: %s.', $domain));
         }
 
         if (!isset($this->messages[$domain]['obsolete'])) {

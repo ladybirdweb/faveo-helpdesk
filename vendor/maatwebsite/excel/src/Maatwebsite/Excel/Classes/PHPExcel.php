@@ -1,6 +1,7 @@
 <?php namespace Maatwebsite\Excel\Classes;
 
 use PHPExcel as PHPOffice_PHPExcel;
+use Illuminate\Support\Facades\Config;
 
 /**
  *
@@ -19,7 +20,7 @@ class PHPExcel extends PHPOffice_PHPExcel {
      * Allowed autofill properties
      * @var array
      */
-    public $allowedProperties = [
+    public $allowedProperties = array(
         'creator',
         'lastModifiedBy',
         'description',
@@ -28,7 +29,7 @@ class PHPExcel extends PHPOffice_PHPExcel {
         'category',
         'manager',
         'company'
-    ];
+    );
 
     /**
      * Create sheet and add it to this workbook
@@ -79,10 +80,10 @@ class PHPExcel extends PHPOffice_PHPExcel {
             $method = 'set' . ucfirst($prop);
 
             // get the value
-            $value = in_array($prop, array_keys($custom)) ? $custom[$prop] : config('excel.properties.' . $prop, null);
+            $value = in_array($prop, array_keys($custom)) ? $custom[$prop] : Config::get('excel.properties.' . $prop, null);
 
             // set the property
-            call_user_func_array([$properties, $method], [$value]);
+            call_user_func_array(array($properties, $method), array($value));
         }
     }
 

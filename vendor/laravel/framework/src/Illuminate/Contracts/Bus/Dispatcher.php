@@ -16,10 +16,9 @@ interface Dispatcher
      * Dispatch a command to its appropriate handler in the current process.
      *
      * @param  mixed  $command
-     * @param  mixed  $handler
      * @return mixed
      */
-    public function dispatchNow($command, $handler = null);
+    public function dispatchNow($command);
 
     /**
      * Set the pipes commands should be piped through before dispatching.

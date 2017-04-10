@@ -4,9 +4,9 @@ namespace PhpParser\Builder;
 
 use PhpParser\Comment;
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Expr\Print_;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt;
 
 class FunctionTest extends \PHPUnit_Framework_TestCase
 {
@@ -78,20 +78,12 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnType() {
         $node = $this->createFunctionBuilder('test')
-            ->setReturnType('void')
+            ->setReturnType('bool')
             ->getNode();
 
         $this->assertEquals(new Stmt\Function_('test', array(
-            'returnType' => 'void'
+            'returnType' => 'bool'
         ), array()), $node);
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage void type cannot be nullable
-     */
-    public function testInvalidNullableVoidType() {
-        $this->createFunctionBuilder('test')->setReturnType('?void');
     }
 
     /**

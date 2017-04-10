@@ -188,7 +188,7 @@ class FormController extends Controller
         try {
             $forms = new Forms();
             $form = $forms->find($id);
-            $select_forms = $forms->where('id', '!=', $id)->pluck('formname', 'id')->toArray();
+            $select_forms = $forms->where('id', '!=', $id)->lists('formname', 'id')->toArray();
             //dd($form);
             if ($form) {
                 $fields = $form->fields();
@@ -206,7 +206,7 @@ class FormController extends Controller
         try {
             $forms = new Forms();
             $form = $forms->find($id);
-            $select_forms = $forms->where('id', '!=', $id)->pluck('formname', 'id')->toArray();
+            $select_forms = $forms->where('id', '!=', $id)->lists('formname', 'id')->toArray();
             //dd($form);
             if ($form) {
                 $fields = $form->fields();
@@ -535,7 +535,7 @@ class FormController extends Controller
         $session = self::getSession();
         $script = self::jqueryScript($field_value = '', $field->id, $field->name, $field_type);
         $form_hidden = Form::hidden('fieldid[]', $field->id, ['id' => 'hidden'.$session.$field->id]).Form::label($field->label, $field->label, ['class' => $required_class]);
-        $select = Form::$field_type($field->name, ['' => 'Select', 'Selects' => self::removeUnderscoreFromDB($field->values()->pluck('field_value', 'field_value')->toArray())], null, ['class' => "form-control $session$field->id", 'id' => $session.$field->id, 'required' => $required]).'</br>';
+        $select = Form::$field_type($field->name, ['' => 'Select', 'Selects' => self::removeUnderscoreFromDB($field->values()->lists('field_value', 'field_value')->toArray())], null, ['class' => "form-control $session$field->id", 'id' => $session.$field->id, 'required' => $required]).'</br>';
         $html = $script.$form_hidden.$select;
         $response_div = '<div id='.$session.$field->name.'></div>';
 
@@ -546,7 +546,7 @@ class FormController extends Controller
     {
         $radio = '';
         $html = '';
-        $values = $field->values()->pluck('field_value')->toArray();
+        $values = $field->values()->lists('field_value')->toArray();
         if (count($values) > 0) {
             foreach ($values as $field_value) {
                 $script = self::jqueryScript($field_value, $field->id, $field->name, $field_type);
@@ -564,7 +564,7 @@ class FormController extends Controller
         $session = self::getSession();
         $checkbox = '';
         $html = '';
-        $values = $field->values()->pluck('field_value')->toArray();
+        $values = $field->values()->lists('field_value')->toArray();
         if (count($values) > 0) {
             $i = 1;
             foreach ($values as $field_value) {
@@ -609,7 +609,7 @@ class FormController extends Controller
     {
         $form = self::getSession();
         $form++;
-        \Session::put('fromid', $form);
+        \Session::set('fromid', $form);
     }
 
     public static function getSession()

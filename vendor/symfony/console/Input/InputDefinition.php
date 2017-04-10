@@ -281,9 +281,6 @@ class InputDefinition
     /**
      * Returns true if an InputOption object exists by name.
      *
-     * This method can't be used to check if the user included the option when
-     * executing the command (use getOption() instead).
-     *
      * @param string $name The InputOption name
      *
      * @return bool true if the InputOption object exists, false otherwise

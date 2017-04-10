@@ -3,7 +3,6 @@
 namespace Illuminate\Database;
 
 use PDOException;
-use Illuminate\Support\Str;
 
 class QueryException extends PDOException
 {
@@ -35,6 +34,7 @@ class QueryException extends PDOException
 
         $this->sql = $sql;
         $this->bindings = $bindings;
+        $this->previous = $previous;
         $this->code = $previous->getCode();
         $this->message = $this->formatMessage($sql, $bindings, $previous);
 
@@ -53,7 +53,7 @@ class QueryException extends PDOException
      */
     protected function formatMessage($sql, $bindings, $previous)
     {
-        return $previous->getMessage().' (SQL: '.Str::replaceArray('?', $bindings, $sql).')';
+        return $previous->getMessage().' (SQL: '.str_replace_array('\?', $bindings, $sql).')';
     }
 
     /**

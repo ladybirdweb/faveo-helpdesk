@@ -11,13 +11,12 @@
 
 namespace Symfony\Component\Process\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\ExecutableFinder;
 
 /**
  * @author Chris Smith <chris@cs278.org>
  */
-class ExecutableFinderTest extends TestCase
+class ExecutableFinderTest extends \PHPUnit_Framework_TestCase
 {
     private $path;
 

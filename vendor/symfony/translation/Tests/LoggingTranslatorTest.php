@@ -11,16 +11,15 @@
 
 namespace Symfony\Component\Translation\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\LoggingTranslator;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 
-class LoggingTranslatorTest extends TestCase
+class LoggingTranslatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testTransWithNoTranslationIsLogged()
     {
-        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->exactly(2))
             ->method('warning')
             ->with('Translation not found.')
@@ -34,7 +33,7 @@ class LoggingTranslatorTest extends TestCase
 
     public function testTransChoiceFallbackIsLogged()
     {
-        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+        $logger = $this->getMock('Psr\Log\LoggerInterface');
         $logger->expects($this->once())
             ->method('debug')
             ->with('Translation use fallback catalogue.')

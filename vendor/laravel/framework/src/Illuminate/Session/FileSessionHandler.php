@@ -68,7 +68,7 @@ class FileSessionHandler implements SessionHandlerInterface
     {
         if ($this->files->exists($path = $this->path.'/'.$sessionId)) {
             if (filemtime($path) >= Carbon::now()->subMinutes($this->minutes)->getTimestamp()) {
-                return $this->files->get($path, true);
+                return $this->files->get($path);
             }
         }
 
@@ -81,8 +81,6 @@ class FileSessionHandler implements SessionHandlerInterface
     public function write($sessionId, $data)
     {
         $this->files->put($this->path.'/'.$sessionId, $data, true);
-
-        return true;
     }
 
     /**
@@ -91,8 +89,6 @@ class FileSessionHandler implements SessionHandlerInterface
     public function destroy($sessionId)
     {
         $this->files->delete($this->path.'/'.$sessionId);
-
-        return true;
     }
 
     /**

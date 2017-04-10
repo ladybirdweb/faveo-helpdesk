@@ -51,7 +51,7 @@ interface ReadInterface
     public function getMetadata($path);
 
     /**
-     * Get the size of a file.
+     * Get all the meta data of a file or directory.
      *
      * @param string $path
      *

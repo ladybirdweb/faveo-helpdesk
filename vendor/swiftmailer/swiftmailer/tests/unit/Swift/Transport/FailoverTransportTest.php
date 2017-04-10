@@ -503,6 +503,8 @@ class Swift_Transport_FailoverTransportTest extends \SwiftMailerTestCase
         $transport->registerPlugin($plugin);
     }
 
+    // -- Private helpers
+
     private function _getTransport(array $transports)
     {
         $transport = new Swift_Transport_FailoverTransport();

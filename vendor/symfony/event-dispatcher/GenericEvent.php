@@ -80,7 +80,7 @@ class GenericEvent extends Event implements \ArrayAccess, \IteratorAggregate
      * @param string $key   Argument name
      * @param mixed  $value Value
      *
-     * @return $this
+     * @return GenericEvent
      */
     public function setArgument($key, $value)
     {
@@ -104,7 +104,7 @@ class GenericEvent extends Event implements \ArrayAccess, \IteratorAggregate
      *
      * @param array $args Arguments
      *
-     * @return $this
+     * @return GenericEvent
      */
     public function setArguments(array $args = array())
     {

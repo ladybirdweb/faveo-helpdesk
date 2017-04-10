@@ -1,11 +1,6 @@
 CHANGELOG
 =========
 
-3.1.0
------
-
- * Added support for creating `JsonResponse` with a string of JSON data
-
 3.0.0
 -----
 

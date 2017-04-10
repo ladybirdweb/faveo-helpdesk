@@ -78,70 +78,36 @@ class ParamTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @dataProvider provideTestTypeHints
-     */
-    public function testTypeHints($typeHint, $expectedType) {
+    public function testTypeHints() {
         $node = $this->createParamBuilder('test')
-            ->setTypeHint($typeHint)
+            ->setTypeHint('array')
             ->getNode()
         ;
-        $type = $node->type;
 
-        /* Manually implement comparison to avoid __toString stupidity */
-        if ($expectedType instanceof Node\NullableType) {
-            $this->assertInstanceOf(get_class($expectedType), $type);
-            $expectedType = $expectedType->type;
-            $type = $type->type;
-        }
-
-        if ($expectedType instanceof Node\Name) {
-            $this->assertInstanceOf(get_class($expectedType), $type);
-            $this->assertEquals($expectedType, $type);
-        } else {
-            $this->assertSame($expectedType, $type);
-        }
-    }
-
-    public function provideTestTypeHints() {
-        return array(
-            array('array', 'array'),
-            array('callable', 'callable'),
-            array('bool', 'bool'),
-            array('int', 'int'),
-            array('float', 'float'),
-            array('string', 'string'),
-            array('iterable', 'iterable'),
-            array('Array', 'array'),
-            array('CALLABLE', 'callable'),
-            array('Some\Class', new Node\Name('Some\Class')),
-            array('\Foo', new Node\Name\FullyQualified('Foo')),
-            array('self', new Node\Name('self')),
-            array('?array', new Node\NullableType('array')),
-            array('?Some\Class', new Node\NullableType(new Node\Name('Some\Class'))),
-            array(new Node\Name('Some\Class'), new Node\Name('Some\Class')),
-            array(new Node\NullableType('int'), new Node\NullableType('int')),
-            array(
-                new Node\NullableType(new Node\Name('Some\Class')),
-                new Node\NullableType(new Node\Name('Some\Class'))
-            ),
+        $this->assertEquals(
+            new Node\Param('test', null, 'array'),
+            $node
         );
-    }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Parameter type cannot be void
-     */
-    public function testVoidTypeError() {
-        $this->createParamBuilder('test')->setTypeHint('void');
-    }
+        $node = $this->createParamBuilder('test')
+            ->setTypeHint('callable')
+            ->getNode()
+        ;
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Type must be a string, or an instance of Name or NullableType
-     */
-    public function testInvalidTypeError() {
-        $this->createParamBuilder('test')->setTypeHint(new \stdClass);
+        $this->assertEquals(
+            new Node\Param('test', null, 'callable'),
+            $node
+        );
+
+        $node = $this->createParamBuilder('test')
+            ->setTypeHint('Some\Class')
+            ->getNode()
+        ;
+
+        $this->assertEquals(
+            new Node\Param('test', null, new Node\Name('Some\Class')),
+            $node
+        );
     }
 
     public function testByRef() {

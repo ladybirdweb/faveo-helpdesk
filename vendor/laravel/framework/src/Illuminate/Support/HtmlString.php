@@ -25,7 +25,7 @@ class HtmlString implements Htmlable
     }
 
     /**
-     * Get the HTML string.
+     * Get the the HTML string.
      *
      * @return string
      */
@@ -35,7 +35,7 @@ class HtmlString implements Htmlable
     }
 
     /**
-     * Get the HTML string.
+     * Get the the HTML string.
      *
      * @return string
      */

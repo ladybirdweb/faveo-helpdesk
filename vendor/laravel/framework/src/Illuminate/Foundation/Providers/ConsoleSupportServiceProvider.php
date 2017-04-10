@@ -3,7 +3,6 @@
 namespace Illuminate\Foundation\Providers;
 
 use Illuminate\Support\AggregateServiceProvider;
-use Illuminate\Database\MigrationServiceProvider;
 
 class ConsoleSupportServiceProvider extends AggregateServiceProvider
 {
@@ -20,8 +19,11 @@ class ConsoleSupportServiceProvider extends AggregateServiceProvider
      * @var array
      */
     protected $providers = [
-        ArtisanServiceProvider::class,
-        MigrationServiceProvider::class,
-        ComposerServiceProvider::class,
+        'Illuminate\Foundation\Providers\ArtisanServiceProvider',
+        'Illuminate\Console\ScheduleServiceProvider',
+        'Illuminate\Database\MigrationServiceProvider',
+        'Illuminate\Database\SeedServiceProvider',
+        'Illuminate\Foundation\Providers\ComposerServiceProvider',
+        'Illuminate\Queue\ConsoleServiceProvider',
     ];
 }

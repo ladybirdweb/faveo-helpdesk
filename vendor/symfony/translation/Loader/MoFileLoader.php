@@ -80,7 +80,7 @@ class MoFileLoader extends FileLoader
         $messages = array();
 
         for ($i = 0; $i < $count; ++$i) {
-            $pluralId = null;
+            $singularId = $pluralId = null;
             $translated = null;
 
             fseek($stream, $offsetId + $i * 8);
@@ -137,7 +137,7 @@ class MoFileLoader extends FileLoader
     }
 
     /**
-     * Reads an unsigned long from stream respecting endianness.
+     * Reads an unsigned long from stream respecting endianess.
      *
      * @param resource $stream
      * @param bool     $isBigEndian

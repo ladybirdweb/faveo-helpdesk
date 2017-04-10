@@ -95,7 +95,7 @@ class Swift_Mime_Headers_DateHeader extends Swift_Mime_Headers_AbstractHeader
      */
     public function setTimestamp($timestamp)
     {
-        if (null !== $timestamp) {
+        if (!is_null($timestamp)) {
             $timestamp = (int) $timestamp;
         }
         $this->clearCachedValueIf($this->_timestamp != $timestamp);

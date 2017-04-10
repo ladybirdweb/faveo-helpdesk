@@ -60,7 +60,7 @@ class SeedCommand extends Command
         $this->resolver->setDefaultConnection($this->getDatabase());
 
         Model::unguarded(function () {
-            $this->getSeeder()->__invoke();
+            $this->getSeeder()->run();
         });
     }
 

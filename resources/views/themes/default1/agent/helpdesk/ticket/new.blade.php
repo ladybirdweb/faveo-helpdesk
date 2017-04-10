@@ -159,7 +159,7 @@ class="active"
                         <label>{!! Lang::get('lang.help_topic') !!}:</label>
                         <!-- helptopic -->
                         <?php $helptopic = App\Model\helpdesk\Manage\Help_topic::where('status', '=', 1)->select('topic', 'id')->get(); ?>
-                        {!! Form::select('helptopic', ['Helptopic'=>$helptopic->pluck('topic','id')->toArray()],null,['class' => 'form-control select','id'=>'selectid']) !!}
+                        {!! Form::select('helptopic', ['Helptopic'=>$helptopic->lists('topic','id')->toArray()],null,['class' => 'form-control select','id'=>'selectid']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -167,7 +167,7 @@ class="active"
                     <div class="form-group">
                         <label>{!! Lang::get('lang.sla_plan') !!}:</label>
                         <?php $sla_plan = App\Model\helpdesk\Manage\Sla_plan::where('status', '=', 1)->select('grace_period', 'id')->get(); ?>
-                        {!! Form::select('sla', ['SLA'=>$sla_plan->pluck('grace_period','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        {!! Form::select('sla', ['SLA'=>$sla_plan->lists('grace_period','id')->toArray()],null,['class' => 'form-control select']) !!}
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -182,7 +182,7 @@ class="active"
                     <div class="form-group">
                         <label>{!! Lang::get('lang.assign_to') !!}:</label>
                         <?php $agents = App\User::where('role', '!=', 'user')->where('active', '=', 1)->get(); ?>
-                        {!! Form::select('assignto', [''=>'Select an Agent','Agents'=>$agents->pluck('first_name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        {!! Form::select('assignto', [''=>'Select an Agent','Agents'=>$agents->lists('first_name','id')->toArray()],null,['class' => 'form-control select']) !!}
                     </div>
                 </div>
                 <div id="response" class="col-md-6 form-group"></div>
@@ -226,7 +226,7 @@ class="active"
                     </div>
                     <div class="col-md-3">
                         <?php $Priority = App\Model\helpdesk\Ticket\Ticket_Priority::where('status','=',1)->get(); ?>
-                        {!! Form::select('priority', ['Priority'=>$Priority->pluck('priority_desc','priority_id')->toArray()],null,['class' => 'form-control select']) !!}
+                        {!! Form::select('priority', ['Priority'=>$Priority->lists('priority_desc','priority_id')->toArray()],null,['class' => 'form-control select']) !!}
                     </div>
                     
                 </div>

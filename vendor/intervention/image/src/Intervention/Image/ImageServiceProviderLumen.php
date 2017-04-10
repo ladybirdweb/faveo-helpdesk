@@ -21,11 +21,8 @@ class ImageServiceProviderLumen extends ServiceProvider
           'image'
         );
 
-        // set configuration
-        $app->configure('image');
-
         // create image
-        $app->singleton('image',function ($app) {
+        $app['image'] = $app->share(function ($app) {
             return new ImageManager($app['config']->get('image'));
         });
 

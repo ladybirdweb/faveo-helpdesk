@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -14,11 +13,10 @@ class Create{{tableClassName}}Table extends Migration
     public function up()
     {
         Schema::create('{{table}}', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->text('connection');
             $table->text('queue');
             $table->longText('payload');
-            $table->longText('exception');
             $table->timestamp('failed_at')->useCurrent();
         });
     }
@@ -30,6 +28,6 @@ class Create{{tableClassName}}Table extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('{{table}}');
+        Schema::drop('{{table}}');
     }
 }

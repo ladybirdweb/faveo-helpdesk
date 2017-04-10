@@ -2,7 +2,6 @@
 
 namespace Illuminate\Database;
 
-use InvalidArgumentException;
 use Illuminate\Console\Command;
 use Illuminate\Container\Container;
 
@@ -23,6 +22,13 @@ abstract class Seeder
     protected $command;
 
     /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    abstract public function run();
+
+    /**
      * Seed the given connection from the given path.
      *
      * @param  string  $class
@@ -30,11 +36,11 @@ abstract class Seeder
      */
     public function call($class)
     {
-        if (isset($this->command)) {
-            $this->command->getOutput()->writeln("<info>Seeding:</info> $class");
-        }
+        $this->resolve($class)->run();
 
-        $this->resolve($class)->__invoke();
+        if (isset($this->command)) {
+            $this->command->getOutput()->writeln("<info>Seeded:</info> $class");
+        }
     }
 
     /**
@@ -84,23 +90,5 @@ abstract class Seeder
         $this->command = $command;
 
         return $this;
-    }
-
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     *
-     * @throws \InvalidArgumentException
-     */
-    public function __invoke()
-    {
-        if (! method_exists($this, 'run')) {
-            throw new InvalidArgumentException('Method [run] missing from '.get_class($this));
-        }
-
-        return isset($this->container)
-                    ? $this->container->call([$this, 'run'])
-                    : $this->run();
     }
 }

@@ -4,7 +4,6 @@ namespace Illuminate\Foundation\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 
 class ConfigCacheCommand extends Command
 {
@@ -69,7 +68,7 @@ class ConfigCacheCommand extends Command
     {
         $app = require $this->laravel->bootstrapPath().'/app.php';
 
-        $app->make(ConsoleKernelContract::class)->bootstrap();
+        $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
 
         return $app['config']->all();
     }

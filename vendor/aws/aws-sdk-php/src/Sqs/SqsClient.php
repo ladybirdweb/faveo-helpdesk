@@ -5,7 +5,6 @@ use Aws\AwsClient;
 use Aws\CommandInterface;
 use Aws\Sqs\Exception\SqsException;
 use GuzzleHttp\Psr7\Uri;
-use GuzzleHttp\Psr7\UriResolver;
 use Psr\Http\Message\RequestInterface;
 
 /**
@@ -88,10 +87,8 @@ class SqsClient extends AwsClient
                 RequestInterface $r = null
             ) use ($handler) {
                 if ($c->hasParam('QueueUrl')) {
-                    $r = $r->withUri(UriResolver::resolve(
-                        $r->getUri(),
-                        new Uri($c['QueueUrl'])
-                    ));
+                    $uri = Uri::resolve($r->getUri(), $c['QueueUrl']);
+                    $r = $r->withUri($uri);
                 }
                 return $handler($c, $r);
             };

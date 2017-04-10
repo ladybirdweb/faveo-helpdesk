@@ -11,13 +11,11 @@
 
 namespace Symfony\Component\OptionsResolver\Tests;
 
-use PHPUnit\Framework\Assert;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class OptionsResolverTest extends TestCase
+class OptionsResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var OptionsResolver
@@ -136,7 +134,7 @@ class OptionsResolverTest extends TestCase
     public function testClosureWithoutTypeHintNotInvoked()
     {
         $closure = function ($options) {
-            Assert::fail('Should not be called');
+            \PHPUnit_Framework_Assert::fail('Should not be called');
         };
 
         $this->resolver->setDefault('foo', $closure);
@@ -147,7 +145,7 @@ class OptionsResolverTest extends TestCase
     public function testClosureWithoutParametersNotInvoked()
     {
         $closure = function () {
-            Assert::fail('Should not be called');
+            \PHPUnit_Framework_Assert::fail('Should not be called');
         };
 
         $this->resolver->setDefault('foo', $closure);
@@ -162,7 +160,7 @@ class OptionsResolverTest extends TestCase
 
         // defined by subclass
         $this->resolver->setDefault('foo', function (Options $options, $previousValue) {
-            Assert::assertEquals('bar', $previousValue);
+            \PHPUnit_Framework_Assert::assertEquals('bar', $previousValue);
 
             return 'lazy';
         });
@@ -179,7 +177,7 @@ class OptionsResolverTest extends TestCase
 
         // defined by subclass
         $this->resolver->setDefault('foo', function (Options $options, $previousValue) {
-            Assert::assertEquals('bar', $previousValue);
+            \PHPUnit_Framework_Assert::assertEquals('bar', $previousValue);
 
             return 'lazy';
         });
@@ -191,7 +189,7 @@ class OptionsResolverTest extends TestCase
     {
         // defined by superclass
         $this->resolver->setDefault('foo', function () {
-            Assert::fail('Should not be called');
+            \PHPUnit_Framework_Assert::fail('Should not be called');
         });
 
         // defined by subclass, no $previousValue argument defined!
@@ -205,7 +203,7 @@ class OptionsResolverTest extends TestCase
     public function testOverwrittenLazyOptionNotEvaluated()
     {
         $this->resolver->setDefault('foo', function (Options $options) {
-            Assert::fail('Should not be called');
+            \PHPUnit_Framework_Assert::fail('Should not be called');
         });
 
         $this->resolver->setDefault('foo', 'bar');
@@ -218,13 +216,13 @@ class OptionsResolverTest extends TestCase
         $calls = 0;
 
         $this->resolver->setDefault('lazy1', function (Options $options) use (&$calls) {
-            Assert::assertSame(1, ++$calls);
+            \PHPUnit_Framework_Assert::assertSame(1, ++$calls);
 
             $options['lazy2'];
         });
 
         $this->resolver->setDefault('lazy2', function (Options $options) use (&$calls) {
-            Assert::assertSame(2, ++$calls);
+            \PHPUnit_Framework_Assert::assertSame(2, ++$calls);
         });
 
         $this->resolver->resolve();
@@ -507,14 +505,7 @@ class OptionsResolverTest extends TestCase
     {
         $this->resolver->setDefined('option');
         $this->resolver->setAllowedTypes('option', $allowedType);
-
-        if (method_exists($this, 'expectException')) {
-            $this->expectException('Symfony\Component\OptionsResolver\Exception\InvalidOptionsException');
-            $this->expectExceptionMessage($exceptionMessage);
-        } else {
-            $this->setExpectedException('Symfony\Component\OptionsResolver\Exception\InvalidOptionsException', $exceptionMessage);
-        }
-
+        $this->setExpectedException('Symfony\Component\OptionsResolver\Exception\InvalidOptionsException', $exceptionMessage);
         $this->resolver->resolve(array('option' => $actualType));
     }
 
@@ -1005,7 +996,7 @@ class OptionsResolverTest extends TestCase
         $this->resolver->setAllowedTypes('foo', 'int');
 
         $this->resolver->setNormalizer('foo', function () {
-            Assert::fail('Should not be called.');
+            \PHPUnit_Framework_Assert::fail('Should not be called.');
         });
 
         $this->resolver->resolve();
@@ -1021,7 +1012,7 @@ class OptionsResolverTest extends TestCase
         $this->resolver->setAllowedValues('foo', 'baz');
 
         $this->resolver->setNormalizer('foo', function () {
-            Assert::fail('Should not be called.');
+            \PHPUnit_Framework_Assert::fail('Should not be called.');
         });
 
         $this->resolver->resolve();
@@ -1033,8 +1024,8 @@ class OptionsResolverTest extends TestCase
         $this->resolver->setDefault('norm', 'baz');
 
         $this->resolver->setNormalizer('norm', function (Options $options) {
-            /* @var TestCase $test */
-            Assert::assertSame('bar', $options['default']);
+            /* @var \PHPUnit_Framework_TestCase $test */
+            \PHPUnit_Framework_Assert::assertSame('bar', $options['default']);
 
             return 'normalized';
         });
@@ -1053,8 +1044,8 @@ class OptionsResolverTest extends TestCase
         $this->resolver->setDefault('norm', 'baz');
 
         $this->resolver->setNormalizer('norm', function (Options $options) {
-            /* @var TestCase $test */
-            Assert::assertEquals('bar', $options['lazy']);
+            /* @var \PHPUnit_Framework_TestCase $test */
+            \PHPUnit_Framework_Assert::assertEquals('bar', $options['lazy']);
 
             return 'normalized';
         });
@@ -1160,12 +1151,12 @@ class OptionsResolverTest extends TestCase
         $this->resolver->setDefault('norm2', 'baz');
 
         $this->resolver->setNormalizer('norm1', function ($options) use (&$calls) {
-            Assert::assertSame(1, ++$calls);
+            \PHPUnit_Framework_Assert::assertSame(1, ++$calls);
 
             $options['norm2'];
         });
         $this->resolver->setNormalizer('norm2', function () use (&$calls) {
-            Assert::assertSame(2, ++$calls);
+            \PHPUnit_Framework_Assert::assertSame(2, ++$calls);
         });
 
         $this->resolver->resolve();
@@ -1178,7 +1169,7 @@ class OptionsResolverTest extends TestCase
         $this->resolver->setDefined('norm');
 
         $this->resolver->setNormalizer('norm', function () {
-            Assert::fail('Should not be called.');
+            \PHPUnit_Framework_Assert::fail('Should not be called.');
         });
 
         $this->assertEmpty($this->resolver->resolve());
@@ -1419,17 +1410,17 @@ class OptionsResolverTest extends TestCase
         });
 
         $this->resolver->setDefault('lazy2', function (Options $options) {
-            Assert::assertTrue(isset($options['default1']));
-            Assert::assertTrue(isset($options['default2']));
-            Assert::assertTrue(isset($options['required']));
-            Assert::assertTrue(isset($options['lazy1']));
-            Assert::assertTrue(isset($options['lazy2']));
-            Assert::assertFalse(isset($options['defined']));
+            \PHPUnit_Framework_Assert::assertTrue(isset($options['default1']));
+            \PHPUnit_Framework_Assert::assertTrue(isset($options['default2']));
+            \PHPUnit_Framework_Assert::assertTrue(isset($options['required']));
+            \PHPUnit_Framework_Assert::assertTrue(isset($options['lazy1']));
+            \PHPUnit_Framework_Assert::assertTrue(isset($options['lazy2']));
+            \PHPUnit_Framework_Assert::assertFalse(isset($options['defined']));
 
-            Assert::assertSame(0, $options['default1']);
-            Assert::assertSame(42, $options['default2']);
-            Assert::assertSame('value', $options['required']);
-            Assert::assertSame('lazy', $options['lazy1']);
+            \PHPUnit_Framework_Assert::assertSame(0, $options['default1']);
+            \PHPUnit_Framework_Assert::assertSame(42, $options['default2']);
+            \PHPUnit_Framework_Assert::assertSame('value', $options['required']);
+            \PHPUnit_Framework_Assert::assertSame('lazy', $options['lazy1']);
 
             // Obviously $options['lazy'] and $options['defined'] cannot be
             // accessed
@@ -1534,7 +1525,7 @@ class OptionsResolverTest extends TestCase
         $this->resolver->setDefault('lazy1', function () {});
 
         $this->resolver->setDefault('lazy2', function (Options $options) {
-            Assert::assertCount(4, $options);
+            \PHPUnit_Framework_Assert::assertCount(4, $options);
         });
 
         $this->assertCount(4, $this->resolver->resolve(array('required' => 'value')));

@@ -11,7 +11,7 @@ class FrameGuard
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\Response
      */
     public function handle($request, Closure $next)
     {

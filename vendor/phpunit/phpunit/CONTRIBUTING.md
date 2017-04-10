@@ -39,10 +39,12 @@ $ git clone git://github.com/sebastianbergmann/phpunit.git
 $ cd phpunit
 ```
 
-Retrieve PHPUnit's dependencies using [Composer](https://getcomposer.org/):
+Retrieve PHPUnit's dependencies using [Composer](http://getcomposer.org/):
 
 ```bash
-$ composer install
+$ wget http://getcomposer.org/composer.phar
+
+$ php composer.phar install
 ```
 
 The `phpunit` script can be used to invoke the PHPUnit test runner:

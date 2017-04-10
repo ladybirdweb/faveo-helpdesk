@@ -33,7 +33,7 @@ class ArrayStore extends TaggableStore implements Store
      *
      * @param  string  $key
      * @param  mixed   $value
-     * @param  float|int  $minutes
+     * @param  int     $minutes
      * @return void
      */
     public function put($key, $value, $minutes)
@@ -95,13 +95,11 @@ class ArrayStore extends TaggableStore implements Store
     /**
      * Remove all items from the cache.
      *
-     * @return bool
+     * @return void
      */
     public function flush()
     {
         $this->storage = [];
-
-        return true;
     }
 
     /**

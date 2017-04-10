@@ -2,55 +2,6 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.9.0 - 2017-03-17
-
-### Added
-
-- [#78](https://github.com/zendframework/zend-validator/pull/78) added
-  `%length%` as an optional message variable in StringLength validator
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- [#151](https://github.com/zendframework/zend-validator/pull/151) dropped
-  php 5.5 support
-
-### Fixed
-
-- [#147](https://github.com/zendframework/zend-validator/issues/147)
-  [#148](https://github.com/zendframework/zend-validator/pull/148) adds further
-  `"suggest"` clauses in `composer.json`, since some dependencies are not always
-  required, and may lead to runtime failures.
-- [#66](https://github.com/zendframework/zend-validator/pull/66) fixed
-  EmailAddress validator applying IDNA conversion to local part 
-- [#88](https://github.com/zendframework/zend-validator/pull/88) fixed NotEmpty
-  validator incorrectly applying types bitmaps
-- [#150](https://github.com/zendframework/zend-validator/pull/150) fixed Hostname
-  validator not allowing some characters in .dk IDN
-
-## 2.8.2 - 2017-01-29
-
-### Added
-
-- [#110](https://github.com/zendframework/zend-validator/pull/110) adds new
-  Mastercard 2-series BINs
-
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
-- [#81](https://github.com/zendframework/zend-validator/pull/81) registers the
-  Uuid validator into ValidatorPluginManager.
-
 ## 2.8.1 - 2016-06-23
 
 ### Added

@@ -247,11 +247,11 @@ abstract class PrettyPrinterAbstract
             if ($childPrecedence > $parentPrecedence
                 || ($parentPrecedence == $childPrecedence && $parentAssociativity != $childPosition)
             ) {
-                return '(' . $this->p($node) . ')';
+                return '(' . $this->{'p' . $type}($node) . ')';
             }
         }
 
-        return $this->p($node);
+        return $this->{'p' . $type}($node);
     }
 
     /**
@@ -265,11 +265,7 @@ abstract class PrettyPrinterAbstract
     protected function pImplode(array $nodes, $glue = '') {
         $pNodes = array();
         foreach ($nodes as $node) {
-            if (null === $node) {
-                $pNodes[] = '';
-            } else {
-                $pNodes[] = $this->p($node);
-            }
+            $pNodes[] = $this->p($node);
         }
 
         return implode($glue, $pNodes);

@@ -65,7 +65,7 @@ class Date extends AbstractValidator
     {
         if ($options instanceof Traversable) {
             $options = iterator_to_array($options);
-        } elseif (! is_array($options)) {
+        } elseif (!is_array($options)) {
             $options = func_get_args();
             $temp['format'] = array_shift($options);
             $options = $temp;
@@ -110,7 +110,7 @@ class Date extends AbstractValidator
     {
         $this->setValue($value);
 
-        if (! $this->convertToDateTime($value)) {
+        if (!$this->convertToDateTime($value)) {
             $this->error(self::INVALID_DATE);
             return false;
         }
@@ -132,7 +132,7 @@ class Date extends AbstractValidator
         }
 
         $type = gettype($param);
-        if (! in_array($type, ['string', 'integer', 'double', 'array'])) {
+        if (!in_array($type, ['string', 'integer', 'double', 'array'])) {
             if ($addErrors) {
                 $this->error(self::INVALID);
             }

@@ -34,22 +34,24 @@ class ThrowPromise implements PromiseInterface
     /**
      * Initializes promise.
      *
-     * @param string|\Exception|\Throwable $exception Exception class name or instance
+     * @param string|\Exception $exception Exception class name or instance
      *
      * @throws \Prophecy\Exception\InvalidArgumentException
      */
     public function __construct($exception)
     {
         if (is_string($exception)) {
-            if (!class_exists($exception) || !$this->isAValidThrowable($exception)) {
+            if (!class_exists($exception)
+             && 'Exception' !== $exception
+             && !is_subclass_of($exception, 'Exception')) {
                 throw new InvalidArgumentException(sprintf(
-                    'Exception / Throwable class or instance expected as argument to ThrowPromise, but got %s.',
+                    'Exception class or instance expected as argument to ThrowPromise, but got %s.',
                     $exception
                 ));
             }
-        } elseif (!$exception instanceof \Exception && !$exception instanceof \Throwable) {
+        } elseif (!$exception instanceof \Exception) {
             throw new InvalidArgumentException(sprintf(
-                'Exception / Throwable class or instance expected as argument to ThrowPromise, but got %s.',
+                'Exception class or instance expected as argument to ThrowPromise, but got %s.',
                 is_object($exception) ? get_class($exception) : gettype($exception)
             ));
         }
@@ -85,15 +87,5 @@ class ThrowPromise implements PromiseInterface
         }
 
         throw $this->exception;
-    }
-
-    /**
-     * @param string $exception
-     *
-     * @return bool
-     */
-    private function isAValidThrowable($exception)
-    {
-        return is_a($exception, 'Exception', true) || is_subclass_of($exception, 'Throwable', true);
     }
 }

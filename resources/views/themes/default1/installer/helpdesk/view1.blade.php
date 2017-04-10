@@ -14,7 +14,6 @@ active
 
         <p>Please read this software license agreement carefully before downloading or using the software. By clicking on the "accept" button, opening the package, or downloading the product, you are consenting to be bound by this agreement. If you do not agree to all of the terms of this agreement, stop the installation process and exit.</p>
         <form action="{{URL::route('postlicence')}}" method="post">
-            {{ csrf_field() }}
             <div>
                 
                 <div id="openModal" class="modalDialog">
@@ -60,6 +59,7 @@ active
                 <a href="{!! route('prerequisites') !!}"><input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue" name="accept1"></a>
                 <input type="submit" class="button button-large button-next" value="Cancel" style="float: left">
             </p>
+            <br>
         </form>
         </div>
     <script>

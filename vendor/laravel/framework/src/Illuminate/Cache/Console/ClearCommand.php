@@ -50,35 +50,21 @@ class ClearCommand extends Command
      */
     public function handle()
     {
-        $this->laravel['events']->fire('cache:clearing', [$this->argument('store'), $this->tags()]);
+        $tags = array_filter(explode(',', $this->option('tags')));
 
-        $this->cache()->flush();
+        $cache = $this->cache->store($store = $this->argument('store'));
 
-        $this->laravel['events']->fire('cache:cleared', [$this->argument('store'), $this->tags()]);
+        $this->laravel['events']->fire('cache:clearing', [$store, $tags]);
+
+        if (! empty($tags)) {
+            $cache->tags($tags)->flush();
+        } else {
+            $cache->flush();
+        }
 
         $this->info('Cache cleared successfully.');
-    }
 
-    /**
-     * Get the cache instance for the command.
-     *
-     * @return \Illuminate\Cache\Repository
-     */
-    protected function cache()
-    {
-        $cache = $this->cache->store($this->argument('store'));
-
-        return empty($this->tags()) ? $cache : $cache->tags($this->tags());
-    }
-
-    /**
-     * Get the tags passed to the command.
-     *
-     * @return array
-     */
-    protected function tags()
-    {
-        return array_filter(explode(',', $this->option('tags')));
+        $this->laravel['events']->fire('cache:cleared', [$store, $tags]);
     }
 
     /**

@@ -47,7 +47,7 @@ class ImageServiceProviderLaravel5 extends ServiceProvider
         );
 
         // create image
-        $app->singleton('image', function ($app) {
+        $app['image'] = $app->share(function ($app) {
             return new ImageManager($app['config']->get('image'));
         });
 

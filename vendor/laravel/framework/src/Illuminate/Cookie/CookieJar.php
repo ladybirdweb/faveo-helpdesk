@@ -2,7 +2,6 @@
 
 namespace Illuminate\Cookie;
 
-use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\Cookie;
 use Illuminate\Contracts\Cookie\QueueingFactory as JarContract;
@@ -21,7 +20,7 @@ class CookieJar implements JarContract
      *
      * @var string
      */
-    protected $domain;
+    protected $domain = null;
 
     /**
      * The default secure setting (defaults to false).
@@ -53,7 +52,7 @@ class CookieJar implements JarContract
     {
         list($path, $domain, $secure) = $this->getPathAndDomain($path, $domain, $secure);
 
-        $time = ($minutes == 0) ? 0 : Carbon::now()->getTimestamp() + ($minutes * 60);
+        $time = ($minutes == 0) ? 0 : time() + ($minutes * 60);
 
         return new Cookie($name, $value, $time, $path, $domain, $secure, $httpOnly);
     }
@@ -113,15 +112,15 @@ class CookieJar implements JarContract
     /**
      * Queue a cookie to send with the next response.
      *
-     * @param  array  $parameters
+     * @param  mixed
      * @return void
      */
-    public function queue(...$parameters)
+    public function queue()
     {
-        if (head($parameters) instanceof Cookie) {
-            $cookie = head($parameters);
+        if (head(func_get_args()) instanceof Cookie) {
+            $cookie = head(func_get_args());
         } else {
-            $cookie = call_user_func_array([$this, 'make'], $parameters);
+            $cookie = call_user_func_array([$this, 'make'], func_get_args());
         }
 
         $this->queued[$cookie->getName()] = $cookie;

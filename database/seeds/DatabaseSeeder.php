@@ -8,7 +8,7 @@ use App\Model\helpdesk\Agent\Groups;
 use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
-//use App\Model\helpdesk\Notification\NotificationType;
+use App\Model\helpdesk\Notification\NotificationType;
 use App\Model\helpdesk\Ratings\Rating;
 use App\Model\helpdesk\Settings\Alert;
 use App\Model\helpdesk\Settings\CommonSettings;
@@ -22,18 +22,20 @@ use App\Model\helpdesk\Theme\Widgets;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Ticket\Ticket_source;
 use App\Model\helpdesk\Ticket\Ticket_Status;
+use App\Model\helpdesk\Ticket\TicketStatusType;
 use App\Model\helpdesk\Utility\CountryCode;
 use App\Model\helpdesk\Utility\Date_format;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Languages;
 use App\Model\helpdesk\Utility\Limit_Login;
-//use App\Model\helpdesk\Utility\Log_notification;
+use App\Model\helpdesk\Utility\Log_notification;
 use App\Model\helpdesk\Utility\MailboxProtocol;
 use App\Model\helpdesk\Utility\Time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\Model\helpdesk\Utility\Version_Check;
 use App\Model\helpdesk\Workflow\WorkflowClose;
 use App\Model\kb\Settings;
+// use App\Model\helpdesk\Ticket\Ticket_Status;
 // Knowledge base
 use Illuminate\Database\Seeder;
 
@@ -62,9 +64,9 @@ class DatabaseSeeder extends Seeder
         foreach ($date_time_formats as $date_time_format) {
             Date_time_format::create(['format' => $date_time_format]);
         }
-        //NotificationType::create(['id' => '1', 'message' => 'A new user is registered', 'type' => 'registration', 'icon_class' => 'fa fa-user']);
-//        NotificationType::create(['id' => '2', 'message' => 'You have a new reply on this ticket', 'type' => 'reply', 'icon_class' => 'fa fa-envelope']);
-//        NotificationType::create(['id' => '3', 'message' => 'A new ticket has been created', 'type' => 'new_ticket', 'icon_class' => 'fa fa-envelope']);
+        NotificationType::create(['id' => '1', 'message' => 'A new user is registered', 'type' => 'registration', 'icon_class' => 'fa fa-user']);
+        NotificationType::create(['id' => '2', 'message' => 'You have a new reply on this ticket', 'type' => 'reply', 'icon_class' => 'fa fa-envelope']);
+        NotificationType::create(['id' => '3', 'message' => 'A new ticket has been created', 'type' => 'new_ticket', 'icon_class' => 'fa fa-envelope']);
         WorkflowClose::create(['id' => '1', 'days' => '2', 'condition' => '1', 'send_email' => '1', 'status' => '3']);
 
         /* Date format */
@@ -203,14 +205,32 @@ class DatabaseSeeder extends Seeder
         foreach ($timezone as $name => $location) {
             Timezones::create(['name' => $name, 'location' => $location]);
         }
+
+        /* Ticket Status Type */
+        TicketStatusType::create(['id' => '1', 'name' => 'open']);
+        TicketStatusType::create(['id' => '2', 'name' => 'closed']);
+        TicketStatusType::create(['id' => '3', 'name' => 'archieved']);
+        TicketStatusType::create(['id' => '4', 'name' => 'deleted']);
+
         /* Ticket status */
-        Ticket_status::create(['name' => 'Open', 'state' => 'open', 'mode' => '3', 'message' => 'Ticket have been Reopened by', 'flags' => '0', 'sort' => '1', 'properties' => 'Open tickets.']);
-        Ticket_status::create(['name' => 'Resolved', 'state' => 'closed', 'mode' => '1', 'message' => 'Ticket have been Resolved by', 'flags' => '0', 'sort' => '2', 'properties' => 'Resolved tickets.']);
-        Ticket_status::create(['name' => 'Closed', 'state' => 'closed', 'mode' => '3', 'message' => 'Ticket have been Closed by', 'flags' => '0', 'sort' => '3', 'properties' => 'Closed tickets. Tickets will still be accessible on client and staff panels.']);
-        Ticket_status::create(['name' => 'Archived', 'state' => 'archived', 'mode' => '3', 'message' => 'Ticket have been Archived by', 'flags' => '0', 'sort' => '4', 'properties' => 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.']);
-        Ticket_status::create(['name' => 'Deleted', 'state' => 'deleted', 'mode' => '3', 'message' => 'Ticket have been Deleted by', 'flags' => '0', 'sort' => '5', 'properties' => 'Tickets queued for deletion. Not accessible on ticket queues.']);
-        Ticket_status::create(['name' => 'Unverified', 'state' => 'unverified', 'mode' => '3', 'message' => 'User account verification required.', 'flags' => '0', 'sort' => '6', 'properties' => 'Ticket will be open after user verifies his/her account.']);
-        Ticket_status::create(['name' => 'Request Approval', 'state' => 'unverified', 'mode' => '3', 'message' => 'Approval requested by', 'flags' => '0', 'sort' => '7', 'properties' => 'Ticket will be approve  after Admin verifies  this ticket']);
+        Ticket_status::create(['name' => 'Open', 'default' => '1', 'visibility_for_client' => '1', 'message' => 'Ticket have been Reopened by {!!$user!!}', 'allow_client' => '1', 'visibility_for_agent' => '1', 'purpose_of_status' => '1', 'secondary_status' => null, 'send_email' => '0', 'order' => '1', 'icon' => 'fa fa-folder-open-o', 'icon_color' => '#ff0000']);
+
+        Ticket_status::create(['name' => 'Resolved', 'default' => null, 'visibility_for_client' => '1', 'message' => 'Ticket have been Resolved by {!!$user!!}', 'allow_client' => '1', 'visibility_for_agent' => '1', 'purpose_of_status' => '2', 'secondary_status' => null, 'send_email' => '0', 'order' => '2', 'icon' => 'fa fa-check-circle-o', 'icon_color' => '#008000']);
+
+        Ticket_status::create(['name' => 'Closed', 'default' => '1', 'visibility_for_client' => '1', 'message' => 'Ticket have been Closed by {!!$user!!}', 'allow_client' => '1', 'visibility_for_agent' => '1', 'purpose_of_status' => '2', 'secondary_status' => null, 'send_email' => '1', 'order' => '3', 'icon' => 'fa fa-check', 'icon_color' => '#008000']);
+
+        Ticket_status::create(['name' => 'Archived', 'default' => null, 'visibility_for_client' => '1', 'message' => 'Ticket have been Archived by {!!$user!!}', 'allow_client' => '1', 'visibility_for_agent' => '1', 'purpose_of_status' => '3', 'secondary_status' => null, 'send_email' => '0', 'order' => '4', 'icon' => 'fa fa-trash', 'icon_color' => '#ff0000']);
+
+        Ticket_status::create(['name' => 'Deleted', 'default' => '1', 'visibility_for_client' => '1', 'message' => 'Ticket have been Deleted by {!!$user!!}', 'allow_client' => '1', 'visibility_for_agent' => '1', 'purpose_of_status' => '4', 'secondary_status' => null, 'send_email' => '0', 'order' => '5', 'icon' => 'fa fa-trash', 'icon_color' => '#ff0000']);
+
+        // /* Ticket status */
+        // Ticket_status::create(['name' => 'Open', 'state' => 'open', 'mode' => '3', 'message' => 'Ticket have been Reopened by', 'flags' => '0', 'sort' => '1', 'properties' => 'Open tickets.']);
+        // Ticket_status::create(['name' => 'Resolved', 'state' => 'closed', 'mode' => '1', 'message' => 'Ticket have been Resolved by', 'flags' => '0', 'sort' => '2', 'properties' => 'Resolved tickets.']);
+        // Ticket_status::create(['name' => 'Closed', 'state' => 'closed', 'mode' => '3', 'message' => 'Ticket have been Closed by', 'flags' => '0', 'sort' => '3', 'properties' => 'Closed tickets. Tickets will still be accessible on client and staff panels.']);
+        // Ticket_status::create(['name' => 'Archived', 'state' => 'archived', 'mode' => '3', 'message' => 'Ticket have been Archived by', 'flags' => '0', 'sort' => '4', 'properties' => 'Tickets only adminstratively available but no longer accessible on ticket queues and client panel.']);
+        // Ticket_status::create(['name' => 'Deleted', 'state' => 'deleted', 'mode' => '3', 'message' => 'Ticket have been Deleted by', 'flags' => '0', 'sort' => '5', 'properties' => 'Tickets queued for deletion. Not accessible on ticket queues.']);
+        // Ticket_status::create(['name' => 'Unverified', 'state' => 'unverified', 'mode' => '3', 'message' => 'User account verification required.', 'flags' => '0', 'sort' => '6', 'properties' => 'Ticket will be open after user verifies his/her account.']);
+        // Ticket_status::create(['name' => 'Request Approval', 'state' => 'unverified', 'mode' => '3', 'message' => 'Approval requested by', 'flags' => '0', 'sort' => '7', 'properties' => 'Ticket will be approve  after Admin verifies  this ticket']);
 
         /* Ticket priority */
         Ticket_priority::create(['priority' => 'Low', 'status' => 1, 'priority_desc' => 'Low', 'priority_color' => '#00a65a', 'priority_urgency' => '4', 'ispublic' => '1']);
@@ -264,13 +284,13 @@ class DatabaseSeeder extends Seeder
         help_topic::create(['topic' => 'Sales query', 'department' => '2', 'ticket_status' => '1', 'priority' => '2', 'sla_plan' => '1', 'ticket_num_format' => '1', 'status' => '0', 'type' => '1', 'auto_response' => '0']);
         help_topic::create(['topic' => 'Operational query', 'department' => '3', 'ticket_status' => '1', 'priority' => '2', 'sla_plan' => '1', 'ticket_num_format' => '1', 'status' => '0', 'type' => '1', 'auto_response' => '0']);
         /* Daily notification log */
-        //Log_notification::create(['log' => 'NOT-1']);
+        Log_notification::create(['log' => 'NOT-1']);
         /* System complete settings */
-        $this->call(AlertSeeder::class);
+        Alert::create(['id' => '1', 'ticket_status' => '1', 'ticket_admin_email' => '1', 'assignment_status' => '1', 'assignment_status' => '1', 'assignment_assigned_agent' => '1']);
         Company::create(['id' => '1']);
         Email::create(['id' => '1', 'template' => 'default', 'email_fetching' => '1', 'notification_cron' => '1', 'all_emails' => '1', 'email_collaborator' => '1', 'attachment' => '1']);
         Responder::create(['id' => '1', 'new_ticket' => '1', 'agent_new_ticket' => '1']);
-        //System::create(['id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32']);
+        System::create(['id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32']);
         Ticket::create(['num_format' => '$$$$-####-####', 'num_sequence' => 'sequence', 'collision_avoid' => '2', 'priority' => '1', 'sla' => '2', 'help_topic' => '1', 'status' => '1']);
         /* Ticket source */
         Ticket_source::create(['name' => 'web', 'value' => 'Web']);
@@ -1979,7 +1999,38 @@ class DatabaseSeeder extends Seeder
 
         Security::create(['id' => '1', 'lockout_message' => 'You have been locked out of application due to too many failed login attempts.', 'backlist_offender' => '0', 'backlist_threshold' => '15', 'lockout_period' => '15', 'days_to_keep_logs' => '0']);
 
-        $this->call(TemplateSeeder::class);
+        TemplateSet::create(['id' => '1', 'name' => 'default', 'active' => '1']);
+
+        TemplateType::create(['id' => '1', 'name' => 'assign-ticket']);
+        TemplateType::create(['id' => '2', 'name' => 'check-ticket']);
+        TemplateType::create(['id' => '3', 'name' => 'close-ticket']);
+        TemplateType::create(['id' => '4', 'name' => 'create-ticket']);
+        TemplateType::create(['id' => '5', 'name' => 'create-ticket-agent']);
+        TemplateType::create(['id' => '6', 'name' => 'create-ticket-by-agent']);
+        TemplateType::create(['id' => '7', 'name' => 'registration-notification']);
+        TemplateType::create(['id' => '8', 'name' => 'reset-password']);
+        TemplateType::create(['id' => '9', 'name' => 'ticket-reply']);
+        TemplateType::create(['id' => '10', 'name' => 'ticket-reply-agent']);
+        TemplateType::create(['id' => '11', 'name' => 'registration']);
+        TemplateType::create(['id' => '12', 'name' => 'team_assign_ticket']);
+        TemplateType::create(['id' => '13', 'name' => 'reset_new_password']);
+        TemplateType::create(['id' => '14', 'name' => 'merge-ticket-notification']);
+
+        Template::create(['id' => '1', 'variable' => '0', 'name' => 'This template is for sending notice to agent when ticket is assigned to them', 'type' => '1', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to you by {!!$ticket_assigner!!} <br/> Please check and resppond on the ticket.<br /> Link: {!!$ticket_link!!}<br /><br />Thank You<br />Kind Regards,<br /> {!!$system_from!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '2', 'variable' => '1', 'name' => 'This template is for sending notice to client with ticket link to check ticket without logging in to system', 'type' => '2', 'subject' => 'Check your Ticket', 'message' => '<div>Hello {!!$user!!},<br/><br/>Click the link below to view your requested ticket<br/> {!!$ticket_link_with_number!!}<br/><br/>Kind Regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '3', 'variable' => '0', 'name' => 'This template is for sending notice to client when ticket status is changed to close', 'type' => '3', 'message' => '<div>Hello,<br/><br/>This message is regarding your ticket ID {!!$ticket_number!!}. We are changing the status of this ticket to "Closed" as the issue appears to be resolved.<br/><br/>Thank you<br/>Kind regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '4', 'variable' => '0', 'name' => 'This template is for sending notice to client on successful ticket creation', 'type' => '4', 'message' => '<div><span>Hello {!!$user!!}<br/><br/></span><span>Thank you for contacting us. This is an automated response confirming the receipt of your ticket. Our team will get back to you as soon as possible. When replying, please make sure that the ticket ID is kept in the subject so that we can track your replies.<br/><br/></span><span><b>Ticket ID:</b> {!!$ticket_number!!} <br/><br/></span><span> {!!$department_sign!!}<br/></span>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '5', 'variable' => '0', 'name' => 'This template is for sending notice to agent on new ticket creation', 'type' => '5', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br/><br/>New ticket {!!$ticket_number!!}created <br/><br/><b>From</b><br/><b>Name:</b> {!!$ticket_client_name!!}   <br/><b>E-mail:</b> {!!$ticket_client_email!!}<br/><br/> {!!$content!!}<br/><br/>Kind Regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '6', 'variable' => '0', 'name' => 'This template is for sending notice to client on new ticket created by agent in name of client', 'type' => '6', 'message' => '<div> {!!$content!!}<br><br> {!!$agent_sign!!}<br><br>You can check the status of or update this ticket online at: {!!$system_link!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '7', 'variable' => '1', 'name' => 'This template is for sending notice to client on new registration during new ticket creation for un registered clients', 'type' => '7', 'subject' => 'Registration Confirmation', 'message' => '<p>Hello {!!$user!!}, </p><p>This email is confirmation that you are now registered at our helpdesk.</p><p><b>Registered Email:</b> {!!$email_address!!}</p><p><b>Password:</b> {!!$user_password!!}</p><p>You can visit the helpdesk to browse articles and contact us at any time: {!!$system_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p> {!!$system_from!!} </p>', 'set_id' => '1']);
+        Template::create(['id' => '8', 'variable' => '1', 'name' => 'This template is for sending notice to any user about reset password option', 'type' => '8', 'subject' => 'Reset your Password', 'message' => 'Hello {!!$user!!},<br/><br/>You asked to reset your password. To do so, please click this link:<br/><br/> {!!$password_reset_link!!}<br/><br/>This will let you change your password to something new.'." If you didn't ask for this, don't worry, we'll keep your password safe.<br/><br/>Thank You.<br/><br/>Kind Regards,<br/>".' {!!$system_from!!}', 'set_id' => '1']);
+        Template::create(['id' => '9', 'variable' => '0', 'name' => 'This template is for sending notice to client when a reply made to his/her ticket', 'type' => '9', 'message' => '<span></span><div><span></span><p> {!!$content!!}<br/></p><p> {!!$agent_sign!!} </p><p><b>Ticket Details</b></p><p><b>Ticket ID:</b> {!!$ticket_number!!}</p></div>', 'set_id' => '1']);
+        Template::create(['id' => '10', 'variable' => '0', 'name' => 'This template is for sending notice to agent when ticket reply is made by client on a ticket', 'type' => '10', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br/><b><br/></b>A reply been made to ticket {!!$ticket_number!!}<br/><b><br/></b><b>From<br/></b><b>Name: </b>{!!$ticket_client_name!!}<br/><b>E-mail: </b>{!!$ticket_client_email!!}<br/><b><br/></b> {!!$content!!}<br/><b><br/></b>Kind Regards,<br/> {!!$system_from!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '11', 'variable' => '1', 'name' => 'This template is for sending notice to client about registration confirmation link', 'type' => '11', 'subject' => 'Verify your email address', 'message' => '<p>Hello {!!$user!!}, </p><p>This email is confirmation that you are now registered at our helpdesk.</p><p><b>Registered Email:</b> {!!$email_address!!}</p><p>Please click on the below link to activate your account and Login to the system {!!$password_reset_link!!}</p><p>Thank You.</p><p>Kind Regards,</p><p> {!!$system_from!!} </p>', 'set_id' => '1']);
+        Template::create(['id' => '12', 'variable' => '1', 'name' => 'This template is for sending notice to team when ticket is assigned to team', 'type' => '12', 'message' => '<div>Hello {!!$ticket_agent_name!!},<br /><br /><b>Ticket No:</b> {!!$ticket_number!!}<br />Has been assigned to your team : {!!$team!!} by {!!$ticket_assigner!!} <br /><br />Thank You<br />Kind Regards,<br />{!!$system_from!!}</div>', 'set_id' => '1']);
+        Template::create(['id' => '13', 'variable' => '1', 'name' => 'This template is for sending notice to client when password is changed', 'type' => '13', 'subject' => 'Verify your email address', 'message' => 'Hello {!!$user!!},<br /><br />Your password is successfully changed.Your new password is : {!!$user_password!!}<br /><br />Thank You.<br /><br />Kind Regards,<br /> {!!$system_from!!}', 'set_id' => '1']);
+        Template::create(['id' => '14', 'variable' => '1', 'name' => 'This template is to notify users when their tickets are merged.', 'type' => '14', 'subject' => 'Your tickets have been merged.', 'message' => '<p>Hello {!!$user!!},<br />&nbsp;</p><p>Your ticket(s) with ticket number {!!$merged_ticket_numbers!!} have been closed and&nbsp;merged with <a href="{!!$ticket_link!!}">{!!$ticket_number!!}</a>.&nbsp;</p><p>Possible reasons for merging tickets</p><ul><li>Tickets are duplicate</li<li>Tickets state&nbsp;the same issue</li><li>Another member from your organization has created a ticket for the same issue</li></ul><p><a href="{!!$system_link!!}">Click here</a> to login to your account and check your tickets.</p><p>Regards,</p><p>{!!$system_from!!}</p>', 'set_id' => '1']);
+
         /*
          * All the common settings will be listed here
          */

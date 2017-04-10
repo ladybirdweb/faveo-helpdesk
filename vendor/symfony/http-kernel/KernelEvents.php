@@ -23,9 +23,11 @@ final class KernelEvents
      * dispatching.
      *
      * This event allows you to create a response for a request before any
-     * other code in the framework is executed.
+     * other code in the framework is executed. The event listener method
+     * receives a Symfony\Component\HttpKernel\Event\GetResponseEvent
+     * instance.
      *
-     * @Event("Symfony\Component\HttpKernel\Event\GetResponseEvent")
+     * @Event
      *
      * @var string
      */
@@ -35,9 +37,11 @@ final class KernelEvents
      * The EXCEPTION event occurs when an uncaught exception appears.
      *
      * This event allows you to create a response for a thrown exception or
-     * to modify the thrown exception.
+     * to modify the thrown exception. The event listener method receives
+     * a Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent
+     * instance.
      *
-     * @Event("Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent")
+     * @Event
      *
      * @var string
      */
@@ -48,9 +52,11 @@ final class KernelEvents
      * is not a Response instance.
      *
      * This event allows you to create a response for the return value of the
-     * controller.
+     * controller. The event listener method receives a
+     * Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent
+     * instance.
      *
-     * @Event("Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent")
+     * @Event
      *
      * @var string
      */
@@ -61,34 +67,24 @@ final class KernelEvents
      * handling a request.
      *
      * This event allows you to change the controller that will handle the
-     * request.
+     * request. The event listener method receives a
+     * Symfony\Component\HttpKernel\Event\FilterControllerEvent instance.
      *
-     * @Event("Symfony\Component\HttpKernel\Event\FilterControllerEvent")
+     * @Event
      *
      * @var string
      */
     const CONTROLLER = 'kernel.controller';
 
     /**
-     * The CONTROLLER_ARGUMENTS event occurs once controller arguments have been resolved.
-     *
-     * This event allows you to change the arguments that will be passed to
-     * the controller.
-     *
-     * @Event("Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent")
-     *
-     * @var string
-     */
-    const CONTROLLER_ARGUMENTS = 'kernel.controller_arguments';
-
-    /**
      * The RESPONSE event occurs once a response was created for
      * replying to a request.
      *
      * This event allows you to modify or replace the response that will be
-     * replied.
+     * replied. The event listener method receives a
+     * Symfony\Component\HttpKernel\Event\FilterResponseEvent instance.
      *
-     * @Event("Symfony\Component\HttpKernel\Event\FilterResponseEvent")
+     * @Event
      *
      * @var string
      */
@@ -98,8 +94,10 @@ final class KernelEvents
      * The TERMINATE event occurs once a response was sent.
      *
      * This event allows you to run expensive post-response jobs.
+     * The event listener method receives a
+     * Symfony\Component\HttpKernel\Event\PostResponseEvent instance.
      *
-     * @Event("Symfony\Component\HttpKernel\Event\PostResponseEvent")
+     * @Event
      *
      * @var string
      */
@@ -110,8 +108,10 @@ final class KernelEvents
      *
      * This event allows you to reset the global and environmental state of
      * the application, when it was changed during the request.
+     * The event listener method receives a
+     * Symfony\Component\HttpKernel\Event\FinishRequestEvent instance.
      *
-     * @Event("Symfony\Component\HttpKernel\Event\FinishRequestEvent")
+     * @Event
      *
      * @var string
      */

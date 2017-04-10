@@ -23,7 +23,7 @@ class = "active"
             <?php
             $all = App\Model\kb\Relationship::where('category_id', $category->id)->get();
             /* from whole attribute pick the article_id */
-            $article_id = $all->pluck('article_id');
+            $article_id = $all->lists('article_id');
             ?>
             <section class="articles-list">
                 <h3><i class="fa fa-folder-open-o fa-fw text-muted"></i> <a href="{{url('category-list/'.$category->slug)}}">{{$category->name}}</a> <span>({{count($all)}})</span></h3>

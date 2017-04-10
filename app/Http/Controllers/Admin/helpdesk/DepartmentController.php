@@ -84,7 +84,7 @@ class DepartmentController extends Controller
             $emails = $email->select('email_name', 'id')->get();
             $templates = $template->get();
             $department = $department->get();
-            $groups = $group->pluck('id', 'name');
+            $groups = $group->lists('id', 'name');
 
             return view('themes.default1.admin.helpdesk.agent.departments.create', compact('department', 'templates', 'slas', 'user', 'emails', 'groups'));
         } catch (Exception $e) {
@@ -164,8 +164,8 @@ class DepartmentController extends Controller
             $emails = $email->select('email_name', 'id')->get();
             $templates = $template->get();
             $departments = $department->whereId($id)->first();
-            //$groups = $group->pluck('id', 'name');
-            $assign = $group_assign_department->where('department_id', $id)->pluck('group_id');
+            //$groups = $group->lists('id', 'name');
+            $assign = $group_assign_department->where('department_id', $id)->lists('group_id');
 
             return view('themes.default1.admin.helpdesk.agent.departments.edit', compact('assign', 'team', 'templates', 'departments', 'slas', 'user', 'emails', 'sys_department'));
         } catch (Exception $e) {

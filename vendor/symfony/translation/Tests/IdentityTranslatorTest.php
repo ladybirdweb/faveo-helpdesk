@@ -11,11 +11,10 @@
 
 namespace Symfony\Component\Translation\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Intl\Util\IntlTestHelper;
 use Symfony\Component\Translation\IdentityTranslator;
 
-class IdentityTranslatorTest extends TestCase
+class IdentityTranslatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getTransTests
@@ -61,7 +60,7 @@ class IdentityTranslatorTest extends TestCase
     public function testGetLocaleReturnsDefaultLocaleIfNotSet()
     {
         // in order to test with "pt_BR"
-        IntlTestHelper::requireFullIntl($this, false);
+        IntlTestHelper::requireFullIntl($this);
 
         $translator = new IdentityTranslator();
 

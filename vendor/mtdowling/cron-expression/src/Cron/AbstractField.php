@@ -76,13 +76,8 @@ abstract class AbstractField implements FieldInterface
     public function isInIncrementsOfRanges($dateValue, $value)
     {
         $parts = array_map('trim', explode('/', $value, 2));
-        $stepSize = isset($parts[1]) ? (int) $parts[1] : 0;
-
-        if ($stepSize === 0) {
-            return false;
-        }
-
-        if (($parts[0] == '*' || $parts[0] === '0')) {
+        $stepSize = isset($parts[1]) ? $parts[1] : 0;
+        if (($parts[0] == '*' || $parts[0] === '0') && 0 !== $stepSize) {
             return (int) $dateValue % $stepSize == 0;
         }
 

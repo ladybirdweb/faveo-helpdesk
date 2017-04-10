@@ -73,12 +73,6 @@ class ContentSecurityPolicy implements HeaderInterface
             ));
         }
         if (empty($sources)) {
-            if ('report-uri' === $name) {
-                if (isset($this->directives[$name])) {
-                    unset($this->directives[$name]);
-                }
-                return $this;
-            }
             $this->directives[$name] = "'none'";
             return $this;
         }
@@ -115,7 +109,7 @@ class ContentSecurityPolicy implements HeaderInterface
             $token = trim($token);
             if ($token) {
                 list($directiveName, $directiveValue) = explode(' ', $token, 2);
-                if (! isset($header->directives[$directiveName])) {
+                if (!isset($header->directives[$directiveName])) {
                     $header->setDirective($directiveName, [$directiveValue]);
                 }
             }

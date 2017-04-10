@@ -34,7 +34,7 @@ class ApiSettings extends Controller
             $ticket_detail = '';
             $settings = $this->api;
             if ($settings->get()->count() > 0) {
-                $details = $this->api->pluck('value', 'key')->toArray();
+                $details = $this->api->lists('value', 'key')->toArray();
             }
             if (array_key_exists('ticket_detail', $details)) {
                 $ticket_detail = $details['ticket_detail'];

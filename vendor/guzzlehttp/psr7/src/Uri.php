@@ -12,26 +12,9 @@ use Psr\Http\Message\UriInterface;
  */
 class Uri implements UriInterface
 {
-    /**
-     * Absolute http and https URIs require a host per RFC 7230 Section 2.7
-     * but in generic URIs the host can be empty. So for http(s) URIs
-     * we apply this default host when no host is given yet to form a
-     * valid URI.
-     */
-    const HTTP_DEFAULT_HOST = 'localhost';
-
-    private static $defaultPorts = [
+    private static $schemes = [
         'http'  => 80,
         'https' => 443,
-        'ftp' => 21,
-        'gopher' => 70,
-        'nntp' => 119,
-        'news' => 119,
-        'telnet' => 23,
-        'tn3270' => 23,
-        'imap' => 143,
-        'pop' => 110,
-        'ldap' => 389,
     ];
 
     private static $charUnreserved = 'a-zA-Z0-9_\-\.~';
@@ -64,7 +47,6 @@ class Uri implements UriInterface
      */
     public function __construct($uri = '')
     {
-        // weak type check to also accept null until we can add scalar type hints
         if ($uri != '') {
             $parts = parse_url($uri);
             if ($parts === false) {
@@ -76,7 +58,7 @@ class Uri implements UriInterface
 
     public function __toString()
     {
-        return self::composeComponents(
+        return self::createUriString(
             $this->scheme,
             $this->getAuthority(),
             $this->path,
@@ -86,198 +68,56 @@ class Uri implements UriInterface
     }
 
     /**
-     * Composes a URI reference string from its various components.
-     *
-     * Usually this method does not need to be called manually but instead is used indirectly via
-     * `Psr\Http\Message\UriInterface::__toString`.
-     *
-     * PSR-7 UriInterface treats an empty component the same as a missing component as
-     * getQuery(), getFragment() etc. always return a string. This explains the slight
-     * difference to RFC 3986 Section 5.3.
-     *
-     * Another adjustment is that the authority separator is added even when the authority is missing/empty
-     * for the "file" scheme. This is because PHP stream functions like `file_get_contents` only work with
-     * `file:///myfile` but not with `file:/myfile` although they are equivalent according to RFC 3986. But
-     * `file:///` is the more common syntax for the file scheme anyway (Chrome for example redirects to
-     * that format).
-     *
-     * @param string $scheme
-     * @param string $authority
-     * @param string $path
-     * @param string $query
-     * @param string $fragment
-     *
-     * @return string
-     *
-     * @link https://tools.ietf.org/html/rfc3986#section-5.3
-     */
-    public static function composeComponents($scheme, $authority, $path, $query, $fragment)
-    {
-        $uri = '';
-
-        // weak type checks to also accept null until we can add scalar type hints
-        if ($scheme != '') {
-            $uri .= $scheme . ':';
-        }
-
-        if ($authority != ''|| $scheme === 'file') {
-            $uri .= '//' . $authority;
-        }
-
-        $uri .= $path;
-
-        if ($query != '') {
-            $uri .= '?' . $query;
-        }
-
-        if ($fragment != '') {
-            $uri .= '#' . $fragment;
-        }
-
-        return $uri;
-    }
-
-    /**
-     * Whether the URI has the default port of the current scheme.
-     *
-     * `Psr\Http\Message\UriInterface::getPort` may return null or the standard port. This method can be used
-     * independently of the implementation.
-     *
-     * @param UriInterface $uri
-     *
-     * @return bool
-     */
-    public static function isDefaultPort(UriInterface $uri)
-    {
-        return $uri->getPort() === null
-            || (isset(self::$defaultPorts[$uri->getScheme()]) && $uri->getPort() === self::$defaultPorts[$uri->getScheme()]);
-    }
-
-    /**
-     * Whether the URI is absolute, i.e. it has a scheme.
-     *
-     * An instance of UriInterface can either be an absolute URI or a relative reference. This method returns true
-     * if it is the former. An absolute URI has a scheme. A relative reference is used to express a URI relative
-     * to another URI, the base URI. Relative references can be divided into several forms:
-     * - network-path references, e.g. '//example.com/path'
-     * - absolute-path references, e.g. '/path'
-     * - relative-path references, e.g. 'subpath'
-     *
-     * @param UriInterface $uri
-     *
-     * @return bool
-     * @see Uri::isNetworkPathReference
-     * @see Uri::isAbsolutePathReference
-     * @see Uri::isRelativePathReference
-     * @link https://tools.ietf.org/html/rfc3986#section-4
-     */
-    public static function isAbsolute(UriInterface $uri)
-    {
-        return $uri->getScheme() !== '';
-    }
-
-    /**
-     * Whether the URI is a network-path reference.
-     *
-     * A relative reference that begins with two slash characters is termed an network-path reference.
-     *
-     * @param UriInterface $uri
-     *
-     * @return bool
-     * @link https://tools.ietf.org/html/rfc3986#section-4.2
-     */
-    public static function isNetworkPathReference(UriInterface $uri)
-    {
-        return $uri->getScheme() === '' && $uri->getAuthority() !== '';
-    }
-
-    /**
-     * Whether the URI is a absolute-path reference.
-     *
-     * A relative reference that begins with a single slash character is termed an absolute-path reference.
-     *
-     * @param UriInterface $uri
-     *
-     * @return bool
-     * @link https://tools.ietf.org/html/rfc3986#section-4.2
-     */
-    public static function isAbsolutePathReference(UriInterface $uri)
-    {
-        return $uri->getScheme() === ''
-            && $uri->getAuthority() === ''
-            && isset($uri->getPath()[0])
-            && $uri->getPath()[0] === '/';
-    }
-
-    /**
-     * Whether the URI is a relative-path reference.
-     *
-     * A relative reference that does not begin with a slash character is termed a relative-path reference.
-     *
-     * @param UriInterface $uri
-     *
-     * @return bool
-     * @link https://tools.ietf.org/html/rfc3986#section-4.2
-     */
-    public static function isRelativePathReference(UriInterface $uri)
-    {
-        return $uri->getScheme() === ''
-            && $uri->getAuthority() === ''
-            && (!isset($uri->getPath()[0]) || $uri->getPath()[0] !== '/');
-    }
-
-    /**
-     * Whether the URI is a same-document reference.
-     *
-     * A same-document reference refers to a URI that is, aside from its fragment
-     * component, identical to the base URI. When no base URI is given, only an empty
-     * URI reference (apart from its fragment) is considered a same-document reference.
-     *
-     * @param UriInterface      $uri  The URI to check
-     * @param UriInterface|null $base An optional base URI to compare against
-     *
-     * @return bool
-     * @link https://tools.ietf.org/html/rfc3986#section-4.4
-     */
-    public static function isSameDocumentReference(UriInterface $uri, UriInterface $base = null)
-    {
-        if ($base !== null) {
-            $uri = UriResolver::resolve($base, $uri);
-
-            return ($uri->getScheme() === $base->getScheme())
-                && ($uri->getAuthority() === $base->getAuthority())
-                && ($uri->getPath() === $base->getPath())
-                && ($uri->getQuery() === $base->getQuery());
-        }
-
-        return $uri->getScheme() === '' && $uri->getAuthority() === '' && $uri->getPath() === '' && $uri->getQuery() === '';
-    }
-
-    /**
      * Removes dot segments from a path and returns the new path.
      *
      * @param string $path
      *
      * @return string
-     *
-     * @deprecated since version 1.4. Use UriResolver::removeDotSegments instead.
-     * @see UriResolver::removeDotSegments
+     * @link http://tools.ietf.org/html/rfc3986#section-5.2.4
      */
     public static function removeDotSegments($path)
     {
-        return UriResolver::removeDotSegments($path);
+        static $noopPaths = ['' => true, '/' => true, '*' => true];
+        static $ignoreSegments = ['.' => true, '..' => true];
+
+        if (isset($noopPaths[$path])) {
+            return $path;
+        }
+
+        $results = [];
+        $segments = explode('/', $path);
+        foreach ($segments as $segment) {
+            if ($segment === '..') {
+                array_pop($results);
+            } elseif (!isset($ignoreSegments[$segment])) {
+                $results[] = $segment;
+            }
+        }
+
+        $newPath = implode('/', $results);
+        // Add the leading slash if necessary
+        if (substr($path, 0, 1) === '/' &&
+            substr($newPath, 0, 1) !== '/'
+        ) {
+            $newPath = '/' . $newPath;
+        }
+
+        // Add the trailing slash if necessary
+        if ($newPath !== '/' && isset($ignoreSegments[end($segments)])) {
+            $newPath .= '/';
+        }
+
+        return $newPath;
     }
 
     /**
-     * Converts the relative URI into a new URI that is resolved against the base URI.
+     * Resolve a base URI with a relative URI and return a new URI.
      *
      * @param UriInterface        $base Base URI
      * @param string|UriInterface $rel  Relative URI
      *
      * @return UriInterface
-     *
-     * @deprecated since version 1.4. Use UriResolver::resolve instead.
-     * @see UriResolver::resolve
+     * @link http://tools.ietf.org/html/rfc3986#section-5.2
      */
     public static function resolve(UriInterface $base, $rel)
     {
@@ -285,11 +125,55 @@ class Uri implements UriInterface
             $rel = new self($rel);
         }
 
-        return UriResolver::resolve($base, $rel);
+        if ((string) $rel === '') {
+            // we can simply return the same base URI instance for this same-document reference
+            return $base;
+        }
+
+        if ($rel->getScheme() != '') {
+            return $rel->withPath(self::removeDotSegments($rel->getPath()));
+        }
+
+        if ($rel->getAuthority() != '') {
+            $targetAuthority = $rel->getAuthority();
+            $targetPath = self::removeDotSegments($rel->getPath());
+            $targetQuery = $rel->getQuery();
+        } else {
+            $targetAuthority = $base->getAuthority();
+            if ($rel->getPath() === '') {
+                $targetPath = $base->getPath();
+                $targetQuery = $rel->getQuery() != '' ? $rel->getQuery() : $base->getQuery();
+            } else {
+                if ($rel->getPath()[0] === '/') {
+                    $targetPath = $rel->getPath();
+                } else {
+                    if ($targetAuthority != '' && $base->getPath() === '') {
+                        $targetPath = '/' . $rel->getPath();
+                    } else {
+                        $lastSlashPos = strrpos($base->getPath(), '/');
+                        if ($lastSlashPos === false) {
+                            $targetPath = $rel->getPath();
+                        } else {
+                            $targetPath = substr($base->getPath(), 0, $lastSlashPos + 1) . $rel->getPath();
+                        }
+                    }
+                }
+                $targetPath = self::removeDotSegments($targetPath);
+                $targetQuery = $rel->getQuery();
+            }
+        }
+
+        return new self(self::createUriString(
+            $base->getScheme(),
+            $targetAuthority,
+            $targetPath,
+            $targetQuery,
+            $rel->getFragment()
+        ));
     }
 
     /**
-     * Creates a new URI with a specific query string value removed.
+     * Create a new URI with a specific query string value removed.
      *
      * Any existing query string values that exactly match the provided key are
      * removed.
@@ -302,7 +186,7 @@ class Uri implements UriInterface
     public static function withoutQueryValue(UriInterface $uri, $key)
     {
         $current = $uri->getQuery();
-        if ($current === '') {
+        if ($current == '') {
             return $uri;
         }
 
@@ -315,7 +199,7 @@ class Uri implements UriInterface
     }
 
     /**
-     * Creates a new URI with a specific query string value.
+     * Create a new URI with a specific query string value.
      *
      * Any existing query string values that exactly match the provided key are
      * removed and replaced with the given key value pair.
@@ -333,7 +217,7 @@ class Uri implements UriInterface
     {
         $current = $uri->getQuery();
 
-        if ($current === '') {
+        if ($current == '') {
             $result = [];
         } else {
             $decodedKey = rawurldecode($key);
@@ -357,21 +241,16 @@ class Uri implements UriInterface
     }
 
     /**
-     * Creates a URI from a hash of `parse_url` components.
+     * Create a URI from a hash of parse_url parts.
      *
      * @param array $parts
      *
-     * @return UriInterface
-     * @link http://php.net/manual/en/function.parse-url.php
-     *
-     * @throws \InvalidArgumentException If the components do not form a valid URI.
+     * @return self
      */
     public static function fromParts(array $parts)
     {
         $uri = new self();
         $uri->applyParts($parts);
-        $uri->validateState();
-
         return $uri;
     }
 
@@ -382,8 +261,12 @@ class Uri implements UriInterface
 
     public function getAuthority()
     {
+        if ($this->host == '') {
+            return '';
+        }
+
         $authority = $this->host;
-        if ($this->userInfo !== '') {
+        if ($this->userInfo != '') {
             $authority = $this->userInfo . '@' . $authority;
         }
 
@@ -434,9 +317,7 @@ class Uri implements UriInterface
 
         $new = clone $this;
         $new->scheme = $scheme;
-        $new->removeDefaultPort();
-        $new->validateState();
-
+        $new->port = $new->filterPort($new->port);
         return $new;
     }
 
@@ -453,8 +334,6 @@ class Uri implements UriInterface
 
         $new = clone $this;
         $new->userInfo = $info;
-        $new->validateState();
-
         return $new;
     }
 
@@ -468,8 +347,6 @@ class Uri implements UriInterface
 
         $new = clone $this;
         $new->host = $host;
-        $new->validateState();
-
         return $new;
     }
 
@@ -483,9 +360,6 @@ class Uri implements UriInterface
 
         $new = clone $this;
         $new->port = $port;
-        $new->removeDefaultPort();
-        $new->validateState();
-
         return $new;
     }
 
@@ -499,8 +373,6 @@ class Uri implements UriInterface
 
         $new = clone $this;
         $new->path = $path;
-        $new->validateState();
-
         return $new;
     }
 
@@ -514,7 +386,6 @@ class Uri implements UriInterface
 
         $new = clone $this;
         $new->query = $query;
-
         return $new;
     }
 
@@ -528,7 +399,6 @@ class Uri implements UriInterface
 
         $new = clone $this;
         $new->fragment = $fragment;
-
         return $new;
     }
 
@@ -561,8 +431,69 @@ class Uri implements UriInterface
         if (isset($parts['pass'])) {
             $this->userInfo .= ':' . $parts['pass'];
         }
+    }
 
-        $this->removeDefaultPort();
+    /**
+     * Create a URI string from its various parts
+     *
+     * @param string $scheme
+     * @param string $authority
+     * @param string $path
+     * @param string $query
+     * @param string $fragment
+     * @return string
+     */
+    private static function createUriString($scheme, $authority, $path, $query, $fragment)
+    {
+        $uri = '';
+
+        if ($scheme != '') {
+            $uri .= $scheme . ':';
+        }
+
+        if ($authority != '') {
+            $uri .= '//' . $authority;
+        }
+
+        if ($path != '') {
+            if ($path[0] !== '/') {
+                if ($authority != '') {
+                    // If the path is rootless and an authority is present, the path MUST be prefixed by "/"
+                    $path = '/' . $path;
+                }
+            } elseif (isset($path[1]) && $path[1] === '/') {
+                if ($authority == '') {
+                    // If the path is starting with more than one "/" and no authority is present, the
+                    // starting slashes MUST be reduced to one.
+                    $path = '/' . ltrim($path, '/');
+                }
+            }
+
+            $uri .= $path;
+        }
+
+        if ($query != '') {
+            $uri .= '?' . $query;
+        }
+
+        if ($fragment != '') {
+            $uri .= '#' . $fragment;
+        }
+
+        return $uri;
+    }
+
+    /**
+     * Is a given port non-standard for the current scheme?
+     *
+     * @param string $scheme
+     * @param int    $port
+     *
+     * @return bool
+     */
+    private static function isNonStandardPort($scheme, $port)
+    {
+        return !isset(self::$schemes[$scheme]) || $port !== self::$schemes[$scheme];
     }
 
     /**
@@ -617,14 +548,7 @@ class Uri implements UriInterface
             );
         }
 
-        return $port;
-    }
-
-    private function removeDefaultPort()
-    {
-        if ($this->port !== null && self::isDefaultPort($this)) {
-            $this->port = null;
-        }
+        return self::isNonStandardPort($this->scheme, $port) ? $port : null;
     }
 
     /**
@@ -674,29 +598,5 @@ class Uri implements UriInterface
     private function rawurlencodeMatchZero(array $match)
     {
         return rawurlencode($match[0]);
-    }
-
-    private function validateState()
-    {
-        if ($this->host === '' && ($this->scheme === 'http' || $this->scheme === 'https')) {
-            $this->host = self::HTTP_DEFAULT_HOST;
-        }
-
-        if ($this->getAuthority() === '') {
-            if (0 === strpos($this->path, '//')) {
-                throw new \InvalidArgumentException('The path of a URI without an authority must not start with two slashes "//"');
-            }
-            if ($this->scheme === '' && false !== strpos(explode('/', $this->path, 2)[0], ':')) {
-                throw new \InvalidArgumentException('A relative URI must not have a path beginning with a segment containing a colon');
-            }
-        } elseif (isset($this->path[0]) && $this->path[0] !== '/') {
-            @trigger_error(
-                'The path of a URI with an authority must start with a slash "/" or be empty. Automagically fixing the URI ' .
-                'by adding a leading slash to the path is deprecated since version 1.4 and will throw an exception instead.',
-                E_USER_DEPRECATED
-            );
-            $this->path = '/'. $this->path;
-            //throw new \InvalidArgumentException('The path of a URI with an authority must start with a slash "/" or be empty');
-        }
     }
 }

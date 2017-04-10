@@ -11,11 +11,10 @@
 
 namespace Symfony\Component\Translation\Tests\Loader;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Loader\CsvFileLoader;
 use Symfony\Component\Config\Resource\FileResource;
 
-class CsvFileLoaderTest extends TestCase
+class CsvFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
     public function testLoad()
     {
