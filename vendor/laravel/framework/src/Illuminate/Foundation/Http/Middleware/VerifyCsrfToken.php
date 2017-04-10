@@ -3,6 +3,7 @@
 namespace Illuminate\Foundation\Http\Middleware;
 
 use Closure;
+use Carbon\Carbon;
 use Illuminate\Foundation\Application;
 use Symfony\Component\HttpFoundation\Cookie;
 use Illuminate\Contracts\Encryption\Encrypter;
@@ -58,7 +59,7 @@ class VerifyCsrfToken
         if (
             $this->isReading($request) ||
             $this->runningUnitTests() ||
-            $this->shouldPassThrough($request) ||
+            $this->inExceptArray($request) ||
             $this->tokensMatch($request)
         ) {
             return $this->addCookieToResponse($request, $next($request));
@@ -68,12 +69,33 @@ class VerifyCsrfToken
     }
 
     /**
+     * Determine if the HTTP request uses a ‘read’ verb.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function isReading($request)
+    {
+        return in_array($request->method(), ['HEAD', 'GET', 'OPTIONS']);
+    }
+
+    /**
+     * Determine if the application is running unit tests.
+     *
+     * @return bool
+     */
+    protected function runningUnitTests()
+    {
+        return $this->app->runningInConsole() && $this->app->runningUnitTests();
+    }
+
+    /**
      * Determine if the request has a URI that should pass through CSRF verification.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
-    protected function shouldPassThrough($request)
+    protected function inExceptArray($request)
     {
         foreach ($this->except as $except) {
             if ($except !== '/') {
@@ -89,16 +111,6 @@ class VerifyCsrfToken
     }
 
     /**
-     * Determine if the application is running unit tests.
-     *
-     * @return bool
-     */
-    protected function runningUnitTests()
-    {
-        return $this->app->runningInConsole() && $this->app->runningUnitTests();
-    }
-
-    /**
      * Determine if the session and input CSRF tokens match.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -106,27 +118,36 @@ class VerifyCsrfToken
      */
     protected function tokensMatch($request)
     {
-        $sessionToken = $request->session()->token();
+        $token = $this->getTokenFromRequest($request);
 
+        return is_string($request->session()->token()) &&
+               is_string($token) &&
+               hash_equals($request->session()->token(), $token);
+    }
+
+    /**
+     * Get the CSRF token from the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return string
+     */
+    protected function getTokenFromRequest($request)
+    {
         $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
 
         if (! $token && $header = $request->header('X-XSRF-TOKEN')) {
             $token = $this->encrypter->decrypt($header);
         }
 
-        if (! is_string($sessionToken) || ! is_string($token)) {
-            return false;
-        }
-
-        return hash_equals($sessionToken, $token);
+        return $token;
     }
 
     /**
      * Add the CSRF token to the response cookies.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Http\Response  $response
-     * @return \Illuminate\Http\Response
+     * @param  \Symfony\Component\HttpFoundation\Response  $response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function addCookieToResponse($request, $response)
     {
@@ -134,22 +155,11 @@ class VerifyCsrfToken
 
         $response->headers->setCookie(
             new Cookie(
-                'XSRF-TOKEN', $request->session()->token(), time() + 60 * $config['lifetime'],
+                'XSRF-TOKEN', $request->session()->token(), Carbon::now()->getTimestamp() + 60 * $config['lifetime'],
                 $config['path'], $config['domain'], $config['secure'], false
             )
         );
 
         return $response;
-    }
-
-    /**
-     * Determine if the HTTP request uses a ‘read’ verb.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return bool
-     */
-    protected function isReading($request)
-    {
-        return in_array($request->method(), ['HEAD', 'GET', 'OPTIONS']);
     }
 }

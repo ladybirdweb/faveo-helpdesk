@@ -10,7 +10,6 @@ class NodeDumperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideTestDump
-     * @covers PhpParser\NodeDumper::dump
      */
     public function testDump($node, $dump) {
         $dumper = new NodeDumper;
@@ -59,6 +58,40 @@ class NodeDumperTest extends \PHPUnit_Framework_TestCase
 )'
             ),
         );
+    }
+
+    public function testDumpWithPositions() {
+        $parser = (new ParserFactory)->create(
+            ParserFactory::ONLY_PHP7,
+            new Lexer(['usedAttributes' => ['startLine', 'endLine', 'startFilePos', 'endFilePos']])
+        );
+        $dumper = new NodeDumper(['dumpPositions' => true]);
+
+        $code = "<?php\n\$a = 1;\necho \$a;";
+        $expected = <<<'OUT'
+array(
+    0: Expr_Assign[2:1 - 2:6](
+        var: Expr_Variable[2:1 - 2:2](
+            name: a
+        )
+        expr: Scalar_LNumber[2:6 - 2:6](
+            value: 1
+        )
+    )
+    1: Stmt_Echo[3:1 - 3:8](
+        exprs: array(
+            0: Expr_Variable[3:6 - 3:7](
+                name: a
+            )
+        )
+    )
+)
+OUT;
+
+        $stmts = $parser->parse($code);
+        $dump = $dumper->dump($stmts, $code);
+
+        $this->assertSame($this->canonicalize($expected), $this->canonicalize($dump));
     }
 
     /**

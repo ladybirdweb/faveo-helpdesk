@@ -11,13 +11,14 @@
 
 namespace Symfony\Component\Routing\Tests\Generator;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 
-class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
+class UrlGeneratorTest extends TestCase
 {
     public function testAbsoluteUrlWithPort80()
     {
@@ -208,7 +209,7 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
     public function testGenerateForRouteWithInvalidOptionalParameterNonStrictWithLogger()
     {
         $routes = $this->getRoutes('test', new Route('/testing/{foo}', array('foo' => '1'), array('foo' => 'd+')));
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
         $logger->expects($this->once())
             ->method('error');
         $generator = $this->getGenerator($routes, array(), $logger);
@@ -231,6 +232,15 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $routes = $this->getRoutes('test', new Route('/testing/{foo}', array(), array('foo' => 'd+')));
         $this->getGenerator($routes)->generate('test', array('foo' => 'bar'), UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Routing\Exception\InvalidParameterException
+     */
+    public function testGenerateForRouteWithInvalidUtf8Parameter()
+    {
+        $routes = $this->getRoutes('test', new Route('/testing/{foo}', array(), array('foo' => '\pL+'), array('utf8' => true)));
+        $this->getGenerator($routes)->generate('test', array('foo' => 'abc123'), UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     /**
@@ -325,18 +335,18 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testUrlEncoding()
     {
+        $expectedPath = '/app.php/@:%5B%5D/%28%29*%27%22%20+,;-._~%26%24%3C%3E|%7B%7D%25%5C%5E%60!%3Ffoo=bar%23id'
+            .'/@:%5B%5D/%28%29*%27%22%20+,;-._~%26%24%3C%3E|%7B%7D%25%5C%5E%60!%3Ffoo=bar%23id'
+            .'?query=%40%3A%5B%5D/%28%29%2A%27%22%20%2B%2C%3B-._~%26%24%3C%3E%7C%7B%7D%25%5C%5E%60%21%3Ffoo%3Dbar%23id';
+
         // This tests the encoding of reserved characters that are used for delimiting of URI components (defined in RFC 3986)
         // and other special ASCII chars. These chars are tested as static text path, variable path and query param.
         $chars = '@:[]/()*\'" +,;-._~&$<>|{}%\\^`!?foo=bar#id';
         $routes = $this->getRoutes('test', new Route("/$chars/{varpath}", array(), array('varpath' => '.+')));
-        $this->assertSame('/app.php/@:%5B%5D/%28%29*%27%22%20+,;-._~%26%24%3C%3E|%7B%7D%25%5C%5E%60!%3Ffoo=bar%23id'
-           .'/@:%5B%5D/%28%29*%27%22%20+,;-._~%26%24%3C%3E|%7B%7D%25%5C%5E%60!%3Ffoo=bar%23id'
-           .'?query=%40%3A%5B%5D/%28%29%2A%27%22+%2B%2C%3B-._%7E%26%24%3C%3E%7C%7B%7D%25%5C%5E%60%21%3Ffoo%3Dbar%23id',
-            $this->getGenerator($routes)->generate('test', array(
-                'varpath' => $chars,
-                'query' => $chars,
-            ))
-        );
+        $this->assertSame($expectedPath, $this->getGenerator($routes)->generate('test', array(
+            'varpath' => $chars,
+            'query' => $chars,
+        )));
     }
 
     public function testEncodingOfRelativePathSegments()
@@ -358,7 +368,7 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
 
         // The default requirement for 'x' should not allow the separator '.' in this case because it would otherwise match everything
         // and following optional variables like _format could never match.
-        $this->setExpectedException('Symfony\Component\Routing\Exception\InvalidParameterException');
+        $this->{method_exists($this, $_ = 'expectException') ? $_ : 'setExpectedException'}('Symfony\Component\Routing\Exception\InvalidParameterException');
         $generator->generate('test', array('x' => 'do.t', 'y' => '123', 'z' => 'bar', '_format' => 'xml'));
     }
 
@@ -632,6 +642,33 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
                 './:subdir/',
             ),
         );
+    }
+
+    public function testFragmentsCanBeAppendedToUrls()
+    {
+        $routes = $this->getRoutes('test', new Route('/testing'));
+
+        $url = $this->getGenerator($routes)->generate('test', array('_fragment' => 'frag ment'), UrlGeneratorInterface::ABSOLUTE_PATH);
+        $this->assertEquals('/app.php/testing#frag%20ment', $url);
+
+        $url = $this->getGenerator($routes)->generate('test', array('_fragment' => '0'), UrlGeneratorInterface::ABSOLUTE_PATH);
+        $this->assertEquals('/app.php/testing#0', $url);
+    }
+
+    public function testFragmentsDoNotEscapeValidCharacters()
+    {
+        $routes = $this->getRoutes('test', new Route('/testing'));
+        $url = $this->getGenerator($routes)->generate('test', array('_fragment' => '?/'), UrlGeneratorInterface::ABSOLUTE_PATH);
+
+        $this->assertEquals('/app.php/testing#?/', $url);
+    }
+
+    public function testFragmentsCanBeDefinedAsDefaults()
+    {
+        $routes = $this->getRoutes('test', new Route('/testing', array('_fragment' => 'fragment')));
+        $url = $this->getGenerator($routes)->generate('test', array(), UrlGeneratorInterface::ABSOLUTE_PATH);
+
+        $this->assertEquals('/app.php/testing#fragment', $url);
     }
 
     protected function getGenerator(RouteCollection $routes, array $parameters = array(), $logger = null)

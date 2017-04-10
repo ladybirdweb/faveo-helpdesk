@@ -2,6 +2,7 @@
 
 namespace Illuminate\Validation;
 
+use Closure;
 use Illuminate\Support\Str;
 use Illuminate\Database\ConnectionResolverInterface;
 
@@ -19,7 +20,7 @@ class DatabasePresenceVerifier implements PresenceVerifierInterface
      *
      * @var string
      */
-    protected $connection = null;
+    protected $connection;
 
     /**
      * Create a new database presence verifier.
@@ -51,11 +52,7 @@ class DatabasePresenceVerifier implements PresenceVerifierInterface
             $query->where($idColumn ?: 'id', '<>', $excludeId);
         }
 
-        foreach ($extra as $key => $extraValue) {
-            $this->addWhere($query, $key, $extraValue);
-        }
-
-        return $query->count();
+        return $this->addConditions($query, $extra)->count();
     }
 
     /**
@@ -71,11 +68,29 @@ class DatabasePresenceVerifier implements PresenceVerifierInterface
     {
         $query = $this->table($collection)->whereIn($column, $values);
 
-        foreach ($extra as $key => $extraValue) {
-            $this->addWhere($query, $key, $extraValue);
+        return $this->addConditions($query, $extra)->count();
+    }
+
+    /**
+     * Add the given conditions to the query.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $conditions
+     * @return \Illuminate\Database\Query\Builder
+     */
+    protected function addConditions($query, $conditions)
+    {
+        foreach ($conditions as $key => $value) {
+            if ($value instanceof Closure) {
+                $query->where(function ($query) use ($value) {
+                    $value($query);
+                });
+            } else {
+                $this->addWhere($query, $key, $value);
+            }
         }
 
-        return $query->count();
+        return $query;
     }
 
     /**

@@ -9,7 +9,9 @@ use PhpParser\Node\Stmt;
 class Method extends FunctionLike
 {
     protected $name;
-    protected $type = 0;
+    protected $flags = 0;
+
+    /** @var array|null */
     protected $stmts = array();
 
     /**
@@ -116,7 +118,7 @@ class Method extends FunctionLike
      */
     public function getNode() {
         return new Stmt\ClassMethod($this->name, array(
-            'type'       => $this->type,
+            'flags'      => $this->flags,
             'byRef'      => $this->returnByRef,
             'params'     => $this->params,
             'returnType' => $this->returnType,

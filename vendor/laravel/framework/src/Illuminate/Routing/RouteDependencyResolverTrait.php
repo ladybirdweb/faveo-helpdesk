@@ -10,20 +10,6 @@ use ReflectionFunctionAbstract;
 trait RouteDependencyResolverTrait
 {
     /**
-     * Call a class method with the resolved dependencies.
-     *
-     * @param  object  $instance
-     * @param  string  $method
-     * @return mixed
-     */
-    protected function callWithDependencies($instance, $method)
-    {
-        return call_user_func_array(
-            [$instance, $method], $this->resolveClassMethodDependencies([], $instance, $method)
-        );
-    }
-
-    /**
      * Resolve the object method's type-hinted dependencies.
      *
      * @param  array  $parameters
@@ -51,19 +37,28 @@ trait RouteDependencyResolverTrait
      */
     public function resolveMethodDependencies(array $parameters, ReflectionFunctionAbstract $reflector)
     {
-        $originalParameters = $parameters;
+        $results = [];
+
+        $instanceCount = 0;
+
+        $values = array_values($parameters);
 
         foreach ($reflector->getParameters() as $key => $parameter) {
             $instance = $this->transformDependency(
-                $parameter, $parameters, $originalParameters
+                $parameter, $parameters
             );
 
             if (! is_null($instance)) {
-                $this->spliceIntoParameters($parameters, $key, $instance);
+                $instanceCount++;
+
+                $results[] = $instance;
+            } else {
+                $results[] = isset($values[$key - $instanceCount])
+                    ? $values[$key - $instanceCount] : $parameter->getDefaultValue();
             }
         }
 
-        return $parameters;
+        return $results;
     }
 
     /**
@@ -71,10 +66,9 @@ trait RouteDependencyResolverTrait
      *
      * @param  \ReflectionParameter  $parameter
      * @param  array  $parameters
-     * @param  array  $originalParameters
      * @return mixed
      */
-    protected function transformDependency(ReflectionParameter $parameter, $parameters, $originalParameters)
+    protected function transformDependency(ReflectionParameter $parameter, $parameters)
     {
         $class = $parameter->getClass();
 
@@ -95,23 +89,8 @@ trait RouteDependencyResolverTrait
      */
     protected function alreadyInParameters($class, array $parameters)
     {
-        return ! is_null(Arr::first($parameters, function ($key, $value) use ($class) {
+        return ! is_null(Arr::first($parameters, function ($value) use ($class) {
             return $value instanceof $class;
         }));
-    }
-
-    /**
-     * Splice the given value into the parameter list.
-     *
-     * @param  array  $parameters
-     * @param  string  $key
-     * @param  mixed  $instance
-     * @return void
-     */
-    protected function spliceIntoParameters(array &$parameters, $key, $instance)
-    {
-        array_splice(
-            $parameters, $key, 0, [$instance]
-        );
     }
 }

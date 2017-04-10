@@ -11,7 +11,6 @@ use App\Http\Requests\helpdesk\SlaUpdate;
 use App\Model\helpdesk\Manage\Sla_plan;
 use App\Model\helpdesk\Settings\Ticket;
 //classes
-use App\Model\helpdesk\Ticket\Tickets;
 use DB;
 use Exception;
 use Lang;
@@ -81,17 +80,7 @@ class SlaController extends Controller
         try {
             /* Fill the request values to Sla_plan Table  */
             /* Check whether function success or not */
-            // $sla->fill($request->input())->save();
-            // $grace_period_time=$request->grace_period_time;
-            // $grace_period_type=$request->grace_period_type;
-            // $grace_period=($request->grace_period_time.' '.$request->grace_period_type);
-            $sla->name = $request->name;
-            $sla->grace_period = ($request->grace_period_time.' '.$request->grace_period_type);
-            $sla->admin_note = $request->admin_note;
-            $sla->status = $request->status;
-            $sla->save();
-                // dd('oh');
-
+            $sla->fill($request->input())->save();
             /* redirect to Index page with Success Message */
             return redirect('sla')->with('success', Lang::get('lang.sla_plan_created_successfully'));
         } catch (Exception $e) {
@@ -111,23 +100,9 @@ class SlaController extends Controller
     public function edit($id)
     {
         try {
-
-        //     $ticket=Tickets::where('id','=',9)->select('created_at','duedate')->first();
-        //     // dd($ticket->created_at);
-
-        //     $sla_plan = Sla_plan::where('id', '=', 4)->first();
-        // $ovdate = $ticket->created_at;
-        // $new_date = date_add($ovdate, date_interval_create_from_date_string($sla_plan->grace_period));
-        // dd($new_date);
-        // $ticket->duedate = $new_date;
-
             /* Direct to edit page along values of perticular field using Id */
             $slas = Sla_plan::whereId($id)->first();
             $slas->get();
-
-            // $total_grace_period = $slas->grace_period;
-            // $grace_period = explode(' ', $total_grace_period);
-            // dd(checkArray(1,$grace_period));
             $sla = \DB::table('settings_ticket')->select('sla')->where('id', '=', 1)->first();
 
             return view('themes.default1.admin.helpdesk.manage.sla.edit', compact('slas', 'sla'));
@@ -148,16 +123,8 @@ class SlaController extends Controller
     public function update($id, SlaUpdate $request)
     {
         try {
-
             /* Fill values to selected field using Id except Check box */
             $slas = Sla_plan::whereId($id)->first();
-            // $grace_period=($request->grace_period_time.'-'.$request->grace_period_type);
-            $slas->name = $request->name;
-            $slas->grace_period = ($request->grace_period_time.' '.$request->grace_period_type);
-            $slas->admin_note = $request->admin_note;
-            $slas->status = $request->status;
-            $slas->save();
-
             $slas->fill($request->except('transient', 'ticket_overdue'))->save();
             /* Update transient checkox field */
             $slas->transient = $request->input('transient');

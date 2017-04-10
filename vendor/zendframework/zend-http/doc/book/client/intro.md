@@ -84,6 +84,8 @@ Parameter         | Description                                                 
 `encodecookies`   | Whether to pass the cookie value through urlencode/urldecode. Enabling this breaks support with some web servers. Disabling this limits the range of values the cookies can contain. | boolean         | TRUE
 `outputstream`    | Destination for streaming of received data (options: string (filename), true for temp file, false/null to disable streaming)                                                         | boolean         | FALSE
 `rfc3986strict`   | Whether to strictly adhere to RFC 3986 (in practice, this means replacing '+' with '%20')                                                                                            | boolean         | FALSE
+`sslcapath`       | Path to SSL certificate directory                                             | string          | `NULL`
+`sslcafile`       | Path to Certificate Authority (CA) bundle                                     | string          | `NULL`
 
 The options are also passed to the adapter class upon instantiation, so the same
 configuration can be used for adapter configuration. See the

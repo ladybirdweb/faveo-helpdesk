@@ -2,7 +2,7 @@
     "name": "illuminate/filesystem",
     "description": "The Illuminate Filesystem package.",
     "license": "MIT",
-    "homepage": "http://laravel.com",
+    "homepage": "https://laravel.com",
     "support": {
         "issues": "https://github.com/laravel/framework/issues",
         "source": "https://github.com/laravel/framework"
@@ -14,10 +14,10 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
-        "illuminate/contracts": "5.2.*",
-        "illuminate/support": "5.2.*",
-        "symfony/finder": "2.8.*|3.0.*"
+        "php": ">=5.6.4",
+        "illuminate/contracts": "5.4.*",
+        "illuminate/support": "5.4.*",
+        "symfony/finder": "~3.2"
     },
     "autoload": {
         "psr-4": {
@@ -26,13 +26,16 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "5.2-dev"
+            "dev-master": "5.4-dev"
         }
     },
     "suggest": {
         "league/flysystem": "Required to use the Flysystem local and FTP drivers (~1.0).",
         "league/flysystem-aws-s3-v3": "Required to use the Flysystem S3 driver (~1.0).",
         "league/flysystem-rackspace": "Required to use the Flysystem Rackspace driver (~1.0)."
+    },
+    "config": {
+        "sort-packages": true
     },
     "minimum-stability": "dev"
 }

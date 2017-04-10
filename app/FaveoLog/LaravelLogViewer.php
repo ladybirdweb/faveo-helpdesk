@@ -188,7 +188,7 @@ class LaravelLogViewer
 
     public static function date($utc)
     {
-        $system_date = UTC::usertimezone($utc);
+        $system_date = faveoDate($utc);
 
         return $system_date;
     }

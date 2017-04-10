@@ -100,7 +100,7 @@ $SlaPlan = App\Model\Manage\Sla_plan::where('id', '=', $sla)->first();
                                 <b>SLA Plan: {{$SlaPlan->grace_period}} </b>
                             </div>
                             <div class="col-md-3">
-                                <b>Created Date: </b> {{ UTC::usertimezone($tickets->created_at) }}
+                                <b>Created Date: </b> {{ faveoDate($tickets->created_at) }}
                             </div>
                             <div class="col-md-3">
                                 <b>Due Date: </b>
@@ -108,7 +108,7 @@ $SlaPlan = App\Model\Manage\Sla_plan::where('id', '=', $sla)->first();
 $time = $tickets->created_at;
 $time = date_create($time);
 date_add($time, date_interval_create_from_date_string($SlaPlan->grace_period));
-echo UTC::usertimezone(date_format($time, 'd/m/Y H:i:s'));
+echo faveoDate(date_format($time, 'd/m/Y H:i:s'));
 ?>
                             </div>
                             <div class="col-md-3">
@@ -116,7 +116,7 @@ echo UTC::usertimezone(date_format($time, 'd/m/Y H:i:s'));
                                 @foreach($response as $last)
                                 <?php $ResponseDate = $last->created_at;?>
                                 @endforeach
-                                <b>Last Response: </b> {{ UTC::usertimezone($ResponseDate)}}
+                                <b>Last Response: </b> {{ faveoDate($ResponseDate)}}
                             </div>
                         </div>
                     </div>

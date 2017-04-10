@@ -9,7 +9,7 @@ class SoftDeletingScope implements Scope
      *
      * @var array
      */
-    protected $extensions = ['ForceDelete', 'Restore', 'WithTrashed', 'WithoutTrashed', 'OnlyTrashed'];
+    protected $extensions = ['Restore', 'WithTrashed', 'WithoutTrashed', 'OnlyTrashed'];
 
     /**
      * Apply the scope to a given Eloquent query builder.
@@ -54,22 +54,9 @@ class SoftDeletingScope implements Scope
     {
         if (count($builder->getQuery()->joins) > 0) {
             return $builder->getModel()->getQualifiedDeletedAtColumn();
-        } else {
-            return $builder->getModel()->getDeletedAtColumn();
         }
-    }
 
-    /**
-     * Add the force delete extension to the builder.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @return void
-     */
-    protected function addForceDelete(Builder $builder)
-    {
-        $builder->macro('forceDelete', function (Builder $builder) {
-            return $builder->getQuery()->delete();
-        });
+        return $builder->getModel()->getDeletedAtColumn();
     }
 
     /**

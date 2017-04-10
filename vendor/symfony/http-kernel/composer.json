@@ -18,7 +18,7 @@
     "require": {
         "php": ">=5.5.9",
         "symfony/event-dispatcher": "~2.8|~3.0",
-        "symfony/http-foundation": "~2.8.8|~3.0.8|~3.1.2|~3.2",
+        "symfony/http-foundation": "~2.8.13|~3.1.6|~3.2",
         "symfony/debug": "~2.8|~3.0",
         "psr/log": "~1.0"
     },
@@ -37,7 +37,7 @@
         "symfony/stopwatch": "~2.8|~3.0",
         "symfony/templating": "~2.8|~3.0",
         "symfony/translation": "~2.8|~3.0",
-        "symfony/var-dumper": "~2.8|~3.0"
+        "symfony/var-dumper": "~3.2"
     },
     "conflict": {
         "symfony/config": "<2.8"
@@ -60,7 +60,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "3.0-dev"
+            "dev-master": "3.2-dev"
         }
     }
 }

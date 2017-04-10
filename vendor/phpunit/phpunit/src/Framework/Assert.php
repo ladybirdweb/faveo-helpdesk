@@ -9,7 +9,7 @@
  */
 
 /**
- * A set of assert methods.
+ * A set of assertion methods.
  *
  * @since Class available since Release 2.0.0
  */
@@ -62,14 +62,14 @@ abstract class PHPUnit_Framework_Assert
      */
     public static function assertArraySubset($subset, $array, $strict = false, $message = '')
     {
-        if (!is_array($subset)) {
+        if (!(is_array($subset) || $subset instanceof ArrayAccess)) {
             throw PHPUnit_Util_InvalidArgumentHelper::factory(
                 1,
                 'array or ArrayAccess'
             );
         }
 
-        if (!is_array($array)) {
+        if (!(is_array($array) || $array instanceof ArrayAccess)) {
             throw PHPUnit_Util_InvalidArgumentHelper::factory(
                 2,
                 'array or ArrayAccess'

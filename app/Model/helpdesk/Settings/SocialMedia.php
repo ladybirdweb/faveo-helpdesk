@@ -22,7 +22,7 @@ class SocialMedia extends Model
         if ($key !== '' && $key !== 'redirect') {
             $social = $this->where('provider', $provider)->where('key', $key)->first();
         } elseif ($key !== 'redirect') {
-            $social = $this->where('provider', $provider)->lists('value', 'key')->toArray();
+            $social = $this->where('provider', $provider)->pluck('value', 'key')->toArray();
         }
         if (is_object($social)) {
             $social = $social->value;

@@ -3,7 +3,6 @@
 namespace PhpParser\Builder;
 
 use PhpParser;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 
 class Trait_ extends Declaration
@@ -49,7 +48,9 @@ class Trait_ extends Declaration
      */
     public function getNode() {
         return new Stmt\Trait_(
-            $this->name, array_merge($this->properties, $this->methods), $this->attributes
+            $this->name, array(
+                'stmts' => array_merge($this->properties, $this->methods)
+            ), $this->attributes
         );
     }
 }

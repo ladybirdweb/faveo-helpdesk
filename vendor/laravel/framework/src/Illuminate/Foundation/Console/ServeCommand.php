@@ -2,7 +2,6 @@
 
 namespace Illuminate\Foundation\Console;
 
-use Exception;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\ProcessUtils;
 use Symfony\Component\Console\Input\InputOption;
@@ -35,25 +34,44 @@ class ServeCommand extends Command
     {
         chdir($this->laravel->publicPath());
 
-        $host = $this->input->getOption('host');
+        $this->line("<info>Laravel development server started:</info> <http://{$this->host()}:{$this->port()}>");
 
-        $port = $this->input->getOption('port');
+        passthru($this->serverCommand());
+    }
 
-        $base = ProcessUtils::escapeArgument($this->laravel->basePath());
+    /**
+     * Get the full server command.
+     *
+     * @return string
+     */
+    protected function serverCommand()
+    {
+        return sprintf('%s -S %s:%s %s/server.php',
+            ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false)),
+            $this->host(),
+            $this->port(),
+            ProcessUtils::escapeArgument($this->laravel->basePath())
+        );
+    }
 
-        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
+    /**
+     * Get the host for the command.
+     *
+     * @return string
+     */
+    protected function host()
+    {
+        return $this->input->getOption('host');
+    }
 
-        $this->info("Laravel development server started on http://{$host}:{$port}/");
-
-        if (defined('HHVM_VERSION')) {
-            if (version_compare(HHVM_VERSION, '3.8.0') >= 0) {
-                passthru("{$binary} -m server -v Server.Type=proxygen -v Server.SourceRoot={$base}/ -v Server.IP={$host} -v Server.Port={$port} -v Server.DefaultDocument=server.php -v Server.ErrorDocument404=server.php");
-            } else {
-                throw new Exception("HHVM's built-in server requires HHVM >= 3.8.0.");
-            }
-        } else {
-            passthru("{$binary} -S {$host}:{$port} {$base}/server.php");
-        }
+    /**
+     * Get the port for the command.
+     *
+     * @return string
+     */
+    protected function port()
+    {
+        return $this->input->getOption('port');
     }
 
     /**
@@ -64,7 +82,7 @@ class ServeCommand extends Command
     protected function getOptions()
     {
         return [
-            ['host', null, InputOption::VALUE_OPTIONAL, 'The host address to serve the application on.', 'localhost'],
+            ['host', null, InputOption::VALUE_OPTIONAL, 'The host address to serve the application on.', '127.0.0.1'],
 
             ['port', null, InputOption::VALUE_OPTIONAL, 'The port to serve the application on.', 8000],
         ];

@@ -122,11 +122,11 @@ class WorkflowController extends Controller
                         })
                         /* add column created */
                         ->addColumn('Created', function ($model) {
-                            return TicketController::usertimezone($model->created_at);
+                            return faveoDate($model->created_at);
                         })
                         /* add column updated */
                         ->addColumn('Updated', function ($model) {
-                            return TicketController::usertimezone($model->updated_at);
+                            return faveoDate($model->updated_at);
                         })
                         /* add column action */
                         ->addColumn('Actions', function ($model) {
@@ -145,7 +145,7 @@ class WorkflowController extends Controller
     public function create(Emails $emails)
     {
         $email_data = '';
-        foreach ($emails->lists('email_address', 'id') as $key => $email) {
+        foreach ($emails->pluck('email_address', 'id') as $key => $email) {
             $email_data["E-$key"] = $email;
         }
         $emails = $email_data;

@@ -130,7 +130,6 @@ active
         <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue">
         <a href="{!! route('prerequisites') !!}" class="button button-large button-next" style="float: left">Previous</a>
     </p>
-    <br>
 </form>
 </div>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>

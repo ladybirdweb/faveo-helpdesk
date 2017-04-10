@@ -100,8 +100,8 @@ class="active"
 							@endif
 
 							<td>{!! $dept !!}</td>
-							<td>{!! UTC::usertimezone($email->created_at) !!}</td>
-							<td>{!! UTC::usertimezone($email->updated_at) !!}</td>
+							<td>{!! faveoDate($email->created_at) !!}</td>
+							<td>{!! faveoDate($email->updated_at) !!}</td>
 							<td>
 							{!! Form::open(['route'=>['emails.destroy', $email->id],'method'=>'DELETE']) !!}
 							<a href="{{route('emails.edit', $email->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> Edit</a>

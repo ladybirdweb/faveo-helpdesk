@@ -16,22 +16,24 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '8a9dc1de0ca7e01f3e08231539562f61' => __DIR__ . '/..' . '/aws/aws-sdk-php/src/functions.php',
         '3919eeb97e98d4648304477f8ef734ba' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
-        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
-        'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
-        '752af1c2bdb339e8474c3c31b22b7d54' => __DIR__ . '/..' . '/illuminate/html/helpers.php',
-        'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
-        '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
         '017b24472353920ed42bb364f7653c43' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/helpers.php',
         '4a1f389d6ce373bda9e57857d3b61c84' => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src/helpers.php',
         '1e298922c3e2134d42dcdb03e6d5f55a' => __DIR__ . '/..' . '/torann/geoip/src/helpers.php',
+        'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
+        '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
+        ),
+        'l' => 
+        array (
+            'libphonenumber\\' => 15,
         ),
         'Z' => 
         array (
@@ -46,10 +48,6 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'Y' => 
         array (
             'Yajra\\Datatables\\' => 17,
-        ),
-        'X' => 
-        array (
-            'XdgBaseDir\\' => 11,
         ),
         'W' => 
         array (
@@ -93,11 +91,15 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
             'Symfony\\Component\\Console\\' => 26,
             'SuperClosure\\' => 13,
         ),
+        'R' => 
+        array (
+            'Ramsey\\Uuid\\' => 12,
+        ),
         'P' => 
         array (
-            'Psy\\' => 4,
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
+            'Psr\\Container\\' => 14,
             'Propaganistas\\LaravelPhone\\' => 27,
             'Predis\\' => 7,
             'PhpParser\\' => 10,
@@ -128,7 +130,6 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
             'Iso3166\\' => 8,
             'Intervention\\Image\\' => 19,
             'Interop\\Container\\' => 18,
-            'Illuminate\\Html\\' => 16,
             'Illuminate\\' => 11,
         ),
         'G' => 
@@ -147,9 +148,8 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         ),
         'C' => 
         array (
+            'Cron\\' => 5,
             'Collective\\Html\\' => 16,
-            'Collective\\Bus\\' => 15,
-            'ClassPreloader\\' => 15,
             'Carbon\\' => 7,
         ),
         'B' => 
@@ -167,8 +167,12 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+        ),
+        'libphonenumber\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src',
         ),
         'Zend\\Validator\\' => 
         array (
@@ -201,10 +205,6 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'Yajra\\Datatables\\' => 
         array (
             0 => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src',
-        ),
-        'XdgBaseDir\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/dnoegel/php-xdg-base-dir/src',
         ),
         'Webmozart\\Assert\\' => 
         array (
@@ -314,9 +314,9 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         array (
             0 => __DIR__ . '/..' . '/jeremeamia/SuperClosure/src',
         ),
-        'Psy\\' => 
+        'Ramsey\\Uuid\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psy/psysh/src/Psy',
+            0 => __DIR__ . '/..' . '/ramsey/uuid/src',
         ),
         'Psr\\Log\\' => 
         array (
@@ -325,6 +325,10 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
         ),
         'Propaganistas\\LaravelPhone\\' => 
         array (
@@ -386,10 +390,6 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         array (
             0 => __DIR__ . '/..' . '/container-interop/container-interop/src/Interop/Container',
         ),
-        'Illuminate\\Html\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/illuminate/html',
-        ),
         'Illuminate\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate',
@@ -426,17 +426,13 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         array (
             0 => __DIR__ . '/..' . '/davejamesmiller/laravel-breadcrumbs/src',
         ),
+        'Cron\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron',
+        ),
         'Collective\\Html\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravelcollective/html/src',
-        ),
-        'Collective\\Bus\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/laravelcollective/bus/src',
-        ),
-        'ClassPreloader\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/classpreloader/classpreloader/src',
         ),
         'Carbon\\' => 
         array (
@@ -462,13 +458,6 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
             'thomaswelton\\GravatarLib\\' => 
             array (
                 0 => __DIR__ . '/..' . '/thomaswelton/gravatarlib',
-            ),
-        ),
-        'l' => 
-        array (
-            'libphonenumber' => 
-            array (
-                0 => __DIR__ . '/..' . '/giggsey/libphonenumber-for-php/src',
             ),
         ),
         'Z' => 
@@ -518,6 +507,10 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
             array (
                 0 => __DIR__ . '/..' . '/phpspec/phpspec/src',
             ),
+            'Parsedown' => 
+            array (
+                0 => __DIR__ . '/..' . '/erusev/parsedown',
+            ),
             'PHPExcel' => 
             array (
                 0 => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes',
@@ -547,17 +540,6 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
             'Maatwebsite\\Excel\\' => 
             array (
                 0 => __DIR__ . '/..' . '/maatwebsite/excel/src',
-            ),
-        ),
-        'J' => 
-        array (
-            'JakubOnderka\\PhpConsoleHighlighter' => 
-            array (
-                0 => __DIR__ . '/..' . '/jakub-onderka/php-console-highlighter/src',
-            ),
-            'JakubOnderka\\PhpConsoleColor' => 
-            array (
-                0 => __DIR__ . '/..' . '/jakub-onderka/php-console-color/src',
             ),
         ),
         'G' => 
@@ -607,10 +589,6 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
             array (
                 0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
             ),
-            'Cron' => 
-            array (
-                0 => __DIR__ . '/..' . '/mtdowling/cron-expression/src',
-            ),
             'Chumper\\Zipper' => 
             array (
                 0 => __DIR__ . '/..' . '/chumper/zipper/src',
@@ -655,7 +633,7 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'AddForeignKeysToUserAssignOrganizationTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_user_assign_organization_table.php',
         'AddForeignKeysToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_users_table.php',
         'Adobe_Font_Metrics' => __DIR__ . '/..' . '/phenx/php-font-lib/classes/Adobe_Font_Metrics.php',
-        'AlterStatusTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_20_072509_alter_status_table.php',
+        'AlertSeeder' => __DIR__ . '/../..' . '/database/seeds/AlertSeeder.php',
         'AlterTicketSourceTable' => __DIR__ . '/../..' . '/database/migrations/2016_08_16_104539_alter_ticket_source_table.php',
         'Attribute_Translator' => __DIR__ . '/..' . '/dompdf/dompdf/include/attribute_translator.cls.php',
         'Block_Frame_Decorator' => __DIR__ . '/..' . '/dompdf/dompdf/include/block_frame_decorator.cls.php',
@@ -730,7 +708,6 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'CreateTicketPriorityTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_ticket_priority_table.php',
         'CreateTicketSourceTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_ticket_source_table.php',
         'CreateTicketStatusTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_ticket_status_table.php',
-        'CreateTicketStatusTypeTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_20_070445_create_ticket_status_type_table.php',
         'CreateTicketThreadTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_ticket_thread_table.php',
         'CreateTicketTokenTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_02_095357_create_ticket_token_table.php',
         'CreateTicketsTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140450_create_tickets_table.php',
@@ -798,7 +775,6 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/frame_reflower.cls.php',
         'Frame_Tree' => __DIR__ . '/..' . '/dompdf/dompdf/include/frame_tree.cls.php',
         'GD_Adapter' => __DIR__ . '/..' . '/dompdf/dompdf/include/gd_adapter.cls.php',
-        'IlluminateQueueClosure' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Queue/IlluminateQueueClosure.php',
         'Image_Cache' => __DIR__ . '/..' . '/dompdf/dompdf/include/image_cache.cls.php',
         'Image_Frame_Decorator' => __DIR__ . '/..' . '/dompdf/dompdf/include/image_frame_decorator.cls.php',
         'Image_Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/image_frame_reflower.cls.php',
@@ -842,10 +818,15 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'Maatwebsite\\Excel\\Readers\\LaravelExcelReader' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Readers/LaravelExcelReader.php',
         'Maatwebsite\\Excel\\Writers\\CellWriter' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Writers/CellWriter.php',
         'Maatwebsite\\Excel\\Writers\\LaravelExcelWriter' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Writers/LaravelExcelWriter.php',
+        'NotificationUpdate' => __DIR__ . '/../..' . '/database/migrations/2017_03_06_074629_notification_update.php',
         'Null_Frame_Decorator' => __DIR__ . '/..' . '/dompdf/dompdf/include/null_frame_decorator.cls.php',
         'Null_Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/null_frame_reflower.cls.php',
         'Null_Positioner' => __DIR__ . '/..' . '/dompdf/dompdf/include/null_positioner.cls.php',
         'PDFLib_Adapter' => __DIR__ . '/..' . '/dompdf/dompdf/include/pdflib_adapter.cls.php',
+        'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/Assert.php',
+        'PHPUnit\\Framework\\BaseTestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/BaseTestListener.php',
+        'PHPUnit\\Framework\\TestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestCase.php',
+        'PHPUnit\\Framework\\TestListener' => __DIR__ . '/..' . '/phpunit/phpunit/src/ForwardCompatibility/TestListener.php',
         'PHPUnit_Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit_Extensions_GroupTestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/GroupTestSuite.php',
         'PHPUnit_Extensions_PhptTestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/Extensions/PhptTestCase.php',
@@ -1174,6 +1155,7 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'PHP_Token_NEW' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_NS_C' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_NS_SEPARATOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_NULLSAFE_OBJECT_OPERATOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_NUM_STRING' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_OBJECT_CAST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_OBJECT_OPERATOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
@@ -1211,6 +1193,7 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'PHP_Token_STRING' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_STRING_CAST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_STRING_VARNAME' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_SUPER' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_SWITCH' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_Stream' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token/Stream.php',
         'PHP_Token_Stream_CachingFactory' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token/Stream/CachingFactory.php',
@@ -1225,6 +1208,7 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'PHP_Token_UNSET' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_UNSET_CAST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_USE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_USE_FUNCTION' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_VAR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_VARIABLE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_WHERE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
@@ -1298,12 +1282,17 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'Table_Row_Group_Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/table_row_group_frame_reflower.cls.php',
         'Table_Row_Group_Renderer' => __DIR__ . '/..' . '/dompdf/dompdf/include/table_row_group_renderer.cls.php',
         'Table_Row_Positioner' => __DIR__ . '/..' . '/dompdf/dompdf/include/table_row_positioner.cls.php',
+        'TemplateSeeder' => __DIR__ . '/../..' . '/database/seeds/TemplateSeeder.php',
         'TestCase' => __DIR__ . '/../..' . '/tests/TestCase.php',
         'Text_Frame_Decorator' => __DIR__ . '/..' . '/dompdf/dompdf/include/text_frame_decorator.cls.php',
         'Text_Frame_Reflower' => __DIR__ . '/..' . '/dompdf/dompdf/include/text_frame_reflower.cls.php',
         'Text_Renderer' => __DIR__ . '/..' . '/dompdf/dompdf/include/text_renderer.cls.php',
         'Text_Template' => __DIR__ . '/..' . '/phpunit/php-text-template/src/Template.php',
-        'UpdateUsersTable2212017' => __DIR__ . '/../..' . '/database/migrations/2017_02_22_084059_update_users_table_22_1_2017.php',
+        'UpdateJob' => __DIR__ . '/../..' . '/database/migrations/2017_03_24_095825_update_job.php',
+        'UpdateNotification' => __DIR__ . '/../..' . '/database/migrations/2017_02_01_110129_update-notification.php',
+        'UpdateNotificationTable' => __DIR__ . '/../..' . '/database/migrations/2017_02_07_104802_update_notification_table.php',
+        'UpdateSettingsSystem' => __DIR__ . '/../..' . '/database/migrations/2017_03_10_044624_update_settings_system.php',
+        'UpdateTicketThread' => __DIR__ . '/../..' . '/database/migrations/2017_02_02_073016_update_ticket_thread.php',
         'Version1079table' => __DIR__ . '/../..' . '/database/migrations/2016_06_28_141613_version1079table.php',
         'Whoops\\Module' => __DIR__ . '/..' . '/filp/whoops/src/deprecated/Zend/Module.php',
         'Whoops\\Provider\\Zend\\ExceptionStrategy' => __DIR__ . '/..' . '/filp/whoops/src/deprecated/Zend/ExceptionStrategy.php',

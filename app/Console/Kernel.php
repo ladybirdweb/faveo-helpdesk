@@ -33,9 +33,11 @@ class Kernel extends ConsoleKernel
             if ($this->getCurrentQueue() != 'sync') {
                 $schedule->command('queue:listen '.$this->getCurrentQueue().' --sleep 60')->everyMinute();
             }
+            
             $this->execute($schedule, 'fetching');
             $this->execute($schedule, 'notification');
             $this->execute($schedule, 'work');
+            $schedule->command('sla-escalate')->everyThirtyMinutes();
         }
     }
 
@@ -113,5 +115,15 @@ class Kernel extends ConsoleKernel
         }
 
         return $queue;
+    }
+
+    /**
+     * Register the Closure based commands for the application.
+     *
+     * @return void
+     */
+    protected function commands()
+    {
+        require base_path('routes/console.php');
     }
 }

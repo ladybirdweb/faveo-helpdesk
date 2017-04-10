@@ -29,7 +29,7 @@ Or you can add it directly in your composer.json file:
 
 	{
     	"require": {
-        	"brozot/laravel-fcm": "^1.2.0"
+        	"brozot/laravel-fcm": "^1.2.*"
     	}
 	}
 
@@ -243,9 +243,9 @@ $topic->topic('news')->andTopic(function($condition) {
 
 	$condition->topic('economic')->orTopic('cultural');
 	
-})
+});
 
-$topicResponse = FCM::sendToTopic($topic, null, $notification, null)
+$topicResponse = FCM::sendToTopic($topic, null, $notification, null);
 
 $topicResponse->isSuccess();
 $topicResponse->shouldRetry();

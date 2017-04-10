@@ -74,7 +74,7 @@ class Callback extends AbstractValidator
      */
     public function setCallback($callback)
     {
-        if (!is_callable($callback)) {
+        if (! is_callable($callback)) {
             throw new Exception\InvalidArgumentException('Invalid callback given');
         }
 
@@ -124,19 +124,19 @@ class Callback extends AbstractValidator
         }
 
         $args = [$value];
-        if (empty($options) && !empty($context)) {
+        if (empty($options) && ! empty($context)) {
             $args[] = $context;
         }
-        if (!empty($options) && empty($context)) {
+        if (! empty($options) && empty($context)) {
             $args = array_merge($args, $options);
         }
-        if (!empty($options) && !empty($context)) {
+        if (! empty($options) && ! empty($context)) {
             $args[] = $context;
             $args   = array_merge($args, $options);
         }
 
         try {
-            if (!call_user_func_array($callback, $args)) {
+            if (! call_user_func_array($callback, $args)) {
                 $this->error(self::INVALID_VALUE);
                 return false;
             }

@@ -8,9 +8,8 @@ use App;
 use App\Http\Controllers\Controller;
 //supports
 use App\Http\Requests;
-use App\Model\helpdesk\Settings\System;
-//classes
 use Config;
+//classes
 use File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
@@ -87,29 +86,24 @@ class LanguageController extends Controller
         $values = array_slice($values, 2); // skips array element $value[0] = '.' & $value[1] = '..'
         return \Datatable::collection(new Collection($values))
                         ->addColumn('language', function ($model) {
-                            $img_src = 'lb-faveo/flags/'.$model.'.png';
                             if ($model == Config::get('app.fallback_locale')) {
-                                return '<img src="'.asset($img_src).'"/>&nbsp;'.Config::get('languages.'.$model).' ('.Lang::get('lang.default').')';
+                                return Config::get('languages.'.$model).' ('.Lang::get('lang.default').')';
                             } else {
-                                return '<img src="'.asset($img_src).'"/>&nbsp;'.Config::get('languages.'.$model);
+                                return Config::get('languages.'.$model);
                             }
                         })
                         ->addColumn('id', function ($model) {
                             return $model;
                         })
                         ->addColumn('status', function ($model) {
-                            $system = System::select('content')->where('id', 1)->first();
-                            $sys_lang = $system->content;
-                            if ($sys_lang === $model) {
+                            if (Lang::getLocale() === $model) {
                                 return "<span style='color:green'>".Lang::trans('lang.active').'</span>';
                             } else {
                                 return "<span style='color:red'>".Lang::trans('lang.inactive').'</span>';
                             }
                         })
                         ->addColumn('Action', function ($model) {
-                            $system = System::select('content')->where('id', 1)->first();
-                            $sys_lang = $system->content;
-                            if ($sys_lang === $model) {
+                            if (Lang::getLocale() === $model) {
                                 return "<a href='change-language/".$model."'><input type='button' class='btn btn-info btn-xs btn-flat' disabled value='".Lang::trans('lang.disable')."'/></a>  
                 <a href='change-language/".$model."' class='btn btn-danger btn-xs btn-flat' disabled><i class='fa fa-trash' style='color:black;'> </i> ".Lang::trans('lang.delete').'</a>';
                             } else {

@@ -36,9 +36,11 @@ array(
         )
         catches: array(
             0: Stmt_Catch(
-                type: Name(
-                    parts: array(
-                        0: A
+                types: array(
+                    0: Name(
+                        parts: array(
+                            0: A
+                        )
                     )
                 )
                 var: b
@@ -55,9 +57,11 @@ array(
                 )
             )
             1: Stmt_Catch(
-                type: Name(
-                    parts: array(
-                        0: B
+                types: array(
+                    0: Name(
+                        parts: array(
+                            0: B
+                        )
                     )
                 )
                 var: c
@@ -74,14 +78,16 @@ array(
                 )
             )
         )
-        finallyStmts: array(
-            0: Expr_FuncCall(
-                name: Name(
-                    parts: array(
-                        0: doFinally
+        finally: Stmt_Finally(
+            stmts: array(
+                0: Expr_FuncCall(
+                    name: Name(
+                        parts: array(
+                            0: doFinally
+                        )
                     )
-                )
-                args: array(
+                    args: array(
+                    )
                 )
             )
         )
@@ -91,9 +97,11 @@ array(
         )
         catches: array(
             0: Stmt_Catch(
-                type: Name(
-                    parts: array(
-                        0: A
+                types: array(
+                    0: Name(
+                        parts: array(
+                            0: A
+                        )
                     )
                 )
                 var: b
@@ -101,7 +109,7 @@ array(
                 )
             )
         )
-        finallyStmts: null
+        finally: null
         comments: array(
             0: // no finally
         )
@@ -111,7 +119,9 @@ array(
         )
         catches: array(
         )
-        finallyStmts: array(
+        finally: Stmt_Finally(
+            stmts: array(
+            )
         )
         comments: array(
             0: // no catch

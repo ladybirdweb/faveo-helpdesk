@@ -9,6 +9,20 @@ use Symfony\Component\Finder\Finder;
 class Factory implements ArrayAccess
 {
     /**
+     * The model definitions in the container.
+     *
+     * @var array
+     */
+    protected $definitions = [];
+
+    /**
+     * The registered model states.
+     *
+     * @var array
+     */
+    protected $states = [];
+
+    /**
      * The Faker instance for the builder.
      *
      * @var \Faker\Generator
@@ -25,13 +39,6 @@ class Factory implements ArrayAccess
     {
         $this->faker = $faker;
     }
-
-    /**
-     * The model definitions in the container.
-     *
-     * @var array
-     */
-    protected $definitions = [];
 
     /**
      * Create a new factory container.
@@ -53,7 +60,7 @@ class Factory implements ArrayAccess
      * @param  string  $class
      * @param  string  $name
      * @param  callable  $attributes
-     * @return void
+     * @return $this
      */
     public function defineAs($class, $name, callable $attributes)
     {
@@ -66,11 +73,28 @@ class Factory implements ArrayAccess
      * @param  string  $class
      * @param  callable  $attributes
      * @param  string  $name
-     * @return void
+     * @return $this
      */
     public function define($class, callable $attributes, $name = 'default')
     {
         $this->definitions[$class][$name] = $attributes;
+
+        return $this;
+    }
+
+    /**
+     * Define a state with a given set of attributes.
+     *
+     * @param  string  $class
+     * @param  string  $state
+     * @param  callable  $attributes
+     * @return $this
+     */
+    public function state($class, $state, callable $attributes)
+    {
+        $this->states[$class][$state] = $attributes;
+
+        return $this;
     }
 
     /**
@@ -96,25 +120,6 @@ class Factory implements ArrayAccess
     public function createAs($class, $name, array $attributes = [])
     {
         return $this->of($class, $name)->create($attributes);
-    }
-
-    /**
-     * Load factories from path.
-     *
-     * @param  string  $path
-     * @return $this
-     */
-    public function load($path)
-    {
-        $factory = $this;
-
-        if (is_dir($path)) {
-            foreach (Finder::create()->files()->in($path) as $file) {
-                require $file->getRealPath();
-            }
-        }
-
-        return $factory;
     }
 
     /**
@@ -165,9 +170,9 @@ class Factory implements ArrayAccess
      */
     public function raw($class, array $attributes = [], $name = 'default')
     {
-        $raw = call_user_func($this->definitions[$class][$name], $this->faker);
-
-        return array_merge($raw, $attributes);
+        return array_merge(
+            call_user_func($this->definitions[$class][$name], $this->faker), $attributes
+        );
     }
 
     /**
@@ -179,7 +184,26 @@ class Factory implements ArrayAccess
      */
     public function of($class, $name = 'default')
     {
-        return new FactoryBuilder($class, $name, $this->definitions, $this->faker);
+        return new FactoryBuilder($class, $name, $this->definitions, $this->states, $this->faker);
+    }
+
+    /**
+     * Load factories from path.
+     *
+     * @param  string  $path
+     * @return $this
+     */
+    public function load($path)
+    {
+        $factory = $this;
+
+        if (is_dir($path)) {
+            foreach (Finder::create()->files()->name('*.php')->in($path) as $file) {
+                require $file->getRealPath();
+            }
+        }
+
+        return $factory;
     }
 
     /**

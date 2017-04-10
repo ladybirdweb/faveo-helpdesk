@@ -30,13 +30,6 @@ class ComposerServiceProvider extends ServiceProvider
                 'themes.default1.admin.layout.admin',
             ], 'App\Http\ViewComposers\AuthUser'
         );
-        view()->composer(
-            [
-                'themes.default1.admin.layout.admin',
-                'themes.default1.agent.layout.agent',
-                'themes.default1.client.layout.client',
-            ], 'App\Http\ViewComposers\UserLanguage'
-        );
     }
 
     /**

@@ -79,7 +79,7 @@ class PageController extends Controller
                         ->addColumn('Created', function ($model) {
                             $t = $model->created_at;
 
-                            return TicketController::usertimezone($t);
+                            return faveoDate($t);
                         })
                         /* add column Actions */
                         /* there are action buttons and modal popup to delete a data column */

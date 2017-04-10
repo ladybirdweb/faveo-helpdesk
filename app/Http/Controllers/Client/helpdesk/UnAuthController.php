@@ -15,13 +15,11 @@ use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Ticket\TicketToken;
 use App\User;
-use DB;
-// classes
 use Hash;
+// classes
 use Illuminate\Http\Request;
 use Input;
 use Lang;
-use Session;
 
 /**
  * GuestController.
@@ -329,11 +327,19 @@ class UnAuthController extends Controller
      */
     public static function changeLanguage($lang)
     {
+        //if(Cache::has('language'))
+        //{
+        //  return Cache::get('language');
+        //} else return 'false';
+        // Cache::put('language',$)
         $path = base_path('resources/lang');  // Path to check available language packages
         if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
+            // dd(array_key_exists($lang, Config::get('languages')));
+            // app()->setLocale($lang);
+
             \Cache::forever('language', $lang);
-            DB::table('settings_system')->where('id', '=', 1)
-                ->update(['content' => $lang]);
+            // dd(Cache::get('language'));
+            // dd()
         } else {
             return false;
         }
@@ -342,10 +348,10 @@ class UnAuthController extends Controller
     }
 
     // Follow up tickets
-    public function followup()
-    {
-        $followup = Followup::whereId('1')->first();
-        $condition = $followup->condition;
+       public function followup()
+       {
+           $followup = Followup::whereId('1')->first();
+           $condition = $followup->condition;
          // dd($condition);
 
         switch ($condition) {
@@ -378,40 +384,34 @@ class UnAuthController extends Controller
                 break;
         }
 
-        if ($followup->status = 1) {
-            $tickets = Tickets::where('id', '>=', 1)->where('status', '!=', 5)->get();
-            foreach ($tickets as $ticket) {
-                $ck = date('Y-m-d H:i:s', strtotime($ticket->updated_at.$followup_set));
-                $current_time = date('Y-m-d H:i:s');
-                if ($current_time > $ck) {
-                    $ticket->follow_up = 1;
-                    $ticket->save();
-                }
-            }
-        }
-    }
+           if ($followup->status = 1) {
+               $tickets = Tickets::where('id', '>=', 1)->where('status', '!=', 5)->get();
+        // dd( $tickets);
+         // $tickets=Tickets::where('id', '>=', 1)->where('status', '!=', 5)->pluck('id');
+        // dd( $tickets);
+         // $id=1;
+        foreach ($tickets as $ticket) {
+            // $id=1;
+            // $id++;
+        // $ticket=Tickets::where('status', '!=', 5)->get();
 
-    /**
-     *@category function to change system's language
-     *
-     *@param string $lang //desired language's iso code
-     *
-     *@return response
-     */
-    public static function changeUserLanguage($lang)
-    {
-        $path = base_path('resources/lang');  // Path to check available language packages
-        if (array_key_exists($lang, \Config::get('languages')) && in_array($lang, scandir($path))) {
-            if (\Auth::check()) {
-                $id = \Auth::user()->id;
-                $user = User::find($id);
-                $user->user_language = $lang;
-                $user->save();
-            } else {
-                Session::set('language', $lang);
-            }
-        }
+        // dd($ticket);
+            // if($ticket != null){
+                // dd('here');
+            $ck = date('Y-m-d H:i:s', strtotime($ticket->updated_at.$followup_set));
+            // dd($ck);
+            $current_time = date('Y-m-d H:i:s');
+            if ($current_time > $ck) {
+                $ticket->follow_up = 1;
+                $ticket->save();
+             //  Tickets::where('id', '=',$id)
+             // ->update(['follow_up' => 1]);
 
-        return redirect()->back();
-    }
+            // }
+            }
+        //       if($id=2)
+        // {dd($ticket);}
+        }
+           }
+       }
 }

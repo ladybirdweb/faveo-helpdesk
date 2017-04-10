@@ -1378,6 +1378,7 @@ return [
     'post_comment'                                                                     => 'Plaats reactie',
     'plugin'                                                                           => 'Plugin',
     'edit_profile'                                                                     => 'Bewerk profiel',
+    'you_are_here'                                                                     => 'Je bent hier',
     'Send'                                                                             => 'Verstuur',
     'no_article'                                                                       => 'Geen artikel',
     'profile_settings'                                                                 => 'Profiel instellingen',
@@ -1557,7 +1558,7 @@ return [
      'change_password'                                            => 'Verander wachtwoord',
      'role_change'                                                => 'Rol aanpassen',
      'password_generator'                                         => 'Wachtwoord generator',
-     'department'                                                 => 'Afdeling',
+     'depertment'                                                 => 'Afdeling',
      'duetoday'                                                   => 'Einddatum vandaag',
      'today-due_tickets'                                          => 'Ticket met een einddatum vandaag',
      'password_change_successfully'                               => 'Wachtwoord succesvol veranderd',
@@ -1610,59 +1611,4 @@ return [
      'search'              => 'Search...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
-          //update 1-2-2017
-     'system-outgoing-incoming-mail-not-configured' => 'You have not configured system mail. Faveo can\'t fetch tickets from mail or send mail to users without it.',
-     'confihure-the-mail-now'                       => 'Click here to configure the mail.',
-     'system-mail-not-configured-agent-message'     => 'System incoming and outgoing email settings are not configured. Please contct the admin.',
-
-      // arindam-14.2.2017
-     // sla
-     'min'   => 'Min',
-     'hours' => 'Hours',
-     'days'  => 'Days',
-     'months'=> 'Months',
-     'year'  => 'Year',
-// department change
-     'change_department'                    => 'Change Department',
-    'ticket_department_successfully_changed'=> 'Ticket Department Successfully Changed',
-    'select_another_department'             => 'Select another department',
-
-    // status
-    /**----------------------------------------------------------------
-     * Status
-     * ----------------------------------------------------------------
-     */
-    'client'                    => 'Client',
-    'send_email'                => 'Send Email',
-    'visibility_to_client'      => 'Visibility to Client',
-    'purpose_of_status'         => 'Purpose of Status',
-    'status_to_display'         => 'Status to Display',
-    'icon_color'                => 'Icon color',
-
-    /**--------------------------------------------------------------------------------------------
-     * Status
-     * --------------------------------------------------------------------------------------------
-     */
-    'visible_to_client'                                                                 => 'Visible to Client',
-    'icon'                                                                              => 'Icon',
-    'none'                                                                              => 'None',
-    'allow_client'                                                                      => 'Allow Client',
-    'if_yes_status_name_will_be_displayed'                                              => 'If yes status name will be displayed',
-    'if_yes_then_clients_can_choose_this_status'                                        => 'If yes then clients can choose this status',
-    'purpose_of_status_will_perform_the_action_to_be_applied_on_the_status_selection'   => 'Purpose of status will perform the action to be applied on the status selection',
-    'this_message_will_be_displayed_in_the_thread_as_internal_note'                     => 'This message will be displayed in the thread as Internal note',
-    'make_system_default_for_selected_purpose'                                          => 'Make system default for Selected Purpose',
-    'this_status_will_be_displayed_to_client_if_visibility_of_client_chosen_no'         => 'This status will be displayed to client if visibility of client chosen no',
-    'tick_who_all_to_send_notification'                                                 => 'Tick who all to send notification',
-    'Default'                                                                           => 'Default',
-    'unable_to_change_the_purpose_of_status_there_are_tickets_with_this_status'         => 'Unable to change the purpose of status. There are tickets with this status.',
-    'you_cannot_delete_a_default_ticket_status'                                         => 'You cannot delete a default Ticket Status',
-    'associated_tickets_moved_to_default_status'                                        => 'Associated tickets moved to default status',
-    'status_deleted_successfully'                                                       => 'Status Deleted Successfully',
-    'have_been_marked_as'                                                               => 'Tickets have been marked as ',
-    'have_been_deleted_forever'                                                         => 'Have been Deleted forever',
-    'related_tickets_moved_to_default_status'                                           => 'Related tickets moved to default status',
-
-    //updates 22-2-2017
-    'invalid-date-range' => 'Invalid date range',
 ];

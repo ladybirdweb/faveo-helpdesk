@@ -11,16 +11,18 @@
 
 namespace Symfony\Component\HttpKernel\Tests\Controller;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\HttpKernel\Tests\Fixtures\Controller\NullableController;
 use Symfony\Component\HttpKernel\Tests\Fixtures\Controller\VariadicController;
 use Symfony\Component\HttpFoundation\Request;
 
-class ControllerResolverTest extends \PHPUnit_Framework_TestCase
+class ControllerResolverTest extends TestCase
 {
     public function testGetControllerWithoutControllerParameter()
     {
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
         $logger->expects($this->once())->method('warning')->with('Unable to look for the controller as the "_controller" parameter is missing.');
         $resolver = $this->createControllerResolver($logger);
 
@@ -116,7 +118,12 @@ class ControllerResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetControllerOnNonUndefinedFunction($controller, $exceptionName = null, $exceptionMessage = null)
     {
         $resolver = $this->createControllerResolver();
-        $this->setExpectedException($exceptionName, $exceptionMessage);
+        if (method_exists($this, 'expectException')) {
+            $this->expectException($exceptionName);
+            $this->expectExceptionMessage($exceptionMessage);
+        } else {
+            $this->setExpectedException($exceptionName, $exceptionMessage);
+        }
 
         $request = Request::create('/');
         $request->attributes->set('_controller', $controller);
@@ -137,6 +144,9 @@ class ControllerResolverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @group legacy
+     */
     public function testGetArguments()
     {
         $resolver = $this->createControllerResolver();
@@ -200,6 +210,7 @@ class ControllerResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @requires PHP 5.6
+     * @group legacy
      */
     public function testGetVariadicArguments()
     {
@@ -214,12 +225,56 @@ class ControllerResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateControllerCanReturnAnyCallable()
     {
-        $mock = $this->getMock('Symfony\Component\HttpKernel\Controller\ControllerResolver', array('createController'));
+        $mock = $this->getMockBuilder('Symfony\Component\HttpKernel\Controller\ControllerResolver')->setMethods(array('createController'))->getMock();
         $mock->expects($this->once())->method('createController')->will($this->returnValue('Symfony\Component\HttpKernel\Tests\Controller\some_controller_function'));
 
         $request = Request::create('/');
         $request->attributes->set('_controller', 'foobar');
         $mock->getController($request);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @group legacy
+     */
+    public function testIfExceptionIsThrownWhenMissingAnArgument()
+    {
+        $resolver = new ControllerResolver();
+        $request = Request::create('/');
+
+        $controller = array($this, 'controllerMethod1');
+
+        $resolver->getArguments($request, $controller);
+    }
+
+    /**
+     * @requires PHP 7.1
+     * @group legacy
+     */
+    public function testGetNullableArguments()
+    {
+        $resolver = new ControllerResolver();
+
+        $request = Request::create('/');
+        $request->attributes->set('foo', 'foo');
+        $request->attributes->set('bar', new \stdClass());
+        $request->attributes->set('mandatory', 'mandatory');
+        $controller = array(new NullableController(), 'action');
+        $this->assertEquals(array('foo', new \stdClass(), 'value', 'mandatory'), $resolver->getArguments($request, $controller));
+    }
+
+    /**
+     * @requires PHP 7.1
+     * @group legacy
+     */
+    public function testGetNullableArgumentsWithDefaults()
+    {
+        $resolver = new ControllerResolver();
+
+        $request = Request::create('/');
+        $request->attributes->set('mandatory', 'mandatory');
+        $controller = array(new NullableController(), 'action');
+        $this->assertEquals(array(null, null, 'value', 'mandatory'), $resolver->getArguments($request, $controller));
     }
 
     protected function createControllerResolver(LoggerInterface $logger = null)
