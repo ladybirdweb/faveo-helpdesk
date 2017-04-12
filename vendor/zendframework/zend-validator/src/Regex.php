@@ -60,11 +60,11 @@ class Regex extends AbstractValidator
             $pattern = ArrayUtils::iteratorToArray($pattern);
         }
 
-        if (!is_array($pattern)) {
+        if (! is_array($pattern)) {
             throw new Exception\InvalidArgumentException('Invalid options provided to constructor');
         }
 
-        if (!array_key_exists('pattern', $pattern)) {
+        if (! array_key_exists('pattern', $pattern)) {
             throw new Exception\InvalidArgumentException("Missing option 'pattern'");
         }
 
@@ -116,7 +116,7 @@ class Regex extends AbstractValidator
      */
     public function isValid($value)
     {
-        if (!is_string($value) && !is_int($value) && !is_float($value)) {
+        if (! is_string($value) && ! is_int($value) && ! is_float($value)) {
             $this->error(self::INVALID);
             return false;
         }
@@ -131,7 +131,7 @@ class Regex extends AbstractValidator
             return false;
         }
 
-        if (!$status) {
+        if (! $status) {
             $this->error(self::NOT_MATCH);
             return false;
         }

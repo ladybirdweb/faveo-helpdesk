@@ -83,36 +83,25 @@ class NotEmpty extends AbstractValidator
      */
     public function __construct($options = null)
     {
-        $this->setType($this->defaultType);
-
         if ($options instanceof Traversable) {
             $options = ArrayUtils::iteratorToArray($options);
         }
 
-        if (!is_array($options)) {
+        if (! is_array($options)) {
             $options = func_get_args();
             $temp    = [];
-            if (!empty($options)) {
+            if (! empty($options)) {
                 $temp['type'] = array_shift($options);
             }
 
             $options = $temp;
         }
 
-        if (is_array($options)) {
-            if (!array_key_exists('type', $options)) {
-                $detected = 0;
-                $found    = false;
-                foreach ($options as $option) {
-                    if (in_array($option, $this->constants, true)) {
-                        $found = true;
-                        $detected += array_search($option, $this->constants);
-                    }
-                }
-
-                if ($found) {
-                    $options['type'] = $detected;
-                }
+        if (! isset($options['type'])) {
+            if (($type = $this->calculateTypeValue($options)) != 0) {
+                $options['type'] = $type;
+            } else {
+                $options['type'] = $this->defaultType;
             }
         }
 
@@ -148,14 +137,14 @@ class NotEmpty extends AbstractValidator
             foreach ($type as $value) {
                 if (is_int($value)) {
                     $detected |= $value;
-                } elseif (in_array($value, $this->constants)) {
-                    $detected |= array_search($value, $this->constants);
+                } elseif (in_array($value, $this->constants, true)) {
+                    $detected |= array_search($value, $this->constants, true);
                 }
             }
 
             $type = $detected;
-        } elseif (is_string($type) && in_array($type, $this->constants)) {
-            $type = array_search($type, $this->constants);
+        } elseif (is_string($type) && in_array($type, $this->constants, true)) {
+            $type = array_search($type, $this->constants, true);
         }
 
         return $type;
@@ -172,7 +161,7 @@ class NotEmpty extends AbstractValidator
     {
         $type = $this->calculateTypeValue($type);
 
-        if (!is_int($type) || ($type < 0) || ($type > self::ALL)) {
+        if (! is_int($type) || ($type < 0) || ($type > self::ALL)) {
             throw new Exception\InvalidArgumentException('Unknown type');
         }
 
@@ -189,8 +178,8 @@ class NotEmpty extends AbstractValidator
      */
     public function isValid($value)
     {
-        if ($value !== null && !is_string($value) && !is_int($value) && !is_float($value) &&
-            !is_bool($value) && !is_array($value) && !is_object($value)
+        if ($value !== null && ! is_string($value) && ! is_int($value) && ! is_float($value) &&
+            ! is_bool($value) && ! is_array($value) && ! is_object($value)
         ) {
             $this->error(self::INVALID);
             return false;
@@ -214,7 +203,7 @@ class NotEmpty extends AbstractValidator
         if ($type & self::OBJECT_STRING) {
             $object = true;
 
-            if ((is_object($value) && (!method_exists($value, '__toString'))) ||
+            if ((is_object($value) && (! method_exists($value, '__toString'))) ||
                 (is_object($value) && (method_exists($value, '__toString')) && (((string) $value) == ""))) {
                 $this->error(self::IS_EMPTY);
                 return false;

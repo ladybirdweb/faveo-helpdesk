@@ -3,13 +3,15 @@
 namespace Illuminate\Foundation\Testing;
 
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Console\Application as Artisan;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 
-abstract class TestCase extends PHPUnit_Framework_TestCase
+abstract class TestCase extends BaseTestCase
 {
     use Concerns\InteractsWithContainer,
         Concerns\MakesHttpRequests,
-        Concerns\ImpersonatesUsers,
         Concerns\InteractsWithAuthentication,
         Concerns\InteractsWithConsole,
         Concerns\InteractsWithDatabase,
@@ -70,6 +72,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             call_user_func($callback);
         }
 
+        Facade::clearResolvedInstances();
+
+        Model::setEventDispatcher($this->app['events']);
+
         $this->setUpHasRun = true;
     }
 
@@ -80,8 +86,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function refreshApplication()
     {
-        putenv('APP_ENV=testing');
-
         $this->app = $this->createApplication();
     }
 
@@ -140,6 +144,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         $this->afterApplicationCreatedCallbacks = [];
         $this->beforeApplicationDestroyedCallbacks = [];
+
+        Artisan::forgetBootstrappers();
     }
 
     /**
@@ -148,7 +154,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param  callable  $callback
      * @return void
      */
-    protected function afterApplicationCreated(callable $callback)
+    public function afterApplicationCreated(callable $callback)
     {
         $this->afterApplicationCreatedCallbacks[] = $callback;
 

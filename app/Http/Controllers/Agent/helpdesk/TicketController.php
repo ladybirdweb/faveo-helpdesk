@@ -1752,7 +1752,7 @@ class TicketController extends Controller
     public function autosearch($id)
     {
         $term = \Input::get('term');
-        $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->lists('email');
+        $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->pluck('email');
         echo json_encode($user);
     }
 
@@ -1765,7 +1765,7 @@ class TicketController extends Controller
      */
     public function autosearch2(User $user)
     {
-        $user = $user->lists('email');
+        $user = $user->pluck('email');
         echo json_encode($user);
     }
 

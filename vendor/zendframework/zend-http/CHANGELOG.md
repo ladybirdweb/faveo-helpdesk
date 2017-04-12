@@ -2,7 +2,29 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 2.5.6 - TBD
+## 2.6.0 - 2017-01-31
+
+### Added
+- [#99](https://github.com/zendframework/zend-http/pull/99) added
+  TimeoutException for cURL adapter.
+- [#98](https://github.com/zendframework/zend-http/pull/98) added connection
+  timeout (`connecttimeout`) for cURL and Socket adapters.
+- [#97](https://github.com/zendframework/zend-http/pull/97) added support to
+  `sslcafile` and `sslcapath` to cURL adapter.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
+## 2.5.6 - 2017-01-31
 
 ### Added
 
@@ -18,7 +40,17 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#107](https://github.com/zendframework/zend-http/pull/107) fixes the
+  `Expires` header to allow values of `0` or `'0'`; these now resolve
+  to the start of the unix epoch (1970-01-01).
+- [#102](https://github.com/zendframework/zend-http/pull/102) fixes the Curl
+  adapter timeout detection.
+- [#93](https://github.com/zendframework/zend-http/pull/93) fixes the Content
+  Security Policy CSP HTTP header when it is `none` (empty value).
+- [#92](https://github.com/zendframework/zend-http/pull/92) fixes the flatten
+  cookies value for array value (also multidimensional).
+- [#34](https://github.com/zendframework/zend-http/issues/33) fixes the
+  standard separator (&) for application/x-www-form-urlencoded.
 
 ## 2.5.5 - 2016-08-08
 

@@ -29,7 +29,7 @@ class ZipperServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-        $this->app['zipper'] = $this->app->share(function($app)
+        $this->app->singleton('zipper', function($app)
         {
             $return = $app->make('Chumper\Zipper\Zipper');
             return $return;

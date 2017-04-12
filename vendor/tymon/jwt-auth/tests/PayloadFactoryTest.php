@@ -11,17 +11,17 @@
 
 namespace Tymon\JWTAuth\Test\Providers\JWT;
 
-use Carbon\Carbon;
 use Mockery;
-use Tymon\JWTAuth\PayloadFactory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Claims\Issuer;
-use Tymon\JWTAuth\Claims\IssuedAt;
-use Tymon\JWTAuth\Claims\Expiration;
-use Tymon\JWTAuth\Claims\NotBefore;
-use Tymon\JWTAuth\Claims\Subject;
 use Tymon\JWTAuth\Claims\JwtId;
 use Tymon\JWTAuth\Claims\Custom;
+use Tymon\JWTAuth\Claims\Issuer;
+use Tymon\JWTAuth\Claims\Subject;
+use Tymon\JWTAuth\PayloadFactory;
+use Tymon\JWTAuth\Claims\IssuedAt;
+use Tymon\JWTAuth\Claims\NotBefore;
+use Tymon\JWTAuth\Claims\Expiration;
 
 class PayloadFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -62,6 +62,26 @@ class PayloadFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Tymon\JWTAuth\Payload', $payload);
     }
 
+    /** @test **/
+    public function it_should_check_custom_claim_keys_accurately_and_accept_numeric_claims()
+    {
+        $this->validator->shouldReceive('setRefreshFlow->check');
+
+        $this->claimFactory->shouldReceive('get')->once()->with('iss', Mockery::any())->andReturn(new Issuer('/foo'));
+        $this->claimFactory->shouldReceive('get')->once()->with('exp', 123 + 3600)->andReturn(new Expiration(123 + 3600));
+        $this->claimFactory->shouldReceive('get')->once()->with('iat', 123)->andReturn(new IssuedAt(123));
+        $this->claimFactory->shouldReceive('get')->once()->with('jti', Mockery::any())->andReturn(new JwtId('foo'));
+        $this->claimFactory->shouldReceive('get')->once()->with('nbf', 123)->andReturn(new NotBefore(123));
+        $this->claimFactory->shouldReceive('get')->once()->with(1, 'claim one')->andReturn(new Custom(1, 'claim one'));
+
+        $payload = $this->factory->make([1 => 'claim one']);
+
+        // if the checker doesn't compare defaults properly, numeric-keyed claims might be ignored
+        $this->assertEquals('claim one', $payload->get(1));
+        // iat is $defaultClaims[1], so verify it wasn't skipped due to a bad k-v comparison
+        $this->assertEquals(123, $payload->get('iat'));
+    }
+
     /** @test */
     public function it_should_return_a_payload_when_chaining_claim_methods()
     {
@@ -85,11 +105,12 @@ class PayloadFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_should_return_a_payload_when_passing_miltidimensional_array_as_custom_claim_to_make_method()
+    public function it_should_return_a_payload_when_passing_miltidimensional_claims()
     {
         $this->validator->shouldReceive('setRefreshFlow->check');
+        $userObject = ['name' => 'example'];
 
-        $this->claimFactory->shouldReceive('get')->once()->with('sub', 1)->andReturn(new Subject(1));
+        $this->claimFactory->shouldReceive('get')->once()->with('sub', $userObject)->andReturn(new Subject($userObject));
         $this->claimFactory->shouldReceive('get')->once()->with('iss', Mockery::any())->andReturn(new Issuer('/foo'));
         $this->claimFactory->shouldReceive('get')->once()->with('exp', Mockery::any())->andReturn(new Expiration(123 + 3600));
         $this->claimFactory->shouldReceive('get')->once()->with('iat', Mockery::any())->andReturn(new IssuedAt(123));
@@ -97,9 +118,9 @@ class PayloadFactoryTest extends \PHPUnit_Framework_TestCase
         $this->claimFactory->shouldReceive('get')->once()->with('nbf', Mockery::any())->andReturn(new NotBefore(123));
         $this->claimFactory->shouldReceive('get')->once()->with('foo', ['bar' => [0, 0, 0]])->andReturn(new Custom('foo', ['bar' => [0, 0, 0]]));
 
-        $payload = $this->factory->sub(1)->foo(['bar' => [0, 0, 0]])->make();
+        $payload = $this->factory->sub($userObject)->foo(['bar' => [0, 0, 0]])->make();
 
-        $this->assertEquals($payload->get('sub'), 1);
+        $this->assertEquals($payload->get('sub'), $userObject);
         $this->assertEquals($payload->get('foo'), ['bar' => [0, 0, 0]]);
 
         $this->assertInstanceOf('Tymon\JWTAuth\Payload', $payload);

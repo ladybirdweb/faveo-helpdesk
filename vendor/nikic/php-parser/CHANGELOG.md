@@ -1,7 +1,197 @@
-Version 2.1.2-dev
+Version 3.0.6-dev
 -----------------
 
 Nothing yet.
+
+Version 3.0.5 (2017-03-05)
+--------------------------
+
+### Fixed
+
+* Name resolution of `NullableType`s is now performed earlier, so that a fully resolved signature is
+  available when a function is entered. (#360)
+* `Error` nodes are now considered empty, while previously they extended until the token where the
+  error occurred. This made some nodes larger than expected. (#359)
+* Fixed notices being thrown during error recovery in some situations. (#362)
+
+Version 3.0.4 (2017-02-10)
+--------------------------
+
+### Fixed
+
+* Fixed some extensibility issues in pretty printer (`pUseType()` is now public and `pPrec()` calls
+  into `p()`, instead of directly dispatching to the type-specific printing method).
+* Fixed notice in `bin/php-parse` script.
+
+### Added
+
+* Error recovery from missing semicolons is now supported in more cases.
+* Error recovery from trailing commas in positions where PHP does not support them is now supported.
+
+Version 3.0.3 (2017-02-03)
+--------------------------
+
+### Fixed
+
+* In `"$foo[0]"` the `0` is now parsed as an `LNumber` rather than `String`. (#325)
+* Ensure integers and floats are always pretty printed preserving semantics, even if the particular
+  value can only be manually constructed.
+* Throw a `LogicException` when trying to pretty-print an `Error` node. Previously this resulted in
+  an undefined method exception or fatal error.
+
+### Added
+
+* [PHP 7.1] Added support for negative interpolated offsets: `"$foo[-1]"`
+* Added `preserveOriginalNames` option to `NameResolver`. If this option is enabled, an
+  `originalName` attribute, containing the unresolved name, will be added to each resolved name.
+* Added `php-parse --with-positions` option, which dumps nodes with position information.
+
+### Deprecated
+
+* The XML serializer has been deprecated. In particular, the classes `Serializer\XML`,
+  `Unserializer\XML`, as well as the interfaces `Serializer` and `Unserializer` are deprecated.
+
+Version 3.0.2 (2016-12-06)
+--------------------------
+
+### Fixed
+
+* Fixed name resolution of nullable types. (#324)
+* Fixed pretty-printing of nullable types.
+
+Version 3.0.1 (2016-12-01)
+--------------------------
+
+### Fixed
+
+* Fixed handling of nested `list()`s: If the nested list was unkeyed, it was directly included in
+  the list items. If it was keyed, it was wrapped in `ArrayItem`. Now nested `List_` nodes are
+  always wrapped in `ArrayItem`s. (#321)
+
+Version 3.0.0 (2016-11-30)
+--------------------------
+
+### Added
+
+* Added support for dumping node positions in the NodeDumper through the `dumpPositions` option.
+* Added error recovery support for `$`, `new`, `Foo::`.
+
+Version 3.0.0-beta2 (2016-10-29)
+--------------------------------
+
+This release primarily improves our support for error recovery.
+
+### Added
+
+* Added `Node::setDocComment()` method.
+* Added `Error::getMessageWithColumnInfo()` method.
+* Added support for recovery from lexer errors.
+* Added support for recovering from "special" errors (i.e. non-syntax parse errors).
+* Added precise location information for lexer errors.
+* Added `ErrorHandler` interface, and `ErrorHandler\Throwing` and `ErrorHandler\Collecting` as
+  specific implementations. These provide a general mechanism for handling error recovery.
+* Added optional `ErrorHandler` argument to `Parser::parse()`, `Lexer::startLexing()` and
+  `NameResolver::__construct()`.
+* The `NameResolver` now adds a `namespacedName` attribute on name nodes that cannot be statically
+  resolved (unqualified unaliased function or constant names in namespaces).
+  
+### Fixed
+
+* Fixed attribute assignment for `GroupUse` prefix and variables in interpolated strings.
+
+### Changed
+
+* The constants on `NameTraverserInterface` have been moved into the `NameTraverser` class.
+* Due to the error handling changes, the `Parser` interface and `Lexer` API have changed.
+* The emulative lexer now directly postprocesses tokens, instead of using `~__EMU__~` sequences.
+  This changes the protected API of the lexer.
+* The `Name::slice()` method now returns `null` for empty slices, previously `new Name([])` was
+  used. `Name::concat()` now also supports concatenation with `null`.
+
+### Removed
+
+* Removed `Name::append()` and `Name::prepend()`. These mutable methods have been superseded by
+  the immutable `Name::concat()`.
+* Removed `Error::getRawLine()` and `Error::setRawLine()`. These methods have been superseded by
+  `Error::getStartLine()` and `Error::setStartLine()`.
+* Removed support for node cloning in the `NodeTraverser`.
+* Removed `$separator` argument from `Name::toString()`.
+* Removed `throw_on_error` parser option and `Parser::getErrors()` method. Use the `ErrorHandler`
+  mechanism instead.
+
+Version 3.0.0-beta1 (2016-09-16)
+--------------------------------
+
+### Added
+
+* [7.1] Function/method and parameter builders now support PHP 7.1 type hints (void, iterable and
+  nullable types).
+* Nodes and Comments now implement `JsonSerializable`. The node kind is stored in a `nodeType`
+  property.
+* The `InlineHTML` node now has an `hasLeadingNewline` attribute, that specifies whether the
+  preceding closing tag contained a newline. The pretty printer honors this attribute.
+* Partial parsing of `$obj->` (with missing property name) is now supported in error recovery mode.
+* The error recovery mode is now exposed in the `php-parse` script through the `--with-recovery`
+  or `-r` flags.
+
+The following changes are also part of PHP-Parser 2.1.1:
+
+* The PHP 7 parser will now generate a parse error for `$var =& new Obj` assignments.
+* Comments on free-standing code blocks will now be retained as comments on the first statement in
+  the code block.
+
+Version 3.0.0-alpha1 (2016-07-25)
+---------------------------------
+
+### Added
+
+* [7.1] Added support for `void` and `iterable` types. These will now be represented as strings
+  (instead of `Name` instances) similar to other builtin types.
+* [7.1] Added support for class constant visibility. The `ClassConst` node now has a `flags` subnode
+  holding the visibility modifier, as well as `isPublic()`, `isProtected()` and `isPrivate()`
+  methods. The constructor changed to accept the additional subnode.
+* [7.1] Added support for nullable types. These are represented using a new `NullableType` node
+  with a single `type` subnode.
+* [7.1] Added support for short array destructuring syntax. This means that `Array` nodes may now
+  appear as the left-hand-side of assignments and foreach value targets. Additionally the array
+  items may now contain `null` values if elements are skipped.
+* [7.1] Added support for keys in list() destructuring. The `List` subnode `vars` has been renamed
+  to `items` and now contains `ArrayItem`s instead of plain variables.
+* [7.1] Added support for multi-catch. The `Catch` subnode `type` has been renamed to `types` and
+  is now an array of `Name`s.
+* `Name::slice()` now supports lengths and negative offsets. This brings it in line with
+  `array_slice()` functionality.
+
+### Changed
+
+Due to PHP 7.1 support additions described above, the node structure changed as follows:
+
+* `void` and `iterable` types are now stored as strings if the PHP 7 parser is used.
+* The `ClassConst` constructor changed to accept an additional `flags` subnode.
+* The `Array` subnode `items` may now contain `null` elements (destructuring).
+* The `List` subnode `vars` has been renamed to `items` and now contains `ArrayItem`s instead of
+  plain variables.
+* The `Catch` subnode `type` has been renamed to `types` and is now an array of `Name`s.
+
+Additionally the following changes were made:
+
+* The `type` subnode on `Class`, `ClassMethod` and `Property` has been renamed to `flags`. The
+  `type` subnode has retained for backwards compatibility and is populated to the same value as
+  `flags`. However, writes to `type` will not update `flags`.
+* The `TryCatch` subnode `finallyStmts` has been replaced with a `finally` subnode that holds an
+  explicit `Finally` node. This allows for more accurate attribute assignment.
+* The `Trait` constructor now has the same form as the `Class` and `Interface` constructors: It
+  takes an array of subnodes. Unlike classes/interfaces, traits can only have a `stmts` subnode.
+* The `NodeDumper` now prints class/method/property/constant modifiers, as well as the include and
+  use type in a textual representation, instead of only showing the number.
+* All methods on `PrettyPrinter\Standard` are now protected. Previoulsy most of them were public.
+
+### Removed
+
+* Removed support for running on PHP 5.4. It is however still possible to parse PHP 5.2-5.4 code
+  while running on a newer version.
+* The deprecated `Comment::setLine()` and `Comment::setText()` methods have been removed.
+* The deprecated `Name::set()`, `Name::setFirst()` and `Name::setLast()` methods have been removed.
 
 Version 2.1.1 (2016-09-16)
 --------------------------
@@ -112,7 +302,7 @@ A more detailed description of backwards incompatible changes can be found in th
 
 ### Removed
 
-* Removed support for running on PHP 5.4. It is however still possible to parse PHP 5.2 and PHP 5.3
+* Removed support for running on PHP 5.3. It is however still possible to parse PHP 5.2 and PHP 5.3
   code while running on a newer version.
 * Removed legacy class name aliases. This includes the old non-namespaced class names and the old
   names for classes that were renamed for PHP 7 compatibility.

@@ -2,15 +2,14 @@
 
 namespace Illuminate\Support;
 
-use BadMethodCallException;
-use Illuminate\Console\Events\ArtisanStarting;
+use Illuminate\Console\Application as Artisan;
 
 abstract class ServiceProvider
 {
     /**
      * The application instance.
      *
-     * @var \Illuminate\Contracts\Foundation\Application
+     * @var \Illuminate\Foundation\Application
      */
     protected $app;
 
@@ -38,20 +37,13 @@ abstract class ServiceProvider
     /**
      * Create a new service provider instance.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Foundation\Application  $app
      * @return void
      */
     public function __construct($app)
     {
         $this->app = $app;
     }
-
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    abstract public function register();
 
     /**
      * Merge the given configuration with the existing configuration.
@@ -68,6 +60,19 @@ abstract class ServiceProvider
     }
 
     /**
+     * Load the given routes file if routes are not already cached.
+     *
+     * @param  string  $path
+     * @return void
+     */
+    protected function loadRoutesFrom($path)
+    {
+        if (! $this->app->routesAreCached()) {
+            require $path;
+        }
+    }
+
+    /**
      * Register a view file namespace.
      *
      * @param  string  $path
@@ -76,7 +81,7 @@ abstract class ServiceProvider
      */
     protected function loadViewsFrom($path, $namespace)
     {
-        if (is_dir($appPath = $this->app->basePath().'/resources/views/vendor/'.$namespace)) {
+        if (is_dir($appPath = $this->app->resourcePath().'/views/vendor/'.$namespace)) {
             $this->app['view']->addNamespace($namespace, $appPath);
         }
 
@@ -96,6 +101,21 @@ abstract class ServiceProvider
     }
 
     /**
+     * Register a database migration path.
+     *
+     * @param  array|string  $paths
+     * @return void
+     */
+    protected function loadMigrationsFrom($paths)
+    {
+        $this->app->afterResolving('migrator', function ($migrator) use ($paths) {
+            foreach ((array) $paths as $path) {
+                $migrator->path($path);
+            }
+        });
+    }
+
+    /**
      * Register paths to be published by the publish command.
      *
      * @param  array  $paths
@@ -104,21 +124,44 @@ abstract class ServiceProvider
      */
     protected function publishes(array $paths, $group = null)
     {
-        $class = static::class;
-
-        if (! array_key_exists($class, static::$publishes)) {
-            static::$publishes[$class] = [];
-        }
+        $this->ensurePublishArrayInitialized($class = static::class);
 
         static::$publishes[$class] = array_merge(static::$publishes[$class], $paths);
 
         if ($group) {
-            if (! array_key_exists($group, static::$publishGroups)) {
-                static::$publishGroups[$group] = [];
-            }
-
-            static::$publishGroups[$group] = array_merge(static::$publishGroups[$group], $paths);
+            $this->addPublishGroup($group, $paths);
         }
+    }
+
+    /**
+     * Ensure the publish array for the service provider is initialized.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    protected function ensurePublishArrayInitialized($class)
+    {
+        if (! array_key_exists($class, static::$publishes)) {
+            static::$publishes[$class] = [];
+        }
+    }
+
+    /**
+     * Add a publish group / tag to the service provider.
+     *
+     * @param  string  $group
+     * @param  array  $paths
+     * @return void
+     */
+    protected function addPublishGroup($group, $paths)
+    {
+        if (! array_key_exists($group, static::$publishGroups)) {
+            static::$publishGroups[$group] = [];
+        }
+
+        static::$publishGroups[$group] = array_merge(
+            static::$publishGroups[$group], $paths
+        );
     }
 
     /**
@@ -130,33 +173,49 @@ abstract class ServiceProvider
      */
     public static function pathsToPublish($provider = null, $group = null)
     {
-        if ($provider && $group) {
-            if (empty(static::$publishes[$provider]) || empty(static::$publishGroups[$group])) {
-                return [];
-            }
+        if (! is_null($paths = static::pathsForProviderOrGroup($provider, $group))) {
+            return $paths;
+        }
 
+        return collect(static::$publishes)->reduce(function ($paths, $p) {
+            return array_merge($paths, $p);
+        }, []);
+    }
+
+    /**
+     * Get the paths for the provider or group (or both).
+     *
+     * @param  string|null  $provider
+     * @param  string|null  $group
+     * @return array
+     */
+    protected static function pathsForProviderOrGroup($provider, $group)
+    {
+        if ($provider && $group) {
+            return static::pathsForProviderAndGroup($provider, $group);
+        } elseif ($group && array_key_exists($group, static::$publishGroups)) {
+            return static::$publishGroups[$group];
+        } elseif ($provider && array_key_exists($provider, static::$publishes)) {
+            return static::$publishes[$provider];
+        } elseif ($group || $provider) {
+            return [];
+        }
+    }
+
+    /**
+     * Get the paths for the provdider and group.
+     *
+     * @param  string  $provider
+     * @param  string  $group
+     * @return array
+     */
+    protected static function pathsForProviderAndGroup($provider, $group)
+    {
+        if (! empty(static::$publishes[$provider]) && ! empty(static::$publishGroups[$group])) {
             return array_intersect_key(static::$publishes[$provider], static::$publishGroups[$group]);
         }
 
-        if ($group && array_key_exists($group, static::$publishGroups)) {
-            return static::$publishGroups[$group];
-        }
-
-        if ($provider && array_key_exists($provider, static::$publishes)) {
-            return static::$publishes[$provider];
-        }
-
-        if ($group || $provider) {
-            return [];
-        }
-
-        $paths = [];
-
-        foreach (static::$publishes as $class => $publish) {
-            $paths = array_merge($paths, $publish);
-        }
-
-        return $paths;
+        return [];
     }
 
     /**
@@ -169,13 +228,8 @@ abstract class ServiceProvider
     {
         $commands = is_array($commands) ? $commands : func_get_args();
 
-        // To register the commands with Artisan, we will grab each of the arguments
-        // passed into the method and listen for Artisan "start" event which will
-        // give us the Artisan console instance which we will give commands to.
-        $events = $this->app['events'];
-
-        $events->listen(ArtisanStarting::class, function ($event) use ($commands) {
-            $event->artisan->resolveCommands($commands);
+        Artisan::starting(function ($artisan) use ($commands) {
+            $artisan->resolveCommands($commands);
         });
     }
 
@@ -212,28 +266,12 @@ abstract class ServiceProvider
     /**
      * Get a list of files that should be compiled for the package.
      *
+     * @deprecated
+     *
      * @return array
      */
     public static function compiles()
     {
         return [];
-    }
-
-    /**
-     * Dynamically handle missing method calls.
-     *
-     * @param  string  $method
-     * @param  array  $parameters
-     * @return mixed
-     *
-     * @throws \BadMethodCallException
-     */
-    public function __call($method, $parameters)
-    {
-        if ($method == 'boot') {
-            return;
-        }
-
-        throw new BadMethodCallException("Call to undefined method [{$method}]");
     }
 }

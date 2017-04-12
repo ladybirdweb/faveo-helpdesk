@@ -23,65 +23,57 @@ abstract class Facade
     protected static $resolvedInstance;
 
     /**
-     * Hotswap the underlying instance behind the facade.
+     * Convert the facade into a Mockery spy.
      *
-     * @param  mixed  $instance
      * @return void
      */
-    public static function swap($instance)
+    public static function spy()
     {
-        static::$resolvedInstance[static::getFacadeAccessor()] = $instance;
+        if (! static::isMock()) {
+            $class = static::getMockableClass();
 
-        static::$app->instance(static::getFacadeAccessor(), $instance);
+            static::swap($class ? Mockery::spy($class) : Mockery::spy());
+        }
     }
 
     /**
      * Initiate a mock expectation on the facade.
      *
-     * @param  mixed
      * @return \Mockery\Expectation
      */
     public static function shouldReceive()
     {
         $name = static::getFacadeAccessor();
 
-        if (static::isMock()) {
-            $mock = static::$resolvedInstance[$name];
-        } else {
-            $mock = static::createFreshMockInstance($name);
-        }
+        $mock = static::isMock()
+                    ? static::$resolvedInstance[$name]
+                    : static::createFreshMockInstance();
 
-        return call_user_func_array([$mock, 'shouldReceive'], func_get_args());
+        return $mock->shouldReceive(...func_get_args());
     }
 
     /**
      * Create a fresh mock instance for the given class.
      *
-     * @param  string  $name
      * @return \Mockery\Expectation
      */
-    protected static function createFreshMockInstance($name)
+    protected static function createFreshMockInstance()
     {
-        static::$resolvedInstance[$name] = $mock = static::createMockByName($name);
+        return tap(static::createMock(), function ($mock) {
+            static::swap($mock);
 
-        $mock->shouldAllowMockingProtectedMethods();
-
-        if (isset(static::$app)) {
-            static::$app->instance($name, $mock);
-        }
-
-        return $mock;
+            $mock->shouldAllowMockingProtectedMethods();
+        });
     }
 
     /**
      * Create a fresh mock instance for the given class.
      *
-     * @param  string  $name
-     * @return \Mockery\Expectation
+     * @return \Mockery\MockInterface
      */
-    protected static function createMockByName($name)
+    protected static function createMock()
     {
-        $class = static::getMockableClass($name);
+        $class = static::getMockableClass();
 
         return $class ? Mockery::mock($class) : Mockery::mock();
     }
@@ -95,7 +87,8 @@ abstract class Facade
     {
         $name = static::getFacadeAccessor();
 
-        return isset(static::$resolvedInstance[$name]) && static::$resolvedInstance[$name] instanceof MockInterface;
+        return isset(static::$resolvedInstance[$name]) &&
+               static::$resolvedInstance[$name] instanceof MockInterface;
     }
 
     /**
@@ -107,6 +100,21 @@ abstract class Facade
     {
         if ($root = static::getFacadeRoot()) {
             return get_class($root);
+        }
+    }
+
+    /**
+     * Hotswap the underlying instance behind the facade.
+     *
+     * @param  mixed  $instance
+     * @return void
+     */
+    public static function swap($instance)
+    {
+        static::$resolvedInstance[static::getFacadeAccessor()] = $instance;
+
+        if (isset(static::$app)) {
+            static::$app->instance(static::getFacadeAccessor(), $instance);
         }
     }
 
@@ -210,19 +218,6 @@ abstract class Facade
             throw new RuntimeException('A facade root has not been set.');
         }
 
-        switch (count($args)) {
-            case 0:
-                return $instance->$method();
-            case 1:
-                return $instance->$method($args[0]);
-            case 2:
-                return $instance->$method($args[0], $args[1]);
-            case 3:
-                return $instance->$method($args[0], $args[1], $args[2]);
-            case 4:
-                return $instance->$method($args[0], $args[1], $args[2], $args[3]);
-            default:
-                return call_user_func_array([$instance, $method], $args);
-        }
+        return $instance->$method(...$args);
     }
 }

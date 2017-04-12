@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Model\Update\BarNotification;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Route;
 use Queue;
 use View;
 
@@ -27,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        Route::singularResourceParameters(false);
         Queue::failing(function (JobFailed $event) {
             loging('Failed Job - '.$event->connectionName, json_encode($event->data));
             $failedid = $event->failedId;

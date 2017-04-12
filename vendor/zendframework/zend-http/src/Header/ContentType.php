@@ -58,7 +58,7 @@ class ContentType implements HeaderInterface
             $parameters = [];
             foreach ($parts as $parameter) {
                 $parameter = trim($parameter);
-                if (!preg_match('/^(?P<key>[^\s\=]+)\="?(?P<value>[^\s\"]*)"?$/', $parameter, $matches)) {
+                if (! preg_match('/^(?P<key>[^\s\=]+)\="?(?P<value>[^\s\"]*)"?$/', $parameter, $matches)) {
                     continue;
                 }
                 $parameters[$matches['key']] = $matches['value'];
@@ -282,7 +282,7 @@ class ContentType implements HeaderInterface
      */
     protected function getMediaTypeObjectFromString($string)
     {
-        if (!is_string($string)) {
+        if (! is_string($string)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Non-string mediatype "%s" provided',
                 (is_object($string) ? get_class($string) : gettype($string))
@@ -337,7 +337,7 @@ class ContentType implements HeaderInterface
         // Is the right side a partial wildcard?
         if ('*' == substr($right->subtype, -1)) {
             // validate partial-wildcard subtype
-            if (!$this->validatePartialWildcard($right->subtype, $left->subtype)) {
+            if (! $this->validatePartialWildcard($right->subtype, $left->subtype)) {
                 return false;
             }
             // Finally, verify format is valid

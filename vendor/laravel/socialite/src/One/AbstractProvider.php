@@ -13,22 +13,22 @@ abstract class AbstractProvider implements ProviderContract
     /**
      * The HTTP request instance.
      *
-     * @var \Illuminate\Http\Request
+     * @var Request
      */
     protected $request;
 
     /**
      * The OAuth server implementation.
      *
-     * @var \League\OAuth1\Client\Server\Server
+     * @var Server
      */
     protected $server;
 
     /**
      * Create a new provider instance.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \League\OAuth1\Client\Server\Server  $server
+     * @param  Request  $request
+     * @param  Server  $server
      * @return void
      */
     public function __construct(Request $request, Server $server)
@@ -40,11 +40,11 @@ abstract class AbstractProvider implements ProviderContract
     /**
      * Redirect the user to the authentication page for the provider.
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function redirect()
     {
-        $this->request->session()->set(
+        $this->request->getSession()->put(
             'oauth.temp', $temp = $this->server->getTemporaryCredentials()
         );
 
@@ -54,7 +54,6 @@ abstract class AbstractProvider implements ProviderContract
     /**
      * Get the User instance for the authenticated user.
      *
-     * @throws \InvalidArgumentException
      * @return \Laravel\Socialite\One\User
      */
     public function user()
@@ -81,7 +80,7 @@ abstract class AbstractProvider implements ProviderContract
      */
     protected function getToken()
     {
-        $temp = $this->request->session()->get('oauth.temp');
+        $temp = $this->request->getSession()->get('oauth.temp');
 
         return $this->server->getTokenCredentials(
             $temp, $this->request->get('oauth_token'), $this->request->get('oauth_verifier')
@@ -101,7 +100,7 @@ abstract class AbstractProvider implements ProviderContract
     /**
      * Set the request instance.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return $this
      */
     public function setRequest(Request $request)

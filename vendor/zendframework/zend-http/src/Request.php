@@ -103,7 +103,7 @@ class Request extends AbstractMessage implements RequestInterface
 
         $regex     = '#^(?P<method>' . $methods . ')\s(?P<uri>[^ ]*)(?:\sHTTP\/(?P<version>\d+\.\d+)){0,1}#';
         $firstLine = array_shift($lines);
-        if (!preg_match($regex, $firstLine, $matches)) {
+        if (! preg_match($regex, $firstLine, $matches)) {
             throw new Exception\InvalidArgumentException(
                 'A valid request line was not found in the provided string'
             );
@@ -175,7 +175,7 @@ class Request extends AbstractMessage implements RequestInterface
     public function setMethod($method)
     {
         $method = strtoupper($method);
-        if (!defined('static::METHOD_' . $method) && ! $this->getAllowCustomMethods()) {
+        if (! defined('static::METHOD_' . $method) && ! $this->getAllowCustomMethods()) {
             throw new Exception\InvalidArgumentException('Invalid HTTP method passed');
         }
         $this->method = $method;
@@ -211,7 +211,7 @@ class Request extends AbstractMessage implements RequestInterface
                     $e
                 );
             }
-        } elseif (!($uri instanceof HttpUri)) {
+        } elseif (! ($uri instanceof HttpUri)) {
             throw new Exception\InvalidArgumentException(
                 'URI must be an instance of Zend\Uri\Http or a string'
             );

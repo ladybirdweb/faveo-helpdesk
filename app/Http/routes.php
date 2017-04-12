@@ -12,10 +12,11 @@
  */
 Route::group(['middleware' => ['web', 'redirect']], function () {
     Route::group(['middleware' => 'update', 'middleware' => 'install'], function () {
-        Route::controllers([
-            'auth'     => 'Auth\AuthController',
-            'password' => 'Auth\PasswordController',
-        ]);
+        Auth::routes();
+            Route::post('login', ['uses' => 'Auth\AuthController@postLogin', 'as' => 'post.login']);
+            Route::get('auth/logout', ['uses' => 'Auth\AuthController@getLogout', 'as' => 'get.logout']);
+            Route::post('auth/register', ['uses' => 'Auth\AuthController@postRegister', 'as' => 'post.register']);
+            
         Route::get('social/login/redirect/{provider}/{redirect?}', ['uses' => 'Auth\AuthController@redirectToProvider', 'as' => 'social.login']);
         Route::get('social/login/{provider}', ['as'=>'social.login.callback', 'uses'=>'Auth\AuthController@handleProviderCallback']);
         Route::get('social-sync', ['as'=>'social.sync', 'uses'=>'Client\helpdesk\GuestController@sync']);

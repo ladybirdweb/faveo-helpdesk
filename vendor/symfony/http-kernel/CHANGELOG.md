@@ -1,6 +1,23 @@
 CHANGELOG
 =========
 
+3.2.0
+-----
+
+ * deprecated `DataCollector::varToString()`, use `cloneVar()` instead
+ * changed surrogate capability name in `AbstractSurrogate::addSurrogateCapability` to 'symfony'
+
+3.1.0
+-----
+ * deprecated passing objects as URI attributes to the ESI and SSI renderers
+ * deprecated `ControllerResolver::getArguments()`
+ * added `Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface`
+ * added `Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface` as argument to `HttpKernel`
+ * added `Symfony\Component\HttpKernel\Controller\ArgumentResolver`
+ * added `Symfony\Component\HttpKernel\DataCollector\RequestDataCollector::getMethod()`
+ * added `Symfony\Component\HttpKernel\DataCollector\RequestDataCollector::getRedirect()`
+ * added the `kernel.controller_arguments` event, triggered after controller arguments have been resolved
+
 3.0.0
 -----
 
@@ -12,8 +29,8 @@ CHANGELOG
  * removed `Symfony\Component\HttpKernel\EventListener\RouterListener::setRequest()`
  * removed `Symfony\Component\HttpKernel\EventListener\ProfilerListener::onKernelRequest()`
  * removed `Symfony\Component\HttpKernel\Fragment\FragmentHandler::setRequest()`
- * removed `Symfony\Component\HttpKernel\HttpCache\Esi::hasSurrogateEsiCapability()` 
- * removed `Symfony\Component\HttpKernel\HttpCache\Esi::addSurrogateEsiCapability()` 
+ * removed `Symfony\Component\HttpKernel\HttpCache\Esi::hasSurrogateEsiCapability()`
+ * removed `Symfony\Component\HttpKernel\HttpCache\Esi::addSurrogateEsiCapability()`
  * removed `Symfony\Component\HttpKernel\HttpCache\Esi::needsEsiParsing()`
  * removed `Symfony\Component\HttpKernel\HttpCache\HttpCache::getEsi()`
  * removed `Symfony\Component\HttpKernel\DependencyInjection\ContainerAwareHttpKernel`

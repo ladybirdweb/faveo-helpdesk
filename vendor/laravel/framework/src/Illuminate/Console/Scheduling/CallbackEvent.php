@@ -25,20 +25,22 @@ class CallbackEvent extends Event
     /**
      * Create a new event instance.
      *
+     * @param  \Illuminate\Console\Scheduling\Mutex  $mutex
      * @param  string  $callback
      * @param  array  $parameters
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public function __construct($callback, array $parameters = [])
+    public function __construct(Mutex $mutex, $callback, array $parameters = [])
     {
         if (! is_string($callback) && ! is_callable($callback)) {
             throw new InvalidArgumentException(
-                'Invalid scheduled callback event. Must be string or callable.'
+                'Invalid scheduled callback event. Must be a string or callable.'
             );
         }
 
+        $this->mutex = $mutex;
         $this->callback = $callback;
         $this->parameters = $parameters;
     }
@@ -54,7 +56,7 @@ class CallbackEvent extends Event
     public function run(Container $container)
     {
         if ($this->description) {
-            touch($this->mutexPath());
+            $this->mutex->create($this);
         }
 
         try {
@@ -76,7 +78,7 @@ class CallbackEvent extends Event
     protected function removeMutex()
     {
         if ($this->description) {
-            @unlink($this->mutexPath());
+            $this->mutex->forget($this);
         }
     }
 
@@ -96,18 +98,18 @@ class CallbackEvent extends Event
         }
 
         return $this->skip(function () {
-            return file_exists($this->mutexPath());
+            return $this->mutex->exists($this);
         });
     }
 
     /**
-     * Get the mutex path for the scheduled command.
+     * Get the mutex name for the scheduled command.
      *
      * @return string
      */
-    protected function mutexPath()
+    public function mutexName()
     {
-        return storage_path('framework/schedule-'.sha1($this->description));
+        return 'framework/schedule-'.sha1($this->description);
     }
 
     /**

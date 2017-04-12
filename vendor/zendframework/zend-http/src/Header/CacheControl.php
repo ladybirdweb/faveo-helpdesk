@@ -223,7 +223,6 @@ class CacheControl implements HeaderInterface
 
             default:
                 throw new Exception\InvalidArgumentException('expected SEPARATOR or END');
-
         }
     }
 

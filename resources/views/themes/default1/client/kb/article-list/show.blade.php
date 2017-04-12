@@ -6,7 +6,7 @@
 $all = App\Model\kb\Relationship::where('article_id','=', $arti->id)->get();
 //dd($all);
 /* from whole attribute pick the article_id */
-$category_id = $all->lists('category_id')->toArray();
+$category_id = $all->pluck('category_id')->toArray();
 ?>
 
 <div class="site-hero clearfix">
@@ -145,7 +145,7 @@ $category_id = $all->lists('category_id')->toArray();
     @foreach($categorys as $category)
 <?php
 $num = \App\Model\kb\Relationship::where('category_id','=', $category->id)->get();
-$article_id = $num->lists('article_id');
+$article_id = $num->pluck('article_id');
 $numcount = count($article_id);
 ?>
     <li><a href="{{url('category-list/'.$category->slug)}}"><span class="badge pull-right">{{$numcount}}</span>{{$category->name}}</a></li>

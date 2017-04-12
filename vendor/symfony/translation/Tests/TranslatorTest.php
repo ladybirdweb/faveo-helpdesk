@@ -11,16 +11,17 @@
 
 namespace Symfony\Component\Translation\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\MessageSelector;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\MessageCatalogue;
 
-class TranslatorTest extends \PHPUnit_Framework_TestCase
+class TranslatorTest extends TestCase
 {
     /**
      * @dataProvider      getInvalidLocalesTests
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Symfony\Component\Translation\Exception\InvalidArgumentException
      */
     public function testConstructorInvalidLocale($locale)
     {
@@ -56,7 +57,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider      getInvalidLocalesTests
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Symfony\Component\Translation\Exception\InvalidArgumentException
      */
     public function testSetInvalidLocale($locale)
     {
@@ -139,7 +140,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider      getInvalidLocalesTests
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Symfony\Component\Translation\Exception\InvalidArgumentException
      */
     public function testSetFallbackInvalidLocales($locale)
     {
@@ -155,6 +156,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
         $translator = new Translator($locale, new MessageSelector());
         $translator->setFallbackLocales(array('fr', $locale));
         // no assertion. this method just asserts that no exception is thrown
+        $this->addToAssertionCount(1);
     }
 
     public function testTransWithFallbackLocale()
@@ -170,7 +172,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider      getInvalidLocalesTests
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Symfony\Component\Translation\Exception\InvalidArgumentException
      */
     public function testAddResourceInvalidLocales($locale)
     {
@@ -186,6 +188,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
         $translator = new Translator('fr', new MessageSelector());
         $translator->addResource('array', array('foo' => 'foofoo'), $locale);
         // no assertion. this method just asserts that no exception is thrown
+        $this->addToAssertionCount(1);
     }
 
     public function testAddResourceAfterTrans()
@@ -263,7 +266,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \Symfony\Component\Translation\Exception\RuntimeException
      */
     public function testWhenAResourceHasNoRegisteredLoader()
     {
@@ -271,6 +274,16 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
         $translator->addResource('array', array('foo' => 'foofoo'), 'en');
 
         $translator->trans('foo');
+    }
+
+    public function testNestedFallbackCatalogueWhenUsingMultipleLocales()
+    {
+        $translator = new Translator('fr');
+        $translator->setFallbackLocales(array('ru', 'en'));
+
+        $translator->getCatalogue('fr');
+
+        $this->assertNotNull($translator->getCatalogue('ru')->getFallbackCatalogue());
     }
 
     public function testFallbackCatalogueResources()
@@ -307,7 +320,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider      getInvalidLocalesTests
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Symfony\Component\Translation\Exception\InvalidArgumentException
      */
     public function testTransInvalidLocale($locale)
     {
@@ -357,7 +370,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider      getInvalidLocalesTests
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Symfony\Component\Translation\Exception\InvalidArgumentException
      */
     public function testTransChoiceInvalidLocale($locale)
     {
@@ -379,6 +392,7 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
 
         $translator->transChoice('foo', 1, array(), '', $locale);
         // no assertion. this method just asserts that no exception is thrown
+        $this->addToAssertionCount(1);
     }
 
     public function getTransFileTests()
@@ -431,23 +445,26 @@ class TranslatorTest extends \PHPUnit_Framework_TestCase
     public function getTransChoiceTests()
     {
         return array(
-            array('Il y a 0 pomme', '{0} There are no appless|{1} There is one apple|]1,Inf] There is %count% apples', '[0,1] Il y a %count% pomme|]1,Inf] Il y a %count% pommes', 0, array('%count%' => 0), 'fr', ''),
-            array('Il y a 1 pomme', '{0} There are no appless|{1} There is one apple|]1,Inf] There is %count% apples', '[0,1] Il y a %count% pomme|]1,Inf] Il y a %count% pommes', 1, array('%count%' => 1), 'fr', ''),
-            array('Il y a 10 pommes', '{0} There are no appless|{1} There is one apple|]1,Inf] There is %count% apples', '[0,1] Il y a %count% pomme|]1,Inf] Il y a %count% pommes', 10, array('%count%' => 10), 'fr', ''),
+            array('Il y a 0 pomme', '{0} There are no appless|{1} There is one apple|]1,Inf] There is %count% apples', '[0,1] Il y a %count% pomme|]1,Inf] Il y a %count% pommes', 0, array(), 'fr', ''),
+            array('Il y a 1 pomme', '{0} There are no appless|{1} There is one apple|]1,Inf] There is %count% apples', '[0,1] Il y a %count% pomme|]1,Inf] Il y a %count% pommes', 1, array(), 'fr', ''),
+            array('Il y a 10 pommes', '{0} There are no appless|{1} There is one apple|]1,Inf] There is %count% apples', '[0,1] Il y a %count% pomme|]1,Inf] Il y a %count% pommes', 10, array(), 'fr', ''),
 
-            array('Il y a 0 pomme', 'There is one apple|There is %count% apples', 'Il y a %count% pomme|Il y a %count% pommes', 0, array('%count%' => 0), 'fr', ''),
-            array('Il y a 1 pomme', 'There is one apple|There is %count% apples', 'Il y a %count% pomme|Il y a %count% pommes', 1, array('%count%' => 1), 'fr', ''),
-            array('Il y a 10 pommes', 'There is one apple|There is %count% apples', 'Il y a %count% pomme|Il y a %count% pommes', 10, array('%count%' => 10), 'fr', ''),
+            array('Il y a 0 pomme', 'There is one apple|There is %count% apples', 'Il y a %count% pomme|Il y a %count% pommes', 0, array(), 'fr', ''),
+            array('Il y a 1 pomme', 'There is one apple|There is %count% apples', 'Il y a %count% pomme|Il y a %count% pommes', 1, array(), 'fr', ''),
+            array('Il y a 10 pommes', 'There is one apple|There is %count% apples', 'Il y a %count% pomme|Il y a %count% pommes', 10, array(), 'fr', ''),
 
-            array('Il y a 0 pomme', 'one: There is one apple|more: There is %count% apples', 'one: Il y a %count% pomme|more: Il y a %count% pommes', 0, array('%count%' => 0), 'fr', ''),
-            array('Il y a 1 pomme', 'one: There is one apple|more: There is %count% apples', 'one: Il y a %count% pomme|more: Il y a %count% pommes', 1, array('%count%' => 1), 'fr', ''),
-            array('Il y a 10 pommes', 'one: There is one apple|more: There is %count% apples', 'one: Il y a %count% pomme|more: Il y a %count% pommes', 10, array('%count%' => 10), 'fr', ''),
+            array('Il y a 0 pomme', 'one: There is one apple|more: There is %count% apples', 'one: Il y a %count% pomme|more: Il y a %count% pommes', 0, array(), 'fr', ''),
+            array('Il y a 1 pomme', 'one: There is one apple|more: There is %count% apples', 'one: Il y a %count% pomme|more: Il y a %count% pommes', 1, array(), 'fr', ''),
+            array('Il y a 10 pommes', 'one: There is one apple|more: There is %count% apples', 'one: Il y a %count% pomme|more: Il y a %count% pommes', 10, array(), 'fr', ''),
 
-            array('Il n\'y a aucune pomme', '{0} There are no apples|one: There is one apple|more: There is %count% apples', '{0} Il n\'y a aucune pomme|one: Il y a %count% pomme|more: Il y a %count% pommes', 0, array('%count%' => 0), 'fr', ''),
-            array('Il y a 1 pomme', '{0} There are no apples|one: There is one apple|more: There is %count% apples', '{0} Il n\'y a aucune pomme|one: Il y a %count% pomme|more: Il y a %count% pommes', 1, array('%count%' => 1), 'fr', ''),
-            array('Il y a 10 pommes', '{0} There are no apples|one: There is one apple|more: There is %count% apples', '{0} Il n\'y a aucune pomme|one: Il y a %count% pomme|more: Il y a %count% pommes', 10, array('%count%' => 10), 'fr', ''),
+            array('Il n\'y a aucune pomme', '{0} There are no apples|one: There is one apple|more: There is %count% apples', '{0} Il n\'y a aucune pomme|one: Il y a %count% pomme|more: Il y a %count% pommes', 0, array(), 'fr', ''),
+            array('Il y a 1 pomme', '{0} There are no apples|one: There is one apple|more: There is %count% apples', '{0} Il n\'y a aucune pomme|one: Il y a %count% pomme|more: Il y a %count% pommes', 1, array(), 'fr', ''),
+            array('Il y a 10 pommes', '{0} There are no apples|one: There is one apple|more: There is %count% apples', '{0} Il n\'y a aucune pomme|one: Il y a %count% pomme|more: Il y a %count% pommes', 10, array(), 'fr', ''),
 
-            array('Il y a 0 pomme', new StringClass('{0} There are no appless|{1} There is one apple|]1,Inf] There is %count% apples'), '[0,1] Il y a %count% pomme|]1,Inf] Il y a %count% pommes', 0, array('%count%' => 0), 'fr', ''),
+            array('Il y a 0 pomme', new StringClass('{0} There are no appless|{1} There is one apple|]1,Inf] There is %count% apples'), '[0,1] Il y a %count% pomme|]1,Inf] Il y a %count% pommes', 0, array(), 'fr', ''),
+
+            // Override %count% with a custom value
+            array('Il y a quelques pommes', 'one: There is one apple|more: There are %count% apples', 'one: Il y a %count% pomme|more: Il y a %count% pommes', 2, array('%count%' => 'quelques'), 'fr', ''),
         );
     }
 

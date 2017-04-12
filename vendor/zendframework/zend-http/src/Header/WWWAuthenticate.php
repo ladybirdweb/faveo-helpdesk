@@ -65,7 +65,7 @@ class WWWAuthenticate implements MultipleHeaderInterface
     {
         $strings = [$this->toString()];
         foreach ($headers as $header) {
-            if (!$header instanceof WWWAuthenticate) {
+            if (! $header instanceof WWWAuthenticate) {
                 throw new Exception\RuntimeException(
                     'The WWWAuthenticate multiple header implementation can only'
                     . ' accept an array of WWWAuthenticate headers'

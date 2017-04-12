@@ -64,7 +64,7 @@ class RouteCollection implements Countable, IteratorAggregate
      */
     protected function addToCollections($route)
     {
-        $domainAndUri = $route->domain().$route->getUri();
+        $domainAndUri = $route->domain().$route->uri();
 
         foreach ($route->methods() as $method) {
             $this->routes[$method][$domainAndUri] = $route;
@@ -99,9 +99,21 @@ class RouteCollection implements Countable, IteratorAggregate
     }
 
     /**
+     * Add a route to the controller action dictionary.
+     *
+     * @param  array  $action
+     * @param  \Illuminate\Routing\Route  $route
+     * @return void
+     */
+    protected function addToActionList($action, $route)
+    {
+        $this->actionList[trim($action['controller'], '\\')] = $route;
+    }
+
+    /**
      * Refresh the name look-up table.
      *
-     * This is done in case any names are fluently defined.
+     * This is done in case any names are fluently defined or if routes are overwritten.
      *
      * @return void
      */
@@ -117,15 +129,21 @@ class RouteCollection implements Countable, IteratorAggregate
     }
 
     /**
-     * Add a route to the controller action dictionary.
+     * Refresh the action look-up table.
      *
-     * @param  array  $action
-     * @param  \Illuminate\Routing\Route  $route
+     * This is done in case any actions are overwritten with new controllers.
+     *
      * @return void
      */
-    protected function addToActionList($action, $route)
+    public function refreshActionLookups()
     {
-        $this->actionList[trim($action['controller'], '\\')] = $route;
+        $this->actionList = [];
+
+        foreach ($this->allRoutes as $route) {
+            if (isset($route->getAction()['controller'])) {
+                $this->addToActionList($route->getAction(), $route);
+            }
+        }
     }
 
     /**
@@ -143,7 +161,7 @@ class RouteCollection implements Countable, IteratorAggregate
         // First, we will see if we can find a matching route for this current request
         // method. If we can, great, we can just return it so that it can be called
         // by the consumer. Otherwise we will check for routes with another verb.
-        $route = $this->check($routes, $request);
+        $route = $this->matchAgainstRoutes($routes, $request);
 
         if (! is_null($route)) {
             return $route->bind($request);
@@ -162,6 +180,21 @@ class RouteCollection implements Countable, IteratorAggregate
     }
 
     /**
+     * Determine if a route in the array matches the request.
+     *
+     * @param  array  $routes
+     * @param  \Illuminate\http\Request  $request
+     * @param  bool  $includingMethod
+     * @return \Illuminate\Routing\Route|null
+     */
+    protected function matchAgainstRoutes(array $routes, $request, $includingMethod = true)
+    {
+        return Arr::first($routes, function ($value) use ($request, $includingMethod) {
+            return $value->matches($request, $includingMethod);
+        });
+    }
+
+    /**
      * Determine if any routes match on another HTTP verb.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -177,7 +210,7 @@ class RouteCollection implements Countable, IteratorAggregate
         $others = [];
 
         foreach ($methods as $method) {
-            if (! is_null($this->check($this->get($method), $request, false))) {
+            if (! is_null($this->matchAgainstRoutes($this->get($method), $request, false))) {
                 $others[] = $method;
             }
         }
@@ -219,33 +252,14 @@ class RouteCollection implements Countable, IteratorAggregate
     }
 
     /**
-     * Determine if a route in the array matches the request.
-     *
-     * @param  array  $routes
-     * @param  \Illuminate\http\Request  $request
-     * @param  bool  $includingMethod
-     * @return \Illuminate\Routing\Route|null
-     */
-    protected function check(array $routes, $request, $includingMethod = true)
-    {
-        return Arr::first($routes, function ($key, $value) use ($request, $includingMethod) {
-            return $value->matches($request, $includingMethod);
-        });
-    }
-
-    /**
-     * Get all of the routes in the collection.
+     * Get routes from the collection by method.
      *
      * @param  string|null  $method
      * @return array
      */
     public function get($method = null)
     {
-        if (is_null($method)) {
-            return $this->getRoutes();
-        }
-
-        return Arr::get($this->routes, $method, []);
+        return is_null($method) ? $this->getRoutes() : Arr::get($this->routes, $method, []);
     }
 
     /**

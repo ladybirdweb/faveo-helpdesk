@@ -11,6 +11,7 @@
 
 namespace Tymon\JWTAuth;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Claims\Factory;
 use Tymon\JWTAuth\Validators\PayloadValidator;
@@ -115,7 +116,7 @@ class PayloadFactory
     protected function buildClaims(array $customClaims)
     {
         // add any custom claims first
-        $this->addClaims(array_diff_key($customClaims, $this->defaultClaims));
+        $this->addClaims($customClaims);
 
         foreach ($this->defaultClaims as $claim) {
             if (! array_key_exists($claim, $customClaims)) {
@@ -188,10 +189,7 @@ class PayloadFactory
      */
     protected function jti()
     {
-        $sub = array_get($this->claims, 'sub', '');
-        $nbf = array_get($this->claims, 'nbf', '');
-
-        return md5(sprintf('jti.%s.%s', $sub, $nbf));
+        return Str::random();
     }
 
     /**

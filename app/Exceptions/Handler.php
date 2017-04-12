@@ -42,7 +42,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
-        // dd($e);
+        dd($e);
         $debug = \Config::get('app.bugsnag_reporting');
         $debug = ($debug) ? 'true' : 'false';
         if ($debug == 'false') {
@@ -67,6 +67,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        dd($e);
         switch ($e) {
             case $e instanceof \Illuminate\Http\Exception\HttpResponseException:
                 return parent::render($request, $e);

@@ -124,7 +124,7 @@
                                 </span>
                             </a>
                         </div>
-                        <p class="box-title" >{!! Lang::get('lang.ban_lists') !!}</p>
+                        <p class="box-title" >{!! Lang::get('lang.ban_pluck') !!}</p>
                     </div>
                 </div>
                 <!--/.col-md-2-->

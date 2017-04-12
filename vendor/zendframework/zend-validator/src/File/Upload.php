@@ -63,7 +63,7 @@ class Upload extends AbstractValidator
      */
     public function __construct($options = [])
     {
-        if (is_array($options) && !array_key_exists('files', $options)) {
+        if (is_array($options) && ! array_key_exists('files', $options)) {
             $options = ['files' => $options];
         }
 
@@ -120,7 +120,7 @@ class Upload extends AbstractValidator
         }
 
         foreach ($this->options['files'] as $file => $content) {
-            if (!isset($content['error'])) {
+            if (! isset($content['error'])) {
                 unset($this->options['files'][$file]);
             }
         }
@@ -162,7 +162,7 @@ class Upload extends AbstractValidator
             $this->value = $file;
             switch ($content['error']) {
                 case 0:
-                    if (!is_uploaded_file($content['tmp_name'])) {
+                    if (! is_uploaded_file($content['tmp_name'])) {
                         $this->throwError($content, self::ATTACK);
                     }
                     break;

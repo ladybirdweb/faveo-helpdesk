@@ -119,7 +119,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $id = $this->attributes['id'];
         }
         $info = new UserAdditionalInfo();
-        $infos = $info->where('owner', $id)->lists('value', 'key')->toArray();
+        $infos = $info->where('owner', $id)->pluck('value', 'key')->toArray();
 
         return $infos;
     }

@@ -67,7 +67,7 @@ use Zend\Validator\NotEmpty;
 $validator = new NotEmpty(NotEmpty::INTEGER);
 
 // Returns false on 0 or '0'
-$validator = new NotEmpty( NotEmpty::INTEGER + NotEmpty::ZERO);
+$validator = new NotEmpty( NotEmpty::INTEGER | NotEmpty::ZERO);
 
 // Returns false on 0 or '0'
 $validator = new NotEmpty([ NotEmpty::INTEGER, NotEmpty::ZERO ]);

@@ -254,7 +254,7 @@ class PhoneValidatorTest extends TestCase
 
     public function testValidatePhoneNoDefaultCountryNoCountryField()
     {
-        $this->setExpectedException('Propaganistas\LaravelPhone\Exceptions\NoValidCountryFoundException');
+        $this->expectException('Propaganistas\LaravelPhone\Exceptions\NoValidCountryFoundException');
 
         // Validator with no country field or given country.
         $this->performValidation([

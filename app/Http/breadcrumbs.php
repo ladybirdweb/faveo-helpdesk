@@ -82,7 +82,7 @@ Breadcrumbs::register('emails.edit', function ($breadcrumbs) {
 
 Breadcrumbs::register('banlist.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.banlists'), route('banlist.index'));
+    $breadcrumbs->push(Lang::get('lang.banpluck'), route('banlist.index'));
 });
 Breadcrumbs::register('banlist.create', function ($breadcrumbs) {
     $breadcrumbs->parent('banlist.index');

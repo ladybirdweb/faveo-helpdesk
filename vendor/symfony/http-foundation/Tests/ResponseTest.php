@@ -33,7 +33,7 @@ class ResponseTest extends ResponseTestCase
         $response = new Response();
         $response = explode("\r\n", $response);
         $this->assertEquals('HTTP/1.0 200 OK', $response[0]);
-        $this->assertEquals('Cache-Control: no-cache', $response[1]);
+        $this->assertEquals('Cache-Control: no-cache, private', $response[1]);
     }
 
     public function testClone()
@@ -276,8 +276,10 @@ class ResponseTest extends ResponseTestCase
         $this->assertEquals($now->getTimestamp(), $date->getTimestamp(), '->getDate() returns the date when the header has been modified');
 
         $response = new Response('', 200);
+        $now = $this->createDateTimeNow();
         $response->headers->remove('Date');
-        $this->assertInstanceOf('\DateTime', $response->getDate());
+        $date = $response->getDate();
+        $this->assertEquals($now->getTimestamp(), $date->getTimestamp(), '->getDate() returns the current Date when the header has previously been removed');
     }
 
     public function testGetMaxAge()
@@ -442,7 +444,7 @@ class ResponseTest extends ResponseTestCase
 
     public function testDefaultContentType()
     {
-        $headerMock = $this->getMock('Symfony\Component\HttpFoundation\ResponseHeaderBag', array('set'));
+        $headerMock = $this->getMockBuilder('Symfony\Component\HttpFoundation\ResponseHeaderBag')->setMethods(array('set'))->getMock();
         $headerMock->expects($this->at(0))
             ->method('set')
             ->with('Content-Type', 'text/html');
@@ -843,6 +845,25 @@ class ResponseTest extends ResponseTestCase
         }
     }
 
+    public function testNoDeprecationsAreTriggered()
+    {
+        new DefaultResponse();
+        $this->getMockBuilder(Response::class)->getMock();
+    }
+
+    /**
+     * @group legacy
+     * @expectedDeprecation Extending Symfony\Component\HttpFoundation\Response::getDate() in Symfony\Component\HttpFoundation\Tests\ExtendedResponse is deprecated %s.
+     * @expectedDeprecation Extending Symfony\Component\HttpFoundation\Response::setLastModified() in Symfony\Component\HttpFoundation\Tests\ExtendedResponse is deprecated %s.
+     */
+    public function testDeprecations()
+    {
+        new ExtendedResponse();
+
+        // Deprecations should not be triggered twice
+        new ExtendedResponse();
+    }
+
     public function validContentProvider()
     {
         return array(
@@ -889,5 +910,20 @@ class StringableObject
     public function __toString()
     {
         return 'Foo';
+    }
+}
+
+class DefaultResponse extends Response
+{
+}
+
+class ExtendedResponse extends Response
+{
+    public function setLastModified(\DateTime $date = null)
+    {
+    }
+
+    public function getDate()
+    {
     }
 }

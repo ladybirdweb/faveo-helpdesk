@@ -130,13 +130,17 @@ class Proxy extends Socket
         $port = $this->config['proxy_port'];
 
         if ($this->connectedTo[0] != "tcp://$host" || $this->connectedTo[1] != $port) {
-            throw new AdapterException\RuntimeException("Trying to write but we are connected to the wrong proxy server");
+            throw new AdapterException\RuntimeException(
+                "Trying to write but we are connected to the wrong proxy server"
+            );
         }
 
         // Add Proxy-Authorization header
         if ($this->config['proxy_user'] && ! isset($headers['proxy-authorization'])) {
             $headers['proxy-authorization'] = Client::encodeAuthHeader(
-                $this->config['proxy_user'], $this->config['proxy_pass'], $this->config['proxy_auth']
+                $this->config['proxy_user'],
+                $this->config['proxy_pass'],
+                $this->config['proxy_auth']
             );
         }
 
@@ -179,7 +183,7 @@ class Proxy extends Socket
         ErrorHandler::start();
         $test  = fwrite($this->socket, $request);
         $error = ErrorHandler::stop();
-        if (!$test) {
+        if (! $test) {
             throw new AdapterException\RuntimeException("Error writing request to proxy server", 0, $error);
         }
 
@@ -224,7 +228,7 @@ class Proxy extends Socket
         ErrorHandler::start();
         $test  = fwrite($this->socket, $request);
         $error = ErrorHandler::stop();
-        if (!$test) {
+        if (! $test) {
             throw new AdapterException\RuntimeException("Error writing request to proxy server", 0, $error);
         }
 
@@ -236,7 +240,7 @@ class Proxy extends Socket
             $gotStatus = $gotStatus || (strpos($line, 'HTTP') !== false);
             if ($gotStatus) {
                 $response .= $line;
-                if (!rtrim($line)) {
+                if (! rtrim($line)) {
                     break;
                 }
             }
@@ -245,7 +249,9 @@ class Proxy extends Socket
 
         // Check that the response from the proxy is 200
         if (Response::fromString($response)->getStatusCode() != 200) {
-            throw new AdapterException\RuntimeException("Unable to connect to HTTPS proxy. Server response: " . $response);
+            throw new AdapterException\RuntimeException(
+                "Unable to connect to HTTPS proxy. Server response: " . $response
+            );
         }
 
         // If all is good, switch socket to secure mode. We have to fall back

@@ -251,7 +251,7 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li @yield('emails')><a href="{{ url('emails') }}"><i class="fa fa-envelope"></i>{!! Lang::get('lang.emails') !!}</a></li>
-                                <li @yield('ban')><a href="{{ url('banlist') }}"><i class="fa fa-ban"></i>{!! Lang::get('lang.ban_lists') !!}</a></li>
+                                <li @yield('ban')><a href="{{ url('banlist') }}"><i class="fa fa-ban"></i>{!! Lang::get('lang.ban_pluck') !!}</a></li>
                                 <li @yield('template')><a href="{{ url('template-sets') }}"><i class="fa fa-mail-forward"></i>{!! Lang::get('lang.templates') !!}</a></li>
                                 <li @yield('email')><a href="{{url('getemail')}}"><i class="fa fa-at"></i>{!! Lang::get('lang.email-settings') !!}</a></li>
                                 <li @yield('queue')><a href="{{ url('queue') }}"><i class="fa fa-upload"></i>{!! Lang::get('lang.queues') !!}</a></li>
