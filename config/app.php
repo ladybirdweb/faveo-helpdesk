@@ -1,4 +1,5 @@
 <?php
+
 return [
     'env' => env('APP_ENV', 'production'),
     /*
@@ -186,11 +187,6 @@ return [
         App\FaveoLog\LaravelLogViewerServiceProvider::class,
         App\FaveoStorage\StorageServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
-    
-
-
-
-
 
     ],
     /*

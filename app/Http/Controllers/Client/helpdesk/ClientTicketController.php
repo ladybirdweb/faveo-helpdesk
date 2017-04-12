@@ -13,7 +13,6 @@ use App\User;
 use Auth;
 // classes
 use Illuminate\Http\Request;
-use Input;
 use Lang;
 
 /**
