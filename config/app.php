@@ -1,5 +1,4 @@
 <?php
-
 return [
     'env' => env('APP_ENV', 'production'),
     /*
@@ -12,7 +11,7 @@ return [
       | application. If disabled, a simple generic error page is shown.
       |
      */
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
     /*
       |--------------------------------------------------------------------------
       | Error Log
@@ -97,8 +96,8 @@ return [
       | will not be safe. Please do this before deploying an application!
       |
      */
-    'key'    => env('APP_KEY', 'F70u5RfMoiq7ptPR'),
-    'cipher' => MCRYPT_RIJNDAEL_128,
+    'key'    => env('APP_KEY', 'base64:h3KjrHeVxyE+j6c8whTAs2YI+7goylGZ/e2vElgXT6I='),
+    'cipher' => 'AES-256-CBC',
     /*
       |--------------------------------------------------------------------------
       | Logging Configuration
@@ -132,13 +131,11 @@ return [
       |
      */
     'providers' => [
-
         'Illuminate\Broadcasting\BroadcastServiceProvider',
         'DaveJamesMiller\Breadcrumbs\ServiceProvider',
         /*
          * Laravel Framework Service Providers...
          */
-
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
         'Illuminate\Cache\CacheServiceProvider',
@@ -159,7 +156,9 @@ return [
         'Illuminate\Translation\TranslationServiceProvider',
         'Illuminate\Validation\ValidationServiceProvider',
         'Illuminate\View\ViewServiceProvider',
-        'Illuminate\Html\HtmlServiceProvider',
+        Illuminate\Notifications\NotificationServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -181,12 +180,17 @@ return [
         Unisharp\Ckeditor\ServiceProvider::class,
         LaravelFCM\FCMServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
-        Collective\Bus\BusServiceProvider::class,
+        //Collective\Bus\BusServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         App\FaveoLog\LaravelLogViewerServiceProvider::class,
         App\FaveoStorage\StorageServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
+    
+
+
+
+
 
     ],
     /*
@@ -200,62 +204,61 @@ return [
       |
      */
     'aliases' => [
-        'App'         => 'Illuminate\Support\Facades\App',
-        'Artisan'     => 'Illuminate\Support\Facades\Artisan',
-        'Auth'        => 'Illuminate\Support\Facades\Auth',
-        'Blade'       => 'Illuminate\Support\Facades\Blade',
-        'Cache'       => 'Illuminate\Support\Facades\Cache',
-        'Config'      => 'Illuminate\Support\Facades\Config',
-        'Cookie'      => 'Illuminate\Support\Facades\Cookie',
-        'Crypt'       => 'Illuminate\Support\Facades\Crypt',
-        'DB'          => 'Illuminate\Support\Facades\DB',
-        'Eloquent'    => 'Illuminate\Database\Eloquent\Model',
-        'Event'       => 'Illuminate\Support\Facades\Event',
-        'File'        => 'Illuminate\Support\Facades\File',
-        'Hash'        => 'Illuminate\Support\Facades\Hash',
-        'Input'       => 'Illuminate\Support\Facades\Input',
-        'Inspiring'   => 'Illuminate\Foundation\Inspiring',
-        'Lang'        => 'Illuminate\Support\Facades\Lang',
-        'Log'         => 'Illuminate\Support\Facades\Log',
-        'Mail'        => 'Illuminate\Support\Facades\Mail',
-        'Password'    => 'Illuminate\Support\Facades\Password',
-        'Queue'       => 'Illuminate\Support\Facades\Queue',
-        'Redirect'    => 'Illuminate\Support\Facades\Redirect',
-        'Redis'       => 'Illuminate\Support\Facades\Redis',
-        'Request'     => 'Illuminate\Support\Facades\Request',
-        'Response'    => 'Illuminate\Support\Facades\Response',
-        'Route'       => 'Illuminate\Support\Facades\Route',
-        'Schema'      => 'Illuminate\Support\Facades\Schema',
-        'Session'     => 'Illuminate\Support\Facades\Session',
-        'Storage'     => 'Illuminate\Support\Facades\Storage',
-        'URL'         => 'Illuminate\Support\Facades\URL',
-        'Validator'   => 'Illuminate\Support\Facades\Validator',
-        'View'        => 'Illuminate\Support\Facades\View',
-        'Form'        => 'Illuminate\Html\FormFacade',
-        'HTML'        => 'Illuminate\Html\HtmlFacade',
-        'phone'       => 'The :attribute field contains an invalid number.',
-        'Bugsnag'     => 'Bugsnag\BugsnagLaravel\BugsnagFacade',
-        'PDF'         => 'Vsmoraes\Pdf\PdfFacade',
-        'Gravatar'    => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
-        'UTC'         => 'App\Http\Controllers\Agent\helpdesk\TicketController',
-        'Ttable'      => 'App\Http\Controllers\Agent\helpdesk\TicketController', //to use getTable function.
-        'SMTPS'       => 'App\Http\Controllers\HomeController',
-        'Datatable'   => 'Chumper\Datatable\Facades\DatatableFacade',
-        'Zipper'      => 'Chumper\Zipper\Zipper',
-        'JWTAuth'     => 'Tymon\JWTAuth\Facades\JWTAuth',
-        'JWTFactory'  => 'Tymon\JWTAuth\Facades\JWTFactory',
-        'Breadcrumbs' => 'DaveJamesMiller\Breadcrumbs\Facade',
-        'GeoIP'       => \Torann\GeoIP\Facades\GeoIP::class,
-        'Image'       => Intervention\Image\Facades\Image::class,
-        'FCM'         => LaravelFCM\Facades\FCM::class,
-        'FCMGroup'    => LaravelFCM\Facades\FCMGroup::class,
-        'Debugbar'    => Barryvdh\Debugbar\Facade::class,
-        'Excel'       => Maatwebsite\Excel\Facades\Excel::class,
-        'Socialite'   => Laravel\Socialite\Facades\Socialite::class,
-        'UnAuth'      => 'App\Http\Controllers\Client\helpdesk\UnAuthController',
-        'Finder'      => App\Helper\Finder::class,
-        'Datatables'  => Yajra\Datatables\Facades\Datatables::class,
-
+        'App'          => 'Illuminate\Support\Facades\App',
+        'Artisan'      => 'Illuminate\Support\Facades\Artisan',
+        'Auth'         => 'Illuminate\Support\Facades\Auth',
+        'Blade'        => 'Illuminate\Support\Facades\Blade',
+        'Cache'        => 'Illuminate\Support\Facades\Cache',
+        'Config'       => 'Illuminate\Support\Facades\Config',
+        'Cookie'       => 'Illuminate\Support\Facades\Cookie',
+        'Crypt'        => 'Illuminate\Support\Facades\Crypt',
+        'DB'           => 'Illuminate\Support\Facades\DB',
+        'Eloquent'     => 'Illuminate\Database\Eloquent\Model',
+        'Event'        => 'Illuminate\Support\Facades\Event',
+        'File'         => 'Illuminate\Support\Facades\File',
+        'Hash'         => 'Illuminate\Support\Facades\Hash',
+        'Input'        => 'Illuminate\Support\Facades\Input',
+        'Inspiring'    => 'Illuminate\Foundation\Inspiring',
+        'Lang'         => 'Illuminate\Support\Facades\Lang',
+        'Log'          => 'Illuminate\Support\Facades\Log',
+        'Mail'         => 'Illuminate\Support\Facades\Mail',
+        'Password'     => 'Illuminate\Support\Facades\Password',
+        'Queue'        => 'Illuminate\Support\Facades\Queue',
+        'Redirect'     => 'Illuminate\Support\Facades\Redirect',
+        'Redis'        => 'Illuminate\Support\Facades\Redis',
+        'Request'      => 'Illuminate\Support\Facades\Request',
+        'Response'     => 'Illuminate\Support\Facades\Response',
+        'Route'        => 'Illuminate\Support\Facades\Route',
+        'Schema'       => 'Illuminate\Support\Facades\Schema',
+        'Session'      => 'Illuminate\Support\Facades\Session',
+        'Storage'      => 'Illuminate\Support\Facades\Storage',
+        'URL'          => 'Illuminate\Support\Facades\URL',
+        'Validator'    => 'Illuminate\Support\Facades\Validator',
+        'View'         => 'Illuminate\Support\Facades\View',
+        'Form'         => Collective\Html\FormFacade::class,
+        'Html'         => Collective\Html\HtmlFacade::class,
+        'phone'        => 'The :attribute field contains an invalid number.',
+        'Bugsnag'      => 'Bugsnag\BugsnagLaravel\BugsnagFacade',
+        'PDF'          => 'Vsmoraes\Pdf\PdfFacade',
+        'Gravatar'     => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
+        'UTC'          => 'App\Http\Controllers\Agent\helpdesk\TicketController',
+        'Ttable'       => 'App\Http\Controllers\Agent\helpdesk\TicketController', //to use getTable function.
+        'SMTPS'        => 'App\Http\Controllers\HomeController',
+        'Datatable'    => 'Chumper\Datatable\Facades\DatatableFacade',
+        'Zipper'       => 'Chumper\Zipper\Zipper',
+        'JWTAuth'      => 'Tymon\JWTAuth\Facades\JWTAuth',
+        'JWTFactory'   => 'Tymon\JWTAuth\Facades\JWTFactory',
+        'Breadcrumbs'  => 'DaveJamesMiller\Breadcrumbs\Facade',
+        'GeoIP'        => \Torann\GeoIP\Facades\GeoIP::class,
+        'Image'        => Intervention\Image\Facades\Image::class,
+        'FCM'          => LaravelFCM\Facades\FCM::class,
+        'FCMGroup'     => LaravelFCM\Facades\FCMGroup::class,
+        'Debugbar'     => Barryvdh\Debugbar\Facade::class,
+        'Excel'        => Maatwebsite\Excel\Facades\Excel::class,
+        'Socialite'    => Laravel\Socialite\Facades\Socialite::class,
+        'UnAuth'       => 'App\Http\Controllers\Client\helpdesk\UnAuthController',
+        'Finder'       => App\Helper\Finder::class,
+        'Datatables'   => Yajra\Datatables\Facades\Datatables::class,
+        'Notification' => Illuminate\Support\Facades\Notification::class,
     ],
-
 ];
