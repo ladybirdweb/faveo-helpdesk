@@ -38,7 +38,7 @@ class DatatableServiceProvider extends ServiceProvider {
 
         $this->mergeConfigFrom(__DIR__.'/../../config/config.php', 'chumper.datatable');
 
-        $this->app->singleton('datatable', function($app)
+        $this->app['datatable'] = $this->app->share(function($app)
         {
             return new Datatable;
         });

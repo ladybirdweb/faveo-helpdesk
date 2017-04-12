@@ -102,13 +102,6 @@ class AwsClient implements AwsClientInterface
      *   accepts a PSR-7 request object and returns a promise that is fulfilled
      *   with a PSR-7 response object or rejected with an array of exception
      *   data. NOTE: This option supersedes any provided "handler" option.
-     * - idempotency_auto_fill: (bool|callable) Set to false to disable SDK to
-     *   populate parameters that enabled 'idempotencyToken' trait with a random
-     *   UUID v4 value on your behalf. Using default value 'true' still allows
-     *   parameter value to be overwritten when provided. Note: auto-fill only
-     *   works when cryptographically secure random bytes generator functions
-     *   (random_bytes, openssl_random_pseudo_bytes or mcrypt_create_iv) can be
-     *   found. You may also provide a callable source of random bytes.
      * - profile: (string) Allows you to specify which profile to use when
      *   credentials are created from the AWS credentials file in your HOME
      *   directory. This setting overrides the AWS_PROFILE environment
@@ -274,17 +267,13 @@ class AwsClient implements AwsClientInterface
         $resolver = static function (
             CommandInterface $c
         ) use ($api, $provider, $name, $region, $version) {
-            $authType = $api->getOperation($c->getName())['authtype'];
-            switch ($authType){
-                case 'none':
-                    $version = 'anonymous';
-                    break;
-                case 'v4-unsigned-body':
-                    $version = 'v4-unsigned-body';
-                    break;
+            if ('none' === $api->getOperation($c->getName())['authtype']) {
+                $version = 'anonymous';
             }
+
             return SignatureProvider::resolve($provider, $version, $name, $region);
         };
+
         $this->handlerList->appendSign(
             Middleware::signer($this->credentialProvider, $resolver),
             'signer'

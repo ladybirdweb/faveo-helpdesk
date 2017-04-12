@@ -15,19 +15,23 @@ abstract class Controller
     protected $middleware = [];
 
     /**
+     * The router instance.
+     *
+     * @var \Illuminate\Routing\Router
+     */
+    protected static $router;
+
+    /**
      * Register middleware on the controller.
      *
-     * @param  array|string|\Closure  $middleware
+     * @param  array|string  $middleware
      * @param  array   $options
      * @return \Illuminate\Routing\ControllerMiddlewareOptions
      */
     public function middleware($middleware, array $options = [])
     {
-        foreach ((array) $middleware as $m) {
-            $this->middleware[] = [
-                'middleware' => $m,
-                'options' => &$options,
-            ];
+        foreach ((array) $middleware as $middlewareName) {
+            $this->middleware[$middlewareName] = &$options;
         }
 
         return new ControllerMiddlewareOptions($options);
@@ -41,6 +45,27 @@ abstract class Controller
     public function getMiddleware()
     {
         return $this->middleware;
+    }
+
+    /**
+     * Get the router instance.
+     *
+     * @return \Illuminate\Routing\Router
+     */
+    public static function getRouter()
+    {
+        return static::$router;
+    }
+
+    /**
+     * Set the router instance.
+     *
+     * @param  \Illuminate\Routing\Router  $router
+     * @return void
+     */
+    public static function setRouter(Router $router)
+    {
+        static::$router = $router;
     }
 
     /**
@@ -79,6 +104,6 @@ abstract class Controller
      */
     public function __call($method, $parameters)
     {
-        throw new BadMethodCallException("Method [{$method}] does not exist.");
+        throw new BadMethodCallException("Method [$method] does not exist.");
     }
 }

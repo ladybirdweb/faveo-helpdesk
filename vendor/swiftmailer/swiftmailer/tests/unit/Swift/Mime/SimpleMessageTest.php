@@ -652,7 +652,7 @@ class Swift_Mime_SimpleMessageTest extends Swift_Mime_MimePartTest
             $this->_createHeaderSet(array('X-Priority' => $prio)),
             $this->_createEncoder(), $this->_createCache()
             );
-        $message->setPriority($message::PRIORITY_LOWEST);
+        $message->setPriority(5);
     }
 
     public function testPriorityHeaderIsAddedIfNoneSet()
@@ -667,7 +667,7 @@ class Swift_Mime_SimpleMessageTest extends Swift_Mime_MimePartTest
         $message = $this->_createMessage($headers, $this->_createEncoder(),
             $this->_createCache()
             );
-        $message->setPriority($message::PRIORITY_LOW);
+        $message->setPriority(4);
     }
 
     public function testReadReceiptAddressReadFromHeader()
@@ -802,12 +802,14 @@ class Swift_Mime_SimpleMessageTest extends Swift_Mime_MimePartTest
             ->setTo(array('chris@site.tld', 'mark@site.tld'))
             ->setCc('john@somewhere.tld')
             ->setBcc(array('one@site', 'two@site' => 'Two'))
-            ->setPriority($message::PRIORITY_LOW)
+            ->setPriority(4)
             ->setReadReceiptTo('a@b')
             ->attach($child)
             ->detach($child)
             );
     }
+
+    // -- Private helpers
 
     //abstract
     protected function _createEntity($headers, $encoder, $cache)

@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\Finder\Tests\Iterator;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Iterator\MultiplePcreFilterIterator;
 
-class MultiplePcreFilterIteratorTest extends TestCase
+class MultiplePcreFilterIteratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider getIsRegexFixtures

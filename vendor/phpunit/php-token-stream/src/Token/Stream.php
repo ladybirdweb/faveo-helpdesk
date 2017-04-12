@@ -157,7 +157,6 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
      */
     protected function scan($sourceCode)
     {
-        $id        = 0;
         $line      = 1;
         $tokens    = token_get_all($sourceCode);
         $numTokens = count($tokens);
@@ -166,7 +165,7 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
 
         for ($i = 0; $i < $numTokens; ++$i) {
             $token = $tokens[$i];
-            $skip  = 0;
+            unset($tokens[$i]);
 
             if (is_array($token)) {
                 $name = substr(token_name($token[0]), 2);
@@ -174,9 +173,6 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
 
                 if ($lastNonWhitespaceTokenWasDoubleColon && $name == 'CLASS') {
                     $name = 'CLASS_NAME_CONSTANT';
-                } elseif ($name == 'USE' && isset($tokens[$i+2][0]) && $tokens[$i+2][0] == T_FUNCTION) {
-                    $name = 'USE_FUNCTION';
-                    $skip = 2;
                 }
 
                 $tokenClass = 'PHP_Token_' . $name;
@@ -185,7 +181,7 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
                 $tokenClass = self::$customTokens[$token];
             }
 
-            $this->tokens[] = new $tokenClass($text, $line, $this, $id++);
+            $this->tokens[] = new $tokenClass($text, $line, $this, $i);
             $lines          = substr_count($text, "\n");
             $line          += $lines;
 
@@ -201,8 +197,6 @@ class PHP_Token_Stream implements ArrayAccess, Countable, SeekableIterator
             } elseif ($name != 'WHITESPACE') {
                 $lastNonWhitespaceTokenWasDoubleColon = false;
             }
-
-            $i += $skip;
         }
 
         $this->linesOfCode['loc']   = substr_count($sourceCode, "\n");

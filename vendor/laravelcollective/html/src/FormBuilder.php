@@ -7,12 +7,13 @@ use BadMethodCallException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\Session\Session;
+use Illuminate\Session\SessionInterface;
 use Illuminate\Support\Traits\Macroable;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
 class FormBuilder
 {
+
     use Macroable, Componentable {
         Macroable::__call as macroCall;
         Componentable::__call as componentCall;
@@ -49,7 +50,7 @@ class FormBuilder
     /**
      * The session store implementation.
      *
-     * @var \Illuminate\Contracts\Session\Session
+     * @var \Illuminate\Session\SessionInterface
      */
     protected $session;
 
@@ -198,7 +199,7 @@ class FormBuilder
      */
     public function token()
     {
-        $token = ! empty($this->csrfToken) ? $this->csrfToken : $this->session->token();
+        $token = ! empty($this->csrfToken) ? $this->csrfToken : $this->session->getToken();
 
         return $this->hidden('_token', $token);
     }
@@ -209,21 +210,16 @@ class FormBuilder
      * @param  string $name
      * @param  string $value
      * @param  array  $options
-     * @param  bool   $escape_html
      *
      * @return \Illuminate\Support\HtmlString
      */
-    public function label($name, $value = null, $options = [], $escape_html = true)
+    public function label($name, $value = null, $options = [])
     {
         $this->labels[] = $name;
 
         $options = $this->html->attributes($options);
 
-        $value = $this->formatLabel($name, $value);
-
-        if ($escape_html) {
-            $value = $this->html->entities($value);
-        }
+        $value = e($this->formatLabel($name, $value));
 
         return $this->toHtmlString('<label for="' . $name . '"' . $options . '>' . $value . '</label>');
     }
@@ -485,7 +481,7 @@ class FormBuilder
         // the element. Then we'll create the final textarea elements HTML for us.
         $options = $this->html->attributes($options);
 
-        return $this->toHtmlString('<textarea' . $options . '>' . $this->html->escapeAll($value). '</textarea>');
+        return $this->toHtmlString('<textarea' . $options . '>' . e($value) . '</textarea>');
     }
 
     /**
@@ -662,7 +658,7 @@ class FormBuilder
             $html[] = $this->option($display, $value, $selected);
         }
 
-        return $this->toHtmlString('<optgroup label="' . $this->html->escapeAll($label) . '">' . implode('', $html) . '</optgroup>');
+        return $this->toHtmlString('<optgroup label="' . e($label) . '">' . implode('', $html) . '</optgroup>');
     }
 
     /**
@@ -680,7 +676,7 @@ class FormBuilder
 
         $options = ['value' => $value, 'selected' => $selected];
 
-        return $this->toHtmlString('<option' . $this->html->attributes($options) . '>' . $this->html->escapeAll($display) . '</option>');
+        return $this->toHtmlString('<option' . $this->html->attributes($options) . '>' . e($display) . '</option>');
     }
 
     /**
@@ -698,7 +694,7 @@ class FormBuilder
         $options = compact('selected');
         $options['value'] = '';
 
-        return $this->toHtmlString('<option' . $this->html->attributes($options) . '>' . $this->html->escapeAll($display) . '</option>');
+        return $this->toHtmlString('<option' . $this->html->attributes($options) . '>' . e($display) . '</option>');
     }
 
     /**
@@ -1084,7 +1080,7 @@ class FormBuilder
             return $value;
         }
 
-        if (! is_null($this->old($name)) && $name != '_method') {
+        if (! is_null($this->old($name))) {
             return $this->old($name);
         }
 
@@ -1107,7 +1103,7 @@ class FormBuilder
     protected function getModelValueAttribute($name)
     {
         if (method_exists($this->model, 'getFormValue')) {
-            return $this->model->getFormValue($this->transformKey($name));
+            return $this->model->getFormValue($name);
         }
 
         return data_get($this->model, $this->transformKey($name));
@@ -1164,7 +1160,7 @@ class FormBuilder
     /**
      * Get the session store implementation.
      *
-     * @return  \Illuminate\Contracts\Session\Session  $session
+     * @return  \Illuminate\Session\SessionInterface  $session
      */
     public function getSessionStore()
     {
@@ -1174,11 +1170,11 @@ class FormBuilder
     /**
      * Set the session store implementation.
      *
-     * @param  \Illuminate\Contracts\Session\Session $session
+     * @param  \Illuminate\Session\SessionInterface $session
      *
      * @return $this
      */
-    public function setSessionStore(Session $session)
+    public function setSessionStore(SessionInterface $session)
     {
         $this->session = $session;
 

@@ -21,6 +21,7 @@ class PostObjectV4
     private $bucket;
     private $formAttributes;
     private $formInputs;
+    private $jsonPolicy;
 
     /**
      * Constructs the PostObject.
@@ -34,7 +35,7 @@ class PostObjectV4
      *                                      fields.
      * @param array             $options    Policy condition options
      * @param mixed             $expiration Upload expiration time value. By
-     *                                      default: 1 hour valid period.
+     *                                      default: 1 hour vaild peroid.
      */
     public function __construct(
         S3ClientInterface $client,
@@ -54,8 +55,9 @@ class PostObjectV4
         ];
 
         $credentials   = $this->client->getCredentials()->wait();
+        $securityToken = $credentials->getSecurityToken();
 
-        if ($securityToken = $credentials->getSecurityToken()) {
+        if (null !== $securityToken) {
             array_push($options, ['x-amz-security-token' => $securityToken]);
             $formInputs['X-Amz-Security-Token'] = $securityToken;
         }
@@ -147,12 +149,10 @@ class PostObjectV4
             && strpos($this->bucket, '.') !== false
         ) {
             // Use path-style URLs
-            $uri = $uri->withPath("/{$this->bucket}");
+            $uri = $uri->withPath($this->bucket);
         } else {
-            // Use virtual-style URLs if haven't been set up already
-            if (strpos($uri->getHost(), $this->bucket . '.') !== 0) {
-                $uri = $uri->withHost($this->bucket . '.' . $uri->getHost());
-            }
+            // Use virtual-style URLs
+            $uri = $uri->withHost($this->bucket . '.' . $uri->getHost());
         }
 
         return (string) $uri;

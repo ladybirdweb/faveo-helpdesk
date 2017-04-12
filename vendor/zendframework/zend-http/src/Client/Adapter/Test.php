@@ -209,8 +209,7 @@ class Test implements AdapterInterface
     {
         if ($index < 0 || $index >= count($this->responses)) {
             throw new Exception\OutOfRangeException(
-                'Index out of range of response buffer size'
-            );
+                'Index out of range of response buffer size');
         }
         $this->responseIndex = $index;
     }

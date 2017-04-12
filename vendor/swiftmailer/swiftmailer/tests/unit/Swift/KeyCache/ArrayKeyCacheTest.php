@@ -218,6 +218,8 @@ class Swift_KeyCache_ArrayKeyCacheTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($cache->hasKey($this->_key1, 'bar'));
     }
 
+    // -- Creation methods
+
     private function _createCache($is)
     {
         return new Swift_KeyCache_ArrayKeyCache($is);
@@ -225,16 +227,16 @@ class Swift_KeyCache_ArrayKeyCacheTest extends \PHPUnit_Framework_TestCase
 
     private function _createKeyCacheInputStream()
     {
-        return $this->getMockBuilder('Swift_KeyCache_KeyCacheInputStream')->getMock();
+        return $this->getMock('Swift_KeyCache_KeyCacheInputStream');
     }
 
     private function _createOutputStream()
     {
-        return $this->getMockBuilder('Swift_OutputByteStream')->getMock();
+        return $this->getMock('Swift_OutputByteStream');
     }
 
     private function _createInputStream()
     {
-        return $this->getMockBuilder('Swift_InputByteStream')->getMock();
+        return $this->getMock('Swift_InputByteStream');
     }
 }

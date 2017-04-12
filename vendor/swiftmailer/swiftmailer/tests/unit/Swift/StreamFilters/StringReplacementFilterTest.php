@@ -46,11 +46,7 @@ class Swift_StreamFilters_StringReplacementFilterTest extends \PHPUnit_Framework
             );
     }
 
-    public function testShouldBufferReturnsFalseOnEmptyBuffer()
-    {
-        $filter = $this->_createFilter("\r\n", "\n");
-        $this->assertFalse($filter->shouldBuffer(''));
-    }
+    // -- Creation methods
 
     private function _createFilter($search, $replace)
     {

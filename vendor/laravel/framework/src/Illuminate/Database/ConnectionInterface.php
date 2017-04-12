@@ -105,12 +105,11 @@ interface ConnectionInterface
      * Execute a Closure within a transaction.
      *
      * @param  \Closure  $callback
-     * @param  int  $attempts
      * @return mixed
      *
      * @throws \Throwable
      */
-    public function transaction(Closure $callback, $attempts = 1);
+    public function transaction(Closure $callback);
 
     /**
      * Start a new database transaction.

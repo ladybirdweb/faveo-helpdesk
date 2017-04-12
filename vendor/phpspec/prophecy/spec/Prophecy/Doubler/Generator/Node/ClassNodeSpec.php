@@ -3,7 +3,6 @@
 namespace spec\Prophecy\Doubler\Generator\Node;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Doubler\Generator\Node\MethodNode;
 use Prophecy\Exception\Doubler\MethodNotExtendableException;
 
 class ClassNodeSpec extends ObjectBehavior
@@ -68,7 +67,11 @@ class ClassNodeSpec extends ObjectBehavior
         $this->getMethods()->shouldHaveCount(0);
     }
 
-    function it_can_has_methods(MethodNode $method1, MethodNode $method2)
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method1
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method2
+     */
+    function it_can_has_methods($method1, $method2)
     {
         $method1->getName()->willReturn('__construct');
         $method2->getName()->willReturn('getName');
@@ -82,7 +85,10 @@ class ClassNodeSpec extends ObjectBehavior
         ));
     }
 
-    function its_hasMethod_returns_true_if_method_exists(MethodNode $method)
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method
+     */
+    function its_hasMethod_returns_true_if_method_exists($method)
     {
         $method->getName()->willReturn('getName');
 
@@ -91,7 +97,10 @@ class ClassNodeSpec extends ObjectBehavior
         $this->hasMethod('getName')->shouldReturn(true);
     }
 
-    function its_getMethod_returns_method_by_name(MethodNode $method)
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method
+     */
+    function its_getMethod_returns_method_by_name($method)
     {
         $method->getName()->willReturn('getName');
 
@@ -105,7 +114,10 @@ class ClassNodeSpec extends ObjectBehavior
         $this->hasMethod('getName')->shouldReturn(false);
     }
 
-    function its_hasMethod_returns_false_if_method_has_been_removed(MethodNode $method)
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method
+     */
+    function its_hasMethod_returns_false_if_method_has_been_removed($method)
     {
         $method->getName()->willReturn('getName');
         $this->addMethod($method);
@@ -170,7 +182,10 @@ class ClassNodeSpec extends ObjectBehavior
         $this->getUnextendableMethods()->shouldHaveCount(1);
     }
 
-    function it_throws_an_exception_when_adding_a_method_that_isnt_extendable(MethodNode $method)
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method
+     */
+    function it_throws_an_exception_when_adding_a_method_that_isnt_extendable($method)
     {
         $this->addUnextendableMethod('testMethod');
         $method->getName()->willReturn('testMethod');

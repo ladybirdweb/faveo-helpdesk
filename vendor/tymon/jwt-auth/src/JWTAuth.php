@@ -291,13 +291,11 @@ class JWTAuth
      */
     protected function requireToken($token)
     {
-        if ($token) {
-            return $this->setToken($token);
-        } elseif ($this->token) {
-            return $this;
-        } else {
+        if (! $token = $token ?: $this->token) {
             throw new JWTException('A token is required', 400);
         }
+
+        return $this->setToken($token);
     }
 
     /**

@@ -25,9 +25,9 @@ class BcryptHasher implements HasherContract
      */
     public function make($value, array $options = [])
     {
-        $hash = password_hash($value, PASSWORD_BCRYPT, [
-            'cost' => $this->cost($options),
-        ]);
+        $cost = isset($options['rounds']) ? $options['rounds'] : $this->rounds;
+
+        $hash = password_hash($value, PASSWORD_BCRYPT, ['cost' => $cost]);
 
         if ($hash === false) {
             throw new RuntimeException('Bcrypt hashing not supported.');
@@ -62,9 +62,9 @@ class BcryptHasher implements HasherContract
      */
     public function needsRehash($hashedValue, array $options = [])
     {
-        return password_needs_rehash($hashedValue, PASSWORD_BCRYPT, [
-            'cost' => $this->cost($options),
-        ]);
+        $cost = isset($options['rounds']) ? $options['rounds'] : $this->rounds;
+
+        return password_needs_rehash($hashedValue, PASSWORD_BCRYPT, ['cost' => $cost]);
     }
 
     /**
@@ -78,16 +78,5 @@ class BcryptHasher implements HasherContract
         $this->rounds = (int) $rounds;
 
         return $this;
-    }
-
-    /**
-     * Extract the cost value from the options array.
-     *
-     * @param  array  $options
-     * @return int
-     */
-    protected function cost(array $options = [])
-    {
-        return isset($options['rounds']) ? $options['rounds'] : $this->rounds;
     }
 }

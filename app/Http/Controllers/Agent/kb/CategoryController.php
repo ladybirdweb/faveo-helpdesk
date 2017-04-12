@@ -84,7 +84,7 @@ class CategoryController extends Controller
                         ->addColumn('Created', function ($model) {
                             $t = $model->created_at;
 
-                            return faveoDate($t);
+                            return TicketController::usertimezone($t);
                         })
                         /* add column Actions */
                         /* there are action buttons and modal popup to delete a data column */
@@ -121,7 +121,7 @@ class CategoryController extends Controller
     public function create(Category $category)
     {
         /* Get the all attributes in the category model */
-        $category = $category->pluck('name', 'id')->toArray();
+        $category = $category->lists('name', 'id')->toArray();
         /* get the view page to create new category with all attributes
           of category model */
         try {
@@ -167,7 +167,7 @@ class CategoryController extends Controller
     {
         /* get the atributes of the category model whose id == $id */
         $category = Category::whereId($id)->first();
-        $categories = Category::pluck('name', 'id')->toArray();
+        $categories = Category::lists('name', 'id')->toArray();
         /* get the Edit page the selected category via id */
         return view('themes.default1.agent.kb.category.edit', compact('category', 'categories'));
     }

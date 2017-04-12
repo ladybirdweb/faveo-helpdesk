@@ -13,7 +13,6 @@ namespace Symfony\Component\Debug;
 
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\Debug\Exception\OutOfMemoryException;
-use Symfony\Component\HttpKernel\Debug\FileLinkFormatter;
 
 /**
  * ExceptionHandler converts an exception to a Response object.
@@ -50,7 +49,7 @@ class ExceptionHandler
      * @param string|null $charset        The charset used by exception messages
      * @param string|null $fileLinkFormat The IDE link template
      *
-     * @return static
+     * @return ExceptionHandler The registered exception handler
      */
     public static function register($debug = true, $charset = null, $fileLinkFormat = null)
     {
@@ -83,14 +82,14 @@ class ExceptionHandler
     /**
      * Sets the format for links to source files.
      *
-     * @param string|FileLinkFormatter $format The format for links to source files
+     * @param string $format The format for links to source files
      *
      * @return string The previous file link format
      */
-    public function setFileLinkFormat($fileLinkFormat)
+    public function setFileLinkFormat($format)
     {
         $old = $this->fileLinkFormat;
-        $this->fileLinkFormat = $fileLinkFormat;
+        $this->fileLinkFormat = $format;
 
         return $old;
     }
@@ -291,14 +290,21 @@ EOF;
             .sf-reset .exception_message { margin-left: 3em; display: block; }
             .sf-reset .traces li { font-size:12px; padding: 2px 4px; list-style-type:decimal; margin-left:20px; }
             .sf-reset .block { background-color:#FFFFFF; padding:10px 28px; margin-bottom:20px;
+                -webkit-border-bottom-right-radius: 16px;
+                -webkit-border-bottom-left-radius: 16px;
+                -moz-border-radius-bottomright: 16px;
+                -moz-border-radius-bottomleft: 16px;
                 border-bottom-right-radius: 16px;
                 border-bottom-left-radius: 16px;
                 border-bottom:1px solid #ccc;
                 border-right:1px solid #ccc;
                 border-left:1px solid #ccc;
-                word-wrap: break-word;
             }
             .sf-reset .block_exception { background-color:#ddd; color: #333; padding:20px;
+                -webkit-border-top-left-radius: 16px;
+                -webkit-border-top-right-radius: 16px;
+                -moz-border-radius-topleft: 16px;
+                -moz-border-radius-topright: 16px;
                 border-top-left-radius: 16px;
                 border-top-right-radius: 16px;
                 border-top:1px solid #ccc;
@@ -311,6 +317,8 @@ EOF;
             .sf-reset a:hover { background:none; color:#313131; text-decoration:underline; }
             .sf-reset ol { padding: 10px 0; }
             .sf-reset h1 { background-color:#FFFFFF; padding: 15px 28px; margin-bottom: 20px;
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
                 border-radius: 10px;
                 border: 1px solid #ccc;
             }
@@ -335,7 +343,7 @@ EOF;
             $css
         </style>
     </head>
-    <body ondblclick="var t = event.target; if (t.title && !t.href) { var f = t.innerHTML; t.innerHTML = t.title; t.title = f; }">
+    <body>
         $content
     </body>
 </html>
@@ -351,14 +359,16 @@ EOF;
 
     private function formatPath($path, $line)
     {
-        $file = $this->escapeHtml(preg_match('#[^/\\\\]*+$#', $path, $file) ? $file[0] : $path);
-        $fmt = $this->fileLinkFormat;
+        $path = $this->escapeHtml($path);
+        $file = preg_match('#[^/\\\\]*$#', $path, $file) ? $file[0] : $path;
 
-        if ($fmt && $link = is_string($fmt) ? strtr($fmt, array('%f' => $path, '%l' => $line)) : $fmt->format($path, $line)) {
-            return sprintf(' in <a href="%s" title="Go to source">%s line %d</a>', $this->escapeHtml($link), $file, $line);
+        if ($linkFormat = $this->fileLinkFormat) {
+            $link = strtr($this->escapeHtml($linkFormat), array('%f' => $path, '%l' => (int) $line));
+
+            return sprintf(' in <a href="%s" title="Go to source">%s line %d</a>', $link, $file, $line);
         }
 
-        return sprintf(' in <a title="%s line %3$d">%s line %d</a>', $this->escapeHtml($path), $file, $line);
+        return sprintf(' in <a title="%s line %3$d" ondblclick="var f=this.innerHTML;this.innerHTML=this.title;this.title=f;">%s line %d</a>', $path, $file, $line);
     }
 
     /**
@@ -376,6 +386,8 @@ EOF;
                 $formattedValue = sprintf('<em>object</em>(%s)', $this->formatClass($item[1]));
             } elseif ('array' === $item[0]) {
                 $formattedValue = sprintf('<em>array</em>(%s)', is_array($item[1]) ? $this->formatArgs($item[1]) : $item[1]);
+            } elseif ('string' === $item[0]) {
+                $formattedValue = sprintf("'%s'", $this->escapeHtml($item[1]));
             } elseif ('null' === $item[0]) {
                 $formattedValue = '<em>null</em>';
             } elseif ('boolean' === $item[0]) {
@@ -383,7 +395,7 @@ EOF;
             } elseif ('resource' === $item[0]) {
                 $formattedValue = '<em>resource</em>';
             } else {
-                $formattedValue = str_replace("\n", '', $this->escapeHtml(var_export($item[1], true)));
+                $formattedValue = str_replace("\n", '', var_export($this->escapeHtml((string) $item[1]), true));
             }
 
             $result[] = is_int($key) ? $formattedValue : sprintf("'%s' => %s", $key, $formattedValue);
@@ -397,6 +409,6 @@ EOF;
      */
     private function escapeHtml($str)
     {
-        return htmlspecialchars($str, ENT_COMPAT | ENT_SUBSTITUTE, $this->charset);
+        return htmlspecialchars($str, ENT_QUOTES | ENT_SUBSTITUTE, $this->charset);
     }
 }

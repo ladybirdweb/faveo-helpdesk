@@ -23,6 +23,7 @@ interface Application extends Container
     /**
      * Get or check the current application environment.
      *
+     * @param  mixed
      * @return string
      */
     public function environment();
@@ -82,6 +83,13 @@ interface Application extends Container
      * @return void
      */
     public function booted($callback);
+
+    /**
+     * Get the path to the cached "compiled.php" file.
+     *
+     * @return string
+     */
+    public function getCachedCompilePath();
 
     /**
      * Get the path to the cached services.php file.

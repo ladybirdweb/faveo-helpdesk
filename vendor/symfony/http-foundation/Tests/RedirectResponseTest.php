@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\HttpFoundation\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class RedirectResponseTest extends TestCase
+class RedirectResponseTest extends \PHPUnit_Framework_TestCase
 {
     public function testGenerateMetaRedirect()
     {
@@ -80,18 +79,5 @@ class RedirectResponseTest extends TestCase
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
         $this->assertEquals(301, $response->getStatusCode());
-    }
-
-    public function testCacheHeaders()
-    {
-        $response = new RedirectResponse('foo.bar', 301);
-        $this->assertFalse($response->headers->hasCacheControlDirective('no-cache'));
-
-        $response = new RedirectResponse('foo.bar', 301, array('cache-control' => 'max-age=86400'));
-        $this->assertFalse($response->headers->hasCacheControlDirective('no-cache'));
-        $this->assertTrue($response->headers->hasCacheControlDirective('max-age'));
-
-        $response = new RedirectResponse('foo.bar', 302);
-        $this->assertTrue($response->headers->hasCacheControlDirective('no-cache'));
     }
 }

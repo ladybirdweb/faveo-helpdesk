@@ -2,20 +2,17 @@
 
 namespace Cron;
 
-use DateTime;
-
-
 /**
  * Year field.  Allows: * , / -
  */
 class YearField extends AbstractField
 {
-    public function isSatisfiedBy(DateTime $date, $value)
+    public function isSatisfiedBy(\DateTime $date, $value)
     {
         return $this->isSatisfied($date->format('Y'), $value);
     }
 
-    public function increment(DateTime $date, $invert = false)
+    public function increment(\DateTime $date, $invert = false)
     {
         if ($invert) {
             $date->modify('-1 year');

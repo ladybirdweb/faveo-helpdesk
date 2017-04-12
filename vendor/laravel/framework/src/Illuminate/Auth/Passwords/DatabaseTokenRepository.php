@@ -5,7 +5,6 @@ namespace Illuminate\Auth\Passwords;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Database\ConnectionInterface;
-use Illuminate\Contracts\Hashing\Hasher as HasherContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class DatabaseTokenRepository implements TokenRepositoryInterface
@@ -16,13 +15,6 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
      * @var \Illuminate\Database\ConnectionInterface
      */
     protected $connection;
-
-    /**
-     * The Hasher implementation.
-     *
-     * @var \Illuminate\Contracts\Hashing\Hasher
-     */
-    protected $hasher;
 
     /**
      * The token database table.
@@ -49,17 +41,14 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
      * Create a new token repository instance.
      *
      * @param  \Illuminate\Database\ConnectionInterface  $connection
-     * @param  \Illuminate\Contracts\Hashing\Hasher  $hasher
      * @param  string  $table
      * @param  string  $hashKey
      * @param  int  $expires
      * @return void
      */
-    public function __construct(ConnectionInterface $connection, HasherContract $hasher,
-                                $table, $hashKey, $expires = 60)
+    public function __construct(ConnectionInterface $connection, $table, $hashKey, $expires = 60)
     {
         $this->table = $table;
-        $this->hasher = $hasher;
         $this->hashKey = $hashKey;
         $this->expires = $expires * 60;
         $this->connection = $connection;
@@ -107,7 +96,7 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
      */
     protected function getPayload($email, $token)
     {
-        return ['email' => $email, 'token' => $this->hasher->make($token), 'created_at' => new Carbon];
+        return ['email' => $email, 'token' => $token, 'created_at' => new Carbon];
     }
 
     /**
@@ -119,35 +108,35 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
      */
     public function exists(CanResetPasswordContract $user, $token)
     {
-        $record = (array) $this->getTable()->where(
-            'email', $user->getEmailForPasswordReset()
-        )->first();
+        $email = $user->getEmailForPasswordReset();
 
-        return $record &&
-               ! $this->tokenExpired($record['created_at']) &&
-                 $this->hasher->check($token, $record['token']);
+        $token = (array) $this->getTable()->where('email', $email)->where('token', $token)->first();
+
+        return $token && ! $this->tokenExpired($token);
     }
 
     /**
      * Determine if the token has expired.
      *
-     * @param  string  $createdAt
+     * @param  array  $token
      * @return bool
      */
-    protected function tokenExpired($createdAt)
+    protected function tokenExpired($token)
     {
-        return Carbon::parse($createdAt)->addSeconds($this->expires)->isPast();
+        $expiresAt = Carbon::parse($token['created_at'])->addSeconds($this->expires);
+
+        return $expiresAt->isPast();
     }
 
     /**
-     * Delete a token record by user.
+     * Delete a token record by token.
      *
-     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
+     * @param  string  $token
      * @return void
      */
-    public function delete(CanResetPasswordContract $user)
+    public function delete($token)
     {
-        $this->deleteExisting($user);
+        $this->getTable()->where('token', $token)->delete();
     }
 
     /**
@@ -173,16 +162,6 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
     }
 
     /**
-     * Get the database connection instance.
-     *
-     * @return \Illuminate\Database\ConnectionInterface
-     */
-    public function getConnection()
-    {
-        return $this->connection;
-    }
-
-    /**
      * Begin a new database query against the table.
      *
      * @return \Illuminate\Database\Query\Builder
@@ -193,12 +172,12 @@ class DatabaseTokenRepository implements TokenRepositoryInterface
     }
 
     /**
-     * Get the hasher instance.
+     * Get the database connection instance.
      *
-     * @return \Illuminate\Contracts\Hashing\Hasher
+     * @return \Illuminate\Database\ConnectionInterface
      */
-    public function getHasher()
+    public function getConnection()
     {
-        return $this->hasher;
+        return $this->connection;
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Illuminate\Support\Facades;
 
-use Illuminate\Contracts\Auth\Access\Gate as GateContract;
-
 /**
  * @see \Illuminate\Contracts\Auth\Access\Gate
  */
@@ -16,6 +14,6 @@ class Gate extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return GateContract::class;
+        return 'Illuminate\Contracts\Auth\Access\Gate';
     }
 }

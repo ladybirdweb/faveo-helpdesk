@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\Yaml\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
-class YamlTest extends TestCase
+class YamlTest extends \PHPUnit_Framework_TestCase
 {
     public function testParseAndDump()
     {

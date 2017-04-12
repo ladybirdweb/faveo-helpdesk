@@ -11,7 +11,6 @@
 
 namespace Prophecy\Call;
 
-use Prophecy\Exception\Prophecy\MethodProphecyException;
 use Prophecy\Prophecy\MethodProphecy;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Argument\ArgumentsWildcard;
@@ -97,22 +96,14 @@ class CallCenter
         @usort($matches, function ($match1, $match2) { return $match2[0] - $match1[0]; });
 
         // If Highest rated method prophecy has a promise - execute it or return null instead
-        $methodProphecy = $matches[0][1];
         $returnValue = null;
         $exception   = null;
-        if ($promise = $methodProphecy->getPromise()) {
+        if ($promise = $matches[0][1]->getPromise()) {
             try {
-                $returnValue = $promise->execute($arguments, $prophecy, $methodProphecy);
+                $returnValue = $promise->execute($arguments, $prophecy, $matches[0][1]);
             } catch (\Exception $e) {
                 $exception = $e;
             }
-        }
-
-        if ($methodProphecy->hasReturnVoid() && $returnValue !== null) {
-            throw new MethodProphecyException(
-                "The method \"$methodName\" has a void return type, but the promise returned a value",
-                $methodProphecy
-            );
         }
 
         $this->recordedCalls[] = new Call(

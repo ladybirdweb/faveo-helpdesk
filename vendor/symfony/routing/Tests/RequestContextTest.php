@@ -11,11 +11,10 @@
 
 namespace Symfony\Component\Routing\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
 
-class RequestContextTest extends TestCase
+class RequestContextTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {

@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\HttpKernel\Tests\CacheWarmer;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerAggregate;
 
-class CacheWarmerAggregateTest extends TestCase
+class CacheWarmerAggregateTest extends \PHPUnit_Framework_TestCase
 {
     protected static $cacheDir;
 

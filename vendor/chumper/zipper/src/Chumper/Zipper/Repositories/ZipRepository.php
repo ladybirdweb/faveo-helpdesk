@@ -24,33 +24,10 @@ class ZipRepository implements RepositoryInterface
 
         $this->archive = $archive ? $archive : new ZipArchive;
 
-        $res = $this->archive->open($filePath, ($create ? ZipArchive::CREATE : null));
-        if( $res !== true )
-            throw new Exception("Error: Failed to open $filePath! Error: " . $this->getErrorMessage($res));
-    }
-
-    private function getErrorMessage($resultCode)
-    {
-        switch ($resultCode) {
-            case ZipArchive::ER_EXISTS:
-                return 'ZipArchive::ER_EXISTS - File already exists.';
-            case ZipArchive::ER_INCONS:
-                return 'ZipArchive::ER_INCONS - Zip archive inconsistent.';
-            case ZipArchive::ER_MEMORY:
-                return 'ZipArchive::ER_MEMORY - Malloc failure.';
-            case ZipArchive::ER_NOENT:
-                return 'ZipArchive::ER_NOENT - No such file.';
-            case ZipArchive::ER_NOZIP:
-                return 'ZipArchive::ER_NOZIP - Not a zip archive.';
-            case ZipArchive::ER_OPEN:
-                return 'ZipArchive::ER_OPEN - Can\'t open file.';
-            case ZipArchive::ER_READ:
-                return 'ZipArchive::ER_READ - Read error.';
-            case ZipArchive::ER_SEEK:
-                return 'ZipArchive::ER_SEEK - Seek error.';
-            default:
-                return "An unknown error [$resultCode] has occurred.";
-        }
+        if ($create)
+            $this->archive->open($filePath, ZipArchive::CREATE);
+        else
+            $this->archive->open($filePath);
     }
 
     /**
@@ -64,20 +41,9 @@ class ZipRepository implements RepositoryInterface
     {
         $this->archive->addFile($pathToFile, $pathInArchive);
     }
-
-    /**
-     * Add an empty directory
-     *
-     * @param $dirName
-     * @return void
-     */
-    public function addEmptyDir($dirName)
-    {
-        $this->archive->addEmptyDir($dirName);
-    }
-
-    /**
-     * Add a file to the opened Archive using its contents
+	
+	/**
+     * Add a file to the opened Archive using its contents 
      *
      * @param $name
      * @param $content
@@ -152,18 +118,6 @@ class ZipRepository implements RepositoryInterface
     public function fileExists($fileInArchive)
     {
         return $this->archive->locateName($fileInArchive) !== false;
-    }
-
-    /**
-     * Sets the password to be used for decompressing
-     * function named usePassword for clarity
-     *
-     * @param $password
-     * @return boolean
-     */
-    public function usePassword($password)
-    {
-        return $this->archive->setPassword($password);
     }
 
     /**

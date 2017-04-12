@@ -1,6 +1,4 @@
-<?php
-
-namespace LaravelFCM\Response;
+<?php namespace LaravelFCM\Response;
 
 use Monolog\Logger;
 use LaravelFCM\Message\Topics;
@@ -8,144 +6,137 @@ use Monolog\Handler\StreamHandler;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 /**
- * Class TopicResponse.
+ * Class TopicResponse
+ *
+ * @package LaravelFCM\Response
  */
-class TopicResponse extends BaseResponse implements TopicResponseContract
-{
-    const LIMIT_RATE_TOPICS_EXCEEDED = 'TopicsMessageRateExceeded';
+class TopicResponse extends BaseResponse implements TopicResponseContract{
 
-    /**
-     * @internal
-     *
-     * @var string
-     */
-    protected $topic;
+	const LIMIT_RATE_TOPICS_EXCEEDED = "TopicsMessageRateExceeded";
 
-    /**
-     * @internal
-     *
-     * @var string
-     */
-    protected $messageId;
+	/**
+	 * @internal
+	 * @var string
+	 */
+	protected $topic;
 
-    /**
-     * @internal
-     *
-     * @var string
-     */
-    protected $error;
+	/**
+	 * @internal
+	 * @var string
+	 */
+	protected $messageId;
 
-    /**
-     * @internal
-     *
-     * @var bool
-     */
-    protected $needRetry = false;
+	/**
+	 * @internal
+	 * @var string
+	 */
+	protected $error;
 
-    /**
-     * TopicResponse constructor.
-     *
-     * @param GuzzleResponse $response
-     * @param Topics         $topic
-     */
-    public function __construct(GuzzleResponse $response, Topics $topic)
-    {
-        $this->topic = $topic;
-        parent::__construct($response);
-    }
+	/**
+	 * @internal
+	 * @var bool
+	 */
+	protected $needRetry = false;
 
-    /**
-     * parse the response.
-     *
-     * @param $responseInJson
-     */
-    protected function parseResponse($responseInJson)
-    {
-        if (!$this->parseSuccess($responseInJson)) {
-            $this->parseError($responseInJson);
-        }
+	/**
+	 * TopicResponse constructor.
+	 *
+	 * @param GuzzleResponse $response
+	 * @param Topics         $topic
+	 */
+	public function __construct(GuzzleResponse $response, Topics $topic)
+	{
+		$this->topic = $topic;
+		parent::__construct($response);
+	}
 
-        if ($this->logEnabled) {
-            $this->logResponse();
-        }
-    }
+	/**
+	 * parse the response
+	 *
+	 * @param $responseInJson
+	 */
+	protected function parseResponse($responseInJson)
+	{
+		if (!$this->parseSuccess($responseInJson)) {
+			$this->parseError($responseInJson);
+		}
 
-    /**
-     * @internal
-     *
-     * @param $responseInJson
-     */
-    private function parseSuccess($responseInJson)
-    {
-        if (array_key_exists(self::MESSAGE_ID, $responseInJson)) {
-            $this->messageId = $responseInJson[ self::MESSAGE_ID ];
-        }
-    }
+		$this->logResponse();
+	}
 
-    /**
-     * @internal
-     *
-     * @param $responseInJson
-     */
-    private function parseError($responseInJson)
-    {
-        if (array_key_exists(self::ERROR, $responseInJson)) {
-            if (in_array(self::LIMIT_RATE_TOPICS_EXCEEDED, $responseInJson)) {
-                $this->needRetry = true;
-            }
+	/**
+	 * @internal
+	 * @param $responseInJson
+	 */
+	private function parseSuccess($responseInJson)
+	{
+		if (array_key_exists(self::MESSAGE_ID, $responseInJson)) {
+			$this->messageId = $responseInJson[ self::MESSAGE_ID ];
+		}
+	}
 
-            $this->error = $responseInJson[ self::ERROR ];
-        }
-    }
+	/**
+	 * @internal 
+	 * @param $responseInJson
+	 */
+	private function parseError($responseInJson)
+	{
+		if (array_key_exists(self::ERROR, $responseInJson)) {
+			if (in_array(self::LIMIT_RATE_TOPICS_EXCEEDED, $responseInJson)) {
+				$this->needRetry = true;
+			}
 
-    /**
-     * Log the response.
-     */
-    protected function logResponse()
-    {
-        $logger = new Logger('Laravel-FCM');
-        $logger->pushHandler(new StreamHandler(storage_path('logs/laravel-fcm.log')));
+			$this->error = $responseInJson[ self::ERROR ];
+		}
+	}
 
-        $topic = $this->topic->build();
+	/**
+	 * Log the response
+	 */
+	protected function logResponse()
+	{
+		$logger = new Logger('Laravel-FCM');
+		$logger->pushHandler(new StreamHandler(storage_path('logs/laravel-fcm.log')));
 
-        $logMessage = "notification send to topic: ".json_encode($topic);
-        if ($this->messageId) {
-            $logMessage .= "with success (message-id : $this->messageId)";
-        } else {
-            $logMessage .= "with error (error : $this->error)";
-        }
+		$topic = $this->topic->build();
+		$logMessage = "notification send to topic: $topic";
+		if ($this->messageId) {
+			$logMessage .= "with success (message-id : $this->messageId)";
+		}
+		else {
+			$logMessage .= "with error (error : $this->error)";
+		}
 
-        $logger->info($logMessage);
-    }
+		$logger->info($logMessage);
+	}
 
-    /**
-     * true if topic sent with success.
-     *
-     * @return bool
-     */
-    public function isSuccess()
-    {
-        return (bool) $this->messageId;
-    }
+	/**
+	 * true if topic sent with success
+	 * @return bool
+	 */
+	public function isSuccess()
+	{
+		return (bool) $this->messageId;
+	}
 
-    /**
-     * return error message
-     * you should test if it's necessary to resent it.
-     *
-     * @return string error
-     */
-    public function error()
-    {
-        return $this->error;
-    }
+	/**
+	 * return error message
+	 * you should test if it's necessary to resent it
+	 *
+	 * @return string error
+	 */
+	public function error()
+	{
+		return $this->error;
+	}
 
-    /**
-     * return true if it's necessary resent it using exponential backoff.
-     *
-     * @return bool
-     */
-    public function shouldRetry()
-    {
-        return $this->needRetry;
-    }
+	/**
+	 * return true if it's necessary resent it using exponential backoff
+	 *
+	 * @return bool
+	 */
+	public function shouldRetry()
+	{
+		return $this->needRetry;
+	}
 }

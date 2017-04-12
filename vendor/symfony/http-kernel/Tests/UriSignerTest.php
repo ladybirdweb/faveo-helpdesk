@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\HttpKernel\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\UriSigner;
 
-class UriSignerTest extends TestCase
+class UriSignerTest extends \PHPUnit_Framework_TestCase
 {
     public function testSign()
     {

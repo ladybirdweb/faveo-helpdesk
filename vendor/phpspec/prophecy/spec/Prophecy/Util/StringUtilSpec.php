@@ -69,7 +69,10 @@ class StringUtilSpec extends ObjectBehavior
         $this->stringify($resource)->shouldReturn('stream:'.$resource);
     }
 
-    function it_generates_proper_string_representation_for_object(\stdClass $object)
+    /**
+     * @param \stdClass $object
+     */
+    function it_generates_proper_string_representation_for_object($object)
     {
         $objHash = sprintf('%s:%s',
             get_class($object->getWrappedObject()),
@@ -79,7 +82,10 @@ class StringUtilSpec extends ObjectBehavior
         $this->stringify($object)->shouldReturn("$objHash");
     }
 
-    function it_generates_proper_string_representation_for_object_without_exporting(\stdClass $object)
+    /**
+     * @param stdClass $object
+     */
+    function it_generates_proper_string_representation_for_object_without_exporting($object)
     {
         $objHash = sprintf('%s:%s',
             get_class($object->getWrappedObject()),

@@ -37,5 +37,4 @@ class Stub
     public $handle = 0;
     public $refCount = 0;
     public $position = 0;
-    public $attr = array();
 }

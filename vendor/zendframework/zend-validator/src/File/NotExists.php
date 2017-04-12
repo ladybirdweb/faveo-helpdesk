@@ -43,7 +43,7 @@ class NotExists extends Exists
             $file     = $file['tmp_name'];
             $this->setValue($filename);
         } elseif (is_array($value)) {
-            if (! isset($value['tmp_name']) || ! isset($value['name'])) {
+            if (!isset($value['tmp_name']) || !isset($value['name'])) {
                 throw new Exception\InvalidArgumentException(
                     'Value array must be in $_FILES format'
                 );
@@ -59,7 +59,7 @@ class NotExists extends Exists
 
         $check = false;
         $directories = $this->getDirectory(true);
-        if (! isset($directories)) {
+        if (!isset($directories)) {
             $check = true;
             if (file_exists($file)) {
                 $this->error(self::DOES_EXIST);
@@ -67,7 +67,7 @@ class NotExists extends Exists
             }
         } else {
             foreach ($directories as $directory) {
-                if (! isset($directory) || '' === $directory) {
+                if (!isset($directory) || '' === $directory) {
                     continue;
                 }
 
@@ -79,7 +79,7 @@ class NotExists extends Exists
             }
         }
 
-        if (! $check) {
+        if (!$check) {
             $this->error(self::DOES_EXIST);
             return false;
         }

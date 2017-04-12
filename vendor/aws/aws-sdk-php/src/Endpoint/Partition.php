@@ -161,8 +161,7 @@ final class Partition implements PartitionInterface
     private function isServicePartitionGlobal($service)
     {
         return isset($this->data['services'][$service]['isRegionalized'])
-            && false === $this->data['services'][$service]['isRegionalized']
-            && isset($this->data['services'][$service]['partitionEndpoint']);
+            && false === $this->data['services'][$service]['isRegionalized'];
     }
 
     private function getPartitionEndpoint($service)

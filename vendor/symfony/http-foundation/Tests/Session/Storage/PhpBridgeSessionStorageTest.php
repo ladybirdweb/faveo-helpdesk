@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\HttpFoundation\Tests\Session\Storage;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Storage\PhpBridgeSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 
@@ -25,7 +24,7 @@ use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class PhpBridgeSessionStorageTest extends TestCase
+class PhpBridgeSessionStorageTest extends \PHPUnit_Framework_TestCase
 {
     private $savePath;
 

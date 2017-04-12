@@ -42,7 +42,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->app->alias('debugbar', 'Barryvdh\Debugbar\LaravelDebugbar');
 
-        $this->app->singleton('command.debugbar.clear',
+        $this->app['command.debugbar.clear'] = $this->app->share(
             function ($app) {
                 return new Console\ClearCommand($app['debugbar']);
             }

@@ -11,12 +11,11 @@
 
 namespace Symfony\Component\HttpKernel\Tests\DataCollector;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\DataCollector\MemoryDataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class MemoryDataCollectorTest extends TestCase
+class MemoryDataCollectorTest extends \PHPUnit_Framework_TestCase
 {
     public function testCollect()
     {

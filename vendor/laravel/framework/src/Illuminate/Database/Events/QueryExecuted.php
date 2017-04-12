@@ -26,7 +26,7 @@ class QueryExecuted
     public $time;
 
     /**
-     * The database connection instance.
+     * The databse connection instance.
      *
      * @var \Illuminate\Database\Connection
      */

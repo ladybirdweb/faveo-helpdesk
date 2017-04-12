@@ -13,14 +13,32 @@ namespace Symfony\Component\HttpKernel\HttpCache;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * Ssi implements the SSI capabilities to Request and Response instances.
  *
  * @author Sebastian Krebs <krebs.seb@gmail.com>
  */
-class Ssi extends AbstractSurrogate
+class Ssi implements SurrogateInterface
 {
+    private $contentTypes;
+    private $phpEscapeMap = array(
+        array('<?', '<%', '<s', '<S'),
+        array('<?php echo "<?"; ?>', '<?php echo "<%"; ?>', '<?php echo "<s"; ?>', '<?php echo "<S"; ?>'),
+    );
+
+    /**
+     * Constructor.
+     *
+     * @param array $contentTypes An array of content-type that should be parsed for SSI information
+     *                            (default: text/html, text/xml, application/xhtml+xml, and application/xml)
+     */
+    public function __construct(array $contentTypes = array('text/html', 'text/xml', 'application/xhtml+xml', 'application/xml'))
+    {
+        $this->contentTypes = $contentTypes;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -32,11 +50,54 @@ class Ssi extends AbstractSurrogate
     /**
      * {@inheritdoc}
      */
+    public function createCacheStrategy()
+    {
+        return new ResponseCacheStrategy();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasSurrogateCapability(Request $request)
+    {
+        if (null === $value = $request->headers->get('Surrogate-Capability')) {
+            return false;
+        }
+
+        return false !== strpos($value, 'SSI/1.0');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addSurrogateCapability(Request $request)
+    {
+        $current = $request->headers->get('Surrogate-Capability');
+        $new = 'symfony2="SSI/1.0"';
+
+        $request->headers->set('Surrogate-Capability', $current ? $current.', '.$new : $new);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function addSurrogateControl(Response $response)
     {
         if (false !== strpos($response->getContent(), '<!--#include')) {
             $response->headers->set('Surrogate-Control', 'content="SSI/1.0"');
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function needsParsing(Response $response)
+    {
+        if (!$control = $response->headers->get('Surrogate-Control')) {
+            return false;
+        }
+
+        return (bool) preg_match('#content="[^"]*SSI/1.0[^"]*"#', $control);
     }
 
     /**
@@ -93,6 +154,41 @@ class Ssi extends AbstractSurrogate
         $response->headers->set('X-Body-Eval', 'SSI');
 
         // remove SSI/1.0 from the Surrogate-Control header
-        $this->removeFromControl($response);
+        if ($response->headers->has('Surrogate-Control')) {
+            $value = $response->headers->get('Surrogate-Control');
+            if ('content="SSI/1.0"' == $value) {
+                $response->headers->remove('Surrogate-Control');
+            } elseif (preg_match('#,\s*content="SSI/1.0"#', $value)) {
+                $response->headers->set('Surrogate-Control', preg_replace('#,\s*content="SSI/1.0"#', '', $value));
+            } elseif (preg_match('#content="SSI/1.0",\s*#', $value)) {
+                $response->headers->set('Surrogate-Control', preg_replace('#content="SSI/1.0",\s*#', '', $value));
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handle(HttpCache $cache, $uri, $alt, $ignoreErrors)
+    {
+        $subRequest = Request::create($uri, 'get', array(), $cache->getRequest()->cookies->all(), array(), $cache->getRequest()->server->all());
+
+        try {
+            $response = $cache->handle($subRequest, HttpKernelInterface::SUB_REQUEST, true);
+
+            if (!$response->isSuccessful()) {
+                throw new \RuntimeException(sprintf('Error when rendering "%s" (Status code is %s).', $subRequest->getUri(), $response->getStatusCode()));
+            }
+
+            return $response->getContent();
+        } catch (\Exception $e) {
+            if ($alt) {
+                return $this->handle($cache, $alt, '', $ignoreErrors);
+            }
+
+            if (!$ignoreErrors) {
+                throw $e;
+            }
+        }
     }
 }

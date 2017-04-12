@@ -50,7 +50,7 @@ class DumperPrefixCollection extends DumperCollection
      *
      * @param DumperRoute $route The route
      *
-     * @return self
+     * @return DumperPrefixCollection The node the route was added to
      *
      * @throws \LogicException
      */

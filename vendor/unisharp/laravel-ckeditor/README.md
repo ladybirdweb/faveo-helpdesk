@@ -40,6 +40,6 @@ Or if you want to initiate by jQuery selector :
     </script>
 ```
 
-## File Uploader Integration
+## File Uplader Integration
 
  Instead of using KCFinder, we recommend [laravel-filemanager](https://github.com/UniSharp/laravel-filemanager) for the file uploader integration for better laravel user access control and specific per user folders.

@@ -8,13 +8,12 @@ if (! function_exists('link_to')) {
      * @param string $title
      * @param array  $attributes
      * @param bool   $secure
-     * @param bool   $escape
      *
      * @return string
      */
-    function link_to($url, $title = null, $attributes = [], $secure = null, $escape = true)
+    function link_to($url, $title = null, $attributes = [], $secure = null)
     {
-        return app('html')->link($url, $title, $attributes, $secure, $escape);
+        return app('html')->link($url, $title, $attributes, $secure);
     }
 }
 

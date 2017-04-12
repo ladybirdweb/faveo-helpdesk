@@ -76,7 +76,7 @@ message template.
 The following example demonstrates a more complex set of validation rules:
 
 - The input must be numeric.
-- The input must fall within a range of boundary values.
+- The input must fall within a range of bouncary values.
 
 An input value would fail validation for exactly one of the following reasons:
 

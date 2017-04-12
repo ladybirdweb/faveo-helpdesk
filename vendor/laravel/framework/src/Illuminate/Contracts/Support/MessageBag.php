@@ -31,10 +31,10 @@ interface MessageBag
     /**
      * Determine if messages exist for a given key.
      *
-     * @param  string|array  $key
+     * @param  string  $key
      * @return bool
      */
-    public function has($key);
+    public function has($key = null);
 
     /**
      * Get the first message from the bag for a given key.

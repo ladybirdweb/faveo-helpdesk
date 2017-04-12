@@ -72,7 +72,7 @@ class Extension extends AbstractValidator
                 unset($options['case']);
             }
 
-            if (! array_key_exists('extension', $options)) {
+            if (!array_key_exists('extension', $options)) {
                 $options = ['extension' => $options];
             }
         } else {
@@ -147,7 +147,7 @@ class Extension extends AbstractValidator
         }
 
         foreach ($extension as $content) {
-            if (empty($content) || ! is_string($content)) {
+            if (empty($content) || !is_string($content)) {
                 continue;
             }
 
@@ -182,7 +182,7 @@ class Extension extends AbstractValidator
             $filename = $file['name'];
             $file     = $file['tmp_name'];
         } elseif (is_array($value)) {
-            if (! isset($value['tmp_name']) || ! isset($value['name'])) {
+            if (!isset($value['tmp_name']) || !isset($value['name'])) {
                 throw new Exception\InvalidArgumentException(
                     'Value array must be in $_FILES format'
                 );
@@ -206,7 +206,7 @@ class Extension extends AbstractValidator
 
         if ($this->getCase() && (in_array($extension, $extensions))) {
             return true;
-        } elseif (! $this->getCase()) {
+        } elseif (!$this->getCase()) {
             foreach ($extensions as $ext) {
                 if (strtolower($ext) == strtolower($extension)) {
                     return true;

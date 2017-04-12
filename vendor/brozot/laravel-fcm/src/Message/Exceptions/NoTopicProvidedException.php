@@ -1,12 +1,12 @@
-<?php
-
-namespace LaravelFCM\Message\Exceptions;
+<?php namespace LaravelFCM\Message\Exceptions;
 
 use Exception;
 
 /**
- * Class NoTopicProvidedException.
+ * Class NoTopicProvidedException
+ *
+ * @package LaravelFCM\Response\Exceptions
  */
-class NoTopicProvidedException extends Exception
-{
+class NoTopicProvidedException extends Exception {
+
 }

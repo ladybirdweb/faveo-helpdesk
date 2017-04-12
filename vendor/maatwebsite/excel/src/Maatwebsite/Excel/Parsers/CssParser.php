@@ -32,7 +32,7 @@ class CssParser {
      * Style sheet links
      * @var array
      */
-    protected $links = [];
+    protected $links = array();
 
     /**
      * Construct the css parser
@@ -48,15 +48,23 @@ class CssParser {
      */
     public function transformCssToInlineStyles($html)
     {
-        $css = '';
+        // Clean-up html
+        $this->cssInliner->setCleanup(true);
+
+        // Set html
+        $this->cssInliner->setHtml($html);
+
+        // Use inline style blocks
+        $this->cssInliner->setUseInlineStylesBlock(true);
 
         // Loop through all stylesheets
         foreach($this->links as $link)
         {
-            $css .= file_get_contents($link);
+            $css = file_get_contents($link);
+            $this->cssInliner->setCSS($css);
         }
 
-        return $this->cssInliner->convert($html, $css);
+        return $this->cssInliner->convert();
     }
 
     /**

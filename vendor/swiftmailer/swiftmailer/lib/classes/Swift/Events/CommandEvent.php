@@ -25,7 +25,7 @@ class Swift_Events_CommandEvent extends Swift_Events_EventObject
     /**
      * An array of codes which a successful response will contain.
      *
-     * @var int[]
+     * @var integer[]
      */
     private $_successCodes = array();
 
@@ -56,7 +56,7 @@ class Swift_Events_CommandEvent extends Swift_Events_EventObject
     /**
      * Get the numeric response codes which indicate success for this command.
      *
-     * @return int[]
+     * @return integer[]
      */
     public function getSuccessCodes()
     {

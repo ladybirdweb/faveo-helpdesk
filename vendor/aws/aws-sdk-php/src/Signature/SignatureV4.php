@@ -14,7 +14,6 @@ class SignatureV4 implements SignatureInterface
 {
     use SignatureTrait;
     const ISO8601_BASIC = 'Ymd\THis\Z';
-    const UNSIGNED_PAYLOAD = 'UNSIGNED-PAYLOAD';
 
     /** @var string */
     private $service;
@@ -22,21 +21,14 @@ class SignatureV4 implements SignatureInterface
     /** @var string */
     private $region;
 
-    /** @var bool */
-    private $unsigned;
-
     /**
      * @param string $service Service name to use when signing
      * @param string $region  Region name to use when signing
-     * @param array $options Array of configuration options used when signing
-     *      - unsigned-body: Flag to make request have unsigned payload.
-     *        Unsigned body is used primarily for streaming requests.
      */
-    public function __construct($service, $region, array $options = [])
+    public function __construct($service, $region)
     {
         $this->service = $service;
         $this->region = $region;
-        $this->unsigned = isset($options['unsigned-body']) ? $options['unsigned-body'] : false;
     }
 
     public function signRequest(
@@ -51,13 +43,9 @@ class SignatureV4 implements SignatureInterface
         if ($token = $credentials->getSecurityToken()) {
             $parsed['headers']['X-Amz-Security-Token'] = [$token];
         }
+
         $cs = $this->createScope($sdt, $this->region, $this->service);
         $payload = $this->getPayload($request);
-
-        if ($payload == self::UNSIGNED_PAYLOAD) {
-            $parsed['headers']['X-Amz-Content-Sha256'] = [$payload];
-        }
-
         $context = $this->createContext($parsed, $payload);
         $toSign = $this->createStringToSign($ldt, $cs, $context['creq']);
         $signingKey = $this->getSigningKey(
@@ -79,22 +67,19 @@ class SignatureV4 implements SignatureInterface
     public function presign(
         RequestInterface $request,
         CredentialsInterface $credentials,
-        $expires,
-        array $options = []
+        $expires
     ) {
-        $startTimestamp = isset($options['start_time']) ? $this->convertToTimestamp($options['start_time']) : time();
-
         $parsed = $this->createPresignedRequest($request, $credentials);
         $payload = $this->getPresignedPayload($request);
-        $httpDate = gmdate(self::ISO8601_BASIC, $startTimestamp);
+        $httpDate = gmdate(self::ISO8601_BASIC, time());
         $shortDate = substr($httpDate, 0, 8);
         $scope = $this->createScope($shortDate, $this->region, $this->service);
         $credential = $credentials->getAccessKeyId() . '/' . $scope;
         $parsed['query']['X-Amz-Algorithm'] = 'AWS4-HMAC-SHA256';
         $parsed['query']['X-Amz-Credential'] = $credential;
-        $parsed['query']['X-Amz-Date'] = gmdate('Ymd\THis\Z', $startTimestamp);
+        $parsed['query']['X-Amz-Date'] = gmdate('Ymd\THis\Z', time());
         $parsed['query']['X-Amz-SignedHeaders'] = 'host';
-        $parsed['query']['X-Amz-Expires'] = $this->convertExpires($expires, $startTimestamp);
+        $parsed['query']['X-Amz-Expires'] = $this->convertExpires($expires);
         $context = $this->createContext($parsed, $payload);
         $stringToSign = $this->createStringToSign($httpDate, $scope, $context['creq']);
         $key = $this->getSigningKey(
@@ -142,9 +127,6 @@ class SignatureV4 implements SignatureInterface
 
     protected function getPayload(RequestInterface $request)
     {
-        if ($this->unsigned && $request->getUri()->getScheme() == 'https') {
-            return self::UNSIGNED_PAYLOAD;
-        }
         // Calculate the request signature payload
         if ($request->hasHeader('X-Amz-Content-Sha256')) {
             // Handle streaming operations (e.g. Glacier.UploadArchive)
@@ -224,8 +206,7 @@ class SignatureV4 implements SignatureInterface
             'proxy-authorization' => true,
             'from'                => true,
             'referer'             => true,
-            'user-agent'          => true,
-            'x-amzn-trace-id'     => true
+            'user-agent'          => true
         ];
 
         // Normalize the path as required by SigV4
@@ -285,22 +266,15 @@ class SignatureV4 implements SignatureInterface
         return substr($qs, 0, -1);
     }
 
-    private function convertToTimestamp($dateValue)
+    private function convertExpires($expires)
     {
-        if ($dateValue instanceof \DateTime) {
-            $timestamp = $dateValue->getTimestamp();
-        } elseif (!is_numeric($dateValue)) {
-            $timestamp = strtotime($dateValue);
-        } else {
-            $timestamp = $dateValue;
+        if ($expires instanceof \DateTime) {
+            $expires = $expires->getTimestamp();
+        } elseif (!is_numeric($expires)) {
+            $expires = strtotime($expires);
         }
 
-        return $timestamp;
-    }
-
-    private function convertExpires($expires, $startTimestamp)
-    {
-        $duration = $this->convertToTimestamp($expires) - $startTimestamp;
+        $duration = $expires - time();
 
         // Ensure that the duration of the signature is not longer than a week
         if ($duration > 604800) {

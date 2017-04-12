@@ -30,18 +30,6 @@ class ArrayArchive implements RepositoryInterface
     }
 
     /**
-     * Add a file to the opened Archive using its contents
-     *
-     * @param $name
-     * @param $content
-     * @return void
-     */
-    public function addFromString($name, $content)
-    {
-        $this->entries[$name] = $name;
-    }
-
-    /**
      * Remove a file permanently from the Archive
      *
      * @param $pathInArchive
@@ -118,26 +106,5 @@ class ArrayArchive implements RepositoryInterface
      */
     public function close()
     {
-    }
-
-    /**
-     * Add an empty directory
-     *
-     * @param $dirName
-     * @return void
-     */
-    public function addEmptyDir($dirName){
-        # CODE...
-    }
-
-    /**
-     * Sets the password to be used for decompressing
-     *
-     * @param $password
-     * @return void
-     */
-    public function usePassword($password)
-    {
-        # CODE...
     }
 }

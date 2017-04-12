@@ -76,7 +76,7 @@ class Profile
     /**
      * Sets the parent token.
      *
-     * @param Profile $parent
+     * @param Profile $parent The parent Profile
      */
     public function setParent(Profile $parent)
     {
@@ -86,7 +86,7 @@ class Profile
     /**
      * Returns the parent profile.
      *
-     * @return self
+     * @return Profile The parent profile
      */
     public function getParent()
     {
@@ -191,7 +191,7 @@ class Profile
     /**
      * Finds children profilers.
      *
-     * @return self[]
+     * @return Profile[] An array of Profile
      */
     public function getChildren()
     {
@@ -201,7 +201,7 @@ class Profile
     /**
      * Sets children profiler.
      *
-     * @param Profile[] $children
+     * @param Profile[] $children An array of Profile
      */
     public function setChildren(array $children)
     {
@@ -214,7 +214,7 @@ class Profile
     /**
      * Adds the child token.
      *
-     * @param Profile $child
+     * @param Profile $child The child Profile
      */
     public function addChild(Profile $child)
     {
@@ -287,6 +287,6 @@ class Profile
 
     public function __sleep()
     {
-        return array('token', 'parent', 'children', 'collectors', 'ip', 'method', 'url', 'time', 'statusCode');
+        return array('token', 'parent', 'children', 'collectors', 'ip', 'method', 'url', 'time');
     }
 }

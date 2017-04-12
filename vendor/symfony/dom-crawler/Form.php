@@ -69,7 +69,7 @@ class Form extends Link implements \ArrayAccess
      *
      * @param array $values An array of field values
      *
-     * @return $this
+     * @return Form
      */
     public function setValues(array $values)
     {
@@ -279,7 +279,7 @@ class Form extends Link implements \ArrayAccess
     /**
      * Gets all fields.
      *
-     * @return FormField[]
+     * @return FormField[] An array of fields
      */
     public function all()
     {

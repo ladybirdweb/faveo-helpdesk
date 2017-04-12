@@ -3,12 +3,14 @@
 namespace spec\Prophecy\Exception\Doubler;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Doubler\Generator\Node\ClassNode;
 use spec\Prophecy\Exception\Prophecy;
 
 class ClassCreatorExceptionSpec extends ObjectBehavior
 {
-    function let(ClassNode $node)
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode $node
+     */
+    function let($node)
     {
         $this->beConstructedWith('', $node);
     }

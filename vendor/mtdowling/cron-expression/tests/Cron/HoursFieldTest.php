@@ -4,17 +4,16 @@ namespace Cron\Tests;
 
 use Cron\HoursField;
 use DateTime;
-use PHPUnit_Framework_TestCase;
 
 /**
  * @author Michael Dowling <mtdowling@gmail.com>
  */
-class HoursFieldTest extends PHPUnit_Framework_TestCase
+class HoursFieldTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers Cron\HoursField::validate
      */
-    public function testValidatesField()
+    public function testValdatesField()
     {
         $f = new HoursField();
         $this->assertTrue($f->validate('1'));

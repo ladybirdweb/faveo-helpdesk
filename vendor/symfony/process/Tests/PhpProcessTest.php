@@ -11,11 +11,10 @@
 
 namespace Symfony\Component\Process\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\PhpProcess;
 
-class PhpProcessTest extends TestCase
+class PhpProcessTest extends \PHPUnit_Framework_TestCase
 {
     public function testNonBlockingWorks()
     {

@@ -18,4 +18,5 @@ class ImageWasDeleted
     {
         return $this->path;
     }
+
 }

@@ -3,12 +3,11 @@
 namespace Cron\Tests;
 
 use Cron\FieldFactory;
-use PHPUnit_Framework_TestCase;
 
 /**
  * @author Michael Dowling <mtdowling@gmail.com>
  */
-class FieldFactoryTest extends PHPUnit_Framework_TestCase
+class FieldFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers Cron\FieldFactory::getField

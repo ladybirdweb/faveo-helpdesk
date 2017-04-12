@@ -24,7 +24,7 @@ class GetWithMetadata extends AbstractPlugin
      *
      * @throws InvalidArgumentException
      *
-     * @return array|false metadata
+     * @return array metadata
      */
     public function handle($path, array $metadata)
     {

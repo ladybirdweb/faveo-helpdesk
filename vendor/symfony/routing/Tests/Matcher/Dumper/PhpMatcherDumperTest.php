@@ -11,12 +11,11 @@
 
 namespace Symfony\Component\Routing\Tests\Matcher\Dumper;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Matcher\Dumper\PhpMatcherDumper;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class PhpMatcherDumperTest extends TestCase
+class PhpMatcherDumperTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \LogicException

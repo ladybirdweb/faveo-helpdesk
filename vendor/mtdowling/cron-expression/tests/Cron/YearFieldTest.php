@@ -4,17 +4,16 @@ namespace Cron\Tests;
 
 use Cron\YearField;
 use DateTime;
-use PHPUnit_Framework_TestCase;
 
 /**
  * @author Michael Dowling <mtdowling@gmail.com>
  */
-class YearFieldTest extends PHPUnit_Framework_TestCase
+class YearFieldTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers Cron\YearField::validate
      */
-    public function testValidatesField()
+    public function testValdatesField()
     {
         $f = new YearField();
         $this->assertTrue($f->validate('2011'));

@@ -69,6 +69,8 @@ class Swift_Plugins_ReporterPluginTest extends \SwiftMailerTestCase
         $plugin->sendPerformed($evt);
     }
 
+    // -- Creation Methods
+
     private function _createMessage()
     {
         return $this->getMockery('Swift_Mime_Message')->shouldIgnoreMissing();

@@ -54,21 +54,23 @@ class SparkPostTransport extends Transport
 
         $message->setBcc([]);
 
-        $this->client->post('https://api.sparkpost.com/api/v1/transmissions', [
+        $options = [
             'headers' => [
                 'Authorization' => $this->key,
             ],
-            'json' => array_merge([
+            'json' => [
                 'recipients' => $recipients,
                 'content' => [
                     'email_rfc822' => $message->toString(),
                 ],
-            ], $this->options),
-        ]);
+            ],
+        ];
 
-        $this->sendPerformed($message);
+        if ($this->options) {
+            $options['json']['options'] = $this->options;
+        }
 
-        return $this->numberOfRecipients($message);
+        return $this->client->post('https://api.sparkpost.com/api/v1/transmissions', $options);
     }
 
     /**
@@ -81,19 +83,23 @@ class SparkPostTransport extends Transport
      */
     protected function getRecipients(Swift_Mime_Message $message)
     {
-        $recipients = [];
+        $to = [];
 
-        foreach ((array) $message->getTo() as $email => $name) {
-            $recipients[] = ['address' => compact('name', 'email')];
+        if ($message->getTo()) {
+            $to = array_merge($to, array_keys($message->getTo()));
         }
 
-        foreach ((array) $message->getCc() as $email => $name) {
-            $recipients[] = ['address' => compact('name', 'email')];
+        if ($message->getCc()) {
+            $to = array_merge($to, array_keys($message->getCc()));
         }
 
-        foreach ((array) $message->getBcc() as $email => $name) {
-            $recipients[] = ['address' => compact('name', 'email')];
+        if ($message->getBcc()) {
+            $to = array_merge($to, array_keys($message->getBcc()));
         }
+
+        $recipients = array_map(function ($address) {
+            return compact('address');
+        }, $to);
 
         return $recipients;
     }
@@ -117,26 +123,5 @@ class SparkPostTransport extends Transport
     public function setKey($key)
     {
         return $this->key = $key;
-    }
-
-    /**
-     * Get the transmission options being used by the transport.
-     *
-     * @return string
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-    /**
-     * Set the transmission options being used by the transport.
-     *
-     * @param  array  $options
-     * @return array
-     */
-    public function setOptions(array $options)
-    {
-        return $this->options = $options;
     }
 }

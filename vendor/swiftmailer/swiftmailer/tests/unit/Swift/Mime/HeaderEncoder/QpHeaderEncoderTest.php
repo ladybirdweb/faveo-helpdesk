@@ -209,6 +209,8 @@ class Swift_Mime_HeaderEncoder_QpHeaderEncoderTest extends \SwiftMailerTestCase
         $this->assertEquals($output, $encoder->encodeString($input));
     }
 
+    // -- Creation Methods
+
     private function _createEncoder($charStream)
     {
         return new Swift_Mime_HeaderEncoder_QpHeaderEncoder($charStream);

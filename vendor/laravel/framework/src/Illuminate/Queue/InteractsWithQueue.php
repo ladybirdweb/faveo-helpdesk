@@ -38,13 +38,12 @@ trait InteractsWithQueue
     /**
      * Fail the job from the queue.
      *
-     * @param  \Throwable  $exception
      * @return void
      */
-    public function fail($exception = null)
+    public function failed()
     {
         if ($this->job) {
-            FailingJob::handle($this->job->getConnectionName(), $this->job, $exception);
+            return $this->job->failed();
         }
     }
 

@@ -1,6 +1,4 @@
-<?php
-
-namespace LaravelFCM\Request;
+<?php namespace LaravelFCM\Request;
 
 use LaravelFCM\Message\Topics;
 use LaravelFCM\Message\Options;
@@ -8,144 +6,143 @@ use LaravelFCM\Message\PayloadData;
 use LaravelFCM\Message\PayloadNotification;
 
 /**
- * Class Request.
+ * Class Request
+ *
+ * @package LaravelFCM\Request
  */
-class Request extends BaseRequest
-{
-    /**
-     * @internal
-     *
-     * @var string|array
-     */
-    protected $to;
+class Request extends BaseRequest{
 
-    /**
-     * @internal
-     *
-     * @var Options
-     */
-    protected $options;
+	/**
+	 * @internal
+	 * @var string|array
+	 */
+	protected $to;
 
-    /**
-     * @internal
-     *
-     * @var PayloadNotification
-     */
-    protected $notification;
+	/**
+	 * @internal
+	 * @var Options
+	 */
+	protected $options;
 
-    /**
-     * @internal
-     *
-     * @var PayloadData
-     */
-    protected $data;
+	/**
+	 * @internal
+	 * @var PayloadNotification
+	 */
+	protected $notification;
 
-    /**
-     * @internal
-     *
-     * @var Topics|null
-     */
-    protected $topic;
+	/**
+	 * @internal
+	 * @var PayloadData
+	 */
+	protected $data;
 
-    /**
-     * Request constructor.
-     *
-     * @param                     $to
-     * @param Options             $options
-     * @param PayloadNotification $notification
-     * @param PayloadData         $data
-     * @param Topics|null         $topic
-     */
-    public function __construct($to, Options $options = null, PayloadNotification $notification = null, PayloadData $data = null, Topics $topic = null)
-    {
-        parent::__construct();
+	/**
+	 * @internal
+	 * @var Topics|null
+	 */
+	protected $topic;
 
-        $this->to = $to;
-        $this->options = $options;
-        $this->notification = $notification;
-        $this->data = $data;
-        $this->topic = $topic;
-    }
+	/**
+	 * Request constructor.
+	 *
+	 * @param                     $to
+	 * @param Options             $options
+	 * @param PayloadNotification $notification
+	 * @param PayloadData         $data
+	 * @param Topics|null         $topic
+	 */
+	public function __construct($to, Options $options = null, PayloadNotification $notification = null, PayloadData $data = null, Topics $topic = null)
+	{
+		parent::__construct();
 
-    /**
-     * Build the body for the request.
-     *
-     * @return array
-     */
-    protected function buildBody()
-    {
-        $message = [
-            'to' => $this->getTo(),
-            'registration_ids' => $this->getRegistrationIds(),
-            'notification' => $this->getNotification(),
-            'data' => $this->getData(),
-        ];
+		$this->to = $to;
+		$this->options = $options;
+		$this->notification = $notification;
+		$this->data = $data;
+		$this->topic = $topic;
+	}
 
-        $message = array_merge($message, $this->getOptions());
+	/**
+	 * Build the body for the request
+	 *
+	 * @return array
+	 */
+	protected function buildBody()
+	{
+		$message = [
+			'to'               => $this->getTo(),
+			'registration_ids' => $this->getRegistrationIds(),
+			'notification'     => $this->getNotification(),
+			'data'             => $this->getData()
+		];
 
-        // remove null entries
-        return array_filter($message);
-    }
+		$message = array_merge($message, $this->getOptions());
 
-    /**
-     * get to key transformed.
-     *
-     * @return array|null|string
-     */
-    protected function getTo()
-    {
-        $to = is_array($this->to) ? null : $this->to;
+		// remove null entries
+		return array_filter($message);
+	}
 
-        if ($this->topic && $this->topic->hasOnlyOneTopic()) {
-            $to = $this->topic->build();
-        }
+	/**
+	 * get to key transformed
+	 *
+	 * @return array|null|string
+	 */
+	protected function getTo()
+	{
+		$to = is_array($this->to) ? null : $this->to;
 
-        return $to;
-    }
+		if ($this->topic && $this->topic->hasOnlyOneTopic()) {
+			$to = $this->topic->build();
+		}
 
-    /**
-     * get registrationIds transformed.
-     *
-     * @return array|null
-     */
-    protected function getRegistrationIds()
-    {
-        return is_array($this->to) ? $this->to : null;
-    }
+		return $to;
+	}
 
-    /**
-     * get Options transformed.
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        $options = $this->options ? $this->options->toArray() : [];
+	/**
+	 * get registrationIds transformed
+	 *
+	 * @return array|null
+	 */
+	protected function getRegistrationIds()
+	{
+		return is_array($this->to) ? $this->to : null;
+	}
 
-        if ($this->topic && !$this->topic->hasOnlyOneTopic()) {
-            $options = array_merge($options, $this->topic->build());
-        }
+	/**
+	 * get Options transformed
+	 *
+	 * @return array
+	 */
+	protected function getOptions()
+	{
+		$options = $this->options ? $this->options->toArray() : [];
 
-        return $options;
-    }
+		if ($this->topic && !$this->topic->hasOnlyOneTopic()) {
 
-    /**
-     * get notification transformed.
-     *
-     * @return array|null
-     */
-    protected function getNotification()
-    {
-        return $this->notification ? $this->notification->toArray() : null;
-    }
+			$options = array_merge($options, $this->topic->build());
+		}
 
-    /**
-     * get data transformed.
-     *
-     * @return array|null
-     */
-    protected function getData()
-    {
-        return $this->data ? $this->data->toArray() : null;
-    }
+		return $options;
+	}
+
+	/**
+	 * get notification transformed
+	 *
+	 * @return array|null
+	 */
+	protected function getNotification()
+	{
+		return $this->notification ? $this->notification->toArray() : null;
+	}
+
+	/**
+	 * get data transformed
+	 *
+	 * @return array|null
+	 */
+	protected function getData()
+	{
+		return $this->data ? $this->data->toArray() : null;
+	}
+
 }

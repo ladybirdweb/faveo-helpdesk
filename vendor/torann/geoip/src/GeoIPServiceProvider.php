@@ -37,7 +37,7 @@ class GeoIPServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register resources.
+     * Register currency resources.
      *
      * @return void
      */
@@ -51,7 +51,7 @@ class GeoIPServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register commands.
+     * Register currency commands.
      *
      * @return void
      */

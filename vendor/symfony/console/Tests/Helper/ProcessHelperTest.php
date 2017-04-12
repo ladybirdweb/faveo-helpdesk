@@ -11,15 +11,13 @@
 
 namespace Symfony\Component\Console\Tests\Helper;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\DebugFormatterHelper;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessBuilder;
 
-class ProcessHelperTest extends TestCase
+class ProcessHelperTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider provideCommandsAndOutput
@@ -48,35 +46,35 @@ class ProcessHelperTest extends TestCase
 
     public function provideCommandsAndOutput()
     {
-        $successOutputVerbose = <<<'EOT'
+        $successOutputVerbose = <<<EOT
   RUN  php -r "echo 42;"
   RES  Command ran successfully
 
 EOT;
-        $successOutputDebug = <<<'EOT'
+        $successOutputDebug = <<<EOT
   RUN  php -r "echo 42;"
   OUT  42
   RES  Command ran successfully
 
 EOT;
-        $successOutputDebugWithTags = <<<'EOT'
+        $successOutputDebugWithTags = <<<EOT
   RUN  php -r "echo '<info>42</info>';"
   OUT  <info>42</info>
   RES  Command ran successfully
 
 EOT;
-        $successOutputProcessDebug = <<<'EOT'
+        $successOutputProcessDebug = <<<EOT
   RUN  'php' '-r' 'echo 42;'
   OUT  42
   RES  Command ran successfully
 
 EOT;
-        $syntaxErrorOutputVerbose = <<<'EOT'
+        $syntaxErrorOutputVerbose = <<<EOT
   RUN  php -r "fwrite(STDERR, 'error message');usleep(50000);fwrite(STDOUT, 'out message');exit(252);"
   RES  252 Command did not run successfully
 
 EOT;
-        $syntaxErrorOutputDebug = <<<'EOT'
+        $syntaxErrorOutputDebug = <<<EOT
   RUN  php -r "fwrite(STDERR, 'error message');usleep(500000);fwrite(STDOUT, 'out message');exit(252);"
   ERR  error message
   OUT  out message
@@ -85,9 +83,9 @@ EOT;
 EOT;
 
         $errorMessage = 'An error occurred';
-        $args = new ProcessBuilder(array('php', '-r', 'echo 42;'));
-        $args = $args->getProcess()->getCommandLine();
-        $successOutputProcessDebug = str_replace("'php' '-r' 'echo 42;'", $args, $successOutputProcessDebug);
+        if ('\\' === DIRECTORY_SEPARATOR) {
+            $successOutputProcessDebug = str_replace("'", '"', $successOutputProcessDebug);
+        }
 
         return array(
             array('', 'php -r "echo 42;"', StreamOutput::VERBOSITY_VERBOSE, null),

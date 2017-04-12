@@ -2,25 +2,10 @@
 
 namespace Illuminate\Http;
 
-use Exception;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Exception\HttpResponseException;
 
 trait ResponseTrait
 {
-    /**
-     * The original content of the response.
-     *
-     * @var mixed
-     */
-    public $original;
-
-    /**
-     * The exception that triggered the error response (if applicable).
-     *
-     * @var \Exception|null
-     */
-    public $exception;
-
     /**
      * Get the status code for the response.
      *
@@ -42,26 +27,16 @@ trait ResponseTrait
     }
 
     /**
-     * Get the original response content.
-     *
-     * @return mixed
-     */
-    public function getOriginalContent()
-    {
-        return $this->original;
-    }
-
-    /**
      * Set a header on the Response.
      *
      * @param  string  $key
-     * @param  array|string  $values
+     * @param  string  $value
      * @param  bool    $replace
      * @return $this
      */
-    public function header($key, $values, $replace = true)
+    public function header($key, $value, $replace = true)
     {
-        $this->headers->set($key, $values, $replace);
+        $this->headers->set($key, $value, $replace);
 
         return $this;
     }
@@ -110,22 +85,9 @@ trait ResponseTrait
     }
 
     /**
-     * Set the exception to attach to the response.
-     *
-     * @param  \Exception  $e
-     * @return $this
-     */
-    public function withException(Exception $e)
-    {
-        $this->exception = $e;
-
-        return $this;
-    }
-
-    /**
      * Throws the response in a HttpResponseException instance.
      *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Http\Exception\HttpResponseException
      */
     public function throwResponse()
     {

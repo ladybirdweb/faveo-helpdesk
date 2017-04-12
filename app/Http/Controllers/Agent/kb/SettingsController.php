@@ -149,7 +149,7 @@ class SettingsController extends Controller
                         })
 
                         ->addColumn('comment', function ($model) {
-                            $created = faveoDate($model->created_at);
+                            $created = TicketController::usertimezone(date($model->created_at));
 
                             return $model->comment."<p>$created</p>";
                         })

@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\HttpFoundation\Tests\Session\Storage\Handler;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeSessionHandler;
 
 /**
@@ -22,7 +21,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeSessionHandle
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class NativeSessionHandlerTest extends TestCase
+class NativeSessionHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {

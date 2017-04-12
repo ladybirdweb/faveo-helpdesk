@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\Routing\Tests\Matcher\Dumper;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Matcher\Dumper\DumperCollection;
 
-class DumperCollectionTest extends TestCase
+class DumperCollectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetRoot()
     {

@@ -19,7 +19,7 @@ class Request implements RequestInterface
     /** @var null|string */
     private $requestTarget;
 
-    /** @var UriInterface */
+    /** @var null|UriInterface */
     private $uri;
 
     /**

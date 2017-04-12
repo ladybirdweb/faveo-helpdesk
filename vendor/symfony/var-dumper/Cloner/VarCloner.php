@@ -25,6 +25,7 @@ class VarCloner extends AbstractCloner
     protected function doClone($var)
     {
         $useExt = $this->useExt;
+        $i = 0;                         // Current iteration position in $queue
         $len = 1;                       // Length of $queue
         $pos = 0;                       // Number of cloned items past the first level
         $refsCounter = 0;               // Hard references counter
@@ -182,13 +183,10 @@ class VarCloner extends AbstractCloner
 
                     case 'resource':
                     case 'unknown type':
-                    case 'resource (closed)':
                         if (empty($resRefs[$h = (int) $v])) {
                             $stub = new Stub();
                             $stub->type = Stub::TYPE_RESOURCE;
-                            if ('Unknown' === $stub->class = $zval['resource_type'] ?: @get_resource_type($v)) {
-                                $stub->class = 'Closed';
-                            }
+                            $stub->class = $zval['resource_type'] ?: get_resource_type($v);
                             $stub->value = $v;
                             $stub->handle = $h;
                             $a = $this->castResource($stub, 0 < $i);

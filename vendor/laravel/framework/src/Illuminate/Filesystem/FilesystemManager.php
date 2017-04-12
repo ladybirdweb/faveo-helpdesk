@@ -255,7 +255,7 @@ class FilesystemManager implements FactoryContract
      */
     protected function createFlysystem(AdapterInterface $adapter, array $config)
     {
-        $config = Arr::only($config, ['visibility', 'disable_asserts', 'url']);
+        $config = Arr::only($config, ['visibility', 'disable_asserts']);
 
         return new Flysystem($adapter, count($config) > 0 ? $config : null);
     }
@@ -269,18 +269,6 @@ class FilesystemManager implements FactoryContract
     protected function adapt(FilesystemInterface $filesystem)
     {
         return new FilesystemAdapter($filesystem);
-    }
-
-    /**
-     * Set the given disk instance.
-     *
-     * @param  string  $name
-     * @param  mixed  $disk
-     * @return void
-     */
-    public function set($name, $disk)
-    {
-        $this->disks[$name] = $disk;
     }
 
     /**
@@ -337,6 +325,6 @@ class FilesystemManager implements FactoryContract
      */
     public function __call($method, $parameters)
     {
-        return $this->disk()->$method(...$parameters);
+        return call_user_func_array([$this->disk(), $method], $parameters);
     }
 }

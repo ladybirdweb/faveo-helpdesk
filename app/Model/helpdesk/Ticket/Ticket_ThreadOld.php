@@ -116,7 +116,7 @@ class Ticket_ThreadOld extends Model
     public function inlineAttachment($body)
     {
         if ($this->attach()->where('poster', 'INLINE')->get()->count() > 0) {
-            $search = $this->attach()->where('poster', 'INLINE')->pluck('name')->toArray();
+            $search = $this->attach()->where('poster', 'INLINE')->lists('name')->toArray();
             foreach ($this->attach()->where('poster', 'INLINE')->get() as $key => $attach) {
                 $replace[$key] = "data:$attach->type;base64,".$attach->file;
             }

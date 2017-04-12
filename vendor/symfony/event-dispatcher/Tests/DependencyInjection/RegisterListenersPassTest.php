@@ -11,11 +11,10 @@
 
 namespace Symfony\Component\EventDispatcher\Tests\DependencyInjection;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\DependencyInjection\RegisterListenersPass;
 
-class RegisterListenersPassTest extends TestCase
+class RegisterListenersPassTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Tests that event subscribers not implementing EventSubscriberInterface
@@ -30,7 +29,7 @@ class RegisterListenersPassTest extends TestCase
             'my_event_subscriber' => array(0 => array()),
         );
 
-        $definition = $this->getMockBuilder('Symfony\Component\DependencyInjection\Definition')->getMock();
+        $definition = $this->getMock('Symfony\Component\DependencyInjection\Definition');
         $definition->expects($this->atLeastOnce())
             ->method('isPublic')
             ->will($this->returnValue(true));
@@ -38,7 +37,10 @@ class RegisterListenersPassTest extends TestCase
             ->method('getClass')
             ->will($this->returnValue('stdClass'));
 
-        $builder = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')->setMethods(array('hasDefinition', 'findTaggedServiceIds', 'getDefinition'))->getMock();
+        $builder = $this->getMock(
+            'Symfony\Component\DependencyInjection\ContainerBuilder',
+            array('hasDefinition', 'findTaggedServiceIds', 'getDefinition')
+        );
         $builder->expects($this->any())
             ->method('hasDefinition')
             ->will($this->returnValue(true));
@@ -62,7 +64,7 @@ class RegisterListenersPassTest extends TestCase
             'my_event_subscriber' => array(0 => array()),
         );
 
-        $definition = $this->getMockBuilder('Symfony\Component\DependencyInjection\Definition')->getMock();
+        $definition = $this->getMock('Symfony\Component\DependencyInjection\Definition');
         $definition->expects($this->atLeastOnce())
             ->method('isPublic')
             ->will($this->returnValue(true));
@@ -70,7 +72,10 @@ class RegisterListenersPassTest extends TestCase
             ->method('getClass')
             ->will($this->returnValue('Symfony\Component\EventDispatcher\Tests\DependencyInjection\SubscriberService'));
 
-        $builder = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerBuilder')->setMethods(array('hasDefinition', 'findTaggedServiceIds', 'getDefinition', 'findDefinition'))->getMock();
+        $builder = $this->getMock(
+            'Symfony\Component\DependencyInjection\ContainerBuilder',
+            array('hasDefinition', 'findTaggedServiceIds', 'getDefinition', 'findDefinition')
+        );
         $builder->expects($this->any())
             ->method('hasDefinition')
             ->will($this->returnValue(true));

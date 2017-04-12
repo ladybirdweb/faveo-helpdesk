@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\Routing\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Route;
 
-class RouteTest extends TestCase
+class RouteTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
     {

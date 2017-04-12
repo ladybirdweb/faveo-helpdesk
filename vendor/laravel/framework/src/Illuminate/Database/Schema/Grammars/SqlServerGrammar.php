@@ -12,7 +12,7 @@ class SqlServerGrammar extends Grammar
      *
      * @var array
      */
-    protected $modifiers = ['Increment', 'Collate', 'Nullable', 'Default'];
+    protected $modifiers = ['Increment', 'Nullable', 'Default'];
 
     /**
      * The columns available as serials.
@@ -37,7 +37,7 @@ class SqlServerGrammar extends Grammar
      * @param  string  $table
      * @return string
      */
-    public function compileColumnListing($table)
+    public function compileColumnExists($table)
     {
         return "select col.name from sys.columns as col
                 join sys.objects as obj on col.object_id = obj.object_id
@@ -67,10 +67,11 @@ class SqlServerGrammar extends Grammar
      */
     public function compileAdd(Blueprint $blueprint, Fluent $command)
     {
-        return sprintf('alter table %s add %s',
-            $this->wrapTable($blueprint),
-            implode(', ', $this->getColumns($blueprint))
-        );
+        $table = $this->wrapTable($blueprint);
+
+        $columns = $this->getColumns($blueprint);
+
+        return 'alter table '.$table.' add '.implode(', ', $columns);
     }
 
     /**
@@ -82,11 +83,13 @@ class SqlServerGrammar extends Grammar
      */
     public function compilePrimary(Blueprint $blueprint, Fluent $command)
     {
-        return sprintf('alter table %s add constraint %s primary key (%s)',
-            $this->wrapTable($blueprint),
-            $this->wrap($command->index),
-            $this->columnize($command->columns)
-        );
+        $columns = $this->columnize($command->columns);
+
+        $table = $this->wrapTable($blueprint);
+
+        $index = $this->wrap($command->index);
+
+        return "alter table {$table} add constraint {$index} primary key ({$columns})";
     }
 
     /**
@@ -98,11 +101,13 @@ class SqlServerGrammar extends Grammar
      */
     public function compileUnique(Blueprint $blueprint, Fluent $command)
     {
-        return sprintf('create unique index %s on %s (%s)',
-            $this->wrap($command->index),
-            $this->wrapTable($blueprint),
-            $this->columnize($command->columns)
-        );
+        $columns = $this->columnize($command->columns);
+
+        $table = $this->wrapTable($blueprint);
+
+        $index = $this->wrap($command->index);
+
+        return "create unique index {$index} on {$table} ({$columns})";
     }
 
     /**
@@ -114,11 +119,13 @@ class SqlServerGrammar extends Grammar
      */
     public function compileIndex(Blueprint $blueprint, Fluent $command)
     {
-        return sprintf('create index %s on %s (%s)',
-            $this->wrap($command->index),
-            $this->wrapTable($blueprint),
-            $this->columnize($command->columns)
-        );
+        $columns = $this->columnize($command->columns);
+
+        $table = $this->wrapTable($blueprint);
+
+        $index = $this->wrap($command->index);
+
+        return "create index {$index} on {$table} ({$columns})";
     }
 
     /**
@@ -142,10 +149,7 @@ class SqlServerGrammar extends Grammar
      */
     public function compileDropIfExists(Blueprint $blueprint, Fluent $command)
     {
-        return sprintf('if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = %s) drop table %s',
-            "'".str_replace("'", "''", $this->getTablePrefix().$blueprint->getTable())."'",
-            $this->wrapTable($blueprint)
-        );
+        return 'if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = \''.$blueprint->getTable().'\') drop table ['.$blueprint->getTable().']';
     }
 
     /**
@@ -159,7 +163,9 @@ class SqlServerGrammar extends Grammar
     {
         $columns = $this->wrapArray($command->columns);
 
-        return 'alter table '.$this->wrapTable($blueprint).' drop column '.implode(', ', $columns);
+        $table = $this->wrapTable($blueprint);
+
+        return 'alter table '.$table.' drop column '.implode(', ', $columns);
     }
 
     /**
@@ -171,9 +177,11 @@ class SqlServerGrammar extends Grammar
      */
     public function compileDropPrimary(Blueprint $blueprint, Fluent $command)
     {
+        $table = $this->wrapTable($blueprint);
+
         $index = $this->wrap($command->index);
 
-        return "alter table {$this->wrapTable($blueprint)} drop constraint {$index}";
+        return "alter table {$table} drop constraint {$index}";
     }
 
     /**
@@ -185,9 +193,11 @@ class SqlServerGrammar extends Grammar
      */
     public function compileDropUnique(Blueprint $blueprint, Fluent $command)
     {
+        $table = $this->wrapTable($blueprint);
+
         $index = $this->wrap($command->index);
 
-        return "drop index {$index} on {$this->wrapTable($blueprint)}";
+        return "drop index {$index} on {$table}";
     }
 
     /**
@@ -199,9 +209,11 @@ class SqlServerGrammar extends Grammar
      */
     public function compileDropIndex(Blueprint $blueprint, Fluent $command)
     {
+        $table = $this->wrapTable($blueprint);
+
         $index = $this->wrap($command->index);
 
-        return "drop index {$index} on {$this->wrapTable($blueprint)}";
+        return "drop index {$index} on {$table}";
     }
 
     /**
@@ -213,9 +225,11 @@ class SqlServerGrammar extends Grammar
      */
     public function compileDropForeign(Blueprint $blueprint, Fluent $command)
     {
+        $table = $this->wrapTable($blueprint);
+
         $index = $this->wrap($command->index);
 
-        return "alter table {$this->wrapTable($blueprint)} drop constraint {$index}";
+        return "alter table {$table} drop constraint {$index}";
     }
 
     /**
@@ -308,7 +322,7 @@ class SqlServerGrammar extends Grammar
     }
 
     /**
-     * Create the column definition for an integer type.
+     * Create the column definition for a integer type.
      *
      * @param  \Illuminate\Support\Fluent  $column
      * @return string
@@ -568,20 +582,6 @@ class SqlServerGrammar extends Grammar
     protected function typeMacAddress(Fluent $column)
     {
         return 'nvarchar(17)';
-    }
-
-    /**
-     * Get the SQL for a collation column modifier.
-     *
-     * @param  \Illuminate\Database\Schema\Blueprint  $blueprint
-     * @param  \Illuminate\Support\Fluent  $column
-     * @return string|null
-     */
-    protected function modifyCollate(Blueprint $blueprint, Fluent $column)
-    {
-        if (! is_null($column->collation)) {
-            return ' collate '.$column->collation;
-        }
     }
 
     /**

@@ -261,7 +261,7 @@ class Request
     /**
      * Creates a new request with values from PHP's super globals.
      *
-     * @return static
+     * @return Request A new request
      */
     public static function createFromGlobals()
     {
@@ -304,7 +304,7 @@ class Request
      * @param array  $server     The server parameters ($_SERVER)
      * @param string $content    The raw body data
      *
-     * @return static
+     * @return Request A Request instance
      */
     public static function create($uri, $method = 'GET', $parameters = array(), $cookies = array(), $files = array(), $server = array(), $content = null)
     {
@@ -422,7 +422,7 @@ class Request
      * @param array $files      The FILES parameters
      * @param array $server     The SERVER parameters
      *
-     * @return static
+     * @return Request The duplicated request
      */
     public function duplicate(array $query = null, array $request = null, array $attributes = null, array $cookies = null, array $files = null, array $server = null)
     {
@@ -596,7 +596,6 @@ class Request
      *  * Request::HEADER_CLIENT_HOST:  defaults to X-Forwarded-Host  (see getHost())
      *  * Request::HEADER_CLIENT_PORT:  defaults to X-Forwarded-Port  (see getPort())
      *  * Request::HEADER_CLIENT_PROTO: defaults to X-Forwarded-Proto (see getScheme() and isSecure())
-     *  * Request::HEADER_FORWARDED:    defaults to Forwarded         (see RFC 7239)
      *
      * Setting an empty value allows to disable the trusted header for the given key.
      *
@@ -1317,22 +1316,6 @@ class Request
     }
 
     /**
-     * Gets the mime types associated with the format.
-     *
-     * @param string $format The format
-     *
-     * @return array The associated mime types
-     */
-    public static function getMimeTypes($format)
-    {
-        if (null === static::$formats) {
-            static::initializeFormats();
-        }
-
-        return isset(static::$formats[$format]) ? static::$formats[$format] : array();
-    }
-
-    /**
      * Gets the format associated with the mime type.
      *
      * @param string $mimeType The associated mime type
@@ -1391,10 +1374,10 @@ class Request
     public function getRequestFormat($default = 'html')
     {
         if (null === $this->format) {
-            $this->format = $this->attributes->get('_format');
+            $this->format = $this->attributes->get('_format', $default);
         }
 
-        return null === $this->format ? $default : $this->format;
+        return $this->format;
     }
 
     /**
@@ -1474,47 +1457,13 @@ class Request
     }
 
     /**
-     * Checks whether or not the method is safe.
-     *
-     * @see https://tools.ietf.org/html/rfc7231#section-4.2.1
-     *
-     * @param bool $andCacheable Adds the additional condition that the method should be cacheable. True by default.
+     * Checks whether the method is safe or not.
      *
      * @return bool
      */
-    public function isMethodSafe(/* $andCacheable = true */)
+    public function isMethodSafe()
     {
-        if (!func_num_args() || func_get_arg(0)) {
-            // This deprecation should be turned into a BadMethodCallException in 4.0 (without adding the argument in the signature)
-            // then setting $andCacheable to false should be deprecated in 4.1
-            @trigger_error('Checking only for cacheable HTTP methods with Symfony\Component\HttpFoundation\Request::isMethodSafe() is deprecated since version 3.2 and will throw an exception in 4.0. Disable checking only for cacheable methods by calling the method with `false` as first argument or use the Request::isMethodCacheable() instead.', E_USER_DEPRECATED);
-
-            return in_array($this->getMethod(), array('GET', 'HEAD'));
-        }
-
         return in_array($this->getMethod(), array('GET', 'HEAD', 'OPTIONS', 'TRACE'));
-    }
-
-    /**
-     * Checks whether or not the method is idempotent.
-     *
-     * @return bool
-     */
-    public function isMethodIdempotent()
-    {
-        return in_array($this->getMethod(), array('HEAD', 'GET', 'PUT', 'DELETE', 'TRACE', 'OPTIONS', 'PURGE'));
-    }
-
-    /**
-     * Checks whether the method is cacheable or not.
-     *
-     * @see https://tools.ietf.org/html/rfc7231#section-4.2.3
-     *
-     * @return bool
-     */
-    public function isMethodCacheable()
-    {
-        return in_array($this->getMethod(), array('GET', 'HEAD'));
     }
 
     /**
@@ -1560,7 +1509,7 @@ class Request
             return stream_get_contents($this->content);
         }
 
-        if (null === $this->content || false === $this->content) {
+        if (null === $this->content) {
             $this->content = file_get_contents('php://input');
         }
 
@@ -1708,7 +1657,7 @@ class Request
      * It works if your JavaScript library sets an X-Requested-With HTTP header.
      * It is known to work with common JavaScript frameworks:
      *
-     * @see http://en.wikipedia.org/wiki/List_of_Ajax_frameworks#JavaScript
+     * @link http://en.wikipedia.org/wiki/List_of_Ajax_frameworks#JavaScript
      *
      * @return bool true if the request is an XMLHttpRequest, false otherwise
      */
@@ -1964,15 +1913,7 @@ class Request
         return new static($query, $request, $attributes, $cookies, $files, $server, $content);
     }
 
-    /**
-     * Indicates whether this request originated from a trusted proxy.
-     *
-     * This can be useful to determine whether or not to trust the
-     * contents of a proxy-specific header.
-     *
-     * @return bool true if the request came from a trusted proxy, false otherwise
-     */
-    public function isFromTrustedProxy()
+    private function isFromTrustedProxy()
     {
         return self::$trustedProxies && IpUtils::checkIp($this->server->get('REMOTE_ADDR'), self::$trustedProxies);
     }

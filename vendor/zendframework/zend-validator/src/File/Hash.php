@@ -51,7 +51,7 @@ class Hash extends AbstractValidator
     public function __construct($options = null)
     {
         if (is_scalar($options) ||
-            (is_array($options) && ! array_key_exists('hash', $options))) {
+            (is_array($options) && !array_key_exists('hash', $options))) {
             $options = ['hash' => $options];
         }
 
@@ -97,19 +97,19 @@ class Hash extends AbstractValidator
     {
         if (is_string($options)) {
             $options = [$options];
-        } elseif (! is_array($options)) {
+        } elseif (!is_array($options)) {
             throw new Exception\InvalidArgumentException("False parameter given");
         }
 
         $known = hash_algos();
-        if (! isset($options['algorithm'])) {
+        if (!isset($options['algorithm'])) {
             $algorithm = $this->options['algorithm'];
         } else {
             $algorithm = $options['algorithm'];
             unset($options['algorithm']);
         }
 
-        if (! in_array($algorithm, $known)) {
+        if (!in_array($algorithm, $known)) {
             throw new Exception\InvalidArgumentException("Unknown algorithm '{$algorithm}'");
         }
 
@@ -134,7 +134,7 @@ class Hash extends AbstractValidator
             $filename = $file['name'];
             $file     = $file['tmp_name'];
         } elseif (is_array($value)) {
-            if (! isset($value['tmp_name']) || ! isset($value['name'])) {
+            if (!isset($value['tmp_name']) || !isset($value['name'])) {
                 throw new Exception\InvalidArgumentException(
                     'Value array must be in $_FILES format'
                 );

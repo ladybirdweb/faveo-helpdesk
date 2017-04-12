@@ -1,13 +1,6 @@
 CHANGELOG
 =========
 
-3.2.0
------
-
-* `FlattenException::getTrace()` now returns additional type descriptions
-  `integer` and `float`.
-
-
 3.0.0
 -----
 

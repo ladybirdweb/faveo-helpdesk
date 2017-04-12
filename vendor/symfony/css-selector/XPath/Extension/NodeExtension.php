@@ -50,7 +50,7 @@ class NodeExtension extends AbstractExtension
      * @param int  $flag
      * @param bool $on
      *
-     * @return $this
+     * @return NodeExtension
      */
     public function setFlag($flag, $on)
     {

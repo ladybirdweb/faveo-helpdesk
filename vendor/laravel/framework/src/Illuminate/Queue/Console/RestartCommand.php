@@ -2,7 +2,6 @@
 
 namespace Illuminate\Queue\Console;
 
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class RestartCommand extends Command
@@ -28,7 +27,7 @@ class RestartCommand extends Command
      */
     public function fire()
     {
-        $this->laravel['cache']->forever('illuminate:queue:restart', Carbon::now()->getTimestamp());
+        $this->laravel['cache']->forever('illuminate:queue:restart', time());
 
         $this->info('Broadcasting queue restart signal.');
     }

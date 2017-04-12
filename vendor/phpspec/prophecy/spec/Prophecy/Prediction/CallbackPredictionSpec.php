@@ -4,9 +4,6 @@ namespace spec\Prophecy\Prediction;
 
 use PhpSpec\ObjectBehavior;
 
-use Prophecy\Call\Call;
-use Prophecy\Prophecy\MethodProphecy;
-use Prophecy\Prophecy\ObjectProphecy;
 use RuntimeException;
 
 class CallbackPredictionSpec extends ObjectBehavior
@@ -21,7 +18,12 @@ class CallbackPredictionSpec extends ObjectBehavior
         $this->shouldHaveType('Prophecy\Prediction\PredictionInterface');
     }
 
-    function it_proxies_call_to_callback(ObjectProphecy $object, MethodProphecy $method, Call $call)
+    /**
+     * @param \Prophecy\Prophecy\ObjectProphecy $object
+     * @param \Prophecy\Prophecy\MethodProphecy $method
+     * @param \Prophecy\Call\Call               $call
+     */
+    function it_proxies_call_to_callback($object, $method, $call)
     {
         $returnFirstCallCallback = function ($calls, $object, $method) {
             throw new RuntimeException;

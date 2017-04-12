@@ -2,6 +2,7 @@
 
 namespace Illuminate\Http;
 
+use Exception;
 use ArrayObject;
 use JsonSerializable;
 use Illuminate\Contracts\Support\Jsonable;
@@ -11,6 +12,20 @@ use Symfony\Component\HttpFoundation\Response as BaseResponse;
 class Response extends BaseResponse
 {
     use ResponseTrait;
+
+    /**
+     * The original content of the response.
+     *
+     * @var mixed
+     */
+    public $original;
+
+    /**
+     * The exception that triggered the error response (if applicable).
+     *
+     * @var \Exception
+     */
+    public $exception;
 
     /**
      * Set the content on the response.
@@ -42,6 +57,21 @@ class Response extends BaseResponse
     }
 
     /**
+     * Morph the given content into JSON.
+     *
+     * @param  mixed   $content
+     * @return string
+     */
+    protected function morphToJson($content)
+    {
+        if ($content instanceof Jsonable) {
+            return $content->toJson();
+        }
+
+        return json_encode($content);
+    }
+
+    /**
      * Determine if the given content should be turned into JSON.
      *
      * @param  mixed  $content
@@ -56,17 +86,25 @@ class Response extends BaseResponse
     }
 
     /**
-     * Morph the given content into JSON.
+     * Get the original response content.
      *
-     * @param  mixed   $content
-     * @return string
+     * @return mixed
      */
-    protected function morphToJson($content)
+    public function getOriginalContent()
     {
-        if ($content instanceof Jsonable) {
-            return $content->toJson();
-        }
+        return $this->original;
+    }
 
-        return json_encode($content);
+    /**
+     * Set the exception to attach to the response.
+     *
+     * @param  \Exception  $e
+     * @return $this
+     */
+    public function withException(Exception $e)
+    {
+        $this->exception = $e;
+
+        return $this;
     }
 }

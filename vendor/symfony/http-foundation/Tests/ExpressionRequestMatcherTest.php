@@ -11,12 +11,11 @@
 
 namespace Symfony\Component\HttpFoundation\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\HttpFoundation\ExpressionRequestMatcher;
 use Symfony\Component\HttpFoundation\Request;
 
-class ExpressionRequestMatcherTest extends TestCase
+class ExpressionRequestMatcherTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @expectedException \LogicException

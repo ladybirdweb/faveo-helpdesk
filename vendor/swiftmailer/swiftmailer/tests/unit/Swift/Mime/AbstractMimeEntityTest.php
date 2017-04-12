@@ -948,6 +948,8 @@ abstract class Swift_Mime_AbstractMimeEntityTest extends \SwiftMailerTestCase
             );
     }
 
+    // -- Private helpers
+
     abstract protected function _createEntity($headers, $encoder, $cache);
 
     protected function _createChild($level = null, $string = '', $stub = true)
@@ -967,7 +969,7 @@ abstract class Swift_Mime_AbstractMimeEntityTest extends \SwiftMailerTestCase
 
     protected function _createEncoder($name = 'quoted-printable', $stub = true)
     {
-        $encoder = $this->getMockBuilder('Swift_Mime_ContentEncoder')->getMock();
+        $encoder = $this->getMock('Swift_Mime_ContentEncoder');
         $encoder->expects($this->any())
                 ->method('getName')
                 ->will($this->returnValue($name));
@@ -1047,6 +1049,6 @@ abstract class Swift_Mime_AbstractMimeEntityTest extends \SwiftMailerTestCase
 
     protected function _createInputStream($stub = true)
     {
-        return $this->getMockBuilder('Swift_InputByteStream')->getMock();
+        return $this->getMock('Swift_InputByteStream');
     }
 }

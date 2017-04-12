@@ -39,18 +39,18 @@ class MorphToMany extends BelongsToMany
      * @param  string  $name
      * @param  string  $table
      * @param  string  $foreignKey
-     * @param  string  $relatedKey
+     * @param  string  $otherKey
      * @param  string  $relationName
      * @param  bool  $inverse
      * @return void
      */
-    public function __construct(Builder $query, Model $parent, $name, $table, $foreignKey, $relatedKey, $relationName = null, $inverse = false)
+    public function __construct(Builder $query, Model $parent, $name, $table, $foreignKey, $otherKey, $relationName = null, $inverse = false)
     {
         $this->inverse = $inverse;
         $this->morphType = $name.'_type';
         $this->morphClass = $inverse ? $query->getModel()->getMorphClass() : $parent->getMorphClass();
 
-        parent::__construct($query, $parent, $table, $foreignKey, $relatedKey, $relationName);
+        parent::__construct($query, $parent, $table, $foreignKey, $otherKey, $relationName);
     }
 
     /**
@@ -58,13 +58,28 @@ class MorphToMany extends BelongsToMany
      *
      * @return $this
      */
-    protected function addWhereConstraints()
+    protected function setWhere()
     {
-        parent::addWhereConstraints();
+        parent::setWhere();
 
         $this->query->where($this->table.'.'.$this->morphType, $this->morphClass);
 
         return $this;
+    }
+
+    /**
+     * Add the constraints for a relationship count query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $parent
+     * @param  array|mixed  $columns
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getRelationQuery(Builder $query, Builder $parent, $columns = ['*'])
+    {
+        $query = parent::getRelationQuery($query, $parent, $columns);
+
+        return $query->where($this->table.'.'.$this->morphType, $this->morphClass);
     }
 
     /**
@@ -87,26 +102,11 @@ class MorphToMany extends BelongsToMany
      * @param  bool  $timed
      * @return array
      */
-    protected function baseAttachRecord($id, $timed)
+    protected function createAttachRecord($id, $timed)
     {
-        return Arr::add(
-            parent::baseAttachRecord($id, $timed), $this->morphType, $this->morphClass
-        );
-    }
+        $record = parent::createAttachRecord($id, $timed);
 
-    /**
-     * Add the constraints for a relationship count query.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  \Illuminate\Database\Eloquent\Builder  $parentQuery
-     * @param  array|mixed  $columns
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function getRelationExistenceQuery(Builder $query, Builder $parentQuery, $columns = ['*'])
-    {
-        return parent::getRelationExistenceQuery($query, $parentQuery, $columns)->where(
-            $this->table.'.'.$this->morphType, $this->morphClass
-        );
+        return Arr::add($record, $this->morphType, $this->morphClass);
     }
 
     /**
@@ -116,7 +116,9 @@ class MorphToMany extends BelongsToMany
      */
     protected function newPivotQuery()
     {
-        return parent::newPivotQuery()->where($this->morphType, $this->morphClass);
+        $query = parent::newPivotQuery();
+
+        return $query->where($this->morphType, $this->morphClass);
     }
 
     /**
@@ -128,12 +130,9 @@ class MorphToMany extends BelongsToMany
      */
     public function newPivot(array $attributes = [], $exists = false)
     {
-        $using = $this->using;
+        $pivot = new MorphPivot($this->parent, $attributes, $this->table, $exists);
 
-        $pivot = $using ? $using::fromRawAttributes($this->parent, $attributes, $this->table, $exists)
-                        : new MorphPivot($this->parent, $attributes, $this->table, $exists);
-
-        $pivot->setPivotKeys($this->foreignKey, $this->relatedKey)
+        $pivot->setPivotKeys($this->foreignKey, $this->otherKey)
               ->setMorphType($this->morphType)
               ->setMorphClass($this->morphClass);
 

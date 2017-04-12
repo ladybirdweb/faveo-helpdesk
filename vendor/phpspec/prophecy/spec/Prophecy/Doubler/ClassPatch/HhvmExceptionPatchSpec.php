@@ -4,8 +4,6 @@ namespace spec\Prophecy\Doubler\ClassPatch;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
-use Prophecy\Doubler\Generator\Node\ClassNode;
-use Prophecy\Doubler\Generator\Node\MethodNode;
 
 class HhvmExceptionPatchSpec extends ObjectBehavior
 {
@@ -19,7 +17,12 @@ class HhvmExceptionPatchSpec extends ObjectBehavior
         $this->getPriority()->shouldReturn(-50);
     }
 
-    function it_uses_parent_code_for_setTraceOptions(ClassNode $node, MethodNode $method, MethodNode $getterMethod)
+    /**
+     * @param \Prophecy\Doubler\Generator\Node\ClassNode  $node
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $method
+     * @param \Prophecy\Doubler\Generator\Node\MethodNode $getterMethod
+     */
+    function it_uses_parent_code_for_setTraceOptions($node, $method, $getterMethod)
     {
         $node->hasMethod('setTraceOptions')->willReturn(true);
         $node->getMethod('setTraceOptions')->willReturn($method);

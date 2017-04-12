@@ -29,14 +29,6 @@ class Prompter implements PrompterInterface
         }
 
         return $this->hasBeenAsked
-            && $this->normalise($this->question) == $this->normalise($question);
-    }
-
-    /**
-     * @return mixed
-     */
-    private function normalise($question)
-    {
-        return preg_replace('/\s+/', '', trim(strip_tags($question)));
+            && preg_replace('/\s+/', ' ', trim(strip_tags($this->question))) == preg_replace('/\s+/', ' ', $question) ;
     }
 }

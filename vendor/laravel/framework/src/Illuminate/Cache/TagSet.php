@@ -44,26 +44,14 @@ class TagSet
     }
 
     /**
-     * Reset the tag and return the new tag identifier.
+     * Get the unique tag identifier for a given tag.
      *
      * @param  string  $name
      * @return string
      */
-    public function resetTag($name)
+    public function tagId($name)
     {
-        $this->store->forever($this->tagKey($name), $id = str_replace('.', '', uniqid('', true)));
-
-        return $id;
-    }
-
-    /**
-     * Get a unique namespace that changes when any of the tags are flushed.
-     *
-     * @return string
-     */
-    public function getNamespace()
-    {
-        return implode('|', $this->tagIds());
+        return $this->store->get($this->tagKey($name)) ?: $this->resetTag($name);
     }
 
     /**
@@ -77,14 +65,26 @@ class TagSet
     }
 
     /**
-     * Get the unique tag identifier for a given tag.
+     * Get a unique namespace that changes when any of the tags are flushed.
+     *
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return implode('|', $this->tagIds());
+    }
+
+    /**
+     * Reset the tag and return the new tag identifier.
      *
      * @param  string  $name
      * @return string
      */
-    public function tagId($name)
+    public function resetTag($name)
     {
-        return $this->store->get($this->tagKey($name)) ?: $this->resetTag($name);
+        $this->store->forever($this->tagKey($name), $id = str_replace('.', '', uniqid('', true)));
+
+        return $id;
     }
 
     /**

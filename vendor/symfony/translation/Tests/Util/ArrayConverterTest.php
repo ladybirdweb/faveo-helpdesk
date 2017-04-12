@@ -11,20 +11,19 @@
 
 namespace Symfony\Component\Translation\Tests\Util;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\Util\ArrayConverter;
 
-class ArrayConverterTest extends TestCase
+class ArrayConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @dataProvider messagesData
+     * @dataProvider messsagesData
      */
     public function testDump($input, $expectedOutput)
     {
         $this->assertEquals($expectedOutput, ArrayConverter::expandToTree($input));
     }
 
-    public function messagesData()
+    public function messsagesData()
     {
         return array(
             array(

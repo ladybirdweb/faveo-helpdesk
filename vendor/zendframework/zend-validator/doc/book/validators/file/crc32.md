@@ -24,7 +24,7 @@ The following options are supported:
 $validator = new \Zend\Validator\File\Crc32('3b3652f');
 
 // Or, check file against multiple hashes
-$validator = new \Zend\Validator\File\Crc32(['3b3652f', 'e612b69']);
+$validator = new \Zend\Validator\File\Crc32(array('3b3652f', 'e612b69'));
 
 // Perform validation with file path
 if ($validator->isValid('./myfile.txt')) {

@@ -29,20 +29,17 @@ trait VarDumperTestTrait
         $this->assertStringMatchesFormat(rtrim($dump), $this->getDump($data), $message);
     }
 
-    protected function getDump($data, $key = null)
+    protected function getDump($data)
     {
-        $flags = getenv('DUMP_LIGHT_ARRAY') ? CliDumper::DUMP_LIGHT_ARRAY : 0;
-        $flags |= getenv('DUMP_STRING_LENGTH') ? CliDumper::DUMP_STRING_LENGTH : 0;
-
+        $h = fopen('php://memory', 'r+b');
         $cloner = new VarCloner();
         $cloner->setMaxItems(-1);
-        $dumper = new CliDumper(null, null, $flags);
+        $dumper = new CliDumper($h);
         $dumper->setColors(false);
-        $data = $cloner->cloneVar($data)->withRefHandles(false);
-        if (null !== $key && null === $data = $data->seek($key)) {
-            return;
-        }
+        $dumper->dump($cloner->cloneVar($data)->withRefHandles(false));
+        $data = stream_get_contents($h, -1, 0);
+        fclose($h);
 
-        return rtrim($dumper->dump($data, true));
+        return rtrim($data);
     }
 }

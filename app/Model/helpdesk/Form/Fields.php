@@ -32,7 +32,7 @@ class Fields extends BaseModel
     public function valuesAsString()
     {
         $string = '';
-        $values = $this->values()->pluck('field_value')->toArray();
+        $values = $this->values()->lists('field_value')->toArray();
         if (count($values) > 0) {
             $string = implode(',', $values);
         }

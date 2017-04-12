@@ -17,7 +17,7 @@ class CellCollection extends ExcelCollection {
      * @param  array $items
      * @return \Maatwebsite\Excel\Collections\CellCollection
      */
-    public function __construct(array $items = [])
+    public function __construct(array $items = array())
     {
         $this->setItems($items);
     }
@@ -32,7 +32,15 @@ class CellCollection extends ExcelCollection {
         foreach ($items as $name => $value)
         {
             $value = !empty($value) || is_numeric($value) ? $value : null;
-            $this->put($name, $value);
+
+            if ($name)
+            {
+                $this->put($name, $value);
+            }
+            else
+            {
+                $this->push($value);
+            }
         }
     }
 

@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\Console\Tests\Descriptor;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,7 +18,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-abstract class AbstractDescriptorTest extends TestCase
+abstract class AbstractDescriptorTest extends \PHPUnit_Framework_TestCase
 {
     /** @dataProvider getDescribeInputArgumentTestData */
     public function testDescribeInputArgument(InputArgument $argument, $expectedDescription)
@@ -87,7 +86,7 @@ abstract class AbstractDescriptorTest extends TestCase
 
     abstract protected function getFormat();
 
-    protected function getDescriptionTestData(array $objects)
+    private function getDescriptionTestData(array $objects)
     {
         $data = array();
         foreach ($objects as $name => $object) {

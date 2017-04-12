@@ -45,6 +45,8 @@ class Swift_MessageAcceptanceTest extends Swift_Mime_SimpleMessageAcceptanceTest
             );
     }
 
+    // -- Private helpers
+
     protected function _createMessage()
     {
         Swift_DependencyContainer::getInstance()

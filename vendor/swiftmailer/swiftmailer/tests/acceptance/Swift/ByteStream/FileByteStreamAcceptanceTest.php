@@ -2,15 +2,24 @@
 
 class Swift_ByteStream_FileByteStreamAcceptanceTest extends \PHPUnit_Framework_TestCase
 {
+    private $_tmpDir;
     private $_testFile;
 
-    protected function setUp()
+    public function setUp()
     {
-        $this->_testFile = sys_get_temp_dir().'/swift-test-file'.__CLASS__;
+        if (!defined('SWIFT_TMP_DIR')) {
+            $this->markTestSkipped(
+                'Cannot run test without a writable directory to use ('.
+                'define SWIFT_TMP_DIR in tests/config.php if you wish to run this test)'
+             );
+        }
+
+        $this->_tmpDir = SWIFT_TMP_DIR;
+        $this->_testFile = $this->_tmpDir.'/swift-test-file'.__CLASS__;
         file_put_contents($this->_testFile, 'abcdefghijklm');
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         unlink($this->_testFile);
     }
@@ -41,14 +50,18 @@ class Swift_ByteStream_FileByteStreamAcceptanceTest extends \PHPUnit_Framework_T
 
     public function testFileCanBeWrittenTo()
     {
-        $file = $this->_createFileStream($this->_testFile, true);
+        $file = $this->_createFileStream(
+            $this->_testFile, true
+            );
         $file->write('foobar');
         $this->assertEquals('foobar', $file->read(8192));
     }
 
     public function testReadingFromThenWritingToFile()
     {
-        $file = $this->_createFileStream($this->_testFile, true);
+        $file = $this->_createFileStream(
+            $this->_testFile, true
+            );
         $file->write('foobar');
         $this->assertEquals('foobar', $file->read(8192));
         $file->write('zipbutton');
@@ -57,7 +70,9 @@ class Swift_ByteStream_FileByteStreamAcceptanceTest extends \PHPUnit_Framework_T
 
     public function testWritingToFileWithCanonicalization()
     {
-        $file = $this->_createFileStream($this->_testFile, true);
+        $file = $this->_createFileStream(
+            $this->_testFile, true
+            );
         $file->addFilter($this->_createFilter(array("\r\n", "\r"), "\n"), 'allToLF');
         $file->write("foo\r\nbar\r");
         $file->write("\nzip\r\ntest\r");
@@ -65,18 +80,11 @@ class Swift_ByteStream_FileByteStreamAcceptanceTest extends \PHPUnit_Framework_T
         $this->assertEquals("foo\nbar\nzip\ntest\n", file_get_contents($this->_testFile));
     }
 
-    public function testWritingWithFulleMessageLengthOfAMultipleOf8192()
-    {
-        $file = $this->_createFileStream($this->_testFile, true);
-        $file->addFilter($this->_createFilter(array("\r\n", "\r"), "\n"), 'allToLF');
-        $file->write('');
-        $file->flushBuffers();
-        $this->assertEquals('', file_get_contents($this->_testFile));
-    }
-
     public function testBindingOtherStreamsMirrorsWriteOperations()
     {
-        $file = $this->_createFileStream($this->_testFile, true);
+        $file = $this->_createFileStream(
+            $this->_testFile, true
+            );
         $is1 = $this->_createMockInputStream();
         $is2 = $this->_createMockInputStream();
 
@@ -121,7 +129,9 @@ class Swift_ByteStream_FileByteStreamAcceptanceTest extends \PHPUnit_Framework_T
 
     public function testUnbindingStreamPreventsFurtherWrites()
     {
-        $file = $this->_createFileStream($this->_testFile, true);
+        $file = $this->_createFileStream(
+            $this->_testFile, true
+            );
         $is1 = $this->_createMockInputStream();
         $is2 = $this->_createMockInputStream();
 
@@ -145,6 +155,8 @@ class Swift_ByteStream_FileByteStreamAcceptanceTest extends \PHPUnit_Framework_T
         $file->write('y');
     }
 
+    // -- Creation methods
+
     private function _createFilter($search, $replace)
     {
         return new Swift_StreamFilters_StringReplacementFilter($search, $replace);
@@ -152,7 +164,7 @@ class Swift_ByteStream_FileByteStreamAcceptanceTest extends \PHPUnit_Framework_T
 
     private function _createMockInputStream()
     {
-        return $this->getMockBuilder('Swift_InputByteStream')->getMock();
+        return $this->getMock('Swift_InputByteStream');
     }
 
     private function _createFileStream($file, $writable = false)

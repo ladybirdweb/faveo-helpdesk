@@ -11,10 +11,9 @@
 
 namespace Symfony\Component\Finder\Tests\Comparator;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Comparator\Comparator;
 
-class ComparatorTest extends TestCase
+class ComparatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetSetOperator()
     {

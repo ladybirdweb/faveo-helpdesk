@@ -5,24 +5,22 @@ namespace Illuminate\Database;
 use PDO;
 use Closure;
 use Exception;
-use PDOStatement;
+use Throwable;
 use LogicException;
+use RuntimeException;
 use DateTimeInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Database\Events\QueryExecuted;
-use Doctrine\DBAL\Connection as DoctrineConnection;
 use Illuminate\Database\Query\Processors\Processor;
+use Doctrine\DBAL\Connection as DoctrineConnection;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Schema\Builder as SchemaBuilder;
 use Illuminate\Database\Query\Grammars\Grammar as QueryGrammar;
 
 class Connection implements ConnectionInterface
 {
-    use DetectsDeadlocks,
-        DetectsLostConnections,
-        Concerns\ManagesTransactions;
+    use DetectsLostConnections;
 
     /**
      * The active PDO connection.
@@ -37,27 +35,6 @@ class Connection implements ConnectionInterface
      * @var PDO
      */
     protected $readPdo;
-
-    /**
-     * The name of the connected database.
-     *
-     * @var string
-     */
-    protected $database;
-
-    /**
-     * The table prefix for the connection.
-     *
-     * @var string
-     */
-    protected $tablePrefix = '';
-
-    /**
-     * The database connection configuration options.
-     *
-     * @var array
-     */
-    protected $config = [];
 
     /**
      * The reconnector instance for the connection.
@@ -102,6 +79,20 @@ class Connection implements ConnectionInterface
     protected $fetchMode = PDO::FETCH_OBJ;
 
     /**
+     * The argument for the fetch mode.
+     *
+     * @var mixed
+     */
+    protected $fetchArgument;
+
+    /**
+     * The constructor arguments for the PDO::FETCH_CLASS fetch mode.
+     *
+     * @var array
+     */
+    protected $fetchConstructorArgument = [];
+
+    /**
      * The number of active transactions.
      *
      * @var int
@@ -130,6 +121,13 @@ class Connection implements ConnectionInterface
     protected $pretending = false;
 
     /**
+     * The name of the connected database.
+     *
+     * @var string
+     */
+    protected $database;
+
+    /**
      * The instance of Doctrine connection.
      *
      * @var \Doctrine\DBAL\Connection
@@ -137,11 +135,18 @@ class Connection implements ConnectionInterface
     protected $doctrineConnection;
 
     /**
-     * The connection resolvers.
+     * The table prefix for the connection.
+     *
+     * @var string
+     */
+    protected $tablePrefix = '';
+
+    /**
+     * The database connection configuration options.
      *
      * @var array
      */
-    protected static $resolvers = [];
+    protected $config = [];
 
     /**
      * Create a new database connection instance.
@@ -271,18 +276,28 @@ class Connection implements ConnectionInterface
     }
 
     /**
+     * Get a new raw query expression.
+     *
+     * @param  mixed  $value
+     * @return \Illuminate\Database\Query\Expression
+     */
+    public function raw($value)
+    {
+        return new Expression($value);
+    }
+
+    /**
      * Run a select statement and return a single result.
      *
      * @param  string  $query
      * @param  array   $bindings
-     * @param  bool  $useReadPdo
      * @return mixed
      */
-    public function selectOne($query, $bindings = [], $useReadPdo = true)
+    public function selectOne($query, $bindings = [])
     {
-        $records = $this->select($query, $bindings, $useReadPdo);
+        $records = $this->select($query, $bindings);
 
-        return array_shift($records);
+        return count($records) > 0 ? reset($records) : null;
     }
 
     /**
@@ -307,22 +322,30 @@ class Connection implements ConnectionInterface
      */
     public function select($query, $bindings = [], $useReadPdo = true)
     {
-        return $this->run($query, $bindings, function ($query, $bindings) use ($useReadPdo) {
-            if ($this->pretending()) {
+        return $this->run($query, $bindings, function ($me, $query, $bindings) use ($useReadPdo) {
+            if ($me->pretending()) {
                 return [];
             }
 
             // For select statements, we'll simply execute the query and return an array
             // of the database result set. Each element in the array will be a single
             // row from the database table, and will either be an array or objects.
-            $statement = $this->prepared($this->getPdoForSelect($useReadPdo)
-                              ->prepare($query));
+            $statement = $this->getPdoForSelect($useReadPdo)->prepare($query);
 
-            $this->bindValues($statement, $this->prepareBindings($bindings));
+            $statement->execute($me->prepareBindings($bindings));
 
-            $statement->execute();
+            $fetchMode = $me->getFetchMode();
+            $fetchArgument = $me->getFetchArgument();
+            $fetchConstructorArgument = $me->getFetchConstructorArgument();
 
-            return $statement->fetchAll();
+            if ($fetchMode === PDO::FETCH_CLASS && ! isset($fetchArgument)) {
+                $fetchArgument = 'StdClass';
+                $fetchConstructorArgument = null;
+            }
+
+            return isset($fetchArgument)
+                ? $statement->fetchAll($fetchMode, $fetchArgument, $fetchConstructorArgument)
+                : $statement->fetchAll($fetchMode);
         });
     }
 
@@ -336,25 +359,29 @@ class Connection implements ConnectionInterface
      */
     public function cursor($query, $bindings = [], $useReadPdo = true)
     {
-        $statement = $this->run($query, $bindings, function ($query, $bindings) use ($useReadPdo) {
-            if ($this->pretending()) {
+        $statement = $this->run($query, $bindings, function ($me, $query, $bindings) use ($useReadPdo) {
+            if ($me->pretending()) {
                 return [];
             }
 
-            // First we will create a statement for the query. Then, we will set the fetch
-            // mode and prepare the bindings for the query. Once that's done we will be
-            // ready to execute the query against the database and return the cursor.
-            $statement = $this->prepared($this->getPdoForSelect($useReadPdo)
-                              ->prepare($query));
+            $statement = $this->getPdoForSelect($useReadPdo)->prepare($query);
 
-            $this->bindValues(
-                $statement, $this->prepareBindings($bindings)
-            );
+            $fetchMode = $me->getFetchMode();
+            $fetchArgument = $me->getFetchArgument();
+            $fetchConstructorArgument = $me->getFetchConstructorArgument();
 
-            // Next, we'll execute the query against the database and return the statement
-            // so we can return the cursor. The cursor will use a PHP generator to give
-            // back one row at a time without using a bunch of memory to render them.
-            $statement->execute();
+            if ($fetchMode === PDO::FETCH_CLASS && ! isset($fetchArgument)) {
+                $fetchArgument = 'StdClass';
+                $fetchConstructorArgument = null;
+            }
+
+            if (isset($fetchArgument)) {
+                $statement->setFetchMode($fetchMode, $fetchArgument, $fetchConstructorArgument);
+            } else {
+                $statement->setFetchMode($fetchMode);
+            }
+
+            $statement->execute($me->prepareBindings($bindings));
 
             return $statement;
         });
@@ -362,23 +389,6 @@ class Connection implements ConnectionInterface
         while ($record = $statement->fetch()) {
             yield $record;
         }
-    }
-
-    /**
-     * Configure the PDO prepared statement.
-     *
-     * @param  \PDOStatement  $statement
-     * @return \PDOStatement
-     */
-    protected function prepared(PDOStatement $statement)
-    {
-        $statement->setFetchMode($this->fetchMode);
-
-        $this->event(new Events\StatementPrepared(
-            $this, $statement
-        ));
-
-        return $statement;
     }
 
     /**
@@ -437,16 +447,14 @@ class Connection implements ConnectionInterface
      */
     public function statement($query, $bindings = [])
     {
-        return $this->run($query, $bindings, function ($query, $bindings) {
-            if ($this->pretending()) {
+        return $this->run($query, $bindings, function ($me, $query, $bindings) {
+            if ($me->pretending()) {
                 return true;
             }
 
-            $statement = $this->getPdo()->prepare($query);
+            $bindings = $me->prepareBindings($bindings);
 
-            $this->bindValues($statement, $this->prepareBindings($bindings));
-
-            return $statement->execute();
+            return $me->getPdo()->prepare($query)->execute($bindings);
         });
     }
 
@@ -459,19 +467,17 @@ class Connection implements ConnectionInterface
      */
     public function affectingStatement($query, $bindings = [])
     {
-        return $this->run($query, $bindings, function ($query, $bindings) {
-            if ($this->pretending()) {
+        return $this->run($query, $bindings, function ($me, $query, $bindings) {
+            if ($me->pretending()) {
                 return 0;
             }
 
             // For update or delete statements, we want to get the number of rows affected
             // by the statement and return that back to the developer. We'll first need
             // to execute the statement and then we'll use PDO to fetch the affected.
-            $statement = $this->getPdo()->prepare($query);
+            $statement = $me->getPdo()->prepare($query);
 
-            $this->bindValues($statement, $this->prepareBindings($bindings));
-
-            $statement->execute();
+            $statement->execute($me->prepareBindings($bindings));
 
             return $statement->rowCount();
         });
@@ -485,79 +491,13 @@ class Connection implements ConnectionInterface
      */
     public function unprepared($query)
     {
-        return $this->run($query, [], function ($query) {
-            if ($this->pretending()) {
+        return $this->run($query, [], function ($me, $query) {
+            if ($me->pretending()) {
                 return true;
             }
 
-            return (bool) $this->getPdo()->exec($query);
+            return (bool) $me->getPdo()->exec($query);
         });
-    }
-
-    /**
-     * Execute the given callback in "dry run" mode.
-     *
-     * @param  \Closure  $callback
-     * @return array
-     */
-    public function pretend(Closure $callback)
-    {
-        return $this->withFreshQueryLog(function () use ($callback) {
-            $this->pretending = true;
-
-            // Basically to make the database connection "pretend", we will just return
-            // the default values for all the query methods, then we will return an
-            // array of queries that were "executed" within the Closure callback.
-            $callback($this);
-
-            $this->pretending = false;
-
-            return $this->queryLog;
-        });
-    }
-
-    /**
-     * Execute the given callback in "dry run" mode.
-     *
-     * @param  \Closure  $callback
-     * @return array
-     */
-    protected function withFreshQueryLog($callback)
-    {
-        $loggingQueries = $this->loggingQueries;
-
-        // First we will back up the value of the logging queries property and then
-        // we'll be ready to run callbacks. This query log will also get cleared
-        // so we will have a new log of all the queries that are executed now.
-        $this->enableQueryLog();
-
-        $this->queryLog = [];
-
-        // Now we'll execute this callback and capture the result. Once it has been
-        // executed we will restore the value of query logging and give back the
-        // value of hte callback so the original callers can have the results.
-        $result = $callback();
-
-        $this->loggingQueries = $loggingQueries;
-
-        return $result;
-    }
-
-    /**
-     * Bind values to their parameters in the given statement.
-     *
-     * @param  \PDOStatement $statement
-     * @param  array  $bindings
-     * @return void
-     */
-    public function bindValues($statement, $bindings)
-    {
-        foreach ($bindings as $key => $value) {
-            $statement->bindValue(
-                is_string($key) ? $key : $key + 1, $value,
-                is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR
-            );
-        }
     }
 
     /**
@@ -585,6 +525,144 @@ class Connection implements ConnectionInterface
     }
 
     /**
+     * Execute a Closure within a transaction.
+     *
+     * @param  \Closure  $callback
+     * @return mixed
+     *
+     * @throws \Exception|\Throwable
+     */
+    public function transaction(Closure $callback)
+    {
+        $this->beginTransaction();
+
+        // We'll simply execute the given callback within a try / catch block
+        // and if we catch any exception we can rollback the transaction
+        // so that none of the changes are persisted to the database.
+        try {
+            $result = $callback($this);
+
+            $this->commit();
+        }
+
+        // If we catch an exception, we will roll back so nothing gets messed
+        // up in the database. Then we'll re-throw the exception so it can
+        // be handled how the developer sees fit for their applications.
+        catch (Exception $e) {
+            $this->rollBack();
+
+            throw $e;
+        } catch (Throwable $e) {
+            $this->rollBack();
+
+            throw $e;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Start a new database transaction.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function beginTransaction()
+    {
+        ++$this->transactions;
+
+        if ($this->transactions == 1) {
+            try {
+                $this->getPdo()->beginTransaction();
+            } catch (Exception $e) {
+                --$this->transactions;
+
+                throw $e;
+            }
+        } elseif ($this->transactions > 1 && $this->queryGrammar->supportsSavepoints()) {
+            $this->getPdo()->exec(
+                $this->queryGrammar->compileSavepoint('trans'.$this->transactions)
+            );
+        }
+
+        $this->fireConnectionEvent('beganTransaction');
+    }
+
+    /**
+     * Commit the active database transaction.
+     *
+     * @return void
+     */
+    public function commit()
+    {
+        if ($this->transactions == 1) {
+            $this->getPdo()->commit();
+        }
+
+        $this->transactions = max(0, $this->transactions - 1);
+
+        $this->fireConnectionEvent('committed');
+    }
+
+    /**
+     * Rollback the active database transaction.
+     *
+     * @return void
+     */
+    public function rollBack()
+    {
+        if ($this->transactions == 1) {
+            $this->getPdo()->rollBack();
+        } elseif ($this->transactions > 1 && $this->queryGrammar->supportsSavepoints()) {
+            $this->getPdo()->exec(
+                $this->queryGrammar->compileSavepointRollBack('trans'.$this->transactions)
+            );
+        }
+
+        $this->transactions = max(0, $this->transactions - 1);
+
+        $this->fireConnectionEvent('rollingBack');
+    }
+
+    /**
+     * Get the number of active transactions.
+     *
+     * @return int
+     */
+    public function transactionLevel()
+    {
+        return $this->transactions;
+    }
+
+    /**
+     * Execute the given callback in "dry run" mode.
+     *
+     * @param  \Closure  $callback
+     * @return array
+     */
+    public function pretend(Closure $callback)
+    {
+        $loggingQueries = $this->loggingQueries;
+
+        $this->enableQueryLog();
+
+        $this->pretending = true;
+
+        $this->queryLog = [];
+
+        // Basically to make the database connection "pretend", we will just return
+        // the default values for all the query methods, then we will return an
+        // array of queries that were "executed" within the Closure callback.
+        $callback($this);
+
+        $this->pretending = false;
+
+        $this->loggingQueries = $loggingQueries;
+
+        return $this->queryLog;
+    }
+
+    /**
      * Run a SQL statement and log its execution context.
      *
      * @param  string    $query
@@ -606,7 +684,11 @@ class Connection implements ConnectionInterface
         try {
             $result = $this->runQueryCallback($query, $bindings, $callback);
         } catch (QueryException $e) {
-            $result = $this->handleQueryException(
+            if ($this->transactions >= 1) {
+                throw $e;
+            }
+
+            $result = $this->tryAgainIfCausedByLostConnection(
                 $e, $query, $bindings, $callback
             );
         }
@@ -614,9 +696,9 @@ class Connection implements ConnectionInterface
         // Once we have run the query we will calculate the time that it took to run and
         // then log the query, bindings, and execution time so we will report them on
         // the event that the developer needs them. We'll log time in milliseconds.
-        $this->logQuery(
-            $query, $bindings, $this->getElapsedTime($start)
-        );
+        $time = $this->getElapsedTime($start);
+
+        $this->logQuery($query, $bindings, $time);
 
         return $result;
     }
@@ -637,7 +719,7 @@ class Connection implements ConnectionInterface
         // run the SQL against the PDO connection. Then we can calculate the time it
         // took to execute and log the query SQL, bindings and time in our memory.
         try {
-            $result = $callback($query, $bindings);
+            $result = $callback($this, $query, $bindings);
         }
 
         // If an exception occurs when attempting to run a query, we'll format the error
@@ -650,54 +732,6 @@ class Connection implements ConnectionInterface
         }
 
         return $result;
-    }
-
-    /**
-     * Log a query in the connection's query log.
-     *
-     * @param  string  $query
-     * @param  array   $bindings
-     * @param  float|null  $time
-     * @return void
-     */
-    public function logQuery($query, $bindings, $time = null)
-    {
-        $this->event(new QueryExecuted($query, $bindings, $time, $this));
-
-        if ($this->loggingQueries) {
-            $this->queryLog[] = compact('query', 'bindings', 'time');
-        }
-    }
-
-    /**
-     * Get the elapsed time since a given starting point.
-     *
-     * @param  int    $start
-     * @return float
-     */
-    protected function getElapsedTime($start)
-    {
-        return round((microtime(true) - $start) * 1000, 2);
-    }
-
-    /**
-     * Handle a query exception.
-     *
-     * @param  \Exception  $e
-     * @param  string  $query
-     * @param  array  $bindings
-     * @param  \Closure  $callback
-     * @return mixed
-     */
-    protected function handleQueryException($e, $query, $bindings, Closure $callback)
-    {
-        if ($this->transactions >= 1) {
-            throw $e;
-        }
-
-        return $this->tryAgainIfCausedByLostConnection(
-            $e, $query, $bindings, $callback
-        );
     }
 
     /**
@@ -723,6 +757,16 @@ class Connection implements ConnectionInterface
     }
 
     /**
+     * Disconnect from the underlying PDO connection.
+     *
+     * @return void
+     */
+    public function disconnect()
+    {
+        $this->setPdo(null)->setReadPdo(null);
+    }
+
+    /**
      * Reconnect to the database.
      *
      * @return void
@@ -745,19 +789,30 @@ class Connection implements ConnectionInterface
      */
     protected function reconnectIfMissingConnection()
     {
-        if (is_null($this->pdo)) {
+        if (is_null($this->getPdo()) || is_null($this->getReadPdo())) {
             $this->reconnect();
         }
     }
 
     /**
-     * Disconnect from the underlying PDO connection.
+     * Log a query in the connection's query log.
      *
+     * @param  string  $query
+     * @param  array   $bindings
+     * @param  float|null  $time
      * @return void
      */
-    public function disconnect()
+    public function logQuery($query, $bindings, $time = null)
     {
-        $this->setPdo(null)->setReadPdo(null);
+        if (isset($this->events)) {
+            $this->events->fire(new Events\QueryExecuted(
+                $query, $bindings, $time, $this
+            ));
+        }
+
+        if ($this->loggingQueries) {
+            $this->queryLog[] = compact('query', 'bindings', 'time');
+        }
     }
 
     /**
@@ -787,36 +842,23 @@ class Connection implements ConnectionInterface
 
         switch ($event) {
             case 'beganTransaction':
-                return $this->events->dispatch(new Events\TransactionBeginning($this));
+                return $this->events->fire(new Events\TransactionBeginning($this));
             case 'committed':
-                return $this->events->dispatch(new Events\TransactionCommitted($this));
+                return $this->events->fire(new Events\TransactionCommitted($this));
             case 'rollingBack':
-                return $this->events->dispatch(new Events\TransactionRolledBack($this));
+                return $this->events->fire(new Events\TransactionRolledBack($this));
         }
     }
 
     /**
-     * Fire the given event if possible.
+     * Get the elapsed time since a given starting point.
      *
-     * @param  mixed  $event
-     * @return void
+     * @param  int    $start
+     * @return float
      */
-    protected function event($event)
+    protected function getElapsedTime($start)
     {
-        if (isset($this->events)) {
-            $this->events->dispatch($event);
-        }
-    }
-
-    /**
-     * Get a new raw query expression.
-     *
-     * @param  mixed  $value
-     * @return \Illuminate\Database\Query\Expression
-     */
-    public function raw($value)
-    {
-        return new Expression($value);
+        return round((microtime(true) - $start) * 1000, 2);
     }
 
     /**
@@ -861,11 +903,11 @@ class Connection implements ConnectionInterface
     public function getDoctrineConnection()
     {
         if (is_null($this->doctrineConnection)) {
+            $driver = $this->getDoctrineDriver();
+
             $data = ['pdo' => $this->getPdo(), 'dbname' => $this->getConfig('database')];
 
-            $this->doctrineConnection = new DoctrineConnection(
-                $data, $this->getDoctrineDriver()
-            );
+            $this->doctrineConnection = new DoctrineConnection($data, $driver);
         }
 
         return $this->doctrineConnection;
@@ -896,10 +938,6 @@ class Connection implements ConnectionInterface
             return $this->getPdo();
         }
 
-        if ($this->readPdo instanceof Closure) {
-            return $this->readPdo = call_user_func($this->readPdo);
-        }
-
         return $this->readPdo ?: $this->getPdo();
     }
 
@@ -908,10 +946,14 @@ class Connection implements ConnectionInterface
      *
      * @param  \PDO|null  $pdo
      * @return $this
+     *
+     * @throws \RuntimeException
      */
     public function setPdo($pdo)
     {
-        $this->transactions = 0;
+        if ($this->transactions >= 1) {
+            throw new RuntimeException("Can't swap PDO instance while within transaction.");
+        }
 
         $this->pdo = $pdo;
 
@@ -957,10 +999,10 @@ class Connection implements ConnectionInterface
     /**
      * Get an option from the configuration options.
      *
-     * @param  string|null  $option
+     * @param  string  $option
      * @return mixed
      */
-    public function getConfig($option = null)
+    public function getConfig($option)
     {
         return Arr::get($this->config, $option);
     }
@@ -1070,6 +1112,51 @@ class Connection implements ConnectionInterface
     }
 
     /**
+     * Get the default fetch mode for the connection.
+     *
+     * @return int
+     */
+    public function getFetchMode()
+    {
+        return $this->fetchMode;
+    }
+
+    /**
+     * Get the fetch argument to be applied when selecting.
+     *
+     * @return mixed
+     */
+    public function getFetchArgument()
+    {
+        return $this->fetchArgument;
+    }
+
+    /**
+     * Get custom constructor arguments for the PDO::FETCH_CLASS fetch mode.
+     *
+     * @return array
+     */
+    public function getFetchConstructorArgument()
+    {
+        return $this->fetchConstructorArgument;
+    }
+
+    /**
+     * Set the default fetch mode for the connection, and optional arguments for the given fetch mode.
+     *
+     * @param  int  $fetchMode
+     * @param  mixed  $fetchArgument
+     * @param  array  $fetchConstructorArgument
+     * @return int
+     */
+    public function setFetchMode($fetchMode, $fetchArgument = null, array $fetchConstructorArgument = [])
+    {
+        $this->fetchMode = $fetchMode;
+        $this->fetchArgument = $fetchArgument;
+        $this->fetchConstructorArgument = $fetchConstructorArgument;
+    }
+
+    /**
      * Get the connection query log.
      *
      * @return array
@@ -1174,29 +1261,5 @@ class Connection implements ConnectionInterface
         $grammar->setTablePrefix($this->tablePrefix);
 
         return $grammar;
-    }
-
-    /**
-     * Register a connection resolver.
-     *
-     * @param  string  $driver
-     * @param  \Closure  $callback
-     * @return void
-     */
-    public static function resolverFor($driver, Closure $callback)
-    {
-        static::$resolvers[$driver] = $callback;
-    }
-
-    /**
-     * Get the connection resolver for the given driver.
-     *
-     * @param  string  $driver
-     * @return mixed
-     */
-    public static function getResolver($driver)
-    {
-        return isset(static::$resolvers[$driver]) ?
-                     static::$resolvers[$driver] : null;
     }
 }

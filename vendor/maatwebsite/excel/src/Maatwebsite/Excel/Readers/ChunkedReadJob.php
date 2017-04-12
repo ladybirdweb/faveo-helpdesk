@@ -2,15 +2,12 @@
 
 namespace Maatwebsite\Excel\Readers;
 
-use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Filters\ChunkReadFilter;
 use SuperClosure\Serializer;
 
 class ChunkedReadJob implements ShouldQueue
 {
-    use Queueable;
-
     /**
      * @var int
      */

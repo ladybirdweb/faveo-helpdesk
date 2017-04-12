@@ -4,9 +4,9 @@ namespace PhpParser\NodeVisitor;
 
 use PhpParser;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Expr;
 
 class NameResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -118,8 +118,8 @@ namespace {
     new \Hallo\Bar();
     new \Bar();
     new \Bar();
-    \bar();
-    \hi();
+    bar();
+    hi();
     \Hallo\bar();
     \foo\bar();
     \bar();
@@ -199,12 +199,9 @@ interface A extends C, D {
     public function a(A $a) : A;
 }
 
-function fn(A $a) : A {}
-function fn2(array $a) : array {}
-function(A $a) : A {};
-
-function fn3(?A $a) : ?A {}
-function fn4(?array $a) : ?array {}
+function fn() : A {}
+function fn2() : array {}
+function() : A {};
 
 A::b();
 A::$b;
@@ -236,20 +233,14 @@ interface A extends \NS\C, \NS\D
 {
     public function a(\NS\A $a) : \NS\A;
 }
-function fn(\NS\A $a) : \NS\A
+function fn() : \NS\A
 {
 }
-function fn2(array $a) : array
+function fn2() : array
 {
 }
-function (\NS\A $a) : \NS\A {
+function () : \NS\A {
 };
-function fn3(?\NS\A $a) : ?\NS\A
-{
-}
-function fn4(?array $a) : ?array
-{
-}
 \NS\A::b();
 \NS\A::$b;
 \NS\A::B;
@@ -287,7 +278,7 @@ EOC;
         $this->assertEquals($stmts, $traverser->traverse($stmts));
     }
 
-    public function testAddDeclarationNamespacedName() {
+    public function testAddNamespacedName() {
         $nsStmts = array(
             new Stmt\Class_('A'),
             new Stmt\Interface_('B'),
@@ -317,29 +308,6 @@ EOC;
         $this->assertSame('D',     (string) $stmts[0]->stmts[3]->consts[0]->namespacedName);
         $this->assertSame('E',     (string) $stmts[0]->stmts[4]->namespacedName);
         $this->assertObjectNotHasAttribute('namespacedName', $stmts[0]->stmts[5]->class);
-    }
-
-    public function testAddRuntimeResolvedNamespacedName() {
-        $stmts = array(
-            new Stmt\Namespace_(new Name('NS'), array(
-                new Expr\FuncCall(new Name('foo')),
-                new Expr\ConstFetch(new Name('FOO')),
-            )),
-            new Stmt\Namespace_(null, array(
-                new Expr\FuncCall(new Name('foo')),
-                new Expr\ConstFetch(new Name('FOO')),
-            )),
-        );
-
-        $traverser = new PhpParser\NodeTraverser;
-        $traverser->addVisitor(new NameResolver);
-        $stmts = $traverser->traverse($stmts);
-        
-        $this->assertSame('NS\\foo', (string) $stmts[0]->stmts[0]->name->getAttribute('namespacedName'));
-        $this->assertSame('NS\\FOO', (string) $stmts[0]->stmts[1]->name->getAttribute('namespacedName'));
-
-        $this->assertFalse($stmts[1]->stmts[0]->name->hasAttribute('namespacedName'));
-        $this->assertFalse($stmts[1]->stmts[1]->name->hasAttribute('namespacedName'));
     }
 
     /**
@@ -445,24 +413,5 @@ EOC;
         $this->assertSame('SELF', (string)$methodStmt->stmts[0]->class);
         $this->assertSame('PARENT', (string)$methodStmt->stmts[1]->class);
         $this->assertSame('STATIC', (string)$methodStmt->stmts[2]->class);
-    }
-
-    public function testAddOriginalNames() {
-        $traverser = new PhpParser\NodeTraverser;
-        $traverser->addVisitor(new NameResolver(null, ['preserveOriginalNames' => true]));
-
-        $n1 = new Name('Bar');
-        $n2 = new Name('bar');
-        $origStmts = [
-            new Stmt\Namespace_(new Name('Foo'), [
-                new Expr\ClassConstFetch($n1, 'FOO'),
-                new Expr\FuncCall($n2),
-            ])
-        ];
-
-        $stmts = $traverser->traverse($origStmts);
-
-        $this->assertSame($n1, $stmts[0]->stmts[0]->class->getAttribute('originalName'));
-        $this->assertSame($n2, $stmts[0]->stmts[1]->name->getAttribute('originalName'));
     }
 }

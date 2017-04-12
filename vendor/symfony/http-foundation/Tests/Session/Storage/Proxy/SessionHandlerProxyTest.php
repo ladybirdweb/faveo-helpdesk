@@ -11,7 +11,6 @@
 
 namespace Symfony\Component\HttpFoundation\Tests\Session\Storage\Proxy;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy;
 
 /**
@@ -22,7 +21,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\Proxy\SessionHandlerProxy;
  * @runTestsInSeparateProcesses
  * @preserveGlobalState disabled
  */
-class SessionHandlerProxyTest extends TestCase
+class SessionHandlerProxyTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_Matcher
@@ -36,7 +35,7 @@ class SessionHandlerProxyTest extends TestCase
 
     protected function setUp()
     {
-        $this->mock = $this->getMockBuilder('SessionHandlerInterface')->getMock();
+        $this->mock = $this->getMock('SessionHandlerInterface');
         $this->proxy = new SessionHandlerProxy($this->mock);
     }
 

@@ -30,8 +30,8 @@ class MandrillTransport extends Transport
      */
     public function __construct(ClientInterface $client, $key)
     {
-        $this->key = $key;
         $this->client = $client;
+        $this->key = $key;
     }
 
     /**
@@ -41,18 +41,20 @@ class MandrillTransport extends Transport
     {
         $this->beforeSendPerformed($message);
 
-        $this->client->post('https://mandrillapp.com/api/1.0/messages/send-raw.json', [
-            'form_params' => [
-                'key' => $this->key,
-                'to' => $this->getTo($message),
-                'raw_message' => $message->toString(),
-                'async' => true,
-            ],
-        ]);
+        $data = [
+            'key' => $this->key,
+            'to' => $this->getToAddresses($message),
+            'raw_message' => $message->toString(),
+            'async' => false,
+        ];
 
-        $this->sendPerformed($message);
+        if (version_compare(ClientInterface::VERSION, '6') === 1) {
+            $options = ['form_params' => $data];
+        } else {
+            $options = ['body' => $data];
+        }
 
-        return $this->numberOfRecipients($message);
+        return $this->client->post('https://mandrillapp.com/api/1.0/messages/send-raw.json', $options);
     }
 
     /**
@@ -63,7 +65,7 @@ class MandrillTransport extends Transport
      * @param  \Swift_Mime_Message $message
      * @return array
      */
-    protected function getTo(Swift_Mime_Message $message)
+    protected function getToAddresses(Swift_Mime_Message $message)
     {
         $to = [];
 

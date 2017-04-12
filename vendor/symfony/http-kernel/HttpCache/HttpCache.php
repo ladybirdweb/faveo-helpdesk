@@ -182,9 +182,9 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         }
         $this->traces[$request->getMethod().' '.$path] = array();
 
-        if (!$request->isMethodSafe(false)) {
+        if (!$request->isMethodSafe()) {
             $response = $this->invalidate($request, $catch);
-        } elseif ($request->headers->has('expect') || !$request->isMethodCacheable()) {
+        } elseif ($request->headers->has('expect')) {
             $response = $this->pass($request, $catch);
         } else {
             $response = $this->lookup($request, $catch);
@@ -354,9 +354,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         $subRequest = clone $request;
 
         // send no head requests because we want content
-        if ('HEAD' === $request->getMethod()) {
-            $subRequest->setMethod('GET');
-        }
+        $subRequest->setMethod('GET');
 
         // add our cached last-modified validator
         $subRequest->headers->set('if_modified_since', $entry->headers->get('Last-Modified'));
@@ -417,9 +415,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
         $subRequest = clone $request;
 
         // send no head requests because we want content
-        if ('HEAD' === $request->getMethod()) {
-            $subRequest->setMethod('GET');
-        }
+        $subRequest->setMethod('GET');
 
         // avoid that the backend sends no content
         $subRequest->headers->remove('if_modified_since');

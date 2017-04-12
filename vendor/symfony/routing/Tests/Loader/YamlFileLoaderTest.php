@@ -11,16 +11,15 @@
 
 namespace Symfony\Component\Routing\Tests\Loader;
 
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Config\Resource\FileResource;
 
-class YamlFileLoaderTest extends TestCase
+class YamlFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
     public function testSupports()
     {
-        $loader = new YamlFileLoader($this->getMockBuilder('Symfony\Component\Config\FileLocator')->getMock());
+        $loader = new YamlFileLoader($this->getMock('Symfony\Component\Config\FileLocator'));
 
         $this->assertTrue($loader->supports('foo.yml'), '->supports() returns true if the resource is loadable');
         $this->assertTrue($loader->supports('foo.yaml'), '->supports() returns true if the resource is loadable');

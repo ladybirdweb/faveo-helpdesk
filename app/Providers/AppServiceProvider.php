@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Model\Update\BarNotification;
 use Illuminate\Queue\Events\JobFailed;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Queue;
 use View;
@@ -29,9 +28,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Queue::failing(function (JobFailed $event) {
-            loging('Failed Job - '.$event->connectionName, json_encode($event->job->payload()));
+            loging('Failed Job - '.$event->connectionName, json_encode($event->data));
+            $failedid = $event->failedId;
+            //\Artisan::call('queue:retry',['id'=>[$failedid]]);
         });
-        Route::singularResourceParameters(false);
         // Please note the different namespace
         // and please add a \ in front of your classes in the global namespace
         \Event::listen('cron.collectJobs', function () {

@@ -1,30 +1,30 @@
-<?php
-
-namespace LaravelFCM\Response;
+<?php namespace LaravelFCM\Response;
 
 /**
- * Interface GroupResponseContract.
+ * Interface GroupResponseContract
+ *
+ * @package LaravelFCM\Response
  */
-interface GroupResponseContract
-{
-    /**
-     * Get the number of device reached with success.
-     *
-     * @return int
-     */
-    public function numberSuccess();
+interface GroupResponseContract {
 
-    /**
-     * Get the number of device which thrown an error.
-     *
-     * @return int
-     */
-    public function numberFailure();
+	/**
+	 * Get the number of device reached with success
+	 * @return int
+	 */
+	public function numberSuccess();
 
-    /**
-     * Get all token in group that fcm cannot reach.
-     *
-     * @return array
-     */
-    public function tokensFailed();
+	/**
+	 * Get the number of device which thrown an error
+	 *
+	 * @return int
+	 */
+	public function numberFailure();
+
+	/**
+	 * Get all token in group that fcm cannot reach
+	 *
+	 * @return array
+	 */
+	public function tokensFailed();
+
 }

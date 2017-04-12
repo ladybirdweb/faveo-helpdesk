@@ -4,9 +4,6 @@ namespace Illuminate\Foundation\Testing\Concerns;
 
 use Mockery;
 use Exception;
-use Illuminate\Contracts\Bus\Dispatcher as BusDispatcherContract;
-use Illuminate\Contracts\Events\Dispatcher as EventsDispatcherContract;
-use Illuminate\Contracts\Notifications\Dispatcher as NotificationDispatcher;
 
 trait MocksApplicationServices
 {
@@ -18,25 +15,11 @@ trait MocksApplicationServices
     protected $firedEvents = [];
 
     /**
-     * All of the fired model events.
-     *
-     * @var array
-     */
-    protected $firedModelEvents = [];
-
-    /**
      * All of the dispatched jobs.
      *
      * @var array
      */
     protected $dispatchedJobs = [];
-
-    /**
-     * All of the dispatched notifications.
-     *
-     * @var array
-     */
-    protected $dispatchedNotifications = [];
 
     /**
      * Specify a list of events that should be fired for the given operation.
@@ -99,13 +82,32 @@ trait MocksApplicationServices
      */
     protected function withoutEvents()
     {
-        $mock = Mockery::mock(EventsDispatcherContract::class);
+        $mock = Mockery::mock('Illuminate\Contracts\Events\Dispatcher');
 
-        $mock->shouldReceive('fire', 'dispatch')->andReturnUsing(function ($called) {
+        $mock->shouldReceive('fire')->andReturnUsing(function ($called) {
             $this->firedEvents[] = $called;
         });
 
         $this->app->instance('events', $mock);
+
+        return $this;
+    }
+
+    /**
+     * Specify a list of observers that will not run for the given operation.
+     *
+     * @param  array|string  $observers
+     * @return $this
+     */
+    public function withoutObservers($observers)
+    {
+        $observers = is_array($observers) ? $observers : [$observers];
+
+        array_map(function ($observer) {
+            $this->app->bind($observer, function () use ($observer) {
+                return $this->getMockBuilder($observer)->disableOriginalConstructor()->getMock();
+            });
+        }, $observers);
 
         return $this;
     }
@@ -180,14 +182,14 @@ trait MocksApplicationServices
      */
     protected function withoutJobs()
     {
-        $mock = Mockery::mock(BusDispatcherContract::class);
+        $mock = Mockery::mock('Illuminate\Contracts\Bus\Dispatcher');
 
-        $mock->shouldReceive('dispatch', 'dispatchNow')->andReturnUsing(function ($dispatched) {
+        $mock->shouldReceive('dispatch')->andReturnUsing(function ($dispatched) {
             $this->dispatchedJobs[] = $dispatched;
         });
 
         $this->app->instance(
-            BusDispatcherContract::class, $mock
+            'Illuminate\Contracts\Bus\Dispatcher', $mock
         );
 
         return $this;
@@ -235,56 +237,5 @@ trait MocksApplicationServices
         }
 
         return false;
-    }
-
-    /**
-     * Mock the notification dispatcher so all notifications are silenced.
-     *
-     * @return $this
-     */
-    protected function withoutNotifications()
-    {
-        $mock = Mockery::mock(NotificationDispatcher::class);
-
-        $mock->shouldReceive('send')->andReturnUsing(function ($notifiable, $instance, $channels = []) {
-            $this->dispatchedNotifications[] = compact(
-                'notifiable', 'instance', 'channels'
-            );
-        });
-
-        $this->app->instance(NotificationDispatcher::class, $mock);
-
-        return $this;
-    }
-
-    /**
-     * Specify a notification that is expected to be dispatched.
-     *
-     * @param  mixed  $notifiable
-     * @param  string  $notification
-     * @return $this
-     */
-    protected function expectsNotification($notifiable, $notification)
-    {
-        $this->withoutNotifications();
-
-        $this->beforeApplicationDestroyed(function () use ($notifiable, $notification) {
-            foreach ($this->dispatchedNotifications as $dispatched) {
-                $notified = $dispatched['notifiable'];
-
-                if (($notified === $notifiable ||
-                     $notified->getKey() == $notifiable->getKey()) &&
-                    get_class($dispatched['instance']) === $notification
-                ) {
-                    return $this;
-                }
-            }
-
-            throw new Exception(
-                'The following expected notification were not dispatched: ['.$notification.']'
-            );
-        });
-
-        return $this;
     }
 }

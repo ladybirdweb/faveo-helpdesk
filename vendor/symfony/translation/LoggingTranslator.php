@@ -12,7 +12,6 @@
 namespace Symfony\Component\Translation;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Translation\Exception\InvalidArgumentException;
 
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
@@ -36,7 +35,7 @@ class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface
     public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
     {
         if (!$translator instanceof TranslatorBagInterface) {
-            throw new InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface and TranslatorBagInterface.', get_class($translator)));
+            throw new \InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface and TranslatorBagInterface.', get_class($translator)));
         }
 
         $this->translator = $translator;
@@ -87,20 +86,6 @@ class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface
     public function getCatalogue($locale = null)
     {
         return $this->translator->getCatalogue($locale);
-    }
-
-    /**
-     * Gets the fallback locales.
-     *
-     * @return array $locales The fallback locales
-     */
-    public function getFallbackLocales()
-    {
-        if ($this->translator instanceof Translator) {
-            return $this->translator->getFallbackLocales();
-        }
-
-        return array();
     }
 
     /**

@@ -3,6 +3,7 @@
 use Closure;
 use PHPExcel;
 use Maatwebsite\Excel\Excel;
+use Illuminate\Support\Facades\Config;
 use Maatwebsite\Excel\Collections\SheetCollection;
 use Maatwebsite\Excel\Exceptions\LaravelExcelException;
 
@@ -160,7 +161,7 @@ class ConfigReader {
      */
     protected function getCoordinateByKey($field)
     {
-        return config($this->configName . '.' . $this->sheetName . '.' . $field, false);
+        return Config::get($this->configName . '.' . $this->sheetName . '.' . $field, false);
     }
 
     /**

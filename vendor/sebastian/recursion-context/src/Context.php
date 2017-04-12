@@ -38,17 +38,19 @@ final class Context
     /**
      * Adds a value to the context.
      *
-     * @param array|object $value The value to add.
-     *
-     * @return int|string The ID of the stored value, either as a string or integer.
-     *
-     * @throws InvalidArgumentException Thrown if $value is not an array or object
+     * @param  array|object             $value The value to add.
+     * @return int|string               The ID of the stored value, either as
+     *                                        a string or integer.
+     * @throws InvalidArgumentException Thrown if $value is not an array or
+     *                                        object
      */
     public function add(&$value)
     {
         if (is_array($value)) {
             return $this->addArray($value);
-        } elseif (is_object($value)) {
+        }
+
+        else if (is_object($value)) {
             return $this->addObject($value);
         }
 
@@ -60,17 +62,20 @@ final class Context
     /**
      * Checks if the given value exists within the context.
      *
-     * @param array|object $value The value to check.
-     *
-     * @return int|string|false The string or integer ID of the stored value if it has already been seen, or false if the value is not stored.
-     *
-     * @throws InvalidArgumentException Thrown if $value is not an array or object
+     * @param  array|object             $value The value to check.
+     * @return int|string|false         The string or integer ID of the stored
+     *                                        value if it has already been seen, or
+     *                                        false if the value is not stored.
+     * @throws InvalidArgumentException Thrown if $value is not an array or
+     *                                        object
      */
     public function contains(&$value)
     {
         if (is_array($value)) {
             return $this->containsArray($value);
-        } elseif (is_object($value)) {
+        }
+
+        else if (is_object($value)) {
             return $this->containsObject($value);
         }
 
@@ -80,8 +85,7 @@ final class Context
     }
 
     /**
-     * @param array $array
-     *
+     * @param  array    $array
      * @return bool|int
      */
     private function addArray(array &$array)
@@ -98,8 +102,7 @@ final class Context
     }
 
     /**
-     * @param object $object
-     *
+     * @param  object $object
      * @return string
      */
     private function addObject($object)
@@ -112,8 +115,7 @@ final class Context
     }
 
     /**
-     * @param array $array
-     *
+     * @param  array     $array
      * @return int|false
      */
     private function containsArray(array &$array)
@@ -137,8 +139,7 @@ final class Context
     }
 
     /**
-     * @param object $value
-     *
+     * @param  object       $value
      * @return string|false
      */
     private function containsObject($value)

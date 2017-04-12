@@ -7,8 +7,8 @@ within an array. It is also able to validate multidimensional arrays.
 
 The following options are supported for `Zend\Validator\InArray`:
 
-- `haystack`: Sets the haystack for the validation. 
-- `recursive`: Defines if the validation should be done recursively. This option
+- `haystack`: Sets the haystack for the validation.  `recursive`: Defines if the
+- validation should be done recursively. This option
   defaults to `false`.
 - `strict`: Three modes of comparison are offered owing to an often overlooked,
   and potentially dangerous security issue when validating string input from
@@ -35,7 +35,7 @@ Basic usage is to provide an array during instantiation:
 
 ```php
 $validator = new Zend\Validator\InArray([
-    'haystack' => ['value1', 'value2',...'valueN'],
+    'haystack' => ['value1', 'value2',...'valueN']
 ]);
 
 if ($validator->isValid('value')) {
@@ -83,7 +83,7 @@ It's possible to set the strict mode at initialisation and afterwards with the
 ```php
 // defaults to InArray::COMPARE_NOT_STRICT_AND_PREVENT_STR_TO_INT_VULNERABILITY
 $validator = new Zend\Validator\InArray([
-    'haystack' => ['value1', 'value2', /* ... */ 'valueN'],
+    'haystack' => array('value1', 'value2', /* ... */ 'valueN'),
 ]);
 
 // set strict mode
@@ -118,7 +118,7 @@ To validate multidimensional arrays you have to set the `recursive` option.
 
 ```php
 $validator = new Zend\Validator\InArray([
-    'haystack' => [
+    'haystack' => array(
         'firstDimension' => ['value1', 'value2', / ... */ 'valueN'],
         'secondDimension' => ['foo1', 'foo2', /* ... */ 'fooN'],
     ],

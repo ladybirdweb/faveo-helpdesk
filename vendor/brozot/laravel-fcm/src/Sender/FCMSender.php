@@ -1,6 +1,4 @@
-<?php
-
-namespace LaravelFCM\Sender;
+<?php namespace LaravelFCM\Sender;
 
 use LaravelFCM\Message\Topics;
 use LaravelFCM\Request\Request;
@@ -13,106 +11,113 @@ use LaravelFCM\Response\DownstreamResponse;
 use LaravelFCM\Message\PayloadNotification;
 
 /**
- * Class FCMSender.
+ * Class FCMSender
+ *
+ * @package LaravelFCM\Sender
  */
-class FCMSender extends HTTPSender
-{
-    const MAX_TOKEN_PER_REQUEST = 1000;
+class FCMSender extends HTTPSender {
 
-    /**
-     * send a downstream message to.
-     *
-     * - a unique device with is registration Token
-     * - or to multiples devices with an array of registrationIds
-     *
-     * @param string|array             $to
-     * @param Options|null             $options
-     * @param PayloadNotification|null $notification
-     * @param PayloadData|null         $data
-     *
-     * @return DownstreamResponse|null
-     */
-    public function sendTo($to, Options $options = null, PayloadNotification $notification = null, PayloadData $data = null)
-    {
-        $response = null;
+	const MAX_TOKEN_PER_REQUEST = 1000;
 
-        if (is_array($to) && !empty($to)) {
-            $partialTokens = array_chunk($to, self::MAX_TOKEN_PER_REQUEST, false);
-            foreach ($partialTokens as $tokens) {
-                $request = new Request($tokens, $options, $notification, $data);
+	/**
+	 * send a downstream message to
+	 *
+	 * - a unique device with is registration Token
+	 * - or to multiples devices with an array of registrationIds
+	 *
+	 * @param String|array             $to
+	 * @param Options|null             $options
+	 * @param PayloadNotification|null $notification
+	 * @param PayloadData|null         $data
+	 *
+	 * @return DownstreamResponse|null
+	 *
+	 */
+	public function sendTo($to, Options $options = null, PayloadNotification $notification = null, PayloadData $data = null)
+	{
+		$response = null;
 
-                $responseGuzzle = $this->post($request);
+		if (is_array($to) && !empty($to)) {
 
-                $responsePartial = new DownstreamResponse($responseGuzzle, $tokens);
-                if (!$response) {
-                    $response = $responsePartial;
-                } else {
-                    $response->merge($responsePartial);
-                }
-            }
-        } else {
-            $request = new Request($to, $options, $notification, $data);
-            $responseGuzzle = $this->post($request);
+			$partialTokens = array_chunk($to, self::MAX_TOKEN_PER_REQUEST, false);
+			foreach ($partialTokens as $tokens) {
+				$request = new Request($tokens, $options, $notification, $data);
 
-            $response = new DownstreamResponse($responseGuzzle, $to);
-        }
+				$responseGuzzle = $this->post($request);
 
-        return $response;
-    }
+				$responsePartial = new DownstreamResponse($responseGuzzle, $tokens);
+				if (!$response) {
+					$response = $responsePartial;
+				}
+				else {
+					$response->merge($responsePartial);
+				}
+			}
+		}
+		else {
+			$request = new Request($to, $options, $notification, $data);
+			$responseGuzzle = $this->post($request);
 
-    /**
-     * Send a message to a group of devices identified with them notification key.
-     *
-     * @param                          $notificationKey
-     * @param Options|null             $options
-     * @param PayloadNotification|null $notification
-     * @param PayloadData|null         $data
-     *
-     * @return GroupResponse
-     */
-    public function sendToGroup($notificationKey, Options $options = null, PayloadNotification $notification = null, PayloadData $data = null)
-    {
-        $request = new Request($notificationKey, $options, $notification, $data);
+			$response = new DownstreamResponse($responseGuzzle, $to);
+		}
 
-        $responseGuzzle = $this->post($request);
+		return $response;
+	}
 
-        return new GroupResponse($responseGuzzle, $notificationKey);
-    }
+	/**
+	 * Send a message to a group of devices identified with them notification key
+	 *
+	 * @param                          $notificationKey
+	 * @param Options|null             $options
+	 * @param PayloadNotification|null $notification
+	 * @param PayloadData|null         $data
+	 *
+	 * @return GroupResponse
+	 */
+	public function sendToGroup($notificationKey, Options $options = null, PayloadNotification $notification = null, PayloadData $data = null)
+	{
+		$request = new Request($notificationKey, $options, $notification, $data);
 
-    /**
-     * Send message devices registered at a or more topics.
-     *
-     * @param Topics                   $topics
-     * @param Options|null             $options
-     * @param PayloadNotification|null $notification
-     * @param PayloadData|null         $data
-     *
-     * @return TopicResponse
-     */
-    public function sendToTopic(Topics $topics, Options $options = null, PayloadNotification $notification = null, PayloadData $data = null)
-    {
-        $request = new Request(null, $options, $notification, $data, $topics);
+		$responseGuzzle = $this->post($request);
 
-        $responseGuzzle = $this->post($request);
+		return new GroupResponse($responseGuzzle, $notificationKey);
+	}
 
-        return new TopicResponse($responseGuzzle, $topics);
-    }
+	/**
+	 * Send message devices registered at a or more topics
+	 *
+	 * @param Topics                   $topics
+	 * @param Options|null             $options
+	 * @param PayloadNotification|null $notification
+	 * @param PayloadData|null         $data
+	 *
+	 * @return TopicResponse
+	 */
+	public function sendToTopic(Topics $topics, Options $options = null, PayloadNotification $notification = null, PayloadData $data = null)
+	{
+		$request = new Request(null, $options, $notification, $data, $topics);
 
-    /**
-     * @internal
-     *
-     * @param $request
-     *
-     * @return null|\Psr\Http\Message\ResponseInterface
-     */
-    private function post($request)
-    {
-        try {
-            $responseGuzzle = $this->client->post($this->url, $request->build());
-        } catch (ClientException $e) {
-            $responseGuzzle = $e->getResponse();
-        }
+		$responseGuzzle = $this->post($request);
 
-        return $responseGuzzle;
-    }
+		return new TopicResponse($responseGuzzle, $topics);
+	}
+
+	/**
+	 * @internal
+	 *
+	 * @param $request
+	 *
+	 * @return null|\Psr\Http\Message\ResponseInterface
+	 */
+	private function post($request)
+	{
+		try {
+			$responseGuzzle = $this->client->post($this->url, $request->build());
+		}
+		catch (ClientException $e) {
+			$responseGuzzle = $e->getResponse();
+		}
+
+		return $responseGuzzle;
+	}
 }

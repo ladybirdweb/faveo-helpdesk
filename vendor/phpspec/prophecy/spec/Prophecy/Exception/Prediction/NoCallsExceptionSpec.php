@@ -3,12 +3,14 @@
 namespace spec\Prophecy\Exception\Prediction;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Prophecy\MethodProphecy;
-use Prophecy\Prophecy\ObjectProphecy;
 
 class NoCallsExceptionSpec extends ObjectBehavior
 {
-    function let(ObjectProphecy $objectProphecy, MethodProphecy $methodProphecy)
+    /**
+     * @param \Prophecy\Prophecy\ObjectProphecy $objectProphecy
+     * @param \Prophecy\Prophecy\MethodProphecy $methodProphecy
+     */
+    function let($objectProphecy, $methodProphecy)
     {
         $methodProphecy->getObjectProphecy()->willReturn($objectProphecy);
 

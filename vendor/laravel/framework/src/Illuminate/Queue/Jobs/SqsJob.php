@@ -27,18 +27,55 @@ class SqsJob extends Job implements JobContract
      *
      * @param  \Illuminate\Container\Container  $container
      * @param  \Aws\Sqs\SqsClient  $sqs
-     * @param  array   $job
-     * @param  string  $connectionName
      * @param  string  $queue
+     * @param  array   $job
      * @return void
      */
-    public function __construct(Container $container, SqsClient $sqs, array $job, $connectionName, $queue)
+    public function __construct(Container $container,
+                                SqsClient $sqs,
+                                $queue,
+                                array $job)
     {
         $this->sqs = $sqs;
         $this->job = $job;
         $this->queue = $queue;
         $this->container = $container;
-        $this->connectionName = $connectionName;
+    }
+
+    /**
+     * Fire the job.
+     *
+     * @return void
+     */
+    public function fire()
+    {
+        $this->resolveAndFire(json_decode($this->getRawBody(), true));
+    }
+
+    /**
+     * Get the raw body string for the job.
+     *
+     * @return string
+     */
+    public function getRawBody()
+    {
+        return $this->job['Body'];
+    }
+
+    /**
+     * Delete the job from the queue.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        parent::delete();
+
+        $this->sqs->deleteMessage([
+
+            'QueueUrl' => $this->queue, 'ReceiptHandle' => $this->job['ReceiptHandle'],
+
+        ]);
     }
 
     /**
@@ -55,20 +92,6 @@ class SqsJob extends Job implements JobContract
             'QueueUrl' => $this->queue,
             'ReceiptHandle' => $this->job['ReceiptHandle'],
             'VisibilityTimeout' => $delay,
-        ]);
-    }
-
-    /**
-     * Delete the job from the queue.
-     *
-     * @return void
-     */
-    public function delete()
-    {
-        parent::delete();
-
-        $this->sqs->deleteMessage([
-            'QueueUrl' => $this->queue, 'ReceiptHandle' => $this->job['ReceiptHandle'],
         ]);
     }
 
@@ -93,13 +116,13 @@ class SqsJob extends Job implements JobContract
     }
 
     /**
-     * Get the raw body string for the job.
+     * Get the IoC container instance.
      *
-     * @return string
+     * @return \Illuminate\Container\Container
      */
-    public function getRawBody()
+    public function getContainer()
     {
-        return $this->job['Body'];
+        return $this->container;
     }
 
     /**

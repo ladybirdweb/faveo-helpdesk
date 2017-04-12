@@ -3,6 +3,8 @@
 namespace PhpParser\Builder;
 
 use PhpParser;
+use PhpParser\Node;
+use PhpParser\Node\Stmt;
 
 abstract class Declaration extends PhpParser\BuilderAbstract
 {

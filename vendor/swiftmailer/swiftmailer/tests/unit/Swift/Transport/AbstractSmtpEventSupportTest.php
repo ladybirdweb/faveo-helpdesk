@@ -551,6 +551,8 @@ abstract class Swift_Transport_AbstractSmtpEventSupportTest extends Swift_Transp
         $smtp->start();
     }
 
+    // -- Creation Methods
+
     protected function _createEventDispatcher($stub = true)
     {
         return $this->getMockery('Swift_Events_EventDispatcher')->shouldIgnoreMissing();

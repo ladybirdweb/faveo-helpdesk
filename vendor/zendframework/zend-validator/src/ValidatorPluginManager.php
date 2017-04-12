@@ -184,8 +184,6 @@ class ValidatorPluginManager extends AbstractPluginManager
         'Timezone'                 => Timezone::class,
         'uri'                      => Uri::class,
         'Uri'                      => Uri::class,
-        'uuid'                     => Uuid::class,
-        'Uuid'                     => Uuid::class,
     ];
 
     /**
@@ -255,7 +253,6 @@ class ValidatorPluginManager extends AbstractPluginManager
         Step::class                            => InvokableFactory::class,
         Timezone::class                        => InvokableFactory::class,
         Uri::class                             => InvokableFactory::class,
-        Uuid::class                            => InvokableFactory::class,
 
         // v2 canonical FQCNs
 
@@ -326,6 +323,8 @@ class ValidatorPluginManager extends AbstractPluginManager
         'zendi18nvalidatordatetime'             => InvokableFactory::class,
         'zendi18nvalidatorisfloat'              => InvokableFactory::class,
         'zendi18nvalidatorisint'                => InvokableFactory::class,
+        'zendi18nvalidatorisfloat'              => InvokableFactory::class,
+        'zendi18nvalidatorisint'                => InvokableFactory::class,
         'zendi18nvalidatorphonenumber'          => InvokableFactory::class,
         'zendi18nvalidatorpostcode'             => InvokableFactory::class,
         'zendvalidatoriban'                     => InvokableFactory::class,
@@ -345,7 +344,6 @@ class ValidatorPluginManager extends AbstractPluginManager
         'zendvalidatorstep'                     => InvokableFactory::class,
         'zendvalidatortimezone'                 => InvokableFactory::class,
         'zendvalidatoruri'                      => InvokableFactory::class,
-        'zendvalidatoruuid'                     => InvokableFactory::class,
     ];
 
     /**

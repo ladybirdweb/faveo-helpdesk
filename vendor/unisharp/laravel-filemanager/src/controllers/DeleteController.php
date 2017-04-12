@@ -1,15 +1,19 @@
 <?php namespace Unisharp\Laravelfilemanager\controllers;
 
+use Illuminate\Support\Facades\Event;
+use Unisharp\Laravelfilemanager\controllers\Controller;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
-use Unisharp\Laravelfilemanager\Events\ImageIsDeleting;
+use Illuminate\Support\Facades\Input;
+use Lang;
 use Unisharp\Laravelfilemanager\Events\ImageWasDeleted;
 
 /**
  * Class CropController
  * @package Unisharp\Laravelfilemanager\controllers
  */
-class DeleteController extends LfmController
-{
+class DeleteController extends LfmController {
+
     /**
      * Delete image and associated thumbnail
      *
@@ -17,39 +21,35 @@ class DeleteController extends LfmController
      */
     public function getDelete()
     {
-        $name_to_delete = request('items');
+        $name_to_delete = Input::get('items');
 
-        $file_to_delete = parent::getCurrentPath($name_to_delete);
-        $thumb_to_delete = parent::getThumbPath($name_to_delete);
+        $file_path = parent::getPath('directory');
 
-        event(new ImageIsDeleting($file_to_delete));
-
-        if (is_null($name_to_delete)) {
-            return $this->error('folder-name');
-        }
+        $file_to_delete = $file_path . $name_to_delete;
+        $thumb_to_delete = parent::getPath('thumb') . $name_to_delete;
 
         if (!File::exists($file_to_delete)) {
-            return $this->error('folder-not-found', ['folder' => $file_to_delete]);
+            return $file_to_delete . ' not found!';
         }
 
         if (File::isDirectory($file_to_delete)) {
-            if (!parent::directoryIsEmpty($file_to_delete)) {
-                return $this->error('delete-folder');
+            if (sizeof(File::files($file_to_delete)) != 0) {
+                return Lang::get('laravel-filemanager::lfm.error-delete');
             }
 
             File::deleteDirectory($file_to_delete);
 
-            return $this->success_response;
-        }
-
-        if ($this->fileIsImage($file_to_delete)) {
-            File::delete($thumb_to_delete);
+            return 'OK';
         }
 
         File::delete($file_to_delete);
+        Event::fire(new ImageWasDeleted($file_to_delete));
+        
+        if ('Images' === $this->file_type) {
+            File::delete($thumb_to_delete);
+        }
 
-        event(new ImageWasDeleted($file_to_delete));
-
-        return $this->success_response;
+        return 'OK';
     }
+
 }

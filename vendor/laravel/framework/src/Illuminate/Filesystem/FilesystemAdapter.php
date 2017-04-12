@@ -3,19 +3,15 @@
 namespace Illuminate\Filesystem;
 
 use RuntimeException;
-use Illuminate\Http\File;
-use Illuminate\Support\Str;
 use InvalidArgumentException;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use League\Flysystem\AdapterInterface;
-use PHPUnit\Framework\Assert as PHPUnit;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Adapter\Local as LocalAdapter;
-use Illuminate\Contracts\Filesystem\Cloud as CloudFilesystemContract;
 use Illuminate\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Illuminate\Contracts\Filesystem\Cloud as CloudFilesystemContract;
 use Illuminate\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
 
 class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
@@ -36,32 +32,6 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
     public function __construct(FilesystemInterface $driver)
     {
         $this->driver = $driver;
-    }
-
-    /**
-     * Assert that the given file exists.
-     *
-     * @param  string  $path
-     * @return void
-     */
-    public function assertExists($path)
-    {
-        PHPUnit::assertTrue(
-            $this->exists($path), "Unable to find a file at path [{$path}]."
-        );
-    }
-
-    /**
-     * Assert that the given file does not exist.
-     *
-     * @param  string  $path
-     * @return void
-     */
-    public function assertMissing($path)
-    {
-        PHPUnit::assertFalse(
-            $this->exists($path), "Found unexpected file at path [{$path}]."
-        );
     }
 
     /**
@@ -97,66 +67,22 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
      *
      * @param  string  $path
      * @param  string|resource  $contents
-     * @param  array  $options
+     * @param  string  $visibility
      * @return bool
      */
-    public function put($path, $contents, $options = [])
+    public function put($path, $contents, $visibility = null)
     {
-        if (is_string($options)) {
-            $options = ['visibility' => $options];
+        if ($visibility = $this->parseVisibility($visibility)) {
+            $config = ['visibility' => $visibility];
+        } else {
+            $config = [];
         }
 
-        // If the given contents is actually a file or uploaded file instance than we will
-        // automatically store the file using a stream. This provides a convenient path
-        // for the developer to store streams without managing them manually in code.
-        if ($contents instanceof File ||
-            $contents instanceof UploadedFile) {
-            return $this->putFile($path, $contents, $options);
+        if (is_resource($contents)) {
+            return $this->driver->putStream($path, $contents, $config);
+        } else {
+            return $this->driver->put($path, $contents, $config);
         }
-
-        return is_resource($contents)
-                ? $this->driver->putStream($path, $contents, $options)
-                : $this->driver->put($path, $contents, $options);
-    }
-
-    /**
-     * Store the uploaded file on the disk.
-     *
-     * @param  string  $path
-     * @param  \Illuminate\Http\UploadedFile  $file
-     * @param  array  $options
-     * @return string|false
-     */
-    public function putFile($path, $file, $options = [])
-    {
-        return $this->putFileAs($path, $file, $file->hashName(), $options);
-    }
-
-    /**
-     * Store the uploaded file on the disk with a given name.
-     *
-     * @param  string  $path
-     * @param  \Illuminate\Http\File|\Illuminate\Http\UploadedFile  $file
-     * @param  string  $name
-     * @param  array  $options
-     * @return string|false
-     */
-    public function putFileAs($path, $file, $name, $options = [])
-    {
-        $stream = fopen($file->getRealPath(), 'r+');
-
-        // Next, we will format the path of the file and store the file using a stream since
-        // they provide better performance than alternatives. Once we write the file this
-        // stream will get closed automatically by us so the developer doesn't have to.
-        $result = $this->put(
-            $path = trim($path.'/'.$name, '/'), $stream, $options
-        );
-
-        if (is_resource($stream)) {
-            fclose($stream);
-        }
-
-        return $result ? $path : false;
     }
 
     /**
@@ -191,7 +117,6 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
      *
      * @param  string  $path
      * @param  string  $data
-     * @param  string  $separator
      * @return int
      */
     public function prepend($path, $data, $separator = PHP_EOL)
@@ -208,7 +133,6 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
      *
      * @param  string  $path
      * @param  string  $data
-     * @param  string  $separator
      * @return int
      */
     public function append($path, $data, $separator = PHP_EOL)
@@ -230,19 +154,15 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
     {
         $paths = is_array($paths) ? $paths : func_get_args();
 
-        $success = true;
-
         foreach ($paths as $path) {
             try {
-                if (! $this->driver->delete($path)) {
-                    $success = false;
-                }
+                $this->driver->delete($path);
             } catch (FileNotFoundException $e) {
-                $success = false;
+                //
             }
         }
 
-        return $success;
+        return true;
     }
 
     /**
@@ -312,57 +232,16 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
     {
         $adapter = $this->driver->getAdapter();
 
-        if (method_exists($adapter, 'getUrl')) {
-            return $adapter->getUrl($path);
-        } elseif ($adapter instanceof AwsS3Adapter) {
-            return $this->getAwsUrl($adapter, $path);
+        if ($adapter instanceof AwsS3Adapter) {
+            $path = $adapter->getPathPrefix().$path;
+
+            return $adapter->getClient()->getObjectUrl($adapter->getBucket(), $path);
         } elseif ($adapter instanceof LocalAdapter) {
-            return $this->getLocalUrl($path);
+            return '/storage/'.$path;
+        } elseif (method_exists($adapter, 'getUrl')) {
+            return $adapter->getUrl($path);
         } else {
             throw new RuntimeException('This driver does not support retrieving URLs.');
-        }
-    }
-
-    /**
-     * Get the URL for the file at the given path.
-     *
-     * @param  \League\Flysystem\AwsS3v3\AwsS3Adapter  $adapter
-     * @param  string  $path
-     * @return string
-     */
-    protected function getAwsUrl($adapter, $path)
-    {
-        return $adapter->getClient()->getObjectUrl(
-            $adapter->getBucket(), $adapter->getPathPrefix().$path
-        );
-    }
-
-    /**
-     * Get the URL for the file at the given path.
-     *
-     * @param  string  $path
-     * @return string
-     */
-    protected function getLocalUrl($path)
-    {
-        $config = $this->driver->getConfig();
-
-        // If an explicit base URL has been set on the disk configuration then we will use
-        // it as the base URL instead of the default path. This allows the developer to
-        // have full control over the base path for this filesystem's generated URLs.
-        if ($config->has('url')) {
-            return trim($config->get('url'), '/').'/'.ltrim($path, '/');
-        }
-
-        $path = '/storage/'.$path;
-
-        // If the path contains "storage/public", it probably means the developer is using
-        // the default disk to generate the path instead of the "public" disk like they
-        // are really supposed to use. We will remove the public from this path here.
-        if (Str::contains($path, '/storage/public/')) {
-            return Str::replaceFirst('/public/', '/', $path);
-        } else {
-            return $path;
         }
     }
 

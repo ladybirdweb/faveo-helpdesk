@@ -330,7 +330,7 @@
                 <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
                         <div class="settingdivblue">
-                            <a href="{{url('alert')}}">
+                            <a href="{{url('getalert')}}">
                                 <span class="fa-stack fa-2x">
                                     <i class="fa fa-bell-o fa-stack-1x"></i>
                                 </span>

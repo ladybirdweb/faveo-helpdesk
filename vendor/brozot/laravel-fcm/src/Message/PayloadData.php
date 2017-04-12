@@ -1,38 +1,38 @@
-<?php
+<?php namespace LaravelFCM\Message;
 
-namespace LaravelFCM\Message;
 
 use Illuminate\Contracts\Support\Arrayable;
 
 /**
- * Class PayloadData.
+ * Class PayloadData
+ *
+ * @package LaravelFCM\Message
  */
-class PayloadData implements Arrayable
-{
-    /**
-     * @internal
-     *
-     * @var array
-     */
-    protected $data;
+class PayloadData implements Arrayable{
 
-    /**
-     * PayloadData constructor.
-     *
-     * @param PayloadDataBuilder $builder
-     */
-    public function __construct(PayloadDataBuilder $builder)
-    {
-        $this->data = $builder->getData();
-    }
+	/**
+	 * @internal
+	 * @var array
+	 */
+	protected $data;
 
-    /**
-     * Transform payloadData to array.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->data;
-    }
+	/**
+	 * PayloadData constructor.
+	 *
+	 * @param PayloadDataBuilder $builder
+	 */
+	public function __construct(PayloadDataBuilder $builder)
+	{
+		$this->data = $builder->getData();
+	}
+
+	/**
+	 * Transform payloadData to array
+	 *
+	 * @return array
+	 */
+	function toArray()
+	{
+		return $this->data;
+	}
 }

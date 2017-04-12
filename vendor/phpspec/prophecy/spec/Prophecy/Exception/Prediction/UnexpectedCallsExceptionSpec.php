@@ -3,13 +3,16 @@
 namespace spec\Prophecy\Exception\Prediction;
 
 use PhpSpec\ObjectBehavior;
-use Prophecy\Call\Call;
-use Prophecy\Prophecy\MethodProphecy;
-use Prophecy\Prophecy\ObjectProphecy;
 
 class UnexpectedCallsExceptionSpec extends ObjectBehavior
 {
-    function let(ObjectProphecy $objectProphecy, MethodProphecy $methodProphecy, Call $call1, Call $call2)
+    /**
+     * @param \Prophecy\Prophecy\ObjectProphecy $objectProphecy
+     * @param \Prophecy\Prophecy\MethodProphecy $methodProphecy
+     * @param \Prophecy\Call\Call               $call1
+     * @param \Prophecy\Call\Call               $call2
+     */
+    function let($objectProphecy, $methodProphecy, $call1, $call2)
     {
         $methodProphecy->getObjectProphecy()->willReturn($objectProphecy);
 

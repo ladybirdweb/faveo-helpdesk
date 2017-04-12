@@ -2,7 +2,7 @@
 
 namespace Intervention\Image\Exception;
 
-class NotFoundException extends ImageException
+class NotFoundException extends \RuntimeException
 {
     # nothing to override
 }

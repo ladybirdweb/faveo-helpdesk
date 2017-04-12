@@ -2,10 +2,12 @@
 
 namespace Illuminate\Routing;
 
+use JsonSerializable;
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Traits\Macroable;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -66,13 +68,13 @@ class ResponseFactory implements FactoryContract
      */
     public function view($view, $data = [], $status = 200, array $headers = [])
     {
-        return $this->make($this->view->make($view, $data), $status, $headers);
+        return static::make($this->view->make($view, $data), $status, $headers);
     }
 
     /**
      * Return a new JSON response from the application.
      *
-     * @param  mixed  $data
+     * @param  string|array  $data
      * @param  int  $status
      * @param  array  $headers
      * @param  int  $options
@@ -80,6 +82,10 @@ class ResponseFactory implements FactoryContract
      */
     public function json($data = [], $status = 200, array $headers = [], $options = 0)
     {
+        if ($data instanceof Arrayable && ! $data instanceof JsonSerializable) {
+            $data = $data->toArray();
+        }
+
         return new JsonResponse($data, $status, $headers, $options);
     }
 
@@ -87,7 +93,7 @@ class ResponseFactory implements FactoryContract
      * Return a new JSONP response from the application.
      *
      * @param  string  $callback
-     * @param  mixed  $data
+     * @param  string|array  $data
      * @param  int  $status
      * @param  array  $headers
      * @param  int  $options
@@ -134,9 +140,9 @@ class ResponseFactory implements FactoryContract
     /**
      * Return the raw contents of a binary file.
      *
-     * @param  \SplFileInfo|string  $file
-     * @param  array  $headers
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @param  \SplFileInfo|string $file
+     * @param  array $headers
+     * @return  \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function file($file, array $headers = [])
     {
