@@ -10,7 +10,6 @@ use App\Model\helpdesk\Settings\Security;
 // Request
 use Illuminate\Http\Request;
 // Class
-use Input;
 use Lang;
 use Redirect;
 

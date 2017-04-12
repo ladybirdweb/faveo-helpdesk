@@ -19,7 +19,6 @@ use DB;
 // classes
 use Hash;
 use Illuminate\Http\Request;
-use Input;
 use Lang;
 use Session;
 
