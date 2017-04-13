@@ -22,7 +22,8 @@ use Auth;
 use DateTime;
 use DB;
 use Hash;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
+use Input;
 use Lang;
 use Socialite;
 
@@ -38,7 +39,7 @@ use Socialite;
  */
 class AuthController extends Controller
 {
-    use AuthenticatesAndRegistersUsers;
+    //use AuthenticatesAndRegistersUsers;
     /* to redirect after login */
 
     // if auth is agent
@@ -184,9 +185,36 @@ class AuthController extends Controller
             $sms = Plugin::select('status')->where('name', '=', 'SMS')->first();
             // Event for login
             \Event::fire(new \App\Events\LoginEvent($request));
-            if ($request->input('email') !== '') {
-                $var = $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $name, 'email' => $request->input('email')], $message = ['subject' => null, 'scenario' => 'registration'], $template_variables = ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => url('account/activate/'.$code)]);
-            }
+            
+            
+            $notifications[]=[
+            'registration_alert'=>[   
+                'userid'=>$userid,
+                'from'=>$this->PhpMailController->mailfrom('1', '0'),
+                'message'=>['subject' => null, 'scenario' => 'registration'],
+                'variable'=>['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => faveoUrl('account/activate/' . $code)],
+            ],
+            'registration_notification_alert' => [
+                        'userid'=>$userid,                       
+                        'from' => $this->PhpMailController->mailfrom('1', '0'),
+                        'message' => ['subject' => null, 'scenario' => 'registration-notification'],
+                        'variable' => ['user' => $name, 'email_address' => $request->input('email'), 'user_password' => $request->input('password')]
+                    ],
+            'new_user_alert' => [
+                        'model'=>$user,
+                        'userid'=>$userid,
+                        'from' => $this->PhpMailController->mailfrom('1', '0'),
+                        'message' => ['subject' => null, 'scenario' => 'new-user'],
+                        'variable' => ['user' => $name, 'email_address' => $user->user_name,'user_profile_link' =>faveoUrl('user/' . $userid)]
+                    ],
+        ];
+        $alert = new \App\Http\Controllers\Agent\helpdesk\Notifications\NotificationController();
+        if (!$request->input('email')) {
+           $alert->setParameter('send_mail', false); 
+        }
+        $alert->setDetails($notifications);
+            
+            
             if ($settings->status == 1 || $settings->status == '1') {
                 if (count($sms) > 0) {
                     if ($sms->status == 1 || $sms->status == '1') {
@@ -627,8 +655,31 @@ class AuthController extends Controller
     public function setSession($provider, $redirect)
     {
         $url = url($redirect);
-        \Session::set('provider', $provider);
-        \Session::set($provider.'redirect', $url);
+        \Session::put('provider', $provider);
+        \Session::put($provider.'redirect', $url);
         $this->changeRedirect();
+    }
+
+    /**
+     * Log the user out of the application.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getLogout(Request $request)
+    {
+        \Event::fire('user.logout', []);
+        $login = new LoginController();
+
+        return $login->logout($request);
+    }
+
+    public function redirectPath()
+    {
+        $auth = Auth::user();
+        if ($auth && $auth->role != 'user') {
+            return 'dashboard';
+        } else {
+            return '/';
+        }
     }
 }

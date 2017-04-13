@@ -42,7 +42,7 @@ return [
       | This Applocation name is used for installation and update checking
       |
      */
-        'name' => 'Faveo Helpdesk Pro',
+        'name' => 'Faveo Helpdesk Community',
     /*
       |--------------------------------------------------------------------------
       | Application URL

@@ -24,7 +24,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        parent::registerPolicies($gate);
+        parent::registerPolicies();
 
         //
     }

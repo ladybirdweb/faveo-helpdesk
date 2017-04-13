@@ -78,27 +78,6 @@ class Finder
             return $status_type->first()->name;
         }
 
-        /**
-         * SPECIAL CHECK FOR STATUS FOR APPROVAL
-         * This function is used to special check status for any type of checks.
-         *
-         * @return type array
-         */
-        public static function getCustomedStatus()
-        {
-            // dd(Approval::where('name', '=', 'approval')->first()->status);
-
-                    if (\Auth::user()->role == 'agent') {
-                        $status = Ticket_Status::where('purpose_of_status', 1)->get();
-                    } else {
-                        $status = Ticket_Status::where('purpose_of_status', '!=', 3)->get();
-                    }
-                //  else {
-                //     $status = Ticket_Status::where('id', '!=', 6)->where('purpose_of_status', '!=', 3)->where('id', '!=', 6)->get();
-                // }
-                return $status;
-        }
-
     /**
      * STATUS
      * This function is used for returning status name with respect to id.
