@@ -249,7 +249,7 @@ class="active"
                                 <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
                                 <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
                                 <td>{!! $assigned !!}</td>
-                                <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
+                                <td class="mailbox-last-activity">{!! faveoDate($title->updated_at) !!}</td>
                                 </tr>
                                 @endforeach
                                 </tbody>
@@ -367,7 +367,7 @@ class="active"
                                 <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
                                 <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
                                 <td>{!! $assigned !!}</td>
-                                <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
+                                <td class="mailbox-last-activity">{!! faveoDate($title->updated_at) !!}</td>
                                 </tr>
                                 @endforeach
                                 </tbody>
@@ -489,7 +489,7 @@ class="active"
                                 <?php $from = App\User::where('id', '=', $ticket->user_id)->first(); ?> 
                                 <td class="mailbox-last-reply" style="color:{!! $rep !!}">{!! $username !!}</td>
                                 <td>{!! $assigned !!}</td>
-                                <td class="mailbox-last-activity">{!! UTC::usertimezone($title->updated_at) !!}</td>
+                                <td class="mailbox-last-activity">{!! faveoDate($title->updated_at) !!}</td>
                                 </tr>
                                 @endforeach
                                 </tbody>

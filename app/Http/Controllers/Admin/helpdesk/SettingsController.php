@@ -27,8 +27,6 @@ use App\Model\helpdesk\Settings\Responder;
 use App\Model\helpdesk\Settings\System;
 use App\Model\helpdesk\Settings\Ticket;
 use App\Model\helpdesk\Ticket\Ticket_Priority;
-use App\Model\helpdesk\Ticket\Ticket_Status;
-use App\Model\helpdesk\Ticket\TicketStatusType;
 use App\Model\helpdesk\Utility\Date_format;
 use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Time_format;
@@ -157,7 +155,7 @@ class SettingsController extends Controller
             /* Fetch the values from Department table */
             $departments = $department->get();
             /* Fetch the values from Timezones table */
-            $timezones = $timezone->get();
+            $timezones = $timezone->pluck('name','name')->toArray();
             /* Fetch status value of common settings */
             $common_setting = $common_settings->select('status')
                     ->where('option_name', '=', 'user_set_ticket_status')
@@ -168,8 +166,10 @@ class SettingsController extends Controller
             $email_mandatory = $common_settings->select('status')
                     ->where('option_name', '=', 'email_mandatory')
                     ->first();
+            $formats = $date_time->pluck('format','format')->merge(['custom'=>'Custom','human-read'=>'Human readable'])->toArray();
+
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory'));
+            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory','formats'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -500,12 +500,8 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function getalert(Alert $alert)
-    {
+    public function getalert(Alert $alerts) {
         try {
-            /* fetch the values of alert from alert table */
-            $alerts = $alert->whereId('1')->first();
-            /* Direct to Alert Settings Page */
             return view('themes.default1.admin.helpdesk.settings.alert', compact('alerts'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -521,66 +517,25 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function postalert($id, Alert $alert, Request $request)
-    {
+    public function postalert(Alert $alert, Request $request) {
         try {
-            /* fetch the values of alert request  */
-            $alerts = $alert->whereId('1')->first();
-            /* Insert Checkbox to DB */
-            $alerts->assignment_status = $request->input('assignment_status');
-            $alerts->ticket_status = $request->input('ticket_status');
-            $alerts->overdue_department_member = $request->input('overdue_department_member');
-            $alerts->sql_error = $request->input('sql_error');
-            $alerts->excessive_failure = $request->input('excessive_failure');
-            $alerts->overdue_status = $request->input('overdue_status');
-            $alerts->overdue_assigned_agent = $request->input('overdue_assigned_agent');
-            $alerts->overdue_department_manager = $request->input('overdue_department_manager');
-            $alerts->internal_status = $request->input('internal_status');
-            $alerts->internal_last_responder = $request->input('internal_last_responder');
-            $alerts->internal_assigned_agent = $request->input('internal_assigned_agent');
-            $alerts->internal_department_manager = $request->input('internal_department_manager');
-            $alerts->assignment_assigned_agent = $request->input('assignment_assigned_agent');
-            $alerts->assignment_team_leader = $request->input('assignment_team_leader');
-            $alerts->assignment_team_member = $request->input('assignment_team_member');
-            $alerts->system_error = $request->input('system_error');
-            $alerts->transfer_department_member = $request->input('transfer_department_member');
-            $alerts->transfer_department_manager = $request->input('transfer_department_manager');
-            $alerts->transfer_assigned_agent = $request->input('transfer_assigned_agent');
-            $alerts->transfer_status = $request->input('transfer_status');
-            $alerts->message_organization_accmanager = $request->input('message_organization_accmanager');
-            $alerts->message_department_manager = $request->input('message_department_manager');
-            $alerts->message_assigned_agent = $request->input('message_assigned_agent');
-            $alerts->message_last_responder = $request->input('message_last_responder');
-            $alerts->message_status = $request->input('message_status');
-            $alerts->ticket_organization_accmanager = $request->input('ticket_organization_accmanager');
-            $alerts->ticket_department_manager = $request->input('ticket_department_manager');
-            $alerts->ticket_department_member = $request->input('ticket_department_member');
-            $alerts->ticket_admin_email = $request->input('ticket_admin_email');
-
-            if ($request->input('system_error') == null) {
-                $str = '%0%';
-                $path = app_path('../config/app.php');
-                $content = \File::get($path);
-                $content = str_replace('%1%', $str, $content);
-                \File::put($path, $content);
-            } else {
-                $str = '%1%';
-                $path = app_path('../config/app.php');
-                $content = \File::get($path);
-                $content = str_replace('%0%', $str, $content);
-                \File::put($path, $content);
+            $requests = $request->except('_token');
+            Alert::truncate();
+            foreach ($requests as $key => $value) {
+                if (is_array($value)) {
+                    $value = implode(',', $value);
+                }
+                Alert::create([
+                    'key' => $key,
+                    'value' => $value,
+                ]);
             }
-            /* fill the values to coompany table */
-            /* Check whether function success or not */
-            $alerts->save();
-            /* redirect to Index page with Success Message */
-            return redirect('getalert')->with('success', Lang::get('lang.alert_&_notices_updated_successfully'));
+            return redirect('alert')->with('success', Lang::get('lang.alert_&_notices_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('getalert')->with('fails', Lang::get('lang.alert_&_notices_can_not_updated').'<li>'.$e->getMessage().'</li>');
+            return redirect('alert')->with('fails', $e->getMessage());
         }
     }
-
     /**
      *  Generate Api key.
      *
@@ -615,90 +570,11 @@ class SettingsController extends Controller
     {
         try {
             /* fetch the values of company from company table */
-            $statuss = Ticket_Status::where('purpose_of_status', '!=', 3)->where('purpose_of_status', '!=', 4)->paginate('10');
+            $statuss = \DB::table('ticket_status')->get();
             /* Direct to Company Settings Page */
             return view('themes.default1.admin.helpdesk.settings.status', compact('statuss'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
-        }
-    }
-
-    /**
-     * create a status.
-     *
-     * @param \App\Model\helpdesk\Ticket\Ticket_Status  $statuss
-     * @param \App\Http\Requests\helpdesk\StatusRequest $request
-     *
-     * @return type redirect
-     */
-    public function createStatuses(Ticket_Status $statuss)
-    {
-        $status_types = TicketStatusType::where('id', '<', 3)->get();
-
-        return view('themes.default1.admin.helpdesk.settings.status.create', compact('status_types'));
-    }
-
-    /**
-     * create a status.
-     *
-     * @param \App\Model\helpdesk\Ticket\Ticket_Status  $statuss
-     * @param \App\Http\Requests\helpdesk\StatusRequest $request
-     *
-     * @return type redirect
-     */
-    public function storeStatuses(StatusRequest $request)
-    {
-        try {
-            $statuss = new Ticket_Status();
-            /* fetch the values of company from company table */
-            $statuss->name = $request->input('name');
-            $statuss->order = $request->input('sort');
-            $statuss->icon = $request->input('icon_class');
-            $statuss->icon_color = $request->input('icon_color');
-            if ($request->input('visibility_for_client') == 'yes') {
-                $statuss->visibility_for_client = 1;
-                $statuss->secondary_status = null;
-            } else {
-                $statuss->visibility_for_client = 0;
-                $statuss->secondary_status = $request->input('secondary_status');
-            }
-            $statuss->purpose_of_status = $request->input('purpose_of_status');
-
-            if ($request->input('client') != null) {
-                $email1 = $request->input('client');
-            } else {
-                $email1 = 0;
-            }
-            if ($request->input('agent') != null) {
-                $email2 = $request->input('agent');
-            } else {
-                $email2 = 0;
-            }
-            if ($request->input('admin') != null) {
-                $email3 = $request->input('admin');
-            } else {
-                $email3 = 0;
-            }
-            $email = $email1 + $email2 + $email3;
-            $statuss->send_email = $email;
-            // $statuss->send_email = $request->message;
-
-            $statuss->allow_client = $request->allow_client;
-
-            if ($request->default == 'on') {
-                $default_statuses = Ticket_Status::where('purpose_of_status', $request->purpose_of_status)->get();
-                foreach ($default_statuses as $default_status) {
-                    $default_status->default = null;
-                    $default_status->save();
-                }
-                $statuss->default = 1;
-            }
-            $statuss->halt_sla = $request->input('halt_sla');
-            $statuss->save();
-            /* Direct to Company Settings Page */
-            return redirect()->route('statuss.index')->with('success', Lang::get('lang.status_has_been_created_successfully'));
-        } catch (Exception $ex) {
-            return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
 
@@ -714,9 +590,9 @@ class SettingsController extends Controller
     {
         try {
             /* fetch the values of company from company table */
-            $status = Ticket_Status::find($id);
+            $status = \DB::table('ticket_status')->where('id', '=', $id)->first();
             /* Direct to Company Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.status.edit', compact('status'));
+            return view('themes.default1.admin.helpdesk.settings.status-edit', compact('status'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -733,74 +609,55 @@ class SettingsController extends Controller
     public function editStatuses($id, StatusRequest $request)
     {
         try {
-            $status = Ticket_Status::whereId($id)->first();
-
-            if ($request->input('client') != null) {
-                $email1 = $request->input('client');
-            } else {
-                $email1 = 0;
-            }
-            if ($request->input('agent') != null) {
-                $email2 = $request->input('agent');
-            } else {
-                $email2 = 0;
-            }
-            if ($request->input('admin') != null) {
-                $email3 = $request->input('admin');
-            } else {
-                $email3 = 0;
-            }
-            $email = $email1 + $email2 + $email3;
-
-            if ($status->purpose_of_status == $request->input('purpose_of_status')) {
-                $status->purpose_of_status = $request->input('purpose_of_status');
-            } else {
-                $ticket_with_same_status = Tickets::where('status', $status->id)->first();
-                if (isset($ticket_with_same_status)) {
-                    return redirect()->back()->with('fails', Lang::get('lang.unable_to_change_the_purpose_of_status_there_are_tickets_with_this_status'));
-                } else {
-                    $status->purpose_of_status = $request->input('purpose_of_status');
-                }
-            }
-
-            if ($request->input('purpose_of_status') == 2) {
-                $status->send_email = $email;
-            } else {
-                $status->send_email = 0;
-            }
-            $status->send_email = $email;
-            $status->message = $request->message;
-
             /* fetch the values of company from company table */
-            $status->name = $request->input('name');
-            $status->order = $request->input('sort');
-            $status->icon = $request->input('icon_class');
-            $status->icon_color = $request->input('icon_color');
-            if ($request->input('visibility_for_client') == '1') {
-                $status->secondary_status = null;
+            $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->first();
+            $statuss->name = $request->input('name');
+            $statuss->icon_class = $request->input('icon_class');
+            $statuss->email_user = $request->input('email_user');
+            $statuss->sort = $request->input('sort');
+            $delete = $request->input('deleted');
+            if ($delete == 'yes') {
+                $statuss->state = 'delete';
             } else {
-                $status->secondary_status = $request->input('secondary_status');
+                $statuss->state = $request->input('state');
             }
-
-            $status->visibility_for_client = $request->input('visibility_for_client');
-
-            $status->allow_client = $request->allow_client;
-
-            if ($request->default == 'on') {
-                $default_statuses = Ticket_Status::where('purpose_of_status', $request->purpose_of_status)->get();
-                foreach ($default_statuses as $default_status) {
-                    $default_status->default = null;
-                    $default_status->save();
-                }
-                $status->default = 1;
-            }
-            $status->halt_sla = $request->input('halt_sla');
-            // dd($status->hault_sla);
-            $status->save();
+            $statuss->sort = $request->input('sort');
+            $statuss->save();
             /* Direct to Company Settings Page */
-            return redirect()->route('statuss.index')->with('success', Lang::get('lang.status_has_been_updated_successfully'));
+            return redirect()->back()->with('success', Lang::get('lang.status_has_been_updated_successfully'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
+        }
+    }
+
+    /**
+     * create a status.
+     *
+     * @param \App\Model\helpdesk\Ticket\Ticket_Status  $statuss
+     * @param \App\Http\Requests\helpdesk\StatusRequest $request
+     *
+     * @return type redirect
+     */
+    public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss, StatusRequest $request)
+    {
+        try {
+            /* fetch the values of company from company table */
+            $statuss->name = $request->input('name');
+            $statuss->icon_class = $request->input('icon_class');
+            $statuss->email_user = $request->input('email_user');
+            $statuss->sort = $request->input('sort');
+            $delete = $request->input('delete');
+            if ($delete == 'yes') {
+                $statuss->state = 'deleted';
+            } else {
+                $statuss->state = $request->input('state');
+            }
+            $statuss->sort = $request->input('sort');
+            $statuss->save();
+            /* Direct to Company Settings Page */
+            return redirect()->back()->with('success', Lang::get('lang.status_has_been_created_successfully'));
+        } catch (Exception $ex) {
+            return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
 
@@ -814,153 +671,18 @@ class SettingsController extends Controller
     public function deleteStatuses($id)
     {
         try {
-            $status_to_delete = Ticket_Status::whereId($id)->first();
-            if ($status_to_delete->default == 1 || $id == Finder::statusApproval()) {
-                return redirect()->back()->with('fails', Lang::get('lang.you_cannot_delete_a_default_ticket_status'));
-            }
-            $ticket_with_status = Tickets::where('status', $id)->first();
-
-            if (isset($ticket_with_status)) {
-                $default_status = Finder::defaultStatus($status_to_delete->purpose_of_status);
-                $tickets = DB::table('tickets')->where('status', '=', $id)->update(['status' => $default_status->id]);
-                $status_to_delete->delete();
-
-                return redirect()->back()->with('success', '<li>'.Lang::get('lang.associated_tickets_moved_to_default_status').'<li>'.Lang::get('lang.status_deleted_successfully'));
+            if ($id > 5) {
+                /* fetch the values of company from company table */
+                \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->delete();
+                /* Direct to Company Settings Page */
+                return redirect()->back()->with('success', Lang::get('lang.status_has_been_deleted'));
             } else {
-                $status_to_delete->delete();
-
-                return redirect()->back()->with('success', '<li>'.Lang::get('lang.status_deleted_successfully'));
+                return redirect()->back()->with('failed', Lang::get('lang.you_cannot_delete_this_status'));
             }
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
-
-    // /**
-    //  * @param int $id
-    //  * @param $compant instance of company table
-    //  *
-    //  * get the form for company setting page
-    //  *
-    //  * @return Response
-    //  */
-    // public function getStatuses()
-    // {
-    //     try {
-    //         /* fetch the values of company from company table */
-    //         $statuss = \DB::table('ticket_status')->get();
-    //         /* Direct to Company Settings Page */
-    //         return view('themes.default1.admin.helpdesk.settings.status', compact('statuss'));
-    //     } catch (Exception $e) {
-    //         return redirect()->back()->with('fails', $e->getMessage());
-    //     }
-    // }
-
-    // /**
-    //  * @param int $id
-    //  * @param $compant instance of company table
-    //  *
-    //  * get the form for company setting page
-    //  *
-    //  * @return Response
-    //  */
-    // public function getEditStatuses($id)
-    // {
-    //     try {
-    //         /* fetch the values of company from company table */
-    //         $status = \DB::table('ticket_status')->where('id', '=', $id)->first();
-    //         /* Direct to Company Settings Page */
-    //         return view('themes.default1.admin.helpdesk.settings.status-edit', compact('status'));
-    //     } catch (Exception $e) {
-    //         return redirect()->back()->with('fails', $e->getMessage());
-    //     }
-    // }
-
-    // /**
-    //  * @param int $id
-    //  * @param $compant instance of company table
-    //  *
-    //  * get the form for company setting page
-    //  *
-    //  * @return Response
-    //  */
-    // public function editStatuses($id, StatusRequest $request)
-    // {
-    //     try {
-    //         /* fetch the values of company from company table */
-    //         $statuss = \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->first();
-    //         $statuss->name = $request->input('name');
-    //         $statuss->icon_class = $request->input('icon_class');
-    //         $statuss->email_user = $request->input('email_user');
-    //         $statuss->sort = $request->input('sort');
-    //         $delete = $request->input('deleted');
-    //         if ($delete == 'yes') {
-    //             $statuss->state = 'delete';
-    //         } else {
-    //             $statuss->state = $request->input('state');
-    //         }
-    //         $statuss->sort = $request->input('sort');
-    //         $statuss->save();
-    //          Direct to Company Settings Page
-    //         return redirect()->back()->with('success', Lang::get('lang.status_has_been_updated_successfully'));
-    //     } catch (Exception $e) {
-    //         return redirect()->back()->with('fails', $e->getMessage());
-    //     }
-    // }
-
-    // /**
-    //  * create a status.
-    //  *
-    //  * @param \App\Model\helpdesk\Ticket\Ticket_Status  $statuss
-    //  * @param \App\Http\Requests\helpdesk\StatusRequest $request
-    //  *
-    //  * @return type redirect
-    //  */
-    // public function createStatuses(\App\Model\helpdesk\Ticket\Ticket_Status $statuss, StatusRequest $request)
-    // {
-    //     try {
-    //         /* fetch the values of company from company table */
-    //         $statuss->name = $request->input('name');
-    //         $statuss->icon_class = $request->input('icon_class');
-    //         $statuss->email_user = $request->input('email_user');
-    //         $statuss->sort = $request->input('sort');
-    //         $delete = $request->input('delete');
-    //         if ($delete == 'yes') {
-    //             $statuss->state = 'deleted';
-    //         } else {
-    //             $statuss->state = $request->input('state');
-    //         }
-    //         $statuss->sort = $request->input('sort');
-    //         $statuss->save();
-    //         /* Direct to Company Settings Page */
-    //         return redirect()->back()->with('success', Lang::get('lang.status_has_been_created_successfully'));
-    //     } catch (Exception $ex) {
-    //         return redirect()->back()->with('fails', $ex->getMessage());
-    //     }
-    // }
-
-    // /**
-    //  * delete a status.
-    //  *
-    //  * @param type $id
-    //  *
-    //  * @return type redirect
-    //  */
-    // public function deleteStatuses($id)
-    // {
-    //     try {
-    //         if ($id > 5) {
-    //             /* fetch the values of company from company table */
-    //             \App\Model\helpdesk\Ticket\Ticket_Status::whereId($id)->delete();
-    //             /* Direct to Company Settings Page */
-    //             return redirect()->back()->with('success', Lang::get('lang.status_has_been_deleted'));
-    //         } else {
-    //             return redirect()->back()->with('failed', Lang::get('lang.you_cannot_delete_this_status'));
-    //         }
-    //     } catch (Exception $e) {
-    //         return redirect()->back()->with('fails', $e->getMessage());
-    //     }
-    // }
 
     /**
      * get the page of notification settings.

@@ -1658,4 +1658,53 @@ return [
 
     //updates 22-2-2017
     'invalid-date-range' => 'Invalid date range',
+
+    //updates 14-4-2017
+    'notification.priority.update'=>'Updated by :agent - Prority changed from :old to :new',
+    'notification.source.update'=>'Updated by :agent - Source changed from :old to :new',
+    'notification.title.update'=>'Updated by :agent - Title changed from :old to :new',
+    'notification.helptopic.update'=>'Updated by :agent - Help topic changed from :old to :new',
+    'notification.sla.update'=>'Updated by :agent - Sla changed from :old to :new',
+    'notification.status.update'=>'Updated by :agent - Status changed from :old to :new',
+    'notification.assign.update'=>'Assigned by :agent - Ticket assigned to :new',
+    'notification.user.update'=>'Ticket ownership changed by :agent - from :old to :new',
+    'notification.department.update'=>'Updated by :agent - Department changed from :old to :new',
+    'created.ticket'=>'A new ticket :subject has created',
+    
+    
+    'mode'=>'Mode',
+    'new_internal_activity_alert'=>'New Internal Activity Alert',
+    'sms'=>'Sms',
+    'agent'=>'Agent',
+    'all_department_manager'=>'All Department Manager',
+    'all_team_lead'=>'All Team Lead',
+    'registration_notification'=>'Registration Notification',
+    'reply_notification'=>'Reply Notification',
+    
+    'notification.update' => ':model set to :new from :old',
+    'notification.update.inapp' => ':model set to :new from :old in <b>:ticket</b>',
+    
+    'notification.assigned'=>'Ticket has assigned to :new',
+    'notification.assigned.inapp'=>'has assigned <b>:ticket</b> to :new',
+    
+    'notification.assigned.myself'=>'Ticket has assigned to himself',
+    'notification.assigned.myself.inapp'=>'has assigned <b>:ticket</b> to himself',
+    
+    'notification.duedate'=>'Ticket :model on :new',
+    'notification.duedate.inapp'=>'Ticket :model on :new',
+    
+    'notification.note'=>'New :model added - :new',
+    'notification.note.inapp'=>'added new :model in <b>:ticket</b> - :new',
+    
+    'agent_reply'=>'Agent Reply',
+    'client_reply'=>'Client Reply',
+    'new-user-register'=>'registered',
+    'reply.notification'=>'has replied in <b>:title</b>',
+    'custom-format'=>'Custom Format',
+    'assigned_agent'=>'Assigned agent',
+    'in_app_system'=>'Notification',
+    'new_ticket_confirmation_alert' => 'New Ticket Confirmation',
+    'registration_verification'     => 'Registration Verififcation',
+    'client'=>'Client',
+    'sla_alert'=>'SLA Alert',
 ];

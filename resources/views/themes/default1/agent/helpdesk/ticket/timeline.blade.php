@@ -197,7 +197,7 @@ if ($thread->title != "") {
                                 <b>{!! Lang::get('lang.sla_plan') !!}: {{$SlaPlan->grace_period}} </b>
                             </div>
                             <div class="col-md-3">
-                                <b>{!! Lang::get('lang.created_date') !!}: </b> {{ UTC::usertimezone($tickets->created_at) }}
+                                <b>{!! Lang::get('lang.created_date') !!}: </b> {{ faveoDate($tickets->created_at) }}
                             </div>
                             <div class="col-md-3">
                                 <b>{!! Lang::get('lang.due_date') !!}: </b>
@@ -205,7 +205,7 @@ if ($thread->title != "") {
                                 $time = $tickets->created_at;
                                 $time = date_create($time);
                                 date_add($time, date_interval_create_from_date_string($SlaPlan->grace_period));
-                                echo UTC::usertimezone(date_format($time, 'Y-m-d H:i:s'));
+                                echo faveoDate(date_format($time, 'Y-m-d H:i:s'));
                                 ?>
                             </div>
                             <div class="col-md-3">
@@ -213,7 +213,7 @@ if ($thread->title != "") {
                                 @foreach($response as $last)
                                 <?php $ResponseDate = $last->created_at; ?>
                                 @endforeach
-                                <b>{!! Lang::get('lang.last_response') !!}: </b> {{ UTC::usertimezone($ResponseDate) }}
+                                <b>{!! Lang::get('lang.last_response') !!}: </b> {{ faveoDate($ResponseDate) }}
                             </div>
                         </div>
                     </div>
@@ -675,7 +675,7 @@ if ($thread->title != "") {
                                                         {!! str_limit($usernam,30) !!}
                                                     @endif
                                                 </span>
-                                                <span class="description" style="margin-bottom:4px;margin-top:4px;"><i class="fa fa-clock-o"></i> {{UTC::usertimezone($conversation->created_at)}}</span>
+                                                <span class="description" style="margin-bottom:4px;margin-top:4px;"><i class="fa fa-clock-o"></i> {{faveoDate($conversation->created_at)}}</span>
                                                 @if($conversation->id == $ij->id)
                                                 <a href="{{url('genereate-pdf/'.$conversation->id)}}" class= "pull-right fa fa-newspaper-o" title="generate pdf of this thread"></a>
                                                 @endif

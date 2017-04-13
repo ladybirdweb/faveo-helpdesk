@@ -114,7 +114,7 @@ class="active"
                 @endif
                 <td> {!! $dept !!} </td>
                 <!-- Last Updated -->
-                <td> {!! UTC::usertimezone($topic->updated_at) !!} </td>
+                <td> {!! faveoDate($topic->updated_at) !!} </td>
                 <!-- Deleting Fields -->
                 <td>
                     {!! Form::open(['route'=>['helptopic.destroy', $topic->id],'method'=>'DELETE']) !!}
