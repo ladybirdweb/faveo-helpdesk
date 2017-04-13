@@ -318,9 +318,9 @@ class InstallController extends Controller
 //        }
 
         // Creating minum settings for system
-        $system =System::where('id','=',1)->first();
-        if(!$system){
-        $system = new System();
+        $system = System::where('id', '=', 1)->first();
+        if (!$system) {
+            $system = new System();
         }
         $system->status = 1;
         $system->department = 1;

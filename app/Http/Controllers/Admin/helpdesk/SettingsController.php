@@ -155,7 +155,7 @@ class SettingsController extends Controller
             /* Fetch the values from Department table */
             $departments = $department->get();
             /* Fetch the values from Timezones table */
-            $timezones = $timezone->pluck('name','name')->toArray();
+            $timezones = $timezone->pluck('name', 'name')->toArray();
             /* Fetch status value of common settings */
             $common_setting = $common_settings->select('status')
                     ->where('option_name', '=', 'user_set_ticket_status')
@@ -166,10 +166,10 @@ class SettingsController extends Controller
             $email_mandatory = $common_settings->select('status')
                     ->where('option_name', '=', 'email_mandatory')
                     ->first();
-            $formats = $date_time->pluck('format','format')->merge(['custom'=>'Custom','human-read'=>'Human readable'])->toArray();
+            $formats = $date_time->pluck('format', 'format')->merge(['custom'=>'Custom', 'human-read'=>'Human readable'])->toArray();
 
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory','formats'));
+            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory', 'formats'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -500,7 +500,8 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function getalert(Alert $alerts) {
+    public function getalert(Alert $alerts)
+    {
         try {
             return view('themes.default1.admin.helpdesk.settings.alert', compact('alerts'));
         } catch (Exception $e) {
@@ -517,7 +518,8 @@ class SettingsController extends Controller
      *
      * @return type Response
      */
-    public function postalert(Alert $alert, Request $request) {
+    public function postalert(Alert $alert, Request $request)
+    {
         try {
             $requests = $request->except('_token');
             Alert::truncate();
@@ -526,16 +528,18 @@ class SettingsController extends Controller
                     $value = implode(',', $value);
                 }
                 Alert::create([
-                    'key' => $key,
+                    'key'   => $key,
                     'value' => $value,
                 ]);
             }
+
             return redirect('alert')->with('success', Lang::get('lang.alert_&_notices_updated_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
             return redirect('alert')->with('fails', $e->getMessage());
         }
     }
+
     /**
      *  Generate Api key.
      *

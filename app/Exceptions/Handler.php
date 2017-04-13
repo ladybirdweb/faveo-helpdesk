@@ -94,7 +94,7 @@ class Handler extends ExceptionHandler
             return parent::render($request, $e);
         } elseif ($e instanceof ValidationException) {
             return parent::render($request, $e);
-        } elseif($e instanceof \Illuminate\Validation\ValidationException){
+        } elseif ($e instanceof \Illuminate\Validation\ValidationException) {
             return parent::render($request, $e);
         }
 

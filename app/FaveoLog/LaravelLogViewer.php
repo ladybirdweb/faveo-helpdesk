@@ -5,7 +5,6 @@ namespace App\FaveoLog;
 use Illuminate\Support\Facades\File;
 use Psr\Log\LogLevel;
 use ReflectionClass;
-use UTC;
 
 /**
  * Class LaravelLogViewer.

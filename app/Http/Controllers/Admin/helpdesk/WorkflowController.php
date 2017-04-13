@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin\helpdesk;
 
 // controller
-use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 // request
 use App\Http\Requests\helpdesk\WorkflowCreateRequest;
