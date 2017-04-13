@@ -407,7 +407,7 @@ class UnAuthController extends Controller
                 $user->user_language = $lang;
                 $user->save();
             } else {
-                Session::set('language', $lang);
+                Session::put('language', $lang);
             }
         }
 

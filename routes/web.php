@@ -867,14 +867,12 @@ Route::group(['middleware' => 'redirect'], function () {
 
 // Route::post('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']);
     Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday', 'uses' => 'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
-
- /*-------------------------------------------------------------
+/*-------------------------------------------------------------
   | User language change
   |-------------------------------------------------------------
   */
     Route::get('swtich-language/{id}', ['as' => 'switch-user-lang', 'uses' => 'Client\helpdesk\UnAuthController@changeUserLanguage']);
 });
-
 \Event::listen('notification-saved', function($event) {
     $controller = new \App\Http\Controllers\Agent\helpdesk\Notifications\NotificationController();
     $controller->saved($event);
