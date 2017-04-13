@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class UpdateNotificationTable extends Migration
 {
@@ -27,7 +27,7 @@ class UpdateNotificationTable extends Migration
             $table->timestamps();
         });
     }
-    
+
     //user_notification
     //
 

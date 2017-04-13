@@ -10,7 +10,6 @@ class Tickets extends BaseModel
     protected $fillable = ['id', 'ticket_number', 'num_sequence', 'user_id', 'priority_id', 'sla', 'help_topic_id', 'max_open_ticket', 'captcha', 'status', 'lock_by', 'lock_at', 'source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'is_transfer', 'transfer_at', 'reopened_at', 'closed_at', 'last_message_at', 'last_response_at', 'created_at', 'updated_at', 'assigned_to'];
     protected $dates = ['duedate'];
 
-
 //        public function attach(){
 //            return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_attachments',);
 //
@@ -45,9 +44,12 @@ class Tickets extends BaseModel
 
         return $ticket_form_datas;
     }
-    public function sources() {
+
+    public function sources()
+    {
         return $this->belongsTo('App\Model\helpdesk\Ticket\Ticket_source', 'source');
     }
+
     public function source()
     {
         $source_id = $this->attributes['source'];
@@ -104,44 +106,56 @@ class Tickets extends BaseModel
 
         return $this->belongsTo($related, $foreignKey);
     }
-    
-    public function assigned() {
+
+    public function assigned()
+    {
         $related = 'App\User';
         $foreignKey = 'assigned_to';
+
         return $this->belongsTo($related, $foreignKey);
     }
 
-    public function departments() {
+    public function departments()
+    {
         $related = 'App\Model\helpdesk\Agent\Department';
         $foreignKey = 'dept_id';
+
         return $this->belongsTo($related, $foreignKey);
     }
 
-    public function slaPlan() {
+    public function slaPlan()
+    {
         $related = 'App\Model\helpdesk\Manage\Sla\Sla_plan';
         $foreignKey = 'sla';
+
         return $this->belongsTo($related, $foreignKey);
     }
 
-    public function statuses() {
+    public function statuses()
+    {
         $related = 'App\Model\helpdesk\Ticket\Ticket_Status';
         $foreignKey = 'status';
+
         return $this->belongsTo($related, $foreignKey);
     }
-    
-    public function priority(){
+
+    public function priority()
+    {
         $related = 'App\Model\helpdesk\Ticket\Ticket_Priority';
         $foreignKey = 'priority_id';
+
         return $this->belongsTo($related, $foreignKey);
     }
-    
-    public function save(array $options = array()) {
+
+    public function save(array $options = [])
+    {
         $changed = $this->isDirty() ? $this->getDirty() : false;
         $id = $this->id;
         $model = $this->find($id);
         $save = parent::save($options);
-        $array = ['changes'=>$changed,'model'=>$model];
-        \Event::fire('notification-saved',[$array]);
+        $array = ['changes'=>$changed, 'model'=>$model];
+        \Event::fire('notification-saved', [$array]);
+
         return $save;
     }
 }

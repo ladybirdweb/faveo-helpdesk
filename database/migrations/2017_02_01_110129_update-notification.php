@@ -1,17 +1,17 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Model\helpdesk\Settings\Alert;
+use Illuminate\Database\Schema\Blueprint;
 
-class UpdateNotification extends Migration {
-
+class UpdateNotification extends Migration
+{
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up() {
+    public function up()
+    {
         Schema::dropIfExists('settings_alert_notice');
         Schema::create('settings_alert_notice', function (Blueprint $table) {
             $table->increments('id');
@@ -19,7 +19,6 @@ class UpdateNotification extends Migration {
             $table->string('value');
             $table->timestamps();
         });
-        
     }
 
     /**
@@ -27,8 +26,8 @@ class UpdateNotification extends Migration {
      *
      * @return void
      */
-    public function down() {
+    public function down()
+    {
         Schema::drop('settings_alert_notice');
     }
-
 }

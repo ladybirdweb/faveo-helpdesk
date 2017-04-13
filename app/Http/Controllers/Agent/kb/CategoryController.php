@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Agent\kb;
 
 // Controllers
-use App\Http\Controllers\Agent\helpdesk\TicketController;
 use App\Http\Controllers\Controller;
 // Requests
 use App\Http\Requests\kb\CategoryRequest;
