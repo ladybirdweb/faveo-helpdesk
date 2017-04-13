@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="fbApp">
     <head>
         <meta charset="UTF-8" ng-app="myApp">
         <title>Faveo | HELP DESK</title>
@@ -69,7 +69,7 @@
 
         </style>
     </head>
-    <body class="skin-blue fixed">
+    <body class="skin-blue fixed" ng-controller="MainCtrl">
         <div class="wrapper">
             <header class="main-header">
                 <a href="http://www.faveohelpdesk.com" class="logo"><img src="{{ asset('lb-faveo/media/images/logo.png')}}" width="100px;"></a>
@@ -507,6 +507,11 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
             }
             }
         </script>
+        
+        <script src="{{asset("lb-faveo/js/angular/angular.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
+
         <script>
     $(function() {
       
@@ -528,5 +533,6 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
 <?php Event::fire('show.calendar.script', array()); ?>
 <?php Event::fire('load-calendar-scripts', array()); ?>
         @yield('FooterInclude')
+         @stack('scripts')
     </body>
 </html>

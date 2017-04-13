@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="fbApp">
     <head>
         <meta charset="UTF-8">
         <title>Faveo | HELP DESK</title>
@@ -47,7 +47,7 @@
         <![endif]-->
         @yield('HeadInclude')
     </head>
-    <body class="skin-yellow fixed">
+    <body class="skin-yellow fixed" ng-controller="MainCtrl">
         <?php
         $replacetop = 0;
         $replacetop = \Event::fire('service.desk.admin.topbar.replace', array());
@@ -229,7 +229,7 @@
                             <ul class="treeview-menu">
                                 <li @yield('tickets')><a href="{{url('getticket')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.ticket') !!}</a></li>
                                 <li @yield('auto-response')><a href="{{url('getresponder')}}"><i class="fa fa-reply-all"></i>{!! Lang::get('lang.auto_response') !!}</a></li>
-                                <li @yield('alert')><a href="{{url('getalert')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.alert_notices') !!}</a></li>
+                                <li @yield('alert')><a href="{{url('alert')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.alert_notices') !!}</a></li>
                                 <li @yield('status')><a href="{{url('setting-status')}}"><i class="fa fa-plus-square-o"></i>{!! Lang::get('lang.status') !!}</a></li>
                                 <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-star"></i>{!! Lang::get('lang.ratings') !!}</a></li>
                                 <li @yield('close-workflow')><a href="{{url('close-workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.close-workflow') !!}</a></li>
@@ -396,8 +396,12 @@
     <script src="{{asset("lb-faveo/js/tabby.js")}}"></script>
     <!-- CK Editor -->
     <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
+    <script src="{{asset("lb-faveo/js/angular/angular.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
 
     @yield('FooterInclude')
+    @stack('scripts')
 </body>
 <script>
     $(function() {
