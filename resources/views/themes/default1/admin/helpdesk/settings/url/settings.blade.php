@@ -32,7 +32,7 @@ class="active"
         <h3 class="box-title">URL Settings</h3>
     </div>
 
-    <div class="box-body table-responsive">
+    <div class="box-body">
         @if (count($errors) > 0)
         <div class="alert alert-danger">
             <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -62,7 +62,6 @@ class="active"
         @endif
         
         <div class="row">
-
             <div class="col-md-6">
                 <div class="form-group">
                     {!! Form::label('url','App URL') !!}
