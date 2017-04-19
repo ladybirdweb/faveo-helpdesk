@@ -92,16 +92,16 @@ class ImageSize extends AbstractValidator
     public function __construct($options = null)
     {
         if (1 < func_num_args()) {
-            if (!is_array($options)) {
+            if (! is_array($options)) {
                 $options = ['minWidth' => $options];
             }
 
             $argv = func_get_args();
             array_shift($argv);
             $options['minHeight'] = array_shift($argv);
-            if (!empty($argv)) {
+            if (! empty($argv)) {
                 $options['maxWidth'] = array_shift($argv);
-                if (!empty($argv)) {
+                if (! empty($argv)) {
                     $options['maxHeight'] = array_shift($argv);
                 }
             }
@@ -337,7 +337,7 @@ class ImageSize extends AbstractValidator
             $filename = $file['name'];
             $file     = $file['tmp_name'];
         } elseif (is_array($value)) {
-            if (!isset($value['tmp_name']) || !isset($value['name'])) {
+            if (! isset($value['tmp_name']) || ! isset($value['name'])) {
                 throw new Exception\InvalidArgumentException(
                     'Value array must be in $_FILES format'
                 );

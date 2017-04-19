@@ -32,7 +32,7 @@ class="active"
         <h3 class="box-title">URL Settings</h3>
     </div>
 
-    <div class="box-body table-responsive">
+    <div class="box-body">
         @if (count($errors) > 0)
         <div class="alert alert-danger">
             <strong>Whoops!</strong> There were some problems with your input.<br><br>
@@ -62,31 +62,15 @@ class="active"
         @endif
         
         <div class="row">
-
             <div class="col-md-6">
                 <div class="form-group">
-                {!! Form::label('www','WWW/non-WWW') !!}
+                    {!! Form::label('url','App URL') !!}
                 </div>
-                <div class="col-md-4 ">
-                    <p> {!! Form::radio('www','yes',$www['www'],['class'=>'option']) !!} WWW</p>
-                </div>
-                <div class="col-md-4">
-                    <p> {!! Form::radio('www','no',$www['nonwww'],['class'=>'option']) !!} Non WWW</p>
-                </div>
-            </div>
- 
-
-            <div class="col-md-6 form-group">
                 <div class="form-group">
-                {!! Form::label('option','SSl') !!}
-                </div>
-                <div class="col-md-4">
-                    <p> {!! Form::radio('ssl','yes',$https['https'],['class'=>'option']) !!} HTTPS</p>
-                </div>
-                <div class="col-md-4">
-                    <p> {!! Form::radio('ssl','no',$https['http'],['class'=>'option']) !!} HTTP</p>
+                    {!! Form::text('url',$url,['class'=>'form-control']) !!}
                 </div>
             </div>
+             
         </div>
        
     </div>

@@ -2,6 +2,8 @@
 
 namespace Cron;
 
+use DateTime;
+
 /**
  * Day of month field.  Allows: * , / - ? L W
  *
@@ -34,7 +36,7 @@ class DayOfMonthField extends AbstractField
     private static function getNearestWeekday($currentYear, $currentMonth, $targetDay)
     {
         $tday = str_pad($targetDay, 2, '0', STR_PAD_LEFT);
-        $target = \DateTime::createFromFormat('Y-m-d', "$currentYear-$currentMonth-$tday");
+        $target = DateTime::createFromFormat('Y-m-d', "$currentYear-$currentMonth-$tday");
         $currentWeekday = (int) $target->format('N');
 
         if ($currentWeekday < 6) {
@@ -54,7 +56,7 @@ class DayOfMonthField extends AbstractField
         }
     }
 
-    public function isSatisfiedBy(\DateTime $date, $value)
+    public function isSatisfiedBy(DateTime $date, $value)
     {
         // ? states that the field value is to be skipped
         if ($value == '?') {
@@ -83,7 +85,7 @@ class DayOfMonthField extends AbstractField
         return $this->isSatisfied($date->format('d'), $value);
     }
 
-    public function increment(\DateTime $date, $invert = false)
+    public function increment(DateTime $date, $invert = false)
     {
         if ($invert) {
             $date->modify('previous day');
@@ -96,8 +98,76 @@ class DayOfMonthField extends AbstractField
         return $this;
     }
 
+    /**
+     * Validates that the value is valid for the Day of the Month field
+     * Days of the month can contain values of 1-31, *, L, or ? by default. This can be augmented with lists via a ',',
+     * ranges via a '-', or with a '[0-9]W' to specify the closest weekday.
+     *
+     * @param string $value
+     * @return bool
+     */
     public function validate($value)
     {
-        return (bool) preg_match('/^[\*,\/\-\?LW0-9A-Za-z]+$/', $value);
+        // Allow wildcards and a single L
+        if ($value === '?' || $value === '*' || $value === 'L') {
+            return true;
+        }
+
+        // If you only contain numbers and are within 1-31
+        if ((bool) preg_match('/^\d{1,2}$/', $value) && ($value >= 1 && $value <= 31)) {
+            return true;
+        }
+
+        // If you have a -, we will deal with each of your chunks
+        if ((bool) preg_match('/-/', $value)) {
+            // We cannot have a range within a list or vice versa
+            if ((bool) preg_match('/,/', $value)) {
+                return false;
+            }
+
+            $chunks = explode('-', $value);
+            foreach ($chunks as $chunk) {
+                if (!$this->validate($chunk)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // If you have a comma, we will deal with each value
+        if ((bool) preg_match('/,/', $value)) {
+            // We cannot have a range within a list or vice versa
+            if ((bool) preg_match('/-/', $value)) {
+                return false;
+            }
+
+            $chunks = explode(',', $value);
+            foreach ($chunks as $chunk) {
+                if (!$this->validate($chunk)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        // If you contain a /, we'll deal with it
+        if ((bool) preg_match('/\//', $value)) {
+            $chunks = explode('/', $value);
+            foreach ($chunks as $chunk) {
+                if (!$this->validate($chunk)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // If you end in W, make sure that it has a numeric in front of it
+        if ((bool) preg_match('/^\d{1,2}W$/', $value)) {
+            return true;
+        }
+
+        return false;
     }
 }

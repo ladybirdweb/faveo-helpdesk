@@ -3,7 +3,6 @@
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
-use PhpParser\Error;
 
 class UseUse extends Node\Stmt
 {
@@ -25,13 +24,6 @@ class UseUse extends Node\Stmt
     public function __construct(Node\Name $name, $alias = null, $type = Use_::TYPE_UNKNOWN, array $attributes = array()) {
         if (null === $alias) {
             $alias = $name->getLast();
-        }
-
-        if ('self' == strtolower($alias) || 'parent' == strtolower($alias)) {
-            throw new Error(sprintf(
-                'Cannot use %s as %s because \'%2$s\' is a special class name',
-                $name, $alias
-            ));
         }
 
         parent::__construct($attributes);

@@ -168,12 +168,12 @@ class InstallController extends Controller
     {
         Cache::forever('step4', 'step4');
 
-        Session::set('default', $request->input('default'));
-        Session::set('host', $request->input('host'));
-        Session::set('databasename', $request->input('databasename'));
-        Session::set('username', $request->input('username'));
-        Session::set('password', $request->input('password'));
-        Session::set('port', $request->input('port'));
+        Session::put('default', $request->input('default'));
+        Session::put('host', $request->input('host'));
+        Session::put('databasename', $request->input('databasename'));
+        Session::put('username', $request->input('username'));
+        Session::put('password', $request->input('password'));
+        Session::put('port', $request->input('port'));
 
         return Redirect::route('database');
     }
@@ -195,9 +195,9 @@ class InstallController extends Controller
 
         $ENV['APP_ENV'] = 'production';
         $ENV['APP_DEBUG'] = 'false';
-        $ENV['APP_KEY'] = 'SomeRandomString';
+        $ENV['APP_KEY'] = 'base64:h3KjrHeVxyE+j6c8whTAs2YI+7goylGZ/e2vElgXT6I=';
         $ENV['APP_BUGSNAG'] = 'true';
-        $ENV['APP_URL'] = 'http://localhost';
+        $ENV['APP_URL'] = url('/');
         $ENV['DB_INSTALL'] = '%0%';
         $ENV['DB_TYPE'] = $default;
         $ENV['DB_HOST'] = $host;
@@ -306,23 +306,26 @@ class InstallController extends Controller
             return \Redirect::back()->with('fails', 'Invalid language');
         }
         // checking requested timezone for the admin and system
-        $timezones = Timezones::where('name', '=', $timezone)->first();
-        if ($timezones == null) {
-            return redirect()->back()->with('fails', 'Invalid time-zone');
-        }
-
-        // checking requested date time format for the admin and system
-        $date_time_format = Date_time_format::where('format', '=', $datetime)->first();
-        if ($date_time_format == null) {
-            return redirect()->back()->with('fails', 'invalid date-time format');
-        }
+//        $timezones = Timezones::where('name', '=', $timezone)->first();
+//        if ($timezones == null) {
+//            return redirect()->back()->with('fails', 'Invalid time-zone');
+//        }
+//
+//        // checking requested date time format for the admin and system
+//        $date_time_format = Date_time_format::where('format', '=', $datetime)->first();
+//        if ($date_time_format == null) {
+//            return redirect()->back()->with('fails', 'invalid date-time format');
+//        }
 
         // Creating minum settings for system
+        $system =System::where('id','=',1)->first();
+        if(!$system){
         $system = new System();
+        }
         $system->status = 1;
         $system->department = 1;
-        $system->date_time_format = $date_time_format->id;
-        $system->time_zone = $timezones->id;
+        $system->date_time_format = $datetime;
+        $system->time_zone = $timezone;
         $version = \Config::get('app.version');
         $version = explode(' ', $version);
         $version = $version[1];
@@ -378,7 +381,7 @@ class InstallController extends Controller
             try {
                 Cache::flush();
 
-                Artisan::call('key:generate');
+                //Artisan::call('key:generate');
                 \Cache::forever('language', $language);
 
                 return View::make('themes/default1/installer/helpdesk/view6');

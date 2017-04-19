@@ -350,12 +350,12 @@ class="active"
 
                         <!-- <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}"> -->
                         {!! Form::label('assign_group',Lang::get('lang.assigned_group')) !!} <span class="text-red"> *</span>
-                        {!!Form::select('group',[Lang::get('lang.groups')=>$groups->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        {!!Form::select('group',[Lang::get('lang.groups')=>$groups->pluck('name','id')->toArray()],null,['class' => 'form-control select']) !!}
                         <!-- </div> -->
                         <!-- primary dept -->
                         <!-- <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}"> -->
                         {!! Form::label('primary_dpt',Lang::get('lang.primary_department')) !!} <span class="text-red"> *</span>
-                        {!! Form::select('primary_department', [Lang::get('lang.departments')=>$departments->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        {!! Form::select('primary_department', [Lang::get('lang.departments')=>$departments->pluck('name','id')->toArray()],null,['class' => 'form-control select']) !!}
                         <!-- </div> -->
 
                     </div>
@@ -417,12 +417,12 @@ class="active"
 
                         <!-- <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}"> -->
                         {!! Form::label('assign_group',Lang::get('lang.assigned_group')) !!} <span class="text-red"> *</span>
-                        {!!Form::select('group',[Lang::get('lang.groups')=>$groups->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        {!!Form::select('group',[Lang::get('lang.groups')=>$groups->pluck('name','id')->toArray()],null,['class' => 'form-control select']) !!}
                         <!-- </div> -->
                         <!-- primary dept -->
                         <!-- <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}"> -->
                         {!! Form::label('primary_dpt',Lang::get('lang.primary_department')) !!} <span class="text-red"> *</span>
-                        {!! Form::select('primary_department', [Lang::get('lang.departments')=>$departments->lists('name','id')->toArray()],null,['class' => 'form-control select']) !!}
+                        {!! Form::select('primary_department', [Lang::get('lang.departments')=>$departments->pluck('name','id')->toArray()],null,['class' => 'form-control select']) !!}
                         <!-- </div> -->
 
                     </div>

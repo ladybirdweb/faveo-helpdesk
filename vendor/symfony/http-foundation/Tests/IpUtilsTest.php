@@ -11,9 +11,10 @@
 
 namespace Symfony\Component\HttpFoundation\Tests;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\IpUtils;
 
-class IpUtilsTest extends \PHPUnit_Framework_TestCase
+class IpUtilsTest extends TestCase
 {
     /**
      * @dataProvider testIpv4Provider
@@ -37,6 +38,7 @@ class IpUtilsTest extends \PHPUnit_Framework_TestCase
             array(true, '1.2.3.4', '0.0.0.0/0'),
             array(true, '1.2.3.4', '192.168.1.0/0'),
             array(false, '1.2.3.4', '256.256.256/0'), // invalid CIDR notation
+            array(false, 'an_invalid_ip', '192.168.1.0/24'),
         );
     }
 

@@ -104,10 +104,10 @@ class Cookies extends Headers
         if ($cookie instanceof SetCookie) {
             $domain = $cookie->getDomain();
             $path   = $cookie->getPath();
-            if (!isset($this->cookies[$domain])) {
+            if (! isset($this->cookies[$domain])) {
                 $this->cookies[$domain] = [];
             }
-            if (!isset($this->cookies[$domain][$path])) {
+            if (! isset($this->cookies[$domain][$path])) {
                 $this->cookies[$domain][$path] = [];
             }
             $this->cookies[$domain][$path][$cookie->getName()] = $cookie;
@@ -168,7 +168,7 @@ class Cookies extends Headers
     ) {
         if (is_string($uri)) {
             $uri = Uri\UriFactory::factory($uri, 'http');
-        } elseif (!$uri instanceof Uri\Uri) {
+        } elseif (! $uri instanceof Uri\Uri) {
             throw new Exception\InvalidArgumentException("Invalid URI string or object passed");
         }
 
@@ -208,7 +208,7 @@ class Cookies extends Headers
     {
         if (is_string($uri)) {
             $uri = Uri\UriFactory::factory($uri, 'http');
-        } elseif (!$uri instanceof Uri\Uri) {
+        } elseif (! $uri instanceof Uri\Uri) {
             throw new Exception\InvalidArgumentException('Invalid URI specified');
         }
 
@@ -252,8 +252,10 @@ class Cookies extends Headers
      * @param int $retAs What value to return
      * @return array|string
      */
+    // @codingStandardsIgnoreStart
     protected function _flattenCookiesArray($ptr, $retAs = self::COOKIE_OBJECT)
     {
+        // @codingStandardsIgnoreEnd
         if (is_array($ptr)) {
             $ret = ($retAs == self::COOKIE_STRING_CONCAT ? '' : []);
             foreach ($ptr as $item) {
@@ -287,8 +289,10 @@ class Cookies extends Headers
      * @param string $domain
      * @return array
      */
+    // @codingStandardsIgnoreStart
     protected function _matchDomain($domain)
     {
+        // @codingStandardsIgnoreEnd
         $ret = [];
 
         foreach (array_keys($this->cookies) as $cdom) {
@@ -307,8 +311,10 @@ class Cookies extends Headers
      * @param string $path
      * @return array
      */
+    // @codingStandardsIgnoreStart
     protected function _matchPath($domains, $path)
     {
+        // @codingStandardsIgnoreEnd
         $ret = [];
 
         foreach ($domains as $dom => $pathsArray) {

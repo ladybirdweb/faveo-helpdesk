@@ -29,6 +29,13 @@ class Builder
     protected $resolver;
 
     /**
+     * The default string length for migrations.
+     *
+     * @var int
+     */
+    public static $defaultStringLength = 255;
+
+    /**
      * Create a new database Schema manager.
      *
      * @param  \Illuminate\Database\Connection  $connection
@@ -41,6 +48,17 @@ class Builder
     }
 
     /**
+     * Set the default string length for migrations.
+     *
+     * @param  int  $length
+     * @return void
+     */
+    public static function defaultStringLength($length)
+    {
+        static::$defaultStringLength = $length;
+    }
+
+    /**
      * Determine if the given table exists.
      *
      * @param  string  $table
@@ -48,11 +66,11 @@ class Builder
      */
     public function hasTable($table)
     {
-        $sql = $this->grammar->compileTableExists();
-
         $table = $this->connection->getTablePrefix().$table;
 
-        return count($this->connection->select($sql, [$table])) > 0;
+        return count($this->connection->select(
+            $this->grammar->compileTableExists(), [$table]
+        )) > 0;
     }
 
     /**
@@ -64,9 +82,9 @@ class Builder
      */
     public function hasColumn($table, $column)
     {
-        $column = strtolower($column);
-
-        return in_array($column, array_map('strtolower', $this->getColumnListing($table)));
+        return in_array(
+            strtolower($column), array_map('strtolower', $this->getColumnListing($table))
+        );
     }
 
     /**
@@ -113,7 +131,7 @@ class Builder
     {
         $table = $this->connection->getTablePrefix().$table;
 
-        $results = $this->connection->select($this->grammar->compileColumnExists($table));
+        $results = $this->connection->select($this->grammar->compileColumnListing($table));
 
         return $this->connection->getPostProcessor()->processColumnListing($results);
     }
@@ -123,7 +141,7 @@ class Builder
      *
      * @param  string    $table
      * @param  \Closure  $callback
-     * @return \Illuminate\Database\Schema\Blueprint
+     * @return void
      */
     public function table($table, Closure $callback)
     {
@@ -135,47 +153,41 @@ class Builder
      *
      * @param  string    $table
      * @param  \Closure  $callback
-     * @return \Illuminate\Database\Schema\Blueprint
+     * @return void
      */
     public function create($table, Closure $callback)
     {
-        $blueprint = $this->createBlueprint($table);
+        $this->build(tap($this->createBlueprint($table), function ($blueprint) use ($callback) {
+            $blueprint->create();
 
-        $blueprint->create();
-
-        $callback($blueprint);
-
-        $this->build($blueprint);
+            $callback($blueprint);
+        }));
     }
 
     /**
      * Drop a table from the schema.
      *
      * @param  string  $table
-     * @return \Illuminate\Database\Schema\Blueprint
+     * @return void
      */
     public function drop($table)
     {
-        $blueprint = $this->createBlueprint($table);
-
-        $blueprint->drop();
-
-        $this->build($blueprint);
+        $this->build(tap($this->createBlueprint($table), function ($blueprint) {
+            $blueprint->drop();
+        }));
     }
 
     /**
      * Drop a table from the schema if it exists.
      *
      * @param  string  $table
-     * @return \Illuminate\Database\Schema\Blueprint
+     * @return void
      */
     public function dropIfExists($table)
     {
-        $blueprint = $this->createBlueprint($table);
-
-        $blueprint->dropIfExists();
-
-        $this->build($blueprint);
+        $this->build(tap($this->createBlueprint($table), function ($blueprint) {
+            $blueprint->dropIfExists();
+        }));
     }
 
     /**
@@ -183,15 +195,13 @@ class Builder
      *
      * @param  string  $from
      * @param  string  $to
-     * @return \Illuminate\Database\Schema\Blueprint
+     * @return void
      */
     public function rename($from, $to)
     {
-        $blueprint = $this->createBlueprint($from);
-
-        $blueprint->rename($to);
-
-        $this->build($blueprint);
+        $this->build(tap($this->createBlueprint($from), function ($blueprint) use ($to) {
+            $blueprint->rename($to);
+        }));
     }
 
     /**

@@ -24,10 +24,10 @@ class Excel {
      * Filter
      * @var array
      */
-    protected $filters = array(
-        'registered' =>  array(),
-        'enabled'    =>  array()
-    );
+    protected $filters = [
+        'registered' =>  [],
+        'enabled'    =>  []
+    ];
 
     /**
      * Excel object
@@ -97,7 +97,8 @@ class Excel {
      * @param  string        $file The file we want to load
      * @param  callback|null $callback
      * @param  string|null   $encoding
-     * @param bool           $noBasePath
+     * @param  bool          $noBasePath
+     * @param  callback|null $callbackConfigReader
      * @return LaravelExcelReader
      */
     public function load($file, $callback = null, $encoding = null, $noBasePath = false, $callbackConfigReader = null)
@@ -130,7 +131,7 @@ class Excel {
      * @param  $sheets
      * @return LaravelExcelReader
      */
-    public function selectSheets($sheets = array())
+    public function selectSheets($sheets = [])
     {
         $sheets = is_array($sheets) ? $sheets : func_get_args();
         $this->reader->setSelectedSheets($sheets);
@@ -143,7 +144,7 @@ class Excel {
      * @param array $sheets
      * @return $this
      */
-    public function selectSheetsByIndex($sheets = array())
+    public function selectSheetsByIndex($sheets = [])
     {
         $sheets = is_array($sheets) ? $sheets : func_get_args();
         $this->reader->setSelectedSheetIndices($sheets);
@@ -171,7 +172,7 @@ class Excel {
      * @param  array  $mergeData
      * @return LaravelExcelWriter
      */
-    public function shareView($view, $data = array(), $mergeData = array())
+    public function shareView($view, $data = [], $mergeData = [])
     {
         return $this->create($view)->shareView($view, $data, $mergeData);
     }
@@ -183,7 +184,7 @@ class Excel {
      * @param  array  $mergeData
      * @return LaravelExcelWriter
      */
-    public function loadView($view, $data = array(), $mergeData = array())
+    public function loadView($view, $data = [], $mergeData = [])
     {
         return $this->shareView($view, $data, $mergeData);
     }
@@ -193,7 +194,7 @@ class Excel {
      * @param   array $filters
      * @return  Excel
      */
-    public function registerFilters($filters = array())
+    public function registerFilters($filters = [])
     {
         // If enabled array key exists
         if(array_key_exists('enabled', $filters))
@@ -263,14 +264,14 @@ class Excel {
         if (method_exists($this->excel, $method))
         {
             // Call the method from the excel object with the given params
-            return call_user_func_array(array($this->excel, $method), $params);
+            return call_user_func_array([$this->excel, $method], $params);
         }
 
         // If reader method exists, call that one
         if (method_exists($this->reader, $method))
         {
             // Call the method from the reader object with the given params
-            return call_user_func_array(array($this->reader, $method), $params);
+            return call_user_func_array([$this->reader, $method], $params);
         }
 
         throw new LaravelExcelException('Laravel Excel method [' . $method . '] does not exist');

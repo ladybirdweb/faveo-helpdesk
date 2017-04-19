@@ -4,10 +4,14 @@
 [![Total Downloads](https://poser.pugx.org/nesbot/carbon/downloads.png)](https://packagist.org/packages/nesbot/carbon)
 [![Build Status](https://travis-ci.org/briannesbitt/Carbon.svg?branch=master)](https://travis-ci.org/briannesbitt/Carbon)
 [![StyleCI](https://styleci.io/repos/5724990/shield?style=flat)](https://styleci.io/repos/5724990)
+[![codecov.io](https://codecov.io/github/briannesbitt/Carbon/coverage.svg?branch=master)](https://codecov.io/github/briannesbitt/Carbon?branch=master)
+[![PHP-Eye](https://php-eye.com/badge/nesbot/carbon/tested.svg?style=flat)](https://php-eye.com/package/nesbot/carbon)
 
 A simple PHP API extension for DateTime. [http://carbon.nesbot.com](http://carbon.nesbot.com)
 
 ```php
+use Carbon\Carbon;
+
 printf("Right now is %s", Carbon::now()->toDateTimeString());
 printf("Right now in Vancouver is %s", Carbon::now('America/Vancouver'));  //implicit __toString()
 $tomorrow = Carbon::now()->addDay();
@@ -55,7 +59,7 @@ $ composer require nesbot/carbon
 ```json
 {
     "require": {
-        "nesbot/carbon": "~1.14"
+        "nesbot/carbon": "~1.21"
     }
 }
 ```
@@ -82,3 +86,7 @@ use Carbon\Carbon;
 
 printf("Now: %s", Carbon::now());
 ```
+
+## Docs
+
+[http://carbon.nesbot.com/docs](http://carbon.nesbot.com/docs)

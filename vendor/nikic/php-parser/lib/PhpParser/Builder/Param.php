@@ -10,7 +10,10 @@ class Param extends PhpParser\BuilderAbstract
     protected $name;
 
     protected $default = null;
+
+    /** @var string|Node\Name|Node\NullableType|null */
     protected $type = null;
+
     protected $byRef = false;
 
     /**
@@ -38,15 +41,14 @@ class Param extends PhpParser\BuilderAbstract
     /**
      * Sets type hint for the parameter.
      *
-     * @param string|Node\Name $type Type hint to use
+     * @param string|Node\Name|Node\NullableType $type Type hint to use
      *
      * @return $this The builder instance (for fluid interface)
      */
     public function setTypeHint($type) {
-        if (in_array($type, array('array', 'callable', 'string', 'int', 'float', 'bool'))) {
-            $this->type = $type;
-        } else {
-            $this->type = $this->normalizeName($type);
+        $this->type = $this->normalizeType($type);
+        if ($this->type === 'void') {
+            throw new \LogicException('Parameter type cannot be void');
         }
 
         return $this;

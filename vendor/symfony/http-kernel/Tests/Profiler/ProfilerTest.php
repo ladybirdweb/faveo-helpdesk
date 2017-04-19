@@ -11,13 +11,15 @@
 
 namespace Symfony\Component\HttpKernel\Tests\Profiler;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\DataCollector\RequestDataCollector;
 use Symfony\Component\HttpKernel\Profiler\FileProfilerStorage;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\VarDumper\Cloner\Data;
 
-class ProfilerTest extends \PHPUnit_Framework_TestCase
+class ProfilerTest extends TestCase
 {
     private $tmp;
     private $storage;
@@ -35,7 +37,7 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(204, $profile->getStatusCode());
         $this->assertSame('GET', $profile->getMethod());
-        $this->assertEquals(array('foo' => 'bar'), $profiler->get('request')->getRequestQuery()->all());
+        $this->assertInstanceOf(Data::class, $profiler->get('request')->getRequestQuery()->all()['foo']);
     }
 
     public function testFindWorksWithDates()
@@ -57,6 +59,13 @@ class ProfilerTest extends \PHPUnit_Framework_TestCase
         $profiler = new Profiler($this->storage);
 
         $this->assertCount(0, $profiler->find(null, null, null, null, 'some string', ''));
+    }
+
+    public function testFindWorksWithStatusCode()
+    {
+        $profiler = new Profiler($this->storage);
+
+        $this->assertCount(0, $profiler->find(null, null, null, null, null, null, '204'));
     }
 
     protected function setUp()

@@ -21,7 +21,6 @@ active
 <div ng-app="myApp">
         <h1 style="text-align: center;">Locale Information</h1>
         {!! Form::open(['url'=>route('postaccount')]) !!}
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
         <!-- checking if the form submit fails -->
         @if($errors->first('firstname')||$errors->first('Lastname')||$errors->first('email')||$errors->first('username')||$errors->first('password')||$errors->first('confirmpassword'))

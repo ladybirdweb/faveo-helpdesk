@@ -150,7 +150,7 @@ class Stream extends Response
      */
     public static function fromStream($responseString, $stream)
     {
-        if (!is_resource($stream) || get_resource_type($stream) !== 'stream') {
+        if (! is_resource($stream) || get_resource_type($stream) !== 'stream') {
             throw new Exception\InvalidArgumentException('A valid stream is required');
         }
 
@@ -172,7 +172,7 @@ class Stream extends Response
             }
         }
 
-        if (!$headerComplete) {
+        if (! $headerComplete) {
             while (false !== ($nextLine = fgets($stream))) {
                 $headersString .= trim($nextLine)."\r\n";
                 if ($nextLine == "\r\n" || $nextLine == "\n") {
@@ -182,7 +182,7 @@ class Stream extends Response
             }
         }
 
-        if (!$headerComplete) {
+        if (! $headerComplete) {
             throw new Exception\OutOfRangeException('End of header not found');
         }
 
@@ -268,7 +268,7 @@ class Stream extends Response
             $bytes = -1; // Read the whole buffer
         }
 
-        if (!is_resource($this->stream) || $bytes == 0) {
+        if (! is_resource($this->stream) || $bytes == 0) {
             return '';
         }
 

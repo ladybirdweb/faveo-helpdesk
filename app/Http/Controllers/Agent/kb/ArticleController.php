@@ -134,7 +134,7 @@ class ArticleController extends Controller
     public function create(Category $category)
     {
         /* get the attributes of the category */
-        $category = $category->lists('id', 'name');
+        $category = $category->pluck('id', 'name');
         /* get the create page  */
         try {
             return view('themes.default1.agent.kb.article.create', compact('category'));
@@ -196,9 +196,9 @@ class ArticleController extends Controller
         $aid = $article->where('id', $slug)->first();
         $id = $aid->id;
         /* define the selected fields */
-        $assign = $relation->where('article_id', $id)->lists('category_id');
+        $assign = $relation->where('article_id', $id)->pluck('category_id');
         /* get the attributes of the category */
-        $category = $category->lists('id', 'name');
+        $category = $category->pluck('id', 'name');
         /* get the selected article and display it at edit page  */
         /* Get the selected article with id */
         $article = $article->whereId($id)->first();

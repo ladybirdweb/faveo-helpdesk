@@ -27,6 +27,11 @@
     "illuminate/support": ">=4.2.0",
     "intervention/image": "2.*"
   },
+  "require-dev": {
+    "orchestra/testbench": "~3.0",
+    "phpspec/phpspec": "~2.1",
+    "phpunit/phpunit": "~4.8"
+  },
   "suggest": {
     "ext-gd": "to use GD library based image processing.",
     "ext-imagick": "to use Imagick based image processing."

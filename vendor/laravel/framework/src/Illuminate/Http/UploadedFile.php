@@ -2,56 +2,88 @@
 
 namespace Illuminate\Http;
 
+use Illuminate\Support\Arr;
+use Illuminate\Container\Container;
 use Illuminate\Support\Traits\Macroable;
+use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 
 class UploadedFile extends SymfonyUploadedFile
 {
-    use Macroable;
+    use FileHelpers, Macroable;
 
     /**
-     * Get the fully qualified path to the file.
+     * Begin creating a new file fake.
      *
-     * @return string
+     * @return \Illuminate\Http\Testing\FileFactory
      */
-    public function path()
+    public static function fake()
     {
-        return $this->getRealPath();
+        return new Testing\FileFactory;
     }
 
     /**
-     * Get the file's extension.
-     *
-     * @return string
-     */
-    public function extension()
-    {
-        return $this->guessExtension();
-    }
-
-    /**
-     * Get the file's extension supplied by the client.
-     *
-     * @return string
-     */
-    public function clientExtension()
-    {
-        return $this->guessClientExtension();
-    }
-
-    /**
-     * Get a filename for the file that is the MD5 hash of the contents.
+     * Store the uploaded file on a filesystem disk.
      *
      * @param  string  $path
-     * @return string
+     * @param  array  $options
+     * @return string|false
      */
-    public function hashName($path = null)
+    public function store($path, $options = [])
     {
-        if ($path) {
-            $path = rtrim($path, '/').'/';
-        }
+        return $this->storeAs($path, $this->hashName(), $this->parseOptions($options));
+    }
 
-        return $path.md5_file($this->path()).'.'.$this->extension();
+    /**
+     * Store the uploaded file on a filesystem disk with public visibility.
+     *
+     * @param  string  $path
+     * @param  array  $options
+     * @return string|false
+     */
+    public function storePublicly($path, $options = [])
+    {
+        $options = $this->parseOptions($options);
+
+        $options['visibility'] = 'public';
+
+        return $this->storeAs($path, $this->hashName(), $options);
+    }
+
+    /**
+     * Store the uploaded file on a filesystem disk with public visibility.
+     *
+     * @param  string  $path
+     * @param  string  $name
+     * @param  array  $options
+     * @return string|false
+     */
+    public function storePubliclyAs($path, $name, $options = [])
+    {
+        $options = $this->parseOptions($options);
+
+        $options['visibility'] = 'public';
+
+        return $this->storeAs($path, $name, $options);
+    }
+
+    /**
+     * Store the uploaded file on a filesystem disk.
+     *
+     * @param  string  $path
+     * @param  string  $name
+     * @param  array  $options
+     * @return string|false
+     */
+    public function storeAs($path, $name, $options = [])
+    {
+        $options = $this->parseOptions($options);
+
+        $disk = Arr::pull($options, 'disk');
+
+        return Container::getInstance()->make(FilesystemFactory::class)->disk($disk)->putFileAs(
+            $path, $this, $name, $options
+        );
     }
 
     /**
@@ -71,5 +103,20 @@ class UploadedFile extends SymfonyUploadedFile
             $file->getError(),
             $test
         );
+    }
+
+    /**
+     * Parse and format the given options.
+     *
+     * @param  array|string  $options
+     * @return array
+     */
+    protected function parseOptions($options)
+    {
+        if (is_string($options)) {
+            $options = ['disk' => $options];
+        }
+
+        return $options;
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Laravel\Socialite\Two;
 
-use GuzzleHttp\Client;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use GuzzleHttp\ClientInterface;
@@ -15,16 +13,9 @@ abstract class AbstractProvider implements ProviderContract
     /**
      * The HTTP request instance.
      *
-     * @var \Illuminate\Http\Request
+     * @var Request
      */
     protected $request;
-
-    /**
-     * The HTTP Client instance.
-     *
-     * @var \GuzzleHttp\Client
-     */
-    protected $httpClient;
 
     /**
      * The client ID.
@@ -85,7 +76,7 @@ abstract class AbstractProvider implements ProviderContract
     /**
      * Create a new provider instance.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  string  $clientId
      * @param  string  $clientSecret
      * @param  string  $redirectUrl
@@ -126,21 +117,21 @@ abstract class AbstractProvider implements ProviderContract
      * Map the raw user array to a Socialite User instance.
      *
      * @param  array  $user
-     * @return \Laravel\Socialite\Two\User
+     * @return \Laravel\Socialite\User
      */
     abstract protected function mapUserToObject(array $user);
 
     /**
      * Redirect the user of the application to the provider's authentication screen.
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function redirect()
     {
         $state = null;
 
         if ($this->usesState()) {
-            $this->request->session()->set('state', $state = Str::random(40));
+            $this->request->getSession()->put('state', $state = Str::random(40));
         }
 
         return new RedirectResponse($this->getAuthUrl($state));
@@ -200,26 +191,9 @@ abstract class AbstractProvider implements ProviderContract
             throw new InvalidStateException;
         }
 
-        $response = $this->getAccessTokenResponse($this->getCode());
-
         $user = $this->mapUserToObject($this->getUserByToken(
-            $token = Arr::get($response, 'access_token')
+            $token = $this->getAccessToken($this->getCode())
         ));
-
-        return $user->setToken($token)
-                    ->setRefreshToken(Arr::get($response, 'refresh_token'))
-                    ->setExpiresIn(Arr::get($response, 'expires_in'));
-    }
-
-    /**
-     * Get a Social User instance from a known access token.
-     *
-     * @param  string  $token
-     * @return \Laravel\Socialite\Two\User
-     */
-    public function userFromToken($token)
-    {
-        $user = $this->mapUserToObject($this->getUserByToken($token));
 
         return $user->setToken($token);
     }
@@ -234,21 +208,19 @@ abstract class AbstractProvider implements ProviderContract
         if ($this->isStateless()) {
             return false;
         }
-        //dd($this->request->all());
-        $state = $this->request->input('state');
-        \Session::put('state', $state);
-        //$state = $this->request->session()->pull('state');
+
+        $state = $this->request->getSession()->pull('state');
 
         return ! (strlen($state) > 0 && $this->request->input('state') === $state);
     }
 
     /**
-     * Get the access token response for the given code.
+     * Get the access token for the given code.
      *
      * @param  string  $code
-     * @return array
+     * @return string
      */
-    public function getAccessTokenResponse($code)
+    public function getAccessToken($code)
     {
         $postKey = (version_compare(ClientInterface::VERSION, '6') === 1) ? 'form_params' : 'body';
 
@@ -257,7 +229,7 @@ abstract class AbstractProvider implements ProviderContract
             $postKey => $this->getTokenFields($code),
         ]);
 
-        return json_decode($response->getBody(), true);
+        return $this->parseAccessToken($response->getBody());
     }
 
     /**
@@ -272,6 +244,17 @@ abstract class AbstractProvider implements ProviderContract
             'client_id' => $this->clientId, 'client_secret' => $this->clientSecret,
             'code' => $code, 'redirect_uri' => $this->redirectUrl,
         ];
+    }
+
+    /**
+     * Get the access token from the token response body.
+     *
+     * @param  string  $body
+     * @return string
+     */
+    protected function parseAccessToken($body)
+    {
+        return json_decode($body, true)['access_token'];
     }
 
     /**
@@ -292,65 +275,25 @@ abstract class AbstractProvider implements ProviderContract
      */
     public function scopes(array $scopes)
     {
-        $this->scopes = array_unique(array_merge($this->scopes, $scopes));
+        $this->scopes = $scopes;
 
         return $this;
     }
 
     /**
-     * Get the current scopes.
-     *
-     * @return array
-     */
-    public function getScopes()
-    {
-        return $this->scopes;
-    }
-
-    /**
-     * Set the redirect URL.
-     *
-     * @param  string  $url
-     * @return $this
-     */
-    public function redirectUrl($url)
-    {
-        $this->redirectUrl = $url;
-
-        return $this;
-    }
-
-    /**
-     * Get a instance of the Guzzle HTTP client.
+     * Get a fresh instance of the Guzzle HTTP client.
      *
      * @return \GuzzleHttp\Client
      */
     protected function getHttpClient()
     {
-        if (is_null($this->httpClient)) {
-            $this->httpClient = new Client();
-        }
-
-        return $this->httpClient;
-    }
-
-    /**
-     * Set the Guzzle HTTP client instance.
-     *
-     * @param  \GuzzleHttp\Client  $client
-     * @return $this
-     */
-    public function setHttpClient(Client $client)
-    {
-        $this->httpClient = $client;
-
-        return $this;
+        return new \GuzzleHttp\Client;
     }
 
     /**
      * Set the request instance.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return $this
      */
     public function setRequest(Request $request)

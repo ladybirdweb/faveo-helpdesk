@@ -67,7 +67,7 @@ class FilterController extends Controller
                         }
                     }
                 })
-                ->lists('ticket_id')
+                ->pluck('ticket_id')
                 ->toArray();
 
         return $query;

@@ -185,7 +185,7 @@ class Count extends AbstractValidator
 
         if (is_array($file)) {
             foreach ($file as $name) {
-                if (!isset($this->files[$name]) && !empty($name)) {
+                if (! isset($this->files[$name]) && ! empty($name)) {
                     $this->files[$name] = $name;
                 }
             }
@@ -205,7 +205,7 @@ class Count extends AbstractValidator
      */
     public function isValid($value, $file = null)
     {
-        if (($file !== null) && !array_key_exists('destination', $file)) {
+        if (($file !== null) && ! array_key_exists('destination', $file)) {
             $file['destination'] = dirname($value);
         }
 
@@ -213,7 +213,7 @@ class Count extends AbstractValidator
             $value = $file['destination'] . DIRECTORY_SEPARATOR . $file['name'];
         }
 
-        if (($file === null) || !empty($file['tmp_name'])) {
+        if (($file === null) || ! empty($file['tmp_name'])) {
             $this->addFile($value);
         }
 

@@ -3,6 +3,8 @@
 namespace Illuminate\Cache;
 
 use Memcached;
+use Carbon\Carbon;
+use ReflectionMethod;
 use Illuminate\Contracts\Cache\Store;
 
 class MemcachedStore extends TaggableStore implements Store
@@ -22,6 +24,13 @@ class MemcachedStore extends TaggableStore implements Store
     protected $prefix;
 
     /**
+     * Indicates whether we are using Memcached version >= 3.0.0.
+     *
+     * @var bool
+     */
+    protected $onVersionThree;
+
+    /**
      * Create a new Memcached store.
      *
      * @param  \Memcached  $memcached
@@ -32,12 +41,15 @@ class MemcachedStore extends TaggableStore implements Store
     {
         $this->setPrefix($prefix);
         $this->memcached = $memcached;
+
+        $this->onVersionThree = (new ReflectionMethod('Memcached', 'getMulti'))
+                            ->getNumberOfParameters() == 2;
     }
 
     /**
      * Retrieve an item from the cache by key.
      *
-     * @param  string|array  $key
+     * @param  string  $key
      * @return mixed
      */
     public function get($key)
@@ -63,7 +75,13 @@ class MemcachedStore extends TaggableStore implements Store
             return $this->prefix.$key;
         }, $keys);
 
-        $values = $this->memcached->getMulti($prefixedKeys, null, Memcached::GET_PRESERVE_ORDER);
+        if ($this->onVersionThree) {
+            $values = $this->memcached->getMulti($prefixedKeys, Memcached::GET_PRESERVE_ORDER);
+        } else {
+            $null = null;
+
+            $values = $this->memcached->getMulti($prefixedKeys, $null, Memcached::GET_PRESERVE_ORDER);
+        }
 
         if ($this->memcached->getResultCode() != 0) {
             return array_fill_keys($keys, null);
@@ -77,19 +95,19 @@ class MemcachedStore extends TaggableStore implements Store
      *
      * @param  string  $key
      * @param  mixed   $value
-     * @param  int     $minutes
+     * @param  float|int  $minutes
      * @return void
      */
     public function put($key, $value, $minutes)
     {
-        $this->memcached->set($this->prefix.$key, $value, $minutes * 60);
+        $this->memcached->set($this->prefix.$key, $value, $this->toTimestamp($minutes));
     }
 
     /**
      * Store multiple items in the cache for a given number of minutes.
      *
      * @param  array  $values
-     * @param  int  $minutes
+     * @param  float|int  $minutes
      * @return void
      */
     public function putMany(array $values, $minutes)
@@ -100,7 +118,7 @@ class MemcachedStore extends TaggableStore implements Store
             $prefixedValues[$this->prefix.$key] = $value;
         }
 
-        $this->memcached->setMulti($prefixedValues, $minutes * 60);
+        $this->memcached->setMulti($prefixedValues, $this->toTimestamp($minutes));
     }
 
     /**
@@ -108,12 +126,12 @@ class MemcachedStore extends TaggableStore implements Store
      *
      * @param  string  $key
      * @param  mixed   $value
-     * @param  int     $minutes
+     * @param  float|int  $minutes
      * @return bool
      */
     public function add($key, $value, $minutes)
     {
-        return $this->memcached->add($this->prefix.$key, $value, $minutes * 60);
+        return $this->memcached->add($this->prefix.$key, $value, $this->toTimestamp($minutes));
     }
 
     /**
@@ -166,11 +184,22 @@ class MemcachedStore extends TaggableStore implements Store
     /**
      * Remove all items from the cache.
      *
-     * @return void
+     * @return bool
      */
     public function flush()
     {
-        $this->memcached->flush();
+        return $this->memcached->flush();
+    }
+
+    /**
+     * Get the UNIX timestamp for the given number of minutes.
+     *
+     * @param  int  $minutes
+     * @return int
+     */
+    protected function toTimestamp($minutes)
+    {
+        return $minutes > 0 ? Carbon::now()->addSeconds($minutes * 60)->getTimestamp() : 0;
     }
 
     /**

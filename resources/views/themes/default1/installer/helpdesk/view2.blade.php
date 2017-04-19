@@ -288,7 +288,7 @@ if ($php_ok && $memory_ok && $extensions_ok && $file_permission && $required_fun
 
 
     <form action="{{URL::route('postprerequisites')}}" method="post"  class="border-line">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        {{ csrf_field() }}
         <p class="setup-actions step">
             <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Continue">
             <a href="{!! route('licence') !!}" class="button button-large button-next" style="float: left">Previous</a>

@@ -39,7 +39,7 @@ return [
     'exists'         => 'Le :attribute sélectionné est invalide.',
     'image'          => 'Le :attribute doit être une image.',
     'in'             => 'Le :attribute sélectionné est invalide.',
-    'integer'        => 'Le :attribute doit être un entier.',
+    'integer'        => 'Le :attribute doit être un integer.',
     'ip'             => 'Le :attribute doit être une adresse IP valide.',
     'max'            => [
         'numeric' => 'Le :attribute ne peut pas être plus grand que :max.',

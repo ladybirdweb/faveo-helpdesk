@@ -33,7 +33,7 @@ via either the client's constructor or `setOptions()` method:
 Parameter            | Description                                                                          | Expected Type | Default Value
 ---------------------|--------------------------------------------------------------------------------------|---------------|--------------
 `persistent`         | Whether to use persistent TCP connections                                            | boolean       | `FALSE`
-`ssltransport`       | SSL transport layer (eg. `sslv2`, `tls`)                                             | string        | `ssl` 
+`ssltransport`       | SSL transport layer (eg. `sslv2`, `tls`)                                             | string        | `ssl`
 `sslcert`            | Path to a PEM encoded SSL certificate                                                | string        | `NULL`
 `sslpassphrase`      | Passphrase for the SSL certificate file                                              | string        | `NULL`
 `sslverifypeer`      | Whether to verify the SSL peer                                                       | string        | `TRUE`
@@ -258,6 +258,17 @@ the 'curloptions' key in the constructor of the adapter, or by calling
 `setCurlOption($name, $value)`; option names correspond to the `CURL_*`
 constants of the cURL extension. You can get access to the underling cURL handle
 by calling `$adapter->getHandle();`
+
+The cURL configuration options that can be set via `setCurlOption($name, $value)`
+method are:
+
+Parameter            | Description                                                                          | Expected Type | Default Value
+---------------------|--------------------------------------------------------------------------------------|---------------|--------------
+`proxyuser`          | Whether to use persistent TCP connections                                            | boolean       | `FALSE`
+`proxypass`          | SSL transport layer (eg. `sslv2`, `tls`)                                             | string        | `ssl`
+`proxyhost`          | Path to a PEM encoded SSL certificate                                                | string        | `NULL`
+`proxyport`          | Passphrase for the SSL certificate file                                              | string        | `NULL`
+`sslverifypeer`      | Whether to verify the SSL peer                                                       | string        | `TRUE`
 
 ### Transfering files by handle
 

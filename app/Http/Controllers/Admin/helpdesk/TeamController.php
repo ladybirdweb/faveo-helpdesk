@@ -49,7 +49,7 @@ class TeamController extends Controller
         try {
             $teams = $team->get();
             /*  find out the Number of Members in the Team */
-            $id = $teams->lists('id');
+            $id = $teams->pluck('id');
             $assign_team_agent = $assign_team_agent->get();
 
             return view('themes.default1.admin.helpdesk.agent.teams.index', compact('assign_team_agent', 'teams'));
@@ -213,7 +213,7 @@ $users = DB::table('team_assign_agent')->select('team_assign_agent.id', 'team_as
             $a_id = [];
             $teams = $team->whereId($id)->first();
             $agent_team = $assign_team_agent->where('team_id', $id)->get();
-            $agent_id = $agent_team->lists('agent_id', 'agent_id');
+            $agent_id = $agent_team->pluck('agent_id', 'agent_id');
             foreach ($agent_id as $value) {
                 array_push($a_id, $value);
             }

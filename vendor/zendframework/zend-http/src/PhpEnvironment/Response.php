@@ -38,7 +38,7 @@ class Response extends HttpResponse
      */
     public function getVersion()
     {
-        if (!$this->version) {
+        if (! $this->version) {
             $this->version = $this->detectVersion();
         }
         return $this->version;

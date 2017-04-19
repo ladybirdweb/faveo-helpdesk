@@ -2,7 +2,6 @@
 
 namespace PhpParser;
 
-use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Parser\Tokens;
 
 class Lexer
@@ -12,6 +11,7 @@ class Lexer
     protected $pos;
     protected $line;
     protected $filePos;
+    protected $prevCloseTagHasNewline;
 
     protected $tokenMap;
     protected $dropTokens;
@@ -48,25 +48,36 @@ class Lexer
     /**
      * Initializes the lexer for lexing the provided source code.
      *
-     * @param string $code The source code to lex
+     * This function does not throw if lexing errors occur. Instead, errors may be retrieved using
+     * the getErrors() method.
      *
-     * @throws Error on lexing errors (unterminated comment or unexpected character)
+     * @param string $code The source code to lex
+     * @param ErrorHandler|null $errorHandler Error handler to use for lexing errors. Defaults to
+     *                                        ErrorHandler\Throwing
      */
-    public function startLexing($code) {
-        $scream = ini_set('xdebug.scream', '0');
-
-        $this->resetErrors();
-        $this->tokens = @token_get_all($code);
-        $this->handleErrors();
-
-        if (false !== $scream) {
-            ini_set('xdebug.scream', $scream);
+    public function startLexing($code, ErrorHandler $errorHandler = null) {
+        if (null === $errorHandler) {
+            $errorHandler = new ErrorHandler\Throwing();
         }
 
         $this->code = $code; // keep the code around for __halt_compiler() handling
         $this->pos  = -1;
         $this->line =  1;
         $this->filePos = 0;
+
+        // If inline HTML occurs without preceding code, treat it as if it had a leading newline.
+        // This ensures proper composability, because having a newline is the "safe" assumption.
+        $this->prevCloseTagHasNewline = true;
+
+        $scream = ini_set('xdebug.scream', '0');
+
+        $this->resetErrors();
+        $this->tokens = @token_get_all($code);
+        $this->handleErrors($errorHandler);
+
+        if (false !== $scream) {
+            ini_set('xdebug.scream', $scream);
+        }
     }
 
     protected function resetErrors() {
@@ -80,32 +91,109 @@ class Lexer
         }
     }
 
-    protected function handleErrors() {
+    private function handleInvalidCharacterRange($start, $end, $line, ErrorHandler $errorHandler) {
+        for ($i = $start; $i < $end; $i++) {
+            $chr = $this->code[$i];
+            if ($chr === 'b' || $chr === 'B') {
+                // HHVM does not treat b" tokens correctly, so ignore these
+                continue;
+            }
+
+            if ($chr === "\0") {
+                // PHP cuts error message after null byte, so need special case
+                $errorMsg = 'Unexpected null byte';
+            } else {
+                $errorMsg = sprintf(
+                    'Unexpected character "%s" (ASCII %d)', $chr, ord($chr)
+                );
+            }
+
+            $errorHandler->handleError(new Error($errorMsg, [
+                'startLine' => $line,
+                'endLine' => $line,
+                'startFilePos' => $i,
+                'endFilePos' => $i,
+            ]));
+        }
+    }
+
+    private function isUnterminatedComment($token) {
+        return ($token[0] === T_COMMENT || $token[0] === T_DOC_COMMENT)
+            && substr($token[1], 0, 2) === '/*'
+            && substr($token[1], -2) !== '*/';
+    }
+
+    private function errorMayHaveOccurred() {
+        if (defined('HHVM_VERSION')) {
+            // In HHVM token_get_all() does not throw warnings, so we need to conservatively
+            // assume that an error occurred
+            return true;
+        }
+
         $error = error_get_last();
-        if (null === $error) {
+        return null !== $error
+            && false === strpos($error['message'], 'Undefined variable');
+    }
+
+    protected function handleErrors(ErrorHandler $errorHandler) {
+        if (!$this->errorMayHaveOccurred()) {
             return;
         }
 
-        if (preg_match(
-            '~^Unterminated comment starting line ([0-9]+)$~',
-            $error['message'], $matches
-        )) {
-            throw new Error('Unterminated comment', (int) $matches[1]);
+        // PHP's error handling for token_get_all() is rather bad, so if we want detailed
+        // error information we need to compute it ourselves. Invalid character errors are
+        // detected by finding "gaps" in the token array. Unterminated comments are detected
+        // by checking if a trailing comment has a "*/" at the end.
+
+        $filePos = 0;
+        $line = 1;
+        foreach ($this->tokens as $i => $token) {
+            $tokenValue = \is_string($token) ? $token : $token[1];
+            $tokenLen = \strlen($tokenValue);
+
+            if (substr($this->code, $filePos, $tokenLen) !== $tokenValue) {
+                // Something is missing, must be an invalid character
+                $nextFilePos = strpos($this->code, $tokenValue, $filePos);
+                $this->handleInvalidCharacterRange(
+                    $filePos, $nextFilePos, $line, $errorHandler);
+                $filePos = $nextFilePos;
+            }
+
+            $filePos += $tokenLen;
+            $line += substr_count($tokenValue, "\n");
         }
 
-        if (preg_match(
-            '~^Unexpected character in input:  \'(.)\' \(ASCII=([0-9]+)\)~s',
-            $error['message'], $matches
-        )) {
-            throw new Error(sprintf(
-                'Unexpected character "%s" (ASCII %d)',
-                $matches[1], $matches[2]
-            ));
+        if ($filePos !== \strlen($this->code)) {
+            if (substr($this->code, $filePos, 2) === '/*') {
+                // Unlike PHP, HHVM will drop unterminated comments entirely
+                $comment = substr($this->code, $filePos);
+                $errorHandler->handleError(new Error('Unterminated comment', [
+                    'startLine' => $line,
+                    'endLine' => $line + substr_count($comment, "\n"),
+                    'startFilePos' => $filePos,
+                    'endFilePos' => $filePos + \strlen($comment),
+                ]));
+
+                // Emulate the PHP behavior
+                $isDocComment = isset($comment[3]) && $comment[3] === '*';
+                $this->tokens[] = [$isDocComment ? T_DOC_COMMENT : T_COMMENT, $comment, $line];
+            } else {
+                // Invalid characters at the end of the input
+                $this->handleInvalidCharacterRange(
+                    $filePos, \strlen($this->code), $line, $errorHandler);
+            }
+            return;
         }
 
-        // PHP cuts error message after null byte, so need special case
-        if (preg_match('~^Unexpected character in input:  \'$~', $error['message'])) {
-            throw new Error('Unexpected null byte');
+        // Check for unterminated comment
+        $lastToken = $this->tokens[count($this->tokens) - 1];
+        if ($this->isUnterminatedComment($lastToken)) {
+            $errorHandler->handleError(new Error('Unterminated comment', [
+                'startLine' => $line - substr_count($lastToken[1], "\n"),
+                'endLine' => $line,
+                'startFilePos' => $filePos - \strlen($lastToken[1]),
+                'endFilePos' => $filePos,
+            ]));
         }
     }
 
@@ -166,6 +254,11 @@ class Lexer
             } elseif (!isset($this->dropTokens[$token[0]])) {
                 $value = $token[1];
                 $id = $this->tokenMap[$token[0]];
+                if (T_CLOSE_TAG === $token[0]) {
+                    $this->prevCloseTagHasNewline = false !== strpos($token[1], "\n");
+                } else if (T_INLINE_HTML === $token[0]) {
+                    $startAttributes['hasLeadingNewline'] = $this->prevCloseTagHasNewline;
+                }
 
                 $this->line += substr_count($value, "\n");
                 $this->filePos += \strlen($value);
