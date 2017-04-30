@@ -18,7 +18,6 @@ use App\User;
 use Hash;
 // classes
 use Illuminate\Http\Request;
-use Input;
 use Lang;
 
 /**
