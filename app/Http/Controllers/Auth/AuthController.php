@@ -23,7 +23,6 @@ use DateTime;
 use DB;
 use Hash;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-use Input;
 use Lang;
 use Socialite;
 
