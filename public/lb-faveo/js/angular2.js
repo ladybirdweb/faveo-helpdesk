@@ -53,6 +53,9 @@ myApp.controller('MainController', ['$http', '$scope',
 
         $scope.Datetimetitle = 'Faveo Date & Time format';
         $scope.Datetimecontent = 'What format you want to display date & time in Faveo';
+
+        $scope.DummyDataTitle = 'Faveo Dummy Data';
+        $scope.DummyDataContent = 'Check this chekbox if you want to install and test Faveo with dummy data. You can clear dummy data and start using Faveo in production anytime.';
                 
     }
 ]);
