@@ -30,6 +30,7 @@ class="active"
 <!-- open a form -->
 
 <form action="{!!URL::route('priority.create1')!!}" method="post" role="form">
+{{ csrf_field() }}
     <div class="box box-primary">
         <div class="box-header with-border">
             <h2 class="box-title">{{Lang::get('lang.create')}}</h2>

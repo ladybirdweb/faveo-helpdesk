@@ -20,7 +20,6 @@ use Exception;
 // classes
 use Illuminate\Http\Request;
 use Illuminate\support\Collection;
-use Input;
 use Lang;
 
 /**

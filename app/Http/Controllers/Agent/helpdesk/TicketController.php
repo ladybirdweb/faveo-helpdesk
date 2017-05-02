@@ -1802,6 +1802,13 @@ class TicketController extends Controller
     {
         $name = Input::get('name');
         $email = Input::get('email');
+        $validator = \Validator::make(
+            ['email' => $email, 'name' => $name],
+            ['email' => 'required|email']
+        );
+        if ($validator->fails()) {
+            return 'Invalid email address.';
+        }
         $ticket_id = Input::get('ticket_id');
         $user_search = User::where('email', '=', $email)->first();
         if (isset($user_serach)) {
