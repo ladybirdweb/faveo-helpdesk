@@ -44,7 +44,7 @@ active
     </div>
     @endif
 
-    {!! Form::open(['url'=> '/step4post']) !!}
+    {!! Form::open(['url'=> '/step4post', 'id' => 'databaseform']) !!}
     <table ng-controller="MainController">
         <tr>
             <td>
@@ -69,7 +69,7 @@ active
                 <label for="box1">Host<span style="color: red;font-size:12px;">*</span></label>
             </td>
             <td>
-                <input type="text" name="host">
+                {!! Form::text('host', null, ['required' => true]) !!}
             </td>
             <td>
                 <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Hosttitle}}" data-content="@{{Hostcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -81,7 +81,7 @@ active
                 <label for="box2">Port</label>
             </td>
             <td>
-                <input type="number" name="port"> 
+                {!! Form::text('port', null, ['onkeydown' => 'return CheckPortForInput(event)']) !!}
             </td>
             <td>
                 <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Porttitle}}" data-content="@{{Portcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -93,7 +93,7 @@ active
                 <label for="box3">Database Name<span style="color: red;font-size:12px;">*</span></label>
             </td>
             <td>
-                <input type="text" name="databasename"> 
+                {!! Form::text('databasename', null, ['required' => true]) !!}
             </td>
             <td>
                 <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Databasenametitle}}" data-content="@{{Databasenamecontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -105,7 +105,7 @@ active
                 <label for="box4">User Name<span style="color: red; font-size: 12px;">*</span></label>
             </td>
             <td>
-                <input type="text" name="username"> 
+                {!! Form::text('username', null, ['required' => true]) !!}
             </td>
             <td>
                 <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Usertitle}}" data-content="@{{Usercontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -136,5 +136,69 @@ active
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
 <script src="{{asset("lb-faveo/js/angular2.js")}}" type="text/javascript"></script>
+<script type="text/javascript">
+    function CheckPortForInput(e) {
+        var code = e.which || e.keyCode;
+        if (e.ctrlKey != true){
+            if((code >=48 && code<= 57) || code == 8 || code == 46 || e.keyCode == 9 || e.keyCode == 13) {
+                return true;
+            }
+        } else {
+            if((code == 65 || code == 97) || (code == 88 || code == 120) || (code == 86 || code == 118)) {
+                return true;
+            }
+        }
+        return false;
+    }
+</script>
+<script type="text/javascript">
+    @if($errors->has('host'))
+        addErrorClass('host');
+    @endif
+    @if($errors->has('host'))
+        addErrorClass('host');
+    @endif
+    @if($errors->has('databasename'))
+        addErrorClass('databasename');
+    @endif
+    @if($errors->has('username'))
+        addErrorClass('username');
+    @endif
+    @if($errors->has('password'))
+        addErrorClass('password');
+    @endif
+
+    $('#databaseform').on('submit', function(e){
+        $("#databaseform input[type=text]").each(function(){
+            if($(this).attr('name') == 'host' || $(this).attr('name') == 'databasename' || $(this).attr('name') == 'username'){
+                if ($(this).val() == '') {
+                    $(this).css('border-color','red')
+                    $(this).css('border-width','1px');
+                    e.preventDefault();
+                    alert('Please fill all required values.');
+                }
+            }
+        });
+    });
+
+    $('input[type=text]').on('blur', function(){
+        if($(this).attr('name') == 'host' || $(this).attr('name') == 'databasename' || $(this).attr('name') == 'username'){
+            if ($(this).val() == '') {
+                addErrorClass($(this).attr('name'));
+            }
+        }
+    })
+
+    function addErrorClass(name){
+        var target = document.getElementsByName(name);
+        $(target[0]).css('border-color','red');
+        $(target[0]).css('border-width','1px');
+    }
+
+    $('input').on('focus', function(){
+        $(this).css('border-color','#A9A9A9')
+        $(this).css('border-width','1px');
+    })
+</script>
 </div>
 @stop

@@ -230,6 +230,7 @@ class="active"
 
         <!-- Delete -->
         <form action="{!!URL::route('user.post.delete', $users->id)!!}" method="post" role="form">
+        {{ csrf_field() }}
             <div class="modal fade" id="addNewCategoryModal3" tabindex="-1" role="dialog">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -254,6 +255,8 @@ class="active"
                             <option value="ban_delete">Ban and delete </option>
                             <option value="delete">Delete</option>
                             </select>
+        }
+        }
  -->
 
 
@@ -331,6 +334,7 @@ class="active"
     <!-- Role -->
     <!-- Admin -->
     <form action="{!!URL::route('user.post.rolechangeadmin', $users->id)!!}" method="post" role="form">
+    {{ csrf_field() }}
         <div class="modal fade" id="addNewCategoryModal4" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -370,6 +374,7 @@ class="active"
     </form>
     <!-- user -->
     <form action="{!!URL::route('user.post.rolechangeuser', $users->id)!!}" method="post" role="form">
+    {{ csrf_field() }}
         <div class="modal fade" id="addNewCategoryModal2" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -398,6 +403,7 @@ class="active"
     </form>
     <!-- agent -->
     <form action="{!!URL::route('user.post.rolechangeagent', $users->id)!!}" method="post" role="form">
+    {{ csrf_field() }}
         <div class="modal fade" id="addNewCategoryModal1" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -453,6 +459,7 @@ class="active"
 
                     <br/>
                     <form name="myForm" action="{!!URL::route('user.post.changepassword', $users->id)!!}" method="post" role="form" onsubmit="return validateForm()">
+                    {{ csrf_field() }}
                         <div class="form-group">
 
                             <!-- <div class="form-group {{ $errors->has('change_password') ? 'has-error' : '' }}"> -->
@@ -478,6 +485,7 @@ class="active"
     <!-- Restore -->
       <!-- Admin -->
     <form action="{!!URL::route('user.restore', $users->id)!!}" method="post" role="form">
+    {{ csrf_field() }}
         <div class="modal modal-fade" id="addNewCategoryModal8" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -727,6 +735,7 @@ $(document).ready(function(){
                     </div>
                     <div class="box-body">
                         <form id="foo">
+                        {{ csrf_field() }}
                             <div  class="form-group">
                                 <div class="row">
                                     <div class='col-sm-3'>

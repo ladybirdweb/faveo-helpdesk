@@ -1124,7 +1124,9 @@ if ($thread->title != "") {
                                 </div>
                                 <div id="hide12345">
                                     <input type="text" name="name" class="form-control" placeholder="{!! Lang::get('lang.name') !!}" required>
-                                    <input type="text" name="email" class="form-control" placeholder="{!! Lang::get('lang.e-mail') !!}" required>
+
+                                    <input type="email" name="email" class="form-control" placeholder="{!! Lang::get('lang.e-mail') !!}" required> 
+
                                     <input type="hidden" name="ticket_id" value="{!! $tickets->id !!}">
                                     <input type="submit" class="btn" value="{!! Lang::get('lang.submit') !!}">
                                 </div>
