@@ -33,7 +33,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.9.3',
+    'version' => 'Community 1.9.4',
     /*
       |--------------------------------------------------------------------------
       | Application Name
@@ -42,7 +42,7 @@ return [
       | This Applocation name is used for installation and update checking
       |
      */
-        'name' => 'Faveo Helpdesk Pro',
+        'name' => 'Faveo Helpdesk Community',
     /*
       |--------------------------------------------------------------------------
       | Application URL
