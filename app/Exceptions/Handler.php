@@ -26,7 +26,7 @@ class Handler extends ExceptionHandler
         \Illuminate\Http\Exception\HttpResponseException::class,
         ValidationException::class,
         AuthorizationException::class,
-        HttpResponseException ::class,
+        HttpResponseException::class,
         ModelNotFoundException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
     ];
