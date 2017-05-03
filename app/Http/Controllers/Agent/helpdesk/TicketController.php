@@ -2068,6 +2068,9 @@ class TicketController extends Controller
     public function rating($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
     {
         foreach ($request->all() as $key => $value) {
+            if ($key == "_token") {
+                continue;
+            }
             if (strpos($key, '_') !== false) {
                 $ratName = str_replace('_', ' ', $key);
             } else {
@@ -2103,6 +2106,9 @@ class TicketController extends Controller
     public function ratingReply($id, Request $request, \App\Model\helpdesk\Ratings\RatingRef $rating_ref)
     {
         foreach ($request->all() as $key => $value) {
+            if ($key == "_token") {
+                continue;
+            }
             $key1 = explode(',', $key);
             if (strpos($key1[0], '_') !== false) {
                 $ratName = str_replace('_', ' ', $key1[0]);
