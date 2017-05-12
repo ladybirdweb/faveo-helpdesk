@@ -49,6 +49,7 @@ use Lang;
 use Mail;
 use PDF;
 use UTC;
+use Crypt;
 
 /**
  * TicketController.
@@ -526,8 +527,8 @@ class TicketController extends Controller
             }
 
             if ($mail == true) {
-                //dd($thread->purify());
-                //dd($this->replyContent($request->input('reply_content')));
+                $encoded_ticketid = Crypt::encrypt($ticket_id);
+                $link = url('check_ticket/'.$encoded_ticketid);
                 $this->NotificationController->create($ticket_id, Auth::user()->id, '2');
                 $this->PhpMailController->sendmail(
                         $from = $this->PhpMailController->mailfrom('0', $tickets->dept_id),
@@ -540,7 +541,9 @@ class TicketController extends Controller
                         ],
                         $template_variables = [
                             'ticket_number' => $ticket_number,
-                            'user'          => $username, 'agent_sign' => $agentsign,
+                            'user'          => $username, 
+                            'agent_sign' => $agentsign,
+                            'system_link'=>$link
                         ]
                 );
             }
@@ -840,11 +843,19 @@ class TicketController extends Controller
                 } else {
                     $sign = $company;
                 }
+                $encoded_ticketid = Crypt::encrypt($ticketdata->id);
+                $link = url('check_ticket/'.$encoded_ticketid);
                 if ($source == 3) {
                     try {
                         if ($auto_response == 0) {
-                            //dd($source);
-                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body], $template_variables = ['agent_sign' => Auth::user()->agent_sign, 'ticket_number' => $ticket_number2]);
+                            $encoded_ticketid = Crypt::encrypt($ticketdata->id);
+                            $link = url('check_ticket/'.$encoded_ticketid);
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body], 
+                                    $template_variables = [
+                                        'agent_sign' => Auth::user()->agent_sign, 
+                                        'ticket_number' => $ticket_number2,
+                                        'system_link'=>$link,
+                                    ]);
                         }
                     } catch (\Exception $e) {
                         //dd($e);
@@ -853,7 +864,12 @@ class TicketController extends Controller
                     $body2 = null;
                     try {
                         if ($auto_response == 0) {
-                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'], $template_variables = ['user' => $username, 'ticket_number' => $ticket_number2, 'department_sign' => '']);
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'], 
+                                    $template_variables = ['user' => $username, 
+                                        'ticket_number' => $ticket_number2, 
+                                        'department_sign' => '',
+                                        'system_link'=>$link,
+                                        ]);
                         }
                     } catch (\Exception $e) {
                     }
