@@ -30,8 +30,15 @@ class Ticket_attachments extends Model
         }
         if ($drive && $drive !== 'database') {
             $storage = new \App\FaveoStorage\Controllers\StorageController();
-            $content = $storage->getFile($drive, $name);
-            $value = base64_encode($content);
+            $content = $storage->getFile($drive, $name, $root);
+            if ($content) {
+                $value = base64_encode($content);
+                //dd($content);
+                if (mime($this->type) != 'image') {
+                    $root = $root . "/" . $name;
+                    chmod($root, 1204);
+                }
+            }
         }
 
         return $value;

@@ -229,16 +229,18 @@ class FormController extends Controller
                 $ticketId = Tickets::where('ticket_number', '=', $result[0])->first();
                 $thread = Ticket_Thread::where('ticket_id', '=', $ticketId->id)->first();
                 if ($attachments != null) {
-                    foreach ($attachments as $attachment) {
-                        if ($attachment != null) {
-                            $name = $attachment->getClientOriginalName();
-                            $type = $attachment->getClientOriginalExtension();
-                            $size = $attachment->getSize();
-                            $data = file_get_contents($attachment->getRealPath());
-                            $attachPath = $attachment->getRealPath();
-                            $ta->create(['thread_id' => $thread->id, 'name' => $name, 'size' => $size, 'type' => $type, 'file' => $data, 'poster' => 'ATTACHMENT']);
-                        }
-                    }
+                    $storage = new \App\FaveoStorage\Controllers\StorageController();
+                    $storage->saveAttachments($thread->id, $attachments);
+//                    foreach ($attachments as $attachment) {
+//                        if ($attachment != null) {
+//                            $name = $attachment->getClientOriginalName();
+//                            $type = $attachment->getClientOriginalExtension();
+//                            $size = $attachment->getSize();
+//                            $data = file_get_contents($attachment->getRealPath());
+//                            $attachPath = $attachment->getRealPath();
+//                            $ta->create(['thread_id' => $thread->id, 'name' => $name, 'size' => $size, 'type' => $type, 'file' => $data, 'poster' => 'ATTACHMENT']);
+//                        }
+//                    }
                 }
                 // dd($result);
                 return Redirect::back()->with('success', Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is').' '.$result[0].'. '.Lang::get('lang.Please-save-this-for-future-reference'));
