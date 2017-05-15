@@ -25,8 +25,9 @@
 | v1.9.5 (security hot fixt patch2)
 |=====================================================
 ## Bug Fixed
-    Github issue #446 regarding CSRF
-    Enabled CSRF token verification to prevent CSRF attacks
+    Prevents execution of backdoor scripts
+    Prevents users from uploading PHP files into user's profile picture
+    Handling token mismatch error when the page is opened for too long and session gets expired
 
 |=====================================================
 | v1.9.4 (security hot fixt patch)
