@@ -169,7 +169,7 @@ class StorageController extends Controller {
         $upload->size = $size;
         $upload->poster = $disposition;
         $upload->driver = $this->default;
-        $upload->path = $this->root;
+        $upload->path = $this->root. DIRECTORY_SEPARATOR.'attachments';
         if ($this->default !== 'database') {
             $this->setFileSystem();
             Storage::disk($this->default)->put($filename, $data);
@@ -205,7 +205,7 @@ class StorageController extends Controller {
                     $size = $attachment->getSize();
                     $data = file_get_contents($attachment->getRealPath());
                 }
-                $filename = $this->upload($data, $filename, $type, $size, $disposition, $thread_id);
+                $this->upload($data, $filename, $type, $size, $disposition, $thread_id);
                 $thread = $this->updateBody($attachment, $thread_id, $filename);
             }
         }
@@ -223,7 +223,9 @@ class StorageController extends Controller {
         if ($disposition == 'INLINE' || $disposition == 'inline') {
             $id = str_replace('>', '', str_replace('<', '', $structure->id));
             $body = $thread->body;
+           // dd($id,$filename,$body);
             $body = str_replace('cid:' . $id, $filename, $body);
+           // dd($body);
             $thread->body = $body;
             $thread->save();
         }
@@ -232,7 +234,7 @@ class StorageController extends Controller {
 
     public function getFile($drive, $name, $root) {
         if ($drive != "database") {
-            $root = $root . "/" . $name;
+            $root = $root . DIRECTORY_SEPARATOR . $name;
             if (\File::exists($root)) {
                 chmod($root, 0755);
                 return \File::get($root);
