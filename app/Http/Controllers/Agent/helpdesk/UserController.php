@@ -764,10 +764,12 @@ class UserController extends Controller
             if (Input::file('profile_pic')) {
                 // fetching picture name
                 $name = Input::file('profile_pic')->getClientOriginalName();
+                // dd($name);
+                // dd(str_replace(" ", "_", $name));
             // fetching upload destination path
                 $destinationPath = 'uploads/profilepic';
             // adding a random value to profile picture filename
-                $fileName = rand(0000, 9999).'.'.$name;
+                $fileName = rand(0000, 9999).'.'.str_replace(" ", "_", $name);
             // moving the picture to a destination folder
                 Input::file('profile_pic')->move($destinationPath, $fileName);
             // saving filename to database

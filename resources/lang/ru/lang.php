@@ -1065,4 +1065,6 @@ return [
      'search'              => 'Search...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'Selected user is already the owner of this ticket.',
+     //updated 15-5-2017
+     'session-expired'     => 'Session expired or invalid, please try again.',
 ];
