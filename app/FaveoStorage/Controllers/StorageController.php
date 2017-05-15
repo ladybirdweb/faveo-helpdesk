@@ -187,6 +187,7 @@ class StorageController extends Controller {
 
     public function saveAttachments($thread_id, $attachments = []) {
         $disposition = 'ATTACHMENT';
+        $thread = '';
         foreach ($attachments as $attachment) {
             if (is_object($attachment)) {
                 if (method_exists($attachment, 'getStructure')) {
@@ -215,11 +216,16 @@ class StorageController extends Controller {
     public function updateBody($attachment, $thread_id, $filename) {
         $threads = new Ticket_Thread();
         $thread = $threads->find($thread_id);
-        $structure = $attachment->getStructure();
         $disposition = 'ATTACHMENT';
-        if (isset($structure->disposition)) {
-            $disposition = $structure->disposition;
+        if (is_object($attachment)) {
+            if (method_exists($attachment, 'getStructure')) {
+                $structure = $attachment->getStructure();
+                if (isset($structure->disposition)) {
+                    $disposition = $structure->disposition;
+                }
+            }
         }
+        
         if ($disposition == 'INLINE' || $disposition == 'inline') {
             $id = str_replace('>', '', str_replace('<', '', $structure->id));
             $body = $thread->body;
