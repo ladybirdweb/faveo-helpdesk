@@ -37,10 +37,11 @@ use App\Model\helpdesk\Utility\Date_time_format;
 use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Auth;
+use Crypt;
 use DB;
 use Exception;
-use GeoIP;
 // classes
+use GeoIP;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\support\Collection;
@@ -49,7 +50,6 @@ use Lang;
 use Mail;
 use PDF;
 use UTC;
-use Crypt;
 
 /**
  * TicketController.
@@ -541,9 +541,9 @@ class TicketController extends Controller
                         ],
                         $template_variables = [
                             'ticket_number' => $ticket_number,
-                            'user'          => $username, 
-                            'agent_sign' => $agentsign,
-                            'system_link'=>$link
+                            'user'          => $username,
+                            'agent_sign'    => $agentsign,
+                            'system_link'   => $link,
                         ]
                 );
             }
@@ -850,11 +850,11 @@ class TicketController extends Controller
                         if ($auto_response == 0) {
                             $encoded_ticketid = Crypt::encrypt($ticketdata->id);
                             $link = url('check_ticket/'.$encoded_ticketid);
-                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body], 
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket-by-agent', 'body' => $body],
                                     $template_variables = [
-                                        'agent_sign' => Auth::user()->agent_sign, 
+                                        'agent_sign'    => Auth::user()->agent_sign,
                                         'ticket_number' => $ticket_number2,
-                                        'system_link'=>$link,
+                                        'system_link'   => $link,
                                     ]);
                         }
                     } catch (\Exception $e) {
@@ -864,11 +864,11 @@ class TicketController extends Controller
                     $body2 = null;
                     try {
                         if ($auto_response == 0) {
-                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'], 
-                                    $template_variables = ['user' => $username, 
-                                        'ticket_number' => $ticket_number2, 
-                                        'department_sign' => '',
-                                        'system_link'=>$link,
+                            $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['name' => $username, 'email' => $emailadd], $message = ['subject' => $updated_subject, 'scenario' => 'create-ticket'],
+                                    $template_variables = ['user' => $username,
+                                        'ticket_number'           => $ticket_number2,
+                                        'department_sign'         => '',
+                                        'system_link'             => $link,
                                         ]);
                         }
                     } catch (\Exception $e) {
