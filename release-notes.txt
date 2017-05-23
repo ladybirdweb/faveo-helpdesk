@@ -25,7 +25,7 @@
 | v1.9.6 Facebook login bug fix patch
 |=====================================================
 ## Bug Fixed
-    Token parsing issue for Facebook which pevents users from login the system using Facebook oAuth API.
+    Token parsing issue for Facebook which prevents users from login the system using Facebook oAuth API.
 
 |=====================================================
 | v1.9.5 (security hot fixt patch2)
