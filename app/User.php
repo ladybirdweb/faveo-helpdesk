@@ -45,17 +45,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
             $pic = $this->checkArray('avatar', $info);
         }
         if (!$pic && $value) {
-            $pic = "";
-            $file = asset('uploads/profilepic/' . $value);
+            $pic = '';
+            $file = asset('uploads/profilepic/'.$value);
             if ($file) {
                 $type = pathinfo($file, PATHINFO_EXTENSION);
                 $data = file_get_contents($file);
-                $pic = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                $pic = 'data:image/'.$type.';base64,'.base64_encode($data);
             }
         }
         if (!$value) {
             $pic = \Gravatar::src($this->attributes['email']);
         }
+
         return $pic;
     }
 
