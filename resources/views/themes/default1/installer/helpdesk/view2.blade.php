@@ -178,7 +178,7 @@ function validate_zend_compatibility_mode(&$results) {
 function validate_extensions(&$results) {
     $ok = true;
 
-    $required_extensions = array('mcrypt', 'openssl', 'pdo', 'fileinfo', 'curl', 'zip', 'mbstring', 'imap');
+    $required_extensions = array('mcrypt', 'openssl', 'pdo', 'fileinfo', 'curl', 'zip', 'mbstring');
 
     foreach ($required_extensions as $required_extension) {
         if (extension_loaded($required_extension)) {
@@ -202,7 +202,7 @@ function validate_extensions(&$results) {
     } // if
 
     $recommended_extensions = array(
-
+        'imap' => 'IMAP extension is used for connecting to mail server using IMAP settings to fetch emails in the system.'
         // 'gd' => 'GD is used for image manipulation. Without it, system is not able to create thumbnails for files or manage avatars, logos and project icons. Please refer to <a href="http://www.php.net/manual/en/image.installation.php">this</a> page for installation instructions',
         // 'mbstring' => 'MultiByte String is used for work with Unicode. Without it, system may not split words and string properly and you can have weird question mark characters in Recent Activities for example. Please refer to <a href="http://www.php.net/manual/en/mbstring.installation.php">this</a> page for installation instructions',
         // 'curl' => 'cURL is used to support various network tasks. Please refer to <a href="http://www.php.net/manual/en/curl.installation.php">this</a> page for installation instructions',
