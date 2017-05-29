@@ -29,6 +29,7 @@ class="active"
 @section('content')
 <!-- open a form -->
 <form action="{!!URL::route('priority.edit1')!!}" method="post" role="form">
+{{ csrf_field() }}
     <input type="hidden" name="priority_id" value="{{$tk_priority->priority_id}}">
     <div class="box box-primary">
         <div class="box-header with-border">

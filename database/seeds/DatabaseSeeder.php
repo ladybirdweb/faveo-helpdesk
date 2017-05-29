@@ -1,8 +1,6 @@
 <?php
 
 use App\Model\Common\Template;
-use App\Model\Common\TemplateSet;
-use App\Model\Common\TemplateType;
 use App\Model\helpdesk\Agent\Department;
 use App\Model\helpdesk\Agent\Groups;
 use App\Model\helpdesk\Agent\Teams;
@@ -10,7 +8,6 @@ use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
 //use App\Model\helpdesk\Notification\NotificationType;
 use App\Model\helpdesk\Ratings\Rating;
-use App\Model\helpdesk\Settings\Alert;
 use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;

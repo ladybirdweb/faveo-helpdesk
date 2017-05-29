@@ -74,6 +74,7 @@ class SettingsController extends Controller
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <form action="'.url('edit-widget/'.$model->id).'" method="POST">
+                            '.csrf_field().'
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <h4 class="modal-title">'.strtoupper($model->name).' </h4>
@@ -160,6 +161,7 @@ class SettingsController extends Controller
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <form action="'.url('edit-widget/'.$model->id).'" method="POST">
+                            '.csrf_field().'
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <h4 class="modal-title">'.strtoupper($model->name).' </h4>

@@ -21,8 +21,8 @@ Route::group(['middleware' => 'redirect'], function () {
         Route::get('social-sync', ['as' => 'social.sync', 'uses' => 'Client\helpdesk\GuestController@sync']);
     });
 
-    Route::get('date/get', function() {
-        return faveoDate("", \Input::get('format'), \Input::get('tz'));
+    Route::get('date/get', function () {
+        return faveoDate('', \Input::get('format'), \Input::get('tz'));
     });
 
     /*
@@ -73,36 +73,33 @@ Route::group(['middleware' => 'redirect'], function () {
         Route::post('mark-read/{id}', 'Common\NotificationController@markRead');
         Route::post('mark-all-read/{id}', 'Common\NotificationController@markAllRead');
 
-
-        /**
+        /*
          * Notification api
          */
         Route::get('notification/api/{userid}', [
-            'as' => 'notification.api',
-            'uses' => 'Agent\helpdesk\Notifications\Notification@appNotification'
+            'as'   => 'notification.api',
+            'uses' => 'Agent\helpdesk\Notifications\Notification@appNotification',
         ])->middleware(['role.agent']);
 
         Route::get('notification/api/seen/{userid}', [
-            'as' => 'notification.api.seen',
-            'uses' => 'Agent\helpdesk\Notifications\Notification@notificationSeen'
+            'as'   => 'notification.api.seen',
+            'uses' => 'Agent\helpdesk\Notifications\Notification@notificationSeen',
         ])->middleware(['role.agent']);
 
         Route::get('notification/api/unseen/count/{userid}', [
-            'as' => 'notification.api.unseen.count',
-            'uses' => 'Agent\helpdesk\Notifications\Notification@notificationUnSeenCount'
+            'as'   => 'notification.api.unseen.count',
+            'uses' => 'Agent\helpdesk\Notifications\Notification@notificationUnSeenCount',
         ])->middleware(['role.agent']);
 
         Route::get('notification/api/seen/all/{userid}', [
-            'as' => 'notification.api.seen.all',
-            'uses' => 'Agent\helpdesk\Notifications\Notification@notificationUpdateSeenAll'
+            'as'   => 'notification.api.seen.all',
+            'uses' => 'Agent\helpdesk\Notifications\Notification@notificationUpdateSeenAll',
         ])->middleware(['role.agent']);
 
         Route::get('notification/sla', [
-            'as' => 'notification.sla',
-            'uses' => 'Agent\helpdesk\Notifications\NotificationController@notificationSla'
+            'as'   => 'notification.sla',
+            'uses' => 'Agent\helpdesk\Notifications\NotificationController@notificationSla',
         ]);
-
-
 
         Route::get('notifications-list', ['as' => 'notification.list', 'uses' => 'Common\NotificationController@show']);
         Route::post('notification-delete/{id}', ['as' => 'notification.delete', 'uses' => 'Common\NotificationController@delete']);
@@ -160,11 +157,11 @@ Route::group(['middleware' => 'redirect'], function () {
         Route::resource('forms', 'Admin\helpdesk\FormController');
         Route::get('forms/add-child/{formid}', ['as' => 'forms.add.child', 'uses' => 'Admin\helpdesk\FormController@addChildForm']);
         Route::post('forms/field/{fieldid}/child', [
-            'as' => 'forms.field.child',
+            'as'   => 'forms.field.child',
             'uses' => 'Admin\helpdesk\FormController@addChild',
         ]);
         Route::get('forms/render/child', [
-            'as' => 'forms.field.child',
+            'as'   => 'forms.field.child',
             'uses' => 'Admin\helpdesk\FormController@renderChild',
         ]);
 
@@ -287,10 +284,10 @@ Route::group(['middleware' => 'redirect'], function () {
 
         //route for submit error and debugging setting form page
         Route::post('post-settings', ['as' => 'post.error.debug.settings',
-            'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings',]);
+            'uses'                         => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings', ]);
         //route to error logs table page
         Route::get('show-error-logs', [
-            'as' => 'error.logs',
+            'as'   => 'error.logs',
             'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs',
         ]);
 
@@ -505,7 +502,7 @@ Route::group(['middleware' => 'redirect'], function () {
 //    });
     Route::any('getdata', function () {
         $term = Illuminate\Support\Str::lower(Input::get('term'));
-        $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term . '%')->groupBy('ticket_number')->take(10)->get();
+        $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
         foreach ($data as $v) {
             return [
                 'value' => $v->ticket_number,
@@ -603,10 +600,10 @@ Route::group(['middleware' => 'redirect'], function () {
         echo '</tr>';
         foreach ($routeCollection as $value) {
             echo '<tr>';
-            echo '<td>' . $value->getMethods()[0] . '</td>';
-            echo '<td>' . $value->getName() . '</td>';
-            echo '<td>' . $value->getPath() . '</td>';
-            echo '<td>' . $value->getActionName() . '</td>';
+            echo '<td>'.$value->getMethods()[0].'</td>';
+            echo '<td>'.$value->getName().'</td>';
+            echo '<td>'.$value->getPath().'</td>';
+            echo '<td>'.$value->getActionName().'</td>';
             echo '</tr>';
         }
         echo '</table>';
@@ -617,24 +614,24 @@ Route::group(['middleware' => 'redirect'], function () {
       |=============================================================
      */
     Route::get('500', ['as' => 'error500', function () {
-            return view('errors.500');
-        }]);
+        return view('errors.500');
+    }]);
 
     Route::get('404', ['as' => 'error404', function () {
-            return view('errors.404');
-        }]);
+        return view('errors.404');
+    }]);
 
     Route::get('error-in-database-connection', ['as' => 'errordb', function () {
-            return view('errors.db');
-        }]);
+        return view('errors.db');
+    }]);
 
     Route::get('unauthorized', ['as' => 'unauth', function () {
-            return view('errors.unauth');
-        }]);
+        return view('errors.unauth');
+    }]);
 
     Route::get('board-offline', ['as' => 'board.offline', function () {
-            return view('errors.offline');
-        }]);
+        return view('errors.offline');
+    }]);
 
     /*
       |=============================================================
@@ -867,10 +864,13 @@ Route::group(['middleware' => 'redirect'], function () {
 
 // Route::post('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']);
     Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday', 'uses' => 'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
+/*-------------------------------------------------------------
+  | User language change
+  |-------------------------------------------------------------
+  */
+    Route::get('swtich-language/{id}', ['as' => 'switch-user-lang', 'uses' => 'Client\helpdesk\UnAuthController@changeUserLanguage']);
 });
-\Event::listen('notification-saved', function($event) {
+\Event::listen('notification-saved', function ($event) {
     $controller = new \App\Http\Controllers\Agent\helpdesk\Notifications\NotificationController();
     $controller->saved($event);
 });
-
-

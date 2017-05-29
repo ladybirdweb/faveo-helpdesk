@@ -328,7 +328,7 @@ class Worker
             // If we catch an exception, we will attempt to release the job back onto the queue
             // so it is not lost entirely. This'll let the job be retried at a later time by
             // another listener (or this same one). We will re-throw this exception after.
-            if (! $job->isDeleted()) {
+            if (! $job->isDeleted() && ! $job->isReleased() && ! $job->hasFailed()) {
                 $job->release($options->delay);
             }
         }
@@ -567,5 +567,26 @@ class Worker
     public function setCache(CacheContract $cache)
     {
         $this->cache = $cache;
+    }
+
+    /**
+     * Get the queue manager instance.
+     *
+     * @return \Illuminate\Queue\QueueManager
+     */
+    public function getManager()
+    {
+        return $this->manager;
+    }
+
+    /**
+     * Set the queue manager instance.
+     *
+     * @param  \Illuminate\Queue\QueueManager  $manager
+     * @return void
+     */
+    public function setManager(QueueManager $manager)
+    {
+        $this->manager = $manager;
     }
 }

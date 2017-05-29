@@ -34,7 +34,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \App\Http\Middleware\LanguageMiddleware::class,
-             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
         'api' => [
             'throttle:60,1',
@@ -62,7 +62,7 @@ class Kernel extends HttpKernel
         'update'      => \App\Http\Middleware\CheckUpdate::class,
         'board'       => \App\Http\Middleware\CheckBoard::class,
         'install'     => \App\Http\Middleware\Install::class,
-        'redirect' => \App\Http\Middleware\Redirect::class,
-        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'redirect'    => \App\Http\Middleware\Redirect::class,
+        'bindings'    => \Illuminate\Routing\Middleware\SubstituteBindings::class,
     ];
 }

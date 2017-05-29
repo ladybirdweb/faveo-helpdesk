@@ -78,7 +78,7 @@ class GroupResponse extends BaseResponse implements GroupResponseContract
         $logger->pushHandler(new StreamHandler(storage_path('logs/laravel-fcm.log')));
 
         $logMessage = "notification send to group: $this->to";
-        $logMessage .= "with $this->numberTokensSuccess success and $this->Failure failure";
+        $logMessage .= "with $this->numberTokensSuccess success and $this->numberTokensFailure";
 
         $logger->info($logMessage);
     }

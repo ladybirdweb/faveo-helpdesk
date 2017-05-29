@@ -20,7 +20,8 @@ active
  <div id="form-content">
 <div ng-app="myApp">
         <h1 style="text-align: center;">Locale Information</h1>
-        {!! Form::open(['url'=>route('postaccount')]) !!}
+        {!! Form::open(['url'=>route('postaccount'), 'id' => 'postaccount']) !!}
+        
 
         <!-- checking if the form submit fails -->
         @if($errors->first('firstname')||$errors->first('Lastname')||$errors->first('email')||$errors->first('username')||$errors->first('password')||$errors->first('confirmpassword'))
@@ -69,7 +70,7 @@ active
                                 : red;font-size:12px;">*</span></label>
                         </td>
                         <td>
-                            {!! Form::text('firstname',null,['style' =>'margin-left:250px']) !!}
+                            {!! Form::text('firstname',null,['style' =>'margin-left:250px', 'required' => true]) !!}
                         </td>
                         <td>
                             <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Nametitle}}" data-content="@{{Namecontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -82,7 +83,7 @@ active
                                 : red;font-size:12px;">*</span></label>
                         </td>
                         <td>
-                            {!! Form::text('Lastname',null,['style' =>'margin-left:250px']) !!}
+                            {!! Form::text('Lastname',null,['style' =>'margin-left:250px', 'required' => true]) !!}
                         </td>
                         <td>
                             <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Lasttitle}}" data-content="@{{Lastcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -95,7 +96,7 @@ active
                                 : red;font-size:12px;">*</span></label>
                         </td>
                         <td>
-                            {!! Form::text('email',null,['style' =>'margin-left:250px']) !!}
+                            {!! Form::email('email',null,['style' =>'margin-left:250px', 'required' => true]) !!}
                         </td>
                         <td>
                             <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Emailtitle}}" data-content="@{{Emailcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -116,7 +117,7 @@ active
                             </label>
                         </td>
                         <td>
-                            {!! Form::text('username',null,['style' =>'margin-left:195px']) !!}
+                            {!! Form::text('username',null,['style' =>'margin-left:195px', 'required' => true]) !!}
                         </td>
                         <td>
                             <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{UserNametitle}}" data-content="@{{UserNamecontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -130,7 +131,7 @@ active
                             </label>
                         </td>
                         <td>
-                            <input type="password" name="password" style="margin-left: 195px" >
+                            <input type="password" name="password" style="margin-left: 195px" required="true">
                         </td>
                         <td>
                             <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Passtitle}}" data-content="@{{Passcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -144,7 +145,7 @@ active
                             </label>
                         </td>
                         <td>
-                            <input type="password" name="confirmpassword" style="margin-left: 195px" >
+                            <input type="password" name="confirmpassword" style="margin-left: 195px" required="true">
                         </td>
                         <td>
                             <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{Confirmtitle}}" data-content="@{{Confirmcontent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
@@ -332,9 +333,11 @@ active
             </table>
             <input id="dummy-data" class="input-checkbox" type="checkbox" name="dummy-data">
             <label for="dummy-data" style="color:#3AA7D9">Install dummy data</label>
+            <button type="button" data-toggle="popover" data-placement="right" data-arrowcolor="#eeeeee" data-bordercolor="#bbbbbb" data-title-backcolor="#cccccc" data-title-bordercolor="#bbbbbb" data-title-textcolor="#444444" data-content-backcolor="#eeeeee" data-content-textcolor="#888888" title="@{{DummyDataTitle}}" data-content="@{{DummyDataContent}}" style="padding: 0px;border: 0px; border-radius: 5px;"><i class="fa fa-question-circle" style="padding: 0px;"></i>
+                            </button>
             <br><br>
             <p class="setup-actions step">
-                <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Install" onclick="this.disabled=true;this.value='Installing, please wait...';this.form.submit();">
+                <input type="submit" id="submitme" class="button-primary button button-large button-next" value="Install">
                 <a href="{{url('step4')}}" class="button button-large button-next" style="float: left">Previous</a>
             </p>
         </form>
@@ -345,5 +348,61 @@ active
     <script src="{{asset("lb-faveo/js/angular2.js")}}" type="text/javascript"></script>
     </div>
     </div>
-    
+    <script type="text/javascript">
+            @if($errors->has('firstname'))
+                addErrorClass('firstname');
+            @endif
+            @if($errors->has('Lastname'))
+                addErrorClass('Lastname');
+            @endif
+            @if($errors->has('email'))
+                addErrorClass('email');
+            @endif
+            @if($errors->has('username'))
+                addErrorClass('username');
+            @endif
+            @if($errors->has('password'))
+                addErrorClass('password');
+            @endif
+            @if($errors->has('confirmpassword'))
+                addErrorClass('confirmpassword');
+            @endif
+
+        $('#postaccount').on('submit', function(e) {
+            $("#postaccount input").each(function(){
+                if($(this).attr('name') == 'firstname' ||
+                   $(this).attr('name') == 'Lastname' ||
+                   $(this).attr('name') == 'email' ||
+                   $(this).attr('name') == 'username' ||
+                   $(this).attr('name') == 'password' ||
+                   $(this).attr('name') == 'confirmpassword'){
+                    if ($(this).val() == '') {
+                        $(this).css('border-color','red')
+                        $(this).css('border-width','1px');
+                        e.preventDefault();
+                    }
+                } else {
+                    $('#submitme').attr('disabled', true);
+                    $('#submitme').val('Installing, please wait...');
+                }
+            });
+        });
+
+        $('input').on('focus', function(){
+            $(this).css('border-color','#A9A9A9')
+            $(this).css('border-width','1px');
+        })
+
+        $('input').on('blur', function(){
+            if($(this).val() == ''){
+                addErrorClass($(this).attr('name'));
+            }
+        });
+
+        function addErrorClass(name){
+            var target = document.getElementsByName(name);
+            $(target[0]).css('border-color','red');
+            $(target[0]).css('border-width','1px');
+        }
+    </script>
 @stop

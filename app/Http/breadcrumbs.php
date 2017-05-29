@@ -82,7 +82,7 @@ Breadcrumbs::register('emails.edit', function ($breadcrumbs) {
 
 Breadcrumbs::register('banlist.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.banlists'), route('banlist.index'));
+    $breadcrumbs->push(Lang::get('lang.banpluck'), route('banlist.index'));
 });
 Breadcrumbs::register('banlist.create', function ($breadcrumbs) {
     $breadcrumbs->parent('banlist.index');
@@ -616,4 +616,12 @@ Breadcrumbs::register('labels.edit', function ($breadcrumbs) {
 
 Breadcrumbs::register('readmails', function ($breadcrumbs) {
     $breadcrumbs->push('readmails', 'readmails');
+});
+
+Breadcrumbs::register('notification', function ($breadcrumbs) {
+    $breadcrumbs->push('notification', 'notification');
+});
+
+Breadcrumbs::register('switch-user-lang', function () {
+    $breadcrumbs->push('switch-language', 'switch-user-lang');
 });

@@ -26,24 +26,26 @@ return array (
   ),
   'fixedLine' => 
   array (
-    'NationalNumberPattern' => '670(?:2(?:3[3-7]|56|8[5-8])|32[1238]|4(?:33|8[348])|5(?:32|55|88)|6(?:64|70|82)|78[589]|8[3-9]8|989)\\d{4}',
+    'NationalNumberPattern' => '670(?:2(?:3[3-7]|56|8[5-8])|32[1238]|4(?:33|8[348])|5(?:32|55|88)|6(?:64|70|82)|78[3589]|8[3-9]8|989)\\d{4}',
     'ExampleNumber' => '6702345678',
     'PossibleLength' => 
     array (
     ),
     'PossibleLengthLocalOnly' => 
     array (
+      0 => 7,
     ),
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '670(?:2(?:3[3-7]|56|8[5-8])|32[1238]|4(?:33|8[348])|5(?:32|55|88)|6(?:64|70|82)|78[589]|8[3-9]8|989)\\d{4}',
+    'NationalNumberPattern' => '670(?:2(?:3[3-7]|56|8[5-8])|32[1238]|4(?:33|8[348])|5(?:32|55|88)|6(?:64|70|82)|78[3589]|8[3-9]8|989)\\d{4}',
     'ExampleNumber' => '6702345678',
     'PossibleLength' => 
     array (
     ),
     'PossibleLengthLocalOnly' => 
     array (
+      0 => 7,
     ),
   ),
   'tollFree' => 

@@ -32,6 +32,7 @@ class="active"
 <!-- content -->
 @section('content')
 <form class="form-horizontal" action="{!! URL::route('workflow.update', $id) !!}" method="POST">
+    {{ csrf_field() }}
     <div class="box">
         <!-- /.box-header -->
         <div class="box-body">

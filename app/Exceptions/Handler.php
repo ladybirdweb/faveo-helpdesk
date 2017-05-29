@@ -26,7 +26,7 @@ class Handler extends ExceptionHandler
         \Illuminate\Http\Exception\HttpResponseException::class,
         ValidationException::class,
         AuthorizationException::class,
-        HttpResponseException ::class,
+        HttpResponseException::class,
         ModelNotFoundException::class,
         \Symfony\Component\HttpKernel\Exception\HttpException::class,
         \Illuminate\Validation\ValidationException::class,
@@ -94,7 +94,7 @@ class Handler extends ExceptionHandler
             return parent::render($request, $e);
         } elseif ($e instanceof ValidationException) {
             return parent::render($request, $e);
-        } elseif($e instanceof \Illuminate\Validation\ValidationException){
+        } elseif ($e instanceof \Illuminate\Validation\ValidationException) {
             return parent::render($request, $e);
         }
 

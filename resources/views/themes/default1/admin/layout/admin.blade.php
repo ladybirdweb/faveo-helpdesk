@@ -98,7 +98,17 @@
                             <!-- START NOTIFICATION --> 
                             @include('themes.default1.inapp-notification.notification')
                             
-                            <!-- END NOTIFICATION --> 
+                            <!-- END NOTIFICATION -->
+                        <li class="dropdown">
+                            <?php $src = Lang::getLocale().'.png'; ?>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><img src="{{asset("lb-faveo/flags/$src")}}"></img> &nbsp;<span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                @foreach($langs as $key => $value)
+                                            <?php $src = $key.".png"; ?>
+                                            <li><a href="#" id="{{$key}}" onclick="changeLang(this.id)"><img src="{{asset("lb-faveo/flags/$src")}}"></img>&nbsp;{{$value}}</a></li>
+                                @endforeach       
+                            </ul>
+                        </li>
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 @if(Auth::user())
@@ -184,7 +194,7 @@
                             </a>
                             <ul class="treeview-menu">
                                 <li @yield('emails')><a href="{{ url('emails') }}"><i class="fa fa-envelope"></i>{!! Lang::get('lang.emails') !!}</a></li>
-                                <li @yield('ban')><a href="{{ url('banlist') }}"><i class="fa fa-ban"></i>{!! Lang::get('lang.ban_lists') !!}</a></li>
+                                <li @yield('ban')><a href="{{ url('banlist') }}"><i class="fa fa-ban"></i>{!! Lang::get('lang.ban_pluck') !!}</a></li>
                                 <li @yield('template')><a href="{{ url('template-sets') }}"><i class="fa fa-mail-forward"></i>{!! Lang::get('lang.templates') !!}</a></li>
                                 <li @yield('email')><a href="{{url('getemail')}}"><i class="fa fa-at"></i>{!! Lang::get('lang.email-settings') !!}</a></li>
                                 <li @yield('queue')><a href="{{ url('queue') }}"><i class="fa fa-upload"></i>{!! Lang::get('lang.queues') !!}</a></li>
@@ -390,7 +400,6 @@
         <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
 
-
     @yield('FooterInclude')
     @stack('scripts')
 </body>
@@ -407,4 +416,9 @@
     
     });        
 </script>
+<script type="text/javascript">
+                function changeLang(lang) {
+                    location.href = "swtich-language/"+lang;
+                }
+            </script>
 </html>

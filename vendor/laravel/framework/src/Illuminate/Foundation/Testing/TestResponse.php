@@ -47,6 +47,21 @@ class TestResponse
     }
 
     /**
+     * Assert that the response has a successful status code.
+     *
+     * @return $this
+     */
+    public function assertSuccessful()
+    {
+        PHPUnit::assertTrue(
+            $this->isSuccessful(),
+            'Response status code ['.$this->getStatusCode().'] is not a successful status code.'
+        );
+
+        return $this;
+    }
+
+    /**
      * Assert that the response has the given status code.
      *
      * @param  int  $status
@@ -70,13 +85,15 @@ class TestResponse
      * @param  string  $uri
      * @return $this
      */
-    public function assertRedirect($uri)
+    public function assertRedirect($uri = null)
     {
         PHPUnit::assertTrue(
-            $this->isRedirect(), 'Response status code ['.$this->status().'] is not a redirect status code.'
+            $this->isRedirect(), 'Response status code ['.$this->getStatusCode().'] is not a redirect status code.'
         );
 
-        PHPUnit::assertEquals(app('url')->to($uri), $this->headers->get('Location'));
+        if (! is_null($uri)) {
+            PHPUnit::assertEquals(app('url')->to($uri), $this->headers->get('Location'));
+        }
 
         return $this;
     }
@@ -156,7 +173,7 @@ class TestResponse
      * Get the given cookie from the response.
      *
      * @param  string  $cookieName
-     * @return Cookie|null
+     * @return \Symfony\Component\HttpFoundation\Cookie|null
      */
     protected function getCookie($cookieName)
     {
@@ -181,6 +198,19 @@ class TestResponse
     }
 
     /**
+     * Assert that the given string is contained within the response text.
+     *
+     * @param  string  $value
+     * @return $this
+     */
+    public function assertSeeText($value)
+    {
+        PHPUnit::assertContains($value, strip_tags($this->getContent()));
+
+        return $this;
+    }
+
+    /**
      * Assert that the given string is not contained within the response.
      *
      * @param  string  $value
@@ -189,6 +219,19 @@ class TestResponse
     public function assertDontSee($value)
     {
         PHPUnit::assertNotContains($value, $this->getContent());
+
+        return $this;
+    }
+
+    /**
+     * Assert that the given string is not contained within the response text.
+     *
+     * @param  string  $value
+     * @return $this
+     */
+    public function assertDontSeeText($value)
+    {
+        PHPUnit::assertNotContains($value, strip_tags($this->getContent()));
 
         return $this;
     }
@@ -261,6 +304,33 @@ class TestResponse
             PHPUnit::assertTrue(
                 Str::contains($actual, $expected),
                 'Unable to find JSON fragment: '.PHP_EOL.PHP_EOL.
+                "[{$expected}]".PHP_EOL.PHP_EOL.
+                'within'.PHP_EOL.PHP_EOL.
+                "[{$actual}]."
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * Assert that the response does not contain the given JSON fragment.
+     *
+     * @param  array  $data
+     * @return $this
+     */
+    public function assertJsonMissing(array $data)
+    {
+        $actual = json_encode(Arr::sortRecursive(
+            (array) $this->decodeResponseJson()
+        ));
+
+        foreach (Arr::sortRecursive($data) as $key => $value) {
+            $expected = substr(json_encode([$key => $value]), 1, -1);
+
+            PHPUnit::assertFalse(
+                Str::contains($actual, $expected),
+                'Found unexpected JSON fragment: '.PHP_EOL.PHP_EOL.
                 "[{$expected}]".PHP_EOL.PHP_EOL.
                 'within'.PHP_EOL.PHP_EOL.
                 "[{$actual}]."
@@ -556,7 +626,7 @@ class TestResponse
      * Handle dynamic calls into macros or pass missing methods to the base response.
      *
      * @param  string  $method
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @return mixed
      */
     public function __call($method, $args)

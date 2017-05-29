@@ -3,11 +3,10 @@
 namespace Illuminate\Mail;
 
 use Swift_Mailer;
-use Swift_Message;
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
-use Illuminate\Support\HtmlString;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Mail\Mailer as MailerContract;
@@ -207,6 +206,8 @@ class Mailer implements MailerContract, MailQueueContract
         }
 
         $this->sendSwiftMessage($message->getSwiftMessage());
+
+        $this->dispatchSentEvent($message);
     }
 
     /**
@@ -294,7 +295,7 @@ class Mailer implements MailerContract, MailQueueContract
      */
     protected function renderView($view, $data)
     {
-        return $view instanceof HtmlString
+        return $view instanceof Htmlable
                         ? $view->toHtml()
                         : $this->views->make($view, $data)->render();
     }
@@ -401,7 +402,7 @@ class Mailer implements MailerContract, MailQueueContract
      */
     protected function createMessage()
     {
-        $message = new Message(new Swift_Message);
+        $message = new Message($this->swift->createMessage('message'));
 
         // If a global from address has been specified we will set it on every message
         // instances so the developer does not have to repeat themselves every time
@@ -454,6 +455,21 @@ class Mailer implements MailerContract, MailQueueContract
         return $this->events->until(
             new Events\MessageSending($message)
         ) !== false;
+    }
+
+    /**
+     * Dispatch the message sent event.
+     *
+     * @param  \Illuminate\Mail\Message  $message
+     * @return void
+     */
+    protected function dispatchSentEvent($message)
+    {
+        if ($this->events) {
+            $this->events->dispatch(
+                new Events\MessageSent($message->getSwiftMessage())
+            );
+        }
     }
 
     /**

@@ -153,7 +153,7 @@ class Ticket_Thread extends Model
 
         return $this->belongsTo($related, $foreignKey);
     }
-    
+
 //    public function setThreadTypeAttribute($value){
 //        if (!$value) {
 //            $this->thread_type = 'thread';
@@ -161,42 +161,46 @@ class Ticket_Thread extends Model
 //            $this->thread_type = $value;
 //        }
 //    }
-    
-    public function save(array $options = array()) {
+
+    public function save(array $options = [])
+    {
         $changed = $this->isDirty() ? $this->getDirty() : false;
-        $thread_ticket = $this->where('ticket_id',$this->attributes['ticket_id'])->select('id')->first();
-        if($thread_ticket){
-          $this->saveThreadType();  
+        $thread_ticket = $this->where('ticket_id', $this->attributes['ticket_id'])->select('id')->first();
+        if ($thread_ticket) {
+            $this->saveThreadType();
         }
         $save = parent::save($options);
         $id = $this->id;
         $model = $this->find($id);
-        if($model->is_internal==1 && $model->thread_type=='note' && !$model->title){
+        if ($model->is_internal == 1 && $model->thread_type == 'note' && !$model->title) {
             $changed = ['note'=>$this->body];
         }
-        $array = ['changes'=>$changed,'model'=>$model];
-        \Event::fire('notification-saved',[$array]);
+        $array = ['changes'=>$changed, 'model'=>$model];
+        \Event::fire('notification-saved', [$array]);
+
         return $save;
     }
-    
-    public function saveThreadType(){
+
+    public function saveThreadType()
+    {
         $ticketid = $this->attributes['ticket_id'];
-        $thread = $this->where('ticket_id',$ticketid)
-                ->where('is_internal','!=',1)
-                ->where('thread_type','first_reply')
-                ->where('poster','support')
-                ->where('title',"")
+        $thread = $this->where('ticket_id', $ticketid)
+                ->where('is_internal', '!=', 1)
+                ->where('thread_type', 'first_reply')
+                ->where('poster', 'support')
+                ->where('title', '')
                 ->select('id')
                 ->first();
-        if(!$thread && checkArray('is_internal', $this->attributes)!==1){
-            $this->attributes['thread_type'] = "first_reply";
+        if (!$thread && checkArray('is_internal', $this->attributes) !== 1) {
+            $this->attributes['thread_type'] = 'first_reply';
         }
     }
-    
-    public function setUserIdAttributes($value){
-        if($value){
+
+    public function setUserIdAttributes($value)
+    {
+        if ($value) {
             $this->attributes['user_id'] = $value;
-        }else{
+        } else {
             $this->attributes['user_id'] = null;
         }
     }

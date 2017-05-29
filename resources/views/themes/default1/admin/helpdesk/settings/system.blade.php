@@ -95,7 +95,7 @@ class="active"
                 <div class="form-group {{ $errors->has('time_zone') ? 'has-error' : '' }}">
                     {!! Form::label('time_zone',Lang::get('lang.timezone')) !!}
                     {!! $errors->first('time_zone', '<spam class="help-block">:message</spam>') !!}
-                    {!!Form::select('time_zone',['Time Zones'=>$timezones],null,['class'=>'form-control','id'=>'tz']) !!}
+                    {!!Form::select('time_zone',['Time Zones'=>$timezones->pluck('name','id')->toArray()],null,['class'=>'form-control']) !!}
                 </div>
             </div>
         </div>
@@ -179,37 +179,6 @@ class="active"
             
             
         </div>
-        <?php
-            $custom_format = "";
-            $date_time_format = "";
-            if(!in_array($systems->date_time_format,$formats)){
-               $custom_format =  $systems->date_time_format;
-            }
-            if(!in_array($systems->date_time_format,$formats)){
-               $date_time_format =  'custom';
-            }else{
-                $date_time_format = $systems->date_time_format;
-            }
-            ?>
-        <div class="row">
-            <!-- Date and Time Format: text: required: eg - 03/25/2015 7:14 am -->
-            <div class="col-md-6">
-                <div class="form-group {{ $errors->has('date_time_format') ? 'has-error' : '' }}">
-                    <span>{!! Form::label('date_time_format',Lang::get('lang.date_time')) !!}(<i id="dateformat"></i>)</span>
-                    {!! $errors->first('date_time_format', '<spam class="help-block">:message</spam>') !!}
-                    {!! Form::select('date_time_format',['Date Time Formats'=>$formats],$date_time_format,['class' => 'form-control','id'=>'format']) !!}
-                </div>
-            </div>
-            
-            <div class="col-md-6" id="custom" @if(in_array($systems->date_time_format,$formats))style="display: none;"@endif>
-                <div class="form-group {{ $errors->has('custom-format') ? 'has-error' : '' }}">
-                    {!! Form::label('custom-format',Lang::get('lang.custom-format')) !!}
-                    {!! $errors->first('custom-format', '<spam class="help-block">:message</spam>') !!}
-                    {!! Form::text('custom-format',$custom_format,['class' => 'form-control','id'=>'custom-format']) !!}
-                </div>
-            </div>
-            
-        </div>
     </div>
     <div class="box-footer">
         {!! Form::submit(Lang::get('lang.submit'),['onclick'=>'sendForm()','class'=>'btn btn-primary'])!!}
@@ -217,51 +186,3 @@ class="active"
 </div>
 
 @stop
-@push('scripts')
-<script>
-    $(document).ready(function(){
-        var format = $("#format").val();
-        var custom_format = $("#custom-format").val();
-        if(custom_format){
-           format =  custom_format;
-        }
-        var tz = $("#tz").val();
-        date(format,tz);
-    });
-    $("#tz").on('change',function(){
-        var format = $("#format").val();
-        if(format=='custom'){
-            format = $("#custom-format").val();
-        }
-        var tz = $("#tz").val();
-        date(format,tz);
-    });
-    $("#format").on('change',function(){
-        var format = $("#format").val();
-        if(format!=='custom'){
-            $("#custom").hide();
-            var tz = $("#tz").val();
-            date(format,tz);
-        }else{
-            $("#custom").show();
-        }
-        
-    });
-    $("#custom-format").on('input',function(){
-        var format = $("#custom-format").val();
-            var tz = $("#tz").val();
-            date(format,tz); 
-    });
-    function date(format,tz){
-        $.ajax({
-            url:"{{url('date/get')}}",
-            dataType:"html",
-            data : "format="+format+"&tz="+tz,
-            success:function(date){
-                $("#dateformat").html(date);
-            }
-        });
-        
-    }
-</script>
-@endpush

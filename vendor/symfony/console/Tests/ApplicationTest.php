@@ -586,6 +586,21 @@ class ApplicationTest extends TestCase
         putenv('COLUMNS=120');
     }
 
+    public function testRenderExceptionEscapesLines()
+    {
+        $application = new Application();
+        $application->setAutoExit(false);
+        putenv('COLUMNS=22');
+        $application->register('foo')->setCode(function () {
+            throw new \Exception('dont break here <info>!</info>');
+        });
+        $tester = new ApplicationTester($application);
+
+        $tester->run(array('command' => 'foo'), array('decorated' => false));
+        $this->assertStringEqualsFile(self::$fixturesPath.'/application_renderexception_escapeslines.txt', $tester->getDisplay(true), '->renderException() escapes lines containing formatting');
+        putenv('COLUMNS=120');
+    }
+
     public function testRun()
     {
         $application = new Application();
@@ -699,8 +714,12 @@ class ApplicationTest extends TestCase
         $input = new ArgvInput(array('cli.php', '-v', 'foo:bar'));
         $application->run($input, $output);
 
+        $this->addToAssertionCount(1);
+
         $input = new ArgvInput(array('cli.php', '--verbose', 'foo:bar'));
         $application->run($input, $output);
+
+        $this->addToAssertionCount(1);
     }
 
     public function testRunReturnsIntegerExitCode()
@@ -1100,31 +1119,6 @@ class ApplicationTest extends TestCase
         $tester->run(array('command' => 'foo', '--extra' => 'some test value'));
 
         $this->assertEquals('some test value', $extraValue);
-    }
-
-    public function testUpdateInputFromConsoleCommandEvent()
-    {
-        $dispatcher = $this->getDispatcher();
-        $dispatcher->addListener('console.command', function (ConsoleCommandEvent $event) {
-            $event->getInput()->setOption('extra', 'overriden');
-        });
-
-        $application = new Application();
-        $application->setDispatcher($dispatcher);
-        $application->setAutoExit(false);
-
-        $application
-            ->register('foo')
-            ->addOption('extra', null, InputOption::VALUE_REQUIRED)
-            ->setCode(function (InputInterface $input, OutputInterface $output) {
-                $output->write('foo.');
-            })
-        ;
-
-        $tester = new ApplicationTester($application);
-        $tester->run(array('command' => 'foo', '--extra' => 'original'));
-
-        $this->assertEquals('overriden', $tester->getInput()->getOption('extra'));
     }
 
     /**

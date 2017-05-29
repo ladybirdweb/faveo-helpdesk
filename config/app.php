@@ -12,7 +12,7 @@ return [
       | application. If disabled, a simple generic error page is shown.
       |
      */
-    'debug' => env('APP_DEBUG', true),
+    'debug' => env('APP_DEBUG', false),
     /*
       |--------------------------------------------------------------------------
       | Error Log
@@ -33,7 +33,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.9.3',
+    'version' => 'Community 1.9.4',
     /*
       |--------------------------------------------------------------------------
       | Application Name
@@ -42,7 +42,7 @@ return [
       | This Applocation name is used for installation and update checking
       |
      */
-        'name' => 'Faveo Helpdesk Pro',
+        'name' => 'Faveo Helpdesk Community',
     /*
       |--------------------------------------------------------------------------
       | Application URL
@@ -132,13 +132,11 @@ return [
       |
      */
     'providers' => [
-
         'Illuminate\Broadcasting\BroadcastServiceProvider',
         'DaveJamesMiller\Breadcrumbs\ServiceProvider',
         /*
          * Laravel Framework Service Providers...
          */
-
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
         'Illuminate\Cache\CacheServiceProvider',
@@ -258,7 +256,5 @@ return [
         'Finder'       => App\Helper\Finder::class,
         'Datatables'   => Yajra\Datatables\Facades\Datatables::class,
         'Notification' => Illuminate\Support\Facades\Notification::class,
-
     ],
-
 ];
