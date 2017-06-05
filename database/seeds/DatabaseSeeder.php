@@ -267,7 +267,7 @@ class DatabaseSeeder extends Seeder
         Company::create(['id' => '1']);
         Email::create(['id' => '1', 'template' => 'default', 'email_fetching' => '1', 'notification_cron' => '1', 'all_emails' => '1', 'email_collaborator' => '1', 'attachment' => '1']);
         Responder::create(['id' => '1', 'new_ticket' => '1', 'agent_new_ticket' => '1']);
-        //System::create(['id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => '1', 'time_zone' => '32']);
+        System::create(['id' => '1', 'status' => '1', 'department' => '1', 'date_time_format' => 'Y-m-d H:m:i', 'time_zone' => 'UTC']);
         Ticket::create(['num_format' => '$$$$-####-####', 'num_sequence' => 'sequence', 'collision_avoid' => '2', 'priority' => '1', 'sla' => '2', 'help_topic' => '1', 'status' => '1']);
         /* Ticket source */
         Ticket_source::create(['name' => 'web', 'value' => 'Web']);
@@ -1995,5 +1995,6 @@ class DatabaseSeeder extends Seeder
 
         Limit_Login::create(['id' => '1']);
         $this->call(CustomFormSeeder::class);
+        $this->call(UserSeeder::class);
     }
 }

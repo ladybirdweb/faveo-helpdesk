@@ -41,11 +41,7 @@ class Install extends Command {
         try {
             $this->appEnv();
             if ($this->confirm('Do you want to intall faveo?')) {
-                $order_number = $this->ask('Enter your order number');
-                $serial_key = $this->ask('Enter your serial key');
-                $result = $this->install->billConnection($order_number, $serial_key);
-                $response = $this->install->postSerialKey($result, false);
-                if ($response == 'success') {
+                
                     $default = $this->choice(
                             'Which sql engine would you like to use?', ['mysql']
                     );
@@ -58,7 +54,7 @@ class Install extends Command {
                     $this->info('.env file has created');
                     $this->call('preinsatall:check');
                     $this->alert("please run 'php artisan install:db'");
-                }
+                
             } else {
                 $this->info('We hope, you will try next time');
             }

@@ -690,6 +690,7 @@ return array(
     'UpdateSettingsSystem' => $baseDir . '/database/migrations/2017_03_10_044624_update_settings_system.php',
     'UpdateTicketThread' => $baseDir . '/database/migrations/2017_02_02_073016_update_ticket_thread.php',
     'UpdateUsersTable2212017' => $baseDir . '/database/migrations/2017_02_22_084059_update_users_table_22_1_2017.php',
+    'UserSeeder' => $baseDir . '/database/seeds/UserSeeder.php',
     'Version1079table' => $baseDir . '/database/migrations/2016_06_28_141613_version1079table.php',
     'Whoops\\Module' => $vendorDir . '/filp/whoops/src/deprecated/Zend/Module.php',
     'Whoops\\Provider\\Zend\\ExceptionStrategy' => $vendorDir . '/filp/whoops/src/deprecated/Zend/ExceptionStrategy.php',

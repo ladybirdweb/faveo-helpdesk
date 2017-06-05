@@ -71,9 +71,9 @@ class InstallDB extends Command {
             $url = rtrim($url, "/ ");
         }
         $systems = new \App\Model\helpdesk\Settings\System();
-        $system = $systems->first();
-        $system->url = $url;
-        $system->save();
+        $system = $systems->updateOrCreate(['id'=>1],[
+            'url'=>$url
+        ]);
         $this->info('Thank you! Faveo has been installed successfully');
     }
 

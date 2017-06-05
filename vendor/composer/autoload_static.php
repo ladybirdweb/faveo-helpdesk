@@ -1327,6 +1327,7 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'UpdateSettingsSystem' => __DIR__ . '/../..' . '/database/migrations/2017_03_10_044624_update_settings_system.php',
         'UpdateTicketThread' => __DIR__ . '/../..' . '/database/migrations/2017_02_02_073016_update_ticket_thread.php',
         'UpdateUsersTable2212017' => __DIR__ . '/../..' . '/database/migrations/2017_02_22_084059_update_users_table_22_1_2017.php',
+        'UserSeeder' => __DIR__ . '/../..' . '/database/seeds/UserSeeder.php',
         'Version1079table' => __DIR__ . '/../..' . '/database/migrations/2016_06_28_141613_version1079table.php',
         'Whoops\\Module' => __DIR__ . '/..' . '/filp/whoops/src/deprecated/Zend/Module.php',
         'Whoops\\Provider\\Zend\\ExceptionStrategy' => __DIR__ . '/..' . '/filp/whoops/src/deprecated/Zend/ExceptionStrategy.php',
