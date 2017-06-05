@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html ng-app="demoApp">
+<head>
+  <meta charset="utf-8">
+  <title>AngularJS UI Tree demo</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="bower_components/bootstrap-css/css/bootstrap.min.css">
+  <style>
+  .list-group{
+    border: 1px solid #ddd;
+  }
+  .list-group-item{
+    border: none;
+  }
+  .list-inline > li {
+    padding: 0px;
+  }
+  .affix {
+      top: 0;
+      z-index: 100;
+      width: 56%;
+  }
+  @media screen and (max-width: 1000px) {
+      #heado{
+           width: 100%;
+      }
+}
+  </style>
+</head>
+
+<body ng-controller="viewPageCtrl">
+<div class="container">
+  <!-- Nested node template -->
+
+<script type="text/ng-template" id="nodes_renderer2.html">
+  <div class="row" style="margin:15px;width:100%">
+      <div class="col-sm-3" style="padding: 0px;line-height: 2.5">
+         <label>{{node.value}}</label><span ng-show="node.agentRequiredFormSubmit==true" style="color:red">*</span>
+      </div>
+      <div class="col-sm-8" style="padding: 0px">
+        <input type="text"  ng-show="node.type=='text'&& node.value!='Requester'" class="form-control" style="border-radius: 0px">
+        <input type="date"  ng-show="node.type=='date'" class="form-control" style="border-radius: 0px">
+        <div class="input-group" ng-show="node.type=='text'&& node.value=='Requester'">
+                   <input type="text" class="form-control" style="border-radius: 0px">
+                          <div class="input-group-btn">
+                              <button class="btn btn-default" type="button" data-toggle="modal" data-target="#myModal" style="margin-right: 0px;" >Add new requester</button>
+                              <span ng-show="node.agentCCfield"><button class="btn btn-default" type="button"  style="margin-right: 0px;border-radius: 0px" ng-click="showCc()" ng-hide="displayCc">Cc</button></span>
+                          </div>
+        </div>
+        <div class="input-group" ng-show="node.type=='text'&& node.value=='Requester'&&displayCc" style="margin-top: 5px;">
+                   <input type="text" class="form-control" style="border-radius: 0px" placeholder="Enter a Cc">
+                          <div class="input-group-btn">
+                             <button class="btn btn-default" type="button" style="margin-right: 0px;border-radius: 0px" ng-click="showCc()">Hide Cc</button>
+                          </div>
+        </div>
+        <textarea name="description" class="form-control" ng-show="node.type=='textarea'" style="border-radius: 0px"></textarea>
+        <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+    
+                  <div class="modal-content">
+                  <div class="modal-header">
+                        <h4 class="modal-title">Add new requester</h4>
+                  </div>
+                  <div class="modal-body">
+                  <form name="dynamicForm">
+                      <div class="row" style="padding-right: 0px;padding-left: 0px; margin:10px">
+                        <div class="col-sm-3">
+                             <label>Name</label>
+                        </div>
+                        <div class="col-sm-8">
+                             <input type="text" class="form-control" style="border-radius: 0px">
+                        </div>
+                      </div>
+                      <div class="row" style="padding-right: 0px;padding-left: 0px; margin:10px">
+                        <div class="col-sm-3">
+                             <label>Email</label>
+                        </div>
+                        <div class="col-sm-8">
+                             <input type="email" name="email" class="form-control" style="border-radius: 0px">
+                             <span style="color:red" ng-show="dynamicForm.email.$dirty && dynamicForm.email.$invalid">
+                                  <span ng-show="dynamicForm.email.$error.required">Email is required.</span>
+                                  <span ng-show="dynamicForm.email.$error.email">Invalid email address.</span>
+                            n</span>
+                        </div>
+                      </div>
+                      <div class="row" style="padding-right: 0px;padding-left: 0px; margin:10px">
+                        <div class="col-sm-3">
+                             <label>Phone No</label>
+                        </div>
+                        <div class="col-sm-8">
+                             <input type="text" class="form-control" style="border-radius: 0px">
+                        </div>
+                      </div>
+                      <div class="row" style="padding-right: 0px;padding-left: 0px; margin:10px">
+                        <div class="col-sm-3">
+                             <label>Company</label>
+                        </div>
+                        <div class="col-sm-8">
+                             <input type="text" class="form-control" style="border-radius: 0px">
+                        </div>
+                      </div>
+                      </form>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                      <button type="button" class="btn btn-info">Create</button>
+                  </div>
+               </div>
+            </div>
+        </div>
+
+        <select  ng-model="selectedValue" ng-show="node.type=='select'" ng-options="option.optionvalue for option in node.options" class="form-control" style="border-radius: 0px">
+          <option value=""><--Select a {{node.title}}--></option>
+        </select> 
+        <ul class="list-group" ng-show="node.type=='radio'" style="border:none">
+              <li ng-repeat="option in node.options"  class="list-group-item" style="border:none">
+                                  <input type="radio" name="selection" id="happy{{$index}}" ng-model="selectedValue" value="{{option}}"/>
+                                    <label for="happy{{$index}}">{{option.optionvalue}}</label>
+              </li>
+        </ul>
+        <ul class="list-group" ng-show="node.type=='checkbox'" style="border:none">
+              <li ng-repeat="option in node.options"  class="list-group-item" style="border:none">
+                                  <input type="checkbox" name="selection{{$index}}" id="happy" ng-model="selectedValue" value="{{option}}" ng-click="checkboxValue(option)">
+                                    <label for="selection{{$index}}">{{option.optionvalue}}</label>
+              </li>
+        </ul>
+      </div>
+      <div class="col-sm-12"  ng-repeat="option in node.options" ng-if="option.nodes.length>0 && selectedValue">
+          <ul ng-model="option.nodes" ng-class="{hidden: collapsed}" style="list-style-type:none;margin-left: -70px">
+              <li  ng-repeat="node in option.nodes" ng-include="'nodes_renderer2.html'" ng-if="option==selectedValue">
+            </li>
+          </ul>
+      </div>
+
+       
+  </div>
+  <ul  ng-model="node.nodes" ng-class="{hidden: collapsed}" style="list-style-type:none">
+    <li ng-repeat="node in node.nodes"  ng-include="'nodes_renderer2.html'">
+    </li>
+  </ul>
+</script>
+<div class="col-sm-8" style="border: 1px solid gainsboro;">
+<div class="row" data-spy="affix" data-offset-top="2">
+  <div  style="background-color: white;-webkit-box-shadow: 0px 2px 6px rgba(63,63,63,0.1);box-shadow: 0 2px 6px rgba(63,63,63,0.1);border-left: 1px solid gainsboro;" class="col-sm-12">
+    <div class="col-sm-7">
+    <h4>Create a new ticket</h4>
+    </div>
+    <div class="col-sm-4" style="line-height: 4">
+       <button type="button" class="btn btn-default">Cancel</button>
+       <button type="button" class="btn btn-info  dropdown-toggle" dropdown-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Submit</button>
+    </div>
+  </div>
+  </div>
+<div class="row">
+    <div class="col-sm-12">
+     
+      <ul  ng-model="tree3"  style="list-style-type:none">
+        <li ng-repeat="node in tree3"  ng-include="'nodes_renderer2.html'">
+         
+        </li>
+      </ul>
+   
+  </div>
+ </div> 
+
+</div>
+
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="js/viewPageController.js"></script>
+
+<script>
+$(function () {
+   $('body').on('click', '[data-toggle=collapse]', function (e) {
+        
+       $(this).next().collapse('toggle');
+});
+
+});
+</script>
+</body>
+</html>
