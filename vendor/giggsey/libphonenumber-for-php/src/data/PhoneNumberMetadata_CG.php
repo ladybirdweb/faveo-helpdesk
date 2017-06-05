@@ -47,7 +47,6 @@ return array (
   ),
   'tollFree' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -58,7 +57,7 @@ return array (
   ),
   'premiumRate' => 
   array (
-    'NationalNumberPattern' => '800\\d{6}',
+    'NationalNumberPattern' => '80(?:0\\d{2}|11[01])\\d{4}',
     'ExampleNumber' => '800123456',
     'PossibleLength' => 
     array (
@@ -69,7 +68,6 @@ return array (
   ),
   'sharedCost' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -80,7 +78,6 @@ return array (
   ),
   'personalNumber' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -91,7 +88,6 @@ return array (
   ),
   'voip' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -102,7 +98,6 @@ return array (
   ),
   'pager' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -113,7 +108,6 @@ return array (
   ),
   'uan' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -124,7 +118,6 @@ return array (
   ),
   'voicemail' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -135,7 +128,6 @@ return array (
   ),
   'noInternationalDialling' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -152,6 +144,18 @@ return array (
   array (
     0 => 
     array (
+      'pattern' => '(\\d{3})(\\d{2})(\\d{2})(\\d{2})',
+      'format' => '$1 $2 $3 $4',
+      'leadingDigitsPatterns' => 
+      array (
+        0 => '801',
+      ),
+      'nationalPrefixFormattingRule' => '',
+      'domesticCarrierCodeFormattingRule' => '',
+      'nationalPrefixOptionalWhenFormatting' => false,
+    ),
+    1 => 
+    array (
       'pattern' => '(\\d{2})(\\d{3})(\\d{4})',
       'format' => '$1 $2 $3',
       'leadingDigitsPatterns' => 
@@ -162,13 +166,13 @@ return array (
       'domesticCarrierCodeFormattingRule' => '',
       'nationalPrefixOptionalWhenFormatting' => false,
     ),
-    1 => 
+    2 => 
     array (
       'pattern' => '(\\d)(\\d{4})(\\d{4})',
       'format' => '$1 $2 $3',
       'leadingDigitsPatterns' => 
       array (
-        0 => '8',
+        0 => '800',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '',

@@ -241,9 +241,11 @@ class Container implements ArrayAccess, ContainerContract
     protected function getClosure($abstract, $concrete)
     {
         return function ($container, $parameters = []) use ($abstract, $concrete) {
-            $method = ($abstract == $concrete) ? 'build' : 'make';
+            if ($abstract == $concrete) {
+                return $container->build($concrete);
+            }
 
-            return $container->$method($concrete, $parameters);
+            return $container->makeWith($concrete, $parameters);
         };
     }
 
@@ -341,6 +343,10 @@ class Container implements ArrayAccess, ContainerContract
             $this->rebound($abstract);
         } else {
             $this->extenders[$abstract][] = $closure;
+
+            if ($this->resolved($abstract)) {
+                $this->rebound($abstract);
+            }
         }
     }
 
@@ -355,6 +361,8 @@ class Container implements ArrayAccess, ContainerContract
     {
         $this->removeAbstractAlias($abstract);
 
+        $isBound = $this->bound($abstract);
+
         unset($this->aliases[$abstract]);
 
         // We'll check to determine if this type has been bound before, and if it has
@@ -362,7 +370,7 @@ class Container implements ArrayAccess, ContainerContract
         // can be updated with consuming classes that have gotten resolved here.
         $this->instances[$abstract] = $instance;
 
-        if ($this->bound($abstract)) {
+        if ($isBound) {
             $this->rebound($abstract);
         }
     }
@@ -576,10 +584,10 @@ class Container implements ArrayAccess, ContainerContract
      */
     protected function resolve($abstract, $parameters = [])
     {
-        $this->with[] = $parameters;
+        $abstract = $this->getAlias($abstract);
 
         $needsContextualBuild = ! empty($parameters) || ! is_null(
-            $this->getContextualConcrete($abstract = $this->getAlias($abstract))
+            $this->getContextualConcrete($abstract)
         );
 
         // If an instance of the type is currently being managed as a singleton we'll
@@ -588,6 +596,8 @@ class Container implements ArrayAccess, ContainerContract
         if (isset($this->instances[$abstract]) && ! $needsContextualBuild) {
             return $this->instances[$abstract];
         }
+
+        $this->with[] = $parameters;
 
         $concrete = $this->getConcrete($abstract);
 
@@ -713,7 +723,7 @@ class Container implements ArrayAccess, ContainerContract
         // hand back the results of the functions, which allows functions to be
         // used as resolvers for more fine-tuned resolution of these objects.
         if ($concrete instanceof Closure) {
-            return $concrete($this, end($this->with));
+            return $concrete($this, $this->getLastParameterOverride());
         }
 
         $reflector = new ReflectionClass($concrete);
@@ -791,7 +801,9 @@ class Container implements ArrayAccess, ContainerContract
      */
     protected function hasParameterOverride($dependency)
     {
-        return array_key_exists($dependency->name, end($this->with));
+        return array_key_exists(
+            $dependency->name, $this->getLastParameterOverride()
+        );
     }
 
     /**
@@ -802,7 +814,17 @@ class Container implements ArrayAccess, ContainerContract
      */
     protected function getParameterOverride($dependency)
     {
-        return end($this->with)[$dependency->name];
+        return $this->getLastParameterOverride()[$dependency->name];
+    }
+
+    /**
+     * Get the last parameter override.
+     *
+     * @return array
+     */
+    protected function getLastParameterOverride()
+    {
+        return count($this->with) ? end($this->with) : [];
     }
 
     /**
@@ -1044,6 +1066,17 @@ class Container implements ArrayAccess, ContainerContract
         }
 
         return [];
+    }
+
+    /**
+     * Remove all of the extender callbacks for a given type.
+     *
+     * @param  string  $abstract
+     * @return void
+     */
+    public function forgetExtenders($abstract)
+    {
+        unset($this->extenders[$this->getAlias($abstract)]);
     }
 
     /**

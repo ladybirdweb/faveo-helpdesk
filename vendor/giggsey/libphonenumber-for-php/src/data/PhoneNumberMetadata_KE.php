@@ -42,7 +42,7 @@ return array (
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '7(?:[0-3679]\\d|4[0-2479]|5[0-6]|8[0-25-9])\\d{6}',
+    'NationalNumberPattern' => '7(?:[0-3679]\\d|4[0-479]|5[0-6]|8[0-25-9])\\d{6}',
     'ExampleNumber' => '712123456',
     'PossibleLength' => 
     array (
@@ -79,7 +79,6 @@ return array (
   ),
   'sharedCost' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -90,7 +89,6 @@ return array (
   ),
   'personalNumber' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -101,7 +99,6 @@ return array (
   ),
   'voip' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -112,7 +109,6 @@ return array (
   ),
   'pager' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -123,7 +119,6 @@ return array (
   ),
   'uan' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -134,7 +129,6 @@ return array (
   ),
   'voicemail' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -145,7 +139,6 @@ return array (
   ),
   'noInternationalDialling' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,

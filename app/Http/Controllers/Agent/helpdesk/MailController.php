@@ -42,7 +42,6 @@ class MailController extends Controller
      */
     public function readmails(Emails $emails, Email $settings_email, System $system, Ticket $ticket)
     {
-        //dd($emails);
         if ($settings_email->first()->email_fetching == 1) {
             if ($settings_email->first()->all_emails == 1) {
                 $email = $emails->get();
@@ -229,10 +228,8 @@ class MailController extends Controller
         $team_assign = null;
         $ticket_status = null;
         $auto_response = $email->auto_response;
-        $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone = '', $phonecode = '', $mobile_number = '', $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data = [], $auto_response);
-        if ($result[1] == true) {
-            $this->updateThread($result[0], $body, $attachments);
-        }
+        $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone = '', $phonecode = '', $mobile_number = '', $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data = [], $auto_response,$attachments);
+        
     }
 
     public function updateThread($ticket_number, $body, $attachments)

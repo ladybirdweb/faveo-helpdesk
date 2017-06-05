@@ -69,7 +69,7 @@ class Hostname extends AbstractValidator
 
     /**
      * Array of valid top-level-domains
-     * IanaVersion 2017031600
+     * IanaVersion 2017051700
      *
      * @see ftp://data.iana.org/TLD/tlds-alpha-by-domain.txt  List of all TLDs by domain
      * @see http://www.iana.org/domains/root/db/ Official list of supported TLDs
@@ -662,6 +662,7 @@ class Hostname extends AbstractValidator
         'hosting',
         'hot',
         'hoteles',
+        'hotels',
         'hotmail',
         'house',
         'how',
@@ -920,7 +921,6 @@ class Hostname extends AbstractValidator
         'msd',
         'mt',
         'mtn',
-        'mtpc',
         'mtr',
         'mu',
         'museum',
@@ -1003,7 +1003,6 @@ class Hostname extends AbstractValidator
         'orange',
         'org',
         'organic',
-        'orientexpress',
         'origins',
         'osaka',
         'otsuka',
@@ -1132,6 +1131,7 @@ class Hostname extends AbstractValidator
         'rs',
         'rsvp',
         'ru',
+        'rugby',
         'ruhr',
         'run',
         'rw',
@@ -1629,6 +1629,7 @@ class Hostname extends AbstractValidator
      * (.ES) Spain https://www.nic.es/media/2008-05/1210147705287.pdf
      * (.FI) Finland http://www.ficora.fi/en/index/palvelut/fiverkkotunnukset/aakkostenkaytto.html
      * (.GR) Greece https://grweb.ics.forth.gr/CharacterTable1_en.jsp
+     * (.HR) Croatia https://www.dns.hr/en/portal/files/Odluka-1,2alfanum-dijak.pdf
      * (.HU) Hungary http://www.domain.hu/domain/English/szabalyzat/szabalyzat.html
      * (.IL) Israel http://www.isoc.org.il/domains/il-domain-rules.html
      * (.INFO) International http://www.nic.info/info/idn
@@ -1688,6 +1689,7 @@ class Hostname extends AbstractValidator
         'FI'  => [1 => '/^[\x{002d}0-9a-zäåö]{1,63}$/iu'],
         'GR'  => [1 => '/^[\x{002d}0-9a-zΆΈΉΊΌΎ-ΡΣ-ώἀ-ἕἘ-Ἕἠ-ὅὈ-Ὅὐ-ὗὙὛὝὟ-ώᾀ-ᾴᾶ-ᾼῂῃῄῆ-ῌῐ-ΐῖ-Ίῠ-Ῥῲῳῴῶ-ῼ]{1,63}$/iu'],
         'HK'  => 'Hostname/Cn.php',
+        'HR'  => [1 => '/^[\x{002d}0-9a-zžćčđš]{1,63}$/iu'],
         'HU'  => [1 => '/^[\x{002d}0-9a-záéíóöúüőű]{1,63}$/iu'],
         'IL'  => [1 => '/^[\x{002d}0-9\x{05D0}-\x{05EA}]{1,63}$/iu',
             2 => '/^[\x{002d}0-9a-z]{1,63}$/i'],

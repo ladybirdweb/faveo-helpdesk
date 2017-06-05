@@ -28,8 +28,8 @@ return array (
   ),
   'fixedLine' => 
   array (
-    'NationalNumberPattern' => '1481\\d{6}',
-    'ExampleNumber' => '1481456789',
+    'NationalNumberPattern' => '1481[25-9]\\d{5}',
+    'ExampleNumber' => '1481256789',
     'PossibleLength' => 
     array (
       0 => 10,
@@ -137,7 +137,6 @@ return array (
   ),
   'voicemail' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,
@@ -148,7 +147,6 @@ return array (
   ),
   'noInternationalDialling' => 
   array (
-    'NationalNumberPattern' => 'NA',
     'PossibleLength' => 
     array (
       0 => -1,

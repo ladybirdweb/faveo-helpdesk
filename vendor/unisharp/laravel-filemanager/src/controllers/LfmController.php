@@ -10,13 +10,11 @@ class LfmController extends Controller
 {
     use LfmHelpers;
 
-    protected $success_response = 'OK';
+    protected static $success_response = 'OK';
 
     public function __construct()
     {
-        if (!$this->isProcessingImages() && !$this->isProcessingFiles()) {
-            throw new \Exception('unexpected type parameter');
-        }
+        $this->applyIniOverrides();
     }
 
     /**

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="clientApp">
     <head>
         <meta charset="UTF-8">
         <?php
@@ -464,6 +464,20 @@ $(function () {
                     location.href = "swtich-language/"+lang;
                 }
             </script>
+                        <script src="{{asset("lb-faveo/js/angular/angular.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
+<script src="{{asset('lb-faveo/js/angular/ng-flow-standalone.js')}}"></script>
+<script src="{{asset('lb-faveo/js/angular/fusty-flow.js')}}"></script>
+<script src="{{asset('lb-faveo/js/angular/fusty-flow-factory.js')}}"></script>
+<script src="{{asset('lb-faveo/js/angular/ng-file-upload.js')}}"></script>
+<script src="{{asset('lb-faveo/js/angular/ng-file-upload-shim.min.js')}}"></script>
+ 
+
+<script>
+              var app=angular.module('clientApp',['ngFileUpload']);
+            </script>
+      @stack('scripts')
           
     </body>
 </html>

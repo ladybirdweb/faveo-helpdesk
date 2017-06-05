@@ -180,4 +180,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 //        parent::save($options);
 //        dd($this->where('id',$this->id)->select('first_name','last_name','user_name','email')->get()->toJson());
 //    }
+    
+    public function org() {
+        return $this->hasOne('App\Model\helpdesk\Agent_panel\User_org', 'user_id');
+    }
 }

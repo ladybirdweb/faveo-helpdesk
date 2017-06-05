@@ -5,7 +5,6 @@ namespace Illuminate\Foundation\Testing;
 use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Traits\Macroable;
 use PHPUnit\Framework\Assert as PHPUnit;
@@ -18,7 +17,7 @@ class TestResponse
     }
 
     /**
-     * The reponse to delegate to.
+     * The response to delegate to.
      *
      * @var \Illuminate\Http\Response
      */
@@ -115,7 +114,7 @@ class TestResponse
 
         if (! is_null($value)) {
             PHPUnit::assertEquals(
-                $this->headers->get($headerName), $value,
+                $value, $this->headers->get($headerName),
                 "Header [{$headerName}] was found, but value [{$actual}] does not match [{$value}]."
             );
         }
@@ -350,7 +349,7 @@ class TestResponse
     public function assertJsonStructure(array $structure = null, $responseData = null)
     {
         if (is_null($structure)) {
-            return $this->assertJson();
+            return $this->assertJson($this->json());
         }
 
         if (is_null($responseData)) {
@@ -404,6 +403,21 @@ class TestResponse
     public function json()
     {
         return $this->decodeResponseJson();
+    }
+
+    /**
+     * Assert that the response view equals the given value.
+     *
+     * @param  string $value
+     * @return $this
+     */
+    public function assertViewIs($value)
+    {
+        $this->ensureResponseHasView();
+
+        PHPUnit::assertEquals($value, $this->original->getName());
+
+        return $this;
     }
 
     /**
@@ -626,7 +640,7 @@ class TestResponse
      * Handle dynamic calls into macros or pass missing methods to the base response.
      *
      * @param  string  $method
-     * @param  array  $parameters
+     * @param  array  $args
      * @return mixed
      */
     public function __call($method, $args)

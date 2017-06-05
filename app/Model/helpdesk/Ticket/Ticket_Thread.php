@@ -6,20 +6,20 @@ namespace App\Model\helpdesk\Ticket;
 use File;
 use Illuminate\Database\Eloquent\Model;
 
-class Ticket_Thread extends Model
-{
+class Ticket_Thread extends Model {
+
     protected $table = 'ticket_thread';
     protected $fillable = [
         'id', 'ticket_id', 'staff_id', 'user_id', 'thread_type', 'poster', 'source', 'is_internal', 'title', 'body', 'format', 'ip_address', 'created_at', 'updated_at',
     ];
+    public $notify = true;
+    public $send = true;
 
-    public function attach()
-    {
+    public function attach() {
         return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_attachments', 'thread_id');
     }
 
-    public function delete()
-    {
+    public function delete() {
         $this->attach()->delete();
         parent::delete();
     }
@@ -28,23 +28,20 @@ class Ticket_Thread extends Model
 //        $this->attributes['title'] = str_replace('"', "'", $value);
 //    }
 
-    public function getTitleAttribute($value)
-    {
+    public function getTitleAttribute($value) {
         return str_replace('"', "'", $value);
     }
 
-    public function thread($content)
-    {
+    public function thread($content) {
         //         $porufi = $this->purify($content);
 //         dd($content,$porufi);
         //return $content;
         return $this->purify($content);
     }
 
-    public function purifyOld($value)
-    {
-        require_once base_path('vendor'.DIRECTORY_SEPARATOR.'htmlpurifier'.DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'HTMLPurifier.auto.php');
-        $path = base_path('vendor'.DIRECTORY_SEPARATOR.'htmlpurifier'.DIRECTORY_SEPARATOR.'library'.DIRECTORY_SEPARATOR.'HTMLPurifier'.DIRECTORY_SEPARATOR.'DefinitionCache'.DIRECTORY_SEPARATOR.'Serializer');
+    public function purifyOld($value) {
+        require_once base_path('vendor' . DIRECTORY_SEPARATOR . 'htmlpurifier' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'HTMLPurifier.auto.php');
+        $path = base_path('vendor' . DIRECTORY_SEPARATOR . 'htmlpurifier' . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'HTMLPurifier' . DIRECTORY_SEPARATOR . 'DefinitionCache' . DIRECTORY_SEPARATOR . 'Serializer');
         if (!File::exists($path)) {
             File::makeDirectory($path, $mode = 0777, true, true);
         }
@@ -60,19 +57,20 @@ class Ticket_Thread extends Model
         return $value;
     }
 
-    public function purify()
-    {
+    public function purify($inline = true, $mail = "") {
         $value = $this->attributes['body'];
         $str = str_replace("'", '"', $value);
         $html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $str);
         $string = trim(preg_replace('/\s+/', ' ', $html));
-        $content = $this->inlineAttachment($string);
-
+        if ($inline) {
+            $content = $this->inlineAttachment($string, $mail);
+        } else {
+            $content = $string;
+        }
         return $content;
     }
 
-    public function setTitleAttribute($value)
-    {
+    public function setTitleAttribute($value) {
         if ($value == '') {
             $this->attributes['title'] = 'No available';
         } else {
@@ -80,8 +78,7 @@ class Ticket_Thread extends Model
         }
     }
 
-    public function removeScript($html)
-    {
+    public function removeScript($html) {
         $doc = new \DOMDocument();
 
         // load the HTML string we want to strip
@@ -103,8 +100,7 @@ class Ticket_Thread extends Model
         return $no_script_html_string;
     }
 
-    public function firstContent()
-    {
+    public function firstContent() {
         $poster = $this->attributes['poster'];
         if ($poster == 'client') {
             return 'yes';
@@ -113,25 +109,29 @@ class Ticket_Thread extends Model
         return 'no';
     }
 
-    public function inlineAttachment($body)
-    {
+    public function inlineAttachment($body, $mail = "") {
+
         $attachments = $this->attach;
         if ($attachments->count() > 0) {
+
             foreach ($attachments as $key => $attach) {
-                if ($attach->poster == 'INLINE' || $attach->poster == 'inline') {
+                if ($attach->poster == "INLINE" || $attach->poster == "inline") {
                     $search = $attach->name;
-                    $replace = "data:$attach->type;base64,".$attach->file;
+                    if (!$mail) {
+                        $replace = "data:$attach->type;base64," . $attach->file;
+                    } else {
+                        $replace = $mail->embedData(base64_decode($attach->file), $search);
+                    }
+
                     $b = str_replace($search, $replace, $body);
                     $body = $b;
                 }
             }
         }
-
         return $body;
     }
 
-    public function getSubject()
-    {
+    public function getSubject() {
         $subject = $this->attributes['title'];
         $array = imap_mime_header_decode($subject);
         $title = '';
@@ -146,8 +146,7 @@ class Ticket_Thread extends Model
         return wordwrap($subject, 70, "<br>\n");
     }
 
-    public function user()
-    {
+    public function user() {
         $related = 'App\User';
         $foreignKey = 'user_id';
 
@@ -162,27 +161,33 @@ class Ticket_Thread extends Model
 //        }
 //    }
 
-    public function save(array $options = [])
-    {
+
+    public function save(array $options = array()) {
         $changed = $this->isDirty() ? $this->getDirty() : false;
         $thread_ticket = $this->where('ticket_id', $this->attributes['ticket_id'])->select('id')->first();
         if ($thread_ticket) {
             $this->saveThreadType();
         }
-        $save = parent::save($options);
         $id = $this->id;
         $model = $this->find($id);
-        if ($model->is_internal == 1 && $model->thread_type == 'note' && !$model->title) {
-            $changed = ['note'=>$this->body];
+        $save = parent::save($options);
+        if ($this->notify) {
+            $ids = $this->id;
+            $table = $this->find($ids);
+            if ($table && $table->is_internal == 1 && $table->thread_type == 'note') {
+                $changed = ['note' => $this->body];
+                $model = $table;
+            }
+            if (checkArray('poster', $changed) == 'client' && checkArray('title', $changed)) {
+                $changed = false;
+            }
+            $array = ['changes' => $changed, 'model' => $model, 'send_mail' => $this->send];
+            \Event::fire('notification-saved', [$array]);
         }
-        $array = ['changes'=>$changed, 'model'=>$model];
-        \Event::fire('notification-saved', [$array]);
-
         return $save;
     }
 
-    public function saveThreadType()
-    {
+    public function saveThreadType() {
         $ticketid = $this->attributes['ticket_id'];
         $thread = $this->where('ticket_id', $ticketid)
                 ->where('is_internal', '!=', 1)
@@ -196,12 +201,12 @@ class Ticket_Thread extends Model
         }
     }
 
-    public function setUserIdAttributes($value)
-    {
+    public function setUserIdAttributes($value) {
         if ($value) {
             $this->attributes['user_id'] = $value;
         } else {
             $this->attributes['user_id'] = null;
         }
     }
+
 }

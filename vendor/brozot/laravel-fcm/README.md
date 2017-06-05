@@ -203,6 +203,12 @@ A topics message is a notification message, data message, or both, that you send
 
 > Note: Topic names must be managed by your app and known by your server. The Laravel-FCM package or fcm doesn't provide an easy way to do that.
 
+The following use statement is required for the examples below:
+
+```php
+use LaravelFCM\Message\Topics;
+```
+
 #### Sending a Message to a Topic
 
 ```php

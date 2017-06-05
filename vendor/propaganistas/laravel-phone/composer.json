@@ -16,7 +16,6 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
         "illuminate/support": "^4.0|^5.0",
         "illuminate/validation": "^4.0|^5.0",
         "giggsey/libphonenumber-for-php": "^7.0|^8.0",
@@ -24,7 +23,7 @@
     },
     "require-dev": {
         "orchestra/testbench": "^2.0|^3.0",
-        "phpunit/phpunit": "^5.2"
+        "phpunit/phpunit": "^4.0|^5.2"
     },
     "autoload": {
         "psr-4": {
@@ -40,6 +39,13 @@
         }
     },
     "suggest": {
-        "monarobase/country-list": "Adds a compatible (and fully translated) country list API."
+        "propaganistas/laravel-intl": "Adds internationalization functions, including a compatible and fully translated country list API."
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Propaganistas\\LaravelPhone\\LaravelPhoneServiceProvider"
+            ]
+        }
     }
 }

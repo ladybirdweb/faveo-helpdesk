@@ -347,7 +347,7 @@ if ($thread->title != "") {
                         </br>
                         </br>
                     </div>
-                    <form id="form3">
+                    <form id="form3" ng-controller="MainCtrl">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <div id="t1">
@@ -355,7 +355,7 @@ if ($thread->title != "") {
                         <div class="form-group">
                             <div class="row">
                                 <!-- to -->
-                                <input type="hidden" name="ticket_ID" value="{{$tickets->id}}">
+                                <input type="hidden" name="ticket_id" value="{{$tickets->id}}">
                                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                     <div class="col-md-2">
                                         {!! Form::label('To', Lang::get('lang.to').':') !!}
@@ -408,6 +408,7 @@ if ($thread->title != "") {
                                         {!! Form::label('Reply Content', Lang::get('lang.reply_content').':') !!}<span class="text-red"> *</span>
                                     </div>
                                     <div class="col-md-10">
+                                        @include('themes.default1.inapp-notification.wyswyg-editor')
                                         <div id="newtextarea">
                                             <textarea style="width:98%;height:20%;" name="reply_content" class="form-control" id="reply_content"></textarea>
                                         </div>
@@ -436,38 +437,31 @@ if ($thread->title != "") {
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="form-group">
                             <div class="row">
-                                <!-- reply content -->
-                                <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}" id="reply_content_class">
-                                    <div class="col-md-2">
-                                        <label> {!! Lang::get('lang.attachment') !!}</label>
-                                    </div>
+                                <div class="col-md-2"></div>
                                     <div class="col-md-10">
-                                        <div id="reset-attachment">
-                                            <span class='btn btn-default btn-file'> <i class='fa fa-paperclip'></i> <span>{!! Lang::get('lang.upload') !!}</span><input type='file' name='attachment[]' id='attachment' multiple/></span>
-                                            <div id='file_details'></div><div id='total-size'></div>{!! Lang::get('lang.max') !!}. {!! $max_size_in_actual !!}
-                                            <div>
-                                                <a id='clear-file' onClick='clearAll()' style='display:none; cursor:pointer;'><i class='fa fa-close'></i>Clear all</a>
-                                            </div>
+                                        <div id="t5">
+                                            <div id="file_details"></div>
                                         </div>
-
                                     </div>
-                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
+                        
+                         <div class="form-group">
                             <div class="row">
                                 <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                                     <div class="col-md-2"></div>
                                     <div class="col-md-10">
                                         <div id="t5">
-                                            <button id="replybtn" type="submit" class="btn btn-primary"><i class="fa fa-check-square-o" style="color:white;"> </i> {!! Lang::get('lang.update') !!}</button>
+                                            <button id="replybtn" ng-click="getEditor()" type="button" class="btn btn-primary"><i class="fa fa-check-square-o" style="color:white;"> </i> {!! Lang::get('lang.update') !!}</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                     {!!Form::close()!!}
                 </div>
@@ -703,7 +697,7 @@ if ($thread->title != "") {
                                             </script>
 
                                             @else
-                                            {!! $conversation->body !!}
+                                            {!! $conversation->purify() !!}
                                             @endif
 
 
@@ -1872,54 +1866,6 @@ $depts=App\Model\helpdesk\Agent\Department::all();
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
             }
 
-            $('#form3').on('submit', function() {
-            for ( instance in CKEDITOR.instances ) {
-                CKEDITOR.instances[instance].updateElement();
-            }
-            var fd = new FormData(document.getElementById("form3"));
-            var reply_content = document.getElementById('reply_content').value;
-            if(reply_content) {
-                $("#reply_content_class").removeClass('has-error');
-                $("#alert23").hide();
-            } else {
-                var message = "<li>{!! Lang::get('lang.reply_content_is_a_required_field') !!}</li>";
-                $("#reply_content_class").addClass('has-error');
-                $("#alert23").show();
-                $('#message-danger2').html(message);
-                $("#show3").hide();
-                $("#t1").show();
-                return false;
-            }
-            var reply_content = document.getElementById('reply_content').value;
-            $.ajax({
-            type: "POST",
-                    url: "../thread/reply/{{ $tickets->id }}",
-                    enctype: 'multipart/form-data',
-                    dataType: "json",
-                    data: fd,
-                    processData: false, // tell jQuery not to process the data
-                    contentType: false, // tell jQuery not to set contentType
-                    beforeSend: function() {
-                    $("#t1").hide();
-                    $("#show3").show();
-            },
-            success: function(json) {
-                    location.reload();
-                    //$('html, body').animate({ scrollTop: $("#heading").offset().top }, 500);
-            },
-                    error: function(json) {
-                    $("#show3").hide();
-                    $("#t1").show();
-                    var res = "";
-                    $.each(json.responseJSON, function (idx, topic) {
-                    res += "<li>" + topic + "</li>";
-                    });
-                    $("#reply-response").html("<div class='alert alert-danger'><strong>Whoops!</strong> There were some problems with your input.<br><br><ul>" + res + "</ul></div>");
-                    //$('html, body').animate({ scrollTop: $("#heading").offset().top }, 500);
-            }
-            })
-            return false;
-    });
 // Surrender
             $('#Surrender').on('click', function() {
     $.ajax({

@@ -28,7 +28,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @var string
      */
-    const VERSION = '5.4.18';
+    const VERSION = '5.4.24';
 
     /**
      * The base path for the Laravel installation.
@@ -687,6 +687,26 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
                 $this->bootProvider($instance);
             });
         }
+    }
+
+    /**
+     * Resolve the given type from the container.
+     *
+     * (Overriding Container::makeWith)
+     *
+     * @param  string  $abstract
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public function makeWith($abstract, array $parameters)
+    {
+        $abstract = $this->getAlias($abstract);
+
+        if (isset($this->deferredServices[$abstract])) {
+            $this->loadDeferredProvider($abstract);
+        }
+
+        return parent::makeWith($abstract, $parameters);
     }
 
     /**

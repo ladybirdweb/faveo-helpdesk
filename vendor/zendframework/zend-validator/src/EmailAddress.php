@@ -511,6 +511,7 @@ class EmailAddress extends AbstractValidator
         }
 
         // Match hostname part
+        $hostname = false;
         if ($this->options['useDomainCheck']) {
             $hostname = $this->validateHostnamePart();
         }
@@ -518,13 +519,7 @@ class EmailAddress extends AbstractValidator
         $local = $this->validateLocalPart();
 
         // If both parts valid, return true
-        if ($local && $length) {
-            if (($this->options['useDomainCheck'] && $hostname) || ! $this->options['useDomainCheck']) {
-                return true;
-            }
-        }
-
-        return false;
+        return ($local && $length) && (! $this->options['useDomainCheck'] || $hostname);
     }
 
     /**
@@ -547,6 +542,10 @@ class EmailAddress extends AbstractValidator
      */
     protected function idnToUtf8($email)
     {
+        if (strlen($email) == 0) {
+            return $email;
+        }
+
         if (extension_loaded('intl')) {
             // The documentation does not clarify what kind of failure
             // can happen in idn_to_utf8. One can assume if the source

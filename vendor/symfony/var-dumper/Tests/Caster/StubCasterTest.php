@@ -100,7 +100,7 @@ EODUMP;
 
         $expectedDump = <<<'EODUMP'
 <foo></foo><bar><span class=sf-dump-note>array:1</span> [<samp>
-  <span class=sf-dump-index>0</span> => "<a href="%sStubCasterTest.php:0"><span class=sf-dump-str title="55 characters">Symfony\Component\VarDumper\Tests\Caster\StubCasterTest</span></a>"
+  <span class=sf-dump-index>0</span> => "<a href="%sStubCasterTest.php:0" target="_blank" rel="noopener noreferrer"><span class=sf-dump-str title="55 characters">Symfony\Component\VarDumper\Tests\Caster\StubCasterTest</span></a>"
 </samp>]
 </bar>
 EODUMP;
@@ -120,7 +120,7 @@ EODUMP;
 
         $expectedDump = <<<'EODUMP'
 <foo></foo><bar><span class=sf-dump-note>array:1</span> [<samp>
-  <span class=sf-dump-index>0</span> => "<a href="%sFooInterface.php:10"><span class=sf-dump-str title="5 characters">hello</span></a>"
+  <span class=sf-dump-index>0</span> => "<a href="%sFooInterface.php:10" target="_blank" rel="noopener noreferrer"><span class=sf-dump-str title="5 characters">hello</span></a>"
 </samp>]
 </bar>
 EODUMP;
@@ -141,7 +141,7 @@ EODUMP;
         $expectedDump = <<<'EODUMP'
 <foo></foo><bar><span class=sf-dump-note>array:1</span> [<samp>
   <span class=sf-dump-index>0</span> => "<span class=sf-dump-str title="Symfony\Component\VarDumper\Tests\Caster\NotExisting
-52 characters"><span class=sf-dump-ellipsis>Symfony\Component\VarDumper\Tests\Caster</span>\NotExisting</span>"
+52 characters"><span class="sf-dump-ellipsis sf-dump-ellipsis-class">Symfony\Component\VarDumper\Tests\Caster</span><span class=sf-dump-ellipsis>\</span>NotExisting</span>"
 </samp>]
 </bar>
 EODUMP;
@@ -161,7 +161,7 @@ EODUMP;
 
         $expectedDump = <<<'EODUMP'
 <foo></foo><bar><span class=sf-dump-note>array:1</span> [<samp>
-  <span class=sf-dump-index>0</span> => "<a href="%sFooInterface.php:5"><span class=sf-dump-str title="5 characters">hello</span></a>"
+  <span class=sf-dump-index>0</span> => "<a href="%sFooInterface.php:5" target="_blank" rel="noopener noreferrer"><span class=sf-dump-str title="5 characters">hello</span></a>"
 </samp>]
 </bar>
 EODUMP;

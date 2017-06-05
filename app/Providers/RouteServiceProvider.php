@@ -36,6 +36,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiRoutes();
         $this->mapWebRoutes();
+        $this->mapInstallerRoutes();
         //
     }
 
@@ -71,6 +72,22 @@ class RouteServiceProvider extends ServiceProvider
             'prefix'     => 'api',
         ], function ($router) {
             require base_path('routes/api.php');
+        });
+    }
+    
+    /**
+     * Define the "installer" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapInstallerRoutes() {
+        Route::group([
+            'middleware' => ['web', 'installer'],
+            'namespace' => $this->namespace,
+                ], function ($router) {
+            require base_path('routes/installer.php');
         });
     }
 }

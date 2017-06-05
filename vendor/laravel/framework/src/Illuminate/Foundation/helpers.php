@@ -231,15 +231,19 @@ if (! function_exists('cache')) {
             return app('cache')->get($arguments[0], isset($arguments[1]) ? $arguments[1] : null);
         }
 
-        if (is_array($arguments[0])) {
-            if (! isset($arguments[1])) {
-                throw new Exception(
-                    'You must set an expiration time when putting to the cache.'
-                );
-            }
-
-            return app('cache')->put(key($arguments[0]), reset($arguments[0]), $arguments[1]);
+        if (! is_array($arguments[0])) {
+            throw new Exception(
+                'When setting a value in the cache, you must pass an array of key / value pairs.'
+            );
         }
+
+        if (! isset($arguments[1])) {
+            throw new Exception(
+                'You must specify an expiration time when setting a value in the cache.'
+            );
+        }
+
+        return app('cache')->put(key($arguments[0]), reset($arguments[0]), $arguments[1]);
     }
 }
 
@@ -420,7 +424,7 @@ if (! function_exists('encrypt')) {
     /**
      * Encrypt the given value.
      *
-     * @param  string  $value
+     * @param  mixed  $value
      * @return string
      */
     function encrypt($value)
@@ -574,7 +578,7 @@ if (! function_exists('mix')) {
         }
 
         if (file_exists(public_path($manifestDirectory.'/hot'))) {
-            return new HtmlString("http://localhost:8080{$path}");
+            return new HtmlString("//localhost:8080{$path}");
         }
 
         if (! $manifest) {

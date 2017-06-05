@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.9.1 - 2017-05-17
+
+### Added
+
+- Nothing.
+
+### Changes
+
+- [#154](https://github.com/zendframework/zend-validator/pull/154) updates the
+  `CreditCard` validator to allow 19 digit Discover card values, and 13 and 19
+  digit Visa card values, which are now allowed (see
+  https://en.wikipedia.org/wiki/Payment_card_number).
+- [#162](https://github.com/zendframework/zend-validator/pull/162) updates the
+  `Hostname` validator to support `.hr` (Croatia) IDN domains.
+- [#163](https://github.com/zendframework/zend-validator/pull/163) updates the
+  `Iban` validator to support Belarus.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#168](https://github.com/zendframework/zend-validator/pull/168) fixes how the
+  `ValidatorPluginManagerFactory` factory initializes the plugin manager instance,
+  ensuring it is injecting the relevant configuration from the `config` service
+  and thus seeding it with configured validator services. This means
+  that the `validators` configuration will now be honored in non-zend-mvc contexts.
+
 ## 2.9.0 - 2017-03-17
 
 ### Added

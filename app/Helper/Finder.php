@@ -181,4 +181,15 @@ class Finder
 
             return $contents;
         }
+        
+         /**
+         * SPECIAL CHECK FOR STATUS FOR APPROVAL
+         * This function is used to special check status for any type of checks
+         * @return type array
+         */
+        public static function getCustomedStatus() {
+            $status = Ticket_Status::select('id','name','icon_class')->get();
+            return $status;
+            
+        }
 }

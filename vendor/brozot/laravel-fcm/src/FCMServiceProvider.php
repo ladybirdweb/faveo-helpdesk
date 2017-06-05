@@ -23,6 +23,10 @@ class FCMServiceProvider extends ServiceProvider
 
     public function register()
     {
+		if (!str_contains($this->app->version(), 'Lumen')) {
+            $this->mergeConfigFrom(__DIR__.'/../config/fcm.php', 'fcm');
+        }
+
         $this->app->singleton('fcm.client', function ($app) {
             return (new FCMManager($app))->driver();
         });

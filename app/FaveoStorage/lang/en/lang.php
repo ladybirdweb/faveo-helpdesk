@@ -13,4 +13,7 @@ return [
     'container'=> 'Container',
     'endpoint' => 'End Point',
     'url_type' => 'Url Type',
+    'private-root'=>'Private Storage',
+    'public-root'=>'Public Storage',
+    'save'=>'Save',
 ];

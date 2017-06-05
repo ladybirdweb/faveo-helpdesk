@@ -397,9 +397,47 @@
     <!-- CK Editor -->
     <script src="{{asset("lb-faveo/plugins/filebrowser/plugin.js")}}"></script>
     <script src="{{asset("lb-faveo/js/angular/angular.min.js")}}" type="text/javascript"></script>
-        <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
-        <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
+    <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
+    <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
+    <script src="{{asset('lb-faveo/js/form/ui-bootstrap-tpls.js')}}"></script>
+    <script src="{{asset('lb-faveo/js/form/main.js')}}"></script>
+    <script src="{{asset('lb-faveo/js/form/handleCtrl.js')}}"></script>
+    <script src="{{asset('lb-faveo/js/form/nodeCtrl.js')}}"></script>
+    <script src="{{asset('lb-faveo/js/form/nodesCtrl.js')}}"></script>
+    <script src="{{asset('lb-faveo/js/form/treeCtrl.js')}}"></script>
+    <script src="{{asset('lb-faveo/js/form/uiTree.js')}}"></script>
+    <script src="{{asset('lb-faveo/js/form/uiTreeHandle.js')}}"></script>
+    <script src="{{asset('lb-faveo/js/form/uiTreeNode.js')}}"></script>
+    <script src="{{asset('lb-faveo/js/form/uiTreeNodes.js')}}"></script>
+    <script src="{{asset('lb-faveo/js/form/helper.js')}}"></script>
+    <script>
+    var app = angular.module('fbApp', ['angularMoment','ui.tree','ui.bootstrap']).directive('whenScrolled', function() {
+    return function(scope, elm, attr) {
+        var raw = elm[0];
+        console.log(raw);
+        elm.bind('scroll', function() {
 
+            if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+                scope.$apply(attr.whenScrolled);
+            }
+        });
+    };
+});
+app.constant("CSRF_TOKEN", '{{ csrf_token() }}');
+app.directive('mediaLibScrolled', function() {
+    return function(scope, elm, attr) {
+        var raw = elm[0];
+        console.log(raw);
+        elm.bind('scroll', function() {
+
+            if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+                scope.$apply(attr.mediaLibScrolled);
+            }
+        });
+    };
+});
+
+    </script>
     @yield('FooterInclude')
     @stack('scripts')
 </body>

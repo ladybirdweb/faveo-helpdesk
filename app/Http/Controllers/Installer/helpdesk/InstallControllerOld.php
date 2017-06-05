@@ -37,7 +37,7 @@ use View;
  *
  *  @author     Ladybird <info@ladybirdweb.com>
  */
-class InstallController extends Controller
+class InstallControllerOld extends Controller
 {
     /**
      * Get Licence (step 1).

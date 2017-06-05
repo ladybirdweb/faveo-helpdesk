@@ -5,6 +5,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Debug\Dumper;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\HigherOrderTapProxy;
 
 if (! function_exists('append_config')) {
     /**
@@ -694,6 +695,20 @@ if (! function_exists('starts_with')) {
     }
 }
 
+if (! function_exists('str_after')) {
+    /**
+     * Return the remainder of a string after a given value.
+     *
+     * @param  string  $subject
+     * @param  string  $search
+     * @return string
+     */
+    function str_after($subject, $search)
+    {
+        return Str::after($subject, $search);
+    }
+}
+
 if (! function_exists('str_contains')) {
     /**
      * Determine if a given string contains a given substring.
@@ -870,11 +885,15 @@ if (! function_exists('tap')) {
      * Call the given Closure with the given value then return the value.
      *
      * @param  mixed  $value
-     * @param  callable  $callback
+     * @param  callable|null  $callback
      * @return mixed
      */
-    function tap($value, $callback)
+    function tap($value, $callback = null)
     {
+        if (is_null($callback)) {
+            return new HigherOrderTapProxy($value);
+        }
+
         $callback($value);
 
         return $value;

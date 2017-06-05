@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+<!DOCTYPE html>                 
 <html ng-app="fbApp">
     <head>
-        <meta charset="UTF-8" ng-app="myApp">
+        <meta charset="UTF-8">
         <title>Faveo | HELP DESK</title>
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
         <meta name="_token" content="{!! csrf_token() !!}"/>
@@ -524,6 +524,49 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
         });
     
     });        
+</script>
+<script src="{{asset('lb-faveo/js/angular/ng-flow-standalone.js')}}"></script>
+<script src="{{asset('lb-faveo/js/angular/fusty-flow.js')}}"></script>
+<script src="{{asset('lb-faveo/js/angular/fusty-flow-factory.js')}}"></script>
+<script src="{{asset('lb-faveo/js/angular/ng-file-upload.js')}}"></script>
+<script src="{{asset('lb-faveo/js/angular/ng-file-upload-shim.min.js')}}"></script>
+<script>
+ var app = angular.module('fbApp', ['angularMoment','flow','ngFileUpload']).directive('whenScrolled', function() {
+    return function(scope, elm, attr) {
+        var raw = elm[0];
+        console.log(raw);
+        elm.bind('scroll', function() {
+
+            if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+                scope.$apply(attr.whenScrolled);
+            }
+        });
+    };
+});
+app.constant("CSRF_TOKEN", '{{ csrf_token() }}');
+app.directive('mediaLibScrolled', function() {
+    return function(scope, elm, attr) {
+        var raw = elm[0];
+        console.log(raw);
+        elm.bind('scroll', function() {
+
+            if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+                scope.$apply(attr.mediaLibScrolled);
+            }
+        });
+    };
+});
+app.config(['flowFactoryProvider', function (flowFactoryProvider) {
+    
+    flowFactoryProvider.on('fileSuccess', function (file,message) {
+      console.log(file,message);
+        $('#mytabs a[href="#menu1"]').tab('show');
+        $("#progressHide").hide();
+        $("#progressHide").find('.transfer-box').remove();
+    });
+   
+    flowFactoryProvider.factory = fustyFlowFactory;
+  }]);
 </script>
 <script type="text/javascript">
                 function changeLang(lang) {

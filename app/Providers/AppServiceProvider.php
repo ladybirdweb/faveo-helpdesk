@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Queue::failing(function (JobFailed $event) {
-            loging('Failed Job - '.$event->connectionName, json_encode($event->job->payload()));
+            loging('Failed Job - '.$event->connectionName, json_encode([$event->job->payload(),'error'=>$event->exception->getMessage()]));
         });
         Route::singularResourceParameters(false);
         // Please note the different namespace

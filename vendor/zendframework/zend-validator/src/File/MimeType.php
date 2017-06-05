@@ -385,6 +385,7 @@ class MimeType extends AbstractValidator
             $this->type = null;
             if (! empty($this->finfo)) {
                 $this->type = finfo_file($this->finfo, $file);
+                finfo_close($this->finfo);
             }
         }
 

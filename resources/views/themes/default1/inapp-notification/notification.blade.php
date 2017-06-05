@@ -66,20 +66,9 @@
 </li>
 @push('scripts')
 <script>
-    var app = angular.module('fbApp', ['angularMoment']).directive('whenScrolled', function() {
-    return function(scope, elm, attr) {
-        var raw = elm[0];
-        console.log(raw);
-        elm.bind('scroll', function() {
 
-            if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
-                scope.$apply(attr.whenScrolled);
-            }
-        });
-    };
-});
 
-  app.controller('MainCtrl', function($scope,$http, $sce,$window) {
+  app.controller('MainCtrl', function($scope,$http, $sce,$window,$compile) {
         $scope.$sce=$sce;
          $scope.count=0;
          var count_api = "{!! url('notification/api/unseen/count') !!}/{{Auth::user()->id}}";
@@ -265,6 +254,217 @@
 
           
      
-});
+
+
+/**
+     * Wyswyg editor
+     */
+    
+      $scope.disable=true;
+      $scope.inlineImage=true;
+      $scope.arrayImage=[];
+      $scope.attachmentImage=[];
+      $scope.inlinImage=[];
+   $scope.getImageApi=function(){
+       
+      $http.get("{{url('media/files')}}").success(function(data){
+          $scope.arrayImage=data;
+          $scope.apiCalled=true;
+          console.log($scope.arrayImage);
+      })
+  }
+      $scope.insert=function(x,i,pathname,name){
+          
+           $scope.disable=false;
+          
+           $scope.preview=true;
+           $scope.viewImage=$scope.arrayImage[i]
+           if(x=="image"){
+               $scope.inlineImage=false;
+               $scope.viewImage=i;
+               $scope.pathName=pathname;
+               $scope.fileName=name;
+           }
+           else if(x=="text"){
+               $scope.inlineImage=true;
+               $scope.viewImage="{{asset('lb-faveo/media/images/txt.png')}}";
+               $scope.pathName=pathname;
+               $scope.fileName=name;
+           }
+           else{
+               $scope.inlineImage=true;
+               $scope.viewImage="{{asset('lb-faveo/media/images/common.png')}}";
+               $scope.pathName=pathname;
+               $scope.fileName=name;
+           }
+      }
+      $scope.noInsert=function(){
+           $scope.disable=true;
+           $scope.inlineImage=true;
+      }
+      
+       $scope.pushToEditor=function(){
+          var radios = document.getElementsByName('selection');
+           for (var i = 0, length = radios.length; i < length; i++) {
+             if (radios[i].checked) {
+                 var attaremove=$scope.arrayImage.data[i].filename;
+                 console.log(attaremove);
+                   $scope.attachmentImage.push($scope.arrayImage.data[i]);
+                   $compile($("#file_details").append("<div type='hidden' id='hidden' style='background-color: #f5f5f5;border: 1px solid #dcdcdc;font-weight: bold;margin-top:9px;overflow-y: hidden;padding: 4px 4px 4px 8px;max-width: 448px;' contenteditable='false'>"+$scope.arrayImage.data[i].filename+"("+$scope.arrayImage.data[i].size+"bytes)<i class='fa fa-times' aria-hidden='true' style='float:right;cursor: pointer;' ng-click='remove($event)'></i></div>"))($scope);
+                }
+          }
+      }
+      $scope.pushImage=function(){
+           var radios = document.getElementsByName('selection');
+           for (var i = 0, length = radios.length; i < length; i++) {
+             if (radios[i].checked) {
+                 
+                $(".cke_wysiwyg_frame").contents().find("body").append("<img  src="+$scope.arrayImage.data[i].base_64+" alt='"+$scope.arrayImage.data[i].filename+"' width='150px' height='150px' />");
+             }
+          }
+      }
+      $scope.remove=function(x){
+           var id=x.currentTarget.parentNode;
+           id.remove();
+          var value=x.currentTarget.parentNode.innerHTML;
+          var b=value.split('(');
+           $scope.attachmentImage=$.grep($scope.attachmentImage, function(e){
+                 return e.filename != b[0];
+                 
+             })
+           
+      }
+      $scope.getEditor=function(){
+          $("#t1").hide();
+          $("#show3").show();
+          $scope.editor=$(".cke_wysiwyg_frame").contents().find("body").html();
+          $scope.imagesAlt=[];     
+          $("<div>" + $scope.editor + "</div>").find('img').each(function(i) {
+              
+              $scope.imagesAlt.push(this.alt);
+              })
+         
+          for(var i in $scope.imagesAlt){
+            var x=$.grep($scope.arrayImage.data, function(e){
+                 return e.filename == $scope.imagesAlt[i];
+               })
+             $scope.inlinImage.push(x[0]);
+         }
+         $("<div>" + $scope.editor + "</div>").find('img').each(function(i) {
+            
+              var old=this.src;
+              
+              $scope.editor1=$scope.editor.replace(old,$scope.imagesAlt[i]);
+              $scope.editor=$scope.editor1;
+                   
+             
+             });
+             if($("<div>" + $scope.editor + "</div>").find('img').length==0){
+                 if($scope.editor=='<p><br></p>'){
+                     $scope.editor1="";
+                   }
+                else{
+                    $scope.editor1=$scope.editor;
+                }
+            }
+             $scope.inlinImage.forEach(function(v){ delete v.base_64 });
+             $scope.attachmentImage.forEach(function(v){ delete v.base_64 });
+
+              var serialize=$("#form3").serialize();
+              console.log(serialize);
+          $scope.editorValues={};
+          $scope.editorValues['content']=$scope.editor1;
+          $scope.editorValues['inline']=$scope.inlinImage;
+          $scope.editorValues['attachment']=$scope.attachmentImage;
+          console.log($scope.editorValues);
+          var config={
+                 headers : {
+                      'Content-Type' : 'application/json'
+                  }
+          }
+          var url = "{{url('/thread/reply')}}?"+serialize;
+          
+          $http.post(url,$scope.editorValues).success(function(data){
+              if(data.result.success!=null){
+                   location.reload();
+              }
+          })
+          .error(function(data){
+                $("#show3").hide();
+                $("#t1").show();
+                var res = "";
+                $.each(data, function (idx, topic) {
+                   res += "<li>" + topic + "</li>";
+                });
+                $("#reply-response").html("<div class='alert alert-danger'><strong>Whoops!</strong> There were some problems with your input.<br><br><ul>" +res+ "</ul></div>");
+           })
+        
+      }
+     $scope.callApi=function(){
+         
+         $scope.api2Called=true;
+         if($scope.arrayImage.next_page_url==null){
+                 $scope.api2Called=false;   
+        }
+         $http.get($scope.arrayImage.next_page_url).success(function(data){
+          	  console.log(data);
+                  $scope.api2Called=false;
+              [].push.apply($scope.arrayImage.data, data.data);
+              console.log($scope.arrayImage.data)
+                 $scope.arrayImage.next_page_url=data.next_page_url;
+         
+     })
+     
+ }
+ $scope.filterApi=function(x){
+         console.log(x.year,x.month,x.day,x.type);
+         var filter={};
+         if(x.year==undefined || x.year==""){
+              filter['year']="";
+             }
+         else{
+             filter['year']=x.year;
+         }
+         if(x.month==undefined || x.month==""){
+              filter['month']="";
+             }
+         else{
+             filter['month']=x.month;
+             
+         }
+         if(x.day==undefined || x.day==""){
+              filter['day']="";
+             }
+         else{
+             filter['day']=x.day;
+         }
+         if(x.type==undefined || x.type==""){
+              filter['type']="";
+             }
+         else{
+             filter['type']=x.type;
+         }
+        
+        if(filter.type==""&&filter.year==""&&filter.month==""&&filter.day!=""){
+             alert('Please Select a Particular Month and Year')
+        }
+        else if(filter.type==""&&filter.year==""&&filter.month!=""&&filter.day!=""){
+             alert('Please Select a Particular Year')
+        }
+        else if(filter.type==""&&filter.year==""&&filter.month!=""&&filter.day==""){
+             alert('Please Select a Particular Year')
+        }
+        else{
+            var config={
+              params:filter
+            }
+            console.log(config);
+            $http.get("{{url('media/files')}}",config).success(function(data){
+                $scope.arrayImage=data;
+            })
+        }
+         
+    }  
+         });
 </script>
 @endpush

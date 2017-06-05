@@ -132,7 +132,7 @@ abstract class Bundle implements BundleInterface
     /**
      * Returns the bundle parent name.
      *
-     * @return string The Bundle parent name it overrides or null if no parent
+     * @return string|null The Bundle parent name it overrides or null if no parent
      */
     public function getParent()
     {
@@ -183,8 +183,9 @@ abstract class Bundle implements BundleInterface
             }
             $class = $ns.'\\'.$file->getBasename('.php');
             if ($this->container) {
+                $commandIds = $this->container->hasParameter('console.command.ids') ? $this->container->getParameter('console.command.ids') : array();
                 $alias = 'console.command.'.strtolower(str_replace('\\', '_', $class));
-                if ($this->container->has($alias)) {
+                if (isset($commandIds[$alias]) || $this->container->has($alias)) {
                     continue;
                 }
             }

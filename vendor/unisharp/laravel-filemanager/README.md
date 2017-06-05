@@ -4,41 +4,42 @@
 [![License](https://poser.pugx.org/unisharp/laravel-filemanager/license)](https://packagist.org/packages/unisharp/laravel-filemanager)
 
  * Document : [unisharp.github.io/laravel-filemanager](http://unisharp.github.io/laravel-filemanager/)
+   * [Installation](http://unisharp.github.io/laravel-filemanager/installation)
+   * [Integration](http://unisharp.github.io/laravel-filemanager/integration)
+   * [Config](http://unisharp.github.io/laravel-filemanager/config)
+   * [Customization](http://unisharp.github.io/laravel-filemanager/customization)
+   * [Events](http://unisharp.github.io/laravel-filemanager/events)
+   * [Upgrade](http://unisharp.github.io/laravel-filemanager/upgrade)
  * Demo : [Laravel Filemanager container](https://github.com/UniSharp/laravel-filemanager-example-5.3)
 
 ## v1.7 released
+ * Please follow the intructions in [upgrade document](https://unisharp.github.io/laravel-filemanager/upgrade).
  * Important changes :
-  * All code refactored.
-  * Fix Windows compatibility.
-  * Fix file cannot be uploaded to "File Mode".
-  * Config file is also refactored, see [config document](https://unisharp.github.io/laravel-filemanager/config).
- * Please follow the intructions in [this document](https://unisharp.github.io/laravel-filemanager/upgrade) to upgrade.
+   * All code refactored.
+   * Fix Windows compatibility.
+   * Fix file cannot be uploaded to "File Mode".
+   * Config file is also refactored, see [config document](https://unisharp.github.io/laravel-filemanager/config).
 
-## Features
- * CKEditor and TinyMCE integration
- * Standalone button
- * Uploading validation
- * Cropping and resizing of images
- * Public and private folders for multi users
- * Customizable routes, middlewares, views, and folder path
- * Supports two types : files and images. Each type works in different directory.
- * Supported locales : ar, bg, de, el, en, es, fa, fr, he, hu, nl, pl, pt-BR, pt_PT, ro, ru, tr, zh-CN, zh-TW
+## Security
 
-PR is welcome!
+It is important to note that if you use your own routes **you must protect your routes to Laravel-Filemanager in order to prevent unauthorized uploads to your server**. Fortunately, Laravel makes this very easy.
 
-## Screenshots
-> Standalone button :
+If, for example, you want to ensure that only logged in users have the ability to access the Laravel-Filemanager, simply wrap the routes in a group, perhaps like this:
 
-![Standalone button demo](https://unisharp.github.io/laravel-filemanager/images/lfm01.png)
+```php
+Route::group(array('before' => 'auth'), function ()
+{
+    Route::get('/laravel-filemanager', '\Unisharp\Laravelfilemanager\controllers\LfmController@show');
+    Route::post('/laravel-filemanager/upload', '\Unisharp\Laravelfilemanager\controllers\LfmController@upload');
+    // list all lfm routes here...
+});
+```
 
-> Grid view :
+This approach ensures that only authenticated users have access to the Laravel-Filemanager. If you are using Middleware or some other approach to enforce security, modify as needed.
 
-![Grid view demo](https://unisharp.github.io/laravel-filemanager/images/lfm02.png)
+**If you use the laravel-filemanager default route, make sure the `auth` middleware (set in config/lfm.php) is enabled and functional**.
 
-> List view :
 
-![List view demo](https://unisharp.github.io/laravel-filemanager/images/lfm03.png)
-  
 ## Credits
 Special thanks to
 

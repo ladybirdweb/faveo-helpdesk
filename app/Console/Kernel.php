@@ -18,6 +18,10 @@ class Kernel extends ConsoleKernel
         'App\Console\Commands\SendReport',
         'App\Console\Commands\CloseWork',
         'App\Console\Commands\TicketFetch',
+        'App\Console\Commands\UpdateEncryption',
+        \App\Console\Commands\DropTables::class,
+        \App\Console\Commands\Install::class,
+        \App\Console\Commands\InstallDB::class,
     ];
 
     /**

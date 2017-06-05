@@ -117,42 +117,16 @@ class FormController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'formname' => 'required|unique:custom_forms,formname',
-            'label.*'  => 'required',
-            'name.*'   => 'required',
-            'type.*'   => 'required',
-        ]);
+    public function store(Request $request) {
         try {
-            $forms = new Forms();
-            $require = Input::get('required');
-
-            $forms->formname = Input::get('formname');
-            $forms->save();
-            $count = count(Input::get('name'));
-            $fields = [];
-            for ($i = 0; $i <= $count; $i++) {
-                if (!empty(Input::get('name')[$i])) {
-                    $name = str_slug(Input::get('name')[$i], '_');
-                    $field = Fields::create([
-                                'forms_id' => $forms->id,
-                                'label'    => Input::get('label')[$i],
-                                'name'     => $name,
-                                'type'     => Input::get('type')[$i],
-                                'required' => $require[$i],
-                    ]);
-                    $field_id = $field->id;
-                    $this->createValues($field_id, Input::get('value')[$i], null, $name);
-                }
-            }
-
-            return Redirect::back()->with('success', Lang::get('lang.successfully_created_form'));
-        } catch (Exception $ex) {
-            dd($ex);
-
-            return redirect()->back()->with('fails', $ex->getMessage());
+            $array = $request->all();
+            $collection = collect($array);
+            $json = $collection->toJson();
+            \DB::table('forms')->truncate();
+            \DB::table('forms')->insert(['form' => 'ticket', 'json' => $json]);
+            return response()->json('success');
+        } catch (\Exception $ex) {
+            return response()->json($ex->getMessage(), 500);
         }
     }
 

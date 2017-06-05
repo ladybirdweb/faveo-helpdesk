@@ -64,5 +64,6 @@ class Kernel extends HttpKernel
         'install'     => \App\Http\Middleware\Install::class,
         'redirect'    => \App\Http\Middleware\Redirect::class,
         'bindings'    => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'installer'=>\App\Http\Middleware\IsInstalled::class,
     ];
 }

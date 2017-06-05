@@ -83,14 +83,14 @@ class CreditCard extends AbstractValidator
         self::AMERICAN_EXPRESS => [15],
         self::DINERS_CLUB      => [14],
         self::DINERS_CLUB_US   => [16],
-        self::DISCOVER         => [16],
+        self::DISCOVER         => [16, 19],
         self::JCB              => [15, 16],
         self::LASER            => [16, 17, 18, 19],
         self::MAESTRO          => [12, 13, 14, 15, 16, 17, 18, 19],
         self::MASTERCARD       => [16],
         self::SOLO             => [16, 18, 19],
         self::UNIONPAY         => [16, 17, 18, 19],
-        self::VISA             => [16],
+        self::VISA             => [13, 16, 19],
     ];
 
     /**

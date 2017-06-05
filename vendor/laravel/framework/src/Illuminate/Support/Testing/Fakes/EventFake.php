@@ -2,7 +2,7 @@
 
 namespace Illuminate\Support\Testing\Fakes;
 
-use PHPUnit_Framework_Assert as PHPUnit;
+use PHPUnit\Framework\Assert as PHPUnit;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class EventFake implements Dispatcher
@@ -192,6 +192,6 @@ class EventFake implements Dispatcher
      */
     public function until($event, $payload = [])
     {
-        //
+        return $this->dispatch($event, $payload, true);
     }
 }
