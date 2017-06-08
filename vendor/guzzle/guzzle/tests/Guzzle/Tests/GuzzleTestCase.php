@@ -8,7 +8,7 @@ use Guzzle\Http\Message\Response;
 use Guzzle\Http\Message\RequestInterface;
 use Guzzle\Tests\Http\Message\HeaderComparison;
 use Guzzle\Plugin\Mock\MockPlugin;
-use Guzzle\Service\Client;
+use Guzzle\Http\Client;
 use Guzzle\Service\Builder\ServiceBuilderInterface;
 use Guzzle\Service\Builder\ServiceBuilder;
 use Guzzle\Tests\Mock\MockObserver;
@@ -99,7 +99,7 @@ abstract class GuzzleTestCase extends \PHPUnit_Framework_TestCase
     /**
      * Get a wildcard observer for an event dispatcher
      *
-     * @param HasDispatcherInterface $hasEvent
+     * @param HasDispatcherInterface $hasDispatcher
      *
      * @return MockObserver
      */

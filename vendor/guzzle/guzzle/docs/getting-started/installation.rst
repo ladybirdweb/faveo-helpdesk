@@ -24,7 +24,7 @@ project.
     curl -sS https://getcomposer.org/installer | php
 
     # Add Guzzle as a dependency
-    php composer.phar require guzzle/guzzle:~3.7
+    php composer.phar require guzzle/guzzle:~3.9
 
 After installing, you need to require Composer's autoloader:
 
@@ -115,7 +115,7 @@ You can install a specific version of Guzzle by providing a version number suffi
 
 .. code-block:: bash
 
-    pear install guzzle/guzzle-3.7.0
+    pear install guzzle/guzzle-3.9.0
 
 Contributing to Guzzle
 ----------------------

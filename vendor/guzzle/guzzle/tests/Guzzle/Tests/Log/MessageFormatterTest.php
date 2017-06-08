@@ -110,7 +110,7 @@ class MessageFormatterTest extends \Guzzle\Tests\GuzzleTestCase
     {
         $formatter = new MessageFormatter('{connect_time}/{total_time}');
         $response = $this->getMockBuilder('Guzzle\Http\Message\Response')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(array(200))
             ->setMethods(array('getInfo'))
             ->getMock();
         $response->expects($this->exactly(2))

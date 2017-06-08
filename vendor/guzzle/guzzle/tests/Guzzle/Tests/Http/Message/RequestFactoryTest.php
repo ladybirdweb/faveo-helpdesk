@@ -93,7 +93,7 @@ class HttpRequestFactoryTest extends \Guzzle\Tests\GuzzleTestCase
     {
         $request = RequestFactory::getInstance()->create('OPTIONS', 'http://www.example.com/');
         $this->assertEquals('OPTIONS', $request->getMethod());
-        $this->assertInstanceOf('Guzzle\\Http\\Message\\Request', $request);
+        $this->assertInstanceOf('Guzzle\\Http\\Message\\EntityEnclosingRequest', $request);
     }
 
     public function testCreatesNewPutRequestWithBody()
@@ -421,7 +421,10 @@ class HttpRequestFactoryTest extends \Guzzle\Tests\GuzzleTestCase
 
     public function testCanAddPlugins()
     {
-        $mock = new MockPlugin(array(new Response(200)));
+        $mock = new MockPlugin(array(
+            new Response(200),
+            new Response(200)
+        ));
         $client = new Client();
         $client->addSubscriber($mock);
         $request = $client->get('/', array(), array(

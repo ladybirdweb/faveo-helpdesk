@@ -99,7 +99,7 @@ endpoint and HTTP method. If an API has a ``DELETE /users/:id`` operation, a sat
                     "errorResponses": [
                         {
                             "code": 500,
-                            "phrase": "Unexpected Error",
+                            "reason": "Unexpected Error",
                             "class": "string"
                         }
                     ],
@@ -125,7 +125,7 @@ endpoint and HTTP method. If an API has a ``DELETE /users/:id`` operation, a sat
     "responseNotes", "string", "A description of the response returned by the operation"
     "responseType", "string", "The type of response that the operation creates: one of primitive, class, model, or documentation. If not specified, this value will be automatically inferred based on whether or not there is a model matching the name, if a matching class name is found, or set to 'primitive' by default."
     "deprecated", "boolean", "Whether or not the operation is deprecated"
-    "errorResponses", "array", "Errors that could occur while executing the operation. Each item of the array is an object that can contain a 'code' (HTTP response status code of the error), 'phrase' (reason phrase or description of the error), and 'class' (an exception class that will be raised when this error is encountered)"
+    "errorResponses", "array", "Errors that could occur while executing the operation. Each item of the array is an object that can contain a 'code' (HTTP response status code of the error), 'reason' (reason phrase or description of the error), and 'class' (an exception class that will be raised when this error is encountered)"
     "data", "object", "Any arbitrary data to associate with the operation"
     "parameters", "object containing :ref:`parameter-schema` objects", "Parameters of the operation. Parameters are used to define how input data is serialized into a HTTP request."
     "additionalParameters", "A single :ref:`parameter-schema` object", "Validation and serialization rules for any parameter supplied to the operation that was not explicitly defined."
@@ -216,7 +216,7 @@ Here's a very simple example of implementing a custom responseClass object.
         public static function fromCommand(OperationCommand $command)
         {
             $response = $command->getResponse();
-            $xml = $command->xml();
+            $xml = $response->xml();
 
             return new self((string) $xml->name);
         }
@@ -232,7 +232,7 @@ errorResponses
 
 ``errorResponses`` is an array containing objects that define the errors that could occur while executing the
 operation. Each item of the array is an object that can contain a 'code' (HTTP response status code of the error),
-'phrase' (reason phrase or description of the error), and 'class' (an exception class that will be raised when this
+'reason' (reason phrase or description of the error), and 'class' (an exception class that will be raised when this
 error is encountered).
 
 ErrorResponsePlugin
@@ -246,7 +246,7 @@ checked against the list of error responses for an exact match using the followi
 
 1. Does the errorResponse have a defined ``class``?
 2. Is the errorResponse ``code`` equal to the status code of the response?
-3. Is the errorResponse ``phrase`` equal to the reason phrase of the response?
+3. Is the errorResponse ``reason`` equal to the reason phrase of the response?
 4. Throw the exception stored in the ``class`` attribute of the errorResponse.
 
 The ``class`` attribute must point to a class that implements

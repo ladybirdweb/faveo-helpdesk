@@ -71,7 +71,7 @@
                             "type": "number",
                             "description": "HTTP response status code of the error"
                         },
-                        "phrase": {
+                        "reason": {
                             "type": "string",
                             "description": "Response reason phrase or description of the error"
                         },

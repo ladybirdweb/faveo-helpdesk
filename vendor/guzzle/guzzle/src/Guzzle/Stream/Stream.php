@@ -100,8 +100,8 @@ class Stream implements StreamInterface
         }
 
         $ctx = hash_init($algo);
-        while ($data = $stream->read(8192)) {
-            hash_update($ctx, $data);
+        while (!$stream->feof()) {
+            hash_update($ctx, $stream->read(8192));
         }
 
         $out = hash_final($ctx, (bool) $rawOutput);

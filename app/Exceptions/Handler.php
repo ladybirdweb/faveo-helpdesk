@@ -68,6 +68,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        
         switch ($e) {
             case $e instanceof \Illuminate\Http\Exception\HttpResponseException:
                 return parent::render($request, $e);
@@ -90,6 +91,10 @@ class Handler extends ExceptionHandler
      */
     public function render500($request, $e)
     {
+        $seg = $request->segments();
+        if (in_array('api', $seg)) {
+            return response()->json(['error' => $e->getMessage()],500);
+        }
         if (config('app.debug') == true) {
             return parent::render($request, $e);
         } elseif ($e instanceof ValidationException) {

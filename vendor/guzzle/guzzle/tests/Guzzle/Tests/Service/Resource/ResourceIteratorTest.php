@@ -66,7 +66,6 @@ class ResourceIteratorTest extends \Guzzle\Tests\GuzzleTestCase
         ));
 
         $d = array();
-        reset($ri);
         foreach ($ri as $data) {
             $d[] = $data;
         }

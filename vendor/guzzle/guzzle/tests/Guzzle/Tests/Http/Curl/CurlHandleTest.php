@@ -140,7 +140,9 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
             "couldn't connect to host",
             'timeout was reached',
             'connection time-out',
-            'connect() timed out!'
+            'connect() timed out!',
+            'failed connect to 127.0.0.1:123; connection refused',
+            'failed to connect to 127.0.0.1 port 123: connection refused'
         );
         $this->assertTrue(in_array(strtolower($h->getError()), $errors), $h->getError() . ' was not the error');
 
@@ -231,7 +233,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 CURLOPT_NOBODY => 1
             )),
             // Send a GET using basic auth
-            array('GET', 'https://michael:123@localhost/index.html?q=2', null, null, array(
+            array('GET', 'https://michael:123@127.0.0.1/index.html?q=2', null, null, array(
                 CURLOPT_RETURNTRANSFER => 0,
                 CURLOPT_HEADER => 0,
                 CURLOPT_CONNECTTIMEOUT => 150,
@@ -239,20 +241,20 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 CURLOPT_HEADERFUNCTION => 'callback',
                 CURLOPT_HTTPHEADER => array(
                     'Accept:',
-                    'Host: localhost',
+                    'Host: 127.0.0.1',
                     'Authorization: Basic ' . $auth,
                     'User-Agent: ' . $userAgent
                 ),
                 CURLOPT_PORT => 443
             )),
             // Send a GET request with custom headers
-            array('GET', 'http://localhost:8124/', array(
+            array('GET', 'http://127.0.0.1:8124/', array(
                 'x-test-data' => 'Guzzle'
             ), null, array(
                 CURLOPT_PORT => 8124,
                 CURLOPT_HTTPHEADER => array(
                     'Accept:',
-                    'Host: localhost:8124',
+                    'Host: 127.0.0.1:8124',
                     'x-test-data: Guzzle',
                     'User-Agent: ' . $userAgent
                 )
@@ -262,7 +264,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 'x-test-data'      => 'Guzzle'
             )),
             // Send a POST using a query string
-            array('POST', 'http://localhost:8124/post.php', null, $qs, array(
+            array('POST', 'http://127.0.0.1:8124/post.php', null, $qs, array(
                 CURLOPT_RETURNTRANSFER => 0,
                 CURLOPT_HEADER => 0,
                 CURLOPT_CONNECTTIMEOUT => 150,
@@ -272,7 +274,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 CURLOPT_HTTPHEADER => array (
                     'Expect:',
                     'Accept:',
-                    'Host: localhost:8124',
+                    'Host: 127.0.0.1:8124',
                     'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
                     'User-Agent: ' . $userAgent
                 )
@@ -285,7 +287,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 '!Transfer-Encoding' => null
             )),
             // Send a PUT using raw data
-            array('PUT', 'http://localhost:8124/put.php', null, EntityBody::factory(fopen($testFile, 'r+')), array(
+            array('PUT', 'http://127.0.0.1:8124/put.php', null, EntityBody::factory(fopen($testFile, 'r+')), array(
                 CURLOPT_RETURNTRANSFER => 0,
                 CURLOPT_HEADER => 0,
                 CURLOPT_CONNECTTIMEOUT => 150,
@@ -296,7 +298,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 CURLOPT_HTTPHEADER => array (
                     'Expect:',
                     'Accept:',
-                    'Host: localhost:8124',
+                    'Host: 127.0.0.1:8124',
                     'User-Agent: ' . $userAgent
                 )
             ), array(
@@ -307,7 +309,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 '!Transfer-Encoding' => null
             )),
             // Send a POST request using an array of fields
-            array('POST', 'http://localhost:8124/post.php', null, array(
+            array('POST', 'http://127.0.0.1:8124/post.php', null, array(
                 'x' => 'y',
                 'a' => 'b'
             ), array(
@@ -321,7 +323,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 CURLOPT_HTTPHEADER => array (
                     'Expect:',
                     'Accept:',
-                    'Host: localhost:8124',
+                    'Host: 127.0.0.1:8124',
                     'Content-Type: application/x-www-form-urlencoded; charset=utf-8',
                     'User-Agent: ' . $userAgent
                 )
@@ -334,7 +336,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 '!Transfer-Encoding' => null
             )),
             // Send a POST request with raw POST data and a custom content-type
-            array('POST', 'http://localhost:8124/post.php', array(
+            array('POST', 'http://127.0.0.1:8124/post.php', array(
                 'Content-Type' => 'application/json'
             ), '{"hi":"there"}', array(
                 CURLOPT_RETURNTRANSFER => 0,
@@ -348,7 +350,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 CURLOPT_HTTPHEADER => array (
                     'Expect:',
                     'Accept:',
-                    'Host: localhost:8124',
+                    'Host: 127.0.0.1:8124',
                     'Content-Type: application/json',
                     'User-Agent: ' . $userAgent
                 ),
@@ -361,7 +363,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 '!Transfer-Encoding' => null
             )),
             // Send a POST request with raw POST data, a custom content-type, and use chunked encoding
-            array('POST', 'http://localhost:8124/post.php', array(
+            array('POST', 'http://127.0.0.1:8124/post.php', array(
                 'Content-Type'      => 'application/json',
                 'Transfer-Encoding' => 'chunked'
             ), '{"hi":"there"}', array(
@@ -375,7 +377,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 CURLOPT_HTTPHEADER => array (
                     'Expect:',
                     'Accept:',
-                    'Host: localhost:8124',
+                    'Host: 127.0.0.1:8124',
                     'Transfer-Encoding: chunked',
                     'Content-Type: application/json',
                     'User-Agent: ' . $userAgent
@@ -389,12 +391,12 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 '!Content-Length'  => ''
             )),
             // Send a POST request with no body
-            array('POST', 'http://localhost:8124/post.php', null, '', array(
+            array('POST', 'http://127.0.0.1:8124/post.php', null, '', array(
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_HTTPHEADER => array (
                     'Expect:',
                     'Accept:',
-                    'Host: localhost:8124',
+                    'Host: 127.0.0.1:8124',
                     'User-Agent: ' . $userAgent
                 )
             ), array(
@@ -404,12 +406,12 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 '!Transfer-Encoding' => null
             )),
             // Send a POST request with empty post fields
-            array('POST', 'http://localhost:8124/post.php', null, array(), array(
+            array('POST', 'http://127.0.0.1:8124/post.php', null, array(), array(
                 CURLOPT_CUSTOMREQUEST => 'POST',
                 CURLOPT_HTTPHEADER => array (
                     'Expect:',
                     'Accept:',
-                    'Host: localhost:8124',
+                    'Host: 127.0.0.1:8124',
                     'User-Agent: ' . $userAgent
                 )
             ), array(
@@ -419,23 +421,23 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
                 '!Transfer-Encoding' => null
             )),
             // Send a PATCH request
-            array('PATCH', 'http://localhost:8124/patch.php', null, 'body', array(
+            array('PATCH', 'http://127.0.0.1:8124/patch.php', null, 'body', array(
                 CURLOPT_INFILESIZE => 4,
                 CURLOPT_HTTPHEADER => array (
                     'Expect:',
                     'Accept:',
-                    'Host: localhost:8124',
+                    'Host: 127.0.0.1:8124',
                     'User-Agent: ' . $userAgent
                 )
             )),
             // Send a DELETE request with a body
-            array('DELETE', 'http://localhost:8124/delete.php', null, 'body', array(
+            array('DELETE', 'http://127.0.0.1:8124/delete.php', null, 'body', array(
                 CURLOPT_CUSTOMREQUEST => 'DELETE',
                 CURLOPT_INFILESIZE => 4,
                 CURLOPT_HTTPHEADER => array (
                     'Expect:',
                     'Accept:',
-                    'Host: localhost:8124',
+                    'Host: 127.0.0.1:8124',
                     'User-Agent: ' . $userAgent
                 )
             ), array(
@@ -463,7 +465,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
             )),
         );
 
-        $postTest = array('POST', 'http://localhost:8124/post.php', null, $postBody, array(
+        $postTest = array('POST', 'http://127.0.0.1:8124/post.php', null, $postBody, array(
             CURLOPT_RETURNTRANSFER => 0,
             CURLOPT_HEADER => 0,
             CURLOPT_CONNECTTIMEOUT => 150,
@@ -475,7 +477,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
             ),
             CURLOPT_HTTPHEADER => array (
                 'Accept:',
-                'Host: localhost:8124',
+                'Host: 127.0.0.1:8124',
                 'Content-Type: multipart/form-data',
                 'Expect: 100-Continue',
                 'User-Agent: ' . $userAgent
@@ -561,7 +563,7 @@ class CurlHandleTest extends \Guzzle\Tests\GuzzleTestCase
 
     public function testFactoryUsesSpecifiedProtocol()
     {
-        $request = RequestFactory::getInstance()->create('GET', 'http://localhost:8124/');
+        $request = RequestFactory::getInstance()->create('GET', 'http://127.0.0.1:8124/');
         $request->setProtocolVersion('1.1');
         $handle = CurlHandle::factory($request);
         $options = $handle->getOptions();

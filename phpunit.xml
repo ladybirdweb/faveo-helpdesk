@@ -10,8 +10,18 @@
          stopOnFailure="false"
          syntaxCheck="false">
     <testsuites>
-        <testsuite name="Application Test Suite">
-            <directory>./tests/</directory>
+        <testsuite name="api">
+            <directory>./tests/feature/api</directory>
+        </testsuite>
+        <testsuite name="dusk">
+            <directory>./tests/Browser</directory>
+        </testsuite>
+        <testsuite name="install">
+            <directory>./tests/Browser/Dusk/Install</directory>
+        </testsuite>
+        
+        <testsuite name="database">
+            <directory>./tests/feature/Database</directory>
         </testsuite>
     </testsuites>
     <php>

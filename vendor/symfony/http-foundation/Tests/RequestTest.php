@@ -1057,7 +1057,7 @@ class RequestTest extends TestCase
      */
     public function testGetContentCantBeCalledTwiceWithResources($first, $second)
     {
-        if (PHP_VERSION_ID >= 50600) {
+        if (\PHP_VERSION_ID >= 50600) {
             $this->markTestSkipped('PHP >= 5.6 allows to open php://input several times.');
         }
 
@@ -1729,7 +1729,7 @@ class RequestTest extends TestCase
 
     /**
      * @group legacy
-     * @expectedDeprecation The "Symfony\Component\HttpFoundation\Request::setTrustedHeaderName()" method is deprecated since version 3.3 and will be removed in 4.0. Use "X-Forwarded-*" headers or the "Forwarded" header defined in RFC7239, and the $trustedHeaderSet argument of the Request::setTrustedProxies() method instead.
+     * @expectedDeprecation The "Symfony\Component\HttpFoundation\Request::setTrustedHeaderName()" method is deprecated since version 3.3 and will be removed in 4.0. Use the $trustedHeaderSet argument of the Request::setTrustedProxies() method instead.
      */
     public function testLegacyTrustedProxies()
     {

@@ -7,6 +7,8 @@ use Guzzle\Common\Event;
 use Guzzle\Http\Exception\MultiTransferException;
 use Guzzle\Http\Exception\CurlException;
 use Guzzle\Http\Message\RequestInterface;
+use Guzzle\Http\Message\EntityEnclosingRequestInterface;
+use Guzzle\Http\Exception\RequestException;
 
 /**
  * Send {@see RequestInterface} objects in parallel using curl_multi
@@ -39,8 +41,12 @@ class CurlMulti extends AbstractHasDispatcher implements CurlMultiInterface
         CURLM_INTERNAL_ERROR  => array('CURLM_INTERNAL_ERROR', 'This can only be returned if libcurl bugs. Please report it to us!')
     );
 
-    public function __construct()
+    /** @var float */
+    protected $selectTimeout;
+
+    public function __construct($selectTimeout = 1.0)
     {
+        $this->selectTimeout = $selectTimeout;
         $this->multiHandle = curl_multi_init();
         // @codeCoverageIgnoreStart
         if ($this->multiHandle === false) {
@@ -153,11 +159,10 @@ class CurlMulti extends AbstractHasDispatcher implements CurlMultiInterface
         try {
             $state = $request->setState(RequestInterface::STATE_TRANSFER);
             if ($state == RequestInterface::STATE_TRANSFER) {
-                // Add the request curl handle to the multi handle
-                $handle = $this->createCurlHandle($request)->getHandle();
-                $this->checkCurlResult(curl_multi_add_handle($this->multiHandle, $handle));
+                $this->addHandle($request);
             } else {
-                // Requests might decide they don't need to be sent just before transfer (e.g. CachePlugin)
+                // Requests might decide they don't need to be sent just before
+                // transfer (e.g. CachePlugin)
                 $this->remove($request);
                 if ($state == RequestInterface::STATE_COMPLETE) {
                     $this->successful[] = $request;
@@ -167,6 +172,14 @@ class CurlMulti extends AbstractHasDispatcher implements CurlMultiInterface
             // Queue the exception to be thrown when sent
             $this->removeErroredRequest($request, $e);
         }
+    }
+
+    private function addHandle(RequestInterface $request)
+    {
+        $handle = $this->createCurlHandle($request)->getHandle();
+        $this->checkCurlResult(
+            curl_multi_add_handle($this->multiHandle, $handle)
+        );
     }
 
     /**
@@ -229,7 +242,7 @@ class CurlMulti extends AbstractHasDispatcher implements CurlMultiInterface
                 // Perform a usleep if a select returns -1: https://bugs.php.net/bug.php?id=61141
                 usleep(150);
             }
-            $selectTimeout = 1;
+            $selectTimeout = $this->selectTimeout;
         } while ($active);
     }
 
@@ -283,23 +296,31 @@ class CurlMulti extends AbstractHasDispatcher implements CurlMultiInterface
         $this->removeHandle($request);
 
         if (!$curlException) {
-            $state = $request->setState(RequestInterface::STATE_COMPLETE, array('handle' => $handle));
-            // Only remove the request if it wasn't resent as a result of the state change
-            if ($state != RequestInterface::STATE_TRANSFER) {
-                $this->remove($request);
+            if ($this->validateResponseWasSet($request)) {
+                $state = $request->setState(
+                    RequestInterface::STATE_COMPLETE,
+                    array('handle' => $handle)
+                );
+                // Only remove the request if it wasn't resent as a result of
+                // the state change
+                if ($state != RequestInterface::STATE_TRANSFER) {
+                    $this->remove($request);
+                }
             }
-        } else {
-            // Set the state of the request to an error
-            $state = $request->setState(RequestInterface::STATE_ERROR, array('exception' => $curlException));
-            // Allow things to ignore the error if possible
-            if ($state != RequestInterface::STATE_TRANSFER) {
-                $this->remove($request);
-            }
-            // The error was not handled, so fail
-            if ($state == RequestInterface::STATE_ERROR) {
-                /** @var CurlException $curlException */
-                throw $curlException;
-            }
+            return;
+        }
+
+        // Set the state of the request to an error
+        $state = $request->setState(RequestInterface::STATE_ERROR, array('exception' => $curlException));
+        // Allow things to ignore the error if possible
+        if ($state != RequestInterface::STATE_TRANSFER) {
+            $this->remove($request);
+        }
+
+        // The error was not handled, so fail
+        if ($state == RequestInterface::STATE_ERROR) {
+            /** @var CurlException $curlException */
+            throw $curlException;
         }
     }
 
@@ -359,5 +380,44 @@ class CurlMulti extends AbstractHasDispatcher implements CurlMultiInterface
                 : 'Unexpected cURL error: ' . $code
             );
         }
+    }
+
+    /**
+     * @link https://github.com/guzzle/guzzle/issues/710
+     */
+    private function validateResponseWasSet(RequestInterface $request)
+    {
+        if ($request->getResponse()) {
+            return true;
+        }
+
+        $body = $request instanceof EntityEnclosingRequestInterface
+            ? $request->getBody()
+            : null;
+
+        if (!$body) {
+            $rex = new RequestException(
+                'No response was received for a request with no body. This'
+                . ' could mean that you are saturating your network.'
+            );
+            $rex->setRequest($request);
+            $this->removeErroredRequest($request, $rex);
+        } elseif (!$body->isSeekable() || !$body->seek(0)) {
+            // Nothing we can do with this. Sorry!
+            $rex = new RequestException(
+                'The connection was unexpectedly closed. The request would'
+                . ' have been retried, but attempting to rewind the'
+                . ' request body failed.'
+            );
+            $rex->setRequest($request);
+            $this->removeErroredRequest($request, $rex);
+        } else {
+            $this->remove($request);
+            // Add the request back to the batch to retry automatically.
+            $this->requests[] = $request;
+            $this->addHandle($request);
+        }
+
+        return false;
     }
 }

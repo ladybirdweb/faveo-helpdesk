@@ -16,8 +16,8 @@ class ClosureLogAdapterTest extends \Guzzle\Tests\GuzzleTestCase
         $this->adapter = new ClosureLogAdapter(function($message, $priority, $extras = null) use ($that, &$modified) {
             $modified = array($message, $priority, $extras);
         });
-        $this->adapter->log('test', LOG_NOTICE, 'localhost');
-        $this->assertEquals(array('test', LOG_NOTICE, 'localhost'), $modified);
+        $this->adapter->log('test', LOG_NOTICE, '127.0.0.1');
+        $this->assertEquals(array('test', LOG_NOTICE, '127.0.0.1'), $modified);
     }
 
     /**

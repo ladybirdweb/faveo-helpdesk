@@ -155,7 +155,8 @@ class OauthPlugin implements EventSubscriberInterface
         $params = $this->prepareParameters($params);
 
         // Build signing string from combined params
-        $parameterString = new QueryString($params);
+        $parameterString = clone $request->getQuery();
+        $parameterString->replace($params);
 
         $url = Url::factory($request->getUrl())->setQuery('')->setFragment(null);
 
@@ -225,7 +226,7 @@ class OauthPlugin implements EventSubscriberInterface
 
         // Sort params
         $params = $params->toArray();
-        ksort($params);
+        uksort($params, 'strcmp');
 
         return $params;
     }

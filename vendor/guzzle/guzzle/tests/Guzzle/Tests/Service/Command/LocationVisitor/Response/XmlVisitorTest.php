@@ -412,4 +412,20 @@ class XmlVisitorTest extends AbstractResponseVisitorTest
         $visitor->visit($this->command, $this->response, $param, $this->value);
         $this->assertEquals(array('foo' => array('bar' => 15)), $this->value);
     }
+
+    public function testProperlyHandlesEmptyStringValues()
+    {
+        $visitor = new Visitor();
+        $param = new Parameter(array(
+            'name'                 => 'foo',
+            'type'                 => 'object',
+            'properties'           => array(
+                'bar' => array('type' => 'string')
+            ),
+        ));
+        $xml = '<wrapper><foo><bar /></foo></wrapper>';
+        $value = json_decode(json_encode(new \SimpleXMLElement($xml)), true);
+        $visitor->visit($this->command, $this->response, $param, $value);
+        $this->assertEquals(array('foo' => array('bar' => '')), $value);
+    }
 }

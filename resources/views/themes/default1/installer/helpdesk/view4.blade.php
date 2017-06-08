@@ -76,8 +76,19 @@ if (DB_HOST && DB_USER && DB_NAME) {
                         $results[] = new TestResult('Database is empty');
                         $mysqli_ok = true;
                     } else {
-                        $results[] = new TestResult('Faveo installation requires an empty database, your database already has tables and data in it.', STATUS_ERROR);
-                        $mysqli_ok = false;
+                        $db = new \App\Database\DbConnect([
+                            'driver'   => $default,
+                            'database' => DB_NAME,
+                            'username' => DB_USER,
+                            'password' => DB_PASS,
+                            'host'=>DB_HOST,
+                        ]);
+                        //dd($db);
+                        $db->dropTables();
+                        $results[] = new TestResult('Database is empty');
+                        $mysqli_ok = true;
+//                        $results[] = new TestResult('Faveo installation requires an empty database, your database already has tables and data in it.', STATUS_ERROR);
+//                        $mysqli_ok = false;
                     }
                 } else {
                     $results[] = new TestResult('Your MySQL version is ' . $mysqli_version . '. We recommend upgrading to at least MySQL5!', STATUS_ERROR);

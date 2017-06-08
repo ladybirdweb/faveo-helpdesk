@@ -45,7 +45,6 @@ htmlhelp_basename = 'Guzzledoc'
 sys.path.insert(0, '/Users/dowling/projects/guzzle_sphinx_theme')
 
 import guzzle_sphinx_theme
-pygments_style = 'guzzle_sphinx_theme.GuzzleStyle'
 html_translator_class = 'guzzle_sphinx_theme.HTMLTranslator'
 html_theme_path = guzzle_sphinx_theme.html_theme_path()
 html_theme = 'guzzle_sphinx_theme'

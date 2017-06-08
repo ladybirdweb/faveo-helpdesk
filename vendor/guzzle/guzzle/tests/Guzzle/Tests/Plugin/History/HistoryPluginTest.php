@@ -24,7 +24,7 @@ class HistoryPluginTest extends \Guzzle\Tests\GuzzleTestCase
     protected function addRequests(HistoryPlugin $h, $num)
     {
         $requests = array();
-        $client = new Client('http://localhost/');
+        $client = new Client('http://127.0.0.1/');
         for ($i = 0; $i < $num; $i++) {
             $requests[$i] = $client->get();
             $requests[$i]->setResponse(new Response(200), true);
@@ -103,7 +103,7 @@ class HistoryPluginTest extends \Guzzle\Tests\GuzzleTestCase
     public function testUpdatesAddRequests()
     {
         $h = new HistoryPlugin();
-        $client = new Client('http://localhost/');
+        $client = new Client('http://127.0.0.1/');
         $client->getEventDispatcher()->addSubscriber($h);
 
         $request = $client->get();
@@ -115,7 +115,7 @@ class HistoryPluginTest extends \Guzzle\Tests\GuzzleTestCase
 
     public function testCanCastToString()
     {
-        $client = new Client('http://localhost/');
+        $client = new Client('http://127.0.0.1/');
         $h = new HistoryPlugin();
         $client->getEventDispatcher()->addSubscriber($h);
 
@@ -132,7 +132,7 @@ class HistoryPluginTest extends \Guzzle\Tests\GuzzleTestCase
         $this->assertEquals(3, count($mock->getReceivedRequests()));
 
         $h = str_replace("\r", '', $h);
-        $this->assertContains("> GET / HTTP/1.1\nHost: localhost\nUser-Agent:", $h);
+        $this->assertContains("> GET / HTTP/1.1\nHost: 127.0.0.1\nUser-Agent:", $h);
         $this->assertContains("< HTTP/1.1 301 Moved Permanently\nLocation: /redirect1", $h);
         $this->assertContains("< HTTP/1.1 307 Temporary Redirect\nLocation: /redirect2", $h);
         $this->assertContains("< HTTP/1.1 200 OK\nContent-Length: 2\n\nHI", $h);

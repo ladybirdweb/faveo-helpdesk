@@ -61,11 +61,11 @@ abstract class Kernel implements KernelInterface, TerminableInterface
 
     private $projectDir;
 
-    const VERSION = '3.3.0';
-    const VERSION_ID = 30300;
+    const VERSION = '3.3.2';
+    const VERSION_ID = 30302;
     const MAJOR_VERSION = 3;
     const MINOR_VERSION = 3;
-    const RELEASE_VERSION = 0;
+    const RELEASE_VERSION = 2;
     const EXTRA_VERSION = '';
 
     const END_OF_MAINTENANCE = '01/2018';
@@ -354,7 +354,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
      */
     public function loadClassCache($name = 'classes', $extension = '.php')
     {
-        if (PHP_VERSION_ID >= 70000) {
+        if (\PHP_VERSION_ID >= 70000) {
             @trigger_error(__METHOD__.'() is deprecated since version 3.3, to be removed in 4.0.', E_USER_DEPRECATED);
         }
 
@@ -368,7 +368,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
      */
     public function setClassCache(array $classes)
     {
-        if (PHP_VERSION_ID >= 70000) {
+        if (\PHP_VERSION_ID >= 70000) {
             @trigger_error(__METHOD__.'() is deprecated since version 3.3, to be removed in 4.0.', E_USER_DEPRECATED);
         }
 
@@ -420,7 +420,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
      */
     protected function doLoadClassCache($name, $extension)
     {
-        if (PHP_VERSION_ID >= 70000) {
+        if (\PHP_VERSION_ID >= 70000) {
             @trigger_error(__METHOD__.'() is deprecated since version 3.3, to be removed in 4.0.', E_USER_DEPRECATED);
         }
 
@@ -822,7 +822,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
 
         $output .= $rawChunk;
 
-        if (PHP_VERSION_ID >= 70000) {
+        if (\PHP_VERSION_ID >= 70000) {
             // PHP 7 memory manager will not release after token_get_all(), see https://bugs.php.net/70098
             unset($tokens, $rawChunk);
             gc_mem_caches();
@@ -838,7 +838,7 @@ abstract class Kernel implements KernelInterface, TerminableInterface
 
     public function unserialize($data)
     {
-        if (PHP_VERSION_ID >= 70000) {
+        if (\PHP_VERSION_ID >= 70000) {
             list($environment, $debug) = unserialize($data, array('allowed_classes' => false));
         } else {
             list($environment, $debug) = unserialize($data);

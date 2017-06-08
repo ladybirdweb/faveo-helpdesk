@@ -85,7 +85,7 @@ class Install extends Command {
         foreach ($extensions as $key => $extension) {
             $result[$key]['extension'] = $extension;
             if (!extension_loaded($extension)) {
-                $result[$key]['status'] = "Not Loading, Please open please open '" . php_ini_loaded_file() . "' and add 'extension = " . $extension;
+                $result[$key]['status'] = "Not Loading, Please open '" . php_ini_loaded_file() . "' and add 'extension = " . $extension;
             } else {
                 $result[$key]['status'] = "Loading";
             }

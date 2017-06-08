@@ -17,7 +17,7 @@ pulling out chunks of values from the inner iterator.
     use Guzzle\Iterator\ChunkedIterator;
 
     $inner = new ArrayIterator(range(0, 8));
-    $chunkedIterator = new ChunkedIterator($inner, 10);
+    $chunkedIterator = new ChunkedIterator($inner, 2);
 
     foreach ($chunkedIterator as $chunk) {
         echo implode(', ', $chunk) . "\n";
@@ -63,7 +63,7 @@ This iterator modifies the values of the inner iterator before yielding.
 
     use Guzzle\Iterator\MapIterator;
 
-    $innner = new ArrayIterator(range(0, 3));
+    $inner = new ArrayIterator(range(0, 3));
 
     $mapIterator = new MapIterator($inner, function ($value) {
         return $value * 10;

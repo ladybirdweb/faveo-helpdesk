@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
+class ComposerStaticInit9293b50e719463adfa690d4df664970b
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -19,11 +19,11 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
-        '1e298922c3e2134d42dcdb03e6d5f55a' => __DIR__ . '/..' . '/torann/geoip/src/helpers.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
         '017b24472353920ed42bb364f7653c43' => __DIR__ . '/..' . '/propaganistas/laravel-phone/src/helpers.php',
         '4a1f389d6ce373bda9e57857d3b61c84' => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src/helpers.php',
+        '1e298922c3e2134d42dcdb03e6d5f55a' => __DIR__ . '/..' . '/torann/geoip/src/helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -69,6 +69,7 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
             'TijsVerkoyen\\CssToInlineStyles\\' => 31,
             'Thomaswelton\\Tests\\LaravelGravatar\\' => 35,
             'Thomaswelton\\LaravelGravatar\\' => 29,
+            'Tests\\' => 6,
         ),
         'S' => 
         array (
@@ -118,6 +119,7 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
             'League\\Fractal\\' => 15,
             'League\\Flysystem\\' => 17,
             'Laravel\\Socialite\\' => 18,
+            'Laravel\\Dusk\\' => 13,
             'LaravelFCM\\Mocks\\' => 17,
             'LaravelFCM\\' => 11,
         ),
@@ -138,6 +140,11 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
             'GuzzleHttp\\Promise\\' => 19,
             'GuzzleHttp\\' => 11,
             'Giggsey\\Locale\\' => 15,
+        ),
+        'F' => 
+        array (
+            'Faker\\' => 6,
+            'Facebook\\WebDriver\\' => 19,
         ),
         'D' => 
         array (
@@ -170,8 +177,8 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
         'libphonenumber\\' => 
         array (
@@ -244,6 +251,10 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'Thomaswelton\\LaravelGravatar\\' => 
         array (
             0 => __DIR__ . '/..' . '/thomaswelton/laravel-gravatar/src',
+        ),
+        'Tests\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
         ),
         'Symfony\\Polyfill\\Util\\' => 
         array (
@@ -369,6 +380,10 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         array (
             0 => __DIR__ . '/..' . '/laravel/socialite/src',
         ),
+        'Laravel\\Dusk\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laravel/dusk/src',
+        ),
         'LaravelFCM\\Mocks\\' => 
         array (
             0 => __DIR__ . '/..' . '/brozot/laravel-fcm/tests/mocks',
@@ -412,6 +427,14 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
         'Giggsey\\Locale\\' => 
         array (
             0 => __DIR__ . '/..' . '/giggsey/locale/src',
+        ),
+        'Faker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
+        ),
+        'Facebook\\WebDriver\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/facebook/webdriver/lib',
         ),
         'Dotenv\\' => 
         array (
@@ -1337,10 +1360,10 @@ class ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit1bacc9bd2a82216bf11bc15e6aee6c79::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9293b50e719463adfa690d4df664970b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9293b50e719463adfa690d4df664970b::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit9293b50e719463adfa690d4df664970b::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit9293b50e719463adfa690d4df664970b::$classMap;
 
         }, null, ClassLoader::class);
     }

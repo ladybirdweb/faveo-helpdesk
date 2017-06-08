@@ -12,7 +12,7 @@ return [
       |
      */
 
-    'secret' => env('JWT_SECRET', 'dx8kSqoteby3TViHaYrwmM92HnnGCeg5'),
+    'secret' => env('JWT_SECRET', '3MvNjY4PPj0nLx3b4PSIYk03DSZRCB0K'),
     /*
       |--------------------------------------------------------------------------
       | JWT time to live

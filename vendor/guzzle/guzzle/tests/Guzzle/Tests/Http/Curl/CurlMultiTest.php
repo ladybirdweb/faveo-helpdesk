@@ -305,7 +305,7 @@ class CurlMultiTest extends \Guzzle\Tests\GuzzleTestCase
         }
 
         // Create a client that is bound to fail connecting
-        $client = new Client('http://localhost:123', array(
+        $client = new Client('http://127.0.0.1:123', array(
             'curl.CURLOPT_PORT'              => 123,
             'curl.CURLOPT_CONNECTTIMEOUT_MS' => 1,
         ));
@@ -355,7 +355,7 @@ class CurlMultiTest extends \Guzzle\Tests\GuzzleTestCase
     public function testDoesNotThrowExceptionsWhenRequestsRecoverWithSuccess()
     {
         // Attempt a port that 99.9% is not listening
-        $client = new Client('http://localhost:123');
+        $client = new Client('http://127.0.0.1:123');
         $request = $client->get();
         // Ensure it times out quickly if needed
         $request->getCurlOptions()->set(CURLOPT_TIMEOUT_MS, 1)->set(CURLOPT_CONNECTTIMEOUT_MS, 1);

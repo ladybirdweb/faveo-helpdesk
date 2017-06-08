@@ -108,7 +108,7 @@ class MockPluginTest extends \Guzzle\Tests\GuzzleTestCase
         $response = MockPlugin::getMockFile(__DIR__ . '/../../TestData/mock_response');
         $p->addResponse($response);
 
-        $client = new Client('http://localhost:123/');
+        $client = new Client('http://127.0.0.1:123/');
         $client->getEventDispatcher()->addSubscriber($p, 9999);
         $request = $client->get();
         $request->send();
@@ -119,8 +119,9 @@ class MockPluginTest extends \Guzzle\Tests\GuzzleTestCase
 
     /**
      * @depends testAddsResponseFilesToQueue
+     * @expectedException \OutOfBoundsException
      */
-    public function testUpdateIgnoresWhenEmpty()
+    public function testUpdateThrowsExceptionWhenEmpty()
     {
         $p = new MockPlugin();
         $p->onRequestBeforeSend(new Event());
@@ -133,7 +134,7 @@ class MockPluginTest extends \Guzzle\Tests\GuzzleTestCase
     {
         $p = new MockPlugin(null, true);
         $p->addResponse(MockPlugin::getMockFile(__DIR__ . '/../../TestData/mock_response'));
-        $client = new Client('http://localhost:123/');
+        $client = new Client('http://127.0.0.1:123/');
         $client->getEventDispatcher()->addSubscriber($p, 9999);
         $request = $client->get();
         $request->send();
@@ -150,7 +151,7 @@ class MockPluginTest extends \Guzzle\Tests\GuzzleTestCase
     public function testStoresMockedRequests()
     {
         $p = new MockPlugin(array(new Response(200), new Response(200)));
-        $client = new Client('http://localhost:123/');
+        $client = new Client('http://127.0.0.1:123/');
         $client->getEventDispatcher()->addSubscriber($p, 9999);
 
         $request1 = $client->get();
@@ -169,7 +170,7 @@ class MockPluginTest extends \Guzzle\Tests\GuzzleTestCase
     {
         $p = new MockPlugin(array(new Response(200)));
         $p->readBodies(true);
-        $client = new Client('http://localhost:123/');
+        $client = new Client('http://127.0.0.1:123/');
         $client->getEventDispatcher()->addSubscriber($p, 9999);
 
         $body = EntityBody::factory('foo');
@@ -181,7 +182,7 @@ class MockPluginTest extends \Guzzle\Tests\GuzzleTestCase
 
     public function testCanMockBadRequestExceptions()
     {
-        $client = new Client('http://localhost:123/');
+        $client = new Client('http://127.0.0.1:123/');
         $ex = new CurlException('Foo');
         $mock = new MockPlugin(array($ex));
         $client->addSubscriber($mock);

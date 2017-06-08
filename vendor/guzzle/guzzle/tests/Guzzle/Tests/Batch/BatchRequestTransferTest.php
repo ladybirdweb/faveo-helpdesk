@@ -53,7 +53,7 @@ class BatchRequestTransferTest extends \Guzzle\Tests\GuzzleTestCase
 
     public function testTransfersBatches()
     {
-        $client = new Client('http://localhost:123');
+        $client = new Client('http://127.0.0.1:123');
         $request = $client->get();
         // For some reason... PHP unit clones the request, which emits a request.clone event. This causes the
         // 'sorted' property of the event dispatcher to contain an array in the cloned request that is not present in

@@ -29,11 +29,7 @@ class ChunkedIteratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(5), $chunks[2]);
     }
 
-    /**
-     * @test
-     * @runInSeparateProcess
-     */
-    public function mustNotTerminateWithTraversable()
+    public function testMustNotTerminateWithTraversable()
     {
         $traversable = simplexml_load_string('<root><foo/><foo/><foo/></root>')->foo;
         $chunked = new ChunkedIterator($traversable, 2);
@@ -41,20 +37,16 @@ class ChunkedIteratorTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $actual);
     }
 
-    /**
-     * @test
-     */
-    public function sizeOfZeroMakesIteratorInvalid() {
+    public function testSizeOfZeroMakesIteratorInvalid() {
         $chunked = new ChunkedIterator(new \ArrayIterator(range(1, 5)), 0);
         $chunked->rewind();
         $this->assertFalse($chunked->valid());
     }
 
     /**
-     * @test
      * @expectedException \InvalidArgumentException
      */
-    public function sizeLowerZeroThrowsException() {
-        $chunked = new ChunkedIterator(new \ArrayIterator(range(1, 5)), -1);
+    public function testSizeLowerZeroThrowsException() {
+        new ChunkedIterator(new \ArrayIterator(range(1, 5)), -1);
     }
 }

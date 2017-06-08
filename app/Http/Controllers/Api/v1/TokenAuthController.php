@@ -73,7 +73,7 @@ class TokenAuthController extends Controller
      */
     public function getAuthenticatedUser()
     {
-        //dd(JWTAuth::parseToken()->authenticate());
+        
         try {
             if (!$user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json(['user_not_found', 404]);
