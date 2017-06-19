@@ -1880,13 +1880,13 @@ class TicketController extends Controller
             $value = Input::get('submit');
             foreach ($selectall as $delete) {
                 $ticket = Tickets::whereId($delete)->first();
-                if ($value == 'Delete') {
+                if ($value == Lang::get('lang.delete')) {
                     $this->delete($delete, new Tickets());
-                } elseif ($value == 'Close') {
+                } elseif ($value == Lang::get('lang.close')) {
                     $this->close($delete, new Tickets());
-                } elseif ($value == 'Open') {
+                } elseif ($value == Lang::get('lang.open')) {
                     $this->open($delete, new Tickets());
-                } elseif ($value == 'Delete forever') {
+                } elseif ($value == Lang::get('lang.clean-up')) {
                     $notification = Notification::select('id')->where('model_id', '=', $ticket->id)->get();
                     foreach ($notification as $id) {
                         $user_notification = UserNotification::where(
@@ -1925,11 +1925,11 @@ class TicketController extends Controller
                     \Event::fire('ticket-permanent-delete', [$data]);
                 }
             }
-            if ($value == 'Delete') {
+            if ($value == Lang::get('lang.delete')) {
                 return redirect()->back()->with('success', lang::get('lang.moved_to_trash'));
-            } elseif ($value == 'Close') {
+            } elseif ($value == Lang::get('lang.close')) {
                 return redirect()->back()->with('success', Lang::get('lang.tickets_have_been_closed'));
-            } elseif ($value == 'Open') {
+            } elseif ($value == Lang::get('lang.open')) {
                 return redirect()->back()->with('success', Lang::get('lang.tickets_have_been_opened'));
             } else {
                 return redirect()->back()->with('success', Lang::get('lang.hard-delete-success-message'));
