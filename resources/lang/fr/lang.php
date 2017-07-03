@@ -876,6 +876,7 @@ return [
     'ticket-details'      => 'Détails des tickets',
     'inbox'               => 'Boite de réception',
     'my_tickets'          => 'Mes tickets',
+    'my_organization_tickets' => 'My organization tickets',
     'unassigned'          => 'Non assignés',
     'trash'               => 'Corbeille',
     'Updates'             => 'MAJ',

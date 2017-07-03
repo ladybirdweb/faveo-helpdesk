@@ -567,6 +567,7 @@ return [
     'Tickets'           => 'ЗАЯВКИ',
     'inbox'             => 'Входящие',
     'my_tickets'        => 'Мои заявки',
+    'my_organization_tickets' => 'My organization tickets',
     'unassigned'        => 'Неназначенные',
     'trash'             => 'Корзина',
     'Updates'           => 'ОБНОВЛЕНИЯ',

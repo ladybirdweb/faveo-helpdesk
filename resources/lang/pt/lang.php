@@ -876,6 +876,7 @@ return [
     'ticket-details'      => 'Detalhes do Ticket',
     'inbox'               => 'Caixa de entrada',
     'my_tickets'          => 'Meus Tickets',
+    'my_organization_tickets' => 'My organization tickets',
     'unassigned'          => 'Não atribuídos',
     'trash'               => 'Lixeira',
     'Updates'             => 'Atualizações',

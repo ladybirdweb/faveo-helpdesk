@@ -914,6 +914,7 @@ return [
     'ticket-details'     => 'Ticket details',
     'inbox'              => 'Inbox',
     'my_tickets'         => 'My tickets',
+    'my_organization_tickets' => 'My organization tickets',
     'unassigned'         => 'Unassigned',
     'trash'              => 'Trash',
     'Updates'            => 'UPDATES',
