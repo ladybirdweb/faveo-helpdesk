@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Client\helpdesk;
 
 // controllers
@@ -10,6 +11,7 @@ use App\Http\Requests\helpdesk\ProfilePassword;
 use App\Http\Requests\helpdesk\ProfileRequest;
 use App\Http\Requests\helpdesk\TicketRequest;
 // models
+use App\Model\helpdesk\Agent_panel\Organization;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Settings\CommonSettings;
 use App\Model\helpdesk\Settings\Company;
@@ -18,7 +20,6 @@ use App\Model\helpdesk\Ticket\Ticket_Thread;
 use App\Model\helpdesk\Ticket\Tickets;
 use App\Model\helpdesk\Utility\CountryCode;
 use App\Model\helpdesk\Utility\Otp;
-use App\Model\helpdesk\Agent_panel\Organization;
 use App\User;
 use Auth;
 // classes
@@ -39,7 +40,6 @@ use Socialite;
  */
 class GuestController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -68,7 +68,7 @@ class GuestController extends Controller
 
         return view('themes.default1.client.helpdesk.profile', compact('user'))
                 ->with(['phonecode' => $phonecode->phonecode,
-                    'verify' => $status,]);
+                    'verify'        => $status, ]);
     }
 
     /**
@@ -102,7 +102,7 @@ class GuestController extends Controller
                 // fetching upload destination path
                 $destinationPath = 'uploads/profilepic';
                 // adding a random value to profile picture filename
-                $fileName = rand(0000, 9999) . '.' . str_replace(' ', '_', $name);
+                $fileName = rand(0000, 9999).'.'.str_replace(' ', '_', $name);
                 // moving the picture to a destination folder
                 Input::file('profile_pic')->move($destinationPath, $fileName);
                 // saving filename to database
@@ -205,19 +205,20 @@ class GuestController extends Controller
     public function getMyorganizationticket()
     {
         $organization = Organization::where('head', '=', Auth::user()->id)->get();
-        $organization_users = array();
+        $organization_users = [];
         // Check if user is manager
         if ($organization->count() > 0) {
-            foreach ($organization AS $org) {
+            foreach ($organization as $org) {
                 $org_model = Organization::find($org->id);
                 $organization_users = $org_model->getUserIds();
             }
         } else {
-            $organization_users = array(Auth::user()->id);
+            $organization_users = [Auth::user()->id];
         }
-        return view('themes.default1.client.helpdesk.myorganizationtickets', array(
-            'users' => $organization_users
-        ));
+
+        return view('themes.default1.client.helpdesk.myorganizationtickets', [
+            'users' => $organization_users,
+        ]);
     }
 
     /**
@@ -249,7 +250,6 @@ class GuestController extends Controller
      */
     public function ticketEdit()
     {
-        
     }
 
     /**
@@ -298,7 +298,7 @@ class GuestController extends Controller
         $tickets = Tickets::where('id', '=', $ticket_id)->first();
         $thread = Ticket_Thread::where('ticket_id', '=', $ticket_id)->first();
 
-        return Redirect('thread/' . $ticket_id);
+        return Redirect('thread/'.$ticket_id);
     }
 
     /**
@@ -327,7 +327,7 @@ class GuestController extends Controller
     public function PostCheckTicket(Request $request)
     {
         $validator = \Validator::make($request->all(), [
-                'email' => 'required|email',
+                'email'         => 'required|email',
                 'ticket_number' => 'required',
         ]);
         if ($validator->fails()) {
@@ -347,7 +347,7 @@ class GuestController extends Controller
             if ($user->role == 'user') {
                 $username = $user->first_name;
             } else {
-                $username = $user->first_name . ' ' . $user->last_name;
+                $username = $user->first_name.' '.$user->last_name;
             }
             if ($user->email != $Email) {
                 return \Redirect::route('form')->with('fails', Lang::get("lang.email_didn't_match_with_ticket_number"));
@@ -358,7 +358,7 @@ class GuestController extends Controller
                 $company = $this->company();
 
                 $this->PhpMailController->sendmail(
-                    $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $user->email], $message = ['subject' => 'Ticket link Request [' . $Ticket_number . ']', 'scenario' => 'check-ticket'], $template_variables = ['user' => $username, 'ticket_link_with_number' => \URL::route('check_ticket', $code)]
+                    $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $user->email], $message = ['subject' => 'Ticket link Request ['.$Ticket_number.']', 'scenario' => 'check-ticket'], $template_variables = ['user' => $username, 'ticket_link_with_number' => \URL::route('check_ticket', $code)]
                 );
 
                 return \Redirect::back()
@@ -503,7 +503,7 @@ class GuestController extends Controller
     public function changeRedirect()
     {
         $provider = \Session::get('provider');
-        $url = \Session::get($provider . 'redirect');
+        $url = \Session::get($provider.'redirect');
         \Config::set("services.$provider.redirect", $url);
     }
 
@@ -511,7 +511,7 @@ class GuestController extends Controller
     {
         $provider = $this->getProvider();
         \Session::forget('provider');
-        \Session::forget($provider . 'redirect');
+        \Session::forget($provider.'redirect');
     }
 
     public function checkArray($key, $array)
@@ -530,7 +530,7 @@ class GuestController extends Controller
         $useremail = \Auth::user()->email;
         $email = $this->checkArray('email', $user); //$user['email'];
         if ($email !== '' && $email !== $useremail) {
-            throw new Exception('Sorry! your current email and ' . ucfirst($user['provider']) . ' email is different so system can not sync');
+            throw new Exception('Sorry! your current email and '.ucfirst($user['provider']).' email is different so system can not sync');
         }
         $this->update($userid, $user);
     }
@@ -562,10 +562,10 @@ class GuestController extends Controller
         if (count($user) > 0) {
             foreach ($user as $key => $value) {
                 $info->create([
-                    'owner' => $id,
+                    'owner'   => $id,
                     'service' => $provider,
-                    'key' => $key,
-                    'value' => $value,
+                    'key'     => $key,
+                    'value'   => $value,
                 ]);
             }
         }
