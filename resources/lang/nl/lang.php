@@ -939,7 +939,7 @@ return [
     'ticket-details'          => 'Ticket Details',
     'inbox'                   => 'Inbox',
     'my_tickets'              => 'Mijn Tickets',
-    'my_organization_tickets' => 'My organization tickets',
+    'my_organization_tickets' => 'Mijn organisatie tickets',
     'unassigned'              => 'Niet toegewezen',
     'trash'                   => 'Prullenbak',
     'Updates'                 => 'UPDATES',

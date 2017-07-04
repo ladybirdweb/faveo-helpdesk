@@ -599,7 +599,7 @@ return [
     'Tickets'                 => 'TICKETS',
     'inbox'                   => 'Inbox',
     'my_tickets'              => 'Miei Tickets',
-    'my_organization_tickets' => 'My organization tickets',
+    'my_organization_tickets' => 'Miei biglietti dell organizzazione',
     'unassigned'              => 'Non Assegnati',
     'trash'                   => 'Cestino',
     'Updates'                 => 'AGGIORNAMENTI',

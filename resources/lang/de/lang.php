@@ -635,7 +635,7 @@ return [
     'Tickets'                 => 'TICKETS',
     'inbox'                   => 'Inbox',
     'my_tickets'              => 'My Tickets',
-    'my_organization_tickets' => 'My organization tickets',
+    'my_organization_tickets' => 'Meine Organisation Tickets',
     'unassigned'              => 'Unassigned',
     'trash'                   => 'Trash',
     'Updates'                 => 'UPDATES',
