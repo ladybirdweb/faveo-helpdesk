@@ -139,20 +139,20 @@ $portal = App\Model\helpdesk\Theme\Portal::where('id', '=', 1)->first();
          <ng-form name="faveoClientForm">
           <div class="row" style="margin:15px;width:100%" ng-if="node.customerDisplay">
               <div class="col-sm-3" style="padding: 0px;line-height: 2.5">
-                 <label >@{{node.label}}</label><span ng-show="node.customerRequiredFormSubmit" style="color:red">*</span>
+                 <label >@{{node.label | translate}}</label><span ng-show="node.customerRequiredFormSubmit" style="color:red">*</span>
               </div>
               <div class="col-sm-8" style="padding: 0px">
                 <input type="text" name="textfield@{{$index}}"  ng-if="node.type=='text'&&node.customerDisplay" class="form-control" style="border-radius: 0px;width:85%" ng-model="node.value" ng-required="@{{node.customerRequiredFormSubmit}}">
                 <span style="color:red" ng-show="faveoClientForm.textfield@{{$index}}.$dirty && faveoClientForm.textfield@{{$index}}.$invalid">
-                                          <span ng-show="faveoClientForm.textfield@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                                          <span ng-show="faveoClientForm.textfield@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                 </span>
                 <input type="text" name="numberfield@{{$index}}"  ng-if="node.type=='number'&&node.customerDisplay" class="form-control numberOnly" style="border-radius: 0px;width:85%" ng-model="node.value" ng-required="@{{node.customerRequiredFormSubmit}}" >
                 <span style="color:red" ng-show="faveoClientForm.numberfield@{{$index}}.$dirty && faveoClientForm.numberfield@{{$index}}.$invalid">
-                                          <span ng-show="faveoClientForm.numberfield@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                                          <span ng-show="faveoClientForm.numberfield@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                 </span>
                 <input type="text"  name="datefield@{{$index}}" ng-if="node.type=='date'" class="form-control" style="border-radius: 0px;width:85%" ng-pattern="/^[0,1]?\d{1}\/(([0-2]?\d{1})|([3][0,1]{1}))\/(([1]{1}[9]{1}[9]{1}\d{1})|([2-9]{1}\d{3}))$/" ng-required="@{{node.customerRequiredFormSubmit}}" placeholder="MM/DD/YYYY" ng-model="node.value">
                 <span style="color:red" ng-show="faveoClientForm.datefield@{{$index}}.$dirty && faveoClientForm.datefield@{{$index}}.$invalid">
-                                          <span ng-show="faveoClientForm.datefield@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                                          <span ng-show="faveoClientForm.datefield@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                                           <span ng-show="faveoClientForm.datefield@{{$index}}.$error.pattern">Please Enter Valid Correct Format-MM/DD/YYYY</span>
                 </span>
                 <div class="input-group" ng-if="node.type=='email'&& node.label=='Requester'" style="width:100%">
@@ -168,7 +168,7 @@ $portal = App\Model\helpdesk\Theme\Portal::where('id', '=', 1)->first();
                 <div ng-if="newReqField && node.type=='email'&& node.label=='Requester'" style="margin-top:15px;">
                     <input type="text" name="requsName@{{$index}}" class="form-control" style="border-radius:0;margin-top:10px;width:85%" ng-model="req.name" placeholder="New Requester Name" id="requesterName" ng-required="@{{node.customer_name}}"/>
                                 <span style="color:red" ng-show="faveoClientForm.requsName@{{$index}}.$dirty && faveoClientForm.requsName@{{$index}}.$invalid">
-                                          <span ng-show="faveoClientForm.requsName@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                                          <span ng-show="faveoClientForm.requsName@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                                 </span>
                     <input type="email" name="requsEmail@{{$index}}" class="form-control" style="border-radius:0;margin-top:10px;width:85%" ng-model="req.email" ng-pattern="emailFormat" placeholder="New Requester Email" id="requesterEmail" ng-required="@{{node.customer_email}}"/>
                                 <span style="color:red" ng-show="faveoClientForm.requsEmail@{{$index}}.$dirty && faveoClientForm.requsEmail@{{$index}}.$invalid">
@@ -190,7 +190,7 @@ $portal = App\Model\helpdesk\Theme\Portal::where('id', '=', 1)->first();
                 </div>
                 <textarea name="descript@{{$index}}"  class="form-control" ng-if="node.type=='textarea'&& node.default=='no'" style="border-radius: 0px;width:85%" ng-model="node.value" ng-required="@{{node.customerRequiredFormSubmit}}"></textarea>
                 <span style="color:red" ng-show="faveoClientForm.descript@{{$index}}.$dirty && faveoClientForm.descript@{{$index}}.$invalid">
-                                          <span ng-show="faveoClientForm.descript@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                                          <span ng-show="faveoClientForm.descript@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                 </span>
                 <div style="width:85%" ng-if="node.type=='textarea'&&node.title=='Description'">
                 <textarea name="description" id="description@{{$index}}" class="form-control"  style="border-radius: 0px;" ng-model="node.value" ng-required="@{{node.customerRequiredFormSubmit}}"></textarea>
@@ -215,14 +215,14 @@ $portal = App\Model\helpdesk\Theme\Portal::where('id', '=', 1)->first();
                 </select>
                 <span ng-show="loado@{{$index}}" style="width:15%"><img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="width:20px;height:20px"></span>
                 <div style="color:red" ng-show="faveoClientForm.selected@{{$index}}.$dirty && faveoClientForm.selected@{{$index}}.$invalid">
-                  <span ng-show="faveoClientForm.selected@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                  <span ng-show="faveoClientForm.selected@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                 </div>
                 </div>
                 <select  ng-model="node.value" name="selected@{{$index}}" ng-if="node.type=='select'&&node.default=='no'&&node.customerDisplay" ng-options="option.optionvalue for option in node.options" class="form-control" style="border-radius: 0px;width:85%" ng-required="@{{node.customerRequiredFormSubmit}}">
                   <option value="">Select</option>
                 </select>
                 <span style="color:red" ng-show="faveoClientForm.selected@{{$index}}.$dirty && faveoClientForm.selected@{{$index}}.$invalid">
-                  <span ng-show="faveoClientForm.selected@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                  <span ng-show="faveoClientForm.selected@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                </span>
                 <ul class="list-group" ng-if="node.type=='radio'&&node.customerDisplay" style="border:none">
                       <li ng-repeat="option in node.options"  class="list-group-item" style="border:none">

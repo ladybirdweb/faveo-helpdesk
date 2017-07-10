@@ -49,20 +49,20 @@ class="active"
           <ng-form name="faveoClientForm">
           <div class="row" style="margin:15px;width:100%">
               <div class="col-sm-3" style="padding: 0px;line-height: 2.5">
-                 <label>@{{node.label}}</label><span ng-show="node.agentRequiredFormSubmit==true" style="color:red">*</span>
+                 <label>@{{node.label | translate}}</label><span ng-show="node.agentRequiredFormSubmit==true" style="color:red">*</span>
               </div>
               <div class="col-sm-8" style="padding: 0px">
                 <input type="text" name="textfield@{{$index}}"  ng-if="node.type=='text'&& node.title!='Api'" class="form-control" style="border-radius: 0px;width:85%" ng-model="node.value" ng-required="@{{node.agentRequiredFormSubmit}}">
                 <span style="color:red" ng-show="faveoClientForm.textfield@{{$index}}.$dirty && faveoClientForm.textfield@{{$index}}.$invalid">
-                                          <span ng-show="faveoClientForm.textfield@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                                          <span ng-show="faveoClientForm.textfield@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                 </span>
                 <input type="text" name="numberfield@{{$index}}"  ng-if="node.type=='number'" class="form-control numberOnly" style="border-radius: 0px;width:85%" ng-model="node.value" ng-required="@{{node.agentRequiredFormSubmit}}" >
                 <span style="color:red" ng-show="faveoClientForm.numberfield@{{$index}}.$dirty && faveoClientForm.numberfield@{{$index}}.$invalid">
-                                          <span ng-show="faveoClientForm.numberfield@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                                          <span ng-show="faveoClientForm.numberfield@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                 </span>
                 <input type="text"  name="datefield@{{$index}}" ng-if="node.type=='date'" class="form-control" style="border-radius: 0px;width:85%" >
                 <span style="color:red" ng-show="faveoClientForm.datefield@{{$index}}.$dirty && faveoClientForm.datefield@{{$index}}.$invalid">
-                                          <span ng-show="faveoClientForm.datefield@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                                          <span ng-show="faveoClientForm.datefield@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                 </span>
                 <div ng-if="node.type=='email'&& node.label=='Requester'">
                 <div class="input-group"  style="width:85%">
@@ -96,7 +96,7 @@ class="active"
                 </div>
                 <textarea name="descript@{{$index}}"  class="form-control" ng-if="node.type=='textarea'&& node.default=='no'" style="border-radius: 0px;width:85%" ng-model="node.value" ng-required="@{{node.agentRequiredFormSubmit}}"></textarea>
                 <span style="color:red" ng-show="faveoClientForm.descript@{{$index}}.$dirty && faveoClientForm.descript@{{$index}}.$invalid">
-                                          <span ng-show="faveoClientForm.descript@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                                          <span ng-show="faveoClientForm.descript@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                 </span>
                 <div ng-if="node.type=='textarea'&&node.title=='Description'" style="width:85%">
                      @include('themes.default1.inapp-notification.wyswyg-editor')
@@ -112,7 +112,7 @@ class="active"
                 </select>
                 <span ng-show="loado@{{$index}}" style="width:15%"><img src="{{asset("lb-faveo/media/images/gifloader.gif")}}" style="width:20px;height:20px"></span>
                 <div style="color:red" ng-show="faveoClientForm.selected@{{$index}}.$dirty && faveoClientForm.selected@{{$index}}.$invalid">
-                    <span ng-show="faveoClientForm.selected@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                    <span ng-show="faveoClientForm.selected@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                   </div>
                 </div>
                 <div ng-if="node.type=='select'&&node.default=='no'">
@@ -120,7 +120,7 @@ class="active"
                   <option value="">Select</option>
                 </select>
                   <span style="color:red" ng-show="faveoClientForm.selected@{{$index}}.$dirty && faveoClientForm.selected@{{$index}}.$invalid">
-                    <span ng-show="faveoClientForm.selected@{{$index}}.$error.required">@{{node.label}} is required.</span>
+                    <span ng-show="faveoClientForm.selected@{{$index}}.$error.required">@{{node.label | translate}} is required.</span>
                   </span>
                 </div>
                 <ul class="list-group" ng-if="node.type=='radio'" style="border:none">

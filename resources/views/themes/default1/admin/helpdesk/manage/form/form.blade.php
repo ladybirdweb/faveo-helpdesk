@@ -117,7 +117,7 @@ class="active"
     </div>
     <div class="tree-node-content dropdown">
      
-       <label>@{{node.title}}</label>
+       <label>@{{node.title | translate}}</label>
       
       <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this)" ng-show="node.default=='no'" style="padding: 3px 5px"><span class="glyphicon glyphicon-remove"> </span></a>
       <a class="pull-right btn btn-info btn-xs collapser"  data-toggle="collapse" aria-controls="collapseExample" style="padding: 3px 5px"><span class="glyphicon glyphicon glyphicon-pencil"></span></a>

@@ -13,8 +13,8 @@
         <link href="{{asset("lb-faveo/css/font-awesome.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- Ionicons -->
         <link href="{{asset("lb-faveo/css/ionicons.min.css")}}" rel="stylesheet"  type="text/css" />
-        <!-- Theme style -->
-        <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" />
+        <!-- Theme style --> 
+        <link href="{{asset("lb-faveo/css/AdminLTE.css")}}" rel="stylesheet" type="text/css" id="adminLTR"/> 
         <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
         <link href="{{asset("lb-faveo/css/skins/_all-skins.min.css")}}" rel="stylesheet" type="text/css" />
         <!-- iCheck -->
@@ -511,6 +511,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
         <script src="{{asset("lb-faveo/js/angular/angular.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/angular/angular-translate.js")}}" type="text/javascript"></script>
 
         <script>
     $(function() {
@@ -531,7 +532,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
 <script src="{{asset('lb-faveo/js/angular/ng-file-upload.js')}}"></script>
 <script src="{{asset('lb-faveo/js/angular/ng-file-upload-shim.min.js')}}"></script>
 <script>
- var app = angular.module('fbApp', ['angularMoment','flow','ngFileUpload']).directive('whenScrolled', function() {
+ var app = angular.module('fbApp', ['angularMoment','flow','ngFileUpload','pascalprecht.translate']).directive('whenScrolled', function() {
     return function(scope, elm, attr) {
         var raw = elm[0];
         console.log(raw);
@@ -567,12 +568,131 @@ app.config(['flowFactoryProvider', function (flowFactoryProvider) {
    
     flowFactoryProvider.factory = fustyFlowFactory;
   }]);
+app.config(['$translateProvider', function($translateProvider){
+    $translateProvider.translations('en', {
+        "Requester"     : "Requester",
+        "Subject"       : "Subject",
+        "Type"          : "Type",
+        "Status"        : "Status",
+        "Priority"      : "Priority",
+        "Help Topic"    : "Help Topic",
+        "Assigned"      : "Assigned",
+        "Description"   : "Description",
+        "Company"       : "Company"
+    });
+    $translateProvider.translations('ar', {
+
+        "Requester"     : "الطالب",
+        "Subject"       : "موضوع",
+        "Type"          : "اكتب",
+        "Status"        : "الحالة",
+        "Priority"      : "أفضلية",
+        "Help Topic"    : "موضوع المساعدة",
+        "Assigned"      : "تعيين",
+        "Description"   : "وصف",
+        "Company"       : "شركة"
+    });
+    if('{{Lang::getLocale()}}'=='ar'){
+       $translateProvider.preferredLanguage('ar');
+    }
+    else{
+         $translateProvider.preferredLanguage('en');
+    }
+}]);
 </script>
 <script type="text/javascript">
                 function changeLang(lang) {
                     location.href = "swtich-language/"+lang;
                 }
             </script>
+<script type="text/javascript">
+ $(function () {
+       if('{{Lang::getLocale()}}'=='ar'){
+    var adminRtl = document.createElement('link');
+    adminRtl.id = 'id-rtl';
+    adminRtl.rel = 'stylesheet';
+    adminRtl.href = '{{asset("lb-faveo/rtl/css/AdminLTE.css")}}';
+    document.head.appendChild(adminRtl);
+
+     var cssRtl = document.createElement('link');
+    cssRtl.id = 'id-csstrtl';
+    cssRtl.rel = 'stylesheet';
+    cssRtl.href = '{{asset("lb-faveo/rtl/css/rtl.css")}}';
+    document.head.appendChild(cssRtl);
+
+     var bootRtl = document.createElement('link');
+    bootRtl.id = 'id-bootrtl';
+    bootRtl.rel = 'stylesheet';
+    bootRtl.href = '{{asset("lb-faveo/rtl/css/bootstrap-rtl.min.css")}}';
+    document.head.appendChild(bootRtl);
+
+
+        
+          $('#adminLTR').remove();
+        $('.container').attr('dir','RTL');
+        $('.formbilder').attr('dir','RTL');
+        $('.content-area').attr('dir','RTL');
+        // agentpanel
+        $('.content').attr('dir','RTL');
+        $('.info').attr('dir','RTL');
+        $('.table').attr('dir','RTL');
+        $('.box-primary').attr('dir','RTL');
+        // box-header with-borderclass="box box-primary"
+        $('.dataTables_paginate').find('.row').attr('dir','RTL');
+        // dataTables_paginate paging_full_numbers
+        $('.sidebar-menu').attr('dir','RTL');
+        $('.sidebar-menu').find('.pull-right').removeClass("pull-right");
+        $('.sidebar-menu').find('.label').addClass("pull-left");
+        $('.content').find('.btn').removeClass("pull-right");
+        $('.content').find('.btn').addClass("pull-left");
+        $('.tabs-horizontal').removeClass("navbar-left");
+        $('.tabs-horizontal').addClass("navbar-right");
+        $('#right-menu').removeClass("navbar-right");
+        $('#right-menu').addClass("navbar-left");
+        $('.navbar-nav').find('li').css("float","right");
+        $('#rtl1').css('display','none');
+        $('#ltr1').css('display','block');
+        $('#rtl2').css('display','none');
+        $('#ltr2').css('display','block');
+        $('#rtl3').css('display','none');
+        $('#ltr3').css('display','block');  
+        $('#rtl4').css('display','none');
+        $('#ltr4').css('display','block');  
+        $('.box-header').find('.pull-right').addClass("pull-left");
+       $('.box-header').find('.pull-right').removeClass("pull-right");
+         $('.btn').removeClass("pull-left");
+        $('.iframe').attr('dir','RTL');
+         $('.box-footer').find('a').removeClass("pull-right");
+         $('.box-footer').find('a').addClass("pull-left");
+         $('.box-footer').find('div').removeClass("pull-right");
+         $('.box-footer').find('div').addClass("pull-left");
+         $('.col-md-3').css('float','right');
+         $('.user-footer').css('float','none');
+         $('.user-header').css('float','none');
+         $('.sidebar-toggle').css('width','60px');
+         $('.dropdown-menu').css('right','inherit');
+         $('.dropdown-menu').css('left','0');
+// chart-data
+        // label
+          $('.box-header').find('.btn-primary').find('.pull-right').removeClass("pull-right");
+        $('.box-header').find('.btn-primary').addClass("pull-left");
+        $('.main-footer').find('.pull-right').removeClass("pull-right");
+        $('.main-footer').find('.hidden-xs').addClass("pull-left");
+        
+        setTimeout(function(){  
+        $('#cke_details').addClass( "cke_rtl" );
+        $(".cke_wysiwyg_frame").contents().find("body").attr('dir','RTL');
+
+        }, 3000);
+        $('iframe').contents().find("body").attr('dir','RTL');
+        /*$('#wys-form').remove();
+        $('#mobile-RTL').css('display','block');
+        $('#mobile-normal').css('display','none');
+        $('#form-foot1').css('display','block');
+        $('.list-inline').attr('dir','RTL');*/
+       };
+    });
+</script>
 <?php Event::fire('show.calendar.script', array()); ?>
 <?php Event::fire('load-calendar-scripts', array()); ?>
         @yield('FooterInclude')
