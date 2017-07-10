@@ -59,7 +59,7 @@ class="active"
 @section('content')
 <!-- success message -->
 <div id="alert-success" class="alert alert-success alert-dismissable" style="display:none;">
-    <i class="fa fa-check-circle"> </i> <b>  <span id="get-success"></span></b>
+    <i class="fa fa-check-circle"> </i> <b>  <span id="get-success" class="success-msg"></span></b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 </div>
 <!-- INfo message -->
@@ -67,6 +67,7 @@ class="active"
     <i class="fa fa-ban"> </i> <b>  <span id="get-danger"></span></b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 </div>
+
 @if(Session::has('success1'))
 <div id="success-alert" class="alert alert-success alert-dismissable">
     <i class="fa  fa-check-circle"> </i>
@@ -175,17 +176,157 @@ class="active"
 
                 </a>
             </div>
-
+             <input type="hidden" name="current_user_id" value="{{$users->id}}" id="current_user">
+            @if($policy->emailVerification())
             <div class="box-footer">
-                <b>{{Lang::get('lang.status')}}</b>
-                <a class="pull-right">
-                    @if($users->active == '1')
+                <b>{{Lang::get('lang.email_verify')}}</b>
+                <a class="pull-right" >
+                    <div class="btn-group {{$users->active == '0' ? 'locked_active unlocked_inactive' : 'locked_inactive unlocked_active'}}" id="toggle_event_editing" style="margin-top:-8px">
+                         <button type="button"  class="btn {{$users->active == '1' ? 'btn-sm btn-info' : 'btn-sm btn-default'}}">{{Lang::get('lang.yes')}}</button>
+                        <button type="button"  class="btn {{$users->active == '0' ? 'btn-sm btn-info' : 'btn-sm btn-default'}}">{{Lang::get('lang.no')}}</button>
+                    </div>
+
+
+                </a>
+            </div> 
+            @endif
+            
+            @if($policy->mobileVerification())
+            <div class="box-footer">
+                <b>{{Lang::get('lang.mobile_verify')}}</b>
+                <a class="pull-right" >
+
+
+                    <div class="btn-group {{$users->mobile_verify == '0' ? 'locked_active_mobile unlocked_inactive_mobile' : 'locked_inactive_mobile unlocked_active_mobile'}}" id="toggle_event_editing_mobile" style="margin-top:-8px">
+                         <button type="button"  class="btn {{$users->mobile_verify == '1' ? 'btn-sm btn-info' : 'btn-sm btn-default'}}">{{Lang::get('lang.yes')}}</button>
+                        <button type="button"  class="btn {{$users->mobile_verify == '0' ? 'btn-sm btn-info' : 'btn-sm btn-default'}}">{{Lang::get('lang.no')}}</button>
+                    </div>
+
+
+                </a>
+            </div> 
+            @endif
+            
+            @if($policy->ban())
+            <div class="box-footer">
+                <b>{{Lang::get('lang.ban')}}</b>
+                <div class="pull-right">
+
+
+                    <div class="btn-group {{$users->ban == '0' ? 'locked_active_ban unlocked_inactive_ban' : 'locked_inactive_ban unlocked_active_ban'}}" id="toggle_event_editing_ban" style="margin-top:-8px">
+                         <button type="button"  class="btn {{$users->ban == '1' ? 'btn-sm btn-info' : 'btn-sm btn-default'}}">{{Lang::get('lang.yes')}}</button>
+                         <button type="button"  class="btn  {{$users->ban == '0' ? 'btn-sm btn-info' : 'btn-sm btn-default'}}" >{{Lang::get('lang.no')}}</button>
+                    </div>
+
+                    <!-- @if($users->active == '1')
                     <span style="color:green;"> <span class="glyphicon glyphicon-ok-circle"></span>  <span class="glyphicon glyphicon-user"></span></span>
                     @else
                     <span style="color:red;"><span class="glyphicon glyphicon-ban-circle"></span><span class="glyphicon glyphicon-user"></span></span>
-                    @endif
-                </a>
-            </div>            
+                    @endif -->
+                </div>
+            </div> 
+            @endif
+            
+
+            <script>
+                $('#toggle_event_editing').click(function() {
+                    var settings_status = 1;
+                    var settings_status = 0;
+                    if ($(this).hasClass('locked_inactive')) {
+                        settings_status = 0
+                    }
+                    if ($(this).hasClass('locked_active')) {
+                        settings_status = 1;
+                    }
+                    // user_status
+                    var user_id = $('#current_user').val()
+                    // alert(user_id);
+
+                    /* reverse locking status */
+                    $('#toggle_event_editing button').eq(0).toggleClass('btn-info btn-default');
+                    $('#toggle_event_editing button').eq(1).toggleClass('btn-default btn-info');
+                    $('#toggle_event_editing').toggleClass('locked_active unlocked_inactive');
+                    $('#toggle_event_editing').toggleClass('locked_inactive unlocked_active');
+                    $.ajax({
+                        type: 'post',
+                        url: '{{route("settings.user.status")}}',
+                        data: {settings_status: settings_status, user_id: user_id},
+                        success: function(result) {
+                            $('.success-msg').html(result);
+                            $('.alert-success').css('display', 'block');
+                            setInterval(function() {
+                                $('.alert-success').fadeOut(3000, function() {
+                                });
+                            }, 500);
+                        }
+                    });
+                });
+            </script>
+
+            <script>
+                $('#toggle_event_editing_ban').click(function() {
+                    var settings_ban = 1;
+                    var settings_ban = 0;
+                    if ($(this).hasClass('locked_inactive_ban')) {
+                        settings_ban = 0
+                    }
+                    if ($(this).hasClass('locked_active_ban')) {
+                        settings_ban = 1;
+                    }
+                    var user_id = $('#current_user').val()
+                    /* reverse locking status */
+                    $('#toggle_event_editing_ban button').eq(0).toggleClass('btn-info btn-default');
+                    $('#toggle_event_editing_ban button').eq(1).toggleClass('btn-default btn-info');
+                    $('#toggle_event_editing_ban').toggleClass('locked_active_ban unlocked_inactive_ban');
+                    $('#toggle_event_editing_ban').toggleClass('locked_inactive_ban unlocked_active_ban');
+                    $.ajax({
+                        type: 'post',
+                        url: '{{route("settings.user.ban")}}',
+                        data: {settings_ban: settings_ban, user_id: user_id},
+                        success: function(result) {
+                            $('.success-msg').html(result);
+                            $('.alert-success').css('display', 'block');
+                            setInterval(function() {
+                                $('.alert-success').fadeOut(3000, function() {
+                                });
+                            }, 500);
+                        }
+                    });
+                });
+            </script>
+            
+            <script>
+                $('#toggle_event_editing_mobile').click(function() {
+                    var settings_ban = 1;
+                    var settings_ban = 0;
+                    if ($(this).hasClass('locked_inactive_mobile')) {
+                        settings_ban = 0
+                    }
+                    if ($(this).hasClass('locked_active_mobile')) {
+                        settings_ban = 1;
+                    }
+                    var user_id = $('#current_user').val()
+                    /* reverse locking status */
+                    $('#toggle_event_editing_mobile button').eq(0).toggleClass('btn-info btn-default');
+                    $('#toggle_event_editing_mobile button').eq(1).toggleClass('btn-default btn-info');
+                    $('#toggle_event_editing_mobile').toggleClass('locked_active_mobile unlocked_inactive_mobile');
+                    $('#toggle_event_editing_mobile').toggleClass('locked_inactive_mobile unlocked_active_mobile');
+                    $.ajax({
+                        type: 'post',
+                        url: '{{route("settings.user.mobile")}}',
+                        data: {settings_ban: settings_ban, user_id: user_id},
+                        success: function(result) {
+                            $('.success-msg').html(result);
+                            $('.alert-success').css('display', 'block');
+                            setInterval(function() {
+                                $('.alert-success').fadeOut(3000, function() {
+                                });
+                            }, 500);
+                        }
+                    });
+                });
+            </script>
+                      
             @if($users->country_code)
             <div class="box-footer">
                 <b>{{Lang::get('lang.country_code')}}</b>

@@ -12,12 +12,17 @@ class Help_topic extends BaseModel
         'sla_plan', 'thank_page', 'ticket_num_format', 'internal_notes', 'status', 'type', 'auto_assign',
         'auto_response',
     ];
-
-    public function department()
-    {
+    
+    public function department(){
         $related = 'App\Model\helpdesk\Agent\Department';
         $foreignKey = 'department';
-
         return $this->belongsTo($related, $foreignKey);
+    }
+    
+    
+    public function delete() {
+        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        parent::delete();
+        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }

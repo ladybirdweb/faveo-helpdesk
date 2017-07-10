@@ -832,7 +832,14 @@ Route::group(['middleware' => 'redirect'], function () {
     Route::get('password', ['as' => 'user.changepassword', 'uses' => 'Agent\helpdesk\UserController@randomPassword']);
     Route::post('changepassword/{id}', ['as' => 'user.post.changepassword', 'uses' => 'Agent\helpdesk\UserController@randomPostPassword']);
     Route::post('delete/{id}', ['as' => 'user.post.delete', 'uses' => 'Agent\helpdesk\UserController@deleteAgent']);
+    
+    Route::post('settings/user/status', ['as' => 'settings.user.status', 'uses' => 'Agent\helpdesk\UserController@settingsUpdateStatus']);
 
+    Route::post('settings/user/ban', ['as' => 'settings.user.ban', 'uses' => 'Agent\helpdesk\UserController@settingsUpdateBan']);
+
+    Route::post('settings/user/mobile', ['as' => 'settings.user.mobile', 'uses' => 'Agent\helpdesk\UserController@settingsUpdateMobileVerify']);
+
+    
 // deleted user list
     Route::get('deleted/user', ['as' => 'user.deleted', 'uses' => 'Agent\helpdesk\UserController@deletedUser']);
 

@@ -415,7 +415,8 @@ class AuthController extends Controller
                 }
                 // If auth ok, redirect to restricted area
                 \Session::put('loginAttempts', $loginAttempts + 1);
-                if (Auth::Attempt([$field => $usernameinput, 'password' => $password], $request->has('remember'))) {
+                $credentials = $this->credential([$field => $usernameinput, 'password' => $password,'is_delete'=>0]);
+                if (Auth::Attempt($credentials, $request->has('remember'))) {
                     if (Auth::user()->role == 'user') {
                         if ($request->input('referer')) {
                             return \Redirect::route($request->input('referer'));
@@ -437,6 +438,19 @@ class AuthController extends Controller
                         ])->with(['error' => Lang::get('lang.invalid'),
                     'referer'             => $referer, ]);
         // Increment login attempts
+    }
+    
+    public function credential(array $credentials) {
+        $common = new CommonSettings();
+        $verify = $common->getOptionValue('verify', 'verify');
+        $verify_decode = json_decode($verify->option_value, true);
+        if(in_array('email', $verify_decode)){
+            $credentials = array_merge($credentials,['active'=>1]);
+        }
+        if(in_array('mobile', $verify_decode)){
+            $credentials = array_merge($credentials,['mobile_verify'=>1]);
+        }
+        return $credentials;
     }
 
     /**

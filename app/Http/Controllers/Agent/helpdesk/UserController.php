@@ -60,6 +60,8 @@ class UserController extends Controller
      *
      * @return void
      */
+     protected $ticket_policy;
+    
     public function __construct(PhpMailController $PhpMailController)
     {
         $this->PhpMailController = $PhpMailController;
@@ -67,6 +69,7 @@ class UserController extends Controller
         $this->middleware('auth');
         // checking if role is agent
         $this->middleware('role.agent');
+        $this->ticket_policy = new \App\Policies\TicketPolicy();
     }
 
     /**
@@ -613,8 +616,9 @@ class UserController extends Controller
     {
         try {
             $users = User::where('id', '=', $id)->first();
+            $policy = $this->ticket_policy;
             if (count($users) > 0) {
-                return view('themes.default1.agent.helpdesk.user.show', compact('users'));
+                return view('themes.default1.agent.helpdesk.user.show', compact('users','policy'));
             } else {
                 return redirect()->back()->with('fails', Lang::get('lang.user-not-found'));
             }
@@ -1081,4 +1085,65 @@ class UserController extends Controller
             echo "<option value='user_$user->id'>".$user->name().'</option>';
         }
     }
+    
+    /**
+     * 
+     * @param Request $request
+     * @return string
+     */
+    public function settingsUpdateStatus(Request $request) {
+        try {
+            if (!$this->ticket_policy->emailVerification()) {
+                return redirect('dashboard')->with('fails', 'Permission denied');
+            }
+            $user_id = $request->user_id;
+            $user_status = $request->settings_status;
+            User::where('id', $user_id)->update(['active' => $user_status]);
+            return Lang::get('lang.status_updated_successfully');
+        } catch (Exception $e) {
+            return Redirect()->back()->with('fails', $e->getMessage());
+        }
+    }
+
+    /**
+     * 
+     * @param Request $request
+     * @return string
+     */
+    public function settingsUpdateBan(Request $request) {
+        try {
+            if (!$this->ticket_policy->ban()) {
+                return redirect('dashboard')->with('fails', 'Permission denied');
+            }
+            $user_id = $request->user_id;
+            $user_ban = $request->settings_ban;
+            $user = User::where('id', $user_id)->update(['ban' => $user_ban]);
+//            $spam_status_type = \App\Model\helpdesk\Ticket\Ticket_Status::whereHas('type', function($query) {
+//                        $query->where('name', 'spam');
+//                    })->first();
+            if ($user->role != 'user') {
+                $user->ticketsAssigned()->whereHas('statuses.type', function($query) {
+                    $query->where('name', 'open');
+                })->update(['assigned_to' => null]);
+            }
+            return Lang::get('lang.status_updated_successfully');
+        } catch (Exception $e) {
+            return Redirect()->back()->with('fails', $e->getMessage());
+        }
+    }
+
+    public function settingsUpdateMobileVerify(Request $request) {
+        try {
+            if (!$this->ticket_policy->mobileVerification()) {
+                return redirect('dashboard')->with('fails', 'Permission denied');
+            }
+            $user_id = $request->user_id;
+            $user_ban = $request->settings_ban;
+            User::where('id', $user_id)->update(['mobile_verify' => $user_ban]);
+            return Lang::get('lang.your_status_updated_successfully');
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    
 }

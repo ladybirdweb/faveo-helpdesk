@@ -167,9 +167,16 @@ class SettingsController extends Controller
                     ->where('option_name', '=', 'email_mandatory')
                     ->first();
             $formats = $date_time->pluck('format', 'format')->merge(['custom'=>'Custom', 'human-read'=>'Human readable'])->toArray();
-
+            
+            $common = new CommonSettings();
+            $verify = $common->getOptionValue('verify','verify');
+            $verify_decode = ['email'=>'','mobile'=>''];
+            if($verify->count()>0){
+                $verify_decode = json_decode($verify->option_value,true);
+            }
+            
             /* Direct to System Settings Page */
-            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory', 'formats'));
+            return view('themes.default1.admin.helpdesk.settings.system', compact('systems', 'departments', 'timezones', 'time', 'date', 'date_time', 'common_setting', 'send_otp', 'email_mandatory', 'formats','verify_decode'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -215,6 +222,10 @@ class SettingsController extends Controller
                 $sett = CommonSettings::firstOrCreate(['option_name'=>'itil']);
                 $sett->status = $itil;
                 $sett->save();
+            }
+            if ($request->has('verify')) {
+                $json = json_encode($request->input('verify'));
+                CommonSettings::updateOrCreate(['option_name' => 'verify'],['option_value'=>$json,'optional_field'=>'verify']);
             }
             /* redirect to Index page with Success Message */
             return redirect('getsystem')->with('success', Lang::get('lang.system_updated_successfully'));

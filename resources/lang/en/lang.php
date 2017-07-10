@@ -1697,4 +1697,32 @@ return [
     'registration_verification'     => 'Registration Verififcation',
     'client'                        => 'Client',
     'sla_alert'                     => 'SLA Alert',
+    
+    // mobile OTP verification screen
+    'verification_channel'                                      => 'Verification channel',
+    'verify-mobile'                                             => 'Verify your mobile number',
+    'send_otp'                                                  => 'Send OTP',
+    'enter-otp-message-to-users'                                => 'We have sent an OTP code on your number. Please enter the code to verify your number.',
+    'edit_number'                                               => 'Edit number',
+    'enter_different_number'                                    => 'Enetr new number or update number',
+    'otp_sending_message'                                       => 'Please wait, we are sending OTP on your number',
+    'mobile_number_already_verified'                            => 'Mobile number has already been associated with another user account.',
+    'error-sms-service-not-active'                              => 'Failed to send OTP as SMS service is not working.',
+    'otp-can-not-be-verified'                                   => 'Failed to send OTP, please try again later',
+    'otp-sent-successfully'                                     => 'OTP has been sent successfully',
+
+    //updated 6-7-2016
+    'filter_tickets'                                            => 'Filter tickets',
+    'account_active'                                            => 'Active account',
+    'user_account_not_active'                                   => 'User account is not active',
+    'user_account_is_active'                                    => 'User\'s account is active',
+    'user_has_not_verified_email'                               => 'User has not verified email address',
+    'user_email_is_verified'                                    => 'User\'s email address is verified',
+    'user_mobile_is_verified'                                   => 'User contact number is verified',
+    'user_has_not_verified_email'                               => 'User has not verified contact number',
+    
+    'email_verify' =>'Email verify',
+    'mobile_verify'=>'Mobile verify',
+    'status_updated_successfully'       => 'Status updated successfully',
+
 ];
