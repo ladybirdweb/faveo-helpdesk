@@ -20,15 +20,7 @@ class VerifyCsrfToken extends BaseVerifier
         'media/files/public',
         'media/files',
     ];
-    /**
-     * The URIs that should be excluded from CSRF verification.
-     *
-     * @var array
-     */
-    protected $except = [
-        'CheckSerial',
-        'api/v1/*',
-    ];
+    
 
     /**
      * Handle an incoming request.

@@ -189,7 +189,11 @@ class MailController extends Controller
     {
         if (count($messages) > 0) {
             foreach ($messages as $message) {
-                $this->getMessageContent($message, $email);
+               $deamon = starts_with($message->getAddresses('from')['address'], 'mailer-daemon');
+                $auto_response = $message->auto_respond;
+                if (!$deamon && !$auto_response) {
+                    $this->getMessageContent($message, $email);
+                }
             }
         }
     }
@@ -209,10 +213,25 @@ class MailController extends Controller
         $collaborators = $this->collaburators($message, $email);
         $attachments = $message->getAttachments();
         //dd(['body' => $body, 'subject' => $subject, 'address' => $address, 'cc' => $collaborator, 'attachments' => $attachments]);
-        $this->workflow($address, $subject, $body, $collaborators, $attachments, $email);
+        $message_id = '';
+        $reference_id = '';
+        $uid = '';
+        if ($message->getOverview()) {
+            if (property_exists($message->getOverview(), 'message_id')) {
+                $message_id = $message->getOverview()->message_id;
+            }
+            if (property_exists($message->getOverview(), 'references')) {
+                $reference_id = $message->getOverview()->references;
+            }
+            if (property_exists($message->getOverview(), 'uid')) {
+                $uid = $message->getOverview()->uid;
+            }
+        }
+        $email_content = ['message_id' => $message_id, 'uid' => $uid, 'reference_id' => $reference_id];
+        $this->workflow($address, $subject, $body, $collaborators, $attachments, $email,$email_content);
     }
 
-    public function workflow($address, $subject, $body, $collaborator, $attachments, $email)
+    public function workflow($address, $subject, $body, $collaborator, $attachments, $email, $email_content = [])
     {
         $fromaddress = checkArray('address', $address[0]);
         $fromname = checkArray('name', $address[0]);
@@ -228,7 +247,7 @@ class MailController extends Controller
         $team_assign = null;
         $ticket_status = null;
         $auto_response = $email->auto_response;
-        $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone = '', $phonecode = '', $mobile_number = '', $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data = [], $auto_response,$attachments);
+        $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone = '', $phonecode = '', $mobile_number = '', $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data = [], $auto_response,$attachments,[],$email_content);
         
     }
 

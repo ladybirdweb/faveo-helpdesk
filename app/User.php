@@ -190,4 +190,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function org() {
         return $this->hasOne('App\Model\helpdesk\Agent_panel\User_org', 'user_id');
     }
+    
+    public function permision() {
+        return $this->hasOne('App\Model\helpdesk\Agent\Groups', 'user_id');
+    }
 }

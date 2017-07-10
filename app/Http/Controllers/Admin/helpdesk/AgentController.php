@@ -29,8 +29,8 @@ use Lang;
  *
  * @author      Ladybird <info@ladybirdweb.com>
  */
-class AgentController extends Controller
-{
+class AgentController extends Controller {
+
     /**
      * Create a new controller instance.
      * constructor to check
@@ -40,8 +40,7 @@ class AgentController extends Controller
      *
      * @return void
      */
-    public function __construct(PhpMailController $PhpMailController)
-    {
+    public function __construct(PhpMailController $PhpMailController) {
         // creating an instance for the PhpmailController
         $this->PhpMailController = $PhpMailController;
         // checking authentication
@@ -55,8 +54,7 @@ class AgentController extends Controller
      *
      * @return type view
      */
-    public function index()
-    {
+    public function index() {
         try {
             return view('themes.default1.admin.helpdesk.agent.agents.index');
         } catch (Exception $e) {
@@ -75,15 +73,14 @@ class AgentController extends Controller
      *
      * @return type view
      */
-    public function create(Timezones $timezone, Groups $group, Department $department, Teams $team_all, CountryCode $code)
-    {
+    public function create(Timezones $timezone, Groups $group, Department $department, Teams $team_all, CountryCode $code) {
         try {
             // gte all the teams
             $team = $team_all->where('status', '=', 1)->get();
             // get all the timezones
             $timezones = $timezone->get();
             // get all the groups
-            $groups = $group->where('group_status', '=', 1)->get();
+            $groups = "";
             // get all department
             $departments = $department->get();
             // list all the teams in a single variable
@@ -109,8 +106,10 @@ class AgentController extends Controller
      *
      * @return type Response
      */
-    public function store(User $user, AgentRequest $request)
-    {
+    public function store(User $user, AgentRequest $request) {
+        $user_name = strtolower($request->get('user_name'));
+        $permission = $request->input('permission');
+        $request->merge([ 'user_name' => $user_name]);
         if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
             return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' => 1])->withInput();
         } else {
@@ -120,7 +119,10 @@ class AgentController extends Controller
             }
         }
         // fixing the user role to agent
-        $user->fill($request->except(['group', 'primary_department', 'agent_time_zone', 'mobile']))->save();
+        $user->fill($request->except(['permission', 'primary_department', 'agent_time_zone', 'mobile']))->save();
+        if (count($permission) > 0) {
+            $user->permision()->create(['permision' => $permission]);
+        }
         if ($request->get('mobile')) {
             $user->mobile = $request->get('mobile');
         } else {
@@ -180,8 +182,7 @@ class AgentController extends Controller
      *
      * @return type Response
      */
-    public function edit($id, User $user, Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team, CountryCode $code)
-    {
+    public function edit($id, User $user, Assign_team_agent $team_assign_agent, Timezones $timezone, Groups $group, Department $department, Teams $team, CountryCode $code) {
         try {
             $location = GeoIP::getLocation();
             $phonecode = $code->where('iso', '=', $location->iso_code)->first();
@@ -189,7 +190,7 @@ class AgentController extends Controller
             $team = $team->where('status', '=', 1)->get();
             $teams1 = $team->pluck('name', 'id');
             $timezones = $timezone->get();
-            $groups = $group->where('group_status', '=', 1)->get();
+            $groups = "";//$group->where('group_status', '=', 1)->get();
             $departments = $department->get();
             $table = $team_assign_agent->where('agent_id', $id)->first();
             $teams = $team->pluck('id', 'name')->toArray();
@@ -211,8 +212,10 @@ class AgentController extends Controller
      *
      * @return type Response
      */
-    public function update($id, User $user, AgentUpdate $request, Assign_team_agent $team_assign_agent)
-    {
+    public function update($id, User $user, AgentUpdate $request, Assign_team_agent $team_assign_agent) {
+        $permission = $request->input('permission');
+        $user_name = strtolower($request->get('user_name'));
+        $request->merge([ 'user_name' => $user_name]);
         if ($request->get('country_code') == '' && ($request->get('phone_number') != '' || $request->get('mobile') != '')) {
             return redirect()->back()->with(['fails2' => Lang::get('lang.country-code-required-error'), 'country_code' => 1])->withInput();
         } else {
@@ -246,10 +249,10 @@ class AgentController extends Controller
             $user->primary_dpt = $request->primary_department;
             $user->agent_tzone = $request->agent_time_zone;
             $user->save();
-
+            $user->permision()->updateOrCreate(['user_id'=>$user->id], ['permision'=>json_encode($permission)]);
             return redirect('agents')->with('success', Lang::get('lang.agent_updated_sucessfully'));
         } catch (Exception $e) {
-            return redirect('agents')->with('fails', Lang::get('lang.unable_to_update_agent').'<li>'.$e->errorInfo[2].'</li>');
+            return redirect('agents')->with('fails', Lang::get('lang.unable_to_update_agent') . '<li>' . $e->errorInfo[2] . '</li>');
         }
     }
 
@@ -264,8 +267,7 @@ class AgentController extends Controller
      *
      * @return type Response
      */
-    public function destroy($id, User $user, Assign_team_agent $team_assign_agent)
-    {
+    public function destroy($id, User $user, Assign_team_agent $team_assign_agent) {
         /* Becouse of foreign key we delete team_assign_agent first */
         error_reporting(E_ALL & ~E_NOTICE);
         $team_assign_agent = $team_assign_agent->where('agent_id', $id);
@@ -289,8 +291,7 @@ class AgentController extends Controller
      *
      * @return string
      */
-    public function generateRandomString($length = 10)
-    {
+    public function generateRandomString($length = 10) {
         // list of supported characters
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         // character length checked
@@ -304,4 +305,5 @@ class AgentController extends Controller
         // return random string
         return $randomString;
     }
+
 }
