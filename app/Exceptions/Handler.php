@@ -12,6 +12,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 // use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Validation\ValidationException;
+use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
@@ -180,6 +181,8 @@ class Handler extends ExceptionHandler
 //                } else {
 //                    return parent::render($request, $e);
 //                }
+            case $e instanceof TokenMismatchException:
+                return redirect()->back()->with('fails', \Lang::get('lang.session-expired'));
             default:
                 return $this->render500($request, $e);
         }

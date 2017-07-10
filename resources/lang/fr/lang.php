@@ -1564,6 +1564,8 @@ return [
      'search'              => 'Rechercher...',
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'L\'utilisateur sélectionné est déjà le propriétaire du ticket.',
+     //updated 15-5-2017
+     'session-expired'     => 'Session expired or invalid, please try again.',
 
       //update 1-2-2017
      'system-outgoing-incoming-mail-not-configured' => 'You have not configured system mail. Faveo can\'t fetch tickets from mail or send mail to users without it.',

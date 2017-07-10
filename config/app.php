@@ -33,7 +33,7 @@ return [
       | This tells about aplication current version.
       |
      */
-    'version' => 'Community 1.9.4',
+    'version' => 'Community 1.9.6',
     /*
       |--------------------------------------------------------------------------
       | Application Name
@@ -187,6 +187,8 @@ return [
         App\FaveoLog\LaravelLogViewerServiceProvider::class,
         App\FaveoStorage\StorageServiceProvider::class,
         Yajra\Datatables\DatatablesServiceProvider::class,
+        
+        
 
     ],
     /*

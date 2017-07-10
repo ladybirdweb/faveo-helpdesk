@@ -275,7 +275,7 @@
                             
                         </li>
                         @endforeach
-
+                        @else
 
 <?php \Event::fire('service.desk.agent.sidebar', array()); ?>
                         @endif
