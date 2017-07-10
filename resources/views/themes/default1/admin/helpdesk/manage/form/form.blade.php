@@ -1,5 +1,9 @@
 @extends('themes.default1.admin.layout.admin')
-
+<style>
+   input[type="radio"]:focus, input[type="checkbox"]:focus {
+       outline: none !important;
+     }
+</style>
 @section('Manage')
 active
 @stop
@@ -50,12 +54,13 @@ class="active"
   .list-inline > li {
     padding: 0px;
   }
-  .affix {
+  .sticky {
+      position: fixed;
       top: 50px;
       z-index: 100;
       -webkit-box-shadow: 0 2px 6px rgba(63,63,63,0.1);
       box-shadow: 0 2px 6px rgba(63,63,63,0.1);
-      width: 74%;
+      
   }
   
   </style>
@@ -114,8 +119,8 @@ class="active"
      
        <label>@{{node.title}}</label>
       
-      <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this)" ng-show="node.default=='no'"><span class="glyphicon glyphicon-remove"></span></a>
-      <a class="pull-right btn btn-info btn-xs collapser"  data-toggle="collapse" aria-controls="collapseExample"><span class="glyphicon glyphicon glyphicon-pencil"></span></a>
+      <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="remove(this)" ng-show="node.default=='no'" style="padding: 3px 5px"><span class="glyphicon glyphicon-remove"> </span></a>
+      <a class="pull-right btn btn-info btn-xs collapser"  data-toggle="collapse" aria-controls="collapseExample" style="padding: 3px 5px"><span class="glyphicon glyphicon glyphicon-pencil"></span></a>
       <div class="panel-collapse collapse" id="collapseExample" style="margin-top: 10px;">
         <ul class="list-group" >
            <li class="list-group-item row" ng-show="node.title=='Requester'" style="margin-left: 0px;margin-right: 0px">
@@ -123,69 +128,70 @@ class="active"
                   <h3>Behaviour</h3>
              </div>
              <div class="col-sm-3">
-                  <button type="button" class="btn btn-default btn-sm" ng-show="node.default=='yes'">Default</button>
+                  <button type="button" class="btn btn-default btn-sm" ng-show="node.default=='yes'" disabled="true">Default</button>
              </div>
              <div class="col-sm-10">
                 <h4>For Agent</h4>
-                <div class="col-sm-2"><input type="checkbox" class="form-control" ng-model="node.agentCCfield" style="margin-top: -6px" ng-disabled="true"></div>
+                <div class="col-sm-2" style="padding-right: 0px"><input type="checkbox" class="form-control" ng-model="node.agentCCfield" style="margin-top: -6px;width: 17%;float: right"></div>
                 <div class="col-sm-10" ><p>Display CC Field</p></div>
              </div>
           </li>
           <li class="list-group-item row" ng-show="node.title!='Requester'" style="margin-left: 0px;margin-right: 0px">
              <div class="col-sm-9"><h3>Behaviour</h3></div>
              <div class="col-sm-3">
-                  <button type="button" class="btn btn-default btn-sm" ng-show="node.default=='yes'">Default</button>
+                  <button type="button" class="btn btn-default btn-sm" ng-show="node.default=='yes'" disabled="true">Default</button>
              </div>
              <div class="col-sm-6">
                 <h4>For Agent</h4>
-                <div class="col-sm-2"><input type="checkbox" class="form-control" ng-model="node.agentRequiredFormSubmit" style="margin-top: -6px"></div>
+                <div class="col-sm-2" style="padding-right: 0px"><input type="checkbox" class="form-control" ng-model="node.agentRequiredFormSubmit" style="margin-top: -6px;width: 35%;float: right;"></div>
                 <div class="col-sm-10" ><p>Required when submitting the form</p></div>
              </div>
              <div class="col-sm-6">
                 <h4>For Customers</h4>
-                <div class="col-sm-2" ><input type="checkbox" class="form-control" ng-model="node.customerDisplay" style="margin-top: -6px"></div>
+                <div class="col-sm-2"  style="padding-right: 0px"><input type="checkbox" class="form-control" ng-model="node.customerDisplay" style="margin-top: -6px;width: 35%;float: right"></div>
                 <div class="col-sm-10" ><p>Display to customer</p></div>
-                <div class="col-sm-2" ><input type="checkbox" class="form-control" ng-model="node.customerRequiredFormSubmit" style="margin-top: -6px"></div>
+                <div class="col-sm-2" style="padding-right: 0px"><input type="checkbox" class="form-control" ng-model="node.customerRequiredFormSubmit" style="margin-top: -6px;width: 35%;float: right;"></div>
                 <div class="col-sm-10" ><p>Required when submitting the form</p></div>
              </div>
           </li>
-          <li class="list-group-item row" ng-show="node.value==''||node.value!=null" style="margin-left: 0px;margin-right: 0px">
-             <div class="col-sm-3" style="line-height: 2.5"><label>label</label></div>
+          <li class="list-group-item row" ng-show="node.label==''||node.label!=null" style="margin-left: 0px;margin-right: 0px">
+             <div class="col-sm-3" style="line-height: 2.5"><label>Label</label></div>
              <div class="col-sm-9"><input type="text" name="" class="form-control" ng-model="node.label" style="border-radius: 0px" ng-disabled="node.default=='yes'"></div>
           </li>
-          <li class="list-group-item row" ng-show="node.placeholder==''||node.placeholder!=null" style="margin-left: 0px;margin-right: 0px">
+<!--           <li class="list-group-item row" ng-show="node.placeholder==''||node.placeholder!=null" style="margin-left: 0px;margin-right: 0px">
               <div class="col-sm-3" style="line-height: 2.5"><label>Placeholder</label></div>
              <div class="col-sm-9"><input type="text" class="form-control" name="" ng-model="node.placeholder" style="border-radius:0px"></div>
           </li>
           <li class="list-group-item row" ng-show="node.name==''||node.name!=null&&node.title!='Requester'" style="margin-left: 0px;margin-right: 0px">
               <div class="col-sm-3" style="line-height: 2.5"><label>Name</label></div>
              <div class="col-sm-9"><input type="text" class="form-control" name="" ng-model="node.name" style="border-radius: 0px"></div>
+          </li> -->
+          <li class="list-group-item row" ng-show="node.title=='Api'" style="margin-left: 0px;margin-right: 0px">
+              <div class="col-sm-3" style="line-height: 2.5"><label>Api Link</label></div>
+             <div class="col-sm-9"><input type="text" class="form-control" name="" ng-model="node.api" style="border-radius: 0px"></div>
+             <div class="col-sm-3" style="line-height: 2.5"><label>Format</label></div>
+             <div class="col-sm-9">@{{node.format}}-->Ex:[{'id':'1','optionvalue':'Your Options-1'},{'id':'2','optionvalue':'Your Options-2'}]</div>
           </li>
-           <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px" ng-repeat="option in node.options" ng-show="node.type=='radio'||node.type=='checkbox'||node.type=='select' && node.default=='no'" >
+           <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px" ng-repeat="option in node.options" ng-show="node.type=='radio'||node.type=='select' ||node.type=='checkbox' && node.default=='no'" >
               <div class="col-sm-3" style="line-height: 2.5"><label>Option@{{$index+1}}</label></div>
              <div class="col-sm-6"><input type="text" class="form-control" name="" ng-model="option.optionvalue" style="border-radius: 0px">
              </div>
              <div class="col-sm-3">
-                  <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="removeOption(this,$index)">
-                      <span class="glyphicon glyphicon-remove"></span>
+                  <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="removeOption(this,$index)" style="padding: 3px 5px">
+                      <span class="glyphicon glyphicon-remove"> </span>
                   </a>
-                  <a class="pull-right btn btn-primary btn-xs" ng-show="node.type=='select'&&node.title=='Nested Select'" data-nodrag ng-click="newSubForm(this,node.title,$index)" style="margin-right: 8px;">
-                      <span class="glyphicon glyphicon-plus"></span>
-                  </a>
+                  <div class="dropdown" ng-show="node.title=='Nested Select'||node.title=='Nested Radio' ||node.title=='Nested Checkbox'">
+                      <a class="pull-right btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown" data-nodrag  style="margin-right: 8px;">
+                         <span class="glyphicon glyphicon-plus"></span> Add
+                      </a>
+                      <ul class="dropdown-menu">
+                          <li ng-repeat="Ifield in tree1"><a href="javascript:void(0)" ng-click="newSubForm(this,Ifield.title,$parent.$index)">@{{Ifield.title}}</a></li>
+                      </ul>
+                  </div>
              </div>
             <ol class="col-sm-12" ui-tree-nodes="" ng-model="option.nodes" ng-class="{hidden: collapsed}">
                 <li ng-repeat="node in option.nodes" ui-tree-node ng-include="'nodes_renderer2.html'"></li>
             </ol> 
-          </li>
-          <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px" ng-repeat="option in node.options" ng-show="node.value=='Type'" >
-              <div class="col-sm-3" style="line-height: 2.5"><label>Option@{{$index+1}}</label></div>
-             <div class="col-sm-6"><input type="text" class="form-control" name="" ng-model="option.optionvalue" style="border-radius: 0px">
-             </div>
-             <div class="col-sm-3">
-                  <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="removeOption(this,$index)">
-                      <span class="glyphicon glyphicon-remove"></span>
-                  </a>
-             </div>
           </li>
           <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px"  ng-show="node.value=='Status'">
               <div class="col-sm-5">
@@ -196,48 +202,11 @@ class="active"
               </div>
               
            </li>
-          <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px" ng-repeat="option in node.options" ng-show="node.title=='Status'">
-              <div class="col-sm-5">
-                <input class="form-control" ng-model="option.optionvalue" ng-show="option.forAgentField=='default'" ng-disabled="true">
-                <input class="form-control" ng-model="option.optionvalue" ng-show="option.forAgentField=='none'">
-              </div>
-              <div class="col-sm-5">
-                <input class="form-control" ng-model="option.forCustomer" >
-              </div>
-              <div class="col-sm-1">
-                 <a class="pull-right btn btn-danger btn-xs" data-nodrag ng-click="removeOption(this,$index)" ng-show="option.forAgentField=='none'">
-                      <span class="glyphicon glyphicon-remove"></span>
-                  </a>
-              </div>
-           </li>
-           <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px;text-align: center;" ng-show="node.title=='Nested Select'">
-                 <input type="button" name="addOption" class="btn btn-default" value="Add Option" ng-click="addOption(this)">
+           <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px;text-align: center;" ng-show="node.title=='Nested Select'||node.title=='Nested Radio'||node.title=='Nested Checkbox'">
+                 <input type="button" name="addOption" class="btn btn-default" value="Add Option" ng-click="addOption(this,node.type)">
           </li>
-          <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px;text-align: center;" ng-show="node.title=='Type' ||node.type=='radio' || node.type=='checkbox'||node.type=='select'&& node.title!='Nested Select'&& node.default=='no'">
-                 <input type="button" name="addOption" class="btn btn-default" value="Add Option" ng-click="addTypeOption(this)">
-          </li>
-          <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px;text-align: center;" ng-show="node.title=='Status'">
-                 <input type="button" name="addOption" class="btn btn-default" value="Add Option" ng-click="addStatusOption(this)">
-          </li>
-          <li class="list-group-item row" ng-show="node.title=='Requester'" style="margin-left: 0px;margin-right: 0px">
-            <div class="col-sm-6" >
-                <h4>For New Agent</h4>
-                <div class="col-sm-2"><input type="checkbox" class="form-control" ng-model="node.agent_email" style="margin-top: -6px"></div>
-                <div class="col-sm-10" ><p>Email Required</p></div>
-                <div class="col-sm-2"><input type="checkbox" class="form-control" ng-model="node.agent_mobile" style="margin-top: -6px"></div>
-                <div class="col-sm-10" ><p>Mobile Required</p></div>
-                <div class="col-sm-2"><input type="checkbox" class="form-control" ng-model="node.agent_name" style="margin-top: -6px"></div>
-                <div class="col-sm-10" ><p>name Required</p></div>
-             </div>
-            <div class="col-sm-6" >
-                <h4>For New Customer</h4>
-                <div class="col-sm-2"><input type="checkbox" class="form-control" ng-model="node.customer_email" style="margin-top: -6px"></div>
-                <div class="col-sm-10" ><p>Email Required</p></div>
-                <div class="col-sm-2"><input type="checkbox" class="form-control" ng-model="node.customer_mobile" style="margin-top: -6px"></div>
-                <div class="col-sm-10" ><p>Mobile Required</p></div>
-                <div class="col-sm-2"><input type="checkbox" class="form-control" ng-model="node.customer_name" style="margin-top: -6px"></div>
-                <div class="col-sm-10" ><p>name Required</p></div>
-             </div>
+          <li class="list-group-item row"   style="margin-left: 0px;margin-right: 0px;text-align: center;" ng-show="node.title!='Nested Radio' && node.type=='radio'||node.title!='Nested Checkbox' && node.type=='checkbox'||node.type=='select' && node.title!='Nested Select'&& node.default=='no'">
+                 <input type="button" name="addOption" class="btn btn-default" value="Add Option" ng-click="addTypeOption(this,node.type)">
           </li>
        </ul>
       </div>
@@ -248,24 +217,23 @@ class="active"
     </li>
   </ol>
 </script>
-<div class="col-sm-10" style="border: 1px solid gainsboro;" id="content1">
-<div class="row" id="category" data-spy="affix" data-offset-top="70">
-<div  class="col-sm-12" style="background-color: white;">
+<div class="row">
+<div class="col-sm-11"  id="content1">
+<div  class="col-sm-12" style="background-color: white;" id="category">
     <div class="col-sm-6">
-    <h3>Create a new ticket</h3>
+    <h3>Create a New Ticket(Drag Here)</h3>
     </div>
-    <div class="col-sm-5" style="line-height: 4">
-       <button type="button" class="btn btn-info" ng-click="editFormValue()">Save</button>
+    <div class="col-sm-5" style="margin-top: 10px">
+
+{!!Form::button('<i class="fa fa-floppy-o" aria-hidden="true">&nbsp;&nbsp;</i>'.Lang::get('lang.save'),['type' => 'submit', 'class' =>'btn btn-primary','ng-click'=>'editFormValue()','style'=>'float: right;','id'=>'save'])!!}
+
     </div>
     <div ui-tree id="tree1-root" data-clone-enabled="true" data-nodrop-enabled="true" class="col-sm-12">
-    <span>Drag Here</span>
-      <ol ui-tree-nodes="" ng-model="tree1" class="list-inline" style="margin-left: 40px;margin-bottom: 15px;">
-        <li ng-repeat="node in tree1" ui-tree-node ng-include="'nodes_renderer1.html'" ng-click=addToTree(node)></li>
+      <ol ui-tree-nodes="" ng-model="tree1" class="list-inline" style="margin-bottom: 15px;">
+        <li ng-repeat="node in tree1" ui-tree-node ng-include="'nodes_renderer1.html'" ng-click="addToTree(node)"></li>
       </ol>
     </div>
   </div>
-</div>
-<div class="row">
   <div class="col-sm-12">
     <h3>Ticket Fields(Drop Here)</h3>
     <div ui-tree id="tree2-root" data-clone-enabled="true" id="drp">
@@ -278,10 +246,10 @@ class="active"
   </div>
 </div>
 </div>
-</div>
         
         <!--end Code-->
     </div>
+</div>
 </div>
 @stop
 
@@ -297,10 +265,27 @@ $(function () {
 });
 
 });
-$(document).ready(function () {
-    
-        $('.affix').width($('#content1').width());
 
+$(document).ready(function() {
+var stickyNavTop = parseInt($('#category').offset().top)-100;
+
+var stickyNav = function(){
+var scrollTop = $(window).scrollTop();
+
+if (scrollTop > stickyNavTop) {
+    var width=$('#category').outerWidth(); 
+    $('#category').addClass('sticky');
+    $('#category').css('width',width);
+} else {
+    $('#category').removeClass('sticky'); 
+}
+};
+ 
+stickyNav();
+ 
+$(window).scroll(function() {
+  stickyNav();
+});
 });
 
 </script>
@@ -312,7 +297,6 @@ $(document).ready(function () {
      $http.get("{{url('form/ticket')}}").success(function(data){
          $scope.tree2 = data[0];
      })
-     
      $scope.node1=['submit','button'];
       $scope.remove = function (scope) {
         scope.remove();
@@ -321,30 +305,46 @@ $(document).ready(function () {
       $scope.toggle = function (scope) {
         scope.toggle();
       };
-      $scope.addOption = function (scope) {
+      $scope.addOption = function (scope,x) {
           var nodeData = scope.$modelValue.options;
+          var index=scope.$modelValue.options.length;
+          if(x=='checkbox'){
+             nodeData.push({
+              'optionvalue':'Value',
+              'checked':'',
+              'nodes':[]
+           })
+
+          }
+          else if(x=='select'){
+            nodeData.push({
+              'id':index+1,
+              'optionvalue':'Value',
+              'nodes':[]
+           })
+          }
+          else{
            nodeData.push({
               'optionvalue':'Value',
               'nodes':[]
            })
+         }
       };
-      $scope.addTypeOption= function (scope) {
+      $scope.addTypeOption= function (scope,x) {
           var nodeData = scope.$modelValue.options;
+        if(x=='checkbox'){
+             nodeData.push({
+              'optionvalue':'Value',
+              'checked':''
+           })
+          }
+        else{
            nodeData.push({
               'optionvalue':'Value'
            })
+          }
       };
-      $scope.addStatusOption= function (scope) {
-          var nodeData = scope.$modelValue.options;
-           nodeData.push({
-              'forAgent':'',
-              'forAgentField':'none',
-              'forCustomer':'',
-              'slaTimer':'yes',
-              'slaTimerValue':true,
-              'optionvalue':''
-           })
-      };
+      
       $scope.removeOption = function (scope,y) {
           var nodeData = scope.$modelValue.options;
            nodeData.splice(y,1);
@@ -353,10 +353,12 @@ $(document).ready(function () {
           $scope.tree2.push(scope);
       };
       $scope.editFormValue=function(){
+          $('#save').attr('disabled','disabled');
           $http.post("{{url('forms')}}",$scope.tree2).success(function(data){
         $('.well').css('display','block');      
         $('.well').html(data);
         $('.well').css('color','green');
+        $('html, body').animate({scrollTop:0}, 500);
          setTimeout(function(){
              location.reload();
          },2000);      
@@ -365,8 +367,12 @@ $(document).ready(function () {
               $('.well').html(data);
               $('.well').css('color','red');
           })
-      }
+       
+
+       }
+       $scope.newSubFormCheckbox=function(scope,x,y){}
       $scope.newSubForm=function(scope,x,y){
+
         var nodeData = scope.$modelValue.options[y];
        
        if(x=='Nested Select'){
@@ -374,7 +380,6 @@ $(document).ready(function () {
            'title': 'Nested Select',
            'label': 'Nested Select',
            'type': 'select',
-           'required':false,
            'placeholder':'',
            'name':'',
            'value':'',
@@ -383,6 +388,7 @@ $(document).ready(function () {
            'customerRequiredFormSubmit':false,
            'options':[
               {
+                 'id':1,
                  'optionvalue':'Value',
                  'nodes':[]
               }
@@ -390,6 +396,158 @@ $(document).ready(function () {
             'default':'no'
           });
        }
+       else if(x=='Nested Radio'){
+        nodeData.nodes.push({
+         'title': 'Nested Radio',
+        'label': 'Nested Radio',
+        'type':'radio',
+        'placeholder':'',
+        'name':'',
+        'value':'',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'options':[
+           {
+              'optionvalue':'Value',
+              'nodes':[]
+           }
+        ],
+        'default':'no'
+          });
+       }
+       else if(x=='Nested Checkbox'){
+        nodeData.nodes.push({
+          'title': 'Nested Checkbox',
+          'label': 'Nested Checkbox',
+          'type':'checkbox',
+          'placeholder':'',
+          'name':'',
+          'agentRequiredFormSubmit':true,
+          'customerDisplay':true,
+          'customerRequiredFormSubmit':false,
+          'options':[
+           {
+              'optionvalue':'Value',
+              'checked':'',
+              'nodes':[]
+           }
+        ],
+          'default':'no'
+         });
+      }
+       else if(x=='Text Field'){
+        nodeData.nodes.push({
+        'title': 'Text Field',
+        'label':'Text Field',
+        'type':'text',
+        'placeholder':'',
+        'name':'',
+        'value':'',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'default':'no'
+      });
+       }
+       else if(x=='Text Area'){
+        nodeData.nodes.push({
+        'title': 'Text Area',
+        'label':'Text Area',
+        'type':'textarea',
+        'placeholder':'',
+        'name':'',
+        'value':'',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'default':'no'
+      });
+       }
+       else if(x=='Number'){
+        nodeData.nodes.push({
+        'title': 'Number',
+        'label':'Number',
+        'type':'number',
+        'placeholder':'',
+        'name':'',
+        'value':'',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'default':'no'
+      });
+       }
+       else if(x=='Select'){
+        nodeData.nodes.push({
+        'title': 'Select',
+        'label': 'Select',
+        'type':'select',
+        'placeholder':'',
+        'name':'',
+        'value':'',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'options':[
+           {
+              'optionvalue':'Value',
+           }
+        ],
+        'default':'no'
+      });
+       }
+       else if(x=='Radio'){
+        nodeData.nodes.push({
+        'title': 'Radio',
+        'label':'Radio',
+        'type':'radio',
+        'name':'',
+        'value':'',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'options':[
+           {
+              'optionvalue':'Value'
+           }
+        ],
+        'default':'no'
+      });
+       }
+       else if(x=='Checkbox'){
+        nodeData.nodes.push({
+        'title': 'Checkbox',
+        'label':'Checkbox',
+        'type':'checkbox',
+        'name':'',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'options':[
+           {
+              'optionvalue':'Value',
+              'checked':''
+           }
+        ],
+        'default':'no'
+      });
+       }
+       else if(x=='Date'){
+        nodeData.nodes.push({
+        'title': 'Date',
+        'label':'Date',
+        'type':'date',
+        'name':'',
+        'value':'',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'default':'no'
+      });
+       }
+
+
       };
 
 
@@ -418,7 +576,7 @@ $(document).ready(function () {
       },{
         'title': 'Number',
         'label':'Number',
-        'type':'mobile',
+        'type':'number',
         'placeholder':'',
         'name':'',
         'value':'',
@@ -438,7 +596,42 @@ $(document).ready(function () {
         'customerRequiredFormSubmit':false,
         'options':[
            {
+              'id':1,
               'optionvalue':'Value',
+              'nodes':[]
+           }
+        ],
+        'default':'no'
+      },{
+        'title': 'Nested Radio',
+        'label': 'Nested Radio',
+        'type':'radio',
+        'placeholder':'',
+        'name':'',
+        'value':'',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'options':[
+           {
+              'optionvalue':'Value',
+              'nodes':[]
+           }
+        ],
+        'default':'no'
+      },{
+        'title': 'Nested Checkbox',
+        'label': 'Nested Checkbox',
+        'type':'checkbox',
+        'placeholder':'',
+        'name':'',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'options':[
+           {
+              'optionvalue':'Value',
+              'checked':'',
               'nodes':[]
            }
         ],
@@ -454,7 +647,7 @@ $(document).ready(function () {
         'customerDisplay':true,
         'customerRequiredFormSubmit':false,
         'options':[
-           {
+           { 
               'optionvalue':'Value',
            }
         ],
@@ -480,13 +673,13 @@ $(document).ready(function () {
         'label':'Checkbox',
         'type':'checkbox',
         'name':'',
-        'value':'',
         'agentRequiredFormSubmit':true,
         'customerDisplay':true,
         'customerRequiredFormSubmit':false,
         'options':[
            {
-              'optionvalue':'Value'
+              'optionvalue':'Value',
+              'checked':''
            }
         ],
         'default':'no'
@@ -500,6 +693,19 @@ $(document).ready(function () {
         'customerDisplay':true,
         'customerRequiredFormSubmit':false,
         'default':'no'
+      },
+      {
+        'title': 'Api',
+        'label':'Api',
+        'type':'text',
+        'name':'',
+        'value':'',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'default':'no',
+        'api':'',
+        'format':'Json'
       }
       ];
       
