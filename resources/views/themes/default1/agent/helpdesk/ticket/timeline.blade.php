@@ -15,8 +15,6 @@ active
 <?php
 $user = App\User::where('id', '=', $tickets->user_id)->first();
 $assignedto = App\User::where('id', '=', $tickets->assigned_to)->first();
-$agent_group = Auth::user()->assign_group;
-$group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->where('group_status', '=', '1')->first();
 ?>
 
 @section('sidebar')
@@ -111,12 +109,12 @@ if ($thread->title != "") {
             <?php
             Event::fire(new \App\Events\TicketBoxHeader($user->id));
 
-            if ($group->can_edit_ticket == 1) {
+            if ($ticket_policy->edit()) {
                 ?>
                 <button type="button" class="btn btn-sm btn-default" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><i class="fa fa-edit" style="color:green;"> </i> {!! Lang::get('lang.edit') !!}</button>
             <?php } ?>
 
-            <?php if ($group->can_assign_ticket == 1) { ?>
+            <?php if ($ticket_policy->assign()) { ?>
                 <button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#{{$tickets->id}}assign"><i class="fa fa-hand-o-right" style="color:orange;"> </i> {!! Lang::get('lang.assign') !!}</button>
             <?php } ?>
 
@@ -139,7 +137,7 @@ if ($thread->title != "") {
                     @endforeach
                 </ul>
             </div>
-            <?php if ($group->can_delete_ticket == 1 || $group->can_ban_email == 1) { ?>
+            <?php if ($ticket_policy->delete() || $ticket_policy->ban()) { ?>
                 <div id="more-option" class="btn-group">
                     <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="d2"><i class="fa fa-cogs" style="color:teal;"> </i>
                         {!! Lang::get('lang.more') !!} <span class="caret"></span>
@@ -149,11 +147,11 @@ if ($thread->title != "") {
                         @if($tickets->status != 3 && $tickets->status != 2)
                         <li data-toggle="modal" data-target="#MergeTickets"><a href="#"><i class="fa fa-code-fork" style="color:teal;"> </i>{!! Lang::get('lang.merge-ticket') !!}</a></li>
                         @endif
-                        <?php if ($group->can_delete_ticket == 1) { ?>
+                        <?php if ($ticket_policy->delete()) { ?>
                             <li id="delete"><a href="#"><i class="fa fa-trash-o" style="color:red;"> </i>{!! Lang::get('lang.delete_ticket') !!}</a></li>
                         <?php }
                         ?>
-                        <?php if ($group->can_ban_email == 1) { ?>
+                        <?php if ($ticket_policy->ban()) { ?>
                             <li data-toggle="modal" data-target="#banemail"><a href="#"><i class="fa fa-ban" style="color:red;"></i>{!! Lang::get('lang.ban_email') !!}</a></li>
                         <?php
                         \Event::fire('ticket.details.more.list',[$tickets]);
@@ -765,7 +763,7 @@ if ($thread->title != "") {
 <!-- page modals -->
 <div>
     <!-- Edit Ticket modal -->
-    <?php if ($group->can_edit_ticket == 1) { ?>
+    <?php if ($ticket_policy->edit()) { ?>
         <div class="modal fade" id="Edit">
             <div class="modal-dialog" style="width:60%;height:70%;">
                 <div class="modal-content">
@@ -870,7 +868,7 @@ if ($thread->title != "") {
         </div><!-- /.modal -->
     <?php }
     ?>
-<?php if ($group->can_ban_email == 1) { ?>
+<?php if ($ticket_policy->ban()) { ?>
         <!-- ban email modal -->
         <div class="modal fade" id="banemail">
             <div class="modal-dialog">
@@ -990,7 +988,7 @@ if ($thread->title != "") {
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-<?php if ($group->can_assign_ticket == 1) { ?>
+<?php if ($ticket_policy->assign()) { ?>
         <!-- Ticket Assign Modal -->
         <div class="modal fade" id="{{$tickets->id}}assign">
             <div class="modal-dialog">

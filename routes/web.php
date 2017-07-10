@@ -403,6 +403,10 @@ Route::group(['middleware' => 'redirect'], function () {
         Route::get('/ticket/delete/{id}', ['as' => 'ticket.delete', 'uses' => 'Agent\helpdesk\TicketController@delete']); /*  Get Ticket Delete */
         Route::get('/email/ban/{id}', ['as' => 'ban.email', 'uses' => 'Agent\helpdesk\TicketController@ban']); /*  Get Ban Email */
         Route::get('/ticket/surrender/{id}', ['as' => 'ticket.surrender', 'uses' => 'Agent\helpdesk\TicketController@surrender']); /*  Get Ticket Surrender */
+        
+        Route::get('/ticket/change-status/{id}/{id2}', ['as' => 'change.status', 'uses' => 'Agent\helpdesk\TicketController@changeStatus']);
+            
+        
         Route::get('/aaaa', 'Client\helpdesk\GuestController@ticket_number');
         Route::get('trash', ['as' => 'get-trash', 'uses' => 'Agent\helpdesk\TicketController@trash']); /* To show Deleted Tickets */
 

@@ -348,14 +348,11 @@ class="active"
                     <div class="modal-body">
 
                         <?php
-                        $groups = App\Model\helpdesk\Agent\Groups::all(array('id', 'name'));
+                       
                         $departments = App\Model\helpdesk\Agent\Department::all(array('id', 'name'));
                         ?>
 
-                        <!-- <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}"> -->
-                        {!! Form::label('assign_group',Lang::get('lang.assigned_group')) !!} <span class="text-red"> *</span>
-                        {!!Form::select('group',[Lang::get('lang.groups')=>$groups->pluck('name','id')->toArray()],null,['class' => 'form-control select']) !!}
-                        <!-- </div> -->
+                        
                         <!-- primary dept -->
                         <!-- <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}"> -->
                         {!! Form::label('primary_dpt',Lang::get('lang.primary_department')) !!} <span class="text-red"> *</span>
@@ -417,14 +414,11 @@ class="active"
                     <div class="modal-body">
 
                         <?php
-                        $groups = App\Model\helpdesk\Agent\Groups::all(array('id', 'name'));
+                        
                         $departments = App\Model\helpdesk\Agent\Department::all(array('id', 'name'));
                         ?>
 
-                        <!-- <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}"> -->
-                        {!! Form::label('assign_group',Lang::get('lang.assigned_group')) !!} <span class="text-red"> *</span>
-                        {!!Form::select('group',[Lang::get('lang.groups')=>$groups->pluck('name','id')->toArray()],null,['class' => 'form-control select']) !!}
-                        <!-- </div> -->
+                        
                         <!-- primary dept -->
                         <!-- <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}"> -->
                         {!! Form::label('primary_dpt',Lang::get('lang.primary_department')) !!} <span class="text-red"> *</span>

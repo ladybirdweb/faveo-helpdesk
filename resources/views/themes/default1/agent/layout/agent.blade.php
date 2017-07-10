@@ -287,10 +287,7 @@
             <!-- Right side column. Contains the navbar and content of the page -->
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
-                <?php
-$agent_group = $auth_user_assign_group;
-$group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first();
-?>
+                
                     <div class="tab-content" style="background-color: #80B5D3; position: fixed; width:100% ;padding: 0 0px 0 0px; z-index:999">                    <div class="collapse navbar-collapse" id="navbar-collapse">
                         <div class="tabs-content">
                             @if($replacetop==0)
@@ -311,7 +308,7 @@ $group = App\Model\helpdesk\Agent\Groups::where('id', '=', $agent_group)->first(
                                     <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
                                     <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
                                     <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
-<?php if ($group->can_create_ticket == 1) { ?>
+<?php if ($ticket_policy->create()) { ?>
                                         <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
                                     <?php } ?>
                                 </ul>
