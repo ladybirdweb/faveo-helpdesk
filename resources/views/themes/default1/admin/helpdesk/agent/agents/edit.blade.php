@@ -1,5 +1,45 @@
 @extends('themes.default1.admin.layout.admin')
+<style type="text/css" media="screen">
+   .permission-menu{
+        width: 300px !important;
+   }  
+.permisson-drop:hover, .permisson-drop:active, .permisson-drop.hover {
+    background-color: #e7e7e7 !important;
 
+}
+.permisson-drop {
+    background-color: #f4f4f4;
+    color: #444;
+    border-color: #ddd;
+    width: 90%;
+}
+.permisson-drop {
+    border-radius: 3px;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: 1px solid transparent;
+}
+.permisson-drop {
+    -moz-user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857;
+    margin-bottom: 0;
+    padding: 6px 12px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.open > .dropdown-menu {
+    overflow: auto;
+    height: 220px;
+}     
+</style>
 @section('Staffs')
 active
 @stop
@@ -204,7 +244,11 @@ class="active"
 
                 </div>
                 <!-- role -->
-                <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
+                
+
+            </div>
+            <div class="col-xs-6">
+            <div class="form-group {{ $errors->has('role') ? 'has-error' : '' }}">
 
                     {!! Form::label('role',Lang::get('lang.role')) !!}
 
@@ -217,11 +261,10 @@ class="active"
                         </div>
                     </div>
                 </div>
-
-            </div>
+                </div>
             <!-- day light saving -->
             {{-- <div class="col-xs-6"> --}}
-
+            
             {{-- <div> --}}
             {{-- <div class="row"> --}}
             {{-- {!! Form::label('',Lang::get('lang.day_light_saving')) !!} --}}
@@ -264,7 +307,116 @@ class="active"
         </div>
         <div class="row">
             
-
+             <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}">
+                {!! Form::label('assign_group', Lang::get('lang.assigned_group')) !!}
+                
+               <div class="dropdown">
+                       <button class="permisson-drop" type="button" id="menu1" data-toggle="dropdown" onclick="closeDropdown()">Permissions<span class="caret"></span></button>
+                         <ul class="dropdown-menu permission-menu" role="menu" aria-labelledby="menu1">
+                            <li role="presentation">
+                                    <span style="padding-left: 10px">Agent Permission</span><span style="float: right;padding: 4px;cursor: pointer;" onclick="closeDropdown()"><svg aria-label="Close" class="octicon octicon-x js-menu-close" height="16" role="img" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z"></path></svg>
+                                    </span>
+                            </li>
+                            <li role="presentation" class="divider"></li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('create_ticket','Create Ticket')">
+                                    <span id="create_ticket" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Create Ticket</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('edit_ticket','Edit Ticket')">
+                                    <span id="edit_ticket" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Edit Ticket</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('post_ticket','Post Ticket')">
+                                    <span id="post_ticket" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Post Ticket</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('close_ticket','Close Ticket')">
+                                    <span id="close_ticket" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Close Ticket</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('transfer_ticket','Transfer Ticket')">
+                                    <span id="transfer_ticket" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Transfer Ticket</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('delete_ticket','Delete Ticket')">
+                                    <span id="delete_ticket" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Delete Ticket</span></a>
+                            </li>
+                            
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('assign_ticket','Assign Ticket')">
+                                    <span id="assign_ticket" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Assign Ticket</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('access_kb','Access Kb')">
+                                    <span id="access_kb" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Access Kb</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('ban_email','Ban Emails')">
+                                    <span id="ban_email" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Ban Email</span></a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('organisation_document_upload','Organisation Document Upload')">
+                                    <span id="organisation_document_upload" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Organisation Document Upload</span></a>
+                            </li>
+                            
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('email_verification','Email Verification')">
+                                    <span id="email_verification" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Email Verification</span></a>
+                            </li>
+                            
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('mobile_verification','Mobile Verification')">
+                                    <span id="mobile_verification" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Mobile Verification</span></a>
+                            </li>
+                            
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="javascript:void(0)" onclick="permissionSelect('account_activate','Account Activation')">
+                                    <span id="account_activate" style="display: none"><svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path fill-rule="evenodd" d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z"></path>
+                                    </svg>
+                                    <input  type="hidden"></span>
+                                    <span>Account Activation</span></a>
+                            </li>
+                        </ul>
+                </div>
+                <div id="view-permission" style="width: 90%;text-align: center;border:1px solid gainsboro"></div>
+            </div>
             <!-- primary department -->
             <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}">
                 {!! Form::label('primary_dpt', Lang::get('lang.primary_department')) !!} <span class="text-red"> *</span>
@@ -298,5 +450,141 @@ class="active"
         {!! Form::submit(Lang::get('lang.update'),['class'=>'form-group btn btn-primary'])!!}
     </div>
 </div>
+<script>
+$(document).ready(function() {
+    $(".numberOnly").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+             // Allow: Ctrl/cmd+A
+            (e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+             // Allow: Ctrl/cmd+C
+            (e.keyCode == 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+             // Allow: Ctrl/cmd+X
+            (e.keyCode == 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+             // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+});
+     var permision = {!!$user->permision()->pluck("permision")!!};
+     console.log(permision);
+     $.each(permision[0], function(key, value) {
+        if(key=="create_ticket"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Create Ticket</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+         else if(key=="edit_ticket"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Edit Ticket</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+         else if(key=="post_ticket"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Post Ticket</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+         else if(key=="close_ticket"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Close Ticket</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+         else if(key=="delete_ticket"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Delete Ticket</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+         else if(key=="assign_ticket"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Assign Ticket</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+         else if(key=="ban_email"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Ban Email</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+         else if(key=="access_kb"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Access Kb</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+         else if(key=="transfer_ticket"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Transfer Ticket</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+         else if(key=="organisation_document_upload"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Organisation Document Upload</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+         
+         else if(key=="email_verification"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Email Verification</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+         else if(key=="mobile_verification"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Mobile Verification</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+         else if(key=="account_activate"){
+          $('#'+key).css('display','inline-block');
+          $('#view-permission').append("<p id='"+key+"1'>Account Activation</p>");
+          $('#'+key).find('input').attr('name','permission['+key+']');
+          $('#'+key).find('input').attr('value','1');
+         }
+     }); 
+
+  function permissionSelect(x,y){
+   
+     $('#submit').removeAttr('disabled');
+    if($('#'+x).css('display')=='none'){
+
+        $('#'+x).css('display','inline-block');
+        $('#'+x).find('input').attr('name','permission['+x+']');
+        $('#'+x).find('input').attr('value','1');
+        $('#view-permission').append("<p id='"+x+"1'>"+y+"</p>")
+    }
+    else{
+        $('#'+x).css('display','none');
+        $('#'+x).find('input').removeAttr('name');
+        $('#view-permission').find('#'+x+'1').remove();
+    }
+     
+  }
+  function closeDropdown(){
+      $('.permission-menu').toggle();
+  }
+
+  $(document).click(function(event) {
+     if($('.permission-menu').css('display')=='block'){
+         $('.permission-menu').hide();
+    }
+  });
+$('.permission-menu').click(function(event){
+     event.stopPropagation();
+ });
+</script>
 {!!Form::close()!!}
 @stop
