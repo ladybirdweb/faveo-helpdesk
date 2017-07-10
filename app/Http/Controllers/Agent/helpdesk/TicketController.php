@@ -56,6 +56,8 @@ use PDF;
  */
 class TicketController extends Controller {
 
+    protected $ticket_policy;
+    
     /**
      * Create a new controller instance.
      *
@@ -65,6 +67,7 @@ class TicketController extends Controller {
         $this->PhpMailController = $PhpMailController;
         $this->NotificationController = $NotificationController;
         $this->middleware('auth');
+        $this->ticket_policy = new \App\Policies\TicketPolicy();
     }
 
     /**
@@ -185,16 +188,11 @@ class TicketController extends Controller {
      * @return type response
      */
     public function newticket(CountryCode $code) {
-        $location = GeoIP::getLocation();
-        $phonecode = $code->where('iso', '=', $location->iso_code)->first();
-        $pcode = '';
-        if ($phonecode) {
-            $pcode = $phonecode->phonecode;
+        if (!$this->ticket_policy->create()) {
+            return redirect('dashboard')->with('fails', Lang::get('lang.permission-denied'));
         }
-        $settings = CommonSettings::select('status')->where('option_name', '=', 'send_otp')->first();
-        $email_mandatory = CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
-
-        return view('themes.default1.agent.helpdesk.ticket.new', compact('email_mandatory', 'settings'))->with('phonecode', $pcode);
+        
+        return view('themes.default1.agent.helpdesk.ticket.new');
     }
 
     /**
@@ -205,6 +203,12 @@ class TicketController extends Controller {
      * @return type response
      */
     public function post_newticket(Request $request, CountryCode $code, $api = false) {
+        if (!$this->ticket_policy->create()) {
+            if ($api) {
+                return response()->json(['message' => 'permission denied'], 403);
+            }
+            return redirect('dashboard')->with('fails', 'Permission denied');
+        }
         try {
             $email = null;
             $fullname = null;
@@ -323,21 +327,28 @@ class TicketController extends Controller {
      * @return type response
      */
     public function thread($id) {
-        if (Auth::user()->role == 'agent') {
-            $dept = Department::where('id', '=', Auth::user()->primary_dpt)->first();
+        $tickets = Tickets::where('tickets.id', $id)
+                ->select('tickets.id', 'ticket_number', 'tickets.user_id', 'tickets.assigned_to', 'source', 'dept_id', 'priority_id','sla', 'help_topic_id', 'status', 'tickets.created_at', 'tickets.duedate');
+        if (!$tickets->first()) {
+            return redirect()->back()->with('fails', \Lang::get('lang.invalid_attempt'));
+        }
+        $auth_agent = \Auth::user();
+        $ticket_policy = new \App\Policies\TicketPolicy();
+        if ($auth_agent->role == 'agent') {
+            $dept = Department::where('id', '=', $auth_agent->primary_dpt)->first();
             $tickets = Tickets::where('id', '=', $id)->first();
             if ($tickets->dept_id == $dept->id) {
                 $tickets = $tickets;
-            } elseif ($tickets->assigned_to == Auth::user()->id) {
+            } elseif ($tickets->assigned_to == $auth_agent->id) {
                 $tickets = $tickets;
             } else {
                 $tickets = null;
             }
 //            $tickets = $tickets->where('dept_id', '=', $dept->id)->orWhere('assigned_to', Auth::user()->id)->first();
 //            dd($tickets);
-        } elseif (Auth::user()->role == 'admin') {
+        } elseif ($auth_agent->role == 'admin') {
             $tickets = Tickets::where('id', '=', $id)->first();
-        } elseif (Auth::user()->role == 'user') {
+        } elseif ($auth_agent->role == 'user') {
             $thread = Ticket_Thread::where('ticket_id', '=', $id)->first();
             $ticket_id = \Crypt::encrypt($id);
 
@@ -356,7 +367,7 @@ class TicketController extends Controller {
         $max_size_in_actual = $fileupload[1];
         $tickets_approval = Tickets::where('id', '=', $id)->first();
 
-        return view('themes.default1.agent.helpdesk.ticket.timeline', compact('tickets', 'max_size_in_bytes', 'max_size_in_actual', 'tickets_approval'), compact('thread', 'avg_rating'));
+        return view('themes.default1.agent.helpdesk.ticket.timeline', compact('tickets', 'max_size_in_bytes', 'max_size_in_actual', 'tickets_approval'), compact('thread', 'avg_rating','ticket_policy'));
     }
 
     public function size() {
@@ -539,32 +550,40 @@ class TicketController extends Controller {
      * @return type bool
      */
     public function ticketEditPost($ticket_id, Ticket_Thread $thread, Tickets $ticket) {
-        if (Input::get('subject') == null) {
-            return 1;
-        } elseif (Input::get('sla_paln') == null) {
-            return 2;
-        } elseif (Input::get('help_topic') == null) {
-            return 3;
-        } elseif (Input::get('ticket_source') == null) {
-            return 4;
-        } elseif (Input::get('ticket_priority') == null) {
-            return 5;
-        } else {
-            $ticket = $ticket->where('id', '=', $ticket_id)->first();
-            $ticket->sla = Input::get('sla_paln');
+        
+         if (!$this->ticket_policy->edit()) {
+            $response = ['message' => 'permission denied'];
+            return response()->json(compact('response'), 403);
+        }
+        try {
+            $ticket = $tickets->where('id', '=', $ticket_id)->first();
+            $tkt_dept = $ticket->dept_id;
+            // dd($tkt_dept->dept_id);
+            $priority = Input::get('ticket_priority');
+
             $ticket->help_topic_id = Input::get('help_topic');
+            // $dept = Help_topic::select('department')->where('id', '=', $ticket->help_topic_id)->first();
+            // $dept = $tkt_dept->dept_id;
+            $sla = $this->getSla(Input::get('ticket_type'), $ticket->user_id, $tkt_dept, Input::get('ticket_source'), $priority);
+            $priority_id = $this->getPriority($priority, $sla);
+            $ticket->sla = $sla;
             $ticket->source = Input::get('ticket_source');
-            $ticket->priority_id = Input::get('ticket_priority');
-            $dept = Help_topic::select('department')->where('id', '=', $ticket->help_topic_id)->first();
-            $ticket->dept_id = $dept->department;
+            $ticket->priority_id = $priority_id;
+            $ticket->type = Input::get('ticket_type');
+            $ticket->dept_id = $tkt_dept;
+            $ticket = $this->updateOverdue($ticket, $sla);
             $ticket->save();
 
             $threads = $thread->where('ticket_id', '=', $ticket_id)->first();
             $threads->title = Input::get('subject');
             $threads->save();
-
-            return 0;
+            \Event::fire('notification', [$threads]);
+        } catch (\Exception $ex) {
+            $result = $ex->getMessage();
+            return response()->json(compact('result'), 500);
         }
+        $result = ["success" => "Edited successfully"];
+        return response()->json(compact('result'));
     }
 
     /**
@@ -1217,6 +1236,85 @@ class TicketController extends Controller {
 
         return $randomString;
     }
+    
+    /**
+     * This function is used to change the status of a ticket
+     * @param type $ticket_id
+     * @param type $status_id
+     * @param type $user_id for unauthenticated users
+     * return type array/boolean
+     */
+    public function changeStatus($ticket_id, $status_id, $user_id = null, $api = true) {
+        $ticket_ids = explode(",", $ticket_id);
+        foreach ($ticket_ids as $ticket_id) {
+            $this->haltDue($status_id, $ticket_id);
+            $status = \App\Helper\Finder::status($status_id);
+            if (Auth::user()->role == 'agent' || Auth::user()->role == 'admin') {
+                $ticket = Tickets::where('id', '=', $ticket_id)->first();
+            } elseif (Auth::user()->role == 'user') {
+                if ($status->allow_client == 1) {
+                    $ticket = Tickets::where('id', '=', $ticket_id)->first();
+                } else {
+                    return 'false';
+                }
+            }
+            // checking for unautherised access attempt on other than owner ticket id
+            if ($ticket == null) {
+                return redirect()->route('unauth');
+            }
+
+            $thread = new Ticket_Thread();
+            $thread->send = false;
+            $thread->ticket_id = $ticket_id;
+            $thread->user_id = Auth::user()->id;
+            $thread->is_internal = 1;
+            $old_status = \App\Helper\Finder::status($ticket->status);
+            if (Auth::user()->first_name) {
+                $user = Auth::user()->first_name;
+            } else {
+                $user = Auth::user()->user_name;
+            }
+            $ticket->send = false;
+            $ticket->status = $status->id;
+            if ($status->type->name == "closed" && $old_status->type->name == "open") {
+                if (!$this->ticket_policy->close()) {
+                    if ($api) {
+                        $message = ['permission denied'];
+                        return response()->json(compact('message'), 403);
+                    }
+                    return redirect('dashboard')->with('fails', 'Permission denied');
+                }
+                $ticket->closed = 1;
+                $ticket->closed_at = date('Y-m-d H:i:s');
+                $sla = new \App\Http\Controllers\SLA\ApplySla();
+                $ticket->resolution_time = $sla->minSpent($ticket_id, 'resolve');
+                $ticket->is_resolution_sla = $this->isSla($ticket->duedate);
+            } elseif ($status->purpose == "deleted") {
+                if (!$this->ticket_policy->delete()) {
+                    if ($api) {
+                        $message = ['permission denied'];
+                        return response()->json(compact('message'), 403);
+                    }
+                    return redirect('dashboard')->with('fails', 'Permission denied');
+                }
+                $ticket->is_deleted = 1;
+            } elseif ($old_status->purpose == "closed") {
+                $ticket->reopened = $ticket->reopened + 1;
+                $ticket->reopened_at = date('Y-m-d H:i:s');
+            }
+            if ($old_status->purpose == "closed" && $status->purpose == "open") {
+                $ticket->resolution_time = NULL;
+                $ticket->is_resolution_sla = $this->isSla($ticket->duedate);
+            }
+            $changed = $ticket->isDirty() ? $ticket->getDirty() : false;
+            $ticket->save();
+            if ($changed) {
+                $this->sendNotification($ticket, $status);
+            }
+        }
+        //$thread->save();
+        return $status->name;
+    }
 
     /**
      * function to Ticket Close.
@@ -1425,6 +1523,12 @@ class TicketController extends Controller {
      * @return type string
      */
     public function ban($id, Tickets $ticket) {
+        if (!$this->ticket_policy->create()) {
+            if ($api) {
+                return response()->json(['message' => 'permission denied'], 403);
+            }
+            return redirect('dashboard')->with('fails', 'Permission denied');
+        }
         $ticket_ban = $ticket->where('id', '=', $id)->first();
         $ban_email = $ticket_ban->user_id;
         $user = User::where('id', '=', $ban_email)->first();
@@ -2901,6 +3005,12 @@ class TicketController extends Controller {
     }
 
     public function ticketChangeDepartment(Request $request) {
+        if (!$this->ticket_policy->transfer()) {
+            if ($api) {
+                return response()->json(['message' => 'permission denied'], 403);
+            }
+            return redirect('dashboard')->with('fails', 'Permission denied');
+        }
         $match_dept_name = Department::where('name', '=', $request->tkt_dept_transfer)->select('id')->first();
         if (!$match_dept_name) {
             return redirect()->back()->with('fails', Lang::get('lang.this_deparment_not_exists'));

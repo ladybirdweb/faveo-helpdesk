@@ -263,12 +263,7 @@ class="active"
             {{-- </div> --}}
         </div>
         <div class="row">
-            <!-- assigned group -->
-            <div class="col-xs-4 form-group {{ $errors->has('group') ? 'has-error' : '' }}">
-                {!! Form::label('assign_group', Lang::get('lang.assigned_group')) !!} <span class="text-red"> *</span>
-
-                {!!Form::select('group',[''=>Lang::get('lang.select_a_group'), Lang::get('lang.groups')=>$groups->pluck('name','id')->toArray()],$user->assign_group,['class' => 'form-control select']) !!}
-            </div>
+            
 
             <!-- primary department -->
             <div class="col-xs-4 form-group {{ $errors->has('primary_department') ? 'has-error' : '' }}">
