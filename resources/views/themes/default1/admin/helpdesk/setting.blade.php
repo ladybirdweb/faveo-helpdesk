@@ -229,7 +229,7 @@
                 <div class="col-md-2 col-sm-6">
                     <div class="settingiconblue">
                         <div class="settingdivblue">
-                            <a href="{{url('forms')}}">
+                            <a href="{{url('forms/create')}}">
                                 <span class="fa-stack fa-2x">
                                     <i class="fa fa-file-text fa-stack-1x"></i>
                                 </span>

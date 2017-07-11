@@ -69,6 +69,7 @@
 
         </style>
     </head>
+    <?php $segment = ""; ?>
     <body class="skin-blue fixed" ng-controller="MainCtrl">
         <div class="wrapper">
             <header class="main-header">
@@ -247,7 +248,6 @@
             ?>
                             <?php
                                 $segments = \Request::segments();
-                                $segment = "";
                                 foreach($segments as $seg){
                                     $segment.="/".$seg;
                                 }

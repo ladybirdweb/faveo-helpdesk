@@ -182,6 +182,9 @@ class Handler extends ExceptionHandler
 //                    return parent::render($request, $e);
 //                }
             case $e instanceof TokenMismatchException:
+                if($request->ajax()){
+                    return response()->json(['message'=>\Lang::get('lang.session-expired')],402);
+                }
                 return redirect()->back()->with('fails', \Lang::get('lang.session-expired'));
             default:
                 return $this->render500($request, $e);

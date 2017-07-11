@@ -216,7 +216,7 @@
                             <ul class="treeview-menu">
                                 <li @yield('help')><a href="{{url('helptopic')}}"><i class="fa fa-file-text-o"></i>{!! Lang::get('lang.help_topics') !!}</a></li>
                                 <li @yield('sla')><a href="{{url('sla')}}"><i class="fa fa-clock-o"></i>{!! Lang::get('lang.sla_plans') !!}</a></li>
-                                <li @yield('forms')><a href="{{url('forms')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.forms') !!}</a></li>
+                                <li @yield('forms')><a href="{{url('forms/create')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.forms') !!}</a></li>
                                 <li @yield('workflow')><a href="{{url('workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.workflow') !!}</a></li>
                                 <li @yield('priority')><a href="{{url('ticket/priority')}}"><i class="fa fa-asterisk"></i>{!! Lang::get('lang.priority') !!}</a></li>
                                 <li @yield('url')><a href="{{url('url/settings')}}"><i class="fa fa-server"></i>{!! Lang::get('lang.url') !!}</a></li>
@@ -477,12 +477,12 @@ app.config(['$translateProvider', function($translateProvider){
     $(function() {
       
         
-        $('input[type="checkbox"]').iCheck({
-            checkboxClass: 'icheckbox_flat-blue'
-        });
-        $('input[type="radio"]').iCheck({
-            radioClass: 'iradio_flat-blue'
-        });
+//        $('input[type="checkbox"]').iCheck({
+//            checkboxClass: 'icheckbox_flat-blue'
+//        });
+//        $('input[type="radio"]').iCheck({
+//            radioClass: 'iradio_flat-blue'
+//        });
     
     });        
 </script>
