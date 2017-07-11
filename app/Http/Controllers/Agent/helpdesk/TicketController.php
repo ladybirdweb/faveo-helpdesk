@@ -1103,11 +1103,8 @@ class TicketController extends Controller {
         $ticket->source = $source;
         $ticket_status = $this->checkUserVerificationStatus();
 
-        if ($status == null) {
-            $ticket->status = 1;
-        } else {
-            $ticket->status = $status;
-        }
+        $ticket->status = $this->getStatus($user_id, $status);
+        
         $ticket->save();
 
         $sla_plan = Sla_plan::where('id', '=', $sla)->first();
@@ -1138,6 +1135,23 @@ class TicketController extends Controller {
             $ticket->save();
             return $ticket_number;
         }
+    }
+    
+    public function getStatus($requester_id, $status = "") {
+        if (!$status) {
+            $requester = User::where('id', $requester_id)->first();
+            $statuses = new Ticket_Status();
+            $name = 'open';
+            if($requester->isDeleted() || $requester->isBan()){
+               $name = 'spam';
+            }
+            $ticket_status = $statuses->where('state', $name)->first();
+            if (!$ticket_status) {
+                $ticket_status = $statuses->first();
+            }
+            $status = $ticket_status->id;
+        }
+        return $status;
     }
 
     /**
@@ -1237,84 +1251,7 @@ class TicketController extends Controller {
         return $randomString;
     }
     
-    /**
-     * This function is used to change the status of a ticket
-     * @param type $ticket_id
-     * @param type $status_id
-     * @param type $user_id for unauthenticated users
-     * return type array/boolean
-     */
-    public function changeStatus($ticket_id, $status_id, $user_id = null, $api = true) {
-        $ticket_ids = explode(",", $ticket_id);
-        foreach ($ticket_ids as $ticket_id) {
-            $this->haltDue($status_id, $ticket_id);
-            $status = \App\Helper\Finder::status($status_id);
-            if (Auth::user()->role == 'agent' || Auth::user()->role == 'admin') {
-                $ticket = Tickets::where('id', '=', $ticket_id)->first();
-            } elseif (Auth::user()->role == 'user') {
-                if ($status->allow_client == 1) {
-                    $ticket = Tickets::where('id', '=', $ticket_id)->first();
-                } else {
-                    return 'false';
-                }
-            }
-            // checking for unautherised access attempt on other than owner ticket id
-            if ($ticket == null) {
-                return redirect()->route('unauth');
-            }
-
-            $thread = new Ticket_Thread();
-            $thread->send = false;
-            $thread->ticket_id = $ticket_id;
-            $thread->user_id = Auth::user()->id;
-            $thread->is_internal = 1;
-            $old_status = \App\Helper\Finder::status($ticket->status);
-            if (Auth::user()->first_name) {
-                $user = Auth::user()->first_name;
-            } else {
-                $user = Auth::user()->user_name;
-            }
-            $ticket->send = false;
-            $ticket->status = $status->id;
-            if ($status->type->name == "closed" && $old_status->type->name == "open") {
-                if (!$this->ticket_policy->close()) {
-                    if ($api) {
-                        $message = ['permission denied'];
-                        return response()->json(compact('message'), 403);
-                    }
-                    return redirect('dashboard')->with('fails', 'Permission denied');
-                }
-                $ticket->closed = 1;
-                $ticket->closed_at = date('Y-m-d H:i:s');
-                $sla = new \App\Http\Controllers\SLA\ApplySla();
-                $ticket->resolution_time = $sla->minSpent($ticket_id, 'resolve');
-                $ticket->is_resolution_sla = $this->isSla($ticket->duedate);
-            } elseif ($status->purpose == "deleted") {
-                if (!$this->ticket_policy->delete()) {
-                    if ($api) {
-                        $message = ['permission denied'];
-                        return response()->json(compact('message'), 403);
-                    }
-                    return redirect('dashboard')->with('fails', 'Permission denied');
-                }
-                $ticket->is_deleted = 1;
-            } elseif ($old_status->purpose == "closed") {
-                $ticket->reopened = $ticket->reopened + 1;
-                $ticket->reopened_at = date('Y-m-d H:i:s');
-            }
-            if ($old_status->purpose == "closed" && $status->purpose == "open") {
-                $ticket->resolution_time = NULL;
-                $ticket->is_resolution_sla = $this->isSla($ticket->duedate);
-            }
-            $changed = $ticket->isDirty() ? $ticket->getDirty() : false;
-            $ticket->save();
-            if ($changed) {
-                $this->sendNotification($ticket, $status);
-            }
-        }
-        //$thread->save();
-        return $status->name;
-    }
+    
 
     /**
      * function to Ticket Close.
@@ -1324,7 +1261,13 @@ class TicketController extends Controller {
      *
      * @return type string
      */
-    public function close($id, Tickets $ticket) {
+    public function close($id, Tickets $ticket,$api=true) {
+        if (!$this->ticket_policy->close()) {
+            if ($api) {
+                return response()->json(['message' => 'permission denied'], 403);
+            }
+            return redirect('dashboard')->with('fails', 'Permission denied');
+        }
         $ticket = Tickets::where('id', '=', $id)->first();
         if (Auth::user()->role == 'user') {
             $ticket_status = $ticket->where('id', '=', $id)->where('user_id', '=', Auth::user()->id)->first();
@@ -1386,7 +1329,13 @@ class TicketController extends Controller {
      *
      * @return type string
      */
-    public function resolve($id, Tickets $ticket) {
+    public function resolve($id, Tickets $ticket,$api=true) {
+        if (!$this->ticket_policy->close()) {
+            if ($api) {
+                return response()->json(['message' => 'permission denied'], 403);
+            }
+            return redirect('dashboard')->with('fails', 'Permission denied');
+        }
         if (Auth::user()->role == 'user') {
             $ticket_status = $ticket->where('id', '=', $id)->where('user_id', '=', Auth::user()->id)->first();
         } else {
@@ -1470,7 +1419,13 @@ class TicketController extends Controller {
      *
      * @return type string
      */
-    public function delete($id, Tickets $ticket) {
+    public function delete($id, Tickets $ticket,$api=true) {
+        if (!$this->ticket_policy->delete()) {
+            if ($api) {
+                return response()->json(['message' => 'permission denied'], 403);
+            }
+            return redirect('dashboard')->with('fails', 'Permission denied');
+        }
         $ticket_delete = $ticket->where('id', '=', $id)->first();
         if ($ticket_delete->status == 5) {
             $ticket_delete->delete();
@@ -1522,8 +1477,8 @@ class TicketController extends Controller {
      *
      * @return type string
      */
-    public function ban($id, Tickets $ticket) {
-        if (!$this->ticket_policy->create()) {
+    public function ban($id, Tickets $ticket,$api=true) {
+        if (!$this->ticket_policy->ban()) {
             if ($api) {
                 return response()->json(['message' => 'permission denied'], 403);
             }
@@ -1546,7 +1501,13 @@ class TicketController extends Controller {
      *
      * @return type bool
      */
-    public function assign($id) {
+    public function assign($id,$api=true) {
+        if (!$this->ticket_policy->assign()) {
+            if ($api) {
+                return response()->json(['message' => 'permission denied'], 403);
+            }
+            return redirect('dashboard')->with('fails', 'Permission denied');
+        }
         $ticket_array = [];
         if (strpos($id, ',') !== false) {
             $ticket_array = explode(',', $id);
