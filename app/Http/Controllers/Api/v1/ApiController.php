@@ -1636,6 +1636,14 @@ class ApiController extends Controller
     {
         try
         {
+            $user    = \JWTAuth::parseToken()->authenticate();
+            $tickets = \DB::table('tickets');
+            if ($user->role == 'agent')
+            {
+                $id      = $user->id;
+                $dept    = DepartmentAssignAgents::where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $tickets = $tickets->whereIn('tickets.dept_id', $dept)->orWhere('assigned_to', '=', $user->id);
+            }
             $department = $this->department->select('name', 'id')->get()->toArray();
             $sla        = $this->slaPlan->select('name', 'id')->get()->toArray();
             $staff      = $this->user->where('role', 'agent')->select('email', 'id')->get()->toArray();
@@ -1644,8 +1652,53 @@ class ApiController extends Controller
             $helptopic  = $this->helptopic->select('topic', 'id')->get()->toArray();
             $status     = \DB::table('ticket_status')->select('name', 'id')->get();
             $source     = \DB::table('ticket_source')->select('name', 'id')->get();
-            $result     = ['departments' => $department, 'sla'         => $sla, 'staffs'      => $staff, 'teams'       => $team,
-                'priorities'  => $priority, 'helptopics'  => $helptopic, 'status'      => $status, 'sources'     => $source,];
+            $statuses   = collect($tickets
+                            ->join('ticket_status', 'tickets.status', '=', 'ticket_status.id')
+                            ->select('ticket_status.name as status', \DB::raw('COUNT(tickets.id) as count'))
+                            ->groupBy('ticket_status.id')
+                            ->get())->transform(function ($item)
+            {
+                return ['name' => ucfirst($item->status), 'count' => $item->count];
+            });
+            $unassigned = $this->user->leftJoin('tickets', function ($join)
+                    {
+                        $join->on('users.id', '=', 'tickets.user_id')
+                        ->whereNull('assigned_to')->where('status', '=', 1);
+                    })
+                    ->where(function($query) use($user)
+                    {
+                        if ($user->role != 'admin')
+                        {
+                            $query->where('tickets.dept_id', '=', $user->primary_dpt);
+                        }
+                    })
+                    ->select(\DB::raw('COUNT(tickets.id) as unassined'))
+                    ->value('unassined');
+            $mytickets = $this->user->leftJoin('tickets', function ($join) use ($user)
+                    {
+                        $join->on('users.id', '=', 'tickets.assigned_to')
+                        ->where('tickets.assigned_to', '=', $user->id)->where('status', '=', 1);
+                    })
+                    ->where(function ($query) use ($user)
+                    {
+                        if ($user->role != 'admin')
+                        {
+                            $query->where('tickets.dept_id', '=', $user->primary_dpt)->orWhere('assigned_to', '=', $user->id);
+                        }
+                    })
+                    ->select(\DB::raw('COUNT(tickets.id) as my_ticket'))
+                    ->value('my_ticket');
+            $depend     = collect([['name' => 'unassigned', 'count' => $unassigned], ['name' => 'mytickets', 'count' => $mytickets]]);
+            $collection = $statuses->merge($depend);
+            $result     = ['departments'   => $department, 'sla'           => $sla, 'staffs'        => $staff, 'teams'         => $team,
+                'priorities'    => $priority, 'helptopics'    => $helptopic,
+                'status'        => $status, 
+                'sources'       => $source,
+                'tickets_count' => $collection];
+
+            return response()->json(compact('result'));
+//            $result     = ['departments' => $department, 'sla'         => $sla, 'staffs'      => $staff, 'teams'       => $team,
+//                'priorities'  => $priority, 'helptopics'  => $helptopic, 'status'      => $status, 'sources'     => $source,];
 
             return response()->json(compact('result'));
         }
