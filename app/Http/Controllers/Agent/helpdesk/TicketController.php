@@ -284,29 +284,34 @@ class TicketController extends Controller
             if ($result[1]) {
                 $status = $this->checkUserVerificationStatus();
                 if ($status == 1) {
-                    if ($api != false) {
-                        return Lang::get('lang.Ticket-created-successfully');
+                    if ($api != false)
+                    {
+                        $ticket = Tickets::where('ticket_number', '=', $result[0])->select('id')->first();
+                        return ['ticket_id' => $ticket->id, 'message' => Lang::get('lang.Ticket-created-successfully')];
                     }
 
                     return Redirect('newticket')->with('success', Lang::get('lang.Ticket-created-successfully'));
                 } else {
-                    if ($api != false) {
-                        return Lang::get('lang.Ticket-created-successfully');
+                    if ($api != false)
+                    {
+                        return response()->json(['success' => Lang::get('lang.Ticket-created-successfully')]);
                     }
 
                     return Redirect('newticket')->with('success', Lang::get('lang.Ticket-created-successfully2'));
                 }
             } else {
-                if ($api != false) {
-                    return Lang::get('lang.failed-to-create-user-tcket-as-mobile-has-been-taken');
+                if ($api != false)
+                {
+                    return response()->json(['error' => Lang::get('lang.failed-to-create-user-tcket-as-mobile-has-been-taken')], 500);
                 }
 
                 return Redirect('newticket')->with('fails', Lang::get('lang.failed-to-create-user-tcket-as-mobile-has-been-taken'))->withInput($request->except('password'));
             }
         } catch (Exception $e) {
-            // dd($e);
-            if ($api != false) {
-                return $e->getMessage();
+            dd($e);
+            if ($api != false)
+            {
+                return response()->json(['error' => $e->getMessage()], 500);
             }
 
             return Redirect()->back()->with('fails', '<li>'.$e->getMessage().'</li>');
@@ -879,7 +884,7 @@ class TicketController extends Controller
             }
 
             $set_mails = [];
-            if (Alert::first()->ticket_status == 1 || Alert::first()->ticket_admin_email == 1) {
+            if (Alert::first() && (Alert::first()->ticket_status == 1 || Alert::first()->ticket_admin_email == 1)) {
                 // send email to admin
                 $admins = User::where('role', '=', 'admin')->get();
                 foreach ($admins as $admin) {
@@ -891,7 +896,7 @@ class TicketController extends Controller
             }
 
             if ($is_reply == 0) {
-                if (Alert::first()->ticket_status == 1 || Alert::first()->ticket_department_member == 1) {
+                if (Alert::first() && (Alert::first()->ticket_status == 1 || Alert::first()->ticket_department_member == 1)) {
                     // send email to agents
                     $agents = User::where('role', '=', 'agent')->get();
                     foreach ($agents as $agent) {
