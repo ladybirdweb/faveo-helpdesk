@@ -1343,6 +1343,12 @@ class ApiController extends Controller
 
                 return response()->json(compact('error'));
             }
+            $user = User::where('users.id', $id)
+                                            ->leftJoin('user_assign_organization', 'users.id', '=', 'user_assign_organization.user_id')
+                                            ->leftJoin('organization', 'user_assign_organization.org_id', '=', 'organization.id')
+                                            ->select(
+                                                    'users.first_name', 'users.last_name', 'users.user_name', 'users.email', 'users.id', 'users.profile_pic', 'users.ban', 'users.active', 'users.is_delete', 'users.phone_number', 'users.ext', 'users.country_code', 'users.mobile', 'organization.name as company'
+                                            )->first()->toArray();
             $result = $this->user->join('tickets', function ($join) use ($id)
                     {
                         $join->on('users.id', '=', 'tickets.user_id')
@@ -1363,10 +1369,9 @@ class ApiController extends Controller
                     ->groupby('tickets.id')
                     ->distinct()
                     ->get()
-                    // ->paginate(10)
-                    ->toJson();
+                    ->toArray();
 
-            return $result;
+            return response()->json(['tickets' => $result, 'requester' => $user]);
         }
         catch (\Exception $e)
         {
