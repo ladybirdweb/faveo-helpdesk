@@ -36,7 +36,6 @@ use Illuminate\Support\Collection;
  */
 class ApiController extends Controller
 {
-
     public $user;
     public $request;
     public $ticket;
@@ -62,60 +61,54 @@ class ApiController extends Controller
 
         $this->middleware('jwt.auth');
         $this->middleware('api', ['except' => 'GenerateApiKey']);
-        try
-        {
-            $user       = \JWTAuth::parseToken()->authenticate();
+
+        try {
+            $user = \JWTAuth::parseToken()->authenticate();
             $this->user = $user;
-        }
-        catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e)
-        {
-            
-        }
-        catch (\Tymon\JWTAuth\Exceptions\JWTException $e)
-        {
-            
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
         }
 
-        $ticket       = new TicketController();
+        $ticket = new TicketController();
         $this->ticket = $ticket;
 
-        $model       = new Tickets();
+        $model = new Tickets();
         $this->model = $model;
 
-        $thread       = new Ticket_Thread();
+        $thread = new Ticket_Thread();
         $this->thread = $thread;
 
-        $attach       = new Ticket_attachments();
+        $attach = new Ticket_attachments();
         $this->attach = $attach;
 
-        $ticketRequest       = new TicketRequest();
+        $ticketRequest = new TicketRequest();
         $this->ticketRequest = $ticketRequest;
 
-        $faveoUser       = new User();
+        $faveoUser = new User();
         $this->faveoUser = $faveoUser;
 
-        $faveoUser  = new User();
+        $faveoUser = new User();
         $this->user = $faveoUser;
 
-        $team       = new Teams();
+        $team = new Teams();
         $this->team = $team;
 
-        $setting       = new System();
+        $setting = new System();
         $this->setting = $setting;
 
-        $helptopic       = new Help_topic();
+        $helptopic = new Help_topic();
         $this->helptopic = $helptopic;
 
-        $slaPlan       = new Sla_plan();
+        $slaPlan = new Sla_plan();
         $this->slaPlan = $slaPlan;
 
-        $priority       = new Priority();
+        $priority = new Priority();
         $this->priority = $priority;
 
-        $department       = new Department();
+        $department = new Department();
         $this->department = $department;
 
-        $source       = new Ticket_source();
+        $source = new Ticket_source();
         $this->source = $source;
     }
 
@@ -130,37 +123,35 @@ class ApiController extends Controller
      */
     public function createTicket(\App\Http\Requests\helpdesk\CreateTicketRequest $request, \App\Model\helpdesk\Utility\CountryCode $code)
     {
-        try
-        {
+        try {
             $user_id = $this->request->input('user_id');
 
-            $subject   = $this->request->input('subject');
-            $body      = $this->request->input('body');
+            $subject = $this->request->input('subject');
+            $body = $this->request->input('body');
             $helptopic = $this->request->input('helptopic');
-            $sla       = $this->request->input('sla');
-            $priority  = $this->request->input('priority');
-            $header    = $this->request->input('cc');
-            $dept      = $this->request->input('dept');
+            $sla = $this->request->input('sla');
+            $priority = $this->request->input('priority');
+            $header = $this->request->input('cc');
+            $dept = $this->request->input('dept');
 
-            $assignto  = $this->request->input('assignto');
+            $assignto = $this->request->input('assignto');
             $form_data = $this->request->input('form_data');
-            $source    = $this->request->input('source');
-            $attach    = $this->request->input('attachments');
-            $headers   = [];
-            if ($header)
-            {
+            $source = $this->request->input('source');
+            $attach = $this->request->input('attachments');
+            $headers = [];
+            if ($header) {
                 $headers = explode(',', $header);
             }
             //return $headers;
             /*
              * return s ticket number
              */
-            $PhpMailController      = new \App\Http\Controllers\Common\PhpMailController();
+            $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
             $NotificationController = new \App\Http\Controllers\Common\NotificationController();
-            $core                   = new CoreTicketController($PhpMailController, $NotificationController);
+            $core = new CoreTicketController($PhpMailController, $NotificationController);
             $this->request->merge(['body' => preg_replace('/[ ](?=[^>]*(?:<|$))/', '&nbsp;', nl2br($this->request->get('body')))]);
             $request->replace($this->request->except('token', 'api_key'));
-            $response               = $core->post_newticket($request, $code, true);
+            $response = $core->post_newticket($request, $code, true);
             //$response = $this->ticket->createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach);
             //return $response;
             /*
@@ -170,17 +161,13 @@ class ApiController extends Controller
             //$result = $this->thread->where('id', $response)->first();
             //$result = $this->attach($result->id,$file);
             return response()->json(compact('response'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'))
@@ -198,14 +185,12 @@ class ApiController extends Controller
     public function ticketReply()
     {
         //dd($this->request->all());
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'ticket_ID'     => 'required|exists:tickets,id',
                         'reply_content' => 'required',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
@@ -218,17 +203,13 @@ class ApiController extends Controller
                     ->first();
 
             return response()->json(compact('result'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -242,8 +223,7 @@ class ApiController extends Controller
      */
     public function editTicket()
     {
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'ticket_id'       => 'required|exists:tickets,id',
                         'subject'         => 'required',
@@ -252,25 +232,21 @@ class ApiController extends Controller
                         'ticket_source'   => 'required|exists:ticket_source,id',
                         'ticket_priority' => 'required|exists:ticket_priority,priority_id',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
             $ticket_id = $this->request->input('ticket_id');
+
             return $this->ticket->ticketEditPost($ticket_id, $this->thread, $this->model);
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -284,13 +260,11 @@ class ApiController extends Controller
      */
     public function deleteTicket()
     {
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'ticket_id' => 'required|exists:tickets,id',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
@@ -300,17 +274,13 @@ class ApiController extends Controller
             $result = $this->ticket->delete(explode(',', $id), $this->model);
 
             return response()->json(compact('result'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -324,23 +294,20 @@ class ApiController extends Controller
      */
     public function openedTickets()
     {
-        try
-        {
+        try {
             //            $result = $this->model->where('status', '=', 1)->where('isanswered', '=', 0)->where('assigned_to', '=', null)->orderBy('id', 'DESC')->get();
 //            return response()->json(compact('result'));
 
-            $result = $this->user->join('tickets', function ($join)
-                    {
-                        $join->on('users.id', '=', 'tickets.user_id')
+            $result = $this->user->join('tickets', function ($join) {
+                $join->on('users.id', '=', 'tickets.user_id')
                         ->where('isanswered', '=', 0)->where('status', '=', 1)->whereNull('assigned_to');
-                    })
+            })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
                     ->join('help_topic', 'help_topic.id', '=', 'tickets.help_topic_id')
                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
-                    ->join('ticket_thread', function ($join)
-                    {
+                    ->join('ticket_thread', function ($join) {
                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id')
                         ->whereNotNull('title');
                     })
@@ -352,17 +319,13 @@ class ApiController extends Controller
                     ->toJson();
 
             return $result;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -376,33 +339,28 @@ class ApiController extends Controller
      */
     public function unassignedTickets()
     {
-        try
-        {
+        try {
             //dd('sdhjbc');
 //            $result = $this->model->where('assigned_to', '=', null)->where('status', '1')->orderBy('id', 'DESC')->get();
 //            return response()->json(compact('result'));
-            $user       = \JWTAuth::parseToken()->authenticate();
-            $unassigned = $this->user->join('tickets', function ($join)
-                    {
-                        $join->on('users.id', '=', 'tickets.user_id')
+            $user = \JWTAuth::parseToken()->authenticate();
+            $unassigned = $this->user->join('tickets', function ($join) {
+                $join->on('users.id', '=', 'tickets.user_id')
                         ->whereNull('assigned_to')->where('status', '=', 1);
-                    })
+            })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
                     ->join('help_topic', 'help_topic.id', '=', 'tickets.help_topic_id')
                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
-                    ->leftJoin('ticket_thread', function ($join)
-                    {
+                    ->leftJoin('ticket_thread', function ($join) {
                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id');
                     })
                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id');
-            if ($user->role == 'agent')
-            {
-                $id         = $user->id;
-                $dept       = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
-                $unassigned = $unassigned->where(function ($query) use ($dept, $id)
-                {
+            if ($user->role == 'agent') {
+                $id = $user->id;
+                $dept = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $unassigned = $unassigned->where(function ($query) use ($dept, $id) {
                     $query->whereIn('tickets.dept_id', $dept)
                             ->orWhere('assigned_to', '=', $id);
                 });
@@ -415,17 +373,13 @@ class ApiController extends Controller
                     ->toJson();
 
             return $unassigned;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -439,32 +393,27 @@ class ApiController extends Controller
      */
     public function closeTickets()
     {
-        try
-        {
+        try {
             //            $result = $this->model->where('status', '>', 1)->where('status', '<', 4)->orderBy('id', 'DESC')->get();
 //            return response()->json(compact('result'));
-            $user   = \JWTAuth::parseToken()->authenticate();
-            $result = $this->user->join('tickets', function ($join)
-                    {
-                        $join->on('users.id', '=', 'tickets.user_id')
+            $user = \JWTAuth::parseToken()->authenticate();
+            $result = $this->user->join('tickets', function ($join) {
+                $join->on('users.id', '=', 'tickets.user_id')
                         ->where('status', '=', 3)->orWhere('status', '=', 2);
-                    })
+            })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
                     ->join('help_topic', 'help_topic.id', '=', 'tickets.help_topic_id')
                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
-                    ->leftJoin('ticket_thread', function ($join)
-                    {
+                    ->leftJoin('ticket_thread', function ($join) {
                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id');
                     })
                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id');
-            if ($user->role == 'agent')
-            {
-                $id     = $user->id;
-                $dept   = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
-                $result = $result->where(function ($query) use ($dept, $id)
-                {
+            if ($user->role == 'agent') {
+                $id = $user->id;
+                $dept = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $result = $result->where(function ($query) use ($dept, $id) {
                     $query->whereIn('tickets.dept_id', $dept)
                             ->orWhere('assigned_to', '=', $id);
                 });
@@ -477,17 +426,13 @@ class ApiController extends Controller
                     ->toJson();
 
             return $result;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -501,22 +446,17 @@ class ApiController extends Controller
      */
     public function getAgents()
     {
-        try
-        {
+        try {
             $result = $this->faveoUser->where('role', 'agent')->orWhere('role', 'admin')->where('active', 1)->get();
 
             return response()->json(compact('result'));
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -530,22 +470,17 @@ class ApiController extends Controller
      */
     public function getTeams()
     {
-        try
-        {
+        try {
             $result = $this->team->get();
 
             return response()->json(compact('result'));
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -559,41 +494,32 @@ class ApiController extends Controller
      */
     public function assignTicket()
     {
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'ticket_id' => 'required',
                         'user'      => 'required',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
-            $id       = $this->request->input('ticket_id');
+            $id = $this->request->input('ticket_id');
             $response = $this->ticket->assign($id);
-            if ($response == 1)
-            {
+            if ($response == 1) {
                 $result = 'success';
 
                 return response()->json(compact('result'));
-            }
-            else
-            {
+            } else {
                 return response()->json(compact('response'));
             }
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -607,33 +533,27 @@ class ApiController extends Controller
      */
     public function getCustomers()
     {
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'search' => 'required',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
             $search = $this->request->input('search');
-            $result = $this->faveoUser->where('first_name', 'like', '%' . $search . '%')->orWhere('last_name', 'like', '%' . $search . '%')->orWhere('user_name', 'like', '%' . $search . '%')->orWhere('email', 'like', '%' . $search . '%')->get();
+            $result = $this->faveoUser->where('first_name', 'like', '%'.$search.'%')->orWhere('last_name', 'like', '%'.$search.'%')->orWhere('user_name', 'like', '%'.$search.'%')->orWhere('email', 'like', '%'.$search.'%')->get();
 
             return response()->json(compact('result'))
                             ->header('X-Header-One', 'Header Value');
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'))
@@ -648,8 +568,7 @@ class ApiController extends Controller
      */
     public function getCustomersWith()
     {
-        try
-        {
+        try {
             $users = $this->user
                     ->leftJoin('user_assign_organization', 'user_assign_organization.user_id', '=', 'users.id')
                     ->leftJoin('organization', 'organization.id', '=', 'user_assign_organization.org_id')
@@ -660,17 +579,13 @@ class ApiController extends Controller
 
             //dd($users);
             return $users;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'))
@@ -685,32 +600,26 @@ class ApiController extends Controller
      */
     public function getCustomer()
     {
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'user_id' => 'required',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
-            $id     = $this->request->input('user_id');
+            $id = $this->request->input('user_id');
             $result = $this->faveoUser->where('id', $id)->where('role', 'user')->first();
 
             return response()->json(compact('result'));
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -724,32 +633,26 @@ class ApiController extends Controller
      */
     public function searchTicket()
     {
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'search' => 'required',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
             $search = $this->request->input('search');
-            $result = $this->thread->select('ticket_id')->where('title', 'like', '%' . $search . '%')->orWhere('body', 'like', '%' . $search . '%')->get();
+            $result = $this->thread->select('ticket_id')->where('title', 'like', '%'.$search.'%')->orWhere('body', 'like', '%'.$search.'%')->get();
 
             return response()->json(compact('result'));
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -763,18 +666,16 @@ class ApiController extends Controller
      */
     public function ticketThreads()
     {
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'id' => 'required',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
-            $id     = $this->request->input('id');
+            $id = $this->request->input('id');
             $result = $this->user
                     ->rightjoin('ticket_thread', 'ticket_thread.user_id', '=', 'users.id')
                     ->select('ticket_thread.id', 'ticket_id', 'user_id', 'poster', 'source', 'title', 'body', 'is_internal', 'format', 'ip_address', 'ticket_thread.created_at', 'ticket_thread.updated_at', 'users.first_name', 'users.last_name', 'users.user_name', 'users.email', 'users.profile_pic')
@@ -784,17 +685,13 @@ class ApiController extends Controller
                     ->toJson();
 
             return $result;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -809,37 +706,30 @@ class ApiController extends Controller
     public function checkUrl()
     {
         //dd($this->request);
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'url' => 'required|url',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
 
             $url = $this->request->input('url');
-            if (!str_is('*/', $url))
-            {
+            if (!str_is('*/', $url)) {
                 $url = str_finish($url, '/');
             }
 
-            $url    = $url . '/api/v1/helpdesk/check-url?api_key=' . $this->request->input('api_key') . '&token=' . \Config::get('app.token');
+            $url = $url.'/api/v1/helpdesk/check-url?api_key='.$this->request->input('api_key').'&token='.\Config::get('app.token');
             $result = $this->CallGetApi($url);
             //dd($result);
             return response()->json(compact('result'));
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -865,16 +755,15 @@ class ApiController extends Controller
      */
     public function callGetApi($url)
     {
-        $curl     = curl_init($url);
+        $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         $response = curl_exec($curl);
 
-        if (curl_errno($curl))
-        {
-            echo 'error:' . curl_error($curl);
+        if (curl_errno($curl)) {
+            echo 'error:'.curl_error($curl);
         }
 
         return $response;
@@ -891,7 +780,7 @@ class ApiController extends Controller
      */
     public function callPostApi($url, $data)
     {
-        $curl     = curl_init($url);
+        $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HEADER, 0);
@@ -899,9 +788,8 @@ class ApiController extends Controller
         curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         $response = curl_exec($curl);
 
-        if (curl_errno($curl))
-        {
-            echo 'error:' . curl_error($curl);
+        if (curl_errno($curl)) {
+            echo 'error:'.curl_error($curl);
         }
 
         return $response;
@@ -915,36 +803,28 @@ class ApiController extends Controller
      */
     public function generateApiKey()
     {
-        try
-        {
+        try {
             $set = $this->setting->where('id', '1')->first();
             //dd($set);
-            if ($set->api_enable == 1)
-            {
-                $key          = str_random(32);
+            if ($set->api_enable == 1) {
+                $key = str_random(32);
                 $set->api_key = $key;
                 $set->save();
-                $result       = $set->api_key;
+                $result = $set->api_key;
 
                 return response()->json(compact('result'));
-            }
-            else
-            {
+            } else {
                 $result = 'please enable api';
 
                 return response()->json(compact('result'));
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -958,22 +838,17 @@ class ApiController extends Controller
      */
     public function getHelpTopic()
     {
-        try
-        {
+        try {
             $result = $this->helptopic->get();
 
             return response()->json(compact('result'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -987,22 +862,17 @@ class ApiController extends Controller
      */
     public function getSlaPlan()
     {
-        try
-        {
+        try {
             $result = $this->slaPlan->get();
 
             return response()->json(compact('result'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -1016,22 +886,17 @@ class ApiController extends Controller
      */
     public function getPriority()
     {
-        try
-        {
+        try {
             $result = $this->priority->select('priority as name', 'priority_id as id')->get();
 
             return response()->json(compact('result'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -1045,22 +910,17 @@ class ApiController extends Controller
      */
     public function getDepartment()
     {
-        try
-        {
+        try {
             $result = $this->department->get();
 
             return response()->json(compact('result'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -1074,23 +934,18 @@ class ApiController extends Controller
      */
     public function getTickets()
     {
-        try
-        {
+        try {
             $tickets = $this->model->orderBy('created_at', 'desc')->paginate(10);
             $tickets->toJson();
 
             return $tickets;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -1104,31 +959,26 @@ class ApiController extends Controller
      */
     public function inbox()
     {
-        try
-        {
-            $user  = \JWTAuth::parseToken()->authenticate();
-            $inbox = $this->user->join('tickets', function ($join)
-                    {
-                        $join->on('users.id', '=', 'tickets.user_id')
+        try {
+            $user = \JWTAuth::parseToken()->authenticate();
+            $inbox = $this->user->join('tickets', function ($join) {
+                $join->on('users.id', '=', 'tickets.user_id')
                         ->where('status', '=', 1);
-                    })
+            })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
                     ->join('help_topic', 'help_topic.id', '=', 'tickets.help_topic_id')
                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
-                    ->leftJoin('ticket_thread', function ($join)
-                    {
+                    ->leftJoin('ticket_thread', function ($join) {
                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id');
                     })
                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id')
                     ->where('ticket_status.name', 'Open');
-            if ($user->role == 'agent')
-            {
-                $id    = $user->id;
-                $dept  = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
-                $inbox = $inbox->where(function ($query) use ($dept, $id)
-                {
+            if ($user->role == 'agent') {
+                $id = $user->id;
+                $dept = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $inbox = $inbox->where(function ($query) use ($dept, $id) {
                     $query->whereIn('tickets.dept_id', $dept)
                             ->orWhere('assigned_to', '=', $id);
                 });
@@ -1141,17 +991,13 @@ class ApiController extends Controller
                     ->toJson();
 
             return $inbox;
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             $error = $ex->getMessage();
-            $line  = $ex->getLine();
-            $file  = $ex->getFile();
+            $line = $ex->getLine();
+            $file = $ex->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -1165,37 +1011,31 @@ class ApiController extends Controller
      */
     public function internalNote()
     {
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'userid'   => 'required|exists:users,id',
                         'ticketid' => 'required|exists:tickets,id',
                         'body'     => 'required',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
-            $userid   = $this->request->input('userid');
+            $userid = $this->request->input('userid');
             $ticketid = $this->request->input('ticketid');
 
-            $body   = preg_replace('/[ ](?=[^>]*(?:<|$))/', '&nbsp;', nl2br($this->request->input('body')));
+            $body = preg_replace('/[ ](?=[^>]*(?:<|$))/', '&nbsp;', nl2br($this->request->input('body')));
             $thread = $this->thread->create(['ticket_id' => $ticketid, 'user_id' => $userid, 'is_internal' => 1, 'body' => $body]);
 
             return response()->json(compact('thread'));
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -1204,30 +1044,25 @@ class ApiController extends Controller
 
     public function getTrash()
     {
-        try
-        {
-            $user  = \JWTAuth::parseToken()->authenticate();
-            $trash = $this->user->join('tickets', function ($join)
-                    {
-                        $join->on('users.id', '=', 'tickets.user_id')
+        try {
+            $user = \JWTAuth::parseToken()->authenticate();
+            $trash = $this->user->join('tickets', function ($join) {
+                $join->on('users.id', '=', 'tickets.user_id')
                         ->where('status', '=', 5);
-                    })
+            })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
                     ->join('help_topic', 'help_topic.id', '=', 'tickets.help_topic_id')
                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
-                    ->leftJoin('ticket_thread', function ($join)
-                    {
+                    ->leftJoin('ticket_thread', function ($join) {
                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id');
                     })
                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id');
-            if ($user->role == 'agent')
-            {
-                $id    = $user->id;
-                $dept  = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
-                $trash = $trash->where(function ($query) use ($dept, $id)
-                {
+            if ($user->role == 'agent') {
+                $id = $user->id;
+                $dept = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $trash = $trash->where(function ($query) use ($dept, $id) {
                     $query->whereIn('tickets.dept_id', $dept)
                             ->orWhere('assigned_to', '=', $id);
                 });
@@ -1240,17 +1075,13 @@ class ApiController extends Controller
                     ->toJson();
 
             return $trash;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -1259,39 +1090,34 @@ class ApiController extends Controller
 
     public function getMyTicketsAgent()
     {
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'user_id' => 'required|exists:users,id',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
             $id = $this->request->input('user_id');
-            if ($this->user->where('id', $id)->first()->role == 'user')
-            {
+            if ($this->user->where('id', $id)->first()->role == 'user') {
                 $error = 'This user is not an Agent or Admin';
 
                 return response()->json(compact('error'));
             }
             //$user = \JWTAuth::parseToken()->authenticate();
-            $result = $this->user->join('tickets', function ($join) use ($id)
-                    {
-                        $join->on('users.id', '=', 'tickets.assigned_to')
+            $result = $this->user->join('tickets', function ($join) use ($id) {
+                $join->on('users.id', '=', 'tickets.assigned_to')
                         ->where('status', '=', 1);
-                        //->where('user_id', '=', $id);
-                    })
+                //->where('user_id', '=', $id);
+            })
                     ->join('users as client', 'tickets.user_id', '=', 'client.id')
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
                     ->join('help_topic', 'help_topic.id', '=', 'tickets.help_topic_id')
                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
-                    ->leftJoin('ticket_thread', function ($join)
-                    {
+                    ->leftJoin('ticket_thread', function ($join) {
                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id');
                     })
                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id')
@@ -1306,17 +1132,13 @@ class ApiController extends Controller
                     ->toJson();
 
             return $result;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -1325,20 +1147,17 @@ class ApiController extends Controller
 
     public function getMyTicketsUser()
     {
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'user_id' => 'required|exists:users,id',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
             $id = $this->request->input('user_id');
-            if ($this->user->where('id', $id)->first()->role == 'admin' || $this->user->where('id', $id)->first()->role == 'agent')
-            {
+            if ($this->user->where('id', $id)->first()->role == 'admin' || $this->user->where('id', $id)->first()->role == 'agent') {
                 $error = 'This is not a client';
 
                 return response()->json(compact('error'));
@@ -1349,18 +1168,16 @@ class ApiController extends Controller
                                             ->select(
                                                     'users.first_name', 'users.last_name', 'users.user_name', 'users.email', 'users.id', 'users.profile_pic', 'users.ban', 'users.active', 'users.is_delete', 'users.phone_number', 'users.ext', 'users.country_code', 'users.mobile', 'organization.name as company'
                                             )->first()->toArray();
-            $result = $this->user->join('tickets', function ($join) use ($id)
-                    {
-                        $join->on('users.id', '=', 'tickets.user_id')
+            $result = $this->user->join('tickets', function ($join) use ($id) {
+                $join->on('users.id', '=', 'tickets.user_id')
                         ->where('user_id', '=', $id);
-                    })
+            })
                     ->join('department', 'department.id', '=', 'tickets.dept_id')
                     ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
                     ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
                     ->join('help_topic', 'help_topic.id', '=', 'tickets.help_topic_id')
                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
-                    ->join('ticket_thread', function ($join)
-                    {
+                    ->join('ticket_thread', function ($join) {
                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id')
                         ->whereNotNull('title');
                     })
@@ -1372,17 +1189,13 @@ class ApiController extends Controller
                     ->toArray();
 
             return response()->json(['tickets' => $result, 'requester' => $user]);
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -1391,26 +1204,22 @@ class ApiController extends Controller
 
     public function getTicketById()
     {
-        try
-        {
+        try {
             $v = \Validator::make($this->request->all(), [
                         'id' => 'required|exists:tickets,id',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
             $id = $this->request->input('id');
-            if (!$this->model->where('id', $id)->first())
-            {
-                $error = 'There is no Ticket as ticket id: ' . $id;
+            if (!$this->model->where('id', $id)->first()) {
+                $error = 'There is no Ticket as ticket id: '.$id;
 
                 return response()->json(compact('error'));
             }
-            $query = $this->user->join('tickets', function ($join) use ($id)
-            {
+            $query = $this->user->join('tickets', function ($join) use ($id) {
                 $join->on('users.id', '=', 'tickets.user_id')
                         ->where('tickets.id', '=', $id);
             });
@@ -1427,17 +1236,13 @@ class ApiController extends Controller
                             'users.email', 'users.user_name', 'users.first_name', 'users.last_name', 'tickets.id', 'ticket_number', 'user_id', 'ticket_priority.priority_id', 'ticket_priority.priority as priority_name', 'department.name as dept_name', 'ticket_status.name as status_name', 'sla_plan.name as sla_name', 'ticket_source.name as source_name', 'sla_plan.id as sla', 'ticket_status.id as status', 'lock_by', 'lock_at', 'ticket_source.id as source', 'isoverdue', 'reopened', 'isanswered', 'is_deleted', 'closed', 'reopened_at', 'duedate', 'closed_at', 'tickets.created_at', 'tickets.updated_at')->first();
 
             return response()->json(compact('result'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -1446,8 +1251,7 @@ class ApiController extends Controller
 
     public function createPagination($array, $perPage)
     {
-        try
-        {
+        try {
             //Get current page form url e.g. &page=6
             $currentPage = LengthAwarePaginator::resolveCurrentPage();
 
@@ -1461,17 +1265,13 @@ class ApiController extends Controller
             $paginatedResults = new LengthAwarePaginator($currentPageSearchResults, count($collection), $perPage);
 
             return $paginatedResults;
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (\TokenExpiredException $e)
-        {
+        } catch (\TokenExpiredException $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -1481,31 +1281,27 @@ class ApiController extends Controller
     public function collaboratorSearch()
     {
         $this->validate($this->request, ['term' => 'required']);
-        try
-        {
+
+        try {
             $emails = $this->ticket->autosearch();
             //return $emails;
-            $user   = new User();
-            if (count($emails) > 0)
-            {
-                foreach ($emails as $key => $email)
-                {
-                    $user_model            = $user->where('email', $email)->first();
+            $user = new User();
+            if (count($emails) > 0) {
+                foreach ($emails as $key => $email) {
+                    $user_model = $user->where('email', $email)->first();
                     //return $user_model;
-                    $users[$key]['name']   = $user_model->first_name . ' ' . $user_model->last_name;
-                    $users[$key]['email']  = $email;
+                    $users[$key]['name'] = $user_model->first_name.' '.$user_model->last_name;
+                    $users[$key]['email'] = $email;
                     $users[$key]['avatar'] = $this->avatarUrl($email);
                 }
             }
             //return $users;
 
             return response()->json(compact('users'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
         }
@@ -1513,23 +1309,17 @@ class ApiController extends Controller
 
     public function avatarUrl($email)
     {
-        try
-        {
+        try {
             $user = new User();
             $user = $user->where('email', $email)->first();
-            if ($user->profile_pic)
-            {
-                $url = url('uploads/profilepic/' . $user->profile_pic);
-            }
-            else
-            {
+            if ($user->profile_pic) {
+                $url = url('uploads/profilepic/'.$user->profile_pic);
+            } else {
                 $url = \Gravatar::src($email);
             }
 
             return $url;
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             //return $ex->getMessage();
             throw new \Exception($ex->getMessage());
         }
@@ -1537,15 +1327,13 @@ class ApiController extends Controller
 
     public function addCollaboratorForTicket()
     {
-        try
-        {
+        try {
             $v = \Validator::make(\Input::get(), [
                         'email'     => 'required|email|unique:users',
                         'ticket_id' => 'required',
                             ]
             );
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->messages();
 
                 return response()->json(compact('error'));
@@ -1553,20 +1341,16 @@ class ApiController extends Controller
             $collaborator = $this->ticket->useradd();
 
             return response()->json(compact('collaborator'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $ex)
-        {
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $ex) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
         }
@@ -1574,14 +1358,12 @@ class ApiController extends Controller
 
     public function getCollaboratorForTicket()
     {
-        try
-        {
+        try {
             $v = \Validator::make(\Input::get(), [
                         'ticket_id' => 'required',
                             ]
             );
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->messages();
 
                 return response()->json(compact('error'));
@@ -1589,20 +1371,16 @@ class ApiController extends Controller
             $collaborator = $this->ticket->getCollaboratorForTicket();
 
             return response()->json(compact('collaborator'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $ex)
-        {
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $ex) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
         }
@@ -1610,15 +1388,13 @@ class ApiController extends Controller
 
     public function deleteCollaborator()
     {
-        try
-        {
+        try {
             $v = \Validator::make(\Input::get(), [
                         'ticketid' => 'required',
                         'email'    => 'required',
                             ]
             );
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $result = $v->messages();
 
                 return response()->json(compact('result'));
@@ -1626,12 +1402,10 @@ class ApiController extends Controller
             $collaborator = $this->ticket->userremove();
 
             return response()->json(compact('collaborator'));
-        }
-        catch (\Exception $ex)
-        {
+        } catch (\Exception $ex) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
         }
@@ -1639,79 +1413,68 @@ class ApiController extends Controller
 
     public function dependency()
     {
-        try
-        {
-            $user    = \JWTAuth::parseToken()->authenticate();
+        try {
+            $user = \JWTAuth::parseToken()->authenticate();
             $tickets = \DB::table('tickets');
-            if ($user->role == 'agent')
-            {
-                $id      = $user->id;
-                $dept    = DepartmentAssignAgents::where('agent_id', '=', $id)->pluck('department_id')->toArray();
+            if ($user->role == 'agent') {
+                $id = $user->id;
+                $dept = DepartmentAssignAgents::where('agent_id', '=', $id)->pluck('department_id')->toArray();
                 $tickets = $tickets->whereIn('tickets.dept_id', $dept)->orWhere('assigned_to', '=', $user->id);
             }
             $department = $this->department->select('name', 'id')->get()->toArray();
-            $sla        = $this->slaPlan->select('name', 'id')->get()->toArray();
-            $staff      = $this->user->where('role', 'agent')->select('email', 'id')->get()->toArray();
-            $team       = $this->team->select('name', 'id')->get()->toArray();
-            $priority   = \DB::table('ticket_priority')->select('priority', 'priority_id')->get();
-            $helptopic  = $this->helptopic->select('topic', 'id')->get()->toArray();
-            $status     = \DB::table('ticket_status')->select('name', 'id')->get();
-            $source     = \DB::table('ticket_source')->select('name', 'id')->get();
-            $statuses   = collect($tickets
+            $sla = $this->slaPlan->select('name', 'id')->get()->toArray();
+            $staff = $this->user->where('role', 'agent')->select('email', 'id')->get()->toArray();
+            $team = $this->team->select('name', 'id')->get()->toArray();
+            $priority = \DB::table('ticket_priority')->select('priority', 'priority_id')->get();
+            $helptopic = $this->helptopic->select('topic', 'id')->get()->toArray();
+            $status = \DB::table('ticket_status')->select('name', 'id')->get();
+            $source = \DB::table('ticket_source')->select('name', 'id')->get();
+            $statuses = collect($tickets
                             ->join('ticket_status', 'tickets.status', '=', 'ticket_status.id')
                             ->select('ticket_status.name as status', \DB::raw('COUNT(tickets.id) as count'))
                             ->groupBy('ticket_status.id')
-                            ->get())->transform(function ($item)
-            {
-                return ['name' => ucfirst($item->status), 'count' => $item->count];
-            });
-            $unassigned = $this->user->leftJoin('tickets', function ($join)
-                    {
-                        $join->on('users.id', '=', 'tickets.user_id')
+                            ->get())->transform(function ($item) {
+                                return ['name' => ucfirst($item->status), 'count' => $item->count];
+                            });
+            $unassigned = $this->user->leftJoin('tickets', function ($join) {
+                $join->on('users.id', '=', 'tickets.user_id')
                         ->whereNull('assigned_to')->where('status', '=', 1);
-                    })
-                    ->where(function($query) use($user)
-                    {
-                        if ($user->role != 'admin')
-                        {
+            })
+                    ->where(function ($query) use ($user) {
+                        if ($user->role != 'admin') {
                             $query->where('tickets.dept_id', '=', $user->primary_dpt);
                         }
                     })
                     ->select(\DB::raw('COUNT(tickets.id) as unassined'))
                     ->value('unassined');
-            $mytickets = $this->user->leftJoin('tickets', function ($join) use ($user)
-                    {
-                        $join->on('users.id', '=', 'tickets.assigned_to')
+            $mytickets = $this->user->leftJoin('tickets', function ($join) use ($user) {
+                $join->on('users.id', '=', 'tickets.assigned_to')
                         ->where('tickets.assigned_to', '=', $user->id)->where('status', '=', 1);
-                    })
-                    ->where(function ($query) use ($user)
-                    {
-                        if ($user->role != 'admin')
-                        {
+            })
+                    ->where(function ($query) use ($user) {
+                        if ($user->role != 'admin') {
                             $query->where('tickets.dept_id', '=', $user->primary_dpt)->orWhere('assigned_to', '=', $user->id);
                         }
                     })
                     ->select(\DB::raw('COUNT(tickets.id) as my_ticket'))
                     ->value('my_ticket');
-            $depend     = collect([['name' => 'unassigned', 'count' => $unassigned], ['name' => 'mytickets', 'count' => $mytickets]]);
+            $depend = collect([['name' => 'unassigned', 'count' => $unassigned], ['name' => 'mytickets', 'count' => $mytickets]]);
             $collection = $statuses->merge($depend);
-            $result     = ['departments'   => $department, 'sla'           => $sla, 'staffs'        => $staff, 'teams'         => $team,
-                'priorities'    => $priority, 'helptopics'    => $helptopic,
-                'status'        => $status, 
-                'sources'       => $source,
-                'tickets_count' => $collection];
+            $result = ['departments'   => $department, 'sla'           => $sla, 'staffs'        => $staff, 'teams'         => $team,
+                'priorities'           => $priority, 'helptopics'    => $helptopic,
+                'status'               => $status,
+                'sources'              => $source,
+                'tickets_count'        => $collection, ];
 
             return response()->json(compact('result'));
 //            $result     = ['departments' => $department, 'sla'         => $sla, 'staffs'      => $staff, 'teams'       => $team,
 //                'priorities'  => $priority, 'helptopics'  => $helptopic, 'status'      => $status, 'sources'     => $source,];
 
             return response()->json(compact('result'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
         }
@@ -1720,19 +1483,15 @@ class ApiController extends Controller
     public function differenciateHelpTopic($query)
     {
         $ticket = $query->first();
-        $check  = 'department';
-        if ($ticket)
-        {
-            if ($ticket->dept_id && $ticket->help_topic_id)
-            {
+        $check = 'department';
+        if ($ticket) {
+            if ($ticket->dept_id && $ticket->help_topic_id) {
                 return $this->getSystem($check, $query);
             }
-            if (!$ticket->dept_id && $ticket->help_topic_id)
-            {
+            if (!$ticket->dept_id && $ticket->help_topic_id) {
                 return $query->select('tickets.help_topic_id');
             }
-            if ($ticket->dept_id && !$ticket->help_topic_id)
-            {
+            if ($ticket->dept_id && !$ticket->help_topic_id) {
                 return $query->select('tickets.dept_id');
             }
         }
@@ -1742,8 +1501,7 @@ class ApiController extends Controller
 
     public function getSystem($check, $query)
     {
-        switch ($check)
-        {
+        switch ($check) {
             case 'department':
                 return $query->select('tickets.dept_id');
             case 'helpTopic':
@@ -1762,38 +1520,33 @@ class ApiController extends Controller
      */
     public function register(Request $request)
     {
-        try
-        {
+        try {
             $v = \Validator::make($request->all(), [
                         'email'    => 'required|email|unique:users',
                         'password' => 'required|min:6',
             ]);
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
-            $auth     = $this->user;
-            $email    = $request->input('email');
+            $auth = $this->user;
+            $email = $request->input('email');
             $username = $request->input('email');
             $password = \Hash::make($request->input('password'));
-            $role     = $request->input('role');
-            if ($auth->role == 'agent')
-            {
+            $role = $request->input('role');
+            if ($auth->role == 'agent') {
                 $role = 'user';
             }
-            $user            = new User();
-            $user->password  = $password;
+            $user = new User();
+            $user->password = $password;
             $user->user_name = $username;
-            $user->email     = $email;
-            $user->role      = $role;
+            $user->email = $email;
+            $user->role = $role;
             $user->save();
 
             return response()->json(compact('user'));
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
 
             return response()->json(compact('error'));
@@ -1802,54 +1555,46 @@ class ApiController extends Controller
 
     public function createUser()
     {
-        try
-        {
+        try {
             $v = \Validator::make(
                             $this->request->all(), [
                         'username'   => 'required|unique:users,user_name',
                         'first_name' => 'required',
                             ]
             );
-            if ($v->fails())
-            {
+            if ($v->fails()) {
                 $error = $v->messages();
+
                 return response()->json(compact('error'));
             }
-            $str     = str_random(8);
-            $array   = ['password' => $str, 'password_confirmation' => $str, 'email' => $this->request->input('email'), 'full_name' => $this->request->input('first_name')];
-            $all     = $this->request->input();
-            $merged  = $array + $all;
+            $str = str_random(8);
+            $array = ['password' => $str, 'password_confirmation' => $str, 'email' => $this->request->input('email'), 'full_name' => $this->request->input('first_name')];
+            $all = $this->request->input();
+            $merged = $array + $all;
             $request = new \App\Http\Requests\helpdesk\RegisterRequest();
             $request->replace($merged);
-            if ($request->has('username'))
-            {
+            if ($request->has('username')) {
                 $request->merge(['user_name' => $request->get('username')]);
             }
             \Route::dispatch($request);
-            $auth     = new \App\Http\Controllers\Auth\AuthController();
-            $user     = new User();
+            $auth = new \App\Http\Controllers\Auth\AuthController();
+            $user = new User();
             $register = $auth->postRegister($user, $request, true);
-            if ($register)
-            {
+            if ($register) {
                 return response()->json(compact('register'));
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
-        }
-        catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e)
-        {
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             $error = $e->getMessage();
-            $line  = $e->getLine();
-            $file  = $e->getFile();
+            $line = $e->getLine();
+            $file = $e->getFile();
 
             return response()->json(compact('error', 'file', 'line'));
         }
     }
-
 }

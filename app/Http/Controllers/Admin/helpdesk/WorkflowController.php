@@ -149,6 +149,7 @@ class WorkflowController extends Controller
             $email_data["E-$key"] = $email;
         }
         $emails = $email_data;
+
         try {
             return view('themes.default1.admin.helpdesk.manage.workflow.create', compact('emails'));
         } catch (Exception $e) {

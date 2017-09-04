@@ -94,6 +94,7 @@ class UnAuthController extends Controller
                     $ticket_token->token = $hashed_token;
                     $ticket_token->save();
                 }
+
                 try {
                     $this->PhpMailController->sendmail(
                             $from = $this->PhpMailController->mailfrom('1', '0'), $to = ['name' => $username, 'email' => $user_details->email], $message = ['subject' => 'Ticket link Request ['.$ticket_number.']', 'scenario' => 'check-ticket'], $template_variables = ['user' => $username, 'ticket_link_with_number' => url('show-ticket/'.$ticket->id.'/'.$token)]
@@ -270,6 +271,7 @@ class UnAuthController extends Controller
         } else {
             $from_email = $sending_emails->id;
         }
+
         try {
             $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $tickets->dept_id), $to = ['name' => $user_name, 'email' => $email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'close-ticket'], $template_variables = ['ticket_number' => $ticket_number]);
         } catch (\Exception $e) {
@@ -347,11 +349,11 @@ class UnAuthController extends Controller
     }
 
     // Follow up tickets
-       public function followup()
-       {
-           $followup = Followup::whereId('1')->first();
-           $condition = $followup->condition;
-         // dd($condition);
+    public function followup()
+    {
+        $followup = Followup::whereId('1')->first();
+        $condition = $followup->condition;
+        // dd($condition);
 
         switch ($condition) {
             case 'everyMinute':
@@ -383,34 +385,34 @@ class UnAuthController extends Controller
                 break;
         }
 
-           if ($followup->status = 1) {
-               $tickets = Tickets::where('id', '>=', 1)->where('status', '!=', 5)->get();
-        // dd( $tickets);
-         // $tickets=Tickets::where('id', '>=', 1)->where('status', '!=', 5)->pluck('id');
-        // dd( $tickets);
-         // $id=1;
-        foreach ($tickets as $ticket) {
+        if ($followup->status = 1) {
+            $tickets = Tickets::where('id', '>=', 1)->where('status', '!=', 5)->get();
+            // dd( $tickets);
+            // $tickets=Tickets::where('id', '>=', 1)->where('status', '!=', 5)->pluck('id');
+            // dd( $tickets);
             // $id=1;
-            // $id++;
-        // $ticket=Tickets::where('status', '!=', 5)->get();
+            foreach ($tickets as $ticket) {
+                // $id=1;
+                // $id++;
+                // $ticket=Tickets::where('status', '!=', 5)->get();
 
-        // dd($ticket);
-            // if($ticket != null){
+                // dd($ticket);
+                // if($ticket != null){
                 // dd('here');
-            $ck = date('Y-m-d H:i:s', strtotime($ticket->updated_at.$followup_set));
-            // dd($ck);
-            $current_time = date('Y-m-d H:i:s');
-            if ($current_time > $ck) {
-                $ticket->follow_up = 1;
-                $ticket->save();
-             //  Tickets::where('id', '=',$id)
+                $ck = date('Y-m-d H:i:s', strtotime($ticket->updated_at.$followup_set));
+                // dd($ck);
+                $current_time = date('Y-m-d H:i:s');
+                if ($current_time > $ck) {
+                    $ticket->follow_up = 1;
+                    $ticket->save();
+                    //  Tickets::where('id', '=',$id)
              // ->update(['follow_up' => 1]);
 
             // }
-            }
-        //       if($id=2)
+                }
+                //       if($id=2)
         // {dd($ticket);}
+            }
         }
-           }
-       }
+    }
 }

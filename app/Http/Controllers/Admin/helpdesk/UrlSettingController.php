@@ -91,7 +91,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n";
     public function changeHttp()
     {
         //$string = "RewriteCond %{HTTPS} off
-//RewriteRule ^(.*)$ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n";
+        //RewriteRule ^(.*)$ http://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n";
         $string = '';
 
         return $string;
