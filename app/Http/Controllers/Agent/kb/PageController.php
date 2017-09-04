@@ -51,6 +51,7 @@ class PageController extends Controller
     {
         $pages = $this->page->paginate(3);
         $pages->setPath('page');
+
         try {
             return view('themes.default1.agent.kb.pages.index', compact('pages'));
         } catch (Exception $e) {
@@ -128,6 +129,7 @@ class PageController extends Controller
         $sl = $request->input('name');
         $slug = str_slug($sl, '-');
         $this->page->slug = $slug;
+
         try {
             $this->page->fill($request->input())->save();
 
@@ -169,6 +171,7 @@ class PageController extends Controller
         $pages = $this->page->where('slug', $slug)->first();
         $sl = $request->input('name');
         $slug = str_slug($sl, '-');
+
         try {
             $pages->fill($request->all())->save();
             $pages->slug = $slug;

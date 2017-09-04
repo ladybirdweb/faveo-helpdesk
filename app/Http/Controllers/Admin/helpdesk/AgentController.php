@@ -271,10 +271,12 @@ class AgentController extends Controller
         $team_assign_agent = $team_assign_agent->where('agent_id', $id);
         $team_assign_agent->delete();
         $user = $user->whereId($id)->first();
+
         try {
             $error = Lang::get('lang.this_staff_is_related_to_some_tickets');
             $user->id;
             $user->delete();
+
             throw new \Exception($error);
             return redirect('agents')->with('success', Lang::get('lang.agent_deleted_sucessfully'));
         } catch (\Exception $e) {
