@@ -147,15 +147,17 @@ class Tickets extends BaseModel
         return $this->belongsTo($related, $foreignKey);
     }
 
-    public function save(array $options = array()) {
+    public function save(array $options = [])
+    {
         $changed = $this->isDirty() ? $this->getDirty() : false;
         $id = $this->id;
         $model = $this->find($id);
         $save = parent::save($options);
         if ($this->notify) {
-            $array = ['changes' => $changed, 'model' => $model,'system'=>  $this->system,'send_mail'=>  $this->send];
+            $array = ['changes' => $changed, 'model' => $model, 'system'=>  $this->system, 'send_mail'=>  $this->send];
             \Event::fire('notification-saved', [$array]);
         }
+
         return $save;
     }
 }

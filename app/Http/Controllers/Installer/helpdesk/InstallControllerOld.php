@@ -367,7 +367,7 @@ class InstallControllerOld extends Controller
             $datacontent = File::get($install);
             $datacontent = str_replace('%0%', $value, $datacontent);
             File::put($install, $datacontent);
-// setting email settings in route
+            // setting email settings in route
             $smtpfilepath = "\App\Http\Controllers\Common\SettingsController::smtp()";
 
             $link = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
@@ -378,6 +378,7 @@ class InstallControllerOld extends Controller
             $datacontent2 = str_replace('http://localhost', $link, $datacontent2);
             File::put($app_url, $datacontent2);
             $language = Cache::get('language');
+
             try {
                 Cache::flush();
 

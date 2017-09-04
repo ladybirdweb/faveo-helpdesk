@@ -30,14 +30,15 @@ use Mail;
  *
  * @version v1
  */
-class TicketController extends Controller {
-
+class TicketController extends Controller
+{
     /**
      * Create a new controller instance.
      *
      * @return type response
      */
-    public function __construct() {
+    public function __construct()
+    {
         $PhpMailController = new PhpMailController();
         $this->PhpMailController = $PhpMailController;
     }
@@ -54,7 +55,8 @@ class TicketController extends Controller {
      *
      * @return type string
      */
-    public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach = '') {
+    public function createTicket($user_id, $subject, $body, $helptopic, $sla, $priority, $source, $headers, $dept, $assignto, $form_data, $attach = '')
+    {
         try {
             //return $headers;
             $max_number = Tickets::whereRaw('id = (select max(`id`) from tickets)')->first();
@@ -117,7 +119,8 @@ class TicketController extends Controller {
      *
      * @return type
      */
-    public function storeCollaborators($headers, $id) {
+    public function storeCollaborators($headers, $id)
+    {
         try {
             //return $headers;
             $company = $this->company();
@@ -170,7 +173,8 @@ class TicketController extends Controller {
      *
      * @return type
      */
-    public function ticketThread($subject, $body, $id, $user_id) {
+    public function ticketThread($subject, $body, $id, $user_id)
+    {
         try {
             $thread = new Ticket_Thread();
             $thread->user_id = $user_id;
@@ -193,7 +197,8 @@ class TicketController extends Controller {
      *
      * @return type integer
      */
-    public function ticketNumber($ticket_number) {
+    public function ticketNumber($ticket_number)
+    {
         try {
             //dd($ticket_number);
             $number = $ticket_number;
@@ -233,7 +238,8 @@ class TicketController extends Controller {
      *
      * @return type string
      */
-    public function generateRandomString($length = 10) {
+    public function generateRandomString($length = 10)
+    {
         try {
             $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $charactersLength = strlen($characters);
@@ -256,7 +262,8 @@ class TicketController extends Controller {
      *
      * @return type bool
      */
-    public function reply($thread, $request, $ta, $attach = '') {
+    public function reply($thread, $request, $ta, $attach = '')
+    {
         try {
             $check_attachment = null;
             $eventthread = $thread->where('ticket_id', $request->input('ticket_ID'))->first();
@@ -289,7 +296,7 @@ class TicketController extends Controller {
                 $thread2->ticket_id = $thread->ticket_id;
                 $thread2->user_id = Auth::user()->id;
                 $thread2->is_internal = 1;
-                $thread2->body = 'This Ticket have been assigned to ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
+                $thread2->body = 'This Ticket have been assigned to '.Auth::user()->first_name.' '.Auth::user()->last_name;
                 $thread2->save();
             }
             if ($tickets->status > 1) {
@@ -322,12 +329,12 @@ class TicketController extends Controller {
 //             Mail::send(array('html' => 'emails.ticket_re-reply'), ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name' => $username, 'Agent_Signature' => $agentsign], function ($message) use ($email, $user_name, $ticket_number, $ticket_subject, $check_attachment) {
 //                 $message->to($email, $user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');
 //                 // if(isset($attachments)){
-// //                if ($check_attachment == 1) {
-// //                    $size = count($attach);
-// //                    for ($i = 0; $i < $size; $i++) {
-// //                        $message->attach($attachments[$i]->getRealPath(), ['as' => $attachments[$i]->getClientOriginalName(), 'mime' => $attachments[$i]->getClientOriginalExtension()]);
-// //                    }
-// //                }
+            // //                if ($check_attachment == 1) {
+            // //                    $size = count($attach);
+            // //                    for ($i = 0; $i < $size; $i++) {
+            // //                        $message->attach($attachments[$i]->getRealPath(), ['as' => $attachments[$i]->getClientOriginalName(), 'mime' => $attachments[$i]->getClientOriginalExtension()]);
+            // //                    }
+            // //                }
 //             }, true);
             //dd('reply');
             /*
@@ -350,22 +357,21 @@ class TicketController extends Controller {
                 if ($user_id_collab->role == 'user') {
                     $collab_user_name = $user_id_collab->user_name;
                 } else {
-                    $collab_user_name = $user_id_collab->first_name . ' ' . $user_id_collab->last_name;
+                    $collab_user_name = $user_id_collab->first_name.' '.$user_id_collab->last_name;
                 }
 //                 Mail::send('emails.ticket_re-reply', ['content' => $reply_content, 'ticket_number' => $ticket_number, 'From' => $company, 'name' => $collab_user_name, 'Agent_Signature' => $agentsign], function ($message) use ($collab_email, $collab_user_name, $ticket_number, $ticket_subject, $check_attachment) {
 //                     $message->to($collab_email, $collab_user_name)->subject($ticket_subject . '[#' . $ticket_number . ']');
-// //                    if ($check_attachment == 1) {
-// //                        $size = sizeOf($attachments);
-// //                        for ($i = 0; $i < $size; $i++) {
-// //                            $message->attach($attachments[$i]->getRealPath(), ['as' => $attachments[$i]->getClientOriginalName(), 'mime' => $attachments[$i]->getClientOriginalExtension()]);
-// //                        }
-// //                    }
+                // //                    if ($check_attachment == 1) {
+                // //                        $size = sizeOf($attachments);
+                // //                        for ($i = 0; $i < $size; $i++) {
+                // //                            $message->attach($attachments[$i]->getRealPath(), ['as' => $attachments[$i]->getClientOriginalName(), 'mime' => $attachments[$i]->getClientOriginalExtension()]);
+                // //                        }
+                // //                    }
 //                 }, true);
 
                 try {
                     $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticketdata->dept_id), $to = ['user' => $admin_user, 'email' => $admin_email], $message = ['subject' => $updated_subject, 'body' => $body, 'scenario' => $mail], $template_variables = ['ticket_agent_name' => $admin_user, 'ticket_client_name' => $username, 'ticket_client_email' => $emailadd, 'user' => $admin_user, 'ticket_number' => $ticket_number2, 'email_address' => $emailadd, 'name' => $ticket_creator]);
                 } catch (\Exception $e) {
-                    
                 }
             }
 
@@ -381,7 +387,8 @@ class TicketController extends Controller {
      *
      * @return type
      */
-    public function company() {
+    public function company()
+    {
         try {
             $company = Company::Where('id', '=', '1')->first();
             if ($company->company_name == null) {
@@ -404,7 +411,8 @@ class TicketController extends Controller {
      *
      * @return type bool
      */
-    public function ticketEditPost($ticket_id, $thread, $ticket) {
+    public function ticketEditPost($ticket_id, $thread, $ticket)
+    {
         try {
             $ticket = $ticket->where('id', '=', $ticket_id)->first();
 
@@ -432,7 +440,8 @@ class TicketController extends Controller {
      *
      * @return type bool
      */
-    public function assign($id) {
+    public function assign($id)
+    {
         try {
             $UserEmail = Input::get('user');
             //dd($UserEmail);
@@ -458,7 +467,7 @@ class TicketController extends Controller {
             $thread->ticket_id = $ticket->id;
             $thread->user_id = Auth::user()->id;
             $thread->is_internal = 1;
-            $thread->body = 'This Ticket has been assigned to ' . $user->first_name . ' ' . $user->last_name;
+            $thread->body = 'This Ticket has been assigned to '.$user->first_name.' '.$user->last_name;
             $thread->save();
 
             $company = $this->company();
@@ -467,7 +476,7 @@ class TicketController extends Controller {
             $agent = $user->first_name;
             $agent_email = $user->email;
 
-            $master = Auth::user()->first_name . ' ' . Auth::user()->last_name;
+            $master = Auth::user()->first_name.' '.Auth::user()->last_name;
             if (Alert::first()->internal_status == 1 || Alert::first()->internal_assigned_agent == 1) {
                 // // ticket assigned send mail
                 // Mail::send('emails.Ticket_assign', ['agent' => $agent, 'ticket_number' => $ticket_number, 'from' => $company, 'master' => $master, 'system' => $system], function ($message) use ($agent_email, $agent, $ticket_number, $ticket_subject) {
@@ -475,7 +484,7 @@ class TicketController extends Controller {
                 // });
 
                 try {
-                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket->dept_id), $to = ['name' => $agent, 'email' => $agent_email], $message = ['subject' => $ticket_subject . '[#' . $ticket_number . ']', 'scenario' => 'assign-ticket'], $template_variables = ['ticket_agent_name' => $agent, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master]);
+                    $this->PhpMailController->sendmail($from = $this->PhpMailController->mailfrom('0', $ticket->dept_id), $to = ['name' => $agent, 'email' => $agent_email], $message = ['subject' => $ticket_subject.'[#'.$ticket_number.']', 'scenario' => 'assign-ticket'], $template_variables = ['ticket_agent_name' => $agent, 'ticket_number' => $ticket_number, 'ticket_assigner' => $master]);
                 } catch (\Exception $e) {
                     return 0;
                 }
@@ -495,7 +504,8 @@ class TicketController extends Controller {
      *
      * @return type string
      */
-    public function delete($ids, $ticket) {
+    public function delete($ids, $ticket)
+    {
         try {
             foreach ($ids as $id) {
                 $ticket_delete = $ticket->where('id', '=', $id)->first();
@@ -527,7 +537,7 @@ class TicketController extends Controller {
                         $thread->ticket_id = $ticket_delete->id;
                         $thread->user_id = Auth::user()->id;
                         $thread->is_internal = 1;
-                        $thread->body = $ticket_status_message->message . ' ' . Auth::user()->first_name . ' ' . Auth::user()->last_name;
+                        $thread->body = $ticket_status_message->message.' '.Auth::user()->first_name.' '.Auth::user()->last_name;
                         $thread->save();
                     }
                 } else {
@@ -548,7 +558,8 @@ class TicketController extends Controller {
      *
      * @return type bool
      */
-    public function checkEmail($email) {
+    public function checkEmail($email)
+    {
         try {
             $check = User::where('email', '=', $email)->first();
             if ($check) {
@@ -566,7 +577,8 @@ class TicketController extends Controller {
      *
      * @return type
      */
-    public function system() {
+    public function system()
+    {
         try {
             $system = System::Where('id', '=', '1')->first();
             if ($system->name == null) {
@@ -589,7 +601,8 @@ class TicketController extends Controller {
      *
      * @return int
      */
-    public function attach($thread, $attach) {
+    public function attach($thread, $attach)
+    {
         try {
             $ta = new Ticket_attachments();
             foreach ($attach as $file) {
@@ -608,9 +621,10 @@ class TicketController extends Controller {
      *
      * @return type json
      */
-    public function autosearch() {
+    public function autosearch()
+    {
         $term = \Input::get('term');
-        $user = \App\User::where('email', 'LIKE', '%' . $term . '%')->orWhere('first_name', 'LIKE', '%' . $term . '%')->orWhere('last_name', 'LIKE', '%' . $term . '%')->orWhere('user_name', 'LIKE', '%' . $term . '%')->pluck('email');
+        $user = \App\User::where('email', 'LIKE', '%'.$term.'%')->orWhere('first_name', 'LIKE', '%'.$term.'%')->orWhere('last_name', 'LIKE', '%'.$term.'%')->orWhere('user_name', 'LIKE', '%'.$term.'%')->pluck('email');
 
         return $user;
     }
@@ -622,7 +636,8 @@ class TicketController extends Controller {
      *
      * @return type json
      */
-    public function useradd() {
+    public function useradd()
+    {
         $email = Input::get('email');
         $ticket_id = Input::get('ticket_id');
         $company = $this->company();
@@ -655,7 +670,8 @@ class TicketController extends Controller {
      *
      * @return type
      */
-    public function userremove() {
+    public function userremove()
+    {
         $email = Input::get('email');
         $ticketid = Input::get('ticketid');
         $user = new User();
@@ -670,10 +686,12 @@ class TicketController extends Controller {
                 return 'deleted successfully';
             }
         }
+
         return 'not found';
     }
 
-    public function getCollaboratorForTicket() {
+    public function getCollaboratorForTicket()
+    {
         try {
             $ticketid = Input::get('ticket_id');
 
@@ -697,16 +715,18 @@ class TicketController extends Controller {
             return $collab;
         } catch (\Exception $ex) {
             return $ex->getMessage();
+
             throw new \Exception('get collaborator for ticket fails');
         }
     }
 
-    public function avatarUrl($email) {
+    public function avatarUrl($email)
+    {
         try {
             $user = new User();
             $user = $user->where('email', $email)->first();
             if ($user->profile_pic) {
-                $url = url('uploads/profilepic/' . $user->profile_pic);
+                $url = url('uploads/profilepic/'.$user->profile_pic);
             } else {
                 $url = \Gravatar::src($email);
             }
@@ -717,5 +737,4 @@ class TicketController extends Controller {
             throw new \Exception($ex->getMessage());
         }
     }
-
 }

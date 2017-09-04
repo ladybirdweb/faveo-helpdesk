@@ -106,6 +106,7 @@ class FormController extends Controller
 
                 return view('themes.default1.admin.helpdesk.manage.form.preview', compact('form', 'fields'));
             }
+
             throw new Exception("Sorry we can't find your request");
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -117,13 +118,15 @@ class FormController extends Controller
      *
      * @return Response
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         try {
             $array = $request->all();
             $collection = collect($array);
             $json = $collection->toJson();
             \DB::table('forms')->truncate();
             \DB::table('forms')->insert(['form' => 'ticket', 'json' => $json]);
+
             return response()->json('success');
         } catch (\Exception $ex) {
             return response()->json($ex->getMessage(), 500);
@@ -169,6 +172,7 @@ class FormController extends Controller
                 //dd($fields);
                 return view('themes.default1.admin.helpdesk.manage.form.edit', compact('form', 'fields', 'select_forms'));
             }
+
             throw new Exception("Sorry we can't find your request");
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -187,6 +191,7 @@ class FormController extends Controller
                 //dd($fields);
                 return view('themes.default1.admin.helpdesk.manage.form.add-child', compact('form', 'fields', 'select_forms'));
             }
+
             throw new Exception("Sorry we can't find your request");
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
@@ -201,6 +206,7 @@ class FormController extends Controller
             'name.*'   => 'required',
             'type.*'   => 'required',
         ]);
+
         try {
             if (!$request->input('formname')) {
                 throw new Exception(Lang::get('lang.please_fill_form_name'));
@@ -365,6 +371,7 @@ class FormController extends Controller
     public function addChild($fieldid, Request $request)
     {
         $ids = $request->except('_token');
+
         try {
             foreach ($ids as $valueid => $formid) {
                 $field_value = new \App\Model\helpdesk\Form\FieldValue();

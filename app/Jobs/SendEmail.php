@@ -23,7 +23,7 @@ class SendEmail implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($from, $to, $message, $template_variables = '',$thread="",$auto_respond="")
+    public function __construct($from, $to, $message, $template_variables = '', $thread = '', $auto_respond = '')
     {
         $this->from = $from;
         $this->to = $to;
@@ -40,7 +40,8 @@ class SendEmail implements ShouldQueue
      */
     public function handle(PhpMailController $PhpMailController)
     {
-        $p = $PhpMailController->sendEmail($this->from, $this->to, $this->message,$this->template,$this->thread,$this->auto_respond);
+        $p = $PhpMailController->sendEmail($this->from, $this->to, $this->message, $this->template, $this->thread, $this->auto_respond);
+
         return $p;
     }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use DB;
+use Illuminate\Console\Command;
+
 class DropTables extends Command
 {
     /**
@@ -37,8 +38,7 @@ class DropTables extends Command
      */
     public function handle()
     {
-
-        $colname = 'Tables_in_' . env('DB_DATABASE');
+        $colname = 'Tables_in_'.env('DB_DATABASE');
 
         $droplist = \Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
         $droplist = implode(',', $droplist);
@@ -51,8 +51,6 @@ class DropTables extends Command
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
         DB::commit();
 
-        $this->comment(PHP_EOL."If no errors showed up, all tables were dropped".PHP_EOL);
-
-    
+        $this->comment(PHP_EOL.'If no errors showed up, all tables were dropped'.PHP_EOL);
     }
 }

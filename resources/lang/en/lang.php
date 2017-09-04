@@ -1697,7 +1697,7 @@ return [
     'registration_verification'     => 'Registration Verififcation',
     'client'                        => 'Client',
     'sla_alert'                     => 'SLA Alert',
-    
+
     // mobile OTP verification screen
     'verification_channel'                                      => 'Verification channel',
     'verify-mobile'                                             => 'Verify your mobile number',
@@ -1720,9 +1720,9 @@ return [
     'user_email_is_verified'                                    => 'User\'s email address is verified',
     'user_mobile_is_verified'                                   => 'User contact number is verified',
     'user_has_not_verified_email'                               => 'User has not verified contact number',
-    
-    'email_verify' =>'Email verify',
-    'mobile_verify'=>'Mobile verify',
+
+    'email_verify'                      => 'Email verify',
+    'mobile_verify'                     => 'Mobile verify',
     'status_updated_successfully'       => 'Status updated successfully',
 
 ];

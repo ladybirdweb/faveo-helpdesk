@@ -90,7 +90,7 @@ class SlaController extends Controller
             $sla->admin_note = $request->admin_note;
             $sla->status = $request->status;
             $sla->save();
-                // dd('oh');
+            // dd('oh');
 
             /* redirect to Index page with Success Message */
             return redirect('sla')->with('success', Lang::get('lang.sla_plan_created_successfully'));
@@ -113,13 +113,13 @@ class SlaController extends Controller
         try {
 
         //     $ticket=Tickets::where('id','=',9)->select('created_at','duedate')->first();
-        //     // dd($ticket->created_at);
+            //     // dd($ticket->created_at);
 
-        //     $sla_plan = Sla_plan::where('id', '=', 4)->first();
-        // $ovdate = $ticket->created_at;
-        // $new_date = date_add($ovdate, date_interval_create_from_date_string($sla_plan->grace_period));
-        // dd($new_date);
-        // $ticket->duedate = $new_date;
+            //     $sla_plan = Sla_plan::where('id', '=', 4)->first();
+            // $ovdate = $ticket->created_at;
+            // $new_date = date_add($ovdate, date_interval_create_from_date_string($sla_plan->grace_period));
+            // dd($new_date);
+            // $ticket->duedate = $new_date;
 
             /* Direct to edit page along values of perticular field using Id */
             $slas = Sla_plan::whereId($id)->first();

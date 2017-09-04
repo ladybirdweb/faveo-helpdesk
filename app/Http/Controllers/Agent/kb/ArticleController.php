@@ -40,9 +40,8 @@ class ArticleController extends Controller
      *
      * @return void
      */
-    
     protected $ticket_policy;
-    
+
     public function __construct()
     {
         // checking authentication
@@ -124,6 +123,7 @@ class ArticleController extends Controller
             if (!$this->ticket_policy->kb()) {
                 return redirect('dashboard')->with('fails', 'Permission denied');
             }
+
             return view('themes.default1.agent.kb.article.index');
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -146,6 +146,7 @@ class ArticleController extends Controller
             if (!$this->ticket_policy->kb()) {
                 return redirect('dashboard')->with('fails', 'Permission denied');
             }
+
             return view('themes.default1.agent.kb.article.create', compact('category'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -163,8 +164,8 @@ class ArticleController extends Controller
     public function store(Article $article, ArticleRequest $request)
     {
         if (!$this->ticket_policy->kb()) {
-                return redirect('dashboard')->with('fails', 'Permission denied');
-            }
+            return redirect('dashboard')->with('fails', 'Permission denied');
+        }
         // requesting the values to store article data
         $publishTime = $request->input('year').'-'.$request->input('month').'-'.$request->input('day').' '.$request->input('hour').':'.$request->input('minute').':00';
 

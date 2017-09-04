@@ -39,8 +39,8 @@ class UpdateEncryption extends Command
     {
         $emails = \App\Model\helpdesk\Email\Emails::get();
 
-        foreach($emails as $email){
-            $email->password = encrypt("password");
+        foreach ($emails as $email) {
+            $email->password = encrypt('password');
             $email->save();
         }
     }

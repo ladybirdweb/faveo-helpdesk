@@ -2,19 +2,21 @@
 
 use Illuminate\Database\Seeder;
 
-class CustomFormSeeder extends Seeder {
-
+class CustomFormSeeder extends Seeder
+{
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run() {
+    public function run()
+    {
         $this->seedForms();
         $this->seedRequired();
     }
 
-    public function seedForms() {
+    public function seedForms()
+    {
         \DB::table('forms')->truncate();
         $json = "[{
         'title': 'Requester',
@@ -119,11 +121,12 @@ class CustomFormSeeder extends Seeder {
         }]
 ";
         $json = trim(preg_replace('/\s+/', ' ', $json));
-        $form = "ticket";
+        $form = 'ticket';
         \DB::table('forms')->insert(['form' => $form, 'json' => $json]);
     }
 
-    public function seedRequired() {
+    public function seedRequired()
+    {
         \DB::table('required_fields')->truncate();
         $fields = [
             ['name' => 'Requester', 'is_agent_required' => 1, 'is_client_required' => 1],
@@ -136,11 +139,9 @@ class CustomFormSeeder extends Seeder {
             ['name' => 'Description', 'is_agent_required' => 1, 'is_client_required' => 1],
             ['name' => 'Company', 'is_agent_required' => 1, 'is_client_required' => 1],
         ];
-        $form = "ticket";
+        $form = 'ticket';
         foreach ($fields as $field) {
             \DB::table('required_fields')->insert(['name' => $field['name'], 'form' => $form, 'is_agent_required' => $field['is_agent_required'], 'is_client_required' => $field['is_client_required']]);
         }
     }
-    
-
 }

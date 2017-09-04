@@ -15,8 +15,8 @@ $extensions = [
     'mysqli',
     'bcmath',
     'iconv',
-    'XML-DOM',//for HTML email processing
-    'json'
+    'XML-DOM', //for HTML email processing
+    'json',
     //'ioncube_loader_dar_5.6',
 ];
 ?>
@@ -54,39 +54,39 @@ $extensions = [
             </tr>
             <?php
             foreach ($extensions as $extension) {
-                echo "<tr>";
+                echo '<tr>';
                 if (!extension_loaded($extension)) {
-                    echo "<td>" . $extension . "</td>  <td style='color:red'>Not loading"
-                    . "<p>To enable this, please open '" . php_ini_loaded_file() . "' and add 'extension = " . $extension . "'</p>"
-                    . "</td>";
+                    echo '<td>'.$extension."</td>  <td style='color:red'>Not loading"
+                    ."<p>To enable this, please open '".php_ini_loaded_file()."' and add 'extension = ".$extension."'</p>"
+                    .'</td>';
                 } else {
-                    echo "<td>" . $extension . "</td>  <td style='color:green'>Loading</td>";
+                    echo '<td>'.$extension."</td>  <td style='color:green'>Loading</td>";
                 }
-                echo "</tr>";
+                echo '</tr>';
             }
-            echo "<tr>";
+            echo '<tr>';
             if (phpversion() >= 5.6) {
-                echo "<td>PHP Version</td>  <td style='color:green'>" . phpversion() . "</td>";
+                echo "<td>PHP Version</td>  <td style='color:green'>".phpversion().'</td>';
             } else {
-                echo "<td>PHP Version</td>  <td style='color:red'>" . phpversion() . "<p>Please upgrade PHP Version to 5.6+ </p></td>";
+                echo "<td>PHP Version</td>  <td style='color:red'>".phpversion().'<p>Please upgrade PHP Version to 5.6+ </p></td>';
             }
-            echo "</tr>";
-            echo "<tr>";
+            echo '</tr>';
+            echo '<tr>';
             $env = '../.env';
             if (!is_file($env)) {
                 echo "<td>.env file</td>  <td style='color:green'>Not found</td>";
             } else {
                 echo "<td>.env file</td>  <td style='color:red'>Yes Found<p>Please delete  '$env' </p></td>";
             }
-            echo "</tr>";
-            echo "<tr>";
+            echo '</tr>';
+            echo '<tr>';
             $redirect = in_array('mod_rewrite', apache_get_modules());
             if ($redirect) {
                 echo "<td>Rewrite Engine</td>  <td style='color:green'>ON</td>";
             } else {
                 echo "<td>Rewrite Engine</td>  <td style='color:red'>OFF</td>";
             }
-            echo "</tr>";
+            echo '</tr>';
             ?>
             
         </table>

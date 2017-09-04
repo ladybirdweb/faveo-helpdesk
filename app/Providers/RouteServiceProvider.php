@@ -74,7 +74,7 @@ class RouteServiceProvider extends ServiceProvider
             require base_path('routes/api.php');
         });
     }
-    
+
     /**
      * Define the "installer" routes for the application.
      *
@@ -82,12 +82,13 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function mapInstallerRoutes() {
+    protected function mapInstallerRoutes()
+    {
         Route::group([
             'middleware' => ['web', 'installer'],
-            'namespace' => $this->namespace,
+            'namespace'  => $this->namespace,
                 ], function ($router) {
-            require base_path('routes/installer.php');
-        });
+                    require base_path('routes/installer.php');
+                });
     }
 }

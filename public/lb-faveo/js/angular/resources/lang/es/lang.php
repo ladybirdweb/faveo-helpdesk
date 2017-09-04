@@ -38,7 +38,7 @@ return [
     'required-error'                                                 => 'por favor llene todos los campos requeridos',
     'invalid'                                                        => 'ID o contraseña de usuario incorrecta',
     'sorry_something_went_wrong'                                     => 'Disculpe, algo salió mal',
-    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'     => "Estamos trabajando en ello y lo arreglaremos tan pronto como podamos.",
+    'were_working_on_it_and_well_get_it_fixed_as_soon_as_we_can'     => 'Estamos trabajando en ello y lo arreglaremos tan pronto como podamos.',
     'we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found' => 'Lo sentimos, pero la página que busca no se encuentra.',
     'go_back'                                                        => 'Volver',
     'the_board_is_offline'                                           => 'El tablero está desconectado',
@@ -52,7 +52,7 @@ return [
     'resend-otp-title'                                               => 'Haga clic aquí para volver a enviar OTP',
     /*
       |--------------------------------------
-      |  Página Inicio sesión 
+      |  Página Inicio sesión
       |--------------------------------------
      */
     'login_to_start_your_session'            => 'Ingrese para iniciar su sesión',
@@ -104,7 +104,7 @@ return [
     'activate_your_account_click_on_Link_that_send_to_your_mail_sms_plugin_inactive_or_not_setup' => 'Cuenta creada, póngase en contacto con el administrador del sistema, ya que no pudimos enviar el código de OTP a su móvil y lo enviamremos a su dirección de correo electrónico..',
     'this_field_do_not_match_our_records'                                                         => 'Este campo no coincide con nuestros registros.',
     'we_have_e-mailed_your_password_reset_link'                                                   => 'Hemos enviado su enlace de restablecimiento de contraseña por correo electrónico!',
-    "we_can't_find_a_user_with_that_e-mail_address"                                               => "No podemos encontrar un usuario con esa dirección de correo electrónico..",
+    "we_can't_find_a_user_with_that_e-mail_address"                                               => 'No podemos encontrar un usuario con esa dirección de correo electrónico..',
     /*
       |--------------------------------------
       |   Restablecer página de contraseñas
@@ -214,18 +214,18 @@ return [
     'you_have_successfully_activated_this_set' => 'Ha activado correctamente este conjunto',
     'template_set_deleted_successfully'        => 'Conjunto de plantillas eliminado correctamente',
     //Template Description
-    'Create ticket agent'       => 'Notificación de correo electrónico que se envía al agente y al admin cuando se crea el ticket',
-    'Assign ticket'             => 'Ticket asignado a un agente',
-    'Create ticket'             => 'Correo enviado al cliente exitosamente notificando la creación del ticket',
-    'Check ticket'              => 'Si un cliente quiere comprobar el ticket a través del portal del cliente, se enviará un enlace al cliente. Este enlace es para que el cliente pueda ver los detalles del ticket sin iniciar sesión en el sistema',
-    'Ticket reply agent'        => 'Una notificación se envía al correo electrónico del agente una vez que el cliente responde al ticket',
-    'Registration notification' => 'Contraseña y nombre de usuario se envía por correo electrónico en el primer registro',
+    'Create ticket agent'                  => 'Notificación de correo electrónico que se envía al agente y al admin cuando se crea el ticket',
+    'Assign ticket'                        => 'Ticket asignado a un agente',
+    'Create ticket'                        => 'Correo enviado al cliente exitosamente notificando la creación del ticket',
+    'Check ticket'                         => 'Si un cliente quiere comprobar el ticket a través del portal del cliente, se enviará un enlace al cliente. Este enlace es para que el cliente pueda ver los detalles del ticket sin iniciar sesión en el sistema',
+    'Ticket reply agent'                   => 'Una notificación se envía al correo electrónico del agente una vez que el cliente responde al ticket',
+    'Registration notification'            => 'Contraseña y nombre de usuario se envía por correo electrónico en el primer registro',
     'Restablecer la contraseña'            => 'Dirección de Correo electrónico con el enlace de restablecimiento de contraseña',
-    'Reporte de error'              => 'Reporte de error',
-    'Ticket creation'           => 'Primera notificación enviada por el sistema sobre la creación del ticket al cliente',
-    'Ticket reply'              => 'Una respuesta hecha por el agente en un ticket, notificación por correo electrónico se envía al cliente y colaboradores',
-    'Close ticket'              => 'Correo enviado al cliente al cerrar un ticket',
-    'Create ticket by agent'    => 'Un agente crea un ticket para el cliente en el nombre del cliente',
+    'Reporte de error'                     => 'Reporte de error',
+    'Ticket creation'                      => 'Primera notificación enviada por el sistema sobre la creación del ticket al cliente',
+    'Ticket reply'                         => 'Una respuesta hecha por el agente en un ticket, notificación por correo electrónico se envía al cliente y colaboradores',
+    'Close ticket'                         => 'Correo enviado al cliente al cerrar un ticket',
+    'Create ticket by agent'               => 'Un agente crea un ticket para el cliente en el nombre del cliente',
     /*
       |--------------------------------------
       |  Plantillas Crear página
@@ -357,7 +357,7 @@ return [
     'cron_notification'                   => 'Habilitar la notificación cron',
     'cron'                                => 'Planificador de trabajos',
     'cron-jobs'                           => 'Cron jobs',
-    'crone-url-message'                   => "Éstas son la URL del planificador de tareas de Faveo (trabajo cron) para su sistema.",
+    'crone-url-message'                   => 'Éstas son la URL del planificador de tareas de Faveo (trabajo cron) para su sistema.',
     'clipboard-copy-message'              => 'Copiado al portapapeles.',
     'click'                               => 'haga clic aquí',
     'check-cron-set'                      => 'Comprobar cómo configurar trabajos cron en su servidor.',
@@ -382,7 +382,7 @@ return [
     'agent_collision_avoidance_duration'  => 'Evitar colision de agentes',
     'human_verification'                  => 'Verificación humana',
     'claim_on_response'                   => 'Reclamación de la respuesta',
-    'assigned_tickets'                    =>  'Tickets asignados',
+    'assigned_tickets'                    => 'Tickets asignados',
     'answered_tickets'                    => 'Tickets contestados',
     'agent_identity_masking'              => 'Enmascaramiento de la identidad del agente',
     'enable_HTML_ticket_thread'           => 'Habilitar subproceso de Tickets HTML',
@@ -677,7 +677,7 @@ return [
     'instructions_on_creating_form'         => 'Seleccione el tipo de campo que desea agregar al formulario de abajo y haga clic en el menú desplegable "Tipo". No olvide establecer las opciones de campo si el tipo es select, checkbox o radio. Separe cada opción con una coma. Una vez que haya terminado de crear el formulario, puede guardar el formulario haciendo clic en el botón "Guardar formulario"',
     'form_properties'                       => 'Propiedades del formulario',
     'adding_fields'                         => 'Añadiendo campos',
-    'click_add_fields_button_to_add_fields' => "Haga clic en el botón <b> Agregar campos </ b> para agregar campos",
+    'click_add_fields_button_to_add_fields' => 'Haga clic en el botón <b> Agregar campos </ b> para agregar campos',
     'add_fields'                            => 'Agregar campos',
     'save_form'                             => 'Guardar formulario',
     'label'                                 => 'Etiqueta',
@@ -987,7 +987,7 @@ return [
     'contact_information'               => 'Información del contacto',
     'Profile-Updated-sucessfully'       => 'perfil actualizado con éxito.',
     'User-profile-Updated-Successfully' => 'Perfil del usuario actualizado con éxito.',
-    'User-Creado-Successfully'         => 'Usuario creado correctamente.',
+    'User-Creado-Successfully'          => 'Usuario creado correctamente.',
     /*
       |-----------------------------------------------
       | Tablero
@@ -1052,7 +1052,7 @@ return [
     'please_select_an_organization'     => 'Seleccione una organización',
     'please_select_an_user'             => 'Seleccione un usuario',
     'organization_profile'              => 'Perfil de la organización',
-    'organization-s_head'               => "Cabeza de la organización",
+    'organization-s_head'               => 'Cabeza de la organización',
     'select_department_manager'         => 'Seleccionar director de departamento',
     'select_organization_manager'       => 'Seleccione el administrador de la organización',
     'users_of'                          => 'Los usuarios de',
@@ -1386,7 +1386,7 @@ Puede ingresar el número de días de registros de base de datos que se eliminar
     'password_updated_sucessfully'                                                     => 'Contraseña actualizada exitosamente',
     'password_was_not_updated_incorrect_old_password'                                  => 'La contraseña no se actualizó. Contraseña antigua incorrecta',
     'there_is_no_such_ticket_number'                                                   => 'No hay tal número de ticket',
-    "email_didn't_match_with_ticket_number"                                            => "Dirección de correo electrónico no coincide con el número del ticket",
+    "email_didn't_match_with_ticket_number"                                            => 'Dirección de correo electrónico no coincide con el número del ticket',
     'we_have_sent_you_a_link_by_email_please_click_on_that_link_to_view_ticket'        => 'Te hemos enviado un enlace por correo electrónico. Por favor, haga clic en ese enlace para ver el ticket',
     'no_records_on_publish_time'                                                       => 'No hay registros sobre el tiempo de publicación',
     'your_details_send_to_system'                                                      => 'Sus datos se envían al sistema',
@@ -1486,7 +1486,7 @@ Puede ingresar el número de días de registros de base de datos que se eliminar
     'week'                => 'Semana',
     'month'               => 'Mes',
     'Currnet_In_Progress' => 'ACTUALIZACIÓN EN PROGRESO',
-    'Total_Creado'       => 'TOTAL CREADO',
+    'Total_Creado'        => 'TOTAL CREADO',
     'Total_Reopened'      => 'TOTAL REABIERTO',
     'Total_Closed'        => 'TOTAL CERRADO',
     'tabular'             => 'Tabular',
