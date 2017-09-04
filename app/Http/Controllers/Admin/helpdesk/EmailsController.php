@@ -428,6 +428,7 @@ class EmailsController extends Controller
                 return redirect('emails')->with('fails', Lang::get('lang.you_cannot_delete_system_default_email'));
             }
         }
+
         try {
             // fetching the database instance of the current email
             $emails = $email->whereId($id)->first();

@@ -21,6 +21,7 @@ class UrlSettingController extends Controller
         if ($row) {
             $url = $row->option_value;
         }
+
         try {
             return view('themes.default1.admin.helpdesk.settings.url.settings', compact('url'));
         } catch (Exception $ex) {

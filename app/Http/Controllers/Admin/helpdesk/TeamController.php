@@ -143,16 +143,16 @@ class TeamController extends Controller
     {
         // dd($request);
 
-// $id = $request->input('show_id');
+        // $id = $request->input('show_id');
 
-// dd($id);
+        // dd($id);
 
-$users = DB::table('team_assign_agent')->select('team_assign_agent.id', 'team_assign_agent.team_id', 'users.user_name', 'users.first_name', 'users.last_name', 'users.active', 'users.assign_group', 'users.primary_dpt', 'users.role')
+        $users = DB::table('team_assign_agent')->select('team_assign_agent.id', 'team_assign_agent.team_id', 'users.user_name', 'users.first_name', 'users.last_name', 'users.active', 'users.assign_group', 'users.primary_dpt', 'users.role')
           ->join('users', 'users.id', '=', 'team_assign_agent.agent_id')
           ->where('team_assign_agent.team_id', '=', $id);
 //           ->get();
-// dd($users);
-            return \Datatable::query($users)
+        // dd($users);
+        return \Datatable::query($users)
             ->showColumns('user_name')
 
             ->addColumn('first_name', function ($model) {

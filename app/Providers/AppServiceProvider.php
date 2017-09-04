@@ -6,12 +6,12 @@ use App\Model\Update\BarNotification;
 use Illuminate\Queue\Events\JobFailed;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Dusk\DuskServiceProvider;
 use Queue;
 use View;
-use Laravel\Dusk\DuskServiceProvider;
 
-class AppServiceProvider extends ServiceProvider {
-
+class AppServiceProvider extends ServiceProvider
+{
     /**
      * Register any application services.
      *
@@ -21,17 +21,19 @@ class AppServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function register() {
+    public function register()
+    {
         $this->app->bind('Illuminate\Contracts\Auth\Registrar');
-        require_once __DIR__ . '/../Http/helpers.php';
+        require_once __DIR__.'/../Http/helpers.php';
         if ($this->app->environment('local', 'testing')) {
             $this->app->register(DuskServiceProvider::class);
         }
     }
 
-    public function boot() {
+    public function boot()
+    {
         Queue::failing(function (JobFailed $event) {
-            loging('Failed Job - ' . $event->connectionName, json_encode([$event->job->payload(), 'error' => $event->exception->getMessage()]));
+            loging('Failed Job - '.$event->connectionName, json_encode([$event->job->payload(), 'error' => $event->exception->getMessage()]));
         });
         Route::singularResourceParameters(false);
         // Please note the different namespace
@@ -55,7 +57,8 @@ class AppServiceProvider extends ServiceProvider {
         $this->composer();
     }
 
-    public function composer() {
+    public function composer()
+    {
         \View::composer('themes.default1.update.notification', function () {
             $notification = new BarNotification();
             $not = [
@@ -64,5 +67,4 @@ class AppServiceProvider extends ServiceProvider {
             view()->share($not);
         });
     }
-
 }

@@ -29,6 +29,7 @@ class TicketRequest extends Request
     public function rules()
     {
         $error = '';
+
         try {
             $size = $this->size();
             if ($size > 800 || $size == 0) {

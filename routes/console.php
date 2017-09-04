@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
 use App\Model\helpdesk\Settings\System;
+use Illuminate\Foundation\Inspiring;
+
 /*
 |--------------------------------------------------------------------------
 | Console Routes
@@ -25,14 +26,13 @@ Artisan::command('sla-escalate', function () {
     $noti->notificationSla();
 })->describe('to send notification for sla due');
 
-/**
+/*
  * Command for pre install check
  */
 Artisan::command('preinsatall:check', function () {
     try {
         $check_for_pre_installation = System::select('id')->first();
         if ($check_for_pre_installation) {
-
             throw new \Exception('The data in database already exist. Please provide fresh database', 100);
         }
     } catch (\Exception $ex) {
@@ -44,14 +44,13 @@ Artisan::command('preinsatall:check', function () {
     $this->info('Preinstall has checked successfully');
 })->describe('check for the pre installation');
 
-
-/**
+/*
  * Migration for installation
  */
 Artisan::command('install:migrate', function () {
     try {
         $tableNames = \Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
-        
+
         if (count($tableNames) == 0) {
             $this->call('migrate', ['--force' => true]);
         }
@@ -61,8 +60,7 @@ Artisan::command('install:migrate', function () {
     $this->info('Migrated successfully');
 })->describe('migration for install');
 
-
-/**
+/*
  * Seeding for installation
  */
 Artisan::command('install:seed', function () {

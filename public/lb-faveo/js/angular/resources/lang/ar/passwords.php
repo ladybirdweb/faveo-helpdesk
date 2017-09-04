@@ -14,7 +14,7 @@ return [
      */
 
     'password' => 'llllllllllll', //Passwords must be at least six characters and match the confirmation.',
-    'user'     => 'llllllllllll',// "We can't find a user with that e-mail address.",
+    'user'     => 'llllllllllll', // "We can't find a user with that e-mail address.",
     'token'    => 'llllllllllll', //This password reset token is invalid.',
     'sent'     => 'llllllllllll', //We have e-mailed your password reset link!',
     'reset'    => 'llllllllllll', //Your password has been reset!',

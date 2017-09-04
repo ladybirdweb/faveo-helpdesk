@@ -189,7 +189,7 @@ class MailController extends Controller
     {
         if (count($messages) > 0) {
             foreach ($messages as $message) {
-               $deamon = starts_with($message->getAddresses('from')['address'], 'mailer-daemon');
+                $deamon = starts_with($message->getAddresses('from')['address'], 'mailer-daemon');
                 $auto_response = $message->auto_respond;
                 if (!$deamon && !$auto_response) {
                     $this->getMessageContent($message, $email);
@@ -228,7 +228,7 @@ class MailController extends Controller
             }
         }
         $email_content = ['message_id' => $message_id, 'uid' => $uid, 'reference_id' => $reference_id];
-        $this->workflow($address, $subject, $body, $collaborators, $attachments, $email,$email_content);
+        $this->workflow($address, $subject, $body, $collaborators, $attachments, $email, $email_content);
     }
 
     public function workflow($address, $subject, $body, $collaborator, $attachments, $email, $email_content = [])
@@ -247,8 +247,7 @@ class MailController extends Controller
         $team_assign = null;
         $ticket_status = null;
         $auto_response = $email->auto_response;
-        $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone = '', $phonecode = '', $mobile_number = '', $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data = [], $auto_response,$attachments,[],$email_content);
-        
+        $result = $this->TicketWorkflowController->workflow($fromaddress, $fromname, $subject, $body, $phone = '', $phonecode = '', $mobile_number = '', $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data = [], $auto_response, $attachments, [], $email_content);
     }
 
     public function updateThread($ticket_number, $body, $attachments)

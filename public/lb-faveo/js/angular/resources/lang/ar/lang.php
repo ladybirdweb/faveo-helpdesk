@@ -41,31 +41,31 @@ return [
       |   Login Page
       |--------------------------------------
      */
-    'login_to_start_your_session'        => 'llllllllllll', //Login to start your session',
-    'login'                              => 'llllllllllll', //Login',
-    'remember'                           => 'llllllllllll', //Remember me',
-    'signmein'                           => 'llllllllllll', //Sign me in',
-    'iforgot'                            => 'llllllllllll', //I forgot my password',
-    'email_address'                      => 'llllllllllll', //Email address',
-    'password'                           => 'llllllllllll', //Password',
+    'login_to_start_your_session'            => 'llllllllllll', //Login to start your session',
+    'login'                                  => 'llllllllllll', //Login',
+    'remember'                               => 'llllllllllll', //Remember me',
+    'signmein'                               => 'llllllllllll', //Sign me in',
+    'iforgot'                                => 'llllllllllll', //I forgot my password',
+    'email_address'                          => 'llllllllllll', //Email address',
+    'password'                               => 'llllllllllll', //Password',
      'password_confirmation'                 => 'llllllllllll', //Password confirmation',
-    'woops'                              => 'llllllllllll', //Whoops!',
-    'theirisproblem'                     => 'llllllllllll', //There were some problems with your input.',
-    'login'                              => 'llllllllllll', //Login',
-    'e-mail'                             => 'llllllllllll', //Email',
-    'reg_new_member'                     => 'llllllllllll', //Register a new membership',
-    'this_account_is_currently_inactive' => 'llllllllllll', //This account is currently inactive!',
-    'not-registered'                     => 'llllllllllll', //Email/username is not registered',
-    'verify'                             => 'llllllllllll', //Verify',
-    'enter-otp'                          => 'llllllllllll', //Enter OTP',
-    'did-not-recive-code'                => 'llllllllllll', //Didn\'t recieve code?',
-    'resend_otp'                         => 'llllllllllll', //Resend OTP',
-    'verify-screen-msg'                  => 'llllllllllll', //Your account is currently inactive.<br/>To activate your account, please enter the OTP we\'ve sent on',
-    'otp-sent'                           => 'llllllllllll', //We\'ve sent an OTP code on your number.',
-    'verify-number'                      => 'llllllllllll', //Verify number',
-    'get-verify-message'                 => 'llllllllllll', //Enter the OTP code we\'ve sent to your new number.',
-    'number-verification-sussessfull'    => 'llllllllllll', //Your number has been verified successfully, please wait we are updating your profile.',
-     'enter_your_email_here'             => 'llllllllllll', //Enter Your Email Here',
+    'woops'                                  => 'llllllllllll', //Whoops!',
+    'theirisproblem'                         => 'llllllllllll', //There were some problems with your input.',
+    'login'                                  => 'llllllllllll', //Login',
+    'e-mail'                                 => 'llllllllllll', //Email',
+    'reg_new_member'                         => 'llllllllllll', //Register a new membership',
+    'this_account_is_currently_inactive'     => 'llllllllllll', //This account is currently inactive!',
+    'not-registered'                         => 'llllllllllll', //Email/username is not registered',
+    'verify'                                 => 'llllllllllll', //Verify',
+    'enter-otp'                              => 'llllllllllll', //Enter OTP',
+    'did-not-recive-code'                    => 'llllllllllll', //Didn\'t recieve code?',
+    'resend_otp'                             => 'llllllllllll', //Resend OTP',
+    'verify-screen-msg'                      => 'llllllllllll', //Your account is currently inactive.<br/>To activate your account, please enter the OTP we\'ve sent on',
+    'otp-sent'                               => 'llllllllllll', //We\'ve sent an OTP code on your number.',
+    'verify-number'                          => 'llllllllllll', //Verify number',
+    'get-verify-message'                     => 'llllllllllll', //Enter the OTP code we\'ve sent to your new number.',
+    'number-verification-sussessfull'        => 'llllllllllll', //Your number has been verified successfully, please wait we are updating your profile.',
+     'enter_your_email_here'                 => 'llllllllllll', //Enter Your Email Here',
     /*
       |--------------------------------------
       |   Register Page
@@ -386,22 +386,22 @@ return [
       |   Access Settings Page
       |--------------------------------------
      */
-    'access'                                           => 'llllllllllll', //Access',
-    'expiration_policy'                                => 'llllllllllll', //Password expiration policy',
-    'allow_password_resets'                            => 'llllllllllll', //Allow password resets',
-    'reset_token_expiration'                           => 'llllllllllll', //Reset token expiration',
-    'agent_session_timeout'                            => 'llllllllllll', //Agent session timeout',
-    'bind_agent_session_IP'                            => 'llllllllllll', //Bind agent session to IP',
-    'registration_required'                            => 'llllllllllll', //Registration required',
-    'require_registration_and_login_to_create_tickets' => 'llllllllllll', //Require registration and login to create tickets',
-    'registration_method'                              => 'llllllllllll', //Registration method',
-    'user_session_timeout'                             => 'llllllllllll', //User session timeout',
-    'client_quick_access'                              => 'llllllllllll', //Client quick access',
-    'cron'                                             => 'llllllllllll', //Cron',
-    'cron_settings'                                    => 'llllllllllll', //Cron settings',
-    'system-settings'                                  => 'llllllllllll', //System settings',
-    'settings-2'                                       => 'llllllllllll', //Settings',
-    'sla_escalation'                                   => 'llllllllllll', //Sla Escalation',
+    'access'                                             => 'llllllllllll', //Access',
+    'expiration_policy'                                  => 'llllllllllll', //Password expiration policy',
+    'allow_password_resets'                              => 'llllllllllll', //Allow password resets',
+    'reset_token_expiration'                             => 'llllllllllll', //Reset token expiration',
+    'agent_session_timeout'                              => 'llllllllllll', //Agent session timeout',
+    'bind_agent_session_IP'                              => 'llllllllllll', //Bind agent session to IP',
+    'registration_required'                              => 'llllllllllll', //Registration required',
+    'require_registration_and_login_to_create_tickets'   => 'llllllllllll', //Require registration and login to create tickets',
+    'registration_method'                                => 'llllllllllll', //Registration method',
+    'user_session_timeout'                               => 'llllllllllll', //User session timeout',
+    'client_quick_access'                                => 'llllllllllll', //Client quick access',
+    'cron'                                               => 'llllllllllll', //Cron',
+    'cron_settings'                                      => 'llllllllllll', //Cron settings',
+    'system-settings'                                    => 'llllllllllll', //System settings',
+    'settings-2'                                         => 'llllllllllll', //Settings',
+    'sla_escalation'                                     => 'llllllllllll', //Sla Escalation',
     'send_sla_escalation'                                => 'llllllllllll', //Send Sla Escalation',
     /*
       |--------------------------------------
@@ -452,7 +452,6 @@ return [
     'Send_app_crash_reports_to_help_Ladybird_improve_Faveo' => 'llllllllllll', //Send app crash reports to help Ladybird improve Faveo',
     'alert_&_notices_updated_successfully'                  => 'llllllllllll', //Alert and notices updated successfully',
     'alert_&_notices_can_not_updated'                       => 'llllllllllll', //Alert and notices can not be updated',
-    
 
     /*
       |-----------------------------------------------
@@ -468,7 +467,6 @@ return [
       |--------------------------------------------------
     */
       'social-login' => 'llllllllllll', //Social login',
-
 
     /*
       |------------------------------------------------
@@ -964,8 +962,6 @@ return [
     'reply_content_is_a_required_field'                                  => 'llllllllllll', //Reply content is a required field',
     'internal_content_is_a_required_field'                               => 'llllllllllll', //Internal content is a required field',
 
-
-
     /*
       |-----------------------------------------------
       |  Profile
@@ -1264,7 +1260,6 @@ return [
     'manage_status'                         => 'llllllllllll', //Manage status',
     'notifications'                         => 'llllllllllll', //Notifications',
 
-
     'auto_close_workflow'               => 'llllllllllll', //Auto-close workflow',
     'close_ticket_workflow_settings'    => 'llllllllllll', //Close ticket workflow settings',
     'successfully_saved_your_settings'  => 'llllllllllll', //Successfully saved your settings',
@@ -1507,7 +1502,7 @@ return [
     'user_priority_status'                                      => 'llllllllllll', //User priority status',
     'current'                                                   => 'llllllllllll', //Current:',
     'active_user_can_select_the_priority_while_creating_ticket' => 'llllllllllll', //Active user can select the priority while creating ticket',
-    
+
     /* --------------------------------------------------------------------------------------------
      * Approval Updated
      * --------------------------------------------------------------------------------------------
@@ -1570,7 +1565,7 @@ return [
      /*** updates 28-11-2016***/
      'apply'              => 'llllllllllll', //Apply',
 
-     /** updates 2-12-2016 **/
+     /* updates 2-12-2016 **/
      'sort-by'                      => 'llllllllllll', //Sort by',
      'created-at'                   => 'llllllllllll', //Created at',
      'or'                           => 'llllllllllll', //OR',
@@ -1585,7 +1580,7 @@ return [
      'accoutn-not-verified'         => 'llllllllllll', //User account is not verified',
      'enabled'                      => 'llllllllllll', //Enabled',
      'disabled'                     => 'llllllllllll', //Disabled',
-    
+
     /**----------------------------------------------------------------
      * Status
      * ----------------------------------------------------------------
@@ -1596,80 +1591,74 @@ return [
     'purpose_of_status'         => 'llllllllllll', //Purpose of Status',
     'status_to_display'         => 'llllllllllll', //Status to Display',
     'icon_color'                => 'llllllllllll', //Icon color',
-        
+
     /**--------------------------------------------------------------------------------------------
      * Status
      * --------------------------------------------------------------------------------------------
      */
-    'visible_to_client'     => 'llllllllllll', //'Visible to Client',
-    'icon'                  =>  'llllllllllll', //'Icon',
-    'none'                  =>  'llllllllllll', //'None',
-    'allow_client'          =>  'llllllllllll', //'Allow Client',
-    'if_yes_status_name_will_be_displayed'      =>  'llllllllllll', //'If yes status name will be displayed',
-    'if_yes_then_clients_can_choose_this_status'        =>    'llllllllllll', //  'If yes then clients can choose this status',
+    'visible_to_client'                                                                 => 'llllllllllll', //'Visible to Client',
+    'icon'                                                                              => 'llllllllllll', //'Icon',
+    'none'                                                                              => 'llllllllllll', //'None',
+    'allow_client'                                                                      => 'llllllllllll', //'Allow Client',
+    'if_yes_status_name_will_be_displayed'                                              => 'llllllllllll', //'If yes status name will be displayed',
+    'if_yes_then_clients_can_choose_this_status'                                        => 'llllllllllll', //  'If yes then clients can choose this status',
     'purpose_of_status_will_perform_the_action_to_be_applied_on_the_status_selection'   => 'llllllllllll', // 'Purpose of status will perform the action to be applied on the status selection',
-    'this_message_will_be_displayed_in_the_thread_as_internal_note'         =>  'llllllllllll', //    'This message will be displayed in the thread as Internal note',
-    'make_system_default_for_selected_purpose'      =>    'llllllllllll', //  'Make system default for Selected Purpose',
-    'this_status_will_be_displayed_to_client_if_visibility_of_client_chosen_no'     =>  'llllllllllll', //    'This status will be displayed to client if visibility of client chosen no',
-    'tick_who_all_to_send_notification' =>  'llllllllllll', //'Tick who all to send notification',
-    'Default'       =>  'llllllllllll', //'Default',
-    'unable_to_change_the_purpose_of_status_there_are_tickets_with_this_status'    =>  'llllllllllll', //'Unable to change the purpose of status. There are tickets with this status.',
-    'you_cannot_delete_a_default_ticket_status'     =>  'llllllllllll', //    'You cannot delete a default Ticket Status',
-    'associated_tickets_moved_to_default_status'    =>    'llllllllllll', //  'Associated tickets moved to default status',
-    'status_deleted_successfully'               =>  'llllllllllll', //        'Status Deleted Successfully',
-    'have_been_marked_as'               =>   'llllllllllll', //   'Tickets have been marked as ',
-    'have_been_deleted_forever'         =>    'llllllllllll', //  'Have been Deleted forever',
-    'related_tickets_moved_to_default_status' =>  'llllllllllll', // 'Related tickets moved to default status',
-    
-    
+    'this_message_will_be_displayed_in_the_thread_as_internal_note'                     => 'llllllllllll', //    'This message will be displayed in the thread as Internal note',
+    'make_system_default_for_selected_purpose'                                          => 'llllllllllll', //  'Make system default for Selected Purpose',
+    'this_status_will_be_displayed_to_client_if_visibility_of_client_chosen_no'         => 'llllllllllll', //    'This status will be displayed to client if visibility of client chosen no',
+    'tick_who_all_to_send_notification'                                                 => 'llllllllllll', //'Tick who all to send notification',
+    'Default'                                                                           => 'llllllllllll', //'Default',
+    'unable_to_change_the_purpose_of_status_there_are_tickets_with_this_status'         => 'llllllllllll', //'Unable to change the purpose of status. There are tickets with this status.',
+    'you_cannot_delete_a_default_ticket_status'                                         => 'llllllllllll', //    'You cannot delete a default Ticket Status',
+    'associated_tickets_moved_to_default_status'                                        => 'llllllllllll', //  'Associated tickets moved to default status',
+    'status_deleted_successfully'                                                       => 'llllllllllll', //        'Status Deleted Successfully',
+    'have_been_marked_as'                                                               => 'llllllllllll', //   'Tickets have been marked as ',
+    'have_been_deleted_forever'                                                         => 'llllllllllll', //  'Have been Deleted forever',
+    'related_tickets_moved_to_default_status'                                           => 'llllllllllll', // 'Related tickets moved to default status',
+
      /**-------------------------------------------------------------------------
      * Business Hours
      * -------------------------------------------------------------------------
      */
-    'business_hours'    =>  'Business hours',
-    'business_hours_list'    =>  'Business Hours list',
-    'hours'     =>      'Hours',
-    'select_working_days/hours' =>  'Select working days/hours',
-    '247hours'  =>  '24 hours * 7 days',
+    'business_hours'                      => 'Business hours',
+    'business_hours_list'                 => 'Business Hours list',
+    'hours'                               => 'Hours',
+    'select_working_days/hours'           => 'Select working days/hours',
+    '247hours'                            => '24 hours * 7 days',
     'business_hours_created_successfully' => 'llllllllllll', //Business Hours Create Successfully',
-    'business_hours_edit_successfully' =>'Business Hours Edit Successfully',
-    'business_hours_delete_successfully' => 'llllllllllll', //Business Hours Delete Successfully',
-    
-    
+    'business_hours_edit_successfully'    => 'Business Hours Edit Successfully',
+    'business_hours_delete_successfully'  => 'llllllllllll', //Business Hours Delete Successfully',
+
     // days
-    'day0'  =>      'Sunday',
-    'day1'  =>      'Monday',
-    'day2'  =>      'Tuesday',
-    'day3'  =>      'Wednesday',
-    'day4'  =>      'Thursday',
-    'day5'  =>      'Friday',
-    'day6'  =>      'Saturday',
-    
-    
-    
-    
+    'day0'  => 'Sunday',
+    'day1'  => 'Monday',
+    'day2'  => 'Tuesday',
+    'day3'  => 'Wednesday',
+    'day4'  => 'Thursday',
+    'day5'  => 'Friday',
+    'day6'  => 'Saturday',
+
     /**-------------------------------------------------------------------------
      * SLA
      * -------------------------------------------------------------------------
      */
-    'sla_targets'       =>      'SLA Targets',
-    'depertment'  =>      'Department',
-    'halt_sla' => 'llllllllllll', //Halt Sla',
-
+    'sla_targets'       => 'SLA Targets',
+    'depertment'        => 'Department',
+    'halt_sla'          => 'llllllllllll', //Halt Sla',
 
      /**-------------------------------------------------------------------------
      * Ticket Type
      * -------------------------------------------------------------------------
      */
-     'ticket_type' => 'llllllllllll', //Ticket Types',
-     'ticket_type_create' => 'llllllllllll', //Create Ticket Types',
-     'type_desc' => 'llllllllllll', //Types Description',
-     'create_ticket_type' => 'llllllllllll', //Create Ticket Types',
-     'ticket_type_name' => 'llllllllllll', //Ticket Types',
+     'ticket_type'                       => 'llllllllllll', //Ticket Types',
+     'ticket_type_create'                => 'llllllllllll', //Create Ticket Types',
+     'type_desc'                         => 'llllllllllll', //Types Description',
+     'create_ticket_type'                => 'llllllllllll', //Create Ticket Types',
+     'ticket_type_name'                  => 'llllllllllll', //Ticket Types',
      'ticket_types_successfully_created' => 'llllllllllll', //Ticket Types Successfully Created',
-     'ticket_types_successfully_edit' => 'llllllllllll', //Ticket Types Edit Successfully',
-     'make-default-type' => 'llllllllllll', //Make Default Type',
-     'reply-can-not-be-empty'       => 'llllllllllll', //Reply can not be blank. Please enter your reply.',
+     'ticket_types_successfully_edit'    => 'llllllllllll', //Ticket Types Edit Successfully',
+     'make-default-type'                 => 'llllllllllll', //Make Default Type',
+     'reply-can-not-be-empty'            => 'llllllllllll', //Reply can not be blank. Please enter your reply.',
 
      //updates 18-12-2016
      'account-created-contact-admin-as-we-were-not-able-to-send-opt' => 'llllllllllll', //Your account has been created successfully. Please contact admin for account activation as we were not able to send you an OPT code.',
@@ -1684,236 +1673,232 @@ return [
      //update 21-12-2016
      'selected-user-is-already-the-owner' => 'llllllllllll', //Selected user is already the owner of this ticket.',
      //update 30-12-2016
-    'team_profile' => 'llllllllllll', //Team Profile',
-    'teamlead_name' => 'llllllllllll', //Teamlead Name',
-    'team_size' => 'llllllllllll', //Team Size',
-    'team_report' => 'llllllllllll', //Team Report',
+    'team_profile'     => 'llllllllllll', //Team Profile',
+    'teamlead_name'    => 'llllllllllll', //Teamlead Name',
+    'team_size'        => 'llllllllllll', //Team Size',
+    'team_report'      => 'llllllllllll', //Team Report',
     'select_helptopic' => 'llllllllllll', //Select Helptopic',
 
     //updates 9/1/2017
-    'no-subject' => 'llllllllllll', //No subject',
-    'select_department_name' => 'llllllllllll', //Select Department Name',
-    'select_company_name' => 'llllllllllll', //Select Company name',
-    'select_source_name' => 'llllllllllll', //Select source name',
-    'What_happens_when_this_SLA_due_time_approaches' => 'llllllllllll', //What happens when this SLA due time approaches?',
+    'no-subject'                                               => 'llllllllllll', //No subject',
+    'select_department_name'                                   => 'llllllllllll', //Select Department Name',
+    'select_company_name'                                      => 'llllllllllll', //Select Company name',
+    'select_source_name'                                       => 'llllllllllll', //Select source name',
+    'What_happens_when_this_SLA_due_time_approaches'           => 'llllllllllll', //What happens when this SLA due time approaches?',
     'set_reminder_rule_when_a_ticket_response_time_approaches' => 'llllllllllll', //Set reminder rule when a ticket response time approaches',
-    'escalate' => 'llllllllllll', //Escalate',
-    'before_30_minites' => 'llllllllllll', //Before 30 Minutes',
-    'before_1_hour' => 'llllllllllll', //Before 1 Hour',
-    'before_2_hour' => 'llllllllllll', //Before 2 Hours',
-    'before_1_day' => 'llllllllllll', //Before 1 Day',
-    'before_7_day' => 'llllllllllll', //Before 7 Days',
+    'escalate'                                                 => 'llllllllllll', //Escalate',
+    'before_30_minites'                                        => 'llllllllllll', //Before 30 Minutes',
+    'before_1_hour'                                            => 'llllllllllll', //Before 1 Hour',
+    'before_2_hour'                                            => 'llllllllllll', //Before 2 Hours',
+    'before_1_day'                                             => 'llllllllllll', //Before 1 Day',
+    'before_7_day'                                             => 'llllllllllll', //Before 7 Days',
 
-    'after_30_minites' => 'llllllllllll', //After 30 Minutes',
-    'after_1_hour' => 'llllllllllll', //After 1 Hour',
-    'after_2_hour' => 'llllllllllll', //After 2 Hours',
-    'after_1_day' => 'llllllllllll', //After 1 Day',
-    'after_7_day' => 'llllllllllll', //After 7 Days',
-    'assign_agent' => 'llllllllllll', //Assign Agent',
-    'add_rule' => 'llllllllllll', //Add Rule',
-    'Set_reminder_rule_when_a_ticket_resolution_time_approaches' => 'llllllllllll', //Set reminder rule when a ticket resolution time approaches',
-    'what_happens_when_this_SLA_is_violated?' => 'llllllllllll', //What happens when this SLA is violated?',
-     'set_escalation_rule_when_a_ticket_is_not_responded_to_on_time' => 'llllllllllll', //Set escalation rule when a ticket is not responded to on time',
+    'after_30_minites'                                                 => 'llllllllllll', //After 30 Minutes',
+    'after_1_hour'                                                     => 'llllllllllll', //After 1 Hour',
+    'after_2_hour'                                                     => 'llllllllllll', //After 2 Hours',
+    'after_1_day'                                                      => 'llllllllllll', //After 1 Day',
+    'after_7_day'                                                      => 'llllllllllll', //After 7 Days',
+    'assign_agent'                                                     => 'llllllllllll', //Assign Agent',
+    'add_rule'                                                         => 'llllllllllll', //Add Rule',
+    'Set_reminder_rule_when_a_ticket_resolution_time_approaches'       => 'llllllllllll', //Set reminder rule when a ticket resolution time approaches',
+    'what_happens_when_this_SLA_is_violated?'                          => 'llllllllllll', //What happens when this SLA is violated?',
+     'set_escalation_rule_when_a_ticket_is_not_responded_to_on_time'   => 'llllllllllll', //Set escalation rule when a ticket is not responded to on time',
       'set_escalation_hierarchy_when_a_ticket_is_not_resolved_on_time' => 'llllllllllll', //Set escalation hierarchy when a ticket is not resolved on time',
-       'apply_this_to:' => 'llllllllllll', //Apply this to:',
-       'choose_when_this_SLA_policy_must_be_enforced' => 'llllllllllll', //Choose when this SLA policy must be enforced',
-       'Priority' => 'llllllllllll', //Priority',
-       'respond_Within' => 'llllllllllll', //Respond Within',
-       'resolve_within' => 'llllllllllll', //Resolve Within',
-       'operational_hrs' => 'llllllllllll', //Operational Hrs',
-       'send_report_email' => 'llllllllllll', //Send Report Email',
-       'send_report_SMS' => 'llllllllllll', //Send Report SMS',
-       'min' => 'llllllllllll', //Min',
-       'hrs' => 'llllllllllll', //Hrs',
-       'days' => 'llllllllllll', //Days',
-       'months' => 'llllllllllll', //Months',
-       'yes' => 'llllllllllll', //Yes',
-       'no' => 'llllllllllll', //No',
-       'add_new' => 'llllllllllll', //Add New',
-
-
+       'apply_this_to:'                                                => 'llllllllllll', //Apply this to:',
+       'choose_when_this_SLA_policy_must_be_enforced'                  => 'llllllllllll', //Choose when this SLA policy must be enforced',
+       'Priority'                                                      => 'llllllllllll', //Priority',
+       'respond_Within'                                                => 'llllllllllll', //Respond Within',
+       'resolve_within'                                                => 'llllllllllll', //Resolve Within',
+       'operational_hrs'                                               => 'llllllllllll', //Operational Hrs',
+       'send_report_email'                                             => 'llllllllllll', //Send Report Email',
+       'send_report_SMS'                                               => 'llllllllllll', //Send Report SMS',
+       'min'                                                           => 'llllllllllll', //Min',
+       'hrs'                                                           => 'llllllllllll', //Hrs',
+       'days'                                                          => 'llllllllllll', //Days',
+       'months'                                                        => 'llllllllllll', //Months',
+       'yes'                                                           => 'llllllllllll', //Yes',
+       'no'                                                            => 'llllllllllll', //No',
+       'add_new'                                                       => 'llllllllllll', //Add New',
 
          'select_month' => 'llllllllllll', //Select Month',
-         'january' => 'llllllllllll', //January',
-         'february' => 'llllllllllll', //February',
-         'march' => 'llllllllllll', //March',
-         'april' => 'llllllllllll', //April',
-         'may' => 'llllllllllll', //May',
-         'june' => 'llllllllllll', //Jun',
-         'july' => 'llllllllllll', //July',
-         'august' => 'llllllllllll', //August',
-         'september' => 'llllllllllll', //September',
-         'october' => 'llllllllllll', //October',
-         'november' => 'llllllllllll', //November',
-         'december' => 'llllllllllll', //December',
-         '1' => 'llllllllllll', //1',
-         '2' => 'llllllllllll', //2',
-         '3' => 'llllllllllll', //3',
-         '4' => 'llllllllllll', //4',
-         '5' => 'llllllllllll', //5',
-         '6' => 'llllllllllll', //6',
-         '7' => 'llllllllllll', //7',
-         '8' => 'llllllllllll', //8',
+         'january'      => 'llllllllllll', //January',
+         'february'     => 'llllllllllll', //February',
+         'march'        => 'llllllllllll', //March',
+         'april'        => 'llllllllllll', //April',
+         'may'          => 'llllllllllll', //May',
+         'june'         => 'llllllllllll', //Jun',
+         'july'         => 'llllllllllll', //July',
+         'august'       => 'llllllllllll', //August',
+         'september'    => 'llllllllllll', //September',
+         'october'      => 'llllllllllll', //October',
+         'november'     => 'llllllllllll', //November',
+         'december'     => 'llllllllllll', //December',
+         '1'            => 'llllllllllll', //1',
+         '2'            => 'llllllllllll', //2',
+         '3'            => 'llllllllllll', //3',
+         '4'            => 'llllllllllll', //4',
+         '5'            => 'llllllllllll', //5',
+         '6'            => 'llllllllllll', //6',
+         '7'            => 'llllllllllll', //7',
+         '8'            => 'llllllllllll', //8',
 
-         '9' => 'llllllllllll', //9',
-         '10' => 'llllllllllll', //10',
-         '11' => 'llllllllllll', //11',
-         '12' => 'llllllllllll', //12',
-         '13' => 'llllllllllll', //13',
-         '14' => 'llllllllllll', //14',
-         '15' => 'llllllllllll', //15',
-         '16' => 'llllllllllll', //16',
-         '17' => 'llllllllllll', //17',
-         '18' => 'llllllllllll', //18',
-         '19' => 'llllllllllll', //19',
-         '20' => 'llllllllllll', //20',
-         '21' => 'llllllllllll', //21',
-         '22' => 'llllllllllll', //22',
-         '23' => 'llllllllllll', //23',
-         '24' => 'llllllllllll', //24',
-         '25' => 'llllllllllll', //25',
-         '26' => 'llllllllllll', //26',
-         '27' => 'llllllllllll', //27',
-         '28' => 'llllllllllll', //28',
-         '29' => 'llllllllllll', //29',
-         '30' => 'llllllllllll', //30',
-         '31' => 'llllllllllll', //31',
-         'select_date' => 'llllllllllll', //Select date',
-         'confirm' => 'llllllllllll', //CONFIRM',
-         'select_month' => 'llllllllllll', //Select month',
-         'select_date' => 'llllllllllll', //Select Date',
-         'select_date_holiday_name_And_also_confirm_your_holiday' => 'llllllllllll', //Select Date,Holiday Name And also confirm your holiday',
+         '9'                                                       => 'llllllllllll', //9',
+         '10'                                                      => 'llllllllllll', //10',
+         '11'                                                      => 'llllllllllll', //11',
+         '12'                                                      => 'llllllllllll', //12',
+         '13'                                                      => 'llllllllllll', //13',
+         '14'                                                      => 'llllllllllll', //14',
+         '15'                                                      => 'llllllllllll', //15',
+         '16'                                                      => 'llllllllllll', //16',
+         '17'                                                      => 'llllllllllll', //17',
+         '18'                                                      => 'llllllllllll', //18',
+         '19'                                                      => 'llllllllllll', //19',
+         '20'                                                      => 'llllllllllll', //20',
+         '21'                                                      => 'llllllllllll', //21',
+         '22'                                                      => 'llllllllllll', //22',
+         '23'                                                      => 'llllllllllll', //23',
+         '24'                                                      => 'llllllllllll', //24',
+         '25'                                                      => 'llllllllllll', //25',
+         '26'                                                      => 'llllllllllll', //26',
+         '27'                                                      => 'llllllllllll', //27',
+         '28'                                                      => 'llllllllllll', //28',
+         '29'                                                      => 'llllllllllll', //29',
+         '30'                                                      => 'llllllllllll', //30',
+         '31'                                                      => 'llllllllllll', //31',
+         'select_date'                                             => 'llllllllllll', //Select date',
+         'confirm'                                                 => 'llllllllllll', //CONFIRM',
+         'select_month'                                            => 'llllllllllll', //Select month',
+         'select_date'                                             => 'llllllllllll', //Select Date',
+         'select_date_holiday_name_And_also_confirm_your_holiday'  => 'llllllllllll', //Select Date,Holiday Name And also confirm your holiday',
          'select_month_holiday_name_And_also_confirm_your_holiday' => 'llllllllllll', //Select Month,Holiday Name Add also confirm your holiday',
-         'confirm_your_holiday' => 'llllllllllll', //Confirm your holiday',
+         'confirm_your_holiday'                                    => 'llllllllllll', //Confirm your holiday',
 
-          '00' => 'llllllllllll', //00',
-         '05' => 'llllllllllll', //05',
-         '10' => 'llllllllllll', //10',
-         '15' => 'llllllllllll', //15',
-         '20' => 'llllllllllll', //20',
-         '25' => 'llllllllllll', //25',
-         '30' => 'llllllllllll', //30',
-         '35' => 'llllllllllll', //35',
-         '40' => 'llllllllllll', //40',
-         '45' => 'llllllllllll', //45',
-         '50' => 'llllllllllll', //50',
-         '55' => 'llllllllllll', //55',
-         'yearly_holiday_list' => 'llllllllllll', //Yearly Holiday List',
+          '00'                                                        => 'llllllllllll', //00',
+         '05'                                                         => 'llllllllllll', //05',
+         '10'                                                         => 'llllllllllll', //10',
+         '15'                                                         => 'llllllllllll', //15',
+         '20'                                                         => 'llllllllllll', //20',
+         '25'                                                         => 'llllllllllll', //25',
+         '30'                                                         => 'llllllllllll', //30',
+         '35'                                                         => 'llllllllllll', //35',
+         '40'                                                         => 'llllllllllll', //40',
+         '45'                                                         => 'llllllllllll', //45',
+         '50'                                                         => 'llllllllllll', //50',
+         '55'                                                         => 'llllllllllll', //55',
+         'yearly_holiday_list'                                        => 'llllllllllll', //Yearly Holiday List',
          'holidays_will_be_ignored_when_calculating_SLA_for_a_ticket' => 'llllllllllll', //Holidays will be ignored when calculating SLA for a ticket',
 
     'filter-agents-by-department' => 'llllllllllll', //Filter by department',
-    'all-departments' => 'llllllllllll', //All departments',
-    'current-owner'   => 'llllllllllll', //Current owner',
-    
-    /**
+    'all-departments'             => 'llllllllllll', //All departments',
+    'current-owner'               => 'llllllllllll', //Current owner',
+
+    /*
      * Auto assign
      */
-    
-    'only-login-agents' => 'llllllllllll', //Only login agents',
+
+    'only-login-agents'                               => 'llllllllllll', //Only login agents',
     'assign-ticket-even-agent-in-non-acceptable-mode' => 'llllllllllll', //Assign ticket even agent in non acceptable mode',
-    'maximum-number-of-ticket-can-assign-to-agent' => 'llllllllllll', //Maximum number of ticket can assign to agent',
-    
-    /**
+    'maximum-number-of-ticket-can-assign-to-agent'    => 'llllllllllll', //Maximum number of ticket can assign to agent',
+
+    /*
      * Billing
      */
-    
-    'level-of-apply' => 'llllllllllll', //Level of apply',
-    'currency' => 'llllllllllll', //Currency',
-    'note' => 'llllllllllll', //Billing note',
-    'billable' => 'llllllllllll', //Billable',
-    'hours' => 'llllllllllll', //Hours',
-    'amount-per-hour' => 'llllllllllll', //Amount Per Hour',
-    'amount' => 'llllllllllll', //Amount',
-    'agent' => 'llllllllllll', //Agent',
-    'action' => 'llllllllllll', //Action',
-    'no-billing-records' => 'llllllllllll', //No billing records',
-    'total-billable-time' => 'llllllllllll', //Total billable time',
+
+    'level-of-apply'          => 'llllllllllll', //Level of apply',
+    'currency'                => 'llllllllllll', //Currency',
+    'note'                    => 'llllllllllll', //Billing note',
+    'billable'                => 'llllllllllll', //Billable',
+    'hours'                   => 'llllllllllll', //Hours',
+    'amount-per-hour'         => 'llllllllllll', //Amount Per Hour',
+    'amount'                  => 'llllllllllll', //Amount',
+    'agent'                   => 'llllllllllll', //Agent',
+    'action'                  => 'llllllllllll', //Action',
+    'no-billing-records'      => 'llllllllllll', //No billing records',
+    'total-billable-time'     => 'llllllllllll', //Total billable time',
     'total-non-billable-time' => 'llllllllllll', //Total non billable time',
-    'total-amount' => 'llllllllllll', //Total amount',
-    'agent' => 'llllllllllll', //Agent',
-    'trigger-on' => 'llllllllllll', //Triger on',
-    
-    /**
+    'total-amount'            => 'llllllllllll', //Total amount',
+    'agent'                   => 'llllllllllll', //Agent',
+    'trigger-on'              => 'llllllllllll', //Triger on',
+
+    /*
      * Report
      */
-    'today' => 'llllllllllll', //Today',
-    'last-7-day' => 'llllllllllll', //Last 7 days',
-    'last-30-days' => 'llllllllllll', //Last 30 days',
-    'last-1-year' => 'llllllllllll', //Last 1 Year',
-    'export' => 'llllllllllll', //Export',
-    'date-range' => 'llllllllllll', //Date range',
-    'mail' => 'llllllllllll', //Mail',
-    'helpdesk-details' => 'llllllllllll', //Helpdesk Details',
-    'overall-details' => 'llllllllllll', //Overall details',
+    'today'             => 'llllllllllll', //Today',
+    'last-7-day'        => 'llllllllllll', //Last 7 days',
+    'last-30-days'      => 'llllllllllll', //Last 30 days',
+    'last-1-year'       => 'llllllllllll', //Last 1 Year',
+    'export'            => 'llllllllllll', //Export',
+    'date-range'        => 'llllllllllll', //Date range',
+    'mail'              => 'llllllllllll', //Mail',
+    'helpdesk-details'  => 'llllllllllll', //Helpdesk Details',
+    'overall-details'   => 'llllllllllll', //Overall details',
     'resource-analysis' => 'llllllllllll', //Resource analysis',
-    
+
     // updated 13/1/2016
-    'select_organization' => 'llllllllllll', //Select Organization',
-    'list_of_SLA_plan' => 'llllllllllll', //List of SLA plan',
+    'select_organization'    => 'llllllllllll', //Select Organization',
+    'list_of_SLA_plan'       => 'llllllllllll', //List of SLA plan',
     'list_of_business_hours' => 'llllllllllll', //List of Business Hours',
-    'list_of_groups' => 'llllllllllll', //List of permissions',
+    'list_of_groups'         => 'llllllllllll', //List of permissions',
 
     //updates 14/1/2017
-    'bill' => 'llllllllllll', //Bill',
+    'bill'              => 'llllllllllll', //Bill',
     'no_member_in_team' => 'llllllllllll', //No members found in this team.',
 
     //update 1-2-2017
      'system-outgoing-incoming-mail-not-configured' => 'llllllllllll', //You have not configured system mail. Faveo can\'t fetch tickets from mail or send mail to users without it.',
-     'confihure-the-mail-now' => 'llllllllllll', //Click here to configure the mail.',
-     'system-mail-not-configured-agent-message' => 'llllllllllll', //System incoming and outgoing email settings are not configured. Please contct the admin.',
+     'confihure-the-mail-now'                       => 'llllllllllll', //Click here to configure the mail.',
+     'system-mail-not-configured-agent-message'     => 'llllllllllll', //System incoming and outgoing email settings are not configured. Please contct the admin.',
 
      'please-wait-while-we-are-crunching-your-data' => 'llllllllllll', //Please wait, we are crunching your data',
 
-
      // updates 08/02/2017
-     'type' => 'llllllllllll', //Type',
-     'tags' => 'llllllllllll', //Tags',
-     'labels' => 'llllllllllll', //Labels',
-     'no_type' => 'llllllllllll', //No Type',
-     'enter_type' => 'llllllllllll', //Enter Type',
-     'enter_tags' => 'llllllllllll', //Enter Tags',
-     'enter_labels' => 'llllllllllll', //Enter Labels',
-     'edit_manager' => 'llllllllllll', //Edit manager',
-     'edit_assign_manrger' => 'llllllllllll', //Edit Assign Manager',
-     'assign_manager' => 'llllllllllll', //Assign Manager',
+     'type'                  => 'llllllllllll', //Type',
+     'tags'                  => 'llllllllllll', //Tags',
+     'labels'                => 'llllllllllll', //Labels',
+     'no_type'               => 'llllllllllll', //No Type',
+     'enter_type'            => 'llllllllllll', //Enter Type',
+     'enter_tags'            => 'llllllllllll', //Enter Tags',
+     'enter_labels'          => 'llllllllllll', //Enter Labels',
+     'edit_manager'          => 'llllllllllll', //Edit manager',
+     'edit_assign_manrger'   => 'llllllllllll', //Edit Assign Manager',
+     'assign_manager'        => 'llllllllllll', //Assign Manager',
      'please_select_manager' => 'llllllllllll', //Please select manager',
-    
-    'notification.priority.update' => 'llllllllllll', //Updated by :agent :created_at - Prority changed from :old to :new',
-    'notification.source.update' => 'llllllllllll', //Updated by :agent :created_at - Source changed from :old to :new',
-    'notification.title.update' => 'llllllllllll', //Updated by :agent :created_at - Title changed from :old to :new',
-    'notification.helptopic.update' => 'llllllllllll', //Updated by :agent :created_at - Help topic changed from :old to :new',
-    'notification.sla.update' => 'llllllllllll', //Updated by :agent :created_at - Sla changed from :old to :new',
-    'notification.status.update' => 'llllllllllll', //Updated by :agent :created_at - Status changed from :old to :new',
-    'notification.assign.update' => 'llllllllllll', //Assigned by :agent :created_at - Ticket assigned to :new',
-    'notification.user.update' => 'llllllllllll', //Ticket ownership changed by :agent :created_at - from :old to :new',
+
+    'notification.priority.update'   => 'llllllllllll', //Updated by :agent :created_at - Prority changed from :old to :new',
+    'notification.source.update'     => 'llllllllllll', //Updated by :agent :created_at - Source changed from :old to :new',
+    'notification.title.update'      => 'llllllllllll', //Updated by :agent :created_at - Title changed from :old to :new',
+    'notification.helptopic.update'  => 'llllllllllll', //Updated by :agent :created_at - Help topic changed from :old to :new',
+    'notification.sla.update'        => 'llllllllllll', //Updated by :agent :created_at - Sla changed from :old to :new',
+    'notification.status.update'     => 'llllllllllll', //Updated by :agent :created_at - Status changed from :old to :new',
+    'notification.assign.update'     => 'llllllllllll', //Assigned by :agent :created_at - Ticket assigned to :new',
+    'notification.user.update'       => 'llllllllllll', //Ticket ownership changed by :agent :created_at - from :old to :new',
     'notification.department.update' => 'llllllllllll', //Updated by :agent :created_at - Department changed from :old to :new',
-    'created.ticket' => 'llllllllllll', //A new ticket :subject has created at :created_at',
-    
-    
-    'mode' => 'llllllllllll', //Mode',
+    'created.ticket'                 => 'llllllllllll', //A new ticket :subject has created at :created_at',
+
+    'mode'                        => 'llllllllllll', //Mode',
     'new_internal_activity_alert' => 'llllllllllll', //New Internal Activity Alert',
-    'sms' => 'llllllllllll', //Sms',
-    'agent' => 'llllllllllll', //Agent',
-    'all_department_manager' => 'llllllllllll', //All Department Manager',
-    'all_team_lead' => 'llllllllllll', //All Team Lead',
-    'registration_notification' => 'llllllllllll', //Registration Notification',
-    'reply_notification' => 'llllllllllll', //Reply Notification',
-    
-    'notification.update' => 'llllllllllll', //:model set to :new from :old',
+    'sms'                         => 'llllllllllll', //Sms',
+    'agent'                       => 'llllllllllll', //Agent',
+    'all_department_manager'      => 'llllllllllll', //All Department Manager',
+    'all_team_lead'               => 'llllllllllll', //All Team Lead',
+    'registration_notification'   => 'llllllllllll', //Registration Notification',
+    'reply_notification'          => 'llllllllllll', //Reply Notification',
+
+    'notification.update'       => 'llllllllllll', //:model set to :new from :old',
     'notification.update.inapp' => 'llllllllllll', //:model set to :new from :old in <b>:ticket</b>',
-    
-    'notification.assigned' => 'llllllllllll', //Ticket has assigned to :new',
+
+    'notification.assigned'       => 'llllllllllll', //Ticket has assigned to :new',
     'notification.assigned.inapp' => 'llllllllllll', //has assigned <b>:ticket</b> to :new',
-    
-    'notification.assigned.myself' => 'llllllllllll', //Ticket has assigned to himself',
+
+    'notification.assigned.myself'       => 'llllllllllll', //Ticket has assigned to himself',
     'notification.assigned.myself.inapp' => 'llllllllllll', //has assigned <b>:ticket</b> to himself',
-    
-    'notification.duedate' => 'llllllllllll', //Ticket :model on :new',
+
+    'notification.duedate'       => 'llllllllllll', //Ticket :model on :new',
     'notification.duedate.inapp' => 'llllllllllll', //Ticket :model on :new',
-    
-    'agent_reply' => 'llllllllllll', //Agent Reply',
-    'client_reply' => 'llllllllllll', //Client Reply',
-    'new-user-register' => 'llllllllllll', //registered at :created',
+
+    'agent_reply'        => 'llllllllllll', //Agent Reply',
+    'client_reply'       => 'llllllllllll', //Client Reply',
+    'new-user-register'  => 'llllllllllll', //registered at :created',
     'reply.notification' => 'llllllllllll', //has replied in <b>:title</b> at :created',
 
     // theme module
@@ -1928,18 +1913,16 @@ return [
     'ticket_department_successfully_changed'  => 'llllllllllll', //'Ticket Department Successfully Changed',
     'select_another_department'               => 'llllllllllll', //'Select another department',
 
-
     //Updates 22-2-2017
     'invalid-date-range'      => 'llllllllllll', //Invalid date range',
     'searching'               => 'llllllllllll', //Searching...',
     'no-canned-reponse-found' => 'llllllllllll', //'No canned reponse found',
 
     // sla add
-     'assigner'                     => 'llllllllllll', //Assigner',
+     'assigner'                              => 'llllllllllll', //Assigner',
     'department_manager'                     => 'llllllllllll', //Department Manager',
-     'team_lead'                     => 'llllllllllll', //Team Lead',
-    'admin'                     => 'llllllllllll', //Admin',
-
+     'team_lead'                             => 'llllllllllll', //Team Lead',
+    'admin'                                  => 'llllllllllll', //Admin',
 
     //Department level canned resposne
     'share-response-with-department'          => 'llllllllllll', //Sahre this resposne with departments',
@@ -1955,13 +1938,13 @@ return [
 
     //cron page
     'cron-cli-recommend' => 'llllllllllll', //We strongly recommend to use CLI commad for job scheduling for better security, But if you want to use curl in cron switch on URLs',
-    'period-5-min' => 'llllllllllll', //We recommend to run this url <b>every 5 minutes</b>',
-    'period-30-min' => 'llllllllllll', //We recommend to run this url <b>every 30 minutes</b>',
-    'period-once-a-day' => 'llllllllllll', //We recommend to run this url <b>once in a day</b>',
-    'due' => 'llllllllllll', //Due',
+    'period-5-min'       => 'llllllllllll', //We recommend to run this url <b>every 5 minutes</b>',
+    'period-30-min'      => 'llllllllllll', //We recommend to run this url <b>every 30 minutes</b>',
+    'period-once-a-day'  => 'llllllllllll', //We recommend to run this url <b>once in a day</b>',
+    'due'                => 'llllllllllll', //Due',
 
     'this_deparment_not_exists' => 'llllllllllll', //This deparment not exists',
-    'no-data-to-show' => 'llllllllllll', //No records found.',
+    'no-data-to-show'           => 'llllllllllll', //No records found.',
 
     // date filter options
     'any-time'      => 'llllllllllll', //Any time',
@@ -1974,7 +1957,7 @@ return [
     '8-hours'       => 'llllllllllll', //Within 8 hours',
     '12-hours'      => 'llllllllllll', //Within 12 hours',
     '24-hours'      => 'llllllllllll', //Within 24 hours',
-    'yesterday'     => 'llllllllllll', //Yesterday', 
+    'yesterday'     => 'llllllllllll', //Yesterday',
     'this-week'     => 'llllllllllll', //This week',
     'last-week'     => 'llllllllllll', //Last week',
     '15-days'       => 'llllllllllll', //In Last 15 days',
@@ -2009,20 +1992,20 @@ return [
         'no-type-found'     => 'llllllllllll', //No type found',
         'no-assignee-found' => 'llllllllllll', //No assignee found',
 
-    'custom-format' => 'llllllllllll', //Custom Format',
+    'custom-format'  => 'llllllllllll', //Custom Format',
     'assigned_agent' => 'llllllllllll', //Assigned agent',
-    'in_app_system' => 'llllllllllll', //Notification',
-    
-    'new-tag' => 'llllllllllll', //New Tag',
+    'in_app_system'  => 'llllllllllll', //Notification',
+
+    'new-tag'       => 'llllllllllll', //New Tag',
     'tickets-count' => 'llllllllllll', //Tickets Count',
 
     'user-account-deleted' => 'llllllllllll', //User account deleted',
-    'restore-account' => 'llllllllllll', //Restore account',
+    'restore-account'      => 'llllllllllll', //Restore account',
 
     //tasks and events
     'task-and-events' => 'llllllllllll', //Tasks and Events',
 
-    /**
+    /*
      *select drop max select lent message
      * this message is displayed when user try to more then allowes item in select2
      *  'You can only select n(any number) item[s]'
@@ -2033,10 +2016,10 @@ return [
     'change-ticket-status-to'      => 'llllllllllll', //Changes status of tickets to ',
 
     //Updates
-    'agents-infomation'           => 'llllllllllll', //Agent Information',
-    'access-permissions'          => 'llllllllllll', //Access Permissions',
-    'last-responsed-by'           => 'llllllllllll', //Last response by',
-    'filtered-results'            => 'llllllllllll', //Filtered results',
+    'agents-infomation'             => 'llllllllllll', //Agent Information',
+    'access-permissions'            => 'llllllllllll', //Access Permissions',
+    'last-responsed-by'             => 'llllllllllll', //Last response by',
+    'filtered-results'              => 'llllllllllll', //Filtered results',
     'new_ticket_confirmation_alert' => 'llllllllllll', //New Ticket Confirmation',
-    'registration_verification' => 'llllllllllll', //Registration Verififcation',
+    'registration_verification'     => 'llllllllllll', //Registration Verififcation',
 ];

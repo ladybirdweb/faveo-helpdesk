@@ -38,7 +38,7 @@ class Redirect
         $url = $request->root();
         if (isInstall()) {
             $schema = new \App\Model\helpdesk\Settings\CommonSettings();
-            $row = $schema->getOptionValue('url', 'app_url',true);
+            $row = $schema->getOptionValue('url', 'app_url', true);
             if ($row) {
                 $url = $row->option_value;
             }

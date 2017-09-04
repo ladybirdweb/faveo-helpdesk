@@ -39,7 +39,7 @@ Route::group(['middleware' => 'redirect'], function () {
         $breadcrumbs->push('Forgot Password', url('password/email'));
     });
 
-// register page
+    // register page
     Route::get('auth/register/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'auth.register', 'uses' => 'Auth\AuthController@getRegister']);
     Breadcrumbs::register('auth.register', function ($breadcrumbs) {
         $breadcrumbs->parent('/');
@@ -47,7 +47,7 @@ Route::group(['middleware' => 'redirect'], function () {
         $breadcrumbs->push('Create Account', url('auth/register'));
     });
 
-// Auth login
+    // Auth login
     Route::get('auth/login/{one?}/{two?}/{three?}/{four?}/{five?}', ['as' => 'auth.login', 'uses' => 'Auth\AuthController@getLogin']);
     Breadcrumbs::register('auth.login', function ($breadcrumbs) {
         $breadcrumbs->parent('/');
@@ -77,27 +77,27 @@ Route::group(['middleware' => 'redirect'], function () {
          * Notification api
          */
         Route::get('notification/api/{userid}', [
-            'as' => 'notification.api',
+            'as'   => 'notification.api',
             'uses' => 'Agent\helpdesk\Notifications\Notification@appNotification',
         ])->middleware(['role.agent']);
 
         Route::get('notification/api/seen/{userid}', [
-            'as' => 'notification.api.seen',
+            'as'   => 'notification.api.seen',
             'uses' => 'Agent\helpdesk\Notifications\Notification@notificationSeen',
         ])->middleware(['role.agent']);
 
         Route::get('notification/api/unseen/count/{userid}', [
-            'as' => 'notification.api.unseen.count',
+            'as'   => 'notification.api.unseen.count',
             'uses' => 'Agent\helpdesk\Notifications\Notification@notificationUnSeenCount',
         ])->middleware(['role.agent']);
 
         Route::get('notification/api/seen/all/{userid}', [
-            'as' => 'notification.api.seen.all',
+            'as'   => 'notification.api.seen.all',
             'uses' => 'Agent\helpdesk\Notifications\Notification@notificationUpdateSeenAll',
         ])->middleware(['role.agent']);
 
         Route::get('notification/sla', [
-            'as' => 'notification.sla',
+            'as'   => 'notification.sla',
             'uses' => 'Agent\helpdesk\Notifications\NotificationController@notificationSla',
         ]);
 
@@ -157,11 +157,11 @@ Route::group(['middleware' => 'redirect'], function () {
         Route::resource('forms', 'Admin\helpdesk\FormController');
         Route::get('forms/add-child/{formid}', ['as' => 'forms.add.child', 'uses' => 'Admin\helpdesk\FormController@addChildForm']);
         Route::post('forms/field/{fieldid}/child', [
-            'as' => 'forms.field.child',
+            'as'   => 'forms.field.child',
             'uses' => 'Admin\helpdesk\FormController@addChild',
         ]);
         Route::get('forms/render/child', [
-            'as' => 'forms.field.child',
+            'as'   => 'forms.field.child',
             'uses' => 'Admin\helpdesk\FormController@renderChild',
         ]);
 
@@ -284,10 +284,10 @@ Route::group(['middleware' => 'redirect'], function () {
 
         //route for submit error and debugging setting form page
         Route::post('post-settings', ['as' => 'post.error.debug.settings',
-            'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings',]);
+            'uses'                         => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings', ]);
         //route to error logs table page
         Route::get('show-error-logs', [
-            'as' => 'error.logs',
+            'as'   => 'error.logs',
             'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@showErrorLogs',
         ]);
 
@@ -403,10 +403,9 @@ Route::group(['middleware' => 'redirect'], function () {
         Route::get('/ticket/delete/{id}', ['as' => 'ticket.delete', 'uses' => 'Agent\helpdesk\TicketController@delete']); /*  Get Ticket Delete */
         Route::get('/email/ban/{id}', ['as' => 'ban.email', 'uses' => 'Agent\helpdesk\TicketController@ban']); /*  Get Ban Email */
         Route::get('/ticket/surrender/{id}', ['as' => 'ticket.surrender', 'uses' => 'Agent\helpdesk\TicketController@surrender']); /*  Get Ticket Surrender */
-        
+
         Route::get('/ticket/change-status/{id}/{id2}', ['as' => 'change.status', 'uses' => 'Agent\helpdesk\TicketController@changeStatus']);
-            
-        
+
         Route::get('/aaaa', 'Client\helpdesk\GuestController@ticket_number');
         Route::get('trash', ['as' => 'get-trash', 'uses' => 'Agent\helpdesk\TicketController@trash']); /* To show Deleted Tickets */
 
@@ -498,7 +497,7 @@ Route::group(['middleware' => 'redirect'], function () {
       |
       |
      */
-// seasrch
+    // seasrch
 //    Route::POST('tickets/search/', function () {
 //        $keyword = Illuminate\Support\Str::lower(Input::get('auto'));
 //        $models = App\Model\Ticket\Tickets::where('ticket_number', '=', $keyword)->orderby('ticket_number')->take(10)->skip(0)->get();
@@ -507,7 +506,7 @@ Route::group(['middleware' => 'redirect'], function () {
 //    });
     Route::any('getdata', function () {
         $term = Illuminate\Support\Str::lower(Input::get('term'));
-        $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term . '%')->groupBy('ticket_number')->take(10)->get();
+        $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
         foreach ($data as $v) {
             return [
                 'value' => $v->ticket_number,
@@ -517,8 +516,8 @@ Route::group(['middleware' => 'redirect'], function () {
 
     Route::post('postform/{id}', 'Client\helpdesk\FormController@postForm'); /* post the AJAX form for create a ticket by guest user */
     Route::post('postedform', ['as' => 'client.form.post', 'uses' => 'Client\helpdesk\FormController@postedForm']); /* post the form to store the value */
-//Route::get('check', 'CheckController@getcheck'); //testing checkbox auto-populate
-//Route::post('postcheck/{id}', 'CheckController@postcheck');
+    //Route::get('check', 'CheckController@getcheck'); //testing checkbox auto-populate
+    //Route::post('postcheck/{id}', 'CheckController@postcheck');
     Route::get('get-helptopic-form', 'Client\helpdesk\FormController@getCustomForm');
 
     Route::get('home', ['as' => 'home', 'uses' => 'Client\helpdesk\WelcomepageController@index']); //guest layout
@@ -546,14 +545,14 @@ Route::group(['middleware' => 'redirect'], function () {
 
         Route::post('verify-client-number2', ['as' => 'post-client-verify-number', 'uses' => 'Client\helpdesk\GuestController@verifyOTP']);
     });
-//====================================================================================
+    //====================================================================================
     Route::get('checkticket', 'Client\helpdesk\ClientTicketController@getCheckTicket'); /* Check your Ticket */
     Route::get('myticket', ['as' => 'ticket', 'uses' => 'Client\helpdesk\GuestController@getMyticket']); /* Get my tickets */
     Route::get('myticket/{id}', ['as' => 'ticket', 'uses' => 'Client\helpdesk\GuestController@thread']); /* Get my tickets */
     Route::post('postcheck', 'Client\helpdesk\GuestController@PostCheckTicket'); /* post Check Ticket */
     Route::get('postcheck', 'Client\helpdesk\GuestController@PostCheckTicket');
     Route::post('post-ticket-reply/{id}', 'Client\helpdesk\FormController@post_ticket_reply');
-        /*
+    /*
       |=============================================================
       |  Cron Job links
       |=============================================================
@@ -579,10 +578,10 @@ Route::group(['middleware' => 'redirect'], function () {
         echo '</tr>';
         foreach ($routeCollection as $value) {
             echo '<tr>';
-            echo '<td>' . $value->getMethods()[0] . '</td>';
-            echo '<td>' . $value->getName() . '</td>';
-            echo '<td>' . $value->getPath() . '</td>';
-            echo '<td>' . $value->getActionName() . '</td>';
+            echo '<td>'.$value->getMethods()[0].'</td>';
+            echo '<td>'.$value->getName().'</td>';
+            echo '<td>'.$value->getPath().'</td>';
+            echo '<td>'.$value->getActionName().'</td>';
             echo '</tr>';
         }
         echo '</table>';
@@ -593,24 +592,24 @@ Route::group(['middleware' => 'redirect'], function () {
       |=============================================================
      */
     Route::get('500', ['as' => 'error500', function () {
-            return view('errors.500');
-        }]);
+        return view('errors.500');
+    }]);
 
     Route::get('404', ['as' => 'error404', function () {
-            return view('errors.404');
-        }]);
+        return view('errors.404');
+    }]);
 
     Route::get('error-in-database-connection', ['as' => 'errordb', function () {
-            return view('errors.db');
-        }]);
+        return view('errors.db');
+    }]);
 
     Route::get('unauthorized', ['as' => 'unauth', function () {
-            return view('errors.unauth');
-        }]);
+        return view('errors.unauth');
+    }]);
 
     Route::get('board-offline', ['as' => 'board.offline', function () {
-            return view('errors.offline');
-        }]);
+        return view('errors.offline');
+    }]);
 
     /*
       |=============================================================
@@ -637,7 +636,7 @@ Route::group(['middleware' => 'redirect'], function () {
 
     /* post settings */
     Route::patch('postsettings/{id}', 'Agent\kb\SettingsController@postSettings');
-//Route for administrater to access the comment
+    //Route for administrater to access the comment
     Route::get('comment', ['as' => 'comment', 'uses' => 'Agent\kb\SettingsController@comment']);
 
     /* Route to define the comment should Published */
@@ -645,11 +644,11 @@ Route::group(['middleware' => 'redirect'], function () {
     /* Route for deleting comments */
     Route::delete('deleted/{id}', ['as' => 'deleted', 'uses' => 'Agent\kb\SettingsController@delete']);
     /* Route for Profile  */
-// $router->get('profile', ['as' => 'profile', 'uses' => 'Agent\kb\SettingsController@getProfile']);
+    // $router->get('profile', ['as' => 'profile', 'uses' => 'Agent\kb\SettingsController@getProfile']);
     /* Profile Update */
-// $router->patch('post-profile', ['as' => 'post-profile', 'uses' =>'Agent\kb\SettingsController@postProfile'] );
+    // $router->patch('post-profile', ['as' => 'post-profile', 'uses' =>'Agent\kb\SettingsController@postProfile'] );
     /* Profile password Update */
-// $router->patch('post-profile-password/{id}',['as' => 'post-profile-password', 'uses' => 'Agent\kb\SettingsController@postProfilepassword']);
+    // $router->patch('post-profile-password/{id}',['as' => 'post-profile-password', 'uses' => 'Agent\kb\SettingsController@postProfilepassword']);
     /* delete Logo */
     Route::get('delete-logo/{id}', ['as' => 'delete-logo', 'uses' => 'Agent\kb\SettingsController@deleteLogo']);
     /* delete Background */
@@ -667,13 +666,13 @@ Route::group(['middleware' => 'redirect'], function () {
     Route::get('direct', function () {
         return view('direct');
     });
-// Route::get('/',['as'=>'home' , 'uses'=> 'client\kb\UserController@home'] );
+    // Route::get('/',['as'=>'home' , 'uses'=> 'client\kb\UserController@home'] );
     /* post the comment from show page */
     Route::post('postcomment/{slug}', ['as' => 'postcomment', 'uses' => 'Client\kb\UserController@postComment']);
     /* get the article list */
 
     Route::get('article-list', ['as' => 'article-list', 'uses' => 'Client\kb\UserController@getArticle']);
-// /* get search values */
+    // /* get search values */
     Route::get('search', ['as' => 'search', 'uses' => 'Client\kb\UserController@search']);
 
     /* get the selected article */
@@ -690,19 +689,19 @@ Route::group(['middleware' => 'redirect'], function () {
     /* get the home page */
     Route::get('knowledgebase', ['as' => 'home', 'uses' => 'Client\kb\UserController@home']);
     /* get the faq value to user */
-// $router->get('faq',['as'=>'faq' , 'uses'=>'Client\kb\UserController@Faq'] );
+    // $router->get('faq',['as'=>'faq' , 'uses'=>'Client\kb\UserController@Faq'] );
     /* get the cantact page to user */
     Route::get('contact', ['as' => 'contact', 'uses' => 'Client\kb\UserController@contact']);
 
     /* post the cantact page to controller */
     Route::post('post-contact', ['as' => 'post-contact', 'uses' => 'Client\kb\UserController@postContact']);
-//to get the value for page content
+    //to get the value for page content
     Route::get('pages/{name}', ['as' => 'pages', 'uses' => 'Client\kb\UserController@getPage']);
 
-//profile
-// $router->get('client-profile',['as' => 'client-profile', 'uses' => 'Client\kb\UserController@clientProfile']);
-// Route::patch('client-profile-edit',['as' => 'client-profile-edit', 'uses' => 'Client\kb\UserController@postClientProfile']);
-// Route::patch('client-profile-password/{id}',['as' => 'client-profile-password', 'uses' => 'Client\kb\UserController@postClientProfilePassword']);
+    //profile
+    // $router->get('client-profile',['as' => 'client-profile', 'uses' => 'Client\kb\UserController@clientProfile']);
+    // Route::patch('client-profile-edit',['as' => 'client-profile-edit', 'uses' => 'Client\kb\UserController@postClientProfile']);
+    // Route::patch('client-profile-password/{id}',['as' => 'client-profile-password', 'uses' => 'Client\kb\UserController@postClientProfilePassword']);
     Route::get('/inbox/data', ['as' => 'api.inbox', 'uses' => 'Agent\helpdesk\TicketController@get_inbox']);
 //    Route::get('/report', 'HomeController@getreport');
 //    Route::get('/reportdata', 'HomeController@pushdata');
@@ -825,30 +824,29 @@ Route::group(['middleware' => 'redirect'], function () {
     Route::post('ticket/priority/edit1', ['as' => 'priority.edit1', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit1']);
     Route::get('ticket/priority/{ticket_priority}/edit', ['as' => 'priority.edit', 'uses' => 'Admin\helpdesk\PriorityController@priorityEdit']);
     Route::get('ticket/priority/{ticket_priority}/destroy', ['as' => 'priority.destroy', 'uses' => 'Admin\helpdesk\PriorityController@destroy']);
-// user---arindam
+    // user---arindam
     Route::post('rolechangeadmin/{id}', ['as' => 'user.post.rolechangeadmin', 'uses' => 'Agent\helpdesk\UserController@changeRoleAdmin']);
     Route::post('rolechangeagent/{id}', ['as' => 'user.post.rolechangeagent', 'uses' => 'Agent\helpdesk\UserController@changeRoleAgent']);
     Route::post('rolechangeuser/{id}', ['as' => 'user.post.rolechangeuser', 'uses' => 'Agent\helpdesk\UserController@changeRoleUser']);
     Route::get('password', ['as' => 'user.changepassword', 'uses' => 'Agent\helpdesk\UserController@randomPassword']);
     Route::post('changepassword/{id}', ['as' => 'user.post.changepassword', 'uses' => 'Agent\helpdesk\UserController@randomPostPassword']);
     Route::post('delete/{id}', ['as' => 'user.post.delete', 'uses' => 'Agent\helpdesk\UserController@deleteAgent']);
-    
+
     Route::post('settings/user/status', ['as' => 'settings.user.status', 'uses' => 'Agent\helpdesk\UserController@settingsUpdateStatus']);
 
     Route::post('settings/user/ban', ['as' => 'settings.user.ban', 'uses' => 'Agent\helpdesk\UserController@settingsUpdateBan']);
 
     Route::post('settings/user/mobile', ['as' => 'settings.user.mobile', 'uses' => 'Agent\helpdesk\UserController@settingsUpdateMobileVerify']);
 
-    
-// deleted user list
+    // deleted user list
     Route::get('deleted/user', ['as' => 'user.deleted', 'uses' => 'Agent\helpdesk\UserController@deletedUser']);
 
     Route::post('restore/{id}', ['as' => 'user.restore', 'uses' => 'Agent\helpdesk\UserController@restoreUser']);
 
-//due today ticket
+    //due today ticket
     Route::get('duetoday', ['as' => 'ticket.duetoday', 'uses' => 'Agent\helpdesk\TicketController@dueTodayTicketlist']);
 
-// Route::post('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']);
+    // Route::post('duetoday/list/ticket', ['as' => 'ticket.post.duetoday',  'uses' =>'Agent\helpdesk\TicketController@getDueToday']);
     Route::get('duetoday/list/ticket', ['as' => 'ticket.post.duetoday', 'uses' => 'Agent\helpdesk\TicketController@getDueToday']); /*  Get Open Ticket */
     /* -------------------------------------------------------------
       | User language change
@@ -869,23 +867,23 @@ Route::group(['middleware' => 'redirect'], function () {
     Route::get('media/files/search/public', ['as' => 'media.files.public', 'uses' => 'Utility\UploadController@filesSearchPublic']);
 
     Route::get('form/ticket', [
-        'as' => 'custom.form.ticket',
-        'uses' => 'Utility\FormController@getTicketFormJson'
+        'as'   => 'custom.form.ticket',
+        'uses' => 'Utility\FormController@getTicketFormJson',
     ]);
 
     Route::get('ticket/form/dependancy', [
-        'as' => 'api.dependancy',
-        'uses' => 'Utility\FormController@dependancy'
+        'as'   => 'api.dependancy',
+        'uses' => 'Utility\FormController@dependancy',
     ]);
 
     Route::get('ticket/form/requester', [
-        'as' => 'api.requester',
-        'uses' => 'Utility\FormController@requester'
+        'as'   => 'api.requester',
+        'uses' => 'Utility\FormController@requester',
     ]);
 
     Route::get('ticket/form/requester/auth', [
-        'as' => 'api.requester.auth',
-        'uses' => 'Utility\FormController@authRequesterClient'
+        'as'   => 'api.requester.auth',
+        'uses' => 'Utility\FormController@authRequesterClient',
     ]);
 });
 \Event::listen('notification-saved', function ($event) {

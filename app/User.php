@@ -9,8 +9,8 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
-
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract
+{
     use Authenticatable,
         CanResetPassword,
         Notifiable;
@@ -30,7 +30,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     protected $fillable = ['user_name', 'email', 'password', 'active', 'first_name', 'last_name', 'ban', 'ext', 'mobile', 'profile_pic',
         'phone_number', 'company', 'agent_sign', 'account_type', 'account_status',
         'assign_group', 'primary_dpt', 'agent_tzone', 'daylight_save', 'limit_access',
-        'directory_listing', 'vacation_mode', 'role', 'internal_note', 'country_code', 'not_accept_ticket', 'is_delete','mobile_verify'];
+        'directory_listing', 'vacation_mode', 'role', 'internal_note', 'country_code', 'not_accept_ticket', 'is_delete', 'mobile_verify', ];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -39,7 +39,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $hidden = ['password', 'remember_token'];
 
-    public function getProfilePicAttribute($value) {
+    public function getProfilePicAttribute($value)
+    {
         $info = $this->avatar();
         $pic = null;
         if ($info) {
@@ -47,11 +48,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
         if (!$pic && $value) {
             $pic = '';
-            $file = asset('uploads/profilepic/' . $value);
+            $file = asset('uploads/profilepic/'.$value);
             if ($file) {
                 $type = pathinfo($file, PATHINFO_EXTENSION);
                 $data = file_get_contents($file);
-                $pic = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                $pic = 'data:image/'.$type.';base64,'.base64_encode($data);
             }
         }
         if (!$value) {
@@ -61,14 +62,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $pic;
     }
 
-    public function avatar() {
+    public function avatar()
+    {
         $related = 'App\UserAdditionalInfo';
         $foreignKey = 'owner';
 
         return $this->hasMany($related, $foreignKey)->select('value')->where('key', 'avatar')->first();
     }
 
-    public function getOrganizationRelation() {
+    public function getOrganizationRelation()
+    {
         $related = "App\Model\helpdesk\Agent_panel\User_org";
         $user_relation = $this->hasMany($related, 'user_id');
         $relation = $user_relation->first();
@@ -81,7 +84,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         }
     }
 
-    public function getOrganization() {
+    public function getOrganization()
+    {
         $name = '';
         if ($this->getOrganizationRelation()) {
             $org = $this->getOrganizationRelation()->first();
@@ -93,21 +97,23 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $name;
     }
 
-    public function getOrgWithLink() {
+    public function getOrgWithLink()
+    {
         $name = '';
         $org = $this->getOrganization();
         if ($org !== '') {
             $orgs = $this->getOrganizationRelation()->first();
             if ($orgs) {
                 $id = $orgs->id;
-                $name = '<a href=' . url('organizations/' . $id) . '>' . ucfirst($org) . '</a>';
+                $name = '<a href='.url('organizations/'.$id).'>'.ucfirst($org).'</a>';
             }
         }
 
         return $name;
     }
 
-    public function getEmailAttribute($value) {
+    public function getEmailAttribute($value)
+    {
         if (!$value) {
             $value = \Lang::get('lang.not-available');
         }
@@ -115,7 +121,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $value;
     }
 
-    public function getExtraInfo($id = '') {
+    public function getExtraInfo($id = '')
+    {
         if ($id === '') {
             $id = $this->attributes['id'];
         }
@@ -125,7 +132,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $infos;
     }
 
-    public function checkArray($key, $array) {
+    public function checkArray($key, $array)
+    {
         $value = '';
         if (is_array($array)) {
             if (array_key_exists($key, $array)) {
@@ -136,24 +144,26 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $value;
     }
 
-    public function twitterLink() {
+    public function twitterLink()
+    {
         $html = '';
         $info = $this->getExtraInfo();
         $username = $this->checkArray('username', $info);
         if ($username !== '') {
-            $html = "<a href='https://twitter.com/" . $username . "' target='_blank'><i class='fa fa-twitter'> </i> Twitter</a>";
+            $html = "<a href='https://twitter.com/".$username."' target='_blank'><i class='fa fa-twitter'> </i> Twitter</a>";
         }
 
         return $html;
     }
 
-    public function name() {
+    public function name()
+    {
         $first_name = $this->first_name;
         $last_name = $this->last_name;
         $name = $this->user_name;
         if ($first_name !== '' && $first_name !== null) {
             if ($last_name !== '' && $last_name !== null) {
-                $name = $first_name . ' ' . $last_name;
+                $name = $first_name.' '.$last_name;
             } else {
                 $name = $first_name;
             }
@@ -162,7 +172,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
         return $name;
     }
 
-    public function getFullNameAttribute() {
+    public function getFullNameAttribute()
+    {
         return $this->name();
     }
 
@@ -175,72 +186,82 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 //        dd($this->where('id',$this->id)->select('first_name','last_name','user_name','email')->get()->toJson());
 //    }
 
-    public function org() {
+    public function org()
+    {
         return $this->hasOne('App\Model\helpdesk\Agent_panel\User_org', 'user_id');
     }
 
-    public function permision() {
+    public function permision()
+    {
         return $this->hasOne('App\Model\helpdesk\Agent\Groups', 'user_id');
     }
 
-    public function save(array $options = array()) {
+    public function save(array $options = [])
+    {
         $changed = $this->isDirty() ? $this->getDirty() : false;
         $user = parent::save();
         $this->updateDeletedUserDependency($changed);
+
         return $user;
     }
 
-    public function ticketsAssigned() {
+    public function ticketsAssigned()
+    {
         $related = 'App\Model\helpdesk\Ticket\Tickets';
+
         return $this->hasMany($related, 'assigned_to');
     }
 
-    public function updateDeletedUserDependency($changed) {
+    public function updateDeletedUserDependency($changed)
+    {
         if ($changed && checkArray('is_delete', $changed) == 1) {
-            $this->ticketsAssigned()->whereHas('statuses.type', function($query) {
+            $this->ticketsAssigned()->whereHas('statuses.type', function ($query) {
                 $query->where('name', 'open');
             })->update(['assigned_to' => null]);
         }
     }
-    
-    public function isDeleted(){
+
+    public function isDeleted()
+    {
         $is_deleted = $this->attributes['is_delete'];
         $check = false;
-        if($is_deleted){
+        if ($is_deleted) {
             $check = true;
         }
-        
-        return $check;
-    }
-    
-    public function isBan(){
-        $is_deleted = $this->attributes['ban'];
-        $check = false;
-        if($is_deleted){
-            $check = true;
-        }
-        
-        return $check;
-    }
-    
-    public function isActive(){
-        $is_deleted = $this->attributes['active'];
-        $check = false;
-        if($is_deleted){
-            $check = true;
-        }
-        
-        return $check;
-    }
-    
-    public function isMobileVerified(){
-        $is_deleted = $this->attributes['mobile_verify'];
-        $check = false;
-        if($is_deleted){
-            $check = true;
-        }
-        
+
         return $check;
     }
 
+    public function isBan()
+    {
+        $is_deleted = $this->attributes['ban'];
+        $check = false;
+        if ($is_deleted) {
+            $check = true;
+        }
+
+        return $check;
+    }
+
+    public function isActive()
+    {
+        $is_deleted = $this->attributes['active'];
+        $check = false;
+        if ($is_deleted) {
+            $check = true;
+        }
+
+        return $check;
+    }
+
+    public function isMobileVerified()
+    {
+        $is_deleted = $this->attributes['mobile_verify'];
+        $check = false;
+        if ($is_deleted) {
+            $check = true;
+        }
+
+        return $check;
+    }
 }

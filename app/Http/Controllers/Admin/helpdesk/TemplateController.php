@@ -157,11 +157,11 @@ class TemplateController extends Controller
         $fname = Input::get('folder_name');
         $filename = $directory.$fname;
 
-// images folder creation using php
-//   $mydir = dirname( __FILE__ )."/html/images";
-//   if(!is_dir($mydir)){
-//   mkdir("html/images");
-//   }
+        // images folder creation using php
+        //   $mydir = dirname( __FILE__ )."/html/images";
+        //   if(!is_dir($mydir)){
+        //   mkdir("html/images");
+        //   }
         // Move all images files
 
         if (!file_exists($filename)) {

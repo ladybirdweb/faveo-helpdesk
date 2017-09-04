@@ -13,9 +13,11 @@ use RecursiveIteratorIterator;
 
 class SettingsController extends Controller
 {
-    public function __construct() {
-        $this->middleware(['auth','roles']);
+    public function __construct()
+    {
+        $this->middleware(['auth', 'roles']);
     }
+
     public function settingsIcon()
     {
         return ' <div class="col-md-2 col-sm-6">
@@ -32,36 +34,41 @@ class SettingsController extends Controller
                 </div>';
     }
 
-    public function settings() {
+    public function settings()
+    {
         try {
             $settings = new CommonSettings();
-            $default = $settings->getOptionValue('storage', 'default',true);
-            $private_folder = $settings->getOptionValue('storage', 'private-root',true);
-            $pubic_folder = $settings->getOptionValue('storage', 'public-root',true);
+            $default = $settings->getOptionValue('storage', 'default', true);
+            $private_folder = $settings->getOptionValue('storage', 'private-root', true);
+            $pubic_folder = $settings->getOptionValue('storage', 'public-root', true);
             $root = storage_path('app');
             if (!$default) {
-                 $default = 'local';
+                $default = 'local';
             }
             if (!$private_folder) {
-                $private_folder = $root . '/private';
+                $private_folder = $root.'/private';
             }
             if (!$pubic_folder) {
                 $pubic_folder = public_path();
             }
+
             return view('storage::settings', compact('default', 'private_folder', 'pubic_folder'));
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());
         }
     }
 
-    public function postSettings(Request $request) {
+    public function postSettings(Request $request)
+    {
         try {
-            if($request->has('private-root') && !is_dir($request->input('private-root'))){
+            if ($request->has('private-root') && !is_dir($request->input('private-root'))) {
                 $dir = $request->input('private-root');
-                throw new \Exception("'$dir'"." is not a valid directory");
+
+                throw new \Exception("'$dir'".' is not a valid directory');
             }
-            if($request->has('private-root') && !is_writable($request->input('private-root'))){
+            if ($request->has('private-root') && !is_writable($request->input('private-root'))) {
                 $dir = $request->input('private-root');
+
                 throw new \Exception("'$dir'"." hasn't write permission");
             }
             $requests = $request->except('_token');
@@ -73,6 +80,7 @@ class SettingsController extends Controller
                     }
                 }
             }
+
             return redirect()->back()->with('success', 'Updated');
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());

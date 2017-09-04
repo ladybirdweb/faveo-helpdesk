@@ -57,12 +57,12 @@ class PasswordController extends Controller
             $user = User::where('email', '=', $request->only('email'))->orWhere('mobile', '=', $request->only('email'))->first();
             if (isset($user)) {
                 $user1 = $user->email;
-            //gen new code and pass
-            $code = str_random(60);
+                //gen new code and pass
+                $code = str_random(60);
                 $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->first();
                 if (isset($password_reset_table)) {
                     $password_reset_table = \DB::table('password_resets')->where('email', '=', $user->email)->update(['token' => $code, 'created_at' => $date]);
-                // $password_reset_table->token = $code;
+                    // $password_reset_table->token = $code;
                 // $password_reset_table->update(['token' => $code]);
                 } else {
                     $create_password_reset = \DB::table('password_resets')->insert(['email' => $user->email, 'token' => $code, 'created_at' => $date]);
@@ -107,7 +107,7 @@ class PasswordController extends Controller
             $this->getResetValidationCustomAttributes()
         );
         $credentials = $this->getResetCredentials($request);
-       // dd($credentials);
+        // dd($credentials);
         $email = $credentials['email'];
         $password = $credentials['password'];
         $token = $credentials['token'];

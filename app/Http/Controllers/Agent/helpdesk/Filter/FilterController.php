@@ -232,7 +232,7 @@ class FilterController extends Controller
     public function table()
     {
         // if (Auth::user()->role == 'admin') {
-            $ticket = new Tickets();
+        $ticket = new Tickets();
         $tickets = $ticket
                     ->leftJoin('ticket_thread', function ($join) {
                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id')

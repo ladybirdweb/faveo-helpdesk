@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class UpdateCustomForm extends Migration
 {
@@ -20,13 +20,13 @@ class UpdateCustomForm extends Migration
         Schema::dropIfExists('form_name');
         Schema::dropIfExists('form_value');
         Schema::dropIfExists('custom_forms');
-        Schema::create('forms',function(Blueprint $table){
+        Schema::create('forms', function (Blueprint $table) {
             $table->increments('id');
             $table->string('form');
             $table->text('json');
             $table->timestamps();
         });
-        Schema::create('required_fields',function(Blueprint $table){
+        Schema::create('required_fields', function (Blueprint $table) {
             $table->increments('id');
             $table->string('form');
             $table->string('name');
@@ -34,12 +34,9 @@ class UpdateCustomForm extends Migration
             $table->integer('is_client_required');
             $table->timestamps();
         });
-        Schema::table('ticket_form_data',function(Blueprint $table){
-            
+        Schema::table('ticket_form_data', function (Blueprint $table) {
             $table->string('key');
-            
         });
-        
     }
 
     /**
@@ -52,6 +49,4 @@ class UpdateCustomForm extends Migration
         Schema::dropIfExists('forms');
         Schema::dropIfExists('required_fields');
     }
-    
-    
 }

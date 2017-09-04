@@ -10,8 +10,9 @@ class TicketStatusType extends BaseModel
     protected $fillable = [
         'id', 'name', 'created_at', 'updated_at',
     ];
-    
-    public function status(){
-        return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_Status','purpose_of_status');
+
+    public function status()
+    {
+        return $this->hasMany('App\Model\helpdesk\Ticket\Ticket_Status', 'purpose_of_status');
     }
 }
