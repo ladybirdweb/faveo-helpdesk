@@ -20,7 +20,7 @@ class CreateBarNotificationsTable extends Migration
         });
         $version = \Config::get('app.version');
         $date = date('Y-m-d H:i:s');
-                //\DB::table('bar_notifications')->insert(['key'=>'new-install','value'=>"Congrates ! You have installed $version",'created_at'=>$date]);
+        //\DB::table('bar_notifications')->insert(['key'=>'new-install','value'=>"Congrates ! You have installed $version",'created_at'=>$date]);
     }
 
     /**

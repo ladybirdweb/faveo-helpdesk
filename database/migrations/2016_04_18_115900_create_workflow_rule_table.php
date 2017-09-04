@@ -27,16 +27,16 @@ class CreateWorkflowRuleTable extends Migration
         });
     }
 
-        /**
-         * Reverse the migrations.
-         *
-         * @return void
-         */
-        public function down()
-        {
-            Schema::table('workflow_rules', function (Blueprint $table) {
-                $table->dropForeign('workflow_rules_1');
-            });
-            Schema::drop('workflow_rules');
-        }
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('workflow_rules', function (Blueprint $table) {
+            $table->dropForeign('workflow_rules_1');
+        });
+        Schema::drop('workflow_rules');
+    }
 }

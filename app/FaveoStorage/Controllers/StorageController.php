@@ -250,9 +250,9 @@ class StorageController extends Controller
         if ($disposition == 'INLINE' || $disposition == 'inline') {
             $id = str_replace('>', '', str_replace('<', '', $structure->id));
             $body = $thread->body;
-           // dd($id,$filename,$body);
+            // dd($id,$filename,$body);
             $body = str_replace('cid:'.$id, $filename, $body);
-           // dd($body);
+            // dd($body);
             $thread->body = $body;
             $thread->save();
         }
