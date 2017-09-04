@@ -75,7 +75,7 @@ We are following Laravel <a href="https://laravel.com/docs/5.2/localization">loc
 
 Contributing
 --------------------------
-Create your own fork of Faveo master repositoray and use <a href="https://github.com/nvie/gitflow">git-flow</a> to create a new feature. Once the feature is published in your fork, send a pull request to begin the conversation of integrating your new feature into Faveo.
+Create your own fork of Faveo master repositoray and use <a href="https://github.com/nvie/gitflow">git-flow</a> to create a new feature. Once the feature is published in your fork, send a pull request to begin the conversation of integrating your new feature into Faveo. Please see the <a href="https://github.com/ladybirdweb/faveo-helpdesk/blob/master/CONTRIBUTING.md">contributing guidelines</a> before sending pull requests.
 
 Help
 --------------------------
