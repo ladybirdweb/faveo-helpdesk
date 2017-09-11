@@ -49,9 +49,9 @@ class LanguageController extends Controller
         $changed = UnAuth::changeLanguage($lang);
         if (!$changed) {
             return \Redirect::back()->with('fails', Lang::get('lang.language-error'));
-        } else {
-            return \Redirect::back();
         }
+        return \Redirect::back();
+
     }
 
     /**
