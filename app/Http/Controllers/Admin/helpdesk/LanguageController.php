@@ -225,28 +225,27 @@ class LanguageController extends Controller
      */
     public function deleteLanguage($lang)
     {
-        if ($lang !== App::getLocale()) {
-            if ($lang !== Config::get('app.fallback_locale')) {
-                $deletePath = base_path('resources/lang').'/'.$lang;     //define file path to delete
-                $success = File::deleteDirectory($deletePath); //remove extracted folder and it's subfolder from lang
-                if ($success) {
-                    //sending back with success message
-                    Session::flash('success', Lang::get('lang.delete-success'));
+        if ($lang === App::getLocale()) {
+            Session::flash('fails', Lang::get('lang.active-lang-error'));
 
-                    return Redirect::back();
-                } else {
-                    //sending back with error message
-                    Session::flash('fails', Lang::get('lang.lang-doesnot-exist'));
+            return redirect('languages');
+        }
+        if ($lang !== Config::get('app.fallback_locale')) {
+            $deletePath = base_path('resources/lang').'/'.$lang;     //define file path to delete
+            $success = File::deleteDirectory($deletePath); //remove extracted folder and it's subfolder from lang
+            if ($success) {
+                //sending back with success message
+                Session::flash('success', Lang::get('lang.delete-success'));
 
-                    return Redirect::back();
-                }
+                return Redirect::back();
             } else {
-                Session::flash('fails', Lang::get('lang.lang-fallback-lang'));
+                //sending back with error message
+                Session::flash('fails', Lang::get('lang.lang-doesnot-exist'));
 
-                return redirect('languages');
+                return Redirect::back();
             }
         } else {
-            Session::flash('fails', Lang::get('lang.active-lang-error'));
+            Session::flash('fails', Lang::get('lang.lang-fallback-lang'));
 
             return redirect('languages');
         }
