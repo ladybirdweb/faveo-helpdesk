@@ -187,13 +187,13 @@ class LanguageController extends Controller
 
                     return Redirect::back()->withInput();
                 }
-            } else {
-                // sending back with success message
-                Session::flash('success', Lang::get('lang.upload-success'));
-                Session::flash('link', 'change-language/'.strtolower(Input::get('iso-code')));
-
-                return Redirect::route('LanguageController');
             }
+            // sending back with success message
+            Session::flash('success', Lang::get('lang.upload-success'));
+            Session::flash('link', 'change-language/'.strtolower(Input::get('iso-code')));
+
+            return Redirect::route('LanguageController');
+
 
 
         } catch (\Exception $e) {
