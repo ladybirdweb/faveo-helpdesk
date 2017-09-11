@@ -20,7 +20,6 @@ use Exception;
 // classes
 use Illuminate\Http\Request;
 use Illuminate\support\Collection;
-use Lang;
 
 /**
  * TicketController.
@@ -124,7 +123,7 @@ class PriorityController extends Controller
         $tk_priority->ispublic = $request->ispublic;
         $tk_priority->save();
 
-        return \Redirect::route('priority.index')->with('success', Lang::get('lang.priority_successfully_created'));
+        return \Redirect::route('priority.index')->with('success', trans('lang.priority_successfully_created'));
     }
 
     /**
@@ -161,7 +160,7 @@ class PriorityController extends Controller
                     ->update(['is_default' => 1]);
         }
 
-        return \Redirect::route('priority.index')->with('success', (Lang::get('lang.priority_successfully_updated')));
+        return \Redirect::route('priority.index')->with('success', (trans('lang.priority_successfully_updated')));
     }
 
     /**
@@ -180,7 +179,7 @@ class PriorityController extends Controller
         //     } else {
         //         $text_topic = 'Email';
         //     }
-        //     $topic = '<li>'.Lang::get('lang.associated_help_topic_have_been_moved_to_default_sla').'</li>';
+        //     $topic = '<li>'.trans('lang.associated_help_topic_have_been_moved_to_default_sla').'</li>';
         // } else {
         //     $topic = '';
         // }
@@ -189,6 +188,6 @@ class PriorityController extends Controller
 
         $tk_priority->delete();
 
-        return \Redirect::route('priority.index')->with('success', (Lang::get('lang.delete_successfully')));
+        return \Redirect::route('priority.index')->with('success', (trans('lang.delete_successfully')));
     }
 }

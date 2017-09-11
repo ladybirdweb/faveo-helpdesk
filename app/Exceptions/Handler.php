@@ -173,7 +173,7 @@ class Handler extends ExceptionHandler
 //                    return parent::render($request, $e);
 //                }
             case $e instanceof TokenMismatchException:
-                return redirect()->back()->with('fails', \Lang::get('lang.session-expired'));
+                return redirect()->back()->with('fails', trans('lang.session-expired'));
             default:
                 return $this->render500($request, $e);
         }

@@ -14,7 +14,6 @@ use Exception;
 use Form;
 use Illuminate\Http\Request;
 use Input;
-use Lang;
 use Redirect;
 
 /**
@@ -150,7 +149,7 @@ class FormController extends Controller
                 }
             }
 
-            return Redirect::back()->with('success', Lang::get('lang.successfully_created_form'));
+            return Redirect::back()->with('success', trans('lang.successfully_created_form'));
         } catch (Exception $ex) {
             dd($ex);
 
@@ -182,7 +181,7 @@ class FormController extends Controller
         $forms = $forms->where('id', $id)->first();
         $forms->delete();
 
-        return redirect()->back()->with('success', Lang::get('lang.form_deleted_successfully'));
+        return redirect()->back()->with('success', trans('lang.form_deleted_successfully'));
     }
 
     public function edit($id)
@@ -234,7 +233,7 @@ class FormController extends Controller
 
         try {
             if (!$request->input('formname')) {
-                throw new Exception(Lang::get('lang.please_fill_form_name'));
+                throw new Exception(trans('lang.please_fill_form_name'));
             }
             $form = new Forms();
             $forms = $form->find($id);

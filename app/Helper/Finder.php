@@ -117,7 +117,7 @@ class Finder
     {
         switch ($id) {
                 case null:
-                        return \Lang::get('lang.none');
+                        return trans('lang.none');
                 case 1:
                         return 'Client';
                 case 2:

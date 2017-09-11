@@ -20,7 +20,6 @@ use Auth;
 use Config;
 use Hash;
 use Illuminate\Http\Request;
-use Lang;
 use Mail;
 use Redirect;
 
@@ -136,7 +135,7 @@ class UserController extends Controller
         /* get the article_id where category_id == current category */
         $catid = $category->where('slug', $slug)->first();
         if (!$catid) {
-            return redirect()->back()->with('fails', Lang::get('lang.we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'));
+            return redirect()->back()->with('fails', trans('lang.we_are_sorry_but_the_page_you_are_looking_for_can_not_be_found'));
         }
         $id = $catid->id;
         $all = $relation->where('category_id', $id)->get();
@@ -209,9 +208,9 @@ class UserController extends Controller
             $message->to($contact->email, $contact->name)->subject('Contact');
         });
         if ($mail) {
-            return redirect('contact')->with('success', Lang::get('lang.your_details_send_to_system'));
+            return redirect('contact')->with('success', trans('lang.your_details_send_to_system'));
         } else {
-            return redirect('contact')->with('fails', Lang::get('lang.your_details_can_not_send_to_system'));
+            return redirect('contact')->with('fails', trans('lang.your_details_can_not_send_to_system'));
         }
     }
 
@@ -234,14 +233,14 @@ class UserController extends Controller
     {
         $article = $article->where('slug', $slug)->first();
         if (!$article) {
-            return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed'));
+            return Redirect::back()->with('fails', trans('lang.sorry_not_processed'));
         }
         $id = $article->id;
         $comment->article_id = $id;
         if ($comment->fill($request->input())->save()) {
-            return Redirect::back()->with('success', Lang::get('lang.your_comment_posted'));
+            return Redirect::back()->with('success', trans('lang.your_comment_posted'));
         } else {
-            return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed'));
+            return Redirect::back()->with('fails', trans('lang.sorry_not_processed'));
         }
     }
 
@@ -251,7 +250,7 @@ class UserController extends Controller
         if ($page) {
             return view('themes.default1.client.kb.article-list.pages', compact('page'));
         } else {
-            return Redirect::back()->with('fails', Lang::get('lang.sorry_not_processed'));
+            return Redirect::back()->with('fails', trans('lang.sorry_not_processed'));
         }
     }
 
@@ -343,10 +342,10 @@ class UserController extends Controller
         } else {
             $user->fill($request->except('profile_pic', 'gender'))->save();
 
-            return redirect('guest')->with('success', Lang::get('lang.profile_updated_sucessfully'));
+            return redirect('guest')->with('success', trans('lang.profile_updated_sucessfully'));
         }
         if ($user->fill($request->except('profile_pic'))->save()) {
-            return redirect('guest')->with('success', Lang::get('lang.sorry_not_proprofile_updated_sucessfullycessed'));
+            return redirect('guest')->with('success', trans('lang.sorry_not_proprofile_updated_sucessfullycessed'));
         }
     }
 
@@ -358,9 +357,9 @@ class UserController extends Controller
             $user->password = Hash::make($request->input('new_password'));
             $user->save();
 
-            return redirect()->back()->with('success', Lang::get('lang.password_updated_sucessfully'));
+            return redirect()->back()->with('success', trans('lang.password_updated_sucessfully'));
         } else {
-            return redirect()->back()->with('fails', Lang::get('lang.password_was_not_updated'));
+            return redirect()->back()->with('fails', trans('lang.password_was_not_updated'));
         }
     }
 }

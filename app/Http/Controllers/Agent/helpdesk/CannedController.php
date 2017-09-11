@@ -12,7 +12,6 @@ use App\Model\helpdesk\Agent_panel\Canned;
 use App\User;
 // classes
 use Exception;
-use Lang;
 
 /**
  * CannedController.
@@ -86,7 +85,7 @@ class CannedController extends Controller
             // saving inputs
             $canned->save();
 
-            return redirect()->route('canned.list')->with('success', Lang::get('lang.added_successfully'));
+            return redirect()->route('canned.list')->with('success', trans('lang.added_successfully'));
         } catch (Exception $e) {
             return redirect()->route('canned.list')->with('fails', $e->getMessage());
         }
@@ -133,7 +132,7 @@ class CannedController extends Controller
             // saving inputs
             $canned->save();
 
-            return redirect()->route('canned.list')->with('success', Lang::get('lang.updated_successfully'));
+            return redirect()->route('canned.list')->with('success', trans('lang.updated_successfully'));
         } catch (Exception $e) {
             return redirect()->route('canned.list')->with('fails', $e->getMessage());
         }
@@ -156,7 +155,7 @@ class CannedController extends Controller
             /* Check whether function success or not */
             $canned->delete();
             /* redirect to Index page with Success Message */
-            return redirect()->route('canned.list')->with('success', Lang::get('lang.user_deleted_successfully'));
+            return redirect()->route('canned.list')->with('success', trans('lang.user_deleted_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
             return redirect()->route('canned.list')->with('fails', $e->getMessage());

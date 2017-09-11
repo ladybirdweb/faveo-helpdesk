@@ -2,7 +2,7 @@
 
 Breadcrumbs::register('dashboard', function ($breadcrumbs) {
     //$breadcrumbs->parent('/');
-    $breadcrumbs->push(Lang::get('lang.dashboard'), route('dashboard'));
+    $breadcrumbs->push(trans('lang.dashboard'), route('dashboard'));
 });
 
 Breadcrumbs::register('notification.list', function ($breadcrumbs) {
@@ -17,80 +17,80 @@ Breadcrumbs::register('notification.settings', function ($breadcrumbs) {
 
 Breadcrumbs::register('groups.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.groups'), route('groups.index'));
+    $breadcrumbs->push(trans('lang.groups'), route('groups.index'));
 });
 Breadcrumbs::register('groups.create', function ($breadcrumbs) {
     $breadcrumbs->parent('groups.index');
-    $breadcrumbs->push(Lang::get('lang.create'), route('groups.create'));
+    $breadcrumbs->push(trans('lang.create'), route('groups.create'));
 });
 Breadcrumbs::register('groups.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('groups.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('groups/{groups}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('groups/{groups}/edit'));
 });
 
 Breadcrumbs::register('departments.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.departments'), route('departments.index'));
+    $breadcrumbs->push(trans('lang.departments'), route('departments.index'));
 });
 Breadcrumbs::register('departments.create', function ($breadcrumbs) {
     $breadcrumbs->parent('departments.index');
-    $breadcrumbs->push(Lang::get('lang.create'), route('departments.create'));
+    $breadcrumbs->push(trans('lang.create'), route('departments.create'));
 });
 Breadcrumbs::register('departments.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('departments.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('departments/{departments}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('departments/{departments}/edit'));
 });
 
 Breadcrumbs::register('teams.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.teams'), route('teams.index'));
+    $breadcrumbs->push(trans('lang.teams'), route('teams.index'));
 });
 Breadcrumbs::register('teams.create', function ($breadcrumbs) {
     $breadcrumbs->parent('teams.index');
-    $breadcrumbs->push(Lang::get('lang.create'), route('teams.create'));
+    $breadcrumbs->push(trans('lang.create'), route('teams.create'));
 });
 Breadcrumbs::register('teams.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('teams.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('teams/{teams}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('teams/{teams}/edit'));
 });
 
 Breadcrumbs::register('agents.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.agents'), route('agents.index'));
+    $breadcrumbs->push(trans('lang.agents'), route('agents.index'));
 });
 Breadcrumbs::register('agents.create', function ($breadcrumbs) {
     $breadcrumbs->parent('agents.index');
-    $breadcrumbs->push(Lang::get('lang.create'), route('agents.create'));
+    $breadcrumbs->push(trans('lang.create'), route('agents.create'));
 });
 Breadcrumbs::register('agents.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('agents.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('agents/{agents}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('agents/{agents}/edit'));
 });
 
 Breadcrumbs::register('emails.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.emails'), route('emails.index'));
+    $breadcrumbs->push(trans('lang.emails'), route('emails.index'));
 });
 Breadcrumbs::register('emails.create', function ($breadcrumbs) {
     $breadcrumbs->parent('emails.index');
-    $breadcrumbs->push(Lang::get('lang.create'), route('emails.create'));
+    $breadcrumbs->push(trans('lang.create'), route('emails.create'));
 });
 Breadcrumbs::register('emails.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('emails.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('emails/{emails}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('emails/{emails}/edit'));
 });
 
 Breadcrumbs::register('banlist.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.banlists'), route('banlist.index'));
+    $breadcrumbs->push(trans('lang.banlists'), route('banlist.index'));
 });
 Breadcrumbs::register('banlist.create', function ($breadcrumbs) {
     $breadcrumbs->parent('banlist.index');
-    $breadcrumbs->push(Lang::get('lang.add'), route('banlist.create'));
+    $breadcrumbs->push(trans('lang.add'), route('banlist.create'));
 });
 Breadcrumbs::register('banlist.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('banlist.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('agents/{agents}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('agents/{agents}/edit'));
 });
 
 Breadcrumbs::register('template-sets.index', function ($breadcrumbs) {
@@ -110,50 +110,50 @@ Breadcrumbs::register('templates.edit', function ($breadcrumbs) {
 
 Breadcrumbs::register('getdiagno', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.email_diagnostic'), route('getdiagno'));
+    $breadcrumbs->push(trans('lang.email_diagnostic'), route('getdiagno'));
 });
 
 Breadcrumbs::register('helptopic.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.help_topics'), route('helptopic.index'));
+    $breadcrumbs->push(trans('lang.help_topics'), route('helptopic.index'));
 });
 Breadcrumbs::register('helptopic.create', function ($breadcrumbs) {
     $breadcrumbs->parent('helptopic.index');
-    $breadcrumbs->push(Lang::get('lang.create'), route('helptopic.create'));
+    $breadcrumbs->push(trans('lang.create'), route('helptopic.create'));
 });
 Breadcrumbs::register('helptopic.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('helptopic.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('helptopic/{helptopic}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('helptopic/{helptopic}/edit'));
 });
 
 Breadcrumbs::register('sla.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.sla-plans'), route('sla.index'));
+    $breadcrumbs->push(trans('lang.sla-plans'), route('sla.index'));
 });
 Breadcrumbs::register('sla.create', function ($breadcrumbs) {
     $breadcrumbs->parent('sla.index');
-    $breadcrumbs->push(Lang::get('lang.create'), route('sla.create'));
+    $breadcrumbs->push(trans('lang.create'), route('sla.create'));
 });
 Breadcrumbs::register('sla.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('sla.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('sla/{sla}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('sla/{sla}/edit'));
 });
 
 Breadcrumbs::register('forms.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.forms'), route('forms.index'));
+    $breadcrumbs->push(trans('lang.forms'), route('forms.index'));
 });
 Breadcrumbs::register('forms.create', function ($breadcrumbs) {
     $breadcrumbs->parent('forms.index');
-    $breadcrumbs->push(Lang::get('lang.create'), route('forms.create'));
+    $breadcrumbs->push(trans('lang.create'), route('forms.create'));
 });
 Breadcrumbs::register('forms.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('forms.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('forms/{forms}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('forms/{forms}/edit'));
 });
 Breadcrumbs::register('forms.show', function ($breadcrumbs) {
     $breadcrumbs->parent('forms.index');
-    $breadcrumbs->push(Lang::get('lang.view'), url('forms/{forms}'));
+    $breadcrumbs->push(trans('lang.view'), url('forms/{forms}'));
 });
 Breadcrumbs::register('forms.add.child', function ($breadcrumbs) {
     $breadcrumbs->parent('forms.index');
@@ -162,37 +162,37 @@ Breadcrumbs::register('forms.add.child', function ($breadcrumbs) {
 
 Breadcrumbs::register('get.job.scheder', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.cron-jobs'), route('get.job.scheder'));
+    $breadcrumbs->push(trans('lang.cron-jobs'), route('get.job.scheder'));
 });
 
 Breadcrumbs::register('getcompany', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.company_settings'), route('getcompany'));
+    $breadcrumbs->push(trans('lang.company_settings'), route('getcompany'));
 });
 Breadcrumbs::register('getsystem', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.system-settings'), route('getsystem'));
+    $breadcrumbs->push(trans('lang.system-settings'), route('getsystem'));
 });
 Breadcrumbs::register('getticket', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.ticket-setting'), route('getticket'));
+    $breadcrumbs->push(trans('lang.ticket-setting'), route('getticket'));
 });
 Breadcrumbs::register('getemail', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.email-settings'), route('getemail'));
+    $breadcrumbs->push(trans('lang.email-settings'), route('getemail'));
 });
 Breadcrumbs::register('getresponder', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.auto_responce'), route('getresponder'));
+    $breadcrumbs->push(trans('lang.auto_responce'), route('getresponder'));
 });
 
 Breadcrumbs::register('getalert', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.alert_notices_setitngs'), route('getalert'));
+    $breadcrumbs->push(trans('lang.alert_notices_setitngs'), route('getalert'));
 });
 Breadcrumbs::register('security.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.security_settings'), route('security.index'));
+    $breadcrumbs->push(trans('lang.security_settings'), route('security.index'));
 });
 // Templates > Upload Templates
 Breadcrumbs::register('security.create', function ($breadcrumbs) {
@@ -212,12 +212,12 @@ Breadcrumbs::register('security.edit', function ($breadcrumbs, $photo) {
 
 Breadcrumbs::register('close-workflow.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.close_ticket_workflow_settings'), route('close-workflow.index'));
+    $breadcrumbs->push(trans('lang.close_ticket_workflow_settings'), route('close-workflow.index'));
 });
 
 Breadcrumbs::register('statuss.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.status_settings'), route('statuss.index'));
+    $breadcrumbs->push(trans('lang.status_settings'), route('statuss.index'));
 });
 
 Breadcrumbs::register('statuss.create', function ($breadcrumbs) {
@@ -232,7 +232,7 @@ Breadcrumbs::register('status.edit', function ($breadcrumbs) {
 
 Breadcrumbs::register('ratings.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.ratings_settings'), route('ratings.index'));
+    $breadcrumbs->push(trans('lang.ratings_settings'), route('ratings.index'));
 });
 
 Breadcrumbs::register('rating.create', function ($breadcrumbs) {
@@ -248,79 +248,79 @@ Breadcrumbs::register('rating.edit', function ($breadcrumbs) {
 
 Breadcrumbs::register('admin-profile', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.profile'), route('admin-profile'));
+    $breadcrumbs->push(trans('lang.profile'), route('admin-profile'));
 });
 
 Breadcrumbs::register('widgets', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.widget-settings'), route('widgets'));
+    $breadcrumbs->push(trans('lang.widget-settings'), route('widgets'));
 });
 
 Breadcrumbs::register('social.buttons', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.social-widget-settings'), route('social.buttons'));
+    $breadcrumbs->push(trans('lang.social-widget-settings'), route('social.buttons'));
 });
 
 Breadcrumbs::register('setting', function ($breadcrumbs) {
-    $breadcrumbs->push(Lang::get('lang.admin_panel'), route('setting'));
+    $breadcrumbs->push(trans('lang.admin_panel'), route('setting'));
 });
 
 Breadcrumbs::register('plugins', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.plugins'), route('plugins'));
+    $breadcrumbs->push(trans('lang.plugins'), route('plugins'));
 });
 
 Breadcrumbs::register('LanguageController', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.language-settings'), route('LanguageController'));
+    $breadcrumbs->push(trans('lang.language-settings'), route('LanguageController'));
 });
 
 Breadcrumbs::register('add-language', function ($breadcrumbs) {
     $breadcrumbs->parent('LanguageController');
-    $breadcrumbs->push(Lang::get('lang.add'), route('add-language'));
+    $breadcrumbs->push(trans('lang.add'), route('add-language'));
 });
 Breadcrumbs::register('workflow', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.ticket_workflow'), route('workflow'));
+    $breadcrumbs->push(trans('lang.ticket_workflow'), route('workflow'));
 });
 Breadcrumbs::register('workflow.create', function ($breadcrumbs) {
     $breadcrumbs->parent('workflow');
-    $breadcrumbs->push(Lang::get('lang.create'), route('workflow.create'));
+    $breadcrumbs->push(trans('lang.create'), route('workflow.create'));
 });
 
 Breadcrumbs::register('workflow.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('workflow');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('workflow/edit/{id}'));
+    $breadcrumbs->push(trans('lang.edit'), url('workflow/edit/{id}'));
 });
 Breadcrumbs::register('api.settings.get', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.api_settings'), route('api.settings.get'));
+    $breadcrumbs->push(trans('lang.api_settings'), route('api.settings.get'));
 });
 
 Breadcrumbs::register('err.debug.settings', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.error-debug-settings'), route('err.debug.settings'));
+    $breadcrumbs->push(trans('lang.error-debug-settings'), route('err.debug.settings'));
 });
 
 Breadcrumbs::register('closed.approvel.ticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.approvel_ticket_list'), route('closed.approvel.ticket'));
+    $breadcrumbs->push(trans('lang.approvel_ticket_list'), route('closed.approvel.ticket'));
 });
 Breadcrumbs::register('user.index', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.user_directory'), route('user.index'));
+    $breadcrumbs->push(trans('lang.user_directory'), route('user.index'));
 });
 Breadcrumbs::register('user.create', function ($breadcrumbs) {
     $breadcrumbs->parent('user.index');
-    $breadcrumbs->push(Lang::get('lang.create'), route('user.create'));
+    $breadcrumbs->push(trans('lang.create'), route('user.create'));
 });
 Breadcrumbs::register('user.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('user.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('user/{user}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('user/{user}/edit'));
 });
 Breadcrumbs::register('user.show', function ($breadcrumbs) {
     $breadcrumbs->parent('user.index');
-    $breadcrumbs->push(Lang::get('lang.view-profile'), url('user/{user}'));
+    $breadcrumbs->push(trans('lang.view-profile'), url('user/{user}'));
 });
 
 Breadcrumbs::register('user.export', function ($breadcrumbs) {
@@ -330,106 +330,106 @@ Breadcrumbs::register('user.export', function ($breadcrumbs) {
 
 Breadcrumbs::register('organizations.index', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.organizations'), route('organizations.index'));
+    $breadcrumbs->push(trans('lang.organizations'), route('organizations.index'));
 });
 Breadcrumbs::register('organizations.create', function ($breadcrumbs) {
     $breadcrumbs->parent('organizations.index');
-    $breadcrumbs->push(Lang::get('lang.create'), route('organizations.create'));
+    $breadcrumbs->push(trans('lang.create'), route('organizations.create'));
 });
 Breadcrumbs::register('organizations.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('organizations.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('organizations/{organizations}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('organizations/{organizations}/edit'));
 });
 Breadcrumbs::register('organizations.show', function ($breadcrumbs) {
     $breadcrumbs->parent('organizations.index');
-    $breadcrumbs->push(Lang::get('lang.view_organization_profile'), url('organizations/{organizations}'));
+    $breadcrumbs->push(trans('lang.view_organization_profile'), url('organizations/{organizations}'));
 });
 Breadcrumbs::register('canned.list', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.canned_response'), route('canned.list'));
+    $breadcrumbs->push(trans('lang.canned_response'), route('canned.list'));
 });
 Breadcrumbs::register('canned.create', function ($breadcrumbs) {
     $breadcrumbs->parent('canned.list');
-    $breadcrumbs->push(Lang::get('lang.create'), route('canned.create'));
+    $breadcrumbs->push(trans('lang.create'), route('canned.create'));
 });
 
 Breadcrumbs::register('canned.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('canned.list');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('canned/edit/{id}'));
+    $breadcrumbs->push(trans('lang.edit'), url('canned/edit/{id}'));
 });
 
 Breadcrumbs::register('profile', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.my_profile'), route('profile'));
+    $breadcrumbs->push(trans('lang.my_profile'), route('profile'));
 });
 Breadcrumbs::register('agent-profile-edit', function ($breadcrumbs) {
     $breadcrumbs->parent('profile');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('profile-edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('profile-edit'));
 });
 Breadcrumbs::register('inbox.ticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.inbox'), route('inbox.ticket'));
+    $breadcrumbs->push(trans('lang.tickets').'&nbsp; > &nbsp;'.trans('lang.inbox'), route('inbox.ticket'));
 });
 Breadcrumbs::register('open.ticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.open'), route('open.ticket'));
+    $breadcrumbs->push(trans('lang.tickets').'&nbsp; > &nbsp;'.trans('lang.open'), route('open.ticket'));
 });
 Breadcrumbs::register('answered.ticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.answered'), route('answered.ticket'));
+    $breadcrumbs->push(trans('lang.tickets').'&nbsp; > &nbsp;'.trans('lang.answered'), route('answered.ticket'));
 });
 Breadcrumbs::register('myticket.ticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.my_tickets'), route('myticket.ticket'));
+    $breadcrumbs->push(trans('lang.tickets').'&nbsp; > &nbsp;'.trans('lang.my_tickets'), route('myticket.ticket'));
 });
 Breadcrumbs::register('overdue.ticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.overdue'), route('overdue.ticket'));
+    $breadcrumbs->push(trans('lang.tickets').'&nbsp; > &nbsp;'.trans('lang.overdue'), route('overdue.ticket'));
 });
 Breadcrumbs::register('closed.ticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.closed'), route('closed.ticket'));
+    $breadcrumbs->push(trans('lang.tickets').'&nbsp; > &nbsp;'.trans('lang.closed'), route('closed.ticket'));
 });
 Breadcrumbs::register('assigned.ticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.assigned'), route('assigned.ticket'));
+    $breadcrumbs->push(trans('lang.tickets').'&nbsp; > &nbsp;'.trans('lang.assigned'), route('assigned.ticket'));
 });
 Breadcrumbs::register('newticket', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
 
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.create'), route('newticket'));
+    $breadcrumbs->push(trans('lang.tickets').'&nbsp; > &nbsp;'.trans('lang.create'), route('newticket'));
 });
 Breadcrumbs::register('ticket.thread', function ($breadcrumbs, $id) {
     $breadcrumbs->parent('dashboard');
     $ticket_number = App\Model\helpdesk\Ticket\Tickets::where('id', '=', $id)->first();
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.$ticket_number->ticket_number, url('/thread/{id}'));
+    $breadcrumbs->push(trans('lang.tickets').'&nbsp; > &nbsp;'.$ticket_number->ticket_number, url('/thread/{id}'));
 });
 Breadcrumbs::register('get-trash', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.trash'), route('get-trash'));
+    $breadcrumbs->push(trans('lang.tickets').'&nbsp; > &nbsp;'.trans('lang.trash'), route('get-trash'));
 });
 Breadcrumbs::register('unassigned', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.tickets').'&nbsp; > &nbsp;'.Lang::get('lang.unassigned'), route('unassigned'));
+    $breadcrumbs->push(trans('lang.tickets').'&nbsp; > &nbsp;'.trans('lang.unassigned'), route('unassigned'));
 });
 
 Breadcrumbs::register('dept.open.ticket', function ($breadcrumbs, $dept) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.department').'&nbsp; > &nbsp;'.$dept.'&nbsp; > &nbsp;'.Lang::get('lang.open_tickets'), url('/{dept}/open'));
+    $breadcrumbs->push(trans('lang.department').'&nbsp; > &nbsp;'.$dept.'&nbsp; > &nbsp;'.trans('lang.open_tickets'), url('/{dept}/open'));
 });
 Breadcrumbs::register('dept.closed.ticket', function ($breadcrumbs, $dept) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.department').'&nbsp; > &nbsp;'.$dept.'&nbsp; > &nbsp;'.Lang::get('lang.closed_tickets'), url('/{dept}/closed'));
+    $breadcrumbs->push(trans('lang.department').'&nbsp; > &nbsp;'.$dept.'&nbsp; > &nbsp;'.trans('lang.closed_tickets'), url('/{dept}/closed'));
 });
 Breadcrumbs::register('report.index', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.dashboard'), route('dashboard'));
+    $breadcrumbs->push(trans('lang.dashboard'), route('dashboard'));
 });
 Breadcrumbs::register('home', function ($breadcrumbs) {
-    $breadcrumbs->push(Lang::get('lang.home'), route('home'));
+    $breadcrumbs->push(trans('lang.home'), route('home'));
 });
 Breadcrumbs::register('/', function ($breadcrumbs) {
-    $breadcrumbs->push(Lang::get('lang.home'), route('/'));
+    $breadcrumbs->push(trans('lang.home'), route('/'));
 });
 Breadcrumbs::register('form', function ($breadcrumbs) {
     $breadcrumbs->push('Create Ticket', route('form'));
@@ -472,61 +472,61 @@ Breadcrumbs::register('board.offline', function ($breadcrumbs) {
 });
 Breadcrumbs::register('category.index', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.category'), route('category.index'));
+    $breadcrumbs->push(trans('lang.category'), route('category.index'));
 });
 Breadcrumbs::register('category.create', function ($breadcrumbs) {
     $breadcrumbs->parent('category.index');
-    $breadcrumbs->push(Lang::get('lang.add'), route('category.create'));
+    $breadcrumbs->push(trans('lang.add'), route('category.create'));
 });
 Breadcrumbs::register('category.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('category.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('category/{category}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('category/{category}/edit'));
 });
 Breadcrumbs::register('category.show', function ($breadcrumbs) {
     $breadcrumbs->parent('category.index');
-    $breadcrumbs->push(Lang::get('lang.view'), url('category/{category}'));
+    $breadcrumbs->push(trans('lang.view'), url('category/{category}'));
 });
 
 Breadcrumbs::register('article.index', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.article'), route('article.index'));
+    $breadcrumbs->push(trans('lang.article'), route('article.index'));
 });
 Breadcrumbs::register('article.create', function ($breadcrumbs) {
     $breadcrumbs->parent('article.index');
-    $breadcrumbs->push(Lang::get('lang.add'), route('article.create'));
+    $breadcrumbs->push(trans('lang.add'), route('article.create'));
 });
 Breadcrumbs::register('article.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('article.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('article/{article}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('article/{article}/edit'));
 });
 Breadcrumbs::register('article.show', function ($breadcrumbs) {
     $breadcrumbs->parent('article.index');
-    $breadcrumbs->push(Lang::get('lang.view'), url('article/{article}'));
+    $breadcrumbs->push(trans('lang.view'), url('article/{article}'));
 });
 
 Breadcrumbs::register('settings', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.settings'), route('settings'));
+    $breadcrumbs->push(trans('lang.settings'), route('settings'));
 });
 Breadcrumbs::register('comment', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.comments'), route('comment'));
+    $breadcrumbs->push(trans('lang.comments'), route('comment'));
 });
 Breadcrumbs::register('page.index', function ($breadcrumbs) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.pages'), route('page.index'));
+    $breadcrumbs->push(trans('lang.pages'), route('page.index'));
 });
 Breadcrumbs::register('page.create', function ($breadcrumbs) {
     $breadcrumbs->parent('page.index');
-    $breadcrumbs->push(Lang::get('lang.add'), route('page.create'));
+    $breadcrumbs->push(trans('lang.add'), route('page.create'));
 });
 Breadcrumbs::register('page.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('page.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), url('page/{page}/edit'));
+    $breadcrumbs->push(trans('lang.edit'), url('page/{page}/edit'));
 });
 Breadcrumbs::register('page.show', function ($breadcrumbs) {
     $breadcrumbs->parent('page.index');
-    $breadcrumbs->push(Lang::get('lang.view'), url('page/{page}'));
+    $breadcrumbs->push(trans('lang.view'), url('page/{page}'));
 });
 Breadcrumbs::register('article-list', function ($breadcrumbs) {
     $breadcrumbs->push('Article List', route('article-list'));
@@ -551,67 +551,67 @@ Breadcrumbs::register('categorylist', function ($breadcrumbs) {
 });
 Breadcrumbs::register('contact', function ($breadcrumbs) {
     $breadcrumbs->parent('/');
-    $breadcrumbs->push(Lang::get('lang.contact'), route('contact'));
+    $breadcrumbs->push(trans('lang.contact'), route('contact'));
 });
 Breadcrumbs::register('pages', function ($breadcrumbs) {
     $breadcrumbs->push('Pages');
 });
 Breadcrumbs::register('queue', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.queues'), route('queue'));
+    $breadcrumbs->push(trans('lang.queues'), route('queue'));
 });
 Breadcrumbs::register('queue.edit', function ($breadcrumbs) {
     $id = \Input::segment(2);
     $breadcrumbs->parent('queue');
-    $breadcrumbs->push(Lang::get('lang.edit'), route('queue.edit', $id));
+    $breadcrumbs->push(trans('lang.edit'), route('queue.edit', $id));
 });
 
 Breadcrumbs::register('url.settings', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.url'), route('url.settings'));
+    $breadcrumbs->push(trans('lang.url'), route('url.settings'));
 });
 
 Breadcrumbs::register('social', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.social-media'), route('social'));
+    $breadcrumbs->push(trans('lang.social-media'), route('social'));
 });
 Breadcrumbs::register('social.media', function ($breadcrumbs) {
     $id = \Input::segment(2);
     $breadcrumbs->parent('social');
-    $breadcrumbs->push(Lang::get('lang.settings'), route('social.media', $id));
+    $breadcrumbs->push(trans('lang.settings'), route('social.media', $id));
 });
 Breadcrumbs::register('priority.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('Ticket Priority'), route('priority.index'));
+    $breadcrumbs->push(trans('Ticket Priority'), route('priority.index'));
 });
 Breadcrumbs::register('priority.create', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('Ticket Priority'), route('priority.index'));
-    $breadcrumbs->push(Lang::get('lang.create'), route('priority.create'));
+    $breadcrumbs->push(trans('Ticket Priority'), route('priority.index'));
+    $breadcrumbs->push(trans('lang.create'), route('priority.create'));
 });
 Breadcrumbs::register('priority.edit', function ($breadcrumbs) {
-    $breadcrumbs->push(Lang::get('Ticket Priority'), route('priority.index'));
-    $breadcrumbs->push(Lang::get('Edit'), route('priority.index'));
+    $breadcrumbs->push(trans('Ticket Priority'), route('priority.index'));
+    $breadcrumbs->push(trans('Edit'), route('priority.index'));
 });
 
 Breadcrumbs::register('dept.inprogress.ticket', function ($breadcrumbs, $dept) {
     $breadcrumbs->parent('dashboard');
-    $breadcrumbs->push(Lang::get('lang.department').'&nbsp; > &nbsp;'.$dept.'&nbsp; > &nbsp;'.Lang::get('lang.assigned_tickets'), url('/{dept}/inprogress'));
+    $breadcrumbs->push(trans('lang.department').'&nbsp; > &nbsp;'.$dept.'&nbsp; > &nbsp;'.trans('lang.assigned_tickets'), url('/{dept}/inprogress'));
 });
 
 Breadcrumbs::register('labels.index', function ($breadcrumbs) {
     $breadcrumbs->parent('setting');
-    $breadcrumbs->push(Lang::get('lang.label'), 'labels.index');
+    $breadcrumbs->push(trans('lang.label'), 'labels.index');
 });
 
 Breadcrumbs::register('labels.create', function ($breadcrumbs) {
     $breadcrumbs->parent('labels.index');
-    $breadcrumbs->push(Lang::get('lang.create'), 'labels.create');
+    $breadcrumbs->push(trans('lang.create'), 'labels.create');
 });
 
 Breadcrumbs::register('labels.edit', function ($breadcrumbs) {
     $breadcrumbs->parent('labels.index');
-    $breadcrumbs->push(Lang::get('lang.edit'), 'labels.edit');
+    $breadcrumbs->push(trans('lang.edit'), 'labels.edit');
 });
 
 Breadcrumbs::register('readmails', function ($breadcrumbs) {

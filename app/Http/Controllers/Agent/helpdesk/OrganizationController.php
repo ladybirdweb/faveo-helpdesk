@@ -17,7 +17,6 @@ use App\User;
 // classes
 use Exception;
 use Illuminate\Http\Request;
-use Lang;
 
 /**
  * OrganizationController
@@ -102,7 +101,7 @@ class OrganizationController extends Controller
                         ->addColumn('Actions', function ($model) {
                             // displaying action buttons
                             // modal popup to delete data
-                            return '<span  data-toggle="modal" data-target="#deletearticle'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.\Lang::get('lang.delete').' </button></span>&nbsp;<a href="'.route('organizations.edit', $model->id).'" class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href="'.route('organizations.show', $model->id).'" class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
+                            return '<span  data-toggle="modal" data-target="#deletearticle'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.trans('lang.delete').' </button></span>&nbsp;<a href="'.route('organizations.edit', $model->id).'" class="btn btn-warning btn-xs">'.trans('lang.edit').'</a>&nbsp;<a href="'.route('organizations.show', $model->id).'" class="btn btn-primary btn-xs">'.trans('lang.view').'</a>
 				<div class="modal fade" id="deletearticle'.$model->id.'">
 			        <div class="modal-dialog">
 			            <div class="modal-content">
@@ -153,14 +152,14 @@ class OrganizationController extends Controller
             /* Check whether function success or not */
             if ($org->fill($request->input())->save() == true) {
                 /* redirect to Index page with Success Message */
-                return redirect('organizations')->with('success', Lang::get('lang.organization_created_successfully'));
+                return redirect('organizations')->with('success', trans('lang.organization_created_successfully'));
             } else {
                 /* redirect to Index page with Fails Message */
-                return redirect('organizations')->with('fails', Lang::get('lang.organization_can_not_create'));
+                return redirect('organizations')->with('fails', trans('lang.organization_can_not_create'));
             }
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect('organizations')->with('fails', Lang::get('lang.organization_can_not_create'));
+            return redirect('organizations')->with('fails', trans('lang.organization_can_not_create'));
         }
     }
 
@@ -222,10 +221,10 @@ class OrganizationController extends Controller
             /* Check whether function success or not */
             if ($orgs->fill($request->input())->save() == true) {
                 /* redirect to Index page with Success Message */
-                return redirect('organizations')->with('success', Lang::get('lang.organization_updated_successfully'));
+                return redirect('organizations')->with('success', trans('lang.organization_updated_successfully'));
             } else {
                 /* redirect to Index page with Fails Message */
-                return redirect('organizations')->with('fails', Lang::get('lang.organization_can_not_update'));
+                return redirect('organizations')->with('fails', trans('lang.organization_can_not_update'));
             }
         } catch (Exception $e) {
             //            dd($e);
@@ -254,7 +253,7 @@ class OrganizationController extends Controller
             /* Check whether function success or not */
             $orgs->delete();
             /* redirect to Index page with Success Message */
-            return redirect('organizations')->with('success', Lang::get('lang.organization_deleted_successfully'));
+            return redirect('organizations')->with('success', trans('lang.organization_deleted_successfully'));
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
             return redirect('organizations')->with('fails', $e->getMessage());

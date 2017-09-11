@@ -3,7 +3,6 @@
 namespace App\Model\helpdesk\Filters;
 
 use Illuminate\Database\Eloquent\Model;
-use Lang;
 
 class Label extends Model
 {
@@ -24,9 +23,9 @@ class Label extends Model
     public function status()
     {
         $status = $this->status;
-        $output = Lang::get('lang.disabled');
+        $output = trans('lang.disabled');
         if ($status == 1) {
-            $output = Lang::get('lang.enabled');
+            $output = trans('lang.enabled');
         }
 
         return $output;

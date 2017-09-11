@@ -22,7 +22,6 @@ use Hash;
 use Illuminate\Http\Request;
 use Image;
 use Input;
-use Lang;
 
 /**
  * SettingsController
@@ -107,14 +106,14 @@ class SettingsController extends Controller
             /* Check whether function success or not */
             if ($settings->fill($request->except('logo', 'background'))->save() == true) {
                 /* redirect to Index page with Success Message */
-                return redirect()->back()->with('success', Lang::get('lang.settings_updated_successfully'));
+                return redirect()->back()->with('success', trans('lang.settings_updated_successfully'));
             } else {
                 /* redirect to Index page with Fails Message */
-                return redirect()->back()->with('fails', Lang::get('lang.settings_can_not_updated'));
+                return redirect()->back()->with('fails', trans('lang.settings_can_not_updated'));
             }
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */
-            return redirect()->back()->with('fails', Lang::get('lang.settings_can_not_updated'));
+            return redirect()->back()->with('fails', trans('lang.settings_can_not_updated'));
         }
     }
 
@@ -156,14 +155,14 @@ class SettingsController extends Controller
                         ->addColumn('status', function ($model) {
                             $status = $model->status;
                             if ($status == 1) {
-                                return '<p style="color:blue"">'.\Lang::get('lang.published');
+                                return '<p style="color:blue"">'.trans('lang.published');
                             } else {
-                                return '<p style="color:red"">'.\Lang::get('lang.not_published');
+                                return '<p style="color:red"">'.trans('lang.not_published');
                             }
                         })
 
                         ->addColumn('Actions', function ($model) {
-                            return '<div class="row"><div class="col-md-12"><a href=comment/delete/'.$model->id.' class="btn btn-danger btn-xs">'.\Lang::get('lang.delete').'</a></div><div class="col-md-12"><a href=published/'.$model->id.' class="btn btn-warning btn-xs">'.\Lang::get('lang.publish').'</a></div></div>';
+                            return '<div class="row"><div class="col-md-12"><a href=comment/delete/'.$model->id.' class="btn btn-danger btn-xs">'.trans('lang.delete').'</a></div><div class="col-md-12"><a href=published/'.$model->id.' class="btn btn-warning btn-xs">'.trans('lang.publish').'</a></div></div>';
                         })
                         ->make();
     }
@@ -181,9 +180,9 @@ class SettingsController extends Controller
         $comment = $comment->whereId($id)->first();
         $comment->status = 1;
         if ($comment->save()) {
-            return redirect('comment')->with('success', $comment->name.'-'.Lang::get('lang.comment_published'));
+            return redirect('comment')->with('success', $comment->name.'-'.trans('lang.comment_published'));
         } else {
-            return redirect('comment')->with('fails', Lang::get('lang.can_not_process'));
+            return redirect('comment')->with('fails', trans('lang.can_not_process'));
         }
     }
 
@@ -199,9 +198,9 @@ class SettingsController extends Controller
     {
         $comment = $comment->whereId($id)->first();
         if ($comment->delete()) {
-            return redirect('comment')->with('success', $comment->name."'s!".Lang::get('lang.comment_deleted'));
+            return redirect('comment')->with('success', $comment->name."'s!".trans('lang.comment_deleted'));
         } else {
-            return redirect('comment')->with('fails', Lang::get('lang.can_not_process'));
+            return redirect('comment')->with('fails', trans('lang.can_not_process'));
         }
     }
 

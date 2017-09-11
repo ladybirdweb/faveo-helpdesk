@@ -22,7 +22,6 @@ use App\User;
 // classes
 use DB;
 use Exception;
-use Lang;
 
 /**
  * DepartmentController.
@@ -125,12 +124,12 @@ class DepartmentController extends Controller
                             ->update(['department' => $department->id]);
                 }
 
-                return redirect('departments')->with('success', Lang::get('lang.department_created_sucessfully'));
+                return redirect('departments')->with('success', trans('lang.department_created_sucessfully'));
             } else {
-                return redirect('departments')->with('fails', Lang::get('lang.failed_to_create_department'));
+                return redirect('departments')->with('fails', trans('lang.failed_to_create_department'));
             }
         } catch (Exception $e) {
-            return redirect('departments')->with('fails', Lang::get('lang.failed_to_create_department'));
+            return redirect('departments')->with('fails', trans('lang.failed_to_create_department'));
         }
     }
 
@@ -214,12 +213,12 @@ class DepartmentController extends Controller
                         ->update(['department' => $id]);
             }
             if ($departments->fill($request->except('group_access', 'manager', 'sla'))->save()) {
-                return redirect('departments')->with('success', Lang::get('lang.department_updated_sucessfully'));
+                return redirect('departments')->with('success', trans('lang.department_updated_sucessfully'));
             } else {
-                return redirect('departments')->with('fails', Lang::get('lang.department_not_updated'));
+                return redirect('departments')->with('fails', trans('lang.department_not_updated'));
             }
         } catch (Exception $e) {
-            return redirect('departments')->with('fails', Lang::get('lang.department_not_updated'));
+            return redirect('departments')->with('fails', trans('lang.department_not_updated'));
         }
     }
 
@@ -238,7 +237,7 @@ class DepartmentController extends Controller
 
         $system = $system->where('id', '=', '1')->first();
         if ($system->department == $id) {
-            return redirect('departments')->with('fails', Lang::get('lang.you_cannot_delete_default_department'));
+            return redirect('departments')->with('fails', trans('lang.you_cannot_delete_default_department'));
         } else {
             $tickets = DB::table('tickets')->where('dept_id', '=', $id)->update(['dept_id' => $system->department]);
             if ($tickets > 0) {
@@ -247,7 +246,7 @@ class DepartmentController extends Controller
                 } else {
                     $text_tickets = 'Ticket';
                 }
-                $ticket = '<li>'.$tickets.' '.$text_tickets.Lang::get('lang.have_been_moved_to_default_department').'</li>';
+                $ticket = '<li>'.$tickets.' '.$text_tickets.trans('lang.have_been_moved_to_default_department').'</li>';
             } else {
                 $ticket = '';
             }
@@ -258,7 +257,7 @@ class DepartmentController extends Controller
                 } else {
                     $text_user = 'User';
                 }
-                $user = '<li>'.$users.' '.$text_user.Lang::get('lang.have_been_moved_to_default_department').'</li>';
+                $user = '<li>'.$users.' '.$text_user.trans('lang.have_been_moved_to_default_department').'</li>';
             } else {
                 $user = '';
             }
@@ -269,13 +268,13 @@ class DepartmentController extends Controller
                 } else {
                     $text_emails = 'Email';
                 }
-                $email = '<li>'.$emails.' System '.$text_emails.Lang::get('lang.have_been_moved_to_default_department').' </li>';
+                $email = '<li>'.$emails.' System '.$text_emails.trans('lang.have_been_moved_to_default_department').' </li>';
             } else {
                 $email = '';
             }
             $helptopic = DB::table('help_topic')->where('department', '=', $id)->update(['department' => null], ['status' => '1']);
             if ($helptopic > 0) {
-                $helptopic = '<li>'.Lang::get('lang.the_associated_helptopic_has_been_deactivated').'</li>';
+                $helptopic = '<li>'.trans('lang.the_associated_helptopic_has_been_deactivated').'</li>';
             } else {
                 $helptopic = '';
             }
@@ -286,9 +285,9 @@ class DepartmentController extends Controller
             $departments = $department->whereId($id)->first();
             /* Check the function is Success or Fail */
             if ($departments->delete() == true) {
-                return redirect('departments')->with('success', Lang::get('lang.department_deleted_sucessfully').$message);
+                return redirect('departments')->with('success', trans('lang.department_deleted_sucessfully').$message);
             } else {
-                return redirect('departments')->with('fails', Lang::get('lang.department_can_not_delete'));
+                return redirect('departments')->with('fails', trans('lang.department_can_not_delete'));
             }
         }
     }

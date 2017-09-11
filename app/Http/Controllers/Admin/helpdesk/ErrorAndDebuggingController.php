@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 
 use Exception;
 use File;
-use Lang;
 
 /**
  * ErrorAndDebuggingController.
@@ -76,10 +75,10 @@ class ErrorAndDebuggingController extends Controller
                 File::put($bugsnag_debug_new, $datacontent2);
 
                 return redirect()->back()->with('success',
-                    Lang::get('lang.error-debug-settings-saved-message'));
+                    trans('lang.error-debug-settings-saved-message'));
             } else {
                 return redirect()->back()->with('fails',
-                    Lang::get('lang.error-debug-settings-error-message'));
+                    trans('lang.error-debug-settings-error-message'));
             }
         } catch (Exception $e) {
             /* redirect to Index page with Fails Message */

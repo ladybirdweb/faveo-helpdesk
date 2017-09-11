@@ -18,7 +18,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Input;
-use Lang;
 
 /**
  * ***************************
@@ -69,7 +68,7 @@ class SettingsController extends Controller
                             return $model->value;
                         })
                         ->addColumn('Actions', function ($model) {
-                            return '<span data-toggle="modal" data-target="#edit_widget'.$model->id.'"><a class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a></span>
+                            return '<span data-toggle="modal" data-target="#edit_widget'.$model->id.'"><a class="btn btn-warning btn-xs">'.trans('lang.edit').'</a></span>
                 <div class="modal fade" id="edit_widget'.$model->id.'">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -81,18 +80,18 @@ class SettingsController extends Controller
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group" style="width:100%">
-                                        <label>'.\Lang::get('lang.title').'</label><br/>
+                                        <label>'.trans('lang.title').'</label><br/>
                                         <input type="text" name="title" value="'.$model->title.'" class="form-control" style="width:100%">
                                     </div>
                                     <br/>
                                     <div class="form-group" style="width:100%">
-                                        <label>'.\Lang::get('lang.content').'</label><br/>
+                                        <label>'.trans('lang.content').'</label><br/>
                                         <textarea name="content" class="form-control" style="width:100%" id="Content'.$model->id.'">'.$model->value.'</textarea>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">'.\Lang::get('lang.close').'</button>
-                                    <input type="submit" class="btn btn-primary" value="'.\Lang::get('lang.update').'">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">'.trans('lang.close').'</button>
+                                    <input type="submit" class="btn btn-primary" value="'.trans('lang.update').'">
                                 </div>
                                 <script>
                                     $(function () {
@@ -124,7 +123,7 @@ class SettingsController extends Controller
         try {
             $widget->save();
 
-            return redirect()->back()->with('success', $widget->name.Lang::get('lang.saved_successfully'));
+            return redirect()->back()->with('success', $widget->name.trans('lang.saved_successfully'));
         } catch (Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
         }
@@ -157,7 +156,7 @@ class SettingsController extends Controller
                             return $model->value;
                         })
                         ->addColumn('Actions', function ($model) {
-                            return '<span data-toggle="modal" data-target="#edit_widget'.$model->id.'"><a class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a></span>
+                            return '<span data-toggle="modal" data-target="#edit_widget'.$model->id.'"><a class="btn btn-warning btn-xs">'.trans('lang.edit').'</a></span>
                 <div class="modal fade" id="edit_widget'.$model->id.'">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -170,13 +169,13 @@ class SettingsController extends Controller
                                 <div class="modal-body">
                                     <br/>
                                     <div class="form-group" style="width:100%">
-                                        <label>'.\Lang::get('lang.link').'</label><br/>
+                                        <label>'.trans('lang.link').'</label><br/>
                                         <input type="url" name="content" class="form-control" style="width:100%" value="'.$model->value.'">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">'.\Lang::get('lang.close').'</button>
-                                    <input type="submit" class="btn btn-primary" value="'.\Lang::get('lang.update').'">
+                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis2">'.trans('lang.close').'</button>
+                                    <input type="submit" class="btn btn-primary" value="'.trans('lang.update').'">
                                 </div>
                             </form>
                         </div>
@@ -315,7 +314,7 @@ class SettingsController extends Controller
                                                     <div class=modal-body>
                                                        <p>Are you Sure ?</p>
                                                         <div class=modal-footer>
-                                                            <button type=button class='btn btn-default pull-left' data-dismiss=modal id=dismis>".\Lang::get('lang.close').'</button>
+                                                            <button type=button class='btn btn-default pull-left' data-dismiss=modal id=dismis>".trans('lang.close').'</button>
                                                             <a href='.url('plugin/delete/'.$model['path'])."><button class='btn btn-danger'>Delete</button></a>
                                                         </div>
 
@@ -387,7 +386,7 @@ class SettingsController extends Controller
             $filename = str_replace('.zip', '', $filename1);
             $dir_check = scandir($destination);
             if (in_array($filename, $dir_check)) {
-                return redirect()->back()->with('fails', Lang::get('lang.plugin-exists'));
+                return redirect()->back()->with('fails', trans('lang.plugin-exists'));
             }
             mkdir($destination.DIRECTORY_SEPARATOR.$filename);
             /*
@@ -420,14 +419,14 @@ class SettingsController extends Controller
                         file_put_contents($app, implode("\n", $lines));
                         $plug->create(['name' => $filename, 'path' => $filename, 'status' => 1]);
 
-                        return redirect()->back()->with('success', Lang::get('lang.plugin-installed'));
+                        return redirect()->back()->with('success', trans('lang.plugin-installed'));
                     } else {
                         /*
                          * delete if the plugin hasn't config.php and ServiceProvider.php
                          */
                         $this->deleteDirectory($file);
 
-                        return redirect()->back()->with('fails', Lang::get('no-plugin-file').$file);
+                        return redirect()->back()->with('fails', trans('no-plugin-file').$file);
                     }
                 } else {
                     /*
@@ -435,7 +434,7 @@ class SettingsController extends Controller
                      */
                     $this->deleteDirectory($file);
 
-                    return redirect()->back()->with('fails', Lang::get('plugin-config-missing').$file);
+                    return redirect()->back()->with('fails', trans('plugin-config-missing').$file);
                 }
             } else {
                 /*
@@ -443,7 +442,7 @@ class SettingsController extends Controller
                  */
                 $this->deleteDirectory($file);
 
-                return redirect()->back()->with('fails', '<b>'.Lang::get('lang.plugin-path-missing').'</b>  '.$file);
+                return redirect()->back()->with('fails', '<b>'.trans('lang.plugin-path-missing').'</b>  '.$file);
             }
         } catch (Exception $ex) {
             return redirect()->back()->with('fails', $ex->getMessage());

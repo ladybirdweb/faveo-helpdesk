@@ -13,7 +13,6 @@ use Datatable;
 // classes
 use Exception;
 use Illuminate\Http\Request;
-use Lang;
 
 /**
  * PageController
@@ -85,7 +84,7 @@ class PageController extends Controller
                         /* add column Actions */
                         /* there are action buttons and modal popup to delete a data column */
                         ->addColumn('Actions', function ($model) {
-                            return '<span  data-toggle="modal" data-target="#deletepage'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.\Lang::get('lang.delete').'</button></span>&nbsp;<a href=page/'.$model->slug.'/edit class="btn btn-warning btn-xs">'.\Lang::get('lang.edit').'</a>&nbsp;<a href=pages/'.$model->slug.' class="btn btn-primary btn-xs">'.\Lang::get('lang.view').'</a>
+                            return '<span  data-toggle="modal" data-target="#deletepage'.$model->id.'"><a href="#" ><button class="btn btn-danger btn-xs"></a> '.trans('lang.delete').'</button></span>&nbsp;<a href=page/'.$model->slug.'/edit class="btn btn-warning btn-xs">'.trans('lang.edit').'</a>&nbsp;<a href=pages/'.$model->slug.' class="btn btn-primary btn-xs">'.trans('lang.view').'</a>
 				<div class="modal fade" id="deletepage'.$model->id.'">
         			<div class="modal-dialog">
             			<div class="modal-content">
@@ -133,7 +132,7 @@ class PageController extends Controller
         try {
             $this->page->fill($request->input())->save();
 
-            return redirect('page')->with('success', Lang::get('lang.page_created_successfully'));
+            return redirect('page')->with('success', trans('lang.page_created_successfully'));
         } catch (Exception $e) {
             return redirect('page')->with('fails', $e->getMessage());
         }
@@ -177,7 +176,7 @@ class PageController extends Controller
             $pages->slug = $slug;
             $pages->save();
 
-            return redirect('page')->with('success', Lang::get('lang.your_page_updated_successfully'));
+            return redirect('page')->with('success', trans('lang.your_page_updated_successfully'));
         } catch (Exception $e) {
             return redirect('page')->with('fails', $e->getMessage());
         }
@@ -197,7 +196,7 @@ class PageController extends Controller
             $page = $this->page->whereId($id)->first();
             $page->delete();
 
-            return redirect('page')->with('success', Lang::get('lang.page_deleted_successfully'));
+            return redirect('page')->with('success', trans('lang.page_deleted_successfully'));
         } catch (Exception $e) {
             return redirect('page')->with('fails', $e->getMessage());
         }

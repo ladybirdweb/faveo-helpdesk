@@ -17,7 +17,6 @@ use App\Model\helpdesk\Ticket\Ticket_Priority;
 use App\Model\helpdesk\Utility\MailboxProtocol;
 use Crypt;
 use Exception;
-use Lang;
 
 /**
  * ======================================
@@ -119,7 +118,7 @@ class EmailsController extends Controller
             if ($send == 1 && $fetch == 1) {
                 $this->store($request, $service_request, $id);
 
-                return $this->jsonResponse('success', Lang::get('lang.success'));
+                return $this->jsonResponse('success', trans('lang.success'));
             }
 
             return $this->validateEmailError($send, $fetch);
@@ -137,10 +136,10 @@ class EmailsController extends Controller
     public function validateEmailError($out, $in)
     {
         if ($out !== 1) {
-            return $this->jsonResponse('fails', Lang::get('lang.outgoing_email_connection_failed'));
+            return $this->jsonResponse('fails', trans('lang.outgoing_email_connection_failed'));
         }
         if ($in !== 1) {
-            return $this->jsonResponse('fails', Lang::get('lang.incoming_email_connection_failed_please_check_email_credentials_or_imap_settings'));
+            return $this->jsonResponse('fails', trans('lang.incoming_email_connection_failed_please_check_email_credentials_or_imap_settings'));
         }
     }
 
@@ -425,7 +424,7 @@ class EmailsController extends Controller
         if ($default_system_email->sys_email) {
             // checking if the default system email is the passed email
             if ($id == $default_system_email->sys_email) {
-                return redirect('emails')->with('fails', Lang::get('lang.you_cannot_delete_system_default_email'));
+                return redirect('emails')->with('fails', trans('lang.you_cannot_delete_system_default_email'));
             }
         }
 
@@ -435,7 +434,7 @@ class EmailsController extends Controller
             // checking if deleting the email is success or if it's carrying any dependencies
             $emails->delete();
 
-            return redirect('emails')->with('success', Lang::get('lang.email_deleted_sucessfully'));
+            return redirect('emails')->with('success', trans('lang.email_deleted_sucessfully'));
         } catch (Exception $e) {
             // returns if the try fails
             return redirect()->back()->with('fails', $e->getMessage());

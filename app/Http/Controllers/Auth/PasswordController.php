@@ -11,7 +11,6 @@ use App\User;
 // classes
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
-use Lang;
 
 /**
  * PasswordController.
@@ -82,9 +81,9 @@ class PasswordController extends Controller
                     \Event::fire('reset.password2', [$value]);
                 }
 
-                return redirect()->back()->with('status', Lang::get('lang.we_have_e-mailed_your_password_reset_link'));
+                return redirect()->back()->with('status', trans('lang.we_have_e-mailed_your_password_reset_link'));
             } else {
-                return redirect()->back()->with('fails', Lang::get("lang.we_can't_find_a_user_with_that_e-mail_address"));
+                return redirect()->back()->with('fails', trans("lang.we_can't_find_a_user_with_that_e-mail_address"));
             }
         } catch (\Exception $e) {
             return redirect()->back()->with('fails', $e->getMessage());
@@ -127,9 +126,9 @@ class PasswordController extends Controller
             }
         }
         if ($response == 'success') {
-            return redirect('/auth/login')->with('status', Lang::get('lang.password-reset-successfully'));
+            return redirect('/auth/login')->with('status', trans('lang.password-reset-successfully'));
         } else {
-            return redirect('/home')->with('fails', Lang::get('lang.password-can-not-reset'));
+            return redirect('/home')->with('fails', trans('lang.password-can-not-reset'));
         }
     }
 }

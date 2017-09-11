@@ -11,7 +11,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('log::lang.logs')}}</h1>
+<h1>{{trans('log::lang.logs')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
