@@ -239,16 +239,16 @@ class LanguageController extends Controller
 
         $deletePath = base_path('resources/lang').'/'.$lang;     //define file path to delete
         $success = File::deleteDirectory($deletePath); //remove extracted folder and it's subfolder from lang
-        if ($success) {
-            //sending back with success message
-            Session::flash('success', Lang::get('lang.delete-success'));
-
-            return Redirect::back();
-        } else {
+        if (!$success) {
             //sending back with error message
             Session::flash('fails', Lang::get('lang.lang-doesnot-exist'));
 
             return Redirect::back();
         }
+        
+        //sending back with success message
+        Session::flash('success', Lang::get('lang.delete-success'));
+
+        return Redirect::back();
     }
 }
