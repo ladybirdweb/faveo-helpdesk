@@ -29,7 +29,7 @@ class="active"
 @section('content')
  <div class="box box-primary">
             <div class="box-header">
-  <h2 class="box-title">{{Lang::get('lang.error-logs')}}</h2>
+  <h2 class="box-title">{{trans('lang.error-logs')}}</h2>
 </div>
             <!-- /.box-header -->
             <div class="box-body">

@@ -68,14 +68,14 @@
                     <div id="navbar" class="navbar-wrapper text-center">
                         <nav class="navbar navbar-default site-navigation" role="navigation">
                             <ul class="nav navbar-nav navbar-menu">
-                                <li @yield('home')><a href="{{url('/')}}">{!! Lang::get('lang.home') !!}</a></li>
+                                <li @yield('home')><a href="{{url('/')}}">{!! trans('lang.home') !!}</a></li>
                                 @if($system->first()->status == 1)
-                                <li @yield('submit')><a href="{{URL::route('form')}}">{!! Lang::get('lang.submit_a_ticket') !!}</a></li>
+                                <li @yield('submit')><a href="{{URL::route('form')}}">{!! trans('lang.submit_a_ticket') !!}</a></li>
                                 @endif
-                                <li @yield('kb')><a href="{!! url('knowledgebase') !!}">{!! Lang::get('lang.knowledge_base') !!}</a>
+                                <li @yield('kb')><a href="{!! url('knowledgebase') !!}">{!! trans('lang.knowledge_base') !!}</a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="{{route('category-list')}}">{!! Lang::get('lang.categories') !!}</a></li>
-                                        <li><a href="{{route('article-list')}}">{!! Lang::get('lang.articles') !!}</a></li>
+                                        <li><a href="{{route('category-list')}}">{!! trans('lang.categories') !!}</a></li>
+                                        <li><a href="{{route('article-list')}}">{!! trans('lang.articles') !!}</a></li>
                                     </ul>
                                 </li>
                                 <?php $pages = App\Model\kb\Page::where('status', '1')->where('visibility', '1')->get();
@@ -84,29 +84,29 @@
                                 <li><a href="{{route('pages',$page->slug)}}">{{$page->name}}</a></li>
                                 @endforeach
                                 @if(Auth::user())
-                                <li @yield('myticket')><a href="{{url('mytickets')}}">{!! Lang::get('lang.my_tickets') !!}</a></li>
+                                <li @yield('myticket')><a href="{{url('mytickets')}}">{!! trans('lang.my_tickets') !!}</a></li>
 
                                 {{-- <li @yield('contact')><a href="{{route('contact')}}">Contact us</a></li> --}}
-                                <li @yield('profile')><a href="#" >{!! Lang::get('lang.my_profile') !!}</a>
+                                <li @yield('profile')><a href="#" >{!! trans('lang.my_profile') !!}</a>
                                     <ul class="dropdown-menu">
                                         <li>
                                             <div class="banner-wrapper user-menu text-center clearfix">
                                                 <img src="{{Auth::user()->profile_pic}}"class="img-circle" alt="User Image" height="80" width="80"/>
                                                 <h3 class="banner-title text-info h4">{{Auth::user()->first_name." ".Auth::user()->last_name}}</h3>
                                                 <div class="banner-content">
-                                                    {{-- <a href="{{url('kb/client-profile')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.edit_profile') !!}</a> --}} <a href="{{url('auth/logout')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.log_out') !!}</a>
+                                                    {{-- <a href="{{url('kb/client-profile')}}" class="btn btn-custom btn-xs">{!! trans('lang.edit_profile') !!}</a> --}} <a href="{{url('auth/logout')}}" class="btn btn-custom btn-xs">{!! trans('lang.log_out') !!}</a>
                                                 </div>
                                                 @if(Auth::user())
                                                 @if(Auth::user()->role != 'user')
                                                 <div class="banner-content">
-                                                    <a href="{{url('dashboard')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.dashboard') !!}</a>
+                                                    <a href="{{url('dashboard')}}" class="btn btn-custom btn-xs">{!! trans('lang.dashboard') !!}</a>
                                                 </div>
                                                 @endif
                                                 @endif
                                                 @if(Auth::user())
                                                 @if(Auth::user()->role == 'user')
                                                 <div class="banner-content">
-                                                    <a href="{{url('client-profile')}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.profile') !!}</a>
+                                                    <a href="{{url('client-profile')}}" class="btn btn-custom btn-xs">{!! trans('lang.profile') !!}</a>
                                                 </div>
                                                 @endif
                                                 @endif
@@ -129,9 +129,9 @@
                         <div class="form-border">
                             <div class="form-inline ">
                                 <div class="form-group">
-                                    <input type="text" name="s" id="s" class="search-field form-control input-lg" title="Enter search term" placeholder="{!! Lang::get('lang.have_a_question?_type_your_search_term_here') !!}" required />
+                                    <input type="text" name="s" id="s" class="search-field form-control input-lg" title="Enter search term" placeholder="{!! trans('lang.have_a_question?_type_your_search_term_here') !!}" required />
                                 </div>
-                                <button type="submit" class="search-submit btn btn-custom btn-lg pull-right check-s">{!! Lang::get('lang.search') !!}</button>
+                                <button type="submit" class="search-submit btn btn-custom btn-lg pull-right check-s">{!! trans('lang.search') !!}</button>
                             </div>
                         </div>
                         {!! Form::close() !!}
@@ -169,7 +169,7 @@
                             @endif
                             <div class="alert alert-danger alert-dismissable">
                                 <i class="fa fa-ban"></i>
-                                <b>{!! Lang::get('lang.alert') !!} !</b>
+                                <b>{!! trans('lang.alert') !!} !</b>
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                 {{Session::get('fails')}}
                             </div>
@@ -257,7 +257,7 @@
                     <hr style="color:#E5E5E5"/>
                     <div class="row">
                         <div class="site-info col-md-6">
-                            <p class="text-muted">{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>. {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
+                            <p class="text-muted">{!! trans('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>. {!! trans('lang.all_rights_reserved') !!}. {!! trans('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/"  target="_blank">Faveo</a></p>
                         </div>
                         <div class="site-social text-right col-md-6">
 <?php $socials = App\Model\helpdesk\Theme\Widgets::all(); ?>

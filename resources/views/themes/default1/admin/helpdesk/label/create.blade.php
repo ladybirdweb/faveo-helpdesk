@@ -45,7 +45,7 @@ class="active"
         <br><br>
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('title'))
@@ -106,7 +106,7 @@ class="active"
             
              <tr>
                 <td>{!! Form::label('status','Status') !!}</td>
-                <td><input type="checkbox" name="status" id="status" checked="true">&nbsp;&nbsp;{{Lang::get('lang.enable')}}</td>
+                <td><input type="checkbox" name="status" id="status" checked="true">&nbsp;&nbsp;{{trans('lang.enable')}}</td>
             </tr>
             
         </table>

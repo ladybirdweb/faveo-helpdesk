@@ -83,13 +83,13 @@
 
                         <ul class="nav navbar-nav navbar-left">
                             @if($replacetop==0)
-                            <li @yield('settings')><a href="{!! url('dashboard') !!}">{!! Lang::get('lang.agent_panel') !!}</a></li>
+                            <li @yield('settings')><a href="{!! url('dashboard') !!}">{!! trans('lang.agent_panel') !!}</a></li>
                             @else
                             <?php \Event::fire('service.desk.admin.topbar', array()); ?>
                             @endif
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a href="{{url('admin')}}">{!! Lang::get('lang.admin_panel') !!}</a></li>
+                            <li><a href="{{url('admin')}}">{!! trans('lang.admin_panel') !!}</a></li>
                             @include('themes.default1.update.notification')
                             <!-- User Account: style can be found in dropdown.less -->
                             <ul class="nav navbar-nav navbar-right">
@@ -179,10 +179,10 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer"  style="background-color:#1a2226;">
                                     <div class="pull-left">
-                                        <a href="{{url('admin-profile')}}" class="btn btn-info btn-sm"><b>{!! Lang::get('lang.profile') !!}</b></a>
+                                        <a href="{{url('admin-profile')}}" class="btn btn-info btn-sm"><b>{!! trans('lang.profile') !!}</b></a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! Lang::get('lang.sign_out') !!}</b></a>
+                                        <a href="{{url('auth/logout')}}" class="btn btn-danger btn-sm"><b>{!! trans('lang.sign_out') !!}</b></a>
                                     </div>
                                 </li>
                             </ul>
@@ -219,33 +219,33 @@
                     <!-- sidebar menu: : style can be found in sidebar.less -->
                     <ul class="sidebar-menu">
                         @if($replaceside==0)
-                        <center><a href="{{url('admin')}}"><li class="header"><span style="font-size:1.5em;">{{ Lang::get('lang.admin_panel') }}</span></li></a></center>
-                        <li class="header">{!! Lang::get('lang.settings-2') !!}</li>
+                        <center><a href="{{url('admin')}}"><li class="header"><span style="font-size:1.5em;">{{ trans('lang.admin_panel') }}</span></li></a></center>
+                        <li class="header">{!! trans('lang.settings-2') !!}</li>
                         <li class="treeview @yield('Staffs')">
                             <a  href="#">
-                                <i class="fa fa-users"></i> <span>{!! Lang::get('lang.staffs') !!}</span> <i class="fa fa-angle-left pull-right"></i>
+                                <i class="fa fa-users"></i> <span>{!! trans('lang.staffs') !!}</span> <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li @yield('agents')><a href="{{ url('agents') }}"><i class="fa fa-user "></i>{!! Lang::get('lang.agents') !!}</a></li>
-                                <li @yield('departments')><a href="{{ url('departments') }}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.departments') !!}</a></li>
-                                <li @yield('teams')><a href="{{ url('teams') }}"><i class="fa fa-users"></i>{!! Lang::get('lang.teams') !!}</a></li>
-                                <li @yield('groups')><a href="{{ url('groups') }}"><i class="fa fa-users"></i>{!! Lang::get('lang.groups') !!}</a></li>
+                                <li @yield('agents')><a href="{{ url('agents') }}"><i class="fa fa-user "></i>{!! trans('lang.agents') !!}</a></li>
+                                <li @yield('departments')><a href="{{ url('departments') }}"><i class="fa fa-sitemap"></i>{!! trans('lang.departments') !!}</a></li>
+                                <li @yield('teams')><a href="{{ url('teams') }}"><i class="fa fa-users"></i>{!! trans('lang.teams') !!}</a></li>
+                                <li @yield('groups')><a href="{{ url('groups') }}"><i class="fa fa-users"></i>{!! trans('lang.groups') !!}</a></li>
                             </ul>
                         </li>
 
                         <li class="treeview @yield('Emails')">
                             <a href="#">
                                 <i class="fa fa-envelope-o"></i>
-                                <span>{!! Lang::get('lang.email') !!}</span>
+                                <span>{!! trans('lang.email') !!}</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li @yield('emails')><a href="{{ url('emails') }}"><i class="fa fa-envelope"></i>{!! Lang::get('lang.emails') !!}</a></li>
-                                <li @yield('ban')><a href="{{ url('banlist') }}"><i class="fa fa-ban"></i>{!! Lang::get('lang.ban_lists') !!}</a></li>
-                                <li @yield('template')><a href="{{ url('template-sets') }}"><i class="fa fa-mail-forward"></i>{!! Lang::get('lang.templates') !!}</a></li>
-                                <li @yield('email')><a href="{{url('getemail')}}"><i class="fa fa-at"></i>{!! Lang::get('lang.email-settings') !!}</a></li>
-                                <li @yield('queue')><a href="{{ url('queue') }}"><i class="fa fa-upload"></i>{!! Lang::get('lang.queues') !!}</a></li>
-                                <li @yield('diagnostics')><a href="{{ url('getdiagno') }}"><i class="fa fa-plus"></i>{!! Lang::get('lang.diagnostics') !!}</a></li>
+                                <li @yield('emails')><a href="{{ url('emails') }}"><i class="fa fa-envelope"></i>{!! trans('lang.emails') !!}</a></li>
+                                <li @yield('ban')><a href="{{ url('banlist') }}"><i class="fa fa-ban"></i>{!! trans('lang.ban_lists') !!}</a></li>
+                                <li @yield('template')><a href="{{ url('template-sets') }}"><i class="fa fa-mail-forward"></i>{!! trans('lang.templates') !!}</a></li>
+                                <li @yield('email')><a href="{{url('getemail')}}"><i class="fa fa-at"></i>{!! trans('lang.email-settings') !!}</a></li>
+                                <li @yield('queue')><a href="{{ url('queue') }}"><i class="fa fa-upload"></i>{!! trans('lang.queues') !!}</a></li>
+                                <li @yield('diagnostics')><a href="{{ url('getdiagno') }}"><i class="fa fa-plus"></i>{!! trans('lang.diagnostics') !!}</a></li>
                                
                                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Auto Response</a></li> -->
                                 <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Rules/a></li> -->
@@ -257,80 +257,80 @@
                         <li class="treeview @yield('Manage')">
                             <a href="#">
                                 <i class="fa  fa-cubes"></i>
-                                <span>{!! Lang::get('lang.manage') !!}</span>
+                                <span>{!! trans('lang.manage') !!}</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li @yield('help')><a href="{{url('helptopic')}}"><i class="fa fa-file-text-o"></i>{!! Lang::get('lang.help_topics') !!}</a></li>
-                                <li @yield('sla')><a href="{{url('sla')}}"><i class="fa fa-clock-o"></i>{!! Lang::get('lang.sla_plans') !!}</a></li>
-                                <li @yield('forms')><a href="{{url('forms')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.forms') !!}</a></li>
-                                <li @yield('workflow')><a href="{{url('workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.workflow') !!}</a></li>
-                                <li @yield('priority')><a href="{{url('ticket/priority')}}"><i class="fa fa-asterisk"></i>{!! Lang::get('lang.priority') !!}</a></li>
-                                <li @yield('url')><a href="{{url('url/settings')}}"><i class="fa fa-server"></i>{!! Lang::get('lang.url') !!}</a></li>
+                                <li @yield('help')><a href="{{url('helptopic')}}"><i class="fa fa-file-text-o"></i>{!! trans('lang.help_topics') !!}</a></li>
+                                <li @yield('sla')><a href="{{url('sla')}}"><i class="fa fa-clock-o"></i>{!! trans('lang.sla_plans') !!}</a></li>
+                                <li @yield('forms')><a href="{{url('forms')}}"><i class="fa fa-file-text"></i>{!! trans('lang.forms') !!}</a></li>
+                                <li @yield('workflow')><a href="{{url('workflow')}}"><i class="fa fa-sitemap"></i>{!! trans('lang.workflow') !!}</a></li>
+                                <li @yield('priority')><a href="{{url('ticket/priority')}}"><i class="fa fa-asterisk"></i>{!! trans('lang.priority') !!}</a></li>
+                                <li @yield('url')><a href="{{url('url/settings')}}"><i class="fa fa-server"></i>{!! trans('lang.url') !!}</a></li>
                             </ul>
                         </li>
                         <li class="treeview @yield('Tickets')">
                             <a  href="#">
-                                <i class="fa fa-ticket"></i> <span>{!! Lang::get('lang.tickets') !!}</span> <i class="fa fa-angle-left pull-right"></i>
+                                <i class="fa fa-ticket"></i> <span>{!! trans('lang.tickets') !!}</span> <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li @yield('tickets')><a href="{{url('getticket')}}"><i class="fa fa-file-text"></i>{!! Lang::get('lang.ticket') !!}</a></li>
-                                <li @yield('auto-response')><a href="{{url('getresponder')}}"><i class="fa fa-reply-all"></i>{!! Lang::get('lang.auto_response') !!}</a></li>
-                                <li @yield('alert')><a href="{{url('getalert')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.alert_notices') !!}</a></li>
-                                <li @yield('status')><a href="{{url('setting-status')}}"><i class="fa fa-plus-square-o"></i>{!! Lang::get('lang.status') !!}</a></li>
-                                <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-star"></i>{!! Lang::get('lang.ratings') !!}</a></li>
-                                <li @yield('close-workflow')><a href="{{url('close-workflow')}}"><i class="fa fa-sitemap"></i>{!! Lang::get('lang.close-workflow') !!}</a></li>
+                                <li @yield('tickets')><a href="{{url('getticket')}}"><i class="fa fa-file-text"></i>{!! trans('lang.ticket') !!}</a></li>
+                                <li @yield('auto-response')><a href="{{url('getresponder')}}"><i class="fa fa-reply-all"></i>{!! trans('lang.auto_response') !!}</a></li>
+                                <li @yield('alert')><a href="{{url('getalert')}}"><i class="fa fa-bell"></i>{!! trans('lang.alert_notices') !!}</a></li>
+                                <li @yield('status')><a href="{{url('setting-status')}}"><i class="fa fa-plus-square-o"></i>{!! trans('lang.status') !!}</a></li>
+                                <li @yield('ratings')><a href="{{url('getratings')}}"><i class="fa fa-star"></i>{!! trans('lang.ratings') !!}</a></li>
+                                <li @yield('close-workflow')><a href="{{url('close-workflow')}}"><i class="fa fa-sitemap"></i>{!! trans('lang.close-workflow') !!}</a></li>
                             </ul>
                         </li>
                         <li class="treeview @yield('Settings')">
                             <a href="#">
                                 <i class="fa fa-cog"></i>
-                                <span>{!! Lang::get('lang.settings') !!}</span>
+                                <span>{!! trans('lang.settings') !!}</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li @yield('company')><a href="{{url('getcompany')}}"><i class="fa fa-building"></i>{!! Lang::get('lang.company') !!}</a></li>
-                                <li @yield('system')><a href="{{url('getsystem')}}"><i class="fa fa-laptop"></i>{!! Lang::get('lang.system') !!}</a></li>
-                                <li @yield('social-login')><a href="{{ url('social/media') }}"><i class="fa fa-globe"></i> {!! Lang::get('lang.social-login') !!}</a></li>
-                                <li @yield('languages')><a href="{{url('languages')}}"><i class="fa fa-language"></i>{!! Lang::get('lang.language') !!}</a></li>
-                                <li @yield('cron')><a href="{{url('job-scheduler')}}"><i class="fa fa-hourglass"></i>{!! Lang::get('lang.cron') !!}</a></li>
-                                <li @yield('security')><a href="{{url('security')}}"><i class="fa fa-lock"></i>{!! Lang::get('lang.security') !!}</a></li>
-                                <li @yield('notification')><a href="{{url('settings-notification')}}"><i class="fa fa-bell"></i>{!! Lang::get('lang.notifications') !!}</a></li>
-                                <li @yield('storage')><a href="{{url('storage')}}"><i class="fa fa-save"></i>{!! Lang::get('storage::lang.storage') !!}</a></li>
+                                <li @yield('company')><a href="{{url('getcompany')}}"><i class="fa fa-building"></i>{!! trans('lang.company') !!}</a></li>
+                                <li @yield('system')><a href="{{url('getsystem')}}"><i class="fa fa-laptop"></i>{!! trans('lang.system') !!}</a></li>
+                                <li @yield('social-login')><a href="{{ url('social/media') }}"><i class="fa fa-globe"></i> {!! trans('lang.social-login') !!}</a></li>
+                                <li @yield('languages')><a href="{{url('languages')}}"><i class="fa fa-language"></i>{!! trans('lang.language') !!}</a></li>
+                                <li @yield('cron')><a href="{{url('job-scheduler')}}"><i class="fa fa-hourglass"></i>{!! trans('lang.cron') !!}</a></li>
+                                <li @yield('security')><a href="{{url('security')}}"><i class="fa fa-lock"></i>{!! trans('lang.security') !!}</a></li>
+                                <li @yield('notification')><a href="{{url('settings-notification')}}"><i class="fa fa-bell"></i>{!! trans('lang.notifications') !!}</a></li>
+                                <li @yield('storage')><a href="{{url('storage')}}"><i class="fa fa-save"></i>{!! trans('storage::lang.storage') !!}</a></li>
                             </ul>
                         </li>
                         <li class="treeview @yield('error-bugs')">
                             <a href="#">
                                 <i class="fa fa-heartbeat"></i>
-                                <span>{!! Lang::get('lang.error-debug') !!}</span>
+                                <span>{!! trans('lang.error-debug') !!}</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <!-- <li @yield('error-logs')><a href="{{ route('error.logs') }}"><i class="fa fa-list-alt"></i> {!! Lang::get('lang.view-logs') !!}</a></li> -->
-                                <li @yield('debugging-option')><a href="{{ route('err.debug.settings') }}"><i class="fa fa-bug"></i> {!! Lang::get('lang.debug-options') !!}</a></li>
+                                <!-- <li @yield('error-logs')><a href="{{ route('error.logs') }}"><i class="fa fa-list-alt"></i> {!! trans('lang.view-logs') !!}</a></li> -->
+                                <li @yield('debugging-option')><a href="{{ route('err.debug.settings') }}"><i class="fa fa-bug"></i> {!! trans('lang.debug-options') !!}</a></li>
                             </ul>
                         </li>
                         <li class="treeview @yield('Themes')">
                             <a href="#">
                                 <i class="fa fa-pie-chart"></i>
-                                <span>{!! Lang::get('lang.widgets') !!}</span>
+                                <span>{!! trans('lang.widgets') !!}</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul class="treeview-menu">
-                                <li @yield('widget')><a href="{{ url('widgets') }}"><i class="fa fa-list-alt"></i> {!! Lang::get('lang.widgets') !!}</a></li>
-                                <li @yield('socail')><a href="{{ url('social-buttons') }}"><i class="fa fa-cubes"></i> {!! Lang::get('lang.social') !!}</a></li>
+                                <li @yield('widget')><a href="{{ url('widgets') }}"><i class="fa fa-list-alt"></i> {!! trans('lang.widgets') !!}</a></li>
+                                <li @yield('socail')><a href="{{ url('social-buttons') }}"><i class="fa fa-cubes"></i> {!! trans('lang.social') !!}</a></li>
                             </ul>
                         </li>
                         <li class="treeview @yield('Plugins')">
                             <a href="{{ url('plugins') }}">
                                 <i class="fa fa-plug"></i>
-                                <span>{!! Lang::get('lang.plugin') !!}</span>
+                                <span>{!! trans('lang.plugin') !!}</span>
                             </a>
                         </li>
                         <li class="treeview @yield('API')">
                             <a href="{{ url('api') }}">
                                 <i class="fa fa-cogs"></i>
-                                <span>{!! Lang::get('lang.api') !!}</span>
+                                <span>{!! trans('lang.api') !!}</span>
                             </a>
                         </li>
                         <li class="treeview @yield('Log')">
@@ -372,7 +372,7 @@
                 <?php
                 $company = App\Model\helpdesk\Settings\Company::where('id', '=', '1')->first();
                 ?>
-                <strong>{!! Lang::get('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</strong> {!! Lang::get('lang.all_rights_reserved') !!}. {!! Lang::get('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
+                <strong>{!! trans('lang.copyright') !!} &copy; {!! date('Y') !!}  <a href="{!! $company->website !!}" target="_blank">{!! $company->company_name !!}</a>.</strong> {!! trans('lang.all_rights_reserved') !!}. {!! trans('lang.powered_by') !!} <a href="http://www.faveohelpdesk.com/" target="_blank">Faveo</a>
             </footer>
         </div><!-- ./wrapper -->
         <!-- jQuery 2.1.3 -->

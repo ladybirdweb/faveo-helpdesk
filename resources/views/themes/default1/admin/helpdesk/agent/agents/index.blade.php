@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{ Lang::get('lang.staffs')}} </h1>
+<h1>{{ trans('lang.staffs')}} </h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -29,8 +29,8 @@ class="active"
 @section('content')
 <div class="box box-primary">
     <div class="box-header">
-        <h2 class="box-title">{!! Lang::get('lang.list_of_agents') !!} </h2><a href="{{route('agents.create')}}" class="btn btn-primary pull-right">
-        <span class="glyphicon glyphicon-plus"></span> &nbsp;{!! Lang::get('lang.create_an_agent') !!}</a></div>
+        <h2 class="box-title">{!! trans('lang.list_of_agents') !!} </h2><a href="{{route('agents.create')}}" class="btn btn-primary pull-right">
+        <span class="glyphicon glyphicon-plus"></span> &nbsp;{!! trans('lang.create_an_agent') !!}</a></div>
     <div class="box-body table-responsive">
         <?php
         $user = App\User::where('role', '!=', 'user')->orderBy('id', 'ASC')->paginate(10);
@@ -47,7 +47,7 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.fails') !!}!</b>
+            <b>{!! trans('lang.fails') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
         </div>
@@ -56,7 +56,7 @@ class="active"
         @if(Session::has('warning'))
         <div class="alert alert-warning alert-dismissable">
             <i class="fa fa-warning"></i>
-            <b>{!! Lang::get('lang.warning') !!}!</b>
+            <b>{!! trans('lang.warning') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('warning')}}
         </div>
@@ -64,15 +64,15 @@ class="active"
         <!-- Agent table -->
         <table class="table table-bordered dataTable" style="overflow:hidden;">
             <tr>
-                <th width="100px">{{Lang::get('lang.name')}}</th>
-                <th width="100px">{{Lang::get('lang.user_name')}}</th>
-                <th width="100px">{{Lang::get('lang.role')}}</th>
-                <th width="100px">{{Lang::get('lang.status')}}</th>
-                <th width="100px">{{Lang::get('lang.group')}}</th>
-                <th width="100px">{{Lang::get('lang.department')}}</th>
-                <th width="100px">{{Lang::get('lang.created')}}</th>
-                {{-- <th width="100px">{{Lang::get('lang.lastlogin')}}</th> --}}
-                <th width="100px">{{Lang::get('lang.action')}}</th>
+                <th width="100px">{{trans('lang.name')}}</th>
+                <th width="100px">{{trans('lang.user_name')}}</th>
+                <th width="100px">{{trans('lang.role')}}</th>
+                <th width="100px">{{trans('lang.status')}}</th>
+                <th width="100px">{{trans('lang.group')}}</th>
+                <th width="100px">{{trans('lang.department')}}</th>
+                <th width="100px">{{trans('lang.created')}}</th>
+                {{-- <th width="100px">{{trans('lang.lastlogin')}}</th> --}}
+                <th width="100px">{{trans('lang.action')}}</th>
             </tr>
             @foreach($user as $use)
             @if($use->role == 'admin' || $use->role == 'agent')
@@ -81,16 +81,16 @@ class="active"
                 <td><a href="{{route('agents.edit', $use->id)}}"> {!! $use->user_name !!}</td>
                 <?php
                 if ($use->role == 'admin') {
-                    echo '<td><button class="btn btn-success btn-xs">' . Lang::get('lang.admin') . '</button></td>';
+                    echo '<td><button class="btn btn-success btn-xs">' . trans('lang.admin') . '</button></td>';
                 } elseif ($use->role == 'agent') {
-                    echo '<td><button class="btn btn-primary btn-xs">' . Lang::get('lang.agent') . '</button></td>';
+                    echo '<td><button class="btn btn-primary btn-xs">' . trans('lang.agent') . '</button></td>';
                 }
                 ?>
                 <td>
                     @if($use->active=='1')
-                    <span style="color:green">{!! Lang::get('lang.active') !!}</span>
+                    <span style="color:green">{!! trans('lang.active') !!}</span>
                     @else
-                    <span style="color:red">{!! Lang::get('lang.inactive') !!}</span>
+                    <span style="color:red">{!! trans('lang.inactive') !!}</span>
                     @endif
                     <?php
                     $group = App\Model\helpdesk\Agent\Groups::whereId($use->assign_group)->first();
@@ -102,9 +102,9 @@ class="active"
                 {{-- <td>{{$use->Lastlogin_at}}</td> --}}
                 <td>
                     {!! Form::open(['route'=>['agents.destroy', $use->id],'method'=>'DELETE']) !!}
-                    <a href="{{route('agents.edit', $use->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!} </a>
+                    <a href="{{route('agents.edit', $use->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! trans('lang.edit') !!} </a>
                     <!-- To pop up a confirm Message -->
-                    {{-- {!! Form::button(' <i class="fa fa-trash" style="color:black;"> </i> '  . Lang::get('lang.delete') ,['type' => 'submit', 'class'=> 'btn btn-warning btn-xs btn-flat','onclick'=>'return confirm("Are you sure?")']) !!} --}}
+                    {{-- {!! Form::button(' <i class="fa fa-trash" style="color:black;"> </i> '  . trans('lang.delete') ,['type' => 'submit', 'class'=> 'btn btn-warning btn-xs btn-flat','onclick'=>'return confirm("Are you sure?")']) !!} --}}
                     {!! Form::close() !!}
                 </td>
             </tr>

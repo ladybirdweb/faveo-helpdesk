@@ -20,7 +20,7 @@ class = "active"
 @if(Session::has('fails'))
 <div class="alert alert-danger alert-dismissable">
     <i class="fa fa-ban"></i>
-    <b>{!! Lang::get('lang.alert') !!}!</b>
+    <b>{!! trans('lang.alert') !!}!</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('fails')}}
 </div>
@@ -79,32 +79,32 @@ class = "active"
 
                             $excerpt = App\Http\Controllers\Client\kb\UserController::getExcerpt($str, $startPos = 0, $maxLength = 20);
                             ?>
-                            {!! strip_tags($excerpt) !!} <br/><a class="more-link text-center" href="{{url('show/'.$arti->slug)}}" style="color: orange">{!! Lang::get('lang.read_more') !!}</a>
+                            {!! strip_tags($excerpt) !!} <br/><a class="more-link text-center" href="{{url('show/'.$arti->slug)}}" style="color: orange">{!! trans('lang.read_more') !!}</a>
                         </li>
                         @empty
-                        <p>{!! Lang::get('lang.no_article') !!}</p>
+                        <p>{!! trans('lang.no_article') !!}</p>
                         @endforelse
                     <?php } ?>
                 </ul>
-                <p class="more-link text-center"><a href="{{url('category-list/'.$category->slug)}}" class="btn btn-custom btn-xs">{!! Lang::get('lang.view_all') !!}</a></p>
+                <p class="more-link text-center"><a href="{{url('category-list/'.$category->slug)}}" class="btn btn-custom btn-xs">{!! trans('lang.view_all') !!}</a></p>
             </section>
         </div>
         @endforeach
     </div>
     <section class="section">
         <div class="banner-wrapper banner-horizontal clearfix">
-            <h4 class="banner-title h4">{!! Lang::get('lang.need_more_support') !!}?</h4>
+            <h4 class="banner-title h4">{!! trans('lang.need_more_support') !!}?</h4>
             <div class="banner-content">
-                <p>{!! Lang::get('lang.if_you_did_not_find_an_answer_please_raise_a_ticket_describing_the_issue') !!}.</p>
+                <p>{!! trans('lang.if_you_did_not_find_an_answer_please_raise_a_ticket_describing_the_issue') !!}.</p>
             </div>
-            <p><a href="{!! URL::route('form') !!}" class="btn btn-custom">{!! Lang::get('lang.submit_a_ticket') !!}</a></p>
+            <p><a href="{!! URL::route('form') !!}" class="btn btn-custom">{!! trans('lang.submit_a_ticket') !!}</a></p>
         </div>
     </section>
 </div>
 @stop
 
 @section('category')
-<h2 class="section-title h4 clearfix">{!! Lang::get('lang.categories') !!}<small class="pull-right"><i class="fa fa-hdd-o fa-fw"></i></small></h2>
+<h2 class="section-title h4 clearfix">{!! trans('lang.categories') !!}<small class="pull-right"><i class="fa fa-hdd-o fa-fw"></i></small></h2>
 <ul class="nav nav-pills nav-stacked nav-categories">
     @foreach($categorys as $category)
     <?php

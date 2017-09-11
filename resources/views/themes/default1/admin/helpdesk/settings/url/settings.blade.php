@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.url') !!}</h1>
+<h1>{!! trans('lang.url') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -55,7 +55,7 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {!!Session::get('fails')!!}
         </div>
@@ -91,7 +91,7 @@ class="active"
        
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.submit'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>
 {!! Form::close() !!}

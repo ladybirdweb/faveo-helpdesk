@@ -18,7 +18,7 @@
 
 <div class="box box-primary">
     <div class="box-header">
-        <h3 class="box-title">{{Lang::get('lang.footer4')}}</h3>  {!! Form::submit(Lang::get('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}
+        <h3 class="box-title">{{trans('lang.footer4')}}</h3>  {!! Form::submit(trans('lang.save'),['class'=>'form-group btn btn-primary pull-right'])!!}
     </div>
 
     <div class="box-body">
@@ -30,14 +30,14 @@
 
         <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
 
-            {!! Form::label('title',Lang::get('lang.title')) !!}
+            {!! Form::label('title',trans('lang.title')) !!}
             {!! $errors->first('title', '<spam class="help-block">:message</spam>') !!}
             {!! Form::text('title',null,['class' => 'form-control']) !!}
 
         </div>
 
         <div class="form-group {{ $errors->has('footer') ? 'has-error' : '' }}">
-            {!! Form::label('footer',Lang::get('lang.footer')) !!}
+            {!! Form::label('footer',trans('lang.footer')) !!}
             {!! $errors->first('footer', '<spam class="help-block">:message</spam>') !!}
             {!! Form::textarea('footer',null,['class' => 'form-control','size' => '128x10','id'=>'footer','placeholder'=>'Enter the description']) !!}
         </div>

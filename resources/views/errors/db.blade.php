@@ -3,7 +3,7 @@
 <div id="page" class="hfeed site">
     <article class="hentry error404 text-center">
         <h1 class="error-title"><i class="fa fa-frown-o text-info"></i><span class="visible-print text-danger">0</span></h1>
-        <h2 class="entry-title text-muted">{!! Lang::get('lang.error_establishing_connection_to_database') !!}</h2>
+        <h2 class="entry-title text-muted">{!! trans('lang.error_establishing_connection_to_database') !!}</h2>
     </article><!-- .hentry -->
 </div><!-- #page -->
 

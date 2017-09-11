@@ -1,7 +1,7 @@
 {!! Form::model($emails,['url' => 'post-scheduler', 'method' => 'PATCH']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.cron_settings')}}</h3>
+        <h3 class="box-title">{{trans('lang.cron_settings')}}</h3>
     </div>
 
     <div class="box-body table-responsive"style="overflow:hidden;">
@@ -33,25 +33,25 @@
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {!!Session::get('fails')!!}
         </div>
         @endif
         <div class="alert  alert-dismissable" style="background: #F3F3F3">
-            <i class="fa  fa-info-circle"></i>&nbsp;{!!Lang::get('lang.crone-url-message')!!}
-            <a href="http://ladybirdweb.com/support/show/cron-job-scheduling" style="color:black" target="blank">{!!Lang::get('lang.click')!!}</a> {!!Lang::get('lang.check-cron-set')!!}
+            <i class="fa  fa-info-circle"></i>&nbsp;{!!trans('lang.crone-url-message')!!}
+            <a href="http://ladybirdweb.com/support/show/cron-job-scheduling" style="color:black" target="blank">{!!trans('lang.click')!!}</a> {!!trans('lang.check-cron-set')!!}
         </div>
         <div class="col-md-6">
             <div class="info-box">
                 <!-- Apply any bg-* class to to the icon to color it -->
                 <span class="info-box-icon bg-aqua"><i class="fa fa-cloud-download"></i></span>
                 <div class="info-box-content">
-                    <i class="fa fa-clipboard pull-right" title="{!!Lang::get('lang.click-url-copy')!!}" onclick="copyToClipboard('#p1')"></i>
+                    <i class="fa fa-clipboard pull-right" title="{!!trans('lang.click-url-copy')!!}" onclick="copyToClipboard('#p1')"></i>
                     <div class="col-md-6">
                         <div class="form-group">
-                            {!! Form::label('email_fetching',Lang::get('lang.email_fetch')) !!}<br>
-                            {!! Form::checkbox('email_fetching',1,true) !!}&nbsp;{{Lang::get('lang.fetch_auto-corn')}}
+                            {!! Form::label('email_fetching',trans('lang.email_fetch')) !!}<br>
+                            {!! Form::checkbox('email_fetching',1,true) !!}&nbsp;{{trans('lang.fetch_auto-corn')}}
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -66,11 +66,11 @@
                 <!-- Apply any bg-* class to to the icon to color it -->
                 <span class="info-box-icon bg-aqua"><i class="fa fa-cloud-upload"></i></span>
                 <div class="info-box-content">
-                    <i class="fa fa-clipboard pull-right" title="{!!Lang::get('lang.click-url-copy')!!}" onclick="copyToClipboard('#p2')"></i>
+                    <i class="fa fa-clipboard pull-right" title="{!!trans('lang.click-url-copy')!!}" onclick="copyToClipboard('#p2')"></i>
                     <div class="col-md-8">
                         <div class="form-group">
-                            {!! Form::label('notification_cron',Lang::get('lang.notification-email')) !!}<br>
-                            {!! Form::checkbox('notification_cron',1,true) !!}&nbsp;{{Lang::get('lang.cron_notification')}}
+                            {!! Form::label('notification_cron',trans('lang.notification-email')) !!}<br>
+                            {!! Form::checkbox('notification_cron',1,true) !!}&nbsp;{{trans('lang.cron_notification')}}
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -85,12 +85,12 @@
                 <!-- Apply any bg-* class to to the icon to color it -->
                 <span class="info-box-icon bg-aqua"><i class="fa fa-check-circle"></i></span>
                 <div class="info-box-content">
-                    <i class="fa fa-clipboard pull-right" title="{!!Lang::get('lang.click-url-copy')!!}" onclick="copyToClipboard('#p3')"></i>
+                    <i class="fa fa-clipboard pull-right" title="{!!trans('lang.click-url-copy')!!}" onclick="copyToClipboard('#p3')"></i>
                     <div class="col-md-8">
                         <div class="form-group">
-                            {!! Form::label('condition',Lang::get('lang.auto_close_workflow')) !!}<br>
+                            {!! Form::label('condition',trans('lang.auto_close_workflow')) !!}<br>
                             <input type="checkbox" name="condition" @if($workflow->condition == 1) checked @endif">
-                            {{Lang::get('lang.enable_workflow')}}
+                            {{trans('lang.enable_workflow')}}
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -102,7 +102,7 @@
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.submit'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>
 <script type="text/javascript">
@@ -112,7 +112,7 @@
         $temp.val($(element).text()).select();
         document.execCommand("copy");
         $temp.remove();
-        alert('{!!Lang::get("lang.clipboard-copy-message")!!}');
+        alert('{!!trans("lang.clipboard-copy-message")!!}');
     }
     $(document).ready(function() {
         var path = $(location).attr('href');

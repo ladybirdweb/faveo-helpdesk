@@ -6,7 +6,7 @@ var image_url     = "{{ Config::get('lfm.images_url') }}";
 var file_url      = "{{ Config::get('lfm.files_url') }}";
 
 $(document).ready(function () {
-  bootbox.setDefaults({locale:"{{ Lang::get('laravel-filemanager::lfm.locale-bootbox') }}"});
+  bootbox.setDefaults({locale:"{{ trans('laravel-filemanager::lfm.locale-bootbox') }}"});
   // load folders
   loadFolders();
   loadItems();
@@ -27,7 +27,7 @@ $('#to-previous').click(function () {
 });
 
 $('#add-folder').click(function () {
-  bootbox.prompt("{{ Lang::get('laravel-filemanager::lfm.message-name') }}", function (result) {
+  bootbox.prompt("{{ trans('laravel-filemanager::lfm.message-name') }}", function (result) {
     if (result !== null) {
       createFolder(result);
     }
@@ -41,13 +41,13 @@ $('#upload-btn').click(function () {
   };
 
   function showRequest(formData, jqForm, options) {
-    $('#upload-btn').html('<i class="fa fa-refresh fa-spin"></i> {{ Lang::get("laravel-filemanager::lfm.btn-uploading") }}');
+    $('#upload-btn').html('<i class="fa fa-refresh fa-spin"></i> {{ trans("laravel-filemanager::lfm.btn-uploading") }}');
     return true;
   }
 
   function showResponse(responseText, statusText, xhr, $form)  {
     $('#uploadModal').modal('hide');
-    $('#upload-btn').html('{{ Lang::get("laravel-filemanager::lfm.btn-upload") }}');
+    $('#upload-btn').html('{{ trans("laravel-filemanager::lfm.btn-upload") }}');
     if (responseText != 'OK'){
       notify(responseText);
     }
@@ -166,7 +166,7 @@ function createFolder(folder_name) {
 
 function rename(item_name) {
   bootbox.prompt({
-    title: "{{ Lang::get('laravel-filemanager::lfm.message-rename') }}",
+    title: "{{ trans('laravel-filemanager::lfm.message-rename') }}",
     value: item_name,
     callback: function (result) {
       if (result !== null) {
@@ -195,7 +195,7 @@ function rename(item_name) {
 }
 
 function trash(item_name) {
-  bootbox.confirm("{{ Lang::get('laravel-filemanager::lfm.message-delete') }}", function (result) {
+  bootbox.confirm("{{ trans('laravel-filemanager::lfm.message-delete') }}", function (result) {
     if (result == true) {
       $.ajax({
         type: 'GET',

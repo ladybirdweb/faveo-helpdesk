@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.ticket_priority') !!}</h1>
+<h1>{!! trans('lang.ticket_priority') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -47,16 +47,16 @@ class="active"
 @endif
 <div class="box box-primary">
     <div class="box-header with-border">
-        <span class="lead border-right">{!! Lang::get('lang.priority') !!}</span>
+        <span class="lead border-right">{!! trans('lang.priority') !!}</span>
         <div class="pull-right">
-             <a href="{{route('priority.create')}}" class="btn btn-primary"> <span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_ticket_priority')}}</a>
+             <a href="{{route('priority.create')}}" class="btn btn-primary"> <span class="glyphicon glyphicon-plus"></span> &nbsp;{{trans('lang.create_ticket_priority')}}</a>
         </div>
     </div>
 
       <div class="box-header with-border">
-    <a class="right" title="" data-placement="right" data-toggle="tooltip" href="#" data-original-title="{{Lang::get('lang.active_user_can_select_the_priority_while_creating_ticket')}}">
+    <a class="right" title="" data-placement="right" data-toggle="tooltip" href="#" data-original-title="{{trans('lang.active_user_can_select_the_priority_while_creating_ticket')}}">
 
-        <span class="lead border-right" >{!! Lang::get('lang.current') !!}{!! Lang::get('lang.user_priority_status') !!}</span>
+        <span class="lead border-right" >{!! trans('lang.current') !!}{!! trans('lang.user_priority_status') !!}</span>
        
            </a>
 
@@ -66,7 +66,7 @@ class="active"
                             </div>
                             <!-- <div class="alert alert-info" id="switch_status"></div> -->
                       
-             <!-- <a href="{{route('priority.create')}}" class="btn btn-primary">{{Lang::get('lang.create_ticket_priority')}}</a> -->
+             <!-- <a href="{{route('priority.create')}}" class="btn btn-primary">{{trans('lang.create_ticket_priority')}}</a> -->
         
     </div>
 
@@ -77,11 +77,11 @@ class="active"
     <div class="box-body">
         {!! Datatable::table()
         ->addColumn(
-        Lang::get('lang.priority'),
-        Lang::get('lang.priority_desc'),
-        Lang::get('lang.priority_color'),
-        Lang::get('lang.status'),
-        Lang::get('lang.action'))
+        trans('lang.priority'),
+        trans('lang.priority_desc'),
+        trans('lang.priority_color'),
+        trans('lang.status'),
+        trans('lang.action'))
         ->setUrl(route('priority.index1')) // this is the route where data will be retrieved
         ->render() !!}
     </div>
@@ -128,7 +128,7 @@ class="active"
                 "_token": "{{ csrf_token() }}",
                 user_settings_priority: user_settings_priority},
             success: function (result) {
-                // with('success', Lang::get('lang.approval_settings-created-successfully'));
+                // with('success', trans('lang.approval_settings-created-successfully'));
                 // alert("Hi, testing");
                 alert(result);
                 location.reload(); 

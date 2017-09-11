@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.manage')}}</h1>
+<h1>{{trans('lang.manage')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -32,7 +32,7 @@ class="active"
 <div class="col-md-12">
 <div class="box box-primary">
 <div class="box-header">
-	<h2 class="box-title">{{Lang::get('lang.SLA_plan')}}</h2><a href="{{route('sla.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_SLA')}}</a></div>
+	<h2 class="box-title">{{trans('lang.SLA_plan')}}</h2><a href="{{route('sla.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{trans('lang.create_SLA')}}</a></div>
 
 <div class="box-body table-responsive">
 
@@ -59,12 +59,12 @@ class="active"
 <table class="table table-bordered dataTable" style="overflow:hidden;">
 
 	<tr>
-		<th width="100px">{{Lang::get('lang.name')}}</th>
-		<th width="100px">{{Lang::get('lang.status')}}</th>
-		<th width="100px">{{Lang::get('lang.grace_period')}}</th>
-		<th width="100px">{{Lang::get('lang.created')}}</th>
-		<th width="100px">{{Lang::get('lang.last_updated')}}</th>
-		<th width="100px">{{Lang::get('lang.action')}}</th>
+		<th width="100px">{{trans('lang.name')}}</th>
+		<th width="100px">{{trans('lang.status')}}</th>
+		<th width="100px">{{trans('lang.grace_period')}}</th>
+		<th width="100px">{{trans('lang.created')}}</th>
+		<th width="100px">{{trans('lang.last_updated')}}</th>
+		<th width="100px">{{trans('lang.action')}}</th>
 	</tr>
 
 <?php

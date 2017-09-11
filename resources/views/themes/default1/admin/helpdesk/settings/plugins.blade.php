@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.plugins') !!}</h1>
+<h1>{!! trans('lang.plugins') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -29,24 +29,24 @@ class="active"
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.plugins-list') !!}</h3>
-        <button type="button" class="btn btn-primary pull-right" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><b>{!! Lang::get('lang.add_plugin') !!}</b></button>        
+        <h3 class="box-title">{!! trans('lang.plugins-list') !!}</h3>
+        <button type="button" class="btn btn-primary pull-right" id="Edit_Ticket" data-toggle="modal" data-target="#Edit"><b>{!! trans('lang.add_plugin') !!}</b></button>
         <div class="modal fade" id="Edit">
             <div class="modal-dialog">
                 <div class="modal-content">  
                     <div class="modal-header">
-                        <h4 class="modal-title">{!! Lang::get('lang.add_plugin') !!}</h4>
+                        <h4 class="modal-title">{!! trans('lang.add_plugin') !!}</h4>
                     </div>
                     <div class="modal-body">
                         {!! Form::open(['url'=>'post-plugin','files'=>true]) !!}
-                        <label>{!! Lang::get('lang.plugin') !!} :</label> 
+                        <label>{!! trans('lang.plugin') !!} :</label>
                         <div class="btn bg-olive btn-file" style="color:blue">
-                            {!! Lang::get('lang.upload_file') !!}<input type="file" name="plugin">
+                            {!! trans('lang.upload_file') !!}<input type="file" name="plugin">
                         </div>
                     </div><!-- /.modal-content -->   
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis">{!! Lang::get('lang.close') !!}</button>
-                        <input type="submit" class="btn btn-primary pull-right" value="{!! Lang::get('lang.upload') !!}">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis">{!! trans('lang.close') !!}</button>
+                        <input type="submit" class="btn btn-primary pull-right" value="{!! trans('lang.upload') !!}">
                     </div>
                     {!! Form::close() !!}
                 </div>
@@ -56,13 +56,13 @@ class="active"
     <div class="box-body">
         <div class="alert alert-info alert-dismissable">
             <i class="fa fa-info-circle"></i>
-            <b>{!! Lang::get('lang.plugin-info') !!}</b><br/>
-            <a href="http://www.faveohelpdesk.com/plugins/" target="_blank">{!!Lang::get('lang.click-here')!!}</a>&nbsp;{!!Lang::get('lang.plugin-info-pro')!!}
+            <b>{!! trans('lang.plugin-info') !!}</b><br/>
+            <a href="http://www.faveohelpdesk.com/plugins/" target="_blank">{!!trans('lang.click-here')!!}</a>&nbsp;{!!trans('lang.plugin-info-pro')!!}
         </div>
         @if (count($errors) > 0)
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b><br/>
+            <b>{!! trans('lang.alert') !!}!</b><br/>
             <ul>
                 @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -81,7 +81,7 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {!!Session::get('fails')!!}
         </div>

@@ -14,7 +14,7 @@ class="active"
 
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.create_user') !!}</h1>
+<h1>{!! trans('lang.create_user') !!}</h1>
 @stop
 <!-- /header -->
 <!-- content -->
@@ -22,7 +22,7 @@ class="active"
 @if(Session::has('fails'))
 <div class="alert alert-danger alert-dismissable">
     <i class="fa fa-ban"></i>
-    <b>{!! Lang::get('lang.alert') !!}!</b>
+    <b>{!! trans('lang.alert') !!}!</b>
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {{Session::get('fails')}}
 </div>
@@ -39,7 +39,7 @@ class="active"
         @if(Session::has('errors'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('first_name'))
@@ -74,12 +74,12 @@ class="active"
         <div class="row">
             <!-- First name : first name : Required -->
             <div class="col-xs-6 form-group {{ $errors->has('first_name') ? 'has-error' : '' }}">
-                {!! Form::label('first_name',Lang::get('lang.first_name')) !!}<span class="text-red"> *</span>
+                {!! Form::label('first_name',trans('lang.first_name')) !!}<span class="text-red"> *</span>
                 {!! Form::text('first_name',null,['class' => 'form-control']) !!}
             </div>
             <!-- Last name : last name : Required -->
             <div class="col-xs-6 form-group {{ $errors->has('last_name') ? 'has-error' : '' }}">
-                {!! Form::label('last_name',Lang::get('lang.last_name')) !!}
+                {!! Form::label('last_name',trans('lang.last_name')) !!}
                 {!! Form::text('last_name',null,['class' => 'form-control']) !!}
             </div>
             <!-- User Name : Text : Required-->
@@ -87,7 +87,7 @@ class="active"
         <div class="row">
             <!-- Email Address : Email : Required -->
             <div class="col-xs-6 form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-                {!! Form::label('email',Lang::get('lang.email')) !!}
+                {!! Form::label('email',trans('lang.email')) !!}
                 @if ($email_mandatory->status == 1 || $email_mandatory->status == '1')
                 <span class="text-red"> *</span>
                 @endif
@@ -95,66 +95,66 @@ class="active"
             </div>
             
             <div class="col-xs-6 form-group {{ $errors->has('user_name') ? 'has-error' : '' }}">
-                {!! Form::label('user_name',Lang::get('lang.user_name')) !!}<span class="text-red"> *</span>
+                {!! Form::label('user_name',trans('lang.user_name')) !!}<span class="text-red"> *</span>
                 {!! Form::text('user_name',null,['class' => 'form-control']) !!}
             </div>
         </div>
         <div class="row">
             <div class="col-xs-6 form-group {{ $errors->has('organization') ? 'has-error' : '' }}">
-                {!! Form::label('organization',Lang::get('lang.organization')) !!}
+                {!! Form::label('organization',trans('lang.organization')) !!}
                 {!! Form::select('org_id',[''=>'Select','Organization'=>$org],null,['class' => 'form-control','id'=>'org']) !!}
                 
             </div>
         </div>
         <div class="row">
             <div class="col-xs-1 form-group {{ $errors->has('country_code') ? 'has-error' : '' }}">
-                {!! Form::label('country_code',Lang::get('lang.country-code')) !!}
+                {!! Form::label('country_code',trans('lang.country-code')) !!}
                 @if ($email_mandatory->status == 0 || $settings->status == 1)
                      <span class="text-red"> *</span>
                 @endif
                 <!-- {!! $errors->first('country_code', '<spam class="help-block">:message</spam>') !!} -->
-                {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => Lang::get('lang.enter-country-phone-code')]) !!}
+                {!! Form::text('country_code',null,['class' => 'form-control', 'placeholder' => $phonecode, 'title' => trans('lang.enter-country-phone-code')]) !!}
             </div>
             <!-- mobile Number : Text :  -->
             <div class="col-md-3 form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
-                {!! Form::label('mobile',Lang::get('lang.mobile')) !!}
+                {!! Form::label('mobile',trans('lang.mobile')) !!}
                 @if ($email_mandatory->status == 0 || $settings->status == 1)
                      <span class="text-red"> *</span>
                 @endif
                 {!! Form::input('number', 'mobile',null,['class' => 'form-control']) !!}
             </div>
             <div class="col-xs-1 form-group {{ $errors->has('ext') ? 'has-error' : '' }}">
-                <label for="ext">{!! Lang::get('lang.ext') !!}</label>  
+                <label for="ext">{!! trans('lang.ext') !!}</label>
                 {!! Form::text('ext',null,['class' => 'form-control']) !!}
             </div>
             <div class="col-xs-3 form-group {{ $errors->has('phone_number') ? 'has-error' : '' }}">
-                <label for="phone_number">{!! Lang::get('lang.phone') !!}</label>
+                <label for="phone_number">{!! trans('lang.phone') !!}</label>
                 {!! Form::text('phone_number',null,['class' => 'form-control']) !!}
             </div>
             <div class="col-md-3 form-group {{ $errors->has('active') ? 'has-error' : '' }}">
-                {!! Form::label('active',Lang::get('lang.status')) !!}
+                {!! Form::label('active',trans('lang.status')) !!}
                 <div class="row">
                     <div class="col-xs-4">
-                        {!! Form::radio('active','1',true) !!} {{Lang::get('lang.active')}}
+                        {!! Form::radio('active','1',true) !!} {{trans('lang.active')}}
                     </div>
                     <div class="col-xs-6">
-                        {!! Form::radio('active','0') !!} {{Lang::get('lang.inactive')}}
+                        {!! Form::radio('active','0') !!} {{trans('lang.inactive')}}
                     </div>
                 </div>
             </div>
         </div>
         <!-- Internal Notes : Textarea -->
         <div class="form-group">
-            {!! Form::label('internal_note',Lang::get('lang.internal_notes')) !!}
+            {!! Form::label('internal_note',trans('lang.internal_notes')) !!}
             {!! Form::textarea('internal_note',null,['class' => 'form-control', 'size' => '30x5']) !!}
         </div>
         <!-- Send email to user about registration password -->
         <div class="form-group">
-            <input type="checkbox" name="send_email" checked> &nbsp;<label> {{ Lang::get('lang.send_password_via_email')}}</label>
+            <input type="checkbox" name="send_email" checked> &nbsp;<label> {{ trans('lang.send_password_via_email')}}</label>
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.submit'),['class'=>'form-group btn btn-primary'])!!}
     </div>
 </div>
 <script>

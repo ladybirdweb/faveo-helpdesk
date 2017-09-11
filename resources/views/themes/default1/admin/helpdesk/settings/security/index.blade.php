@@ -9,7 +9,7 @@ class="active"
 @stop
 
 @section('PageHeader')
-<h1>{!! Lang::get('lang.settings') !!}</h1>
+<h1>{!! trans('lang.settings') !!}</h1>
 @stop
 
 @section('header')
@@ -18,7 +18,7 @@ class="active"
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.security_settings') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.security_settings') !!}</h3>
     </div><!-- /.box-header -->
     <div class="box-body">
         @if(Session::has('success'))
@@ -31,7 +31,7 @@ class="active"
         @if(Session::has('failed'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang/alert') !!}!</b>
+            <b>{!! trans('lang/alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <p>{{Session::get('failed')}}</p>                
         </div>
@@ -39,7 +39,7 @@ class="active"
         @if(Session::has('errors'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('lockout_message'))
@@ -60,7 +60,7 @@ class="active"
                     <label for="title">Lockout Message: <span class="text-red"> *</span></label>
                 </div>
                 <div  class="col-md-9">
-                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.security_msg1') !!}</div>
+                    <div class="callout callout-default" style="font-style: oblique;">{!! trans('lang.security_msg1') !!}</div>
                     {!! Form::textarea('lockout_message',null,['class'=>'form-control'])!!}
                 </div>
             </div>
@@ -68,11 +68,11 @@ class="active"
         <div class="form-group {{ $errors->has('backlist_threshold') ? 'has-error' : '' }}">
             <div class="row">
                 <div class="col-md-3">
-                    <label for="title">{!! Lang::get('lang.max_attempt') !!}: <span class="text-red"> *</span></label>
+                    <label for="title">{!! trans('lang.max_attempt') !!}: <span class="text-red"> *</span></label>
                 </div>
                 <div class="col-md-9">
-                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.security_msg2') !!}</div>
-                    <span>{!! Form::text('backlist_threshold',null,['class'=>'form-control'])!!} {!! Lang::get('lang.lockouts') !!}</span>
+                    <div class="callout callout-default" style="font-style: oblique;">{!! trans('lang.security_msg2') !!}</div>
+                    <span>{!! Form::text('backlist_threshold',null,['class'=>'form-control'])!!} {!! trans('lang.lockouts') !!}</span>
                 </div>     
             </div>
         </div>
@@ -82,14 +82,14 @@ class="active"
                     <label for="title">Lockout Period: <span class="text-red"> *</span></label>
                 </div>
                 <div class="col-md-8">
-                    <div class="callout callout-default" style="font-style: oblique;">{!! Lang::get('lang.security_msg3') !!}</div>
-                    <span> {!! Form::text('lockout_period',null,['class'=>'form-control'])!!} {!! Lang::get('lang.minutes') !!}</span>
+                    <div class="callout callout-default" style="font-style: oblique;">{!! trans('lang.security_msg3') !!}</div>
+                    <span> {!! Form::text('lockout_period',null,['class'=>'form-control'])!!} {!! trans('lang.minutes') !!}</span>
                 </div>
             </div>
         </div>
     </div><!-- /.box-body -->
     <div class="box-footer">
-        <button type="submit" class="btn btn-primary">{!! lang::get('lang.submit') !!}</button>
+        <button type="submit" class="btn btn-primary">{!! trans('lang.submit') !!}</button>
     </div>
     {!! Form::close() !!}
 </div>

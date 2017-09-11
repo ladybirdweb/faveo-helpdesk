@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.emails')}}</h1>
+<h1>{{trans('lang.emails')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -31,7 +31,7 @@ class="active"
 {!! Form::model($emails,['url' => 'postemail/'.$emails->id, 'method' => 'PATCH']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.email-settings')}}</h3>             
+        <h3 class="box-title">{{trans('lang.email-settings')}}</h3>
     </div>
     <div class="box-body">
         <!-- check whether success or not -->
@@ -46,7 +46,7 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! lang::get('lang.success') !!} !</b>
+            <b>{!! trans('lang.success') !!} !</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {!!Session::get('fails')!!}
         </div>
@@ -55,7 +55,7 @@ class="active"
         <?php //dd($errors); ?>
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('sys_email'))
@@ -70,7 +70,7 @@ class="active"
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    {!! Form::checkbox('all_emails',1,true) !!}&nbsp;{{Lang::get('lang.accept_all_email')}}
+                    {!! Form::checkbox('all_emails',1,true) !!}&nbsp;{{trans('lang.accept_all_email')}}
                 </div>
             </div>
         </div>
@@ -81,7 +81,7 @@ class="active"
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    {!! Form::checkbox('email_collaborator',1) !!}&nbsp;{{Lang::get('lang.accept_email_collab')}}
+                    {!! Form::checkbox('email_collaborator',1) !!}&nbsp;{{trans('lang.accept_email_collab')}}
                 </div>
             </div>
         </div>
@@ -89,13 +89,13 @@ class="active"
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    {!! Form::checkbox('attachment',1) !!}&nbsp;{{Lang::get('lang.attachments')}}
+                    {!! Form::checkbox('attachment',1) !!}&nbsp;{{trans('lang.attachments')}}
                 </div>
             </div>
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.submit'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>
 @stop

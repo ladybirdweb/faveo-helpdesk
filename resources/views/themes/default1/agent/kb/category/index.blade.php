@@ -7,7 +7,7 @@ active
 @stop
 
 @section('PageHeader')
-<h1>{{Lang::get('lang.category')}}</h1>
+<h1>{{trans('lang.category')}}</h1>
 @stop
 
 @section('all-category')
@@ -17,7 +17,7 @@ class="active"
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.allcategory')}}</h3>
+        <h3 class="box-title">{{trans('lang.allcategory')}}</h3>
     </div>
     <div class="box-body">
         <!-- check whether success or not -->
@@ -32,7 +32,7 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!} !</b>
+            <b>{!! trans('lang.alert') !!} !</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
         </div>
@@ -40,9 +40,9 @@ class="active"
         <div class="row">
             <div class="col-sm-12">
                 {!! Datatable::table()
-                ->addColumn(Lang::get('lang.name'),
-                Lang::get('lang.create'),
-                Lang::get('lang.action'))       // these are the column headings to be shown
+                ->addColumn(trans('lang.name'),
+                trans('lang.create'),
+                trans('lang.action'))       // these are the column headings to be shown
                 ->setUrl(route('api.category'))   // this is the route where data will be retrieved
                 ->render() !!}
             </div>

@@ -25,7 +25,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="close" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <input type="submit" class="btn btn-primary" value="{{Lang::get('lang.save')}}">
+                <input type="submit" class="btn btn-primary" value="{{trans('lang.save')}}">
                 {!! Form::close() !!}
             </div>
             <!-- /Form -->

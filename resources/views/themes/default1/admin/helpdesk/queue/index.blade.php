@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.queue')}}</h1>
+<h1>{{trans('lang.queue')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -50,16 +50,16 @@ class="active"
 <div class="box">
     <div class="box-header">
         <div class="box-title">
-            {!! Lang::get('lang.queues') !!}
+            {!! trans('lang.queues') !!}
         </div>
     </div>
     <div class="box-body">
         <table id="example2" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>{!! Lang::get('lang.name') !!}</th>
-                    <th>{!! Lang::get('lang.status') !!}</th>
-                    <th>{!! Lang::get('lang.action') !!}</th>
+                    <th>{!! trans('lang.name') !!}</th>
+                    <th>{!! trans('lang.status') !!}</th>
+                    <th>{!! trans('lang.action') !!}</th>
                 </tr>
             </thead>
             <tbody>

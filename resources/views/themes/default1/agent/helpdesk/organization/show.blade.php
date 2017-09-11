@@ -17,7 +17,7 @@ class="active"
 
 <!-- header -->
 @section('PageHeader')
-<div class="box-header" style="margin-top:-5px;margin-bottom:-15px;"><h3 class="box-title">{!! Lang::get('lang.organization_profile') !!}</h3></div>
+<div class="box-header" style="margin-top:-5px;margin-bottom:-15px;"><h3 class="box-title">{!! trans('lang.organization_profile') !!}</h3></div>
 @stop
 <!-- /header -->
 
@@ -49,16 +49,16 @@ class="active"
             <div class="box-footer no-padding">
                 <ul class="nav nav-stacked">
                     @if($orgs->phone)<li><a>
-                            <b>{!! Lang::get('lang.phone') !!}</b>  
+                            <b>{!! trans('lang.phone') !!}</b>
                             <span class="pull-right"> {{$orgs->phone}}</span></a></li>@endif
                     @if($orgs->address)<li><a>
-                            <b>{!! Lang::get('lang.address') !!}</b>  
+                            <b>{!! trans('lang.address') !!}</b>
                             <br/> <center>{!! $orgs->address !!}</center></a></li>@endif
                     @if($orgs->internal_notes)<li><a>
-                            <b>{!! Lang::get('lang.internal_notes') !!}</b>  
+                            <b>{!! trans('lang.internal_notes') !!}</b>
                             <br/> <center>{!! $orgs->internal_notes !!}</center></a></li>@endif
                 </ul>
-                <button data-toggle="modal" data-target="#assign_head" id="button_select" class="btn btn-primary btn-flat btn-block">{!! Lang::get('lang.select_organization_manager') !!}</button>
+                <button data-toggle="modal" data-target="#assign_head" id="button_select" class="btn btn-primary btn-flat btn-block">{!! trans('lang.select_organization_manager') !!}</button>
             </div>
         </div>
         <div id="refresh1"> 
@@ -71,12 +71,12 @@ class="active"
                         <img class="img-circle"  src="{{ Gravatar::src( $users->email) }}" alt="User Avatar">
                     </div><!-- /.widget-user-image -->
                     <h3 class="widget-user-username">{!! $users->user_name !!}</h3>
-                    <h5 class="widget-user-desc">{!! Lang::get('lang.organization-s_head') !!}</h5>
+                    <h5 class="widget-user-desc">{!! trans('lang.organization-s_head') !!}</h5>
                 </div>
                 <div class="box-footer no-padding">
                     <ul class="nav nav-stacked">
-                        <li><a href="#">{!! Lang::get('lang.e-mail') !!} <span class="pull-right">{!! $users->email !!}</span></a></li>
-                        <li><a href="#">{!! Lang::get('lang.phone') !!} <span class="pull-right">{!! $users->phone_number !!}</span></a></li>
+                        <li><a href="#">{!! trans('lang.e-mail') !!} <span class="pull-right">{!! $users->email !!}</span></a></li>
+                        <li><a href="#">{!! trans('lang.phone') !!} <span class="pull-right">{!! $users->phone_number !!}</span></a></li>
                     </ul>
                 </div>
             </div>
@@ -89,7 +89,7 @@ class="active"
             $user_orgs = App\Model\helpdesk\Agent_panel\User_org::where('org_id', '=', $orgs->id)->paginate(20);
             ?>
             <div class="box-header with-border">
-                <h3 class="box-title">{!! Lang::get('lang.users_of') !!} {{$orgs->name}}</h3>
+                <h3 class="box-title">{!! trans('lang.users_of') !!} {{$orgs->name}}</h3>
                 <div class="pull-right" style="margin-top:-25px;margin-bottom:-25px;">
                     <?php echo $user_orgs->setPath(route('organizations.show', $orgs->id))->render(); ?>
                 </div>
@@ -97,11 +97,11 @@ class="active"
             <div class="box-body">
                 <table class="table table-hover table-bordered">
                     <tbody><tr>
-                            <th>{!! Lang::get('lang.name') !!}</th>
-                            <th>{!! Lang::get('lang.email') !!}</th>
-                            <th>{!! Lang::get('lang.phone') !!}</th>
-                            <th>{!! Lang::get('lang.status') !!}</th>
-                            <th>{!! Lang::get('lang.ban') !!}</th>
+                            <th>{!! trans('lang.name') !!}</th>
+                            <th>{!! trans('lang.email') !!}</th>
+                            <th>{!! trans('lang.phone') !!}</th>
+                            <th>{!! trans('lang.status') !!}</th>
+                            <th>{!! trans('lang.ban') !!}</th>
                         </tr>
                         @foreach($user_orgs as $user_org)
                         <?php
@@ -112,9 +112,9 @@ class="active"
                             <td><a href="{!! route('user.show',$user_detail->id) !!}">{!! $user_detail->email !!}</a></td>
                             <td>{!! $user_detail->phone_number !!}</td>
                             @if($user_detail->active == 1)
-                            <td><span class="label label-success">{!! Lang::get('lang.active') !!}</span></td>
+                            <td><span class="label label-success">{!! trans('lang.active') !!}</span></td>
                             @elseif($user_detail->active == 0)
-                            <td><span class="label label-warning">{!! Lang::get('lang.inactive') !!}</span></td>
+                            <td><span class="label label-warning">{!! trans('lang.inactive') !!}</span></td>
                             @endif
                             <td>{!! $user_detail->ban !!}</td>
                         </tr>
@@ -140,9 +140,9 @@ class="active"
         ?>
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab_1" data-toggle="tab">{!! Lang::get('lang.open_tickets') !!} ({{$open}})</a></li>
-                <li><a href="#tab_2" data-toggle="tab">{!! Lang::get('lang.closed_tickets') !!} ({{$counted}})</a></li>
-                <li><a href="#tab_3" data-toggle="tab">{!! Lang::get('lang.deleted_tickets') !!} ({{$deleted}})</a></li>
+                <li class="active"><a href="#tab_1" data-toggle="tab">{!! trans('lang.open_tickets') !!} ({{$open}})</a></li>
+                <li><a href="#tab_2" data-toggle="tab">{!! trans('lang.closed_tickets') !!} ({{$counted}})</a></li>
+                <li><a href="#tab_3" data-toggle="tab">{!! trans('lang.deleted_tickets') !!} ({{$deleted}})</a></li>
             </ul>
             <div class="tab-content no-padding">
                 <div class="tab-pane active" id="tab_1">
@@ -157,7 +157,7 @@ class="active"
                     <!-- failure message -->
                     @if(Session::has('fails'))
                     <div class="alert alert-danger alert-dismissable">
-                        <i class="fa fa-ban"> </i> <b> {!! Lang::get('lang.alert') !!} ! </b>
+                        <i class="fa fa-ban"> </i> <b> {!! trans('lang.alert') !!} ! </b>
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         {{Session::get('fails')}}
                     </div>
@@ -167,8 +167,8 @@ class="active"
                         <div class="mailbox-controls">
                             <!-- Check all button -->
                             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
-                            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
+                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! trans('lang.delete') !!}">
+                            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! trans('lang.close') !!}">
                             <div class="pull-right">
                                 <?php
                                 $counted = count(App\Model\helpdesk\Ticket\Tickets::whereIn('user_id', $user_orga_relation_id)->where('status', '=', '1')->get());
@@ -187,12 +187,12 @@ class="active"
                                 <thead>
                                 <th>
                                 </th>
-                                <th>{!! Lang::get('lang.subject') !!}</th>
-                                <th>{!! Lang::get('lang.ticket_id') !!}</th>
-                                <th>{!! Lang::get('lang.priority') !!}</th>
-                                <th>{!! Lang::get('lang.last_replier') !!}</th>
-                                <th>{!! Lang::get('lang.assigned_to') !!}</th>
-                                <th>{!! Lang::get('lang.last_activity') !!}</th>
+                                <th>{!! trans('lang.subject') !!}</th>
+                                <th>{!! trans('lang.ticket_id') !!}</th>
+                                <th>{!! trans('lang.priority') !!}</th>
+                                <th>{!! trans('lang.last_replier') !!}</th>
+                                <th>{!! trans('lang.assigned_to') !!}</th>
+                                <th>{!! trans('lang.last_activity') !!}</th>
                                 </thead>
                                 <tbody id="hello">
                                     <?php $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('user_id', $user_orga_relation_id)->where('status', '=', '1')->orderBy('id', 'DESC')->paginate(20); ?>
@@ -276,7 +276,7 @@ class="active"
                     <!-- failure message -->
                     @if(Session::has('fails'))
                     <div class="alert alert-danger alert-dismissable">
-                        <i class="fa fa-ban"> </i> <b> {!! lang::get('lang.alert') !!} ! </b>
+                        <i class="fa fa-ban"> </i> <b> {!! trans('lang.alert') !!} ! </b>
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         {{Session::get('fails')}}
                     </div>
@@ -286,8 +286,8 @@ class="active"
                         <div class="mailbox-controls">
                             <!-- Check all button -->
                             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
-                            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
+                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! trans('lang.delete') !!}">
+                            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! trans('lang.close') !!}">
                             <div class="pull-right">
                                 <?php
                                 $counted = count(App\Model\helpdesk\Ticket\Tickets::whereIn('user_id', $user_orga_relation_id)->where('status', '=', '2')->get());
@@ -306,12 +306,12 @@ class="active"
                                 <thead>
                                 <th>
                                 </th>
-                                <th>{!! Lang::get('lang.subject') !!}</th>
-                                <th>{!! Lang::get('lang.ticket_id') !!}</th>
-                                <th>{!! Lang::get('lang.priority') !!}</th>
-                                <th>{!! Lang::get('lang.last_replier') !!}</th>
-                                <th>{!! Lang::get('lang.assigned_to') !!}</th>
-                                <th>{!! Lang::get('lang.last_activity') !!}</th>
+                                <th>{!! trans('lang.subject') !!}</th>
+                                <th>{!! trans('lang.ticket_id') !!}</th>
+                                <th>{!! trans('lang.priority') !!}</th>
+                                <th>{!! trans('lang.last_replier') !!}</th>
+                                <th>{!! trans('lang.assigned_to') !!}</th>
+                                <th>{!! trans('lang.last_activity') !!}</th>
                                 </thead>
                                 <tbody id="hello">
                                     <?php $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('user_id', $user_orga_relation_id)->where('status', '=', '2')->orderBy('id', 'DESC')->paginate(20); ?>
@@ -396,7 +396,7 @@ class="active"
                     <!-- failure message -->
                     @if(Session::has('fails'))
                     <div class="alert alert-danger alert-dismissable">
-                        <i class="fa fa-ban"> </i> <b> {!! lang::get('lang.alert') !!} ! </b>
+                        <i class="fa fa-ban"> </i> <b> {!! trans('lang.alert') !!} ! </b>
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         {{Session::get('fails')}}
                     </div>
@@ -407,8 +407,8 @@ class="active"
                         <div class="mailbox-controls">
                             <!-- Check all button -->
                             <a class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></a>
-                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! Lang::get('lang.delete') !!}">
-                            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! Lang::get('lang.close') !!}">
+                            <input type="submit" class="btn btn-default text-orange btn-sm" name="submit" value="{!! trans('lang.delete') !!}">
+                            <input type="submit" class="btn btn-default text-yellow btn-sm" name="submit" value="{!! trans('lang.close') !!}">
                             <div class="pull-right">
                                 <?php
                                 $counted = count(App\Model\helpdesk\Ticket\Tickets::whereIn('user_id', $user_orga_relation_id)->where('status', '=', '5')->get());
@@ -427,12 +427,12 @@ class="active"
                                 <thead>
                                 <th>
                                 </th>
-                                <th>{!! Lang::get('lang.subject') !!}</th>
-                                <th>{!! Lang::get('lang.ticket_id') !!}</th>
-                                <th>{!! Lang::get('lang.priority') !!}</th>
-                                <th>{!! Lang::get('lang.last_replier') !!}</th>
-                                <th>{!! Lang::get('lang.assigned_to') !!}</th>
-                                <th>{!! Lang::get('lang.last_activity') !!}</th>
+                                <th>{!! trans('lang.subject') !!}</th>
+                                <th>{!! trans('lang.ticket_id') !!}</th>
+                                <th>{!! trans('lang.priority') !!}</th>
+                                <th>{!! trans('lang.last_replier') !!}</th>
+                                <th>{!! trans('lang.assigned_to') !!}</th>
+                                <th>{!! trans('lang.last_activity') !!}</th>
                                 </thead>
                                 <tbody id="hello">
                                     <?php $tickets = App\Model\helpdesk\Ticket\Tickets::whereIn('user_id', $user_orga_relation_id)->where('status', '=', '5')->orderBy('id', 'DESC')->paginate(20); ?>
@@ -508,7 +508,7 @@ class="active"
         <div class="box box-primary">
             <div class="box-header with-border">
                 <h3 class="box-title">
-                    {!! Lang::get('lang.report_of') !!} {!! $orgs->name !!}
+                    {!! trans('lang.report_of') !!} {!! $orgs->name !!}
                 </h3>
             </div>
             <div class="box-body">
@@ -516,7 +516,7 @@ class="active"
                     <div  class="form-group">
                         <div class="row">
                             <div class='col-sm-3'>
-                                {!! Form::label('date', Lang::get("lang.start_date").':') !!}
+                                {!! Form::label('date', trans("lang.start_date").':') !!}
                                 {!! Form::text('start_date',null,['class'=>'form-control','id'=>'datepicker4'])!!}
                             </div>
                             <?php
@@ -543,7 +543,7 @@ class="active"
                                 });
                             </script>
                             <div class='col-sm-3'>
-                                {!! Form::label('start_time', Lang::get("lang.end_date").':') !!}
+                                {!! Form::label('start_time', trans("lang.end_date").':') !!}
                                 {!! Form::text('end_date',null,['class'=>'form-control','id'=>'datetimepicker3'])!!}
                             </div>
                             <script type="text/javascript">
@@ -558,18 +558,18 @@ class="active"
                                 });
                             </script>
                             <div class='col-sm-2'>
-                                {!! Form::label('filter', Lang::get("lang.filter").':') !!}<br>
-                                <input type="submit" value="{!! Lang::get('lang.submit') !!}" class="btn btn-primary">
+                                {!! Form::label('filter', trans("lang.filter").':') !!}<br>
+                                <input type="submit" value="{!! trans('lang.submit') !!}" class="btn btn-primary">
                             </div>
                             <div class="col-sm-10">
-                                <label class="lead">{!! Lang::get('lang.Legend') !!}:</label>
+                                <label class="lead">{!! trans('lang.Legend') !!}:</label>
                                 <div class="row">
                                     <style>
                                         #legend-holder { border: 1px solid #ccc; float: left; width: 25px; height: 25px; margin: 2px; }
                                     </style>
-                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span class="lead"> <span id="total-created-tickets" ></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.created') !!} </span></div> 
-                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6DC5B2;"></span>&nbsp; <span class="lead"> <span id="total-reopen-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.reopen') !!}  </span></div> 
-                            <div class="col-md-4"><span id="legend-holder" style="background-color: #E3B870;"></span>&nbsp; <span class="lead"> <span id="total-closed-tickets" class="lead"></span> {!! Lang::get('lang.tickets') !!} {!! Lang::get('lang.closed') !!}  </span></div> 
+                                    <div class="col-md-4"><span id="legend-holder" style="background-color: #6C96DF;"></span>&nbsp; <span class="lead"> <span id="total-created-tickets" ></span> {!! trans('lang.tickets') !!} {!! trans('lang.created') !!} </span></div>
+                            <div class="col-md-4"><span id="legend-holder" style="background-color: #6DC5B2;"></span>&nbsp; <span class="lead"> <span id="total-reopen-tickets" class="lead"></span> {!! trans('lang.tickets') !!} {!! trans('lang.reopen') !!}  </span></div>
+                            <div class="col-md-4"><span id="legend-holder" style="background-color: #E3B870;"></span>&nbsp; <span class="lead"> <span id="total-closed-tickets" class="lead"></span> {!! trans('lang.tickets') !!} {!! trans('lang.closed') !!}  </span></div>
                                 </div>
                             </div>
                         </div>
@@ -864,7 +864,7 @@ class="active"
             {!! Form::model($orgs->id, ['id'=>'org_head','method' => 'PATCH'] )!!}
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" id="dismiss" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">{!! Lang::get('lang.assign') !!}</h4>
+                <h4 class="modal-title">{!! trans('lang.assign') !!}</h4>
             </div>
             <div id="assign_alert" class="alert alert-success alert-dismissable" style="display:none;">
                 <button id="assign_dismiss" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -880,7 +880,7 @@ class="active"
                     </div>
                 </div>
                 <div id="assign_body">
-                    <p>{!! Lang::get('lang.please_select_an_user') !!}</p>
+                    <p>{!! trans('lang.please_select_an_user') !!}</p>
                     <select id="user" class="form-control" name="user">
                         <?php
                         $org_heads = App\Model\helpdesk\Agent_panel\User_org::where('org_id', '=', $orgs->id)->get();
@@ -895,8 +895,8 @@ class="active"
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis4">{!! Lang::get('lang.close') !!}</button>
-                <button type="submit" class="btn btn-success pull-right" id="submt2">{!! Lang::get('lang.assign') !!}</button>
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal" id="dismis4">{!! trans('lang.close') !!}</button>
+                <button type="submit" class="btn btn-success pull-right" id="submt2">{!! trans('lang.assign') !!}</button>
             </div>
             {!! Form::close()!!}
         </div><!-- /.modal-content -->

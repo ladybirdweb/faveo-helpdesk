@@ -3,7 +3,7 @@
 <div id="page" class="hfeed site">
     <article class="hentry error404 text-center">
         <h1 class="error-title"><i class="fa fa-frown-o text-info"></i></h1>
-        <h2 class="entry-title text-muted">{!! Lang::get('lang.the_board_is_offline') !!}</h2>
+        <h2 class="entry-title text-muted">{!! trans('lang.the_board_is_offline') !!}</h2>
     </article><!-- .hentry -->
 </div><!-- #page -->
 

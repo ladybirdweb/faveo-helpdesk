@@ -3,7 +3,7 @@ $social = new \App\Model\helpdesk\Settings\SocialMedia();
 ?>
 <br>
 @if($social->checkActive('twitter') || $social->checkActive('facebook') || $social->checkActive('google') || $social->checkActive('linkedin') || $social->checkActive('bitbucket') || $social->checkActive('github'))
-<center>{{Lang::get('lang.or')}}</center>
+<center>{{trans('lang.or')}}</center>
 @endif
 <br>
 @if($social->checkActive('twitter'))

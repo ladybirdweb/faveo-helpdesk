@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.ban_email') !!}</h1>
+<h1>{!! trans('lang.ban_email') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -30,14 +30,14 @@ class="active"
 {!! Form::model($bans,['url'=>'banlist/'.$bans->id,'method'=>'PATCH']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.edit_banned_email')}}</h3>
+        <h3 class="box-title">{{trans('lang.edit_banned_email')}}</h3>
     </div>
     <!-- Ban Status : Radio form : Required -->
     <div class="box-body">
         @if(Session::has('errors'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('ban'))
@@ -46,29 +46,29 @@ class="active"
         </div>
         @endif
         <div class="form-group {{ $errors->has('ban') ? 'has-error' : '' }}">
-            {!! Form::label('ban',Lang::get('lang.ban_status')) !!} <span class="text-red"> *</span>
+            {!! Form::label('ban',trans('lang.ban_status')) !!} <span class="text-red"> *</span>
             <div class="row">
                 <div class="col-xs-2">
-                    {!! Form::radio('ban',1) !!} {{Lang::get('lang.active')}}
+                    {!! Form::radio('ban',1) !!} {{trans('lang.active')}}
                 </div>
                 <div class="col-xs-2">
-                    {!! Form::radio('ban',0) !!} {{Lang::get('lang.inactive')}}
+                    {!! Form::radio('ban',0) !!} {{trans('lang.inactive')}}
                 </div>
             </div>
         </div>
         <!-- email Address : Text form : Required -->
         <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-            {!! Form::label('email',Lang::get('lang.email_address')) !!} <span class="text-red"> *</span>
+            {!! Form::label('email',trans('lang.email_address')) !!} <span class="text-red"> *</span>
             {!! Form::text('email',null,['disabled'=>'disabled','class' => 'form-control']) !!}
         </div>
         <!-- intrnal Notes : Textarea :  -->
         <div class="form-group">
-            {!! Form::label('internal_note',Lang::get('lang.internal_notes')) !!}
+            {!! Form::label('internal_note',trans('lang.internal_notes')) !!}
             {!! Form::textarea('internal_note',null,['class' => 'form-control']) !!}
         </div>
     </div>
     <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.update'),['class'=>'btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.update'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>
 @stop

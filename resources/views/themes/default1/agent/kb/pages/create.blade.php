@@ -11,7 +11,7 @@ class="active"
 @stop
 
 @section('PageHeader')
-<h1>{{Lang::get('lang.pages')}}</h1>
+<h1>{{trans('lang.pages')}}</h1>
 @stop
 
 @section('content')
@@ -22,7 +22,7 @@ class="active"
         <?php //dd($errors); ?>
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('name'))
@@ -45,22 +45,22 @@ class="active"
         <div class="col-md-9">
             <div class="box box-primary">
                 <div class="box-header with-border">  
-                    <h3 class="box-title">{!! Lang::get('lang.addpages') !!}</h3>
+                    <h3 class="box-title">{!! trans('lang.addpages') !!}</h3>
                 </div>
                 <div class="box-body"> 
                     <div class="row">
                         <div class="col-md-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                            {!! Form::label('name',Lang::get('lang.name')) !!}<span class="text-red"> *</span>
+                            {!! Form::label('name',trans('lang.name')) !!}<span class="text-red"> *</span>
 
                             {!! Form::text('name',null,['class' => 'form-control']) !!}
                         </div>
                         
                     </div>
                     <div class="form-group {{ $errors->has('description') ? 'has-error' : '' }}">
-                        {!! Form::label('description',Lang::get('lang.description')) !!}
+                        {!! Form::label('description',trans('lang.description')) !!}
 
                         <div class="form-group" style="background-color:white">
-                            {!! Form::textarea('description',null,['class' => 'form-control color','size' => '110x15','id'=>'myNicEditor','placeholder'=>Lang::get('lang.enter_the_description')]) !!}
+                            {!! Form::textarea('description',null,['class' => 'form-control color','size' => '110x15','id'=>'myNicEditor','placeholder'=>trans('lang.enter_the_description')]) !!}
                         </div>
                     </div>
                 </div>
@@ -69,31 +69,31 @@ class="active"
         <div class="col-md-3">
             <div class="box box-default">
                 <div class="box-header with-border">
-                    <h3 class="box-title">{{Lang::get('lang.publish')}}</h3>
+                    <h3 class="box-title">{{trans('lang.publish')}}</h3>
                 </div>
                 <div class="box-body">
                     <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
-                        {!! Form::label('status',Lang::get('lang.status')) !!}
+                        {!! Form::label('status',trans('lang.status')) !!}
 
                         <div class="row">
                             <div class="col-xs-5">
-                                {!! Form::radio('status','1',true) !!} {{ Lang::get('lang.published') }}
+                                {!! Form::radio('status','1',true) !!} {{ trans('lang.published') }}
                             </div>
                             <div class="col-xs-5">
-                                {!! Form::radio('status','0',null) !!} {{ Lang::get('lang.draft') }}
+                                {!! Form::radio('status','0',null) !!} {{ trans('lang.draft') }}
                             </div>
                         </div>
                     </div>
                     <div class="form-group {{ $errors->has('visibility') ? 'has-error' : '' }}">
-                        {!! Form::label('visibility',Lang::get('lang.visibility')) !!}
+                        {!! Form::label('visibility',trans('lang.visibility')) !!}
 
                         <div class="row">
                             <div class="col-xs-5">
-                                {!! Form::radio('visibility','1',true) !!} {{Lang::get('lang.public')}}
+                                {!! Form::radio('visibility','1',true) !!} {{trans('lang.public')}}
                             </div>
                             <div class="row">
                                 <div class="col-xs-5">
-                                    {!! Form::radio('visibility','0',null) !!} {{Lang::get('lang.private')}}
+                                    {!! Form::radio('visibility','0',null) !!} {{trans('lang.private')}}
                                 </div>
                             </div>
                         </div>
@@ -101,7 +101,7 @@ class="active"
                 </div>
                 <div class="box-footer" style="background-color:#F7F7F7;">
                     <!--<div style="margin-left:140px;">-->
-                    {!! Form::submit(Lang::get('lang.publish'),['class'=>'btn btn-primary'])!!}
+                    {!! Form::submit(trans('lang.publish'),['class'=>'btn btn-primary'])!!}
                     <!--</div>-->
                 </div>
             </div>

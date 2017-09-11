@@ -11,7 +11,7 @@
     <link href="{{asset('lb-faveo/dist/css/dataTables.bootstrap.css')}}" rel="stylesheet">
 <div class="box box-primary">
 <div class="box-header">
-    <h2 class="box-title">{{Lang::get('lang.category')}}</h2></div>
+    <h2 class="box-title">{{trans('lang.category')}}</h2></div>
 
 <div class="box-body table-responsive no-padding">
 
@@ -45,9 +45,9 @@
     <table id="allBlogs"  class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
         <thead>
         <tr>
-            <th>{{Lang::get('lang.name')}}</th>
-            <th>{{Lang::get('lang.create')}}</th>
-            <th>{{Lang::get('lang.action')}}</th>
+            <th>{{trans('lang.name')}}</th>
+            <th>{{trans('lang.create')}}</th>
+            <th>{{trans('lang.action')}}</th>
         </tr>
         </thead>
     </table>

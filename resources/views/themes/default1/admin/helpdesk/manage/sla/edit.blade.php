@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.sla_plan') !!}</h1>
+<h1>{!! trans('lang.sla_plan') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -31,7 +31,7 @@ class="active"
 {!! Form::model($slas,['url' => 'sla/'.$slas->id, 'method' => 'PATCH']) !!}
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h2 class="box-title">{{Lang::get('lang.edit')}}</h2>
+        <h2 class="box-title">{{trans('lang.edit')}}</h2>
     </div>
     <div class="box-body">
         @if(Session::has('errors'))
@@ -58,23 +58,23 @@ class="active"
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-                        {!! Form::label('name',Lang::get('lang.name')) !!} <span class="text-red"> *</span>
+                        {!! Form::label('name',trans('lang.name')) !!} <span class="text-red"> *</span>
                         {!! Form::text('name',null,['class' => 'form-control']) !!}
                     </div>
                 </div>
                 <!-- Grace Period text form Required -->
                 <div class="col-md-6">
                     <div class="form-group {{ $errors->has('grace_period') ? 'has-error' : '' }}">
-                        {!! Form::label('grace_period',Lang::get('lang.grace_period')) !!}
+                        {!! Form::label('grace_period',trans('lang.grace_period')) !!}
                         {!! Form::select('grace_period',['6 Hours'=>'6 Hours', '12 Hours'=>'12 Hours', '18 Hours'=>'18 Hours', '24 Hours'=>'24 Hours', '36 Hours'=>'36 Hours', '48 Hours'=>'48 Hours'],null,['class' => 'form-control']) !!}
                     </div>
                 </div>
                 <!-- status radio: required: Active|Dissable -->
                 <div class="col-md-6">
                     <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
-                        {!! Form::label('status',Lang::get('lang.status')) !!}&nbsp;
-                        {!! Form::radio('status','1',true) !!} &nbsp; {{Lang::get('lang.active')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {!! Form::radio('status','0') !!} &nbsp; {{Lang::get('lang.inactive')}}
+                        {!! Form::label('status',trans('lang.status')) !!}&nbsp;
+                        {!! Form::radio('status','1',true) !!} &nbsp; {{trans('lang.active')}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        {!! Form::radio('status','0') !!} &nbsp; {{trans('lang.inactive')}}
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@ class="active"
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        {!! Form::label('admin_note',Lang::get('lang.admin_notes')) !!}
+                        {!! Form::label('admin_note',trans('lang.admin_notes')) !!}
                         {!! Form::textarea('admin_note',null,['class' => 'form-control','size' => '30x5']) !!}
                     </div>
                 </div>
@@ -91,9 +91,9 @@ class="active"
     </div>
     <div class="box-footer">
         <div class="form-group">
-            <input type="checkbox" name="sys_sla" @if($slas->id == $sla->sla) checked disabled @endif> {{ Lang::get('lang.make-default-sla')}}
+            <input type="checkbox" name="sys_sla" @if($slas->id == $sla->sla) checked disabled @endif> {{ trans('lang.make-default-sla')}}
         </div>
-        {!! Form::submit(Lang::get('lang.update'),['class'=>'btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.update'),['class'=>'btn btn-primary'])!!}
     </div>
 </div>
 <!-- close form -->

@@ -11,7 +11,7 @@ class="active"
 @stop
 
 @section('PageHeader')
-<h1>{{Lang::get('lang.article')}}</h1>
+<h1>{{trans('lang.article')}}</h1>
 @stop
 
 @section('content')
@@ -30,7 +30,7 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
         </div>
@@ -39,7 +39,7 @@ class="active"
         <?php //dd($errors); ?>
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!}!</b>
+            <b>{!! trans('lang.alert') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             <br/>
             @if($errors->first('name'))
@@ -67,22 +67,22 @@ class="active"
         <div class="box box-primary box-body">
             <div class="row">
                 <div class="col-md-6 form-group {{ $errors->has('name') ? 'has-error' : '' }}" >
-                    {!! Form::label('name',Lang::get('lang.name')) !!} <span class="text-red"> *</span>
+                    {!! Form::label('name',trans('lang.name')) !!} <span class="text-red"> *</span>
 
                     {!! Form::text('name',null,['class' => 'form-control']) !!}
                 </div>
                 <div class="col-md-6 form-group {{ $errors->has('slug') ? 'has-error' : '' }}" >
-                    {!! Form::label('slug',Lang::get('lang.slug')) !!} <span class="text-red"> *</span>
+                    {!! Form::label('slug',trans('lang.slug')) !!} <span class="text-red"> *</span>
 
                     {!! Form::text('slug',null,['class' => 'form-control']) !!}
                 </div>
             </div>
 
             <div class="form-group {{ $errors->has('description') ? 'has-error' : '' }}">
-                {!! Form::label('description',Lang::get('lang.description')) !!} <span class="text-red"> *</span>
+                {!! Form::label('description',trans('lang.description')) !!} <span class="text-red"> *</span>
 
                 <div class="form-group" style="background-color:white">
-                    {!! Form::textarea('description',$article->description,['class' => 'form-control','id'=>'editor','size' => '128x20','placeholder'=>Lang::get('lang.enter_the_description')]) !!}
+                    {!! Form::textarea('description',$article->description,['class' => 'form-control','id'=>'editor','size' => '128x20','placeholder'=>trans('lang.enter_the_description')]) !!}
                 </div>
                 <script>
   CKEDITOR.replace( 'description', {
@@ -100,41 +100,41 @@ class="active"
             <div class="col-md-4">
                 <div class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title">{{Lang::get('lang.publish')}}</h3>
+                        <h3 class="box-title">{{trans('lang.publish')}}</h3>
                     </div>
                     <div class="box-body">
                         <div class="form-group {{ $errors->has('type') ? 'has-error' : '' }}">
-                            {!! Form::label('type',Lang::get('lang.status')) !!}
+                            {!! Form::label('type',trans('lang.status')) !!}
                             <div class="row">
                                 <div class="col-xs-1">
                                     {!! Form::radio('type','1',true) !!}
                                 </div>
                                 <div class="col-xs-4">
-                                    {{Lang::get('lang.published')}}
+                                    {{trans('lang.published')}}
                                 </div>
                                 <div class="col-xs-1">
                                     {!! Form::radio('type','0',null) !!}
                                 </div>
                                 <div class="col-xs-4">
-                                    {{Lang::get('lang.draft')}}
+                                    {{trans('lang.draft')}}
                                 </div>
                             </div>
                         </div>
                         <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
-                            {!! Form::label('status',Lang::get('lang.visibility')) !!}
+                            {!! Form::label('status',trans('lang.visibility')) !!}
                             <div class="row">
                                 <div class="col-xs-1">
                                     {!! Form::radio('status','1',true) !!}
                                 </div>
                                 <div class="col-xs-4">  
-                                    {{Lang::get('lang.public')}}
+                                    {{trans('lang.public')}}
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-1">
                                         {!! Form::radio('status','0',null) !!}
                                     </div>
                                     <div class="col-xs-4"> 
-                                        {{Lang::get('lang.private')}}
+                                        {{trans('lang.private')}}
                                     </div>
                                 </div>
                             </div>
@@ -155,7 +155,7 @@ class="active"
                         ?>
                         <div class="row">
                             <div class="col-md-12">
-                                {!! Form::label('month',Lang::get('lang.publish_immediately')) !!}
+                                {!! Form::label('month',trans('lang.publish_immediately')) !!}
                             </div>
                             <div class="col-md-12">
                                 <span>
@@ -171,13 +171,13 @@ class="active"
                     <div class="box-footer" style="background-color:#f5f5f5;">
                         <div class="row">
                             <div class="col-md-4">
-                                {!! Form::submit(Lang::get('lang.publish'),['class'=>'btn btn-primary'])!!}
+                                {!! Form::submit(trans('lang.publish'),['class'=>'btn btn-primary'])!!}
                             </div>
                             <div class="col-md-4">
-                                <a href="#" data-toggle="modal" data-target="#deletearticle{{$article->id}}"  class="btn btn-danger pull-right">{{Lang::get('lang.delete')}}</a>
+                                <a href="#" data-toggle="modal" data-target="#deletearticle{{$article->id}}"  class="btn btn-danger pull-right">{{trans('lang.delete')}}</a>
                             </div>
                             <div class="col-md-4">
-                                <a href="{{url('show/'.$article->slug)}}" target="_blank" class="btn btn-primary">{{Lang::get('lang.show')}}</a>
+                                <a href="{{url('show/'.$article->slug)}}" target="_blank" class="btn btn-primary">{{trans('lang.show')}}</a>
                             </div>
                         </div>
                     </div>
@@ -186,7 +186,7 @@ class="active"
                         <div class="col-md-4">
                             <div class="box box-default">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">{{Lang::get('lang.category')}} <span class="text-red"> *</span></h3>
+                                    <h3 class="box-title">{{trans('lang.category')}} <span class="text-red"> *</span></h3>
                                 </div>
                                 <div class="box-body" style="height:190px; overflow-y:auto;">
                                     <div class="form-group {{ $errors->has('category_id') ? 'has-error' : '' }}">
@@ -209,23 +209,23 @@ class="active"
                                     </div>
                                 </div>
                                 <div class="box-footer" style="background-color:#f5f5f5;">
-                                    <span class="btn btn-info btn-sm" data-toggle="modal" data-target="#j">{!! Lang::get('lang.addcategory') !!}</span>
+                                    <span class="btn btn-info btn-sm" data-toggle="modal" data-target="#j">{!! trans('lang.addcategory') !!}</span>
                                     <div class="modal" id="j">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 {!! Form::open(['method'=>'post','action'=>'Agent\kb\CategoryController@store']) !!}
                                                 <div class="modal-header">
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h4 class="modal-title">{{Lang::get('lang.addcategory')}}</h4>
+                                                    <h4 class="modal-title">{{trans('lang.addcategory')}}</h4>
                                                 </div>
                                                 <div class="modal-body">
                                                     @include('themes.default1.agent.kb.category.form')
                                                 </div>
                                                 <div class="modal-footer">
                                                     <div class="form-group">
-                                                        {!! Form::submit(Lang::get('lang.add'))!!}
+                                                        {!! Form::submit(trans('lang.add'))!!}
                                                     </div>
-                                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">{!! Lang::get('lang.close') !!}</button>
+                                                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">{!! trans('lang.close') !!}</button>
                                                 </div>
                                                 {!! Form::close() !!}
                                             </div>

@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.user_directory')}}</h1>
+<h1>{{trans('lang.user_directory')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -36,13 +36,13 @@ class="active"
         <div class="row">
         <div>
             <div class="col-md-6">
-                <h3 class="box-title ">{{Lang::get('lang.user')}}</h3>                
+                <h3 class="box-title ">{{trans('lang.user')}}</h3>
             </div>
             <div class="col-md-6">
                 <div class="col-md-5">
                     <div class="box-tools" style="width: 235px">
                         <div class="has-feedback">
-                            <input type="text" class="form-control input-sm" id="search-text" name="search" placeholder="{{Lang::get('lang.search')}}" style="height:30px">
+                            <input type="text" class="form-control input-sm" id="search-text" name="search" placeholder="{{trans('lang.search')}}" style="height:30px">
                             <span class="fa fa-search form-control-feedback"></span>
                         </div>
                     </div><!-- /.box-tools -->
@@ -50,20 +50,20 @@ class="active"
                 <div class="col-md-7">
                     <div class="pull-right">
                     <div id="labels-div" class="btn-group">
-                        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="labels-button"><i class="fa fa-eye" style="color:teal;">&nbsp;</i>{{Lang::get('lang.view-option')}}<span class="caret"></span>
+                        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" id="labels-button"><i class="fa fa-eye" style="color:teal;">&nbsp;</i>{{trans('lang.view-option')}}<span class="caret"></span>
                         </button>
                         <ul  class="dropdown-menu role="menu">
-                            <li class="active"><a href="#" class="all">{{Lang::get('lang.all-users')}}</a></li>
-                            <li><a href="#" class="agents">{{Lang::get('lang.only-agents')}}</a></li>
-                            <li><a href="#" class="users">{{Lang::get('lang.only-users')}}</a></li>
-                            <li><a href="#" class="active-users">{{Lang::get('lang.active-users')}}</a></li>
-                            <li><a href="#" class="inactive">{{Lang::get('lang.inactive-users')}}</a></li>
-                            <li><a href="#" class="deleted">{{Lang::get('lang.deleted-users')}}</a></li>
-                            <li><a href="#" class="banned">{{Lang::get('lang.banned-users')}}</a></li>
+                            <li class="active"><a href="#" class="all">{{trans('lang.all-users')}}</a></li>
+                            <li><a href="#" class="agents">{{trans('lang.only-agents')}}</a></li>
+                            <li><a href="#" class="users">{{trans('lang.only-users')}}</a></li>
+                            <li><a href="#" class="active-users">{{trans('lang.active-users')}}</a></li>
+                            <li><a href="#" class="inactive">{{trans('lang.inactive-users')}}</a></li>
+                            <li><a href="#" class="deleted">{{trans('lang.deleted-users')}}</a></li>
+                            <li><a href="#" class="banned">{{trans('lang.banned-users')}}</a></li>
                         </ul>
                     </div>
                     <a href="{{url('user-export')}}" class="btn btn-default btn-sm ">Export</a>
-                    <a href="{{route('user.create')}}" class="btn btn-primary btn-sm">{{Lang::get('lang.create_user')}}</a>
+                    <a href="{{route('user.create')}}" class="btn btn-primary btn-sm">{{trans('lang.create_user')}}</a>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@ class="active"
         @if(Session::has('warning'))
         <div class="alert alert-warning alert-dismissable">
             <i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <b>{!! Lang::get('lang.alert') !!} !</b>            
+            <b>{!! trans('lang.alert') !!} !</b>
             {{Session::get('warning')}}
         </div>
         @endif
@@ -90,7 +90,7 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <b>{!! Lang::get('lang.alert') !!} !</b>            
+            <b>{!! trans('lang.alert') !!} !</b>
             {{Session::get('fails')}}
         </div>
         @endif

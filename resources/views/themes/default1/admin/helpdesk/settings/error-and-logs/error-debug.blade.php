@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.error-debug')}}</h1>
+<h1>{{trans('lang.error-debug')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -29,7 +29,7 @@ class="active"
 @section('content')
 	<div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.debug-options')}}</h3> 
+        <h3 class="box-title">{{trans('lang.debug-options')}}</h3>
     </div>
     <!-- Helpdesk Status: radio Online Offline -->
     <div class="box-body">
@@ -45,7 +45,7 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            <b>{!! Lang::get('lang.alert') !!}!</b><br/>
+            <b>{!! trans('lang.alert') !!}!</b><br/>
             <li class="error-message-padding">{!!Session::get('fails')!!}</li>
         </div>
         @endif
@@ -53,26 +53,26 @@ class="active"
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    {!! Form::label('debug',Lang::get('lang.debugging')) !!}
+                    {!! Form::label('debug',trans('lang.debugging')) !!}
                     <div class="row">
                         <div class="col-xs-3">
-                            <input type="radio" name="debug" value="true" @if($debug == true) checked="true" @endif> {{Lang::get('lang.enable')}}
+                            <input type="radio" name="debug" value="true" @if($debug == true) checked="true" @endif> {{trans('lang.enable')}}
                         </div>
                         <div class="col-xs-3">
-                            <input type="radio" name="debug" value="false" @if($debug == false) checked="true" @endif> {{Lang::get('lang.disable')}}
+                            <input type="radio" name="debug" value="false" @if($debug == false) checked="true" @endif> {{trans('lang.disable')}}
                         </div>
                     </div>
                 </div> 
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    {!! Form::label('bugsnag',Lang::get('lang.bugsnag-debugging')) !!}
+                    {!! Form::label('bugsnag',trans('lang.bugsnag-debugging')) !!}
                     <div class="row">
                         <div class="col-xs-3">
-                            <input type="radio" name="bugsnag" value="true" @if($bugsnag == true) checked="true" @endif> {{Lang::get('lang.yes')}}
+                            <input type="radio" name="bugsnag" value="true" @if($bugsnag == true) checked="true" @endif> {{trans('lang.yes')}}
                         </div>
                         <div class="col-xs-3">
-                            <input type="radio" name="bugsnag" value="false" @if($bugsnag == false) checked="true" @endif> {{Lang::get('lang.no')}}
+                            <input type="radio" name="bugsnag" value="false" @if($bugsnag == false) checked="true" @endif> {{trans('lang.no')}}
                         </div>
                     </div>
                 </div> 
@@ -80,7 +80,7 @@ class="active"
         </div>
         </div>
          <div class="box-footer">
-        {!! Form::submit(Lang::get('lang.save'),['onclick'=>'sendForm()','class'=>'btn btn-primary'])!!}
+        {!! Form::submit(trans('lang.save'),['onclick'=>'sendForm()','class'=>'btn btn-primary'])!!}
     </div>
      {!! Form::close() !!}  
         </div>

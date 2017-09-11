@@ -2,7 +2,7 @@
 
 @extends('themes.default1.agent.layout.sidebar')    
 @section('PageHeader')
-<h1>{!! Lang::get('lang.comments') !!}</h1>
+<h1>{!! trans('lang.comments') !!}</h1>
 @stop
 @section('comment')
 class="active"
@@ -11,7 +11,7 @@ class="active"
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{{Lang::get('lang.comments-list')}}</h3>
+        <h3 class="box-title">{{trans('lang.comments-list')}}</h3>
     </div>
     <div class="box-body">
         <!-- check whether success or not -->
@@ -26,7 +26,7 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.alert') !!} !</b>
+            <b>{!! trans('lang.alert') !!} !</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {{Session::get('fails')}}
         </div>
@@ -34,10 +34,10 @@ class="active"
         <div class="row">
             <div class="col-sm-12">
                 {!! Datatable::table()
-                ->addColumn(Lang::get('lang.details'), 
-                Lang::get('lang.comment'),
-                Lang::get('lang.status'),
-                Lang::get('lang.action'))       // these are the column headings to be shown
+                ->addColumn(trans('lang.details'),
+                trans('lang.comment'),
+                trans('lang.status'),
+                trans('lang.action'))       // these are the column headings to be shown
                 ->setUrl(route('api.comment'))   // this is the route where data will be retrieved
                 ->render() !!}
             </div>

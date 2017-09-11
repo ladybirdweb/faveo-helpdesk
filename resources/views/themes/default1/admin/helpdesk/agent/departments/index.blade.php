@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{{Lang::get('lang.departments')}}</h1>
+<h1>{{trans('lang.departments')}}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -30,7 +30,7 @@ class="active"
 @section('content')
 <div class="box box-primary">
     <div class="box-header">
-        <h2 class="box-title">{!! Lang::get('lang.list_of_departments') !!}</h2><a href="{{route('departments.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{Lang::get('lang.create_a_department')}}</a></div>
+        <h2 class="box-title">{!! trans('lang.list_of_departments') !!}</h2><a href="{{route('departments.create')}}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span> &nbsp;{{trans('lang.create_a_department')}}</a></div>
     <div class="box-body table-responsive ">
         <!-- check whether success or not -->
         @if(Session::has('success'))
@@ -44,7 +44,7 @@ class="active"
         @if(Session::has('fails'))
         <div class="alert alert-danger alert-dismissable">
             <i class="fa fa-ban"></i>
-            <b>{!! Lang::get('lang.fails') !!}!</b>
+            <b>{!! trans('lang.fails') !!}!</b>
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
             {!! Session::get('fails') !!}
         </div>
@@ -52,11 +52,11 @@ class="active"
         <!-- table -->
         <table class="table table-bordered dataTable" style="overflow:hidden;">
             <tr>
-                <th>{{Lang::get('lang.name')}}</th>
-                <th>{{Lang::get('lang.type')}}</th>
-                <th>{{Lang::get('lang.sla_plan')}}</th>
-                <th>{{Lang::get('lang.department_manager')}}</th>
-                <th>{{Lang::get('lang.action')}}</th>
+                <th>{{trans('lang.name')}}</th>
+                <th>{{trans('lang.type')}}</th>
+                <th>{{trans('lang.sla_plan')}}</th>
+                <th>{{trans('lang.department_manager')}}</th>
+                <th>{{trans('lang.action')}}</th>
             </tr>
             <?php
             $default_department = App\Model\helpdesk\Settings\System::where('id', '=', '1')->first();
@@ -78,9 +78,9 @@ class="active"
                     </a></td>
                 <td>
                     @if($department->type=='1')
-                    <span style="color:green">{!! Lang::get('lang.public') !!}</span>
+                    <span style="color:green">{!! trans('lang.public') !!}</span>
                     @else
-                    <span style="color:red">{!! Lang::get('lang.private') !!}</span>
+                    <span style="color:red">{!! trans('lang.private') !!}</span>
                     @endif
                 </td>
                 <?php
@@ -103,11 +103,11 @@ class="active"
                 <td>{{ $manager }}</td>
                 <td>
                     {!! Form::open(['route'=>['departments.destroy', $department->id],'method'=>'DELETE']) !!}
-                    <a href="{{route('departments.edit', $department->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! Lang::get('lang.edit') !!}</a>
+                    <a href="{{route('departments.edit', $department->id)}}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-edit" style="color:black;"> </i> {!! trans('lang.edit') !!}</a>
                     {{-- @if($default_department == $department->id) --}}
                     {{-- @else --}}
                     <!-- To pop up a confirm Message -->
-                    {!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> '.Lang::get('lang.delete'),
+                    {!! Form::button('<i class="fa fa-trash" style="color:black;"> </i> '.trans('lang.delete'),
                     ['type' => 'submit',
                     'class'=> 'btn btn-warning btn-xs btn-flat '.$disable,
                     'onclick'=>'return confirm("Are you sure?")'])

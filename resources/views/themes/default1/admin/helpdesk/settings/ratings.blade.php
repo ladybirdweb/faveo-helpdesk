@@ -9,7 +9,7 @@ class="active"
 @stop
 
 @section('PageHeader')
-<h1>{!! Lang::get('lang.settings') !!}</h1>
+<h1>{!! trans('lang.settings') !!}</h1>
 @stop
 
 @section('header')
@@ -18,10 +18,10 @@ class="active"
 @section('content')
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">{!! Lang::get('lang.current_ratings') !!}</h3>
+        <h3 class="box-title">{!! trans('lang.current_ratings') !!}</h3>
         <div class="box-tools pull-right">
             <div class="box-tools pull-right">
-                <a class="btn btn-box-tool" href="{{ route('rating.create') }}" title="{!! Lang::get('lang.create') !!}"><i class="fa fa-plus-circle fa-2x"></i></a>
+                <a class="btn btn-box-tool" href="{{ route('rating.create') }}" title="{!! trans('lang.create') !!}"><i class="fa fa-plus-circle fa-2x"></i></a>
             </div>
         </div><!-- /.box-header -->
     </div>
@@ -35,10 +35,10 @@ class="active"
         <table id="example1" class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>{!! Lang::get('lang.name') !!}</th>
-                    <th>{!! Lang::get('lang.display_order') !!}</th>
-                    <th>{!! Lang::get('lang.rating_area') !!}</th>
-                    <th>{!! Lang::get('lang.action') !!}</th>
+                    <th>{!! trans('lang.name') !!}</th>
+                    <th>{!! trans('lang.display_order') !!}</th>
+                    <th>{!! trans('lang.rating_area') !!}</th>
+                    <th>{!! trans('lang.action') !!}</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,14 +55,14 @@ class="active"
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">{!! Lang::get('lang.delete') !!}</h4>
+                                        <h4 class="modal-title">{!! trans('lang.delete') !!}</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <p>{!! Lang::get('lang.are_you_sure_you_want_to_delete') !!} ?</p>
+                                        <p>{!! trans('lang.are_you_sure_you_want_to_delete') !!} ?</p>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">{!! Lang::get('lang.close') !!}</button>
-                                        {!! link_to_route('ratings.delete',Lang::get('lang.delete'),[$rating->id],['id'=>'delete','class'=>'btn btn-danger btn-sm']) !!}
+                                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">{!! trans('lang.close') !!}</button>
+                                        {!! link_to_route('ratings.delete',trans('lang.delete'),[$rating->id],['id'=>'delete','class'=>'btn btn-danger btn-sm']) !!}
                                     </div>
                                 </div> 
                             </div>

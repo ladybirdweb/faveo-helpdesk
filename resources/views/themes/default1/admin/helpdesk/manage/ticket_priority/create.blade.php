@@ -16,7 +16,7 @@ class="active"
 @stop
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.priority') !!}</h1>
+<h1>{!! trans('lang.priority') !!}</h1>
 @stop
 <!-- /header -->
 <!-- breadcrumbs -->
@@ -33,7 +33,7 @@ class="active"
 {{ csrf_field() }}
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h2 class="box-title">{{Lang::get('lang.create')}}</h2>
+            <h2 class="box-title">{{trans('lang.create')}}</h2>
         </div>
         <div class="box-body">
             @if(Session::has('errors'))
@@ -61,14 +61,14 @@ class="active"
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group {{ $errors->has('priority') ? 'has-error' : '' }}">
-                        {!! Form::label('priority',Lang::get('lang.priority')) !!} <span class="text-red"> *</span>
+                        {!! Form::label('priority',trans('lang.priority')) !!} <span class="text-red"> *</span>
                         <input type="text" class="form-control" name="priority" value="" >
                     </div>
                 </div>
                 <!-- Grace Period text form Required -->
                 <div class="col-md-6">
                     <div class="form-group {{ $errors->has('priority_desc') ? 'has-error' : '' }}">
-                        {!! Form::label('priority_desc',Lang::get('lang.priority_desc')) !!}<span class="text-red"> *</span>
+                        {!! Form::label('priority_desc',trans('lang.priority_desc')) !!}<span class="text-red"> *</span>
                         <input type="text" name="priority_desc" class="form-control">
                     </div>
                 </div> 
@@ -77,7 +77,7 @@ class="active"
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group {{ $errors->has('priority_color') ? 'has-error' : '' }}">
-                        {!! Form::label('priority_color',Lang::get('lang.priority_color')) !!}<span class="text-red"> *</span>
+                        {!! Form::label('priority_color',trans('lang.priority_color')) !!}<span class="text-red"> *</span>
                         <input class="form-control my-colorpicker1 colorpicker-element" id="colorpicker" type="text" name="priority_color">
 
                     </div>
@@ -85,16 +85,16 @@ class="active"
                 <!-- status radio: required: Active|Dissable -->
                 <div class="col-md-3">
                     <div class="form-group {{ $errors->has('status') ? 'has-error' : '' }}">
-                        {!! Form::label('status',Lang::get('lang.status')) !!}&nbsp;<span class="text-red"> *</span>
-                        <input type="radio"  name="status" value="1" checked>{{Lang::get('lang.active')}}
-                        <input type="radio"  name="status" value="0" >{{Lang::get('lang.inactive')}}
+                        {!! Form::label('status',trans('lang.status')) !!}&nbsp;<span class="text-red"> *</span>
+                        <input type="radio"  name="status" value="1" checked>{{trans('lang.active')}}
+                        <input type="radio"  name="status" value="0" >{{trans('lang.inactive')}}
                     </div>       
                 </div>
 
                 <!-- Show radio: required: public|private -->
                 <div class="col-md-3">
                     <div class="form-group {{ $errors->has('ispublic') ? 'has-error' : '' }}">
-                        {!! Form::label('ispublic',Lang::get('lang.visibility')) !!}&nbsp;<span class="text-red"> *</span>
+                        {!! Form::label('ispublic',trans('lang.visibility')) !!}&nbsp;<span class="text-red"> *</span>
                         <input type="radio"  name="ispublic" value="1" checked>public
                         <input type="radio"  name="ispublic" value="0" >private
                     </div>       
@@ -104,14 +104,14 @@ class="active"
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        {!! Form::label('admin_note',Lang::get('lang.admin_notes')) !!}
+                        {!! Form::label('admin_note',trans('lang.admin_notes')) !!}
                         {!! Form::textarea('admin_note',null,['class' => 'form-control','size' => '30x5']) !!}
                     </div>
                 </div>
             </div>
         </div>
         <div class="box-footer">
-            {!! Form::submit(Lang::get('lang.submit'),['class'=>'btn btn-primary'])!!}
+            {!! Form::submit(trans('lang.submit'),['class'=>'btn btn-primary'])!!}
         </div>
     </div>
     <script>

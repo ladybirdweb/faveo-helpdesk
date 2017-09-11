@@ -14,7 +14,7 @@ class="active"
 
 <!-- header -->
 @section('PageHeader')
-<h1>{!! Lang::get('lang.forms') !!}</h1>
+<h1>{!! trans('lang.forms') !!}</h1>
 @stop
 <!-- /header -->
 
@@ -36,14 +36,14 @@ class="active"
 @if(Session::has('fails'))
 <div class="alert alert-success alert-dismissable">
     <i class="fa fa-ban"></i><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <b>{!! Lang::get('lang.alert') !!} !</b> <br>
+    <b>{!! trans('lang.alert') !!} !</b> <br>
     <li class="error-message-padding">{{Session::get('fails')}}</li>
 </div>
 @endif
 <!-- -->    
 <div class="box">
     <div class="box-header">
-        <h3 class="box-title">{!! Lang::get('lang.form_name') !!} : {!! $form->formname !!}</h3>
+        <h3 class="box-title">{!! trans('lang.form_name') !!} : {!! $form->formname !!}</h3>
     </div>
     <div class="box-body">
         @foreach($fields as $field)
