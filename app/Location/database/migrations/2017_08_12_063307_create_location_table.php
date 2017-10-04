@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateLocationTable extends Migration
 {
@@ -13,7 +13,7 @@ class CreateLocationTable extends Migration
      */
     public function up()
     {
-         Schema::create('location', function (Blueprint $table) {
+        Schema::create('location', function (Blueprint $table) {
             $table->increments('id');
             // $table->integer('location_category_id')->unsigned()->nullable();
             // $table->foreign('location_category_id')->references('id')->on('sd_location_categories');

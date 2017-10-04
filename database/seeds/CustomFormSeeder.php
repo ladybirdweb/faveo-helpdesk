@@ -2,14 +2,15 @@
 
 use Illuminate\Database\Seeder;
 
-class CustomFormSeeder extends Seeder {
-
+class CustomFormSeeder extends Seeder
+{
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run() {
+    public function run()
+    {
         \DB::table('forms')->truncate();
         \App\Model\Custom\Required::truncate();
         $this->seedTicketForm();
@@ -18,8 +19,8 @@ class CustomFormSeeder extends Seeder {
         //$this->seedRequired();
     }
 
-    public function seedTicketForm() {
-        
+    public function seedTicketForm()
+    {
         $json = "[{
         'title': 'Requester',
         'agentlabel':[
@@ -212,20 +213,21 @@ class CustomFormSeeder extends Seeder {
         ]
 ";
         $json = trim(preg_replace('/\s+/', ' ', $json));
-        $form = "ticket";
+        $form = 'ticket';
         \DB::table('forms')->insert(['form' => $form, 'json' => $json]);
         $form_controller = new \App\Http\Controllers\Utility\FormController();
         $form_controller->saveRequired($form);
     }
-    
-    public function seedUserForm(){
+
+    public function seedUserForm()
+    {
         $json = "[{
         'title': 'First Name',
         'agentlabel':[
-                 {'language':'en','label':'First Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'First Name','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'First Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'First Name','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'text',
         'customerDisplay':true,
@@ -237,10 +239,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Last Name',
         'agentlabel':[
-                 {'language':'en','label':'Last Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Last Name','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Last Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Last Name','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'text',
         'customerDisplay':true,
@@ -252,10 +254,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Work Phone',
         'agentlabel':[
-                 {'language':'en','label':'Work Phone','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Work Phone','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Work Phone','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Work Phone','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'number',
         'agentRequiredFormSubmit':true,
@@ -267,10 +269,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Email',
         'agentlabel':[
-                 {'language':'en','label':'Email','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Email','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Email','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Email','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'email',
         'agentRequiredFormSubmit':true,
@@ -282,10 +284,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Mobile Phone',
         'agentlabel':[
-                 {'language':'en','label':'Mobile Phone','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Mobile Phone','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Mobile Phone','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Mobile Phone','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'number',
         'agentRequiredFormSubmit':true,
@@ -297,10 +299,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Address',
         'agentlabel':[
-                 {'language':'en','label':'Address','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Address','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Address','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Address','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'textarea',
         'agentRequiredFormSubmit':true,
@@ -312,10 +314,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Organisation',
         'agentlabel':[
-                 {'language':'en','label':'Organisation','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Organisation','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Organisation','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Organisation','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'select2',
         'agentRequiredFormSubmit':false,
@@ -328,10 +330,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Department Name',
         'agentlabel':[
-                 {'language':'en','label':'Department Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Department Name','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Department Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Department Name','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'select',
         'agentRequiredFormSubmit':false,
@@ -352,20 +354,21 @@ class CustomFormSeeder extends Seeder {
         'default':'yes'
         }]";
         $json = trim(preg_replace('/\s+/', ' ', $json));
-        $form = "user";
+        $form = 'user';
         \DB::table('forms')->insert(['form' => $form, 'json' => $json]);
         $form_controller = new \App\Http\Controllers\Utility\FormController();
         $form_controller->saveRequired($form);
     }
-    
-    public function seedOrganisationForm(){
+
+    public function seedOrganisationForm()
+    {
         $json = "[{
         'title': 'Company Name',
         'agentlabel':[
-                 {'language':'en','label':'Company Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Company Name','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Company Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Company Name','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'text',
         'customerDisplay':true,
@@ -377,10 +380,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Phone',
         'agentlabel':[
-                 {'language':'en','label':'Phone','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Phone','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Phone','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Phone','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'number',
         'customerDisplay':true,
@@ -392,10 +395,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Company Domain Name',
         'agentlabel':[
-                 {'language':'en','label':'Company Domain Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Company Domain Name','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Company Domain Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Company Domain Name','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'select2',
         'agentRequiredFormSubmit':false,
@@ -407,10 +410,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Description',
         'agentlabel':[
-                 {'language':'en','label':'Description','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Description','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Description','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Description','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'textarea',
         'agentRequiredFormSubmit':false,
@@ -422,10 +425,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Address',
         'agentlabel':[
-                 {'language':'en','label':'Address','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Address','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Address','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Address','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'textarea',
         'agentRequiredFormSubmit':false,
@@ -437,10 +440,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Manager',
         'agentlabel':[
-                 {'language':'en','label':'Manager','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Manager','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Manager','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Manager','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'select',
         'agentRequiredFormSubmit':false,
@@ -453,10 +456,10 @@ class CustomFormSeeder extends Seeder {
         },{
         'title': 'Department',
         'agentlabel':[
-                 {'language':'en','label':'Department','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Department','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'clientlabel':[
-                 {'language':'en','label':'Department','flag':'".asset("lb-faveo/flags/en.png")."'}
+                 {'language':'en','label':'Department','flag':'".asset('lb-faveo/flags/en.png')."'}
                 ],
         'type':'select2',
         'agentRequiredFormSubmit':false,
@@ -467,12 +470,9 @@ class CustomFormSeeder extends Seeder {
         'unique':'department'
         }]";
         $json = trim(preg_replace('/\s+/', ' ', $json));
-        $form = "organisation";
+        $form = 'organisation';
         \DB::table('forms')->insert(['form' => $form, 'json' => $json]);
         $form_controller = new \App\Http\Controllers\Utility\FormController();
         $form_controller->saveRequired($form);
     }
-
-    
-
 }

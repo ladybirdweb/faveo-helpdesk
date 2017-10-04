@@ -10,7 +10,6 @@ use App\Model\helpdesk\Settings\Company;
 use App\Model\helpdesk\Settings\Email;
 use App\User;
 use Auth;
-use Exception;
 use Mail;
 
 class PhpMailController extends Controller
@@ -19,12 +18,12 @@ class PhpMailController extends Controller
      *@var variable to instantiate common mailer class
      */
     protected $commonMailer;
-    
+
     public function __construct()
     {
-        $this->commonMailer = new CommonMailer;
+        $this->commonMailer = new CommonMailer();
     }
-    
+
     public function fetch_smtp_details($id)
     {
         $emails = Emails::where('id', '=', $id)->first();
@@ -83,7 +82,6 @@ class PhpMailController extends Controller
     {
         $from_address = $this->fetch_smtp_details($from);
         if ($from_address == null) {
-            
             loging('email-config', 'Invalid Email Configuration');
         }
         $this->setMailConfig($from_address);
@@ -100,40 +98,42 @@ class PhpMailController extends Controller
             $content = checkArray('content', $content_array);
             $subject = checkArray('subject', $content_array);
         }
-        $send = $this->laravelMail($recipants, $recipantname, $subject, $content, $from_address,$cc, $attachment, $thread, $auto_respond);
+        $send = $this->laravelMail($recipants, $recipantname, $subject, $content, $from_address, $cc, $attachment, $thread, $auto_respond);
 
         return $send;
     }
 
-    public function setMailConfig($mail) {
+    public function setMailConfig($mail)
+    {
         switch ($mail->sending_protocol) {
-            case "smtp":
-                $config = [ "host" => $mail->sending_host,
-                            "port" => $mail->sending_port,
-                            "security" => $mail->sending_encryption,
+            case 'smtp':
+                $config = ['host'     => $mail->sending_host,
+                            'port'     => $mail->sending_port,
+                            'security' => $mail->sending_encryption,
                             'username' => $mail->user_name,
-                            'password' => $mail->password
+                            'password' => $mail->password,
                         ];
                 if (!$this->commonMailer->setSmtpDriver($config)) {
-                    \Log::info("Invaid configuration :- ".$config);
-                    return "invalid mail configuration";
+                    \Log::info('Invaid configuration :- '.$config);
+
+                    return 'invalid mail configuration';
                 }
                 break;
-            case "send_mail":
+            case 'send_mail':
                 $config = [
-                            "host" => \Config::get('mail.host'),
-                            "port" => \Config::get('mail.port'),
-                            "security" => \Config::get('mail.encryption'),
+                            'host'     => \Config::get('mail.host'),
+                            'port'     => \Config::get('mail.port'),
+                            'security' => \Config::get('mail.encryption'),
                             'username' => \Config::get('mail.username'),
-                            'password' => \Config::get('mail.password')
+                            'password' => \Config::get('mail.password'),
                         ];
                 $this->commonMailer->setSmtpDriver($config);
                 break;
-            case "mailgun":
+            case 'mailgun':
                 $this->commonMailer->setMailGunDriver(null);
                 break;
             default:
-                return "Mail driver not supported";
+                return 'Mail driver not supported';
         }
     }
 
@@ -157,7 +157,7 @@ class PhpMailController extends Controller
         return $value;
     }
 
-    public function laravelMail($to, $toname, $subject, $data,$from_address,$cc = '', $attach = '', $thread = '', $auto_respond = '')
+    public function laravelMail($to, $toname, $subject, $data, $from_address, $cc = '', $attach = '', $thread = '', $auto_respond = '')
     {
         //dd($to, $toname, $subject, $data);
         $mail = Mail::send('emails.mail', ['data' => $data, 'thread' => $thread], function ($m) use ($to, $subject, $toname, $cc, $attach, $thread, $auto_respond,$from_address) {

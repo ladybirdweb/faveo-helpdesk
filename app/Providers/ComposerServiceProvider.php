@@ -13,7 +13,7 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $service_desk = "";
+        $service_desk = '';
         if (isInstall()) {
             if (isPlugin()) {
                 $service_desk = 'service::interface.agent.sidebar';
@@ -25,7 +25,7 @@ class ComposerServiceProvider extends ServiceProvider
                 'themes.default1.agent.helpdesk.dashboard.dashboard',
                 'themes.default1.admin.layout.admin',
                 'themes.default1.admin.helpdesk.setting',
-                $service_desk
+                $service_desk,
             ], 'App\Http\ViewComposers\AgentLayout'
         );
         view()->composer(

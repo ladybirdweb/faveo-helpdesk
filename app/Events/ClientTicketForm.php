@@ -6,7 +6,6 @@ use Illuminate\Queue\SerializesModels;
 
 class ClientTicketForm extends Event
 {
-
     use SerializesModels;
 
     public $event;
