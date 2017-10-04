@@ -42,7 +42,7 @@ return array (
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '(?:5(?:[1-59][0-46-9]|6[0-4689]|7[0-2469])|6(?:0[1-9]|[1459]\\d|[2368][0-57-9]|7[0-79])|9(?:0[1-9]|1[02-9]|[2358][0-8]|[467]\\d))\\d{5}',
+    'NationalNumberPattern' => '(?:5(?:[1-59][0-46-9]|6[0-4689]|7[0-469])|6(?:0[1-9]|[1459]\\d|[2368][0-57-9]|7[0-79])|9(?:0[1-9]|1[02-9]|[2358][0-8]|[467]\\d))\\d{5}',
     'ExampleNumber' => '51234567',
     'PossibleLength' => 
     array (
@@ -126,9 +126,11 @@ return array (
   ),
   'uan' => 
   array (
+    'NationalNumberPattern' => '30(?:0[1-9]|[15-7]\\d|2[047]|89)\\d{4}',
+    'ExampleNumber' => '30161234',
     'PossibleLength' => 
     array (
-      0 => -1,
+      0 => 8,
     ),
     'PossibleLengthLocalOnly' => 
     array (

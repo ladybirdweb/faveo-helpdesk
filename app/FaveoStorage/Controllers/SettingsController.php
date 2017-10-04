@@ -61,12 +61,12 @@ class SettingsController extends Controller
     public function postSettings(Request $request)
     {
         try {
-            if ($request->has('private-root') && !is_dir($request->input('private-root'))) {
+            if ($request->filled('private-root') && !is_dir($request->input('private-root'))) {
                 $dir = $request->input('private-root');
 
                 throw new \Exception("'$dir'".' is not a valid directory');
             }
-            if ($request->has('private-root') && !is_writable($request->input('private-root'))) {
+            if ($request->filled('private-root') && !is_writable($request->input('private-root'))) {
                 $dir = $request->input('private-root');
 
                 throw new \Exception("'$dir'"." hasn't write permission");

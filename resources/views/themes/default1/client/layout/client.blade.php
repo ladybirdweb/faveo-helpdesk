@@ -467,6 +467,7 @@ $(function () {
             </script>
                         <script src="{{asset("lb-faveo/js/angular/angular.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
+                 <script src="{{asset("lb-faveo/js/angular/angular-recaptcha.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
 <script src="{{asset('lb-faveo/js/angular/ng-flow-standalone.js')}}"></script>
 <script src="{{asset('lb-faveo/js/angular/fusty-flow.js')}}"></script>
@@ -477,7 +478,7 @@ $(function () {
 <script src="{{asset('lb-faveo/js/angular/angular-translate.js')}}" type="text/javascript"></script>
 
 <script>
-var app=angular.module('clientApp',['ngFileUpload','pascalprecht.translate']);
+var app=angular.module('clientApp',['ngFileUpload','pascalprecht.translate','vcRecaptcha']);
 app.config(['$translateProvider', function($translateProvider){
     $translateProvider.translations('en', {
         "Requester"     : "Requester",

@@ -7,23 +7,30 @@
          columns="80"
          colors="false"
          stderr="false"
+         convertDeprecationsToExceptions="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          forceCoversAnnotation="false"
-         mapTestClassNameToCoveredClassName="false"
-         printerClass="PHPUnit_TextUI_ResultPrinter"
          stopOnFailure="false"
-         testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader"
+         stopOnWarning="false"
+         failOnWarning="false"
+         failOnRisky="false"
+         extensionsDirectory="/tmp"
+         printerClass="PHPUnit\TextUI\ResultPrinter"
+         testSuiteLoaderClass="PHPUnit\Runner\StandardTestSuiteLoader"
+         defaultTestSuite="My Test Suite"
+         beStrictAboutChangesToGlobalState="false"
+         beStrictAboutOutputDuringTests="false"
+         beStrictAboutResourceUsageDuringSmallTests="false"
+         beStrictAboutTestsThatDoNotTestAnything="false"
+         beStrictAboutTodoAnnotatedTests="false"
+         beStrictAboutCoversAnnotation="false"
+         enforceTimeLimit="false"
+         ignoreDeprecatedCodeUnitsFromCodeCoverage="false"
          timeoutForSmallTests="1"
          timeoutForMediumTests="10"
          timeoutForLargeTests="60"
-         beStrictAboutTestsThatDoNotTestAnything="false"
-         beStrictAboutOutputDuringTests="false"
-         beStrictAboutTestSize="false"
-         beStrictAboutTodoAnnotatedTests="false"
-         checkForUnintentionallyCoveredCode="false"
-         beStrictAboutChangesToGlobalState="false"
          verbose="false">
   <testsuites>
     <testsuite name="My Test Suite">
@@ -41,22 +48,23 @@
     </exclude>
   </groups>
 
+  <testdoxGroups>
+    <include>
+      <group>name</group>
+    </include>
+    <exclude>
+      <group>name</group>
+    </exclude>
+  </testdoxGroups>
+
   <filter>
-    <blacklist>
-      <directory suffix=".php">/path/to/files</directory>
-      <file>/path/to/file</file>
-      <file>
-          /path/to/file
-      </file>
-      <exclude>
-        <directory suffix=".php">/path/to/files</directory>
-        <file>/path/to/file</file>
-      </exclude>
-    </blacklist>
     <whitelist addUncoveredFilesFromWhitelist="true"
                processUncoveredFilesFromWhitelist="false">
       <directory suffix=".php">/path/to/files</directory>
       <file>/path/to/file</file>
+      <file>
+        /path/to/file
+      </file>
       <exclude>
         <directory suffix=".php">/path/to/files</directory>
         <file>/path/to/file</file>
@@ -91,9 +99,10 @@
     <log type="json" target="/tmp/logfile.json"/>
     <log type="plain" target="/tmp/logfile.txt"/>
     <log type="tap" target="/tmp/logfile.tap"/>
-    <log type="junit" target="/tmp/logfile.xml" logIncompleteSkipped="false"/>
+    <log type="junit" target="/tmp/logfile.xml"/>
     <log type="testdox-html" target="/tmp/testdox.html"/>
     <log type="testdox-text" target="/tmp/testdox.txt"/>
+    <log type="testdox-xml" target="/tmp/testdox.xml"/>
   </logging>
 
   <php>
@@ -104,6 +113,8 @@
     <const name="BAR" value="true"/>
     <var name="foo" value="false"/>
     <env name="foo" value="true"/>
+    <env name="foo_force" value="forced" force="true"/>
+    <env name="bar" value="true" verbatim="true"/>
     <post name="foo" value="bar"/>
     <get name="foo" value="bar"/>
     <cookie name="foo" value="bar"/>
@@ -111,13 +122,5 @@
     <files name="foo" value="bar"/>
     <request name="foo" value="bar"/>
   </php>
-
-  <selenium>
-    <browser name="Firefox on Linux"
-             browser="*firefox /usr/lib/firefox/firefox-bin"
-             host="my.linux.box"
-             port="4444"
-             timeout="30000"/>
-  </selenium>
 </phpunit>
 

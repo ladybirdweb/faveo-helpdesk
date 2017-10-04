@@ -3,6 +3,7 @@
 namespace Illuminate\Support;
 
 use ArrayAccess;
+use InvalidArgumentException;
 use Illuminate\Support\Traits\Macroable;
 
 class Arr
@@ -68,13 +69,23 @@ class Arr
      */
     public static function crossJoin(...$arrays)
     {
-        return array_reduce($arrays, function ($results, $array) {
-            return static::collapse(array_map(function ($parent) use ($array) {
-                return array_map(function ($item) use ($parent) {
-                    return array_merge($parent, [$item]);
-                }, $array);
-            }, $results));
-        }, [[]]);
+        $results = [[]];
+
+        foreach ($arrays as $index => $array) {
+            $append = [];
+
+            foreach ($results as $product) {
+                foreach ($array as $item) {
+                    $product[$index] = $item;
+
+                    $append[] = $product;
+                }
+            }
+
+            $results = $append;
+        }
+
+        return $results;
     }
 
     /**
@@ -274,6 +285,10 @@ class Arr
             return $array[$key];
         }
 
+        if (strpos($key, '.') === false) {
+            return $array[$key] ?? value($default);
+        }
+
         foreach (explode('.', $key) as $segment) {
             if (static::accessible($array) && static::exists($array, $segment)) {
                 $array = $array[$segment];
@@ -379,6 +394,10 @@ class Arr
             } else {
                 $itemKey = data_get($item, $key);
 
+                if (is_object($itemKey) && method_exists($itemKey, '__toString')) {
+                    $itemKey = (string) $itemKey;
+                }
+
                 $results[$itemKey] = $itemValue;
             }
         }
@@ -439,6 +458,46 @@ class Arr
     }
 
     /**
+     * Get one or a specified number of random values from an array.
+     *
+     * @param  array  $array
+     * @param  int|null  $number
+     * @return mixed
+     *
+     * @throws \InvalidArgumentException
+     */
+    public static function random($array, $number = null)
+    {
+        $requested = is_null($number) ? 1 : $number;
+
+        $count = count($array);
+
+        if ($requested > $count) {
+            throw new InvalidArgumentException(
+                "You requested {$requested} items, but there are only {$count} items available."
+            );
+        }
+
+        if (is_null($number)) {
+            return $array[array_rand($array)];
+        }
+
+        if ((int) $number === 0) {
+            return [];
+        }
+
+        $keys = array_rand($array, $number);
+
+        $results = [];
+
+        foreach ((array) $keys as $key) {
+            $results[] = $array[$key];
+        }
+
+        return $results;
+    }
+
+    /**
      * Set an array item to a given value using "dot" notation.
      *
      * If no key is given to the method, the entire array will be replaced.
@@ -491,10 +550,10 @@ class Arr
      * Sort the array using the given callback or "dot" notation.
      *
      * @param  array  $array
-     * @param  callable|string  $callback
+     * @param  callable|string|null  $callback
      * @return array
      */
-    public static function sort($array, $callback)
+    public static function sort($array, $callback = null)
     {
         return Collection::make($array)->sortBy($callback)->all();
     }

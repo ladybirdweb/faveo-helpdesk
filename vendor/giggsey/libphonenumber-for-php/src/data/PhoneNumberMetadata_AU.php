@@ -170,7 +170,7 @@ return array (
   ),
   'id' => 'AU',
   'countryCode' => 61,
-  'internationalPrefix' => '(?:14(?:1[14]|34|4[17]|[56]6|7[47]|88))?001[14-689]',
+  'internationalPrefix' => '(?:14(?:1[14]|34|4[17]|[56]6|7[47]|88)0011)|001[14-689]',
   'preferredInternationalPrefix' => '0011',
   'nationalPrefix' => '0',
   'nationalPrefixForParsing' => '0',
@@ -195,7 +195,7 @@ return array (
       'format' => '$1 $2 $3',
       'leadingDigitsPatterns' => 
       array (
-        0 => '[45]|14',
+        0 => '14|[45]',
       ),
       'nationalPrefixFormattingRule' => '0$1',
       'domesticCarrierCodeFormattingRule' => '',
@@ -231,8 +231,8 @@ return array (
       'format' => '$1 $2 $3',
       'leadingDigitsPatterns' => 
       array (
-        0 => '1(?:[38]0|90)',
-        1 => '1(?:[38]00|90)',
+        0 => '1[389]0',
+        1 => '1(?:[38]0|9)0',
       ),
       'nationalPrefixFormattingRule' => '$1',
       'domesticCarrierCodeFormattingRule' => '',

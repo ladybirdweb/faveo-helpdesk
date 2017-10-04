@@ -2,7 +2,7 @@
 
 namespace LaravelFCM\Response;
 
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Psr\Http\Message\ResponseInterface;
 use LaravelFCM\Response\Exceptions\ServerResponseException;
 use LaravelFCM\Response\Exceptions\InvalidRequestException;
 use LaravelFCM\Response\Exceptions\UnauthorizedRequestException;
@@ -25,9 +25,9 @@ abstract class BaseResponse
     /**
      * BaseResponse constructor.
      *
-     * @param GuzzleResponse $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      */
-    public function __construct(GuzzleResponse $response)
+    public function __construct(ResponseInterface $response)
     {
         $this->isJsonResponse($response);
         $this->logEnabled = app('config')->get('fcm.log_enabled', false);
@@ -38,13 +38,13 @@ abstract class BaseResponse
     /**
      * Check if the response given by fcm is parsable.
      *
-     * @param GuzzleResponse $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @throws InvalidRequestException
      * @throws ServerResponseException
      * @throws UnauthorizedRequestException
      */
-    private function isJsonResponse(GuzzleResponse $response)
+    private function isJsonResponse(ResponseInterface $response)
     {
         if ($response->getStatusCode() == 200) {
             return;

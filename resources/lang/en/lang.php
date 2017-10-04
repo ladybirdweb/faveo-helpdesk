@@ -1724,5 +1724,9 @@ return [
     'email_verify'                      => 'Email verify',
     'mobile_verify'                     => 'Mobile verify',
     'status_updated_successfully'       => 'Status updated successfully',
+    'ticket_type'=>'Ticket Type',
+    'plugin_updated_successfully'=>'Plugin updated successfully',
+    'on'=>'On',
+    'off'=>'Off',
 
 ];

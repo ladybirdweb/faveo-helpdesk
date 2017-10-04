@@ -9,4 +9,9 @@ class WorkflowRules extends BaseModel
     public $timestamps = false;
     protected $table = 'workflow_rules';
     protected $fillable = ['id', 'workflow_id', 'matching_criteria', 'matching_scenario', 'matching_relation', 'matching_value', 'updated_at', 'created_at'];
+    
+    public function workflow(){
+        return $this->belongsTo('App\Model\helpdesk\Workflow\WorkflowName','workflow_id');
+    }
+    
 }

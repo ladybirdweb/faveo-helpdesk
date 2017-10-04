@@ -76,7 +76,7 @@ class Hash extends AbstractValidator
      * Sets the hash for one or multiple files
      *
      * @param  string|array $options
-     * @return Hash Provides a fluent interface
+     * @return self Provides a fluent interface
      */
     public function setHash($options)
     {
@@ -90,8 +90,8 @@ class Hash extends AbstractValidator
      * Adds the hash for one or multiple files
      *
      * @param  string|array $options
-     * @return Hash Provides a fluent interface
      * @throws Exception\InvalidArgumentException
+     * @return self Provides a fluent interface
      */
     public function addHash($options)
     {
@@ -148,7 +148,7 @@ class Hash extends AbstractValidator
         $this->setValue($filename);
 
         // Is file readable ?
-        if (empty($file) || false === stream_resolve_include_path($file)) {
+        if (empty($file) || false === is_readable($file)) {
             $this->error(self::NOT_FOUND);
             return false;
         }

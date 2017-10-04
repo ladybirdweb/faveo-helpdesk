@@ -112,6 +112,7 @@ class ParamTest extends \PHPUnit_Framework_TestCase
             array('float', 'float'),
             array('string', 'string'),
             array('iterable', 'iterable'),
+            array('object', 'object'),
             array('Array', 'array'),
             array('CALLABLE', 'callable'),
             array('Some\Class', new Node\Name('Some\Class')),
@@ -152,6 +153,18 @@ class ParamTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             new Node\Param('test', null, null, true),
+            $node
+        );
+    }
+
+    public function testVariadic() {
+        $node = $this->createParamBuilder('test')
+            ->makeVariadic()
+            ->getNode()
+        ;
+
+        $this->assertEquals(
+            new Node\Param('test', null, null, false, true),
             $node
         );
     }

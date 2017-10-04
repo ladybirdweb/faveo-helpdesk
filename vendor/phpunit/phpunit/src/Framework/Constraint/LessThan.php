@@ -7,26 +7,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework\Constraint;
 
 /**
  * Constraint that asserts that the value it is evaluated for is less than
  * a given value.
- *
- * @since Class available since Release 3.0.0
  */
-class PHPUnit_Framework_Constraint_LessThan extends PHPUnit_Framework_Constraint
+class LessThan extends Constraint
 {
     /**
-     * @var numeric
+     * @var int|float
      */
     protected $value;
 
     /**
-     * @param numeric $value
+     * @param int|float $value
      */
     public function __construct($value)
     {
         parent::__construct();
+
         $this->value = $value;
     }
 

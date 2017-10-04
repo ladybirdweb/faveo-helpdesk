@@ -9,30 +9,45 @@ $_SERVER['argv'][4] = 'StatusTest';
 $_SERVER['argv'][5] = __DIR__ . '/../_files/StatusTest.php';
 
 require __DIR__ . '/../bootstrap.php';
-PHPUnit_TextUI_Command::main();
+PHPUnit\TextUI\Command::main();
 ?>
 --EXPECTF--
 PHPUnit %s by Sebastian Bergmann and contributors.
 
-.FEIS.<?xml version="1.0" encoding="UTF-8"?>
+.FEISRW                                                             7 / 7 (100%)<?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="StatusTest" file="%s/StatusTest.php" tests="4" assertions="2" failures="1" errors="1" time="%s">
-    <testcase name="testSuccess" class="StatusTest" file="%s/StatusTest.php" line="%d" assertions="1" time="%s"/>
-    <testcase name="testFailure" class="StatusTest" file="%s/StatusTest.php" line="%d" assertions="1" time="%s">
-      <failure type="PHPUnit_Framework_ExpectationFailedException">StatusTest::testFailure
+  <testsuite name="vendor\project\StatusTest" file="%s%eStatusTest.php" tests="7" assertions="2" errors="2" failures="2" skipped="2" time="%s">
+    <testcase name="testSuccess" class="vendor\project\StatusTest" classname="vendor.project.StatusTest" file="%s%eStatusTest.php" line="%d" assertions="1" time="%s"/>
+    <testcase name="testFailure" class="vendor\project\StatusTest" classname="vendor.project.StatusTest" file="%s%eStatusTest.php" line="%d" assertions="1" time="%s">
+      <failure type="PHPUnit\Framework\ExpectationFailedException">vendor\project\StatusTest::testFailure
 Failed asserting that false is true.
 
-%s/StatusTest.php:%d
+%s%eStatusTest.php:%d
 </failure>
     </testcase>
-    <testcase name="testError" class="StatusTest" file="%s/StatusTest.php" line="%d" assertions="0" time="%s">
-      <error type="Exception">StatusTest::testError
-Exception: 
+    <testcase name="testError" class="vendor\project\StatusTest" classname="vendor.project.StatusTest" file="%s%eStatusTest.php" line="%d" assertions="0" time="%s">
+      <error type="RuntimeException">vendor\project\StatusTest::testError
+RuntimeException:%w
 
-%s/StatusTest.php:%d
+%s%eStatusTest.php:%d
 </error>
     </testcase>
-    <testcase name="testRisky" class="StatusTest" file="%s/StatusTest.php" line="%d" assertions="0" time="%s"/>
+    <testcase name="testIncomplete" class="vendor\project\StatusTest" classname="vendor.project.StatusTest" file="%s%eStatusTest.php" line="%d" assertions="0" time="%s">
+      <skipped/>
+    </testcase>
+    <testcase name="testSkipped" class="vendor\project\StatusTest" classname="vendor.project.StatusTest" file="%s%eStatusTest.php" line="%d" assertions="0" time="%s">
+      <skipped/>
+    </testcase>
+    <testcase name="testRisky" class="vendor\project\StatusTest" classname="vendor.project.StatusTest" file="%s%eStatusTest.php" line="%d" assertions="0" time="%s">
+      <error type="PHPUnit\Framework\RiskyTestError">Risky Test
+</error>
+    </testcase>
+    <testcase name="testWarning" class="vendor\project\StatusTest" classname="vendor.project.StatusTest" file="%s%eStatusTest.php" line="%d" assertions="0" time="%s">
+      <warning type="PHPUnit\Framework\Warning">vendor\project\StatusTest::testWarning
+
+%s%eStatusTest.php:%d
+</warning>
+    </testcase>
   </testsuite>
 </testsuites>
 
@@ -41,19 +56,34 @@ Time: %s, Memory: %s
 
 There was 1 error:
 
-1) StatusTest::testError
-Exception: 
+1) vendor\project\StatusTest::testError
+RuntimeException:%w
 
-%s/StatusTest.php:%d
+%s%eStatusTest.php:%d
+
+--
+
+There was 1 warning:
+
+1) vendor\project\StatusTest::testWarning
+
+%s%eStatusTest.php:%d
 
 --
 
 There was 1 failure:
 
-1) StatusTest::testFailure
+1) vendor\project\StatusTest::testFailure
 Failed asserting that false is true.
 
-%s/StatusTest.php:%d
+%s%eStatusTest.php:%d
 
-FAILURES!
-Tests: 6, Assertions: 2, Errors: 1, Failures: 1, Skipped: 1, Incomplete: 1.
+--
+
+There was 1 risky test:
+
+1) vendor\project\StatusTest::testRisky
+This test did not perform any assertions
+
+ERRORS!
+Tests: 7, Assertions: 2, Errors: 1, Failures: 1, Warnings: 1, Skipped: 1, Incomplete: 1, Risky: 1.

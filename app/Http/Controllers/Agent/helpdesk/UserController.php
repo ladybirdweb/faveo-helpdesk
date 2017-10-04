@@ -1155,4 +1155,50 @@ class UserController extends Controller
             return $e->getMessage();
         }
     }
+    
+    public function createRequester(Request $request) {
+
+        $this->validate($request, [
+            'email' => 'required|max:50|email|unique:users',
+            'full_name' => 'required',
+        ]);
+        try {
+            $auth_control = new \App\Http\Controllers\Auth\AuthController();
+            $user_create_request = new \App\Http\Requests\helpdesk\RegisterRequest();
+            $user = new User();
+            $password = str_random(8);
+            $all = $request->all() + ['password' => $password, 'password_confirmation' => $password];
+            $user_create_request->replace($all);
+            $response = $auth_control->postRegister($user, $user_create_request, true);
+            $status = 200;
+        } catch (\Exception $e) {
+            $response = ['error' => [$e->getMessage()]];
+            $status = 500;
+            return response()->json($response, $status);
+        }
+        return response()->json(compact('response'), $status);
+    }
+
+    public function getRequesterForCC(Request $request) {
+        try {
+            $this->validate($request, [
+                'term' => 'required',
+            ]);
+            $term = $request->input('term');
+            $requester = User::where('ban', 0)
+                    ->where('active', 1)
+                    ->where('is_delete', 0)
+                    ->whereNotNull('email')
+                    ->where('email', 'LIKE', '%' . $term . '%')
+                    ->select('id', 'user_name', 'email', 'first_name', 'last_name', 'profile_pic')
+                    ->get();
+            $response = $requester->toArray();
+            $status = 200;
+        } catch (\Exception $e) {
+            $response = ['error' => [$e->getMessage()]];
+            $status = 500;
+            return response()->json($response, $status);
+        }
+        return response()->json(compact('response'), $status);
+    }
 }

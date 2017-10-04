@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class MorphTo extends BelongsTo
 {
     /**
@@ -191,9 +194,13 @@ class MorphTo extends BelongsTo
      */
     public function associate($model)
     {
-        $this->parent->setAttribute($this->foreignKey, $model->getKey());
+        $this->parent->setAttribute(
+            $this->foreignKey, $model instanceof Model ? $model->getKey() : null
+        );
 
-        $this->parent->setAttribute($this->morphType, $model->getMorphClass());
+        $this->parent->setAttribute(
+            $this->morphType, $model instanceof Model ? $model->getMorphClass() : null
+        );
 
         return $this->parent->setRelation($this->relation, $model);
     }

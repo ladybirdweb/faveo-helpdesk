@@ -2,12 +2,14 @@
 
 namespace Illuminate\Database\Eloquent;
 
-use Closure;
 use Faker\Generator as Faker;
 use InvalidArgumentException;
+use Illuminate\Support\Traits\Macroable;
 
 class FactoryBuilder
 {
+    use Macroable;
+
     /**
      * The model definitions in the container.
      *
@@ -28,6 +30,13 @@ class FactoryBuilder
      * @var string
      */
     protected $name = 'default';
+
+    /**
+     * The database connection on which the model instance should be persisted.
+     *
+     * @var string
+     */
+    protected $connection;
 
     /**
      * The model states.
@@ -103,6 +112,19 @@ class FactoryBuilder
     }
 
     /**
+     * Set the database connection on which the model instance should be persisted.
+     *
+     * @param  string  $name
+     * @return $this
+     */
+    public function connection($name)
+    {
+        $this->connection = $name;
+
+        return $this;
+    }
+
+    /**
      * Create a model and persist it in the database if requested.
      *
      * @param  array  $attributes
@@ -143,7 +165,9 @@ class FactoryBuilder
     protected function store($results)
     {
         $results->each(function ($model) {
-            $model->setConnection($model->newQueryWithoutScopes()->getConnection()->getName());
+            if (! isset($this->connection)) {
+                $model->setConnection($model->newQueryWithoutScopes()->getConnection()->getName());
+            }
 
             $model->save();
         });
@@ -224,9 +248,15 @@ class FactoryBuilder
                 throw new InvalidArgumentException("Unable to locate factory with name [{$this->name}] [{$this->class}].");
             }
 
-            return new $this->class(
+            $instance = new $this->class(
                 $this->getRawAttributes($attributes)
             );
+
+            if (isset($this->connection)) {
+                $instance->setConnection($this->connection);
+            }
+
+            return $instance;
         });
     }
 
@@ -244,13 +274,34 @@ class FactoryBuilder
                 throw new InvalidArgumentException("Unable to locate [{$state}] state for [{$this->class}].");
             }
 
-            $definition = array_merge($definition, call_user_func(
-                $this->states[$this->class][$state],
-                $this->faker, $attributes
-            ));
+            $definition = array_merge(
+                $definition,
+                $this->stateAttributes($state, $attributes)
+            );
         }
 
         return $definition;
+    }
+
+    /**
+     * Get the state attributes.
+     *
+     * @param string $state
+     * @param array $attributes
+     * @return array
+     */
+    protected function stateAttributes($state, array $attributes)
+    {
+        $stateAttributes = $this->states[$this->class][$state];
+
+        if (! is_callable($stateAttributes)) {
+            return $stateAttributes;
+        }
+
+        return call_user_func(
+            $stateAttributes,
+            $this->faker, $attributes
+        );
     }
 
     /**
@@ -262,7 +313,7 @@ class FactoryBuilder
     protected function expandAttributes(array $attributes)
     {
         foreach ($attributes as &$attribute) {
-            if ($attribute instanceof Closure) {
+            if (is_callable($attribute) && ! is_string($attribute)) {
                 $attribute = $attribute($attributes);
             }
 

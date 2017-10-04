@@ -90,14 +90,15 @@ class MockDownstreamResponse implements DownstreamResponseContract
         return $this->numberTokensSuccess + count($this->tokensToModify);
     }
 
-/**
- * Get the number of device which thrown an error.
- *
- * @return int
- */public function numberFailure()
-{
-    return count($this->tokensToDelete()) + count($this->tokensWithError);
-}
+    /**
+     * Get the number of device which thrown an error.
+     *
+     * @return int
+     */
+    public function numberFailure()
+    {
+        return count($this->tokensToDelete()) + count($this->tokensWithError);
+    }
 
     /**
      * Get the number of device that you need to modify their token.
@@ -113,10 +114,12 @@ class MockDownstreamResponse implements DownstreamResponseContract
      * Add a token to delete.
      *
      * @param $token
+     * @return MockDownstreamResponse
      */
     public function addTokenToDelete($token)
     {
         $this->tokensToDelete[] = $token;
+        return $this;
     }
 
     /**
@@ -135,10 +138,12 @@ class MockDownstreamResponse implements DownstreamResponseContract
      *
      * @param $oldToken
      * @param $newToken
+     * @return MockDownstreamResponse
      */
     public function addTokenToModify($oldToken, $newToken)
     {
         $this->tokensToModify[$oldToken] = $newToken;
+        return $this;
     }
 
     /**
@@ -158,10 +163,12 @@ class MockDownstreamResponse implements DownstreamResponseContract
      * Add a token to retry.
      *
      * @param $token
+     * @return MockDownstreamResponse
      */
     public function addTokenToRetry($token)
     {
         $this->tokensToRetry[] = $token;
+        return $this;
     }
 
     /**
@@ -179,10 +186,12 @@ class MockDownstreamResponse implements DownstreamResponseContract
      *
      * @param $token
      * @param $message
+     * @return MockDownstreamResponse
      */
     public function addTokenWithError($token, $message)
     {
         $this->tokensWithError[$token] = $message;
+        return $this;
     }
 
     /**
@@ -202,10 +211,12 @@ class MockDownstreamResponse implements DownstreamResponseContract
      * change missing token state.
      *
      * @param $hasMissingToken
+     * @return MockDownstreamResponse
      */
     public function setMissingToken($hasMissingToken)
     {
         $this->hasMissingToken = $hasMissingToken;
+        return $this;
     }
 
     /**

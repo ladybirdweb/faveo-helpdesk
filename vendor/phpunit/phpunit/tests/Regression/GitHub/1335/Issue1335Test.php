@@ -1,9 +1,11 @@
 <?php
+use PHPUnit\Framework\TestCase;
+
 /**
  * @runTestsInSeparateProcesses
  * @preserveGlobalState enabled
  */
-class Issue1335Test extends PHPUnit_Framework_TestCase
+class Issue1335Test extends TestCase
 {
     public function testGlobalString()
     {
@@ -27,12 +29,12 @@ class Issue1335Test extends PHPUnit_Framework_TestCase
 
     public function testGlobalBoolTrue()
     {
-        $this->assertEquals(true, $GLOBALS['globalBoolTrue']);
+        $this->assertTrue($GLOBALS['globalBoolTrue']);
     }
 
     public function testGlobalBoolFalse()
     {
-        $this->assertEquals(false, $GLOBALS['globalBoolFalse']);
+        $this->assertFalse($GLOBALS['globalBoolFalse']);
     }
 
     public function testGlobalNull()
@@ -42,26 +44,26 @@ class Issue1335Test extends PHPUnit_Framework_TestCase
 
     public function testGlobalArray()
     {
-        $this->assertEquals(array('foo'), $GLOBALS['globalArray']);
+        $this->assertEquals(['foo'], $GLOBALS['globalArray']);
     }
 
     public function testGlobalNestedArray()
     {
-        $this->assertEquals(array(array('foo')), $GLOBALS['globalNestedArray']);
+        $this->assertEquals([['foo']], $GLOBALS['globalNestedArray']);
     }
 
     public function testGlobalObject()
     {
-        $this->assertEquals((object) array('foo'=> 'bar'), $GLOBALS['globalObject']);
+        $this->assertEquals((object) ['foo'=> 'bar'], $GLOBALS['globalObject']);
     }
 
     public function testGlobalObjectWithBackSlashString()
     {
-        $this->assertEquals((object) array('foo'=> 'back\\slash'), $GLOBALS['globalObjectWithBackSlashString']);
+        $this->assertEquals((object) ['foo'=> 'back\\slash'], $GLOBALS['globalObjectWithBackSlashString']);
     }
 
     public function testGlobalObjectWithDoubleBackSlashString()
     {
-        $this->assertEquals((object) array('foo'=> 'back\\\\slash'), $GLOBALS['globalObjectWithDoubleBackSlashString']);
+        $this->assertEquals((object) ['foo'=> 'back\\\\slash'], $GLOBALS['globalObjectWithDoubleBackSlashString']);
     }
 }

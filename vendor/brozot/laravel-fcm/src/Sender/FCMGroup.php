@@ -3,7 +3,7 @@
 namespace LaravelFCM\Sender;
 
 use LaravelFCM\Request\GroupRequest;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class FCMGroup.
@@ -19,12 +19,14 @@ class FCMGroup extends HTTPSender
      *
      * @param       $notificationKeyName
      * @param array $registrationIds
+     *
+     * @return null|string notification_key
      */
     public function createGroup($notificationKeyName, array $registrationIds)
     {
         $request = new GroupRequest(self::CREATE, $notificationKeyName, null, $registrationIds);
 
-        $response = $this->client->post($this->url, $request->build());
+        $response = $this->client->request('post', $this->url, $request->build());
 
         return $this->getNotificationToken($response);
     }
@@ -35,11 +37,12 @@ class FCMGroup extends HTTPSender
      * @param       $notificationKeyName
      * @param       $notificationKey
      * @param array $registrationIds     registrationIds to add
+     * @return null|string notification_key
      */
     public function addToGroup($notificationKeyName, $notificationKey, array $registrationIds)
     {
         $request = new GroupRequest(self::ADD, $notificationKeyName, $notificationKey, $registrationIds);
-        $response = $this->client->post($this->url, $request->build());
+        $response = $this->client->request('post', $this->url, $request->build());
 
         return $this->getNotificationToken($response);
     }
@@ -52,11 +55,12 @@ class FCMGroup extends HTTPSender
      * @param       $notificationKeyName
      * @param       $notificationKey
      * @param array $registeredIds       registrationIds to remove
+     * @return null|string notification_key
      */
     public function removeFromGroup($notificationKeyName, $notificationKey, array $registeredIds)
     {
         $request = new GroupRequest(self::REMOVE, $notificationKeyName, $notificationKey, $registeredIds);
-        $response = $this->client->post($this->url, $request->build());
+        $response = $this->client->request('post', $this->url, $request->build());
 
         return $this->getNotificationToken($response);
     }
@@ -64,28 +68,27 @@ class FCMGroup extends HTTPSender
     /**
      * @internal
      *
-     * @param GuzzleResponse $response
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @return null|string notification_key
      */
-    private function getNotificationToken(GuzzleResponse $response)
+    private function getNotificationToken(ResponseInterface $response)
     {
-        if ($this->isValidResponse($response)) {
+        if (! $this->isValidResponse($response)) {
             return null;
         }
 
-        $json = json_decode($response->getBody(), true);
+        $json = json_decode($response->getBody()->getContents(), true);
 
         return $json['notification_key'];
     }
 
     /**
-     * @internal
-     *
-     * @param $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return bool
      */
-    public function isValidResponse(GuzzleResponse $response)
+    public function isValidResponse(ResponseInterface $response)
     {
-        return $response->getReasonPhrase() != 'OK' || $response->getStatusCode() != 200;
+        return $response->getStatusCode() === 200;
     }
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\Optional;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Debug\Dumper;
 use Illuminate\Contracts\Support\Htmlable;
@@ -245,6 +246,20 @@ if (! function_exists('array_pull')) {
     }
 }
 
+if (! function_exists('array_random')) {
+    /**
+     * Get a random value from an array.
+     *
+     * @param  array  $array
+     * @param  int|null  $num
+     * @return mixed
+     */
+    function array_random($array, $num = null)
+    {
+        return Arr::random($array, $num);
+    }
+}
+
 if (! function_exists('array_set')) {
     /**
      * Set an array item to a given value using "dot" notation.
@@ -264,13 +279,13 @@ if (! function_exists('array_set')) {
 
 if (! function_exists('array_sort')) {
     /**
-     * Sort the array using the given callback.
+     * Sort the array by the given callback or attribute name.
      *
      * @param  array  $array
-     * @param  callable  $callback
+     * @param  callable|string|null  $callback
      * @return array
      */
-    function array_sort($array, callable $callback)
+    function array_sort($array, $callback = null)
     {
         return Arr::sort($array, $callback);
     }
@@ -313,6 +328,35 @@ if (! function_exists('array_wrap')) {
     function array_wrap($value)
     {
         return Arr::wrap($value);
+    }
+}
+
+if (! function_exists('blank')) {
+    /**
+     * Determine if the given value is "blank".
+     *
+     * @param  mixed  $value
+     * @return bool
+     */
+    function blank($value)
+    {
+        if (is_null($value)) {
+            return true;
+        }
+
+        if (is_string($value)) {
+            return trim($value) === '';
+        }
+
+        if (is_numeric($value) || is_bool($value)) {
+            return false;
+        }
+
+        if ($value instanceof Countable) {
+            return count($value) === 0;
+        }
+
+        return empty($value);
     }
 }
 
@@ -548,6 +592,58 @@ if (! function_exists('ends_with')) {
     }
 }
 
+if (! function_exists('env')) {
+    /**
+     * Gets the value of an environment variable.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return mixed
+     */
+    function env($key, $default = null)
+    {
+        $value = getenv($key);
+
+        if ($value === false) {
+            return value($default);
+        }
+
+        switch (strtolower($value)) {
+            case 'true':
+            case '(true)':
+                return true;
+            case 'false':
+            case '(false)':
+                return false;
+            case 'empty':
+            case '(empty)':
+                return '';
+            case 'null':
+            case '(null)':
+                return;
+        }
+
+        if (strlen($value) > 1 && Str::startsWith($value, '"') && Str::endsWith($value, '"')) {
+            return substr($value, 1, -1);
+        }
+
+        return $value;
+    }
+}
+
+if (! function_exists('filled')) {
+    /**
+     * Determine if a value is "filled".
+     *
+     * @param  mixed  $value
+     * @return bool
+     */
+    function filled($value)
+    {
+        return ! blank($value);
+    }
+}
+
 if (! function_exists('head')) {
     /**
      * Get the first element of an array. Useful for method chaining.
@@ -611,6 +707,19 @@ if (! function_exists('object_get')) {
         }
 
         return $object;
+    }
+}
+
+if (! function_exists('optional')) {
+    /**
+     * Provide access to optional objects.
+     *
+     * @param  mixed  $value
+     * @return mixed
+     */
+    function optional($value)
+    {
+        return new Optional($value);
     }
 }
 
@@ -706,6 +815,20 @@ if (! function_exists('str_after')) {
     function str_after($subject, $search)
     {
         return Str::after($subject, $search);
+    }
+}
+
+if (! function_exists('str_before')) {
+    /**
+     * Get the portion of a string before a given value.
+     *
+     * @param  string  $subject
+     * @param  string  $search
+     * @return string
+     */
+    function str_before($subject, $search)
+    {
+        return Str::before($subject, $search);
     }
 }
 
@@ -859,11 +982,26 @@ if (! function_exists('str_slug')) {
      *
      * @param  string  $title
      * @param  string  $separator
+     * @param  string  $language
      * @return string
      */
-    function str_slug($title, $separator = '-')
+    function str_slug($title, $separator = '-', $language = 'en')
     {
-        return Str::slug($title, $separator);
+        return Str::slug($title, $separator, $language);
+    }
+}
+
+if (! function_exists('str_start')) {
+    /**
+     * Begin a string with a single instance of a given value.
+     *
+     * @param  string  $value
+     * @param  string  $prefix
+     * @return string
+     */
+    function str_start($value, $prefix)
+    {
+        return Str::start($value, $prefix);
     }
 }
 
@@ -900,6 +1038,40 @@ if (! function_exists('tap')) {
     }
 }
 
+if (! function_exists('throw_if')) {
+    /**
+     * Throw the given exception if the given boolean is true.
+     *
+     * @param  bool  $boolean
+     * @param  \Throwable|string  $exception
+     * @param  array  ...$parameters
+     * @return void
+     */
+    function throw_if($boolean, $exception, ...$parameters)
+    {
+        if ($boolean) {
+            throw (is_string($exception) ? new $exception(...$parameters) : $exception);
+        }
+    }
+}
+
+if (! function_exists('throw_unless')) {
+    /**
+     * Throw the given exception unless the given boolean is true.
+     *
+     * @param  bool  $boolean
+     * @param  \Throwable|string  $exception
+     * @param  array  ...$parameters
+     * @return void
+     */
+    function throw_unless($boolean, $exception, ...$parameters)
+    {
+        if (! $boolean) {
+            throw (is_string($exception) ? new $exception(...$parameters) : $exception);
+        }
+    }
+}
+
 if (! function_exists('title_case')) {
     /**
      * Convert a value to title case.
@@ -932,6 +1104,29 @@ if (! function_exists('trait_uses_recursive')) {
     }
 }
 
+if (! function_exists('transform')) {
+    /**
+     * Transform the given value if it is present.
+     *
+     * @param  mixed  $value
+     * @param  callable  $callback
+     * @param  mixed  $default
+     * @return mixed|null
+     */
+    function transform($value, callable $callback, $default = null)
+    {
+        if (filled($value)) {
+            return $callback($value);
+        }
+
+        if (is_callable($default)) {
+            return $default($value);
+        }
+
+        return $default;
+    }
+}
+
 if (! function_exists('value')) {
     /**
      * Return the default value of the given value.
@@ -959,13 +1154,14 @@ if (! function_exists('windows_os')) {
 
 if (! function_exists('with')) {
     /**
-     * Return the given object. Useful for chaining.
+     * Return the given value, optionally passed through the given callback.
      *
-     * @param  mixed  $object
+     * @param  mixed  $value
+     * @param  callable|null  $callback
      * @return mixed
      */
-    function with($object)
+    function with($value, callable $callback = null)
     {
-        return $object;
+        return is_null($callback) ? $value : $callback($value);
     }
 }

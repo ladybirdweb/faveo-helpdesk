@@ -40,6 +40,20 @@ class MailMessage extends SimpleMessage
     public $replyTo = [];
 
     /**
+     * The "cc" information for the message.
+     *
+     * @var array
+     */
+    public $cc = [];
+
+    /**
+     * The "bcc" information for the message.
+     *
+     * @var array
+     */
+    public $bcc = [];
+
+    /**
      * The attachments for the message.
      *
      * @var array
@@ -95,6 +109,19 @@ class MailMessage extends SimpleMessage
     }
 
     /**
+     * Set the default markdown template.
+     *
+     * @param  string  $template
+     * @return $this
+     */
+    public function template($template)
+    {
+        $this->markdown = $template;
+
+        return $this;
+    }
+
+    /**
      * Set the from address for the mail message.
      *
      * @param  string  $address
@@ -118,6 +145,34 @@ class MailMessage extends SimpleMessage
     public function replyTo($address, $name = null)
     {
         $this->replyTo = [$address, $name];
+
+        return $this;
+    }
+
+    /**
+     * Set the cc address for the mail message.
+     *
+     * @param  string  $address
+     * @param  string|null  $name
+     * @return $this
+     */
+    public function cc($address, $name = null)
+    {
+        $this->cc = [$address, $name];
+
+        return $this;
+    }
+
+    /**
+     * Set the bcc address for the mail message.
+     *
+     * @param  string  $address
+     * @param  string|null  $name
+     * @return $this
+     */
+    public function bcc($address, $name = null)
+    {
+        $this->bcc = [$address, $name];
 
         return $this;
     }

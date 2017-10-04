@@ -134,19 +134,11 @@ class CommandTest extends AbstractCommandTest
      */
     public function testConvertsInvalidJsonResponsesToArray()
     {
-        $json = '{ "key": "Hi!" }invalid';
-        // Some implementations of php-json extension are not strict enough
-        // and allow to parse invalid json ignoring invalid parts
-        // See https://github.com/remicollet/pecl-json-c/issues/5
-        if (json_decode($json) && JSON_ERROR_NONE === json_last_error()) {
-            $this->markTestSkipped('php-pecl-json library regression issues');
-        }
-
         $client = $this->getClient();
         $this->setMockResponse($client, array(
             new \Guzzle\Http\Message\Response(200, array(
                 'Content-Type' => 'application/json'
-                ), $json
+                ), '{ "key": "Hi!" }invalid'
             )
         ));
         $command = new MockCommand();

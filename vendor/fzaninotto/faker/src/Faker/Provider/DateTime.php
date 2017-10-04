@@ -62,8 +62,9 @@ class DateTime extends Base
      */
     public static function dateTimeAD($max = 'now', $timezone = null)
     {
+        $min = (PHP_INT_SIZE>4 ? -62135597361 : -PHP_INT_MAX);
         return static::setTimezone(
-            new \DateTime('@' . mt_rand(-62135597361, static::getMaxTimestamp($max))),
+            new \DateTime('@' . mt_rand($min, static::getMaxTimestamp($max))),
             (null === $timezone ? date_default_timezone_get() : $timezone)
         );
     }
@@ -154,7 +155,7 @@ class DateTime extends Base
         $datetime       = $date instanceof \DateTime ? $date : new \DateTime($date);
         $otherDatetime  = clone $datetime;
         $otherDatetime->add($intervalObject);
-        
+
         $begin = $datetime > $otherDatetime ? $otherDatetime : $datetime;
         $end = $datetime===$begin ? $otherDatetime : $datetime;
 
@@ -167,42 +168,46 @@ class DateTime extends Base
 
     /**
      * @param \DateTime|int|string $max maximum timestamp used as random end limit, default to "now"
+     * @param string $timezone time zone in which the date time should be set, default to result of `date_default_timezone_get`
      * @example DateTime('1964-04-04 11:02:02')
      * @return \DateTime
      */
-    public static function dateTimeThisCentury($max = 'now')
+    public static function dateTimeThisCentury($max = 'now', $timezone = null)
     {
-        return static::dateTimeBetween('-100 year', $max);
+        return static::dateTimeBetween('-100 year', $max, $timezone);
     }
 
     /**
      * @param \DateTime|int|string $max maximum timestamp used as random end limit, default to "now"
+     * @param string $timezone time zone in which the date time should be set, default to result of `date_default_timezone_get`
      * @example DateTime('2010-03-10 05:18:58')
      * @return \DateTime
      */
-    public static function dateTimeThisDecade($max = 'now')
+    public static function dateTimeThisDecade($max = 'now', $timezone = null)
     {
-        return static::dateTimeBetween('-10 year', $max);
+        return static::dateTimeBetween('-10 year', $max, $timezone);
     }
 
     /**
      * @param \DateTime|int|string $max maximum timestamp used as random end limit, default to "now"
+     * @param string $timezone time zone in which the date time should be set, default to result of `date_default_timezone_get`
      * @example DateTime('2011-09-19 09:24:37')
      * @return \DateTime
      */
-    public static function dateTimeThisYear($max = 'now')
+    public static function dateTimeThisYear($max = 'now', $timezone = null)
     {
-        return static::dateTimeBetween('-1 year', $max);
+        return static::dateTimeBetween('-1 year', $max, $timezone);
     }
 
     /**
      * @param \DateTime|int|string $max maximum timestamp used as random end limit, default to "now"
+     * @param string $timezone time zone in which the date time should be set, default to result of `date_default_timezone_get`
      * @example DateTime('2011-10-05 12:51:46')
      * @return \DateTime
      */
-    public static function dateTimeThisMonth($max = 'now')
+    public static function dateTimeThisMonth($max = 'now', $timezone = null)
     {
-        return static::dateTimeBetween('-1 month', $max);
+        return static::dateTimeBetween('-1 month', $max, $timezone);
     }
 
     /**
@@ -285,6 +290,11 @@ class DateTime extends Base
 
     /**
      * Internal method to set the time zone on a DateTime.
+     *
+     * @param \DateTime $dt
+     * @param string $timezone
+     *
+     * @return $this
      */
     private static function setTimezone(\DateTime $dt, $timezone)
     {

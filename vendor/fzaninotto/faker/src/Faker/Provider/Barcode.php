@@ -17,10 +17,14 @@ class Barcode extends Base
 
     /**
      * Utility function for computing EAN checksums
+     *
+     * @param string $input
+     *
+     * @return integer
      */
     protected static function eanChecksum($input)
     {
-        $sequence = (strlen($input) - 1) === 8 ? array(3, 1) : array(1, 3);
+        $sequence = (strlen($input) + 1) === 8 ? array(3, 1) : array(1, 3);
         $sums = 0;
         foreach (str_split($input) as $n => $digit) {
             $sums += $digit * $sequence[$n % 2];

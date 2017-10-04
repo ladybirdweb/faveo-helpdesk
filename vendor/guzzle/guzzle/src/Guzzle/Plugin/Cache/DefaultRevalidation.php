@@ -95,11 +95,9 @@ class DefaultRevalidation implements RevalidationInterface
     protected function createRevalidationRequest(RequestInterface $request, Response $response)
     {
         $revalidate = clone $request;
-        $revalidate->removeHeader('Pragma')->removeHeader('Cache-Control');
-
-        if ($response->getLastModified()) {
-            $revalidate->setHeader('If-Modified-Since', $response->getLastModified());
-        }
+        $revalidate->removeHeader('Pragma')
+            ->removeHeader('Cache-Control')
+            ->setHeader('If-Modified-Since', $response->getLastModified() ?: $response->getDate());
 
         if ($response->getEtag()) {
             $revalidate->setHeader('If-None-Match', $response->getEtag());

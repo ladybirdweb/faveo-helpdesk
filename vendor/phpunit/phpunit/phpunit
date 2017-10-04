@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-if (version_compare('5.3.3', PHP_VERSION, '>')) {
+if (version_compare('7.0.0', PHP_VERSION, '>')) {
     fwrite(
         STDERR,
         sprintf(
-            'This version of PHPUnit is supported on PHP 5.3, PHP 5.4, PHP 5.5, and PHP 5.6.' . PHP_EOL .
-            'You are using PHP %s%s.' . PHP_EOL,
+            'This version of PHPUnit is supported on PHP 7.0 and PHP 7.1.' . PHP_EOL .
+            'You are using PHP %s (%s).' . PHP_EOL,
             PHP_VERSION,
-            defined('PHP_BINARY') ? ' (' . PHP_BINARY . ')' : ''
+            PHP_BINARY
         )
     );
 
@@ -38,7 +38,8 @@ foreach (array(__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.p
 unset($file);
 
 if (!defined('PHPUNIT_COMPOSER_INSTALL')) {
-    fwrite(STDERR,
+    fwrite(
+        STDERR,
         'You need to set up the project dependencies using Composer:' . PHP_EOL . PHP_EOL .
         '    composer install' . PHP_EOL . PHP_EOL .
         'You can learn all about Composer on https://getcomposer.org/.' . PHP_EOL
@@ -49,4 +50,4 @@ if (!defined('PHPUNIT_COMPOSER_INSTALL')) {
 
 require PHPUNIT_COMPOSER_INSTALL;
 
-PHPUnit_TextUI_Command::main();
+PHPUnit\TextUI\Command::main();

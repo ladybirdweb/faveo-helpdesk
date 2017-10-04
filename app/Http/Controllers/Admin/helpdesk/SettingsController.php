@@ -217,13 +217,13 @@ class SettingsController extends Controller
             $email_mandatory = CommonSettings::where('option_name', '=', 'email_mandatory')
                     ->update(['status' => $request->email_mandatory]);
 
-            if ($request->has('itil')) {
+            if ($request->filled('itil')) {
                 $itil = $request->input('itil');
                 $sett = CommonSettings::firstOrCreate(['option_name'=>'itil']);
                 $sett->status = $itil;
                 $sett->save();
             }
-            if ($request->has('verify')) {
+            if ($request->filled('verify')) {
                 $json = json_encode($request->input('verify'));
                 CommonSettings::updateOrCreate(['option_name' => 'verify'], ['option_value'=>$json, 'optional_field'=>'verify']);
             }

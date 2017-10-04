@@ -78,60 +78,65 @@ class WorkflowController extends Controller
                         /* order column name and description */
                         ->orderColumns('name')
                         /* add column name */
-                        ->addColumn('name', function ($model) {
+                        ->addColumn('name', function ($model)
+                        {
                             return $model->name;
                         })
                         /* add column status */
-                        ->addColumn('status', function ($model) {
-                            if ($model->status == 1) {
+                        ->addColumn('status', function ($model)
+                        {
+                            if ($model->status == 1)
+                            {
                                 return 'Active';
-                            } elseif ($model->status == 0) {
+                            }
+                            elseif ($model->status == 0)
+                            {
                                 return 'Disabled';
                             }
                         })
                         /* add column order */
-                        ->addColumn('order', function ($model) {
+                        ->addColumn('order', function ($model)
+                        {
                             return $model->order;
                         })
                         /* add column rules */
-                        ->addColumn('rules', function ($model) {
+                        ->addColumn('rules', function ($model)
+                        {
                             $rules = WorkflowRules::where('workflow_id', '=', $model->id)->count();
 
                             return $rules;
                         })
                         /* add column target */
-                        ->addColumn('target', function ($model) {
-                            $target = $model->target;
-                            $target1 = explode('-', $target);
-                            if ($target1[0] == 'A') {
-                                if ($target1[1] == 0) {
-                                    return 'Any';
-                                } elseif ($target1[1] == 1) {
-                                    return 'Web Forms';
-                                } elseif ($target1[1] == 2) {
-                                    return 'Email';
-                                } elseif ($target1[1] == 4) {
-                                    return 'API';
+                        ->addColumn('target', function ($model)
+                        {
+                            $target = "";
+                            if($model->target=='any'){
+                                $target = "Any";
+                            }else{
+                                $targets = $model->targets()->first();
+                                if($targets){
+                                    $target = $targets->value;
                                 }
-                            } elseif ($target1[0] == 'E') {
-                                $emails = Emails::where('id', '=', $target1[1])->first();
-
-                                return $emails->email_address;
                             }
+                            return $target;
                         })
                         /* add column created */
-                        ->addColumn('Created', function ($model) {
+                        ->addColumn('Created', function ($model)
+                        {
                             return faveoDate($model->created_at);
                         })
                         /* add column updated */
-                        ->addColumn('Updated', function ($model) {
+                        ->addColumn('Updated', function ($model)
+                        {
                             return faveoDate($model->updated_at);
                         })
                         /* add column action */
-                        ->addColumn('Actions', function ($model) {
-                            $confirmation = 'Are you sure?';
+                        ->addColumn('Actions', function ($model)
+                        {
+                            $url          = url('/workflow/delete/' . $model->id);
+                            $confirmation = $delete       = deletePopUp($model->id, $url, "Delete $model->subject");
 
-                            return "<a class='btn btn-info btn-xs btn-flat' href='".route('workflow.edit', $model->id)."'><i class='fa fa-edit text-black'></i> Edit</a>  <a class='btn btn-danger btn-xs btn-flat' href='".route('workflow.delete', $model->id)."'><i class='fa fa-trash text-black'></i> Delete</a>";
+                            return "<a class='btn btn-primary btn-xs ' href='" . route('workflow.edit', $model->id) . "'><i class='fa fa-edit text-white'></i>&nbsp; Edit</a> &nbsp;$confirmation";
                         })
                         ->make();
     }

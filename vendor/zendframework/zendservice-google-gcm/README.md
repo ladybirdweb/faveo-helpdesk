@@ -1,4 +1,4 @@
-ZendService\Google\Gcm [![Build Status](https://travis-ci.org/zendframework/ZendService_Google_Gcm.png?branch=master.png?branch=master)](https://travis-ci.org/zendframework/ZendService_Google_Gcm)
+ZendService\Google\Gcm [![Build Status](https://api.travis-ci.org/zendframework/ZendService_Google_Gcm.svg?branch=develop)](https://travis-ci.org/zendframework/ZendService_Google_Gcm)
 ================================
 
 Provides support for Google push notifications.

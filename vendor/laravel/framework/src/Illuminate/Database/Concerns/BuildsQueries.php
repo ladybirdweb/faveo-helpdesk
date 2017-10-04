@@ -36,9 +36,11 @@ trait BuildsQueries
             // On each chunk result set, we will pass them to the callback and then let the
             // developer take care of everything within the callback, which allows us to
             // keep the memory low for spinning through large result sets for working.
-            if ($callback($results) === false) {
+            if ($callback($results, $page) === false) {
                 return false;
             }
+
+            unset($results);
 
             $page++;
         } while ($countResults == $count);
@@ -68,7 +70,7 @@ trait BuildsQueries
      * Execute the query and get the first result.
      *
      * @param  array  $columns
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Model|static|null
      */
     public function first($columns = ['*'])
     {
@@ -86,6 +88,36 @@ trait BuildsQueries
     public function when($value, $callback, $default = null)
     {
         if ($value) {
+            return $callback($this, $value) ?: $this;
+        } elseif ($default) {
+            return $default($this, $value) ?: $this;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Pass the query to a given callback.
+     *
+     * @param  \Closure  $callback
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function tap($callback)
+    {
+        return $this->when(true, $callback);
+    }
+
+    /**
+     * Apply the callback's query changes if the given "value" is false.
+     *
+     * @param  mixed  $value
+     * @param  callable  $callback
+     * @param  callable  $default
+     * @return mixed
+     */
+    public function unless($value, $callback, $default = null)
+    {
+        if (! $value) {
             return $callback($this, $value) ?: $this;
         } elseif ($default) {
             return $default($this, $value) ?: $this;
@@ -115,7 +147,6 @@ trait BuildsQueries
      * Create a new simple paginator instance.
      *
      * @param  \Illuminate\Support\Collection  $items
-     * @param  int $total
      * @param  int $perPage
      * @param  int $currentPage
      * @param  array  $options

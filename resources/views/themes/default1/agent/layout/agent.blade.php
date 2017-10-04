@@ -508,6 +508,7 @@
         <script src="{{asset("lb-faveo/js/angular/angular.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/angular/ng-scrollable.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/angular/angular-moment.min.js")}}" type="text/javascript"></script>
+        <script src="{{asset("lb-faveo/js/angular/angular-recaptcha.min.js")}}" type="text/javascript"></script>
         <script src="{{asset("lb-faveo/js/angular/angular-translate.js")}}" type="text/javascript"></script>
 
         <script>
@@ -529,7 +530,7 @@
 <script src="{{asset('lb-faveo/js/angular/ng-file-upload.js')}}"></script>
 <script src="{{asset('lb-faveo/js/angular/ng-file-upload-shim.min.js')}}"></script>
 <script>
- var app = angular.module('fbApp', ['angularMoment','flow','ngFileUpload','pascalprecht.translate']).directive('whenScrolled', function() {
+ var app = angular.module('fbApp', ['vcRecaptcha','angularMoment','flow','ngFileUpload','pascalprecht.translate']).directive('whenScrolled', function() {
     return function(scope, elm, attr) {
         var raw = elm[0];
         console.log(raw);

@@ -59,7 +59,7 @@ return array (
   ),
   'shortCode' => 
   array (
-    'NationalNumberPattern' => '1(?:0[01]|1[027-9]|2[01389]|3(?:2|3[039]|45|66|88|9[18])|82)',
+    'NationalNumberPattern' => '1(?:0[01]|1[0247-9]|2[01389]|3(?:2|3[039]|45|66|88|9[18])|82)',
     'ExampleNumber' => '112',
     'PossibleLength' => 
     array (
@@ -80,11 +80,21 @@ return array (
   ),
   'carrierSpecific' => 
   array (
-    'NationalNumberPattern' => '10[01]',
+    'NationalNumberPattern' => '1(?:0[01]|14)',
     'ExampleNumber' => '100',
     'PossibleLength' => 
     array (
       0 => 3,
+    ),
+    'PossibleLengthLocalOnly' => 
+    array (
+    ),
+  ),
+  'smsServices' => 
+  array (
+    'PossibleLength' => 
+    array (
+      0 => -1,
     ),
     'PossibleLengthLocalOnly' => 
     array (

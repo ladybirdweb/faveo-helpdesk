@@ -213,12 +213,6 @@ class Url
      */
     public function setScheme($scheme)
     {
-        if ($this->scheme == 'http' && $this->port == 80) {
-            $this->port = null;
-        } elseif ($this->scheme == 'https' && $this->port == 443) {
-            $this->port = null;
-        }
-
         $this->scheme = $scheme;
 
         return $this;
@@ -318,7 +312,7 @@ class Url
     }
 
     /**
-     * Add a relative path to the currently set path.
+     * Add a relative path to the currently set path
      *
      * @param string $relativePath Relative path to add
      *
@@ -326,15 +320,16 @@ class Url
      */
     public function addPath($relativePath)
     {
-        if ($relativePath != '/' && is_string($relativePath) && strlen($relativePath) > 0) {
-            // Add a leading slash if needed
-            if ($relativePath[0] != '/') {
-                $relativePath = '/' . $relativePath;
-            }
-            $this->setPath(str_replace('//', '/', $this->path . $relativePath));
+        if (!$relativePath || $relativePath == '/') {
+            return $this;
         }
 
-        return $this;
+        // Add a leading slash if needed
+        if ($relativePath[0] != '/') {
+            $relativePath = '/' . $relativePath;
+        }
+
+        return $this->setPath(str_replace('//', '/', $this->getPath() . $relativePath));
     }
 
     /**

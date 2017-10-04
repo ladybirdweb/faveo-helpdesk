@@ -157,9 +157,8 @@ class SchemaValidator implements ValidatorInterface
                             }
                         } else {
                             // if additionalProperties is set to false and there are additionalProperties in the values, then fail
-                            foreach ($diff as $prop) {
-                                $this->errors[] = sprintf('%s[%s] is not an allowed property', $path, $prop);
-                            }
+                            $keys = array_keys($value);
+                            $this->errors[] = sprintf('%s[%s] is not an allowed property', $path, reset($keys));
                         }
                     }
                 }

@@ -57,12 +57,12 @@ class JsonResponse extends BaseJsonResponse
     {
         $this->original = $data;
 
-        if ($data instanceof Arrayable) {
-            $this->data = json_encode($data->toArray(), $this->encodingOptions);
-        } elseif ($data instanceof Jsonable) {
+        if ($data instanceof Jsonable) {
             $this->data = $data->toJson($this->encodingOptions);
         } elseif ($data instanceof JsonSerializable) {
             $this->data = json_encode($data->jsonSerialize(), $this->encodingOptions);
+        } elseif ($data instanceof Arrayable) {
+            $this->data = json_encode($data->toArray(), $this->encodingOptions);
         } else {
             $this->data = json_encode($data, $this->encodingOptions);
         }
@@ -75,7 +75,7 @@ class JsonResponse extends BaseJsonResponse
     }
 
     /**
-     * Determine if an error occured during JSON encoding.
+     * Determine if an error occurred during JSON encoding.
      *
      * @param  int  $jsonError
      * @return bool

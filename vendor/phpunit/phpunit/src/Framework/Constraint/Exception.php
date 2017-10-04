@@ -7,11 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework\Constraint;
 
-/**
- * @since Class available since Release 3.6.6
- */
-class PHPUnit_Framework_Constraint_Exception extends PHPUnit_Framework_Constraint
+use PHPUnit\Util\Filter;
+use Throwable;
+
+class Exception extends Constraint
 {
     /**
      * @var string
@@ -54,20 +55,20 @@ class PHPUnit_Framework_Constraint_Exception extends PHPUnit_Framework_Constrain
     {
         if ($other !== null) {
             $message = '';
-            if ($other instanceof Exception) {
+            if ($other instanceof Throwable) {
                 $message = '. Message was: "' . $other->getMessage() . '" at'
-                        . "\n" . $other->getTraceAsString();
+                    . "\n" . Filter::getFilteredStacktrace($other);
             }
 
-            return sprintf(
+            return \sprintf(
                 'exception of type "%s" matches expected exception "%s"%s',
-                get_class($other),
+                \get_class($other),
                 $this->className,
                 $message
             );
         }
 
-        return sprintf(
+        return \sprintf(
             'exception of type "%s" is thrown',
             $this->className
         );
@@ -80,7 +81,7 @@ class PHPUnit_Framework_Constraint_Exception extends PHPUnit_Framework_Constrain
      */
     public function toString()
     {
-        return sprintf(
+        return \sprintf(
             'exception of type "%s"',
             $this->className
         );

@@ -105,6 +105,19 @@ interface PushInterface
     public function setDevices(DeviceCollection $devices);
 
     /**
+     * Get Responses
+     * @return \Sly\NotificationPusher\Collection\ResponseCollection
+     */
+    public function getResponses();
+
+    /**
+     * adds a response
+     * @param \Sly\NotificationPusher\Model\DeviceInterface $device
+     * @param mixed $response
+     */
+    public function addResponse(DeviceInterface $device, $response);
+
+    /**
      * Get PushedAt.
      *
      * @return DateTime

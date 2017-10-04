@@ -209,18 +209,18 @@ abstract class AbstractCloner implements ClonerInterface
         });
         $this->filter = $filter;
 
+        if ($gc = gc_enabled()) {
+            gc_disable();
+        }
         try {
-            $data = $this->doClone($var);
-        } catch (\Exception $e) {
+            return new Data($this->doClone($var));
+        } finally {
+            if ($gc) {
+                gc_enable();
+            }
+            restore_error_handler();
+            $this->prevErrorHandler = null;
         }
-        restore_error_handler();
-        $this->prevErrorHandler = null;
-
-        if (isset($e)) {
-            throw $e;
-        }
-
-        return new Data($data);
     }
 
     /**

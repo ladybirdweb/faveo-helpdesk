@@ -91,11 +91,9 @@ return array (
   ),
   'personalNumber' => 
   array (
-    'NationalNumberPattern' => '70\\d{6}',
-    'ExampleNumber' => '70123456',
     'PossibleLength' => 
     array (
-      0 => 8,
+      0 => -1,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -172,7 +170,7 @@ return array (
       'format' => '$1 $2',
       'leadingDigitsPatterns' => 
       array (
-        0 => '[2-5]|7[1-9]|[89](?:[1-9]|0[2-9])',
+        0 => '[2-5]|7[1-9]|[89](?:0[2-9]|[1-9])',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '$CC $1',
@@ -184,7 +182,7 @@ return array (
       'format' => '$1 $2 $3',
       'leadingDigitsPatterns' => 
       array (
-        0 => '[2-5]|7[1-9]|[89](?:[1-9]|0[2-9])',
+        0 => '[2-5]|7[1-9]|[89](?:0[2-9]|[1-9])',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '$CC $1',
@@ -244,7 +242,7 @@ return array (
       'format' => '$1 $2 $3 $4',
       'leadingDigitsPatterns' => 
       array (
-        0 => '2(?:[12589]|4[12])|[3-5]|7[1-9]|8(?:[1-9]|0[2-9])|9(?:[1-9]|0[2-46-9])',
+        0 => '2(?:[12589]|4[12])|[3-5]|7[1-9]|8(?:0[2-9]|[1-9])|9(?:0[2-46-9]|[1-9])',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '$CC $1',

@@ -9,6 +9,8 @@
 
 namespace Zend\Validator;
 
+use UConverter;
+
 class EmailAddress extends AbstractValidator
 {
     const INVALID            = 'emailAddressInvalid';
@@ -342,6 +344,8 @@ class EmailAddress extends AbstractValidator
         $atext = 'a-zA-Z0-9\x21\x23\x24\x25\x26\x27\x2a\x2b\x2d\x2f\x3d\x3f\x5e\x5f\x60\x7b\x7c\x7d\x7e';
         if (preg_match('/^[' . $atext . ']+(\x2e+[' . $atext . ']+)*$/', $this->localPart)) {
             $result = true;
+        } elseif ($this->validateInternationalizedLocalPart($this->localPart)) {
+            $result = true;
         } else {
             // Try quoted string format (RFC 5321 Chapter 4.1.2)
 
@@ -358,6 +362,26 @@ class EmailAddress extends AbstractValidator
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $localPart Address local part to validate.
+     * @return bool
+     */
+    protected function validateInternationalizedLocalPart($localPart)
+    {
+        if (extension_loaded('intl')
+            && false === UConverter::transcode($localPart, 'UTF-8', 'UTF-8')
+        ) {
+            // invalid utf?
+            return false;
+        }
+
+        $atext = 'a-zA-Z0-9\x21\x23\x24\x25\x26\x27\x2a\x2b\x2d\x2f\x3d\x3f\x5e\x5f\x60\x7b\x7c\x7d\x7e';
+        // RFC 6532 extends atext to include non-ascii utf
+        // @see https://tools.ietf.org/html/rfc6532#section-3.1
+        $uatext = $atext . '\x{80}-\x{FFFF}';
+        return (bool) preg_match('/^[' . $uatext . ']+(\x2e+[' . $uatext . ']+)*$/u', $localPart);
     }
 
     /**
@@ -530,6 +554,9 @@ class EmailAddress extends AbstractValidator
     protected function idnToAscii($email)
     {
         if (extension_loaded('intl')) {
+            if (defined('INTL_IDNA_VARIANT_UTS46')) {
+                return (idn_to_ascii($email, 0, INTL_IDNA_VARIANT_UTS46) ?: $email);
+            }
             return (idn_to_ascii($email) ?: $email);
         }
         return $email;
@@ -553,6 +580,9 @@ class EmailAddress extends AbstractValidator
             // the source string in those cases.
             // But not when the source string is long enough.
             // Thus we default to source string ourselves.
+            if (defined('INTL_IDNA_VARIANT_UTS46')) {
+                return idn_to_utf8($email, 0, INTL_IDNA_VARIANT_UTS46) ?: $email;
+            }
             return idn_to_utf8($email) ?: $email;
         }
         return $email;

@@ -47,7 +47,7 @@ class TokenAuthController extends Controller
         $password = $request->input('password');
         $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
 
-        //$credentials = $request->only('email', 'password');
+        //$credentials = $request->all('email', 'password');
 
         try {
             if (!$token = JWTAuth::attempt([$field => $usernameinput, 'password' => $password, 'active'=>1])) {
@@ -163,7 +163,7 @@ class TokenAuthController extends Controller
             }
 
             $date = date('Y-m-d H:i:s');
-            $user = User::where('email', '=', $request->only('email'))->first();
+            $user = User::where('email', '=', $request->all('email'))->first();
             if (isset($user)) {
                 $user1 = $user->email;
                 //gen new code and pass

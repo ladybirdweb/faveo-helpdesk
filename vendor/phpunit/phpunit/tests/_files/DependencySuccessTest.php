@@ -1,8 +1,11 @@
 <?php
-class DependencySuccessTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class DependencySuccessTest extends TestCase
 {
     public function testOne()
     {
+        $this->assertTrue(true);
     }
 
     /**
@@ -10,6 +13,7 @@ class DependencySuccessTest extends PHPUnit_Framework_TestCase
      */
     public function testTwo()
     {
+        $this->assertTrue(true);
     }
 
     /**
@@ -17,5 +21,6 @@ class DependencySuccessTest extends PHPUnit_Framework_TestCase
      */
     public function testThree()
     {
+        $this->assertTrue(true);
     }
 }

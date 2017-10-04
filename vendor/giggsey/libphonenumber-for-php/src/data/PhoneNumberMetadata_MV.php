@@ -104,11 +104,9 @@ return array (
   ),
   'pager' => 
   array (
-    'NationalNumberPattern' => '781\\d{4}',
-    'ExampleNumber' => '7812345',
     'PossibleLength' => 
     array (
-      0 => 7,
+      0 => -1,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -159,7 +157,7 @@ return array (
       'format' => '$1-$2',
       'leadingDigitsPatterns' => 
       array (
-        0 => '[3467]|9(?:[1-9]|0[1-9])',
+        0 => '[3467]|9(?:0[1-9]|[1-9])',
       ),
       'nationalPrefixFormattingRule' => '',
       'domesticCarrierCodeFormattingRule' => '',

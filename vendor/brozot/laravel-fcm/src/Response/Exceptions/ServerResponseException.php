@@ -3,7 +3,7 @@
 namespace LaravelFCM\Response\Exceptions;
 
 use Exception;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class ServerResponseException.
@@ -20,9 +20,9 @@ class ServerResponseException extends Exception
     /**
      * ServerResponseException constructor.
      *
-     * @param GuzzleResponse $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      */
-    public function __construct(GuzzleResponse $response)
+    public function __construct(ResponseInterface $response)
     {
         $code = $response->getStatusCode();
         $responseHeader = $response->getHeaders();

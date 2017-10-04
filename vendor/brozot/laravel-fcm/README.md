@@ -124,8 +124,8 @@ use FCM;
 #### Sending a Downstream Message to a Device
 
 ```php
-$optionBuiler = new OptionsBuilder();
-$optionBuiler->setTimeToLive(60*20);
+$optionBuilder = new OptionsBuilder();
+$optionBuilder->setTimeToLive(60*20);
 
 $notificationBuilder = new PayloadNotificationBuilder('my title');
 $notificationBuilder->setBody('Hello world')
@@ -134,7 +134,7 @@ $notificationBuilder->setBody('Hello world')
 $dataBuilder = new PayloadDataBuilder();
 $dataBuilder->addData(['a_data' => 'my_data']);
 
-$option = $optionBuiler->build();
+$option = $optionBuilder->build();
 $notification = $notificationBuilder->build();
 $data = $dataBuilder->build();
 
@@ -161,8 +161,8 @@ $downstreamResponse->tokensToRetry();
 #### Sending a Downstream Message to Multiple Devices
 
 ```php
-$optionBuiler = new OptionsBuilder();
-$optionBuiler->setTimeToLive(60*20);
+$optionBuilder = new OptionsBuilder();
+$optionBuilder->setTimeToLive(60*20);
 
 $notificationBuilder = new PayloadNotificationBuilder('my title');
 $notificationBuilder->setBody('Hello world')
@@ -171,7 +171,7 @@ $notificationBuilder->setBody('Hello world')
 $dataBuilder = new PayloadDataBuilder();
 $dataBuilder->addData(['a_data' => 'my_data']);
 
-$option = $optionBuiler->build();
+$option = $optionBuilder->build();
 $notification = $notificationBuilder->build();
 $data = $dataBuilder->build();
 

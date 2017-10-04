@@ -7,16 +7,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace PHPUnit\Framework\Constraint;
+
+use ReflectionClass;
 
 /**
  * Constraint that asserts that the class it is evaluated for has a given
  * attribute.
  *
  * The attribute name is passed in the constructor.
- *
- * @since Class available since Release 3.1.0
  */
-class PHPUnit_Framework_Constraint_ClassHasAttribute extends PHPUnit_Framework_Constraint
+class ClassHasAttribute extends Constraint
 {
     /**
      * @var string
@@ -54,7 +55,7 @@ class PHPUnit_Framework_Constraint_ClassHasAttribute extends PHPUnit_Framework_C
      */
     public function toString()
     {
-        return sprintf(
+        return \sprintf(
             'has attribute "%s"',
             $this->attributeName
         );
@@ -72,10 +73,10 @@ class PHPUnit_Framework_Constraint_ClassHasAttribute extends PHPUnit_Framework_C
      */
     protected function failureDescription($other)
     {
-        return sprintf(
+        return \sprintf(
             '%sclass "%s" %s',
-            is_object($other) ? 'object of ' : '',
-            is_object($other) ? get_class($other) : $other,
+            \is_object($other) ? 'object of ' : '',
+            \is_object($other) ? \get_class($other) : $other,
             $this->toString()
         );
     }

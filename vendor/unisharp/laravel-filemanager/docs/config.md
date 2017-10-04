@@ -1,132 +1,92 @@
-In `config/lfm.php` :
+**The config is in `config/lfm.php`.**
 
-```php
-/*
-|--------------------------------------------------------------------------
-| Routing
-|--------------------------------------------------------------------------
-*/
+## Routing:
 
-// Include to pre-defined routes from package or not. Middlewares
-'use_package_routes' => true,
+| Key                | Type    | Description                                                                                                  |
+|--------------------|---------|--------------------------------------------------------------------------------------------------------------|
+| use\_package\_routes | boolean | Use routes from package or not. If false, you will need to define routes to all controllers of this package. |
+| middlewares        | array   | Middlewares to be applied to default routes. For laravel 5.1 and before, remove 'web' from the array.        |
+| prefix             | string  | The url prefix to this package. Change it if necessary.                                                      |
 
-// Middlewares which should be applied to all package routes.
-// For laravel 5.1 and before, remove 'web' from the array.
-'middlewares' => ['web','auth'],
 
-// The url to this package. Change it if necessary.
-'prefix' => 'laravel-filemanager',
+## Multi-User Mode:
 
-/*
-|--------------------------------------------------------------------------
-| Multi-User Mode
-|--------------------------------------------------------------------------
-*/
+| Key                | Type    | Description                                                                                    |
+|--------------------|---------|------------------------------------------------------------------------------------------------|
+| allow\_multi\_user   | boolean | If true, private folders will be created for each signed-in user.                              |
+| allow\_share\_folder | boolean | If true, share folder will be created.                                                         |
+| user_field         | string  | Private folders will be named by this. Can receive column name of `users` table or class name. |
 
-// If true, private folders will be created for each signed-in user.
-'allow_multi_user' => true,
+### If you want to name private folders other than columns of users table, follow these steps:
+1. Run `php artisan vendor:publish --tag=lfm_handler`.
+2. Fill `App\Handler\ConfigHander::class` into `user_field`.
+3. Edit `userField()` in the `App\Handler\ConfigHander`
 
-// The database column to identify a user. Make sure the value is unique.
-// Ex: When set to 'id', the private folder of user will be named as the user id.
-'user_field' => 'id',
 
-/*
-|--------------------------------------------------------------------------
-| Working Directory
-|--------------------------------------------------------------------------
-*/
+## Working Directory:
 
-// Which folder to store files in project, fill in 'public', 'resources', 'storage' and so on.
-// You should create routes to serve images if it is not set to public.
-'base_directory' => 'public',
+| Key                | Type   | Description                                                                                                                                                                     |
+|--------------------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| base_directory     | string | Which folder to store files in project, fill in 'public', 'resources', 'storage' and so on. Does not support path relative path like `../public_html` or `public/upload/user/`. |
+| images\_folder\_name | string | Does not support path relative path like `../public_html` or `public/upload/user/`.                                                                                             |
+| files\_folder\_name  | string | Does not support path relative path like `../public_html` or `public/upload/user/`.                                                                                             |
+| shared\_folder\_name | string | Does not support path relative path like `../public_html` or `public/upload/user/`.                                                                                             |
+| thumb\_folder\_name  | string | Does not support path relative path like `../public_html` or `public/upload/user/`.                                                                                             |
 
-'images_folder_name' => 'photos',
-'files_folder_name'  => 'files',
 
-'shared_folder_name' => 'shares',
-'thumb_folder_name'  => 'thumbs',
+## Startup Views:
 
-/*
-|--------------------------------------------------------------------------
-| Startup Views
-|--------------------------------------------------------------------------
-*/
+| Key                 | Type   | Description                                                     |
+|---------------------|--------|-----------------------------------------------------------------|
+| images\_startup\_view | string | The default display type for images. Supported: "grid", "list". |
+| files\_startup\_view  | string | The default display type for files. Supported: "grid", "list".  |
 
-// The default display type for items.
-// Supported: "grid", "list"
-'images_startup_view' => 'grid',
-'files_startup_view' => 'list',
 
-/*
-|--------------------------------------------------------------------------
-| Upload / Validation
-|--------------------------------------------------------------------------
-*/
+## Upload / Validation:
 
-// If true, the uploaded file will be renamed to uniqid() + file extension.
-'rename_file' => false,
+| Key                     | Type    | Description                                                              |
+|-------------------------|---------|--------------------------------------------------------------------------|
+| rename_file             | string  | If true, the uploaded file will be renamed to uniqid() + file extension. |
+| alphanumeric_filename   | string  | If  true, non-alphanumeric file name will be replaced with `_`.          |
+| alphanumeric_directory  | boolean | If true, non-alphanumeric folder name will be rejected.                  |
+| should\_validate\_size  | boolean | If true, the size of uploading file will be verified.                    |
+| max\_image\_size        | int     | Specify max size of uploading image.                                     |
+| max\_file\_size         | int     | Specify max size of uploading file.                                      |
+| should\_validate\_mime  | boolean | If true, the mime type of uploading file will be verified.               |
+| valid\_image\_mimetypes | array   | Array of mime types. Available since v1.3.0 .                       |
+| valid\_file\_mimetypes  | array   | Array of mime types. Available since v1.3.0 .                       |
 
-// If rename_file set to false and this set to true, then non-alphanumeric characters in filename will be replaced.
-'alphanumeric_filename' => true,
 
-// If true, non-alphanumeric folder name will be rejected.
-'alphanumeric_directory' => false,
+## Thumbnail dimensions:
 
-'max_image_size' => 500,
-'max_file_size' => 1000,
+| Key              | Type   | Description                                      |
+|------------------|--------|--------------------------------------------------|
+| thumb\_img\_width  | string | Width of thumbnail made when image is uploaded.  |
+| thumb\_img\_height | string | Height of thumbnail made when image is uploaded. |
 
-// available since v1.3.0
-'valid_image_mimetypes' => [
-    'image/jpeg',
-    'image/pjpeg',
-    'image/png',
-    'image/gif'
-],
 
-// available since v1.3.0
-// only when '/laravel-filemanager?type=Files'
-'valid_file_mimetypes' => [
-    'image/jpeg',
-    'image/pjpeg',
-    'image/png',
-    'image/gif',
-    'application/pdf',
-    'text/plain',
-],
+## File Extension Information
 
-/*
-|--------------------------------------------------------------------------
-| File Extension Information
-|--------------------------------------------------------------------------
-*/
+| Key             | Type  | Description                                 |
+|-----------------|-------|---------------------------------------------|
+| file\_type\_array | array | Map file extension with display names.      |
+| file\_icon\_array | array | Map file extension with icons(font-awsome). |
 
-'file_type_array' => [
-    'pdf'  => 'Adobe Acrobat',
-    'doc'  => 'Microsoft Word',
-    'docx' => 'Microsoft Word',
-    'xls'  => 'Microsoft Excel',
-    'xlsx' => 'Microsoft Excel',
-    'zip'  => 'Archive',
-    'gif'  => 'GIF Image',
-    'jpg'  => 'JPEG Image',
-    'jpeg' => 'JPEG Image',
-    'png'  => 'PNG Image',
-    'ppt'  => 'Microsoft PowerPoint',
-    'pptx' => 'Microsoft PowerPoint',
-],
 
-'file_icon_array' => [
-    'pdf'  => 'fa-file-pdf-o',
-    'doc'  => 'fa-file-word-o',
-    'docx' => 'fa-file-word-o',
-    'xls'  => 'fa-file-excel-o',
-    'xlsx' => 'fa-file-excel-o',
-    'zip'  => 'fa-file-archive-o',
-    'gif'  => 'fa-file-image-o',
-    'jpg'  => 'fa-file-image-o',
-    'jpeg' => 'fa-file-image-o',
-    'png'  => 'fa-file-image-o',
-    'ppt'  => 'fa-file-powerpoint-o',
-    'pptx' => 'fa-file-powerpoint-o',
-],
-```
+## php.ini override
+
+| Key               | Type            | Description                                                                                                                       |
+|-------------------|-----------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| php\_ini\_overrides | array or boolean | These values override your php.ini settings before uploading files. Set these to false to ingnore and apply your php.ini settings |
+
+### Caveats
+
+The php\_ini\_overrides are applied on every request the filemanager does and are reset once the script has finished executing.
+This has one drawback: any ini settings that you might want to change that apply to the request itself will not work.
+
+For example, overriding these settings will not work:
+* upload\_max\_filesize
+* post\_max\_size
+
+**Why this is expected behaviour:**
+upload\_max\_filesize and post\_max\_size will get set but uploaded files are already passed to your PHP script before the settings are changed.

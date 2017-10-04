@@ -38,7 +38,7 @@ return array (
   ),
   'mobile' => 
   array (
-    'NationalNumberPattern' => '7(?:4576|[59]24\\d)\\d{5}',
+    'NationalNumberPattern' => '7(?:4576|[59]24\\d|624[0-4689])\\d{5}',
     'ExampleNumber' => '7924123456',
     'PossibleLength' => 
     array (
@@ -104,10 +104,9 @@ return array (
   ),
   'pager' => 
   array (
-    'NationalNumberPattern' => '7624[0-4689]\\d{5}',
-    'ExampleNumber' => '7624212345',
     'PossibleLength' => 
     array (
+      0 => -1,
     ),
     'PossibleLengthLocalOnly' => 
     array (
@@ -148,7 +147,6 @@ return array (
   'countryCode' => 44,
   'internationalPrefix' => '00',
   'nationalPrefix' => '0',
-  'preferredExtnPrefix' => ' x',
   'nationalPrefixForParsing' => '0',
   'sameMobileAndFixedLinePattern' => false,
   'numberFormat' => 

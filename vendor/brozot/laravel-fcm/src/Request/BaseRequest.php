@@ -10,7 +10,7 @@ abstract class BaseRequest
     /**
      * @internal
      *
-     * @var \GuzzleHttp\Client
+     * @var \GuzzleHttp\ClientInterface
      */
     protected $client;
 

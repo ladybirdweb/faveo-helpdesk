@@ -5,7 +5,7 @@ namespace LaravelFCM\Response;
 use Monolog\Logger;
 use LaravelFCM\Message\Topics;
 use Monolog\Handler\StreamHandler;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class TopicResponse.
@@ -45,10 +45,10 @@ class TopicResponse extends BaseResponse implements TopicResponseContract
     /**
      * TopicResponse constructor.
      *
-     * @param GuzzleResponse $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      * @param Topics         $topic
      */
-    public function __construct(GuzzleResponse $response, Topics $topic)
+    public function __construct(ResponseInterface $response, Topics $topic)
     {
         $this->topic = $topic;
         parent::__construct($response);

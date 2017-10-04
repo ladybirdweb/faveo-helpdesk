@@ -5,9 +5,8 @@
     <property name="git.currentbranch" value=""/>
     <target name="check-git-branch-status">
         <exec command="git status -s -b" outputProperty="git.currentbranch" />
-        <echo msg="${git.currentbranch}"/>
         <if>
-            <contains string="${git.currentbranch}" substring="${head}"/>
+            <equals arg1="${git.currentbranch}" arg2="## ${head}" trim="true"/>
             <then>
                 <echo>On branch ${head}</echo>
             </then>
@@ -128,6 +127,7 @@
             <fileset dir="${project.basedir}/.subsplit">
                 <include name="src/**/*.php" />
                 <include name="src/**/*.pem" />
+                <include name="src/**/*.md5" />
                 <include name="vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php" />
                 <include name="vendor/symfony/event-dispatcher/**/*.php" />
                 <include name="vendor/doctrine/common/lib/Doctrine/Common/Cache/*.php" />

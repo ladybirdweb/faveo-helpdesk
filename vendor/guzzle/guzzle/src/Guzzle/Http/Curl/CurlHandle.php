@@ -193,7 +193,7 @@ class CurlHandle
         }
 
         // Add the content-length header back if it was temporarily removed
-        if (null !== $tempContentLength) {
+        if ($tempContentLength) {
             $request->setHeader('Content-Length', $tempContentLength);
         }
 

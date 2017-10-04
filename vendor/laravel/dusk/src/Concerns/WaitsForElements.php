@@ -121,6 +121,28 @@ trait WaitsForElements
     }
 
     /**
+     * Wait for the current page to reload.
+     *
+     * @param  Closure  $callback
+     * @param  int  $seconds
+     * @return $this
+     */
+    public function waitForReload($callback = null, $seconds = 5)
+    {
+        $token = str_random();
+
+        $this->driver->executeScript("window['{$token}'] = {};");
+
+        if ($callback) {
+            $callback($this);
+        }
+
+        return $this->waitUsing($seconds, 100, function () use ($token) {
+            return $this->driver->executeScript("return typeof window['{$token}'] === 'undefined';");
+        });
+    }
+
+    /**
      * Wait for the given callback to be true.
      *
      * @param  int  $seconds

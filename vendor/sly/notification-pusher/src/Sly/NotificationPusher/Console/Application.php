@@ -11,9 +11,9 @@
 
 namespace Sly\NotificationPusher\Console;
 
-use Symfony\Component\Console\Application as BaseApplication;
-use Sly\NotificationPusher\NotificationPusher;
 use Sly\NotificationPusher\Console\Command\PushCommand;
+use Sly\NotificationPusher\NotificationPusher;
+use Symfony\Component\Console\Application as BaseApplication;
 
 /**
  * Application.

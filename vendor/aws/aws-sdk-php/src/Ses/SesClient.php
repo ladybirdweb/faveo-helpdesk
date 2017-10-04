@@ -1,6 +1,9 @@
 <?php
 namespace Aws\Ses;
 
+use Aws\Api\ApiProvider;
+use Aws\Api\DocModel;
+use Aws\Api\Service;
 use Aws\Credentials\CredentialsInterface;
 
 /**
@@ -12,6 +15,8 @@ use Aws\Credentials\CredentialsInterface;
  * @method \GuzzleHttp\Promise\Promise createConfigurationSetAsync(array $args = [])
  * @method \Aws\Result createConfigurationSetEventDestination(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createConfigurationSetEventDestinationAsync(array $args = [])
+ * @method \Aws\Result createConfigurationSetTrackingOptions(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise createConfigurationSetTrackingOptionsAsync(array $args = [])
  * @method \Aws\Result createReceiptFilter(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createReceiptFilterAsync(array $args = [])
  * @method \Aws\Result createReceiptRule(array $args = [])
@@ -22,6 +27,8 @@ use Aws\Credentials\CredentialsInterface;
  * @method \GuzzleHttp\Promise\Promise deleteConfigurationSetAsync(array $args = [])
  * @method \Aws\Result deleteConfigurationSetEventDestination(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteConfigurationSetEventDestinationAsync(array $args = [])
+ * @method \Aws\Result deleteConfigurationSetTrackingOptions(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteConfigurationSetTrackingOptionsAsync(array $args = [])
  * @method \Aws\Result deleteIdentity(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteIdentityAsync(array $args = [])
  * @method \Aws\Result deleteIdentityPolicy(array $args = [])
@@ -94,6 +101,8 @@ use Aws\Credentials\CredentialsInterface;
  * @method \GuzzleHttp\Promise\Promise setReceiptRulePositionAsync(array $args = [])
  * @method \Aws\Result updateConfigurationSetEventDestination(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateConfigurationSetEventDestinationAsync(array $args = [])
+ * @method \Aws\Result updateConfigurationSetTrackingOptions(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise updateConfigurationSetTrackingOptionsAsync(array $args = [])
  * @method \Aws\Result updateReceiptRule(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateReceiptRuleAsync(array $args = [])
  * @method \Aws\Result verifyDomainDkim(array $args = [])
@@ -126,5 +135,21 @@ class SesClient extends \Aws\AwsClient
         $signature = hash_hmac($algo, $message, $creds->getSecretKey(), true);
 
         return base64_encode($version . $signature);
+    }
+
+    /**
+     * @internal
+     * @codeCoverageIgnore
+     */
+    public static function applyDocFilters(array $api, array $docs)
+    {
+        $b64 = '<div class="alert alert-info">This value will be base64 encoded on your behalf.</div>';
+
+        $docs['shapes']['RawMessage']['append'] = $b64;
+
+        return [
+            new Service($api, ApiProvider::defaultProvider()),
+            new DocModel($docs)
+        ];
     }
 }

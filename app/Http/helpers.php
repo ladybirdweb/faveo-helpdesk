@@ -2,9 +2,8 @@
 
 function loging($context, $message, $level = 'error', $array = [])
 {
-    \Log::$level($message.':-:-:-'.$context, $array);
+    \Log::$level($message . ':-:-:-' . $context, $array);
 }
-
 function checkArray($key, $array)
 {
     $value = '';
@@ -14,7 +13,6 @@ function checkArray($key, $array)
 
     return $value;
 }
-
 function mime($type)
 {
     if ($type == 'jpg' ||
@@ -28,13 +26,12 @@ function mime($type)
             $type == 'image/jpeg' ||
             $type == 'image/jpg' ||
             $type == 'image/gif' ||
-           // $type == "application/octet-stream" ||
+            // $type == "application/octet-stream" ||
             $type == 'image/png' ||
             starts_with($type, 'image')) {
         return 'image';
     }
 }
-
 function removeUnderscore($string)
 {
     if (str_contains($string, '_') === true) {
@@ -43,7 +40,6 @@ function removeUnderscore($string)
 
     return ucfirst($string);
 }
-
 function isItil()
 {
     $check = false;
@@ -53,7 +49,6 @@ function isItil()
 
     return $check;
 }
-
 function isAsset()
 {
     $check = false;
@@ -63,7 +58,6 @@ function isAsset()
 
     return $check;
 }
-
 function itilEnabled()
 {
     $check = false;
@@ -76,7 +70,6 @@ function itilEnabled()
 
     return $check;
 }
-
 function isBill()
 {
     $check = false;
@@ -89,20 +82,20 @@ function isBill()
 
     return $check;
 }
-
-function deletePopUp($id, $url, $title = 'Delete', $class = 'btn btn-sm btn-danger', $btn_name = 'Delete', $button_check = true)
+function deletePopUp($id, $url, $title = 'Delete', $class = 'btn btn-sm btn-danger', $btn_name
+= 'Delete', $button_check = true)
 {
     $button = '';
     if ($button_check == true) {
-        $button = '<a href="#delete" class="'.$class.'" data-toggle="modal" data-target="#delete'.$id.'">'.$btn_name.'</a>';
+        $button = '<a href="#delete" class="' . $class . '" data-toggle="modal" data-target="#delete' . $id . '">' . $btn_name . '</a>';
     }
 
-    return $button.'<div class="modal fade" id="delete'.$id.'">
+    return $button . '<div class="modal fade" id="delete' . $id . '">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">'.$title.'</h4>
+                                <h4 class="modal-title">' . $title . '</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="row">
@@ -113,24 +106,22 @@ function deletePopUp($id, $url, $title = 'Delete', $class = 'btn btn-sm btn-dang
                             </div>
                             <div class="modal-footer">
                                 <button type="button" id="close" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                                <a href="'.$url.'" class="btn btn-danger">Delete</a>
+                                <a href="' . $url . '" class="btn btn-danger">Delete</a>
                             </div>
                         </div>
                     </div>
                 </div>';
 }
-
 function isInstall()
 {
     $check = false;
-    $env = base_path('.env');
+    $env   = base_path('.env');
     if (\File::exists($env) && env('DB_INSTALL') == 1) {
         $check = true;
     }
 
     return $check;
 }
-
 function faveotime($date, $hour = 0, $min = 0, $sec = 0)
 {
     if (is_bool($hour) && $hour == true) {
@@ -146,33 +137,32 @@ function faveotime($date, $hour = 0, $min = 0, $sec = 0)
 
     return $date1->hour($hour)->minute($min)->second($sec);
 }
-
 function getCarbon($date, $glue = '-', $format = 'Y-m-d', $flag = true)
 {
     //dd($date,$glue);
     $parse = explode($glue, $date);
     if ($format == 'Y-m-d') {
-        $day = $parse[2];
+        $day   = $parse[2];
         $month = $parse[1];
-        $year = $parse[0];
+        $year  = $parse[0];
     }
 
     if ($format == 'm-d-Y') {
         $month = $parse[0];
-        $day = $parse[1];
-        $year = $parse[2];
+        $day   = $parse[1];
+        $year  = $parse[2];
     }
 
-    $hour = 0;
+    $hour   = 0;
     $minute = 0;
     $second = 0;
     if ($format == 'Y-m-d H:m:i') {
-        $day = $parse[2];
+        $day   = $parse[2];
         $month = $parse[1];
-        $year = $parse[0];
+        $year  = $parse[0];
     }
     if (!$flag) {
-        $hour = 23;
+        $hour   = 23;
         $minute = 59;
         $second = 59;
     }
@@ -180,7 +170,6 @@ function getCarbon($date, $glue = '-', $format = 'Y-m-d', $flag = true)
 
     return $carbon;
 }
-
 function createCarbon($date, $tz = '', $format = '')
 {
     if (!$tz) {
@@ -192,23 +181,20 @@ function createCarbon($date, $tz = '', $format = '')
 
     return \Carbon\Carbon::parse($date)->tz($tz)->format($format);
 }
-
 function carbon($date)
 {
     return \Carbon\Carbon::parse($date);
 }
-
 function timezone()
 {
     $system = App\Model\helpdesk\Settings\System::select('time_zone')->first();
-    $tz = 'UTC';
+    $tz     = 'UTC';
     if ($system) {
         $tz = $system->time_zone;
     }
 
     return $tz;
 }
-
 function dateformat()
 {
     $system = App\Model\helpdesk\Settings\System::select('date_time_format')->first();
@@ -219,14 +205,12 @@ function dateformat()
 
     return $format;
 }
-
 function faveoUrl($route)
 {
     $url = \Config::get('app.url');
     //dd($url."/".$route);
-    return $url.$route;
+    return $url . $route;
 }
-
 /**
  * @category function to UTF encoding
  *
@@ -247,7 +231,6 @@ function utfEncoding($name)
 
     return $name;
 }
-
 function role($id)
 {
     $user = \App\User::where('id', $id)->select('role')->first();
@@ -255,7 +238,6 @@ function role($id)
         return $user->role;
     }
 }
-
 function title($ticketid)
 {
     $thread = firstThread($ticketid);
@@ -263,7 +245,6 @@ function title($ticketid)
         return $thread->title;
     }
 }
-
 function requester($ticketid)
 {
     $ticket = ticket($ticketid);
@@ -271,14 +252,12 @@ function requester($ticketid)
         return $ticket->user_id;
     }
 }
-
 function thread($threadid)
 {
     return App\Model\helpdesk\Utility\Ticket_thread::where('id', $threadid)
                     ->select('title', 'user_id', 'id', 'poster', 'is_internal')
                     ->first();
 }
-
 function poster($threadid)
 {
     $thread = thread($threadid);
@@ -286,7 +265,6 @@ function poster($threadid)
         return $thread->poster;
     }
 }
-
 function threadType($threadid)
 {
     $thread = thread($threadid);
@@ -294,7 +272,6 @@ function threadType($threadid)
         return $thread->thread_type;
     }
 }
-
 function lastResponder($ticketid)
 {
     $thread = App\Model\helpdesk\Utility\Ticket_thread::where('ticket_id', $ticketid)
@@ -306,14 +283,12 @@ function lastResponder($ticketid)
         return $thread->user_id;
     }
 }
-
 function ticket($ticketid)
 {
     return App\Model\helpdesk\Ticket\Tickets::where('id', $ticketid)
                     ->select('user_id', 'assigned_to', 'sla', 'priority_id', 'dept_id', 'source', 'duedate')
                     ->first();
 }
-
 function firstThread($ticketid)
 {
     return App\Model\helpdesk\Utility\Ticket_thread::where('ticket_id', $ticketid)
@@ -322,14 +297,12 @@ function firstThread($ticketid)
                     ->select('title', 'user_id', 'id', 'poster', 'is_internal')
                     ->first();
 }
-
 function lastThread($ticketid)
 {
     return App\Model\helpdesk\Utility\Ticket_thread::where('ticket_id', $ticketid)
                     ->orderBy('id', 'desc')
                     ->first();
 }
-
 function source($ticketid)
 {
     $ticket = ticket($ticketid);
@@ -337,7 +310,6 @@ function source($ticketid)
         return $ticket->source;
     }
 }
-
 function dueDateUTC($ticketid)
 {
     $ticket = ticket($ticketid);
@@ -345,7 +317,6 @@ function dueDateUTC($ticketid)
         return $ticket->duedate;
     }
 }
-
 function dueDate($ticketid)
 {
     $ticket = ticket($ticketid);
@@ -353,50 +324,47 @@ function dueDate($ticketid)
         return $ticket->duedate->tz(timezone());
     }
 }
-
 function getDateFromString($str)
 {
-    $reg = '/\d{2}\/\d{2}\/\d{4}.\d{2}:\d{2}:\d{2}/';
+    $reg   = '/\d{2}\/\d{2}\/\d{4}.\d{2}:\d{2}:\d{2}/';
     $match = preg_match($reg, $str, $matches);
     if (!$matches) {
-        $reg = '/\d{2}\-\d{2}\-\d{4}.\d{2}:\d{2}:\d{2}/';
+        $reg   = '/\d{2}\-\d{2}\-\d{4}.\d{2}:\d{2}:\d{2}/';
         $match = preg_match($reg, $str, $matches);
     }
     if (!$matches) {
-        $reg = '/\d{2}\.\d{2}\.\d{4}.\d{2}:\d{2}:\d{2}/';
+        $reg   = '/\d{2}\.\d{2}\.\d{4}.\d{2}:\d{2}:\d{2}/';
         $match = preg_match($reg, $str, $matches);
     }
     if (!$matches) {
-        $reg = '/\d{4}\.\d{2}\.\d{2}.\d{2}:\d{2}:\d{2}/';
+        $reg   = '/\d{4}\.\d{2}\.\d{2}.\d{2}:\d{2}:\d{2}/';
         $match = preg_match($reg, $str, $matches);
     }
     if (!$matches) {
-        $reg = '/\d{4}\/\d{2}\/\d{2}.\d{2}:\d{2}:\d{2}/';
+        $reg   = '/\d{4}\/\d{2}\/\d{2}.\d{2}:\d{2}:\d{2}/';
         $match = preg_match($reg, $str, $matches);
     }
     if (!$matches) {
-        $reg = '/\d{4}\-\d{2}\-\d{2}.\d{2}:\d{2}:\d{2}/';
+        $reg   = '/\d{4}\-\d{2}\-\d{2}.\d{2}:\d{2}:\d{2}/';
         $match = preg_match($reg, $str, $matches);
     }
     if ($match) {
-        $date = checkArray(0, $matches);
+        $date   = checkArray(0, $matches);
         $carbon = carbon($date);
 
         return $carbon;
     }
 }
-
 function convertToHours($time, $format = '%02d:%02d')
 {
     if ($time < 1) {
         return;
     }
-    $hours = floor($time / 60);
+    $hours   = floor($time / 60);
     $minutes = ($time % 60);
 
     return sprintf($format, $hours, $minutes);
 }
-
 function collapse($array)
 {
     $arrays = [];
@@ -414,7 +382,6 @@ function collapse($array)
 
     return $arrays;
 }
-
 function delTree($dir)
 {
     $files = array_diff(scandir($dir), ['.', '..']);
@@ -424,13 +391,11 @@ function delTree($dir)
 
     return rmdir($dir);
 }
-
 function humanReadingDate($carbon)
 {
     //$now = \Carbon\Carbon::now()->tz(timezone());
     return $carbon->diffForHumans();
 }
-
 function faveoDate($date = '', $format = '', $tz = '')
 {
     if (!$date) {
@@ -461,27 +426,23 @@ function faveoDate($date = '', $format = '', $tz = '')
         return 'invalid';
     }
 }
-
 function domainUrl()
 {
     return sprintf(
-    '%s://%s',
-    isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-    $_SERVER['SERVER_NAME']
-  );
+            '%s://%s', isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https'
+                        : 'http', $_SERVER['SERVER_NAME']
+    );
 }
-
 function ticketNumber($ticketid)
 {
     return App\Model\helpdesk\Ticket\Tickets::where('id', $ticketid)
                     ->select('ticket_number')
                     ->value('ticket_number');
 }
-
 function isPlugin($plugin = 'ServiceDesk')
 {
     $plugin = \DB::table('plugins')->where('name', $plugin)->where('status', 1)->count();
-    $check = false;
+    $check  = false;
     if ($plugin > 0) {
         $check = true;
     }
@@ -506,7 +467,6 @@ function file_upload_max_size()
 
     return ($max_size / 1024) / 1024;
 }
-
 function parse_size($size)
 {
     $unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
@@ -514,14 +474,14 @@ function parse_size($size)
     if ($unit) {
         // Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
         return round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
-    } else {
+    }
+    else {
         return round($size);
     }
 }
-
 function storageDrive()
 {
-    $drive = 'local';
+    $drive    = 'local';
     $settings = \DB::table('common_settings')->where('option_name', 'storage')
                     ->where('optional_field', 'default')->first();
     if ($settings && $settings->option_value) {
@@ -529,4 +489,140 @@ function storageDrive()
     }
 
     return $drive;
+}
+/**
+ * @category funcion to get the value of account activation method
+ * @param object of model CommonSettings : $settings
+ * @var string $value
+ * @return string $value: value of activation option fetched from DB
+ */
+function getAccountActivationOptionValue()
+{
+    $value = App\Model\helpdesk\Settings\CommonSettings::select('option_value')->where('option_name', '=', 'account_actvation_option')->first();
+    return $value->option_value;
+}
+/**
+ * @category Funcion to set validation rule for email
+ * @param null
+ * @return string : validation rule
+ */
+function getEmailValidation()
+{
+    $value           = getAccountActivationOptionValue();
+    $email_mandatory = App\Model\helpdesk\Settings\CommonSettings::select('status')->where('option_name', '=', 'email_mandatory')->first();
+    if ($value == 'email' || $value == 'email,mobile' || $email_mandatory->status
+            == 1) {
+        return 'required|max:50|email|unique:users,email';
+    }
+    else {
+        return 'max:50|email|unique:users,email';
+    }
+}
+/**
+ * @category Funcion to set validation rule for mobile and code
+ * @param string $field : name of field
+ * @return string : validation rule
+ */
+function getMobileValidation($field)
+{
+    $value = getAccountActivationOptionValue();
+    if (strpos($value, 'mobile') !== false) {
+        return 'required|numeric|max:999999999999999|unique:users,mobile';
+    }
+    else {
+        return 'numeric|max:999999999999999|unique:users,mobile';
+    }
+}
+/**
+ * get default department id
+ * @return integer
+ */
+function defaultDepartmentId()
+{
+    $id     = "";
+    $system = \App\Model\helpdesk\Settings\System::select('department')->first();
+    if ($system) {
+        $id = $system->department;
+    }
+    else {
+        $department = App\Model\helpdesk\Agent\Department::select('id')->first();
+        $id         = $department->id;
+    }
+    return $id;
+}
+function isMicroOrg()
+{
+    $check = false;
+    if (\Schema::hasTable('common_settings')) {
+        $settings = \DB::table('common_settings')->where('option_name', 'micro_organization_status')->first();
+        if ($settings && $settings->status == 1) {
+            $check = true;
+        }
+    }
+    return $check;
+}
+/**
+ * @category function to return array values if status id 
+ * @param string purpose of status
+ * @return array ids of status with purpose passed as string
+ */
+function getStatusArray($status)
+{
+    $type   = new App\Model\helpdesk\Ticket\TicketStatusType();
+    $values = $type->select('name', 'id')
+            ->whereIn('name', [$status])
+            ->with(['status' => function ($query) {
+                    $query->select('id as status_id', 'name', 'purpose_of_status');
+                }])
+            ->get()
+            ->pluck('status')
+            ->flatten()
+            ->pluck('status_id')
+            ->toArray()
+    ;
+    return $values;
+}
+function isCustomMail()
+{
+    $check   = false;
+    $drive   = config('mail.driver');
+    $default = [
+        'smtp'     => true,
+        'mail'     => true,
+        'sendmail' => true,
+        'mailgun'  => true,
+        'mandrill' => true,
+        'log'      => true
+    ];
+    // dd($drive, $default);
+    if (!checkArray($drive, $default)) {
+        $check = true;
+    }
+    return $check;
+}
+function departmentByHelptopic($helptopic_id)
+{
+    $help_topic = \App\Model\helpdesk\Manage\Help_topic::where('id', '=', $helptopic_id)->select('department')->first();
+    if ($help_topic) {
+        $department_id = $help_topic->department;
+    }
+    else {
+        $department_id = defaultDepartmentId();
+    }
+    return $department_id;
+}
+function commonSettings($option, $option_field)
+{
+    return \App\Model\helpdesk\Settings\CommonSettings::where('option_name', $option)
+                    ->where('optional_field', $option_field)
+                    ->value('option_value');
+}
+function defaultSla()
+{
+    $id  = "";
+    $sla = App\Model\helpdesk\Manage\Sla_plan::where('status', 1)->first();
+    if ($sla) {
+        $id = $sla->id;
+    }
+    return $id;
 }

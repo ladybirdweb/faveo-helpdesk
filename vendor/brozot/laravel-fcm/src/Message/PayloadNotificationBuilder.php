@@ -44,6 +44,13 @@ class PayloadNotificationBuilder
      *
      * @var null|string
      */
+    protected $channelId;
+
+    /**
+     * @internal
+     *
+     * @var null|string
+     */
     protected $badge;
 
     /**
@@ -130,6 +137,20 @@ class PayloadNotificationBuilder
     public function setBody($body)
     {
         $this->body = $body;
+
+        return $this;
+    }
+
+    /**
+     * Set a channel ID for android API >= 26.
+     *
+     * @param string $channelId
+     *
+     * @return PayloadNotificationBuilder current instance of the builder
+     */
+    public function setChannelId($channelId)
+    {
+        $this->channelId = $channelId;
 
         return $this;
     }
@@ -302,6 +323,16 @@ class PayloadNotificationBuilder
     public function getBody()
     {
         return $this->body;
+    }
+
+    /**
+     * Get channel id for android api >= 26
+     *
+     * @return null|string
+     */
+    public function getChannelId()
+    {
+        return $this->channelId;
     }
 
     /**

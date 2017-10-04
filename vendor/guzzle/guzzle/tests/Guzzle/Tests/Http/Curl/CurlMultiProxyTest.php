@@ -12,17 +12,13 @@ use Guzzle\Http\Curl\CurlMultiProxy;
  */
 class CurlMultiProxyTest extends \Guzzle\Tests\GuzzleTestCase
 {
-    const SELECT_TIMEOUT = 23.1;
-
-    const MAX_HANDLES = 2;
-
     /** @var \Guzzle\Http\Curl\CurlMultiProxy */
     private $multi;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->multi = new CurlMultiProxy(self::MAX_HANDLES, self::SELECT_TIMEOUT);
+        $this->multi = new CurlMultiProxy();
     }
 
     public function tearDown()
@@ -32,14 +28,8 @@ class CurlMultiProxyTest extends \Guzzle\Tests\GuzzleTestCase
 
     public function testConstructorSetsMaxHandles()
     {
-        $m = new CurlMultiProxy(self::MAX_HANDLES, self::SELECT_TIMEOUT);
-        $this->assertEquals(self::MAX_HANDLES, $this->readAttribute($m, 'maxHandles'));
-    }
-
-    public function testConstructorSetsSelectTimeout()
-    {
-        $m = new CurlMultiProxy(self::MAX_HANDLES, self::SELECT_TIMEOUT);
-        $this->assertEquals(self::SELECT_TIMEOUT, $this->readAttribute($m, 'selectTimeout'));
+        $m = new CurlMultiProxy(2);
+        $this->assertEquals(2, $this->readAttribute($m, 'maxHandles'));
     }
 
     public function testAddingRequestsAddsToQueue()
@@ -100,7 +90,7 @@ class CurlMultiProxyTest extends \Guzzle\Tests\GuzzleTestCase
             "HTTP/1.1 200 OK\r\nContent-Length: 0\r\n\r\n"
         ));
         $client = new Client($this->getServer()->getUrl());
-        $client->setCurlMulti(new CurlMultiProxy(self::MAX_HANDLES, self::SELECT_TIMEOUT));
+        $client->setCurlMulti(new CurlMultiProxy(2));
         $request = $client->get();
         $request->send();
         $this->assertEquals(200, $request->getResponse()->getStatusCode());

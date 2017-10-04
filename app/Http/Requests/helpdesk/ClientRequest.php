@@ -3,7 +3,7 @@
 namespace App\Http\Requests\helpdesk;
 
 use App\Http\Requests\Request;
-use App\Model\helpdesk\Settings\CommonSettings;
+
 
 /**
  * CompanyRequest.
@@ -29,133 +29,67 @@ class ClientRequest extends Request
      */
     public function rules()
     {
-        $check = $this->check(new CommonSettings());
-        if ($check != 0) {
-            return $check;
-            $custom_rule = $this->getCustomRule();
-            $rules = array_merge($check, $custom_rule);
-
-            return $rules;
-        }
-        $current_rule = [
-            'Name'    => 'required',
-            'Email'   => 'required|email',
-            'Subject' => 'required',
-            'Details' => 'required',
-        ];
-        $custom_rule = $this->getCustomRule();
-        $rules = array_merge($current_rule, $custom_rule);
-
+        $panel = 'client';
+        $rules = $this->check($panel);
         return $rules;
     }
 
-    public function getHelpTopic()
+    public function messages()
     {
-        $help_topics = new \App\Model\helpdesk\Manage\Help_topic();
-        $topic = $this->input('helptopic');
-        $help_topic = $help_topics->where('id', $topic)->first();
-
-        return $help_topic;
+        $panel = 'client';
+        $message = \App\Model\Custom\Required::
+                where('form', 'ticket')
+                ->select("$panel as panel", 'field', 'label')
+                ->where(function($query)use($panel)
+                {
+                    return $query->whereNotNull($panel)
+                            ->where($panel, '!=', '')
+                    ;
+                })
+                ->get()
+                ->transform(function($value)
+                {
+                    $panel = $value->panel;
+                    if(str_contains($panel,":")){
+                        $explode = explode(':', $panel);
+                        $panel = $explode[0];
+                    }
+                    
+                    $request["$value->field.$panel"]="$value->label is required";
+                    return $request;
+                })
+                ->collapse()
+                ->toArray();
+        return $message;
     }
 
-    public function getCustomRule()
+    public function check($panel)
     {
-        $custom_form = '';
-        $help_topic = $this->getHelpTopic();
-        if ($help_topic) {
-            $custom_form = $help_topic->custom_form;
-        }
-
-        return $this->getForm($custom_form);
+        $required = \App\Model\Custom\Required::
+                where('form', 'ticket')
+                ->select("$panel as panel", 'field', 'option')
+                ->where(function($query)use($panel)
+                {
+                    return $query->whereNotNull($panel)
+                            ->where($panel, '!=', '')
+                    ;
+                })
+                ->get()
+                ->transform(function($value)
+                {
+                    $option = $value->option;
+                    if ($option)
+                    {
+                        $option = "," . $value->option;
+                    }
+                    if($value->field=='requester'){
+                        $value->panel = "required_without:full_name";
+                    }
+                    $request[$value->field] = $value->panel . $option;
+                    return $request;
+                })
+                ->collapse()
+                ->toArray();
+        return $required;
     }
-
-    public function getForm($formid)
-    {
-        $id = '';
-        $forms = new \App\Model\helpdesk\Form\Forms();
-        $form = $forms->where('id', $formid)->first();
-        if ($form) {
-            $id = $form->id;
-        }
-
-        return $this->getFields($id);
-    }
-
-    public function getFields($formid)
-    {
-        $rules = [];
-        $field = new \App\Model\helpdesk\Form\Fields();
-        $fields = $field->where('forms_id', $formid)->get();
-        if ($fields->count() > 0) {
-            foreach ($fields as $fd) {
-                if ($fd->required === '1') {
-                    $rules[str_replace(' ', '_', $fd->name)] = 'required';
-                }
-                $rules = array_merge($rules, $this->getChild($fd->id));
-            }
-        }
-
-        return $rules;
-    }
-
-    public function getChild($fieldid)
-    {
-        $children = new \App\Model\helpdesk\Form\FieldValue();
-        $childs = $children->where('field_id', $fieldid)->get();
-        $rules = [];
-        if ($childs->count() > 0) {
-            foreach ($childs as $child) {
-                $child_formid = $child->child_id;
-
-                return $this->getForm($child_formid);
-            }
-        }
-
-        return [];
-    }
-
-    /**
-     *@category Funcion to set rule if send opt is enabled
-     *
-     *@param object $settings (instance of Model common settings)
-     *
-     *@author manish.verma@ladybirdweb.com
-     *
-     *@return array|int
-     */
-    public function check($settings)
-    {
-        $settings = $settings->select('status')->where('option_name', '=', 'send_otp')->first();
-        $email_mandatory = $settings->select('status')->where('option_name', '=', 'email_mandatory')->first();
-        if (($email_mandatory->status == 0 || $email_mandatory->status == '0')) {
-            if (!\Auth::check()) {
-                return [
-                'Name'    => 'required',
-                'Email'   => 'email',
-                'Subject' => 'required',
-                'Details' => 'required',
-                'mobile'  => 'required',
-                ];
-            } else {
-                return [
-                'Subject' => 'required',
-                'Details' => 'required',
-                ];
-            }
-        } else {
-            return 0;
-        }
-    }
-
-//    public function purifyArray($array){
-//        $purified = [];
-//        foreach($array as $key=>$value){
-//            if(!is_array($value)){
-//                $purified[$key]="required";
-//            }else{
-//                $purified[] = $this->purifyArray($value);
-//            }
-//        }
-//        return array_dot($purified);
-//    }
 }

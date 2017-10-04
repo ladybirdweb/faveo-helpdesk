@@ -257,24 +257,16 @@ class PhpStreamRequestFactory implements StreamRequestFactoryInterface
      */
     protected function createResource($callback)
     {
-        $errors = null;
-        set_error_handler(function ($_, $msg, $file, $line) use (&$errors) {
-            $errors[] = array(
-                'message' => $msg,
-                'file'    => $file,
-                'line'    => $line
-            );
-            return true;
-        });
+        // Turn off error reporting while we try to initiate the request
+        $level = error_reporting(0);
         $resource = call_user_func($callback);
-        restore_error_handler();
+        error_reporting($level);
 
-        if (!$resource) {
+        // If the resource could not be created, then grab the last error and throw an exception
+        if (false === $resource) {
             $message = 'Error creating resource. ';
-            foreach ($errors as $err) {
-                foreach ($err as $key => $value) {
-                    $message .= "[$key] $value" . PHP_EOL;
-                }
+            foreach (error_get_last() as $key => $value) {
+                $message .= "[{$key}] {$value} ";
             }
             throw new RuntimeException(trim($message));
         }

@@ -233,6 +233,7 @@ class ElementResolver
     protected function findButtonByName($button)
     {
         if (! is_null($element = $this->find("input[type=submit][name='{$button}']")) ||
+            ! is_null($element = $this->find("input[type=button][value='{$button}']")) ||
             ! is_null($element = $this->find("button[name='{$button}']"))) {
             return $element;
         }
@@ -364,8 +365,12 @@ class ElementResolver
         })->toArray();
 
         $selector = str_replace(
-            array_keys($sortedElements), array_values($sortedElements), $selector
+            array_keys($sortedElements), array_values($sortedElements), $originalSelector = $selector
         );
+
+        if (starts_with($selector, '@') && $selector === $originalSelector) {
+            $selector = '[dusk="'.explode('@', $selector)[1].'"]';
+        }
 
         return trim($this->prefix.' '.$selector);
     }

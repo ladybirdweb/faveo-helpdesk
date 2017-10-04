@@ -2,25 +2,32 @@
 
 use Illuminate\Database\Seeder;
 
-class CustomFormSeeder extends Seeder
-{
+class CustomFormSeeder extends Seeder {
+
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
-    {
-        $this->seedForms();
-        $this->seedRequired();
+    public function run() {
+        \DB::table('forms')->truncate();
+        \App\Model\Custom\Required::truncate();
+        $this->seedTicketForm();
+//        $this->seedUserForm();
+//        $this->seedOrganisationForm();
+        //$this->seedRequired();
     }
 
-    public function seedForms()
-    {
-        \DB::table('forms')->truncate();
+    public function seedTicketForm() {
+        
         $json = "[{
         'title': 'Requester',
-        'label':'Requester',
+        'agentlabel':[
+                 {'language':'en','label':'Requester','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Requester','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
         'type':'email',
         'agentCCfield':true,
         'customerCCfield':false,
@@ -29,24 +36,48 @@ class CustomFormSeeder extends Seeder
         'customerRequiredFormSubmit':true,
         'default':'yes',
         'value':'',
-        'customer_name':true,
-        'customer_email':true,
-        'customer_mobile':true,
-        'agent_name':true,
-        'agent_email':true,
-        'agent_mobile':true
+        'unique':'requester'
         },{
         'title': 'Subject',
-        'label':'Subject',
+        'agentlabel':[
+                 {'language':'en','label':'Subject','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Subject','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
         'type':'text',
         'agentRequiredFormSubmit':true,
         'customerDisplay':true,
         'customerRequiredFormSubmit':true,
         'default':'yes',
-        'value':''
+        'value':'',
+        'unique':'subject'
+        },{
+        'title': 'Type',
+        'agentlabel':[
+                 {'language':'en','label':'Type','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Type','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'type':'select',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':true,
+        'value':'',
+        'api':'type',
+        'options':[
+        ],
+        'default':'yes',
+        'unique':'type'
         },{
         'title': 'Status',
-        'label':'Status',
+        'agentlabel':[
+                 {'language':'en','label':'Status','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Status','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
         'type':'select',
         'agentRequiredFormSubmit':true,
         'customerDisplay':false,
@@ -56,10 +87,16 @@ class CustomFormSeeder extends Seeder
         'options':[
            
         ],
-        'default':'yes'
+        'default':'yes',
+        'unique':'status'
         },{
         'title': 'Priority',
-        'label':'Priority',
+        'agentlabel':[
+                 {'language':'en','label':'Priority','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Priority','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
         'type':'select',
         'agentRequiredFormSubmit':true,
         'customerDisplay':true,
@@ -69,11 +106,17 @@ class CustomFormSeeder extends Seeder
         'options':[
            
         ],
-        'default':'yes'
+        'default':'yes',
+        'unique':'priority'
         },{
         'title': 'Help Topic',
-        'label':'Help Topic',
-        'type':'select',
+        'agentlabel':[
+                 {'language':'en','label':'Help Topic','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Help Topic','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'type':'multiselect',
         'agentRequiredFormSubmit':true,
         'customerDisplay':true,
         'customerRequiredFormSubmit':true,
@@ -82,10 +125,36 @@ class CustomFormSeeder extends Seeder
         'options':[
            
         ],
-        'default':'yes'
+        'default':'yes',
+        'unique':'help_topic'
+        },{
+        'title': 'Department',
+        'agentlabel':[
+                 {'language':'en','label':'Department','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Department','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'type':'multiselect',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':false,
+        'customerRequiredFormSubmit':false,
+        'value':'',
+        'api':'department',
+        'options':[
+           
+        ],
+        'default':'yes',
+        'unique':'department',
+        'linkHelpTopic':false
         },{
         'title': 'Assigned',
-        'label':'Assigned',
+        'agentlabel':[
+                 {'language':'en','label':'Assigned','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Assigned','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
         'type':'select',
         'agentRequiredFormSubmit':true,
         'customerDisplay':false,
@@ -95,19 +164,33 @@ class CustomFormSeeder extends Seeder
         'options':[
            
         ],
-        'default':'yes'
+        'default':'yes',
+        'unique':'assigned'
         },{
         'title': 'Description',
-        'label':'Description',
+        'agentlabel':[
+                 {'language':'en','label':'Description','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Description','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
         'type':'textarea',
         'agentRequiredFormSubmit':true,
         'customerDisplay':true,
         'customerRequiredFormSubmit':false,
         'default':'yes',
-        'value':''
-        },{
+        'value':'',
+        'unique':'description',
+        'media_option':true
+        },
+        {
         'title': 'Company',
-        'label':'Company',
+        'agentlabel':[
+                 {'language':'en','label':'Company','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Company','flag':'".faveoUrl('lb-faveo/flags/en.png')."'}
+                ],
         'type':'select',
         'agentRequiredFormSubmit':false,
         'customerDisplay':false,
@@ -117,31 +200,279 @@ class CustomFormSeeder extends Seeder
         'api':'company',
         'options':[
            
+        ],
+        'unique':'company'
+        },
+        {
+        'title': 'Captcha',
+        'agentShow':true,
+        'customerDisplay':true,
+        'default':'yes'
+        }
         ]
-        }]
 ";
         $json = trim(preg_replace('/\s+/', ' ', $json));
-        $form = 'ticket';
+        $form = "ticket";
         \DB::table('forms')->insert(['form' => $form, 'json' => $json]);
+        $form_controller = new \App\Http\Controllers\Utility\FormController();
+        $form_controller->saveRequired($form);
+    }
+    
+    public function seedUserForm(){
+        $json = "[{
+        'title': 'First Name',
+        'agentlabel':[
+                 {'language':'en','label':'First Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'First Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'text',
+        'customerDisplay':true,
+        'agentRequiredFormSubmit':true,
+        'customerRequiredFormSubmit':true,
+        'default':'yes',
+        'value':'',
+        'unique':'first_name'
+        },{
+        'title': 'Last Name',
+        'agentlabel':[
+                 {'language':'en','label':'Last Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Last Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'text',
+        'customerDisplay':true,
+        'agentRequiredFormSubmit':true,
+        'customerRequiredFormSubmit':true,
+        'default':'yes',
+        'value':'',
+        'unique':'last_name'
+        },{
+        'title': 'Work Phone',
+        'agentlabel':[
+                 {'language':'en','label':'Work Phone','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Work Phone','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'number',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':true,
+        'default':'yes',
+        'value':'',
+        'unique':'phone_number'
+        },{
+        'title': 'Email',
+        'agentlabel':[
+                 {'language':'en','label':'Email','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Email','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'email',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':false,
+        'customerRequiredFormSubmit':false,
+        'value':'',
+        'default':'yes',
+        'unique':'email'
+        },{
+        'title': 'Mobile Phone',
+        'agentlabel':[
+                 {'language':'en','label':'Mobile Phone','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Mobile Phone','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'number',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':true,
+        'value':'',
+        'default':'yes',
+        'unique':'mobile'
+        },{
+        'title': 'Address',
+        'agentlabel':[
+                 {'language':'en','label':'Address','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Address','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'textarea',
+        'agentRequiredFormSubmit':true,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':true,
+        'value':'',
+        'default':'no',
+        'unique':'address'
+        },{
+        'title': 'Organisation',
+        'agentlabel':[
+                 {'language':'en','label':'Organisation','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Organisation','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'select2',
+        'agentRequiredFormSubmit':false,
+        'customerDisplay':false,
+        'customerRequiredFormSubmit':false,
+        'default':'yes',
+        'value':'',
+        'unique':'organisation'
+        
+        },{
+        'title': 'Department Name',
+        'agentlabel':[
+                 {'language':'en','label':'Department Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Department Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'select',
+        'agentRequiredFormSubmit':false,
+        'customerDisplay':false,
+        'customerRequiredFormSubmit':false,
+        'default':'yes',
+        'value':'',
+        'unique':'department',
+        'options':[
+           
+        ],
+        'api':'organisationdept'
+        },
+        {
+        'title': 'Captcha',
+        'agentShow':true,
+        'customerDisplay':true,
+        'default':'yes'
+        }]";
+        $json = trim(preg_replace('/\s+/', ' ', $json));
+        $form = "user";
+        \DB::table('forms')->insert(['form' => $form, 'json' => $json]);
+        $form_controller = new \App\Http\Controllers\Utility\FormController();
+        $form_controller->saveRequired($form);
+    }
+    
+    public function seedOrganisationForm(){
+        $json = "[{
+        'title': 'Company Name',
+        'agentlabel':[
+                 {'language':'en','label':'Company Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Company Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'text',
+        'customerDisplay':true,
+        'agentRequiredFormSubmit':true,
+        'customerRequiredFormSubmit':true,
+        'default':'yes',
+        'value':'',
+        'unique':'name'
+        },{
+        'title': 'Phone',
+        'agentlabel':[
+                 {'language':'en','label':'Phone','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Phone','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'number',
+        'customerDisplay':true,
+        'agentRequiredFormSubmit':false,
+        'customerRequiredFormSubmit':false,
+        'default':'yes',
+        'value':'',
+        'unique':'phone'
+        },{
+        'title': 'Company Domain Name',
+        'agentlabel':[
+                 {'language':'en','label':'Company Domain Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Company Domain Name','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'select2',
+        'agentRequiredFormSubmit':false,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'default':'yes',
+        'value':'',
+        'unique':'domain'
+        },{
+        'title': 'Description',
+        'agentlabel':[
+                 {'language':'en','label':'Description','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Description','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'textarea',
+        'agentRequiredFormSubmit':false,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'value':'',
+        'default':'yes',
+        'unique':'internal_notes'
+        },{
+        'title': 'Address',
+        'agentlabel':[
+                 {'language':'en','label':'Address','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Address','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'textarea',
+        'agentRequiredFormSubmit':false,
+        'customerDisplay':false,
+        'customerRequiredFormSubmit':false,
+        'value':'',
+        'default':'yes',
+        'unique':'address'
+        },{
+        'title': 'Manager',
+        'agentlabel':[
+                 {'language':'en','label':'Manager','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Manager','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'select',
+        'agentRequiredFormSubmit':false,
+        'customerDisplay':false,
+        'customerRequiredFormSubmit':false,
+        'value':'',
+        'default':'yes',
+        'unique':'head',
+        'api':'assigned_to'
+        },{
+        'title': 'Department',
+        'agentlabel':[
+                 {'language':'en','label':'Department','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'clientlabel':[
+                 {'language':'en','label':'Department','flag':'".asset("lb-faveo/flags/en.png")."'}
+                ],
+        'type':'select2',
+        'agentRequiredFormSubmit':false,
+        'customerDisplay':true,
+        'customerRequiredFormSubmit':false,
+        'default':'yes',
+        'value':'',
+        'unique':'department'
+        }]";
+        $json = trim(preg_replace('/\s+/', ' ', $json));
+        $form = "organisation";
+        \DB::table('forms')->insert(['form' => $form, 'json' => $json]);
+        $form_controller = new \App\Http\Controllers\Utility\FormController();
+        $form_controller->saveRequired($form);
     }
 
-    public function seedRequired()
-    {
-        \DB::table('required_fields')->truncate();
-        $fields = [
-            ['name' => 'Requester', 'is_agent_required' => 1, 'is_client_required' => 1],
-            ['name' => 'Subject', 'is_agent_required' => 1, 'is_client_required' => 1],
-            ['name' => 'Type', 'is_agent_required' => 1, 'is_client_required' => 1],
-            ['name' => 'Status', 'is_agent_required' => 1, 'is_client_required' => 1],
-            ['name' => 'Priority', 'is_agent_required' => 1, 'is_client_required' => 1],
-            ['name' => 'Group', 'is_agent_required' => 1, 'is_client_required' => 1],
-            ['name' => 'Agent', 'is_agent_required' => 1, 'is_client_required' => 1],
-            ['name' => 'Description', 'is_agent_required' => 1, 'is_client_required' => 1],
-            ['name' => 'Company', 'is_agent_required' => 1, 'is_client_required' => 1],
-        ];
-        $form = 'ticket';
-        foreach ($fields as $field) {
-            \DB::table('required_fields')->insert(['name' => $field['name'], 'form' => $form, 'is_agent_required' => $field['is_agent_required'], 'is_client_required' => $field['is_client_required']]);
-        }
-    }
+    
+
 }

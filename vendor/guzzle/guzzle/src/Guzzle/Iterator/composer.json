@@ -18,7 +18,7 @@
     "autoload": {
         "psr-0": { "Guzzle\\Iterator": "/" }
     },
-    "target-dir": "Guzzle/Iterator",
+    "target-dir": "Guzzle/Log",
     "extra": {
         "branch-alias": {
             "dev-master": "3.7-dev"

@@ -7,6 +7,7 @@ use App\Http\Controllers\Agent\helpdesk\TicketWorkflowController;
 use App\Http\Controllers\Controller;
 // requests
 use App\Model\helpdesk\Agent\Department;
+use App\Http\Requests\helpdesk\ClientRequest;
 // models
 use App\Model\helpdesk\Form\Fields;
 use App\Model\helpdesk\Manage\Help_topic;
@@ -142,102 +143,119 @@ class FormController extends Controller
      * @param type Request $request
      * @param type User    $user
      */
-    public function postedForm(User $user, Request $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code)
-    {
+    public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code) {
         try {
-            $phone = '';
+            $phone = "";
             $collaborator = null;
             $auto_response = 0;
             $team_assign = null;
-            $sla = null;
+            $sla = "";
             $email = null;
             $name = null;
             $mobile_number = null;
-            $phonecode = null;
-            $default_values = ['Requester', 'Requester_email', 'Requester_name', 'Requester_mobile',
-                'Requester_mobile', 'Requester_code', 'Group', 'Assigned', 'Subject', 'Description',
-                'Priority', 'Type', 'Status', 'attachment', 'inline', ];
+            $phonecode = "";
+            $user = "";
+            $default_values = ['Requester', 'Requester_email', 'Requester_name', 'media_option',
+                'Requester_mobile', 'Help_Topic', 'cc', 'Help Topic',
+                'Requester_mobile', 'Requester_code', 'Help Topic', 'Assigned', 'Subject',
+                'subject', 'priority', 'help_topic', 'body', 'Description', 'Priority',
+                'Type', 'Status', 'attachment', 'inline', 'email', 'first_name',
+                'last_name', 'mobile', 'country_code', 'api', 'sla', 'dept', 'code',
+                'user_id', 'media_attachment', 'requester', 'status', 'assigned', 'description', 'type', 'media_option', 'Department', 'department'];
             $form_extras = $request->except($default_values);
-            $requester = $request->input('Requester');
-            if ($request->has('Requester')) {
+            $requester = $request->input('requester');
+            $user = false;
+            if ($request->has('requester')) {
                 $user = User::find($requester);
             }
-            if ($request->has('Requester_email')) {
-                $email = $request->input('Requester_email');
+            if ($request->has('email')) {
+                $email = $request->input('email');
             } elseif ($user) {
                 $email = $user->email;
             }
-            if ($request->has('Requester_name')) {
-                $name = $request->input('Requester_name');
+            if ($request->has('full_name')) {
+                $name = $request->input('full_name');
             } elseif ($user) {
                 $name = $user->first_name;
             }
-            if ($request->has('Requester_mobile')) {
-                $mobile_number = $request->input('Requester_mobile');
+            if ($request->has('mobile')) {
+                $mobile_number = $request->input('mobile');
             } elseif ($user) {
                 $mobile_number = $user->mobile;
             }
-            if ($request->has('Requester_code')) {
-                $phonecode = $request->input('Requester_code');
+            if ($request->has('code')) {
+                $phonecode = $request->input('code');
             } elseif ($user) {
                 $phonecode = $user->country_code;
             }
-
-            if ($request->has('Group')) {
-                $helptopic = $request->input('Group');
-                $department = Help_topic::where('id', '=', $helptopic)->first()->value('department');
+            if(!$phonecode){
+                $phonecode = '';
+            }
+            if ($request->has('help_topic')) {
+                $helptopic = $request->input('help_topic');
+                $help = Help_topic::where('id', '=', $helptopic)->first();
             } else {
                 $help = Help_topic::first();
                 $helptopic = $help->id;
-                $department = $help->value('department');
             }
-            if ($request->has('Assigned')) {
-                $assignto = $request->input('Assigned');
+            if ($request->has('assigned')) {
+                $assignto = $request->input('assigned');
             } else {
                 $assignto = null;
             }
-            if ($request->has('Subject')) {
-                $subject = $request->input('Subject');
+            if ($request->has('subject')) {
+                $subject = $request->input('subject');
             } else {
                 $subject = null;
             }
-            if ($request->has('Description')) {
-                $details = $request->input('Description');
+            if ($request->has('description')) {
+                $details = $request->input('description');
             } else {
                 $details = null;
             }
-            if ($request->has('Priority')) {
-                $priority = $request->input('Priority');
+            if ($request->has('priority')) {
+                $priority = $request->input('priority');
             } else {
                 $priority = null;
             }
-
-            if ($request->input('Status')) {
+            if ($request->input('type')) {
+                $type = $request->input('type');
+            } else {
+                $default_type = Tickettype::where('is_default', '>', 0)->select('id')->first();
+                $type = $default_type->id;
+            }
+            if ($request->input('status')) {
                 $status = $ticket_settings->first()->status;
             } else {
                 $status = null;
             }
-            $sla_plan = \App\Model\helpdesk\Manage\Sla_plan::where('status', 1)->first();
-            if ($sla_plan) {
-                $sla = $sla_plan->id;
+            $company = "";
+            if ($request->has('company'))
+            {
+                $company = $request->input('company');
             }
+            
             $source = Ticket_source::where('name', '=', 'web')->first()->id;
-            if ($request->hasFile('attachment')) {
-                $attachments = $request->file('attachment');
-            } else {
-                $attachments = null;
+            $attach        = [];
+            $media_attach  = [];
+            if ($request->has('media_attachment'))
+            {
+                $media_attach = $request->input('media_attachment');
             }
-
+            if ($request->file())
+            {
+                $attach = $request->file();
+            }
+            $department = ($request->has('department')) ? $request->input('department') : $help->department ;
+            $attachment = array_merge($attach, $media_attach);
             \Event::fire(new \App\Events\ClientTicketFormPost($form_extras, $email, $source));
-            $response = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response, $attachments);
+            $respnse = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response, $type, $attachment,[],[],$company);
         } catch (\Exception $e) {
             $result = $e->getMessage();
-
             return response()->json(compact('result'), 500);
         }
-        $msg = Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is').' '.$response[0].'. '.Lang::get('lang.Please-save-this-for-future-reference');
-        $result = ['success' => $msg];
-
+        $msg = Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is') . ' ' . $respnse[0] . '. ' . Lang::get('lang.Please-save-this-for-future-reference');
+        $result = ["success" => $msg];
         return response()->json(compact('result'));
     }
 

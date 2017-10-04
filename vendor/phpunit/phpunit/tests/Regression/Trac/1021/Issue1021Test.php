@@ -1,5 +1,7 @@
 <?php
-class Issue1021Test extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class Issue1021Test extends TestCase
 {
     /**
      * @dataProvider provider
@@ -14,10 +16,11 @@ class Issue1021Test extends PHPUnit_Framework_TestCase
      */
     public function testSomethingElse()
     {
+        $this->assertTrue(true);
     }
 
     public function provider()
     {
-        return array(array(true));
+        return [[true]];
     }
 }

@@ -298,7 +298,7 @@ trait LfmHelpers
     public function translateFromUtf8($input)
     {
         if ($this->isRunningOnWindows()) {
-            $input = iconv('UTF-8', 'BIG5', $input);
+            $input = iconv('UTF-8', mb_detect_encoding($input), $input);
         }
 
         return $input;
@@ -313,7 +313,7 @@ trait LfmHelpers
     public function translateToUtf8($input)
     {
         if ($this->isRunningOnWindows()) {
-            $input = iconv('BIG5', 'UTF-8', $input);
+            $input = iconv(mb_detect_encoding($input), 'UTF-8', $input);
         }
 
         return $input;
@@ -590,6 +590,9 @@ trait LfmHelpers
     {
         if (is_callable(config('lfm.user_field'))) {
             $slug_of_user = call_user_func(config('lfm.user_field'));
+        } elseif (class_exists(config('lfm.user_field'))) {
+            $config_handler = config('lfm.user_field');
+            $slug_of_user = app()->make($config_handler)->userField();
         } else {
             $old_slug_of_user = config('lfm.user_field');
             $slug_of_user = empty(auth()->user()) ? '' : auth()->user()->$old_slug_of_user;

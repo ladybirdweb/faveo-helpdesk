@@ -4,13 +4,12 @@ namespace tests\units\Sly\NotificationPusher\Adapter;
 
 use mageekguy\atoum as Units;
 use Sly\NotificationPusher\Adapter\Apns as TestedModel;
-
-use Sly\NotificationPusher\Model\Message as BaseMessage;
-use Sly\NotificationPusher\Model\Device as BaseDevice;
 use Sly\NotificationPusher\Collection\DeviceCollection as BaseDeviceCollection;
-
-use ZendService\Apple\Apns\Message as BaseServiceMessage;
+use Sly\NotificationPusher\Model\Device as BaseDevice;
+use Sly\NotificationPusher\Model\Message as BaseMessage;
+use Sly\NotificationPusher\Model\Response;
 use ZendService\Apple\Apns\Client\Message as BaseServiceClient;
+use ZendService\Apple\Apns\Message as BaseServiceMessage;
 
 /**
  * Apns.
@@ -42,6 +41,7 @@ class Apns extends Units\Test
             ->and($this->mockClass('\Sly\NotificationPusher\Adapter\Apns', '\Mock'))
             ->and($object = new \Mock\Apns())
             ->and($object->setParameters(['certificate' => 'test.pem', 'passPhrase' => 'test']))
+            ->and($object->setResponse(new Response()))
             ->array($object->getParameters())
                 ->isNotEmpty()
                 ->hasSize(2)
@@ -144,6 +144,7 @@ class Apns extends Units\Test
         $this->if($this->mockGenerator()->orphanize('__construct'))
             ->and($this->mockClass('\Sly\NotificationPusher\Adapter\Apns', '\Mock'))
             ->and($object = new \Mock\Apns())
+            ->and($object->setResponse(new Response()))
 
             ->and($this->mockClass('\ZendService\Apple\Apns\Response\Message', '\Mock\ZendService', 'Response'))
             ->and($serviceResponse = new \Mock\ZendService\Response())

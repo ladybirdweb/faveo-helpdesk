@@ -111,7 +111,7 @@ class TopicsTest extends FCMTestCase
         $response = new Response(200, [], '{"message_id":6177433633397011933}');
 
         $client = Mockery::mock(Client::class);
-        $client->shouldReceive('post')->once()->andReturn($response);
+        $client->shouldReceive('request')->once()->andReturn($response);
 
         $fcm = new FCMSender($client, 'http://test.test');
 
@@ -133,7 +133,7 @@ class TopicsTest extends FCMTestCase
         $response = new Response(200, [], '{"error":"TopicsMessageRateExceeded"}');
 
         $client = Mockery::mock(Client::class);
-        $client->shouldReceive('post')->once()->andReturn($response);
+        $client->shouldReceive('request')->once()->andReturn($response);
 
         $fcm = new FCMSender($client, 'http://test.test');
 

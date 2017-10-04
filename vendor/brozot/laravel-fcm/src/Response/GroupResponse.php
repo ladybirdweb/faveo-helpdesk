@@ -4,7 +4,7 @@ namespace LaravelFCM\Response;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class GroupResponse.
@@ -44,10 +44,10 @@ class GroupResponse extends BaseResponse implements GroupResponseContract
     /**
      * GroupResponse constructor.
      *
-     * @param GuzzleResponse $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      * @param                $to
      */
-    public function __construct(GuzzleResponse $response, $to)
+    public function __construct(ResponseInterface $response, $to)
     {
         $this->to = $to;
         parent::__construct($response);

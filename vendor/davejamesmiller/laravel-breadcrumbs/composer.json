@@ -1,6 +1,6 @@
 {
 	"name": "davejamesmiller/laravel-breadcrumbs",
-	"description": "A simple Laravel-style way to create breadcrumbs in Laravel 4+.",
+	"description": "A simple Laravel-style way to create breadcrumbs in Laravel.",
 	"keywords": [
 		"laravel"
 	],
@@ -21,8 +21,7 @@
 	"require-dev": {
 		"mockery/mockery": "0.9.*",
 		"orchestra/testbench": "3.2.*|3.3.*",
-		"phpunit/phpunit": "4.*",
-		"satooshi/php-coveralls": "0.6.*"
+		"phpunit/phpunit": "4.*"
 	},
 	"autoload": {
 		"psr-4": {

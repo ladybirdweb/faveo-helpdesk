@@ -26,7 +26,7 @@
         "zendframework/zend-i18n": "^2.6",
         "zendframework/zend-math": "^2.6",
         "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
-        "zendframework/zend-session": "^2.6.2",
+        "zendframework/zend-session": "^2.8",
         "zendframework/zend-uri": "^2.5",
         "phpunit/PHPUnit": "^6.0.8 || ^5.7.15",
         "zendframework/zend-coding-standard": "~1.0.0"
@@ -38,15 +38,15 @@
         "zendframework/zend-math": "Zend\\Math component, required by the Csrf validator",
         "zendframework/zend-i18n-resources": "Translations of validator messages",
         "zendframework/zend-servicemanager": "Zend\\ServiceManager component to allow using the ValidatorPluginManager and validator chains",
-        "zendframework/zend-session": "Zend\\Session component, required by the Csrf validator",
+        "zendframework/zend-session": "Zend\\Session component, ^2.8; required by the Csrf validator",
         "zendframework/zend-uri": "Zend\\Uri component, required by the Uri and Sitemap\\Loc validators"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "2.9-dev",
-            "dev-develop": "2.10-dev"
+            "dev-master": "2.10-dev",
+            "dev-develop": "2.11-dev"
         },
         "zf": {
             "component": "Zend\\Validator",

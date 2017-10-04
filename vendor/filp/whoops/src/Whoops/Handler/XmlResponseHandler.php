@@ -40,16 +40,24 @@ class XmlResponseHandler extends Handler
      */
     public function handle()
     {
-        $response = array(
+        $response = [
             'error' => Formatter::formatExceptionAsDataArray(
                 $this->getInspector(),
                 $this->addTraceToOutput()
             ),
-        );
+        ];
 
         echo $this->toXml($response);
 
         return Handler::QUIT;
+    }
+
+    /**
+     * @return string
+     */
+    public function contentType()
+    {
+        return 'application/xml';
     }
 
     /**

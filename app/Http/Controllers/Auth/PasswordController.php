@@ -54,7 +54,7 @@ class PasswordController extends Controller
             $date = date('Y-m-d H:i:s');
             $this->validate($request, ['email' => 'required']);
             \Event::fire('reset.password', []);
-            $user = User::where('email', '=', $request->only('email'))->orWhere('mobile', '=', $request->only('email'))->first();
+            $user = User::where('email', '=', $request->all('email'))->orWhere('mobile', '=', $request->all('email'))->first();
             if (isset($user)) {
                 $user1 = $user->email;
                 //gen new code and pass

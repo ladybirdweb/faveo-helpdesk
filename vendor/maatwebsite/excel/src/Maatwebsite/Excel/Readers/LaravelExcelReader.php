@@ -625,7 +625,7 @@ class LaravelExcelReader
      */
     public function first($columns = [])
     {
-        return $this->take(1)->get($columns)->first();
+        return $this->get($columns)->first();
     }
 
     /**
@@ -1239,12 +1239,17 @@ class LaravelExcelReader
     {
         $spreadsheetInfo = $this->reader->listWorksheetInfo($this->file);
 
+        $index = null ;
         // Loop through the info
         foreach ($spreadsheetInfo as $key => $value) {
             // When we hit the right worksheet
             if ($value['worksheetName'] == $this->getActiveSheet()->getTitle()) {
                 $index = $key;
             }
+        }
+        if( $index === null )
+        {
+            throw new LaravelExcelException('Active sheet not found (active sheet name: "'.$this->getActiveSheet()->getTitle().'")');
         }
 
         // return total rows

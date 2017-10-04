@@ -25,7 +25,7 @@ class FilterController extends Controller
     {
         $labels = $this->request->input('labels');
         $tags = $this->request->input('tags');
-        if ($request->has('department')) {
+        if ($request->filled('department')) {
             $table = $this->departmentTickets($request->input('department'), $request->input('status'));
         } else {
             $segment = $this->request->input('segment');

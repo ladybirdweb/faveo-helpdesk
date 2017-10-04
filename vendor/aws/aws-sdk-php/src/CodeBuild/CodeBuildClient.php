@@ -5,14 +5,20 @@ use Aws\AwsClient;
 
 /**
  * This client is used to interact with the **AWS CodeBuild** service.
+ * @method \Aws\Result batchDeleteBuilds(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise batchDeleteBuildsAsync(array $args = [])
  * @method \Aws\Result batchGetBuilds(array $args = [])
  * @method \GuzzleHttp\Promise\Promise batchGetBuildsAsync(array $args = [])
  * @method \Aws\Result batchGetProjects(array $args = [])
  * @method \GuzzleHttp\Promise\Promise batchGetProjectsAsync(array $args = [])
  * @method \Aws\Result createProject(array $args = [])
  * @method \GuzzleHttp\Promise\Promise createProjectAsync(array $args = [])
+ * @method \Aws\Result createWebhook(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise createWebhookAsync(array $args = [])
  * @method \Aws\Result deleteProject(array $args = [])
  * @method \GuzzleHttp\Promise\Promise deleteProjectAsync(array $args = [])
+ * @method \Aws\Result deleteWebhook(array $args = [])
+ * @method \GuzzleHttp\Promise\Promise deleteWebhookAsync(array $args = [])
  * @method \Aws\Result listBuilds(array $args = [])
  * @method \GuzzleHttp\Promise\Promise listBuildsAsync(array $args = [])
  * @method \Aws\Result listBuildsForProject(array $args = [])

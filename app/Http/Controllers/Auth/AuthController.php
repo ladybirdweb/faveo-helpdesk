@@ -58,9 +58,10 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct(PhpMailController $PhpMailController, SocialMediaController $social)
+    public function __construct()
     {
-        $this->PhpMailController = $PhpMailController;
+        $this->PhpMailController = new PhpMailController();
+        $social = new SocialMediaController();
         $social->configService();
         $this->middleware('guest', ['except' => ['getLogout', 'verifyOTP', 'redirectToProvider']]);
     }
@@ -147,7 +148,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function postRegister(User $user, RegisterRequest $request)
+    public function postRegister(User $user, RegisterRequest $request,$api = false, $send_mail = true,$role='user')
     {
         try {
             $request_array = $request->input();
@@ -187,23 +188,23 @@ class AuthController extends Controller
 
             $notifications[] = [
                 'registration_alert' => [
-                    'userid'   => $userid,
+                    'userid'   => $user->id,
                     'from'     => $this->PhpMailController->mailfrom('1', '0'),
                     'message'  => ['subject' => null, 'scenario' => 'registration'],
                     'variable' => ['user' => $name, 'email_address' => $request->input('email'), 'password_reset_link' => faveoUrl('account/activate/'.$code)],
                 ],
                 'registration_notification_alert' => [
-                    'userid'   => $userid,
+                    'userid'   => $user->id,
                     'from'     => $this->PhpMailController->mailfrom('1', '0'),
                     'message'  => ['subject' => null, 'scenario' => 'registration-notification'],
                     'variable' => ['user' => $name, 'email_address' => $request->input('email'), 'user_password' => $request->input('password')],
                 ],
                 'new_user_alert' => [
                     'model'    => $user,
-                    'userid'   => $userid,
+                    'userid'   => $user->id,
                     'from'     => $this->PhpMailController->mailfrom('1', '0'),
                     'message'  => ['subject' => null, 'scenario' => 'new-user'],
-                    'variable' => ['user' => $name, 'email_address' => $user->user_name, 'user_profile_link' => faveoUrl('user/'.$userid)],
+                    'variable' => ['user' => $name, 'email_address' => $user->user_name, 'user_profile_link' => faveoUrl('user/'.$user->id)],
                 ],
             ];
             $alert = new \App\Http\Controllers\Agent\helpdesk\Notifications\NotificationController();
@@ -229,9 +230,14 @@ class AuthController extends Controller
             } else {
                 $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
             }
-
+            if ($api==true) {
+                return ['message'=>$message12,'user'=>$user->toArray()];
+            }
             return redirect('home')->with('success', $message12);
         } catch (\Exception $e) {
+            if ($api==true) {
+                return ['error'=>$e->getMessage()];
+            }
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }
@@ -335,7 +341,7 @@ class AuthController extends Controller
         if (!$check_active) { //check if user exists or not
             //if user deos not exist then return back with error that user is not registered
             return redirect()->back()
-                            ->withInput($request->only('email', 'remember'))
+                            ->withInput($request->all('email', 'remember'))
                             ->withErrors([
                                 'email'       => $this->getFailedLoginMessage(),
                                 'password'    => $this->getFailedLoginMessage(),
@@ -381,7 +387,7 @@ class AuthController extends Controller
             a: if (!$check_active->active) { //check account is active or not
                 // if accoutn is not active return back with error message that account is inactive
                 return redirect()->back()
-                                ->withInput($request->only('email', 'remember'))
+                                ->withInput($request->all('email', 'remember'))
                                 ->withErrors([
                                     'email'       => $this->getFailedLoginMessage(),
                                     'password'    => $this->getFailedLoginMessage(),
@@ -395,7 +401,7 @@ class AuthController extends Controller
                     $loginAttempts = \Session::get('loginAttempts');
                     $loginAttemptTime = \Session::get('loginAttemptTime');
                     $this->addLoginAttempt($value, $usernameinput);
-                    // $credentials = $request->only('email', 'password');
+                    // $credentials = $request->all('email', 'password');
                     $usernameinput = $request->input('email');
                     $password = $request->input('password');
                     $field = filter_var($usernameinput, FILTER_VALIDATE_EMAIL) ? 'email' : 'user_name';
@@ -416,7 +422,7 @@ class AuthController extends Controller
                 // If auth ok, redirect to restricted area
                 \Session::put('loginAttempts', $loginAttempts + 1);
                 $credentials = $this->credential([$field => $usernameinput, 'password' => $password, 'is_delete' => 0]);
-                if (Auth::Attempt($credentials, $request->has('remember'))) {
+                if (Auth::Attempt($credentials, $request->filled('remember'))) {
                     if (Auth::user()->role == 'user') {
                         if ($request->input('referer')) {
                             return \Redirect::route($request->input('referer'));
@@ -431,7 +437,7 @@ class AuthController extends Controller
         }
 
         return redirect()->back()
-                        ->withInput($request->only('email', 'remember'))
+                        ->withInput($request->all('email', 'remember'))
                         ->withErrors([
                             'email'       => $this->getFailedLoginMessage(),
                             'password'    => $this->getFailedLoginMessage(),

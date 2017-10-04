@@ -1,13 +1,19 @@
 <?php
-class MultiDependencyTest extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class MultiDependencyTest extends TestCase
 {
     public function testOne()
     {
+        $this->assertTrue(true);
+
         return 'foo';
     }
 
     public function testTwo()
     {
+        $this->assertTrue(true);
+
         return 'bar';
     }
 

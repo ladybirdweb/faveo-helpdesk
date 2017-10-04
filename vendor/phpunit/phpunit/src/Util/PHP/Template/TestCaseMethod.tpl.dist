@@ -1,4 +1,7 @@
 <?php
+use PHPUnit\Framework\TestCase;
+use SebastianBergmann\CodeCoverage\CodeCoverage;
+
 if (!defined('STDOUT')) {
     // php://stdout does not obey output buffering. Any output would break
     // unserialization of child process results in the parent process.
@@ -28,11 +31,11 @@ function __phpunit_run_isolated_test()
         require_once '{filename}';
     }
 
-    $result = new PHPUnit_Framework_TestResult;
+    $result = new PHPUnit\Framework\TestResult;
 
     if ({collectCodeCoverageInformation}) {
         $result->setCodeCoverage(
-            new PHP_CodeCoverage(
+            new CodeCoverage(
                 null,
                 unserialize('{codeCoverageFilter}')
             )
@@ -41,9 +44,11 @@ function __phpunit_run_isolated_test()
 
     $result->beStrictAboutTestsThatDoNotTestAnything({isStrictAboutTestsThatDoNotTestAnything});
     $result->beStrictAboutOutputDuringTests({isStrictAboutOutputDuringTests});
-    $result->beStrictAboutTestSize({isStrictAboutTestSize});
+    $result->enforceTimeLimit({enforcesTimeLimit});
     $result->beStrictAboutTodoAnnotatedTests({isStrictAboutTodoAnnotatedTests});
+    $result->beStrictAboutResourceUsageDuringSmallTests({isStrictAboutResourceUsageDuringSmallTests});
 
+    /** @var TestCase $test */
     $test = new {className}('{methodName}', unserialize('{data}'), '{dataName}');
     $test->setDependencyInput(unserialize('{dependencyInput}'));
     $test->setInIsolation(TRUE);
@@ -58,6 +63,11 @@ function __phpunit_run_isolated_test()
     @rewind(STDOUT); /* @ as not every STDOUT target stream is rewindable */
     if ($stdout = stream_get_contents(STDOUT)) {
         $output = $stdout . $output;
+        $streamMetaData = stream_get_meta_data(STDOUT);
+        if (!empty($streamMetaData['stream_type']) && 'STDIO' === $streamMetaData['stream_type']) {
+            @ftruncate(STDOUT, 0);
+            @rewind(STDOUT);
+        }
     }
 
     print serialize(
@@ -73,7 +83,7 @@ function __phpunit_run_isolated_test()
 $configurationFilePath = '{configurationFilePath}';
 
 if ('' !== $configurationFilePath) {
-    $configuration = PHPUnit_Util_Configuration::getInstance($configurationFilePath);
+    $configuration = PHPUnit\Util\Configuration::getInstance($configurationFilePath);
     $configuration->handlePHPConfiguration();
     unset($configuration);
 }
@@ -83,7 +93,7 @@ function __phpunit_error_handler($errno, $errstr, $errfile, $errline, $errcontex
    return true;
 }
 
-set_error_handler("__phpunit_error_handler");
+set_error_handler('__phpunit_error_handler');
 
 {constants}
 {included_files}

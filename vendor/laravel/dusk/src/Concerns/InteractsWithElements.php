@@ -70,7 +70,7 @@ trait InteractsWithElements
     {
         $this->ensurejQueryIsAvailable();
 
-        $selector = trim($this->resolver->format("a:contains({$link})"));
+        $selector = addslashes(trim($this->resolver->format("a:contains({$link})")));
 
         $this->driver->executeScript("jQuery.find(\"{$selector}\")[0].click();");
 
@@ -167,6 +167,20 @@ trait InteractsWithElements
     public function type($field, $value)
     {
         $this->resolver->resolveForTyping($field)->clear()->sendKeys($value);
+
+        return $this;
+    }
+
+    /**
+     * Type the given value in the given field without clearing it.
+     *
+     * @param  string  $field
+     * @param  string  $value
+     * @return $this
+     */
+    public function append($field, $value)
+    {
+        $this->resolver->resolveForTyping($field)->sendKeys($value);
 
         return $this;
     }

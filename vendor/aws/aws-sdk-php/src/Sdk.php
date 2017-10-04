@@ -28,6 +28,8 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionCloudFormation(array $args = [])
  * @method \Aws\CloudFront\CloudFrontClient createCloudFront(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionCloudFront(array $args = [])
+ * @method \Aws\CloudHSMV2\CloudHSMV2Client createCloudHSMV2(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionCloudHSMV2(array $args = [])
  * @method \Aws\CloudHsm\CloudHsmClient createCloudHsm(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionCloudHsm(array $args = [])
  * @method \Aws\CloudSearch\CloudSearchClient createCloudSearch(array $args = [])
@@ -62,6 +64,8 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionConfigService(array $args = [])
  * @method \Aws\CostandUsageReportService\CostandUsageReportServiceClient createCostandUsageReportService(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionCostandUsageReportService(array $args = [])
+ * @method \Aws\DAX\DAXClient createDAX(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionDAX(array $args = [])
  * @method \Aws\DataPipeline\DataPipelineClient createDataPipeline(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionDataPipeline(array $args = [])
  * @method \Aws\DatabaseMigrationService\DatabaseMigrationServiceClient createDatabaseMigrationService(array $args = [])
@@ -104,6 +108,10 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionGameLift(array $args = [])
  * @method \Aws\Glacier\GlacierClient createGlacier(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionGlacier(array $args = [])
+ * @method \Aws\Glue\GlueClient createGlue(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionGlue(array $args = [])
+ * @method \Aws\Greengrass\GreengrassClient createGreengrass(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionGreengrass(array $args = [])
  * @method \Aws\Health\HealthClient createHealth(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionHealth(array $args = [])
  * @method \Aws\Iam\IamClient createIam(array $args = [])
@@ -140,6 +148,10 @@ namespace Aws;
  * @method \Aws\MultiRegionClient createMultiRegionMarketplaceEntitlementService(array $args = [])
  * @method \Aws\MarketplaceMetering\MarketplaceMeteringClient createMarketplaceMetering(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionMarketplaceMetering(array $args = [])
+ * @method \Aws\MigrationHub\MigrationHubClient createMigrationHub(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionMigrationHub(array $args = [])
+ * @method \Aws\Mobile\MobileClient createMobile(array $args = [])
+ * @method \Aws\MultiRegionClient createMultiRegionMobile(array $args = [])
  * @method \Aws\OpsWorks\OpsWorksClient createOpsWorks(array $args = [])
  * @method \Aws\MultiRegionClient createMultiRegionOpsWorks(array $args = [])
  * @method \Aws\OpsWorksCM\OpsWorksCMClient createOpsWorksCM(array $args = [])
@@ -203,7 +215,7 @@ namespace Aws;
  */
 class Sdk
 {
-    const VERSION = '3.28.9';
+    const VERSION = '3.36.19';
 
     /** @var array Arguments for creating clients */
     private $args;

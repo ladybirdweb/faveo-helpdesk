@@ -17,10 +17,6 @@ return [
     // The url to this package. Change it if necessary.
     'prefix' => 'laravel-filemanager',
 
-    // The prefix of urls to non-public files, for exmaple if: base_directory !== 'public'
-    // Without slashes
-    'urls_prefix' => '',
-
     /*
     |--------------------------------------------------------------------------
     | Multi-User Mode
@@ -33,11 +29,11 @@ return [
     'allow_share_folder' => true,
 
     // Flexibla way to customize client folders accessibility
+    // If you want to customize client folders, publish tag="lfm_handler"
+    // Then you can rewrite userField function in App\Handler\ConfigHander class
+    // And set 'user_field' to App\Handler\ConfigHander::class
     // Ex: The private folder of user will be named as the user id.
-    // You cant use a closure when using the optimized config file (in Laravel 5.2 anyway)
-    'user_field' => function() {
-        return auth()->user()->id;
-    },
+    'user_field' => Unisharp\Laravelfilemanager\Handlers\ConfigHandler::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -76,7 +72,7 @@ return [
     'rename_file' => false,
 
     // If rename_file set to false and this set to true, then non-alphanumeric characters in filename will be replaced.
-    'alphanumeric_filename' => true,
+    'alphanumeric_filename' => false,
 
     // If true, non-alphanumeric folder name will be rejected.
     'alphanumeric_directory' => false,
@@ -160,9 +156,13 @@ return [
     |--------------------------------------------------------------------------
     | php.ini override
     |--------------------------------------------------------------------------
+    |
+    | These values override your php.ini settings before uploading files
+    | Set these to false to ingnore and apply your php.ini settings
+    |
+    | Please note that the 'upload_max_filesize' & 'post_max_size'
+    | directives are not supported.
     */
-    // These values override your php.ini settings before uploading files
-    // Set these to false to ingnore and apply your php.ini settings
     'php_ini_overrides' => [
         'memory_limit'        => '256M'
     ]

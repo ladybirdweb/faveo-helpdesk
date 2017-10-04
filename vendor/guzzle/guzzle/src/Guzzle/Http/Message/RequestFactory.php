@@ -84,7 +84,7 @@ class RequestFactory implements RequestFactoryInterface
     {
         $method = strtoupper($method);
 
-        if ($method == 'GET' || $method == 'HEAD' || $method == 'TRACE') {
+        if ($method == 'GET' || $method == 'HEAD' || $method == 'TRACE' || $method == 'OPTIONS') {
             // Handle non-entity-enclosing request methods
             $request = new $this->requestClass($method, $url, $headers);
             if ($body) {

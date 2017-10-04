@@ -55,8 +55,6 @@ class XmlVisitor extends AbstractResponseVisitor
             $this->processObject($param, $value);
         } elseif ($type == 'array') {
             $this->processArray($param, $value);
-        } elseif ($type == 'string' && gettype($value) == 'array') {
-            $value = '';
         }
 
         if ($value !== null) {

@@ -103,12 +103,12 @@ class FilesSize extends Size
                         'Value array must be in $_FILES format'
                     );
                 }
-                $file = $files;
+                $file  = $files;
                 $files = $files['tmp_name'];
             }
 
             // Is file readable ?
-            if (empty($files) || false === stream_resolve_include_path($files)) {
+            if (empty($files) || false === is_readable($files)) {
                 $this->throwError($file, self::NOT_READABLE);
                 continue;
             }
@@ -128,10 +128,10 @@ class FilesSize extends Size
             if (($max !== null) && ($max < $size)) {
                 if ($this->getByteString()) {
                     $this->options['max'] = $this->toByteString($max);
-                    $this->size          = $this->toByteString($size);
+                    $this->size           = $this->toByteString($size);
                     $this->throwError($file, self::TOO_BIG);
                     $this->options['max'] = $max;
-                    $this->size          = $size;
+                    $this->size           = $size;
                 } else {
                     $this->throwError($file, self::TOO_BIG);
                 }
@@ -142,10 +142,10 @@ class FilesSize extends Size
         if (($min !== null) && ($size < $min)) {
             if ($this->getByteString()) {
                 $this->options['min'] = $this->toByteString($min);
-                $this->size          = $this->toByteString($size);
+                $this->size           = $this->toByteString($size);
                 $this->throwError($file, self::TOO_SMALL);
                 $this->options['min'] = $min;
-                $this->size          = $size;
+                $this->size           = $size;
             } else {
                 $this->throwError($file, self::TOO_SMALL);
             }

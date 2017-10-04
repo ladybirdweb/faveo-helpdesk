@@ -4,7 +4,7 @@ namespace LaravelFCM\Response;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Class DownstreamResponse.
@@ -96,10 +96,10 @@ class DownstreamResponse extends BaseResponse implements DownstreamResponseContr
     /**
      * DownstreamResponse constructor.
      *
-     * @param GuzzleResponse $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      * @param                $tokens
      */
-    public function __construct(GuzzleResponse $response, $tokens)
+    public function __construct(ResponseInterface $response, $tokens)
     {
         $this->tokens = is_string($tokens) ? [$tokens] : $tokens;
 

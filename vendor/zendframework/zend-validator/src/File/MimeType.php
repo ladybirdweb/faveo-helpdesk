@@ -176,10 +176,10 @@ class MimeType extends AbstractValidator
      * if false, the default MAGIC file from PHP will be used
      *
      * @param  string $file
-     * @return MimeType Provides fluid interface
      * @throws Exception\RuntimeException When finfo can not read the magicfile
      * @throws Exception\InvalidArgumentException
      * @throws Exception\InvalidMagicMimeFileException
+     * @return self Provides fluid interface
      */
     public function setMagicFile($file)
     {
@@ -216,7 +216,7 @@ class MimeType extends AbstractValidator
      * Disables usage of MagicFile
      *
      * @param $disable boolean False disables usage of magic file
-     * @return MimeType Provides fluid interface
+     * @return self Provides fluid interface
      */
     public function disableMagicFile($disable)
     {
@@ -249,7 +249,7 @@ class MimeType extends AbstractValidator
      * Note that this is unsafe and therefor the default value is false
      *
      * @param  bool $headerCheck
-     * @return MimeType Provides fluid interface
+     * @return self Provides fluid interface
      */
     public function enableHeaderCheck($headerCheck = true)
     {
@@ -278,7 +278,7 @@ class MimeType extends AbstractValidator
      * Sets the mimetypes
      *
      * @param  string|array $mimetype The mimetypes to validate
-     * @return MimeType Provides a fluent interface
+     * @return self Provides a fluent interface
      */
     public function setMimeType($mimetype)
     {
@@ -291,8 +291,8 @@ class MimeType extends AbstractValidator
      * Adds the mimetypes
      *
      * @param  string|array $mimetype The mimetypes to add for validation
-     * @return MimeType Provides a fluent interface
      * @throws Exception\InvalidArgumentException
+     * @return self Provides a fluent interface
      */
     public function addMimeType($mimetype)
     {
@@ -363,7 +363,7 @@ class MimeType extends AbstractValidator
         $this->setValue($filename);
 
         // Is file readable ?
-        if (empty($file) || false === stream_resolve_include_path($file)) {
+        if (empty($file) || false === is_readable($file)) {
             $this->error(static::NOT_READABLE);
             return false;
         }
@@ -385,7 +385,7 @@ class MimeType extends AbstractValidator
             $this->type = null;
             if (! empty($this->finfo)) {
                 $this->type = finfo_file($this->finfo, $file);
-                finfo_close($this->finfo);
+                unset($this->finfo);
             }
         }
 

@@ -281,6 +281,22 @@
                     </div>
                 </div>
                 <!--/.col-md-2-->
+                
+                <!-- Ticket Types -->
+                <div class="col-md-2 col-sm-6">
+                    <div class="settingiconblue">
+                        <div class="settingdivblue">
+                            <a href="{{url('ticket-types')}}" onclick="sidebaropen(this)">
+                                <span class="fa-stack fa-2x">
+
+                                    <i class="fa fa-list-ol fa-stack-1x"></i>
+                                </span>
+                            </a>
+                        </div>
+                        <p class="box-title" >{!! Lang::get('lang.ticket_type') !!}</p>
+                    </div>
+                </div>
+                
             </div>
         </div>
         <!-- /.row -->

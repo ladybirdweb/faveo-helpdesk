@@ -8,12 +8,11 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "laravel/framework": "5.4.*",
+        "laravel/framework": "5.5.*",
         "laravelcollective/html": "5.*",
         "vsmoraes/laravel-pdf": "1.0.1",
         "propaganistas/laravel-phone": "~2.0",
         "bugsnag/bugsnag-laravel": "1.*",
-        "filp/whoops": "~1.0",
         "thomaswelton/laravel-gravatar": "~1.0",
         "neitanod/forceutf8": "dev-master",
         "nicolaslopezj/searchable": "1.*",
@@ -36,15 +35,16 @@
         "torann/geoip": "^1.0",
         "yajra/laravel-datatables-oracle": "~6.0",
         "flowjs/flow-php-server": "^1.0",
-        "doctrine/dbal": "^2.5",
-        "laravel/dusk": "^1.1"
+        "doctrine/dbal": "^2.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0",
+        "phpunit/phpunit": "~6.0",
         "phpspec/phpspec": "~2.1",
         "symfony/dom-crawler": "3.1.*",
         "symfony/css-selector": "3.1.*",
-        "fzaninotto/faker": "1.*"
+        "fzaninotto/faker": "1.*",
+        "filp/whoops": "~2.0",
+        "laravel/dusk": "2.0.0"
     },
     "autoload": {
         "classmap": [
@@ -72,6 +72,10 @@
         "post-create-project-cmd": [
             "php -r \"copy('.env.example', '.env');\"",
             "php artisan key:generate"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover"
         ]
     },
     "config": {

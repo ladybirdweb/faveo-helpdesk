@@ -34,18 +34,155 @@ class TicketWorkflowController extends Controller
     {
         $this->TicketController = $TicketController;
     }
+    public function isTarget($channel, $source)
+    {
 
+        $check = false;
+        if ((int) $channel == (int) $source || $channel == 'any') {
+            $check = true;
+        }
+        return $check;
+    }
+    public function relation($rule_model, $ticket_values = [])
+    {
+        $scenario = $rule_model->matching_scenario;
+        $value    = $rule_model->matching_value;
+        $relation = $rule_model->matching_relation;
+        switch ($relation) {
+            case "equal":
+                if (isset($ticket_values[$scenario])) {
+                    return $ticket_values[$scenario] == $value;
+                }
+                return false;
+            case "not_equal":
+                if (isset($ticket_values[$scenario])) {
+                    return $ticket_values[$scenario] != $value;
+                }
+                return false;
+            case "contains":
+                if (isset($ticket_values[$scenario])) {
+                    return str_contains($ticket_values[$scenario], $value);
+                }
+                return false;
+            case "dn_contain":
+                if (isset($ticket_values[$scenario])) {
+                    return !str_contains($ticket_values[$scenario], $value);
+                }
+                return false;
+            case "starts":
+                if (isset($ticket_values[$scenario])) {
+                    return starts_with($ticket_values[$scenario], $value);
+                }
+                return false;
+            case "ends":
+                if (isset($ticket_values[$scenario])) {
+                    return ends_with($ticket_values[$scenario], $value);
+                }
+                return false;
+            default :
+                return false;
+        }
+    }
+    public function workflow($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response, $type, $attachment
+    = "", $inline = [], $email_content = [], $company = "")
+    {
+        $values        = [
+            'email'         => $fromaddress,
+            'name'          => $fromname,
+            'subject'       => $subject,
+            'body'          => $body,
+            'phone'         => $phone,
+            'code'          => $phonecode,
+            'mobile'        => $mobile_number,
+            'helptopic'     => $helptopic,
+            'sla'           => $sla,
+            'priority'      => $priority,
+            'source'        => $source,
+            'cc'            => $collaborator,
+            'department'    => $dept,
+            'agent'         => $assign,
+            'team'          => $team_assign,
+            'status'        => $ticket_status,
+            'custom_data'   => $form_data,
+            'auto_response' => $auto_response,
+            'type'          => $type,
+            'attachment'    => $attachment,
+            'inline'        => $inline,
+            'email_content' => $email_content,
+            'organization'  => $company
+        ];
+        
+        //$values        = $this->process($values);
+        $create_ticket = $this->TicketController->create_user($values['email'], $values['name'], $values['subject'], $values['body'], $values['phone'], $values['code'], $values['mobile'], $values['helptopic'], $values['sla'], $values['priority'], $values['source'], $values['cc'], $values['department'], $values['agent'], $values['custom_data'], $values['auto_response'], $values['status'], $values['type'], $values['attachment'], $values['inline'], $values['email_content'],$company);
+
+        return $create_ticket;
+    }
+    public function process($values)
+    {
+        $workflow  = new WorkflowName();
+        $workflows = $workflow
+                ->where('status', 1)
+                ->orderBy('order')
+                ->get();
+        $rules     = [];
+        if ($workflows->count() > 0) {
+            foreach ($workflows as $flow) {
+                $rules[] = $this->rules($flow, $values);
+            }
+            $rules = head(array_filter($rules));
+            if ($rules) {
+                $rule = $rules->first();
+                if ($rule) {
+                    $actions = $this->action($rule);
+                    $values  = array_replace($values, $actions);
+                }
+            }
+        }
+        if (key_exists('reject', $values)) {
+            throw new \Exception('Rejected by workflow');
+        }
+        return $values;
+    }
+    public function action($rule)
+    {
+        if ($rule && $rule->workflow && $rule->workflow->action) {
+            return $rule->workflow->action->pluck('action', 'condition')->toArray();
+        }
+    }
+    public function rules($workflow, $values = [])
+    {
+        if ($workflow) {
+            $isTarget = $this->isTarget($workflow->target, $values['source']);
+            if ($isTarget) {
+                //dd($workflow->rule()->with(['workflow.action'])->get());
+                $work = $workflow->rule()
+                        ->with(['workflow.action'])
+                        ->select('id', 'workflow_id', 'matching_scenario', 'matching_relation', 'matching_value')->get()
+                        ->filter(function($value)use($values) {
+                    return $this->relation($value, $values);
+                })
+
+                ;
+                if ($work && $work->count() > 0) {
+                    return $work;
+                }
+            }
+        }
+    }
     /**
      * This is the core function from where the workflow is applied.
      *
      * @return type response
      */
-    public function workflow($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response, $attachments = '', $email_content = [])
+    public function workflowOld($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response, $type, $attachment
+    = "", $inline = [], $email_content = [])
     {
-        $contact_details = ['email' => $fromaddress, 'email_name' => $fromname, 'subject' => $subject, 'message' => $body];
+//        dd($fromaddress, $fromname, $subject, $body, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $dept, $assign, $team_assign, $ticket_status, $form_data, $auto_response,$type,$attachment);
+
+        $contact_details         = ['email' => $fromaddress, 'email_name' => $fromname, 'subject' => $subject, 'message' => $body];
         $ticket_settings_details = ['help_topic' => $helptopic, 'sla' => $sla, 'priority' => $priority, 'source' => $source, 'dept' => $dept, 'assign' => $assign, 'team' => $team_assign, 'status' => $ticket_status, 'reject' => false];
         // get all the workflow common to the entire system which includes any type of ticket creation where the execution order of the workflow should be starting with ascending order
-        $workflows = WorkflowName::where('target', '=', 'A-0')->where('status', '=', '1')->orderBy('order', 'asc')->get();
+        $workflows               = WorkflowName::where('target', '=', 'A-0')->where('status', '=', '1')->orderBy('order', 'asc')->get();
         foreach ($workflows as $workflow) {
             // checking if any workflow defined in the system
             if ($workflow) {
@@ -54,19 +191,26 @@ class TicketWorkflowController extends Controller
                 foreach ($worklfow_rules as $worklfow_rule) {
                     // checking for the workflow rules to which workflow rule type it is
                     if ($worklfow_rule->matching_scenario == 'email') {
-                        if ($rule_condition = $this->checkRuleCondition($contact_details['email'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                        if ($rule_condition = $this->checkRuleCondition($contact_details['email'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                == true) {
                             $ticket_settings_details = $this->applyActionCondition($workflow->id, $ticket_settings_details);
                         }
-                    } elseif ($worklfow_rule->matching_scenario == 'email_name') {
-                        if ($rule_condition = $this->checkRuleCondition($contact_details['email_name'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                    }
+                    elseif ($worklfow_rule->matching_scenario == 'email_name') {
+                        if ($rule_condition = $this->checkRuleCondition($contact_details['email_name'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                == true) {
                             $ticket_settings_details = $this->applyActionCondition($workflow->id, $ticket_settings_details);
                         }
-                    } elseif ($worklfow_rule->matching_scenario == 'subject') {
-                        if ($rule_condition = $this->checkRuleCondition($contact_details['subject'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                    }
+                    elseif ($worklfow_rule->matching_scenario == 'subject') {
+                        if ($rule_condition = $this->checkRuleCondition($contact_details['subject'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                == true) {
                             $ticket_settings_details = $this->applyActionCondition($workflow->id, $ticket_settings_details);
                         }
-                    } elseif ($worklfow_rule->matching_scenario == 'message') {
-                        if ($rule_condition = $this->checkRuleCondition($contact_details['message'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                    }
+                    elseif ($worklfow_rule->matching_scenario == 'message') {
+                        if ($rule_condition = $this->checkRuleCondition($contact_details['message'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                == true) {
                             $ticket_settings_details = $this->applyActionCondition($workflow->id, $ticket_settings_details);
                         }
                     }
@@ -83,19 +227,26 @@ class TicketWorkflowController extends Controller
                         if ($worklfow_rule) {
                             // checking for the workflow rules to which workflow rule type it is
                             if ($worklfow_rule->matching_scenario == 'email') {
-                                if ($this->checkRuleCondition($contact_details['email'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                                if ($this->checkRuleCondition($contact_details['email'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                        == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_web->id, $ticket_settings_details);
                                 }
-                            } elseif ($worklfow_rule->matching_scenario == 'email_name') {
-                                if ($this->checkRuleCondition($contact_details['email_name'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                            }
+                            elseif ($worklfow_rule->matching_scenario == 'email_name') {
+                                if ($this->checkRuleCondition($contact_details['email_name'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                        == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_web->id, $ticket_settings_details);
                                 }
-                            } elseif ($worklfow_rule->matching_scenario == 'subject') {
-                                if ($this->checkRuleCondition($contact_details['subject'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                            }
+                            elseif ($worklfow_rule->matching_scenario == 'subject') {
+                                if ($this->checkRuleCondition($contact_details['subject'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                        == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_web->id, $ticket_settings_details);
                                 }
-                            } elseif ($worklfow_rule->matching_scenario == 'message') {
-                                if ($this->checkRuleCondition($contact_details['message'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                            }
+                            elseif ($worklfow_rule->matching_scenario == 'message') {
+                                if ($this->checkRuleCondition($contact_details['message'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                        == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_web->id, $ticket_settings_details);
                                 }
                             }
@@ -114,19 +265,26 @@ class TicketWorkflowController extends Controller
                         if ($worklfow_rule) {
                             // checking for the workflow rules to which workflow rule type it is
                             if ($worklfow_rule->matching_scenario == 'email') {
-                                if ($rule_condition = $this->checkRuleCondition($contact_details['email'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                                if ($rule_condition = $this->checkRuleCondition($contact_details['email'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                        == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_email->id, $ticket_settings_details);
                                 }
-                            } elseif ($worklfow_rule->matching_scenario == 'email_name') {
-                                if ($rule_condition = $this->checkRuleCondition($contact_details['email_name'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                            }
+                            elseif ($worklfow_rule->matching_scenario == 'email_name') {
+                                if ($rule_condition = $this->checkRuleCondition($contact_details['email_name'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                        == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_email->id, $ticket_settings_details);
                                 }
-                            } elseif ($worklfow_rule->matching_scenario == 'subject') {
-                                if ($rule_condition = $this->checkRuleCondition($contact_details['subject'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                            }
+                            elseif ($worklfow_rule->matching_scenario == 'subject') {
+                                if ($rule_condition = $this->checkRuleCondition($contact_details['subject'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                        == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_email->id, $ticket_settings_details);
                                 }
-                            } elseif ($worklfow_rule->matching_scenario == 'message') {
-                                if ($rule_condition = $this->checkRuleCondition($contact_details['message'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                            }
+                            elseif ($worklfow_rule->matching_scenario == 'message') {
+                                if ($rule_condition = $this->checkRuleCondition($contact_details['message'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                        == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_email->id, $ticket_settings_details);
                                 }
                             }
@@ -145,19 +303,26 @@ class TicketWorkflowController extends Controller
                         if ($worklfow_rule) {
                             // checking for the workflow rules to which workflow rule type it is
                             if ($worklfow_rule->matching_scenario == 'email') {
-                                if ($rule_condition = $this->checkRuleCondition($contact_details['email'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                                if ($rule_condition = $this->checkRuleCondition($contact_details['email'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                        == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_api->id, $ticket_settings_details);
                                 }
-                            } elseif ($worklfow_rule->matching_scenario == 'email_name') {
-                                if ($rule_condition = $this->checkRuleCondition($contact_details['email_name'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                            }
+                            elseif ($worklfow_rule->matching_scenario == 'email_name') {
+                                if ($rule_condition = $this->checkRuleCondition($contact_details['email_name'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                        == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_api->id, $ticket_settings_details);
                                 }
-                            } elseif ($worklfow_rule->matching_scenario == 'subject') {
-                                if ($rule_condition = $this->checkRuleCondition($contact_details['subject'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                            }
+                            elseif ($worklfow_rule->matching_scenario == 'subject') {
+                                if ($rule_condition = $this->checkRuleCondition($contact_details['subject'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                        == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_api->id, $ticket_settings_details);
                                 }
-                            } elseif ($worklfow_rule->matching_scenario == 'message') {
-                                if ($rule_condition = $this->checkRuleCondition($contact_details['message'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value) == true) {
+                            }
+                            elseif ($worklfow_rule->matching_scenario == 'message') {
+                                if ($rule_condition = $this->checkRuleCondition($contact_details['message'], $worklfow_rule->matching_relation, $worklfow_rule->matching_value)
+                                        == true) {
                                     $ticket_settings_details = $this->applyActionCondition($workflows_api->id, $ticket_settings_details);
                                 }
                             }
@@ -170,13 +335,14 @@ class TicketWorkflowController extends Controller
         //dd($form_data);
         if ($ticket_settings_details['reject'] == true) {
             return ['0' => false, '1' => false];
-        } else {
-            $create_ticket = $this->TicketController->create_user($contact_details['email'], $contact_details['email_name'], $contact_details['subject'], $contact_details['message'], $phone, $phonecode, $mobile_number, $ticket_settings_details['help_topic'], $ticket_settings_details['sla'], $ticket_settings_details['priority'], $source, $collaborator, $ticket_settings_details['dept'], $ticket_settings_details['assign'], $form_data, $auto_response, $ticket_settings_details['status'], $attachments, $email_content);
+        }
+        else {
+
+            $create_ticket = $this->TicketController->create_user($contact_details['email'], $contact_details['email_name'], $contact_details['subject'], $contact_details['message'], $phone, $phonecode, $mobile_number, $ticket_settings_details['help_topic'], $ticket_settings_details['sla'], $ticket_settings_details['priority'], $source, $collaborator, $ticket_settings_details['dept'], $ticket_settings_details['assign'], $form_data, $auto_response, $ticket_settings_details['status'], $type, $attachment, $inline, $email_content);
 
             return $create_ticket;
         }
     }
-
     /**
      * function to check the rules applied to the ticket workflow.
      *
@@ -190,15 +356,20 @@ class TicketWorkflowController extends Controller
     {
         if ($condition == 'equal') {
             $return = $this->checkEqual($statement, $to_check);
-        } elseif ($condition == 'not_equal') {
+        }
+        elseif ($condition == 'not_equal') {
             $return = $this->checkNotEqual($statement, $to_check);
-        } elseif ($condition == 'contains') {
+        }
+        elseif ($condition == 'contains') {
             $return = $this->checkContains($statement, $to_check);
-        } elseif ($condition == 'dn_contain') {
+        }
+        elseif ($condition == 'dn_contain') {
             $return = $this->checkDoNotContain($statement, $to_check);
-        } elseif ($condition == 'starts') {
+        }
+        elseif ($condition == 'starts') {
             $return = $this->checkStarts($statement, $to_check);
-        } elseif ($condition == 'ends') {
+        }
+        elseif ($condition == 'ends') {
             $return = $this->checkEnds($statement, $to_check);
         }
 //        elseif($condition == 'match') {
@@ -208,7 +379,6 @@ class TicketWorkflowController extends Controller
 //        }
         return $return;
     }
-
     /**
      * function to check if the equal functions are applied.
      *
@@ -221,11 +391,11 @@ class TicketWorkflowController extends Controller
     {
         if ($statement == $to_check) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
-
     /**
      * function to check if the not-equal functions are applied.
      *
@@ -238,11 +408,11 @@ class TicketWorkflowController extends Controller
     {
         if ($statement != $to_check) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
-
     /**
      * function to check if the contains functions are applied.
      *
@@ -255,11 +425,11 @@ class TicketWorkflowController extends Controller
     {
         if (strpos($to_check, $statement) !== false) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
-
     /**
      * function to check if the do not contain functions are applied.
      *
@@ -272,11 +442,11 @@ class TicketWorkflowController extends Controller
     {
         if (strpos($to_check, $statement) == false) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
-
     /**
      * function to check if the start functions are applied.
      *
@@ -289,11 +459,11 @@ class TicketWorkflowController extends Controller
     {
         if (substr($to_check, 0, strlen($statement)) == $statement) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
-
     /**
      * function to check if the ends functions are applied.
      *
@@ -307,21 +477,19 @@ class TicketWorkflowController extends Controller
         $to_check = strip_tags($to_check);
         if (substr($to_check, -strlen($statement)) == $statement) {
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
-
 //    function startsWith($to_check, $statement) {
 //        // search backwards starting from haystack length characters from the end
 //        return $statement === "" || strrpos($to_check, $statement, -strlen($to_check)) !== false;
 //    }
-
 //    function endsWith($to_check, $statement) {
 //        // search forward starting from end minus needle length characters
 //        return $statement === "" || (($temp = strlen($to_check) - strlen($statement)) >= 0 && strpos($to_check, $statement, $temp) !== false);
 //    }
-
     /**
      * function to apply the action to a ticket.
      *
@@ -336,26 +504,31 @@ class TicketWorkflowController extends Controller
         foreach ($workflow_actions as $workflow_action) {
             if ($workflow_action->condition == 'reject') {
                 $ticket_settings_details = $this->rejectTicket($ticket_settings_details);
-            } elseif ($workflow_action->condition == 'department') {
+            }
+            elseif ($workflow_action->condition == 'department') {
                 $ticket_settings_details = $this->changeDepartment($workflow_action, $ticket_settings_details);
-            } elseif ($workflow_action->condition == 'priority') {
+            }
+            elseif ($workflow_action->condition == 'priority') {
                 $ticket_settings_details = $this->changePriority($workflow_action, $ticket_settings_details);
-            } elseif ($workflow_action->condition == 'sla') {
+            }
+            elseif ($workflow_action->condition == 'sla') {
                 $ticket_settings_details = $this->changeSla($workflow_action, $ticket_settings_details);
-            } elseif ($workflow_action->condition == 'team') {
+            }
+            elseif ($workflow_action->condition == 'team') {
                 $ticket_settings_details = $this->changeTeam($workflow_action, $ticket_settings_details);
-            } elseif ($workflow_action->condition == 'agent') {
+            }
+            elseif ($workflow_action->condition == 'agent') {
                 $ticket_settings_details = $this->changeAgent($workflow_action, $ticket_settings_details);
-            } elseif ($workflow_action->condition == 'helptopic') {
+            }
+            elseif ($workflow_action->condition == 'helptopic') {
                 $ticket_settings_details = $this->changeHelptopic($workflow_action, $ticket_settings_details);
-            } elseif ($workflow_action->condition == 'status') {
+            }
+            elseif ($workflow_action->condition == 'status') {
                 $ticket_settings_details = $this->changeStatus($workflow_action, $ticket_settings_details);
             }
         }
-
         return $ticket_settings_details;
     }
-
     /**
      * function to reject ticket.
      *
@@ -369,7 +542,6 @@ class TicketWorkflowController extends Controller
 
         return $ticket_settings_details;
     }
-
     /**
      * function to change the department of a ticket.
      *
@@ -383,13 +555,13 @@ class TicketWorkflowController extends Controller
         $dept = Department::where('id', '=', $workflow_action->action)->first();
         if ($dept == null) {
             return $ticket_settings_details;
-        } else {
+        }
+        else {
             $ticket_settings_details['dept'] = $dept->id;
 
             return $ticket_settings_details;
         }
     }
-
     /**
      * function to change the priority of a ticket.
      *
@@ -403,13 +575,13 @@ class TicketWorkflowController extends Controller
         $priority = Ticket_Priority::where('priority_id', '=', $workflow_action->action)->first();
         if ($priority == null) {
             return $ticket_settings_details;
-        } else {
+        }
+        else {
             $ticket_settings_details['priority'] = $priority->priority_id;
 
             return $ticket_settings_details;
         }
     }
-
     /**
      * function to change the SLA of a ticket.
      *
@@ -423,13 +595,13 @@ class TicketWorkflowController extends Controller
         $sla_plan = Sla_plan::where('id', '=', $workflow_action->action)->first();
         if ($sla_plan == null) {
             return $ticket_settings_details;
-        } else {
+        }
+        else {
             $ticket_settings_details['sla'] = $sla_plan->id;
 
             return $ticket_settings_details;
         }
     }
-
     /**
      * function to assign tean to a ticket.
      *
@@ -443,13 +615,13 @@ class TicketWorkflowController extends Controller
         $team = Teams::where('id', '=', $workflow_action->action)->first();
         if ($team == null) {
             return $ticket_settings_details;
-        } else {
+        }
+        else {
             $ticket_settings_details['team'] = $team->id;
 
             return $ticket_settings_details;
         }
     }
-
     /**
      * function to assing a ticket to an agent.
      *
@@ -463,13 +635,13 @@ class TicketWorkflowController extends Controller
         $agent = User::where('id', '=', $workflow_action->action)->where('role', '!=', 'user')->first();
         if ($agent == null) {
             return $ticket_settings_details;
-        } else {
+        }
+        else {
             $ticket_settings_details['assign'] = $agent->id;
 
             return $ticket_settings_details;
         }
     }
-
     /**
      * function to change the helptopic of a ticket.
      *
@@ -483,13 +655,13 @@ class TicketWorkflowController extends Controller
         $help_topic = Help_topic::where('id', '=', $workflow_action->action)->first();
         if ($help_topic == null) {
             return $ticket_settings_details;
-        } else {
+        }
+        else {
             $ticket_settings_details['help_topic'] = $help_topic->id;
 
             return $ticket_settings_details;
         }
     }
-
     /**
      * function to change the status of a ticket.
      *
@@ -503,7 +675,8 @@ class TicketWorkflowController extends Controller
         $status = Ticket_Status::where('id', '=', $workflow_action->action)->first();
         if ($status == null) {
             return $ticket_settings_details;
-        } else {
+        }
+        else {
             $ticket_settings_details['status'] = $status->id;
 
             return $ticket_settings_details;

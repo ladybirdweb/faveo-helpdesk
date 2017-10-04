@@ -105,8 +105,7 @@ class Server
 
         try {
             $this->client->get('guzzle-server/perf', array(), array('timeout' => 5))->send();
-            $this->running = true;
-            return true;
+            return $this->running = true;
         } catch (\Exception $e) {
             return false;
         }
@@ -161,11 +160,8 @@ class Server
     public function start()
     {
         if (!$this->isRunning()) {
-            exec('node ' . __DIR__ . \DIRECTORY_SEPARATOR
-                . 'server.js ' . $this->port
-                . ' >> /tmp/server.log 2>&1 &');
-            // Wait at most 5 seconds for the server the setup before
-            // proceeding.
+            exec('node ' . __DIR__ . \DIRECTORY_SEPARATOR . 'server.js ' . $this->port . ' >> /tmp/server.log 2>&1 &');
+            // Wait at most 5 seconds for the server the setup before proceeding
             $start = time();
             while (!$this->isRunning() && time() - $start < 5);
             if (!$this->running) {

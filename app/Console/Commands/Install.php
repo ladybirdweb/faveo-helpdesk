@@ -91,10 +91,10 @@ class Install extends Command
             }
         }
         $result['php']['extension'] = 'PHP';
-        if (phpversion() >= 5.6) {
+        if (phpversion() === 7.0) {
             $result['php']['status'] = 'PHP version supports';
         } else {
-            $result['php']['status'] = "PHP version doesn't supports please upgrade to 5.6+";
+            $result['php']['status'] = "PHP version doesn't supports please upgrade to 7.0";
         }
 
         $headers = ['Extension', 'Status'];

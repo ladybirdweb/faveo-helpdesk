@@ -101,14 +101,14 @@ class FCMSender extends HTTPSender
     /**
      * @internal
      *
-     * @param $request
+     * @param \LaravelFCM\Request\Request $request
      *
      * @return null|\Psr\Http\Message\ResponseInterface
      */
     private function post($request)
     {
         try {
-            $responseGuzzle = $this->client->post($this->url, $request->build());
+            $responseGuzzle = $this->client->request('post', $this->url, $request->build());
         } catch (ClientException $e) {
             $responseGuzzle = $e->getResponse();
         }
