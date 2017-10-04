@@ -70,7 +70,7 @@ class AppServiceProvider extends ServiceProvider
             view()->share($not);
         });
     }
-    
+
     public function plugin()
     {
         if (isPlugin('Ldap') && $this->isPluginDir('Ldap')) {
@@ -112,24 +112,28 @@ class AppServiceProvider extends ServiceProvider
         if (isPlugin('Zapier') && $this->isPluginDir('Zapier')) {
             $this->app->register(\App\Plugins\Zapier\ServiceProvider::class);
         }
-        if($this->isModuleDir('Location')){
+        if ($this->isModuleDir('Location')) {
             $this->app->register(\App\Location\LocationServiceProvider::class);
         }
     }
-    
-    public function isPluginDir($name){
+
+    public function isPluginDir($name)
+    {
         $check = false;
-        if(is_dir(app_path('Plugins'.DIRECTORY_SEPARATOR.$name))){
+        if (is_dir(app_path('Plugins'.DIRECTORY_SEPARATOR.$name))) {
             $check = true;
         }
+
         return $check;
     }
-    
-    public function isModuleDir($name){
-         $check = false;
-        if(is_dir(app_path($name))){
+
+    public function isModuleDir($name)
+    {
+        $check = false;
+        if (is_dir(app_path($name))) {
             $check = true;
         }
+
         return $check;
     }
 }

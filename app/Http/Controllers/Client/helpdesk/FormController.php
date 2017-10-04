@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Client\helpdesk;
 use App\Http\Controllers\Agent\helpdesk\TicketWorkflowController;
 use App\Http\Controllers\Controller;
 // requests
-use App\Model\helpdesk\Agent\Department;
 use App\Http\Requests\helpdesk\ClientRequest;
+use App\Model\helpdesk\Agent\Department;
 // models
 use App\Model\helpdesk\Form\Fields;
 use App\Model\helpdesk\Manage\Help_topic;
@@ -143,25 +143,26 @@ class FormController extends Controller
      * @param type Request $request
      * @param type User    $user
      */
-    public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code) {
+    public function postedForm(User $user, ClientRequest $request, Ticket $ticket_settings, Ticket_source $ticket_source, Ticket_attachments $ta, CountryCode $code)
+    {
         try {
-            $phone = "";
+            $phone = '';
             $collaborator = null;
             $auto_response = 0;
             $team_assign = null;
-            $sla = "";
+            $sla = '';
             $email = null;
             $name = null;
             $mobile_number = null;
-            $phonecode = "";
-            $user = "";
+            $phonecode = '';
+            $user = '';
             $default_values = ['Requester', 'Requester_email', 'Requester_name', 'media_option',
                 'Requester_mobile', 'Help_Topic', 'cc', 'Help Topic',
                 'Requester_mobile', 'Requester_code', 'Help Topic', 'Assigned', 'Subject',
                 'subject', 'priority', 'help_topic', 'body', 'Description', 'Priority',
                 'Type', 'Status', 'attachment', 'inline', 'email', 'first_name',
                 'last_name', 'mobile', 'country_code', 'api', 'sla', 'dept', 'code',
-                'user_id', 'media_attachment', 'requester', 'status', 'assigned', 'description', 'type', 'media_option', 'Department', 'department'];
+                'user_id', 'media_attachment', 'requester', 'status', 'assigned', 'description', 'type', 'media_option', 'Department', 'department', ];
             $form_extras = $request->except($default_values);
             $requester = $request->input('requester');
             $user = false;
@@ -188,7 +189,7 @@ class FormController extends Controller
             } elseif ($user) {
                 $phonecode = $user->country_code;
             }
-            if(!$phonecode){
+            if (!$phonecode) {
                 $phonecode = '';
             }
             if ($request->has('help_topic')) {
@@ -229,33 +230,32 @@ class FormController extends Controller
             } else {
                 $status = null;
             }
-            $company = "";
-            if ($request->has('company'))
-            {
+            $company = '';
+            if ($request->has('company')) {
                 $company = $request->input('company');
             }
-            
+
             $source = Ticket_source::where('name', '=', 'web')->first()->id;
-            $attach        = [];
-            $media_attach  = [];
-            if ($request->has('media_attachment'))
-            {
+            $attach = [];
+            $media_attach = [];
+            if ($request->has('media_attachment')) {
                 $media_attach = $request->input('media_attachment');
             }
-            if ($request->file())
-            {
+            if ($request->file()) {
                 $attach = $request->file();
             }
-            $department = ($request->has('department')) ? $request->input('department') : $help->department ;
+            $department = ($request->has('department')) ? $request->input('department') : $help->department;
             $attachment = array_merge($attach, $media_attach);
             \Event::fire(new \App\Events\ClientTicketFormPost($form_extras, $email, $source));
-            $respnse = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response, $type, $attachment,[],[],$company);
+            $respnse = $this->TicketWorkflowController->workflow($email, $name, $subject, $details, $phone, $phonecode, $mobile_number, $helptopic, $sla, $priority, $source, $collaborator, $department, $assignto, $team_assign, $status, $form_extras, $auto_response, $type, $attachment, [], [], $company);
         } catch (\Exception $e) {
             $result = $e->getMessage();
+
             return response()->json(compact('result'), 500);
         }
-        $msg = Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is') . ' ' . $respnse[0] . '. ' . Lang::get('lang.Please-save-this-for-future-reference');
-        $result = ["success" => $msg];
+        $msg = Lang::get('lang.Ticket-has-been-created-successfully-your-ticket-number-is').' '.$respnse[0].'. '.Lang::get('lang.Please-save-this-for-future-reference');
+        $result = ['success' => $msg];
+
         return response()->json(compact('result'));
     }
 

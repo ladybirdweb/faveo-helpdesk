@@ -411,7 +411,7 @@ class SettingsController extends Controller
                         /*
                          * write provider list in app.php line 128
                          */
-       
+
                         $plug->create(['name' => $filename, 'path' => $filename, 'status' => 1]);
 
                         return redirect()->back()->with('success', Lang::get('lang.plugin-installed'));
@@ -568,18 +568,20 @@ class SettingsController extends Controller
         return redirect()->back()->with('success', 'Deleted Successfully');
     }
 
-    public function StatusPlugin($slug) {
+    public function StatusPlugin($slug)
+    {
         $plugs = new Plugin();
         $plug = $plugs->where('name', $slug)->first();
         $status = 0;
         if (!$plug) {
             $status = 1;
-        }elseif($plug->status==0){
+        } elseif ($plug->status == 0) {
             $status = 1;
         }
         $plugs->updateOrCreate(['name' => $slug, 'path' => $slug],
-                [ 'status' => $status]);
-        \Event::fire('plugin.status.change',[['name'=>$slug,'status'=>$status]]);
-        return redirect()->back()->with('success',Lang::get('lang.plugin_updated_successfully'));
+                ['status' => $status]);
+        \Event::fire('plugin.status.change', [['name'=>$slug, 'status'=>$status]]);
+
+        return redirect()->back()->with('success', Lang::get('lang.plugin_updated_successfully'));
     }
 }

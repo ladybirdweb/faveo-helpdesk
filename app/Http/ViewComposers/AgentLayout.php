@@ -12,7 +12,6 @@ use Illuminate\View\View;
 
 class AgentLayout
 {
-
     /**
      * The user repository implementation.
      *
@@ -33,13 +32,14 @@ class AgentLayout
      */
     public function __construct(Company $company, User $users, Tickets $tickets, Department $department, Emails $emails)
     {
-        $this->company    = $company;
-        $this->auth       = Auth::user();
-        $this->users      = $users;
-        $this->tickets    = $tickets;
+        $this->company = $company;
+        $this->auth = Auth::user();
+        $this->users = $users;
+        $this->tickets = $tickets;
         $this->department = $department;
-        $this->emails     = $emails;
+        $this->emails = $emails;
     }
+
     /**
      * Bind data to the view.
      *
@@ -66,17 +66,20 @@ class AgentLayout
             'ticket_policy'     => new \App\Policies\TicketPolicy(),
         ]);
     }
+
     public function users()
     {
         return $this->users->select('id', 'profile_pic');
     }
+
     public function tickets()
     {
         return $this->tickets->select('id', 'ticket_number');
     }
+
     public function departments()
     {
-        $array   = [];
+        $array = [];
         $tickets = $this->tickets;
         if (\Auth::user()->role == 'agent') {
             $tickets = $tickets->where('tickets.dept_id', '=', \Auth::user()->primary_dpt);
@@ -88,25 +91,26 @@ class AgentLayout
                 ->groupBy('dep.name', 'ticket_status.name')
                 ->get();
         $grouped = $tickets->groupBy('name');
-        $status  = [];
+        $status = [];
         foreach ($grouped as $key => $group) {
             $status[$key] = $group->keyBy('status');
         }
 
         return collect($status);
     }
+
     public function myTicket()
     {
         $ticket = $this->tickets();
         if ($this->auth->role == 'admin') {
             return $ticket->where('assigned_to', $this->auth->id)
                             ->where('status', '1');
-        }
-        elseif ($this->auth->role == 'agent') {
+        } elseif ($this->auth->role == 'agent') {
             return $ticket->where('assigned_to', $this->auth->id)
                             ->where('status', '1');
         }
     }
+
     public function unassigned()
     {
         $ticket = $this->tickets();
@@ -114,48 +118,49 @@ class AgentLayout
             return $ticket->where('assigned_to', '=', null)
                             ->where('status', '=', '1')
                             ->select('id');
-        }
-        elseif ($this->auth->role == 'agent') {
+        } elseif ($this->auth->role == 'agent') {
             return $ticket->where('assigned_to', '=', null)
                             ->where('status', '=', '1')
                             ->where('dept_id', '=', $this->auth->primary_dpt)
                             ->select('id');
         }
     }
+
     public function followupTicket()
     {
         $ticket = $this->tickets();
         if ($this->auth->role == 'admin') {
             return $ticket->where('status', '1')->where('follow_up', '1')->select('id');
-        }
-        elseif ($this->auth->role == 'agent') {
+        } elseif ($this->auth->role == 'agent') {
             return $ticket->where('status', '1')->where('follow_up', '1')->select('id');
         }
     }
+
     public function deleted()
     {
         $ticket = $this->tickets();
         if ($this->auth->role == 'admin') {
             return $ticket->where('status', '5')->select('id');
-        }
-        elseif ($this->auth->role == 'agent') {
+        } elseif ($this->auth->role == 'agent') {
             return $ticket->where('status', '5')->where('dept_id', '=', $this->auth->primary_dpt)
                             ->select('id');
         }
     }
+
     public function inbox()
     {
         $table = $this->tickets();
         if (Auth::user()->role == 'agent') {
-            $id    = Auth::user()->primary_dpt;
+            $id = Auth::user()->primary_dpt;
             $table = $table->where('tickets.dept_id', '=', $id)->orWhere('assigned_to', '=', Auth::user()->id);
         }
 
         return $table->Join('ticket_status', function ($join) {
-                    $join->on('ticket_status.id', '=', 'tickets.status')
+            $join->on('ticket_status.id', '=', 'tickets.status')
                             ->whereIn('ticket_status.id', [1, 7]);
-                });
+        });
     }
+
     public function overdues()
     {
         $ticket = $this->tickets();
@@ -166,8 +171,7 @@ class AgentLayout
                             ->where('tickets.duedate', '!=', '00-00-00 00:00:00')
                             ->where('tickets.duedate', '<', \Carbon\Carbon::now())
                             ->select('tickets.id');
-        }
-        elseif ($this->auth->role == 'agent') {
+        } elseif ($this->auth->role == 'agent') {
             return $ticket->where('status', '=', 1)
                             ->where('isanswered', '=', 0)
                             ->whereNotNull('tickets.duedate')
@@ -177,6 +181,7 @@ class AgentLayout
                             ->select('tickets.id');
         }
     }
+
     public function getDueToday()
     {
         $ticket = $this->tickets();
@@ -186,8 +191,7 @@ class AgentLayout
                             ->where('isanswered', '=', 0)
                             ->whereNotNull('duedate')
                             ->whereRaw('date(duedate) = ?', [date('Y-m-d')]);
-        }
-        elseif ($this->auth->role == 'agent') {
+        } elseif ($this->auth->role == 'agent') {
             return $ticket->where('status', '=', 1)
                             ->where('status', '=', 1)
                             ->where('isanswered', '=', 0)
@@ -196,26 +200,29 @@ class AgentLayout
                             ->whereRaw('date(duedate) = ?', [date('Y-m-d')]);
         }
     }
+
     /**
      * @category function to fetch closed tickets count
+     *
      * @param null
+     *
      * @return builder
      */
     public function closed()
     {
         $table = $this->tickets();
         if (Auth::user()->role == 'agent') {
-                $id    = Auth::user()->id;
-                $dept  = DepartmentAssignAgents::where('agent_id', '=', $id)->pluck('department_id')->toArray();
-                $table = $table->whereIn('tickets.dept_id', $dept)->orWhere('assigned_to', '=', Auth::user()->id);
-           
+            $id = Auth::user()->id;
+            $dept = DepartmentAssignAgents::where('agent_id', '=', $id)->pluck('department_id')->toArray();
+            $table = $table->whereIn('tickets.dept_id', $dept)->orWhere('assigned_to', '=', Auth::user()->id);
 
             // $id = Auth::user()->primary_dpt;
             // $table = $table->where('tickets.dept_id', '=', $id)->orWhere('assigned_to', '=', Auth::user()->id);
         }
 
-        return $table->where('status',3);
+        return $table->where('status', 3);
     }
+
     /**
      * @category function to check configured mails
      *

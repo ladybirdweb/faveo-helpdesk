@@ -4,7 +4,6 @@ namespace App\Http\Requests\helpdesk;
 
 use App\Http\Requests\Request;
 
-
 /**
  * CompanyRequest.
  *
@@ -31,6 +30,7 @@ class ClientRequest extends Request
     {
         $panel = 'client';
         $rules = $this->check($panel);
+
         return $rules;
     }
 
@@ -40,26 +40,25 @@ class ClientRequest extends Request
         $message = \App\Model\Custom\Required::
                 where('form', 'ticket')
                 ->select("$panel as panel", 'field', 'label')
-                ->where(function($query)use($panel)
-                {
+                ->where(function ($query) use ($panel) {
                     return $query->whereNotNull($panel)
-                            ->where($panel, '!=', '')
-                    ;
+                            ->where($panel, '!=', '');
                 })
                 ->get()
-                ->transform(function($value)
-                {
+                ->transform(function ($value) {
                     $panel = $value->panel;
-                    if(str_contains($panel,":")){
+                    if (str_contains($panel, ':')) {
                         $explode = explode(':', $panel);
                         $panel = $explode[0];
                     }
-                    
-                    $request["$value->field.$panel"]="$value->label is required";
+
+                    $request["$value->field.$panel"] = "$value->label is required";
+
                     return $request;
                 })
                 ->collapse()
                 ->toArray();
+
         return $message;
     }
 
@@ -68,28 +67,26 @@ class ClientRequest extends Request
         $required = \App\Model\Custom\Required::
                 where('form', 'ticket')
                 ->select("$panel as panel", 'field', 'option')
-                ->where(function($query)use($panel)
-                {
+                ->where(function ($query) use ($panel) {
                     return $query->whereNotNull($panel)
-                            ->where($panel, '!=', '')
-                    ;
+                            ->where($panel, '!=', '');
                 })
                 ->get()
-                ->transform(function($value)
-                {
+                ->transform(function ($value) {
                     $option = $value->option;
-                    if ($option)
-                    {
-                        $option = "," . $value->option;
+                    if ($option) {
+                        $option = ','.$value->option;
                     }
-                    if($value->field=='requester'){
-                        $value->panel = "required_without:full_name";
+                    if ($value->field == 'requester') {
+                        $value->panel = 'required_without:full_name';
                     }
-                    $request[$value->field] = $value->panel . $option;
+                    $request[$value->field] = $value->panel.$option;
+
                     return $request;
                 })
                 ->collapse()
                 ->toArray();
+
         return $required;
     }
 }

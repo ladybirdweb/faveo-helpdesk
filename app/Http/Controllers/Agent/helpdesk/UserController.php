@@ -1155,13 +1155,14 @@ class UserController extends Controller
             return $e->getMessage();
         }
     }
-    
-    public function createRequester(Request $request) {
 
+    public function createRequester(Request $request)
+    {
         $this->validate($request, [
-            'email' => 'required|max:50|email|unique:users',
+            'email'     => 'required|max:50|email|unique:users',
             'full_name' => 'required',
         ]);
+
         try {
             $auth_control = new \App\Http\Controllers\Auth\AuthController();
             $user_create_request = new \App\Http\Requests\helpdesk\RegisterRequest();
@@ -1174,12 +1175,15 @@ class UserController extends Controller
         } catch (\Exception $e) {
             $response = ['error' => [$e->getMessage()]];
             $status = 500;
+
             return response()->json($response, $status);
         }
+
         return response()->json(compact('response'), $status);
     }
 
-    public function getRequesterForCC(Request $request) {
+    public function getRequesterForCC(Request $request)
+    {
         try {
             $this->validate($request, [
                 'term' => 'required',
@@ -1189,7 +1193,7 @@ class UserController extends Controller
                     ->where('active', 1)
                     ->where('is_delete', 0)
                     ->whereNotNull('email')
-                    ->where('email', 'LIKE', '%' . $term . '%')
+                    ->where('email', 'LIKE', '%'.$term.'%')
                     ->select('id', 'user_name', 'email', 'first_name', 'last_name', 'profile_pic')
                     ->get();
             $response = $requester->toArray();
@@ -1197,8 +1201,10 @@ class UserController extends Controller
         } catch (\Exception $e) {
             $response = ['error' => [$e->getMessage()]];
             $status = 500;
+
             return response()->json($response, $status);
         }
+
         return response()->json(compact('response'), $status);
     }
 }

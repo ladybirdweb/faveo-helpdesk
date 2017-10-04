@@ -1,15 +1,18 @@
 <?php
+
 namespace App\Location\Requests;
 
 use App\Http\Requests\Request;
 
-class LocationRequest extends Request{
+class LocationRequest extends Request
+{
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() {
+    public function authorize()
+    {
         return true;
     }
 
@@ -18,12 +21,13 @@ class LocationRequest extends Request{
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-           'title'=>'required|unique:location|max:30',
-           'email'=>'required',
-           'address' =>'max:30',
-           'phone' =>'max:15'
+           'title'   => 'required|unique:location|max:30',
+           'email'   => 'required',
+           'address' => 'max:30',
+           'phone'   => 'max:15',
         ];
     }
 }
