@@ -107,7 +107,7 @@ class PhpMailController extends Controller
     {
         switch ($mail->sending_protocol) {
             case 'smtp':
-                $config = ['host'     => $mail->sending_host,
+                $config = ['host'      => $mail->sending_host,
                             'port'     => $mail->sending_port,
                             'security' => $mail->sending_encryption,
                             'username' => $mail->user_name,
