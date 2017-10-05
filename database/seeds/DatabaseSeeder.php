@@ -1989,5 +1989,6 @@ class DatabaseSeeder extends Seeder
         Limit_Login::create(['id' => '1']);
         $this->call(CustomFormSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(TickettypeSeeder::class);
     }
 }

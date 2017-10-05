@@ -12,6 +12,10 @@ class TickettypeSeeder extends Seeder
      */
     public function run()
     {
+        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Tickettype::truncate();
+        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        
         /* Ticket type */
         // Tickettype::create(['name' => 'Default', 'type_desc' => 'Default','status'=>'1','is_default' => '1']);
         Tickettype::create(['name' => 'Question', 'type_desc' => 'Question', 'status'=>'1', 'ispublic'=>'1', 'is_default' => '1']);

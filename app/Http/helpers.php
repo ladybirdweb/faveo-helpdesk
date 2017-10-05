@@ -208,8 +208,15 @@ function dateformat()
 function faveoUrl($route)
 {
     $url = \Config::get('app.url');
+    $system = App\Model\helpdesk\Settings\System::select('url')->first();
+    if ($system && $system->url) {
+        $url = $system->url;
+    }
+    if (!str_finish($url, '/')) {
+        $url = $url . "/";
+    }
     //dd($url."/".$route);
-    return $url.$route;
+    return $url . "/" . $route;
 }
 /**
  * @category function to UTF encoding
