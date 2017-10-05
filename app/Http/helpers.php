@@ -579,6 +579,7 @@ function getStatusArray($status)
 {
     $type = new App\Model\helpdesk\Ticket\Ticket_Status();
     $values = $type->where('state', '=', $status)->pluck('id')->toArray();
+
     return $values;
 }
 function isCustomMail()

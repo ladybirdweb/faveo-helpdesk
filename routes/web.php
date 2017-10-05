@@ -381,7 +381,7 @@ Route::group(['middleware' => ['redirect', 'install']], function () {
         Route::get('/test', ['as' => 'thr', 'uses' => 'Agent\helpdesk\MailController@fetchdata']); /*  Fetch Emails */
         Route::get('/ticket', ['as' => 'ticket', 'uses' => 'Agent\helpdesk\TicketController@ticket_list']); /*  Get Ticket */
 
-        Route::group(['middleware' => ['force.option','role.agent']], function () {
+        Route::group(['middleware' => ['force.option', 'role.agent']], function () {
             Route::get('tickets', ['as' => 'tickets-view', 'uses' => 'Agent\helpdesk\TicketController@getTicketsView']);
         });
 
