@@ -526,7 +526,7 @@ class InstallController extends Controller
 
     public function updateInstalEnv()
     {
-        Artisan::call('jwt:secret',['--force'=>true]);
+        Artisan::call('jwt:secret', ['--force'=>true]);
 
         $env = base_path().DIRECTORY_SEPARATOR.'.env';
         if (is_file($env)) {
