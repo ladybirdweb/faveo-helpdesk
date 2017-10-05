@@ -530,7 +530,7 @@ class InstallController extends Controller
 
         $env = base_path().DIRECTORY_SEPARATOR.'.env';
         if (is_file($env)) {
-            $txt = 'DB_INSTALL=1';
+            $txt = PHP_EOL.'DB_INSTALL=1';
             $txt1 = 'APP_ENV=production';
             file_put_contents($env, $txt.PHP_EOL, FILE_APPEND | LOCK_EX);
             file_put_contents($env, $txt1.PHP_EOL, FILE_APPEND | LOCK_EX);

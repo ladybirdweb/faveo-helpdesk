@@ -53,8 +53,8 @@ class TestResult {
      <?php
 
 function validate_php(&$results) {
-    if (version_compare(PHP_VERSION, '5.6.4') == -1) {
-        $results[] = new TestResult('Minimum PHP version required in order to run Faveo HELPDESK is PHP 5.6. Your PHP version: ' . PHP_VERSION, STATUS_ERROR);
+    if (version_compare(PHP_VERSION, '7.0') == -1) {
+        $results[] = new TestResult('PHP version required in order to run Faveo HELPDESK is PHP 7.0. Your PHP version: ' . PHP_VERSION, STATUS_ERROR);
         return false;
     } else {
         $results[] = new TestResult('Your PHP version is ' . PHP_VERSION, STATUS_OK);
