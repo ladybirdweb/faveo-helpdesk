@@ -213,10 +213,10 @@ function faveoUrl($route)
         $url = $system->url;
     }
     if (!str_finish($url, '/')) {
-        $url = $url . "/";
+        $url = $url.'/';
     }
     //dd($url."/".$route);
-    return $url . "/" . $route;
+    return $url.'/'.$route;
 }
 /**
  * @category function to UTF encoding

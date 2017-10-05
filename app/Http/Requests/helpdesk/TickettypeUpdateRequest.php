@@ -28,16 +28,12 @@ class TickettypeUpdateRequest extends Request
      */
     public function rules()
     {
-         
         return [
 
         'name'   => 'required|max:20|unique:ticket_type,name,'.$this->segment(2),
-         
+
             'type_desc'  => 'required|max:30',
-            'status'=> 'required',
-
-
-
+            'status'     => 'required',
 
         ];
     }

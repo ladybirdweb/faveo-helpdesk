@@ -28,27 +28,25 @@ class TickettypeRequest extends Request
      */
     public function rules()
     {
-
-        if($this->method()=='post'){
+        if ($this->method() == 'post') {
             $rule = 'unique:ticket_type,name|required|max:25';
-        }
-        else{
+        } else {
             $id = $this->name;
             $rule = 'required|max:25|unique:ticket_type,name,'.$id.',id';
         }
 
         return [
-                'name'  => $rule,
+                'name'       => $rule,
                 'type_desc'  => 'required|max:30',
-                'status'=> 'required',
+                'status'     => 'required',
             ];
-        
+
         // return [
-            
+
         //   'name' => 'required|unique:ticket_type|max:20',
         //      // 'name'  => 'required|max:20',
         //     'type_desc'  => 'required|max:30',
-      
+
         // ];
     }
 }
