@@ -148,7 +148,7 @@ class AuthController extends Controller
      *
      * @return type Response
      */
-    public function postRegister(User $user, RegisterRequest $request,$api = false, $send_mail = true,$role='user')
+    public function postRegister(User $user, RegisterRequest $request, $api = false, $send_mail = true, $role = 'user')
     {
         try {
             $request_array = $request->input();
@@ -230,14 +230,16 @@ class AuthController extends Controller
             } else {
                 $message12 = Lang::get('lang.activate_your_account_click_on_Link_that_send_to_your_mail');
             }
-            if ($api==true) {
-                return ['message'=>$message12,'user'=>$user->toArray()];
+            if ($api == true) {
+                return ['message'=>$message12, 'user'=>$user->toArray()];
             }
+
             return redirect('home')->with('success', $message12);
         } catch (\Exception $e) {
-            if ($api==true) {
+            if ($api == true) {
                 return ['error'=>$e->getMessage()];
             }
+
             return redirect()->back()->with('fails', $e->getMessage());
         }
     }

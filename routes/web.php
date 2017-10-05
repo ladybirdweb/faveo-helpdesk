@@ -149,7 +149,6 @@ Route::group(['middleware' => ['redirect', 'install']], function () {
         Route::get('delete-template/{template}/{path}', ['as' => 'templates.delete', 'uses' => 'Admin\helpdesk\TemplateController@deletetemplate']);
         Route::get('getdiagno', ['as' => 'getdiagno', 'uses' => 'Admin\helpdesk\TemplateController@formDiagno']); // for getting form for diagnostic
 
-
         /*
          * Ticket_Type Settings
          */
@@ -166,8 +165,6 @@ Route::group(['middleware' => ['redirect', 'install']], function () {
         Route::get('ticket-types/{id}/edit', ['as' => 'ticket.type.edit', 'uses' => 'Type\TicketTypeController@typeEdit']);
 
         Route::get('ticket-types/{id}/destroy', ['as' => 'ticket.type.destroy', 'uses' => 'Type\TicketTypeController@destroy']);
-
-
 
         Route::post('postdiagno', ['as' => 'postdiagno', 'uses' => 'Admin\helpdesk\TemplateController@postDiagno']); // for getting form for diagnostic
         Route::resource('helptopic', 'Admin\helpdesk\HelptopicController'); // in helptopics module, for CRUD
@@ -304,7 +301,7 @@ Route::group(['middleware' => ['redirect', 'install']], function () {
 
         //route for submit error and debugging setting form page
         Route::post('post-settings', ['as'   => 'post.error.debug.settings',
-            'uses' => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings',]);
+            'uses'                           => 'Admin\helpdesk\ErrorAndDebuggingController@postSettings', ]);
         //route to error logs table page
         Route::get('show-error-logs', [
             'as'   => 'error.logs',
@@ -526,7 +523,7 @@ Route::group(['middleware' => ['redirect', 'install']], function () {
 //    });
     Route::any('getdata', function () {
         $term = Illuminate\Support\Str::lower(Input::get('term'));
-        $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term . '%')->groupBy('ticket_number')->take(10)->get();
+        $data = Illuminate\Support\Facades\DB::table('tickets')->distinct()->select('ticket_number')->where('ticket_number', 'LIKE', $term.'%')->groupBy('ticket_number')->take(10)->get();
         foreach ($data as $v) {
             return [
                 'value' => $v->ticket_number,
@@ -608,10 +605,10 @@ Route::group(['middleware' => ['redirect', 'install']], function () {
         echo '</tr>';
         foreach ($routeCollection as $value) {
             echo '<tr>';
-            echo '<td>' . $value->getMethods()[0] . '</td>';
-            echo '<td>' . $value->getName() . '</td>';
-            echo '<td>' . $value->getPath() . '</td>';
-            echo '<td>' . $value->getActionName() . '</td>';
+            echo '<td>'.$value->getMethods()[0].'</td>';
+            echo '<td>'.$value->getName().'</td>';
+            echo '<td>'.$value->getPath().'</td>';
+            echo '<td>'.$value->getActionName().'</td>';
             echo '</tr>';
         }
         echo '</table>';
@@ -622,24 +619,24 @@ Route::group(['middleware' => ['redirect', 'install']], function () {
       |=============================================================
      */
     Route::get('500', ['as' => 'error500', function () {
-            return view('errors.500');
-        }]);
+        return view('errors.500');
+    }]);
 
     Route::get('404', ['as' => 'error404', function () {
-            return view('errors.404');
-        }]);
+        return view('errors.404');
+    }]);
 
     Route::get('error-in-database-connection', ['as' => 'errordb', function () {
-            return view('errors.db');
-        }]);
+        return view('errors.db');
+    }]);
 
     Route::get('unauthorized', ['as' => 'unauth', function () {
-            return view('errors.unauth');
-        }]);
+        return view('errors.unauth');
+    }]);
 
     Route::get('board-offline', ['as' => 'board.offline', function () {
-            return view('errors.offline');
-        }]);
+        return view('errors.offline');
+    }]);
 
     /*
       |=============================================================

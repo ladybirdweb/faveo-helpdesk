@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateSystemPortalTable extends Migration
 {
@@ -10,11 +10,11 @@ class CreateSystemPortalTable extends Migration
      *
      * @return void
      */
-   public function up()
+    public function up()
     {
         Schema::create('system_portal', function (Blueprint $table) {
             $table->increments('id');
-        
+
             $table->string('admin_header_color');
             $table->string('agent_header_color');
             $table->string('client_header_color');
@@ -22,9 +22,9 @@ class CreateSystemPortalTable extends Migration
             $table->string('client_button_border_color');
             $table->string('client_input_fild_color');
             $table->string('logo');
-         
+
             $table->string('icon');
-            
+
             $table->timestamps();
         });
     }
@@ -36,6 +36,6 @@ class CreateSystemPortalTable extends Migration
      */
     public function down()
     {
-       Schema::drop('system_portal');
+        Schema::drop('system_portal');
     }
 }
