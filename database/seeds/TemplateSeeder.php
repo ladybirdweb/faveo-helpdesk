@@ -163,14 +163,14 @@ class TemplateSeeder extends Seeder
                 .'{!! $system_from !!}'
         ]);
 
-         Template::create([
-             'id' => '6',
-             'variable' => '0',
-             'name' => 'template-ticket-creation-acknowledgement-client-by-agent',
-             'type' => '6',
-             'template_category' => 'client-templates',
-             'set_id' => '1'
-         ]);
+//         Template::create([
+//             'id' => '6',
+//             'variable' => '0',
+//             'name' => 'template-ticket-creation-acknowledgement-client-by-agent',
+//             'type' => '6',
+//             'template_category' => 'client-templates',
+//             'set_id' => '1'
+//         ]);
 
         Template::create([
             'variable' => '0',

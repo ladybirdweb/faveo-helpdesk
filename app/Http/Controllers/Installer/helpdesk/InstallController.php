@@ -278,7 +278,7 @@ class InstallController extends Controller
                     'email'        => $email,
                     'user_name'    => $username,
                     'password'     => Hash::make($password),
-                    'assign_group' => 1,
+                    //'assign_group' => 1,
                     'primary_dpt'  => 1,
                     'active'       => 1,
                     'role'         => 'admin',
@@ -526,7 +526,7 @@ class InstallController extends Controller
 
     public function updateInstalEnv()
     {
-        Artisan::call('jwt:generate');
+        Artisan::call('jwt:secret',['--force'=>true]);
 
         $env = base_path().DIRECTORY_SEPARATOR.'.env';
         if (is_file($env)) {

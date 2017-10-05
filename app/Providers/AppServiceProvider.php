@@ -39,24 +39,6 @@ class AppServiceProvider extends ServiceProvider
             loging('Failed Job - '.$event->connectionName, json_encode([$event->job->payload(), 'error' => $event->exception->getMessage()]));
         });
         Route::singularResourceParameters(false);
-        // Please note the different namespace
-        // and please add a \ in front of your classes in the global namespace
-        \Event::listen('cron.collectJobs', function () {
-            \Cron::add('example1', '* * * * *', function () {
-                $this->index();
-
-                return 'No';
-            });
-
-            \Cron::add('example2', '*/2 * * * *', function () {
-                // Do some crazy things successfully every two minute
-            });
-
-            \Cron::add('disabled job', '0 * * * *', function () {
-                // Do some crazy things successfully every hour
-            }, false);
-        });
-
         $this->composer();
     }
 

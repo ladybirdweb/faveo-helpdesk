@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'testing'),
     /*
       |--------------------------------------------------------------------------
       | Application Debug Mode
@@ -174,7 +174,7 @@ return [
         'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
         'Chumper\Datatable\DatatableServiceProvider',
         'Chumper\Zipper\ZipperServiceProvider',
-        'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
        \Torann\GeoIP\GeoIPServiceProvider::class,
         Unisharp\Laravelfilemanager\LaravelFilemanagerServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,

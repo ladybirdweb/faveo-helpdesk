@@ -664,6 +664,7 @@ class ComposerStaticInit7774f3a91ad280621dc3b00b5d0dd4a5
     public static $classMap = array (
         'Absolute_Positioner' => __DIR__ . '/..' . '/dompdf/dompdf/include/absolute_positioner.cls.php',
         'Abstract_Renderer' => __DIR__ . '/..' . '/dompdf/dompdf/include/abstract_renderer.cls.php',
+        'AddCategory' => __DIR__ . '/../..' . '/database/migrations/2017_10_05_051721_add_category.php',
         'AddForeignKeysToCannedResponseTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_canned_response_table.php',
         'AddForeignKeysToDepartmentTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_department_table.php',
         'AddForeignKeysToEmailsTable' => __DIR__ . '/../..' . '/database/migrations/2016_02_16_140454_add_foreign_keys_to_emails_table.php',

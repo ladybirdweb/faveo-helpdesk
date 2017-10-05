@@ -18,7 +18,7 @@
         "nicolaslopezj/searchable": "1.*",
         "chumper/datatable": "dev-develop",
         "chumper/zipper": "1.0.x",
-        "tymon/jwt-auth": "0.5.*",
+        "tymon/jwt-auth": "dev-develop",
         "php": ">=5.5.9",
         "davejamesmiller/laravel-breadcrumbs": "^3.0",
         "davibennun/laravel-push-notification": "dev-laravel5",

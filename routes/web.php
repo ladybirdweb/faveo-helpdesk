@@ -10,8 +10,8 @@
   | and give it the controller to call when that URI is requested.
   |
  */
-Route::group(['middleware' => 'redirect'], function () {
-    Route::group(['middleware' => 'update', 'middleware' => 'install'], function () {
+Route::group(['middleware' => ['redirect', 'install']], function () {
+    Route::group(['middleware' => 'update'], function () {
         Auth::routes();
         Route::post('login', ['uses' => 'Auth\AuthController@postLogin', 'as' => 'post.login']);
         Route::get('auth/logout', ['uses' => 'Auth\AuthController@getLogout', 'as' => 'get.logout']);
