@@ -577,18 +577,8 @@ function isMicroOrg()
  */
 function getStatusArray($status)
 {
-    $type = new App\Model\helpdesk\Ticket\TicketStatusType();
-    $values = $type->select('name', 'id')
-            ->whereIn('name', [$status])
-            ->with(['status' => function ($query) {
-                $query->select('id as status_id', 'name', 'purpose_of_status');
-            }])
-            ->get()
-            ->pluck('status')
-            ->flatten()
-            ->pluck('status_id')
-            ->toArray();
-
+    $type = new App\Model\helpdesk\Ticket\Ticket_Status();
+    $values = $type->where('state', '=', $status)->pluck('id')->toArray();
     return $values;
 }
 function isCustomMail()

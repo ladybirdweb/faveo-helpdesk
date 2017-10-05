@@ -210,31 +210,31 @@
                         <li class="header">{!! Lang::get('lang.Tickets') !!}</li>
                         
                         <li @yield('inbox')>
-                             <a href="{{ url('/ticket/inbox')}}" id="load-inbox">
+                             <a href="{{ url('/tickets')}}" id="load-inbox">
                                 <i class="fa fa-envelope"></i> <span>{!! Lang::get('lang.inbox') !!}</span> <small class="label pull-right bg-green">{{$tickets -> count()}}</small>                                            
                             </a>
                         </li>
                         <li @yield('myticket')>
-                             <a href="{{url('ticket/myticket')}}" id="load-myticket">
+                             <a href="{{ url('/tickets?show=mytickets')}}" id="load-myticket">
                                 <i class="fa fa-user"></i> <span>{!! Lang::get('lang.my_tickets') !!} </span>
                                 <small class="label pull-right bg-green">{{$myticket -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('unassigned')>
-                             <a href="{{url('unassigned')}}" id="load-unassigned">
+                             <a href="{{ url('/tickets?assigned[]=0')}}" id="load-unassigned">
                                 <i class="fa fa-th"></i> <span>{!! Lang::get('lang.unassigned') !!}</span>
                                 <small class="label pull-right bg-green">{{$unassigned -> count()}}</small>
                             </a>
                         </li>
                         <li @yield('overdue')>
-                             <a href="{{url('ticket/overdue')}}" id="load-unassigned">
+                             <a href="{{url('/tickets?show=overdue')}}" id="load-unassigned">
                                 <i class="fa fa-calendar-times-o"></i> <span>{!! Lang::get('lang.overdue') !!}</span>
                                 <small class="label pull-right bg-green">{{$overdues->count()}}</small>
                             </a>
                         </li>
                        
                         <li @yield('trash')>
-                             <a href="{{url('trash')}}">
+                             <a href="{{ url('/tickets?show=trash')}}">
                                 <i class="fa fa-trash-o"></i> <span>{!! Lang::get('lang.trash') !!}</span>
                                 <small class="label pull-right bg-green">{{$deleted -> count()}}</small>
                             </a>
@@ -304,10 +304,9 @@
                             </div>
                             <div class="tabs-pane @yield('ticket-bar')" id="tabC">
                                 <ul class="nav navbar-nav">
-                                    <li id="bar" @yield('open')><a href="{{ url('/ticket/open')}}" id="load-open">{!! Lang::get('lang.open') !!}</a></li>
-                                    <li id="bar" @yield('answered')><a href="{{ url('/ticket/answered')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
-                                    <li id="bar" @yield('assigned')><a href="{{ url('/ticket/assigned')}}" id="load-assigned" >{!! Lang::get('lang.assigned') !!}</a></li>
-                                    <li id="bar" @yield('closed')><a href="{{ url('/ticket/closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
+                                    <li id="bar" @yield('answered')><a href="{{ url('/tickets?last-response-by[]=Agent')}}" id="load-answered">{!! Lang::get('lang.answered') !!}</a></li>
+                                    <li id="bar" @yield('assigned')><a href="{{ url('/tickets?assigned[]=1')}}" id="load-unassigned">{!! Lang::get('lang.assigned') !!}</a></li>
+                                    <li id="bar" @yield('closed')><a href="{{ url('/tickets?show=closed')}}" >{!! Lang::get('lang.closed') !!}</a></li>
 <?php if ($ticket_policy->create()) { ?>
                                         <li id="bar" @yield('newticket')><a href="{{ url('/newticket')}}" >{!! Lang::get('lang.create_ticket') !!}</a></li>
                                     <?php } ?>
