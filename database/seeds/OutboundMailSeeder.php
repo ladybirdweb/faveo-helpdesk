@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Model\MailJob\MailService;
 use App\Model\MailJob\QueueService;
+use Illuminate\Database\Seeder;
 
 class OutboundMailSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class OutboundMailSeeder extends Seeder
      */
     public function run()
     {
-        $mail     = new MailService();
+        $mail = new MailService();
         $mail_services = ['smtp' => 'SMTP', 'mail' => 'Php Mail', 'sendmail' => 'Send Mail', 'mailgun' => 'Mailgun', 'mandrill' => 'Mandrill', 'log' => 'Log file'];
         foreach ($mail_services as $key => $value) {
             $mail->create([
@@ -22,7 +22,7 @@ class OutboundMailSeeder extends Seeder
             ]);
         }
 
-        $queue    = new QueueService();
+        $queue = new QueueService();
         $services = ['sync' => 'Sync', 'database' => 'Database', 'beanstalkd' => 'Beanstalkd', 'sqs' => 'SQS', 'iron' => 'Iron', 'redis' => 'Redis'];
         foreach ($services as $key => $value) {
             $queue->create([
