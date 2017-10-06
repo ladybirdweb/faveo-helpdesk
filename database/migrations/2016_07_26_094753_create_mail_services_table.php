@@ -20,14 +20,6 @@ class CreateMailServicesTable extends Migration
             $table->timestamps();
         });
 
-        $mail = new MailService();
-        $services = ['smtp'=>'SMTP', 'mail'=>'Php Mail', 'sendmail'=>'Send Mail', 'mailgun'=>'Mailgun', 'mandrill'=>'Mandrill', 'log'=>'Log file'];
-        foreach ($services as $key=>$value) {
-            $mail->create([
-            'name'      => $value,
-            'short_name'=> $key,
-        ]);
-        }
     }
 
     /**

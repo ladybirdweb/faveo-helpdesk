@@ -226,6 +226,7 @@ return array(
     'Null_Frame_Decorator' => $vendorDir . '/dompdf/dompdf/include/null_frame_decorator.cls.php',
     'Null_Frame_Reflower' => $vendorDir . '/dompdf/dompdf/include/null_frame_reflower.cls.php',
     'Null_Positioner' => $vendorDir . '/dompdf/dompdf/include/null_positioner.cls.php',
+    'OutboundMailSeeder' => $baseDir . '/database/seeds/OutboundMailSeeder.php',
     'PDFLib_Adapter' => $vendorDir . '/dompdf/dompdf/include/pdflib_adapter.cls.php',
     'PHPUnit\\Exception' => $vendorDir . '/phpunit/phpunit/src/Exception.php',
     'PHPUnit\\Framework\\Assert' => $vendorDir . '/phpunit/phpunit/src/Framework/Assert.php',

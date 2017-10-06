@@ -1990,5 +1990,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CustomFormSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(TickettypeSeeder::class);
+        $this->call(OutboundMailSeeder::class);
     }
 }
