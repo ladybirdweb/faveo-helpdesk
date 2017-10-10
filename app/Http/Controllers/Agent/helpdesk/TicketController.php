@@ -46,6 +46,7 @@ use Input;
 use Lang;
 use Mail;
 use PDF;
+use App\Model\helpdesk\Manage\Tickettype;
 
 /**
  * TicketController.
@@ -241,7 +242,7 @@ class TicketController extends Controller
      *
      * @return type response
      */
-    public function post_newticket(TicketRequest $request, CountryCode $code, $api
+    public function post_newticket(CreateTicketRequest $request, CountryCode $code, $api
     = true)
     {
         if (!$this->ticket_policy->create()) {
@@ -432,7 +433,7 @@ class TicketController extends Controller
             }
         } catch (Exception $e) {
             $api = true;
-            if ($api != false) {
+            if ($api) {
                 return response()->json(['error' => $e->getMessage()], 500);
             }
 
@@ -1396,9 +1397,9 @@ class TicketController extends Controller
             //dd($ticket_assign);
         }
 
-        if (!$assigned_to) {
-            $assigned_to = \Event::fire('ticket.assign', [['department' => $dept, 'type' => $type, 'extra' => $form_data]])[0];
-        }
+//        if (!$assigned_to) {
+//            $assigned_to = \Event::fire('ticket.assign', [['department' => $dept, 'type' => $type, 'extra' => $form_data]])[0];
+//        }
         $ticket->team_id = $team_id;
         // dd($ticket->team_id);
         $ticket->assigned_to = $assigned_to;
