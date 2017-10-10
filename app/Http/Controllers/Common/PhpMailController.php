@@ -110,7 +110,7 @@ class PhpMailController extends Controller
                 $config = ['host'      => $mail->sending_host,
                             'port'     => $mail->sending_port,
                             'security' => $mail->sending_encryption,
-                            'username' => $mail->user_name,
+                            'username' => $mail->email_address,
                             'password' => $mail->password,
                         ];
                 if (!$this->commonMailer->setSmtpDriver($config)) {
