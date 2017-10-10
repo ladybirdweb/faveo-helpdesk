@@ -9,7 +9,8 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject as AuthenticatableUserContract;
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract,AuthenticatableUserContract
+
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract, AuthenticatableUserContract
 {
     use Authenticatable,
         CanResetPassword,
@@ -264,7 +265,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
         return $check;
     }
-    
+
     /**
      * @return mixed
      */
@@ -279,10 +280,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     public function getJWTCustomClaims()
     {
         return [
-             'user' => [ 
+             'user' => [
                 'id' => $this->id,
-             ]
+             ],
         ];
     }
-    
 }
