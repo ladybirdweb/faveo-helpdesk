@@ -16,6 +16,7 @@ use App\Model\helpdesk\Agent\Teams;
 use App\Model\helpdesk\Email\Emails;
 use App\Model\helpdesk\Manage\Help_topic;
 use App\Model\helpdesk\Manage\Sla_plan;
+use App\Model\helpdesk\Manage\Tickettype;
 use App\Model\helpdesk\Notification\Notification;
 use App\Model\helpdesk\Notification\UserNotification;
 use App\Model\helpdesk\Settings\Alert;
@@ -37,8 +38,8 @@ use App\Model\helpdesk\Utility\Timezones;
 use App\User;
 use Auth;
 use DB;
-use Exception;
 // classes
+use Exception;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\support\Collection;
@@ -46,7 +47,6 @@ use Input;
 use Lang;
 use Mail;
 use PDF;
-use App\Model\helpdesk\Manage\Tickettype;
 
 /**
  * TicketController.
