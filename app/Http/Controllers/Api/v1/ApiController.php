@@ -218,7 +218,7 @@ class ApiController extends Controller
                         'help_topic'      => 'required',
                         'ticket_source'   => 'required',
                         'ticket_priority' => 'required',
-                        'ticket_type'     => 'required',
+                        //'ticket_type'     => 'required',
             ]);
             if ($v->fails()) {
                 $error = $v->errors();
