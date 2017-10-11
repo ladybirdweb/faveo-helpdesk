@@ -768,17 +768,19 @@ class TicketController extends Controller
     {
         if (!$this->ticket_policy->edit()) {
             $response = ['message' => Lang::get('lang.permission_denied')];
+
             return response()->json(compact('response'), 403);
         }
         $this->validate($request, [
-            "subject"         => 'required',
+            'subject'         => 'required',
             'help_topic'      => 'required',
             'ticket_source'   => 'required',
             'ticket_priority' => 'required',
             //'ticket_type'     => 'required',
         ]);
+
         try {
-            $ticket   = $tickets->where('id', '=', $ticket_id)->first();
+            $ticket = $tickets->where('id', '=', $ticket_id)->first();
             $tkt_dept = $ticket->dept_id;
             // dd($tkt_dept->dept_id);
             $priority = Input::get('ticket_priority');
@@ -788,23 +790,25 @@ class TicketController extends Controller
             $ticket->help_topic_id = Input::get('help_topic');
             // $dept = Help_topic::select('department')->where('id', '=', $ticket->help_topic_id)->first();
             // $dept = $tkt_dept->dept_id;
-         
-            $priority_id           = $priority; //$this->getPriority($priority, $sla);
-            $ticket->source        = Input::get('ticket_source');
-            $ticket->priority_id   = $priority_id;
+
+            $priority_id = $priority; //$this->getPriority($priority, $sla);
+            $ticket->source = Input::get('ticket_source');
+            $ticket->priority_id = $priority_id;
             //$ticket->type          = Input::get('ticket_type');
-            $ticket->dept_id       = $tkt_dept;
+            $ticket->dept_id = $tkt_dept;
             //$ticket = $this->updateOverdue($ticket, $sla);
             $ticket->save();
-            $threads               = $thread->where('ticket_id', '=', $ticket_id)->first();
-            $threads->title        = Input::get('subject');
+            $threads = $thread->where('ticket_id', '=', $ticket_id)->first();
+            $threads->title = Input::get('subject');
             $threads->save();
             \Event::fire('notification', [$threads]);
         } catch (\Exception $ex) {
             $result = $ex->getMessage();
+
             return response()->json(compact('result'), 500);
         }
-        $result = ["success" => "Edited successfully"];
+        $result = ['success' => 'Edited successfully'];
+
         return response()->json(compact('result'));
     }
 
