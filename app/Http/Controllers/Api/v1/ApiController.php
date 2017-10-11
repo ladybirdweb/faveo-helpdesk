@@ -236,12 +236,13 @@ class ApiController extends Controller
                 }
             }
 
-            $ticket_id              = $this->request->input('ticket_id');
-            $PhpMailController      = new \App\Http\Controllers\Common\PhpMailController();
+            $ticket_id = $this->request->input('ticket_id');
+            $PhpMailController = new \App\Http\Controllers\Common\PhpMailController();
             $NotificationController = new \App\Http\Controllers\Common\NotificationController();
-            $core                   = new CoreTicketController($PhpMailController, $NotificationController);
-            $thread                 = new Ticket_Thread();
-            $tickets                = new Tickets();
+            $core = new CoreTicketController($PhpMailController, $NotificationController);
+            $thread = new Ticket_Thread();
+            $tickets = new Tickets();
+
             return $core->ticketEditPost($ticket_id, $thread, $tickets, $this->request);
         } catch (\Exception $e) {
             $error = $e->getMessage();
@@ -1143,47 +1144,47 @@ class ApiController extends Controller
     {
         try {
             $v = \Validator::make($this->request->all(), [
-                        'user_id' => 'required|exists:users,id',
-            ]);
+                                        'user_id' => 'required|exists:users,id',
+                            ]);
             if ($v->fails()) {
                 $error = $v->errors();
 
                 return response()->json(compact('error'));
             }
             $id = $this->request->input('user_id');
-            if ($this->user->where('id', $id)->first()->role == 'admin' || $this->user->where('id', $id)->first()->role
-                    == 'agent') {
+            if ($this->user->where('id', $id)->first()->role == 'admin'
+                                    || $this->user->where('id', $id)->first()->role
+                                    == 'agent') {
                 $error = 'This is not a client';
 
                 return response()->json(compact('error'));
             }
-            $user   = User::where('users.id', $id)
-                            ->leftJoin('user_assign_organization', 'users.id', '=', 'user_assign_organization.user_id')
-                            ->leftJoin('organization', 'user_assign_organization.org_id', '=', 'organization.id')
-                            ->select(
-                                    'users.first_name', 'users.last_name', 'users.user_name', 'users.email', 'users.id', 'users.profile_pic', 'users.ban', 'users.active', 'users.is_delete', 'users.phone_number', 'users.ext', 'users.country_code', 'users.mobile', 'organization.name as company'
-                            )->first()->toArray();
+            $user = User::where('users.id', $id)
+                                            ->leftJoin('user_assign_organization', 'users.id', '=', 'user_assign_organization.user_id')
+                                            ->leftJoin('organization', 'user_assign_organization.org_id', '=', 'organization.id')
+                                            ->select(
+                                                    'users.first_name', 'users.last_name', 'users.user_name', 'users.email', 'users.id', 'users.profile_pic', 'users.ban', 'users.active', 'users.is_delete', 'users.phone_number', 'users.ext', 'users.country_code', 'users.mobile', 'organization.name as company'
+                                            )->first()->toArray();
             //dd($user);
             $result = $this->user->join('tickets', function ($join) use ($id) {
-                        $join->on('users.id', '=', 'tickets.user_id')
-                        ->where('user_id', '=', $id);
-                    })
-                    ->join('department', 'department.id', '=', 'tickets.dept_id')
-                    ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
-                    ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
-                    ->join('help_topic', 'help_topic.id', '=', 'tickets.help_topic_id')
-                    ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
-                    ->join('ticket_thread', function ($join) {
-                        $join->on('tickets.id', '=', 'ticket_thread.ticket_id')
-                        ->whereNotNull('title');
-                    })
-                    ->select('ticket_number', 'tickets.id', 'title', 'ticket_status.name as ticket_status_name')
-                    ->orderBy('ticket_thread.updated_at', 'desc')
-                    ->groupby('tickets.id')
-                    ->distinct()
-                    ->get()
-                    ->toArray()
-            ;
+                $join->on('users.id', '=', 'tickets.user_id')
+                                        ->where('user_id', '=', $id);
+            })
+                                    ->join('department', 'department.id', '=', 'tickets.dept_id')
+                                    ->join('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
+                                    ->join('sla_plan', 'sla_plan.id', '=', 'tickets.sla')
+                                    ->join('help_topic', 'help_topic.id', '=', 'tickets.help_topic_id')
+                                    ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
+                                    ->join('ticket_thread', function ($join) {
+                                        $join->on('tickets.id', '=', 'ticket_thread.ticket_id')
+                                        ->whereNotNull('title');
+                                    })
+                                    ->select('ticket_number', 'tickets.id', 'title', 'ticket_status.name as ticket_status_name')
+                                    ->orderBy('ticket_thread.updated_at', 'desc')
+                                    ->groupby('tickets.id')
+                                    ->distinct()
+                                    ->get()
+                                    ->toArray();
 
             return response()->json(['tickets' => $result, 'requester' => $user]);
         } catch (\Exception $e) {
