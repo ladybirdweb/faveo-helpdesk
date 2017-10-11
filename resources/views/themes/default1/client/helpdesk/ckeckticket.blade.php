@@ -94,7 +94,7 @@ $thread = App\Model\helpdesk\Ticket\Ticket_Thread::where('ticket_id', '=', \Cryp
                             <div class="col-md-3"> 
                                 <?php
                                 $sla = $tickets->sla;
-                                $SlaPlan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', 1)->first();
+                                $SlaPlan = App\Model\helpdesk\Manage\Sla_plan::where('id', '=', $sla)->first();
                                 ?>
                                 <b>{!! Lang::get('lang.sla_plan') !!}: {{$SlaPlan->grace_period}} </b> 
                             </div>
