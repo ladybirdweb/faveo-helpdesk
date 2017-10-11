@@ -1702,4 +1702,5 @@ return [
     'edit_ticket_type'                 => 'Edit ticket type',
     'ticket_type_updated_successfully' => 'Ticket type updated successfully',
     'ticket_type_deleted_successfully' => 'Ticket type deleted successfully',
+    'create_new_ticket'=>'Create new ticket'
 ];
