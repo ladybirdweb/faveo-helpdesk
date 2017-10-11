@@ -27,7 +27,6 @@ class PhpMailController extends Controller
     public function fetch_smtp_details($id)
     {
         $emails = Emails::where('id', '=', $id)->first();
-
         return $emails;
     }
 
@@ -60,14 +59,15 @@ class PhpMailController extends Controller
     {
         $email_id = '';
         $emails = Emails::where('department', '=', $dept_id)->first();
-
+        if(!$emails){
+            $emails = Emails::first();
+        }
         $email = Email::find(1);
         if ($emails && $emails->sending_status) {
             $email_id = $emails->id;
         } else {
             $email_id = $email->sys_email;
         }
-
         return $email_id;
     }
 
@@ -336,6 +336,44 @@ class PhpMailController extends Controller
             '{!!$by!!}'                      => checkArray('by', $template_variables),
             '{!!$internal_content!!}'        => checkArray('internal_content', $template_variables),
             '{!!$user_profile_link!!}'       => checkArray('user_profile_link', $template_variables),
+            '{!! $receiver_name !!}' => checkArray('receiver_name', $template_variables),
+            '{!! $new_user_name !!}' => checkArray('new_user_name', $template_variables),
+            '{!! $new_user_email !!}' => checkArray('new_user_email', $template_variables),
+            '{!! $password_reset_link !!}' => checkArray('password_reset_link', $template_variables),
+            '{!! $reference_link !!}' => checkArray('reference_link', $template_variables),
+            '{!! $user_password !!}' => checkArray('user_password', $template_variables),
+            '{!! $account_activation_link !!}' => checkArray('account_activation_link', $template_variables),
+            '{!! $ticket_link !!}' => checkArray('ticket_link', $template_variables),
+            '{!! $ticket_number !!}' => checkArray('ticket_number', $template_variables),
+            '{!! $department_signature !!}' => checkArray('department_signature', $template_variables),
+            '{!! $client_name !!}' => checkArray('client_name', $template_variables),
+            '{!! $client_email !!}' => checkArray('client_email', $template_variables),
+            '{!! $agent_name !!}' => checkArray('agent_name', $template_variables),
+            '{!! $agent_email !!}' => checkArray('agent_email', $template_variables),
+            '{!! $agent_contact !!}' => checkArray('agent_contact', $template_variables),
+            '{!! $agent_signature !!}' => checkArray('agent_sign', $template_variables),
+            '{!! $client_name !!}' => checkArray('client_name', $template_variables),
+            '{!! $client_email !!}' => checkArray('client_email', $template_variables),
+            '{!! $client_contact !!}' => checkArray('client_contact', $template_variables),
+            '{!! $user_profile_link !!}' => checkArray('user_profile_link', $template_variables),
+            '{!! $activity_by !!}' => checkArray('activity_by', $template_variables),
+            '{!! $assigned_team_name !!}' => checkArray('assigned_team_name', $template_variables),
+            '{!! $ticket_subject !!}' => checkArray('ticket_subject', $template_variables),
+            '{!! $ticket_due_date !!}' => checkArray('ticket_due_date', $template_variables),
+            '{!! $ticket_created_at !!}' => checkArray('ticket_created_at', $template_variables),
+            '{!! $otp_code !!}' => checkArray('otp_code', $template_variables),
+            '{!! $system_from !!}' => $system_from,
+            '{!! $system_link !!}' => $system_link,
+            '{!! $company_name !!}' => $system_from,
+            '{!! $company_link !!}' => $system_link,
+            '{!! $message_content !!}' => $content,
+            '{!! $approve_url !!}'=>checkArray('approve_url', $template_variables),
+            '{!! $deny_url !!}'=>checkArray('deny_url', $template_variables),
+            '{!! $ticket_edit_link !!}'=>  checkArray('ticket_client_edit_link', $template_variables),
+            '{!! $total_time !!}'=>  checkArray('total_time', $template_variables),
+            '{!! $cost !!}'=>  checkArray('cost', $template_variables),
+            '{!! $bill_date !!}'=>  checkArray('bill_date', $template_variables),
+            '{!! $currency !!}'=>checkArray('currency', $template_variables),
         ];
 
         return $variables;
