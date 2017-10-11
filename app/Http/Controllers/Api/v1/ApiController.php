@@ -327,13 +327,12 @@ class ApiController extends Controller
     public function unassignedTickets()
     {
         try {
-            $user       = \JWTAuth::parseToken()->authenticate();
+            $user = \JWTAuth::parseToken()->authenticate();
             $unassigned = $this->user->join('tickets', function ($join) {
-                        $join->on('users.id', '=', 'tickets.user_id')
+                $join->on('users.id', '=', 'tickets.user_id')
                         ->whereNull('assigned_to');
-                    })
-                    ->leftjoin('department', function($join)
-                    {
+            })
+                    ->leftjoin('department', function ($join) {
                         $join->on('department.id', '=', 'tickets.dept_id');
                     })
                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
@@ -347,8 +346,8 @@ class ApiController extends Controller
                     })
                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id');
             if ($user->role == 'agent') {
-                $id         = $user->id;
-                $dept       = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $id = $user->id;
+                $dept = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
                 $unassigned = $unassigned->where(function ($query) use ($dept, $id) {
                     $query->whereIn('tickets.dept_id', $dept)
                             ->orWhere('assigned_to', '=', $id);
@@ -383,12 +382,11 @@ class ApiController extends Controller
     public function closeTickets()
     {
         try {
-            $user   = \JWTAuth::parseToken()->authenticate();
+            $user = \JWTAuth::parseToken()->authenticate();
             $result = $this->user->join('tickets', function ($join) {
-                        $join->on('users.id', '=', 'tickets.user_id');
-                    })
-                    ->leftjoin('department', function($join)
-                    {
+                $join->on('users.id', '=', 'tickets.user_id');
+            })
+                    ->leftjoin('department', function ($join) {
                         $join->on('department.id', '=', 'tickets.dept_id');
                     })
                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
@@ -402,8 +400,8 @@ class ApiController extends Controller
                     })
                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id');
             if ($user->role == 'agent') {
-                $id     = $user->id;
-                $dept   = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $id = $user->id;
+                $dept = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
                 $result = $result->where(function ($query) use ($dept, $id) {
                     $query->whereIn('tickets.dept_id', $dept)
                             ->orWhere('assigned_to', '=', $id);
@@ -1042,12 +1040,11 @@ class ApiController extends Controller
     public function getTrash()
     {
         try {
-            $user  = \JWTAuth::parseToken()->authenticate();
-                            $trash = $this->user->join('tickets', function ($join) {
-                                        $join->on('users.id', '=', 'tickets.user_id');
-                                    })
-                                    ->leftjoin('department', function($join)
-                                    {
+            $user = \JWTAuth::parseToken()->authenticate();
+            $trash = $this->user->join('tickets', function ($join) {
+                $join->on('users.id', '=', 'tickets.user_id');
+            })
+                                    ->leftjoin('department', function ($join) {
                                         $join->on('department.id', '=', 'tickets.dept_id');
                                     })
                                     ->join('ticket_status', 'ticket_status.id', '=', 'tickets.status')
@@ -1060,22 +1057,22 @@ class ApiController extends Controller
                                         $join->on('tickets.id', '=', 'ticket_thread.ticket_id');
                                     })
                                     ->leftJoin('ticket_attachment', 'ticket_attachment.thread_id', '=', 'ticket_thread.id');
-                            if ($user->role == 'agent') {
-                                $id    = $user->id;
-                                $dept  = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
-                                $trash = $trash->where(function ($query) use ($dept, $id) {
-                                    $query->whereIn('tickets.dept_id', $dept)
+            if ($user->role == 'agent') {
+                $id = $user->id;
+                $dept = \DB::table('department_assign_agents')->where('agent_id', '=', $id)->pluck('department_id')->toArray();
+                $trash = $trash->where(function ($query) use ($dept, $id) {
+                    $query->whereIn('tickets.dept_id', $dept)
                                             ->orWhere('assigned_to', '=', $id);
-                                });
-                            }
-                            $trash = $trash->select('ticket_priority.priority_color as priority_color', \DB::raw('substring_index(group_concat(ticket_thread.title order by ticket_thread.id asc) , ",", 1) as title'), 'tickets.duedate as overdue_date', \DB::raw('count(ticket_attachment.id) as attachment'), \DB::raw('max(ticket_thread.updated_at) as updated_at'), 'user_name', 'first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
+                });
+            }
+            $trash = $trash->select('ticket_priority.priority_color as priority_color', \DB::raw('substring_index(group_concat(ticket_thread.title order by ticket_thread.id asc) , ",", 1) as title'), 'tickets.duedate as overdue_date', \DB::raw('count(ticket_attachment.id) as attachment'), \DB::raw('max(ticket_thread.updated_at) as updated_at'), 'user_name', 'first_name', 'last_name', 'email', 'profile_pic', 'ticket_number', 'tickets.id', 'tickets.created_at', 'department.name as department_name', 'ticket_priority.priority as priotity_name', 'sla_plan.name as sla_plan_name', 'help_topic.topic as help_topic_name', 'ticket_status.name as ticket_status_name')
                                     ->orderBy('updated_at', 'desc')
                                     ->groupby('tickets.id')
                                     ->distinct()
                                     ->paginate(10)
                                     ->toJson();
 
-                            return $trash;
+            return $trash;
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
@@ -1095,23 +1092,23 @@ class ApiController extends Controller
             $v = \Validator::make($this->request->all(), [
                                         'user_id' => 'required|exists:users,id',
                             ]);
-                            if ($v->fails()) {
-                                $error = $v->errors();
+            if ($v->fails()) {
+                $error = $v->errors();
 
-                                return response()->json(compact('error'));
-                            }
-                            $id = $this->request->input('user_id');
-                            if ($this->user->where('id', $id)->first()->role == 'user') {
-                                $error = 'This user is not an Agent or Admin';
+                return response()->json(compact('error'));
+            }
+            $id = $this->request->input('user_id');
+            if ($this->user->where('id', $id)->first()->role == 'user') {
+                $error = 'This user is not an Agent or Admin';
 
-                                return response()->json(compact('error'));
-                            }
-                            //$user = \JWTAuth::parseToken()->authenticate();
-                            $result = $this->user->join('tickets', function ($join) use ($id) {
-                                        $join->on('users.id', '=', 'tickets.assigned_to')
+                return response()->json(compact('error'));
+            }
+            //$user = \JWTAuth::parseToken()->authenticate();
+            $result = $this->user->join('tickets', function ($join) use ($id) {
+                $join->on('users.id', '=', 'tickets.assigned_to')
                                         ->where('status', '=', 1);
-                                        //->where('user_id', '=', $id);
-                                    })
+                //->where('user_id', '=', $id);
+            })
                                     ->join('users as client', 'tickets.user_id', '=', 'client.id')
                                     ->leftJoin('department', 'department.id', '=', 'tickets.dept_id')
                                     ->leftJoin('ticket_priority', 'ticket_priority.priority_id', '=', 'tickets.priority_id')
@@ -1132,7 +1129,7 @@ class ApiController extends Controller
                                     ->paginate(10)
                                     ->toJson();
 
-                            return $result;
+            return $result;
         } catch (\Exception $e) {
             $error = $e->getMessage();
             $line = $e->getLine();
