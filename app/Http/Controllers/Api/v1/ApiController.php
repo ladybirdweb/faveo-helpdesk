@@ -572,8 +572,8 @@ class ApiController extends Controller
             $users = $this->user
                     ->leftJoin('user_assign_organization', 'user_assign_organization.user_id', '=', 'users.id')
                     ->leftJoin('organization', 'organization.id', '=', 'user_assign_organization.org_id')
-                    ->where('role', 'user')
-                    ->select('users.id', 'user_name', 'first_name', 'last_name', 'email', 'phone_number', 'users.profile_pic', 'organization.name AS company', 'users.active')
+                    ->where('users.role', 'user')
+                    ->select('users.id', 'users.user_name', 'users.first_name', 'users.last_name', 'users.email', 'users.phone_number', 'users.profile_pic', 'organization.name AS company', 'users.active', 'users.ext as telephone_extension', 'users.mobile', 'users.phone_number as telephone', 'users.country_code as mobile_code')
                     ->paginate(10)
                     ->toJson();
 
